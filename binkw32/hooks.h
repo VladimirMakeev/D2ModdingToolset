@@ -22,8 +22,8 @@
 
 namespace hooks {
 
-void RespopupInitHooked(void);
-void* __fastcall ToggleShowBannersInitHooked(void* thisptr, int /*%edx*/);
+void respopupInitHooked(void);
+void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/);
 
 } // namespace hooks
 

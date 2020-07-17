@@ -18,11 +18,57 @@
  */
 
 #include "game.h"
+#include "version.h"
+#include <array>
 
 namespace game {
 
-RespopupInitFunc respopupInit = (RespopupInitFunc)0x4893ad;
+// clang-format off
+static std::array<Functions, 3> functions = {{
+	// Akella
+    Functions{
+		(RespopupInitFunc)0x4893ad,
+		(ToggleShowBannersInitFunc)0x5b4015
+	},
+    // Russobit
+    Functions{
+		(RespopupInitFunc)0x4893ad,
+		(ToggleShowBannersInitFunc)0x5b4015
+	},
+    // Gog
+    Functions{
+		(RespopupInitFunc)0x488f96,
+		(ToggleShowBannersInitFunc)0x5b32db
+	}
+}};
 
-ToggleShowBannersInitFunc toggleShowBannersInit = (ToggleShowBannersInitFunc)0x5b4015;
+static std::array<Variables, 3> variables = {{
+	// Akella
+	Variables{
+		(int*)0x837ac8,
+		(unsigned char*)0x837acc
+	},
+	// Russobit
+	Variables{
+		(int*)0x837ac8,
+		(unsigned char*)0x837acc
+	},
+	// Gog
+	Variables{
+		(int*)0x835a78,
+		(unsigned char*)0x835a7c
+	}
+}};
+// clang-format on
+
+Functions& gameFunctions()
+{
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+Variables& gameVariables()
+{
+    return variables[static_cast<int>(hooks::gameVersion())];
+}
 
 } // namespace game

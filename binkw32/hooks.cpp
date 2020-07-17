@@ -18,27 +18,25 @@
  */
 
 #include "hooks.h"
+#include "game.h"
 #include "log.h"
 #include "settings.h"
 
 namespace hooks {
 
-void RespopupInitHooked(void)
+void respopupInitHooked(void)
 {
     logDebug("binkwProxy.log", "Resource popup hook start");
 
-    int* minimapMode = (int*)0x837ac8;
-    unsigned char* popup = (unsigned char*)0x837acc;
+    auto& variables = game::gameVariables();
 
-    // 0 - show minimap
-    // 1 - show percentage converted
-    *minimapMode = 0;
-    *popup = userSettings().showResources;
+    *variables.minimapMode = 0;
+    *variables.respopup = userSettings().showResources;
 
     logDebug("binkwProxy.log", "Resource popup hook finished");
 }
 
-void* __fastcall ToggleShowBannersInitHooked(void* thisptr, int /*%edx*/)
+void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/)
 {
     logDebug("binkwProxy.log", "Show banners hook start");
 

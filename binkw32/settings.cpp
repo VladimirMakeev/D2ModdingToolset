@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "settings.h"
 #define WIN32_LEAN_AND_MEAN
+#include "settings.h"
 #include <Windows.h>
 #include <string>
 
@@ -31,15 +31,9 @@ const UserSettings& userSettings()
     return settings;
 }
 
-void readUserSettings()
+void readUserSettings(const std::filesystem::path& iniFilePath)
 {
-    HMODULE module = GetModuleHandle(NULL);
-
-    std::string iniPath(MAX_PATH, '\0');
-    GetModuleFileName(module, &iniPath[0], MAX_PATH - 1);
-
-    const auto n = iniPath.rfind('\\');
-    iniPath.replace(n, iniPath.length() - n, "\\disciple.ini");
+    const std::string iniPath{iniFilePath.string()};
 
     const char disciple[] = "Disciple";
     settings.showResources = GetPrivateProfileInt(disciple,

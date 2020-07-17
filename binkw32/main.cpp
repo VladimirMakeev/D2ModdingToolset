@@ -23,38 +23,63 @@
 #include "hooks.h"
 #include "log.h"
 #include "settings.h"
+#include "version.h"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <detours.h>
+#include <filesystem>
 #include <fmt/format.h>
 #include <string>
 
 static void setupHooks()
 {
-    DetourAttach((PVOID*)&game::respopupInit, (PVOID)hooks::RespopupInitHooked);
-    DetourAttach((PVOID*)&game::toggleShowBannersInit, (PVOID)hooks::ToggleShowBannersInitHooked);
+    auto& fn = game::gameFunctions();
+
+    DetourAttach((PVOID*)&fn.respopupInit, (PVOID)hooks::respopupInitHooked);
+    DetourAttach((PVOID*)&fn.toggleShowBannersInit, (PVOID)hooks::toggleShowBannersInitHooked);
 }
 
 BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
 {
-    if (reason == DLL_PROCESS_ATTACH) {
-        DisableThreadLibraryCalls(hDll);
+    if (reason != DLL_PROCESS_ATTACH) {
+        return TRUE;
+    }
 
-        hooks::readUserSettings();
+    DisableThreadLibraryCalls(hDll);
 
-        DetourTransactionBegin();
-        DetourUpdateThread(GetCurrentThread());
+    HMODULE module = GetModuleHandle(NULL);
+    std::string moduleName(MAX_PATH, '\0');
 
-        setupHooks();
+    GetModuleFileName(module, &moduleName[0], MAX_PATH - 1);
 
-        const auto result = DetourTransactionCommit();
-        if (result != NO_ERROR) {
-            const std::string msg{
-                fmt::format("Failed to hook game functions. Error code: {:d}", result)};
+    std::filesystem::path exeFilePath{moduleName};
 
-            hooks::logError("binkwProxyError.log", msg);
-            MessageBox(NULL, msg.c_str(), "binkw32.dll proxy", MB_OK);
-        }
+    const std::error_code error = hooks::determineGameVersion(exeFilePath);
+    if (error || hooks::gameVersion() == hooks::GameVersion::Unknown) {
+        const std::string msg{
+            fmt::format("Failed to determine game version.\nReason: {:s}.", error.message())};
+
+        hooks::logError("binkwProxyError.log", msg);
+        MessageBox(NULL, msg.c_str(), "binkw32.dll proxy", MB_OK);
+        return FALSE;
+    }
+
+    exeFilePath.remove_filename();
+    hooks::readUserSettings(exeFilePath / "disciple.ini");
+
+    DetourTransactionBegin();
+    DetourUpdateThread(GetCurrentThread());
+
+    setupHooks();
+
+    const auto result = DetourTransactionCommit();
+    if (result != NO_ERROR) {
+        const std::string msg{
+            fmt::format("Failed to hook game functions. Error code: {:d}.", result)};
+
+        hooks::logError("binkwProxyError.log", msg);
+        MessageBox(NULL, msg.c_str(), "binkw32.dll proxy", MB_OK);
+        return FALSE;
     }
 
     return TRUE;

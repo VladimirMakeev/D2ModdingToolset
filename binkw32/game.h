@@ -24,11 +24,29 @@ namespace game {
 
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
-extern RespopupInitFunc respopupInit;
 
 /** Sets initial value for 'show banners' toggle button. */
 using ToggleShowBannersInitFunc = void*(__thiscall*)(void* thisptr);
-extern ToggleShowBannersInitFunc toggleShowBannersInit;
+
+/** Game functions that can be hooked. */
+struct Functions
+{
+    RespopupInitFunc respopupInit;
+    ToggleShowBannersInitFunc toggleShowBannersInit;
+};
+
+/** Global variables used in game. */
+struct Variables
+{
+    int* minimapMode; /**< Value of 0 shows minimap, 1 shows percentage of land converted. */
+    unsigned char* respopup;
+};
+
+/** Returns functions according to determined version of the game. */
+Functions& gameFunctions();
+
+/** Returns variables according to determined version of the game. */
+Variables& gameVariables();
 
 } // namespace game
 

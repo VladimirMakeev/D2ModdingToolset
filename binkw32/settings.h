@@ -20,18 +20,20 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <filesystem>
+
 namespace hooks {
 
 struct UserSettings
 {
     bool showBanners{true};
     bool showResources{true};
-    bool debugMode;
+    bool debugMode{};
 };
 
 const UserSettings& userSettings();
 
-void readUserSettings();
+void readUserSettings(const std::filesystem::path& iniFilePath);
 
 } // namespace hooks
 
