@@ -1,14 +1,16 @@
 # Binkw32 proxy dll for Disciples 2 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ### Features:
-- Shows banners by default. Behaviour can be changed from disciple.ini file using "ShowBanners=(0/1)" setting in "Disciple" section;
-- Shows resources panel by default. Behaviour can be changed from disciple.ini file using "ShowResources=(0/1)" setting in "Disciple" section;
+- Shows banners by default.
+  Behaviour can be changed from disciple.ini file using "ShowBanners=(0/1)" setting in "Disciple" section;
+- Shows resources panel by default.
+  Behaviour can be changed from disciple.ini file using "ShowResources=(0/1)" setting in "Disciple" section;
 - Can be used on vanilla version or with other mods installed.
 
 ### Tested on:
 - [x] Disciples 2 Rise of the Elves v3.01 (Akella)
-- [ ] Disciples 2 Rise of the Elves (Russobit)
-- [ ] Disciples 2 Rise of the Elves (GOG)
+- [x] Disciples 2 Rise of the Elves v3.01 (Russobit)
+- [x] Disciples 2 Rise of the Elves v3.01 (GOG)
 
 ### Installation:
 Rename original binkw32.dll to binkw**23**.dll, then copy binkw32.dll from this repository to game folder.
