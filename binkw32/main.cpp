@@ -37,6 +37,7 @@ static void setupHooks()
 
     DetourAttach((PVOID*)&fn.respopupInit, (PVOID)hooks::respopupInitHooked);
     DetourAttach((PVOID*)&fn.toggleShowBannersInit, (PVOID)hooks::toggleShowBannersInitHooked);
+    DetourAttach((PVOID*)&fn.processUnitModifiers, (PVOID)hooks::processUnitModifiersHooked);
 }
 
 BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)

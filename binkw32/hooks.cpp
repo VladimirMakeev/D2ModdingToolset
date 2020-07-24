@@ -49,4 +49,13 @@ void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/)
     return thisptr;
 }
 
+bool __fastcall processUnitModifiersHooked(void* thisptr, int /*%edx*/, int* a2)
+{
+    if (!thisptr) {
+        return false;
+    }
+
+    return game::gameFunctions().processUnitModifiers(thisptr, a2);
+}
+
 } // namespace hooks

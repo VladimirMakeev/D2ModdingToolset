@@ -25,6 +25,8 @@ namespace hooks {
 void respopupInitHooked(void);
 void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/);
 
+bool __fastcall processUnitModifiersHooked(void* thisptr, int /*%edx*/, int* a2);
+
 } // namespace hooks
 
 #endif // HOOKS_H
