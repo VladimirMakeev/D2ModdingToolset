@@ -28,11 +28,19 @@ using RespopupInitFunc = void (*)(void);
 /** Sets initial value for 'show banners' toggle button. */
 using ToggleShowBannersInitFunc = void*(__thiscall*)(void* thisptr);
 
+/**
+ * Assumption: processes unit modifiers during battle.
+ * Called with unit pointer being a result of dynamic_cast without a nullptr checks.
+ * Main reason of crashes in battles when summoners are involved.
+ */
+using ProcessUnitModifiersFunc = bool(__thiscall*)(void* unit, int* a2);
+
 /** Game functions that can be hooked. */
 struct Functions
 {
     RespopupInitFunc respopupInit;
     ToggleShowBannersInitFunc toggleShowBannersInit;
+    ProcessUnitModifiersFunc processUnitModifiers;
 };
 
 /** Global variables used in game. */

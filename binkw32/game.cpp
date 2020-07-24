@@ -25,39 +25,42 @@ namespace game {
 
 // clang-format off
 static std::array<Functions, 3> functions = {{
-	// Akella
+    // Akella
     Functions{
-		(RespopupInitFunc)0x4893ad,
-		(ToggleShowBannersInitFunc)0x5b4015
-	},
+        (RespopupInitFunc)0x4893ad,
+        (ToggleShowBannersInitFunc)0x5b4015,
+        (ProcessUnitModifiersFunc)0x5eac81
+    },
     // Russobit
     Functions{
-		(RespopupInitFunc)0x4893ad,
-		(ToggleShowBannersInitFunc)0x5b4015
-	},
+        (RespopupInitFunc)0x4893ad,
+        (ToggleShowBannersInitFunc)0x5b4015,
+        (ProcessUnitModifiersFunc)0x5eac81
+    },
     // Gog
     Functions{
-		(RespopupInitFunc)0x488f96,
-		(ToggleShowBannersInitFunc)0x5b32db
-	}
+        (RespopupInitFunc)0x488f96,
+        (ToggleShowBannersInitFunc)0x5b32db,
+        (ProcessUnitModifiersFunc)0x5e9984
+    }
 }};
 
 static std::array<Variables, 3> variables = {{
-	// Akella
-	Variables{
-		(int*)0x837ac8,
-		(unsigned char*)0x837acc
-	},
-	// Russobit
-	Variables{
-		(int*)0x837ac8,
-		(unsigned char*)0x837acc
-	},
-	// Gog
-	Variables{
-		(int*)0x835a78,
-		(unsigned char*)0x835a7c
-	}
+    // Akella
+    Variables{
+        (int*)0x837ac8,
+        (unsigned char*)0x837acc
+    },
+    // Russobit
+    Variables{
+        (int*)0x837ac8,
+        (unsigned char*)0x837acc
+    },
+    // Gog
+    Variables{
+        (int*)0x835a78,
+        (unsigned char*)0x835a7c
+    }
 }};
 // clang-format on
 
