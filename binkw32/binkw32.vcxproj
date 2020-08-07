@@ -200,6 +200,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     </ClCompile>
     <ClCompile Include="settings.cpp" />
     <ClCompile Include="string.cpp" />
+    <ClCompile Include="stringarray.cpp" />
     <ClCompile Include="version.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -211,6 +212,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="resource.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="string.h" />
+    <ClInclude Include="stringarray.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
