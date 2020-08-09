@@ -20,12 +20,21 @@
 #ifndef HOOKS_H
 #define HOOKS_H
 
+namespace game {
+struct AutoDialogData;
+};
+
 namespace hooks {
 
 void respopupInitHooked(void);
 void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/);
 
 bool __fastcall processUnitModifiersHooked(void* thisptr, int /*%edx*/, int* a2);
+
+game::AutoDialogData* __fastcall LoadScriptFileHooked(game::AutoDialogData* thisptr,
+                                                      int /*%edx*/,
+                                                      const char* filePath,
+                                                      int /*unknown*/);
 
 } // namespace hooks
 
