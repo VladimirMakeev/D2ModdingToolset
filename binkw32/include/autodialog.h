@@ -20,7 +20,7 @@
 #ifndef AUTODIALOG_H
 #define AUTODIALOG_H
 
-#include "string.h"
+#include "d2string.h"
 #include "stringarray.h"
 
 namespace game {

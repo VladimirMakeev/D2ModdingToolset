@@ -19,10 +19,10 @@
 
 #include "hooks.h"
 #include "autodialog.h"
+#include "d2string.h"
 #include "game.h"
 #include "log.h"
 #include "settings.h"
-#include "string.h"
 #include <algorithm>
 #include <cstring>
 #include <fstream>

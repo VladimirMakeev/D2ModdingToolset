@@ -141,7 +141,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\Detours\src;$(ProjectDir)..\fmt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Detours\src;$(ProjectDir)..\fmt\include;$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -181,41 +181,28 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
   <ItemGroup>
     <ClCompile Include="..\fmt\src\format.cc" />
     <ClCompile Include="..\fmt\src\os.cc" />
-    <ClCompile Include="autodialog.cpp" />
-    <ClCompile Include="game.cpp" />
-    <ClCompile Include="hooks.cpp" />
-    <ClCompile Include="log.cpp" />
-    <ClCompile Include="main.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </PrecompiledHeaderFile>
-      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreaded</RuntimeLibrary>
-      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MultiThreadedDebug</RuntimeLibrary>
-      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</BufferSecurityCheck>
-      <DebugInformationFormat Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">None</DebugInformationFormat>
-      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdcpp17</LanguageStandard>
-      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdcpp17</LanguageStandard>
-    </ClCompile>
-    <ClCompile Include="settings.cpp" />
-    <ClCompile Include="string.cpp" />
-    <ClCompile Include="stringarray.cpp" />
-    <ClCompile Include="version.cpp" />
+    <ClCompile Include="src\autodialog.cpp" />
+    <ClCompile Include="src\d2string.cpp" />
+    <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\hooks.cpp" />
+    <ClCompile Include="src\log.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\settings.cpp" />
+    <ClCompile Include="src\stringarray.cpp" />
+    <ClCompile Include="src\version.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Detours\src\detours.h" />
     <ClInclude Include="..\Detours\src\detver.h" />
-    <ClInclude Include="autodialog.h" />
-    <ClInclude Include="game.h" />
-    <ClInclude Include="hooks.h" />
-    <ClInclude Include="log.h" />
+    <ClInclude Include="include\autodialog.h" />
+    <ClInclude Include="include\d2string.h" />
+    <ClInclude Include="include\game.h" />
+    <ClInclude Include="include\hooks.h" />
+    <ClInclude Include="include\log.h" />
+    <ClInclude Include="include\settings.h" />
+    <ClInclude Include="include\stringarray.h" />
+    <ClInclude Include="include\version.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="settings.h" />
-    <ClInclude Include="string.h" />
-    <ClInclude Include="stringarray.h" />
-    <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="module.rc" />
