@@ -32,7 +32,7 @@ struct String
     void* allocator;
 };
 
-static_assert(sizeof(String) == 16, "String structure must be exactly 16 bytes");
+static_assert(sizeof(String) == 16, "Size of String structure must be exactly 16 bytes");
 
 namespace StringApi {
 
