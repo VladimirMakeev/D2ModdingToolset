@@ -104,6 +104,9 @@
     <ClInclude Include="include\menunewskirmish.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\menunewskirmishsingle.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="module.rc">
