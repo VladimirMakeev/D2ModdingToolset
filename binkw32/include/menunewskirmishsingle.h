@@ -30,6 +30,21 @@ struct CMenuNewSkirmishSingle : public CMenuNewSkirmish
 
 namespace CMenuNewSkirmishSingleApi {
 
+struct Api
+{
+    /**
+     * Initializes CMenuNewSkirmishSingle object, sets vftable.
+     * @param[in] thisptr pointer to existing CMenuNewSkirmishSingle object.
+     * @param a1 meaning unknown.
+     * @returns thisptr.
+     */
+    using Constructor = CMenuNewSkirmishSingle*(__thiscall*)(CMenuNewSkirmishSingle* thisptr,
+                                                             int a1);
+    Constructor constructor;
+};
+
+Api& get();
+
 struct Vftable
 {
     void* unknown[38];

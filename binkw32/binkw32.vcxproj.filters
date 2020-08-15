@@ -63,6 +63,9 @@
     <ClCompile Include="src\listbox.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\menunewskirmishsingle.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\menunewskirmish.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
