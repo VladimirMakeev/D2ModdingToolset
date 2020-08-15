@@ -54,6 +54,9 @@
     <ClCompile Include="src\d2string.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\button.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\functor.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
