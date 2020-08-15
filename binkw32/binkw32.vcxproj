@@ -184,6 +184,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClCompile Include="src\autodialog.cpp" />
     <ClCompile Include="src\button.cpp" />
     <ClCompile Include="src\d2string.cpp" />
+    <ClCompile Include="src\dialoginterf.cpp" />
     <ClCompile Include="src\functor.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\hooks.cpp" />
