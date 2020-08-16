@@ -104,6 +104,22 @@ struct Api
                                                                  Functor* functor,
                                                                  bool addTextShortenedMark);
     AssignDisplayTextFunctor assignDisplayTextFunctor;
+
+    /**
+     * Initializes list box with specified number of elements.
+     * @param[in] thisptr list box to initialize.
+     * @param elementsTotal max number of elements to show in list box.
+     * @returns unknown.
+     */
+    using InitContents = bool(__thiscall*)(CListBoxInterf* thisptr, int elementsTotal);
+    InitContents initContents;
+
+    /**
+     * Assumption: returns index of currently selected list box element.
+     * Called many times in game code, actual types and meaning unknown.
+     */
+    using SelectedIndex = int(__thiscall*)(CListBoxInterf* thisptr);
+    SelectedIndex selectedIndex;
 };
 
 Api& get();
