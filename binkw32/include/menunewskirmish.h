@@ -113,6 +113,17 @@ struct Api
                              CMenuNewSkirmish* menu,
                              const ListBoxDisplayTextCallback* callback);
     CreateListBoxDisplayTextFunctor createListBoxDisplayTextFunctor;
+
+    /**
+     * Updates scenario related ui elements in menu.
+     * @param unknown pointer returned from sub_6804ae().
+     * @param dialog
+     * @param selectedIndex index of currently selected list box item to update ui according to.
+     */
+    using UpdateScenarioUi = void(__stdcall*)(void* unknown,
+                                              CDialogInterf* dialog,
+                                              int selectedIndex);
+    UpdateScenarioUi updateScenarioUi;
 };
 
 Api& get();

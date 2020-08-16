@@ -34,7 +34,8 @@ static std::array<Api, 3> functions = {{
         (Api::ListBoxCallback)0x4e9cb3,
         (Api::CreateListBoxFunctor)0x4ea8da,
         (Api::ListBoxDisplayTextCallback)0x4e9c1a,
-        (Api::CreateListBoxDisplayTextFunctor)0x4ea88e
+        (Api::CreateListBoxDisplayTextFunctor)0x4ea88e,
+        (Api::UpdateScenarioUi)0x4e987c
     },
     // Russobit
     Api{},
