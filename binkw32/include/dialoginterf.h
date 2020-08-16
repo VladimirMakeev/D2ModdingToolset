@@ -54,17 +54,17 @@ namespace CDialogInterfApi {
 struct Api
 {
     /** Searches for button ui element with specific name, returns nullptr if not found. */
-    using FindButton = CButtonInterf*(__thiscall*)(CDialogInterf* thisptr, const char* controlName);
+    using FindButton = CButtonInterf*(__stdcall*)(CDialogInterf* thisptr, const char* controlName);
     FindButton findButton;
 
     /** Searches for list box ui element with specific name, returns nullptr if not found. */
-    using FindListBox = CListBoxInterf*(__thiscall*)(CDialogInterf* thisptr,
-                                                     const char* controlName);
+    using FindListBox = CListBoxInterf*(__stdcall*)(CDialogInterf* thisptr,
+                                                    const char* controlName);
     FindListBox findListBox;
 
     /** Searches for text box ui element with specific name, returns nullptr if not found. */
-    using FindTextBox = CTextBoxInterf*(__thiscall*)(CDialogInterf* thisptr,
-                                                     const char* controlName);
+    using FindTextBox = CTextBoxInterf*(__stdcall*)(CDialogInterf* thisptr,
+                                                    const char* controlName);
     FindTextBox findTextBox;
 };
 
