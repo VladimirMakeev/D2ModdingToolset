@@ -48,6 +48,7 @@ struct Variables
 {
     int* minimapMode; /**< Value of 0 shows minimap, 1 shows percentage of land converted. */
     unsigned char* respopup;
+    int* spellMinLevel;
 };
 
 /** Returns functions according to determined version of the game. */

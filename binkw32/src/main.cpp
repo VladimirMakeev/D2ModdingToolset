@@ -31,6 +31,28 @@
 #include <fmt/format.h>
 #include <string>
 
+template <typename T>
+static void writeProtectedMemory(T* address, T value)
+{
+    DWORD oldProtection{};
+    if (VirtualProtect(address, sizeof(T), PAGE_EXECUTE_READWRITE, &oldProtection)) {
+        *address = value;
+        VirtualProtect(address, sizeof(T), oldProtection, &oldProtection);
+        return;
+    }
+
+    hooks::logError("binkwProxyError.log",
+                    fmt::format("Failed to change memory protection for {:p}", (void*)address));
+}
+
+static void adjustGameRestrictions()
+{
+    auto& variables = game::gameVariables();
+    // Allow game to load scenarios with maximum allowed spells level set to zero,
+    // disabling usage of magic in scenario
+    writeProtectedMemory(variables.spellMinLevel, 0);
+}
+
 static void setupHooks()
 {
     auto& fn = game::gameFunctions();
@@ -71,6 +93,7 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
 
+    adjustGameRestrictions();
     setupHooks();
 
     const auto result = DetourTransactionCommit();

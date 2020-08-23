@@ -49,17 +49,20 @@ static std::array<Variables, 3> variables = {{
     // Akella
     Variables{
         (int*)0x837ac8,
-        (unsigned char*)0x837acc
+        (unsigned char*)0x837acc,
+        (int*)0x6eb3f8
     },
     // Russobit
     Variables{
         (int*)0x837ac8,
-        (unsigned char*)0x837acc
+        (unsigned char*)0x837acc,
+        (int*)0x6eb3f8
     },
     // Gog
     Variables{
         (int*)0x835a78,
-        (unsigned char*)0x835a7c
+        (unsigned char*)0x835a7c,
+        (int*)0x6e9398
     }
 }};
 // clang-format on
