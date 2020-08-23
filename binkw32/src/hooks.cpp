@@ -37,7 +37,7 @@ void respopupInitHooked(void)
 
     auto& variables = game::gameVariables();
 
-    *variables.minimapMode = 0;
+    *variables.minimapMode = userSettings().showLandConverted;
     *variables.respopup = userSettings().showResources;
 
     logDebug("binkwProxy.log", "Resource popup hook finished");

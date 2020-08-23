@@ -36,19 +36,16 @@ void readUserSettings(const std::filesystem::path& iniFilePath)
     const std::string iniPath{iniFilePath.string()};
 
     const char disciple[] = "Disciple";
-    settings.showResources = GetPrivateProfileInt(disciple,
-                                                  "ShowResources",
-                                                  settings.showResources,
+    settings.showResources = GetPrivateProfileInt(disciple, "ShowResources", settings.showResources,
                                                   iniPath.c_str())
                              != 0;
-    settings.showBanners = GetPrivateProfileInt(disciple,
-                                                "ShowBanners",
-                                                settings.showBanners,
+    settings.showBanners = GetPrivateProfileInt(disciple, "ShowBanners", settings.showBanners,
                                                 iniPath.c_str())
                            != 0;
-    settings.debugMode = GetPrivateProfileInt(disciple,
-                                              "DebugHooks",
-                                              settings.debugMode,
+    settings.showLandConverted = GetPrivateProfileInt(disciple, "ShowLandConverted",
+                                                      settings.showLandConverted, iniPath.c_str())
+                                 != 0;
+    settings.debugMode = GetPrivateProfileInt(disciple, "DebugHooks", settings.debugMode,
                                               iniPath.c_str())
                          != 0;
 }
