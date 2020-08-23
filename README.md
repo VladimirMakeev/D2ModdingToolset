@@ -2,10 +2,13 @@
 
 ### Features:
 - Fixes game crash in battles with summoners involved;
+- Allows to load scenarios with no magic (maximum spell level set to 0);
 - Shows banners by default.<br />
   Behaviour can be changed from disciple.ini file using "ShowBanners=(0/1)" setting in "Disciple" section;
 - Shows resources panel by default.<br />
   Behaviour can be changed from disciple.ini file using "ShowResources=(0/1)" setting in "Disciple" section;
+- Percentage of land converted can be shown by default instead of minimap.<br />
+  Use "ShowLandConverted=(0/1)" setting in "Disciple" section;
 - Can be used on vanilla version or with other mods installed.
 
 ### Tested on:
