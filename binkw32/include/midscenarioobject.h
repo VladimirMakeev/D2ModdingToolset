@@ -17,16 +17,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MIDOBJECT_H
-#define MIDOBJECT_H
+#ifndef MIDSCENARIOOBJECT_H
+#define MIDSCENARIOOBJECT_H
+
+#include "midobject.h"
 
 namespace game {
 
-struct IMidObject
-{
-    const void* vftable;
-};
+/** Base class for all objects in scenario. */
+struct IMidScenarioObject : public IMidObject
+{ };
 
 } // namespace game
 
-#endif // MIDOBJECT_H
+#endif // MIDSCENARIOOBJECT_H

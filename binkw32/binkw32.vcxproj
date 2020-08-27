@@ -220,6 +220,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\menunewskirmish.h" />
     <ClInclude Include="include\menunewskirmishsingle.h" />
     <ClInclude Include="include\midobject.h" />
+    <ClInclude Include="include\midscenarioobject.h" />
     <ClInclude Include="include\scenariodata.h" />
     <ClInclude Include="include\scenariodataarray.h" />
     <ClInclude Include="include\settings.h" />
