@@ -81,6 +81,9 @@
     <ClCompile Include="src\scenariodataarray.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\currency.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Detours\src\detver.h">
@@ -147,6 +150,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\scenariodataarray.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\currency.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
