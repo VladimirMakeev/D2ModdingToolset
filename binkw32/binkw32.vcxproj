@@ -206,6 +206,8 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="..\Detours\src\detver.h" />
     <ClInclude Include="include\autodialog.h" />
     <ClInclude Include="include\button.h" />
+    <ClInclude Include="include\categories.h" />
+    <ClInclude Include="include\categoryids.h" />
     <ClInclude Include="include\currency.h" />
     <ClInclude Include="include\d2string.h" />
     <ClInclude Include="include\dialoginterf.h" />
