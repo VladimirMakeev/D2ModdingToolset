@@ -19,6 +19,12 @@
     <Filter Include="Файлы заголовков\detours">
       <UniqueIdentifier>{2cb06a8c-ff84-4bc8-9d38-9f1ee90c187d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы заголовков\dbf">
+      <UniqueIdentifier>{89d84a5f-78af-4251-a41d-9ab8fa67ebff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\dbf">
+      <UniqueIdentifier>{176d0509-2342-430f-9628-31fd8d24cd1a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\fmt\src\format.cc">
@@ -86,6 +92,12 @@
     </ClCompile>
     <ClCompile Include="src\dynamiccast.cpp">
       <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dbf\dbffile.cpp">
+      <Filter>Исходные файлы\dbf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dbf\dbfrecord.cpp">
+      <Filter>Исходные файлы\dbf</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +199,18 @@
     </ClInclude>
     <ClInclude Include="include\dynamiccast.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dbf\dbfheader.h">
+      <Filter>Файлы заголовков\dbf</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dbf\dbffile.h">
+      <Filter>Файлы заголовков\dbf</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dbf\dbfcolumn.h">
+      <Filter>Файлы заголовков\dbf</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dbf\dbfrecord.h">
+      <Filter>Файлы заголовков\dbf</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
