@@ -185,6 +185,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClCompile Include="src\button.cpp" />
     <ClCompile Include="src\currency.cpp" />
     <ClCompile Include="src\d2string.cpp" />
+    <ClCompile Include="src\dbfaccess.cpp" />
     <ClCompile Include="src\dbf\dbffile.cpp" />
     <ClCompile Include="src\dbf\dbfrecord.cpp" />
     <ClCompile Include="src\dialoginterf.cpp" />
@@ -214,6 +215,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\categoryids.h" />
     <ClInclude Include="include\currency.h" />
     <ClInclude Include="include\d2string.h" />
+    <ClInclude Include="include\dbfaccess.h" />
     <ClInclude Include="include\dbf\dbfcolumn.h" />
     <ClInclude Include="include\dbf\dbffile.h" />
     <ClInclude Include="include\dbf\dbfheader.h" />

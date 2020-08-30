@@ -102,6 +102,9 @@
     <ClCompile Include="src\midgardid.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\dbfaccess.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Detours\src\detver.h">
@@ -216,6 +219,9 @@
       <Filter>Файлы заголовков\dbf</Filter>
     </ClInclude>
     <ClInclude Include="include\midgardid.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dbfaccess.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
