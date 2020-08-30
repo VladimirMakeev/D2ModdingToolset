@@ -193,6 +193,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClCompile Include="src\functor.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\hooks.cpp" />
+    <ClCompile Include="src\linkedlist.cpp" />
     <ClCompile Include="src\listbox.cpp" />
     <ClCompile Include="src\log.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -230,6 +231,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\intarray.h" />
     <ClInclude Include="include\interface.h" />
     <ClInclude Include="include\interffullscreen.h" />
+    <ClInclude Include="include\linkedlist.h" />
     <ClInclude Include="include\listbox.h" />
     <ClInclude Include="include\log.h" />
     <ClInclude Include="include\menubase.h" />
