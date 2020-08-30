@@ -64,6 +64,12 @@ struct LAttitudesCategoryTable : CEnumConstantTable<AiAttitudeId>
 struct LAttitudesCategory : public Category<AiAttitudeId>
 { };
 
+struct LUnitBranchTable : public CEnumConstantTable<UnitBranchId>
+{ };
+
+struct LUnitBranch : public Category<UnitBranchId>
+{ };
+
 } // namespace game
 
 #endif // CATEGORIES_H

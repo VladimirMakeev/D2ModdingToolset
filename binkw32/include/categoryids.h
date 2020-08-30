@@ -42,6 +42,19 @@ enum class AiAttitudeId : int
     Humongous
 };
 
+/** Unit branch ids from LunitB.dbf. */
+enum class UnitBranchId : int
+{
+    Fighter = 0,
+    Archer,
+    Mage,
+    Special,
+    Sideshow,
+    Hero,
+    Noble,
+    Summon
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
