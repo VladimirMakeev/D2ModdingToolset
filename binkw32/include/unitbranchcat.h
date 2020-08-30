@@ -17,53 +17,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CATEGORIES_H
-#define CATEGORIES_H
+#ifndef UNITBRANCHCAT_H
+#define UNITBRANCHCAT_H
 
+#include "categories.h"
 #include "categoryids.h"
 
 namespace game {
 
-/** Category table record, contains data read from database. */
-template <typename T>
-struct TableRecord
+struct LUnitBranchTable : public CEnumConstantTable<UnitBranchId>
+{ };
+
+struct LUnitBranch : public Category<UnitBranchId>
+{ };
+
+namespace UnitBranchCategories {
+
+struct Categories
 {
-    T id;
-    char* name;
+    LUnitBranch* fighter;
+    LUnitBranch* archer;
+    LUnitBranch* mage;
+    LUnitBranch* special;
+    LUnitBranch* sideshow;
 };
 
-/** Base class for all category tables. */
-template <typename T>
-struct CEnumConstantTable
-{
-    const void* vftable;
-    TableRecord<T>* bgn;
-    TableRecord<T>* end;
-    TableRecord<T>* allocatedMemEnd;
-    void* allocator;
-};
+Categories& get();
 
-/** Base class for all category types. */
-template <typename T>
-struct Category
-{
-    const void* vftable;
-    CEnumConstantTable<T>* table;
-    T id;
-};
-
-struct LRaceCategoryTable : public CEnumConstantTable<RaceId>
-{ };
-
-struct LRaceCategory : public Category<RaceId>
-{ };
-
-struct LAttitudesCategoryTable : CEnumConstantTable<AiAttitudeId>
-{ };
-
-struct LAttitudesCategory : public Category<AiAttitudeId>
-{ };
+} // namespace UnitBranchCategories
 
 } // namespace game
 
-#endif // CATEGORIES_H
+#endif // UNITBRANCHCAT_H
