@@ -111,6 +111,9 @@
     <ClCompile Include="src\linkedlist.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\globaldata.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\unitbranchcat.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -237,6 +240,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\linkedlist.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\globaldata.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\unitbranchcat.h">
