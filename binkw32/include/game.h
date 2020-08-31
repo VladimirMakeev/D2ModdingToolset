@@ -26,6 +26,8 @@ struct TRaceType;
 struct CPlayerBuildings;
 struct LUnitBranch;
 struct LinkedList;
+struct CMidDataCache2;
+struct CMidgardID;
 
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
@@ -64,6 +66,19 @@ using AddSideshowUnitToHireList = void*(__stdcall*)(TRaceType* race,
                                                     CPlayerBuildings* buildings,
                                                     LinkedList* hireList);
 
+/**
+ * Adds player's tier-1 units to hire list.
+ * @param[in] dataCache pointer to data cache object.
+ * @param[in] playerId id of player to process.
+ * @param[in] a3 meaning unknown.
+ * @param[inout] hireList list to store results.
+ * @returns true if units were added to the list.
+ */
+using AddPlayerUnitsToHireList = bool(__stdcall*)(CMidDataCache2* dataCache,
+                                                  const CMidgardID* playerId,
+                                                  const CMidgardID* a3,
+                                                  LinkedList* hireList);
+
 /** Game functions that can be hooked. */
 struct Functions
 {
@@ -72,6 +87,7 @@ struct Functions
     ProcessUnitModifiersFunc processUnitModifiers;
     AddUnitToHireList addUnitToHireList;
     AddSideshowUnitToHireList addSideshowUnitToHireList;
+    AddPlayerUnitsToHireList addPlayerUnitsToHireList;
 };
 
 /** Global variables used in game. */

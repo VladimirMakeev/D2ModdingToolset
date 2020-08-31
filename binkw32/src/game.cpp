@@ -31,7 +31,8 @@ static std::array<Functions, 3> functions = {{
         (ToggleShowBannersInitFunc)0x5b4015,
         (ProcessUnitModifiersFunc)0x5eac81,
         (AddUnitToHireList)0x5d5bb4,
-        (AddSideshowUnitToHireList)0x5d5ab6
+        (AddSideshowUnitToHireList)0x5d5ab6,
+        (AddPlayerUnitsToHireList)0x5d59e8
     },
     // Russobit
     Functions{
@@ -39,7 +40,8 @@ static std::array<Functions, 3> functions = {{
         (ToggleShowBannersInitFunc)0x5b4015,
         (ProcessUnitModifiersFunc)0x5eac81,
         (AddUnitToHireList)0,
-        (AddSideshowUnitToHireList)0
+        (AddSideshowUnitToHireList)0,
+        (AddPlayerUnitsToHireList)0
     },
     // Gog
     Functions{
@@ -47,7 +49,8 @@ static std::array<Functions, 3> functions = {{
         (ToggleShowBannersInitFunc)0x5b32db,
         (ProcessUnitModifiersFunc)0x5e9984,
         (AddUnitToHireList)0,
-        (AddSideshowUnitToHireList)0
+        (AddSideshowUnitToHireList)0,
+        (AddPlayerUnitsToHireList)0
     }
 }};
 
