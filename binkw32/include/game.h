@@ -22,6 +22,11 @@
 
 namespace game {
 
+struct TRaceType;
+struct CPlayerBuildings;
+struct LUnitBranch;
+struct LinkedList;
+
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
 
@@ -35,12 +40,38 @@ using ToggleShowBannersInitFunc = void*(__thiscall*)(void* thisptr);
  */
 using ProcessUnitModifiersFunc = bool(__thiscall*)(void* unit, int* a2);
 
+/**
+ * Adds tier-1 unit from specified unit branch to player's hire list.
+ * @param[in] race player race.
+ * @param[in] buildings player buildings.
+ * @param[in] branch determines unit to add.
+ * @param[inout] hireList list to store results.
+ * @returns unknown.
+ */
+using AddUnitToHireList = void*(__stdcall*)(TRaceType* race,
+                                            CPlayerBuildings* buildings,
+                                            const LUnitBranch* branch,
+                                            LinkedList* hireList);
+
+/**
+ * Adds unit from sideshow branch to player's hire list.
+ * @param[in] race player race.
+ * @param[in] buildings player buildings.
+ * @param[inout] hireList list to store results.
+ * @returns unknown.
+ */
+using AddSideshowUnitToHireList = void*(__stdcall*)(TRaceType* race,
+                                                    CPlayerBuildings* buildings,
+                                                    LinkedList* hireList);
+
 /** Game functions that can be hooked. */
 struct Functions
 {
     RespopupInitFunc respopupInit;
     ToggleShowBannersInitFunc toggleShowBannersInit;
     ProcessUnitModifiersFunc processUnitModifiers;
+    AddUnitToHireList addUnitToHireList;
+    AddSideshowUnitToHireList addSideshowUnitToHireList;
 };
 
 /** Global variables used in game. */

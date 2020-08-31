@@ -29,19 +29,25 @@ static std::array<Functions, 3> functions = {{
     Functions{
         (RespopupInitFunc)0x4893ad,
         (ToggleShowBannersInitFunc)0x5b4015,
-        (ProcessUnitModifiersFunc)0x5eac81
+        (ProcessUnitModifiersFunc)0x5eac81,
+        (AddUnitToHireList)0x5d5bb4,
+        (AddSideshowUnitToHireList)0x5d5ab6
     },
     // Russobit
     Functions{
         (RespopupInitFunc)0x4893ad,
         (ToggleShowBannersInitFunc)0x5b4015,
-        (ProcessUnitModifiersFunc)0x5eac81
+        (ProcessUnitModifiersFunc)0x5eac81,
+        (AddUnitToHireList)0,
+        (AddSideshowUnitToHireList)0
     },
     // Gog
     Functions{
         (RespopupInitFunc)0x488f96,
         (ToggleShowBannersInitFunc)0x5b32db,
-        (ProcessUnitModifiersFunc)0x5e9984
+        (ProcessUnitModifiersFunc)0x5e9984,
+        (AddUnitToHireList)0,
+        (AddSideshowUnitToHireList)0
     }
 }};
 
