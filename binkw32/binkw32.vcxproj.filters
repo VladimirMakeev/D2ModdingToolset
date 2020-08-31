@@ -251,6 +251,9 @@
     <ClInclude Include="include\playerbuildings.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\midgardobjectmap.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="module.rc">
