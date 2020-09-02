@@ -23,9 +23,12 @@
 #include "game.h"
 #include "log.h"
 #include "settings.h"
+#include "unitsforhire.h"
 #include <algorithm>
 #include <cstring>
+#include <fmt/format.h>
 #include <fstream>
+#include <iterator>
 #include <string>
 #include <vector>
 
@@ -65,7 +68,77 @@ bool __fastcall processUnitModifiersHooked(void* thisptr, int /*%edx*/, int* a2)
     return game::gameFunctions().processUnitModifiers(thisptr, a2);
 }
 
-game::AutoDialogData* __fastcall LoadScriptFileHooked(game::AutoDialogData* thisptr,
+using ScriptLines = std::vector<std::string>;
+
+ScriptLines::iterator addDialogUiElements(ScriptLines& script,
+                                          const std::string& dialogName,
+                                          const ScriptLines& newElements)
+{
+    const std::string dialogStr{std::string{"DIALOG\t"} + dialogName};
+
+    auto line = std::find_if(script.begin(), script.end(), [&dialogStr](const std::string& line) {
+        return line.find(dialogStr) != std::string::npos;
+    });
+
+    if (line == script.end()) {
+        return line;
+    }
+
+    // Skip DIALOG and BEGIN lines
+    std::advance(line, 2);
+    return script.insert(line, newElements.begin(), newElements.end());
+}
+
+void addRandomMapGeneratorUi(ScriptLines& script)
+{
+    const ScriptLines uiElements{
+        "\tBUTTON\tBINKW_PROXY_BTN_GEN_MAP,212,122,422,142,,,,,\"\",0",
+        "\tTEXT\tBINKW_PROXY_TXT_GEN_MAP,212,122,422,142,\\hC;\\vC;,\"Generate random map\",\"Open map generation menu\""};
+
+    addDialogUiElements(script, "DLG_CHOOSE_SKIRMISH", uiElements);
+}
+
+void changeHireDialogUi(ScriptLines& script)
+{
+    const std::string btnPgUpName{"BINKW_PROXY_BTN_PG_UP"};
+    const std::string btnPgDownName{"BINKW_PROXY_BTN_PG_DN"};
+    const std::string btnUpName{"BINKW_PROXY_BTN_LIST_UP"};
+    const std::string btnDownName{"BINKW_PROXY_BTN_LIST_DN"};
+
+    const std::string buttonImageName{"DLG_UPGRADE_LEADER_ARROW"};
+    const std::string btnDownImageName{fmt::format("{:s}_DOWN_", buttonImageName)};
+    const std::string btnUpImageName{fmt::format("{:s}_UP_", buttonImageName)};
+
+    const int buttonSize{26};
+    const int buttonX{415};
+    const int buttonUpY{30};
+    const int buttonDownY{480};
+
+    const ScriptLines uiElements{
+        // Page up and page down hotkeys
+        fmt::format("\tBUTTON\t{0},0,0,10,10,,,,,\"\",0,34", btnPgDownName),
+        fmt::format("\tBUTTON\t{0},10,0,20,10,,,,,\"\",0,33", btnPgUpName),
+        // Up and down keys, this also enables list scrolling with mouse wheel
+        fmt::format("\tBUTTON\t{0},{1},{2},{3},{4},{5}N,{5}H,{5}C,{5}N,\"\",1,38", btnUpName,
+                    buttonX, buttonUpY, buttonX + buttonSize, buttonUpY + buttonSize,
+                    btnUpImageName),
+        fmt::format("\tBUTTON\t{0},{1},{2},{3},{4},{5}N,{5}H,{5}C,{5}N,\"\",1,40", btnDownName,
+                    buttonX, buttonDownY, buttonX + buttonSize, buttonDownY + buttonSize,
+                    btnDownImageName)};
+
+    auto line = addDialogUiElements(script, "DLG_HIRE_LEADER_2", uiElements);
+    auto lboxLine = std::find_if(line, script.end(), [](const std::string& scriptLine) {
+        return scriptLine.find("\tLBOX\tLBOX_LEADER") != std::string::npos;
+    });
+
+    if (lboxLine != script.end()) {
+        *lboxLine = fmt::format(
+            "\tLBOX\tLBOX_LEADER,125,43,410,503,285,85,0,7,{0},{1},,,{2},{3},BTN_HIRE_LEADER,,,0,\"\",0",
+            btnUpName, btnDownName, btnPgUpName, btnPgDownName);
+    }
+}
+
+game::AutoDialogData* __fastcall loadScriptFileHooked(game::AutoDialogData* thisptr,
                                                       int /*%edx*/,
                                                       const char* filePath,
                                                       int /*unknown*/)
@@ -80,7 +153,6 @@ game::AutoDialogData* __fastcall LoadScriptFileHooked(game::AutoDialogData* this
 
     stringApi.initFromString(&thisptr->scriptPath, filePath);
 
-    using ScriptLines = std::vector<std::string>;
     ScriptLines scriptLines;
 
     {
@@ -95,38 +167,14 @@ game::AutoDialogData* __fastcall LoadScriptFileHooked(game::AutoDialogData* this
         }
     }
 
-    const std::string skirmishDialog{"DIALOG\tDLG_CHOOSE_SKIRMISH"};
-    auto dialogLine = std::find_if(scriptLines.begin(), scriptLines.end(),
-                                   [&skirmishDialog](const std::string& line) {
-                                       return line.find(skirmishDialog) != std::string::npos;
-                                   });
-
-    if (dialogLine == scriptLines.end()) {
-        logError("binkwProxy.log",
-                 "Could not find 'DLG_CHOOSE_SKIRMISH' in AutoDialog script file");
-        return thisptr;
-    }
-
-    const std::string endToken{"END"};
-    auto endTokenLine = std::find_if(dialogLine, scriptLines.end(),
-                                     [&endToken](const std::string& line) {
-                                         return line.find(endToken) != std::string::npos;
-                                     });
-
-    if (endTokenLine == scriptLines.end()) {
-        logError("binkwProxy.log",
-                 "Could not find 'END' token for 'DLG_CHOOSE_SKIRMISH' in AutoDialog script file");
-        return thisptr;
-    }
-
     // As for now, it is easier to add new ui elements to AutoDialog script
     // and let the game do processing, than reverse-engineer all CDlgPrototype class hierarchy.
     // Use uncommon names to avoid collisions.
-    ScriptLines newUiElements{
-        "\tBUTTON\tBINKW_PROXY_BTN_GEN_MAP,212,122,422,142,,,,,\"\",0",
-        "\tTEXT\tBINKW_PROXY_TXT_GEN_MAP,212,122,422,142,\\hC;\\vC;,\"Generate random map\",\"Open map generation menu\""};
+    // addRandomMapGeneratorUi(scriptLines);
 
-    scriptLines.insert(endTokenLine, newUiElements.begin(), newUiElements.end());
+    if (!unitsForHire().empty()) {
+        changeHireDialogUi(scriptLines);
+    }
 
     for (auto& line : scriptLines) {
         if (line.empty()) {

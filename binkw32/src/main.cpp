@@ -19,6 +19,7 @@
 
 #pragma comment(lib, "detours.lib")
 
+#include "autodialog.h"
 #include "game.h"
 #include "hooks.h"
 #include "log.h"
@@ -60,6 +61,9 @@ static void setupHooks()
     DetourAttach((PVOID*)&fn.respopupInit, (PVOID)hooks::respopupInitHooked);
     DetourAttach((PVOID*)&fn.toggleShowBannersInit, (PVOID)hooks::toggleShowBannersInitHooked);
     DetourAttach((PVOID*)&fn.processUnitModifiers, (PVOID)hooks::processUnitModifiersHooked);
+
+    DetourAttach((PVOID*)&game::AutoDialogApi::get().loadScriptFile,
+                 (PVOID)hooks::loadScriptFileHooked);
 }
 
 BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)

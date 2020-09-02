@@ -31,7 +31,7 @@ void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/);
 
 bool __fastcall processUnitModifiersHooked(void* thisptr, int /*%edx*/, int* a2);
 
-game::AutoDialogData* __fastcall LoadScriptFileHooked(game::AutoDialogData* thisptr,
+game::AutoDialogData* __fastcall loadScriptFileHooked(game::AutoDialogData* thisptr,
                                                       int /*%edx*/,
                                                       const char* filePath,
                                                       int /*unknown*/);
