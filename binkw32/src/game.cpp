@@ -39,18 +39,18 @@ static std::array<Functions, 3> functions = {{
         (RespopupInitFunc)0x4893ad,
         (ToggleShowBannersInitFunc)0x5b4015,
         (ProcessUnitModifiersFunc)0x5eac81,
-        (AddUnitToHireList)0,
-        (AddSideshowUnitToHireList)0,
-        (AddPlayerUnitsToHireList)0
+        (AddUnitToHireList)0x5d5bb4,
+        (AddSideshowUnitToHireList)0x5d5ab6,
+        (AddPlayerUnitsToHireList)0x5d59e8
     },
     // Gog
     Functions{
         (RespopupInitFunc)0x488f96,
         (ToggleShowBannersInitFunc)0x5b32db,
         (ProcessUnitModifiersFunc)0x5e9984,
-        (AddUnitToHireList)0,
-        (AddSideshowUnitToHireList)0,
-        (AddPlayerUnitsToHireList)0
+        (AddUnitToHireList)0x5d4add,
+        (AddSideshowUnitToHireList)0x5d49df,
+        (AddPlayerUnitsToHireList)0x5d4911
     }
 }};
 
