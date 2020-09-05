@@ -22,6 +22,7 @@
 
 #include "categories.h"
 #include "currency.h"
+#include "midgardid.h"
 #include "midscenarioobject.h"
 #include "stringandid.h"
 
@@ -42,18 +43,18 @@ struct CMidPlayerExmapData
 /** Holds player related data in scenario file and game. */
 struct CMidPlayer : public IMidScenarioObject
 {
-    int playerId;
+    CMidgardID playerId;
     StringAndId name;
     StringAndId description;
     int face;
-    int raceId;
-    int lordId;
+    CMidgardID raceId;
+    CMidgardID lordId;
     int unknown;
     LAttitudesCategory attitude;
     int qtyBreaks;
-    int fogId;
-    int knownSpellsId;
-    int buildingsId;
+    CMidgardID fogId;
+    CMidgardID knownSpellsId;
+    CMidgardID buildingsId;
     int researchTurn;
     int constructionTurn;
     CMidPlayerSpyData spyData;
@@ -61,7 +62,7 @@ struct CMidPlayer : public IMidScenarioObject
     Bank spellBank;
     bool isHuman;
     char padding[3];
-    int capturedById;
+    CMidgardID capturedById;
     bool alwaysAi;
     char padding2[3];
     CMidPlayerExmapData exmapData;
