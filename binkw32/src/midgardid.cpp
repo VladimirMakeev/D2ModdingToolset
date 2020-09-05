@@ -41,9 +41,27 @@ static std::array<Api, 3> functions = {{
         (Api::IsIdStringValid)0x57fb49
     },
     // Russobit
-    Api{},
+    Api{
+        (Api::GetCategory)0x57fcc5,
+        (Api::GetCategoryIndex)0x57fcde,
+        (Api::GetType)0x57fcfe,
+        (Api::GetTypeIndex)0x57fd1a,
+        (Api::ToString)0x57fd37,
+        (Api::FromString)0x57f897,
+        (Api::FromParts)0x57fbfa,
+        (Api::IsIdStringValid)0x57fb49
+    },
     // Gog
-    Api{}
+    Api{
+        (Api::GetCategory)0x57f37d,
+        (Api::GetCategoryIndex)0x57f396,
+        (Api::GetType)0x57f3b6,
+        (Api::GetTypeIndex)0x57f3d2,
+        (Api::ToString)0x57f3ef,
+        (Api::FromString)0x57ef4f,
+        (Api::FromParts)0x57f2b2,
+        (Api::IsIdStringValid)0x57f201
+    }
 }};
 // clang-format on
 
