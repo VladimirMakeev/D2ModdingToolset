@@ -31,9 +31,11 @@ static std::array<Api, 3> functions = {{
     },
     // Russobit
     Api {
+        (Api::DynamicCast)0x66d466
     },
     // Gog
     Api {
+        (Api::DynamicCast)0x66bda6
     }
 }};
 
@@ -46,9 +48,15 @@ static const std::array<Rtti, 3> types = {{
     },
     // Russobit
     Rtti{
+        (TypeDescriptor*)0x78eda8,
+        (TypeDescriptor*)0x78edd0,
+        (TypeDescriptor*)0x79e868
     },
     // Gog
     Rtti{
+        (TypeDescriptor*)0x78cd50,
+        (TypeDescriptor*)0x78cd78,
+        (TypeDescriptor*)0x79c810
     }
 }};
 // clang-format on
