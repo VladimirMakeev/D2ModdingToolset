@@ -31,9 +31,15 @@ static std::array<Api, 3> functions = {{
         (Api::FindById)0x583c35
     },
     // Russobit
-    Api{},
+    Api{
+        (Api::GetGlobalData)0x58004f,
+        (Api::FindById)0x583c35
+    },
     // Gog
-    Api{}
+    Api{
+        (Api::GetGlobalData)0x57f707,
+        (Api::FindById)0x592f25
+    }
 }};
 // clang-format on
 
