@@ -24,6 +24,7 @@
 #include "hooks.h"
 #include "log.h"
 #include "settings.h"
+#include "unitsforhire.h"
 #include "version.h"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
@@ -62,8 +63,10 @@ static void setupHooks()
     DetourAttach((PVOID*)&fn.toggleShowBannersInit, (PVOID)hooks::toggleShowBannersInitHooked);
     DetourAttach((PVOID*)&fn.processUnitModifiers, (PVOID)hooks::processUnitModifiersHooked);
 
-    DetourAttach((PVOID*)&game::AutoDialogApi::get().loadScriptFile,
-                 (PVOID)hooks::loadScriptFileHooked);
+    if (!hooks::unitsForHire().empty()) {
+        DetourAttach((PVOID*)&fn.addPlayerUnitsToHireList,
+                     (PVOID)hooks::addPlayerUnitsToHireListHooked);
+    }
 }
 
 BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
@@ -96,6 +99,12 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
 
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
+
+    if (!hooks::loadUnitsForHire(exeFilePath)) {
+        MessageBox(NULL, "Failed to load new units. Check error log for details.",
+                   "binkw32.dll proxy", MB_OK);
+        return FALSE;
+    }
 
     adjustGameRestrictions();
     setupHooks();

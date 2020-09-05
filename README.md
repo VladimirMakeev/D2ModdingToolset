@@ -2,6 +2,8 @@
 
 ### Features:
 - Fixes game crash in battles with summoners involved;
+- Allows each race to hire up to 10 new tier-1 units in cities and capital.<br />
+  New units are specified by adding a new columns SOLDIER\_N to Grace.dbf, N starting from 6.
 - Allows to load scenarios with no magic (maximum spell level set to 0);
 - Shows banners by default.<br />
   Behaviour can be changed from disciple.ini file using "ShowBanners=(0/1)" setting in "Disciple" section;

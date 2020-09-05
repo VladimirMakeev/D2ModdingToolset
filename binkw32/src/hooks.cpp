@@ -19,10 +19,20 @@
 
 #include "hooks.h"
 #include "autodialog.h"
+#include "categories.h"
 #include "d2string.h"
+#include "dynamiccast.h"
 #include "game.h"
+#include "globaldata.h"
+#include "linkedlist.h"
 #include "log.h"
+#include "middatacache.h"
+#include "midgardid.h"
+#include "midplayer.h"
+#include "playerbuildings.h"
+#include "racetype.h"
 #include "settings.h"
+#include "unitbranchcat.h"
 #include "unitsforhire.h"
 #include <algorithm>
 #include <cstring>
@@ -194,6 +204,82 @@ game::AutoDialogData* __fastcall loadScriptFileHooked(game::AutoDialogData* this
 
     thisptr->initialized = true;
     return thisptr;
+}
+
+bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
+                                              const game::CMidgardID* playerId,
+                                              const game::CMidgardID* a3,
+                                              game::LinkedList* hireList)
+{
+    using namespace game;
+
+    const auto& list = LinkedListApi::get();
+    list.setEmpty(hireList);
+
+    const auto& id = CMidgardIDApi::get();
+    if (id.getType(a3) != 29) {
+        return false;
+    }
+
+    auto vftable = (const CMidDataCache2Api::Vftable*)dataCache->vftable;
+    auto findScenarioObjectById = vftable->findScenarioObjectById;
+
+    auto playerObject = findScenarioObjectById(dataCache, playerId);
+    if (!playerObject) {
+        logError("binkwProxyError.log",
+                 fmt::format("Could not find player object with id {:x}", playerId->value));
+        return false;
+    }
+
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+    CMidPlayer* player = (CMidPlayer*)dynamicCast(playerObject, 0, rtti.IMidScenarioObjectType,
+                                                  rtti.CMidPlayerType, 0);
+    if (!player) {
+        logError("binkwProxyError.log",
+                 fmt::format("Object with id {:x} is not player", playerId->value));
+        return false;
+    }
+
+    auto buildingsObject = findScenarioObjectById(dataCache, &player->buildingsId);
+    if (!buildingsObject) {
+        logError("binkwProxyError.log", fmt::format("Could not find player buildings with id {:x}",
+                                                    player->buildingsId.value));
+        return false;
+    }
+
+    CPlayerBuildings* buildings = (CPlayerBuildings*)dynamicCast(buildingsObject, 0,
+                                                                 rtti.IMidScenarioObjectType,
+                                                                 rtti.CPlayerBuildingsType, 0);
+    if (!buildings) {
+        logError("binkwProxyError.log", fmt::format("Object with id {:x} is not player buildings",
+                                                    player->buildingsId.value));
+        return false;
+    }
+
+    const auto& global = GlobalDataApi::get();
+    int* races = (*global.getGlobalData())->races;
+    TRaceType* race = (TRaceType*)global.findById(races, &player->raceId);
+
+    const auto& addUnitToHireList = gameFunctions().addUnitToHireList;
+    const auto& unitBranch = UnitBranchCategories::get();
+
+    addUnitToHireList(race, buildings, unitBranch.fighter, hireList);
+    addUnitToHireList(race, buildings, unitBranch.archer, hireList);
+    addUnitToHireList(race, buildings, unitBranch.mage, hireList);
+    addUnitToHireList(race, buildings, unitBranch.special, hireList);
+
+    gameFunctions().addSideshowUnitToHireList(race, buildings, hireList);
+
+    const int raceIndex = id.getTypeIndex(&player->raceId);
+    if (!unitsForHire().empty()) {
+        const auto& units = unitsForHire()[raceIndex];
+        for (const auto& unit : units) {
+            list.add(hireList, &unit);
+        }
+    }
+
+    return true;
 }
 
 } // namespace hooks
