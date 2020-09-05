@@ -34,9 +34,21 @@ static std::array<Categories, 3> categories = {{
         (LUnitBranch*)0x839f78
     },
     // Russobit
-    Categories{},
+    Categories{
+        (LUnitBranch*)0x839fc8,
+        (LUnitBranch*)0x839fa8,
+        (LUnitBranch*)0x839fd8,
+        (LUnitBranch*)0x839f98,
+        (LUnitBranch*)0x839f78
+    },
     // Gog
-    Categories{}
+    Categories{
+        (LUnitBranch*)0x837f78,
+        (LUnitBranch*)0x837f58,
+        (LUnitBranch*)0x837f88,
+        (LUnitBranch*)0x837f48,
+        (LUnitBranch*)0x837f28
+    }
 }};
 // clang-format on
 
