@@ -31,6 +31,72 @@ enum class IdCategory : int
     Invalid
 };
 
+enum class IdType : int
+{
+    Empty = 0,       /**< Type of empty id 'g000000000' when converted from string.
+                      * Can not be used to construct id from parts.
+                      */
+    ApplicationText, /**< 'TA', entries of TApp.dbf and TAppEdit.dbf. */
+    Building,        /**< 'BB', entries of Gbuild.dbf. */
+    Race,            /**< 'RR' */
+    Lord,            /**< 'LR' */
+    Spell,           /**< 'SS' */
+    UnitGlobal,      /**< Entries of Gunits.dbf. */
+    // 7 for UG
+    UnitModifier = 8, /**< 'UM' */
+    Attack,           /**< 'AA' */
+    TextGlobal,       /**< 'TG', entries of Tglobal.dbf. */
+    LandmarkGlobal,   /**< 'MG', entries of GLmark.dbf. */
+    ItemGlobal,       /**< 'IG', entries of GItem.dbf. */
+    NobleAction,      /**< 'NA', entries of Gaction.dbf. */
+    DynamicUpgrade,   /**< 'DU' */
+    // 15 for DA
+    // 16 for AL
+    // 17 for DC
+    // 18 for AC
+    CampaignFile = 19, /**< 'CC' */
+    // 20 for CW
+    // 21 for CO
+    Plan = 22,         /**< 'PN' */
+    ObjectCount,       /**< 'OB', number of objects in scenario file. */
+    ScenarioFile,      /**< 'SC' */
+    Map,               /**< 'MP' */
+    MapBlock,          /**< 'MB' */
+    ScenarioInfo,      /**< 'IF' */
+    SpellEffects,      /**< 'ET' */
+    Fortification,     /**< 'FT', capitals and villages. */
+    Player,            /**< 'PL' */
+    PlayerKnownSpells, /**< 'KS' */
+    Fog,               /**< 'FG' */
+    PlayerBuildings,   /**< 'PB' */
+    Road,              /**< 'RA' */
+    Stack,             /**< 'KC' */
+    Unit,              /**< 'UN' */
+    Landmark,          /**< 'MM' */
+    Item,              /**< 'IM' */
+    Bag,               /**< 'BG' */
+    Site,              /**< 'SI' */
+    Ruin,              /**< 'RU' */
+    Tomb,              /**< 'TB' */
+    Rod,               /**< 'RD' */
+    Crystal,           /**< 'CR' */
+    Diplomacy,         /**< 'DP' */
+    SpellCast,         /**< 'ST' */
+    Location,          /**< 'LO' */
+    StackTemplate,     /**< 'TM' */
+    Event,             /**< 'EV' */
+    StackDestroyed,    /**< 'SD' */
+    TalismanCharges,   /**< 'TC' */
+    // 52 for MT
+    Mountains = 53, /**< 'ML' */
+    SubRace,        /**< 'SR' */
+    // 55 for BR
+    QuestLog = 56,    /**< 'QL' */
+    TurnSummary,      /**< 'TS' */
+    ScenarioVariable, /**< 'SV' */
+    Invalid = 59
+};
+
 /**
  * Represents entity identifier in game.
  * Used in game logic as integer and stored as 10-characters string
@@ -39,12 +105,12 @@ enum class IdCategory : int
  * Both identifier representations contains 4 logical parts:
  * - IdCategory
  * - Category index
- * - Type
+ * - IdType
  * - Type index
  * Example of id string "S143MB0c08" split into logical parts:
  * - 'S' - IdCategory (Scenario)
  * - '143' - Category index (scenario with index 143, values are decimal)
- * - 'MB' - Type (Identifier describes map block entity)
+ * - 'MB' - IdType (Identifier describes map block entity)
  * - '0c08' - Type index (0x0c08, map block y and x coordinates on map)
  */
 struct CMidgardID
@@ -95,9 +161,9 @@ struct Api
     /**
      * Returns type part from id.
      * Same as @code{.cpp}(id->value >> 16) & 0x3f;@endcode
-     * @returns invalid type value of 59 in case of invalid id.
+     * @returns IdType::Invalid in case of invalid id.
      */
-    using GetType = int(__thiscall*)(const CMidgardID* id);
+    using GetType = IdType(__thiscall*)(const CMidgardID* id);
     GetType getType;
 
     /**
@@ -129,7 +195,7 @@ struct Api
     using FromParts = CMidgardID*(__stdcall*)(CMidgardID* id,
                                               IdCategory category,
                                               int categoryIndex,
-                                              int type,
+                                              IdType type,
                                               int typeIndex);
     FromParts fromParts;
 

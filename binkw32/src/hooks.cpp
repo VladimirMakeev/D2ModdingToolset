@@ -217,7 +217,7 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
     list.setEmpty(hireList);
 
     const auto& id = CMidgardIDApi::get();
-    if (id.getType(a3) != 29) {
+    if (id.getType(a3) != IdType::Fortification) {
         return false;
     }
 
