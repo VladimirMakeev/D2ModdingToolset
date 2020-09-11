@@ -30,7 +30,7 @@ struct CPlayerBuildings : public IMidScenarioObject
 {
     int unknown;
     int unknown2;
-    LinkedList list;
+    IdList buildings;
 };
 
 static_assert(sizeof(CPlayerBuildings) == 28,

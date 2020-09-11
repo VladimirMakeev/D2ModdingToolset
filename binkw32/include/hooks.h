@@ -24,7 +24,7 @@ namespace game {
 struct AutoDialogData;
 struct CMidDataCache2;
 struct CMidgardID;
-struct LinkedList;
+struct IdList;
 }; // namespace game
 
 namespace hooks {
@@ -42,7 +42,7 @@ game::AutoDialogData* __fastcall loadScriptFileHooked(game::AutoDialogData* this
 bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
                                               const game::CMidgardID* playerId,
                                               const game::CMidgardID* a3,
-                                              game::LinkedList* hireList);
+                                              game::IdList* hireList);
 
 } // namespace hooks
 

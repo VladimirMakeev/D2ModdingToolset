@@ -21,7 +21,7 @@
 #include "version.h"
 #include <array>
 
-namespace game::LinkedListApi {
+namespace game::IdListApi {
 
 // clang-format off
 static std::array<Api, 3> functions = {{
@@ -48,4 +48,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::LinkedListApi
+} // namespace game::IdListApi

@@ -209,11 +209,11 @@ game::AutoDialogData* __fastcall loadScriptFileHooked(game::AutoDialogData* this
 bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
                                               const game::CMidgardID* playerId,
                                               const game::CMidgardID* a3,
-                                              game::LinkedList* hireList)
+                                              game::IdList* hireList)
 {
     using namespace game;
 
-    const auto& list = LinkedListApi::get();
+    const auto& list = IdListApi::get();
     list.setEmpty(hireList);
 
     const auto& id = CMidgardIDApi::get();

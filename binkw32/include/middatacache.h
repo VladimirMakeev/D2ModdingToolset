@@ -32,7 +32,7 @@ struct CMidgardID;
 struct CMidDataCache2 : public IMidgardObjectMap
 {
     CMidgardScenarioMap** scenarioMap;
-    LinkedList list;
+    IdList list;
     char unknown;
     char padding[3];
     int* unknown2;

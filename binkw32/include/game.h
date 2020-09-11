@@ -25,7 +25,7 @@ namespace game {
 struct TRaceType;
 struct CPlayerBuildings;
 struct LUnitBranch;
-struct LinkedList;
+struct IdList;
 struct CMidDataCache2;
 struct CMidgardID;
 
@@ -53,7 +53,7 @@ using ProcessUnitModifiersFunc = bool(__thiscall*)(void* unit, int* a2);
 using AddUnitToHireList = void*(__stdcall*)(TRaceType* race,
                                             CPlayerBuildings* buildings,
                                             const LUnitBranch* branch,
-                                            LinkedList* hireList);
+                                            IdList* hireList);
 
 /**
  * Adds unit from sideshow branch to player's hire list.
@@ -64,7 +64,7 @@ using AddUnitToHireList = void*(__stdcall*)(TRaceType* race,
  */
 using AddSideshowUnitToHireList = void*(__stdcall*)(TRaceType* race,
                                                     CPlayerBuildings* buildings,
-                                                    LinkedList* hireList);
+                                                    IdList* hireList);
 
 /**
  * Adds player's tier-1 units to hire list.
@@ -77,7 +77,7 @@ using AddSideshowUnitToHireList = void*(__stdcall*)(TRaceType* race,
 using AddPlayerUnitsToHireList = bool(__stdcall*)(CMidDataCache2* dataCache,
                                                   const CMidgardID* playerId,
                                                   const CMidgardID* a3,
-                                                  LinkedList* hireList);
+                                                  IdList* hireList);
 
 /** Game functions that can be hooked. */
 struct Functions
