@@ -248,6 +248,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\midobject.h" />
     <ClInclude Include="include\midplayer.h" />
     <ClInclude Include="include\midscenarioobject.h" />
+    <ClInclude Include="include\midserverbuilder.h" />
     <ClInclude Include="include\mqanimation.h" />
     <ClInclude Include="include\mqnettraffic.h" />
     <ClInclude Include="include\mqthread.h" />
