@@ -28,6 +28,8 @@
 
 namespace game {
 
+struct TRaceType;
+
 /** Must be 24 bytes according to CMidPlayer constructor. */
 struct CMidPlayerSpyData
 {
@@ -49,7 +51,7 @@ struct CMidPlayer : public IMidScenarioObject
     int face;
     CMidgardID raceId;
     CMidgardID lordId;
-    int unknown;
+    TRaceType* raceType;
     LAttitudesCategory attitude;
     int qtyBreaks;
     CMidgardID fogId;
