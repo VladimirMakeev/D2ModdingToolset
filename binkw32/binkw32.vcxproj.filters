@@ -275,6 +275,9 @@
     <ClInclude Include="include\mqthread.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\mqnetsystem.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\midserverbuilder.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
