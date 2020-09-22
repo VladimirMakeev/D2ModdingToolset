@@ -17,53 +17,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CATEGORYIDS_H
-#define CATEGORYIDS_H
+#ifndef BUILDINGCAT_H
+#define BUILDINGCAT_H
+
+#include "categories.h"
+#include "categoryids.h"
 
 namespace game {
 
-/** Race ids from LRace.dbf. */
-enum class RaceId : int
+struct LBuildingCategoryTable : public CEnumConstantTable<BuildingId>
+{ };
+
+struct LBuildingCategory : public Category<BuildingId>
+{ };
+
+namespace BuildingCategories {
+
+struct Categories
 {
-    Human = 0,
-    Undead,
-    Heretic,
-    Dwarf,
-    Neutral,
-    Elf
+    LBuildingCategory* guild;
+    LBuildingCategory* heal;
+    LBuildingCategory* magic;
+    LBuildingCategory* unit;
 };
 
-/** Ai attitude ids from LaiAtt.dbf. */
-enum class AiAttitudeId : int
-{
-    Small = 0,
-    Medium,
-    Large,
-    Humongous
-};
+Categories& get();
 
-/** Unit branch ids from LunitB.dbf. */
-enum class UnitBranchId : int
-{
-    Fighter = 0,
-    Archer,
-    Mage,
-    Special,
-    Sideshow,
-    Hero,
-    Noble,
-    Summon
-};
-
-/** Building type ids from Lbuild.dbf. */
-enum class BuildingId : int
-{
-    Guild,
-    Heal,
-    Magic,
-    Unit
-};
+} // namespace BuildingCategories
 
 } // namespace game
 
-#endif // CATEGORYIDS_H
+#endif // BUILDINGCAT_H
