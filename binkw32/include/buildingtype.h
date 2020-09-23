@@ -30,6 +30,7 @@
 namespace game {
 
 struct GlobalData;
+struct CDBTable;
 
 struct Position
 {
@@ -81,14 +82,20 @@ namespace TBuildingTypeApi {
 struct Api
 {
     using Constructor = TBuildingType*(__thiscall*)(TBuildingType* thisptr,
-                                                    void* dbTable,
-                                                    GlobalData** globalData);
+                                                    const CDBTable* dbTable,
+                                                    const GlobalData** globalData);
     Constructor constructor;
 };
 
 Api& get();
 
 } // namespace TBuildingTypeApi
+
+namespace TBuildingUnitUpgTypeApi {
+
+const void* vftable();
+
+}
 
 } // namespace game
 

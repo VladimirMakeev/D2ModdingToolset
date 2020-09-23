@@ -21,7 +21,8 @@
 #include "version.h"
 #include <array>
 
-namespace game::TBuildingTypeApi {
+namespace game {
+namespace TBuildingTypeApi {
 
 // clang-format off
 static std::array<Api, 3> functions = {{
@@ -35,7 +36,7 @@ static std::array<Api, 3> functions = {{
     },
     // Gog
     Api{
-        (Api::Constructor)0,
+        (Api::Constructor)0x58ab86,
     }
 }};
 // clang-format on
@@ -45,4 +46,26 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::TBuildingTypeApi
+} // namespace TBuildingTypeApi
+
+namespace TBuildingUnitUpgTypeApi {
+
+// clang-format off
+static std::array<const void*, 3> vftables = {{
+    // Akella
+    (const void*)0x6ea7cc,
+    // Russobit
+    (const void*)0x6ea7cc,
+    // Gog
+    (const void*)0x6e876c
+}};
+// clang-format on
+
+const void* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
+
+} // namespace TBuildingUnitUpgTypeApi
+
+} // namespace game
