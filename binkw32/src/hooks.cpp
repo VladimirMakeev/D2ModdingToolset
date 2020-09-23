@@ -19,13 +19,16 @@
 
 #include "hooks.h"
 #include "autodialog.h"
+#include "buildingtype.h"
 #include "categories.h"
 #include "d2string.h"
+#include "dbtable.h"
 #include "dynamiccast.h"
 #include "game.h"
 #include "globaldata.h"
 #include "linkedlist.h"
 #include "log.h"
+#include "mempool.h"
 #include "middatacache.h"
 #include "midgardid.h"
 #include "midplayer.h"
@@ -280,6 +283,49 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
     }
 
     return true;
+}
+
+void __stdcall createBuildingTypeHooked(const game::CDBTable* dbTable,
+                                        void* a2,
+                                        const game::GlobalData** globalData)
+{
+    using namespace game;
+
+    auto* buildings = (*globalData)->buildingCategories;
+    LBuildingCategory category;
+    category.vftable = BuildingCategories::vftable();
+
+    auto& db = CDBTableApi::get();
+    db.findBuildingCategory(&category, dbTable, "CATEGORY", buildings);
+
+    auto memAlloc = Memory::get().allocate;
+    auto constructor = TBuildingTypeApi::get().constructor;
+    TBuildingType* buildingType = nullptr;
+
+    auto& buildingCategories = BuildingCategories::get();
+    if (category.id == buildingCategories.unit->id || category.id == buildingCategories.heal->id) {
+        // This is TBuildingUnitUpgType constructor
+        // without TBuildingTypeData::category validity check
+        TBuildingUnitUpgType* unitBuilding = (TBuildingUnitUpgType*)memAlloc(
+            sizeof(TBuildingUnitUpgType));
+
+        constructor(unitBuilding, dbTable, globalData);
+        unitBuilding->branch.vftable = UnitBranchCategories::vftable();
+        unitBuilding->vftable = TBuildingUnitUpgTypeApi::vftable();
+
+        auto* branches = (*globalData)->unitBranches;
+        db.findUnitBranchCategory(&unitBuilding->branch, dbTable, "BRANCH", branches);
+        db.readUnitLevel(&unitBuilding->level, dbTable, "LEVEL");
+
+        buildingType = unitBuilding;
+    } else {
+        buildingType = constructor((TBuildingType*)memAlloc(sizeof(TBuildingType)), dbTable,
+                                   globalData);
+    }
+
+    if (!gameFunctions().addObjectAndCheckDuplicates(a2, buildingType)) {
+        db.duplicateRecordException(dbTable, &buildingType->buildingId);
+    }
 }
 
 } // namespace hooks

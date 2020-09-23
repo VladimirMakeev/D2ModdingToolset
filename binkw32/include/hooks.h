@@ -25,6 +25,8 @@ struct AutoDialogData;
 struct CMidDataCache2;
 struct CMidgardID;
 struct IdList;
+struct GlobalData;
+struct CDBTable;
 }; // namespace game
 
 namespace hooks {
@@ -43,6 +45,14 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
                                               const game::CMidgardID* playerId,
                                               const game::CMidgardID* a3,
                                               game::IdList* hireList);
+
+/**
+ * Create TBuildingUnitUpgType objects for buildings from heal category.
+ * This allows to assign temples as buildings required to hire units.
+ */
+void __stdcall createBuildingTypeHooked(const game::CDBTable* dbTable,
+                                        void* a2,
+                                        const game::GlobalData** globalData);
 
 } // namespace hooks
 
