@@ -35,7 +35,7 @@ static std::array<Api, 3> functions = {{
     },
     // Gog
     Api{
-        (Api::Allocate)0
+        (Api::Allocate)0x508820
     }
 }};
 // clang-format on

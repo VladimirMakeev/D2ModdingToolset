@@ -41,10 +41,10 @@ static std::array<Api, 3> functions = {{
     },
     // Gog
     Api{
-        (Api::FindBuildingCategory)0,
-        (Api::FindUnitBranchCategory)0,
-        (Api::ReadUnitLevel)0,
-        (Api::DuplicateRecordException)0
+        (Api::FindBuildingCategory)0x58b1cf,
+        (Api::FindUnitBranchCategory)0x58b24d,
+        (Api::ReadUnitLevel)0x58afd7,
+        (Api::DuplicateRecordException)0x59c710
     }
 }};
 // clang-format on
