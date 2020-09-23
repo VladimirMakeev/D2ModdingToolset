@@ -44,6 +44,9 @@ struct Categories
 
 Categories& get();
 
+/** Returns address of LUnitBranch::vftable used in game. */
+const void* vftable();
+
 } // namespace UnitBranchCategories
 
 } // namespace game

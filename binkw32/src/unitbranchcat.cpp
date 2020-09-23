@@ -50,11 +50,25 @@ static std::array<Categories, 3> categories = {{
         (LUnitBranch*)0x837f28
     }
 }};
+
+static std::array<const void*, 3> vftables = {{
+    // Akella
+    (const void*)0x6d8e5c,
+    // Russobit
+    (const void*)0x6d8e5c,
+    // Gog
+    (const void*)0x6d6dfc
+}};
 // clang-format on
 
 Categories& get()
 {
     return categories[static_cast<int>(hooks::gameVersion())];
+}
+
+const void* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::UnitBranchCategories
