@@ -41,17 +41,31 @@ static std::array<Categories, 3> categories = {{
     },
     // Gog
     Categories{
-        (LBuildingCategory*)0,
-        (LBuildingCategory*)0,
-        (LBuildingCategory*)0,
-        (LBuildingCategory*)0
+        (LBuildingCategory*)0x8379e0,
+        (LBuildingCategory*)0x8379f0,
+        (LBuildingCategory*)0x837a00,
+        (LBuildingCategory*)0x8379d0
     }
+}};
+
+static std::array<const void*, 3> vftables = {{
+    // Akella
+    (const void*)0x6d153c,
+    // Russobit
+    (const void*)0x6d153c,
+    // Gog
+    (const void*)0x6cf4dc
 }};
 // clang-format on
 
 Categories& get()
 {
     return categories[static_cast<int>(hooks::gameVersion())];
+}
+
+const void* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::BuildingCategories

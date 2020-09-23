@@ -43,6 +43,9 @@ struct Categories
 
 Categories& get();
 
+/** Returns address of LBuildingCategory::vftable used in game. */
+const void* vftable();
+
 } // namespace BuildingCategories
 
 } // namespace game
