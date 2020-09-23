@@ -28,6 +28,9 @@ struct LUnitBranch;
 struct IdList;
 struct CMidDataCache2;
 struct CMidgardID;
+struct CDBTable;
+struct GlobalData;
+struct IMidObject;
 
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
@@ -79,6 +82,20 @@ using AddPlayerUnitsToHireList = bool(__stdcall*)(CMidDataCache2* dataCache,
                                                   const CMidgardID* a3,
                                                   IdList* hireList);
 
+/**
+ * Callback function used to process each record in GBuild.dbf.
+ * Creates TBuildingType or TBuildingUnitUpgType objects from record data and stores them in a2.
+ */
+using CreateBuildingType = void(__stdcall*)(const CDBTable* dbTable,
+                                            void* a2,
+                                            const GlobalData** globalData);
+
+/**
+ * Adds object to dictionary-like structure if it's not a duplicate.
+ * @returns false in case of duplicating object.
+ */
+using AddObjectAndCheckDuplicates = bool(__thiscall*)(void* thisptr, const IMidObject* object);
+
 /** Game functions that can be hooked. */
 struct Functions
 {
@@ -88,6 +105,8 @@ struct Functions
     AddUnitToHireList addUnitToHireList;
     AddSideshowUnitToHireList addSideshowUnitToHireList;
     AddPlayerUnitsToHireList addPlayerUnitsToHireList;
+    CreateBuildingType createBuildingType;
+    AddObjectAndCheckDuplicates addObjectAndCheckDuplicates;
 };
 
 /** Global variables used in game. */
