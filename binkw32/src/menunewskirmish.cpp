@@ -38,7 +38,17 @@ static std::array<Api, 3> functions = {{
         (Api::UpdateScenarioUi)0x4e987c
     },
     // Russobit
-    Api{},
+    Api{
+        (Api::Constructor)0x4e9697,
+        (Api::ButtonCallback)0x4dcf9e,
+        (Api::ButtonCallback)0x4e9d2a,
+        (Api::CreateButtonFunctor)0x4ea842,
+        (Api::ListBoxCallback)0x4e9cb3,
+        (Api::CreateListBoxFunctor)0x4ea8da,
+        (Api::ListBoxDisplayTextCallback)0x4e9c1a,
+        (Api::CreateListBoxDisplayTextFunctor)0x4ea88e,
+        (Api::UpdateScenarioUi)0x4e987c
+    },
     // Gog
     Api{}
 }};
@@ -47,7 +57,7 @@ static std::array<Vftable*, 3> vftables = {{
     // Akella
     (Vftable*)0x6dec9c,
     // Russobit
-    (Vftable*)0x0,
+    (Vftable*)0x6dec9c,
     // Gog
     (Vftable*)0x0
 }};

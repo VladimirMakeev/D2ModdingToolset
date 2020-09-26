@@ -30,7 +30,9 @@ static std::array<Api, 3> functions = {{
         (Api::CreateOrFree)0x49c5d7
     },
     // Russobit
-    Api{},
+    Api{
+        (Api::CreateOrFree)0x49c5d7
+    },
     // Gog
     Api{}
 }};

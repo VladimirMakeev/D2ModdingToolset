@@ -42,7 +42,21 @@ static std::array<Api, 3> functions = {{
         (Api::FromString)0x5873ab
     },
     // Russobit
-    Api{},
+    Api{
+        (Api::Add)0x58748f,
+        (Api::Subtract)0x5873c5,
+        (Api::Multiply)0x587559,
+        (Api::Divide)0x58763d,
+        (Api::Less)0x587833,
+        (Api::Copy)0x5870dd,
+        (Api::SetInvalid)0x5870ac,
+        (Api::SetZero)0x5879a7,
+        (Api::SetCurrency)0x5878bc,
+        (Api::IsZero)0x58797e,
+        (Api::IsValid)0x58790f,
+        (Api::ToString)0x5872d9,
+        (Api::FromString)0x5873ab
+    },
     // Gog
     Api{}
 }};

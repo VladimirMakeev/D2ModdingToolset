@@ -32,7 +32,11 @@ static std::array<Api, 3> functions = {{
         (Api::GetDialogInterface)0x40306a
     },
     // Russobit
-    Api{},
+    Api{
+        (Api::Constructor)0x4db5ea,
+        (Api::CreateMenu)0x4db76a,
+        (Api::GetDialogInterface)0x40306a
+    },
     // Gog
     Api{}
 }};

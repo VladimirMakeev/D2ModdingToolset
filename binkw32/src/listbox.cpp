@@ -33,7 +33,12 @@ static std::array<Api, 3> functions = {{
         (Api::SelectedIndex)0x5838db
     },
     // Russobit
-    Api{},
+    Api{
+        (Api::AssignFunctor)0x5c9b66,
+        (Api::AssignDisplayTextFunctor)0x5c9982,
+        (Api::InitContents)0x536047,
+        (Api::SelectedIndex)0x5838db
+    },
     // Gog
     Api{}
 }};

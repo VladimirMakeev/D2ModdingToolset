@@ -32,7 +32,11 @@ static std::array<Api, 3> functions = {{
         (Api::FindTextBox)0x50bb0f
     },
     // Russobit
-    Api{},
+    Api{
+        (Api::FindButton)0x50baaf,
+        (Api::FindListBox)0x50bacf,
+        (Api::FindTextBox)0x50bb0f
+    },
     // Gog
     Api{}
 }};

@@ -30,7 +30,9 @@ static std::array<Api, 3> functions = {{
         (Api::Constructor)0x4ea0b8
     },
     // Russobit
-    Api{},
+    Api{
+        (Api::Constructor)0x4ea0b8
+    },
     // Gog
     Api{}
 }};
@@ -39,7 +41,7 @@ static std::array<Vftable*, 3> vftables = {{
     // Akella
     (Vftable*)0x6ded5c,
     // Russobit
-    (Vftable*)0x0,
+    (Vftable*)0x6ded5c,
     // Gog
     (Vftable*)0x0
 }};
