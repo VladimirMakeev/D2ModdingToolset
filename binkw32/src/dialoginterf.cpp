@@ -38,7 +38,11 @@ static std::array<Api, 3> functions = {{
         (Api::FindTextBox)0x50bb0f
     },
     // Gog
-    Api{}
+    Api{
+        (Api::FindButton)0x50afb3,
+        (Api::FindListBox)0x50afd3,
+        (Api::FindTextBox)0x50b013
+    }
 }};
 // clang-format on
 

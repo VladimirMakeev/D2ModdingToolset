@@ -40,7 +40,12 @@ static std::array<Api, 3> functions = {{
         (Api::SelectedIndex)0x5838db
     },
     // Gog
-    Api{}
+    Api{
+        (Api::AssignFunctor)0x5c8b34,
+        (Api::AssignDisplayTextFunctor)0x5c8950,
+        (Api::InitContents)0x535665,
+        (Api::SelectedIndex)0x535361
+    }
 }};
 // clang-format on
 

@@ -34,7 +34,9 @@ static std::array<Api, 3> functions = {{
         (Api::CreateOrFree)0x49c5d7
     },
     // Gog
-    Api{}
+    Api{
+        (Api::CreateOrFree)0x495146
+    }
 }};
 // clang-format on
 

@@ -34,7 +34,9 @@ static std::array<Api, 3> functions = {{
         (Api::AssignFunctor)0x5c93d6
     },
     // Gog
-    Api{}
+    Api{
+        (Api::AssignFunctor)0x5c83a4
+    }
 }};
 
 static std::array<Vftable*, 3> vftables = {{
@@ -43,7 +45,7 @@ static std::array<Vftable*, 3> vftables = {{
     // Russobit
     (Vftable*)0x6e3294,
     // Gog
-    (Vftable*)0x0
+    (Vftable*)0x6e1234
 }};
 // clang-format on
 

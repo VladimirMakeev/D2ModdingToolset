@@ -38,7 +38,11 @@ static std::array<Api, 3> functions = {{
         (Api::CopyConstructor)0x60624b
     },
     // Gog
-    Api{}
+    Api{
+        (Api::Constructor)0x6046ff,
+        (Api::Destructor)0x604799,
+        (Api::CopyConstructor)0x604d58
+    }
 }};
 // clang-format on
 

@@ -38,7 +38,11 @@ static std::array<Api, 3> functions = {{
         (Api::GetDialogInterface)0x40306a
     },
     // Gog
-    Api{}
+    Api{
+        (Api::Constructor)0x4dac4f,
+        (Api::CreateMenu)0x4dadcf,
+        (Api::GetDialogInterface)0x402db0
+    }
 }};
 // clang-format on
 
