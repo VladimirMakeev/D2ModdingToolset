@@ -21,8 +21,14 @@
 #define SCENARIODATA_H
 
 #include "d2string.h"
+#include "difficultylevel.h"
+#include "linkedlist.h"
+#include "midgardid.h"
+#include <cstddef>
 
 namespace game {
+
+using RaceCategoryList = LinkedList<LRaceCategory>;
 
 /**
  * Holds brief information about scenario file registered in game.
@@ -36,23 +42,16 @@ struct ScenarioData
     String author;
     bool official;
     char padding[3];
-    int* ptr;
+    CMidgardID scenarioFileId;
     String description;
     String name;
     int mapSize;
-    void* difficultyLevelVftable;
-    int unknown1;
+    LDifficultyLevel difficulty;
+    int unknown; /** Save game flag? */
+    CMidgardID campaignId;
+    RaceCategoryList races;
+    LRaceCategory race;
     int unknown2;
-    int unknown3;
-    int unknown4;
-    int unknown5;
-    int unknown6;
-    int unknown7;
-    int unknown8;
-    void* raceCategoryVftable;
-    int unknown9;
-    int unknown10;
-    int unknown11;
 };
 
 static_assert(sizeof(ScenarioData) == 128,

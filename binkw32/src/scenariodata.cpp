@@ -32,7 +32,11 @@ static std::array<Api, 3> functions = {{
         (Api::CopyConstructor)0x60624b
     },
     // Russobit
-    Api{},
+    Api{
+        (Api::Constructor)0x605bf2,
+        (Api::Destructor)0x605c8c,
+        (Api::CopyConstructor)0x60624b
+    },
     // Gog
     Api{}
 }};
