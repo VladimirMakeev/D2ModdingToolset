@@ -232,6 +232,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\dbf\dbfrecord.h" />
     <ClInclude Include="include\dbtable.h" />
     <ClInclude Include="include\dialoginterf.h" />
+    <ClInclude Include="include\difficultylevel.h" />
     <ClInclude Include="include\dynamiccast.h" />
     <ClInclude Include="include\functor.h" />
     <ClInclude Include="include\game.h" />

@@ -17,62 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CATEGORYIDS_H
-#define CATEGORYIDS_H
+#ifndef DIFFICULTYLEVEL_H
+#define DIFFICULTYLEVEL_H
+
+#include "categories.h"
+#include "categoryids.h"
 
 namespace game {
 
-/** Race ids from LRace.dbf. */
-enum class RaceId : int
-{
-    Human = 0,
-    Undead,
-    Heretic,
-    Dwarf,
-    Neutral,
-    Elf
-};
+struct LDifficultyLevelTable : public CEnumConstantTable<DifficultyLevelId>
+{ };
 
-/** Ai attitude ids from LaiAtt.dbf. */
-enum class AiAttitudeId : int
-{
-    Small = 0,
-    Medium,
-    Large,
-    Humongous
-};
-
-/** Unit branch ids from LunitB.dbf. */
-enum class UnitBranchId : int
-{
-    Fighter = 0,
-    Archer,
-    Mage,
-    Special,
-    Sideshow,
-    Hero,
-    Noble,
-    Summon
-};
-
-/** Building type ids from Lbuild.dbf. */
-enum class BuildingId : int
-{
-    Guild,
-    Heal,
-    Magic,
-    Unit
-};
-
-/** Difficulty level ids from LDiff.dbf. */
-enum class DifficultyLevelId : int
-{
-    Easy,
-    Average,
-    Hard,
-    VeryHard
-};
+struct LDifficultyLevel : public Category<DifficultyLevelId>
+{ };
 
 } // namespace game
 
-#endif // CATEGORYIDS_H
+#endif // DIFFICULTYLEVEL_H
