@@ -108,9 +108,6 @@
     <ClCompile Include="src\unitsforhire.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\linkedlist.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="src\globaldata.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -127,6 +124,9 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\dbtable.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\idlist.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -321,6 +321,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\difficultylevel.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\idlist.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

@@ -20,11 +20,12 @@
 #ifndef HOOKS_H
 #define HOOKS_H
 
+#include "idlist.h"
+
 namespace game {
 struct AutoDialogData;
 struct CMidDataCache2;
 struct CMidgardID;
-struct IdList;
 struct GlobalData;
 struct CDBTable;
 }; // namespace game

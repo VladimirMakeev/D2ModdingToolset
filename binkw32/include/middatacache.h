@@ -20,7 +20,7 @@
 #ifndef MIDDATACACHE_H
 #define MIDDATACACHE_H
 
-#include "linkedlist.h"
+#include "idlist.h"
 #include "midgardobjectmap.h"
 
 namespace game {

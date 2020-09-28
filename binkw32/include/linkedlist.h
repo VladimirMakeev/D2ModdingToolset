@@ -20,45 +20,27 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
-#include "midgardid.h"
 #include <cstdint>
 
 namespace game {
 
-struct IdListNode
+template <typename T>
+struct LinkedListNode
 {
-    IdListNode* next;
-    IdListNode* prev;
-    CMidgardID id;
+    LinkedListNode<T>* next;
+    LinkedListNode<T>* prev;
+    T data;
 };
 
-/**
- * Doubly-linked list with CMidgardID as data.
- */
-struct IdList
+/** Implementation of std::list<T> used in game. */
+template <typename T>
+struct LinkedList
 {
     std::uint32_t length;
-    IdListNode* head;
+    LinkedListNode<T>* head;
     int unknown;
     void* allocator;
 };
-
-namespace IdListApi {
-
-struct Api
-{
-    /** Clears list contents. */
-    using SetEmpty = bool(__thiscall*)(IdList* list);
-    SetEmpty setEmpty;
-
-    /** Adds id to list. */
-    using Add = int(__thiscall*)(IdList* list, const CMidgardID* id);
-    Add add;
-};
-
-Api& get();
-
-} // namespace IdListApi
 
 } // namespace game
 

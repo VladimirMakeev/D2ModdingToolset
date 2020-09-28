@@ -17,25 +17,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLAYERBUIDINGS_H
-#define PLAYERBUIDINGS_H
+#ifndef IDLIST_H
+#define IDLIST_H
 
-#include "idlist.h"
-#include "midscenarioobject.h"
+#include "linkedlist.h"
+#include "midgardid.h"
 
 namespace game {
 
-/** Holds information about player's buildings in capital. */
-struct CPlayerBuildings : public IMidScenarioObject
+using IdList = LinkedList<CMidgardID>;
+
+namespace IdListApi {
+
+struct Api
 {
-    int unknown;
-    int unknown2;
-    IdList buildings;
+    /** Clears list contents. */
+    using SetEmpty = bool(__thiscall*)(IdList* list);
+    SetEmpty setEmpty;
+
+    /** Adds id to list. */
+    using Add = int(__thiscall*)(IdList* list, const CMidgardID* id);
+    Add add;
 };
 
-static_assert(sizeof(CPlayerBuildings) == 28,
-              "Size of CPlayerBuildings structure must be exactly 28 bytes");
+Api& get();
+
+} // namespace IdListApi
 
 } // namespace game
 
-#endif // PLAYERBUIDINGS_H
+#endif // IDLIST_H

@@ -26,7 +26,7 @@
 #include "dynamiccast.h"
 #include "game.h"
 #include "globaldata.h"
-#include "linkedlist.h"
+#include "idlist.h"
 #include "log.h"
 #include "mempool.h"
 #include "middatacache.h"

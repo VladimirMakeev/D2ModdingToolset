@@ -20,12 +20,13 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "idlist.h"
+
 namespace game {
 
 struct TRaceType;
 struct CPlayerBuildings;
 struct LUnitBranch;
-struct IdList;
 struct CMidDataCache2;
 struct CMidgardID;
 struct CDBTable;
