@@ -135,6 +135,9 @@
     <ClCompile Include="src\smartptr.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\midgardmsgbox.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\interfmanager.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -348,6 +351,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\popupdialoginterf.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midgardmsgbox.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\interfmanager.h">
