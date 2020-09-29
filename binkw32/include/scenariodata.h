@@ -47,7 +47,7 @@ struct ScenarioData
     String name;
     int mapSize;
     LDifficultyLevel difficulty;
-    int unknown; /** Save game flag? */
+    int turnNumber;
     CMidgardID campaignId;
     RaceCategoryList races;
     LRaceCategory race;
