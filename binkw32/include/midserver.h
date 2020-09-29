@@ -51,7 +51,7 @@ static_assert(offsetof(CMidServer, CMidServer::CMqThread::vftable) == 0,
               "Vftable offset for CMqThread in CMidServer structure must be 0 bytes");
 
 static_assert(offsetof(CMidServer, CMidServer::IMqNetSystem::vftable) == 8,
-              "Vftable offset for IMqNetSystem in CMidServer structure must be 4 bytes");
+              "Vftable offset for IMqNetSystem in CMidServer structure must be 8 bytes");
 
 static_assert(offsetof(CMidServer, data) == 12, "CMidServer::data offset must be 12 bytes");
 
