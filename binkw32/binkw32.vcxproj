@@ -272,6 +272,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\netdplayservice.h" />
     <ClInclude Include="include\netdplaysession.h" />
     <ClInclude Include="include\playerbuildings.h" />
+    <ClInclude Include="include\popupdialoginterf.h" />
     <ClInclude Include="include\presentation.h" />
     <ClInclude Include="include\racetype.h" />
     <ClInclude Include="include\scenariodata.h" />

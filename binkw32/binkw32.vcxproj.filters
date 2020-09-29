@@ -341,6 +341,9 @@
     <ClInclude Include="include\interfdialog.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\popupdialoginterf.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\presentation.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
