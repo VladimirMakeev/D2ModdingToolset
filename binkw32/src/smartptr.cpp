@@ -31,11 +31,11 @@ static std::array<Api, 3> functions = {{
     },
     // Russobit
     Api{
-        (Api::CreateOrFree)0
+        (Api::CreateOrFree)0x5e4830
     },
     // Gog
     Api{
-        (Api::CreateOrFree)0
+        (Api::CreateOrFree)0x55b7bc
     }
 }};
 // clang-format on
