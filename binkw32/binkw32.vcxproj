@@ -210,6 +210,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClCompile Include="src\scenariodataarray.cpp" />
     <ClCompile Include="src\scenarioheader.cpp" />
     <ClCompile Include="src\settings.cpp" />
+    <ClCompile Include="src\smartptr.cpp" />
     <ClCompile Include="src\stringarray.cpp" />
     <ClCompile Include="src\unitbranchcat.cpp" />
     <ClCompile Include="src\unitsforhire.cpp" />
@@ -275,6 +276,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\scenariodataarray.h" />
     <ClInclude Include="include\scenarioheader.h" />
     <ClInclude Include="include\settings.h" />
+    <ClInclude Include="include\smartptr.h" />
     <ClInclude Include="include\stringandid.h" />
     <ClInclude Include="include\stringarray.h" />
     <ClInclude Include="include\textandid.h" />

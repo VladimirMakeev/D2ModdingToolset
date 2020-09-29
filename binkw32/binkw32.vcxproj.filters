@@ -132,6 +132,9 @@
     <ClCompile Include="src\idlist.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\smartptr.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Detours\src\detver.h">
@@ -330,6 +333,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\idlist.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\smartptr.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
