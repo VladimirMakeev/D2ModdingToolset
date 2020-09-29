@@ -25,6 +25,7 @@
 
 namespace game {
 struct AutoDialogData;
+struct CMenuNewSkirmishSingle;
 struct CMidDataCache2;
 struct CMidgardID;
 struct GlobalData;
@@ -42,6 +43,11 @@ game::AutoDialogData* __fastcall loadScriptFileHooked(game::AutoDialogData* this
                                                       int /*%edx*/,
                                                       const char* filePath,
                                                       int /*unknown*/);
+
+game::CMenuNewSkirmishSingle* __fastcall menuNewSkirmishSingleCtorHooked(
+    game::CMenuNewSkirmishSingle* thisptr,
+    int /*%edx*/,
+    int a1);
 
 bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
                                               const game::CMidgardID* playerId,

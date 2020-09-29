@@ -23,6 +23,7 @@
 #include "game.h"
 #include "hooks.h"
 #include "log.h"
+#include "menunewskirmishsingle.h"
 #include "settings.h"
 #include "unitsforhire.h"
 #include "version.h"
@@ -62,6 +63,8 @@ static void setupHooks()
     DetourAttach((PVOID*)&fn.respopupInit, (PVOID)hooks::respopupInitHooked);
     DetourAttach((PVOID*)&fn.toggleShowBannersInit, (PVOID)hooks::toggleShowBannersInitHooked);
     DetourAttach((PVOID*)&fn.processUnitModifiers, (PVOID)hooks::processUnitModifiersHooked);
+    DetourAttach((PVOID*)&game::CMenuNewSkirmishSingleApi::get().constructor,
+                 (PVOID)hooks::menuNewSkirmishSingleCtorHooked);
 
     if (!hooks::unitsForHire().empty()) {
         DetourAttach((PVOID*)&fn.addPlayerUnitsToHireList,

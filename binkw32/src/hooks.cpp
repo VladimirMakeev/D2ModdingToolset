@@ -20,16 +20,22 @@
 #include "hooks.h"
 #include "autodialog.h"
 #include "buildingtype.h"
+#include "button.h"
 #include "categories.h"
 #include "d2string.h"
 #include "dbtable.h"
+#include "dialoginterf.h"
 #include "dynamiccast.h"
+#include "functor.h"
 #include "game.h"
 #include "globaldata.h"
 #include "idlist.h"
 #include "interfmanager.h"
+#include "listbox.h"
 #include "log.h"
+#include "mapgen.h"
 #include "mempool.h"
+#include "menunewskirmishsingle.h"
 #include "middatacache.h"
 #include "midgardid.h"
 #include "midgardmsgbox.h"
@@ -37,6 +43,8 @@
 #include "midplayer.h"
 #include "playerbuildings.h"
 #include "racetype.h"
+#include "scenariodata.h"
+#include "scenariodataarray.h"
 #include "settings.h"
 #include "smartptr.h"
 #include "unitbranchcat.h"
@@ -213,6 +221,28 @@ game::AutoDialogData* __fastcall loadScriptFileHooked(game::AutoDialogData* this
     return thisptr;
 }
 
+static int* sub_6804ae(void* thisptr)
+{
+    return *(int**)(((int*)thisptr)[2]);
+}
+
+/**
+ * Returns ScenarioDataArrayWrapped, actual meaning and types are unknown.
+ * @param[in] unknown parameter is a pointer returned from sub_6804ae().
+ */
+static game::ScenarioDataArrayWrapped* sub_573134(int* unknown)
+{
+    return *(game::ScenarioDataArrayWrapped**)(*(unknown + 2) + 20);
+}
+
+static size_t getScenariosTotal(const game::ScenarioDataArray& data)
+{
+    const auto bgn = reinterpret_cast<size_t>(data.bgn);
+    const auto end = reinterpret_cast<size_t>(data.end);
+
+    return (end - bgn) / sizeof(game::ScenarioData);
+}
+
 void showMessageBox(const std::string& message)
 {
     using namespace game;
@@ -230,6 +260,78 @@ void showMessageBox(const std::string& message)
 
     manager->CInterfManagerImpl::CInterfManager::vftable->showInterface(manager, msgBox);
     SmartPointerApi::get().createOrFree(&ptr, nullptr);
+}
+
+static void __fastcall buttonGenerateMapCallback(game::CMenuNewSkirmish* thisptr, int /*%edx*/)
+{
+    std::string errorMessage;
+    if (!showMapGeneratorDialog(errorMessage)) {
+        showMessageBox(errorMessage);
+    }
+}
+
+static void menuNewSkirmishCtor(game::CMenuNewSkirmish* thisptr, int a1, const char* dialogName)
+{
+    using namespace game;
+
+    const auto& menuBase = CMenuBaseApi::get();
+    menuBase.constructor(thisptr, a1);
+    thisptr->vftable = CMenuNewSkirmishApi::vftable();
+    menuBase.createMenu(thisptr, dialogName);
+
+    const auto dialog = menuBase.getDialogInterface(thisptr);
+    const auto& menu = CMenuNewSkirmishApi::get();
+    const auto& button = CButtonInterfApi::get();
+    const auto freeFunctor = FunctorApi::get().createOrFree;
+    Functor functor;
+
+    menu.createButtonFunctor(&functor, 0, thisptr, &menu.buttonBackCallback);
+    button.assignFunctor(dialog, "BTN_BACK", dialogName, &functor, 0);
+    freeFunctor(&functor, nullptr);
+
+    menu.createButtonFunctor(&functor, 0, thisptr, &menu.loadScenarioCallback);
+    CButtonInterf* loadButton = button.assignFunctor(dialog, "BTN_LOAD", dialogName, &functor, 0);
+    freeFunctor(&functor, nullptr);
+
+    void* callback = buttonGenerateMapCallback;
+    menu.createButtonFunctor(&functor, 0, thisptr,
+                             (CMenuNewSkirmishApi::Api::ButtonCallback*)&callback);
+    button.assignFunctor(dialog, "BINKW_PROXY_BTN_GEN_MAP", dialogName, &functor, 0);
+    freeFunctor(&functor, nullptr);
+
+    const auto& listBox = CListBoxInterfApi::get();
+    menu.createListBoxDisplayTextFunctor(&functor, 0, thisptr, &menu.displayTextCallback);
+    listBox.assignDisplayTextFunctor(dialog, "TLBOX_GAME_SLOT", dialogName, &functor, true);
+    freeFunctor(&functor, nullptr);
+
+    menu.createListBoxFunctor(&functor, 0, thisptr, &menu.listBoxCallback);
+    listBox.assignFunctor(dialog, "TLBOX_GAME_SLOT", dialogName, &functor);
+    freeFunctor(&functor, nullptr);
+
+    int* unknown = sub_6804ae(thisptr);
+    ScenarioDataArrayWrapped* scenarios = sub_573134(unknown);
+
+    const size_t scenariosTotal = getScenariosTotal(scenarios->data);
+    if (!scenariosTotal) {
+        // Nothing to load
+        CButtonInterfApi::vftable()->setEnabled(loadButton, false);
+        return;
+    }
+
+    CListBoxInterf* lBox = CDialogInterfApi::get().findListBox(dialog, "TLBOX_GAME_SLOT");
+    listBox.initContents(lBox, scenariosTotal);
+    menu.updateScenarioUi(unknown, dialog, listBox.selectedIndex(lBox));
+}
+
+game::CMenuNewSkirmishSingle* __fastcall menuNewSkirmishSingleCtorHooked(
+    game::CMenuNewSkirmishSingle* thisptr,
+    int /*%edx*/,
+    int a1)
+{
+    menuNewSkirmishCtor(thisptr, a1, "DLG_CHOOSE_SKIRMISH");
+    thisptr->vftable = game::CMenuNewSkirmishSingleApi::vftable();
+
+    return thisptr;
 }
 
 bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
