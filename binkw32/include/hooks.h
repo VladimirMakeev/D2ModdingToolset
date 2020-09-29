@@ -21,6 +21,7 @@
 #define HOOKS_H
 
 #include "idlist.h"
+#include <string>
 
 namespace game {
 struct AutoDialogData;
@@ -54,6 +55,9 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
 void __stdcall createBuildingTypeHooked(const game::CDBTable* dbTable,
                                         void* a2,
                                         const game::GlobalData** globalData);
+
+/** Shows native in-game message box with specified text. */
+void showMessageBox(const std::string& message);
 
 } // namespace hooks
 

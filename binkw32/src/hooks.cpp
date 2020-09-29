@@ -27,14 +27,18 @@
 #include "game.h"
 #include "globaldata.h"
 #include "idlist.h"
+#include "interfmanager.h"
 #include "log.h"
 #include "mempool.h"
 #include "middatacache.h"
 #include "midgardid.h"
+#include "midgardmsgbox.h"
+#include "midmsgboxbuttonhandlerstd.h"
 #include "midplayer.h"
 #include "playerbuildings.h"
 #include "racetype.h"
 #include "settings.h"
+#include "smartptr.h"
 #include "unitbranchcat.h"
 #include "unitsforhire.h"
 #include <algorithm>
@@ -207,6 +211,25 @@ game::AutoDialogData* __fastcall loadScriptFileHooked(game::AutoDialogData* this
 
     thisptr->initialized = true;
     return thisptr;
+}
+
+void showMessageBox(const std::string& message)
+{
+    using namespace game;
+
+    auto memAlloc = Memory::get().allocate;
+    auto* btnHandler = (CMidMsgBoxButtonHandlerStd*)memAlloc(sizeof(CMidMsgBoxButtonHandlerStd));
+    btnHandler->vftable = CMidMsgBoxButtonHandlerStdApi::vftable();
+
+    CMidgardMsgBox* msgBox = (CMidgardMsgBox*)memAlloc(sizeof(CMidgardMsgBox));
+    CMidgardMsgBoxApi::get().constructor(msgBox, message.c_str(), 0, btnHandler, 0, nullptr);
+
+    SmartPointer ptr;
+    CInterfManagerImplApi::get().get(&ptr);
+    CInterfManagerImpl* manager = (CInterfManagerImpl*)ptr.data;
+
+    manager->CInterfManagerImpl::CInterfManager::vftable->showInterface(manager, msgBox);
+    SmartPointerApi::get().createOrFree(&ptr, nullptr);
 }
 
 bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
