@@ -73,6 +73,20 @@ enum class DifficultyLevelId : int
     VeryHard
 };
 
+/**
+ * Unit ids from LUnitC.dbf.
+ * LUnitC.dbf also defines neutral leader and neutral soldier but game does not use them.
+ */
+enum class UnitId : int
+{
+    Soldier,
+    Noble,
+    Leader,
+    Summon = 4,
+    Illusion,
+    Guardian = 8
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
