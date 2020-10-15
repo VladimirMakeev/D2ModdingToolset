@@ -21,7 +21,8 @@
 #include "version.h"
 #include <array>
 
-namespace game::BuildingCategories {
+namespace game {
+namespace BuildingCategories {
 
 // clang-format off
 static std::array<Categories, 3> categories = {{
@@ -68,4 +69,55 @@ const void* vftable()
     return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::BuildingCategories
+} // namespace BuildingCategories
+
+namespace LBuildingCategoryTableApi {
+
+// clang-format off
+static std::array<Api, 3> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)0x58b4a0,
+        (Api::Init)0x58b607,
+        (Api::ReadCategory)0x58b67f,
+        (Api::InitDone)0x58b5c2
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)0x58b4a0,
+        (Api::Init)0x58b607,
+        (Api::ReadCategory)0x58b67f,
+        (Api::InitDone)0x58b5c2
+    },
+    // Gog
+    Api{
+        (Api::Constructor)0x58a60c,
+        (Api::Init)0x58a773,
+        (Api::ReadCategory)0x58a7eb,
+        (Api::InitDone)0x58a72e
+    }
+}};
+
+static std::array<const void*, 3> vftables = {{
+    // Akella
+    (const void*)0x6ea71c,
+    // Russobit
+    (const void*)0x6ea71c,
+    // Gog
+    (const void*)0x6e86bc
+}};
+// clang-format on
+
+Api& get()
+{
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+const void* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
+
+} // namespace LBuildingCategoryTableApi
+
+} // namespace game
