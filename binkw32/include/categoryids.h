@@ -87,6 +87,14 @@ enum class UnitId : int
     Guardian = 8
 };
 
+/** Attack reach ids from LAttR.dbf. */
+enum class AttackReachId : int
+{
+    All = 1,
+    Any,
+    Adjacent
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
