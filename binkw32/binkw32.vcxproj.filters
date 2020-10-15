@@ -377,6 +377,9 @@
     <ClInclude Include="include\midmsgboxbuttonhandlerstd.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\midunit.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\usunit.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
