@@ -33,6 +33,26 @@ enum class RaceId : int
     Elf
 };
 
+/** Subrace ids from LSubRace.dbf. */
+enum class SubRaceId : int
+{
+    Custom,
+    Human,
+    Undead,
+    Heretic,
+    Dwarf,
+    Neutral,
+    NeutralHuman,
+    NeutralElf,
+    NeutralGreenSkin,
+    NeutralDragon,
+    NeutralMarsh,
+    NeutralWater,
+    NeutralBarbarian,
+    NeutralWolf,
+    Elf
+};
+
 /** Ai attitude ids from LaiAtt.dbf. */
 enum class AiAttitudeId : int
 {
