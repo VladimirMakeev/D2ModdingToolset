@@ -95,6 +95,34 @@ enum class AttackReachId : int
     Adjacent
 };
 
+/** Attack class ids from LAttC.dbf. */
+enum class AttackClassId : int
+{
+    Damage = 1,
+    Drain,
+    Paralyze,
+    Heal = 6,
+    Fear,
+    BoostDamage,
+    Petrify,
+    LowerDamage,
+    LowerInitiative,
+    Poison,
+    Frostbite,
+    Revive,
+    DrainOverflow,
+    Cure,
+    Summon,
+    DrainLevel,
+    GiveAttack,
+    Doppelganger,
+    TransformSelf,
+    TransformOther,
+    Blister,
+    BestowWards,
+    Shatter
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H

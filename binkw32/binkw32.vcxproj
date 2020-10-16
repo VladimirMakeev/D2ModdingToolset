@@ -181,6 +181,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
   <ItemGroup>
     <ClCompile Include="..\fmt\src\format.cc" />
     <ClCompile Include="..\fmt\src\os.cc" />
+    <ClCompile Include="src\attackclasscat.cpp" />
     <ClCompile Include="src\attackreachcat.cpp" />
     <ClCompile Include="src\autodialog.cpp" />
     <ClCompile Include="src\buildingcat.cpp" />
@@ -225,6 +226,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
   <ItemGroup>
     <ClInclude Include="..\Detours\src\detours.h" />
     <ClInclude Include="..\Detours\src\detver.h" />
+    <ClInclude Include="include\attackclasscat.h" />
     <ClInclude Include="include\attackreachcat.h" />
     <ClInclude Include="include\autodialog.h" />
     <ClInclude Include="include\buildingcat.h" />
