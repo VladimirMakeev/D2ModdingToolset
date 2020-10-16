@@ -401,6 +401,9 @@
     <ClInclude Include="include\attackreachcat.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\attackimpl.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\attackclasscat.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
