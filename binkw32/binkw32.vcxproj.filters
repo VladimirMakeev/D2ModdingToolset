@@ -156,6 +156,9 @@
     <ClCompile Include="src\attackclasscat.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\attacksourcecat.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Detours\src\detver.h">
@@ -399,6 +402,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\attackclasscat.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\attacksourcecat.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

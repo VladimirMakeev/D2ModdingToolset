@@ -123,6 +123,19 @@ enum class AttackClassId : int
     Shatter
 };
 
+/** Attack source ids from LAttS.dbf. */
+enum class AttackSourceId : int
+{
+    Weapon,
+    Mind,
+    Life,
+    Death,
+    Fire,
+    Water,
+    Earth,
+    Air
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
