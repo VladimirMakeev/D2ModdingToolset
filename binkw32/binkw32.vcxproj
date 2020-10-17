@@ -238,6 +238,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\categories.h" />
     <ClInclude Include="include\categoryids.h" />
     <ClInclude Include="include\currency.h" />
+    <ClInclude Include="include\d2pair.h" />
     <ClInclude Include="include\d2string.h" />
     <ClInclude Include="include\dbfaccess.h" />
     <ClInclude Include="include\dbf\dbfcolumn.h" />
