@@ -410,6 +410,12 @@
     <ClInclude Include="include\attacksourcecat.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\usunitextension.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ussoldier.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\subracecat.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
