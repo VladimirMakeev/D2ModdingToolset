@@ -416,6 +416,9 @@
     <ClInclude Include="include\ussoldier.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\ussoldierimpl.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\subracecat.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
