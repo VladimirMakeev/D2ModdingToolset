@@ -169,6 +169,14 @@ enum DeathAnimationId : int
     Elf
 };
 
+/** Immune category ids from LImmune.dbf. */
+enum ImmuneId : int
+{
+    Notimmune = 1,
+    Once,
+    Always
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
