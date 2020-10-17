@@ -156,6 +156,19 @@ enum class AttackSourceId : int
     Air
 };
 
+/** Death animation ids from LDthAnim.dbf. */
+enum DeathAnimationId : int
+{
+    Human = 1,
+    Heretic,
+    Dwarf,
+    Undead,
+    Neutral,
+    Dragon,
+    Ghost,
+    Elf
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
