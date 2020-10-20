@@ -177,6 +177,14 @@ enum ImmuneId : int
     Always
 };
 
+/** Lord category ids from LLord.dbf. */
+enum LordId : int
+{
+    Mage,
+    Warrior,
+    Diplomat
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
