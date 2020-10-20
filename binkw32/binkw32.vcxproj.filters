@@ -147,6 +147,9 @@
     <ClCompile Include="src\midmsgboxbuttonhandlerstd.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\buildingbranch.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\unitcat.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -384,6 +387,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\midmsgboxbuttonhandlerstd.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\buildingbranch.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\midunit.h">
