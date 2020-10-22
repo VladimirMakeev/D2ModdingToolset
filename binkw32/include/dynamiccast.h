@@ -50,7 +50,7 @@ struct Api
      * @isReference true if input is a reference.
      * @returns pointer to object of type dstType or NULL.
      */
-    using DynamicCast = void*(__cdecl*)(void* ptr,
+    using DynamicCast = void*(__cdecl*)(const void* ptr,
                                         int vfDelta,
                                         const TypeDescriptor* srcType,
                                         const TypeDescriptor* dstType,
@@ -65,6 +65,8 @@ struct Rtti
     TypeDescriptor* IMidScenarioObjectType;
     TypeDescriptor* CMidPlayerType;
     TypeDescriptor* CPlayerBuildingsType;
+    TypeDescriptor* TBuildingTypeType;
+    TypeDescriptor* TBuildingUnitUpgTypeType;
 };
 
 const Rtti& rtti();
