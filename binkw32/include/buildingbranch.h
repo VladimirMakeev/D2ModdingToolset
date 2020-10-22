@@ -24,6 +24,9 @@
 
 namespace game {
 
+struct TBuildingUnitUpgType;
+struct TBuildingType;
+
 struct CBuildingBranchData
 {
     int unk1;
@@ -54,10 +57,52 @@ namespace CBuildingBranchApi {
 
 struct Api
 {
+    /** Creates CBuildingBranch for specified branchNumber. */
     using Constructor = CBuildingBranch*(__thiscall*)(CBuildingBranch* thisptr,
                                                       int phaseGame,
                                                       int* branchNumber);
     Constructor constructor;
+
+    /** Initializes CBuildingBranchData with default values. */
+    using InitData = CBuildingBranchData*(__thiscall*)(CBuildingBranchData* thisptr);
+    InitData initData;
+
+    using InitData2 = void*(__thiscall*)(void*);
+    InitData2 initData2;
+
+    using InitData3 = void*(__thiscall*)(void*);
+    InitData3 initData3;
+
+    /**
+     * Adds sideshow unit building to building branch.
+     * @param[in] unknown pointer to CBuildingBranch::data->unk1.
+     * @param[in] building sideshow unit building to add.
+     */
+    using AddSideshowUnitBuilding = void(__stdcall*)(int* unknown,
+                                                     const TBuildingUnitUpgType* building);
+    AddSideshowUnitBuilding addSideshowUnitBuilding;
+
+    /**
+     * Adds unit building to building branch.
+     * @param[in] phaseGame
+     * @param[in] data pointer to building branch data.
+     * @param[in] building unit building to add.
+     */
+    using AddUnitBuilding = void(__stdcall*)(int phaseGame,
+                                             const CBuildingBranchData* data,
+                                             const TBuildingUnitUpgType* building);
+    AddUnitBuilding addUnitBuilding;
+
+    /**
+     * Adds building to building branch.
+     * @param[in] phaseGame
+     * @param[in] data pointer to building branch data.
+     * @param[in] building building to add.
+     */
+    using AddBuilding = void(__stdcall*)(int phaseGame,
+                                         const CBuildingBranchData* data,
+                                         const TBuildingType* building);
+    AddBuilding addBuilding;
 };
 
 Api& get();
