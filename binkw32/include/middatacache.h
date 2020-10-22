@@ -26,8 +26,6 @@
 namespace game {
 
 struct CMidgardScenarioMap;
-struct IMidScenarioObject;
-struct CMidgardID;
 
 struct CMidDataCache2 : public IMidgardObjectMap
 {
@@ -41,24 +39,6 @@ struct CMidDataCache2 : public IMidgardObjectMap
 
 static_assert(sizeof(CMidDataCache2) == 36,
               "Size of CMidDataCache2 structure must be exactly 36 bytes");
-
-namespace CMidDataCache2Api {
-
-struct Vftable
-{
-    void* unknown[5];
-
-    using FindScenarioObjectById = IMidScenarioObject*(__thiscall*)(CMidDataCache2* thisptr,
-                                                                    const CMidgardID* id);
-    FindScenarioObjectById findScenarioObjectById;
-
-    void* unknown2[7];
-};
-
-static_assert(sizeof(Vftable) == 13 * sizeof(void*),
-              "CMidDataCache2 vftable must have exactly 13 methods");
-
-} // namespace CMidDataCache2Api
 
 } // namespace game
 

@@ -22,9 +22,27 @@
 
 namespace game {
 
+struct IMidgardObjectMap;
+struct IMidScenarioObject;
+struct CMidgardID;
+
+struct IMidgardObjectMapVftable
+{
+    void* unknown[5];
+
+    using FindScenarioObjectById =
+        IMidScenarioObject*(__thiscall*)(const IMidgardObjectMap* thisptr, const CMidgardID* id);
+    FindScenarioObjectById findScenarioObjectById;
+
+    void* unknown2[7];
+};
+
+static_assert(sizeof(IMidgardObjectMapVftable) == 13 * sizeof(void*),
+              "IMidgardObjectMap vftable must have exactly 13 methods");
+
 struct IMidgardObjectMap
 {
-    const void* vftable;
+    const IMidgardObjectMapVftable* vftable;
 };
 
 } // namespace game
