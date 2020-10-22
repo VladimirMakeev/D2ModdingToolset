@@ -205,6 +205,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClCompile Include="src\interfmanager.cpp" />
     <ClCompile Include="src\listbox.cpp" />
     <ClCompile Include="src\log.cpp" />
+    <ClCompile Include="src\lordtype.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mapgen.cpp" />
     <ClCompile Include="src\mempool.cpp" />
@@ -269,6 +270,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\listbox.h" />
     <ClInclude Include="include\log.h" />
     <ClInclude Include="include\lordcat.h" />
+    <ClInclude Include="include\lordtype.h" />
     <ClInclude Include="include\mapgen.h" />
     <ClInclude Include="include\mempool.h" />
     <ClInclude Include="include\menubase.h" />
