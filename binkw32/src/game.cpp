@@ -34,7 +34,11 @@ static std::array<Functions, 3> functions = {{
         (AddSideshowUnitToHireList)0x5d5ab6,
         (AddPlayerUnitsToHireList)0x5d59e8,
         (CreateBuildingType)0x58bf67,
-        (AddObjectAndCheckDuplicates)0x59c0a8
+        (AddObjectAndCheckDuplicates)0x59c0a8,
+        (ChooseUnitLane)0x5d6abb,
+        (GetPlayerIdFromPhase)0x404e71,
+        (GetObjectMapFromPhase)0x404f06,
+        (GetLordByPlayer)0x5e6323
     },
     // Russobit
     Functions{
@@ -45,7 +49,11 @@ static std::array<Functions, 3> functions = {{
         (AddSideshowUnitToHireList)0x5d5ab6,
         (AddPlayerUnitsToHireList)0x5d59e8,
         (CreateBuildingType)0x58bf67,
-        (AddObjectAndCheckDuplicates)0x59c0a8
+        (AddObjectAndCheckDuplicates)0x59c0a8,
+        (ChooseUnitLane)0x5d6abb,
+        (GetPlayerIdFromPhase)0x404e71,
+        (GetObjectMapFromPhase)0x404f06,
+        (GetLordByPlayer)0x5e6323
     },
     // Gog
     Functions{
@@ -56,7 +64,11 @@ static std::array<Functions, 3> functions = {{
         (AddSideshowUnitToHireList)0x5d49df,
         (AddPlayerUnitsToHireList)0x5d4911,
         (CreateBuildingType)0x58b0c2,
-        (AddObjectAndCheckDuplicates)0x59b275
+        (AddObjectAndCheckDuplicates)0x59b275,
+        (ChooseUnitLane)0x5d59e4,
+        (GetPlayerIdFromPhase)0x404af9,
+        (GetObjectMapFromPhase)0x404b8e,
+        (GetLordByPlayer)0x5e5038
     }
 }};
 

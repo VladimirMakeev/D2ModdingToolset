@@ -32,6 +32,10 @@ struct CMidgardID;
 struct CDBTable;
 struct GlobalData;
 struct IMidObject;
+struct IUsSoldier;
+struct IMidgardObjectMap;
+struct TLordType;
+struct CMidPlayer;
 
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
@@ -97,6 +101,19 @@ using CreateBuildingType = void(__stdcall*)(const CDBTable* dbTable,
  */
 using AddObjectAndCheckDuplicates = bool(__thiscall*)(void* thisptr, const IMidObject* object);
 
+/**
+ * Decides where to place unit in group.
+ * @returns 0 for back lane, 1 for forward lane.
+ */
+using ChooseUnitLane = int(__stdcall*)(const IUsSoldier* soldier);
+
+/** Assumption: returns current player id. */
+using GetPlayerIdFromPhase = const CMidgardID*(__thiscall*)(int phase);
+using GetObjectMapFromPhase = const IMidgardObjectMap*(__thiscall*)(int phase);
+
+/** Returns lord type for specified player. */
+using GetLordByPlayer = const TLordType*(__stdcall*)(const CMidPlayer* player);
+
 /** Game functions that can be hooked. */
 struct Functions
 {
@@ -108,6 +125,10 @@ struct Functions
     AddPlayerUnitsToHireList addPlayerUnitsToHireList;
     CreateBuildingType createBuildingType;
     AddObjectAndCheckDuplicates addObjectAndCheckDuplicates;
+    ChooseUnitLane chooseUnitLane;
+    GetPlayerIdFromPhase getPlayerIdFromPhase;
+    GetObjectMapFromPhase getObjectMapFromPhase;
+    GetLordByPlayer getLordByPlayer;
 };
 
 /** Global variables used in game. */
