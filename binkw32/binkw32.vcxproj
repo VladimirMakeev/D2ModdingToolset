@@ -271,6 +271,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\log.h" />
     <ClInclude Include="include\lordcat.h" />
     <ClInclude Include="include\lordtype.h" />
+    <ClInclude Include="include\mapelement.h" />
     <ClInclude Include="include\mapgen.h" />
     <ClInclude Include="include\mempool.h" />
     <ClInclude Include="include\menubase.h" />
