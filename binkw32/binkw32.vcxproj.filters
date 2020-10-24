@@ -449,6 +449,9 @@
     <ClInclude Include="include\d2vector.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\position.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="module.rc">
