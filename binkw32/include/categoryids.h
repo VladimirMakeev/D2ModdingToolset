@@ -157,7 +157,7 @@ enum class AttackSourceId : int
 };
 
 /** Death animation ids from LDthAnim.dbf. */
-enum DeathAnimationId : int
+enum class DeathAnimationId : int
 {
     Human = 1,
     Heretic,
@@ -170,7 +170,7 @@ enum DeathAnimationId : int
 };
 
 /** Immune category ids from LImmune.dbf. */
-enum ImmuneId : int
+enum class ImmuneId : int
 {
     Notimmune = 1,
     Once,
@@ -178,7 +178,7 @@ enum ImmuneId : int
 };
 
 /** Lord category ids from LLord.dbf. */
-enum LordId : int
+enum class LordId : int
 {
     Mage,
     Warrior,
