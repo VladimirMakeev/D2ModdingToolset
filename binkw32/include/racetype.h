@@ -22,7 +22,8 @@
 
 #include "categories.h"
 #include "currency.h"
-#include "intarray.h"
+#include "d2vector.h"
+#include "midgardid.h"
 #include "midobject.h"
 #include "textandid.h"
 
@@ -49,20 +50,22 @@ struct CRacePlayerDesc
 /** Holds city information read from GCityInf.dbf. */
 struct TRaceTypeCityInformation;
 
+using IdVector = Vector<CMidgardID>;
+
 struct TRaceTypeData
 {
     LRaceCategory raceType;
     TextAndId name;
     bool playable;
     char padding[3];
-    int guardianUnitId;
-    int nobleUnitId;
-    IntArray leaders;
-    IntArray soldiers;
+    CMidgardID guardianUnitId;
+    CMidgardID nobleUnitId;
+    IdVector leaders;
+    IdVector soldiers;
     int regen;
     int scout;
     Bank income;
-    int protectionModifierId;
+    CMidgardID protectionModifierId;
     CRaceLeaderNames* leaderNames;
     CRacePlayerDesc* playerDesc1;
     CRacePlayerDesc* playerDesc2;
@@ -75,7 +78,7 @@ static_assert(sizeof(TRaceTypeData) == 104,
 /** Holds race information read from Grace.dbf. */
 struct TRaceType : public IMidObject
 {
-    int raceId;
+    CMidgardID raceId;
     TRaceTypeData* data;
 };
 

@@ -17,20 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INTARRAY_H
-#define INTARRAY_H
+#ifndef D2VECTOR_H
+#define D2VECTOR_H
 
 namespace game {
 
-/** Implementation of std::vector<int> in game. */
-struct IntArray
+/** Implementation of std::vector<T> in game. */
+template <typename T>
+struct Vector
 {
-    int* bgn;
-    int* end;
-    int* allocatedMemEnd;
+    T* bgn;
+    T* end;
+    T* allocatedMemEnd;
     void* allocator;
 };
 
 } // namespace game
 
-#endif // INTARRAY_H
+#endif // D2VECTOR_H

@@ -244,6 +244,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\d2map.h" />
     <ClInclude Include="include\d2pair.h" />
     <ClInclude Include="include\d2string.h" />
+    <ClInclude Include="include\d2vector.h" />
     <ClInclude Include="include\dbfaccess.h" />
     <ClInclude Include="include\dbf\dbfcolumn.h" />
     <ClInclude Include="include\dbf\dbffile.h" />
@@ -261,7 +262,6 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\hooks.h" />
     <ClInclude Include="include\idlist.h" />
     <ClInclude Include="include\immunecat.h" />
-    <ClInclude Include="include\intarray.h" />
     <ClInclude Include="include\interface.h" />
     <ClInclude Include="include\interfdialog.h" />
     <ClInclude Include="include\interffullscreen.h" />

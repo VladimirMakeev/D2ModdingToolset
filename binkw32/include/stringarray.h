@@ -20,17 +20,13 @@
 #ifndef STRINGARRAY_H
 #define STRINGARRAY_H
 
+#include "d2vector.h"
+
 namespace game {
 
 struct String;
 
-struct StringArray
-{
-    String* begin;
-    String* end;
-    String* allocatedMemEnd;
-    void* allocator;
-};
+using StringArray = Vector<String>;
 
 static_assert(sizeof(StringArray) == 16, "StringArray structure must be exactly 16 bytes");
 

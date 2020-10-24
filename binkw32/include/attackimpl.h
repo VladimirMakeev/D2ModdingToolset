@@ -23,13 +23,15 @@
 #include "attackclasscat.h"
 #include "attackreachcat.h"
 #include "attacksourcecat.h"
-#include "intarray.h"
+#include "d2vector.h"
 #include "midgardid.h"
 #include "midobject.h"
 #include "textandid.h"
 #include <cstddef>
 
 namespace game {
+
+using IdVector = Vector<CMidgardID>;
 
 struct IAttack : public IMidObject
 { };
@@ -49,7 +51,7 @@ struct CAttackImplData
     int altAttack;
     bool infinite;
     char padding[3];
-    IntArray wards;
+    IdVector wards;
     bool critHit;
     char padding2[3];
 };
