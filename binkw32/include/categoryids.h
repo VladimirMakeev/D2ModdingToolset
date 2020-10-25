@@ -185,6 +185,24 @@ enum class LordId : int
     Diplomat
 };
 
+/** Order ids from LOrder.dbf. */
+enum class OrderId : int
+{
+    Normal = 1,
+    Stand,
+    Guard,
+    AttackStack,
+    DefendStack,
+    SecureCity,
+    Roam,
+    MoveToLocation,
+    DefendLocation,
+    Bezerk,
+    Assist,
+    Steal = 13,
+    DefendCity
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
