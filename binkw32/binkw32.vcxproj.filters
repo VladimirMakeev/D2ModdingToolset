@@ -464,6 +464,9 @@
     <ClInclude Include="include\midunitgroup.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="include\fortification.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="module.rc">
