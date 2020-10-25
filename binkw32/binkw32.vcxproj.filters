@@ -467,6 +467,9 @@
     <ClInclude Include="include\fortification.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="include\midvillage.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="module.rc">
