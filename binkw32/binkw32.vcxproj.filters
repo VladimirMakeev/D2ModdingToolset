@@ -473,6 +473,9 @@
     <ClInclude Include="include\ordercat.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\midruin.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\fortification.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>

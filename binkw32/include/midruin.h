@@ -17,12 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FORTIFICATION_H
-#define FORTIFICATION_H
+#ifndef MIDRUIN_H
+#define MIDRUIN_H
 
 #include "aipriority.h"
+#include "currency.h"
 #include "mapelement.h"
-#include "midinventory.h"
+#include "midgardid.h"
 #include "midscenarioobject.h"
 #include "midunitgroup.h"
 #include "stringandid.h"
@@ -30,38 +31,33 @@
 
 namespace game {
 
-struct CMidUnitGroupFortification : public CMidUnitGroup
+struct CMidUnitGroupRuin : public CMidUnitGroup
 { };
 
-/** Base class for capitals and villages (cities). */
-struct CFortification : public IMidScenarioObject
+struct CMidRuin : public IMidScenarioObject
 {
-    CMidgardID cityId;
+    CMidgardID ruinId;
     IMapElement mapElement;
     IAiPriority aiPriority;
-    StringAndId name;
+    CMidUnitGroupRuin group;
+    StringAndId title;
     StringAndId description;
-    CMidUnitGroupFortification group;
-    CMidInventory inventory;
-    CMidgardID ownerId;
-    CMidgardID subraceId;
-    CMidgardID stackId;
+    Bank cash;
+    CMidgardID itemId;
+    CMidgardID looterId;
+    char visitorData[28];
+    int imageIndex;
 };
 
-static_assert(offsetof(CFortification, aiPriority) == 28,
-              "CFortification::aiPriority offset must be 28 bytes");
+static_assert(sizeof(CMidRuin) == 164, "Size of CMidRuin structure must be exactly 164 bytes");
 
-static_assert(offsetof(CFortification, name) == 36, "CFortification::name offset must be 36 bytes");
+static_assert(offsetof(CMidRuin, group) == 36, "CMidRuin::group offset must be 36 bytes");
 
-static_assert(offsetof(CFortification, description) == 48,
-              "CFortification::description offset must be 48 bytes");
+static_assert(offsetof(CMidRuin, description) == 100,
+              "CMidRuin::description offset must be 100 bytes");
 
-static_assert(offsetof(CFortification, group) == 60,
-              "CFortification::group offset must be 60 bytes");
-
-static_assert(offsetof(CFortification, inventory) == 112,
-              "CFortification::inventory offset must be 112 bytes");
+static_assert(offsetof(CMidRuin, looterId) == 128, "CMidRuin::looterId offset must be 128 bytes");
 
 } // namespace game
 
-#endif // FORTIFICATION_H
+#endif // MIDRUIN_H

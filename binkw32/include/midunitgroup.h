@@ -39,15 +39,6 @@ struct CMidUnitGroup
     CFortification* city;
 };
 
-struct CMidUnitGroupStack : public CMidUnitGroup
-{ };
-
-struct CMidUnitGroupFortification : public CMidUnitGroup
-{ };
-
-struct CMidUnitGroupRuin : public CMidUnitGroup
-{ };
-
 } // namespace game
 
 #endif // MIDUNITGROUP_H

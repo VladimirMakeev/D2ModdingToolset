@@ -34,6 +34,9 @@ namespace game {
 
 using IdVector = Vector<CMidgardID>;
 
+struct CMidUnitGroupStack : public CMidUnitGroup
+{ };
+
 struct CMidInventoryStack : public CMidInventory
 {
     int unknown;
