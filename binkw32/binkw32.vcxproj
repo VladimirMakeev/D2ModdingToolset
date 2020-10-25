@@ -294,6 +294,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\midscenarioobject.h" />
     <ClInclude Include="include\midserver.h" />
     <ClInclude Include="include\midserverbuilder.h" />
+    <ClInclude Include="include\midstack.h" />
     <ClInclude Include="include\midunit.h" />
     <ClInclude Include="include\midunitgroup.h" />
     <ClInclude Include="include\midvillage.h" />
