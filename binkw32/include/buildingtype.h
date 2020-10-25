@@ -24,6 +24,7 @@
 #include "currency.h"
 #include "midgardid.h"
 #include "midobject.h"
+#include "position.h"
 #include "textandid.h"
 #include "unitbranchcat.h"
 
@@ -31,12 +32,6 @@ namespace game {
 
 struct GlobalData;
 struct CDBTable;
-
-struct Position
-{
-    int x;
-    int y;
-};
 
 struct TBuildingTypeData
 {
