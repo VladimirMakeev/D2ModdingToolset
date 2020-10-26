@@ -42,6 +42,9 @@ std::error_code determineGameVersion(const std::filesystem::path& exeFilePath)
         version = GameVersion::Akella;
         break;
 
+    // Mortling's mod, exe with custom icon
+    case 4214272:
+        [[fallthrough]];
     case 4187648:
         version = GameVersion::Russobit;
         break;
