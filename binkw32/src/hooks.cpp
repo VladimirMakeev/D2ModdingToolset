@@ -349,9 +349,7 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
         return false;
     }
 
-    auto vftable = (const CMidDataCache2Api::Vftable*)dataCache->vftable;
-    auto findScenarioObjectById = vftable->findScenarioObjectById;
-
+    auto findScenarioObjectById = dataCache->vftable->findScenarioObjectById;
     auto playerObject = findScenarioObjectById(dataCache, playerId);
     if (!playerObject) {
         logError("binkwProxyError.log",
