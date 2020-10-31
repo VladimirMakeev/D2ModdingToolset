@@ -28,6 +28,11 @@ GameVersion gameVersion()
     return version;
 }
 
+bool executableIsGame()
+{
+    return version != GameVersion::Unknown && version != GameVersion::ScenarioEditor;
+}
+
 std::error_code determineGameVersion(const std::filesystem::path& exeFilePath)
 {
     std::error_code errorCode;

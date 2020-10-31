@@ -37,6 +37,9 @@ enum class GameVersion
 /** Returns determined game version. */
 GameVersion gameVersion();
 
+/** Returns true if dll loaded from game executable. */
+bool executableIsGame();
+
 std::error_code determineGameVersion(const std::filesystem::path& exeFilePath);
 
 } // namespace hooks
