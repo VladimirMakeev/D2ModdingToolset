@@ -30,6 +30,7 @@ struct CMidDataCache2;
 struct CMidgardID;
 struct GlobalData;
 struct CDBTable;
+struct LBuildingCategoryTable;
 }; // namespace game
 
 namespace hooks {
@@ -61,6 +62,12 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
 void __stdcall createBuildingTypeHooked(const game::CDBTable* dbTable,
                                         void* a2,
                                         const game::GlobalData** globalData);
+
+game::LBuildingCategoryTable* __fastcall buildingCategoryTableCtorHooked(
+    game::LBuildingCategoryTable* thisptr,
+    int /*%edx*/,
+    const char* globalsFolderPath,
+    void* codeBaseEnvProxy);
 
 /** Shows native in-game message box with specified text. */
 void showMessageBox(const std::string& message);

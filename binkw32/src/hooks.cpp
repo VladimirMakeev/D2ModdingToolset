@@ -23,6 +23,7 @@
 #include "button.h"
 #include "categories.h"
 #include "d2string.h"
+#include "dbf/dbffile.h"
 #include "dbtable.h"
 #include "dialoginterf.h"
 #include "dynamiccast.h"
@@ -408,6 +409,9 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
     return true;
 }
 
+static game::LBuildingCategory custom;
+static bool customCategoryExists{false};
+
 void __stdcall createBuildingTypeHooked(const game::CDBTable* dbTable,
                                         void* a2,
                                         const game::GlobalData** globalData)
@@ -426,7 +430,8 @@ void __stdcall createBuildingTypeHooked(const game::CDBTable* dbTable,
     TBuildingType* buildingType = nullptr;
 
     auto& buildingCategories = BuildingCategories::get();
-    if (category.id == buildingCategories.unit->id || category.id == buildingCategories.heal->id) {
+    if (category.id == buildingCategories.unit->id
+        || (customCategoryExists && (category.id == custom.id))) {
         // This is TBuildingUnitUpgType constructor
         // without TBuildingTypeData::category validity check
         TBuildingUnitUpgType* unitBuilding = (TBuildingUnitUpgType*)memAlloc(
@@ -449,6 +454,70 @@ void __stdcall createBuildingTypeHooked(const game::CDBTable* dbTable,
     if (!gameFunctions().addObjectAndCheckDuplicates(a2, buildingType)) {
         db.duplicateRecordException(dbTable, &buildingType->buildingId);
     }
+}
+
+static std::string trimSpaces(const std::string& str)
+{
+    const auto begin = str.find_first_not_of(" ");
+    if (begin == std::string::npos) {
+        return "";
+    }
+
+    const auto end = str.find_last_not_of(" ");
+    return str.substr(begin, end - begin + 1);
+}
+
+game::LBuildingCategoryTable* __fastcall buildingCategoryTableCtorHooked(
+    game::LBuildingCategoryTable* thisptr,
+    int /*%edx*/,
+    const char* globalsFolderPath,
+    void* codeBaseEnvProxy)
+{
+    static const char dbfFileName[] = "LBuild.dbf";
+
+    logDebug("newBuildingType.log", "Hook started");
+
+    {
+        utils::DbfFile dbf;
+        std::filesystem::path globals{globalsFolderPath};
+        if (!dbf.open(globals / dbfFileName)) {
+            logError("binkwProxyError.log", fmt::format("Could not open {:s}", dbfFileName));
+        } else {
+            utils::DbfRecord record;
+            if (dbf.recordsTotal() > 4 && dbf.record(record, 4)) {
+                std::string categoryName;
+                if (record.value(categoryName, "TEXT") && trimSpaces(categoryName) == "L_CUSTOM") {
+                    customCategoryExists = true;
+                    logDebug("newBuildingType.log", "Found custom building category");
+                }
+            }
+        }
+    }
+
+    using namespace game;
+    auto& table = LBuildingCategoryTableApi::get();
+    auto& categories = BuildingCategories::get();
+
+    thisptr->bgn = nullptr;
+    thisptr->end = nullptr;
+    thisptr->allocatedMemEnd = nullptr;
+    thisptr->allocator = nullptr;
+    thisptr->vftable = LBuildingCategoryTableApi::vftable();
+
+    table.init(thisptr, codeBaseEnvProxy, globalsFolderPath, dbfFileName);
+    table.readCategory(categories.guild, thisptr, "L_GUILD", dbfFileName);
+    table.readCategory(categories.heal, thisptr, "L_HEAL", dbfFileName);
+    table.readCategory(categories.magic, thisptr, "L_MAGIC", dbfFileName);
+    table.readCategory(categories.unit, thisptr, "L_UNIT", dbfFileName);
+
+    if (customCategoryExists) {
+        table.readCategory(&custom, thisptr, "L_CUSTOM", dbfFileName);
+    }
+
+    table.initDone(thisptr);
+
+    logDebug("newBuildingType.log", "Hook finished");
+    return thisptr;
 }
 
 } // namespace hooks
