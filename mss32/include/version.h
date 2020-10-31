@@ -30,7 +30,8 @@ enum class GameVersion
     Unknown = -1,
     Akella,
     Russobit,
-    Gog
+    Gog,
+    ScenarioEditor
 };
 
 /** Returns determined game version. */

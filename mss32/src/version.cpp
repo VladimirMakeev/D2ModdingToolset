@@ -53,6 +53,10 @@ std::error_code determineGameVersion(const std::filesystem::path& exeFilePath)
         version = GameVersion::Gog;
         break;
 
+    case 2895872:
+        version = GameVersion::ScenarioEditor;
+        break;
+
     default:
         version = GameVersion::Unknown;
         break;
