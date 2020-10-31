@@ -71,29 +71,27 @@ static void writeProtectedMemory(T* address, T value)
 static void adjustGameRestrictions()
 {
     auto& variables = game::gameVariables();
-    // Allow game to load scenarios with maximum allowed spells level set to zero,
-    // disabling usage of magic in scenario
+    // Allow game to load and scenario editor to create scenarios with maximum allowed spells level
+    // set to zero, disabling usage of magic in scenario
     writeProtectedMemory(variables.spellMinLevel, 0);
 }
 
-static void setupHooks()
+/** Hooks that used only in game. */
+static void setupGameHooks()
 {
     auto& fn = game::gameFunctions();
 
     DetourAttach((PVOID*)&fn.respopupInit, (PVOID)hooks::respopupInitHooked);
     DetourAttach((PVOID*)&fn.toggleShowBannersInit, (PVOID)hooks::toggleShowBannersInitHooked);
+    // Fix game crash in battles with summoners
     DetourAttach((PVOID*)&fn.processUnitModifiers, (PVOID)hooks::processUnitModifiersHooked);
 
-    DetourAttach((PVOID*)&fn.createBuildingType, (PVOID)hooks::createBuildingTypeHooked);
-    DetourAttach((PVOID*)&game::LBuildingCategoryTableApi::get().constructor,
-                 (PVOID)hooks::buildingCategoryTableCtorHooked);
-    // Support custom building branch category
     DetourAttach((PVOID*)&game::CBuildingBranchApi::get().constructor,
                  (PVOID)hooks::buildingBranchCtorHooked);
 
     DetourAttach((PVOID*)&fn.chooseUnitLane, (PVOID)hooks::chooseUnitLaneHooked);
 
-    // map generation
+    // Random map generation
     DetourAttach((PVOID*)&game::CMenuNewSkirmishSingleApi::get().constructor,
                  (PVOID)hooks::menuNewSkirmishSingleCtorHooked);
 
@@ -101,6 +99,20 @@ static void setupHooks()
         DetourAttach((PVOID*)&fn.addPlayerUnitsToHireList,
                      (PVOID)hooks::addPlayerUnitsToHireListHooked);
     }
+}
+
+static void setupHooks()
+{
+    if (hooks::executableIsGame()) {
+        setupGameHooks();
+    }
+
+    auto& fn = game::gameFunctions();
+
+    // Support custom building branch category
+    DetourAttach((PVOID*)&fn.createBuildingType, (PVOID)hooks::createBuildingTypeHooked);
+    DetourAttach((PVOID*)&game::LBuildingCategoryTableApi::get().constructor,
+                 (PVOID)hooks::buildingCategoryTableCtorHooked);
 }
 
 BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
@@ -151,7 +163,7 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
 
-    if (!hooks::loadUnitsForHire(exeFilePath)) {
+    if (hooks::executableIsGame() && !hooks::loadUnitsForHire(exeFilePath)) {
         MessageBox(NULL, "Failed to load new units. Check error log for details.",
                    "mss32.dll proxy", MB_OK);
         return FALSE;
