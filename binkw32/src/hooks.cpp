@@ -21,6 +21,7 @@
 #include "attackimpl.h"
 #include "attackreachcat.h"
 #include "autodialog.h"
+#include "buildingbranch.h"
 #include "buildingtype.h"
 #include "button.h"
 #include "categories.h"
@@ -36,6 +37,7 @@
 #include "interfmanager.h"
 #include "listbox.h"
 #include "log.h"
+#include "lordtype.h"
 #include "mapgen.h"
 #include "mempool.h"
 #include "menunewskirmishsingle.h"
@@ -520,6 +522,107 @@ game::LBuildingCategoryTable* __fastcall buildingCategoryTableCtorHooked(
     table.initDone(thisptr);
 
     logDebug("newBuildingType.log", "Hook finished");
+    return thisptr;
+}
+
+game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch* thisptr,
+                                                           int /*%edx*/,
+                                                           int phaseGame,
+                                                           int* branchNumber)
+{
+    using namespace game;
+
+    logDebug("newBuildingType.log", "CBuildingBranchCtor hook started");
+
+    auto memAlloc = Memory::get().allocate;
+    CBuildingBranchData* data = (CBuildingBranchData*)memAlloc(sizeof(CBuildingBranchData));
+
+    const auto& buildingBranch = CBuildingBranchApi::get();
+    buildingBranch.initData(data);
+
+    thisptr->data = data;
+    thisptr->vftable = CBuildingBranchApi::vftable();
+
+    buildingBranch.initData2(&thisptr->data->unk1);
+    thisptr->data->branchNumber = *branchNumber;
+    buildingBranch.initData3(&thisptr->data->unk12);
+
+    const auto& fn = gameFunctions();
+    const CMidgardID* playerId = fn.getPlayerIdFromPhase(phaseGame + 8);
+    auto objectMap = fn.getObjectMapFromPhase(phaseGame + 8);
+    auto findScenarioObjectById = objectMap->vftable->findScenarioObjectById;
+
+    auto playerObject = findScenarioObjectById(objectMap, playerId);
+
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+    const CMidPlayer* player = (const CMidPlayer*)dynamicCast(playerObject, 0,
+                                                              rtti.IMidScenarioObjectType,
+                                                              rtti.CMidPlayerType, 0);
+
+    const LRaceCategory* playerRace = &player->raceType->data->raceType;
+    thisptr->data->raceCategory.table = playerRace->table;
+    thisptr->data->raceCategory.id = playerRace->id;
+
+    auto lord = fn.getLordByPlayer(player);
+    auto buildList = lord->data->buildList;
+
+    auto lordTypeApi = TLordTypeApi::get();
+    BuildListIterator iterator;
+    lordTypeApi.getIterator(buildList, &iterator);
+
+    const auto globalData = GlobalDataApi::get().getGlobalData();
+    int* buildings = (*globalData)->buildings;
+
+    while (true) {
+        BuildListIterator endIterator;
+        lordTypeApi.getEndIterator(buildList, &endIterator);
+
+        if (iterator.node == endIterator.node && iterator.node2 == endIterator.node2) {
+            break;
+        }
+
+        const auto findById = GlobalDataApi::get().findById;
+        const TBuildingType* buildingType = (const TBuildingType*)
+            findById(buildings, &iterator.node->buildingId);
+
+        const LBuildingCategory* buildingCategory = &buildingType->data->category;
+        const auto buildingCategories = BuildingCategories::get();
+
+        if (buildingCategory->id == buildingCategories.unit->id) {
+            const TBuildingUnitUpgType* unitUpg = (const TBuildingUnitUpgType*)
+                dynamicCast(buildingType, 0, rtti.TBuildingTypeType, rtti.TBuildingUnitUpgTypeType,
+                            0);
+
+            LUnitBranch unitBranch;
+            unitBranch.table = unitUpg->branch.table;
+            unitBranch.id = unitUpg->branch.id;
+            unitBranch.vftable = UnitBranchCategories::vftable();
+
+            const auto unitBranchCategories = UnitBranchCategories::get();
+            const int num = *branchNumber;
+
+            if (unitBranch.id == unitBranchCategories.sideshow->id) {
+                buildingBranch.addSideshowUnitBuilding(&thisptr->data->unk1, unitUpg);
+            } else if (unitBranch.id == unitBranchCategories.fighter->id && num == 0
+                       || unitBranch.id == unitBranchCategories.mage->id && num == 1
+                       || unitBranch.id == unitBranchCategories.archer->id && num == 2
+                       || unitBranch.id == unitBranchCategories.special->id && num == 4) {
+                buildingBranch.addUnitBuilding(phaseGame, thisptr->data, unitUpg);
+            }
+
+        } else if ((buildingCategory->id == buildingCategories.guild->id
+                    || buildingCategory->id == buildingCategories.heal->id
+                    || buildingCategory->id == buildingCategories.magic->id
+                    || (customCategoryExists && (buildingCategory->id == custom.id)))
+                   && *branchNumber == 3) {
+            buildingBranch.addBuilding(phaseGame, thisptr->data, buildingType);
+        }
+
+        lordTypeApi.advanceIterator(&iterator.node, &iterator.node2->unknown);
+    }
+
+    logDebug("newBuildingType.log", "Ctor finished");
     return thisptr;
 }
 

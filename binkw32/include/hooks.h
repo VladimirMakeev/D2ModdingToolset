@@ -31,6 +31,7 @@ struct CMidgardID;
 struct GlobalData;
 struct CDBTable;
 struct LBuildingCategoryTable;
+struct CBuildingBranch;
 struct IUsSoldier;
 }; // namespace game
 
@@ -72,6 +73,11 @@ game::LBuildingCategoryTable* __fastcall buildingCategoryTableCtorHooked(
 
 /** Shows native in-game message box with specified text. */
 void showMessageBox(const std::string& message);
+
+game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch* thisptr,
+                                                           int /*%edx*/,
+                                                           int phaseGame,
+                                                           int* branchNumber);
 
 int __stdcall chooseUnitLaneHooked(const game::IUsSoldier* soldier);
 
