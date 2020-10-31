@@ -92,25 +92,29 @@ static std::array<Variables, 4> variables = {{
     Variables{
         (int*)0x837ac8,
         (unsigned char*)0x837acc,
-        (int*)0x6eb3f8
+        (int*)0x6eb3f8,
+        (int*)0x6ea92c
     },
     // Russobit
     Variables{
         (int*)0x837ac8,
         (unsigned char*)0x837acc,
-        (int*)0x6eb3f8
+        (int*)0x6eb3f8,
+        (int*)0x6ea92c
     },
     // Gog
     Variables{
         (int*)0x835a78,
         (unsigned char*)0x835a7c,
-        (int*)0x6e9398
+        (int*)0x6e9398,
+        (int*)0x6e88cc
     },
     // Scenario Editor
     Variables{
         nullptr,
         nullptr,
-        (int*)0x5df134
+        (int*)0x5df134,
+        (int*)0x5de03c
     },
 }};
 // clang-format on

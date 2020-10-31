@@ -74,6 +74,8 @@ static void adjustGameRestrictions()
     // Allow game to load and scenario editor to create scenarios with maximum allowed spells level
     // set to zero, disabling usage of magic in scenario
     writeProtectedMemory(variables.spellMinLevel, 0);
+    // Allow using units with tier higher than 5
+    writeProtectedMemory(variables.unitMaxLevel, 10);
 }
 
 /** Hooks that used only in game. */
