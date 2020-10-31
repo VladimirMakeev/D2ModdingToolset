@@ -18,6 +18,8 @@
  */
 
 #include "hooks.h"
+#include "attackimpl.h"
+#include "attackreachcat.h"
 #include "autodialog.h"
 #include "buildingtype.h"
 #include "button.h"
@@ -50,6 +52,7 @@
 #include "smartptr.h"
 #include "unitbranchcat.h"
 #include "unitsforhire.h"
+#include "ussoldier.h"
 #include <algorithm>
 #include <cstring>
 #include <fmt/format.h>
@@ -518,6 +521,21 @@ game::LBuildingCategoryTable* __fastcall buildingCategoryTableCtorHooked(
 
     logDebug("newBuildingType.log", "Hook finished");
     return thisptr;
+}
+
+int __stdcall chooseUnitLaneHooked(const game::IUsSoldier* soldier)
+{
+    using namespace game;
+
+    auto vftable = (const IUsSoldierVftable*)soldier->vftable;
+    const CAttackImpl* attackImpl = vftable->getAttackById(soldier);
+
+    // Place units with adjacent attack reach at the front lane, despite of their attack class
+    if (attackImpl->data->attackReach.id == AttackReachCategories::get().adjacentAttackReach->id) {
+        return 1;
+    }
+
+    return 0;
 }
 
 } // namespace hooks
