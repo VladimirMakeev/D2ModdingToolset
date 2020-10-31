@@ -25,7 +25,7 @@ namespace game {
 namespace BuildingCategories {
 
 // clang-format off
-static std::array<Categories, 3> categories = {{
+static std::array<Categories, 4> categories = {{
     // Akella
     Categories{
         (LBuildingCategory*)0x839a30,
@@ -46,16 +46,25 @@ static std::array<Categories, 3> categories = {{
         (LBuildingCategory*)0x8379f0,
         (LBuildingCategory*)0x837a00,
         (LBuildingCategory*)0x8379d0
+    },
+    // Scenario Editor
+    Categories{
+        (LBuildingCategory*)0x665af8,
+        (LBuildingCategory*)0x665b08,
+        (LBuildingCategory*)0x665b18,
+        (LBuildingCategory*)0x665ae8
     }
 }};
 
-static std::array<const void*, 3> vftables = {{
+static std::array<const void*, 4> vftables = {{
     // Akella
     (const void*)0x6d153c,
     // Russobit
     (const void*)0x6d153c,
     // Gog
-    (const void*)0x6cf4dc
+    (const void*)0x6cf4dc,
+    // Scenario Editor
+    (const void*)0x5df5dc
 }};
 // clang-format on
 
@@ -74,7 +83,7 @@ const void* vftable()
 namespace LBuildingCategoryTableApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::Constructor)0x58b4a0,
@@ -95,16 +104,25 @@ static std::array<Api, 3> functions = {{
         (Api::Init)0x58a773,
         (Api::ReadCategory)0x58a7eb,
         (Api::InitDone)0x58a72e
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x53b0a8,
+        (Api::Init)0x53b20f,
+        (Api::ReadCategory)0x53b287,
+        (Api::InitDone)0x53b1ca
     }
 }};
 
-static std::array<const void*, 3> vftables = {{
+static std::array<const void*, 4> vftables = {{
     // Akella
     (const void*)0x6ea71c,
     // Russobit
     (const void*)0x6ea71c,
     // Gog
-    (const void*)0x6e86bc
+    (const void*)0x6e86bc,
+    // Scenario Editor
+    (const void*)0x5df714
 }};
 // clang-format on
 

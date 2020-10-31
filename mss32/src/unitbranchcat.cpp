@@ -24,7 +24,7 @@
 namespace game::UnitBranchCategories {
 
 // clang-format off
-static std::array<Categories, 3> categories = {{
+static std::array<Categories, 4> categories = {{
     // Akella
     Categories{
         (LUnitBranch*)0x839fc8,
@@ -48,16 +48,26 @@ static std::array<Categories, 3> categories = {{
         (LUnitBranch*)0x837f88,
         (LUnitBranch*)0x837f48,
         (LUnitBranch*)0x837f28
+    },
+    // Scenario Editor
+    Categories{
+        (LUnitBranch*)0x665a58,
+        (LUnitBranch*)0x665a38,
+        (LUnitBranch*)0x665a68,
+        (LUnitBranch*)0x665a28,
+        (LUnitBranch*)0x665a08
     }
 }};
 
-static std::array<const void*, 3> vftables = {{
+static std::array<const void*, 4> vftables = {{
     // Akella
     (const void*)0x6d8e5c,
     // Russobit
     (const void*)0x6d8e5c,
     // Gog
-    (const void*)0x6d6dfc
+    (const void*)0x6d6dfc,
+    // Scenario Editor
+    (const void*)0x5df604
 }};
 // clang-format on
 

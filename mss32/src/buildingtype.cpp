@@ -25,7 +25,7 @@ namespace game {
 namespace TBuildingTypeApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::Constructor)0x58ba1d,
@@ -37,6 +37,10 @@ static std::array<Api, 3> functions = {{
     // Gog
     Api{
         (Api::Constructor)0x58ab86,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x538599,
     }
 }};
 // clang-format on
@@ -51,13 +55,15 @@ Api& get()
 namespace TBuildingUnitUpgTypeApi {
 
 // clang-format off
-static std::array<const void*, 3> vftables = {{
+static std::array<const void*, 4> vftables = {{
     // Akella
     (const void*)0x6ea7cc,
     // Russobit
     (const void*)0x6ea7cc,
     // Gog
-    (const void*)0x6e876c
+    (const void*)0x6e876c,
+    // Scenario Editor
+    (const void*)0x5df5f4
 }};
 // clang-format on
 

@@ -24,7 +24,7 @@
 namespace game::Memory {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::Allocate)0x509530
@@ -36,6 +36,10 @@ static std::array<Api, 3> functions = {{
     // Gog
     Api{
         (Api::Allocate)0x508820
+    },
+    // Scenario Editor
+    Api{
+        (Api::Allocate)0x4832a0
     }
 }};
 // clang-format on

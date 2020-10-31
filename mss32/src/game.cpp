@@ -24,7 +24,7 @@
 namespace game {
 
 // clang-format off
-static std::array<Functions, 3> functions = {{
+static std::array<Functions, 4> functions = {{
     // Akella
     Functions{
         (RespopupInitFunc)0x4893ad,
@@ -69,10 +69,25 @@ static std::array<Functions, 3> functions = {{
         (GetPlayerIdFromPhase)0x404af9,
         (GetObjectMapFromPhase)0x404b8e,
         (GetLordByPlayer)0x5e5038
+    },
+    // Scenario Editor
+    Functions{
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        (CreateBuildingType)0x538b2d,
+        (AddObjectAndCheckDuplicates)0x53cd9c,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr
     }
 }};
 
-static std::array<Variables, 3> variables = {{
+static std::array<Variables, 4> variables = {{
     // Akella
     Variables{
         (int*)0x837ac8,
@@ -90,7 +105,13 @@ static std::array<Variables, 3> variables = {{
         (int*)0x835a78,
         (unsigned char*)0x835a7c,
         (int*)0x6e9398
-    }
+    },
+    // Scenario Editor
+    Variables{
+        nullptr,
+        nullptr,
+        (int*)0x5df134
+    },
 }};
 // clang-format on
 

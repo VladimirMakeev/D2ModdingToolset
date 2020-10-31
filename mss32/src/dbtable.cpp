@@ -24,7 +24,7 @@
 namespace game::CDBTableApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::FindBuildingCategory)0x58c041,
@@ -45,6 +45,13 @@ static std::array<Api, 3> functions = {{
         (Api::FindUnitBranchCategory)0x58b24d,
         (Api::ReadUnitLevel)0x58afd7,
         (Api::DuplicateRecordException)0x59c710
+    },
+    // Scenario Editor
+    Api{
+        (Api::FindBuildingCategory)0x538bf7,
+        (Api::FindUnitBranchCategory)0x538c75,
+        (Api::ReadUnitLevel)0x538a1b,
+        (Api::DuplicateRecordException)0x53f9b2
     }
 }};
 // clang-format on
