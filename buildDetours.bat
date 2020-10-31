@@ -1,6 +1,6 @@
 ::
-:: This file is part of the binkw32 proxy dll for Disciples 2.
-:: (https://github.com/VladimirMakeev/D2Binkw32Proxy)
+:: This file is part of the modding toolset for Disciples 2.
+:: (https://github.com/VladimirMakeev/D2ModdingToolset)
 :: Copyright (C) 2020 Vladimir Makeev.
 ::
 :: This program is free software: you can redistribute it and/or modify
