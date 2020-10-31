@@ -1,25 +1,8 @@
-﻿/*
- * This file is part of the binkw32 proxy dll for Disciples 2.
- * (https://github.com/VladimirMakeev/D2Binkw32Proxy)
- * Copyright (C) 2020 Vladimir Makeev.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-#pragma comment(lib, "detours.lib")
+﻿#pragma comment(lib, "detours.lib")
 
 #include "autodialog.h"
+#include "buildingbranch.h"
+#include "buildingcat.h"
 #include "game.h"
 #include "hooks.h"
 #include "log.h"
@@ -34,6 +17,24 @@
 #include <fmt/format.h>
 #include <string>
 
+static HMODULE library{};
+static void* registerInterface{};
+static void* unregisterInterface{};
+
+extern "C" __declspec(naked) void __stdcall RIB_register_interface(void)
+{
+    __asm {
+        jmp registerInterface;
+    }
+}
+
+extern "C" __declspec(naked) void __stdcall RIB_unregister_interface(void)
+{
+    __asm {
+        jmp unregisterInterface;
+    }
+}
+
 template <typename T>
 static void writeProtectedMemory(T* address, T value)
 {
@@ -44,7 +45,7 @@ static void writeProtectedMemory(T* address, T value)
         return;
     }
 
-    hooks::logError("binkwProxyError.log",
+    hooks::logError("mssProxyError.log",
                     fmt::format("Failed to change memory protection for {:p}", (void*)address));
 }
 
@@ -63,6 +64,17 @@ static void setupHooks()
     DetourAttach((PVOID*)&fn.respopupInit, (PVOID)hooks::respopupInitHooked);
     DetourAttach((PVOID*)&fn.toggleShowBannersInit, (PVOID)hooks::toggleShowBannersInitHooked);
     DetourAttach((PVOID*)&fn.processUnitModifiers, (PVOID)hooks::processUnitModifiersHooked);
+
+    DetourAttach((PVOID*)&fn.createBuildingType, (PVOID)hooks::createBuildingTypeHooked);
+    DetourAttach((PVOID*)&game::LBuildingCategoryTableApi::get().constructor,
+                 (PVOID)hooks::buildingCategoryTableCtorHooked);
+    // Support custom building branch category
+    DetourAttach((PVOID*)&game::CBuildingBranchApi::get().constructor,
+                 (PVOID)hooks::buildingBranchCtorHooked);
+
+    DetourAttach((PVOID*)&fn.chooseUnitLane, (PVOID)hooks::chooseUnitLaneHooked);
+
+    // map generation
     DetourAttach((PVOID*)&game::CMenuNewSkirmishSingleApi::get().constructor,
                  (PVOID)hooks::menuNewSkirmishSingleCtorHooked);
 
@@ -74,15 +86,32 @@ static void setupHooks()
 
 BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
 {
+    if (reason == DLL_PROCESS_DETACH) {
+        FreeLibrary(library);
+        return TRUE;
+    }
+
     if (reason != DLL_PROCESS_ATTACH) {
         return TRUE;
+    }
+
+    library = LoadLibrary("Mss23.dll");
+    if (!library) {
+        MessageBox(NULL, "Failed to load Mss23.dll", "mss32.dll proxy", MB_OK);
+        return FALSE;
+    }
+
+    registerInterface = GetProcAddress(library, "RIB_register_interface");
+    unregisterInterface = GetProcAddress(library, "RIB_unregister_interface");
+    if (!registerInterface || !unregisterInterface) {
+        MessageBox(NULL, "Could not load Mss23.dll addresses", "mss32.dll proxy", MB_OK);
+        return FALSE;
     }
 
     DisableThreadLibraryCalls(hDll);
 
     HMODULE module = GetModuleHandle(NULL);
     std::string moduleName(MAX_PATH, '\0');
-
     GetModuleFileName(module, &moduleName[0], MAX_PATH - 1);
 
     std::filesystem::path exeFilePath{moduleName};
@@ -90,10 +119,10 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
     const std::error_code error = hooks::determineGameVersion(exeFilePath);
     if (error || hooks::gameVersion() == hooks::GameVersion::Unknown) {
         const std::string msg{
-            fmt::format("Failed to determine game version.\nReason: {:s}.", error.message())};
+            fmt::format("Failed to determine target exe type.\nReason: {:s}.", error.message())};
 
-        hooks::logError("binkwProxyError.log", msg);
-        MessageBox(NULL, msg.c_str(), "binkw32.dll proxy", MB_OK);
+        hooks::logError("mssProxyError.log", msg);
+        MessageBox(NULL, msg.c_str(), "mss32.dll proxy", MB_OK);
         return FALSE;
     }
 
@@ -105,7 +134,7 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
 
     if (!hooks::loadUnitsForHire(exeFilePath)) {
         MessageBox(NULL, "Failed to load new units. Check error log for details.",
-                   "binkw32.dll proxy", MB_OK);
+                   "mss32.dll proxy", MB_OK);
         return FALSE;
     }
 
@@ -117,8 +146,8 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
         const std::string msg{
             fmt::format("Failed to hook game functions. Error code: {:d}.", result)};
 
-        hooks::logError("binkwProxyError.log", msg);
-        MessageBox(NULL, msg.c_str(), "binkw32.dll proxy", MB_OK);
+        hooks::logError("mssProxyError.log", msg);
+        MessageBox(NULL, msg.c_str(), "mss32.dll proxy", MB_OK);
         return FALSE;
     }
 

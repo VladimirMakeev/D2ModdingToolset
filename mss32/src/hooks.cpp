@@ -189,7 +189,7 @@ game::AutoDialogData* __fastcall loadScriptFileHooked(game::AutoDialogData* this
     {
         std::ifstream stream(filePath);
         if (!stream) {
-            logError("binkwProxy.log", "Failed to open AutoDialog script file");
+            logError("mssProxyError.log", "Failed to open AutoDialog script file");
             return thisptr;
         }
 
@@ -358,7 +358,7 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
     auto findScenarioObjectById = dataCache->vftable->findScenarioObjectById;
     auto playerObject = findScenarioObjectById(dataCache, playerId);
     if (!playerObject) {
-        logError("binkwProxyError.log",
+        logError("mssProxyError.log",
                  fmt::format("Could not find player object with id {:x}", playerId->value));
         return false;
     }
@@ -368,15 +368,15 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
     CMidPlayer* player = (CMidPlayer*)dynamicCast(playerObject, 0, rtti.IMidScenarioObjectType,
                                                   rtti.CMidPlayerType, 0);
     if (!player) {
-        logError("binkwProxyError.log",
+        logError("mssProxyError.log",
                  fmt::format("Object with id {:x} is not player", playerId->value));
         return false;
     }
 
     auto buildingsObject = findScenarioObjectById(dataCache, &player->buildingsId);
     if (!buildingsObject) {
-        logError("binkwProxyError.log", fmt::format("Could not find player buildings with id {:x}",
-                                                    player->buildingsId.value));
+        logError("mssProxyError.log", fmt::format("Could not find player buildings with id {:x}",
+                                                  player->buildingsId.value));
         return false;
     }
 
@@ -384,8 +384,8 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
                                                                  rtti.IMidScenarioObjectType,
                                                                  rtti.CPlayerBuildingsType, 0);
     if (!buildings) {
-        logError("binkwProxyError.log", fmt::format("Object with id {:x} is not player buildings",
-                                                    player->buildingsId.value));
+        logError("mssProxyError.log", fmt::format("Object with id {:x} is not player buildings",
+                                                  player->buildingsId.value));
         return false;
     }
 
@@ -486,7 +486,7 @@ game::LBuildingCategoryTable* __fastcall buildingCategoryTableCtorHooked(
         utils::DbfFile dbf;
         std::filesystem::path globals{globalsFolderPath};
         if (!dbf.open(globals / dbfFileName)) {
-            logError("binkwProxyError.log", fmt::format("Could not open {:s}", dbfFileName));
+            logError("mssProxyError.log", fmt::format("Could not open {:s}", dbfFileName));
         } else {
             utils::DbfRecord record;
             if (dbf.recordsTotal() > 4 && dbf.record(record, 4)) {

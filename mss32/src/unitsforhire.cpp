@@ -47,7 +47,7 @@ bool loadUnitsForHire(const std::filesystem::path& gameFolder)
 
     DbfFile raceDb;
     if (!raceDb.open(globalsFolder / raceDbName)) {
-        logError("binkwProxyError.log", fmt::format("Could not read {:s} database.", raceDbName));
+        logError("mssProxyError.log", fmt::format("Could not read {:s} database.", raceDbName));
         return false;
     }
 
@@ -72,14 +72,14 @@ bool loadUnitsForHire(const std::filesystem::path& gameFolder)
 
         game::CMidgardID raceId{};
         if (!dbRead(raceId, raceDb, row, idColumnName)) {
-            logError("binkwProxyError.log",
+            logError("mssProxyError.log",
                      fmt::format("Failed to read row {:d} column {:s} from {:s} database.", row,
                                  idColumnName, raceDbName));
             return false;
         }
 
         if (raceId == game::invalidId) {
-            logError("binkwProxyError.log",
+            logError("mssProxyError.log",
                      fmt::format("Row {:d} has invalid {:s} value in {:s} database.", row,
                                  idColumnName, raceDbName));
             return false;
@@ -88,9 +88,9 @@ bool loadUnitsForHire(const std::filesystem::path& gameFolder)
         const auto& idApi = game::CMidgardIDApi::get();
         const int raceIndex = idApi.getTypeIndex(&raceId);
         if (raceIndex >= tmpUnits.size()) {
-            logError("binkwProxyError.log", fmt::format("Row {:d} column {:s} has invalid "
-                                                        "race index {:d} in {:s} database.",
-                                                        row, idColumnName, raceIndex, raceDbName));
+            logError("mssProxyError.log", fmt::format("Row {:d} column {:s} has invalid "
+                                                      "race index {:d} in {:s} database.",
+                                                      row, idColumnName, raceIndex, raceDbName));
             return false;
         }
 
@@ -103,7 +103,7 @@ bool loadUnitsForHire(const std::filesystem::path& gameFolder)
             const std::string columnName{fmt::format("SOLDIER_{:d}", i + 6)};
             game::CMidgardID soldierId{};
             if (!dbRead(soldierId, raceDb, row, columnName) || soldierId == game::invalidId) {
-                logError("binkwProxyError.log",
+                logError("mssProxyError.log",
                          fmt::format("Row {:d} column {:s} has invalid id in {:s} database", row,
                                      columnName, raceDbName));
                 return false;

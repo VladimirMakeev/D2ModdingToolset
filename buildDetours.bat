@@ -25,7 +25,7 @@ cd %2
 nmake 2>nul
 :: Copy built library into project folder
 if exist %2\lib.X86\detours.lib (
-xcopy /y %2\lib.X86\detours.lib %~dp0\binkw32\
+xcopy /y %2\lib.X86\detours.lib %~dp0\mss32\
 ) else (
 echo "Could not find detours.lib, please check for build errors."
 exit 1
