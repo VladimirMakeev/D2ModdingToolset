@@ -20,6 +20,8 @@
 #ifndef D2MAP_H
 #define D2MAP_H
 
+#include "d2vector.h"
+
 namespace game {
 
 /** Structure with fast element lookup used in game. */
@@ -27,10 +29,7 @@ template <typename T>
 struct Map
 {
     const void* vftable;
-    T* bgn;
-    T* end;
-    T* allocatedMemEnd;
-    void* allocator;
+    Vector<T> data;
 };
 
 } // namespace game
