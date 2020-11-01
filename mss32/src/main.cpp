@@ -94,8 +94,8 @@ static void setupGameHooks()
     DetourAttach((PVOID*)&fn.chooseUnitLane, (PVOID)hooks::chooseUnitLaneHooked);
 
     // Random map generation
-    DetourAttach((PVOID*)&game::CMenuNewSkirmishSingleApi::get().constructor,
-                 (PVOID)hooks::menuNewSkirmishSingleCtorHooked);
+    /*DetourAttach((PVOID*)&game::CMenuNewSkirmishSingleApi::get().constructor,
+                 (PVOID)hooks::menuNewSkirmishSingleCtorHooked);*/
 
     if (!hooks::unitsForHire().empty()) {
         DetourAttach((PVOID*)&fn.addPlayerUnitsToHireList,
