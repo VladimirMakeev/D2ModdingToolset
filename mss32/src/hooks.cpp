@@ -390,7 +390,7 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
     }
 
     const auto& global = GlobalDataApi::get();
-    int* races = (*global.getGlobalData())->races;
+    auto races = (*global.getGlobalData())->races;
     TRaceType* race = (TRaceType*)global.findById(races, &player->raceId);
 
     const auto& addUnitToHireList = gameFunctions().addUnitToHireList;
@@ -572,7 +572,7 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
     lordTypeApi.getIterator(buildList, &iterator);
 
     const auto globalData = GlobalDataApi::get().getGlobalData();
-    int* buildings = (*globalData)->buildings;
+    auto buildings = (*globalData)->buildings;
 
     while (true) {
         BuildListIterator endIterator;

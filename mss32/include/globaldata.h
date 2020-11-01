@@ -20,6 +20,10 @@
 #ifndef GLOBALDATA_H
 #define GLOBALDATA_H
 
+#include "d2map.h"
+#include "d2pair.h"
+#include "midgardid.h"
+
 namespace game {
 
 struct LAttackClassTable;
@@ -54,7 +58,16 @@ struct LEventEffectCategoryTable;
 struct LLandmarkCategoryTable;
 struct LDeathAnimCategoryTable;
 
-struct CMidgardID;
+struct TBuildingType;
+struct TRaceType;
+struct TSubRaceType;
+struct TLordType;
+struct TStrategicSpell;
+struct TUsUnitImpl;
+struct TUnitModifier;
+struct CAttackImpl;
+struct TLandmark;
+struct TItemTypeList;
 
 /** Holds global game information. */
 struct GlobalData
@@ -91,16 +104,16 @@ struct GlobalData
     LEventEffectCategoryTable* eventEffectCategories;
     LLandmarkCategoryTable* landmarkCategories;
     LDeathAnimCategoryTable* deathAnimCategories;
-    int* buildings;
-    int* races;
-    int* subRaces;
-    int* lords;
-    int* spells;
-    int* units;
-    int* modifiers;
-    int* attacks;
-    int* landmarks;
-    int* itemTypes;
+    Map<Pair<CMidgardID, TBuildingType*>>* buildings;
+    Map<Pair<CMidgardID, TRaceType*>>* races;
+    Map<Pair<CMidgardID, TSubRaceType*>>* subRaces;
+    Map<Pair<CMidgardID, TLordType*>>* lords;
+    Map<Pair<CMidgardID, TStrategicSpell*>>* spells;
+    Map<Pair<CMidgardID, TUsUnitImpl*>>* units;
+    Map<Pair<CMidgardID, TUnitModifier*>>* modifiers;
+    Map<Pair<CMidgardID, CAttackImpl*>>* attacks;
+    Map<Pair<CMidgardID, TLandmark*>>* landmarks;
+    TItemTypeList* itemTypes;
     int* actions;
     int* transf;
     int* dynUpgrade;
