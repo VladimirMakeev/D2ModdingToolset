@@ -72,7 +72,7 @@ struct TItemTypeList;
 /** Holds global game information. */
 struct GlobalData
 {
-    void* unknown;
+    Map<Pair<CMidgardID, char*>>* text;
     LAttackClassTable* attackClasses;
     LAttackSourceTable* attackSources;
     LAttackReachTable* attackReach;
