@@ -105,7 +105,7 @@ struct GlobalData
     LLandmarkCategoryTable* landmarkCategories;
     LDeathAnimCategoryTable* deathAnimCategories;
     Map<Pair<CMidgardID, TBuildingType*>>* buildings;
-    Map<Pair<CMidgardID, TRaceType*>>* races;
+    Map<Pair<CMidgardID, TRaceType*>>** races;
     Map<Pair<CMidgardID, TSubRaceType*>>* subRaces;
     Map<Pair<CMidgardID, TLordType*>>* lords;
     Map<Pair<CMidgardID, TStrategicSpell*>>* spells;
