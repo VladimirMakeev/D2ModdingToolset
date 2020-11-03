@@ -103,10 +103,23 @@ static void setupGameHooks()
     }
 }
 
+/** Hooks that used only in editor. */
+static void setupEditorHooks()
+{
+    /** Returns true if tiles are suitable for site or ruin. */
+    using CanPlace = bool(__stdcall*)(int, int, int);
+    CanPlace canPlaceSite = (CanPlace)0x511142;
+    CanPlace canPlaceRuin = (CanPlace)0x512376;
+    // Check sites placement the same way as ruins, allowing them to be placed on water
+    DetourAttach((PVOID*)&canPlaceSite, (PVOID)canPlaceRuin);
+}
+
 static void setupHooks()
 {
     if (hooks::executableIsGame()) {
         setupGameHooks();
+    } else {
+        setupEditorHooks();
     }
 
     auto& fn = game::gameFunctions();
