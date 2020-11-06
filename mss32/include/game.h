@@ -114,6 +114,9 @@ using GetObjectMapFromPhase = const IMidgardObjectMap*(__thiscall*)(int phase);
 /** Returns lord type for specified player. */
 using GetLordByPlayer = const TLordType*(__stdcall*)(const CMidPlayer* player);
 
+/** Returns true if current turn value is in allowed range [0 : 999]. */
+using IsTurnValid = bool(__stdcall*)(int turn);
+
 /** Game functions that can be hooked. */
 struct Functions
 {
@@ -129,6 +132,7 @@ struct Functions
     GetPlayerIdFromPhase getPlayerIdFromPhase;
     GetObjectMapFromPhase getObjectMapFromPhase;
     GetLordByPlayer getLordByPlayer;
+    IsTurnValid isTurnValid;
 };
 
 /** Global variables used in game. */

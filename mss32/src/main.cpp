@@ -128,6 +128,8 @@ static void setupHooks()
     DetourAttach((PVOID*)&fn.createBuildingType, (PVOID)hooks::createBuildingTypeHooked);
     DetourAttach((PVOID*)&game::LBuildingCategoryTableApi::get().constructor,
                  (PVOID)hooks::buildingCategoryTableCtorHooked);
+
+    DetourAttach((PVOID*)&fn.isTurnValid, (PVOID)hooks::isTurnValidHooked);
 }
 
 BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)

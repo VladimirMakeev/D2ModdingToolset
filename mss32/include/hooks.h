@@ -81,6 +81,8 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
 
 int __stdcall chooseUnitLaneHooked(const game::IUsSoldier* soldier);
 
+bool __stdcall isTurnValidHooked(int turn);
+
 } // namespace hooks
 
 #endif // HOOKS_H

@@ -641,4 +641,9 @@ int __stdcall chooseUnitLaneHooked(const game::IUsSoldier* soldier)
     return 0;
 }
 
+bool __stdcall isTurnValidHooked(int turn)
+{
+    return turn >= 0 && turn <= 9999 || turn == -1;
+}
+
 } // namespace hooks
