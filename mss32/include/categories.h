@@ -52,12 +52,6 @@ struct Category
     T id;
 };
 
-struct LRaceCategoryTable : public CEnumConstantTable<RaceId>
-{ };
-
-struct LRaceCategory : public Category<RaceId>
-{ };
-
 struct LAttitudesCategoryTable : CEnumConstantTable<AiAttitudeId>
 { };
 

@@ -20,7 +20,7 @@
 #ifndef BUILDINGBRANCH_H
 #define BUILDINGBRANCH_H
 
-#include "categories.h"
+#include "racecategory.h"
 
 namespace game {
 

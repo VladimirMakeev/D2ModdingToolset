@@ -20,9 +20,9 @@
 #ifndef MIDVILLAGE_H
 #define MIDVILLAGE_H
 
-#include "categories.h"
 #include "d2vector.h"
 #include "fortification.h"
+#include "racecategory.h"
 
 namespace game {
 

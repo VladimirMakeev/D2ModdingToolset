@@ -24,6 +24,7 @@
 #include "difficultylevel.h"
 #include "linkedlist.h"
 #include "midgardid.h"
+#include "racecategory.h"
 #include <cstddef>
 
 namespace game {

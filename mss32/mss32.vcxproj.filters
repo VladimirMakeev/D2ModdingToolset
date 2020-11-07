@@ -165,6 +165,9 @@
     <ClCompile Include="src\editor.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\racecategory.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -480,6 +483,9 @@
     </ClInclude>
     <ClInclude Include="include\dbf\dbfrecord.h">
       <Filter>Файлы заголовков\dbf</Filter>
+    </ClInclude>
+    <ClInclude Include="include\racecategory.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Файлы заголовков</Filter>

@@ -20,11 +20,11 @@
 #ifndef RACETYPE_H
 #define RACETYPE_H
 
-#include "categories.h"
 #include "currency.h"
 #include "d2vector.h"
 #include "midgardid.h"
 #include "midobject.h"
+#include "racecategory.h"
 #include "textandid.h"
 
 namespace game {
