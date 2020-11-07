@@ -23,7 +23,7 @@ namespace game {
 
 // clang-format off
 EditorFunctions editorFunctions{
-    (RadioButtonIndexToPlayerId)0x4291fb,
+    (RadioButtonIndexToPlayerId)0x429f1b,
     (FindPlayerByRaceCategory)0x4e1bf5
 };
 // clang-format on
