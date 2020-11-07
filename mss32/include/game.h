@@ -117,7 +117,7 @@ using GetLordByPlayer = const TLordType*(__stdcall*)(const CMidPlayer* player);
 /** Returns true if current turn value is in allowed range [0 : 999]. */
 using IsTurnValid = bool(__stdcall*)(int turn);
 
-/** Game functions that can be hooked. */
+/** Game and editor functions that can be hooked. */
 struct Functions
 {
     RespopupInitFunc respopupInit;
