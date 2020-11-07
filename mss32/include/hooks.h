@@ -33,6 +33,7 @@ struct CDBTable;
 struct LBuildingCategoryTable;
 struct CBuildingBranch;
 struct IUsSoldier;
+struct IMidgardObjectMap;
 }; // namespace game
 
 namespace hooks {
@@ -82,6 +83,10 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
 int __stdcall chooseUnitLaneHooked(const game::IUsSoldier* soldier);
 
 bool __stdcall isTurnValidHooked(int turn);
+
+game::CMidgardID* __stdcall radioButtonIndexToPlayerIdHooked(game::CMidgardID* playerId,
+                                                             game::IMidgardObjectMap* objectMap,
+                                                             int index);
 
 } // namespace hooks
 

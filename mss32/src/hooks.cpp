@@ -29,6 +29,7 @@
 #include "dbtable.h"
 #include "dialoginterf.h"
 #include "dynamiccast.h"
+#include "editor.h"
 #include "functor.h"
 #include "game.h"
 #include "globaldata.h"
@@ -644,6 +645,38 @@ int __stdcall chooseUnitLaneHooked(const game::IUsSoldier* soldier)
 bool __stdcall isTurnValidHooked(int turn)
 {
     return turn >= 0 && turn <= 9999 || turn == -1;
+}
+
+game::CMidgardID* __stdcall radioButtonIndexToPlayerIdHooked(game::CMidgardID* playerId,
+                                                             game::IMidgardObjectMap* objectMap,
+                                                             int index)
+{
+    using namespace game;
+    const auto& races = RaceCategories::get();
+    const auto& fn = editorFunctions;
+
+    const CMidPlayer* player{nullptr};
+    switch (index) {
+    case 0:
+        player = fn.findPlayerByRaceCategory(races.human, objectMap);
+        break;
+    case 1:
+        player = fn.findPlayerByRaceCategory(races.heretic, objectMap);
+        break;
+    case 2:
+        player = fn.findPlayerByRaceCategory(races.undead, objectMap);
+        break;
+    case 3:
+        player = fn.findPlayerByRaceCategory(races.dwarf, objectMap);
+        break;
+    case 4:
+        player = fn.findPlayerByRaceCategory(races.elf, objectMap);
+        break;
+    }
+
+    *playerId = player ? player->playerId : emptyId;
+
+    return playerId;
 }
 
 } // namespace hooks

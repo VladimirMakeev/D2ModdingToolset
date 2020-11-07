@@ -22,6 +22,7 @@
 #include "autodialog.h"
 #include "buildingbranch.h"
 #include "buildingcat.h"
+#include "editor.h"
 #include "game.h"
 #include "hooks.h"
 #include "log.h"
@@ -112,6 +113,9 @@ static void setupEditorHooks()
     CanPlace canPlaceRuin = (CanPlace)0x512376;
     // Check sites placement the same way as ruins, allowing them to be placed on water
     DetourAttach((PVOID*)&canPlaceSite, (PVOID)canPlaceRuin);
+    // Allow editor to set elves race as caster in 'cast spell on location' event effect
+    DetourAttach((PVOID*)&game::editorFunctions.radioButtonIndexToPlayerId,
+                 (PVOID)hooks::radioButtonIndexToPlayerIdHooked);
 }
 
 static void setupHooks()
