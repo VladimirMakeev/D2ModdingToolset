@@ -137,6 +137,7 @@ static constexpr bool operator<(const CMidgardID& first, const CMidgardID& secon
 }
 
 extern const CMidgardID invalidId;
+extern const CMidgardID emptyId;
 
 namespace CMidgardIDApi {
 

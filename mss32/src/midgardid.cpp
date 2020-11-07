@@ -24,6 +24,7 @@
 namespace game {
 
 const CMidgardID invalidId{0x3f0000};
+const CMidgardID emptyId{0};
 
 namespace CMidgardIDApi {
 
