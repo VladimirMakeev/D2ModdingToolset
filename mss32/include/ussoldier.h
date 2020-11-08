@@ -28,7 +28,7 @@ struct CMidgardID;
 struct LSubRaceCategory;
 struct LUnitBranch;
 struct LDeathAnimCategory;
-struct CAttackImpl;
+struct IAttack;
 struct LImmuneCat;
 struct LAttackClass;
 struct LAttackSource;
@@ -91,7 +91,7 @@ struct IUsSoldierVftable
         __thiscall*)(const IUsSoldier* thisptr, const LAttackSource* attackSource);
     GetImmuneByAttackSource getImmuneByAttackSource;
 
-    using GetAttackById = const CAttackImpl*(__thiscall*)(const IUsSoldier* thisptr);
+    using GetAttackById = IAttack*(__thiscall*)(const IUsSoldier* thisptr);
     GetAttackById getAttackById;
     GetAttackById getSecondAttackById;
 

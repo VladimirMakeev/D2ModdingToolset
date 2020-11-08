@@ -20,21 +20,11 @@
 #ifndef ATTACKIMPL_H
 #define ATTACKIMPL_H
 
-#include "attackclasscat.h"
-#include "attackreachcat.h"
-#include "attacksourcecat.h"
-#include "d2vector.h"
-#include "midgardid.h"
-#include "midobject.h"
+#include "attack.h"
 #include "textandid.h"
 #include <cstddef>
 
 namespace game {
-
-using IdVector = Vector<CMidgardID>;
-
-struct IAttack : public IMidObject
-{ };
 
 struct CAttackImplData
 {
@@ -61,6 +51,9 @@ static_assert(sizeof(CAttackImplData) == 100,
 
 static_assert(offsetof(CAttackImplData, attackSource) == 44,
               "CAttackImplData::attackSource offset must be 44 bytes");
+
+static_assert(offsetof(CAttackImplData, attackReach) == 56,
+              "CAttackImplData::attackReach offset must be 56 bytes");
 
 static_assert(offsetof(CAttackImplData, critHit) == 96,
               "CAttackImplData::critHit offset must be 96 bytes");

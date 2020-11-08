@@ -219,6 +219,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h" />
+    <ClInclude Include="include\attack.h" />
     <ClInclude Include="include\attackclasscat.h" />
     <ClInclude Include="include\attackimpl.h" />
     <ClInclude Include="include\attackreachcat.h" />
