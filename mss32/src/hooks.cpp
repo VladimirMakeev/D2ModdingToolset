@@ -68,26 +68,26 @@ namespace hooks {
 
 void respopupInitHooked(void)
 {
-    logDebug("binkwProxy.log", "Resource popup hook start");
+    logDebug("mss32Proxy.log", "Resource popup hook start");
 
     auto& variables = game::gameVariables();
 
     *variables.minimapMode = userSettings().showLandConverted;
     *variables.respopup = userSettings().showResources;
 
-    logDebug("binkwProxy.log", "Resource popup hook finished");
+    logDebug("mss32Proxy.log", "Resource popup hook finished");
 }
 
 void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/)
 {
-    logDebug("binkwProxy.log", "Show banners hook start");
+    logDebug("mss32Proxy.log", "Show banners hook start");
 
     char* ptr = (char*)thisptr;
     *ptr = userSettings().showBanners;
     // meaning unknown
     ptr[1] = 0;
 
-    logDebug("binkwProxy.log", "Show banners hook finished");
+    logDebug("mss32Proxy.log", "Show banners hook finished");
     return thisptr;
 }
 
