@@ -631,11 +631,13 @@ int __stdcall chooseUnitLaneHooked(const game::IUsSoldier* soldier)
 {
     using namespace game;
 
-    auto vftable = (const IUsSoldierVftable*)soldier->vftable;
-    const CAttackImpl* attackImpl = vftable->getAttackById(soldier);
+    auto soldierVftable = (const IUsSoldierVftable*)soldier->vftable;
+    IAttack* attack = soldierVftable->getAttackById(soldier);
+    auto attackVftable = (const IAttackVftable*)attack->vftable;
+    const LAttackReach* reach = attackVftable->getAttackReach(attack);
 
     // Place units with adjacent attack reach at the front lane, despite of their attack class
-    if (attackImpl->data->attackReach.id == AttackReachCategories::get().adjacentAttackReach->id) {
+    if (reach->id == AttackReachCategories::get().adjacentAttackReach->id) {
         return 1;
     }
 
