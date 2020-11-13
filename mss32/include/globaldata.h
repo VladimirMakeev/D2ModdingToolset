@@ -68,6 +68,7 @@ struct TUnitModifier;
 struct CAttackImpl;
 struct TLandmark;
 struct TItemTypeList;
+struct GlobalVariables;
 
 /** Holds global game information. */
 struct GlobalData
@@ -120,7 +121,7 @@ struct GlobalData
     int* tileVariation;
     int* aiAttitudes;
     int* aiMessages;
-    int* globalVariables;
+    GlobalVariables** globalVariables;
     int* unitGenerator;
     int initialized;
 };

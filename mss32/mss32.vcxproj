@@ -253,6 +253,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\game.h" />
     <ClInclude Include="include\gamesettings.h" />
     <ClInclude Include="include\globaldata.h" />
+    <ClInclude Include="include\globalvariables.h" />
     <ClInclude Include="include\hooks.h" />
     <ClInclude Include="include\idlist.h" />
     <ClInclude Include="include\immunecat.h" />
