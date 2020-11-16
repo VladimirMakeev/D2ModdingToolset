@@ -17,9 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
 #include "settings.h"
 #include <Windows.h>
+#include <algorithm>
+#include <limits>
 #include <string>
 
 namespace hooks {
@@ -34,17 +37,36 @@ const UserSettings& userSettings()
 void readUserSettings(const std::filesystem::path& iniFilePath)
 {
     const std::string iniPath{iniFilePath.string()};
-
     const char disciple[] = "Disciple";
+
+    settings.unitMaxDamage = GetPrivateProfileInt(disciple, "UnitMaxDamage", settings.unitMaxDamage,
+                                                  iniPath.c_str());
+
+    settings.unitMaxArmor = GetPrivateProfileInt(disciple, "UnitMaxArmor", settings.unitMaxArmor,
+                                                 iniPath.c_str());
+
+    settings.stackScoutRangeMax = GetPrivateProfileInt(disciple, "StackMaxScoutRange",
+                                                       settings.stackScoutRangeMax,
+                                                       iniPath.c_str());
+
+    auto criticalHitDamage = GetPrivateProfileInt(disciple, "CriticalHitDamage",
+                                                  settings.criticalHitDamage, iniPath.c_str());
+    constexpr auto critMax{std::numeric_limits<std::uint8_t>::max()};
+
+    settings.criticalHitDamage = std::clamp<std::uint32_t>(criticalHitDamage, 0, critMax);
+
     settings.showResources = GetPrivateProfileInt(disciple, "ShowResources", settings.showResources,
                                                   iniPath.c_str())
                              != 0;
+
     settings.showBanners = GetPrivateProfileInt(disciple, "ShowBanners", settings.showBanners,
                                                 iniPath.c_str())
                            != 0;
+
     settings.showLandConverted = GetPrivateProfileInt(disciple, "ShowLandConverted",
                                                       settings.showLandConverted, iniPath.c_str())
                                  != 0;
+
     settings.debugMode = GetPrivateProfileInt(disciple, "DebugHooks", settings.debugMode,
                                               iniPath.c_str())
                          != 0;

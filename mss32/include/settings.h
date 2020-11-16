@@ -20,12 +20,17 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <cstdint>
 #include <filesystem>
 
 namespace hooks {
 
 struct UserSettings
 {
+    int unitMaxDamage{};
+    int unitMaxArmor{};
+    int stackScoutRangeMax{};
+    std::uint8_t criticalHitDamage{};
     bool showBanners{true};
     bool showResources{true};
     bool showLandConverted{};
