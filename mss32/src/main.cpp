@@ -27,6 +27,7 @@
 #include "hooks.h"
 #include "log.h"
 #include "menunewskirmishsingle.h"
+#include "restrictions.h"
 #include "settings.h"
 #include "unitsforhire.h"
 #include "version.h"
@@ -69,14 +70,54 @@ static void writeProtectedMemory(T* address, T value)
                     fmt::format("Failed to change memory protection for {:p}", (void*)address));
 }
 
+template <typename T>
+static void adjustRestrictionMax(game::Restriction<T>* restriction,
+                                 const T& value,
+                                 const char* name)
+{
+    if (value >= restriction->min) {
+        hooks::logDebug("restrictions.log", fmt::format("Set '{:s}' to {:d}", name, value));
+        writeProtectedMemory(&restriction->max, value);
+        return;
+    }
+
+    hooks::logError(
+        "mssProxyError.log",
+        fmt::format(
+            "User specified '{:s}' value of {:d} is less than minimum value allowed in game ({:d}). "
+            "Change rejected.",
+            name, value, restriction->min));
+}
+
 static void adjustGameRestrictions()
 {
-    auto& variables = game::gameVariables();
+    auto& restrictions = game::gameRestrictions();
     // Allow game to load and scenario editor to create scenarios with maximum allowed spells level
     // set to zero, disabling usage of magic in scenario
-    writeProtectedMemory(variables.spellMinLevel, 0);
+    writeProtectedMemory(&restrictions.spellLevel->min, 0);
     // Allow using units with tier higher than 5
-    writeProtectedMemory(variables.unitMaxLevel, 10);
+    writeProtectedMemory(&restrictions.unitLevel->max, 10);
+
+    auto& settings = hooks::userSettings();
+
+    if (settings.unitMaxDamage > 0) {
+        adjustRestrictionMax(restrictions.unitDamage, settings.unitMaxDamage, "UnitMaxDamage");
+    }
+
+    if (settings.unitMaxArmor > 0) {
+        adjustRestrictionMax(restrictions.unitArmor, settings.unitMaxArmor, "UnitMaxArmor");
+    }
+
+    if (settings.stackScoutRangeMax > 0) {
+        adjustRestrictionMax(restrictions.stackScoutRange, settings.stackScoutRangeMax,
+                             "StackMaxScoutRange");
+    }
+
+    if (hooks::executableIsGame() && settings.criticalHitDamage > 0) {
+        hooks::logDebug("restrictions.log", fmt::format("Set 'criticalHitDamage' to {:d}",
+                                                        (int)settings.criticalHitDamage));
+        writeProtectedMemory(restrictions.criticalHitDamage, settings.criticalHitDamage);
+    }
 }
 
 /** Hooks that used only in game. */
