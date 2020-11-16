@@ -203,6 +203,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClCompile Include="src\midgardmsgbox.cpp" />
     <ClCompile Include="src\midmsgboxbuttonhandlerstd.cpp" />
     <ClCompile Include="src\racecategory.cpp" />
+    <ClCompile Include="src\restrictions.cpp" />
     <ClCompile Include="src\scenariodata.cpp" />
     <ClCompile Include="src\scenariodataarray.cpp" />
     <ClCompile Include="src\scenarioheader.cpp" />
@@ -306,6 +307,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\presentation.h" />
     <ClInclude Include="include\racecategory.h" />
     <ClInclude Include="include\racetype.h" />
+    <ClInclude Include="include\restrictions.h" />
     <ClInclude Include="include\scenariodata.h" />
     <ClInclude Include="include\scenariodataarray.h" />
     <ClInclude Include="include\scenarioheader.h" />
