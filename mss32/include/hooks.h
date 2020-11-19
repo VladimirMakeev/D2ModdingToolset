@@ -34,6 +34,8 @@ struct LBuildingCategoryTable;
 struct CBuildingBranch;
 struct IUsSoldier;
 struct IMidgardObjectMap;
+struct BattleMsgData;
+struct CBatAttackGiveAttack;
 }; // namespace game
 
 namespace hooks {
@@ -87,6 +89,12 @@ bool __stdcall isTurnValidHooked(int turn);
 game::CMidgardID* __stdcall radioButtonIndexToPlayerIdHooked(game::CMidgardID* playerId,
                                                              game::IMidgardObjectMap* objectMap,
                                                              int index);
+
+bool __fastcall giveAttackCanPerformHooked(game::CBatAttackGiveAttack* thisptr,
+                                           int /*%edx*/,
+                                           game::IMidgardObjectMap* objectMap,
+                                           game::BattleMsgData* battleMsgData,
+                                           game::CMidgardID* unitId);
 
 } // namespace hooks
 

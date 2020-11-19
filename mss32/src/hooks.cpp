@@ -21,6 +21,7 @@
 #include "attackimpl.h"
 #include "attackreachcat.h"
 #include "autodialog.h"
+#include "batattackgiveattack.h"
 #include "buildingbranch.h"
 #include "buildingtype.h"
 #include "button.h"
@@ -46,6 +47,7 @@
 #include "midgardmsgbox.h"
 #include "midmsgboxbuttonhandlerstd.h"
 #include "midplayer.h"
+#include "midunit.h"
 #include "playerbuildings.h"
 #include "racecategory.h"
 #include "racetype.h"
@@ -679,6 +681,57 @@ game::CMidgardID* __stdcall radioButtonIndexToPlayerIdHooked(game::CMidgardID* p
     *playerId = player ? player->playerId : emptyId;
 
     return playerId;
+}
+
+bool __fastcall giveAttackCanPerformHooked(game::CBatAttackGiveAttack* thisptr,
+                                           int /*%edx*/,
+                                           game::IMidgardObjectMap* objectMap,
+                                           game::BattleMsgData* battleMsgData,
+                                           game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    CMidgardID targetStackId{};
+    thisptr->vftable->getTargetStackId(thisptr, &targetStackId, battleMsgData);
+
+    auto& fn = gameFunctions();
+    CMidgardID alliedStackId{};
+    fn.getAllyOrEnemyStackId(&alliedStackId, battleMsgData, &thisptr->unitId1, true);
+
+    if (targetStackId != alliedStackId) {
+        // Do not allow to give additional attacks to enemies
+        return false;
+    }
+
+    if (*unitId == thisptr->unitId1) {
+        // Do not allow to give additional attacks to self
+        return false;
+    }
+
+    CMidUnit* unit = fn.findUnitById(objectMap, unitId);
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+    auto soldierVftable = static_cast<const IUsSoldierVftable*>(soldier->vftable);
+
+    auto attack = soldierVftable->getAttackById(soldier);
+    auto attackVftable = static_cast<const IAttackVftable*>(attack->vftable);
+    const auto attackClass = attackVftable->getAttackClass(attack);
+
+    const auto& attackCategories = AttackClassCategories::get();
+
+    if (attackClass->id == attackCategories.giveAttack->id) {
+        // Do not allow to buff other units with this attack type
+        return false;
+    }
+
+    auto secondAttack = soldierVftable->getSecondAttackById(soldier);
+    if (!secondAttack) {
+        return true;
+    }
+
+    auto secondAttackVftable = static_cast<const IAttackVftable*>(secondAttack->vftable);
+    const auto secondAttackClass = secondAttackVftable->getAttackClass(secondAttack);
+
+    return secondAttackClass->id != attackCategories.giveAttack->id;
 }
 
 } // namespace hooks
