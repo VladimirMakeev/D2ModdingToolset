@@ -39,7 +39,10 @@ static std::array<Functions, 4> functions = {{
         (GetPlayerIdFromPhase)0x404e71,
         (GetObjectMapFromPhase)0x404f06,
         (GetLordByPlayer)0x5e6323,
-        (IsTurnValid)0x5879f3
+        (IsTurnValid)0x5879f3,
+        (GetAllyOrEnemyStackId)0x65afb2,
+        (FindUnitById)0x625180,
+        (CastUnitImplToSoldier)0x40a79d
     },
     // Russobit
     Functions{
@@ -55,7 +58,10 @@ static std::array<Functions, 4> functions = {{
         (GetPlayerIdFromPhase)0x404e71,
         (GetObjectMapFromPhase)0x404f06,
         (GetLordByPlayer)0x5e6323,
-        (IsTurnValid)0x5879f3
+        (IsTurnValid)0x5879f3,
+        (GetAllyOrEnemyStackId)0x65afb2,
+        (FindUnitById)0x625180,
+        (CastUnitImplToSoldier)0x40a79d
     },
     // Gog
     Functions{
@@ -71,7 +77,10 @@ static std::array<Functions, 4> functions = {{
         (GetPlayerIdFromPhase)0x404af9,
         (GetObjectMapFromPhase)0x404b8e,
         (GetLordByPlayer)0x5e5038,
-        (IsTurnValid)0x586ba8
+        (IsTurnValid)0x586ba8,
+        (GetAllyOrEnemyStackId)0x659a32,
+        (FindUnitById)0x623cc0,
+        (CastUnitImplToSoldier)0x40a3f9
     },
     // Scenario Editor
     Functions{
@@ -87,7 +96,10 @@ static std::array<Functions, 4> functions = {{
         nullptr,
         nullptr,
         nullptr,
-        (IsTurnValid)0x52d22e
+        (IsTurnValid)0x52d22e,
+        nullptr,
+        nullptr,
+        nullptr
     }
 }};
 

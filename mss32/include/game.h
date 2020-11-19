@@ -36,6 +36,9 @@ struct IUsSoldier;
 struct IMidgardObjectMap;
 struct TLordType;
 struct CMidPlayer;
+struct BattleMsgData;
+struct CMidUnit;
+struct TUsUnitImpl;
 
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
@@ -117,6 +120,18 @@ using GetLordByPlayer = const TLordType*(__stdcall*)(const CMidPlayer* player);
 /** Returns true if current turn value is in allowed range [0 : 999]. */
 using IsTurnValid = bool(__stdcall*)(int turn);
 
+/** Returns stack id of allies or enemies for specified unit id. */
+using GetAllyOrEnemyStackId = CMidgardID*(__stdcall*)(CMidgardID* stackId,
+                                                      const BattleMsgData* battleMsgData,
+                                                      const CMidgardID* unitId,
+                                                      bool allies);
+
+/** Returns pointer to unit found by specified id. */
+using FindUnitById = CMidUnit*(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                           const CMidgardID* unitId);
+
+using CastUnitImplToSoldier = IUsSoldier*(__stdcall*)(TUsUnitImpl* unitImpl);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -133,6 +148,9 @@ struct Functions
     GetObjectMapFromPhase getObjectMapFromPhase;
     GetLordByPlayer getLordByPlayer;
     IsTurnValid isTurnValid;
+    GetAllyOrEnemyStackId getAllyOrEnemyStackId;
+    FindUnitById findUnitById;
+    CastUnitImplToSoldier castUnitImplToSoldier;
 };
 
 /** Global variables used in game. */
