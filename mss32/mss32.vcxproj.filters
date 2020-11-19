@@ -171,6 +171,9 @@
     <ClCompile Include="src\restrictions.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\batattackgiveattack.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -506,6 +509,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\batattack.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\batattackgiveattack.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
