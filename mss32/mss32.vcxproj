@@ -226,6 +226,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\attackreachcat.h" />
     <ClInclude Include="include\attacksourcecat.h" />
     <ClInclude Include="include\autodialog.h" />
+    <ClInclude Include="include\batattack.h" />
     <ClInclude Include="include\buildingbranch.h" />
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />
