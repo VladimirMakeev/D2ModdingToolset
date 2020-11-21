@@ -22,6 +22,8 @@
 #include "attackreachcat.h"
 #include "autodialog.h"
 #include "batattackgiveattack.h"
+#include "batattackshatter.h"
+#include "battlemsgdata.h"
 #include "buildingbranch.h"
 #include "buildingtype.h"
 #include "button.h"
@@ -732,6 +734,80 @@ bool __fastcall giveAttackCanPerformHooked(game::CBatAttackGiveAttack* thisptr,
     const auto secondAttackClass = secondAttackVftable->getAttackClass(secondAttack);
     // Do not allow to buff other units with this attack type as their second attack
     return secondAttackClass->id != attackCategories.giveAttack->id;
+}
+
+bool __fastcall shatterCanPerformHooked(game::CBatAttackShatter* thisptr,
+                                        int /*%edx*/,
+                                        game::IMidgardObjectMap* objectMap,
+                                        game::BattleMsgData* battleMsgData,
+                                        game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    CMidgardID targetStackId{};
+    thisptr->vftable->getTargetStackId(thisptr, &targetStackId, battleMsgData);
+
+    auto& fn = gameFunctions();
+    CMidgardID alliedStackId{};
+    fn.getAllyOrEnemyStackId(&alliedStackId, battleMsgData, unitId, true);
+
+    if (targetStackId != alliedStackId) {
+        // Can't target allies
+        return false;
+    }
+
+    auto& battle = BattleMsgDataApi::get();
+    if (battle.getUnitStatus(battleMsgData, unitId, BattleStatus::Retreat)) {
+        // Can't target retreating units
+        return false;
+    }
+
+    const int shatteredArmor = battle.getUnitShatteredArmor(battleMsgData, unitId);
+    if (shatteredArmor >= userSettings().shatteredArmorMax) {
+        return false;
+    }
+
+    CMidUnit* unit = fn.findUnitById(objectMap, unitId);
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+    auto soldierVftable = (const IUsSoldierVftable*)soldier->vftable;
+
+    int unitArmor{};
+    soldierVftable->getArmor(soldier, &unitArmor);
+
+    const int fortArmor = battle.getUnitFortificationArmor(battleMsgData, unitId);
+    const int reducedArmor = unitArmor - shatteredArmor;
+
+    if (reducedArmor > fortArmor) {
+        return reducedArmor > 0;
+    }
+
+    return false;
+}
+
+static game::UnitInfo* getUnitInfoById(game::BattleMsgData* battleMsgData,
+                                       const game::CMidgardID* unitId)
+{
+    for (auto& info : battleMsgData->unitsInfo) {
+        if (info.unitId1 == *unitId) {
+            return &info;
+        }
+    }
+
+    return nullptr;
+}
+
+void __fastcall setUnitShatteredArmorHooked(game::BattleMsgData* thisptr,
+                                            int /*%edx*/,
+                                            const game::CMidgardID* unitId,
+                                            int armor)
+{
+    auto info = getUnitInfoById(thisptr, unitId);
+    if (!info) {
+        return;
+    }
+
+    info->shatteredArmor = std::clamp(info->shatteredArmor + armor, 0,
+                                      userSettings().shatteredArmorMax);
 }
 
 } // namespace hooks

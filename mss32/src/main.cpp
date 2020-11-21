@@ -21,6 +21,8 @@
 
 #include "autodialog.h"
 #include "batattackgiveattack.h"
+#include "batattackshatter.h"
+#include "battlemsgdata.h"
 #include "buildingbranch.h"
 #include "buildingcat.h"
 #include "editor.h"
@@ -135,9 +137,15 @@ static void setupGameHooks()
                  (PVOID)hooks::buildingBranchCtorHooked);
 
     DetourAttach((PVOID*)&fn.chooseUnitLane, (PVOID)hooks::chooseUnitLaneHooked);
-
+    // Allow alchemists to buff retreating units
     DetourAttach((PVOID*)&game::CBatAttackGiveAttackApi::get().canPerform,
                  (PVOID)hooks::giveAttackCanPerformHooked);
+
+    // Allow users to customize maximum armor shatter value
+    DetourAttach((PVOID*)&game::CBatAttackShatterApi::get().canPerform,
+                 (PVOID)hooks::shatterCanPerformHooked);
+    DetourAttach((PVOID*)&game::BattleMsgDataApi::get().setUnitShatteredArmor,
+                 (PVOID)hooks::setUnitShatteredArmorHooked);
 
     // Random map generation
     /*DetourAttach((PVOID*)&game::CMenuNewSkirmishSingleApi::get().constructor,
