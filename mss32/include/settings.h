@@ -30,6 +30,7 @@ struct UserSettings
     int unitMaxDamage{};
     int unitMaxArmor{};
     int stackScoutRangeMax{};
+    int shatteredArmorMax{100};
     std::uint8_t criticalHitDamage{};
     bool showBanners{true};
     bool showResources{true};
