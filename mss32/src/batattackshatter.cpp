@@ -17,39 +17,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BATATTACKGIVEATTACK_H
-#define BATATTACKGIVEATTACK_H
+#include "batattackshatter.h"
+#include "version.h"
+#include <array>
 
-#include "batattack.h"
-#include "midgardid.h"
+namespace game::CBatAttackShatterApi {
 
-namespace game {
+// clang-format off
+static std::array<Api, 3> functions = {{
+    // Akella
+    Api{
+        (IBatAttackVftable::CanPerform)0x65ecc1
+    },
+    // Russobit
+    Api{
+        (IBatAttackVftable::CanPerform)0x65ecc1
+    },
+    // Gog
+    Api{
+        (IBatAttackVftable::CanPerform)0x65d741
+    }
+}};
+// clang-format on
 
-/**
- * Gives additional attacks to allies.
- * Alchemist unit of Mountain Clans uses this attack.
- */
-struct CBatAttackGiveAttack : public CBatAttackBase
+Api& get()
 {
-    CMidgardID unitId1;
-    CMidgardID unitId2;
-    int attackIndex; /**< 1 if this is a unit's primary attack, 2 for secondary. */
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-static_assert(sizeof(CBatAttackGiveAttack) == 16,
-              "Size of CBatAttackGiveAttack structure must be exactly 16 bytes");
-
-namespace CBatAttackGiveAttackApi {
-
-struct Api
-{
-    IBatAttackVftable::CanPerform canPerform;
-};
-
-Api& get();
-
-} // namespace CBatAttackGiveAttackApi
-
-} // namespace game
-
-#endif // BATATTACKGIVEATTACK_H
+} // namespace game::CBatAttackShatterApi

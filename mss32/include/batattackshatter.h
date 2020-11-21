@@ -17,29 +17,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BATATTACKGIVEATTACK_H
-#define BATATTACKGIVEATTACK_H
+#ifndef BATATTACKSHATTER_H
+#define BATATTACKSHATTER_H
 
 #include "batattack.h"
 #include "midgardid.h"
 
 namespace game {
 
+struct IAttack;
+
 /**
- * Gives additional attacks to allies.
- * Alchemist unit of Mountain Clans uses this attack.
+ * Breaks armor.
+ * Theurgist unit of Elven Alliance uses this attack.
  */
-struct CBatAttackGiveAttack : public CBatAttackBase
+struct CBatAttackShatter : public CBatAttackBase
 {
     CMidgardID unitId1;
     CMidgardID unitId2;
     int attackIndex; /**< 1 if this is a unit's primary attack, 2 for secondary. */
+    IAttack* attack;
+    int unknown2;
+    int unknown3;
+    int unknown4;
 };
 
-static_assert(sizeof(CBatAttackGiveAttack) == 16,
-              "Size of CBatAttackGiveAttack structure must be exactly 16 bytes");
+static_assert(sizeof(CBatAttackShatter) == 32,
+              "Size of CBatAttackShatter structure must be exactly 32 bytes");
 
-namespace CBatAttackGiveAttackApi {
+namespace CBatAttackShatterApi {
 
 struct Api
 {
@@ -48,8 +54,8 @@ struct Api
 
 Api& get();
 
-} // namespace CBatAttackGiveAttackApi
+} // namespace CBatAttackShatterApi
 
 } // namespace game
 
-#endif // BATATTACKGIVEATTACK_H
+#endif // BATATTACKSHATTER_H

@@ -172,6 +172,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClCompile Include="src\attacksourcecat.cpp" />
     <ClCompile Include="src\autodialog.cpp" />
     <ClCompile Include="src\batattackgiveattack.cpp" />
+    <ClCompile Include="src\batattackshatter.cpp" />
     <ClCompile Include="src\buildingbranch.cpp" />
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
@@ -229,6 +230,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\autodialog.h" />
     <ClInclude Include="include\batattack.h" />
     <ClInclude Include="include\batattackgiveattack.h" />
+    <ClInclude Include="include\batattackshatter.h" />
     <ClInclude Include="include\buildingbranch.h" />
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />
