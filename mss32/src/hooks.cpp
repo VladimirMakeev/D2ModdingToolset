@@ -696,7 +696,7 @@ bool __fastcall giveAttackCanPerformHooked(game::CBatAttackGiveAttack* thisptr,
 
     auto& fn = gameFunctions();
     CMidgardID alliedStackId{};
-    fn.getAllyOrEnemyStackId(&alliedStackId, battleMsgData, &thisptr->unitId1, true);
+    fn.getAllyOrEnemyStackId(&alliedStackId, battleMsgData, unitId, true);
 
     if (targetStackId != alliedStackId) {
         // Do not allow to give additional attacks to enemies
@@ -730,7 +730,7 @@ bool __fastcall giveAttackCanPerformHooked(game::CBatAttackGiveAttack* thisptr,
 
     auto secondAttackVftable = static_cast<const IAttackVftable*>(secondAttack->vftable);
     const auto secondAttackClass = secondAttackVftable->getAttackClass(secondAttack);
-
+    // Do not allow to buff other units with this attack type as their second attack
     return secondAttackClass->id != attackCategories.giveAttack->id;
 }
 
