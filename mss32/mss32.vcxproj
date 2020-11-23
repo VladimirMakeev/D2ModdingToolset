@@ -321,6 +321,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\scenarioinfo.h" />
     <ClInclude Include="include\settings.h" />
     <ClInclude Include="include\smartptr.h" />
+    <ClInclude Include="include\sortedlist.h" />
     <ClInclude Include="include\stringandid.h" />
     <ClInclude Include="include\stringarray.h" />
     <ClInclude Include="include\subracecat.h" />

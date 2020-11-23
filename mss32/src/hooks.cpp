@@ -588,8 +588,8 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
         }
 
         const auto findById = GlobalDataApi::get().findById;
-        const TBuildingType* buildingType = (const TBuildingType*)
-            findById(buildings, &iterator.node->buildingId);
+        const TBuildingType* buildingType = (const TBuildingType*)findById(buildings,
+                                                                           &iterator.node->value);
 
         const LBuildingCategory* buildingCategory = &buildingType->data->category;
         const auto buildingCategories = BuildingCategories::get();
@@ -604,7 +604,7 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
             unitBranch.id = unitUpg->branch.id;
             unitBranch.vftable = UnitBranchCategories::vftable();
 
-            const auto unitBranchCategories = UnitBranchCategories::get();
+            const auto& unitBranchCategories = UnitBranchCategories::get();
             const int num = *branchNumber;
 
             if (unitBranch.id == unitBranchCategories.sideshow->id) {

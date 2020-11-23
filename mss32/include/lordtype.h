@@ -24,47 +24,25 @@
 #include "lordcat.h"
 #include "midgardid.h"
 #include "midobject.h"
+#include "sortedlist.h"
 #include "textandid.h"
 #include <cstddef>
 #include <cstdint>
 
 namespace game {
 
-struct BuildListDataNode
-{
-    int unknown;                /**< Can be zero or one. */
-    BuildListDataNode* next;    /**< Next node to search. */
-    BuildListDataNode* less;    /**< Node with lesser buildingId value. */
-    BuildListDataNode* greater; /**< Node with greater buildingId value. */
-    CMidgardID buildingId;
-};
+using BuildListDataNode = SortedListNode<CMidgardID>;
 
 static_assert(sizeof(BuildListDataNode) == 20,
               "Size of BuildListDataNode structure must be exactly 20 bytes");
 
-struct BuildListData
-{
-    char unknown;
-    char padding[3];
-    std::uint32_t length; /**< Number of nodes in list. */
-    char unknown2[4];
-    BuildListDataNode* bgnNode; /**< Points to the first node with minimal buildingId value. */
-    int unknown3;
-    BuildListDataNode* endNode; /**< Points to the end node used as stop element. */
-    void* allocator;
-};
+using BuildListData = SortedList<CMidgardID>;
 
 static_assert(sizeof(BuildListData) == 28,
               "Size of BuildListData structure must be exactly 28 bytes");
 
 /** Name and meaning were assumed. */
-struct BuildListIterator
-{
-    char unknown;
-    char padding[3];
-    BuildListDataNode* node;
-    BuildListDataNode* node2;
-};
+using BuildListIterator = SortedListIterator<CMidgardID>;
 
 static_assert(sizeof(BuildListIterator) == 12,
               "Size of BuildListIterator structure must be exactly 12 bytes");
