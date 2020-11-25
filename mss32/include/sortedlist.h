@@ -27,10 +27,10 @@ namespace game {
 template <typename T>
 struct SortedListNode
 {
-    int unknown;             /**< Can be zero or one. */
-    SortedListNode* next;    /**< Next node to search. */
-    SortedListNode* less;    /**< Node with lesser value. */
-    SortedListNode* greater; /**< Node with greater value. */
+    int unknown;                /**< Can be zero or one. */
+    SortedListNode<T>* next;    /**< Next node to search. */
+    SortedListNode<T>* less;    /**< Node with lesser value. */
+    SortedListNode<T>* greater; /**< Node with greater value. */
     T value;
 };
 
