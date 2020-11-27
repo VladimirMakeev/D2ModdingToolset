@@ -20,6 +20,8 @@
 #ifndef BATATTACK_H
 #define BATATTACK_H
 
+#include "targetslist.h"
+
 namespace game {
 
 struct IMidgardObjectMap;
@@ -54,11 +56,12 @@ struct IBatAttackVftable
                                                       BattleMsgData* battleMsgData);
     GetTargetStackId getTargetStackId;
 
-    using Method3 = void(__thiscall*)(IBatAttack* thisptr,
-                                      IMidgardObjectMap* objectMap,
-                                      BattleMsgData* battleMsgData,
-                                      int a4);
-    Method3 method3;
+    /** Fills attack targets list with positions of units in groups. */
+    using FillTargetsList = void(__thiscall*)(IBatAttack* thisptr,
+                                              IMidgardObjectMap* objectMap,
+                                              BattleMsgData* battleMsgData,
+                                              TargetsList* targetsList);
+    FillTargetsList fillTargetsList;
 
     using Method4 = void(__thiscall*)(IBatAttack* thisptr,
                                       IMidgardObjectMap* objectMap,
