@@ -180,6 +180,9 @@
     <ClCompile Include="src\battlemsgdata.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\targetslist.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -527,6 +530,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\sortedlist.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\targetslist.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
