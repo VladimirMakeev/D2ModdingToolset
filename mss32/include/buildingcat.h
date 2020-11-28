@@ -50,40 +50,7 @@ const void* vftable();
 
 namespace LBuildingCategoryTableApi {
 
-struct Api
-{
-    /** Creates table and building categories from contents of LBuild.dbf. */
-    using Constructor = LBuildingCategoryTable*(__thiscall*)(LBuildingCategoryTable* thisptr,
-                                                             const char* globalsFolderPath,
-                                                             void* codeBaseEnvProxy);
-    Constructor constructor;
-
-    /** Performs initialization before reading categories. */
-    using Init = void(__stdcall*)(LBuildingCategoryTable* table,
-                                  void* codeBaseEnvProxy,
-                                  const char* globalsFolderPath,
-                                  const char* dbfFileName);
-    Init init;
-
-    /**
-     * Reads building category from dbf file using category name.
-     * Throws exception if category with specified name could not be found in dbf table.
-     * @param[inout] category building category structure to store the result.
-     * @param[in] table initialized category table to search for BuildingId constants by name.
-     * @param[in] fieldName dbf table field name that represents category.
-     * @param[in] dbfFileName name of dbf table to read from.
-     * @returns pointer to category.
-     */
-    using ReadCategory = LBuildingCategory*(__stdcall*)(LBuildingCategory* category,
-                                                        LBuildingCategoryTable* table,
-                                                        const char* fieldName,
-                                                        const char* dbfFileName);
-    ReadCategory readCategory;
-
-    /** Performs necessary cleanup after categories was read. */
-    using InitDone = void*(__thiscall*)(LBuildingCategoryTable* table);
-    InitDone initDone;
-};
+using Api = CategoryTableApi::Api<LBuildingCategoryTable, LBuildingCategory>;
 
 Api& get();
 

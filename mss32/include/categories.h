@@ -58,6 +58,46 @@ struct LAttitudesCategoryTable : CEnumConstantTable<AiAttitudeId>
 struct LAttitudesCategory : public Category<AiAttitudeId>
 { };
 
+namespace CategoryTableApi {
+
+template <typename Table, typename Category>
+struct Api
+{
+    /** Creates table and categories from contents of dbf file. */
+    using Constructor = Table*(__thiscall*)(Table* thisptr,
+                                            const char* globalsFolderPath,
+                                            void* codeBaseEnvProxy);
+    Constructor constructor;
+
+    /** Performs initialization before reading categories. */
+    using Init = void(__stdcall*)(Table* table,
+                                  void* codeBaseEnvProxy,
+                                  const char* globalsFolderPath,
+                                  const char* dbfFileName);
+    Init init;
+
+    /**
+     * Reads categories from dbf file using category name.
+     * Throws exception if category with specified name could not be found in dbf table.
+     * @param[inout] category category structure to store the result.
+     * @param[in] table initialized category table to search for id constants by name.
+     * @param[in] fieldName dbf table field name that represents category.
+     * @param[in] dbfFileName name of dbf table to read from.
+     * @returns pointer to category.
+     */
+    using ReadCategory = Category*(__stdcall*)(Category* category,
+                                               Table* table,
+                                               const char* fieldName,
+                                               const char* dbfFileName);
+    ReadCategory readCategory;
+
+    /** Performs necessary cleanup after categories was read. */
+    using InitDone = void*(__thiscall*)(Table* table);
+    InitDone initDone;
+};
+
+} // namespace CategoryTableApi
+
 } // namespace game
 
 #endif // CATEGORIES_H

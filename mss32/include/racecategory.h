@@ -51,40 +51,7 @@ const void* vftable();
 
 namespace LRaceCategoryTableApi {
 
-struct Api
-{
-    /** Creates table and race categories from contents of LRace.dbf. */
-    using Constructor = LRaceCategoryTable*(__thiscall*)(LRaceCategoryTable* thisptr,
-                                                         const char* globalsFolderPath,
-                                                         void* codeBaseEnvProxy);
-    Constructor constructor;
-
-    /** Performs initialization before reading categories. */
-    using Init = void(__stdcall*)(LRaceCategoryTable* table,
-                                  void* codeBaseEnvProxy,
-                                  const char* globalsFolderPath,
-                                  const char* dbfFileName);
-    Init init;
-
-    /**
-     * Reads race category from dbf file using category name.
-     * Throws exception if category with specified name could not be found in dbf table.
-     * @param[inout] category race category structure to store the result.
-     * @param[in] table initialized category table to search for RaceId constants by name.
-     * @param[in] fieldName dbf table field name that represents category.
-     * @param[in] dbfFileName name of dbf table to read from.
-     * @returns pointer to category.
-     */
-    using ReadCategory = LRaceCategory*(__stdcall*)(LRaceCategory* category,
-                                                    LRaceCategoryTable* table,
-                                                    const char* fieldName,
-                                                    const char* dbfFileName);
-    ReadCategory readCategory;
-
-    /** Performs necessary cleanup after categories was read. */
-    using InitDone = void*(__thiscall*)(LRaceCategoryTable* table);
-    InitDone initDone;
-};
+using Api = CategoryTableApi::Api<LRaceCategoryTable, LRaceCategory>;
 
 Api& get();
 
