@@ -21,7 +21,7 @@
 #define MIDSTACK_H
 
 #include "aipriority.h"
-#include "d2vector.h"
+#include "idvector.h"
 #include "mapelement.h"
 #include "midinventory.h"
 #include "midscenarioobject.h"
@@ -31,8 +31,6 @@
 #include <cstdint>
 
 namespace game {
-
-using IdVector = Vector<CMidgardID>;
 
 struct CMidUnitGroupStack : public CMidUnitGroup
 { };

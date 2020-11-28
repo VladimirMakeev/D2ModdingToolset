@@ -17,20 +17,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MIDINVENTORY_H
-#define MIDINVENTORY_H
-
 #include "idvector.h"
-#include "midgardid.h"
+#include "version.h"
+#include <array>
 
-namespace game {
+namespace game::IdVectorApi {
 
-struct CMidInventory
+// clang-format off
+static std::array<Api, 3> functions = {{
+    // Akella
+    Api{
+        (Api::PushBack)0x4118f0
+    },
+    // Russobit
+    Api{
+        (Api::PushBack)0
+    },
+    // Gog
+    Api{
+        (Api::PushBack)0
+    }
+}};
+// clang-format on
+
+Api& get()
 {
-    const void* vftable;
-    IdVector items;
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-} // namespace game
-
-#endif // MIDINVENTORY_H
+} // namespace game::IdVectorApi

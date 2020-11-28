@@ -17,20 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MIDINVENTORY_H
-#define MIDINVENTORY_H
+#ifndef IDVECTOR_H
+#define IDVECTOR_H
 
-#include "idvector.h"
+#include "d2vector.h"
 #include "midgardid.h"
 
 namespace game {
 
-struct CMidInventory
+using IdVector = Vector<CMidgardID>;
+
+namespace IdVectorApi {
+
+struct Api
 {
-    const void* vftable;
-    IdVector items;
+    using PushBack = void(__thiscall*)(IdVector* thisptr, const CMidgardID* id);
+    PushBack pushBack;
 };
+
+Api& get();
+
+} // namespace IdVectorApi
 
 } // namespace game
 
-#endif // MIDINVENTORY_H
+#endif // IDVECTOR_H

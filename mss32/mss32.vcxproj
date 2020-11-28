@@ -193,6 +193,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClCompile Include="src\globaldata.cpp" />
     <ClCompile Include="src\hooks.cpp" />
     <ClCompile Include="src\idlist.cpp" />
+    <ClCompile Include="src\idvector.cpp" />
     <ClCompile Include="src\interfmanager.cpp" />
     <ClCompile Include="src\listbox.cpp" />
     <ClCompile Include="src\log.cpp" />
@@ -268,6 +269,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\globalvariables.h" />
     <ClInclude Include="include\hooks.h" />
     <ClInclude Include="include\idlist.h" />
+    <ClInclude Include="include\idvector.h" />
     <ClInclude Include="include\immunecat.h" />
     <ClInclude Include="include\interface.h" />
     <ClInclude Include="include\interfdialog.h" />

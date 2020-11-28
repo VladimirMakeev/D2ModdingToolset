@@ -23,13 +23,11 @@
 #include "attackclasscat.h"
 #include "attackreachcat.h"
 #include "attacksourcecat.h"
-#include "d2vector.h"
+#include "idvector.h"
 #include "midgardid.h"
 #include "midobject.h"
 
 namespace game {
-
-using IdVector = Vector<CMidgardID>;
 
 /** Base class for units attacks. */
 struct IAttack : public IMidObject

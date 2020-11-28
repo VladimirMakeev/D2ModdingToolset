@@ -20,14 +20,12 @@
 #ifndef MIDUNITGROUP_H
 #define MIDUNITGROUP_H
 
-#include "d2vector.h"
+#include "idvector.h"
 #include "midgardid.h"
 
 namespace game {
 
 struct CFortification;
-
-using IdVector = Vector<CMidgardID>;
 
 /** Represents group of 6 units in game. */
 struct CMidUnitGroup

@@ -21,7 +21,7 @@
 #define RACETYPE_H
 
 #include "currency.h"
-#include "d2vector.h"
+#include "idvector.h"
 #include "midgardid.h"
 #include "midobject.h"
 #include "racecategory.h"
@@ -49,8 +49,6 @@ struct CRacePlayerDesc
 
 /** Holds city information read from GCityInf.dbf. */
 struct TRaceTypeCityInformation;
-
-using IdVector = Vector<CMidgardID>;
 
 struct TRaceTypeData
 {
