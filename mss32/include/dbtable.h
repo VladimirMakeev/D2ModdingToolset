@@ -27,6 +27,13 @@ struct LBuildingCategoryTable;
 struct LUnitBranch;
 struct LUnitBranchTable;
 struct CMidgardID;
+struct TextAndId;
+struct LAttackClass;
+struct LAttackClassTable;
+struct LAttackSource;
+struct LAttackSourceTable;
+struct LAttackReach;
+struct LAttackReachTable;
 
 /** One of the classes in game that wraps dbf access logic. */
 struct CDBTable;
@@ -86,6 +93,77 @@ struct Api
      */
     using DuplicateRecordException = void(__stdcall*)(const CDBTable* dbTable, CMidgardID* id);
     DuplicateRecordException duplicateRecordException;
+
+    /**
+     * Read id from dbf table field.
+     * Checks if id string in table contains valid id. Throws exception in case of invalid id.
+     * @param[inout] id id to store result.
+     * @param[in] dbTable table object to read from.
+     * @param[in] fieldName table field to read from.
+     */
+    using ReadId = void(__stdcall*)(CMidgardID* id, const CDBTable* dbTable, const char* fieldName);
+    ReadId readId;
+
+    using ReadText = void(__stdcall*)(TextAndId* text,
+                                      const CDBTable* dbTable,
+                                      const char* fieldName,
+                                      const void* texts);
+    ReadText readText;
+
+    using FindAttackClass = LAttackClass*(__stdcall*)(LAttackClass* attackClass,
+                                                      const CDBTable* dbTable,
+                                                      const char* fieldName,
+                                                      const LAttackClassTable* table);
+    FindAttackClass findAttackClass;
+
+    using FindAttackSource = LAttackSource*(__stdcall*)(LAttackSource* attackSource,
+                                                        const CDBTable* dbTable,
+                                                        const char* fieldName,
+                                                        const LAttackSourceTable* table);
+    FindAttackSource findAttackSource;
+
+    using FindAttackReach = LAttackReach*(__stdcall*)(LAttackReach* attackReach,
+                                                      const CDBTable* dbTable,
+                                                      const char* fieldName,
+                                                      const LAttackReachTable* table);
+    FindAttackReach findAttackReach;
+
+    using ReadAttackIntValue = void(__stdcall*)(int* value,
+                                                const CDBTable* dbTable,
+                                                const char* fieldName,
+                                                const CMidgardID* attackId);
+    ReadAttackIntValue readInitiative;
+
+    using ReadPower = void(__thiscall*)(int* thisptr,
+                                        int* power,
+                                        const CDBTable* dbTable,
+                                        const char* fieldName,
+                                        const CMidgardID* attackId);
+    ReadPower readPower;
+
+    ReadAttackIntValue readDamage;
+    ReadAttackIntValue readHeal;
+
+    using ReadAttackLevel = void(__stdcall*)(int* level,
+                                             const CDBTable* dbTable,
+                                             const char* fieldName,
+                                             const CMidgardID* attackId,
+                                             const LAttackClass* attackClass);
+    ReadAttackLevel readAttackLevel;
+
+    using ReadBoolValue = void(__stdcall*)(bool* value,
+                                           const CDBTable* dbTable,
+                                           const char* fieldName);
+    ReadBoolValue readInfinite;
+
+    using ReadIntWithBoundsCheck = void(__stdcall*)(int* value,
+                                                    const CDBTable* dbTable,
+                                                    const char* fieldName,
+                                                    int minBound,
+                                                    int maxBound);
+    ReadIntWithBoundsCheck readIntWithBoundsCheck;
+
+    ReadBoolValue readCriticalHit;
 };
 
 Api& get();

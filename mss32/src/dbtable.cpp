@@ -30,7 +30,20 @@ static std::array<Api, 4> functions = {{
         (Api::FindBuildingCategory)0x58c041,
         (Api::FindUnitBranchCategory)0x58c0bf,
         (Api::ReadUnitLevel)0x58be7c,
-        (Api::DuplicateRecordException)0x59d474
+        (Api::DuplicateRecordException)0x59d474,
+        (Api::ReadId)0x596935,
+        (Api::ReadText)0x596b67,
+        (Api::FindAttackClass)0x59fad5,
+        (Api::FindAttackSource)0x583f7d,
+        (Api::FindAttackReach)0x5a6a31,
+        (Api::ReadAttackIntValue)0x5a6409,
+        (Api::ReadPower)0x5a64bc,
+        (Api::ReadAttackIntValue)0x5a6505,
+        (Api::ReadAttackIntValue)0x5a6548,
+        (Api::ReadAttackLevel)0x5a657f,
+        (Api::ReadBoolValue)0x5a6624,
+        (Api::ReadIntWithBoundsCheck)0x5968cc,
+        (Api::ReadBoolValue)0x596911
     },
     // Russobit
     Api{
