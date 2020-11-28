@@ -19,10 +19,15 @@
 
 #include "customattacks.h"
 #include "attackclasscat.h"
+#include "attackimpl.h"
 #include "dbf/dbffile.h"
+#include "dbtable.h"
+#include "globaldata.h"
 #include "log.h"
+#include "mempool.h"
 #include "utils.h"
 #include <fmt/format.h>
+#include <limits>
 
 namespace hooks {
 
@@ -99,6 +104,105 @@ game::LAttackClassTable* __fastcall attackClassTableCtorHooked(game::LAttackClas
     table.initDone(thisptr);
 
     logDebug("newAttackType.log", "LAttackClassTable c-tor hook finished");
+    return thisptr;
+}
+
+game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
+                                                   int /*%edx*/,
+                                                   const game::CDBTable* dbTable,
+                                                   const game::GlobalData** globalData)
+{
+    using namespace game;
+
+    const auto& attackImpl = CAttackImplApi::get();
+
+    thisptr->data = (CAttackImplData*)Memory::get().allocate(sizeof(CAttackImplData));
+
+    attackImpl.initData(thisptr->data);
+    thisptr->vftable = CAttackImplApi::vftable();
+
+    const auto& db = CDBTableApi::get();
+    db.readId(&thisptr->attackId, dbTable, "ATT_ID");
+
+    auto gData = *globalData;
+    auto data = thisptr->data;
+    db.readText(&data->name, dbTable, "NAME_TXT", gData->text);
+    db.readText(&data->description, dbTable, "DESC_TXT", gData->text);
+    db.findAttackClass(&data->attackClass, dbTable, "CLASS", gData->attackClasses);
+    db.findAttackSource(&data->attackSource, dbTable, "SOURCE", gData->attackSources);
+    db.findAttackReach(&data->attackReach, dbTable, "REACH", gData->attackReach);
+    db.readInitiative(&data->initiative, dbTable, "INITIATIVE", &thisptr->attackId);
+
+    const auto& categories = AttackClassCategories::get();
+    const auto id = thisptr->data->attackClass.id;
+
+    if (id == categories.paralyze->id || id == categories.petrify->id || id == categories.damage->id
+        || id == categories.drain->id || id == categories.drainOverflow->id
+        || id == categories.fear->id || id == categories.lowerDamage->id
+        || id == categories.lowerInitiative->id || id == categories.poison->id
+        || id == categories.frostbite->id || id == categories.blister->id
+        || id == categories.bestowWards->id || id == categories.shatter->id
+        || id == categories.revive->id || id == categories.drainLevel->id
+        || id == categories.transformSelf->id || id == categories.transformOther->id) {
+        db.readPower(&data->power, &data->power, dbTable, "POWER", &thisptr->attackId);
+    }
+
+    if (id == categories.damage->id || id == categories.drain->id
+        || id == categories.drainOverflow->id || id == categories.poison->id
+        || id == categories.frostbite->id || id == categories.blister->id
+        || id == categories.shatter->id) {
+        db.readDamage(&data->qtyDamage, dbTable, "QTY_DAM", &thisptr->attackId);
+    } else {
+        data->qtyDamage = 0;
+    }
+
+    if (id == categories.heal->id || id == categories.revive->id) {
+        db.readHeal(&data->qtyHeal, dbTable, "QTY_HEAL", &thisptr->attackId);
+    } else {
+        data->qtyHeal = 0;
+    }
+
+    if (id == categories.boostDamage->id || id == categories.lowerDamage->id
+        || id == categories.lowerInitiative->id) {
+        db.readAttackLevel(&data->level, dbTable, "LEVEL", &thisptr->attackId, &data->attackClass);
+    } else {
+        data->level = -1;
+    }
+
+    if (id == categories.paralyze->id || id == categories.petrify->id
+        || id == categories.boostDamage->id || id == categories.lowerDamage->id
+        || id == categories.lowerInitiative->id || id == categories.poison->id
+        || id == categories.frostbite->id || id == categories.blister->id
+        || id == categories.transformOther->id) {
+        db.readInfinite(&data->infinite, dbTable, "INFINITE");
+    } else {
+        data->infinite = false;
+    }
+
+    if (id == categories.transformSelf->id || id == categories.doppelganger->id) {
+        db.readId(&data->altAttack, dbTable, "ALT_ATTACK");
+    } else {
+        data->altAttack = emptyId;
+    }
+
+    if (id == categories.bestowWards->id) {
+        int count{0};
+        db.readIntWithBoundsCheck(&count, dbTable, "QTY_WARDS", std::numeric_limits<int>::min(),
+                                  std::numeric_limits<int>::max());
+
+        for (int i = 0; i < count; ++i) {
+            CMidgardID wardId = invalidId;
+            db.readId(&wardId, dbTable, fmt::format("WARD{:d}", i + 1).c_str());
+            IdVectorApi::get().pushBack(&data->wards, &wardId);
+        }
+    }
+
+    if (id == categories.damage->id) {
+        db.readCriticalHit(&data->critHit, dbTable, "CRIT_HIT");
+    } else {
+        data->critHit = false;
+    }
+
     return thisptr;
 }
 

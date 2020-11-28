@@ -22,7 +22,10 @@
 
 namespace game {
 struct LAttackClassTable;
-}
+struct CAttackImpl;
+struct CDBTable;
+struct GlobalData;
+} // namespace game
 
 namespace hooks {
 
@@ -31,6 +34,11 @@ game::LAttackClassTable* __fastcall attackClassTableCtorHooked(game::LAttackClas
                                                                const char* globalsFolderPath,
                                                                void* codeBaseEnvProxy);
 
-}
+game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
+                                                   int /*%edx*/,
+                                                   const game::CDBTable* dbTable,
+                                                   const game::GlobalData** globalData);
+
+} // namespace hooks
 
 #endif // CUSTOMATTACKS_H
