@@ -26,6 +26,9 @@
 
 namespace game {
 
+struct GlobalData;
+struct CDBTable;
+
 struct CAttackImplData
 {
     int initiative;
@@ -38,7 +41,7 @@ struct CAttackImplData
     LAttackSource attackSource;
     LAttackReach attackReach;
     int level;
-    int altAttack;
+    CMidgardID altAttack;
     bool infinite;
     char padding[3];
     IdVector wards;
@@ -66,6 +69,26 @@ struct CAttackImpl : public IAttack
 };
 
 static_assert(sizeof(CAttackImpl) == 12, "Size of CAttackImpl structure must be exactly 12 bytes");
+
+namespace CAttackImplApi {
+
+struct Api
+{
+    using Constructor = CAttackImpl*(__thiscall*)(CAttackImpl* thisptr,
+                                                  const CDBTable* dbTable,
+                                                  const GlobalData** globalData);
+    Constructor constructor;
+
+    using InitData = CAttackImplData*(__thiscall*)(CAttackImplData* thisptr);
+    InitData initData;
+};
+
+Api& get();
+
+/** Returns address of CAttackImpl::vftable used in game. */
+const void* vftable();
+
+} // namespace CAttackImplApi
 
 } // namespace game
 

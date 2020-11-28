@@ -189,6 +189,9 @@
     <ClCompile Include="src\utils.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\attackimpl.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\idvector.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
