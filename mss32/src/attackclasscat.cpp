@@ -21,7 +21,8 @@
 #include "version.h"
 #include <array>
 
-namespace game::AttackClassCategories {
+namespace game {
+namespace AttackClassCategories {
 
 // clang-format off
 static std::array<Categories, 3> categories = {{
@@ -104,6 +105,17 @@ static std::array<Categories, 3> categories = {{
         (LAttackClass*)0x837588
     }
 }};
+
+static std::array<const void*, 4> vftables = {{
+    // Akella
+    (const void*)0x6ceadc,
+    // Russobit
+    (const void*)0x6ceadc,
+    // Gog
+    (const void*)0x6cca7c,
+    // Scenario Editor
+    (const void*)0x5d295c
+}};
 // clang-format on
 
 Categories& get()
@@ -111,4 +123,69 @@ Categories& get()
     return categories[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::AttackClassCategories
+const void* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
+
+} // namespace AttackClassCategories
+
+namespace LAttackClassTableApi {
+
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)0x585a1a,
+        (Api::Init)0x585d36,
+        (Api::ReadCategory)0x585dae,
+        (Api::InitDone)0x585cf1
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)0,
+        (Api::Init)0,
+        (Api::ReadCategory)0,
+        (Api::InitDone)0
+    },
+    // Gog
+    Api{
+        (Api::Constructor)0,
+        (Api::Init)0,
+        (Api::ReadCategory)0,
+        (Api::InitDone)0
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0,
+        (Api::Init)0,
+        (Api::ReadCategory)0,
+        (Api::InitDone)0
+    }
+}};
+
+static std::array<const void*, 4> vftables = {{
+    // Akella
+    (const void*)0x6e9eb4,
+    // Russobit
+    (const void*)0x6e9eb4,
+    // Gog
+    (const void*)0x6e7e54,
+    // Scenario Editor
+    (const void*)0x5df10c
+}};
+// clang-format on
+
+Api& get()
+{
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+const void* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
+
+} // namespace LAttackClassTableApi
+
+} // namespace game
