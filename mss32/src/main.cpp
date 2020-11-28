@@ -19,12 +19,14 @@
 
 #pragma comment(lib, "detours.lib")
 
+#include "attackclasscat.h"
 #include "autodialog.h"
 #include "batattackgiveattack.h"
 #include "batattackshatter.h"
 #include "battlemsgdata.h"
 #include "buildingbranch.h"
 #include "buildingcat.h"
+#include "customattacks.h"
 #include "editor.h"
 #include "game.h"
 #include "hooks.h"
@@ -187,6 +189,10 @@ static void setupHooks()
                  (PVOID)hooks::buildingCategoryTableCtorHooked);
 
     DetourAttach((PVOID*)&fn.isTurnValid, (PVOID)hooks::isTurnValidHooked);
+
+    // Support custom attack class category
+    DetourAttach((PVOID*)&game::LAttackClassTableApi::get().constructor,
+                 (PVOID)hooks::attackClassTableCtorHooked);
 }
 
 BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)

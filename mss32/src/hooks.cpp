@@ -60,6 +60,7 @@
 #include "unitbranchcat.h"
 #include "unitsforhire.h"
 #include "ussoldier.h"
+#include "utils.h"
 #include <algorithm>
 #include <cstring>
 #include <fmt/format.h>
@@ -464,17 +465,6 @@ void __stdcall createBuildingTypeHooked(const game::CDBTable* dbTable,
     if (!gameFunctions().addObjectAndCheckDuplicates(a2, buildingType)) {
         db.duplicateRecordException(dbTable, &buildingType->buildingId);
     }
-}
-
-static std::string trimSpaces(const std::string& str)
-{
-    const auto begin = str.find_first_not_of(" ");
-    if (begin == std::string::npos) {
-        return "";
-    }
-
-    const auto end = str.find_last_not_of(" ");
-    return str.substr(begin, end - begin + 1);
 }
 
 game::LBuildingCategoryTable* __fastcall buildingCategoryTableCtorHooked(
