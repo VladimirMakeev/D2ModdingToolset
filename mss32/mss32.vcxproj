@@ -180,6 +180,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClCompile Include="src\buildingtype.cpp" />
     <ClCompile Include="src\button.cpp" />
     <ClCompile Include="src\currency.cpp" />
+    <ClCompile Include="src\customattack.cpp" />
     <ClCompile Include="src\customattacks.cpp" />
     <ClCompile Include="src\d2string.cpp" />
     <ClCompile Include="src\dbfaccess.cpp" />
@@ -246,6 +247,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\categories.h" />
     <ClInclude Include="include\categoryids.h" />
     <ClInclude Include="include\currency.h" />
+    <ClInclude Include="include\customattack.h" />
     <ClInclude Include="include\customattacks.h" />
     <ClInclude Include="include\d2map.h" />
     <ClInclude Include="include\d2pair.h" />
