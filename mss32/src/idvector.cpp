@@ -24,18 +24,22 @@
 namespace game::IdVectorApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::PushBack)0x4118f0
     },
     // Russobit
     Api{
-        (Api::PushBack)0
+        (Api::PushBack)0x4118f0
     },
     // Gog
     Api{
-        (Api::PushBack)0
+        (Api::PushBack)0x4114ce
+    },
+    // Scenario Editor
+    Api{
+        (Api::PushBack)0x4151ff
     }
 }};
 // clang-format on
