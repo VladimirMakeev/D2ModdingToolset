@@ -27,19 +27,23 @@ namespace game::Memory {
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::Allocate)0x509530
+        (Api::Allocate)0x509530,
+        (Api::FreeNonZero)0x509550
     },
     // Russobit
     Api{
-        (Api::Allocate)0x509530
+        (Api::Allocate)0x509530,
+        (Api::FreeNonZero)0x509550
     },
     // Gog
     Api{
-        (Api::Allocate)0x508820
+        (Api::Allocate)0x508820,
+        (Api::FreeNonZero)0x508840
     },
     // Scenario Editor
     Api{
-        (Api::Allocate)0x4832a0
+        (Api::Allocate)0x4832a0,
+        (Api::FreeNonZero)0x4832c0
     }
 }};
 // clang-format on

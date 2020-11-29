@@ -27,6 +27,10 @@ struct Api
     /** Allocates memory using ingame custom allocator (SmartHeap ?). */
     using Allocate = void*(__cdecl*)(int sizeBytes);
     Allocate allocate;
+
+    /** Frees allocated memory if pointer is not null. */
+    using FreeNonZero = void(__cdecl*)(void*);
+    FreeNonZero freeNonZero;
 };
 
 Api& get();
