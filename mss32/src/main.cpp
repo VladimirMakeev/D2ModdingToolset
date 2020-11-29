@@ -158,6 +158,13 @@ static void setupGameHooks()
         DetourAttach((PVOID*)&fn.addPlayerUnitsToHireList,
                      (PVOID)hooks::addPlayerUnitsToHireListHooked);
     }
+
+    // Support custom battle attack objects
+    DetourAttach((PVOID*)&fn.createBatAttack, (PVOID)hooks::createBatAttackHooked);
+    // Support immunity bitmask in BattleMsgData
+    DetourAttach((PVOID*)&fn.attackClassToNumber, (PVOID)hooks::attackClassToNumberHooked);
+    // Support custom attack animations?
+    DetourAttach((PVOID*)&fn.attackClassToString, (PVOID)hooks::attackClassToStringHooked);
 }
 
 /** Hooks that used only in editor. */

@@ -20,8 +20,10 @@
 #include "customattacks.h"
 #include "attackclasscat.h"
 #include "attackimpl.h"
+#include "customattack.h"
 #include "dbf/dbffile.h"
 #include "dbtable.h"
+#include "game.h"
 #include "globaldata.h"
 #include "log.h"
 #include "mempool.h"
@@ -98,7 +100,7 @@ game::LAttackClassTable* __fastcall attackClassTableCtorHooked(game::LAttackClas
     table.readCategory(categories.shatter, thisptr, "L_SHATTER", dbfFileName);
 
     if (customAttackExists) {
-        table.readCategory(&customAttakClass, thisptr, customCategoryName, dbfFileName);
+        table.readCategory(&customAttackClass, thisptr, customCategoryName, dbfFileName);
     }
 
     table.initDone(thisptr);
@@ -204,6 +206,45 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
     }
 
     return thisptr;
+}
+
+game::IBatAttack* __stdcall createBatAttackHooked(game::IMidgardObjectMap* objectMap,
+                                                  game::BattleMsgData* battleMsgData,
+                                                  const game::CMidgardID* id1,
+                                                  const game::CMidgardID* id2,
+                                                  int attackNumber,
+                                                  const game::LAttackClass* attackClass,
+                                                  bool a7)
+{
+    using namespace game;
+
+    if (attackClass->id == customAttackClass.id) {
+        CustomAttack* customAttack = (CustomAttack*)Memory::get().allocate(sizeof(CustomAttack));
+        customAttackCtor(customAttack, objectMap, id1, id2, attackNumber);
+
+        return customAttack;
+    }
+
+    return gameFunctions().createBatAttack(objectMap, battleMsgData, id1, id2, attackNumber,
+                                           attackClass, a7);
+}
+
+int __stdcall attackClassToNumberHooked(const game::LAttackClass* attackClass)
+{
+    if (attackClass->id == customAttackClass.id) {
+        return 23;
+    }
+
+    return game::gameFunctions().attackClassToNumber(attackClass);
+}
+
+const char* __stdcall attackClassToStringHooked(const game::LAttackClass* attackClass)
+{
+    if (attackClass->id == customAttackClass.id) {
+        return "DAMA";
+    }
+
+    return game::gameFunctions().attackClassToString(attackClass);
 }
 
 } // namespace hooks

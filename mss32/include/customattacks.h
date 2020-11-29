@@ -26,6 +26,10 @@ struct LAttackClass;
 struct CAttackImpl;
 struct CDBTable;
 struct GlobalData;
+struct IBatAttack;
+struct IMidgardObjectMap;
+struct BattleMsgData;
+struct CMidgardID;
 } // namespace game
 
 namespace hooks {
@@ -41,6 +45,18 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
                                                    int /*%edx*/,
                                                    const game::CDBTable* dbTable,
                                                    const game::GlobalData** globalData);
+
+game::IBatAttack* __stdcall createBatAttackHooked(game::IMidgardObjectMap* objectMap,
+                                                  game::BattleMsgData* battleMsgData,
+                                                  const game::CMidgardID* id1,
+                                                  const game::CMidgardID* id2,
+                                                  int attackNumber,
+                                                  const game::LAttackClass* attackClass,
+                                                  bool a7);
+
+int __stdcall attackClassToNumberHooked(const game::LAttackClass* attackClass);
+
+const char* __stdcall attackClassToStringHooked(const game::LAttackClass* attackClass);
 
 } // namespace hooks
 
