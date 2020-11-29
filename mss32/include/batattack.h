@@ -41,7 +41,8 @@ struct CBatAttackBase : public IBatAttack
 
 struct IBatAttackVftable
 {
-    void* destructor;
+    using Destructor = void(__thiscall*)(IBatAttack* thisptr, bool freeMemory);
+    Destructor destructor;
 
     /** Returns true if unit with specified id can be attacked with this attack. */
     using CanPerform = bool(__thiscall*)(IBatAttack* thisptr,
@@ -62,17 +63,18 @@ struct IBatAttackVftable
                                               BattleMsgData* battleMsgData,
                                               TargetsList* targetsList);
     FillTargetsList fillTargetsList;
+    FillTargetsList fillTargetsList2;
 
-    using Method4 = void(__thiscall*)(IBatAttack* thisptr,
+    using Method5 = bool(__thiscall*)(IBatAttack* thisptr,
                                       IMidgardObjectMap* objectMap,
                                       BattleMsgData* battleMsgData,
-                                      void* a4);
-    Method4 method4;
-
-    using Method5 = int(__thiscall*)(IBatAttack* thisptr, int a2, int a3, int a4);
+                                      CMidgardID* unitId);
     Method5 method5;
 
-    void* method6;
+    using Method6 = bool(__thiscall*)(IBatAttack* thisptr,
+                                      BattleMsgData* battleMsgData,
+                                      CMidgardID* id);
+    Method6 method6;
 
     using Method7 = bool(__thiscall*)(IBatAttack* thisptr, int a2, int a3, int a4);
     Method7 method7;
@@ -83,7 +85,7 @@ struct IBatAttackVftable
                                        CMidgardID* unitId);
     IsImmune isImmune;
 
-    using Method8 = int(__thiscall*)(IBatAttack* thisptr, int a2, int a3, int a4, int a5);
+    using Method8 = void(__thiscall*)(IBatAttack* thisptr, int a2, int a3, int a4, int a5);
     Method8 method8;
 
     using GetAttackClass = bool(__thiscall*)(IBatAttack* thisptr,
@@ -92,7 +94,10 @@ struct IBatAttackVftable
                                              LAttackClass* attackClass);
     GetAttackClass getAttackClass;
 
-    using Method9 = int(__thiscall*)(IBatAttack* thisptr, int a2, int a3, int a4);
+    using Method9 = bool(__thiscall*)(IBatAttack* thisptr,
+                                      int a2,
+                                      int a3,
+                                      LAttackClass* attackClass);
     Method9 method9;
 
     /** Performs attack. */
@@ -103,11 +108,16 @@ struct IBatAttackVftable
                                        void* a5);
     DoAttack doAttack;
 
-    void* method10;
-    void* method11;
-    void* method12;
-    void* method13;
-    void* method14;
+    using Method10 = bool(__thiscall*)(IBatAttack* thisptr,
+                                       BattleMsgData* battleMsgData,
+                                       IMidgardObjectMap* objectMap);
+    Method10 method10;
+
+    using UnknownMethod = bool(__thiscall*)(IBatAttack* thisptr, BattleMsgData* battleMsgData);
+    UnknownMethod method11;
+    UnknownMethod method12;
+    UnknownMethod method13;
+    UnknownMethod method14;
 };
 
 static_assert(sizeof(IBatAttackVftable) == 18 * sizeof(void*),
