@@ -24,7 +24,7 @@
 namespace game::CAttackImplApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::Constructor)0x5a5f0a,
@@ -32,21 +32,30 @@ static std::array<Api, 3> functions = {{
     },
     // Russobit
     Api{
-        (Api::Constructor)0
+        (Api::Constructor)0x5a5f0a,
+        (Api::InitData)0x5a6638
     },
     // Gog
     Api{
-        (Api::Constructor)0
+        (Api::Constructor)0x5a5156,
+        (Api::InitData)0x5a5884
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x54e138,
+        (Api::InitData)0x54e866
     }
 }};
 
-static std::array<const void*, 3> vftables = {{
+static std::array<const void*, 4> vftables = {{
     // Akella
     (const void*)0x6ed004,
     // Russobit
-    (const void*)0,
+    (const void*)0x6ed004,
     // Gog
-    (const void*)0
+    (const void*)0x6eafa4,
+    // Scenario Editor
+    (const void*)0x5e11c4
 }};
 // clang-format on
 
