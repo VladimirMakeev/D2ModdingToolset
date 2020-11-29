@@ -25,7 +25,7 @@ namespace game {
 namespace AttackClassCategories {
 
 // clang-format off
-static std::array<Categories, 3> categories = {{
+static std::array<Categories, 4> categories = {{
     // Akella
     Categories{
         (LAttackClass*)0x8394d0,
@@ -103,6 +103,32 @@ static std::array<Categories, 3> categories = {{
         (LAttackClass*)0x837520,
         (LAttackClass*)0x837470,
         (LAttackClass*)0x837588
+    },
+    // Scenario Editor
+    Categories{
+        (LAttackClass*)0x665728,
+        (LAttackClass*)0x6657e8,
+        (LAttackClass*)0x6656c8,
+        (LAttackClass*)0x665820,
+        (LAttackClass*)0x665738,
+        (LAttackClass*)0x6656d8,
+        (LAttackClass*)0x665768,
+        (LAttackClass*)0x665748,
+        (LAttackClass*)0x6657b8,
+        (LAttackClass*)0x665798,
+        (LAttackClass*)0x6657f8,
+        (LAttackClass*)0x6656e8,
+        (LAttackClass*)0x665758,
+        (LAttackClass*)0x665778,
+        (LAttackClass*)0x6657a8,
+        (LAttackClass*)0x6656f8,
+        (LAttackClass*)0x6657d8,
+        (LAttackClass*)0x665788,
+        (LAttackClass*)0x665810,
+        (LAttackClass*)0x665708,
+        (LAttackClass*)0x6657c8,
+        (LAttackClass*)0x665718,
+        (LAttackClass*)0x665830
     }
 }};
 
@@ -143,24 +169,24 @@ static std::array<Api, 4> functions = {{
     },
     // Russobit
     Api{
-        (Api::Constructor)0,
-        (Api::Init)0,
-        (Api::ReadCategory)0,
-        (Api::InitDone)0
+        (Api::Constructor)0x585a1a,
+        (Api::Init)0x585d36,
+        (Api::ReadCategory)0x585dae,
+        (Api::InitDone)0x585cf1
     },
     // Gog
     Api{
-        (Api::Constructor)0,
-        (Api::Init)0,
-        (Api::ReadCategory)0,
-        (Api::InitDone)0
+        (Api::Constructor)0x584bcd,
+        (Api::Init)0x584ee9,
+        (Api::ReadCategory)0x584f61,
+        (Api::InitDone)0x584ea4
     },
     // Scenario Editor
     Api{
-        (Api::Constructor)0,
-        (Api::Init)0,
-        (Api::ReadCategory)0,
-        (Api::InitDone)0
+        (Api::Constructor)0x536288,
+        (Api::Init)0x5365a4,
+        (Api::ReadCategory)0x53661c,
+        (Api::InitDone)0x53655f
     }
 }};
 
