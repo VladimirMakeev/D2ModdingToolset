@@ -22,12 +22,15 @@
 
 namespace game {
 struct LAttackClassTable;
+struct LAttackClass;
 struct CAttackImpl;
 struct CDBTable;
 struct GlobalData;
 } // namespace game
 
 namespace hooks {
+
+extern game::LAttackClass customAttackClass;
 
 game::LAttackClassTable* __fastcall attackClassTableCtorHooked(game::LAttackClassTable* thisptr,
                                                                int /*%edx*/,

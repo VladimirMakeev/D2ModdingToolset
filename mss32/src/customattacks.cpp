@@ -31,7 +31,7 @@
 
 namespace hooks {
 
-static game::LAttackClass customAttakClass{};
+game::LAttackClass customAttackClass{};
 static bool customAttackExists{false};
 
 game::LAttackClassTable* __fastcall attackClassTableCtorHooked(game::LAttackClassTable* thisptr,
