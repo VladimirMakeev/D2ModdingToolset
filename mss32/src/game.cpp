@@ -42,7 +42,12 @@ static std::array<Functions, 4> functions = {{
         (IsTurnValid)0x5879f3,
         (GetAllyOrEnemyStackId)0x65afb2,
         (FindUnitById)0x625180,
-        (CastUnitImplToSoldier)0x40a79d
+        (CastUnitImplToSoldier)0x40a79d,
+        (CreateBatAttack)0x64630e,
+        (GetAttackByIdAndCheckTransfomed)0x64752d,
+        (IsUnitImmuneToAttack)0x65baa8,
+        (AttackClassToNumber)0x623e12,
+        (AttackClassToString)0x5c7af0
     },
     // Russobit
     Functions{
@@ -61,7 +66,12 @@ static std::array<Functions, 4> functions = {{
         (IsTurnValid)0x5879f3,
         (GetAllyOrEnemyStackId)0x65afb2,
         (FindUnitById)0x625180,
-        (CastUnitImplToSoldier)0x40a79d
+        (CastUnitImplToSoldier)0x40a79d,
+        (CreateBatAttack)0x64630e,
+        (GetAttackByIdAndCheckTransfomed)0x64752d,
+        (IsUnitImmuneToAttack)0x65baa8,
+        (AttackClassToNumber)0x623e12,
+        (AttackClassToString)0x5c7af0
     },
     // Gog
     Functions{
@@ -80,7 +90,12 @@ static std::array<Functions, 4> functions = {{
         (IsTurnValid)0x586ba8,
         (GetAllyOrEnemyStackId)0x659a32,
         (FindUnitById)0x623cc0,
-        (CastUnitImplToSoldier)0x40a3f9
+        (CastUnitImplToSoldier)0x40a3f9,
+        (CreateBatAttack)0x644b3e,
+        (GetAttackByIdAndCheckTransfomed)0x645d5d,
+        (IsUnitImmuneToAttack)0x65a528,
+        (AttackClassToNumber)0x6229a2,
+        (AttackClassToString)0x5c6ad9
     },
     // Scenario Editor
     Functions{

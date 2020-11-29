@@ -39,6 +39,9 @@ struct CMidPlayer;
 struct BattleMsgData;
 struct CMidUnit;
 struct TUsUnitImpl;
+struct LAttackClass;
+struct IBatAttack;
+struct IAttack;
 
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
@@ -132,6 +135,27 @@ using FindUnitById = CMidUnit*(__stdcall*)(const IMidgardObjectMap* objectMap,
 
 using CastUnitImplToSoldier = IUsSoldier*(__stdcall*)(TUsUnitImpl* unitImpl);
 
+using CreateBatAttack = IBatAttack*(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                BattleMsgData* battleMsgData,
+                                                const CMidgardID* id1,
+                                                const CMidgardID* id2,
+                                                int attackNumber,
+                                                const LAttackClass* attackClass,
+                                                bool a7);
+
+using GetAttackByIdAndCheckTransfomed = IAttack*(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                             const CMidgardID* id,
+                                                             int attackNumber);
+
+using IsUnitImmuneToAttack = bool(__stdcall*)(IMidgardObjectMap* objectMap,
+                                              BattleMsgData* battleMsgData,
+                                              const CMidgardID* unitId,
+                                              IAttack* attack,
+                                              bool checkAlwaysImmuneOnly);
+
+using AttackClassToNumber = int(__stdcall*)(const LAttackClass* attackClass);
+using AttackClassToString = const char*(__stdcall*)(const LAttackClass* attackClass);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -151,6 +175,11 @@ struct Functions
     GetAllyOrEnemyStackId getAllyOrEnemyStackId;
     FindUnitById findUnitById;
     CastUnitImplToSoldier castUnitImplToSoldier;
+    CreateBatAttack createBatAttack;
+    GetAttackByIdAndCheckTransfomed getAttackByIdAndCheckTransfomed;
+    IsUnitImmuneToAttack isUnitImmuneToAttack;
+    AttackClassToNumber attackClassToNumber;
+    AttackClassToString attackClassToString;
 };
 
 /** Global variables used in game. */
