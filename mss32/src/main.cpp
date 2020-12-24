@@ -19,20 +19,8 @@
 
 #pragma comment(lib, "detours.lib")
 
-#include "attackclasscat.h"
-#include "attackimpl.h"
-#include "autodialog.h"
-#include "batattackgiveattack.h"
-#include "batattackshatter.h"
-#include "battlemsgdata.h"
-#include "buildingbranch.h"
-#include "buildingcat.h"
-#include "customattacks.h"
-#include "editor.h"
-#include "game.h"
 #include "hooks.h"
 #include "log.h"
-#include "menunewskirmishsingle.h"
 #include "restrictions.h"
 #include "settings.h"
 #include "unitsforhire.h"
@@ -126,87 +114,38 @@ static void adjustGameRestrictions()
     }
 }
 
-/** Hooks that used only in game. */
-static void setupGameHooks()
+static bool setupHook(const hooks::HookInfo& hook)
 {
-    auto& fn = game::gameFunctions();
+    DetourTransactionBegin();
+    DetourUpdateThread(GetCurrentThread());
 
-    DetourAttach((PVOID*)&fn.respopupInit, (PVOID)hooks::respopupInitHooked);
-    DetourAttach((PVOID*)&fn.toggleShowBannersInit, (PVOID)hooks::toggleShowBannersInitHooked);
-    // Fix game crash in battles with summoners
-    DetourAttach((PVOID*)&fn.processUnitModifiers, (PVOID)hooks::processUnitModifiersHooked);
+    DetourAttach(hook.first, hook.second);
 
-    DetourAttach((PVOID*)&game::CBuildingBranchApi::get().constructor,
-                 (PVOID)hooks::buildingBranchCtorHooked);
+    const auto result = DetourTransactionCommit();
+    if (result != NO_ERROR) {
+        const std::string msg{
+            fmt::format("Failed to hook function {:p} with {:p}. Error code: {:d}.", *hook.first,
+                        hook.second, result)};
 
-    DetourAttach((PVOID*)&fn.chooseUnitLane, (PVOID)hooks::chooseUnitLaneHooked);
-    // Allow alchemists to buff retreating units
-    DetourAttach((PVOID*)&game::CBatAttackGiveAttackApi::get().canPerform,
-                 (PVOID)hooks::giveAttackCanPerformHooked);
-
-    // Allow users to customize maximum armor shatter value
-    DetourAttach((PVOID*)&game::CBatAttackShatterApi::get().canPerform,
-                 (PVOID)hooks::shatterCanPerformHooked);
-    DetourAttach((PVOID*)&game::BattleMsgDataApi::get().setUnitShatteredArmor,
-                 (PVOID)hooks::setUnitShatteredArmorHooked);
-    // Allow users to customize maximum armor shatter damage per attack
-    DetourAttach((PVOID*)&game::CBatAttackShatterApi::get().onHit,
-                 (PVOID)hooks::shatterOnHitHooked);
-
-    // Random map generation
-    /*DetourAttach((PVOID*)&game::CMenuNewSkirmishSingleApi::get().constructor,
-                 (PVOID)hooks::menuNewSkirmishSingleCtorHooked);*/
-
-    if (!hooks::unitsForHire().empty()) {
-        DetourAttach((PVOID*)&fn.addPlayerUnitsToHireList,
-                     (PVOID)hooks::addPlayerUnitsToHireListHooked);
+        hooks::logError("mssProxyError.log", msg);
+        MessageBox(NULL, msg.c_str(), "mss32.dll proxy", MB_OK);
+        return false;
     }
 
-    // Support custom battle attack objects
-    DetourAttach((PVOID*)&fn.createBatAttack, (PVOID)hooks::createBatAttackHooked);
-    // Support immunity bitmask in BattleMsgData
-    DetourAttach((PVOID*)&fn.attackClassToNumber, (PVOID)hooks::attackClassToNumberHooked);
-    // Support custom attack animations?
-    DetourAttach((PVOID*)&fn.attackClassToString, (PVOID)hooks::attackClassToStringHooked);
+    return true;
 }
 
-/** Hooks that used only in editor. */
-static void setupEditorHooks()
+static bool setupHooks()
 {
-    /** Returns true if tiles are suitable for site or ruin. */
-    using CanPlace = bool(__stdcall*)(int, int, int);
-    CanPlace canPlaceSite = (CanPlace)0x511142;
-    CanPlace canPlaceRuin = (CanPlace)0x512376;
-    // Check sites placement the same way as ruins, allowing them to be placed on water
-    DetourAttach((PVOID*)&canPlaceSite, (PVOID)canPlaceRuin);
-    // Allow editor to set elves race as caster in 'cast spell on location' event effect
-    DetourAttach((PVOID*)&game::editorFunctions.radioButtonIndexToPlayerId,
-                 (PVOID)hooks::radioButtonIndexToPlayerIdHooked);
-}
+    const auto hooks{hooks::getHooks()};
 
-static void setupHooks()
-{
-    if (hooks::executableIsGame()) {
-        setupGameHooks();
-    } else {
-        setupEditorHooks();
+    for (const auto& hook : hooks) {
+        if (!setupHook(hook)) {
+            return false;
+        }
     }
 
-    auto& fn = game::gameFunctions();
-
-    // Support custom building branch category
-    DetourAttach((PVOID*)&fn.createBuildingType, (PVOID)hooks::createBuildingTypeHooked);
-    DetourAttach((PVOID*)&game::LBuildingCategoryTableApi::get().constructor,
-                 (PVOID)hooks::buildingCategoryTableCtorHooked);
-
-    DetourAttach((PVOID*)&fn.isTurnValid, (PVOID)hooks::isTurnValidHooked);
-
-    // Support custom attack class category
-    DetourAttach((PVOID*)&game::LAttackClassTableApi::get().constructor,
-                 (PVOID)hooks::attackClassTableCtorHooked);
-    // Support custom attack class in CAttackImpl constructor
-    DetourAttach((PVOID*)&game::CAttackImplApi::get().constructor,
-                 (PVOID)hooks::attackImplCtorHooked);
+    return true;
 }
 
 BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
@@ -248,9 +187,6 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
     const auto& gameFolder{hooks::gameFolder()};
     hooks::readUserSettings(gameFolder / "disciple.ini");
 
-    DetourTransactionBegin();
-    DetourUpdateThread(GetCurrentThread());
-
     if (hooks::executableIsGame() && !hooks::loadUnitsForHire(gameFolder)) {
         MessageBox(NULL, "Failed to load new units. Check error log for details.",
                    "mss32.dll proxy", MB_OK);
@@ -258,17 +194,5 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
     }
 
     adjustGameRestrictions();
-    setupHooks();
-
-    const auto result = DetourTransactionCommit();
-    if (result != NO_ERROR) {
-        const std::string msg{
-            fmt::format("Failed to hook game functions. Error code: {:d}.", result)};
-
-        hooks::logError("mssProxyError.log", msg);
-        MessageBox(NULL, msg.c_str(), "mss32.dll proxy", MB_OK);
-        return FALSE;
-    }
-
-    return TRUE;
+    return setupHooks();
 }

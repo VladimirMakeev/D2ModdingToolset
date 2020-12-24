@@ -28,6 +28,7 @@
 #include "buildingbranch.h"
 #include "buildingtype.h"
 #include "button.h"
+#include "customattacks.h"
 #include "d2string.h"
 #include "dbf/dbffile.h"
 #include "dbtable.h"
@@ -63,15 +64,101 @@
 #include "ussoldier.h"
 #include "usunitimpl.h"
 #include "utils.h"
+#include "version.h"
 #include <algorithm>
 #include <cstring>
 #include <fmt/format.h>
 #include <fstream>
 #include <iterator>
 #include <string>
-#include <vector>
 
 namespace hooks {
+
+/** Hooks that used only in game. */
+static Hooks getGameHooks()
+{
+    auto& fn = game::gameFunctions();
+
+    // clang-format off
+    Hooks hooks{
+        // Allow users to show resources panel by default
+        HookInfo{(void**)&fn.respopupInit, respopupInitHooked},
+        // Allow users to show banners by default
+        HookInfo{(void**)&fn.toggleShowBannersInit, toggleShowBannersInitHooked},
+        // Fix game crash in battles with summoners
+        HookInfo{(void**)&fn.processUnitModifiers, processUnitModifiersHooked},
+        // Show buildings with custom branch category on the 'other buildings' tab
+        HookInfo{(void**)&game::CBuildingBranchApi::get().constructor, buildingBranchCtorHooked},
+        // Always place units with melee attack at the front lane in groups controlled by non-neutrals AI
+        HookInfo{(void**)&fn.chooseUnitLane, chooseUnitLaneHooked},
+        // Allow alchemists to buff retreating units
+        HookInfo{(void**)&game::CBatAttackGiveAttackApi::get().canPerform, giveAttackCanPerformHooked},
+        // Allow users to customize maximum armor shatter damage per attack
+        HookInfo{(void**)&game::CBatAttackShatterApi::get().canPerform, shatterCanPerformHooked},
+        // Allow users to customize total armor shatter damage
+        HookInfo{(void**)&game::BattleMsgDataApi::get().setUnitShatteredArmor, setUnitShatteredArmorHooked},
+        // Allow users to customize maximum armor shatter damage per attack
+        HookInfo{(void**)&game::CBatAttackShatterApi::get().onHit, shatterOnHitHooked},
+        // Random map generation
+        //HookInfo{(void**)&game::CMenuNewSkirmishSingleApi::get().constructor, menuNewSkirmishSingleCtorHooked},
+        // Support custom battle attack objects
+        HookInfo{(void**)&fn.createBatAttack, createBatAttackHooked},
+        // Support immunity bitmask in BattleMsgData
+        HookInfo{(void**)&fn.attackClassToNumber, attackClassToNumberHooked},
+        // Support custom attack animations?
+        HookInfo{(void**)&fn.attackClassToString, attackClassToStringHooked}
+    };
+    // clang-format on
+
+    if (!unitsForHire().empty()) {
+        hooks.push_back(
+            HookInfo{(void**)&fn.addPlayerUnitsToHireList, addPlayerUnitsToHireListHooked});
+    }
+
+    return hooks;
+}
+
+/** Hooks that used only in Scenario Editor. */
+static Hooks getScenarioEditorHooks()
+{
+    /** Returns true if tiles are suitable for site or ruin. */
+    using CanPlace = bool(__stdcall*)(int, int, int);
+    CanPlace canPlaceSite = (CanPlace)0x511142;
+    CanPlace canPlaceRuin = (CanPlace)0x512376;
+
+    // clang-format off
+    Hooks hooks{
+        // Check sites placement the same way as ruins, allowing them to be placed on water
+        HookInfo{(void**)&canPlaceSite, canPlaceRuin},
+        // Allow editor to set elves race as caster in 'cast spell on location' event effect
+        HookInfo{(void**)&game::editorFunctions.radioButtonIndexToPlayerId, radioButtonIndexToPlayerIdHooked}
+    };
+    // clang-format on
+
+    return hooks;
+}
+
+Hooks getHooks()
+{
+    Hooks hooks{executableIsGame() ? getGameHooks() : getScenarioEditorHooks()};
+
+    auto& fn = game::gameFunctions();
+    // Register buildings with custom branch category as unit buildings
+    hooks.emplace_back(HookInfo{(void**)&fn.createBuildingType, createBuildingTypeHooked});
+    // Support custom building branch category
+    hooks.emplace_back(HookInfo{(void**)&game::LBuildingCategoryTableApi::get().constructor,
+                                buildingCategoryTableCtorHooked});
+    // Increase maximum allowed game turn
+    hooks.emplace_back(HookInfo{(void**)&fn.isTurnValid, isTurnValidHooked});
+    // Support custom attack class category
+    hooks.emplace_back(HookInfo{(void**)&game::LAttackClassTableApi::get().constructor,
+                                attackClassTableCtorHooked});
+    // Support custom attack class in CAttackImpl constructor
+    hooks.emplace_back(
+        HookInfo{(void**)&game::CAttackImplApi::get().constructor, attackImplCtorHooked});
+
+    return hooks;
+}
 
 void respopupInitHooked(void)
 {

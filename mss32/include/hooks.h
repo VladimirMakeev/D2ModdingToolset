@@ -22,6 +22,8 @@
 
 #include "idlist.h"
 #include <string>
+#include <utility>
+#include <vector>
 
 namespace game {
 struct AutoDialogData;
@@ -41,6 +43,12 @@ struct BattleAttackInfo;
 }; // namespace game
 
 namespace hooks {
+
+using HookInfo = std::pair<void**, void*>;
+using Hooks = std::vector<HookInfo>;
+
+/** Returns array of hooks to setup. */
+Hooks getHooks();
 
 void respopupInitHooked(void);
 void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/);
