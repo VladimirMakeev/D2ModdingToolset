@@ -58,7 +58,7 @@ enum class BattleStatus : int
     Status24,            /**< Unit transfomed himself ? */
     Status25,            /**< Doppelganger transformation ? */
     Status26,            /**< Drain level applied ? */
-    Status27,            /**< Unit was summoned during battle ? */
+    Summon,              /**< Unit was summoned during battle. */
     Status28,            /**< Fast retreat ? */
     Retreat,             /**< Unit retreating. */
     Status30,
@@ -132,7 +132,8 @@ struct UnitInfo
     std::int8_t blisterAppliedRound;
     /** Round when long transform was applied. */
     std::int8_t transformAppliedRound;
-    char unknown6[5];
+    char unknown6;
+    CMidgardID summonOwner;
     UnknownUnitInfo elements[8];
     CMidgardID unknownIds[8];
     /** Total armor reduced by theurgist 'shatter' attacks. Negative values can increase armor. */
@@ -247,6 +248,17 @@ struct Api
                                            const CMidgardID* unitId,
                                            std::int8_t value);
     SetInt8Value setDisableAppliedRound;
+
+    using AddSummonedUnit = void(__thiscall*)(BattleMsgData* thisptr,
+                                              const IMidgardObjectMap* objectMap,
+                                              const CMidgardID* unitId,
+                                              const CMidgardID* groupId);
+    AddSummonedUnit addSummonedUnit;
+
+    using SetSummonOwner = void(__thiscall*)(BattleMsgData* thisptr,
+                                             const CMidgardID* summonUnitId,
+                                             const CMidgardID* ownerUnitId);
+    SetSummonOwner setSummonOwner;
 };
 
 Api& get();
