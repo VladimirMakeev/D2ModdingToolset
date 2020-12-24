@@ -74,6 +74,10 @@ struct Api
                                   bool checkTransformed);
     Fill fill;
 
+    /** Clears list contents. */
+    using Clear = void(__thiscall*)(TargetsList* thisptr);
+    Clear clear;
+
     /** Returns iterator pointing to the first element in the list. */
     using Begin = TargetsListIterator*(__thiscall*)(TargetsList* thisptr,
                                                     TargetsListIterator* iterator);
