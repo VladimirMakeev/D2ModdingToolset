@@ -26,6 +26,8 @@
 
 namespace game {
 
+struct IMidgardObjectMap;
+
 /** Unit statuses in battle. */
 enum class BattleStatus : int
 {
@@ -218,6 +220,18 @@ struct Api
                                               const CMidgardID* unitId,
                                               int value);
     SetUnitIntValue setUnitShatteredArmor;
+
+    /** Sets UnitInfo::unitHp for unit with unitId to specified value. */
+    using SetUnitInt16Value = void(__thiscall*)(BattleMsgData* thisptr,
+                                                const CMidgardID* unitId,
+                                                std::int16_t value);
+    SetUnitInt16Value setUnitHp;
+
+    /** Checks if unit is dead, updates UnitInfo::unitStatuses accordingly. */
+    using CheckUnitDeath = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                            BattleMsgData* battleMsgData,
+                                            const CMidgardID* unitId);
+    CheckUnitDeath checkUnitDeath;
 };
 
 Api& get();
