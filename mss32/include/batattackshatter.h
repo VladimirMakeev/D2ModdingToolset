@@ -50,6 +50,7 @@ namespace CBatAttackShatterApi {
 struct Api
 {
     IBatAttackVftable::CanPerform canPerform;
+    IBatAttackVftable::OnAttack onHit;
 };
 
 Api& get();

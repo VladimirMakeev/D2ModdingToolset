@@ -27,15 +27,18 @@ namespace game::CBatAttackShatterApi {
 static std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (IBatAttackVftable::CanPerform)0x65ecc1
+        (IBatAttackVftable::CanPerform)0x65ecc1,
+        (IBatAttackVftable::OnAttack)0x65ee5c
     },
     // Russobit
     Api{
-        (IBatAttackVftable::CanPerform)0x65ecc1
+        (IBatAttackVftable::CanPerform)0x65ecc1,
+        (IBatAttackVftable::OnAttack)0x65ee5c
     },
     // Gog
     Api{
-        (IBatAttackVftable::CanPerform)0x65d741
+        (IBatAttackVftable::CanPerform)0x65d741,
+        (IBatAttackVftable::OnAttack)0x65d8dc
     }
 }};
 // clang-format on
