@@ -33,9 +33,9 @@ enum class BattleStatus : int
 {
     Status0 = 0,
     Dead,
-    Paralyze,            /**< Unit skips his turn (paralyzed or petrified). */
+    Paralyze,            /**< Unit paralyzed. */
     Petrify,             /**< Unit petrified. */
-    SkipLong,            /**< Both paralyze and petrify sets this in case of 'infinite' attack. */
+    DisableLong,         /**< Long disable applied (paralyze, petrify or fear). */
     BoostDamageLvl1,     /**< 25% boost */
     BoostDamageLvl2,     /**< 50% boost */
     BoostDamageLvl3,     /**< 75% boost */
@@ -52,7 +52,7 @@ enum class BattleStatus : int
     FrostbiteLong,       /**< Long frostbite applied. */
     Blister,             /**< Blister dot. */
     BlisterLong,         /**< Long blister applied. */
-    Status21,            /**< cure applied ? */
+    Status21,            /**< Cure applied ? */
     Transform,           /**< Unit transformed by another unit. */
     TransformLong,       /**< Long transformation applied by another unit. */
     Status24,            /**< Unit transfomed himself ? */
