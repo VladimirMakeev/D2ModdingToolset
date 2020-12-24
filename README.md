@@ -6,16 +6,24 @@
   Custom category is created by adding 'L\_CUSTOM' record to LBuild.dbf;
 - Allows each race to hire up to 10 new tier-1 units in cities and capital.<br />
   New units are specified by adding a new columns SOLDIER\_N to Grace.dbf, N starting from 6;
+- Allows alchemists to give additional attacks to retreating allies;
 - Allows to load and create scenarios with no magic (maximum spell level set to 0);
+- Allows Scenario Editor to place merchants, mages, trainers and mercenaries on water tiles;
 - Buildings up to tier 10 are supported in editor and game;
+- Maximum game turn increased to 9999;
 - Fixes game crash in battles with summoners involved;
 - Fixes AI unit placement logic for melee units with vampiric attacks;
-- Shows banners by default.<br />
-  Behaviour can be changed from disciple.ini file using "ShowBanners=(0/1)" setting in "Disciple" section;
-- Shows resources panel by default.<br />
-  Behaviour can be changed from disciple.ini file using "ShowResources=(0/1)" setting in "Disciple" section;
-- Percentage of land converted can be shown by default instead of minimap.<br />
-  Use "ShowLandConverted=(0/1)" setting in "Disciple" section;
+- Fixes Scenario Editor bug with elves race as a caster in "Cast spell on location" event effect;
+- Game rules and settings can be changed in Disciple.ini, section \[Disciple\]:
+  - "UnitMaxDamage=\[300 : (2^31 - 1)\]" changes maximum unit damage per attack;
+  - "UnitMaxArmor=\[70: 100\]" changes maximum combined unit armor;
+  - "StackMaxScoutRange=\[7 : 100\]" changes maximum allowed scout range for troops; 
+  - "ShatteredArmorMax=\[0 : 100\]" changes total armor shatter damage;
+  - "ShatterDamageMax=\[0 : 100\]" changes maximum armor shatter damage per attack;
+  - "CriticalHitDamage=\[0 : 255\]" changes the percentage damage of critical hit;
+  - "ShowBanners=(0/1)" toggle show banners by default;
+  - "ShowResources=(0/1)" toggle show resources panel by default;
+  - "ShowLandConverted=(0/1)" toggle show percentage of land converted instead of minimap;
 - Can be used on vanilla version or with other mods installed.
 
 ### Tested on:
