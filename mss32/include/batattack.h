@@ -29,6 +29,7 @@ struct BattleMsgData;
 struct CMidgardID;
 struct LAttackClass;
 struct IBatAttackVftable;
+struct BattleAttackInfo;
 
 /** Base class for attacks in battle. */
 struct IBatAttack
@@ -84,9 +85,14 @@ struct IBatAttackVftable
                                        BattleMsgData* battleMsgData,
                                        CMidgardID* unitId);
     IsImmune isImmune;
-
-    using Method8 = void(__thiscall*)(IBatAttack* thisptr, int a2, int a3, int a4, int a5);
-    Method8 method8;
+    /** Attack action logic. */
+    using OnAttack = void(__thiscall*)(IBatAttack* thisptr,
+                                       IMidgardObjectMap* objectMap,
+                                       BattleMsgData* battleMsgData,
+                                       CMidgardID* unitId,
+                                       BattleAttackInfo** attackInfo);
+    /** Called when attack misses the target. */
+    OnAttack onMiss;
 
     using GetAttackClass = bool(__thiscall*)(IBatAttack* thisptr,
                                              int a2,
@@ -100,13 +106,8 @@ struct IBatAttackVftable
                                       LAttackClass* attackClass);
     Method9 method9;
 
-    /** Performs attack. */
-    using DoAttack = void(__thiscall*)(IBatAttack* thisptr,
-                                       IMidgardObjectMap* objectMap,
-                                       BattleMsgData* battleMsgData,
-                                       CMidgardID* unitId,
-                                       void* a5);
-    DoAttack doAttack;
+    /** Called when attack hits the target. */
+    OnAttack onHit;
 
     using Method10 = bool(__thiscall*)(IBatAttack* thisptr,
                                        BattleMsgData* battleMsgData,
