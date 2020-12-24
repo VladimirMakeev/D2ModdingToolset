@@ -122,7 +122,8 @@ struct UnitInfo
     std::int16_t unitXp;
     UnitFlags unitFlags;
     char unknown2;
-    char unknown5;
+    /** Round when paralyze, petrify or fear was applied. */
+    std::int8_t disableAppliedRound;
     /** Round when long poison was applied. 0 means poison was not applied. */
     std::int8_t poisonAppliedRound;
     /** Round when long frostbite was applied. */
@@ -134,9 +135,11 @@ struct UnitInfo
     char unknown6[5];
     UnknownUnitInfo elements[8];
     CMidgardID unknownIds[8];
+    /** Total armor reduced by theurgist 'shatter' attacks. Negative values can increase armor. */
     int shatteredArmor;
     int fortificationArmor;
-    int unknown7;
+    /** Applied by game to mage units. Reduction does not shown in unit encyclopedia. */
+    int accuracyReduction;
 };
 
 static_assert(sizeof(UnitInfo) == 168, "Size of UnitInfo structure must be exactly 168 bytes");
