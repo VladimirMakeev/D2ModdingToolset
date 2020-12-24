@@ -39,7 +39,10 @@ static std::array<Api, 3> functions = {{
         (Api::ToString)0x57fd37,
         (Api::FromString)0x57f897,
         (Api::FromParts)0x57fbfa,
-        (Api::IsIdStringValid)0x57fb49
+        (Api::IsIdStringValid)0x57fb49,
+        (Api::IsSummonUnitId)0x64599f,
+        (Api::SummonUnitIdFromPosition)0x645abe,
+        (Api::SummonUnitIdToPosition)0x645b37
     },
     // Russobit
     Api{
@@ -50,7 +53,10 @@ static std::array<Api, 3> functions = {{
         (Api::ToString)0x57fd37,
         (Api::FromString)0x57f897,
         (Api::FromParts)0x57fbfa,
-        (Api::IsIdStringValid)0x57fb49
+        (Api::IsIdStringValid)0x57fb49,
+        (Api::IsSummonUnitId)0x64599f,
+        (Api::SummonUnitIdFromPosition)0x645abe,
+        (Api::SummonUnitIdToPosition)0x645b37
     },
     // Gog
     Api{
@@ -61,7 +67,10 @@ static std::array<Api, 3> functions = {{
         (Api::ToString)0x57f3ef,
         (Api::FromString)0x57ef4f,
         (Api::FromParts)0x57f2b2,
-        (Api::IsIdStringValid)0x57f201
+        (Api::IsIdStringValid)0x57f201,
+        (Api::IsSummonUnitId)0x6441cf,
+        (Api::SummonUnitIdFromPosition)0x6442ee,
+        (Api::SummonUnitIdToPosition)0x644367
     }
 }};
 // clang-format on

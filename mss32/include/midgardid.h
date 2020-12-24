@@ -203,6 +203,35 @@ struct Api
     /** Returns true if string can be converted to valid id. */
     using IsIdStringValid = bool(__stdcall*)(const char* string);
     IsIdStringValid isIdStringValid;
+
+    /**
+     * Checks if 'other' is a special id for summoning units in battle.
+     * 'other' id can be a valid unit id or special id like "G000004e2n",
+     * where n is a position in group for upcoming summon.
+     * Sets 'id' to emptyId if 'other' is a valid unit id, otherwise copies 'other' into 'id'.
+     * @param[inout] id id to store result.
+     * @param[in] other id to check.
+     * @returns pointer to 'id'.
+     */
+    using IsSummonUnitId = CMidgardID*(__thiscall*)(CMidgardID* id, const CMidgardID* other);
+    IsSummonUnitId isSummonUnitId;
+
+    /**
+     * Creates special id for summoning units in battle from specified position in group.
+     * 'id' isn't changed if position is not in valid range [0 : 5].
+     * @param[inout] id to store result.
+     * @param position unit position in group.
+     */
+    using SummonUnitIdFromPosition = void(__thiscall*)(CMidgardID* id, int position);
+    SummonUnitIdFromPosition summonUnitIdFromPosition;
+
+    /**
+     * Returns position from special id for summoning units in battle.
+     * Does not check if unit special or not.
+     * Same as @code{.cpp}getTypeIndex(id) - 0x4e20;@endcode
+     */
+    using SummonUnitIdToPosition = int(__thiscall*)(const CMidgardID* id);
+    SummonUnitIdToPosition summonUnitIdToPosition;
 };
 
 Api& get();
