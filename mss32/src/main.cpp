@@ -149,6 +149,9 @@ static void setupGameHooks()
                  (PVOID)hooks::shatterCanPerformHooked);
     DetourAttach((PVOID*)&game::BattleMsgDataApi::get().setUnitShatteredArmor,
                  (PVOID)hooks::setUnitShatteredArmorHooked);
+    // Allow users to customize maximum armor shatter damage per attack
+    DetourAttach((PVOID*)&game::CBatAttackShatterApi::get().onHit,
+                 (PVOID)hooks::shatterOnHitHooked);
 
     // Random map generation
     /*DetourAttach((PVOID*)&game::CMenuNewSkirmishSingleApi::get().constructor,

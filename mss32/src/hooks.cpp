@@ -23,6 +23,7 @@
 #include "autodialog.h"
 #include "batattackgiveattack.h"
 #include "batattackshatter.h"
+#include "battleattackinfo.h"
 #include "battlemsgdata.h"
 #include "buildingbranch.h"
 #include "buildingtype.h"
@@ -60,6 +61,7 @@
 #include "unitbranchcat.h"
 #include "unitsforhire.h"
 #include "ussoldier.h"
+#include "usunitimpl.h"
 #include "utils.h"
 #include <algorithm>
 #include <cstring>
@@ -798,6 +800,36 @@ void __fastcall setUnitShatteredArmorHooked(game::BattleMsgData* thisptr,
 
     info->shatteredArmor = std::clamp(info->shatteredArmor + armor, 0,
                                       userSettings().shatteredArmorMax);
+}
+
+void __fastcall shatterOnHitHooked(game::CBatAttackShatter* thisptr,
+                                   int /*%edx*/,
+                                   game::IMidgardObjectMap* objectMap,
+                                   game::BattleMsgData* battleMsgData,
+                                   game::CMidgardID* unitId,
+                                   game::BattleAttackInfo** attackInfo)
+{
+    using namespace game;
+
+    auto attackVftable = (const IAttackVftable*)thisptr->attack->vftable;
+
+    const auto damageMax{userSettings().shatterDamageMax};
+    int shatterDamage = attackVftable->getQtyDamage(thisptr->attack);
+    if (shatterDamage > damageMax) {
+        shatterDamage = damageMax;
+    }
+
+    setUnitShatteredArmorHooked(battleMsgData, 0, unitId, shatterDamage);
+
+    const auto unit = gameFunctions().findUnitById(objectMap, unitId);
+
+    BattleAttackUnitInfo info{};
+    info.unitId = *unitId;
+    info.unitImplId = unit->unitImpl->unitId;
+    info.attackMissed = false;
+    info.damage = 0;
+
+    BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
 }
 
 } // namespace hooks

@@ -37,6 +37,7 @@ struct IMidgardObjectMap;
 struct BattleMsgData;
 struct CBatAttackGiveAttack;
 struct CBatAttackShatter;
+struct BattleAttackInfo;
 }; // namespace game
 
 namespace hooks {
@@ -107,6 +108,13 @@ void __fastcall setUnitShatteredArmorHooked(game::BattleMsgData* thisptr,
                                             int /*%edx*/,
                                             const game::CMidgardID* unitId,
                                             int armor);
+
+void __fastcall shatterOnHitHooked(game::CBatAttackShatter* thisptr,
+                                   int /*%edx*/,
+                                   game::IMidgardObjectMap* objectMap,
+                                   game::BattleMsgData* battleMsgData,
+                                   game::CMidgardID* unitId,
+                                   game::BattleAttackInfo** attackInfo);
 
 } // namespace hooks
 
