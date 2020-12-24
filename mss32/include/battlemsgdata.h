@@ -117,7 +117,7 @@ struct UnitInfo
     /** Bitmask with values for each of LAttackClass. */
     std::uint32_t attackClassImmunityStatuses;
     std::int16_t unitHp;
-    std::int16_t unknown4;
+    std::int16_t unitXp;
     UnitFlags unitFlags;
     char unknown2;
     char unknown5;
@@ -142,16 +142,16 @@ static_assert(sizeof(UnitInfo) == 168, "Size of UnitInfo structure must be exact
 static_assert(offsetof(UnitInfo, unitStatuses) == 8,
               "UnitInfo::unitStatuses offset must be 8 bytes");
 
-static_assert(offsetof(UnitInfo, unitHp) == 44, "UnitInfo::unitStatuses offset must be 8 bytes");
+static_assert(offsetof(UnitInfo, unitHp) == 44, "UnitInfo::unitHp offset must be 44 bytes");
 
-static_assert(offsetof(UnitInfo, unknown4) == 46, "UnitInfo::unitStatuses offset must be 8 bytes");
+static_assert(offsetof(UnitInfo, unitXp) == 46, "UnitInfo::unitXp offset must be 46 bytes");
 
-static_assert(offsetof(UnitInfo, unitFlags) == 48, "UnitInfo::unitStatuses offset must be 8 bytes");
+static_assert(offsetof(UnitInfo, unitFlags) == 48, "UnitInfo::unitFlags offset must be 48 bytes");
 
 static_assert(offsetof(UnitInfo, poisonAppliedRound) == 51,
-              "UnitInfo::unitStatuses offset must be 8 bytes");
+              "UnitInfo::poisonAppliedRound offset must be 51 bytes");
 
-static_assert(offsetof(UnitInfo, elements) == 60, "UnitInfo::unitStatuses offset must be 8 bytes");
+static_assert(offsetof(UnitInfo, elements) == 60, "UnitInfo::elements offset must be 60 bytes");
 
 static_assert(offsetof(UnitInfo, shatteredArmor) == 156,
               "UnitInfo::shatteredArmor offset must be 156 bytes");
