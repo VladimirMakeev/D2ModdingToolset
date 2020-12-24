@@ -33,7 +33,12 @@ struct CMidUnitGroup
     const void* vftable;
     IdVector units;
     CMidgardID positions[6];
-    int unknown;
+    /**
+     * Maximum number of units that can be added to the group.
+     * Value of -1 disables restriction.
+     * Does not work properly with units hire and used only for summon attacks logic.
+     */
+    int maxUnitsAllowed;
     CFortification* city;
 };
 
