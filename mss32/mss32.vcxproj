@@ -223,6 +223,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClCompile Include="src\unitsforhire.cpp" />
     <ClCompile Include="src\utils.cpp" />
     <ClCompile Include="src\version.cpp" />
+    <ClCompile Include="src\visitors.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def" />
@@ -346,6 +347,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\usunitimpl.h" />
     <ClInclude Include="include\utils.h" />
     <ClInclude Include="include\version.h" />
+    <ClInclude Include="include\visitors.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
