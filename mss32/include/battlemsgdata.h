@@ -171,8 +171,9 @@ struct BattleMsgData
     UnitInfo unitsInfo[22];
     /** Order of turns in a single battle round. 12 for units and 1 reserved? */
     BattleTurn turnsOrder[13];
-    CMidgardID attackerStackId;
-    CMidgardID defenderStackId;
+    CMidgardID attackerGroupId;
+    /** Can be id of a stack, fortification or ruin. */
+    CMidgardID defenderGroupId;
     CMidgardID attackerPlayerId;
     CMidgardID defenderPlayerId;
     CMidgardID attackerStackUnitIds[6];
