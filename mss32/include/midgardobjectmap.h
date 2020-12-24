@@ -20,21 +20,41 @@
 #ifndef MIDGARDOBJECTMAP_H
 #define MIDGARDOBJECTMAP_H
 
+#include "midgardid.h"
+
 namespace game {
 
 struct IMidgardObjectMap;
 struct IMidScenarioObject;
-struct CMidgardID;
 
 struct IMidgardObjectMapVftable
 {
-    void* unknown[5];
+    void* destructor;
+    void* unknown[4];
 
+    /**
+     * Finds scenario object by its id.
+     * Returns nullptr if object could not be found.
+     */
     using FindScenarioObjectById =
         IMidScenarioObject*(__thiscall*)(const IMidgardObjectMap* thisptr, const CMidgardID* id);
     FindScenarioObjectById findScenarioObjectById;
 
-    void* unknown2[7];
+    void* unknown2[2];
+
+    /** Assumption: stores id of scenario object. */
+    using InsertObjectId = bool(__thiscall*)(IMidgardObjectMap* thisptr,
+                                             const IMidScenarioObject* object);
+    InsertObjectId insertObjectId;
+    void* unknownMethod;
+
+    /** Creates id with IdCategory::Scenario and specified type. */
+    using CreateScenarioId = void(__thiscall*)(IMidgardObjectMap* thisptr,
+                                               CMidgardID* scenarioId,
+                                               IdType type);
+    CreateScenarioId createScenarioId;
+
+    void* unknown3[2];
 };
 
 static_assert(sizeof(IMidgardObjectMapVftable) == 13 * sizeof(void*),
