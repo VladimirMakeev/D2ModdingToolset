@@ -42,6 +42,7 @@ struct TUsUnitImpl;
 struct LAttackClass;
 struct IBatAttack;
 struct IAttack;
+struct CMidUnitGroup;
 
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
@@ -156,6 +157,14 @@ using IsUnitImmuneToAttack = bool(__stdcall*)(IMidgardObjectMap* objectMap,
 using AttackClassToNumber = int(__stdcall*)(const LAttackClass* attackClass);
 using AttackClassToString = const char*(__stdcall*)(const LAttackClass* attackClass);
 
+/**
+ * Returns pointer to units group of stack, fortification or ruin
+ * Actual object type found determined by specified id IdType.
+ */
+using GetStackFortRuinGroup = CMidUnitGroup*(__thiscall*)(void* thisptr,
+                                                          IMidgardObjectMap* objectMap,
+                                                          const CMidgardID* objectId);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -180,6 +189,7 @@ struct Functions
     IsUnitImmuneToAttack isUnitImmuneToAttack;
     AttackClassToNumber attackClassToNumber;
     AttackClassToString attackClassToString;
+    GetStackFortRuinGroup getStackFortRuinGroup;
 };
 
 /** Global variables used in game. */
