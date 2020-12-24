@@ -20,12 +20,19 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <filesystem>
 #include <string>
 
 namespace hooks {
 
 std::string trimSpaces(const std::string& str);
 
-}
+/** Returns full path to the game folder. */
+const std::filesystem::path& gameFolder();
+
+/** Returns full path to the executable that is currently running. */
+const std::filesystem::path& exePath();
+
+} // namespace hooks
 
 #endif // UTILS_H

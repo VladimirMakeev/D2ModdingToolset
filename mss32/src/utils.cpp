@@ -18,6 +18,8 @@
  */
 
 #include "utils.h"
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 
 namespace hooks {
 
@@ -30,6 +32,33 @@ std::string trimSpaces(const std::string& str)
 
     const auto end = str.find_last_not_of(" ");
     return str.substr(begin, end - begin + 1);
+}
+
+const std::filesystem::path& gameFolder()
+{
+    static std::filesystem::path folder{};
+
+    if (folder.empty()) {
+        folder = exePath();
+        folder.remove_filename();
+    }
+
+    return folder;
+}
+
+const std::filesystem::path& exePath()
+{
+    static std::filesystem::path exe{};
+
+    if (exe.empty()) {
+        HMODULE module = GetModuleHandle(NULL);
+        std::string moduleName(MAX_PATH, '\0');
+        GetModuleFileName(module, &moduleName[0], MAX_PATH - 1);
+
+        exe = std::filesystem::path(moduleName);
+    }
+
+    return exe;
 }
 
 } // namespace hooks

@@ -36,11 +36,11 @@
 #include "restrictions.h"
 #include "settings.h"
 #include "unitsforhire.h"
+#include "utils.h"
 #include "version.h"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <detours.h>
-#include <filesystem>
 #include <fmt/format.h>
 #include <string>
 
@@ -232,13 +232,7 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
 
     DisableThreadLibraryCalls(hDll);
 
-    HMODULE module = GetModuleHandle(NULL);
-    std::string moduleName(MAX_PATH, '\0');
-    GetModuleFileName(module, &moduleName[0], MAX_PATH - 1);
-
-    std::filesystem::path exeFilePath{moduleName};
-
-    const std::error_code error = hooks::determineGameVersion(exeFilePath);
+    const auto error = hooks::determineGameVersion(hooks::exePath());
     if (error || hooks::gameVersion() == hooks::GameVersion::Unknown) {
         const std::string msg{
             fmt::format("Failed to determine target exe type.\nReason: {:s}.", error.message())};
@@ -248,13 +242,13 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
         return FALSE;
     }
 
-    exeFilePath.remove_filename();
-    hooks::readUserSettings(exeFilePath / "disciple.ini");
+    const auto& gameFolder{hooks::gameFolder()};
+    hooks::readUserSettings(gameFolder / "disciple.ini");
 
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
 
-    if (hooks::executableIsGame() && !hooks::loadUnitsForHire(exeFilePath)) {
+    if (hooks::executableIsGame() && !hooks::loadUnitsForHire(gameFolder)) {
         MessageBox(NULL, "Failed to load new units. Check error log for details.",
                    "mss32.dll proxy", MB_OK);
         return FALSE;
