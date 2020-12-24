@@ -18,6 +18,7 @@
  */
 
 #include "utils.h"
+#include "midgardid.h"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
@@ -59,6 +60,14 @@ const std::filesystem::path& exePath()
     }
 
     return exe;
+}
+
+std::string idToString(const game::CMidgardID* id)
+{
+    char idString[11] = {0};
+    game::CMidgardIDApi::get().toString(id, idString);
+
+    return {idString};
 }
 
 } // namespace hooks

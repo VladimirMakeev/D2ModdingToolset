@@ -23,6 +23,10 @@
 #include <filesystem>
 #include <string>
 
+namespace game {
+struct CMidgardID;
+}
+
 namespace hooks {
 
 std::string trimSpaces(const std::string& str);
@@ -32,6 +36,9 @@ const std::filesystem::path& gameFolder();
 
 /** Returns full path to the executable that is currently running. */
 const std::filesystem::path& exePath();
+
+/** Returns id as string. */
+std::string idToString(const game::CMidgardID* id);
 
 } // namespace hooks
 
