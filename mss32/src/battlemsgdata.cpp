@@ -28,29 +28,35 @@ static std::array<Api, 3> functions = {{
     // Akella
     Api{
         (Api::GetUnitStatus)0x623b8c,
+        (Api::SetUnitStatus)0x623c11,
         (Api::GetUnitIntValue)0x62332c,
         (Api::GetUnitIntValue)0x623391,
         (Api::SetUnitIntValue)0x6232d7,
         (Api::SetUnitInt16Value)0x62423b,
-        (Api::CheckUnitDeath)0x65cf69
+        (Api::CheckUnitDeath)0x65cf69,
+        (Api::SetInt8Value)0x6247d9
     },
     // Russobit
     Api{
         (Api::GetUnitStatus)0x623b8c,
+        (Api::SetUnitStatus)0x623c11,
         (Api::GetUnitIntValue)0x62332c,
         (Api::GetUnitIntValue)0x623391,
         (Api::SetUnitIntValue)0x6232d7,
         (Api::SetUnitInt16Value)0x62423b,
-        (Api::CheckUnitDeath)0x65cf69
+        (Api::CheckUnitDeath)0x65cf69,
+        (Api::SetInt8Value)0x6247d9
     },
     // Gog
     Api{
         (Api::GetUnitStatus)0x62271c,
+        (Api::SetUnitStatus)0x6227a1,
         (Api::GetUnitIntValue)0x621ebc,
         (Api::GetUnitIntValue)0x621f21,
         (Api::SetUnitIntValue)0x621e67,
         (Api::SetUnitInt16Value)0x622dcb,
-        (Api::CheckUnitDeath)0x65b9e9
+        (Api::CheckUnitDeath)0x65b9e9,
+        (Api::SetInt8Value)0x623369
     }
 }};
 // clang-format on

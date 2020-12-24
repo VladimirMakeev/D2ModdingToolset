@@ -33,7 +33,7 @@ enum class BattleStatus : int
 {
     Status0 = 0,
     Dead,
-    SkipTurn,            /**< Unit skips his turn (paralyzed or petrified). */
+    Paralyze,            /**< Unit skips his turn (paralyzed or petrified). */
     Petrify,             /**< Unit petrified. */
     SkipLong,            /**< Both paralyze and petrify sets this in case of 'infinite' attack. */
     BoostDamageLvl1,     /**< 25% boost */
@@ -212,6 +212,12 @@ struct Api
                                             BattleStatus status);
     GetUnitStatus getUnitStatus;
 
+    using SetUnitStatus = void(__thiscall*)(const BattleMsgData* thisptr,
+                                            const CMidgardID* unitId,
+                                            BattleStatus status,
+                                            bool enable);
+    SetUnitStatus setUnitStatus;
+
     using GetUnitIntValue = int(__thiscall*)(const BattleMsgData* thisptr,
                                              const CMidgardID* unitId);
     GetUnitIntValue getUnitShatteredArmor;
@@ -233,6 +239,11 @@ struct Api
                                             BattleMsgData* battleMsgData,
                                             const CMidgardID* unitId);
     CheckUnitDeath checkUnitDeath;
+
+    using SetInt8Value = void(__thiscall*)(BattleMsgData* thisptr,
+                                           const CMidgardID* unitId,
+                                           std::int8_t value);
+    SetInt8Value setDisableAppliedRound;
 };
 
 Api& get();
