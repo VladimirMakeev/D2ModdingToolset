@@ -54,6 +54,11 @@ void readUserSettings(const std::filesystem::path& iniFilePath)
                                                       defaultShatteredMax, iniPath.c_str());
     settings.shatteredArmorMax = std::clamp(settings.shatteredArmorMax, 0, defaultShatteredMax);
 
+    const auto defaultShatterMax{settings.shatterDamageMax};
+    settings.shatterDamageMax = GetPrivateProfileInt(disciple, "ShatterDamageMax",
+                                                     defaultShatterMax, iniPath.c_str());
+    settings.shatterDamageMax = std::clamp(settings.shatterDamageMax, 0, defaultShatterMax);
+
     auto criticalHitDamage = GetPrivateProfileInt(disciple, "CriticalHitDamage",
                                                   settings.criticalHitDamage, iniPath.c_str());
     constexpr auto critMax{std::numeric_limits<std::uint8_t>::max()};
