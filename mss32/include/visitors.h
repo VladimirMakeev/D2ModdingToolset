@@ -71,6 +71,41 @@ struct Api
                                           IMidgardObjectMap* objectMap,
                                           int apply);
     ChangeUnitHp changeUnitHp;
+
+    /**
+     * Sets maximum allowed units count for a specific group.
+     * Changes CMidUnitGroup::maxUnitsAllowed value.
+     * @param[in] groupId id of group where unit will be summoned.
+     * @param maxUnitsAllowed maximum allowed units in group. Value of -1 disables the restriction.
+     * @param[in] objectMap interface used for group search.
+     * @param apply specifies whether visitor should be applied.
+     */
+    using ForceUnitMax = bool(__stdcall*)(const CMidgardID* groupId,
+                                          int maxUnitsAllowed,
+                                          IMidgardObjectMap* objectMap,
+                                          int apply);
+    ForceUnitMax forceUnitMax;
+
+    /**
+     * Adds unit to the group.
+     * @param[in] unitId id of the exising unit to add.
+     * @param[in] groupId id of the group in stack, fortification or ruin to add unit to.
+     * @param position unit position in group.
+     * @param[in] creationTurn number of game turn when unit was created.
+     * @param a5 meaning unknown, summon attack logic sets it to 1.
+     * @param objectMap interface used for group search.
+     * @param apply specifies whether unit addition should be applied.
+     * @returns true if unit was added when apply set to 1. If apply set to 0, returns whether
+     * visitor can be applied.
+     */
+    using AddUnitToGroup = bool(__stdcall*)(const CMidgardID* unitId,
+                                            const CMidgardID* groupId,
+                                            int position,
+                                            int* creationTurn,
+                                            char a5,
+                                            IMidgardObjectMap* objectMap,
+                                            int apply);
+    AddUnitToGroup addUnitToGroup;
 };
 
 Api& get();

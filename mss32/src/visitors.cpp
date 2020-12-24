@@ -27,15 +27,21 @@ namespace game::VisitorApi {
 std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (Api::ChangeUnitHp)0x5e88f4
+        (Api::ChangeUnitHp)0x5e88f4,
+        (Api::ForceUnitMax)0x5e972a,
+        (Api::AddUnitToGroup)0x5e8bf8
     },
     // Russobit
     Api{
-        (Api::ChangeUnitHp)0x5e88f4
+        (Api::ChangeUnitHp)0x5e88f4,
+        (Api::ForceUnitMax)0x5e972a,
+        (Api::AddUnitToGroup)0x5e972a
     },
     // Gog
     Api{
-        (Api::ChangeUnitHp)0x5e75f3
+        (Api::ChangeUnitHp)0x5e75f3,
+        (Api::ForceUnitMax)0x5e8429,
+        (Api::AddUnitToGroup)0x5e78f7
     }
 }};
 // clang-format on
