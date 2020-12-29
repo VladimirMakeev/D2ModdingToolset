@@ -341,6 +341,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\textandid.h" />
     <ClInclude Include="include\unitbranchcat.h" />
     <ClInclude Include="include\unitcat.h" />
+    <ClInclude Include="include\unitgenerator.h" />
     <ClInclude Include="include\unitsforhire.h" />
     <ClInclude Include="include\ussoldier.h" />
     <ClInclude Include="include\ussoldierimpl.h" />

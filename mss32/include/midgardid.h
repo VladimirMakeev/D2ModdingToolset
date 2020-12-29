@@ -41,15 +41,15 @@ enum class IdType : int
     Race,            /**< 'RR' */
     Lord,            /**< 'LR' */
     Spell,           /**< 'SS' */
-    UnitGlobal,      /**< Entries of Gunits.dbf. */
-    // 7 for UG
-    UnitModifier = 8, /**< 'UM' */
-    Attack,           /**< 'AA' */
-    TextGlobal,       /**< 'TG', entries of Tglobal.dbf. */
-    LandmarkGlobal,   /**< 'MG', entries of GLmark.dbf. */
-    ItemGlobal,       /**< 'IG', entries of GItem.dbf. */
-    NobleAction,      /**< 'NA', entries of Gaction.dbf. */
-    DynamicUpgrade,   /**< 'DU' */
+    UnitGlobal,      /**< 'UU', units implementations, entries of Gunits.dbf. */
+    UnitGenerated,   /**< 'UG', runtime-generated units implementations. */
+    UnitModifier,    /**< 'UM' */
+    Attack,          /**< 'AA' */
+    TextGlobal,      /**< 'TG', entries of Tglobal.dbf. */
+    LandmarkGlobal,  /**< 'MG', entries of GLmark.dbf. */
+    ItemGlobal,      /**< 'IG', entries of GItem.dbf. */
+    NobleAction,     /**< 'NA', entries of Gaction.dbf. */
+    DynamicUpgrade,  /**< 'DU' */
     // 15 for DA
     // 16 for AL
     // 17 for DC
