@@ -116,16 +116,14 @@ static void adjustGameRestrictions()
 
 static bool setupHook(const hooks::HookInfo& hook)
 {
-    DetourTransactionBegin();
-    DetourUpdateThread(GetCurrentThread());
+    hooks::logDebug("mss32Proxy.log", fmt::format("Try to attach hook. Function {:p}, hook {:p}.",
+                                                  *hook.first, hook.second));
 
-    DetourAttach(hook.first, hook.second);
-
-    const auto result = DetourTransactionCommit();
+    auto result = DetourAttach(hook.first, hook.second);
     if (result != NO_ERROR) {
         const std::string msg{
-            fmt::format("Failed to hook function {:p} with {:p}. Error code: {:d}.", *hook.first,
-                        hook.second, result)};
+            fmt::format("Failed to attach hook. Function {:p}, hook {:p}. Error code: {:d}.",
+                        *hook.first, hook.second, result)};
 
         hooks::logError("mssProxyError.log", msg);
         MessageBox(NULL, msg.c_str(), "mss32.dll proxy", MB_OK);
@@ -139,12 +137,26 @@ static bool setupHooks()
 {
     const auto hooks{hooks::getHooks()};
 
+    DetourTransactionBegin();
+    DetourUpdateThread(GetCurrentThread());
+
     for (const auto& hook : hooks) {
         if (!setupHook(hook)) {
             return false;
         }
     }
 
+    const auto result = DetourTransactionCommit();
+    if (result != NO_ERROR) {
+        const std::string msg{
+            fmt::format("Failed to commit detour transaction. Error code: {:d}.", result)};
+
+        hooks::logError("mssProxyError.log", msg);
+        MessageBox(NULL, msg.c_str(), "mss32.dll proxy", MB_OK);
+        return false;
+    }
+
+    hooks::logDebug("mss32Proxy.log", "All hooks are set");
     return true;
 }
 
