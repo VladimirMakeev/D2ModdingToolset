@@ -121,17 +121,14 @@ static Hooks getGameHooks()
 /** Hooks that used only in Scenario Editor. */
 static Hooks getScenarioEditorHooks()
 {
-    /** Returns true if tiles are suitable for site or ruin. */
-    using CanPlace = bool(__stdcall*)(int, int, int);
-    CanPlace canPlaceSite = (CanPlace)0x511142;
-    CanPlace canPlaceRuin = (CanPlace)0x512376;
+    using namespace game;
 
     // clang-format off
     Hooks hooks{
         // Check sites placement the same way as ruins, allowing them to be placed on water
-        HookInfo{(void**)&canPlaceSite, canPlaceRuin},
+        HookInfo{(void**)&editorFunctions.canPlaceSite, editorFunctions.canPlaceRuin},
         // Allow editor to set elves race as caster in 'cast spell on location' event effect
-        HookInfo{(void**)&game::editorFunctions.radioButtonIndexToPlayerId, radioButtonIndexToPlayerIdHooked}
+        HookInfo{(void**)&editorFunctions.radioButtonIndexToPlayerId, radioButtonIndexToPlayerIdHooked}
     };
     // clang-format on
 

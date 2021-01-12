@@ -38,11 +38,16 @@ using RadioButtonIndexToPlayerId = CMidgardID*(__stdcall*)(CMidgardID* playerId,
 using FindPlayerByRaceCategory = CMidPlayer*(__stdcall*)(const LRaceCategory* raceCategory,
                                                          IMidgardObjectMap* objectMap);
 
+/** Returns true if tiles are suitable for site or ruin. */
+using CanPlace = bool(__stdcall*)(int, int, int);
+
 /** Scenario Editor functions that can be hooked. */
 struct EditorFunctions
 {
     RadioButtonIndexToPlayerId radioButtonIndexToPlayerId;
     FindPlayerByRaceCategory findPlayerByRaceCategory;
+    CanPlace canPlaceSite;
+    CanPlace canPlaceRuin;
 };
 
 extern EditorFunctions editorFunctions;
