@@ -36,6 +36,7 @@ struct UserSettings
     bool showBanners{true};
     bool showResources{true};
     bool showLandConverted{};
+    bool preserveCapitalBuildings{};
     bool debugMode{};
 };
 

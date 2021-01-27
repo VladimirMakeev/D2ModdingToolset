@@ -40,6 +40,7 @@ struct BattleMsgData;
 struct CBatAttackGiveAttack;
 struct CBatAttackShatter;
 struct BattleAttackInfo;
+struct CMidPlayer;
 }; // namespace game
 
 namespace hooks {
@@ -123,6 +124,9 @@ void __fastcall shatterOnHitHooked(game::CBatAttackShatter* thisptr,
                                    game::BattleMsgData* battleMsgData,
                                    game::CMidgardID* unitId,
                                    game::BattleAttackInfo** attackInfo);
+
+int __stdcall deletePlayerBuildingsHooked(game::IMidgardObjectMap* objectMap,
+                                          game::CMidPlayer* player);
 
 } // namespace hooks
 

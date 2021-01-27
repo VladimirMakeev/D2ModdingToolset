@@ -115,6 +115,11 @@ static Hooks getGameHooks()
             HookInfo{(void**)&fn.addPlayerUnitsToHireList, addPlayerUnitsToHireListHooked});
     }
 
+    if (userSettings().preserveCapitalBuildings) {
+        // Allow scenarios with prebuilt buildings in capitals
+        hooks.push_back(HookInfo{(void**)&fn.deletePlayerBuildings, deletePlayerBuildingsHooked});
+    }
+
     return hooks;
 }
 
@@ -914,6 +919,11 @@ void __fastcall shatterOnHitHooked(game::CBatAttackShatter* thisptr,
     info.damage = 0;
 
     BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
+}
+
+int __stdcall deletePlayerBuildingsHooked(game::IMidgardObjectMap*, game::CMidPlayer*)
+{
+    return 0;
 }
 
 } // namespace hooks

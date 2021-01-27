@@ -77,6 +77,11 @@ void readUserSettings(const std::filesystem::path& iniFilePath)
                                                       settings.showLandConverted, iniPath.c_str())
                                  != 0;
 
+    settings.preserveCapitalBuildings = GetPrivateProfileInt(disciple, "PreserveCapitalBuildings",
+                                                             settings.preserveCapitalBuildings,
+                                                             iniPath.c_str())
+                                        != 0;
+
     settings.debugMode = GetPrivateProfileInt(disciple, "DebugHooks", settings.debugMode,
                                               iniPath.c_str())
                          != 0;
