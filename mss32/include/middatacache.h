@@ -29,6 +29,11 @@ struct CMidgardScenarioMap;
 
 struct CMidDataCache2 : public IMidgardObjectMap
 {
+    struct INotify
+    {
+        void* vftable;
+    };
+
     CMidgardScenarioMap** scenarioMap;
     IdList list;
     char unknown;
