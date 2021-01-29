@@ -58,6 +58,7 @@ struct Api
 {
     /**
      * Changes unit hit points by specified amount.
+     * Uses CVisitorChangeUnitHP.
      * Handles all necessary logic with min/max values as well as stack leader alive statuses.
      * @param[in] unitId id of unit whose hit points to change.
      * @param amount hit points change amount. Positive value heals unit, negative damages.
@@ -74,6 +75,7 @@ struct Api
 
     /**
      * Sets maximum allowed units count for a specific group.
+     * Uses CVisitorForceUnitMax.
      * Changes CMidUnitGroup::maxUnitsAllowed value.
      * @param[in] groupId id of group where unit will be summoned.
      * @param maxUnitsAllowed maximum allowed units in group. Value of -1 disables the restriction.
@@ -88,6 +90,7 @@ struct Api
 
     /**
      * Adds unit to the group.
+     * Uses CVisitorAddUnitToGroup.
      * @param[in] unitId id of the exising unit to add.
      * @param[in] groupId id of the group in stack, fortification or ruin to add unit to.
      * @param position unit position in group.
@@ -106,6 +109,24 @@ struct Api
                                             IMidgardObjectMap* objectMap,
                                             int apply);
     AddUnitToGroup addUnitToGroup;
+
+    /**
+     * Transfers item from one object with inventory (stack, bag or city) to another.
+     * Uses CVisitorExchangeItem.
+     * @param[in] fromObjectId id of the object with inventory to transfer from.
+     * @param[in] toObjectId id of the object with inventory to receive item.
+     * @param[in] itemId id of the item to transfer.
+     * @param objectMap interface used for objects search.
+     * @param apply specifies whether item transfer should be applied.
+     * @returns true if item was transfered when apply set to 1. If apply set to 0, returns whether
+     * visitor can be applied.
+     */
+    using ExchangeItem = bool(__stdcall*)(const CMidgardID* fromObjectId,
+                                          const CMidgardID* toObjectId,
+                                          const CMidgardID* itemId,
+                                          IMidgardObjectMap* objectMap,
+                                          int apply);
+    ExchangeItem exchangeItem;
 };
 
 Api& get();
