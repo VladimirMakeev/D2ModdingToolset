@@ -278,6 +278,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\idvector.h" />
     <ClInclude Include="include\immunecat.h" />
     <ClInclude Include="include\interface.h" />
+    <ClInclude Include="include\interfacechilds.h" />
     <ClInclude Include="include\interfdialog.h" />
     <ClInclude Include="include\interffullscreen.h" />
     <ClInclude Include="include\interfmanager.h" />
