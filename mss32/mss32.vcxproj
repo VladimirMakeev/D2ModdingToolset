@@ -269,6 +269,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\dynamiccast.h" />
     <ClInclude Include="include\editor.h" />
     <ClInclude Include="include\fortification.h" />
+    <ClInclude Include="include\fullscreeninterf.h" />
     <ClInclude Include="include\functor.h" />
     <ClInclude Include="include\game.h" />
     <ClInclude Include="include\gamesettings.h" />

@@ -601,6 +601,9 @@
     <ClInclude Include="include\middropmanager.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\fullscreeninterf.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\taskmanagerholder.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
