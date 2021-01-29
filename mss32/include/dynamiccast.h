@@ -67,6 +67,7 @@ struct Rtti
     TypeDescriptor* CPlayerBuildingsType;
     TypeDescriptor* TBuildingTypeType;
     TypeDescriptor* TBuildingUnitUpgTypeType;
+    TypeDescriptor* CMidStackType;
 };
 
 const Rtti& rtti();
