@@ -20,17 +20,33 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
+#include "interfacechilds.h"
+#include "smartptr.h"
+#include <cstddef>
+
 namespace game {
 
-/** Must be 64 bytes according to CInterface constructor. */
 struct CInterfaceData
 {
-    char unknown[64];
+    SmartPointer interfManagerImpl;
+    int unknown;
+    int unknown2;
+    int unknown3;
+    int unknown4;
+    int unknown5;
+    CInterfaceChilds childs;
+    SmartPointer unknown6;
+    SmartPointer unknown7;
 };
 
+static_assert(sizeof(CInterfaceData) == 64,
+              "Size of CInterfaceData structure must be exactly 64 bytes");
+
+static_assert(offsetof(CInterfaceData, childs) == 28,
+              "CInterfaceData::childs offset must be 28 bytes");
+
 /**
- * Assumption: base class for all ui elements.
- * Actual size unknown.
+ * Base class for all ui elements.
  */
 struct CInterface
 {
