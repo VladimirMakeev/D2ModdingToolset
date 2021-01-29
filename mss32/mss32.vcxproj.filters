@@ -598,6 +598,9 @@
     <ClInclude Include="include\resetstackext.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\draganddropinterf.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\middropmanager.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
