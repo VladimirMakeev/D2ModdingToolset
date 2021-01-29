@@ -25,11 +25,61 @@
 
 namespace game {
 
+struct CMidInventoryVftable;
+struct IMidgardObjectMap;
+
 struct CMidInventory
 {
-    const void* vftable;
+    CMidInventoryVftable* vftable;
     IdVector items;
 };
+
+struct CMidInventoryVftable
+{
+    void* destructor;
+    void* method1;
+
+    /** Runs CVisitorDestroyItem for each item in inventory. */
+    using Clear = bool(__thiscall*)(CMidInventory* thisptr, int* a2, IMidgardObjectMap* objectMap);
+    Clear clear;
+
+    /** Serializes inventory data. */
+    using Stream = void*(__thiscall*)(CMidInventory* thisptr, int a2, void* a3);
+    Stream stream;
+
+    /** Returns true if all item ids refers to valid objects. */
+    using AllItemsExist = bool(__thiscall*)(CMidInventory* thisptr, IMidgardObjectMap* objectMap);
+    AllItemsExist allItemsExist;
+
+    /** Returns number of items in inventory. */
+    using GetItemsCount = int(__thiscall*)(CMidInventory* thisptr);
+    GetItemsCount getItemsCount;
+
+    /** Returns item id at specified index. */
+    using GetItem = CMidgardID*(__thiscall*)(CMidInventory* thisptr, int index);
+    GetItem getItem;
+
+    /** Returns index of specified item id or -1 if item not found. */
+    using GetItemIndex = int(__thiscall*)(CMidInventory* thisptr, const CMidgardID* itemId);
+    GetItemIndex getItemIndex;
+
+    /** Adds item id to inventory. Returns true if added successfully. */
+    using AddItem = bool(__thiscall*)(CMidInventory* thisptr,
+                                      int a2,
+                                      const CMidgardID* itemId,
+                                      IMidgardObjectMap* objectMap);
+    AddItem addItem;
+
+    /** Removes item id from inventory. Returns true if removed successfully. */
+    using RemoveItem = bool(__thiscall*)(CMidInventory* thisptr,
+                                         int a2,
+                                         const CMidgardID* itemId,
+                                         IMidgardObjectMap* objectMap);
+    RemoveItem removeItem;
+};
+
+static_assert(sizeof(CMidInventoryVftable) == 10 * sizeof(void*),
+              "CMidInventory vftable must have exactly 10 methods");
 
 } // namespace game
 
