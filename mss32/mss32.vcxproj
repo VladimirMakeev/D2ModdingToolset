@@ -300,6 +300,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\midclientcore.h" />
     <ClInclude Include="include\midcommandqueue2.h" />
     <ClInclude Include="include\middatacache.h" />
+    <ClInclude Include="include\middragdropinterf.h" />
     <ClInclude Include="include\middropmanager.h" />
     <ClInclude Include="include\midgard.h" />
     <ClInclude Include="include\midgardid.h" />
