@@ -583,6 +583,9 @@
     <ClInclude Include="include\phase.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\phasegame.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\midcommandqueue2.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
