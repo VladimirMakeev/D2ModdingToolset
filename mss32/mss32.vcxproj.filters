@@ -577,6 +577,9 @@
     <ClInclude Include="include\unitgenerator.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\taskmanagerholder.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\interfacechilds.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
