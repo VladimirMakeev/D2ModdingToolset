@@ -43,6 +43,7 @@ struct BattleAttackInfo;
 struct CMidPlayer;
 struct CCityStackInterf;
 struct CPhaseGame;
+struct CExchangeInterf;
 }; // namespace game
 
 namespace hooks {
@@ -135,6 +136,13 @@ game::CCityStackInterf* __fastcall cityStackInterfCtorHooked(game::CCityStackInt
                                                              void* taskOpenInterf,
                                                              game::CPhaseGame* phaseGame,
                                                              game::CMidgardID* cityId);
+
+game::CExchangeInterf* __fastcall exchangeInterfCtorHooked(game::CExchangeInterf* thisptr,
+                                                           int /*%edx*/,
+                                                           void* taskOpenInterf,
+                                                           game::CPhaseGame* phaseGame,
+                                                           game::CMidgardID* stackLeftSide,
+                                                           game::CMidgardID* stackRightSide);
 
 } // namespace hooks
 

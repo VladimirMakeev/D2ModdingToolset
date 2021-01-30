@@ -36,6 +36,7 @@
 #include "dialoginterf.h"
 #include "dynamiccast.h"
 #include "editor.h"
+#include "exchangeinterf.h"
 #include "fortification.h"
 #include "functor.h"
 #include "game.h"
@@ -115,6 +116,8 @@ static Hooks getGameHooks()
         HookInfo{(void**)&fn.attackClassToString, attackClassToStringHooked},
         // Add items transfer buttons to city interface
         HookInfo{(void**)&game::CCityStackInterfApi::get().constructor, cityStackInterfCtorHooked},
+        // Add items transfer buttons to stack exchange interface
+        HookInfo{(void**)&game::CExchangeInterfApi::get().constructor, exchangeInterfCtorHooked},
     };
     // clang-format on
 
@@ -1076,6 +1079,107 @@ game::CCityStackInterf* __fastcall cityStackInterfCtorHooked(game::CCityStackInt
 
     callback.callback = (ButtonCallback::Callback)transferToCityCallback;
     cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+    button.assignFunctor(dialog, "BTN_TRANSF_R_ALL", dialogName, &functor, 0);
+    freeFunctor(&functor, nullptr);
+    return thisptr;
+}
+
+/** Transfers items from stack with srcStackId to stack with dstStackId. */
+static void transferStackToStack(game::CPhaseGame* phaseGame,
+                                 const game::CMidgardID* dstStackId,
+                                 const game::CMidgardID* srcStackId)
+{
+    using namespace game;
+
+    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto srcObj = objectMap->vftable->findScenarioObjectById(objectMap, srcStackId);
+    if (!srcObj) {
+        logError("mssProxyError.log",
+                 fmt::format("Could not find stack {:s}", idToString(srcStackId)));
+        return;
+    }
+
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+
+    auto srcStack = (CMidStack*)dynamicCast(srcObj, 0, rtti.IMidScenarioObjectType,
+                                            rtti.CMidStackType, 0);
+    if (!srcStack) {
+        logError("mssProxyError.log", fmt::format("Failed to cast scenario oject {:s} to stack",
+                                                  idToString(srcStackId)));
+        return;
+    }
+
+    auto& inventory = srcStack->inventory;
+    std::vector<CMidgardID> itemsToTransfer;
+    const int itemsTotal = inventory.vftable->getItemsCount(&inventory);
+    for (int i = 0; i < itemsTotal; i++) {
+        auto item = inventory.vftable->getItem(&inventory, i);
+        if (isItemEquipped(srcStack->leaderEquppedItems, item)) {
+            continue;
+        }
+
+        // TODO: apply item filter
+        itemsToTransfer.push_back(*item);
+    }
+
+    const auto& exchangeItem = VisitorApi::get().exchangeItem;
+    const auto& sendExchangeItemMsg = NetMessagesApi::get().sendStackExchangeItemMsg;
+
+    for (const auto& item : itemsToTransfer) {
+        sendExchangeItemMsg(phaseGame, srcStackId, dstStackId, &item, 1);
+
+        if (!exchangeItem(srcStackId, dstStackId, &item, objectMap, 1)) {
+            logError("mssProxyError.log",
+                     fmt::format("Failed to transfer item {:s} from stack {:s} to stack {:s}",
+                                 idToString(&item), idToString(srcStackId),
+                                 idToString(dstStackId)));
+        }
+    }
+}
+
+void __fastcall exchangeTransferAllToLeftStack(game::CExchangeInterf* thisptr, int /*%edx*/)
+{
+    transferStackToStack(thisptr->dragDropInterf.phaseGame, &thisptr->data->stackLeftSideId,
+                         &thisptr->data->stackRightSideId);
+}
+
+void __fastcall exchangeTransferAllToRightStack(game::CExchangeInterf* thisptr, int /*%edx*/)
+{
+    transferStackToStack(thisptr->dragDropInterf.phaseGame, &thisptr->data->stackRightSideId,
+                         &thisptr->data->stackLeftSideId);
+}
+
+game::CExchangeInterf* __fastcall exchangeInterfCtorHooked(game::CExchangeInterf* thisptr,
+                                                           int /*%edx*/,
+                                                           void* taskOpenInterf,
+                                                           game::CPhaseGame* phaseGame,
+                                                           game::CMidgardID* stackLeftSide,
+                                                           game::CMidgardID* stackRightSide)
+{
+    using namespace game;
+
+    const auto& exchangeInterf = CExchangeInterfApi::get();
+    exchangeInterf.constructor(thisptr, taskOpenInterf, phaseGame, stackLeftSide, stackRightSide);
+
+    const auto& button = CButtonInterfApi::get();
+    const auto freeFunctor = FunctorApi::get().createOrFree;
+    const char dialogName[] = "DLG_EXCHANGE";
+
+    using ButtonCallback = CExchangeInterfApi::Api::ButtonCallback;
+
+    ButtonCallback callback{};
+    callback.callback = (ButtonCallback::Callback)exchangeTransferAllToLeftStack;
+
+    Functor functor;
+    exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+
+    auto dialog = CMidDragDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
+    button.assignFunctor(dialog, "BTN_TRANSF_L_ALL", dialogName, &functor, 0);
+    freeFunctor(&functor, nullptr);
+
+    callback.callback = (ButtonCallback::Callback)exchangeTransferAllToRightStack;
+    exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
     button.assignFunctor(dialog, "BTN_TRANSF_R_ALL", dialogName, &functor, 0);
     freeFunctor(&functor, nullptr);
     return thisptr;
