@@ -44,6 +44,7 @@ struct CMidPlayer;
 struct CCityStackInterf;
 struct CPhaseGame;
 struct CExchangeInterf;
+struct CPickUpDropInterf;
 }; // namespace game
 
 namespace hooks {
@@ -143,6 +144,13 @@ game::CExchangeInterf* __fastcall exchangeInterfCtorHooked(game::CExchangeInterf
                                                            game::CPhaseGame* phaseGame,
                                                            game::CMidgardID* stackLeftSide,
                                                            game::CMidgardID* stackRightSide);
+
+game::CPickUpDropInterf* __fastcall pickupDropInterfCtorHooked(game::CPickUpDropInterf* thisptr,
+                                                               int /*%edx*/,
+                                                               void* taskOpenInterf,
+                                                               game::CPhaseGame* phaseGame,
+                                                               game::CMidgardID* stackId,
+                                                               game::CMidgardID* bagId);
 
 } // namespace hooks
 

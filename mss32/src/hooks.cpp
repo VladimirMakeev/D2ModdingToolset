@@ -49,6 +49,7 @@
 #include "mapgen.h"
 #include "mempool.h"
 #include "menunewskirmishsingle.h"
+#include "midbag.h"
 #include "middatacache.h"
 #include "midgardid.h"
 #include "midgardmsgbox.h"
@@ -58,6 +59,7 @@
 #include "midunit.h"
 #include "netmessages.h"
 #include "phasegame.h"
+#include "pickupdropinterf.h"
 #include "playerbuildings.h"
 #include "racecategory.h"
 #include "racetype.h"
@@ -118,6 +120,8 @@ static Hooks getGameHooks()
         HookInfo{(void**)&game::CCityStackInterfApi::get().constructor, cityStackInterfCtorHooked},
         // Add items transfer buttons to stack exchange interface
         HookInfo{(void**)&game::CExchangeInterfApi::get().constructor, exchangeInterfCtorHooked},
+        // Add items transfer buttons to pickup drop interface
+        HookInfo{(void**)&game::CPickUpDropInterfApi::get().constructor, pickupDropInterfCtorHooked}
     };
     // clang-format on
 
@@ -1180,6 +1184,125 @@ game::CExchangeInterf* __fastcall exchangeInterfCtorHooked(game::CExchangeInterf
 
     callback.callback = (ButtonCallback::Callback)exchangeTransferAllToRightStack;
     exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+    button.assignFunctor(dialog, "BTN_TRANSF_R_ALL", dialogName, &functor, 0);
+    freeFunctor(&functor, nullptr);
+    return thisptr;
+}
+
+void __fastcall pickupTransferBagItemsToStack(game::CPickUpDropInterf* thisptr, int /*%edx*/)
+{
+    using namespace game;
+
+    auto phaseGame = thisptr->dragDropInterf.phaseGame;
+    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto bagObj = objectMap->vftable->findScenarioObjectById(objectMap, &thisptr->data->bagId);
+    if (!bagObj) {
+        logError("mssProxyError.log",
+                 fmt::format("Could not find bag {:s}", idToString(&thisptr->data->bagId)));
+        return;
+    }
+
+    const auto exchangeFromId = &thisptr->data->bagId;
+    const auto exchangeToId = &thisptr->data->stackId;
+    const auto& exchangeItem = VisitorApi::get().exchangeItem;
+    const auto& sendExchangeItemMsg = NetMessagesApi::get().sendStackExchangeItemMsg;
+    auto bag = static_cast<CMidBag*>(bagObj);
+    auto& inventory = bag->inventory;
+
+    while (inventory.vftable->getItemsCount(&inventory)) {
+        auto itemId = inventory.vftable->getItem(&inventory, 0);
+        sendExchangeItemMsg(phaseGame, exchangeFromId, exchangeToId, itemId, 1);
+
+        if (!exchangeItem(exchangeFromId, exchangeToId, itemId, objectMap, 1)) {
+            logError("mssProxyError.log",
+                     fmt::format("Failed to transfer item {:s} from bag {:s} to stack {:s}",
+                                 idToString(itemId), idToString(exchangeFromId),
+                                 idToString(exchangeToId)));
+        }
+    }
+}
+
+void __fastcall pickupTransferStackItemsToBag(game::CPickUpDropInterf* thisptr, int /*%edx*/)
+{
+    using namespace game;
+
+    auto phaseGame = thisptr->dragDropInterf.phaseGame;
+    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto stackObj = objectMap->vftable->findScenarioObjectById(objectMap, &thisptr->data->stackId);
+    if (!stackObj) {
+        logError("mssProxyError.log",
+                 fmt::format("Could not find stack {:s}", idToString(&thisptr->data->stackId)));
+        return;
+    }
+
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+
+    auto stack = (CMidStack*)dynamicCast(stackObj, 0, rtti.IMidScenarioObjectType,
+                                         rtti.CMidStackType, 0);
+    if (!stack) {
+        logError("mssProxyError.log", fmt::format("Failed to cast scenario oject {:s} to stack",
+                                                  idToString(&thisptr->data->stackId)));
+        return;
+    }
+
+    auto& inventory = stack->inventory;
+    std::vector<CMidgardID> itemsToTransfer;
+    const int itemsTotal = inventory.vftable->getItemsCount(&inventory);
+    for (int i = 0; i < itemsTotal; i++) {
+        auto item = inventory.vftable->getItem(&inventory, i);
+        if (!isItemEquipped(stack->leaderEquppedItems, item)) {
+            itemsToTransfer.push_back(*item);
+        }
+    }
+
+    const auto exchangeFromId = &thisptr->data->stackId;
+    const auto exchangeToId = &thisptr->data->bagId;
+    const auto& exchangeItem = VisitorApi::get().exchangeItem;
+    const auto& sendExchangeItemMsg = NetMessagesApi::get().sendStackExchangeItemMsg;
+
+    for (const auto& item : itemsToTransfer) {
+        sendExchangeItemMsg(phaseGame, exchangeFromId, exchangeToId, &item, 1);
+
+        if (!exchangeItem(exchangeFromId, exchangeToId, &item, objectMap, 1)) {
+            logError("mssProxyError.log",
+                     fmt::format("Failed to transfer item {:s} from stack {:s} to bag {:s}",
+                                 idToString(&item), idToString(exchangeFromId),
+                                 idToString(exchangeToId)));
+        }
+    }
+}
+
+game::CPickUpDropInterf* __fastcall pickupDropInterfCtorHooked(game::CPickUpDropInterf* thisptr,
+                                                               int /*%edx*/,
+                                                               void* taskOpenInterf,
+                                                               game::CPhaseGame* phaseGame,
+                                                               game::CMidgardID* stackId,
+                                                               game::CMidgardID* bagId)
+{
+    using namespace game;
+
+    const auto& pickupInterf = CPickUpDropInterfApi::get();
+    pickupInterf.constructor(thisptr, taskOpenInterf, phaseGame, stackId, bagId);
+
+    const auto& button = CButtonInterfApi::get();
+    const auto freeFunctor = FunctorApi::get().createOrFree;
+    const char dialogName[] = "DLG_PICKUP_DROP";
+
+    using ButtonCallback = CPickUpDropInterfApi::Api::ButtonCallback;
+
+    ButtonCallback callback{};
+    callback.callback = (ButtonCallback::Callback)pickupTransferBagItemsToStack;
+
+    Functor functor;
+    pickupInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+
+    auto dialog = CMidDragDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
+    button.assignFunctor(dialog, "BTN_TRANSF_L_ALL", dialogName, &functor, 0);
+    freeFunctor(&functor, nullptr);
+
+    callback.callback = (ButtonCallback::Callback)pickupTransferStackItemsToBag;
+    pickupInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
     button.assignFunctor(dialog, "BTN_TRANSF_R_ALL", dialogName, &functor, 0);
     freeFunctor(&functor, nullptr);
     return thisptr;
