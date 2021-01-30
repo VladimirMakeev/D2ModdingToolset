@@ -215,6 +215,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClCompile Include="src\midmsgboxbuttonhandlerstd.cpp" />
     <ClCompile Include="src\netmessages.cpp" />
     <ClCompile Include="src\phase.cpp" />
+    <ClCompile Include="src\pickupdropinterf.cpp" />
     <ClCompile Include="src\racecategory.cpp" />
     <ClCompile Include="src\restrictions.cpp" />
     <ClCompile Include="src\scenariodata.cpp" />
@@ -339,6 +340,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\ordercat.h" />
     <ClInclude Include="include\phase.h" />
     <ClInclude Include="include\phasegame.h" />
+    <ClInclude Include="include\pickupdropinterf.h" />
     <ClInclude Include="include\playerbuildings.h" />
     <ClInclude Include="include\popupdialoginterf.h" />
     <ClInclude Include="include\position.h" />
