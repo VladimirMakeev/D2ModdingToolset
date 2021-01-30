@@ -28,6 +28,7 @@
 #include "buildingbranch.h"
 #include "buildingtype.h"
 #include "button.h"
+#include "citystackinterf.h"
 #include "customattacks.h"
 #include "d2string.h"
 #include "dbf/dbffile.h"
@@ -35,6 +36,7 @@
 #include "dialoginterf.h"
 #include "dynamiccast.h"
 #include "editor.h"
+#include "fortification.h"
 #include "functor.h"
 #include "game.h"
 #include "globaldata.h"
@@ -51,7 +53,10 @@
 #include "midgardmsgbox.h"
 #include "midmsgboxbuttonhandlerstd.h"
 #include "midplayer.h"
+#include "midstack.h"
 #include "midunit.h"
+#include "netmessages.h"
+#include "phasegame.h"
 #include "playerbuildings.h"
 #include "racecategory.h"
 #include "racetype.h"
@@ -65,6 +70,7 @@
 #include "usunitimpl.h"
 #include "utils.h"
 #include "version.h"
+#include "visitors.h"
 #include <algorithm>
 #include <cstring>
 #include <fmt/format.h>
@@ -106,7 +112,9 @@ static Hooks getGameHooks()
         // Support immunity bitmask in BattleMsgData
         HookInfo{(void**)&fn.attackClassToNumber, attackClassToNumberHooked},
         // Support custom attack animations?
-        HookInfo{(void**)&fn.attackClassToString, attackClassToStringHooked}
+        HookInfo{(void**)&fn.attackClassToString, attackClassToStringHooked},
+        // Add items transfer buttons to city interface
+        HookInfo{(void**)&game::CCityStackInterfApi::get().constructor, cityStackInterfCtorHooked},
     };
     // clang-format on
 
@@ -924,6 +932,153 @@ void __fastcall shatterOnHitHooked(game::CBatAttackShatter* thisptr,
 int __stdcall deletePlayerBuildingsHooked(game::IMidgardObjectMap*, game::CMidPlayer*)
 {
     return 0;
+}
+
+void __fastcall transferToStackCallback(game::CCityStackInterf* thisptr, int /*%edx*/)
+{
+    using namespace game;
+
+    auto phaseGame = thisptr->dragDropInterf.phaseGame;
+    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap,
+                                                          &thisptr->data->fortificationId);
+    if (!obj) {
+        logError("mssProxyError.log", fmt::format("Could not find city {:s}",
+                                                  idToString(&thisptr->data->fortificationId)));
+        return;
+    }
+
+    auto fortification = static_cast<CFortification*>(obj);
+    if (fortification->stackId == emptyId) {
+        return;
+    }
+
+    const auto exchangeFromId = &fortification->cityId;
+    const auto exchangeToId = &fortification->stackId;
+    const auto& exchangeItem = VisitorApi::get().exchangeItem;
+    const auto& sendExchangeItemMsg = NetMessagesApi::get().sendStackExchangeItemMsg;
+    auto& inventory = fortification->inventory;
+
+    while (inventory.vftable->getItemsCount(&inventory)) {
+        auto itemId = inventory.vftable->getItem(&inventory, 0);
+        sendExchangeItemMsg(phaseGame, exchangeFromId, exchangeToId, itemId, 1);
+
+        if (!exchangeItem(exchangeFromId, exchangeToId, itemId, objectMap, 1)) {
+            logError("mssProxyError.log",
+                     fmt::format("Failed to transfer item {:s} from city {:s} to stack {:s}",
+                                 idToString(itemId), idToString(exchangeFromId),
+                                 idToString(exchangeToId)));
+        }
+    }
+}
+
+static bool isItemEquipped(const game::IdVector& equippedItems, const game::CMidgardID* itemId)
+{
+    for (const game::CMidgardID* item = equippedItems.bgn; item != equippedItems.end; item++) {
+        if (*item == *itemId) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void __fastcall transferToCityCallback(game::CCityStackInterf* thisptr, int /*%edx*/)
+{
+    using namespace game;
+
+    auto phaseGame = thisptr->dragDropInterf.phaseGame;
+    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap,
+                                                          &thisptr->data->fortificationId);
+    if (!obj) {
+        logError("mssProxyError.log", fmt::format("Could not find city {:s}",
+                                                  idToString(&thisptr->data->fortificationId)));
+        return;
+    }
+
+    auto fortification = static_cast<CFortification*>(obj);
+    if (fortification->stackId == emptyId) {
+        return;
+    }
+
+    auto stackObj = objectMap->vftable->findScenarioObjectById(objectMap, &fortification->stackId);
+    if (!stackObj) {
+        logError("mssProxyError.log",
+                 fmt::format("Could not find stack {:s}", idToString(&fortification->stackId)));
+        return;
+    }
+
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+
+    auto stack = (CMidStack*)dynamicCast(stackObj, 0, rtti.IMidScenarioObjectType,
+                                         rtti.CMidStackType, 0);
+    if (!stack) {
+        logError("mssProxyError.log", fmt::format("Failed to cast scenario oject {:s} to stack",
+                                                  idToString(&fortification->stackId)));
+        return;
+    }
+
+    auto& inventory = stack->inventory;
+    std::vector<CMidgardID> itemsToTransfer;
+    const int itemsTotal = inventory.vftable->getItemsCount(&inventory);
+    for (int i = 0; i < itemsTotal; i++) {
+        auto item = inventory.vftable->getItem(&inventory, i);
+        if (!isItemEquipped(stack->leaderEquppedItems, item)) {
+            itemsToTransfer.push_back(*item);
+        }
+    }
+
+    const auto exchangeFromId = &fortification->stackId;
+    const auto exchangeToId = &fortification->cityId;
+    const auto& exchangeItem = VisitorApi::get().exchangeItem;
+    const auto& sendExchangeItemMsg = NetMessagesApi::get().sendStackExchangeItemMsg;
+
+    for (const auto& item : itemsToTransfer) {
+        sendExchangeItemMsg(phaseGame, exchangeFromId, exchangeToId, &item, 1);
+
+        if (!exchangeItem(exchangeFromId, exchangeToId, &item, objectMap, 1)) {
+            logError("mssProxyError.log",
+                     fmt::format("Failed to transfer item {:s} from stack {:s} to city {:s}",
+                                 idToString(&item), idToString(exchangeFromId),
+                                 idToString(exchangeToId)));
+        }
+    }
+}
+
+game::CCityStackInterf* __fastcall cityStackInterfCtorHooked(game::CCityStackInterf* thisptr,
+                                                             int /*%edx*/,
+                                                             void* taskOpenInterf,
+                                                             game::CPhaseGame* phaseGame,
+                                                             game::CMidgardID* cityId)
+{
+    using namespace game;
+
+    const auto& cityStackInterf = CCityStackInterfApi::get();
+    cityStackInterf.constructor(thisptr, taskOpenInterf, phaseGame, cityId);
+
+    const auto& button = CButtonInterfApi::get();
+    const auto freeFunctor = FunctorApi::get().createOrFree;
+    const char dialogName[] = "DLG_CITY_STACK";
+
+    using ButtonCallback = CCityStackInterfApi::Api::ButtonCallback;
+
+    ButtonCallback callback{};
+    callback.callback = (ButtonCallback::Callback)transferToStackCallback;
+
+    Functor functor;
+    cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+
+    auto dialog = CMidDragDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
+    button.assignFunctor(dialog, "BTN_TRANSF_L_ALL", dialogName, &functor, 0);
+    freeFunctor(&functor, nullptr);
+
+    callback.callback = (ButtonCallback::Callback)transferToCityCallback;
+    cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+    button.assignFunctor(dialog, "BTN_TRANSF_R_ALL", dialogName, &functor, 0);
+    freeFunctor(&functor, nullptr);
+    return thisptr;
 }
 
 } // namespace hooks
