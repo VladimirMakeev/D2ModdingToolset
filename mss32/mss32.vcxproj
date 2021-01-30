@@ -211,6 +211,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClCompile Include="src\midgardid.cpp" />
     <ClCompile Include="src\midgardmsgbox.cpp" />
     <ClCompile Include="src\midmsgboxbuttonhandlerstd.cpp" />
+    <ClCompile Include="src\netmessages.cpp" />
     <ClCompile Include="src\phase.cpp" />
     <ClCompile Include="src\racecategory.cpp" />
     <ClCompile Include="src\restrictions.cpp" />
@@ -330,6 +331,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\mqthread.h" />
     <ClInclude Include="include\netdplayservice.h" />
     <ClInclude Include="include\netdplaysession.h" />
+    <ClInclude Include="include\netmessages.h" />
     <ClInclude Include="include\ordercat.h" />
     <ClInclude Include="include\phase.h" />
     <ClInclude Include="include\phasegame.h" />
