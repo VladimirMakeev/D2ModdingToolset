@@ -26,6 +26,7 @@
 namespace game {
 
 struct CPhaseGame;
+struct CDialogInterf;
 
 struct CMidDragDropInterf : public CDragAndDropInterf
 {
@@ -34,6 +35,18 @@ struct CMidDragDropInterf : public CDragAndDropInterf
 
 static_assert(offsetof(CMidDragDropInterf, phaseGame) == 24,
               "CMidDragDropInterf::phaseGame offset must be 24 bytes");
+
+namespace CMidDragDropInterfApi {
+
+struct Api
+{
+    using GetDialog = CDialogInterf*(__thiscall*)(CMidDragDropInterf* thisptr);
+    GetDialog getDialog;
+};
+
+Api& get();
+
+} // namespace CMidDragDropInterfApi
 
 } // namespace game
 

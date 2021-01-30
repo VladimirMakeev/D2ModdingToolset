@@ -35,7 +35,6 @@ struct CDynLevelUnit;
 struct CHealUnit;
 struct CReviveUnit;
 struct Functor;
-struct CDialogInterf;
 
 struct CCityStackInterfData
 {
@@ -72,7 +71,10 @@ static_assert(offsetof(CCityStackInterfData, dismissUnit) == 56,
 static_assert(offsetof(CCityStackInterfData, fortificationId) == 92,
               "CCityStackInterfData::fortificationId offset must be 92 bytes");
 
-/** Shows stack, garrison and unit hire window of cities and capitals. */
+/**
+ * Shows stack, garrison and unit hire window of cities and capitals.
+ * Represents DLG_CITY_STACK from Interf.dlg.
+ */
 struct CCityStackInterf : public CMidDataCache2::INotify
 {
     CMidCommandQueue2::INotifyCQ commandQueueNotify;
@@ -110,9 +112,6 @@ struct Api
                                                      CCityStackInterf* cityStackInterf,
                                                      ButtonCallback* callback);
     CreateButtonFunctor createButtonFunctor;
-
-    using GetDialog = CDialogInterf*(__thiscall*)(CMidDragDropInterf* dragDropInterf);
-    GetDialog getDialog;
 };
 
 Api& get();

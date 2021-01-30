@@ -17,28 +17,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "citystackinterf.h"
+#include "middragdropinterf.h"
 #include "version.h"
 #include <array>
 
-namespace game::CCityStackInterfApi {
+namespace game::CMidDragDropInterfApi {
 
 // clang-format off
 static std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (Api::Constructor)0x4b14cd,
-        (Api::CreateButtonFunctor)0x4b4bca
+        (Api::GetDialog)0x56cea4
     },
     // Russobit
     Api{
-        (Api::Constructor)0x4b14cd,
-        (Api::CreateButtonFunctor)0x4b4bca
+        (Api::GetDialog)0x56cea4
     },
     // Gog
     Api{
-        (Api::Constructor)0x4b0bcf,
-        (Api::CreateButtonFunctor)0x4b4263
+        (Api::GetDialog)0x56c54e
     }
 }};
 // clang-format on
@@ -48,4 +45,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::CCityStackInterfApi
+} // namespace game::CMidDragDropInterfApi
