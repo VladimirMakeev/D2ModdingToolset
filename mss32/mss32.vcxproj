@@ -293,6 +293,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\interfdialog.h" />
     <ClInclude Include="include\interffullscreen.h" />
     <ClInclude Include="include\interfmanager.h" />
+    <ClInclude Include="include\item.h" />
     <ClInclude Include="include\itemcategory.h" />
     <ClInclude Include="include\linkedlist.h" />
     <ClInclude Include="include\listbox.h" />

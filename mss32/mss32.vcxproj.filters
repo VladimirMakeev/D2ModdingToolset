@@ -649,6 +649,9 @@
     <ClInclude Include="include\pickupdropinterf.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\item.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\itemcategory.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
