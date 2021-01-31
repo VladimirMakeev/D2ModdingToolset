@@ -658,6 +658,9 @@
     <ClInclude Include="include\itembase.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\itemvaluable.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\itemspecial.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
