@@ -301,9 +301,11 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\itemcategory.h" />
     <ClInclude Include="include\itemequipment.h" />
     <ClInclude Include="include\itemexequipment.h" />
+    <ClInclude Include="include\itemexpotionboost.h" />
     <ClInclude Include="include\itemexspell.h" />
     <ClInclude Include="include\itemjewelry.h" />
     <ClInclude Include="include\itemorb.h" />
+    <ClInclude Include="include\itempotionboost.h" />
     <ClInclude Include="include\itemscroll.h" />
     <ClInclude Include="include\itemspell.h" />
     <ClInclude Include="include\itemtalisman.h" />
