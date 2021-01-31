@@ -310,6 +310,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\itempotionboostperm.h" />
     <ClInclude Include="include\itempotionboosttemp.h" />
     <ClInclude Include="include\itempotionheal.h" />
+    <ClInclude Include="include\itempotionrevive.h" />
     <ClInclude Include="include\itemscroll.h" />
     <ClInclude Include="include\itemspell.h" />
     <ClInclude Include="include\itemtalisman.h" />
