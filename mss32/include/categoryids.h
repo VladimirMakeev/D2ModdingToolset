@@ -203,6 +203,26 @@ enum class OrderId : int
     DefendCity
 };
 
+/** Items ids from LmagItm.dbf. */
+enum class ItemId : int
+{
+    Armor,
+    Jewel,
+    Weapon,
+    Banner,
+    PotionBoost,
+    PotionHeal,
+    PotionRevive,
+    PotionPermanent,
+    Scroll,
+    Wand,
+    Valuable,
+    Orb,
+    Talisman,
+    TravelItem,
+    Special
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
