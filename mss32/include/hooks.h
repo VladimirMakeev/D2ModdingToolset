@@ -41,10 +41,6 @@ struct CBatAttackGiveAttack;
 struct CBatAttackShatter;
 struct BattleAttackInfo;
 struct CMidPlayer;
-struct CCityStackInterf;
-struct CPhaseGame;
-struct CExchangeInterf;
-struct CPickUpDropInterf;
 }; // namespace game
 
 namespace hooks {
@@ -131,26 +127,6 @@ void __fastcall shatterOnHitHooked(game::CBatAttackShatter* thisptr,
 
 int __stdcall deletePlayerBuildingsHooked(game::IMidgardObjectMap* objectMap,
                                           game::CMidPlayer* player);
-
-game::CCityStackInterf* __fastcall cityStackInterfCtorHooked(game::CCityStackInterf* thisptr,
-                                                             int /*%edx*/,
-                                                             void* taskOpenInterf,
-                                                             game::CPhaseGame* phaseGame,
-                                                             game::CMidgardID* cityId);
-
-game::CExchangeInterf* __fastcall exchangeInterfCtorHooked(game::CExchangeInterf* thisptr,
-                                                           int /*%edx*/,
-                                                           void* taskOpenInterf,
-                                                           game::CPhaseGame* phaseGame,
-                                                           game::CMidgardID* stackLeftSide,
-                                                           game::CMidgardID* stackRightSide);
-
-game::CPickUpDropInterf* __fastcall pickupDropInterfCtorHooked(game::CPickUpDropInterf* thisptr,
-                                                               int /*%edx*/,
-                                                               void* taskOpenInterf,
-                                                               game::CPhaseGame* phaseGame,
-                                                               game::CMidgardID* stackId,
-                                                               game::CMidgardID* bagId);
 
 } // namespace hooks
 

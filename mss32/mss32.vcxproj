@@ -201,6 +201,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClCompile Include="src\idvector.cpp" />
     <ClCompile Include="src\interfmanager.cpp" />
     <ClCompile Include="src\itemcategory.cpp" />
+    <ClCompile Include="src\itemtransferhooks.cpp" />
     <ClCompile Include="src\listbox.cpp" />
     <ClCompile Include="src\log.cpp" />
     <ClCompile Include="src\lordtype.cpp" />
@@ -315,6 +316,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\itemspecial.h" />
     <ClInclude Include="include\itemspell.h" />
     <ClInclude Include="include\itemtalisman.h" />
+    <ClInclude Include="include\itemtransferhooks.h" />
     <ClInclude Include="include\itemtravelitem.h" />
     <ClInclude Include="include\itemvaluable.h" />
     <ClInclude Include="include\itemwand.h" />
