@@ -70,6 +70,7 @@ struct TLandmark;
 struct TItemTypeList;
 struct GlobalVariables;
 struct CUnitGenerator;
+struct CItemBase;
 
 /** Holds global game information. */
 struct GlobalData
@@ -139,6 +140,10 @@ struct Api
     /** Searches an entity by its id. */
     using FindById = void*(__thiscall*)(void* entityCollection, const CMidgardID* id);
     FindById findById;
+
+    using FindItemById = const CItemBase*(__thiscall*)(TItemTypeList* thisptr,
+                                                       const CMidgardID* id);
+    FindItemById findItemById;
 };
 
 Api& get();
