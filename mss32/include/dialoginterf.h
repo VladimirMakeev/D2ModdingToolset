@@ -66,6 +66,10 @@ struct Api
     using FindTextBox = CTextBoxInterf*(__stdcall*)(CDialogInterf* thisptr,
                                                     const char* controlName);
     FindTextBox findTextBox;
+
+    /** Searches for ui element with specific name, returns nullptr if not found. */
+    using FindControl = CInterface*(__thiscall*)(CDialogInterf* thisptr, const char* controlName);
+    FindControl findControl;
 };
 
 Api& get();

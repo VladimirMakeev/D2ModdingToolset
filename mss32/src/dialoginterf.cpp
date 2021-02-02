@@ -29,19 +29,22 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::FindButton)0x50baaf,
         (Api::FindListBox)0x50bacf,
-        (Api::FindTextBox)0x50bb0f
+        (Api::FindTextBox)0x50bb0f,
+        (Api::FindControl)0x50c206
     },
     // Russobit
     Api{
         (Api::FindButton)0x50baaf,
         (Api::FindListBox)0x50bacf,
-        (Api::FindTextBox)0x50bb0f
+        (Api::FindTextBox)0x50bb0f,
+        (Api::FindControl)0x50c206
     },
     // Gog
     Api{
         (Api::FindButton)0x50afb3,
         (Api::FindListBox)0x50afd3,
-        (Api::FindTextBox)0x50b013
+        (Api::FindTextBox)0x50b013,
+        (Api::FindControl)0x50b70a
     }
 }};
 // clang-format on
