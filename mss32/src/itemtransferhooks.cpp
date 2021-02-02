@@ -20,6 +20,7 @@
 #include "itemtransferhooks.h"
 #include "button.h"
 #include "citystackinterf.h"
+#include "dialoginterf.h"
 #include "dynamiccast.h"
 #include "exchangeinterf.h"
 #include "fortification.h"
@@ -102,6 +103,20 @@ static bool isSpell(game::IMidgardObjectMap* objectMap, const game::CMidgardID* 
     return categories.scroll->id == id || categories.wand->id == id;
 }
 
+static bool isValuable(game::IMidgardObjectMap* objectMap, const game::CMidgardID* itemId)
+{
+    using namespace game;
+
+    auto category = getItemCategoryById(objectMap, itemId);
+    if (!category) {
+        return false;
+    }
+
+    const auto& categories = ItemCategories::get();
+
+    return categories.valuable->id == category->id;
+}
+
 /** Transfers items from src object to dst. */
 static void transferItems(const std::vector<game::CMidgardID>& items,
                           game::CPhaseGame* phaseGame,
@@ -175,6 +190,12 @@ void __fastcall cityInterfTransferSpellsToStack(game::CCityStackInterf* thisptr,
 {
     transferCityToStack(thisptr->dragDropInterf.phaseGame, &thisptr->data->fortificationId,
                         isSpell);
+}
+
+void __fastcall cityInterfTransferValuablesToStack(game::CCityStackInterf* thisptr, int /*%edx*/)
+{
+    transferCityToStack(thisptr->dragDropInterf.phaseGame, &thisptr->data->fortificationId,
+                        isValuable);
 }
 
 static bool isItemEquipped(const game::IdVector& equippedItems, const game::CMidgardID* itemId)
@@ -259,6 +280,12 @@ void __fastcall cityInterfTransferSpellsToCity(game::CCityStackInterf* thisptr, 
                         isSpell);
 }
 
+void __fastcall cityInterfTransferValuablesToCity(game::CCityStackInterf* thisptr, int /*%edx*/)
+{
+    transferStackToCity(thisptr->dragDropInterf.phaseGame, &thisptr->data->fortificationId,
+                        isValuable);
+}
+
 game::CCityStackInterf* __fastcall cityStackInterfCtorHooked(game::CCityStackInterf* thisptr,
                                                              int /*%edx*/,
                                                              void* taskOpenInterf,
@@ -273,43 +300,69 @@ game::CCityStackInterf* __fastcall cityStackInterfCtorHooked(game::CCityStackInt
     const auto& button = CButtonInterfApi::get();
     const auto freeFunctor = FunctorApi::get().createOrFree;
     const char dialogName[] = "DLG_CITY_STACK";
+    auto dialog = CMidDragDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
 
     using ButtonCallback = CCityStackInterfApi::Api::ButtonCallback;
-
     ButtonCallback callback{};
-    callback.callback = (ButtonCallback::Callback)cityInterfTransferAllToStack;
-
     Functor functor;
-    cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
 
-    auto dialog = CMidDragDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
-    button.assignFunctor(dialog, "BTN_TRANSF_L_ALL", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    auto dialogApi = CDialogInterfApi::get();
 
-    callback.callback = (ButtonCallback::Callback)cityInterfTransferAllToCity;
-    cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
-    button.assignFunctor(dialog, "BTN_TRANSF_R_ALL", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_L_ALL")) {
+        callback.callback = (ButtonCallback::Callback)cityInterfTransferAllToStack;
+        cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_L_ALL", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
 
-    callback.callback = (ButtonCallback::Callback)cityInterfTransferPotionsToStack;
-    cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
-    button.assignFunctor(dialog, "BTN_TRANSF_L_POTIONS", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_R_ALL")) {
+        callback.callback = (ButtonCallback::Callback)cityInterfTransferAllToCity;
+        cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_R_ALL", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
 
-    callback.callback = (ButtonCallback::Callback)cityInterfTransferPotionsToCity;
-    cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
-    button.assignFunctor(dialog, "BTN_TRANSF_R_POTIONS", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_L_POTIONS")) {
+        callback.callback = (ButtonCallback::Callback)cityInterfTransferPotionsToStack;
+        cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_L_POTIONS", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
 
-    callback.callback = (ButtonCallback::Callback)cityInterfTransferSpellsToStack;
-    cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
-    button.assignFunctor(dialog, "BTN_TRANSF_L_SPELLS", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_R_POTIONS")) {
+        callback.callback = (ButtonCallback::Callback)cityInterfTransferPotionsToCity;
+        cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_R_POTIONS", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
 
-    callback.callback = (ButtonCallback::Callback)cityInterfTransferSpellsToCity;
-    cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
-    button.assignFunctor(dialog, "BTN_TRANSF_R_SPELLS", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_L_SPELLS")) {
+        callback.callback = (ButtonCallback::Callback)cityInterfTransferSpellsToStack;
+        cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_L_SPELLS", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
+
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_R_SPELLS")) {
+        callback.callback = (ButtonCallback::Callback)cityInterfTransferSpellsToCity;
+        cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_R_SPELLS", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
+
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_L_VALUABLES")) {
+        callback.callback = (ButtonCallback::Callback)cityInterfTransferValuablesToStack;
+        cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_L_VALUABLES", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
+
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_R_VALUABLES")) {
+        callback.callback = (ButtonCallback::Callback)cityInterfTransferValuablesToCity;
+        cityStackInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_R_VALUABLES", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
 
     return thisptr;
 }
@@ -376,6 +429,12 @@ void __fastcall exchangeTransferSpellsToLeftStack(game::CExchangeInterf* thisptr
                          &thisptr->data->stackRightSideId, isSpell);
 }
 
+void __fastcall exchangeTransferValuablesToLeftStack(game::CExchangeInterf* thisptr, int /*%edx*/)
+{
+    transferStackToStack(thisptr->dragDropInterf.phaseGame, &thisptr->data->stackLeftSideId,
+                         &thisptr->data->stackRightSideId, isValuable);
+}
+
 void __fastcall exchangeTransferAllToRightStack(game::CExchangeInterf* thisptr, int /*%edx*/)
 {
     transferStackToStack(thisptr->dragDropInterf.phaseGame, &thisptr->data->stackRightSideId,
@@ -394,6 +453,12 @@ void __fastcall exchangeTransferSpellsToRightStack(game::CExchangeInterf* thispt
                          &thisptr->data->stackLeftSideId, isSpell);
 }
 
+void __fastcall exchangeTransferValuablesToRightStack(game::CExchangeInterf* thisptr, int /*%edx*/)
+{
+    transferStackToStack(thisptr->dragDropInterf.phaseGame, &thisptr->data->stackRightSideId,
+                         &thisptr->data->stackLeftSideId, isValuable);
+}
+
 game::CExchangeInterf* __fastcall exchangeInterfCtorHooked(game::CExchangeInterf* thisptr,
                                                            int /*%edx*/,
                                                            void* taskOpenInterf,
@@ -409,43 +474,69 @@ game::CExchangeInterf* __fastcall exchangeInterfCtorHooked(game::CExchangeInterf
     const auto& button = CButtonInterfApi::get();
     const auto freeFunctor = FunctorApi::get().createOrFree;
     const char dialogName[] = "DLG_EXCHANGE";
+    auto dialog = CMidDragDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
 
     using ButtonCallback = CExchangeInterfApi::Api::ButtonCallback;
-
     ButtonCallback callback{};
-    callback.callback = (ButtonCallback::Callback)exchangeTransferAllToLeftStack;
-
     Functor functor;
-    exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
 
-    auto dialog = CMidDragDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
-    button.assignFunctor(dialog, "BTN_TRANSF_L_ALL", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    auto dialogApi = CDialogInterfApi::get();
 
-    callback.callback = (ButtonCallback::Callback)exchangeTransferAllToRightStack;
-    exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
-    button.assignFunctor(dialog, "BTN_TRANSF_R_ALL", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_L_ALL")) {
+        callback.callback = (ButtonCallback::Callback)exchangeTransferAllToLeftStack;
+        exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_L_ALL", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
 
-    callback.callback = (ButtonCallback::Callback)exchangeTransferPotionsToLeftStack;
-    exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
-    button.assignFunctor(dialog, "BTN_TRANSF_L_POTIONS", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_R_ALL")) {
+        callback.callback = (ButtonCallback::Callback)exchangeTransferAllToRightStack;
+        exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_R_ALL", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
 
-    callback.callback = (ButtonCallback::Callback)exchangeTransferPotionsToRightStack;
-    exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
-    button.assignFunctor(dialog, "BTN_TRANSF_R_POTIONS", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_L_POTIONS")) {
+        callback.callback = (ButtonCallback::Callback)exchangeTransferPotionsToLeftStack;
+        exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_L_POTIONS", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
 
-    callback.callback = (ButtonCallback::Callback)exchangeTransferSpellsToLeftStack;
-    exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
-    button.assignFunctor(dialog, "BTN_TRANSF_L_SPELLS", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_R_POTIONS")) {
+        callback.callback = (ButtonCallback::Callback)exchangeTransferPotionsToRightStack;
+        exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_R_POTIONS", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
 
-    callback.callback = (ButtonCallback::Callback)exchangeTransferSpellsToRightStack;
-    exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
-    button.assignFunctor(dialog, "BTN_TRANSF_R_SPELLS", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_L_SPELLS")) {
+        callback.callback = (ButtonCallback::Callback)exchangeTransferSpellsToLeftStack;
+        exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_L_SPELLS", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
+
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_R_SPELLS")) {
+        callback.callback = (ButtonCallback::Callback)exchangeTransferSpellsToRightStack;
+        exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_R_SPELLS", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
+
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_L_VALUABLES")) {
+        callback.callback = (ButtonCallback::Callback)exchangeTransferValuablesToLeftStack;
+        exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_L_VALUABLES", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
+
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_R_VALUABLES")) {
+        callback.callback = (ButtonCallback::Callback)exchangeTransferValuablesToRightStack;
+        exchangeInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_R_VALUABLES", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
 
     return thisptr;
 }
@@ -495,6 +586,12 @@ void __fastcall pickupTransferSpellsToStack(game::CPickUpDropInterf* thisptr, in
 {
     transferBagToStack(thisptr->dragDropInterf.phaseGame, &thisptr->data->stackId,
                        &thisptr->data->bagId, isSpell);
+}
+
+void __fastcall pickupTransferValuablesToStack(game::CPickUpDropInterf* thisptr, int /*%edx*/)
+{
+    transferBagToStack(thisptr->dragDropInterf.phaseGame, &thisptr->data->stackId,
+                       &thisptr->data->bagId, isValuable);
 }
 
 /** Transfers stack items to bag. */
@@ -559,6 +656,12 @@ void __fastcall pickupTransferSpellsToBag(game::CPickUpDropInterf* thisptr, int 
                        &thisptr->data->bagId, isSpell);
 }
 
+void __fastcall pickupTransferValuablesToBag(game::CPickUpDropInterf* thisptr, int /*%edx*/)
+{
+    transferStackToBag(thisptr->dragDropInterf.phaseGame, &thisptr->data->stackId,
+                       &thisptr->data->bagId, isValuable);
+}
+
 game::CPickUpDropInterf* __fastcall pickupDropInterfCtorHooked(game::CPickUpDropInterf* thisptr,
                                                                int /*%edx*/,
                                                                void* taskOpenInterf,
@@ -574,43 +677,69 @@ game::CPickUpDropInterf* __fastcall pickupDropInterfCtorHooked(game::CPickUpDrop
     const auto& button = CButtonInterfApi::get();
     const auto freeFunctor = FunctorApi::get().createOrFree;
     const char dialogName[] = "DLG_PICKUP_DROP";
+    auto dialog = CMidDragDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
 
     using ButtonCallback = CPickUpDropInterfApi::Api::ButtonCallback;
-
     ButtonCallback callback{};
-    callback.callback = (ButtonCallback::Callback)pickupTransferAllToStack;
-
     Functor functor;
-    pickupInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
 
-    auto dialog = CMidDragDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
-    button.assignFunctor(dialog, "BTN_TRANSF_L_ALL", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    auto dialogApi = CDialogInterfApi::get();
 
-    callback.callback = (ButtonCallback::Callback)pickupTransferAllToBag;
-    pickupInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
-    button.assignFunctor(dialog, "BTN_TRANSF_R_ALL", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_L_ALL")) {
+        callback.callback = (ButtonCallback::Callback)pickupTransferAllToStack;
+        pickupInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_L_ALL", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
 
-    callback.callback = (ButtonCallback::Callback)pickupTransferPotionsToStack;
-    pickupInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
-    button.assignFunctor(dialog, "BTN_TRANSF_L_POTIONS", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_R_ALL")) {
+        callback.callback = (ButtonCallback::Callback)pickupTransferAllToBag;
+        pickupInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_R_ALL", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
 
-    callback.callback = (ButtonCallback::Callback)pickupTransferPotionsToBag;
-    pickupInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
-    button.assignFunctor(dialog, "BTN_TRANSF_R_POTIONS", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_L_POTIONS")) {
+        callback.callback = (ButtonCallback::Callback)pickupTransferPotionsToStack;
+        pickupInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_L_POTIONS", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
 
-    callback.callback = (ButtonCallback::Callback)pickupTransferSpellsToStack;
-    pickupInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
-    button.assignFunctor(dialog, "BTN_TRANSF_L_SPELLS", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_R_POTIONS")) {
+        callback.callback = (ButtonCallback::Callback)pickupTransferPotionsToBag;
+        pickupInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_R_POTIONS", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
 
-    callback.callback = (ButtonCallback::Callback)pickupTransferSpellsToBag;
-    pickupInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
-    button.assignFunctor(dialog, "BTN_TRANSF_R_SPELLS", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_L_SPELLS")) {
+        callback.callback = (ButtonCallback::Callback)pickupTransferSpellsToStack;
+        pickupInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_L_SPELLS", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
+
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_R_SPELLS")) {
+        callback.callback = (ButtonCallback::Callback)pickupTransferSpellsToBag;
+        pickupInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_R_SPELLS", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
+
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_L_VALUABLES")) {
+        callback.callback = (ButtonCallback::Callback)pickupTransferValuablesToStack;
+        pickupInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_L_VALUABLES", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
+
+    if (dialogApi.findControl(dialog, "BTN_TRANSF_R_VALUABLES")) {
+        callback.callback = (ButtonCallback::Callback)pickupTransferValuablesToBag;
+        pickupInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_TRANSF_R_VALUABLES", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
 
     return thisptr;
 }
