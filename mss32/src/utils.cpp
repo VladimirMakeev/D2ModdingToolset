@@ -70,4 +70,15 @@ std::string idToString(const game::CMidgardID* id)
     return {idString};
 }
 
+bool replace(std::string& str, const std::string& keyword, const std::string& replacement)
+{
+    const auto pos = str.find(keyword);
+    if (pos == std::string::npos) {
+        return false;
+    }
+
+    str.replace(pos, keyword.length(), replacement);
+    return true;
+}
+
 } // namespace hooks

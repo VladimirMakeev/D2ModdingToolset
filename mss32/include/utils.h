@@ -40,6 +40,9 @@ const std::filesystem::path& exePath();
 /** Returns id as string. */
 std::string idToString(const game::CMidgardID* id);
 
+/** Tries to replace first occurence of 'keyword' in 'str' with 'replacement'. */
+bool replace(std::string& str, const std::string& keyword, const std::string& replacement);
+
 } // namespace hooks
 
 #endif // UTILS_H
