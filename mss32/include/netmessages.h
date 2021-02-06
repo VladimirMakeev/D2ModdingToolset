@@ -38,12 +38,26 @@ struct Api
      * @param[in] itemId id of the item to exchange.
      * @param a5 meaning unknown, currently set to 1.
      */
-    using SendStackExchangeItemMsg = void(__thiscall*)(game::CPhaseGame* thisptr,
-                                                       const game::CMidgardID* fromObjectId,
-                                                       const game::CMidgardID* toObjectId,
-                                                       const game::CMidgardID* itemId,
+    using SendStackExchangeItemMsg = void(__thiscall*)(CPhaseGame* thisptr,
+                                                       const CMidgardID* fromObjectId,
+                                                       const CMidgardID* toObjectId,
+                                                       const CMidgardID* itemId,
                                                        char a5);
     SendStackExchangeItemMsg sendStackExchangeItemMsg;
+
+    /**
+     * Sends network message about item being sold to merchant.
+     * Sends CSiteSellItemMsg.
+     * @param[in] thisptr pointer to CPhaseGame object that will send the message.
+     * @param[in] siteId id of the merchant object.
+     * @param[in] stackId id of the stack that sells item.
+     * @param[in] itemId id of the item to sell.
+     */
+    using SendSiteSellItemMsg = void(__thiscall*)(CPhaseGame* thisptr,
+                                                  const CMidgardID* siteId,
+                                                  const CMidgardID* stackId,
+                                                  const CMidgardID* itemId);
+    SendSiteSellItemMsg sendSiteSellItemMsg;
 };
 
 Api& get();

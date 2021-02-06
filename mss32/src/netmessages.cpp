@@ -27,15 +27,18 @@ namespace game::NetMessagesApi {
 static std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (Api::SendStackExchangeItemMsg)0x406fef
+        (Api::SendStackExchangeItemMsg)0x406fef,
+        (Api::SendSiteSellItemMsg)0x4066d9
     },
     // Russobit
     Api{
-        (Api::SendStackExchangeItemMsg)0x406fef
+        (Api::SendStackExchangeItemMsg)0x406fef,
+        (Api::SendSiteSellItemMsg)0x4066d9
     },
     // Gog
     Api{
-        (Api::SendStackExchangeItemMsg)0x406c7b
+        (Api::SendStackExchangeItemMsg)0x406c7b,
+        (Api::SendSiteSellItemMsg)0x406365
     }
 }};
 // clang-format on
