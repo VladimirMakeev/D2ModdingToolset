@@ -37,7 +37,13 @@ struct CInterfManagerVftable
     using ShowInterface = bool(__thiscall*)(CInterfManager* thisptr, CInterface* interface);
     ShowInterface showInterface;
 
-    void* unknown2[18];
+    void* method5;
+
+    /** Assumption: Hides specified interface. */
+    using HideInterface = bool(__thiscall*)(CInterfManager* thisptr, CInterface* interface);
+    HideInterface hideInterface;
+
+    void* unknown2[16];
 };
 
 static_assert(sizeof(CInterfManagerVftable) == 23 * sizeof(void*),
