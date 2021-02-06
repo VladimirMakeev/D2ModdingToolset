@@ -32,6 +32,7 @@ struct IAttack;
 struct LImmuneCat;
 struct LAttackClass;
 struct LAttackSource;
+struct Bank;
 
 struct IUsSoldier : public IUsUnitExtension
 { };
@@ -96,7 +97,21 @@ struct IUsSoldierVftable
     GetAttackById getSecondAttackById;
 
     GetBool getAttackTwice;
-    void* methods[7];
+
+    using GetBank = const Bank*(__thiscall*)(const IUsSoldier* thisptr);
+    GetBank getEnrollCost;
+    GetBank getReviveCost;
+    GetBank getHealCost;
+    GetBank getTrainingCost;
+
+    using GetDynUpg = const int*(__thiscall*)(const IUsSoldier* thisptr);
+    GetDynUpg getDynUpg1;
+
+    using GetDynUpgLvl = int(__thiscall*)(const IUsSoldier* thisptr);
+    GetDynUpgLvl getDynUpgLvl;
+
+    GetDynUpg getDynUpg2;
+
     GetBool getWaterOnly;
 };
 
