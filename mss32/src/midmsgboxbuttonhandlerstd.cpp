@@ -24,17 +24,17 @@
 namespace game::CMidMsgBoxButtonHandlerStdApi {
 
 // clang-format off
-static std::array<const void*, 3> vftables = {{
+static std::array<CMidMsgBoxButtonHandlerVftable*, 3> vftables = {{
     // Akella
-    (const void*)0x6db61c,
+    (CMidMsgBoxButtonHandlerVftable*)0x6db61c,
     // Russobit
-    (const void*)0x6db61c,
+    (CMidMsgBoxButtonHandlerVftable*)0x6db61c,
     // Gog
-    (const void*)0x6d95bc
+    (CMidMsgBoxButtonHandlerVftable*)0x6d95bc
 }};
 // clang-format on
 
-const void* vftable()
+CMidMsgBoxButtonHandlerVftable* vftable()
 {
     return vftables[static_cast<int>(hooks::gameVersion())];
 }

@@ -32,7 +32,10 @@ struct CMidgardMsgBoxData
     char unknown[48];
 };
 
-/** Message box ui element. */
+/**
+ * Message box ui element.
+ * By default, represents DLG_MESSAGE_BOX from Interf.dlg.
+ */
 struct CMidgardMsgBox : public CPopupDialogInterf
 {
     CMidgardMsgBoxData* data;
@@ -53,6 +56,7 @@ struct Api
      * @param[in] message text to show.
      * @param showCancelButton if set to 1, creates message box with cancel button.
      * @param[in] buttonHandler handler logic to execute upon message box closing.
+     * Handler object destroyed and its memory freed in message box destructor.
      * @param a4 unknown.
      * @param dialogName name of the custom dialog ui element to show instead of default,
      * or nullptr. Default dialog is 'DLG_MESSAGE_BOX' from Interf.dlg.

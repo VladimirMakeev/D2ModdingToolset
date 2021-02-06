@@ -358,16 +358,21 @@ static size_t getScenariosTotal(const game::ScenarioDataArray& data)
     return (end - bgn) / sizeof(game::ScenarioData);
 }
 
-void showMessageBox(const std::string& message)
+void showMessageBox(const std::string& message,
+                    game::CMidMsgBoxButtonHandler* buttonHandler,
+                    bool showCancel)
 {
     using namespace game;
 
     auto memAlloc = Memory::get().allocate;
-    auto* btnHandler = (CMidMsgBoxButtonHandlerStd*)memAlloc(sizeof(CMidMsgBoxButtonHandlerStd));
-    btnHandler->vftable = CMidMsgBoxButtonHandlerStdApi::vftable();
+    if (!buttonHandler) {
+        buttonHandler = (CMidMsgBoxButtonHandlerStd*)memAlloc(sizeof(CMidMsgBoxButtonHandlerStd));
+        buttonHandler->vftable = CMidMsgBoxButtonHandlerStdApi::vftable();
+    }
 
     CMidgardMsgBox* msgBox = (CMidgardMsgBox*)memAlloc(sizeof(CMidgardMsgBox));
-    CMidgardMsgBoxApi::get().constructor(msgBox, message.c_str(), 0, btnHandler, 0, nullptr);
+    CMidgardMsgBoxApi::get().constructor(msgBox, message.c_str(), showCancel, buttonHandler, 0,
+                                         nullptr);
 
     SmartPointer ptr;
     CInterfManagerImplApi::get().get(&ptr);

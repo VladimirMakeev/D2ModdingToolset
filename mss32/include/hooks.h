@@ -41,6 +41,7 @@ struct CBatAttackGiveAttack;
 struct CBatAttackShatter;
 struct BattleAttackInfo;
 struct CMidPlayer;
+struct CMidMsgBoxButtonHandler;
 }; // namespace game
 
 namespace hooks {
@@ -86,7 +87,9 @@ game::LBuildingCategoryTable* __fastcall buildingCategoryTableCtorHooked(
     void* codeBaseEnvProxy);
 
 /** Shows native in-game message box with specified text. */
-void showMessageBox(const std::string& message);
+void showMessageBox(const std::string& message,
+                    game::CMidMsgBoxButtonHandler* buttonHandler = nullptr,
+                    bool showCancel = false);
 
 game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch* thisptr,
                                                            int /*%edx*/,

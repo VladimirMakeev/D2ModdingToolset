@@ -33,7 +33,7 @@ struct CMidMsgBoxButtonHandlerStd : public CMidMsgBoxButtonHandler
 
 namespace CMidMsgBoxButtonHandlerStdApi {
 
-const void* vftable();
+CMidMsgBoxButtonHandlerVftable* vftable();
 
 }
 

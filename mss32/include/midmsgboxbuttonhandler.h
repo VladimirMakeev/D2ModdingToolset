@@ -22,10 +22,35 @@
 
 namespace game {
 
+struct CMidMsgBoxButtonHandlerVftable;
+struct CMidgardMsgBox;
+
+/** Base class for all CMidgardMsgBox button handlers. */
 struct CMidMsgBoxButtonHandler
 {
-    const void* vftable;
+    CMidMsgBoxButtonHandlerVftable* vftable;
 };
+
+static_assert(sizeof(CMidMsgBoxButtonHandler) == 4,
+              "Size of CMidMsgBoxButtonHandler structure must be exactly 4 bytes");
+
+struct CMidMsgBoxButtonHandlerVftable
+{
+    using Destructor = void(__thiscall*)(CMidMsgBoxButtonHandler* thisptr);
+    Destructor destructor;
+
+    /**
+     * CMidgardMsgBox result handler function.
+     * Called on BTN_YES, BTN_OK and BTN_NO presses.
+     */
+    using Handler = void(__thiscall*)(CMidMsgBoxButtonHandler* thisptr,
+                                      CMidgardMsgBox* msgBox,
+                                      bool okPressed);
+    Handler handler;
+};
+
+static_assert(sizeof(CMidMsgBoxButtonHandlerVftable) == 2 * sizeof(void*),
+              "CMidMsgBoxButtonHandler vftable must have exactly 2 methods");
 
 } // namespace game
 
