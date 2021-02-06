@@ -25,6 +25,9 @@
 
 namespace game {
 
+struct Bank;
+struct IMidgardObjectMap;
+
 /** Holds item related data in scenario file and game. */
 struct CMidItem : public IMidScenarioObject
 {
@@ -33,6 +36,24 @@ struct CMidItem : public IMidScenarioObject
 };
 
 static_assert(sizeof(CMidItem) == 12, "Size of CMidItem structure must be exactly 12 bytes");
+
+namespace CMidItemApi {
+
+struct Api
+{
+    /**
+     * Computes item selling price according to game rules.
+     * Takes into account sell ratio from GVars.dbf and talisman charges count.
+     */
+    using GetSellingPrice = Bank*(__stdcall*)(Bank* sellingPrice,
+                                              IMidgardObjectMap* objectMap,
+                                              const CMidgardID* itemId);
+    GetSellingPrice getSellingPrice;
+};
+
+Api& get();
+
+} // namespace CMidItemApi
 
 } // namespace game
 
