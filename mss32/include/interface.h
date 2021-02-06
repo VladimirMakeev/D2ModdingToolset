@@ -26,6 +26,8 @@
 
 namespace game {
 
+struct CInterfaceVftable;
+
 struct CInterfaceData
 {
     SmartPointer interfManagerImpl;
@@ -50,9 +52,20 @@ static_assert(offsetof(CInterfaceData, childs) == 28,
  */
 struct CInterface
 {
-    const void* vftable;
+    CInterfaceVftable* vftable;
     CInterfaceData* interfaceData;
 };
+
+struct CInterfaceVftable
+{
+    using Destructor = void(__thiscall*)(CInterface* thisptr, char flags);
+    Destructor destructor;
+
+    void* methods[33];
+};
+
+static_assert(sizeof(CInterfaceVftable) == 34 * sizeof(void*),
+              "CInterface vftable must have exactly 34 methods");
 
 } // namespace game
 

@@ -396,7 +396,7 @@ static void menuNewSkirmishCtor(game::CMenuNewSkirmish* thisptr, int a1, const c
 
     const auto& menuBase = CMenuBaseApi::get();
     menuBase.constructor(thisptr, a1);
-    thisptr->vftable = CMenuNewSkirmishApi::vftable();
+    thisptr->vftable = (game::CInterfaceVftable*)CMenuNewSkirmishApi::vftable();
     menuBase.createMenu(thisptr, dialogName);
 
     const auto dialog = menuBase.getDialogInterface(thisptr);
@@ -449,7 +449,7 @@ game::CMenuNewSkirmishSingle* __fastcall menuNewSkirmishSingleCtorHooked(
     int a1)
 {
     menuNewSkirmishCtor(thisptr, a1, "DLG_CHOOSE_SKIRMISH");
-    thisptr->vftable = game::CMenuNewSkirmishSingleApi::vftable();
+    thisptr->vftable = (game::CInterfaceVftable*)game::CMenuNewSkirmishSingleApi::vftable();
 
     return thisptr;
 }
