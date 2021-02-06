@@ -167,6 +167,8 @@ using GetStackFortRuinGroup = CMidUnitGroup*(__thiscall*)(void* thisptr,
 
 using DeletePlayerBuildings = int(__stdcall*)(IMidgardObjectMap* objectMap, CMidPlayer* player);
 
+using GetInterfaceText = const char*(__stdcall*)(const CMidgardID* textId);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -193,6 +195,7 @@ struct Functions
     AttackClassToString attackClassToString;
     GetStackFortRuinGroup getStackFortRuinGroup;
     DeletePlayerBuildings deletePlayerBuildings;
+    GetInterfaceText getInterfaceText;
 };
 
 /** Global variables used in game. */
