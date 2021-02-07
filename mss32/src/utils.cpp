@@ -18,6 +18,7 @@
  */
 
 #include "utils.h"
+#include "game.h"
 #include "midgardid.h"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
@@ -68,6 +69,16 @@ std::string idToString(const game::CMidgardID* id)
     game::CMidgardIDApi::get().toString(id, idString);
 
     return {idString};
+}
+
+std::string getTranslatedText(const char* textIdString)
+{
+    using namespace game;
+
+    CMidgardID textId{};
+    CMidgardIDApi::get().fromString(&textId, textIdString);
+
+    return {gameFunctions().getInterfaceText(&textId)};
 }
 
 bool replace(std::string& str, const std::string& keyword, const std::string& replacement)
