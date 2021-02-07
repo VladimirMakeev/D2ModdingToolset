@@ -28,7 +28,7 @@
       - "ShowResources=(0/1)" toggle show resources panel by default;
       - "ShowLandConverted=(0/1)" toggle show percentage of land converted instead of minimap;
   </details>
-- Buttons for bulk item transfer: transfer all items, potions, scrolls/wands or valuables between inventories with single click.
+- Buttons for bulk item transfer: transfer all items, potions, scrolls/wands or valuables between inventories with single click;
   - <details>
     <summary>Installation:</summary>
 
@@ -47,6 +47,18 @@
     Example of button description in Interf.dlg:
     ```
     BUTTON    BTN_TRANSF_L_ALL,342,424,385,459,DLG_EXCHANGE_RETURN_D,DLG_EXCHANGE_RETURN_H,DLG_EXCHANGE_RETURN_C,DLG_EXCHANGE_RETURN_D,"Transfer all items to left",0
+    ```
+  </details>
+- Button to sell all valuables with single click;
+  - <details>
+    <summary>Installation:</summary>
+  
+    Add button with name BTN\_SELL\_ALL\_VALUABLES to DLG\_MERCHANT in Interf.dlg file.
+    Button is optional.
+    
+    Example of button description in Interf.dlg:
+    ```
+    BUTTON	BTN_SELL_ALL_VALUABLES,417,425,460,460,DLG_CITY_STACK_RETURN_D,DLG_CITY_STACK_RETURN_H,DLG_CITY_STACK_RETURN_C,DLG_CITY_STACK_RETURN_D,"Sell all valuables",0
     ```
   </details>
 - Can be used on vanilla version or with other mods installed;
