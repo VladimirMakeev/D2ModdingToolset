@@ -64,6 +64,7 @@
 #include "scenariodata.h"
 #include "scenariodataarray.h"
 #include "settings.h"
+#include "sitemerchantinterf.h"
 #include "smartptr.h"
 #include "unitbranchcat.h"
 #include "unitsforhire.h"
@@ -118,7 +119,9 @@ static Hooks getGameHooks()
         // Add items transfer buttons to stack exchange interface
         HookInfo{(void**)&game::CExchangeInterfApi::get().constructor, exchangeInterfCtorHooked},
         // Add items transfer buttons to pickup drop interface
-        HookInfo{(void**)&game::CPickUpDropInterfApi::get().constructor, pickupDropInterfCtorHooked}
+        HookInfo{(void**)&game::CPickUpDropInterfApi::get().constructor, pickupDropInterfCtorHooked},
+        // Add sell all valuables button to merchant interface
+        HookInfo{(void**)&game::CSiteMerchantInterfApi::get().constructor, siteMerchantInterfCtorHooked}
     };
     // clang-format on
 

@@ -26,7 +26,7 @@ struct CCityStackInterf;
 struct CPhaseGame;
 struct CExchangeInterf;
 struct CPickUpDropInterf;
-
+struct CSiteMerchantInterf;
 } // namespace game
 
 namespace hooks {
@@ -50,6 +50,14 @@ game::CPickUpDropInterf* __fastcall pickupDropInterfCtorHooked(game::CPickUpDrop
                                                                game::CPhaseGame* phaseGame,
                                                                game::CMidgardID* stackId,
                                                                game::CMidgardID* bagId);
+
+game::CSiteMerchantInterf* __fastcall siteMerchantInterfCtorHooked(
+    game::CSiteMerchantInterf* thisptr,
+    int /*%edx*/,
+    void* taskOpenInterf,
+    game::CPhaseGame* phaseGame,
+    game::CMidgardID* stackId,
+    game::CMidgardID* merchantId);
 
 } // namespace hooks
 
