@@ -53,6 +53,14 @@
   - <details>
     <summary>Installation:</summary>
   
+    Add sell confirmation text to TApp.dbf with id X015TA0001. Text must contain keyword '%PRICE%' in it.
+    In case of missing text, stub message in english will be shown.
+    
+    Example of confirmation text:
+    ```
+    Do you want to sell all valuables? Revenue will be:\n%PRICE%
+    ```
+    
     Add button with name BTN\_SELL\_ALL\_VALUABLES to DLG\_MERCHANT in Interf.dlg file.
     Button is optional.
     
