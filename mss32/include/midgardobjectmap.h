@@ -21,6 +21,7 @@
 #define MIDGARDOBJECTMAP_H
 
 #include "midgardid.h"
+#include "smartptr.h"
 
 namespace game {
 
@@ -62,8 +63,41 @@ static_assert(sizeof(IMidgardObjectMapVftable) == 13 * sizeof(void*),
 
 struct IMidgardObjectMap
 {
+    struct IteratorVftable;
+
+    struct Iterator
+    {
+        IteratorVftable* vftable;
+        SmartPointer iterator;
+        IMidgardObjectMap* objectMap;
+    };
+
+    struct IteratorVftable
+    {
+        using Destructor = void(__thiscall*)(Iterator* thisptr, char flags);
+        Destructor destructor;
+
+        /** Returns true if iterator reached end. */
+        using End = bool(__thiscall*)(Iterator* thisptr, Iterator* endIterator);
+        End end;
+
+        /** Returns id of the object that the iterator is currently pointing. */
+        using GetObjectId = CMidgardID*(__thiscall*)(Iterator* thisptr);
+        GetObjectId getObjectId;
+
+        /** Advances iterator so it starts pointing to the next object or end. */
+        using Advance = void(__thiscall*)(Iterator* thisptr);
+        Advance advance;
+    };
+
     const IMidgardObjectMapVftable* vftable;
 };
+
+static_assert(sizeof(IMidgardObjectMap::Iterator) == 16,
+              "IMidgardObjectMap::Iterator structure must be exactly 16 bytes");
+
+static_assert(sizeof(IMidgardObjectMap::IteratorVftable) == 4 * sizeof(void*),
+              "IMidgardObjectMap::Iterator vftable must have exactly 4 methods");
 
 } // namespace game
 
