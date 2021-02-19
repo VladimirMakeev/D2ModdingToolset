@@ -807,21 +807,17 @@ void __fastcall customMsgBoxHandlerFunction(SellValuablesMsgBoxHandler* thisptr,
 {
     using namespace game;
 
+    auto merchant = thisptr->merchantInterf;
+    auto phaseGame = merchant->dragDropInterf.phaseGame;
+
     if (okPressed) {
-        auto merchant = thisptr->merchantInterf;
         auto data = merchant->data;
-        sellValuablesToMerchant(merchant->dragDropInterf.phaseGame, &data->merchantId,
-                                &data->stackId);
+        sellValuablesToMerchant(phaseGame, &data->merchantId, &data->stackId);
     }
 
-    SmartPointer ptr;
-    CInterfManagerImplApi::get().get(&ptr);
-    CInterfManagerImpl* manager = (CInterfManagerImpl*)ptr.data;
-
+    auto manager = phaseGame->data->interfManager.data;
     auto vftable = manager->CInterfManagerImpl::CInterfManager::vftable;
     vftable->hideInterface(manager, msgBox);
-
-    SmartPointerApi::get().createOrFree(&ptr, nullptr);
 
     if (msgBox) {
         msgBox->vftable->destructor(msgBox, 1);

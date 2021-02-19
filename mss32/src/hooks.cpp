@@ -377,12 +377,11 @@ void showMessageBox(const std::string& message,
     CMidgardMsgBoxApi::get().constructor(msgBox, message.c_str(), showCancel, buttonHandler, 0,
                                          nullptr);
 
-    SmartPointer ptr;
+    InterfManagerImplPtr ptr;
     CInterfManagerImplApi::get().get(&ptr);
-    CInterfManagerImpl* manager = (CInterfManagerImpl*)ptr.data;
 
-    manager->CInterfManagerImpl::CInterfManager::vftable->showInterface(manager, msgBox);
-    SmartPointerApi::get().createOrFree(&ptr, nullptr);
+    ptr.data->CInterfManagerImpl::CInterfManager::vftable->showInterface(ptr.data, msgBox);
+    SmartPointerApi::get().createOrFree((SmartPointer*)&ptr, nullptr);
 }
 
 static void __fastcall buttonGenerateMapCallback(game::CMenuNewSkirmish* thisptr, int /*%edx*/)

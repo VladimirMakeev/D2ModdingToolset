@@ -21,13 +21,13 @@
 #define INTERFMANAGER_H
 
 #include "presentation.h"
+#include "smartptr.h"
 #include <cstddef>
 
 namespace game {
 
 struct CInterfManager;
 struct CInterface;
-struct SmartPointer;
 
 struct CInterfManagerVftable
 {
@@ -76,12 +76,14 @@ static_assert(offsetof(CInterfManagerImpl, CInterfManagerImpl::CInterfManager::v
 static_assert(offsetof(CInterfManagerImpl, CInterfManagerImpl::IPresentation::vftable) == 4,
               "Vftable offset for IPresentation in CInterfManagerImpl structure must be 4 bytes");
 
+using InterfManagerImplPtr = SmartPtr<CInterfManagerImpl>;
+
 namespace CInterfManagerImplApi {
 
 struct Api
 {
     /** Populates SmartPointer with CInterfManagerImpl object. */
-    using Get = SmartPointer*(__stdcall*)(SmartPointer* managerPtr);
+    using Get = InterfManagerImplPtr*(__stdcall*)(InterfManagerImplPtr* managerPtr);
     Get get;
 };
 

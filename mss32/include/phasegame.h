@@ -20,10 +20,10 @@
 #ifndef PHASEGAME_H
 #define PHASEGAME_H
 
+#include "interfmanager.h"
 #include "midcommandqueue2.h"
 #include "middatacache.h"
 #include "phase.h"
-#include "smartptr.h"
 #include <cstddef>
 
 namespace game {
@@ -34,7 +34,7 @@ struct CIsoChatDisplay;
 
 struct CPhaseGameData
 {
-    SmartPointer interfManagerImpl;
+    InterfManagerImplPtr interfManager;
     int unknown2;
     int unknown3;
     SmartPointer unknown4;
