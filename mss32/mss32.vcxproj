@@ -279,6 +279,8 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\draganddropinterf.h" />
     <ClInclude Include="include\dynamiccast.h" />
     <ClInclude Include="include\editor.h" />
+    <ClInclude Include="include\encparam.h" />
+    <ClInclude Include="include\encparambase.h" />
     <ClInclude Include="include\exchangeinterf.h" />
     <ClInclude Include="include\fortification.h" />
     <ClInclude Include="include\fullscreeninterf.h" />
