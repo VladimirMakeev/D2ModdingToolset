@@ -24,7 +24,7 @@
 namespace game::SmartPointerApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::CreateOrFree)0x5e4830
@@ -36,6 +36,10 @@ static std::array<Api, 3> functions = {{
     // Gog
     Api{
         (Api::CreateOrFree)0x55b7bc
+    },
+    // Scenario Editor
+    Api{
+        (Api::CreateOrFree)0x534aa4
     }
 }};
 // clang-format on

@@ -36,6 +36,8 @@
 #include "dialoginterf.h"
 #include "dynamiccast.h"
 #include "editor.h"
+#include "enclayoutspell.h"
+#include "encparambase.h"
 #include "exchangeinterf.h"
 #include "fortification.h"
 #include "functor.h"
@@ -44,6 +46,7 @@
 #include "idlist.h"
 #include "interfmanager.h"
 #include "itemtransferhooks.h"
+#include "iterators.h"
 #include "listbox.h"
 #include "log.h"
 #include "lordtype.h"
@@ -148,7 +151,9 @@ static Hooks getScenarioEditorHooks()
         // Check sites placement the same way as ruins, allowing them to be placed on water
         HookInfo{(void**)&editorFunctions.canPlaceSite, editorFunctions.canPlaceRuin},
         // Allow editor to set elves race as caster in 'cast spell on location' event effect
-        HookInfo{(void**)&editorFunctions.radioButtonIndexToPlayerId, radioButtonIndexToPlayerIdHooked}
+        HookInfo{(void**)&editorFunctions.radioButtonIndexToPlayerId, radioButtonIndexToPlayerIdHooked},
+        // Fix DLG_R_C_SPELL so it shows actual spell info
+        HookInfo{(void**)&CEncLayoutSpellApi::get().constructor, encLayoutSpellCtorHooked}
     };
     // clang-format on
 
@@ -943,6 +948,41 @@ void __fastcall shatterOnHitHooked(game::CBatAttackShatter* thisptr,
 int __stdcall deletePlayerBuildingsHooked(game::IMidgardObjectMap*, game::CMidPlayer*)
 {
     return 0;
+}
+
+game::CEncLayoutSpell* __fastcall encLayoutSpellCtorHooked(game::CEncLayoutSpell* thisptr,
+                                                           int /*%edx*/,
+                                                           game::IMidgardObjectMap* objectMap,
+                                                           game::CInterface* interface,
+                                                           void* a2,
+                                                           game::CMidgardID* spellId,
+                                                           game::CEncParamBase* encParam,
+                                                           game::CMidgardID* playerId)
+{
+    using namespace game;
+
+    if (!playerId) {
+        IteratorPtr iterator;
+        Iterators::get().createPlayersIterator(&iterator, objectMap);
+
+        IteratorPtr endIterator;
+        Iterators::get().createPlayersEndIterator(&endIterator, objectMap);
+
+        // Use id of the first found player to show spell info
+        if (!iterator.data->vftable->end(iterator.data, endIterator.data)) {
+            playerId = iterator.data->vftable->getObjectId(iterator.data);
+        }
+
+        auto& freeSmartPtr = SmartPointerApi::get().createOrFree;
+        freeSmartPtr((SmartPointer*)&iterator, nullptr);
+        freeSmartPtr((SmartPointer*)&endIterator, nullptr);
+    }
+
+    // Show spell price and casting cost
+    encParam->data->unknown2 = 4;
+    CEncLayoutSpellApi::get().constructor(thisptr, objectMap, interface, a2, spellId, encParam,
+                                          playerId);
+    return thisptr;
 }
 
 } // namespace hooks

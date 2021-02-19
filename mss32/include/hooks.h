@@ -42,6 +42,9 @@ struct CBatAttackShatter;
 struct BattleAttackInfo;
 struct CMidPlayer;
 struct CMidMsgBoxButtonHandler;
+struct CEncLayoutSpell;
+struct CInterface;
+struct CEncParamBase;
 }; // namespace game
 
 namespace hooks {
@@ -130,6 +133,15 @@ void __fastcall shatterOnHitHooked(game::CBatAttackShatter* thisptr,
 
 int __stdcall deletePlayerBuildingsHooked(game::IMidgardObjectMap* objectMap,
                                           game::CMidPlayer* player);
+
+game::CEncLayoutSpell* __fastcall encLayoutSpellCtorHooked(game::CEncLayoutSpell* thisptr,
+                                                           int /*%edx*/,
+                                                           game::IMidgardObjectMap* objectMap,
+                                                           game::CInterface* interface,
+                                                           void* a2,
+                                                           game::CMidgardID* spellId,
+                                                           game::CEncParamBase* encParam,
+                                                           game::CMidgardID* playerId);
 
 } // namespace hooks
 
