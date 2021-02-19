@@ -22,11 +22,14 @@
 
 namespace game {
 
-struct SmartPointer
+template <typename T>
+struct SmartPtr
 {
     int* referenceCount;
-    void* data;
+    T* data;
 };
+
+using SmartPointer = SmartPtr<void>;
 
 namespace SmartPointerApi {
 
