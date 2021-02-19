@@ -26,7 +26,8 @@ EditorFunctions editorFunctions{
     (RadioButtonIndexToPlayerId)0x429f1b,
     (FindPlayerByRaceCategory)0x4e1bf5,
     (CanPlace)0x511142,
-    (CanPlace)0x512376
+    (CanPlace)0x512376,
+    (CountStacksOnMap)0x40b631
 };
 // clang-format on
 

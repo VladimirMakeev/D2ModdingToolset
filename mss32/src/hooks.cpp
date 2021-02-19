@@ -153,7 +153,9 @@ static Hooks getScenarioEditorHooks()
         // Allow editor to set elves race as caster in 'cast spell on location' event effect
         HookInfo{(void**)&editorFunctions.radioButtonIndexToPlayerId, radioButtonIndexToPlayerIdHooked},
         // Fix DLG_R_C_SPELL so it shows actual spell info
-        HookInfo{(void**)&CEncLayoutSpellApi::get().constructor, encLayoutSpellCtorHooked}
+        HookInfo{(void**)&CEncLayoutSpellApi::get().constructor, encLayoutSpellCtorHooked},
+        // Allow editor to place more than 200 stacks on a map
+        HookInfo{(void**)&editorFunctions.countStacksOnMap, countStacksOnMapHooked}
     };
     // clang-format on
 
@@ -983,6 +985,11 @@ game::CEncLayoutSpell* __fastcall encLayoutSpellCtorHooked(game::CEncLayoutSpell
     CEncLayoutSpellApi::get().constructor(thisptr, objectMap, interface, a2, spellId, encParam,
                                           playerId);
     return thisptr;
+}
+
+int __stdcall countStacksOnMapHooked(game::IMidgardObjectMap*)
+{
+    return 0;
 }
 
 } // namespace hooks

@@ -143,6 +143,8 @@ game::CEncLayoutSpell* __fastcall encLayoutSpellCtorHooked(game::CEncLayoutSpell
                                                            game::CEncParamBase* encParam,
                                                            game::CMidgardID* playerId);
 
+int __stdcall countStacksOnMapHooked(game::IMidgardObjectMap* objectMap);
+
 } // namespace hooks
 
 #endif // HOOKS_H

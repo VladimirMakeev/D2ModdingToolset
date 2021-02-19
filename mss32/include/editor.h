@@ -41,6 +41,9 @@ using FindPlayerByRaceCategory = CMidPlayer*(__stdcall*)(const LRaceCategory* ra
 /** Returns true if tiles are suitable for site or ruin. */
 using CanPlace = bool(__stdcall*)(int, int, int);
 
+/** Returns number of CMidStack objects on map. */
+using CountStacksOnMap = int(__stdcall*)(IMidgardObjectMap* objectMap);
+
 /** Scenario Editor functions that can be hooked. */
 struct EditorFunctions
 {
@@ -48,6 +51,7 @@ struct EditorFunctions
     FindPlayerByRaceCategory findPlayerByRaceCategory;
     CanPlace canPlaceSite;
     CanPlace canPlaceRuin;
+    CountStacksOnMap countStacksOnMap;
 };
 
 extern EditorFunctions editorFunctions;
