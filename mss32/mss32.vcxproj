@@ -192,6 +192,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClCompile Include="src\dialoginterf.cpp" />
     <ClCompile Include="src\dynamiccast.cpp" />
     <ClCompile Include="src\editor.cpp" />
+    <ClCompile Include="src\enclayoutspell.cpp" />
     <ClCompile Include="src\exchangeinterf.cpp" />
     <ClCompile Include="src\functor.cpp" />
     <ClCompile Include="src\game.cpp" />
@@ -279,6 +280,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\draganddropinterf.h" />
     <ClInclude Include="include\dynamiccast.h" />
     <ClInclude Include="include\editor.h" />
+    <ClInclude Include="include\enclayoutspell.h" />
     <ClInclude Include="include\encparam.h" />
     <ClInclude Include="include\encparambase.h" />
     <ClInclude Include="include\exchangeinterf.h" />

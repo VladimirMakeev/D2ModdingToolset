@@ -234,6 +234,9 @@
     <ClCompile Include="src\miditem.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\enclayoutspell.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -749,6 +752,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\encparambase.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\enclayoutspell.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
