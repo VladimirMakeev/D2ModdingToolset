@@ -237,6 +237,9 @@
     <ClCompile Include="src\enclayoutspell.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\iterators.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -755,6 +758,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\enclayoutspell.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\iterators.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
