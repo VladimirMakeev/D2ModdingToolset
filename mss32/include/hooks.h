@@ -45,6 +45,7 @@ struct CMidMsgBoxButtonHandler;
 struct CEncLayoutSpell;
 struct CInterface;
 struct CEncParamBase;
+struct Bank;
 }; // namespace game
 
 namespace hooks {
@@ -144,6 +145,10 @@ game::CEncLayoutSpell* __fastcall encLayoutSpellCtorHooked(game::CEncLayoutSpell
                                                            game::CMidgardID* playerId);
 
 int __stdcall countStacksOnMapHooked(game::IMidgardObjectMap* objectMap);
+
+game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
+                                                     game::IMidgardObjectMap* objectMap,
+                                                     const game::CMidgardID* playerId);
 
 } // namespace hooks
 

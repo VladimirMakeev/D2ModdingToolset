@@ -43,6 +43,7 @@ struct LAttackClass;
 struct IBatAttack;
 struct IAttack;
 struct CMidUnitGroup;
+struct Bank;
 
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
@@ -169,6 +170,10 @@ using DeletePlayerBuildings = int(__stdcall*)(IMidgardObjectMap* objectMap, CMid
 
 using GetInterfaceText = const char*(__stdcall*)(const CMidgardID* textId);
 
+using ComputePlayerDailyIncome = Bank*(__stdcall*)(Bank* income,
+                                                   IMidgardObjectMap* objectMap,
+                                                   const CMidgardID* playerId);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -196,6 +201,7 @@ struct Functions
     GetStackFortRuinGroup getStackFortRuinGroup;
     DeletePlayerBuildings deletePlayerBuildings;
     GetInterfaceText getInterfaceText;
+    ComputePlayerDailyIncome computePlayerDailyIncome;
 };
 
 /** Global variables used in game. */

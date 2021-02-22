@@ -50,7 +50,8 @@ static std::array<Functions, 4> functions = {{
         (AttackClassToString)0x5c7af0,
         (GetStackFortRuinGroup)0x5f6304,
         (DeletePlayerBuildings)0x422498,
-        (GetInterfaceText)0x5c8f38
+        (GetInterfaceText)0x5c8f38,
+        (ComputePlayerDailyIncome)0x5db82a
     },
     // Russobit
     Functions{
@@ -77,7 +78,8 @@ static std::array<Functions, 4> functions = {{
         (AttackClassToString)0x5c7af0,
         (GetStackFortRuinGroup)0x5f6304,
         (DeletePlayerBuildings)0x422498,
-        (GetInterfaceText)0x5c8f38
+        (GetInterfaceText)0x5c8f38,
+        (ComputePlayerDailyIncome)0x5db82a
     },
     // Gog
     Functions{
@@ -104,7 +106,8 @@ static std::array<Functions, 4> functions = {{
         (AttackClassToString)0x5c6ad9,
         (GetStackFortRuinGroup)0x5f4f87,
         (DeletePlayerBuildings)0x421fb6,
-        (GetInterfaceText)0x5c7f06
+        (GetInterfaceText)0x5c7f06,
+        (ComputePlayerDailyIncome)0x5da55f
     },
     // Scenario Editor
     Functions{
