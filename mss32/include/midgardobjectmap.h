@@ -30,8 +30,21 @@ struct IMidScenarioObject;
 
 struct IMidgardObjectMapVftable
 {
-    void* destructor;
-    void* unknown[4];
+    using Destructor = void(__thiscall*)(IMidgardObjectMap* thisptr, char flags);
+    Destructor destructor;
+
+    /** Returns scenario id. */
+    using GetId = const CMidgardID*(__thiscall*)(const IMidgardObjectMap* thisptr);
+    GetId getId;
+
+    /** Returns total number of objects in scenario. */
+    using GetObjectsTotal = int(__thiscall*)(const IMidgardObjectMap* thisptr);
+    GetObjectsTotal getObjectsTotal;
+
+    using CreateIterator = SmartPointer*(__thiscall*)(IMidgardObjectMap* thisptr,
+                                                      SmartPointer* iterator);
+    CreateIterator createIterator;
+    CreateIterator createIterator2;
 
     /**
      * Finds scenario object by its id.
@@ -41,7 +54,15 @@ struct IMidgardObjectMapVftable
         IMidScenarioObject*(__thiscall*)(const IMidgardObjectMap* thisptr, const CMidgardID* id);
     FindScenarioObjectById findScenarioObjectById;
 
-    void* unknown2[2];
+    /**
+     * Finds scenario object by its id and adds it to change list.
+     * Returns nullptr if object could not be found.
+     */
+    using FindScenarioObjectByIdForChange =
+        IMidScenarioObject*(__thiscall*)(IMidgardObjectMap* thisptr, const CMidgardID* id);
+    FindScenarioObjectByIdForChange findScenarioObjectByIdForChange;
+
+    void* unknown;
 
     /** Assumption: stores id of scenario object. */
     using InsertObjectId = bool(__thiscall*)(IMidgardObjectMap* thisptr,
