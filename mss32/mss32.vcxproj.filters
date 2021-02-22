@@ -240,6 +240,9 @@
     <ClCompile Include="src\iterators.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\fortcategory.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -761,6 +764,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\iterators.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fortcategory.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

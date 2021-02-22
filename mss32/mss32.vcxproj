@@ -194,6 +194,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClCompile Include="src\editor.cpp" />
     <ClCompile Include="src\enclayoutspell.cpp" />
     <ClCompile Include="src\exchangeinterf.cpp" />
+    <ClCompile Include="src\fortcategory.cpp" />
     <ClCompile Include="src\functor.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\globaldata.cpp" />
@@ -285,6 +286,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\encparam.h" />
     <ClInclude Include="include\encparambase.h" />
     <ClInclude Include="include\exchangeinterf.h" />
+    <ClInclude Include="include\fortcategory.h" />
     <ClInclude Include="include\fortification.h" />
     <ClInclude Include="include\fullscreeninterf.h" />
     <ClInclude Include="include\functor.h" />

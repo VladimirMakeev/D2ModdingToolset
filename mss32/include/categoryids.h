@@ -223,6 +223,13 @@ enum class ItemId : int
     Special
 };
 
+/** Fortification ids from LFort.dbf. */
+enum class FortId : int
+{
+    Capital = 2,
+    Village = 4
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
