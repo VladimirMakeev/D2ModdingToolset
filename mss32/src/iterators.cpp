@@ -28,22 +28,30 @@ static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::CreateIterator)0,
-        (Api::CreateIterator)0
+        (Api::CreateIterator)0,
+        (Api::CreateIterator)0x419d24,
+        (Api::CreateIterator)0x419dca
     },
     // Russobit
     Api{
         (Api::CreateIterator)0,
-        (Api::CreateIterator)0
+        (Api::CreateIterator)0,
+        (Api::CreateIterator)0x419d24,
+        (Api::CreateIterator)0x419dca
     },
     // Gog
     Api{
         (Api::CreateIterator)0,
-        (Api::CreateIterator)0
+        (Api::CreateIterator)0,
+        (Api::CreateIterator)0x41983f,
+        (Api::CreateIterator)0x4198e5
     },
     // Scenario Editor
     Api{
         (Api::CreateIterator)0x41a62a,
-        (Api::CreateIterator)0x41a6d0
+        (Api::CreateIterator)0x41a6d0,
+        (Api::CreateIterator)0,
+        (Api::CreateIterator)0
     }
 }};
 // clang-format on

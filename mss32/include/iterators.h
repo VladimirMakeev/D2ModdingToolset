@@ -42,6 +42,9 @@ struct Api
     // Traverse CMidPlayer objects
     CreateIterator createPlayersIterator;
     CreateIterator createPlayersEndIterator;
+    // Traverse CFortification objects
+    CreateIterator createFortificationsIterator;
+    CreateIterator createFortificationsEndIterator;
 };
 
 Api& get();
