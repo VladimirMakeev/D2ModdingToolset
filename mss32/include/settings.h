@@ -32,6 +32,7 @@ struct UserSettings
     int stackScoutRangeMax{};
     int shatteredArmorMax{100};
     int shatterDamageMax{100};
+    int villageIncome[5]; /**< For each possible tier. */
     std::uint8_t criticalHitDamage{};
     bool showBanners{true};
     bool showResources{true};
