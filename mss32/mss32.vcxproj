@@ -219,6 +219,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClCompile Include="src\midgardmsgbox.cpp" />
     <ClCompile Include="src\miditem.cpp" />
     <ClCompile Include="src\midmsgboxbuttonhandlerstd.cpp" />
+    <ClCompile Include="src\midscenvariables.cpp" />
     <ClCompile Include="src\netmessages.cpp" />
     <ClCompile Include="src\phase.cpp" />
     <ClCompile Include="src\pickupdropinterf.cpp" />
@@ -362,6 +363,7 @@ call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
     <ClInclude Include="include\midplayer.h" />
     <ClInclude Include="include\midruin.h" />
     <ClInclude Include="include\midscenarioobject.h" />
+    <ClInclude Include="include\midscenvariables.h" />
     <ClInclude Include="include\midserver.h" />
     <ClInclude Include="include\midserverbuilder.h" />
     <ClInclude Include="include\midstack.h" />
