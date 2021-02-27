@@ -83,11 +83,6 @@ void readUserSettings(const std::filesystem::path& iniFilePath)
                                                              iniPath.c_str())
                                         != 0;
 
-    for (size_t i = 0; i < 5; i++) {
-        settings.villageIncome[i] = GetPrivateProfileInt(
-            disciple, fmt::format("Tier{:d}CityIncome", i + 1).c_str(), 0, iniPath.c_str());
-    }
-
     settings.debugMode = GetPrivateProfileInt(disciple, "DebugHooks", settings.debugMode,
                                               iniPath.c_str())
                          != 0;

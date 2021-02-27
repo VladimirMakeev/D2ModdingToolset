@@ -60,6 +60,7 @@ static_assert(sizeof(CMidScenVariables) == 40,
               "Size of CMidScenVariables structure must be exactly 40 bytes");
 
 using ScenarioVariablesListNode = SortedListNode<ScenarioVariable>;
+using ScenarioVariablesListIterator = SortedListIterator<ScenarioVariable>;
 
 namespace CMidScenVariablesApi {
 

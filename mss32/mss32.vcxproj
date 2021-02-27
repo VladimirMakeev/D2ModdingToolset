@@ -163,6 +163,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\netmessages.cpp" />
     <ClCompile Include="src\phase.cpp" />
     <ClCompile Include="src\pickupdropinterf.cpp" />
+    <ClCompile Include="src\playerincomehooks.cpp" />
     <ClCompile Include="src\racecategory.cpp" />
     <ClCompile Include="src\restrictions.cpp" />
     <ClCompile Include="src\scenariodata.cpp" />
@@ -324,6 +325,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\phasegame.h" />
     <ClInclude Include="include\pickupdropinterf.h" />
     <ClInclude Include="include\playerbuildings.h" />
+    <ClInclude Include="include\playerincomehooks.h" />
     <ClInclude Include="include\popupdialoginterf.h" />
     <ClInclude Include="include\position.h" />
     <ClInclude Include="include\presentation.h" />

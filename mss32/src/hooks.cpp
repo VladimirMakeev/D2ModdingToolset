@@ -39,7 +39,6 @@
 #include "enclayoutspell.h"
 #include "encparambase.h"
 #include "exchangeinterf.h"
-#include "fortcategory.h"
 #include "fortification.h"
 #include "functor.h"
 #include "game.h"
@@ -61,9 +60,9 @@
 #include "midplayer.h"
 #include "midstack.h"
 #include "midunit.h"
-#include "midvillage.h"
 #include "pickupdropinterf.h"
 #include "playerbuildings.h"
+#include "playerincomehooks.h"
 #include "racecategory.h"
 #include "racetype.h"
 #include "scenariodata.h"
@@ -126,7 +125,9 @@ static Hooks getGameHooks()
         // Add items transfer buttons to pickup drop interface
         HookInfo{(void**)&game::CPickUpDropInterfApi::get().constructor, pickupDropInterfCtorHooked},
         // Add sell all valuables button to merchant interface
-        HookInfo{(void**)&game::CSiteMerchantInterfApi::get().constructor, siteMerchantInterfCtorHooked}
+        HookInfo{(void**)&game::CSiteMerchantInterfApi::get().constructor, siteMerchantInterfCtorHooked},
+        // Cities can generate daily income depending on scenario variable settings
+        HookInfo{(void**)& fn.computePlayerDailyIncome, computePlayerDailyIncomeHooked}
     };
     // clang-format on
 
@@ -138,14 +139,6 @@ static Hooks getGameHooks()
     if (userSettings().preserveCapitalBuildings) {
         // Allow scenarios with prebuilt buildings in capitals
         hooks.push_back(HookInfo{(void**)&fn.deletePlayerBuildings, deletePlayerBuildingsHooked});
-    }
-
-    const auto& villageIncome = userSettings().villageIncome;
-    if (std::any_of(std::begin(villageIncome), std::end(villageIncome),
-                    [](int income) { return income > 0; })) {
-        // Cities generate daily income depending on their level
-        hooks.push_back(
-            HookInfo{(void**)&fn.computePlayerDailyIncome, computePlayerDailyIncomeHooked});
     }
 
     return hooks;
@@ -1000,60 +993,6 @@ game::CEncLayoutSpell* __fastcall encLayoutSpellCtorHooked(game::CEncLayoutSpell
 int __stdcall countStacksOnMapHooked(game::IMidgardObjectMap*)
 {
     return 0;
-}
-
-game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
-                                                     game::IMidgardObjectMap* objectMap,
-                                                     const game::CMidgardID* playerId)
-{
-    using namespace game;
-
-    gameFunctions().computePlayerDailyIncome(income, objectMap, playerId);
-
-    auto playerObj = objectMap->vftable->findScenarioObjectById(objectMap, playerId);
-    if (!playerObj) {
-        logError("mssProxyError.log",
-                 fmt::format("Could not find player {:s}", idToString(playerId)));
-        return income;
-    }
-
-    auto player = static_cast<const CMidPlayer*>(playerObj);
-    if (player->raceType->data->raceType.id == RaceCategories::get().neutral->id) {
-        return income;
-    }
-
-    IteratorPtr iteratorPtr;
-    Iterators::get().createFortificationsIterator(&iteratorPtr, objectMap);
-    IteratorPtr endIteratorPtr;
-    Iterators::get().createFortificationsEndIterator(&endIteratorPtr, objectMap);
-
-    auto iterator = iteratorPtr.data;
-
-    while (!iterator->vftable->end(iterator, endIteratorPtr.data)) {
-        auto id = iterator->vftable->getObjectId(iterator);
-        auto obj = objectMap->vftable->findScenarioObjectById(objectMap, id);
-        auto fortification = static_cast<CFortification*>(obj);
-
-        if (fortification->ownerId == *playerId) {
-            auto vftable = static_cast<const CFortificationVftable*>(fortification->vftable);
-            auto category = vftable->getCategory(fortification);
-
-            if (category->id == FortCategories::get().village->id) {
-                auto village = static_cast<const CMidVillage*>(fortification);
-                const int villageIncome = userSettings().villageIncome[village->tierLevel - 1];
-
-                BankApi::get().set(income, CurrencyType::Gold, income->gold + villageIncome);
-            }
-        }
-
-        iterator->vftable->advance(iterator);
-    }
-
-    auto& freeSmartPtr = SmartPointerApi::get().createOrFree;
-    freeSmartPtr((SmartPointer*)&iteratorPtr, nullptr);
-    freeSmartPtr((SmartPointer*)&endIteratorPtr, nullptr);
-
-    return income;
 }
 
 } // namespace hooks

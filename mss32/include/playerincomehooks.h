@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,33 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef PLAYERINCOMEHOOKS_H
+#define PLAYERINCOMEHOOKS_H
 
-#include <cstdint>
-#include <filesystem>
+namespace game {
+struct Bank;
+struct IMidgardObjectMap;
+struct CMidgardID;
+} // namespace game
 
 namespace hooks {
 
-struct UserSettings
-{
-    int unitMaxDamage{};
-    int unitMaxArmor{};
-    int stackScoutRangeMax{};
-    int shatteredArmorMax{100};
-    int shatterDamageMax{100};
-    std::uint8_t criticalHitDamage{};
-    bool showBanners{true};
-    bool showResources{true};
-    bool showLandConverted{};
-    bool preserveCapitalBuildings{};
-    bool debugMode{};
-};
+game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
+                                                     game::IMidgardObjectMap* objectMap,
+                                                     const game::CMidgardID* playerId);
 
-const UserSettings& userSettings();
+}
 
-void readUserSettings(const std::filesystem::path& iniFilePath);
-
-} // namespace hooks
-
-#endif // SETTINGS_H
+#endif // PLAYERINCOMEHOOKS_H
