@@ -140,7 +140,7 @@
     </Link>
     <PreBuildEvent>
       <Command>if not exist detours.lib (
-call ..\buildDetours.bat "$(VS140COMNTOOLS)VsDevCmd.bat" ..\Detours
+call ..\buildDetours.bat ..\Detours
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>

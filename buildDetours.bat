@@ -19,13 +19,13 @@
 
 
 :: Call developer console
-CALL %1\VsDevCmd.bat
+CALL VsDevCmd
 :: Build Detours library, ignore build errors. We only need detours.lib
-cd %2
+cd %1
 nmake 2>nul
 :: Copy built library into project folder
-if exist %2\lib.X86\detours.lib (
-xcopy /y %2\lib.X86\detours.lib %~dp0\mss32\
+if exist %1\lib.X86\detours.lib (
+xcopy %1\lib.X86\detours.lib "%~dp0\mss32\" /y
 ) else (
 echo "Could not find detours.lib, please check for build errors."
 exit 1
