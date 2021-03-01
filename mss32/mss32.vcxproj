@@ -68,6 +68,11 @@
       <EnableUAC>false</EnableUAC>
       <ModuleDefinitionFile>module.def</ModuleDefinitionFile>
     </Link>
+    <PreBuildEvent>
+      <Command>if not exist detours.lib (
+call ..\buildDetours.bat ..\Detours
+)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
