@@ -87,7 +87,7 @@ bool loadUnitsForHire(const std::filesystem::path& gameFolder)
 
         const auto& idApi = game::CMidgardIDApi::get();
         const int raceIndex = idApi.getTypeIndex(&raceId);
-        if (raceIndex >= tmpUnits.size()) {
+        if (raceIndex >= (int)tmpUnits.size()) {
             logError("mssProxyError.log", fmt::format("Row {:d} column {:s} has invalid "
                                                       "race index {:d} in {:s} database.",
                                                       row, idColumnName, raceIndex, raceDbName));

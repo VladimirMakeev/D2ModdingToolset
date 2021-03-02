@@ -23,6 +23,7 @@
 #include "dbfcolumn.h"
 #include <cstdint>
 #include <gsl/span>
+#include <string>
 
 namespace utils {
 
