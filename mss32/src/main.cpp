@@ -85,6 +85,8 @@ static void adjustRestrictionMax(game::Restriction<T>* restriction,
 
 static void adjustGameRestrictions()
 {
+    using namespace hooks;
+
     auto& restrictions = game::gameRestrictions();
     // Allow game to load and scenario editor to create scenarios with maximum allowed spells level
     // set to zero, disabling usage of magic in scenario
@@ -92,25 +94,26 @@ static void adjustGameRestrictions()
     // Allow using units with tier higher than 5
     writeProtectedMemory(&restrictions.unitLevel->max, 10);
 
-    auto& settings = hooks::userSettings();
-
-    if (settings.unitMaxDamage > 0) {
-        adjustRestrictionMax(restrictions.unitDamage, settings.unitMaxDamage, "UnitMaxDamage");
+    if (userSettings().unitMaxDamage != baseSettings().unitMaxDamage) {
+        adjustRestrictionMax(restrictions.unitDamage, userSettings().unitMaxDamage,
+                             "UnitMaxDamage");
     }
 
-    if (settings.unitMaxArmor > 0) {
-        adjustRestrictionMax(restrictions.unitArmor, settings.unitMaxArmor, "UnitMaxArmor");
+    if (userSettings().unitMaxArmor != baseSettings().unitMaxArmor) {
+        adjustRestrictionMax(restrictions.unitArmor, userSettings().unitMaxArmor, "UnitMaxArmor");
     }
 
-    if (settings.stackScoutRangeMax > 0) {
-        adjustRestrictionMax(restrictions.stackScoutRange, settings.stackScoutRangeMax,
+    if (userSettings().stackScoutRangeMax != baseSettings().stackScoutRangeMax) {
+        adjustRestrictionMax(restrictions.stackScoutRange, userSettings().stackScoutRangeMax,
                              "StackMaxScoutRange");
     }
 
-    if (hooks::executableIsGame() && settings.criticalHitDamage > 0) {
-        hooks::logDebug("restrictions.log", fmt::format("Set 'criticalHitDamage' to {:d}",
-                                                        (int)settings.criticalHitDamage));
-        writeProtectedMemory(restrictions.criticalHitDamage, settings.criticalHitDamage);
+    if (executableIsGame()) {
+        if (userSettings().criticalHitDamage != baseSettings().criticalHitDamage) {
+            logDebug("restrictions.log", fmt::format("Set 'criticalHitDamage' to {:d}",
+                                                     (int)userSettings().criticalHitDamage));
+            writeProtectedMemory(restrictions.criticalHitDamage, userSettings().criticalHitDamage);
+        }
     }
 }
 
