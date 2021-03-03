@@ -25,24 +25,24 @@
 
 namespace hooks {
 
-struct UserSettings
+struct Settings
 {
-    int unitMaxDamage{};
-    int unitMaxArmor{};
-    int stackScoutRangeMax{};
-    int shatteredArmorMax{100};
-    int shatterDamageMax{100};
-    std::uint8_t criticalHitDamage{};
-    bool showBanners{true};
-    bool showResources{true};
-    bool showLandConverted{};
-    bool preserveCapitalBuildings{};
-    bool debugMode{};
+    int unitMaxDamage;
+    int unitMaxArmor;
+    int stackScoutRangeMax;
+    int shatteredArmorMax;
+    int shatterDamageMax;
+    std::uint8_t criticalHitDamage;
+    bool showBanners;
+    bool showResources;
+    bool showLandConverted;
+    bool preserveCapitalBuildings;
+    bool debugMode;
 };
 
-const UserSettings& userSettings();
-
-void readUserSettings(const std::filesystem::path& iniFilePath);
+const Settings& baseSettings();
+const Settings& defaultSettings();
+const Settings& userSettings();
 
 } // namespace hooks
 

@@ -196,10 +196,7 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
         return FALSE;
     }
 
-    const auto& gameFolder{hooks::gameFolder()};
-    hooks::readUserSettings(gameFolder / "disciple.ini");
-
-    if (hooks::executableIsGame() && !hooks::loadUnitsForHire(gameFolder)) {
+    if (hooks::executableIsGame() && !hooks::loadUnitsForHire(hooks::gameFolder())) {
         MessageBox(NULL, "Failed to load new units. Check error log for details.",
                    "mss32.dll proxy", MB_OK);
         return FALSE;
