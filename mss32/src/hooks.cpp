@@ -92,10 +92,6 @@ static Hooks getGameHooks()
 
     // clang-format off
     Hooks hooks{
-        // Allow users to show resources panel by default
-        HookInfo{(void**)&fn.respopupInit, respopupInitHooked},
-        // Allow users to show banners by default
-        HookInfo{(void**)&fn.toggleShowBannersInit, toggleShowBannersInitHooked},
         // Fix game crash in battles with summoners
         HookInfo{(void**)&fn.processUnitModifiers, processUnitModifiersHooked},
         // Show buildings with custom branch category on the 'other buildings' tab
@@ -104,12 +100,6 @@ static Hooks getGameHooks()
         HookInfo{(void**)&fn.chooseUnitLane, chooseUnitLaneHooked},
         // Allow alchemists to buff retreating units
         HookInfo{(void**)&game::CBatAttackGiveAttackApi::get().canPerform, giveAttackCanPerformHooked},
-        // Allow users to customize maximum armor shatter damage per attack
-        HookInfo{(void**)&game::CBatAttackShatterApi::get().canPerform, shatterCanPerformHooked},
-        // Allow users to customize total armor shatter damage
-        HookInfo{(void**)&game::BattleMsgDataApi::get().setUnitShatteredArmor, setUnitShatteredArmorHooked},
-        // Allow users to customize maximum armor shatter damage per attack
-        HookInfo{(void**)&game::CBatAttackShatterApi::get().onHit, shatterOnHitHooked},
         // Random map generation
         //HookInfo{(void**)&game::CMenuNewSkirmishSingleApi::get().constructor, menuNewSkirmishSingleCtorHooked},
         // Support custom battle attack objects
@@ -136,7 +126,32 @@ static Hooks getGameHooks()
             HookInfo{(void**)&fn.addPlayerUnitsToHireList, addPlayerUnitsToHireListHooked});
     }
 
-    if (userSettings().preserveCapitalBuildings) {
+    if (userSettings().shatteredArmorMax != baseSettings().shatteredArmorMax) {
+        // Allow users to customize total armor shatter damage
+        hooks.push_back(HookInfo{(void**)&game::CBatAttackShatterApi::get().canPerform,
+                                 shatterCanPerformHooked});
+        hooks.push_back(HookInfo{(void**)&game::BattleMsgDataApi::get().setUnitShatteredArmor,
+                                 setUnitShatteredArmorHooked});
+    }
+
+    if (userSettings().shatterDamageMax != baseSettings().shatterDamageMax) {
+        // Allow users to customize maximum armor shatter damage per attack
+        hooks.push_back(
+            HookInfo{(void**)&game::CBatAttackShatterApi::get().onHit, shatterOnHitHooked});
+    }
+
+    if (userSettings().showBanners != baseSettings().showBanners) {
+        // Allow users to show banners by default
+        hooks.push_back(HookInfo{(void**)&fn.toggleShowBannersInit, toggleShowBannersInitHooked});
+    }
+
+    if (userSettings().showResources != baseSettings().showResources
+        || userSettings().showLandConverted != baseSettings().showLandConverted) {
+        // Allow users to show resources panel by default
+        hooks.push_back(HookInfo{(void**)&fn.respopupInit, respopupInitHooked});
+    }
+
+    if (userSettings().preserveCapitalBuildings != baseSettings().preserveCapitalBuildings) {
         // Allow scenarios with prebuilt buildings in capitals
         hooks.push_back(HookInfo{(void**)&fn.deletePlayerBuildings, deletePlayerBuildingsHooked});
     }
