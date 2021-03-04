@@ -33,6 +33,7 @@ struct Settings
     int shatteredArmorMax;
     int shatterDamageMax;
     std::uint8_t criticalHitDamage;
+    std::uint8_t mageLeaderAccuracyReduction;
     bool showBanners;
     bool showResources;
     bool showLandConverted;

@@ -57,6 +57,7 @@ const Settings& baseSettings()
         settings.shatteredArmorMax = 100;
         settings.shatterDamageMax = 100;
         settings.criticalHitDamage = 5;
+        settings.mageLeaderAccuracyReduction = 10;
         settings.showBanners = false;
         settings.showResources = false;
         settings.showLandConverted = false;
@@ -100,6 +101,7 @@ const Settings& userSettings()
         settings.shatteredArmorMax = readNumberSetting(iniPath, "ShatteredArmorMax", defaultSettings().shatteredArmorMax, 0, baseSettings().shatteredArmorMax);
         settings.shatterDamageMax = readNumberSetting(iniPath, "ShatterDamageMax", defaultSettings().shatterDamageMax, 0, baseSettings().shatterDamageMax);
         settings.criticalHitDamage = readNumberSetting(iniPath, "CriticalHitDamage", defaultSettings().criticalHitDamage);
+        settings.mageLeaderAccuracyReduction = readNumberSetting(iniPath, "MageLeaderAccuracyReduction", defaultSettings().mageLeaderAccuracyReduction);
         settings.showBanners = readBooleanSetting(iniPath, "ShowBanners", defaultSettings().showBanners);
         settings.showResources = readBooleanSetting(iniPath, "ShowResources", defaultSettings().showResources);
         settings.showLandConverted = readBooleanSetting(iniPath, "ShowLandConverted", defaultSettings().showLandConverted);
