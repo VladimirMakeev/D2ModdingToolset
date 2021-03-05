@@ -215,6 +215,20 @@ Hooks getHooks()
     return hooks;
 }
 
+Hooks getVftableHooks()
+{
+    Hooks hooks;
+
+    if (userSettings().allowShatterAttackToMiss != baseSettings().allowShatterAttackToMiss) {
+        if (game::CBatAttackShatterApi::vftable())
+            // Fix an issue where shatter attack always hits regardless of its power value
+            hooks.emplace_back(HookInfo{(void**)&game::CBatAttackShatterApi::vftable()->canMiss,
+                                        shatterCanMissHooked});
+    }
+
+    return hooks;
+}
+
 void respopupInitHooked(void)
 {
     logDebug("mss32Proxy.log", "Resource popup hook start");
@@ -976,6 +990,14 @@ void __fastcall shatterOnHitHooked(game::CBatAttackShatter* thisptr,
     info.damage = 0;
 
     BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
+}
+
+bool __fastcall shatterCanMissHooked(game::CBatAttackShatter* thisptr,
+                                    int /*%edx*/,
+                                    game::BattleMsgData* battleMsgData,
+                                    game::CMidgardID* id)
+{
+    return true;
 }
 
 int __stdcall deletePlayerBuildingsHooked(game::IMidgardObjectMap*, game::CMidPlayer*)

@@ -41,11 +41,27 @@ static std::array<Api, 3> functions = {{
         (IBatAttackVftable::OnAttack)0x65d8dc
     }
 }};
+
+static std::array<IBatAttackVftable*, 4> vftables = {{
+    // Akella
+    (IBatAttackVftable*)0x6f504c,
+    // Russobit
+    (IBatAttackVftable*)0x6f504c,
+    // Gog
+    (IBatAttackVftable*)0x6f2ffc,
+    // Scenario Editor
+    (IBatAttackVftable*)0x000000,
+}};
 // clang-format on
 
 Api& get()
 {
     return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+IBatAttackVftable* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::CBatAttackShatterApi

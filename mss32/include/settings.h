@@ -40,6 +40,7 @@ struct Settings
     bool showResources;
     bool showLandConverted;
     bool preserveCapitalBuildings;
+    bool allowShatterAttackToMiss;
     bool debugMode;
 };
 

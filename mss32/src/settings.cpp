@@ -64,6 +64,7 @@ const Settings& baseSettings()
         settings.showResources = false;
         settings.showLandConverted = false;
         settings.preserveCapitalBuildings = false;
+        settings.allowShatterAttackToMiss = false;
         settings.debugMode = false;
 
         initialized = true;
@@ -110,6 +111,7 @@ const Settings& userSettings()
         settings.showResources = readBooleanSetting(iniPath, "ShowResources", defaultSettings().showResources);
         settings.showLandConverted = readBooleanSetting(iniPath, "ShowLandConverted", defaultSettings().showLandConverted);
         settings.preserveCapitalBuildings = readBooleanSetting(iniPath, "PreserveCapitalBuildings", defaultSettings().preserveCapitalBuildings);
+        settings.allowShatterAttackToMiss = readBooleanSetting(iniPath, "AllowShatterAttackToMiss", defaultSettings().allowShatterAttackToMiss);
         settings.debugMode = readBooleanSetting(iniPath, "DebugHooks", defaultSettings().debugMode);
         // clang-format on
 
