@@ -60,7 +60,9 @@ struct IAttackVftable
     GetInt getQtyDamage;
     GetInt getQtyHeal;
 
-    void* unknown;
+    /** Meaning assumed. */
+    using GetDrain = int(__thiscall*)(IAttack* thisptr, int damage);
+    GetDrain getDrain;
 
     GetInt getLevel;
     GetInt getAltAttack;

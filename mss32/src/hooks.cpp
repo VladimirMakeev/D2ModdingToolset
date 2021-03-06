@@ -21,6 +21,7 @@
 #include "attackimpl.h"
 #include "attackreachcat.h"
 #include "autodialog.h"
+#include "batattackdrain.h"
 #include "batattackgiveattack.h"
 #include "batattackshatter.h"
 #include "battleattackinfo.h"
@@ -34,6 +35,7 @@
 #include "dbf/dbffile.h"
 #include "dbtable.h"
 #include "dialoginterf.h"
+#include "drainattackhooks.h"
 #include "dynamiccast.h"
 #include "editor.h"
 #include "enclayoutspell.h"
@@ -117,7 +119,9 @@ static Hooks getGameHooks()
         // Add sell all valuables button to merchant interface
         HookInfo{(void**)&game::CSiteMerchantInterfApi::get().constructor, siteMerchantInterfCtorHooked},
         // Cities can generate daily income depending on scenario variable settings
-        HookInfo{(void**)& fn.computePlayerDailyIncome, computePlayerDailyIncomeHooked}
+        HookInfo{(void**)& fn.computePlayerDailyIncome, computePlayerDailyIncomeHooked},
+        // Vampiric attacks can deal critical damage
+        HookInfo{(void**)&game::CBatAttackDrainApi::get().onHit, drainAttackOnHitHooked}
     };
     // clang-format on
 

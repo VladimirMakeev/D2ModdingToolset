@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,34 +17,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef DRAINATTACKHOOKS_H
+#define DRAINATTACKHOOKS_H
 
-#include <cstdint>
-#include <filesystem>
+namespace game {
+struct CBatAttackDrain;
+struct IMidgardObjectMap;
+struct BattleMsgData;
+struct CMidgardID;
+struct BattleAttackInfo;
+
+} // namespace game
 
 namespace hooks {
 
-struct Settings
-{
-    int unitMaxDamage;
-    int unitMaxArmor;
-    int stackScoutRangeMax;
-    int shatteredArmorMax;
-    int shatterDamageMax;
-    int vampiricHeal;
-    std::uint8_t criticalHitDamage;
-    bool showBanners;
-    bool showResources;
-    bool showLandConverted;
-    bool preserveCapitalBuildings;
-    bool debugMode;
-};
+void __fastcall drainAttackOnHitHooked(game::CBatAttackDrain* thisptr,
+                                       int /*%edx*/,
+                                       game::IMidgardObjectMap* objectMap,
+                                       game::BattleMsgData* battleMsgData,
+                                       game::CMidgardID* unitId,
+                                       game::BattleAttackInfo** attackInfo);
 
-const Settings& baseSettings();
-const Settings& defaultSettings();
-const Settings& userSettings();
+}
 
-} // namespace hooks
-
-#endif // SETTINGS_H
+#endif // DRAINATTACKHOOKS_H

@@ -31,10 +31,10 @@ namespace hooks {
 
 template <typename T>
 T readNumberSetting(const std::string& iniPath,
-                 const char* key,
-                 T def,
-                 T min = std::numeric_limits<T>::min(),
-                 T max = std::numeric_limits<T>::max())
+                    const char* key,
+                    T def,
+                    T min = std::numeric_limits<T>::min(),
+                    T max = std::numeric_limits<T>::max())
 {
     auto value = GetPrivateProfileInt("Disciple", key, def, iniPath.c_str());
     return std::clamp<T>(value, min, max);
@@ -56,6 +56,7 @@ const Settings& baseSettings()
         settings.stackScoutRangeMax = 8;
         settings.shatteredArmorMax = 100;
         settings.shatterDamageMax = 100;
+        settings.vampiricHeal = 50;
         settings.criticalHitDamage = 5;
         settings.showBanners = false;
         settings.showResources = false;
@@ -99,6 +100,7 @@ const Settings& userSettings()
         settings.stackScoutRangeMax = readNumberSetting(iniPath, "StackMaxScoutRange", defaultSettings().stackScoutRangeMax);
         settings.shatteredArmorMax = readNumberSetting(iniPath, "ShatteredArmorMax", defaultSettings().shatteredArmorMax, 0, baseSettings().shatteredArmorMax);
         settings.shatterDamageMax = readNumberSetting(iniPath, "ShatterDamageMax", defaultSettings().shatterDamageMax, 0, baseSettings().shatterDamageMax);
+        settings.vampiricHeal = readNumberSetting(iniPath, "VampiricHeal", defaultSettings().vampiricHeal);
         settings.criticalHitDamage = readNumberSetting(iniPath, "CriticalHitDamage", defaultSettings().criticalHitDamage);
         settings.showBanners = readBooleanSetting(iniPath, "ShowBanners", defaultSettings().showBanners);
         settings.showResources = readBooleanSetting(iniPath, "ShowResources", defaultSettings().showResources);
