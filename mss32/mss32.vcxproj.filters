@@ -249,6 +249,9 @@
     <ClCompile Include="src\playerincomehooks.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\batattackdrain.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -779,6 +782,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\playerincomehooks.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\batattackdrain.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

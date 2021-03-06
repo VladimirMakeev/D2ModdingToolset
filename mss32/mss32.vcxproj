@@ -112,6 +112,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\attackreachcat.cpp" />
     <ClCompile Include="src\attacksourcecat.cpp" />
     <ClCompile Include="src\autodialog.cpp" />
+    <ClCompile Include="src\batattackdrain.cpp" />
     <ClCompile Include="src\batattackgiveattack.cpp" />
     <ClCompile Include="src\batattackshatter.cpp" />
     <ClCompile Include="src\battleattackinfo.cpp" />
@@ -193,6 +194,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\attacksourcecat.h" />
     <ClInclude Include="include\autodialog.h" />
     <ClInclude Include="include\batattack.h" />
+    <ClInclude Include="include\batattackdrain.h" />
     <ClInclude Include="include\batattackgiveattack.h" />
     <ClInclude Include="include\batattackshatter.h" />
     <ClInclude Include="include\battleattackinfo.h" />
