@@ -131,6 +131,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\dbf\dbffile.cpp" />
     <ClCompile Include="src\dbf\dbfrecord.cpp" />
     <ClCompile Include="src\dbtable.cpp" />
+    <ClCompile Include="src\ddcarryoveritems.cpp" />
     <ClCompile Include="src\dialoginterf.cpp" />
     <ClCompile Include="src\drainattackhooks.cpp" />
     <ClCompile Include="src\dynamiccast.cpp" />
@@ -223,6 +224,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\dbf\dbfheader.h" />
     <ClInclude Include="include\dbf\dbfrecord.h" />
     <ClInclude Include="include\dbtable.h" />
+    <ClInclude Include="include\ddcarryoveritems.h" />
     <ClInclude Include="include\deathanimcat.h" />
     <ClInclude Include="include\dialoginterf.h" />
     <ClInclude Include="include\difficultylevel.h" />
