@@ -174,6 +174,30 @@ using ComputePlayerDailyIncome = Bank*(__stdcall*)(Bank* income,
                                                    IMidgardObjectMap* objectMap,
                                                    const CMidgardID* playerId);
 
+/**
+ * Computes full attack damage with respect to armor, buffs, debuffs and critical hit.
+ * @param[in] objectMap map to search for units.
+ * @param[in] battleMsgData battle information to check for buffs and debuffs.
+ * @param[in] attackImpl attack for which damage is computed.
+ * @param[in] attackerUnitId id of unit performing the attack.
+ * @param[in] targetUnitId id of unit being attacked.
+ * @param computeCriticalHit if set to true, critical hit ability is checked and critical damage is
+ * computed.
+ * @param[inout] attackDamage used to store damage without critical hit. Must be non-null if
+ * computeCriticalHit is true.
+ * @param[inout] criticalHitDamage used to store critical hit damage. Must be non-null if
+ * computeCriticalHit is true.
+ * @returns computed damage.
+ */
+using ComputeDamage = int(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                      const BattleMsgData* battleMsgData,
+                                      const IAttack* attackImpl,
+                                      const CMidgardID* attackerUnitId,
+                                      const CMidgardID* targetUnitId,
+                                      bool computeCriticalHit,
+                                      int* attackDamage,
+                                      int* criticalHitDamage);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -202,6 +226,7 @@ struct Functions
     DeletePlayerBuildings deletePlayerBuildings;
     GetInterfaceText getInterfaceText;
     ComputePlayerDailyIncome computePlayerDailyIncome;
+    ComputeDamage computeDamage;
 };
 
 /** Global variables used in game. */
