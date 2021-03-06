@@ -34,6 +34,7 @@ struct Settings
     int shatterDamageMax;
     int drainAttackHeal;
     int drainOverflowHeal;
+    int carryOverItemsMax;
     std::uint8_t criticalHitDamage;
     bool showBanners;
     bool showResources;

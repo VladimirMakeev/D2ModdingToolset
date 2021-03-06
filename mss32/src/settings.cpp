@@ -58,6 +58,7 @@ const Settings& baseSettings()
         settings.shatterDamageMax = 100;
         settings.drainAttackHeal = 50;
         settings.drainOverflowHeal = 50;
+        settings.carryOverItemsMax = 5;
         settings.criticalHitDamage = 5;
         settings.showBanners = false;
         settings.showResources = false;
@@ -103,6 +104,7 @@ const Settings& userSettings()
         settings.shatterDamageMax = readNumberSetting(iniPath, "ShatterDamageMax", defaultSettings().shatterDamageMax, 0, baseSettings().shatterDamageMax);
         settings.drainAttackHeal = readNumberSetting(iniPath, "DrainAttackHeal", defaultSettings().drainAttackHeal);
         settings.drainOverflowHeal = readNumberSetting(iniPath, "DrainOverflowHeal", defaultSettings().drainOverflowHeal);
+        settings.carryOverItemsMax = readNumberSetting(iniPath, "CarryOverItemsMax", defaultSettings().carryOverItemsMax, 0);
         settings.criticalHitDamage = readNumberSetting(iniPath, "CriticalHitDamage", defaultSettings().criticalHitDamage);
         settings.showBanners = readBooleanSetting(iniPath, "ShowBanners", defaultSettings().showBanners);
         settings.showResources = readBooleanSetting(iniPath, "ShowResources", defaultSettings().showResources);

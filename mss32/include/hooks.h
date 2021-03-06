@@ -45,6 +45,10 @@ struct CMidMsgBoxButtonHandler;
 struct CEncLayoutSpell;
 struct CInterface;
 struct CEncParamBase;
+struct CDDCarryOverItems;
+struct IMidDropManager;
+struct CListBoxInterf;
+struct CPhaseGame;
 }; // namespace game
 
 namespace hooks {
@@ -144,6 +148,13 @@ game::CEncLayoutSpell* __fastcall encLayoutSpellCtorHooked(game::CEncLayoutSpell
                                                            game::CMidgardID* playerId);
 
 int __stdcall countStacksOnMapHooked(game::IMidgardObjectMap* objectMap);
+
+game::CDDCarryOverItems* __fastcall carryOverItemsCtorHooked(game::CDDCarryOverItems* thisptr,
+                                                             int /*%edx*/,
+                                                             game::IMidDropManager* dropManager,
+                                                             game::CListBoxInterf* listBox,
+                                                             game::CPhaseGame* phaseGame,
+                                                             int carryOverItemsMax);
 
 } // namespace hooks
 

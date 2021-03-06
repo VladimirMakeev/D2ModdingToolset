@@ -35,6 +35,7 @@
 #include "d2string.h"
 #include "dbf/dbffile.h"
 #include "dbtable.h"
+#include "ddcarryoveritems.h"
 #include "dialoginterf.h"
 #include "drainattackhooks.h"
 #include "dynamiccast.h"
@@ -160,6 +161,12 @@ static Hooks getGameHooks()
     if (userSettings().preserveCapitalBuildings != baseSettings().preserveCapitalBuildings) {
         // Allow scenarios with prebuilt buildings in capitals
         hooks.push_back(HookInfo{(void**)&fn.deletePlayerBuildings, deletePlayerBuildingsHooked});
+    }
+
+    if (userSettings().carryOverItemsMax != baseSettings().carryOverItemsMax) {
+        // Change maximum number of items that player can carry between campaign scenarios
+        hooks.push_back(HookInfo{(void**)&game::CDDCarryOverItemsApi::get().constructor,
+                                 carryOverItemsCtorHooked});
     }
 
     return hooks;
@@ -1014,6 +1021,17 @@ game::CEncLayoutSpell* __fastcall encLayoutSpellCtorHooked(game::CEncLayoutSpell
 int __stdcall countStacksOnMapHooked(game::IMidgardObjectMap*)
 {
     return 0;
+}
+
+game::CDDCarryOverItems* __fastcall carryOverItemsCtorHooked(game::CDDCarryOverItems* thisptr,
+                                                             int /*%edx*/,
+                                                             game::IMidDropManager* dropManager,
+                                                             game::CListBoxInterf* listBox,
+                                                             game::CPhaseGame* phaseGame,
+                                                             int carryOverItemsMax)
+{
+    return game::CDDCarryOverItemsApi::get().constructor(thisptr, dropManager, listBox, phaseGame,
+                                                         userSettings().carryOverItemsMax);
 }
 
 } // namespace hooks
