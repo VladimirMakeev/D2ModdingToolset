@@ -20,6 +20,7 @@
 #include "drainattackhooks.h"
 #include "attack.h"
 #include "batattackdrain.h"
+#include "batattackdrainoverflow.h"
 #include "battleattackinfo.h"
 #include "battlemsgdata.h"
 #include "game.h"
@@ -28,10 +29,93 @@
 #include "midunit.h"
 #include "settings.h"
 #include "usunitimpl.h"
+#include "utils.h"
 #include "visitors.h"
 #include <fmt/format.h>
 
 namespace hooks {
+
+static void addBattleAttackInfo(game::BattleAttackInfo* attackInfo,
+                                const game::CMidUnit* unit,
+                                int damage,
+                                int criticalHitDamage = 0)
+{
+    using namespace game;
+
+    BattleAttackUnitInfo info{};
+    info.unitId = unit->unitId;
+    info.unitImplId = unit->unitImpl->unitId;
+    info.damage = damage;
+    info.criticalDamage = criticalHitDamage;
+
+    BattleAttackInfoApi::get().addUnitInfo(&attackInfo->unitsInfo, &info);
+}
+
+static int drainAttack(game::IMidgardObjectMap* objectMap,
+                       game::BattleMsgData* battleMsgData,
+                       game::IAttack* attack,
+                       const game::CMidgardID* attackerUnitId,
+                       const game::CMidgardID* targetUnitId,
+                       game::BattleAttackInfo* attackInfo,
+                       int drainHealPercent)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    if (fn.isUnitImmuneToAttack(objectMap, battleMsgData, targetUnitId, attack, false)) {
+        return 0;
+    }
+
+    int attackDamage{};
+    int criticalHitDamage{};
+    const int fullDamage = fn.computeDamage(objectMap, battleMsgData, attack, attackerUnitId,
+                                            targetUnitId, true, &attackDamage, &criticalHitDamage);
+
+    auto targetUnit = static_cast<const CMidUnit*>(
+        objectMap->vftable->findScenarioObjectById(objectMap, targetUnitId));
+    const auto targetInitialHp = targetUnit->currentHp;
+
+    const auto& visitors = VisitorApi::get();
+    visitors.changeUnitHp(targetUnitId, -fullDamage, objectMap, 1);
+
+    const auto targetResultingHp = targetUnit->currentHp;
+    auto drainDamage = (targetInitialHp - targetResultingHp) * drainHealPercent / 100;
+
+    auto attackVftable = static_cast<const IAttackVftable*>(attack->vftable);
+    drainDamage += attackVftable->getDrain(attack, targetInitialHp - targetResultingHp);
+
+    const auto& battle = BattleMsgDataApi::get();
+    battle.checkUnitDeath(objectMap, battleMsgData, targetUnitId);
+
+    auto attackerUnit = static_cast<const CMidUnit*>(
+        objectMap->vftable->findScenarioObjectById(objectMap, attackerUnitId));
+    const auto attackerInitialHp = attackerUnit->currentHp;
+
+    visitors.changeUnitHp(attackerUnitId, drainDamage, objectMap, 1);
+
+    const auto hpDiff = targetInitialHp - targetResultingHp;
+    int damage{};
+    int criticalDamage{};
+
+    if (hpDiff < criticalHitDamage) {
+        criticalDamage = hpDiff;
+    } else {
+        damage = hpDiff - criticalHitDamage;
+        criticalDamage = criticalHitDamage;
+    }
+
+    addBattleAttackInfo(attackInfo, targetUnit, damage, criticalDamage);
+
+    const auto attackerHpDiff = attackerUnit->currentHp - attackerInitialHp;
+    addBattleAttackInfo(attackInfo, attackerUnit, attackerHpDiff);
+
+    battle.setUnitHp(battleMsgData, targetUnitId, targetUnit->currentHp);
+    battle.setUnitHp(battleMsgData, attackerUnitId, attackerUnit->currentHp);
+
+    // drain overflow
+    return drainDamage - attackerHpDiff;
+}
 
 void __fastcall drainAttackOnHitHooked(game::CBatAttackDrain* thisptr,
                                        int /*%edx*/,
@@ -40,72 +124,74 @@ void __fastcall drainAttackOnHitHooked(game::CBatAttackDrain* thisptr,
                                        game::CMidgardID* unitId,
                                        game::BattleAttackInfo** attackInfo)
 {
+    drainAttack(objectMap, battleMsgData, thisptr->attack, &thisptr->unitId, unitId, *attackInfo,
+                userSettings().drainAttackHeal);
+}
+
+void __fastcall drainOverflowAttackOnHitHooked(game::CBatAttackDrainOverflow* thisptr,
+                                               int /*%edx*/,
+                                               game::IMidgardObjectMap* objectMap,
+                                               game::BattleMsgData* battleMsgData,
+                                               game::CMidgardID* unitId,
+                                               game::BattleAttackInfo** attackInfo)
+{
     using namespace game;
 
     const auto& fn = gameFunctions();
 
-    if (fn.isUnitImmuneToAttack(objectMap, battleMsgData, unitId, thisptr->attack, false)) {
+    const auto drainOverflow = drainAttack(objectMap, battleMsgData, thisptr->attack,
+                                           &thisptr->unitId, unitId, *attackInfo,
+                                           userSettings().drainOverflowHeal);
+    if (!drainOverflow) {
         return;
     }
 
-    int attackDamage{};
-    int criticalHitDamage{};
-    const int fullDamage = fn.computeDamage(objectMap, battleMsgData, thisptr->attack,
-                                            &thisptr->unitId, unitId, true, &attackDamage,
-                                            &criticalHitDamage);
+    CMidgardID alliedStackId{};
+    fn.getAllyOrEnemyStackId(&alliedStackId, battleMsgData, &thisptr->unitId, true);
 
-    auto targetUnit = static_cast<const CMidUnit*>(
-        objectMap->vftable->findScenarioObjectById(objectMap, unitId));
-    const auto targetInitialHp = targetUnit->currentHp;
+    const auto& attack = CBatAttackDrainOverflowApi::get();
+
+    DrainOverflowHealData healData{};
+    attack.healDataCtor(&healData);
+
+    attack.computeDrainOverflowGroupHeal(&healData, objectMap, &alliedStackId, &thisptr->unitId,
+                                         drainOverflow);
+
+    DrainOverflowHealIterator tmpIterator{};
+    attack.healDataIteratorCtor(&healData, &tmpIterator);
+
+    DrainOverflowHealIterator iterator{};
+    attack.healDataIteratorCopyCtor(&iterator, &tmpIterator);
+
+    DrainOverflowHealIterator tmpEndIterator{};
+    attack.healDataEndIteratorCtor(&healData, &tmpEndIterator);
+
+    DrainOverflowHealIterator endIterator{};
+    attack.healDataIteratorCopyCtor(&endIterator, &tmpEndIterator);
 
     const auto& visitors = VisitorApi::get();
-    visitors.changeUnitHp(unitId, -fullDamage, objectMap, 1);
-
-    const auto targetResultingHp = targetUnit->currentHp;
-    auto drainDamage = (targetInitialHp - targetResultingHp) * userSettings().vampiricHeal / 100;
-
-    auto attackVftable = static_cast<const IAttackVftable*>(thisptr->attack->vftable);
-    drainDamage += attackVftable->getDrain(thisptr->attack, targetInitialHp - targetResultingHp);
-
     const auto& battle = BattleMsgDataApi::get();
-    battle.checkUnitDeath(objectMap, battleMsgData, unitId);
 
-    auto attackerUnit = static_cast<const CMidUnit*>(
-        objectMap->vftable->findScenarioObjectById(objectMap, &thisptr->unitId));
-    const auto attackerInitialHp = attackerUnit->currentHp;
+    DrainOverflowHealIterator tmp{};
+    while (attack.isHealDataIteratorAtEnd(&iterator, &endIterator)) {
+        const void* data = attack.healDataIteratorGetData(&iterator);
 
-    visitors.changeUnitHp(&thisptr->unitId, drainDamage, objectMap, 1);
+        auto healingUnitId = static_cast<const CMidgardID*>(data);
+        const auto unitHeal = *(static_cast<const int*>(data) + 1);
+        auto unit = static_cast<const CMidUnit*>(
+            objectMap->vftable->findScenarioObjectById(objectMap, healingUnitId));
 
-    const auto attackerResultingHp = attackerUnit->currentHp;
+        const auto unitInitialHp = unit->currentHp;
+        visitors.changeUnitHp(healingUnitId, unitHeal, objectMap, 1);
+        const auto unitResultingHp = unit->currentHp;
 
-    {
-        BattleAttackUnitInfo info{};
-        info.unitId = *unitId;
-        info.unitImplId = targetUnit->unitImpl->unitId;
+        addBattleAttackInfo(*attackInfo, unit, unitResultingHp - unitInitialHp);
+        battle.setUnitHp(battleMsgData, healingUnitId, unitResultingHp);
 
-        const auto hpDiff = targetInitialHp - targetResultingHp;
-        if (hpDiff < criticalHitDamage) {
-            info.damage = 0;
-            info.criticalDamage = hpDiff;
-        } else {
-            info.damage = hpDiff - criticalHitDamage;
-            info.criticalDamage = criticalHitDamage;
-        }
-
-        BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
+        attack.healDataIteratorAdvance(&iterator, &tmp, 0);
     }
 
-    {
-        BattleAttackUnitInfo info{};
-        info.unitId = thisptr->unitId;
-        info.unitImplId = attackerUnit->unitImpl->unitId;
-        info.damage = attackerResultingHp - attackerInitialHp;
-
-        BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
-    }
-
-    battle.setUnitHp(battleMsgData, unitId, targetUnit->currentHp);
-    battle.setUnitHp(battleMsgData, &thisptr->unitId, attackerUnit->currentHp);
+    attack.healDataDtor(&healData);
 }
 
 } // namespace hooks

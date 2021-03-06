@@ -26,7 +26,7 @@ struct IMidgardObjectMap;
 struct BattleMsgData;
 struct CMidgardID;
 struct BattleAttackInfo;
-
+struct CBatAttackDrainOverflow;
 } // namespace game
 
 namespace hooks {
@@ -38,6 +38,13 @@ void __fastcall drainAttackOnHitHooked(game::CBatAttackDrain* thisptr,
                                        game::CMidgardID* unitId,
                                        game::BattleAttackInfo** attackInfo);
 
-}
+void __fastcall drainOverflowAttackOnHitHooked(game::CBatAttackDrainOverflow* thisptr,
+                                               int /*%edx*/,
+                                               game::IMidgardObjectMap* objectMap,
+                                               game::BattleMsgData* battleMsgData,
+                                               game::CMidgardID* unitId,
+                                               game::BattleAttackInfo** attackInfo);
+
+} // namespace hooks
 
 #endif // DRAINATTACKHOOKS_H

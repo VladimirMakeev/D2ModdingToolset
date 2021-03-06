@@ -32,7 +32,8 @@ struct Settings
     int stackScoutRangeMax;
     int shatteredArmorMax;
     int shatterDamageMax;
-    int vampiricHeal;
+    int drainAttackHeal;
+    int drainOverflowHeal;
     std::uint8_t criticalHitDamage;
     bool showBanners;
     bool showResources;

@@ -22,6 +22,7 @@
 #include "attackreachcat.h"
 #include "autodialog.h"
 #include "batattackdrain.h"
+#include "batattackdrainoverflow.h"
 #include "batattackgiveattack.h"
 #include "batattackshatter.h"
 #include "battleattackinfo.h"
@@ -121,7 +122,8 @@ static Hooks getGameHooks()
         // Cities can generate daily income depending on scenario variable settings
         HookInfo{(void**)& fn.computePlayerDailyIncome, computePlayerDailyIncomeHooked},
         // Vampiric attacks can deal critical damage
-        HookInfo{(void**)&game::CBatAttackDrainApi::get().onHit, drainAttackOnHitHooked}
+        HookInfo{(void**)&game::CBatAttackDrainApi::get().onHit, drainAttackOnHitHooked},
+        HookInfo{(void**)&game::CBatAttackDrainOverflowApi::get().onHit, drainOverflowAttackOnHitHooked}
     };
     // clang-format on
 

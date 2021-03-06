@@ -56,7 +56,8 @@ const Settings& baseSettings()
         settings.stackScoutRangeMax = 8;
         settings.shatteredArmorMax = 100;
         settings.shatterDamageMax = 100;
-        settings.vampiricHeal = 50;
+        settings.drainAttackHeal = 50;
+        settings.drainOverflowHeal = 50;
         settings.criticalHitDamage = 5;
         settings.showBanners = false;
         settings.showResources = false;
@@ -100,7 +101,8 @@ const Settings& userSettings()
         settings.stackScoutRangeMax = readNumberSetting(iniPath, "StackMaxScoutRange", defaultSettings().stackScoutRangeMax);
         settings.shatteredArmorMax = readNumberSetting(iniPath, "ShatteredArmorMax", defaultSettings().shatteredArmorMax, 0, baseSettings().shatteredArmorMax);
         settings.shatterDamageMax = readNumberSetting(iniPath, "ShatterDamageMax", defaultSettings().shatterDamageMax, 0, baseSettings().shatterDamageMax);
-        settings.vampiricHeal = readNumberSetting(iniPath, "VampiricHeal", defaultSettings().vampiricHeal);
+        settings.drainAttackHeal = readNumberSetting(iniPath, "DrainAttackHeal", defaultSettings().drainAttackHeal);
+        settings.drainOverflowHeal = readNumberSetting(iniPath, "DrainOverflowHeal", defaultSettings().drainOverflowHeal);
         settings.criticalHitDamage = readNumberSetting(iniPath, "CriticalHitDamage", defaultSettings().criticalHitDamage);
         settings.showBanners = readBooleanSetting(iniPath, "ShowBanners", defaultSettings().showBanners);
         settings.showResources = readBooleanSetting(iniPath, "ShowResources", defaultSettings().showResources);
