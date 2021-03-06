@@ -20,6 +20,7 @@
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
 #include "settings.h"
+#include "utils.h"
 #include <Windows.h>
 #include <algorithm>
 #include <fmt/format.h>
@@ -28,64 +29,88 @@
 
 namespace hooks {
 
-UserSettings settings;
-
-const UserSettings& userSettings()
+template <typename T>
+T readNumberSetting(const std::string& iniPath,
+                 const char* key,
+                 T def,
+                 T min = std::numeric_limits<T>::min(),
+                 T max = std::numeric_limits<T>::max())
 {
+    auto value = GetPrivateProfileInt("Disciple", key, def, iniPath.c_str());
+    return std::clamp<T>(value, min, max);
+}
+
+bool readBooleanSetting(const std::string& iniPath, const char* key, bool def)
+{
+    return readNumberSetting<int>(iniPath, key, def, 0, 1) != 0;
+}
+
+const Settings& baseSettings()
+{
+    static Settings settings;
+    static bool initialized = false;
+
+    if (!initialized) {
+        settings.unitMaxDamage = 300;
+        settings.unitMaxArmor = 90;
+        settings.stackScoutRangeMax = 8;
+        settings.shatteredArmorMax = 100;
+        settings.shatterDamageMax = 100;
+        settings.criticalHitDamage = 5;
+        settings.showBanners = false;
+        settings.showResources = false;
+        settings.showLandConverted = false;
+        settings.preserveCapitalBuildings = false;
+        settings.debugMode = false;
+
+        initialized = true;
+    }
+
     return settings;
 }
 
-void readUserSettings(const std::filesystem::path& iniFilePath)
+const Settings& defaultSettings()
 {
-    const std::string iniPath{iniFilePath.string()};
-    const char disciple[] = "Disciple";
+    static Settings settings;
+    static bool initialized = false;
 
-    settings.unitMaxDamage = GetPrivateProfileInt(disciple, "UnitMaxDamage", settings.unitMaxDamage,
-                                                  iniPath.c_str());
+    if (!initialized) {
+        settings = baseSettings();
+        settings.showBanners = true;
+        settings.showResources = true;
 
-    settings.unitMaxArmor = GetPrivateProfileInt(disciple, "UnitMaxArmor", settings.unitMaxArmor,
-                                                 iniPath.c_str());
+        initialized = true;
+    }
 
-    settings.stackScoutRangeMax = GetPrivateProfileInt(disciple, "StackMaxScoutRange",
-                                                       settings.stackScoutRangeMax,
-                                                       iniPath.c_str());
+    return settings;
+}
 
-    const auto defaultShatteredMax{settings.shatteredArmorMax};
-    settings.shatteredArmorMax = GetPrivateProfileInt(disciple, "ShatteredArmorMax",
-                                                      defaultShatteredMax, iniPath.c_str());
-    settings.shatteredArmorMax = std::clamp(settings.shatteredArmorMax, 0, defaultShatteredMax);
+const Settings& userSettings()
+{
+    static Settings settings;
+    static bool initialized = false;
 
-    const auto defaultShatterMax{settings.shatterDamageMax};
-    settings.shatterDamageMax = GetPrivateProfileInt(disciple, "ShatterDamageMax",
-                                                     defaultShatterMax, iniPath.c_str());
-    settings.shatterDamageMax = std::clamp(settings.shatterDamageMax, 0, defaultShatterMax);
+    if (!initialized) {
+        const auto iniPath = (hooks::gameFolder() / "disciple.ini").string();
 
-    auto criticalHitDamage = GetPrivateProfileInt(disciple, "CriticalHitDamage",
-                                                  settings.criticalHitDamage, iniPath.c_str());
-    constexpr auto critMax{std::numeric_limits<std::uint8_t>::max()};
+        // clang-format off
+        settings.unitMaxDamage = readNumberSetting(iniPath, "UnitMaxDamage", defaultSettings().unitMaxDamage);
+        settings.unitMaxArmor = readNumberSetting(iniPath, "UnitMaxArmor", defaultSettings().unitMaxArmor);
+        settings.stackScoutRangeMax = readNumberSetting(iniPath, "StackMaxScoutRange", defaultSettings().stackScoutRangeMax);
+        settings.shatteredArmorMax = readNumberSetting(iniPath, "ShatteredArmorMax", defaultSettings().shatteredArmorMax, 0, baseSettings().shatteredArmorMax);
+        settings.shatterDamageMax = readNumberSetting(iniPath, "ShatterDamageMax", defaultSettings().shatterDamageMax, 0, baseSettings().shatterDamageMax);
+        settings.criticalHitDamage = readNumberSetting(iniPath, "CriticalHitDamage", defaultSettings().criticalHitDamage);
+        settings.showBanners = readBooleanSetting(iniPath, "ShowBanners", defaultSettings().showBanners);
+        settings.showResources = readBooleanSetting(iniPath, "ShowResources", defaultSettings().showResources);
+        settings.showLandConverted = readBooleanSetting(iniPath, "ShowLandConverted", defaultSettings().showLandConverted);
+        settings.preserveCapitalBuildings = readBooleanSetting(iniPath, "PreserveCapitalBuildings", defaultSettings().preserveCapitalBuildings);
+        settings.debugMode = readBooleanSetting(iniPath, "DebugHooks", defaultSettings().debugMode);
+        // clang-format on
 
-    settings.criticalHitDamage = std::clamp<std::uint32_t>(criticalHitDamage, 0, critMax);
+        initialized = true;
+    }
 
-    settings.showResources = GetPrivateProfileInt(disciple, "ShowResources", settings.showResources,
-                                                  iniPath.c_str())
-                             != 0;
-
-    settings.showBanners = GetPrivateProfileInt(disciple, "ShowBanners", settings.showBanners,
-                                                iniPath.c_str())
-                           != 0;
-
-    settings.showLandConverted = GetPrivateProfileInt(disciple, "ShowLandConverted",
-                                                      settings.showLandConverted, iniPath.c_str())
-                                 != 0;
-
-    settings.preserveCapitalBuildings = GetPrivateProfileInt(disciple, "PreserveCapitalBuildings",
-                                                             settings.preserveCapitalBuildings,
-                                                             iniPath.c_str())
-                                        != 0;
-
-    settings.debugMode = GetPrivateProfileInt(disciple, "DebugHooks", settings.debugMode,
-                                              iniPath.c_str())
-                         != 0;
+    return settings;
 }
 
 } // namespace hooks
