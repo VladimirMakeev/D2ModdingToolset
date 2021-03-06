@@ -255,6 +255,9 @@
     <ClCompile Include="src\drainattackhooks.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\batattackdrainoverflow.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -791,6 +794,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\drainattackhooks.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\batattackdrainoverflow.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
