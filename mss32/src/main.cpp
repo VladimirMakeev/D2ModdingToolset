@@ -114,6 +114,15 @@ static void adjustGameRestrictions()
                                                      (int)userSettings().criticalHitDamage));
             writeProtectedMemory(restrictions.criticalHitDamage, userSettings().criticalHitDamage);
         }
+
+        if (userSettings().paralyzePetrifyAllowedRoundMax
+            != baseSettings().paralyzePetrifyAllowedRoundMax) {
+            logDebug("restrictions.log",
+                     fmt::format("Set 'paralyzePetrifyAllowedRoundMax' to {:d}",
+                                 (int)userSettings().paralyzePetrifyAllowedRoundMax));
+            writeProtectedMemory(restrictions.paralyzePetrifyAllowedRoundMax,
+                                 userSettings().paralyzePetrifyAllowedRoundMax);
+        }
     }
 }
 
