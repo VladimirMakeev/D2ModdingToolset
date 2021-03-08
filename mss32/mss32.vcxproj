@@ -159,6 +159,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\menunewskirmish.cpp" />
     <ClCompile Include="src\menunewskirmishsingle.cpp" />
     <ClCompile Include="src\middragdropinterf.cpp" />
+    <ClCompile Include="src\midgard.cpp" />
     <ClCompile Include="src\midgardid.cpp" />
     <ClCompile Include="src\midgardmsgbox.cpp" />
     <ClCompile Include="src\miditem.cpp" />
