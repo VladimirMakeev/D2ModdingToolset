@@ -52,7 +52,8 @@ static std::array<Functions, 4> functions = {{
         (DeletePlayerBuildings)0x422498,
         (GetInterfaceText)0x5c8f38,
         (ComputePlayerDailyIncome)0x5db82a,
-        (ComputeDamage)0x65ccc7
+        (ComputeDamage)0x65ccc7,
+        (ComputeAttackMiss)0x626b5f,
     },
     // Russobit
     Functions{
@@ -81,7 +82,8 @@ static std::array<Functions, 4> functions = {{
         (DeletePlayerBuildings)0x422498,
         (GetInterfaceText)0x5c8f38,
         (ComputePlayerDailyIncome)0x5db82a,
-        (ComputeDamage)0x65ccc7
+        (ComputeDamage)0x65ccc7,
+        (ComputeAttackMiss)0x626b5f,
     },
     // Gog
     Functions{
@@ -110,7 +112,8 @@ static std::array<Functions, 4> functions = {{
         (DeletePlayerBuildings)0x421fb6,
         (GetInterfaceText)0x5c7f06,
         (ComputePlayerDailyIncome)0x5da55f,
-        (ComputeDamage)0x65b747
+        (ComputeDamage)0x65b747,
+        (ComputeAttackMiss)0x62569f,
     },
     // Scenario Editor
     Functions{
@@ -129,7 +132,8 @@ static std::array<Functions, 4> functions = {{
         (IsTurnValid)0x52d22e,
         nullptr,
         nullptr,
-        nullptr
+        nullptr,
+        nullptr,
     }
 }};
 

@@ -169,6 +169,11 @@ static Hooks getGameHooks()
                                  carryOverItemsCtorHooked});
     }
 
+    if (userSettings().criticalHitChance != baseSettings().criticalHitChance) {
+        // Allow users to specify critical hit chance
+        hooks.push_back(HookInfo{(void**)&fn.computeDamage, computeDamageHooked});
+    }
+
     return hooks;
 }
 
@@ -1032,6 +1037,36 @@ game::CDDCarryOverItems* __fastcall carryOverItemsCtorHooked(game::CDDCarryOverI
 {
     return game::CDDCarryOverItemsApi::get().constructor(thisptr, dropManager, listBox, phaseGame,
                                                          userSettings().carryOverItemsMax);
+}
+
+int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
+                                  const game::BattleMsgData* battleMsgData,
+                                  const game::IAttack* attackImpl,
+                                  const game::CMidgardID* attackerUnitId,
+                                  const game::CMidgardID* targetUnitId,
+                                  bool computeCriticalHit,
+                                  int* attackDamage,
+                                  int* criticalHitDamage)
+{
+    int damage;
+    int critDamage;
+    int totalDamage = game::gameFunctions().computeDamage(objectMap, battleMsgData, attackImpl,
+                                                          attackerUnitId, targetUnitId,
+                                                          computeCriticalHit, &damage, &critDamage);
+
+    if (critDamage != 0) {
+        int critChance = userSettings().criticalHitChance;
+        if (game::gameFunctions().computeAttackMiss(&critChance)) {
+            totalDamage -= critDamage;
+            critDamage = 0;
+        }
+    }
+
+    if (attackDamage)
+        *attackDamage = damage;
+    if (criticalHitDamage)
+        *criticalHitDamage = critDamage;
+    return totalDamage;
 }
 
 } // namespace hooks

@@ -21,6 +21,7 @@
 #define HOOKS_H
 
 #include "idlist.h"
+#include "attack.h"
 #include <string>
 #include <utility>
 #include <vector>
@@ -155,6 +156,15 @@ game::CDDCarryOverItems* __fastcall carryOverItemsCtorHooked(game::CDDCarryOverI
                                                              game::CListBoxInterf* listBox,
                                                              game::CPhaseGame* phaseGame,
                                                              int carryOverItemsMax);
+
+int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
+                                  const game::BattleMsgData* battleMsgData,
+                                  const game::IAttack* attackImpl,
+                                  const game::CMidgardID* attackerUnitId,
+                                  const game::CMidgardID* targetUnitId,
+                                  bool computeCriticalHit,
+                                  int* attackDamage,
+                                  int* criticalHitDamage);
 
 } // namespace hooks
 

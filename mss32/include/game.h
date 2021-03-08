@@ -198,6 +198,8 @@ using ComputeDamage = int(__stdcall*)(const IMidgardObjectMap* objectMap,
                                       int* attackDamage,
                                       int* criticalHitDamage);
 
+using ComputeAttackMiss = bool(__stdcall*)(int* accuracy);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -227,6 +229,7 @@ struct Functions
     GetInterfaceText getInterfaceText;
     ComputePlayerDailyIncome computePlayerDailyIncome;
     ComputeDamage computeDamage;
+    ComputeAttackMiss computeAttackMiss;
 };
 
 /** Global variables used in game. */

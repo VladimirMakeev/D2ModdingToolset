@@ -36,6 +36,7 @@ struct Settings
     int drainOverflowHeal;
     int carryOverItemsMax;
     std::uint8_t criticalHitDamage;
+    std::uint8_t criticalHitChance;
     bool showBanners;
     bool showResources;
     bool showLandConverted;
