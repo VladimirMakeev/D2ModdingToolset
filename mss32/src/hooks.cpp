@@ -61,9 +61,11 @@
 #include "midgardid.h"
 #include "midgardmsgbox.h"
 #include "midmsgboxbuttonhandlerstd.h"
+#include "midmusic.h"
 #include "midplayer.h"
 #include "midstack.h"
 #include "midunit.h"
+#include "musichooks.h"
 #include "pickupdropinterf.h"
 #include "playerbuildings.h"
 #include "playerincomehooks.h"
@@ -124,7 +126,10 @@ static Hooks getGameHooks()
         HookInfo{(void**)& fn.computePlayerDailyIncome, computePlayerDailyIncomeHooked},
         // Vampiric attacks can deal critical damage
         HookInfo{(void**)&game::CBatAttackDrainApi::get().onHit, drainAttackOnHitHooked},
-        HookInfo{(void**)&game::CBatAttackDrainOverflowApi::get().onHit, drainOverflowAttackOnHitHooked}
+        HookInfo{(void**)&game::CBatAttackDrainOverflowApi::get().onHit, drainOverflowAttackOnHitHooked},
+        // Support additional music tracks for battle and capital cities
+        HookInfo{(void**)&game::CMidMusicApi::get().playBattleTrack, playBattleTrackHooked},
+        HookInfo{(void**)&game::CMidMusicApi::get().playCapitalTrack, playCapitalTrackHooked}
     };
     // clang-format on
 
