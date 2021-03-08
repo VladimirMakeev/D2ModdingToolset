@@ -114,6 +114,27 @@ static void adjustGameRestrictions()
                                                      (int)userSettings().criticalHitDamage));
             writeProtectedMemory(restrictions.criticalHitDamage, userSettings().criticalHitDamage);
         }
+
+        if (userSettings().aiEasyAccuracyPenalty != baseSettings().aiEasyAccuracyPenalty) {
+            logDebug("restrictions.log", fmt::format("Set 'aiEasyAccuracyPenalty' to {:d}",
+                                                     (int)userSettings().aiEasyAccuracyPenalty));
+            writeProtectedMemory(restrictions.aiEasyAccuracyPenalty,
+                                 userSettings().aiEasyAccuracyPenalty);
+        }
+
+        if (userSettings().aiHardAccuracyBonus != baseSettings().aiHardAccuracyBonus) {
+            logDebug("restrictions.log", fmt::format("Set 'aiHardAccuracyBonus' to {:d}",
+                                                     (int)userSettings().aiHardAccuracyBonus));
+            writeProtectedMemory(restrictions.aiHardAccuracyBonus,
+                                 userSettings().aiHardAccuracyBonus);
+        }
+
+        if (userSettings().aiVeryHardAccuracyBonus != baseSettings().aiVeryHardAccuracyBonus) {
+            logDebug("restrictions.log", fmt::format("Set 'aiVeryHardAccuracyBonus' to {:d}",
+                                                     (int)userSettings().aiVeryHardAccuracyBonus));
+            writeProtectedMemory(restrictions.aiVeryHardAccuracyBonus,
+                                 userSettings().aiVeryHardAccuracyBonus);
+        }
     }
 }
 

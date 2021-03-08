@@ -60,6 +60,9 @@ const Settings& baseSettings()
         settings.drainOverflowHeal = 50;
         settings.carryOverItemsMax = 5;
         settings.criticalHitDamage = 5;
+        settings.aiEasyAccuracyPenalty = 15;
+        settings.aiHardAccuracyBonus = 5;
+        settings.aiVeryHardAccuracyBonus = 10;
         settings.showBanners = false;
         settings.showResources = false;
         settings.showLandConverted = false;
@@ -106,6 +109,9 @@ const Settings& userSettings()
         settings.drainOverflowHeal = readNumberSetting(iniPath, "DrainOverflowHeal", defaultSettings().drainOverflowHeal);
         settings.carryOverItemsMax = readNumberSetting(iniPath, "CarryOverItemsMax", defaultSettings().carryOverItemsMax, 0);
         settings.criticalHitDamage = readNumberSetting(iniPath, "CriticalHitDamage", defaultSettings().criticalHitDamage);
+        settings.aiEasyAccuracyPenalty = readNumberSetting(iniPath, "AIEasyAccuracyPenalty", defaultSettings().aiEasyAccuracyPenalty);
+        settings.aiHardAccuracyBonus = readNumberSetting(iniPath, "AIHardAccuracyBonus", defaultSettings().aiHardAccuracyBonus);
+        settings.aiVeryHardAccuracyBonus = readNumberSetting(iniPath, "AIVeryHardAccuracyBonus", defaultSettings().aiVeryHardAccuracyBonus);
         settings.showBanners = readBooleanSetting(iniPath, "ShowBanners", defaultSettings().showBanners);
         settings.showResources = readBooleanSetting(iniPath, "ShowResources", defaultSettings().showResources);
         settings.showLandConverted = readBooleanSetting(iniPath, "ShowLandConverted", defaultSettings().showLandConverted);

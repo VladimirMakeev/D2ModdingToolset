@@ -40,6 +40,9 @@ struct GameRestrictions
     Restriction<int>* unitArmor;
     Restriction<int>* stackScoutRange;
     std::uint8_t* criticalHitDamage;
+    std::uint8_t* aiEasyAccuracyPenalty;
+    std::uint8_t* aiHardAccuracyBonus;
+    std::uint8_t* aiVeryHardAccuracyBonus;
 };
 
 GameRestrictions& gameRestrictions();
