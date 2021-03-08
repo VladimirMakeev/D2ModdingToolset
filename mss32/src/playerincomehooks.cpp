@@ -78,13 +78,7 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
     auto variablesObj = objectMap->vftable->findScenarioObjectById(objectMap, &variablesId);
 
     auto variables = static_cast<const CMidScenVariables*>(variablesObj);
-    if (!variables) {
-        logError("mssProxyError.log", fmt::format("Could not find scenario variables by id {:s}",
-                                                  idToString(&variablesId)));
-        return income;
-    }
-
-    if (!variables->variables.length) {
+    if (!variables || !variables->variables.length) {
         // No variables defined, skip
         return income;
     }
