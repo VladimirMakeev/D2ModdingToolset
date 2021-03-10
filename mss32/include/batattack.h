@@ -89,7 +89,7 @@ struct IBatAttackVftable
     using OnAttack = void(__thiscall*)(IBatAttack* thisptr,
                                        IMidgardObjectMap* objectMap,
                                        BattleMsgData* battleMsgData,
-                                       CMidgardID* unitId,
+                                       CMidgardID* targetUnitId,
                                        BattleAttackInfo** attackInfo);
     /** Called when attack misses the target. */
     OnAttack onMiss;

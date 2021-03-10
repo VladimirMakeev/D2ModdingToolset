@@ -52,7 +52,11 @@ static std::array<Functions, 4> functions = {{
         (DeletePlayerBuildings)0x422498,
         (GetInterfaceText)0x5c8f38,
         (ComputePlayerDailyIncome)0x5db82a,
-        (ComputeDamage)0x65ccc7
+        (ComputeDamage)0x65ccc7,
+        (GetUnitImplId)0x65c4ec,
+        (GetUnitLevelByImplId)0x599581,
+        (IsUnitTransformedInBattle)0x662e69,
+        (RemoveTransformStatuses)0x661f7b,
     },
     // Russobit
     Functions{
@@ -81,7 +85,11 @@ static std::array<Functions, 4> functions = {{
         (DeletePlayerBuildings)0x422498,
         (GetInterfaceText)0x5c8f38,
         (ComputePlayerDailyIncome)0x5db82a,
-        (ComputeDamage)0x65ccc7
+        (ComputeDamage)0x65ccc7,
+        (GetUnitImplId)0x65c4ec,
+        (GetUnitLevelByImplId)0x599581,
+        (IsUnitTransformedInBattle)0x662e69,
+        (RemoveTransformStatuses)0x661f7b,
     },
     // Gog
     Functions{
@@ -110,7 +118,11 @@ static std::array<Functions, 4> functions = {{
         (DeletePlayerBuildings)0x421fb6,
         (GetInterfaceText)0x5c7f06,
         (ComputePlayerDailyIncome)0x5da55f,
-        (ComputeDamage)0x65b747
+        (ComputeDamage)0x65b747,
+        (GetUnitImplId)0x65af6c,
+        (GetUnitLevelByImplId)0x59870b,
+        (IsUnitTransformedInBattle)0x6618e9,
+        (RemoveTransformStatuses)0x6609fb,
     },
     // Scenario Editor
     Functions{
@@ -129,7 +141,11 @@ static std::array<Functions, 4> functions = {{
         (IsTurnValid)0x52d22e,
         nullptr,
         nullptr,
-        nullptr
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
     }
 }};
 

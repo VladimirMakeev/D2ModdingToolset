@@ -198,6 +198,19 @@ using ComputeDamage = int(__stdcall*)(const IMidgardObjectMap* objectMap,
                                       int* attackDamage,
                                       int* criticalHitDamage);
 
+using GetUnitImplId = CMidgardID*(__stdcall*)(const CMidgardID* unitImplId,
+                                              const IMidgardObjectMap* objectMap,
+                                              const CMidgardID* unitId);
+
+/** Returns unit level by impl id. If unit does not exist yet, computes its level. */
+using GetUnitLevelByImplId = int(__stdcall*)(const CMidgardID* unitImplId);
+
+using IsUnitTransformedInBattle = bool(__stdcall*)(const CMidgardID* unitId,
+                                                   const BattleMsgData* battleMsgData);
+
+using RemoveTransformStatuses = void(__stdcall*)(const CMidgardID* unitId,
+                                                 const BattleMsgData* battleMsgData);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -227,6 +240,10 @@ struct Functions
     GetInterfaceText getInterfaceText;
     ComputePlayerDailyIncome computePlayerDailyIncome;
     ComputeDamage computeDamage;
+    GetUnitImplId getUnitImplId;
+    GetUnitLevelByImplId getUnitLevelByImplId;
+    IsUnitTransformedInBattle isUnitTransformedInBattle;
+    RemoveTransformStatuses removeTransformStatuses;
 };
 
 /** Global variables used in game. */

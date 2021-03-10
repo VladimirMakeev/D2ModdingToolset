@@ -64,6 +64,7 @@ const Settings& baseSettings()
         settings.showResources = false;
         settings.showLandConverted = false;
         settings.preserveCapitalBuildings = false;
+        settings.leveledDoppelgangerAttack = false;
         settings.debugMode = false;
 
         initialized = true;
@@ -110,6 +111,7 @@ const Settings& userSettings()
         settings.showResources = readBooleanSetting(iniPath, "ShowResources", defaultSettings().showResources);
         settings.showLandConverted = readBooleanSetting(iniPath, "ShowLandConverted", defaultSettings().showLandConverted);
         settings.preserveCapitalBuildings = readBooleanSetting(iniPath, "PreserveCapitalBuildings", defaultSettings().preserveCapitalBuildings);
+        settings.leveledDoppelgangerAttack = readBooleanSetting(iniPath, "LeveledDoppelgangerAttack", defaultSettings().leveledDoppelgangerAttack);
         settings.debugMode = readBooleanSetting(iniPath, "DebugHooks", defaultSettings().debugMode);
         // clang-format on
 

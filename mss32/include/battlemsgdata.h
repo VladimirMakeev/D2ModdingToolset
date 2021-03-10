@@ -52,18 +52,18 @@ enum class BattleStatus : int
     FrostbiteLong,       /**< Long frostbite applied. */
     Blister,             /**< Blister dot. */
     BlisterLong,         /**< Long blister applied. */
-    Status21,            /**< Cure applied ? */
+    Cured,               /**< Cure applied ? */
     Transform,           /**< Unit transformed by another unit. */
     TransformLong,       /**< Long transformation applied by another unit. */
-    Status24,            /**< Unit transfomed himself ? */
-    Status25,            /**< Doppelganger transformation ? */
-    Status26,            /**< Drain level applied ? */
+    TransformSelf,       /**< Unit transfomed himself ? */
+    TransformDoppelganger,/**< Doppelganger transformation ? */
+    TransformDrainLevel, /**< Drain level applied ? */
     Summon,              /**< Unit was summoned during battle. */
-    Status28,            /**< Fast retreat ? */
+    FastRetreat,         /**< Fast retreat ? */
     Retreat,             /**< Unit retreating. */
-    Status30,
-    Defend,  /**< Defend was used in this round. */
-    Status32 /**< unsummon effect applied ? */
+    Hidden,              /**< Unit is hidden. For example, while leader dueling a thief. */
+    Defend,              /**< Defend was used in this round. */
+    Unsummoned           /**< unsummon effect applied ? */
 };
 
 struct UnknownUnitInfo

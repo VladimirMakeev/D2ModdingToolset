@@ -39,6 +39,7 @@ struct IMidgardObjectMap;
 struct BattleMsgData;
 struct CBatAttackGiveAttack;
 struct CBatAttackShatter;
+struct CBatAttackDoppelganger;
 struct BattleAttackInfo;
 struct CMidPlayer;
 struct CMidMsgBoxButtonHandler;
@@ -155,6 +156,13 @@ game::CDDCarryOverItems* __fastcall carryOverItemsCtorHooked(game::CDDCarryOverI
                                                              game::CListBoxInterf* listBox,
                                                              game::CPhaseGame* phaseGame,
                                                              int carryOverItemsMax);
+
+void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* thisptr,
+                                              int /*%edx*/,
+                                              game::IMidgardObjectMap* objectMap,
+                                              game::BattleMsgData* battleMsgData,
+                                              game::CMidgardID* targetUnitId,
+                                              game::BattleAttackInfo** attackInfo);
 
 } // namespace hooks
 
