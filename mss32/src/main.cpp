@@ -114,6 +114,15 @@ static void adjustGameRestrictions()
                                                      (int)userSettings().criticalHitDamage));
             writeProtectedMemory(restrictions.criticalHitDamage, userSettings().criticalHitDamage);
         }
+
+        if (userSettings().mageLeaderAccuracyReduction
+            != baseSettings().mageLeaderAccuracyReduction) {
+            logDebug("restrictions.log",
+                     fmt::format("Set 'mageLeaderAccuracyReduction' to {:d}",
+                                 (int)userSettings().mageLeaderAccuracyReduction));
+            writeProtectedMemory(restrictions.mageLeaderAccuracyReduction,
+                                 userSettings().mageLeaderAccuracyReduction);
+        }
     }
 }
 
@@ -163,6 +172,15 @@ static bool setupHooks()
     return true;
 }
 
+static void setupVftableHooks()
+{
+    for (const auto& hook : hooks::getVftableHooks()) {
+        writeProtectedMemory(hook.first, hook.second);
+    }
+
+    hooks::logDebug("mss32Proxy.log", "All vftable hooks are set");
+}
+
 BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
 {
     if (reason == DLL_PROCESS_DETACH) {
@@ -206,5 +224,6 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
     }
 
     adjustGameRestrictions();
+    setupVftableHooks();
     return setupHooks();
 }

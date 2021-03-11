@@ -198,6 +198,8 @@ using ComputeDamage = int(__stdcall*)(const IMidgardObjectMap* objectMap,
                                       int* attackDamage,
                                       int* criticalHitDamage);
 
+using ComputeAttackMiss = bool(__stdcall*)(int* accuracy);
+
 using GetUnitImplId = CMidgardID*(__stdcall*)(const CMidgardID* unitImplId,
                                               const IMidgardObjectMap* objectMap,
                                               const CMidgardID* unitId);
@@ -240,6 +242,7 @@ struct Functions
     GetInterfaceText getInterfaceText;
     ComputePlayerDailyIncome computePlayerDailyIncome;
     ComputeDamage computeDamage;
+    ComputeAttackMiss computeAttackMiss;
     GetUnitImplId getUnitImplId;
     GetUnitLevelByImplId getUnitLevelByImplId;
     IsUnitTransformedInBattle isUnitTransformedInBattle;

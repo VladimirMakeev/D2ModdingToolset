@@ -20,6 +20,7 @@
 #ifndef HOOKS_H
 #define HOOKS_H
 
+#include "attack.h"
 #include "idlist.h"
 #include <string>
 #include <utility>
@@ -59,6 +60,7 @@ using Hooks = std::vector<HookInfo>;
 
 /** Returns array of hooks to setup. */
 Hooks getHooks();
+Hooks getVftableHooks();
 
 void respopupInitHooked(void);
 void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/);
@@ -136,6 +138,11 @@ void __fastcall shatterOnHitHooked(game::CBatAttackShatter* thisptr,
                                    game::CMidgardID* unitId,
                                    game::BattleAttackInfo** attackInfo);
 
+bool __fastcall shatterCanMissHooked(game::CBatAttackShatter* thisptr,
+                                     int /*%edx*/,
+                                     game::BattleMsgData* battleMsgData,
+                                     game::CMidgardID* id);
+
 int __stdcall deletePlayerBuildingsHooked(game::IMidgardObjectMap* objectMap,
                                           game::CMidPlayer* player);
 
@@ -156,6 +163,15 @@ game::CDDCarryOverItems* __fastcall carryOverItemsCtorHooked(game::CDDCarryOverI
                                                              game::CListBoxInterf* listBox,
                                                              game::CPhaseGame* phaseGame,
                                                              int carryOverItemsMax);
+
+int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
+                                  const game::BattleMsgData* battleMsgData,
+                                  const game::IAttack* attackImpl,
+                                  const game::CMidgardID* attackerUnitId,
+                                  const game::CMidgardID* targetUnitId,
+                                  bool computeCriticalHit,
+                                  int* attackDamage,
+                                  int* criticalHitDamage);
 
 void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* thisptr,
                                               int /*%edx*/,

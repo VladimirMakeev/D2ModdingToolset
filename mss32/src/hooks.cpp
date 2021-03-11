@@ -21,11 +21,11 @@
 #include "attackimpl.h"
 #include "attackreachcat.h"
 #include "autodialog.h"
+#include "batattackdoppelganger.h"
 #include "batattackdrain.h"
 #include "batattackdrainoverflow.h"
 #include "batattackgiveattack.h"
 #include "batattackshatter.h"
-#include "batattackdoppelganger.h"
 #include "battleattackinfo.h"
 #include "battlemsgdata.h"
 #include "buildingbranch.h"
@@ -78,13 +78,13 @@
 #include "sitemerchantinterf.h"
 #include "smartptr.h"
 #include "unitbranchcat.h"
+#include "unitgenerator.h"
 #include "unitsforhire.h"
 #include "ussoldier.h"
 #include "usunitimpl.h"
-#include "unitgenerator.h"
-#include "visitors.h"
 #include "utils.h"
 #include "version.h"
+#include "visitors.h"
 #include <algorithm>
 #include <cstring>
 #include <fmt/format.h>
@@ -177,6 +177,11 @@ static Hooks getGameHooks()
                                  carryOverItemsCtorHooked});
     }
 
+    if (userSettings().criticalHitChance != baseSettings().criticalHitChance) {
+        // Allow users to specify critical hit chance
+        hooks.push_back(HookInfo{(void**)&fn.computeDamage, computeDamageHooked});
+    }
+
     if (userSettings().leveledDoppelgangerAttack != baseSettings().leveledDoppelgangerAttack) {
         // Allow doppelganger to transform into leveled units depending on its own level
         hooks.push_back(HookInfo{(void**)&game::CBatAttackDoppelgangerApi::get().onHit,
@@ -225,6 +230,20 @@ Hooks getHooks()
     // Support custom attack class in CAttackImpl constructor
     hooks.emplace_back(
         HookInfo{(void**)&game::CAttackImplApi::get().constructor, attackImplCtorHooked});
+
+    return hooks;
+}
+
+Hooks getVftableHooks()
+{
+    Hooks hooks;
+
+    if (userSettings().allowShatterAttackToMiss != baseSettings().allowShatterAttackToMiss) {
+        if (game::CBatAttackShatterApi::vftable())
+            // Fix an issue where shatter attack always hits regardless of its power value
+            hooks.emplace_back(HookInfo{(void**)&game::CBatAttackShatterApi::vftable()->canMiss,
+                                        shatterCanMissHooked});
+    }
 
     return hooks;
 }
@@ -992,6 +1011,14 @@ void __fastcall shatterOnHitHooked(game::CBatAttackShatter* thisptr,
     BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
 }
 
+bool __fastcall shatterCanMissHooked(game::CBatAttackShatter* thisptr,
+                                     int /*%edx*/,
+                                     game::BattleMsgData* battleMsgData,
+                                     game::CMidgardID* id)
+{
+    return true;
+}
+
 int __stdcall deletePlayerBuildingsHooked(game::IMidgardObjectMap*, game::CMidPlayer*)
 {
     return 0;
@@ -1048,6 +1075,36 @@ game::CDDCarryOverItems* __fastcall carryOverItemsCtorHooked(game::CDDCarryOverI
                                                          userSettings().carryOverItemsMax);
 }
 
+int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
+                                  const game::BattleMsgData* battleMsgData,
+                                  const game::IAttack* attackImpl,
+                                  const game::CMidgardID* attackerUnitId,
+                                  const game::CMidgardID* targetUnitId,
+                                  bool computeCriticalHit,
+                                  int* attackDamage,
+                                  int* criticalHitDamage)
+{
+    int damage;
+    int critDamage;
+    int totalDamage = game::gameFunctions().computeDamage(objectMap, battleMsgData, attackImpl,
+                                                          attackerUnitId, targetUnitId,
+                                                          computeCriticalHit, &damage, &critDamage);
+
+    if (critDamage != 0) {
+        int critChance = userSettings().criticalHitChance;
+        if (game::gameFunctions().computeAttackMiss(&critChance)) {
+            totalDamage -= critDamage;
+            critDamage = 0;
+        }
+    }
+
+    if (attackDamage)
+        *attackDamage = damage;
+    if (criticalHitDamage)
+        *criticalHitDamage = critDamage;
+    return totalDamage;
+}
+
 void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* thisptr,
                                               int /*%edx*/,
                                               game::IMidgardObjectMap* objectMap,
@@ -1101,7 +1158,8 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
     fn.removeTransformStatuses(&thisptr->unitId, battleMsgData);
 
     const auto& battle = BattleMsgDataApi::get();
-    battle.setUnitStatus(battleMsgData, &thisptr->unitId, BattleStatus::TransformDoppelganger, true);
+    battle.setUnitStatus(battleMsgData, &thisptr->unitId, BattleStatus::TransformDoppelganger,
+                         true);
 
     CMidUnit* unit = fn.findUnitById(objectMap, &thisptr->unitId);
     battle.setUnitHp(battleMsgData, &thisptr->unitId, unit->currentHp);
