@@ -31,6 +31,7 @@
 #include "usunitimpl.h"
 #include "utils.h"
 #include "visitors.h"
+#include "hooks.h"
 #include <fmt/format.h>
 
 namespace hooks {
@@ -69,8 +70,13 @@ static int drainAttack(game::IMidgardObjectMap* objectMap,
 
     int attackDamage{};
     int criticalHitDamage{};
-    const int fullDamage = fn.computeDamage(objectMap, battleMsgData, attack, attackerUnitId,
-                                            targetUnitId, true, &attackDamage, &criticalHitDamage);
+    int fullDamage{};
+    if (userSettings().criticalHitChance != baseSettings().criticalHitChance)
+        fullDamage = computeDamageHooked(objectMap, battleMsgData, attack, attackerUnitId,
+                                         targetUnitId, true, &attackDamage, &criticalHitDamage);
+    else
+        fullDamage = fn.computeDamage(objectMap, battleMsgData, attack, attackerUnitId,
+                                      targetUnitId, true, &attackDamage, &criticalHitDamage);
 
     auto targetUnit = static_cast<const CMidUnit*>(
         objectMap->vftable->findScenarioObjectById(objectMap, targetUnitId));
