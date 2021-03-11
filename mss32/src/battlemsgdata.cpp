@@ -36,7 +36,9 @@ static std::array<Api, 3> functions = {{
         (Api::CheckUnitDeath)0x65cf69,
         (Api::SetInt8Value)0x6247d9,
         (Api::AddSummonedUnit)0x6235c0,
-        (Api::SetSummonOwner)0x6249ec
+        (Api::SetSummonOwner)0x6249ec,
+        (Api::IsUnitTransformed)0x662e69,
+        (Api::RemoveTransformStatuses)0x661f7b
     },
     // Russobit
     Api{
@@ -49,7 +51,9 @@ static std::array<Api, 3> functions = {{
         (Api::CheckUnitDeath)0x65cf69,
         (Api::SetInt8Value)0x6247d9,
         (Api::AddSummonedUnit)0x6235c0,
-        (Api::SetSummonOwner)0x6249ec
+        (Api::SetSummonOwner)0x6249ec,
+        (Api::IsUnitTransformed)0x662e69,
+        (Api::RemoveTransformStatuses)0x661f7b
     },
     // Gog
     Api{
@@ -62,7 +66,9 @@ static std::array<Api, 3> functions = {{
         (Api::CheckUnitDeath)0x65b9e9,
         (Api::SetInt8Value)0x623369,
         (Api::AddSummonedUnit)0x622150,
-        (Api::SetSummonOwner)0x62357c
+        (Api::SetSummonOwner)0x62357c,
+        (Api::IsUnitTransformed)0x6618e9,
+        (Api::RemoveTransformStatuses)0x6609fb
     }
 }};
 // clang-format on

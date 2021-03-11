@@ -55,10 +55,7 @@ static std::array<Functions, 4> functions = {{
         (ComputeDamage)0x65ccc7,
         (ComputeAttackMiss)0x626b5f,
         (MarkMapPosition)0x5cdf6f,
-        (GetUnitImplId)0x65c4ec,
-        (GetUnitLevelByImplId)0x599581,
-        (IsUnitTransformedInBattle)0x662e69,
-        (RemoveTransformStatuses)0x661f7b,
+        (GetUnitLevelByImplId)0x599581
     },
     // Russobit
     Functions{
@@ -90,10 +87,7 @@ static std::array<Functions, 4> functions = {{
         (ComputeDamage)0x65ccc7,
         (ComputeAttackMiss)0x626b5f,
         (MarkMapPosition)0x5cdf6f,
-        (GetUnitImplId)0x65c4ec,
-        (GetUnitLevelByImplId)0x599581,
-        (IsUnitTransformedInBattle)0x662e69,
-        (RemoveTransformStatuses)0x661f7b,
+        (GetUnitLevelByImplId)0x599581
     },
     // Gog
     Functions{
@@ -125,10 +119,7 @@ static std::array<Functions, 4> functions = {{
         (ComputeDamage)0x65b747,
         (ComputeAttackMiss)0x62569f,
         (MarkMapPosition)0x5cce8b,
-        (GetUnitImplId)0x65af6c,
-        (GetUnitLevelByImplId)0x59870b,
-        (IsUnitTransformedInBattle)0x6618e9,
-        (RemoveTransformStatuses)0x6609fb,
+        (GetUnitLevelByImplId)0x59870b
     },
     // Scenario Editor
     Functions{

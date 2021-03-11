@@ -33,37 +33,37 @@ enum class BattleStatus : int
 {
     Status0 = 0,
     Dead,
-    Paralyze,            /**< Unit paralyzed. */
-    Petrify,             /**< Unit petrified. */
-    DisableLong,         /**< Long disable applied (paralyze, petrify or fear). */
-    BoostDamageLvl1,     /**< 25% boost */
-    BoostDamageLvl2,     /**< 50% boost */
-    BoostDamageLvl3,     /**< 75% boost */
-    BoostDamageLvl4,     /**< 100% boost */
-    BoostDamageLong,     /**< Long damage boost (until battle is over or lower damage applied). */
-    LowerDamageLvl1,     /**< 50% lower damage */
-    LowerDamageLvl2,     /**< 33% lower damage */
-    LowerDamageLong,     /**< Long lower damage (until battle is over or removed). */
-    LowerInitiative,     /**< 50% lower initiative */
-    LowerInitiativeLong, /**< Long lower initiative. */
-    Poison,              /**< Poison dot. */
-    PoisonLong,          /**< Long poison applied. */
-    Frostbite,           /**< Frostbite dot. */
-    FrostbiteLong,       /**< Long frostbite applied. */
-    Blister,             /**< Blister dot. */
-    BlisterLong,         /**< Long blister applied. */
-    Cured,               /**< Cure applied ? */
-    Transform,           /**< Unit transformed by another unit. */
-    TransformLong,       /**< Long transformation applied by another unit. */
-    TransformSelf,       /**< Unit transfomed himself ? */
-    TransformDoppelganger,/**< Doppelganger transformation ? */
-    TransformDrainLevel, /**< Drain level applied ? */
-    Summon,              /**< Unit was summoned during battle. */
-    FastRetreat,         /**< Fast retreat ? */
-    Retreat,             /**< Unit retreating. */
-    Hidden,              /**< Unit is hidden. For example, while leader dueling a thief. */
-    Defend,              /**< Defend was used in this round. */
-    Unsummoned           /**< unsummon effect applied ? */
+    Paralyze,              /**< Unit paralyzed. */
+    Petrify,               /**< Unit petrified. */
+    DisableLong,           /**< Long disable applied (paralyze, petrify or fear). */
+    BoostDamageLvl1,       /**< 25% boost */
+    BoostDamageLvl2,       /**< 50% boost */
+    BoostDamageLvl3,       /**< 75% boost */
+    BoostDamageLvl4,       /**< 100% boost */
+    BoostDamageLong,       /**< Long damage boost (until battle is over or lower damage applied). */
+    LowerDamageLvl1,       /**< 50% lower damage */
+    LowerDamageLvl2,       /**< 33% lower damage */
+    LowerDamageLong,       /**< Long lower damage (until battle is over or removed). */
+    LowerInitiative,       /**< 50% lower initiative */
+    LowerInitiativeLong,   /**< Long lower initiative. */
+    Poison,                /**< Poison dot. */
+    PoisonLong,            /**< Long poison applied. */
+    Frostbite,             /**< Frostbite dot. */
+    FrostbiteLong,         /**< Long frostbite applied. */
+    Blister,               /**< Blister dot. */
+    BlisterLong,           /**< Long blister applied. */
+    Cured,                 /**< Cure applied ? */
+    Transform,             /**< Unit transformed by another unit. */
+    TransformLong,         /**< Long transformation applied by another unit. */
+    TransformSelf,         /**< Unit transfomed himself ? */
+    TransformDoppelganger, /**< Doppelganger transformation ? */
+    TransformDrainLevel,   /**< Drain level applied ? */
+    Summon,                /**< Unit was summoned during battle. */
+    FastRetreat,           /**< Fast retreat ? */
+    Retreat,               /**< Unit retreating. */
+    Hidden,                /**< Unit is hidden. For example, while leader dueling a thief. */
+    Defend,                /**< Defend was used in this round. */
+    Unsummoned             /**< unsummon effect applied ? */
 };
 
 struct UnknownUnitInfo
@@ -259,6 +259,14 @@ struct Api
                                              const CMidgardID* summonUnitId,
                                              const CMidgardID* ownerUnitId);
     SetSummonOwner setSummonOwner;
+
+    using IsUnitTransformed = bool(__stdcall*)(const CMidgardID* unitId,
+                                               const BattleMsgData* battleMsgData);
+    IsUnitTransformed isUnitTransformed;
+
+    using RemoveTransformStatuses = void(__stdcall*)(const CMidgardID* unitId,
+                                                     const BattleMsgData* battleMsgData);
+    RemoveTransformStatuses removeTransformStatuses;
 };
 
 Api& get();

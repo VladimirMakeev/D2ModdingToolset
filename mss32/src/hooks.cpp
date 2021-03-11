@@ -1124,16 +1124,15 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
 {
     using namespace game;
 
-    const auto& fn = gameFunctions();
+    const auto& battle = BattleMsgDataApi::get();
 
-    if (fn.isUnitTransformedInBattle(&thisptr->unitId, battleMsgData) || !thisptr->unknown) {
+    if (battle.isUnitTransformed(&thisptr->unitId, battleMsgData) || !thisptr->unknown) {
         thisptr->altAttack->vftable->onHit(thisptr->altAttack, objectMap, battleMsgData,
                                            targetUnitId, attackInfo);
         return;
     }
 
-    CMidgardID unitImplId;
-    fn.getUnitImplId(&unitImplId, objectMap, &thisptr->unitId);
+    const auto& fn = gameFunctions();
 
     CMidUnit* targetUnit = fn.findUnitById(objectMap, targetUnitId);
     CMidgardID targetUnitImplId = targetUnit->unitImpl->unitId;
@@ -1143,9 +1142,10 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
     unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &globalTargetUnitImplId,
                                                 &targetUnit->unitImpl->unitId);
 
-    int unitLevel = fn.getUnitLevelByImplId(&unitImplId);
-    int targetLevel = fn.getUnitLevelByImplId(&targetUnitImplId);
-    int globalLevel = fn.getUnitLevelByImplId(&globalTargetUnitImplId);
+    const CMidUnit* unit = fn.findUnitById(objectMap, &thisptr->unitId);
+    const int unitLevel = fn.getUnitLevelByImplId(&unit->unitImpl->unitId);
+    const int targetLevel = fn.getUnitLevelByImplId(&targetUnitImplId);
+    const int globalLevel = fn.getUnitLevelByImplId(&globalTargetUnitImplId);
 
     int transformLevel = unitLevel < targetLevel ? unitLevel : targetLevel;
     if (transformLevel < globalLevel)
@@ -1162,16 +1162,14 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
 
     BattleAttackUnitInfo info{};
     info.unitId = thisptr->unitId;
-    info.unitImplId = unitImplId;
+    info.unitImplId = unit->unitImpl->unitId;
     BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
 
-    fn.removeTransformStatuses(&thisptr->unitId, battleMsgData);
+    battle.removeTransformStatuses(&thisptr->unitId, battleMsgData);
 
-    const auto& battle = BattleMsgDataApi::get();
     battle.setUnitStatus(battleMsgData, &thisptr->unitId, BattleStatus::TransformDoppelganger,
                          true);
 
-    CMidUnit* unit = fn.findUnitById(objectMap, &thisptr->unitId);
     battle.setUnitHp(battleMsgData, &thisptr->unitId, unit->currentHp);
 }
 
