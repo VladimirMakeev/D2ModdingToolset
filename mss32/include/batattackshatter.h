@@ -55,6 +55,8 @@ struct Api
 
 Api& get();
 
+IBatAttackVftable* vftable();
+
 } // namespace CBatAttackShatterApi
 
 } // namespace game
