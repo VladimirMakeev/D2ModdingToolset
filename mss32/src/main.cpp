@@ -114,6 +114,15 @@ static void adjustGameRestrictions()
                                                      (int)userSettings().criticalHitDamage));
             writeProtectedMemory(restrictions.criticalHitDamage, userSettings().criticalHitDamage);
         }
+
+        if (userSettings().mageLeaderAccuracyReduction
+            != baseSettings().mageLeaderAccuracyReduction) {
+            logDebug("restrictions.log",
+                     fmt::format("Set 'mageLeaderAccuracyReduction' to {:d}",
+                                 (int)userSettings().mageLeaderAccuracyReduction));
+            writeProtectedMemory(restrictions.mageLeaderAccuracyReduction,
+                                 userSettings().mageLeaderAccuracyReduction);
+        }
     }
 }
 
