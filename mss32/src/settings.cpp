@@ -61,10 +61,12 @@ const Settings& baseSettings()
         settings.carryOverItemsMax = 5;
         settings.criticalHitDamage = 5;
         settings.criticalHitChance = 100;
+        settings.mageLeaderAccuracyReduction = 10;
         settings.showBanners = false;
         settings.showResources = false;
         settings.showLandConverted = false;
         settings.preserveCapitalBuildings = false;
+        settings.allowShatterAttackToMiss = false;
         settings.debugMode = false;
 
         initialized = true;
@@ -108,10 +110,12 @@ const Settings& userSettings()
         settings.carryOverItemsMax = readNumberSetting(iniPath, "CarryOverItemsMax", defaultSettings().carryOverItemsMax, 0);
         settings.criticalHitDamage = readNumberSetting(iniPath, "CriticalHitDamage", defaultSettings().criticalHitDamage);
         settings.criticalHitChance = readNumberSetting(iniPath, "CriticalHitChance", defaultSettings().criticalHitChance, (uint8_t)0, (uint8_t)100);
+        settings.mageLeaderAccuracyReduction = readNumberSetting(iniPath, "MageLeaderAccuracyReduction", defaultSettings().mageLeaderAccuracyReduction);
         settings.showBanners = readBooleanSetting(iniPath, "ShowBanners", defaultSettings().showBanners);
         settings.showResources = readBooleanSetting(iniPath, "ShowResources", defaultSettings().showResources);
         settings.showLandConverted = readBooleanSetting(iniPath, "ShowLandConverted", defaultSettings().showLandConverted);
         settings.preserveCapitalBuildings = readBooleanSetting(iniPath, "PreserveCapitalBuildings", defaultSettings().preserveCapitalBuildings);
+        settings.allowShatterAttackToMiss = readBooleanSetting(iniPath, "AllowShatterAttackToMiss", defaultSettings().allowShatterAttackToMiss);
         settings.debugMode = readBooleanSetting(iniPath, "DebugHooks", defaultSettings().debugMode);
         // clang-format on
 

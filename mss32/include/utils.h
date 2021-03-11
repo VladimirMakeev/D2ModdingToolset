@@ -46,6 +46,9 @@ std::string getTranslatedText(const char* textIdString);
 /** Tries to replace first occurence of 'keyword' in 'str' with 'replacement'. */
 bool replace(std::string& str, const std::string& keyword, const std::string& replacement);
 
+/** Returns random number from range [min : max]. */
+int getRandomNumber(int min, int max);
+
 } // namespace hooks
 
 #endif // UTILS_H

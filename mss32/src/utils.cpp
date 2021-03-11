@@ -22,6 +22,7 @@
 #include "midgardid.h"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#include <random>
 
 namespace hooks {
 
@@ -90,6 +91,15 @@ bool replace(std::string& str, const std::string& keyword, const std::string& re
 
     str.replace(pos, keyword.length(), replacement);
     return true;
+}
+
+int getRandomNumber(int min, int max)
+{
+    static std::random_device dev;
+    static std::mt19937 rng{dev()};
+
+    std::uniform_int_distribution<int> disribution(min, max);
+    return disribution(rng);
 }
 
 } // namespace hooks

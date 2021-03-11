@@ -85,12 +85,12 @@ bool __fastcall customAttackMethod5(CustomAttack* thisptr,
     return thisptr->vftable->canPerform(thisptr, objectMap, battleMsgData, unitId);
 }
 
-bool __fastcall customAttackMethod6(CustomAttack* thisptr,
+bool __fastcall customAttackCanMiss(CustomAttack* thisptr,
                                     int /*%edx*/,
                                     game::BattleMsgData* battleMsgData,
                                     game::CMidgardID* id)
 {
-    logDebug("newAttackType.log", "CustomAttack method 6");
+    logDebug("newAttackType.log", "CustomAttack canMiss");
     return true;
 }
 
@@ -203,7 +203,7 @@ static const game::IBatAttackVftable customAttackVftable{
     (game::IBatAttackVftable::FillTargetsList)customAttackFillTargetsList,
     (game::IBatAttackVftable::FillTargetsList)customAttackFillTargetsList2,
     (game::IBatAttackVftable::Method5)customAttackMethod5,
-    (game::IBatAttackVftable::Method6)customAttackMethod6,
+    (game::IBatAttackVftable::CanMiss)customAttackCanMiss,
     (game::IBatAttackVftable::Method7)customAttackMethod7,
     (game::IBatAttackVftable::IsImmune)customAttackIsImmune,
     (game::IBatAttackVftable::OnAttack)customAttackMethod8,

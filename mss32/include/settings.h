@@ -37,10 +37,12 @@ struct Settings
     int carryOverItemsMax;
     std::uint8_t criticalHitDamage;
     std::uint8_t criticalHitChance;
+    std::uint8_t mageLeaderAccuracyReduction;
     bool showBanners;
     bool showResources;
     bool showLandConverted;
     bool preserveCapitalBuildings;
+    bool allowShatterAttackToMiss;
     bool debugMode;
 };
 

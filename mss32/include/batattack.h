@@ -72,10 +72,10 @@ struct IBatAttackVftable
                                       CMidgardID* unitId);
     Method5 method5;
 
-    using Method6 = bool(__thiscall*)(IBatAttack* thisptr,
+    using CanMiss = bool(__thiscall*)(IBatAttack* thisptr,
                                       BattleMsgData* battleMsgData,
                                       CMidgardID* id);
-    Method6 method6;
+    CanMiss canMiss;
 
     using Method7 = bool(__thiscall*)(IBatAttack* thisptr, int a2, int a3, int a4);
     Method7 method7;

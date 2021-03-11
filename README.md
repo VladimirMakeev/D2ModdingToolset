@@ -7,8 +7,10 @@
 - Allows each race to hire up to 10 new tier-1 units in cities and capital.<br />
   New units are specified by adding a new columns SOLDIER\_N to Grace.dbf, N starting from 6;
 - Allows alchemists to give additional attacks to retreating allies;
+- Allows vampiric attacks to deal critical damage;
 - Allows to load and create scenarios with no magic (maximum spell level set to 0);
 - Allows Scenario Editor to place merchants, mages, trainers and mercenaries on water tiles;
+- Allows Scenario Editor to place more than 200 stacks on a map;
 - Buildings up to tier 10 are supported in editor and game;
 - Maximum game turn increased to 9999;
 - Fixes game crash in battles with summoners involved;
@@ -27,6 +29,9 @@
       - "ShowBanners=(0/1)" toggle show banners by default;
       - "ShowResources=(0/1)" toggle show resources panel by default;
       - "ShowLandConverted=(0/1)" toggle show percentage of land converted instead of minimap;
+      - "DrainAttackHeal=\["-(2^31 - 1) : (2^31 - 1)\]" changes percentage of L\_DRAIN attacks damage used as heal;
+      - "DrainOverflowHeal=\["-(2^31 - 1) : (2^31 - 1)\]" changes percentage of L\_DRAIN\_OVERFLOW attacks damage used as heal;
+      - "CarryOverItemsMax=\[0 : (2^31 - 1)\]" changes maximum number of items the player is allowed to transfer between campaign scenarios;
   </details>
 - Buttons for bulk item transfer: transfer all items, potions, scrolls/wands or valuables between inventories with single click;
   - <details>
@@ -69,6 +74,55 @@
     BUTTON	BTN_SELL_ALL_VALUABLES,417,425,460,460,DLG_CITY_STACK_RETURN_D,DLG_CITY_STACK_RETURN_H,DLG_CITY_STACK_RETURN_C,DLG_CITY_STACK_RETURN_D,"Sell all valuables",0
     ```
   </details>
+- Allows to add new music tracks for battle and capital cities;
+  - <details>
+    <summary>Installation:</summary>
+  
+    New music tracks name format follows original game naming convention.    
+    WAV tracks in Music folder containing 'battle' as part of their names will be played during battle.    
+    WAV tracks in Music folder containing '<humn/dwrf/unde/here/elf>trk' as part of their names will be played in capital city window with accordance to race.
+    
+    Examples:
+      - battle10.wav - new music track for battle
+      - humntrk4.wav - new music track for Empire
+      - heretrk15.wav - new music track for Legions of the Damned    
+    </details>
+- Fixes Scenario Editor to show spell cost information;
+  - <details>
+      <summary>ScenEdit.dlg fix:</summary>
+  
+      Make sure the corresponding lines of DLG\_R\_C\_SPELL changed as described below.
+      
+      Add 'X160TA0005' to fix elven mana name tooltip:
+      ```
+      IMAGE	IMG_BLUE,303,257,343,291,_RESOURCES_GREENM_B,"X160TA0005"
+      ```
+      Change resource names between IMG\_JAUNE and IMG\_ORANGE:
+      ```
+      IMAGE	IMG_JAUNE,163,257,203,291,_RESOURCES_BLACKM_B,"X100TA0098"
+      IMAGE	IMG_ORANGE,28,257,68,291,_RESOURCES_BLUEM_B,"X100TA0096"
+      ```
+    </details>
+- Cities can generate daily income depending on scenario variables with predefined names;
+  - <details>
+      <summary>Description:</summary>
+  
+      Scenario variables with predefined names are checked each turn and affect income, excluding neutrals race.
+      Variables can be changed by events as any others.
+      
+      Variables that affect all races:
+      
+        - TIER_0_CITY_INCOME - income from capital city;
+        - TIER_N_CITY_INCOME - income from tier N city, N = [1 : 5];
+      Variables that affect specific race:
+      
+        - EMPIRE_TIER_0_CITY_INCOME - income from capital city for Empire only;
+        - EMPIRE_TIER_N_CITY_INCOME - income from tier N city for Empire only, N = [1 : 5];
+        - LEGIONS .. - income for Legions of the Damned only;
+        - CLANS .. - Mountain Clans;
+        - HORDES .. - Undead Hordes;
+        - ELVES .. - Elven Alliance;
+    </details>
 - Can be used on vanilla version or with other mods installed;
 
 ### Tested on:

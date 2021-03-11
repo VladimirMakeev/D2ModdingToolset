@@ -61,9 +61,11 @@
 #include "midgardid.h"
 #include "midgardmsgbox.h"
 #include "midmsgboxbuttonhandlerstd.h"
+#include "midmusic.h"
 #include "midplayer.h"
 #include "midstack.h"
 #include "midunit.h"
+#include "musichooks.h"
 #include "pickupdropinterf.h"
 #include "playerbuildings.h"
 #include "playerincomehooks.h"
@@ -124,7 +126,10 @@ static Hooks getGameHooks()
         HookInfo{(void**)& fn.computePlayerDailyIncome, computePlayerDailyIncomeHooked},
         // Vampiric attacks can deal critical damage
         HookInfo{(void**)&game::CBatAttackDrainApi::get().onHit, drainAttackOnHitHooked},
-        HookInfo{(void**)&game::CBatAttackDrainOverflowApi::get().onHit, drainOverflowAttackOnHitHooked}
+        HookInfo{(void**)&game::CBatAttackDrainOverflowApi::get().onHit, drainOverflowAttackOnHitHooked},
+        // Support additional music tracks for battle and capital cities
+        HookInfo{(void**)&game::CMidMusicApi::get().playBattleTrack, playBattleTrackHooked},
+        HookInfo{(void**)&game::CMidMusicApi::get().playCapitalTrack, playCapitalTrackHooked}
     };
     // clang-format on
 
@@ -216,6 +221,20 @@ Hooks getHooks()
     // Support custom attack class in CAttackImpl constructor
     hooks.emplace_back(
         HookInfo{(void**)&game::CAttackImplApi::get().constructor, attackImplCtorHooked});
+
+    return hooks;
+}
+
+Hooks getVftableHooks()
+{
+    Hooks hooks;
+
+    if (userSettings().allowShatterAttackToMiss != baseSettings().allowShatterAttackToMiss) {
+        if (game::CBatAttackShatterApi::vftable())
+            // Fix an issue where shatter attack always hits regardless of its power value
+            hooks.emplace_back(HookInfo{(void**)&game::CBatAttackShatterApi::vftable()->canMiss,
+                                        shatterCanMissHooked});
+    }
 
     return hooks;
 }
@@ -981,6 +1000,14 @@ void __fastcall shatterOnHitHooked(game::CBatAttackShatter* thisptr,
     info.damage = 0;
 
     BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
+}
+
+bool __fastcall shatterCanMissHooked(game::CBatAttackShatter* thisptr,
+                                    int /*%edx*/,
+                                    game::BattleMsgData* battleMsgData,
+                                    game::CMidgardID* id)
+{
+    return true;
 }
 
 int __stdcall deletePlayerBuildingsHooked(game::IMidgardObjectMap*, game::CMidPlayer*)

@@ -59,6 +59,7 @@ using Hooks = std::vector<HookInfo>;
 
 /** Returns array of hooks to setup. */
 Hooks getHooks();
+Hooks getVftableHooks();
 
 void respopupInitHooked(void);
 void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/);
@@ -135,6 +136,11 @@ void __fastcall shatterOnHitHooked(game::CBatAttackShatter* thisptr,
                                    game::BattleMsgData* battleMsgData,
                                    game::CMidgardID* unitId,
                                    game::BattleAttackInfo** attackInfo);
+
+bool __fastcall shatterCanMissHooked(game::CBatAttackShatter* thisptr,
+                                     int /*%edx*/,
+                                     game::BattleMsgData* battleMsgData,
+                                     game::CMidgardID* id);
 
 int __stdcall deletePlayerBuildingsHooked(game::IMidgardObjectMap* objectMap,
                                           game::CMidPlayer* player);

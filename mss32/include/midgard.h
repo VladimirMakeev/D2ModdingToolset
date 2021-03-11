@@ -70,6 +70,18 @@ static_assert(offsetof(CMidgard, CMidgard::IMqAnimation::vftable) == 4,
 
 static_assert(offsetof(CMidgard, data) == 8, "CMidgard::data offset must be 8 bytes");
 
+namespace CMidgardApi {
+
+struct Api
+{
+    using Instance = CMidgard*(__cdecl*)();
+    Instance instance;
+};
+
+Api& get();
+
+} // namespace CMidgardApi
+
 } // namespace game
 
 #endif // MIDGARD_H

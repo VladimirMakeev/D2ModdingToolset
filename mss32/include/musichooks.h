@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,34 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef RESTRICTIONS_H
-#define RESTRICTIONS_H
-
-#include <cstdint>
+#ifndef MUSICHOOKS_H
+#define MUSICHOOKS_H
 
 namespace game {
-
-template <typename T>
-struct Restriction
-{
-    T min;
-    T max;
-};
-
-/** Addresses of global variables representing game restrictions. */
-struct GameRestrictions
-{
-    Restriction<int>* spellLevel;
-    Restriction<int>* unitLevel;
-    Restriction<int>* unitDamage;
-    Restriction<int>* unitArmor;
-    Restriction<int>* stackScoutRange;
-    std::uint8_t* criticalHitDamage;
-    std::uint8_t* mageLeaderAccuracyReduction;
-};
-
-GameRestrictions& gameRestrictions();
-
+struct CMidMusic;
+struct LRaceCategory;
 } // namespace game
 
-#endif // RESTRICTIONS_H
+namespace hooks {
+
+void __fastcall playBattleTrackHooked(game::CMidMusic* thisptr, int /*%edx*/);
+
+void __fastcall playCapitalTrackHooked(game::CMidMusic* thisptr,
+                                       int /*%edx*/,
+                                       const game::LRaceCategory* raceCategory);
+
+} // namespace hooks
+
+#endif // MUSICHOOKS_H
