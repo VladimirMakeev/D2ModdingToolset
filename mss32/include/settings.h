@@ -43,6 +43,7 @@ struct Settings
     bool showLandConverted;
     bool preserveCapitalBuildings;
     bool allowShatterAttackToMiss;
+    bool leveledDoppelgangerAttack;
     bool debugMode;
 };
 

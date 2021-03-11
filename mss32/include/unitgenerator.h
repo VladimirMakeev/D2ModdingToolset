@@ -67,14 +67,15 @@ struct CUnitGeneratorVftable
     IsUnitGenerated isUnitGenerated;
 
     /**
-     * Assumption: creates new unit implementation id for ids with IdType::UnitGenerated.
-     * Implementation ids with IdType::UnitGlobal returned as is.
-     * Actual meaning unknown.
+     * Used in doppelganger attack logic. 
+     * Checks if a unit implementation with the specified id is global, if so - returns the id as is.
+     * Otherwise, if the id belongs to a generated unit, returns an id of the corresponding global unit.
+     * If the id is nor a global unit nor a generated unit, returns the empty id.
      */
-    using Method4 = CMidgardID*(__thiscall*)(CUnitGenerator* thisptr,
+    using GetGlobalUnitImplId = CMidgardID*(__thiscall*)(CUnitGenerator* thisptr,
                                              CMidgardID* resultUnitId,
                                              const CMidgardID* unitImplId);
-    Method4 method4;
+    GetGlobalUnitImplId getGlobalUnitImplId;
 
     /** Assumption: returns number of existing unit implementations. */
     using GetUnitImplsTotal = int(__thiscall*)(CUnitGenerator* thisptr);

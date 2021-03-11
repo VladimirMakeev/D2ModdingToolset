@@ -270,6 +270,9 @@
     <ClCompile Include="src\midgard.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\batattackdoppelganger.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -818,6 +821,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\musichooks.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\batattackdoppelganger.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

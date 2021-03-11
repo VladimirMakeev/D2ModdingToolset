@@ -127,6 +127,25 @@ struct Api
                                           IMidgardObjectMap* objectMap,
                                           int apply);
     ExchangeItem exchangeItem;
+
+    /**
+     * Transforms a unit to another.
+     * Uses CVisitorTransformUnit.
+     * @param[in] unitId id of the unit to be transformed.
+     * @param[in] toUnitImplId id of the unit impl to transform to.
+     * @param[in] keepHp specifies whether the transformed unit retains its original hp.
+     * @param objectMap interface used for objects search.
+     * @param apply specifies whether unit transformation should be applied.
+     * @returns true if unit was transformed when apply set to 1. If apply set to 0, returns whether
+     * visitor can be applied.
+     */
+    using TransformUnit = bool(__stdcall*)(CMidgardID* unitId,
+                                           CMidgardID* toUnitImplId,
+                                           bool keepHp,
+                                           IMidgardObjectMap* objectMap,
+                                           int apply);
+
+    TransformUnit transformUnit;
 };
 
 Api& get();

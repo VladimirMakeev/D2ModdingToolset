@@ -67,6 +67,7 @@ const Settings& baseSettings()
         settings.showLandConverted = false;
         settings.preserveCapitalBuildings = false;
         settings.allowShatterAttackToMiss = false;
+        settings.leveledDoppelgangerAttack = false;
         settings.debugMode = false;
 
         initialized = true;
@@ -116,6 +117,7 @@ const Settings& userSettings()
         settings.showLandConverted = readBooleanSetting(iniPath, "ShowLandConverted", defaultSettings().showLandConverted);
         settings.preserveCapitalBuildings = readBooleanSetting(iniPath, "PreserveCapitalBuildings", defaultSettings().preserveCapitalBuildings);
         settings.allowShatterAttackToMiss = readBooleanSetting(iniPath, "AllowShatterAttackToMiss", defaultSettings().allowShatterAttackToMiss);
+        settings.leveledDoppelgangerAttack = readBooleanSetting(iniPath, "LeveledDoppelgangerAttack", defaultSettings().leveledDoppelgangerAttack);
         settings.debugMode = readBooleanSetting(iniPath, "DebugHooks", defaultSettings().debugMode);
         // clang-format on
 

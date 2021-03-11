@@ -21,6 +21,7 @@
 #include "attackimpl.h"
 #include "attackreachcat.h"
 #include "autodialog.h"
+#include "batattackdoppelganger.h"
 #include "batattackdrain.h"
 #include "batattackdrainoverflow.h"
 #include "batattackgiveattack.h"
@@ -77,11 +78,13 @@
 #include "sitemerchantinterf.h"
 #include "smartptr.h"
 #include "unitbranchcat.h"
+#include "unitgenerator.h"
 #include "unitsforhire.h"
 #include "ussoldier.h"
 #include "usunitimpl.h"
 #include "utils.h"
 #include "version.h"
+#include "visitors.h"
 #include <algorithm>
 #include <cstring>
 #include <fmt/format.h>
@@ -177,6 +180,12 @@ static Hooks getGameHooks()
     if (userSettings().criticalHitChance != baseSettings().criticalHitChance) {
         // Allow users to specify critical hit chance
         hooks.push_back(HookInfo{(void**)&fn.computeDamage, computeDamageHooked});
+    }
+
+    if (userSettings().leveledDoppelgangerAttack != baseSettings().leveledDoppelgangerAttack) {
+        // Allow doppelganger to transform into leveled units depending on its own level
+        hooks.push_back(HookInfo{(void**)&game::CBatAttackDoppelgangerApi::get().onHit,
+                                 doppelgangerAttackOnHitHooked});
     }
 
     return hooks;
@@ -1003,9 +1012,9 @@ void __fastcall shatterOnHitHooked(game::CBatAttackShatter* thisptr,
 }
 
 bool __fastcall shatterCanMissHooked(game::CBatAttackShatter* thisptr,
-                                    int /*%edx*/,
-                                    game::BattleMsgData* battleMsgData,
-                                    game::CMidgardID* id)
+                                     int /*%edx*/,
+                                     game::BattleMsgData* battleMsgData,
+                                     game::CMidgardID* id)
 {
     return true;
 }
@@ -1094,6 +1103,66 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
     if (criticalHitDamage)
         *criticalHitDamage = critDamage;
     return totalDamage;
+}
+
+void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* thisptr,
+                                              int /*%edx*/,
+                                              game::IMidgardObjectMap* objectMap,
+                                              game::BattleMsgData* battleMsgData,
+                                              game::CMidgardID* targetUnitId,
+                                              game::BattleAttackInfo** attackInfo)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    if (fn.isUnitTransformedInBattle(&thisptr->unitId, battleMsgData) || !thisptr->unknown) {
+        thisptr->altAttack->vftable->onHit(thisptr->altAttack, objectMap, battleMsgData,
+                                           targetUnitId, attackInfo);
+        return;
+    }
+
+    CMidgardID unitImplId;
+    fn.getUnitImplId(&unitImplId, objectMap, &thisptr->unitId);
+
+    CMidUnit* targetUnit = fn.findUnitById(objectMap, targetUnitId);
+    CMidgardID targetUnitImplId = targetUnit->unitImpl->unitId;
+
+    CMidgardID globalTargetUnitImplId;
+    CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
+    unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &globalTargetUnitImplId,
+                                                &targetUnit->unitImpl->unitId);
+
+    int unitLevel = fn.getUnitLevelByImplId(&unitImplId);
+    int targetLevel = fn.getUnitLevelByImplId(&targetUnitImplId);
+    int globalLevel = fn.getUnitLevelByImplId(&globalTargetUnitImplId);
+
+    int transformLevel = unitLevel < targetLevel ? unitLevel : targetLevel;
+    if (transformLevel < globalLevel)
+        transformLevel = globalLevel;
+
+    CMidgardID transformUnitImplId;
+    unitGenerator->vftable->generateUnitImplId(unitGenerator, &transformUnitImplId,
+                                               &targetUnit->unitImpl->unitId, transformLevel);
+
+    unitGenerator->vftable->generateUnitImpl(unitGenerator, &transformUnitImplId);
+
+    const auto& visitors = VisitorApi::get();
+    visitors.transformUnit(&thisptr->unitId, &transformUnitImplId, false, objectMap, 1);
+
+    BattleAttackUnitInfo info{};
+    info.unitId = thisptr->unitId;
+    info.unitImplId = unitImplId;
+    BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
+
+    fn.removeTransformStatuses(&thisptr->unitId, battleMsgData);
+
+    const auto& battle = BattleMsgDataApi::get();
+    battle.setUnitStatus(battleMsgData, &thisptr->unitId, BattleStatus::TransformDoppelganger,
+                         true);
+
+    CMidUnit* unit = fn.findUnitById(objectMap, &thisptr->unitId);
+    battle.setUnitHp(battleMsgData, &thisptr->unitId, unit->currentHp);
 }
 
 } // namespace hooks
