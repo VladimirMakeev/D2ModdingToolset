@@ -132,7 +132,9 @@ static Hooks getGameHooks()
         HookInfo{(void**)&game::CBatAttackDrainOverflowApi::get().onHit, drainOverflowAttackOnHitHooked},
         // Support additional music tracks for battle and capital cities
         HookInfo{(void**)&game::CMidMusicApi::get().playBattleTrack, playBattleTrackHooked},
-        HookInfo{(void**)&game::CMidMusicApi::get().playCapitalTrack, playCapitalTrackHooked}
+        HookInfo{(void**)&game::CMidMusicApi::get().playCapitalTrack, playCapitalTrackHooked},
+        // Fix game crash with pathfinding on 144x144 maps
+        HookInfo{(void**)&fn.markMapPosition, markMapPositionHooked},
     };
     // clang-format on
 
@@ -1073,6 +1075,14 @@ game::CDDCarryOverItems* __fastcall carryOverItemsCtorHooked(game::CDDCarryOverI
 {
     return game::CDDCarryOverItemsApi::get().constructor(thisptr, dropManager, listBox, phaseGame,
                                                          userSettings().carryOverItemsMax);
+}
+
+void __fastcall markMapPositionHooked(void* thisptr, int /*%edx*/, game::Position* position)
+{
+    if (position->x < 0 || position->x >= 144 || position->y < 0 || position->y >= 144)
+        return;
+
+    return game::gameFunctions().markMapPosition(thisptr, position);
 }
 
 int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,

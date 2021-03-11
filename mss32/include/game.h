@@ -44,6 +44,7 @@ struct IBatAttack;
 struct IAttack;
 struct CMidUnitGroup;
 struct Bank;
+struct Position;
 
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
@@ -203,6 +204,11 @@ using ComputeAttackMiss = bool(__stdcall*)(int* accuracy);
 using GetUnitImplId = CMidgardID*(__stdcall*)(const CMidgardID* unitImplId,
                                               const IMidgardObjectMap* objectMap,
                                               const CMidgardID* unitId);
+/**
+ * Used for pathfinding.
+ * Causes memory corruption (that leads to crash) on 144x144 maps if the position is out of map bounds.
+ */
+using MarkMapPosition = void(__thiscall*)(void* thisptr, Position* position);
 
 /** Returns unit level by impl id. If unit does not exist yet, computes its level. */
 using GetUnitLevelByImplId = int(__stdcall*)(const CMidgardID* unitImplId);
@@ -243,6 +249,7 @@ struct Functions
     ComputePlayerDailyIncome computePlayerDailyIncome;
     ComputeDamage computeDamage;
     ComputeAttackMiss computeAttackMiss;
+    MarkMapPosition markMapPosition;
     GetUnitImplId getUnitImplId;
     GetUnitLevelByImplId getUnitLevelByImplId;
     IsUnitTransformedInBattle isUnitTransformedInBattle;

@@ -51,6 +51,7 @@ struct CDDCarryOverItems;
 struct IMidDropManager;
 struct CListBoxInterf;
 struct CPhaseGame;
+struct Position;
 }; // namespace game
 
 namespace hooks {
@@ -163,6 +164,8 @@ game::CDDCarryOverItems* __fastcall carryOverItemsCtorHooked(game::CDDCarryOverI
                                                              game::CListBoxInterf* listBox,
                                                              game::CPhaseGame* phaseGame,
                                                              int carryOverItemsMax);
+
+void __fastcall markMapPositionHooked(void* thisptr, int /*%edx*/, game::Position* position);
 
 int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
                                   const game::BattleMsgData* battleMsgData,
