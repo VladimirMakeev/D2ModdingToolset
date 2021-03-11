@@ -44,6 +44,7 @@ struct IBatAttack;
 struct IAttack;
 struct CMidUnitGroup;
 struct Bank;
+struct Position;
 
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
@@ -198,6 +199,12 @@ using ComputeDamage = int(__stdcall*)(const IMidgardObjectMap* objectMap,
                                       int* attackDamage,
                                       int* criticalHitDamage);
 
+/**
+ * Used for pathfinding.
+ * Causes memory corruption (that leads to crash) on 144x144 maps if the position is out of map bounds.
+ */
+using MarkMapPosition = void(__thiscall*)(void* thisptr, Position* position);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -227,6 +234,7 @@ struct Functions
     GetInterfaceText getInterfaceText;
     ComputePlayerDailyIncome computePlayerDailyIncome;
     ComputeDamage computeDamage;
+    MarkMapPosition markMapPosition;
 };
 
 /** Global variables used in game. */
