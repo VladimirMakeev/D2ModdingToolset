@@ -7,3 +7,6 @@
 [submodule "GSL"]
 	path = GSL
 	url = https://github.com/microsoft/GSL.git
+[submodule "sol2"]
+	path = sol2
+	url = https://github.com/ThePhD/sol2.git
