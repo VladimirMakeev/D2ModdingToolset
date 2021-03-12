@@ -31,6 +31,20 @@ struct LDifficultyLevelTable : public CEnumConstantTable<DifficultyLevelId>
 struct LDifficultyLevel : public Category<DifficultyLevelId>
 { };
 
+namespace DifficultyLevelCategories {
+
+struct Categories
+{
+    LDifficultyLevel* easy;
+    LDifficultyLevel* average;
+    LDifficultyLevel* hard;
+    LDifficultyLevel* veryHard;
+};
+
+Categories& get();
+
+} // namespace DifficultyLevelCategories
+
 } // namespace game
 
 #endif // DIFFICULTYLEVEL_H

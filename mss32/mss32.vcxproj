@@ -134,6 +134,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\dbtable.cpp" />
     <ClCompile Include="src\ddcarryoveritems.cpp" />
     <ClCompile Include="src\dialoginterf.cpp" />
+    <ClCompile Include="src\difficultylevel.cpp" />
     <ClCompile Include="src\drainattackhooks.cpp" />
     <ClCompile Include="src\dynamiccast.cpp" />
     <ClCompile Include="src\editor.cpp" />
