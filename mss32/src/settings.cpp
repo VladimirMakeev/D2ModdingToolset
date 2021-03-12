@@ -17,32 +17,56 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define NOMINMAX
-#define WIN32_LEAN_AND_MEAN
 #include "settings.h"
+#include "log.h"
 #include "utils.h"
-#include <Windows.h>
 #include <algorithm>
 #include <fmt/format.h>
 #include <limits>
+#include <lua.hpp>
+#include <optional>
+#include <sol/sol.hpp>
 #include <string>
 
 namespace hooks {
 
 template <typename T>
-T readNumberSetting(const std::string& iniPath,
-                    const char* key,
-                    T def,
-                    T min = std::numeric_limits<T>::min(),
-                    T max = std::numeric_limits<T>::max())
+static T readSetting(const sol::state& lua,
+                     const char* name,
+                     T def,
+                     T min = std::numeric_limits<T>::min(),
+                     T max = std::numeric_limits<T>::max())
 {
-    auto value = GetPrivateProfileInt("Disciple", key, def, iniPath.c_str());
-    return std::clamp<T>(value, min, max);
+    const std::optional<T> result = lua["settings"][name];
+    if (!result) {
+        return def;
+    }
+
+    return std::clamp<T>(*result, min, max);
 }
 
-bool readBooleanSetting(const std::string& iniPath, const char* key, bool def)
+static void readSettings(Settings& settings, const sol::state& lua)
 {
-    return readNumberSetting<int>(iniPath, key, def, 0, 1) != 0;
+    // clang-format off
+    settings.unitMaxDamage = readSetting(lua, "unitMaxDamage", defaultSettings().unitMaxDamage);
+    settings.unitMaxArmor = readSetting(lua, "unitMaxArmor", defaultSettings().unitMaxArmor);
+    settings.stackScoutRangeMax = readSetting(lua, "stackMaxScoutRange", defaultSettings().stackScoutRangeMax);
+    settings.shatteredArmorMax = readSetting(lua, "shatteredArmorMax", defaultSettings().shatteredArmorMax, 0, baseSettings().shatteredArmorMax);
+    settings.shatterDamageMax = readSetting(lua, "shatterDamageMax", defaultSettings().shatterDamageMax, 0, baseSettings().shatterDamageMax);
+    settings.drainAttackHeal = readSetting(lua, "drainAttackHeal", defaultSettings().drainAttackHeal);
+    settings.drainOverflowHeal = readSetting(lua, "drainOverflowHeal", defaultSettings().drainOverflowHeal);
+    settings.carryOverItemsMax = readSetting(lua, "carryOverItemsMax", defaultSettings().carryOverItemsMax, 0);
+    settings.criticalHitDamage = readSetting(lua, "criticalHitDamage", defaultSettings().criticalHitDamage);
+    settings.criticalHitChance = readSetting(lua, "criticalHitChance", defaultSettings().criticalHitChance, (uint8_t)0, (uint8_t)100);
+    settings.mageLeaderAccuracyReduction = readSetting(lua, "mageLeaderAccuracyReduction", defaultSettings().mageLeaderAccuracyReduction);
+    settings.showBanners = readSetting(lua, "showBanners", defaultSettings().showBanners);
+    settings.showResources = readSetting(lua, "showResources", defaultSettings().showResources);
+    settings.showLandConverted = readSetting(lua, "showLandConverted", defaultSettings().showLandConverted);
+    settings.preserveCapitalBuildings = readSetting(lua, "preserveCapitalBuildings", defaultSettings().preserveCapitalBuildings);
+    settings.allowShatterAttackToMiss = readSetting(lua, "allowShatterAttackToMiss", defaultSettings().allowShatterAttackToMiss);
+    settings.leveledDoppelgangerAttack = readSetting(lua, "leveledDoppelgangerAttack", defaultSettings().leveledDoppelgangerAttack);
+    settings.debugMode = readSetting(lua, "debugHooks", defaultSettings().debugMode);
+    // clang-format on
 }
 
 const Settings& baseSettings()
@@ -98,30 +122,25 @@ const Settings& userSettings()
     static bool initialized = false;
 
     if (!initialized) {
-        const auto iniPath = (hooks::gameFolder() / "disciple.ini").string();
-
-        // clang-format off
-        settings.unitMaxDamage = readNumberSetting(iniPath, "UnitMaxDamage", defaultSettings().unitMaxDamage);
-        settings.unitMaxArmor = readNumberSetting(iniPath, "UnitMaxArmor", defaultSettings().unitMaxArmor);
-        settings.stackScoutRangeMax = readNumberSetting(iniPath, "StackMaxScoutRange", defaultSettings().stackScoutRangeMax);
-        settings.shatteredArmorMax = readNumberSetting(iniPath, "ShatteredArmorMax", defaultSettings().shatteredArmorMax, 0, baseSettings().shatteredArmorMax);
-        settings.shatterDamageMax = readNumberSetting(iniPath, "ShatterDamageMax", defaultSettings().shatterDamageMax, 0, baseSettings().shatterDamageMax);
-        settings.drainAttackHeal = readNumberSetting(iniPath, "DrainAttackHeal", defaultSettings().drainAttackHeal);
-        settings.drainOverflowHeal = readNumberSetting(iniPath, "DrainOverflowHeal", defaultSettings().drainOverflowHeal);
-        settings.carryOverItemsMax = readNumberSetting(iniPath, "CarryOverItemsMax", defaultSettings().carryOverItemsMax, 0);
-        settings.criticalHitDamage = readNumberSetting(iniPath, "CriticalHitDamage", defaultSettings().criticalHitDamage);
-        settings.criticalHitChance = readNumberSetting(iniPath, "CriticalHitChance", defaultSettings().criticalHitChance, (uint8_t)0, (uint8_t)100);
-        settings.mageLeaderAccuracyReduction = readNumberSetting(iniPath, "MageLeaderAccuracyReduction", defaultSettings().mageLeaderAccuracyReduction);
-        settings.showBanners = readBooleanSetting(iniPath, "ShowBanners", defaultSettings().showBanners);
-        settings.showResources = readBooleanSetting(iniPath, "ShowResources", defaultSettings().showResources);
-        settings.showLandConverted = readBooleanSetting(iniPath, "ShowLandConverted", defaultSettings().showLandConverted);
-        settings.preserveCapitalBuildings = readBooleanSetting(iniPath, "PreserveCapitalBuildings", defaultSettings().preserveCapitalBuildings);
-        settings.allowShatterAttackToMiss = readBooleanSetting(iniPath, "AllowShatterAttackToMiss", defaultSettings().allowShatterAttackToMiss);
-        settings.leveledDoppelgangerAttack = readBooleanSetting(iniPath, "LeveledDoppelgangerAttack", defaultSettings().leveledDoppelgangerAttack);
-        settings.debugMode = readBooleanSetting(iniPath, "DebugHooks", defaultSettings().debugMode);
-        // clang-format on
-
         initialized = true;
+        settings = defaultSettings();
+
+        const auto settingsPath{hooks::gameFolder() / "Scripts" / "settings.lua"};
+        if (std::filesystem::exists(settingsPath)) {
+            sol::state lua;
+
+            auto config = lua.load_file(settingsPath.string());
+            const auto result = config();
+
+            if (result.valid()) {
+                readSettings(settings, lua);
+            } else {
+                const sol::error err = result;
+                hooks::logError("mssProxyError.log",
+                                fmt::format("Failed to settings script '{:s}'.\nReason: '{:s}'",
+                                            settingsPath.string(), err.what()));
+            }
+        }
     }
 
     return settings;
