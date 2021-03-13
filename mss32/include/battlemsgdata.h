@@ -267,6 +267,12 @@ struct Api
     using RemoveTransformStatuses = void(__stdcall*)(const CMidgardID* unitId,
                                                      const BattleMsgData* battleMsgData);
     RemoveTransformStatuses removeTransformStatuses;
+
+    using IsUnitAttacker = bool(__thiscall*)(const BattleMsgData* thisptr,
+                                             const CMidgardID* unitId);
+    IsUnitAttacker isUnitAttacker;
+
+    GetUnitIntValue getUnitAccuracyReduction;
 };
 
 Api& get();
