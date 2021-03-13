@@ -38,6 +38,7 @@
 #include "dbtable.h"
 #include "ddcarryoveritems.h"
 #include "dialoginterf.h"
+#include "difficultylevel.h"
 #include "drainattackhooks.h"
 #include "dynamiccast.h"
 #include "editor.h"
@@ -74,6 +75,7 @@
 #include "racetype.h"
 #include "scenariodata.h"
 #include "scenariodataarray.h"
+#include "scenarioinfo.h"
 #include "settings.h"
 #include "sitemerchantinterf.h"
 #include "smartptr.h"
@@ -135,6 +137,8 @@ static Hooks getGameHooks()
         HookInfo{(void**)&game::CMidMusicApi::get().playCapitalTrack, playCapitalTrackHooked},
         // Fix game crash with pathfinding on 144x144 maps
         HookInfo{(void**)&fn.markMapPosition, markMapPositionHooked},
+        // Allow user to tweak accuracy computations
+        HookInfo{(void**)&fn.getAttackAccuracy, getAttackAccuracyHooked}
     };
     // clang-format on
 
@@ -188,6 +192,11 @@ static Hooks getGameHooks()
         // Allow doppelganger to transform into leveled units depending on its own level
         hooks.push_back(HookInfo{(void**)&game::CBatAttackDoppelgangerApi::get().onHit,
                                  doppelgangerAttackOnHitHooked});
+    }
+
+    if (userSettings().missChanceSingleRoll != baseSettings().missChanceSingleRoll) {
+        // Compute attack miss chance using single random value, instead of two
+        hooks.push_back(HookInfo{(void**)&fn.attackShouldMiss, attackShouldMissHooked});
     }
 
     return hooks;
@@ -1171,6 +1180,101 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
                          true);
 
     battle.setUnitHp(battleMsgData, &thisptr->unitId, unit->currentHp);
+}
+
+static bool isAttackClassUsesAccuracy(const game::LAttackClass* attackClass)
+{
+    const auto attacks = game::AttackClassCategories::get();
+    const auto id = attackClass->id;
+
+    return id == attacks.paralyze->id || id == attacks.petrify->id || id == attacks.damage->id
+           || id == attacks.drain->id || id == attacks.drainOverflow->id || id == attacks.fear->id
+           || id == attacks.lowerDamage->id || id == attacks.lowerInitiative->id
+           || id == attacks.poison->id || id == attacks.frostbite->id || id == attacks.blister->id
+           || id == attacks.bestowWards->id || id == attacks.shatter->id || id == attacks.revive->id
+           || id == attacks.drainLevel->id || id == attacks.transformOther->id;
+}
+
+void __stdcall getAttackAccuracyHooked(int* accuracy,
+                                       const game::IAttack* attack,
+                                       const game::IMidgardObjectMap* objectMap,
+                                       const game::CMidgardID* unitId,
+                                       const game::BattleMsgData* battleMsgData)
+{
+    if (!attack) {
+        *accuracy = 100;
+        return;
+    }
+
+    using namespace game;
+
+    auto vftable = static_cast<const IAttackVftable*>(attack->vftable);
+    const auto attackClass = vftable->getAttackClass(attack);
+
+    if (!isAttackClassUsesAccuracy(attackClass)) {
+        *accuracy = 100;
+        return;
+    }
+
+    int tmpAccuracy{};
+    vftable->getPower(attack, &tmpAccuracy);
+
+    const auto& battle = BattleMsgDataApi::get();
+    auto groupId = battle.isUnitAttacker(battleMsgData, unitId) ? &battleMsgData->attackerGroupId
+                                                                : &battleMsgData->defenderGroupId;
+
+    const auto& fn = gameFunctions();
+
+    if (!fn.isGroupOwnerPlayerHuman(objectMap, groupId)) {
+        const auto& id = CMidgardIDApi::get();
+
+        CMidgardID scenarioInfoId{};
+        auto scenarioId = objectMap->vftable->getId(objectMap);
+
+        id.fromParts(&scenarioInfoId, id.getCategory(scenarioId), id.getCategoryIndex(scenarioId),
+                     IdType::ScenarioInfo, 0);
+
+        auto scenarioInfo = static_cast<const CScenarioInfo*>(
+            objectMap->vftable->findScenarioObjectById(objectMap, &scenarioInfoId));
+
+        const auto difficulties = DifficultyLevelCategories::get();
+        const auto difficultyId = scenarioInfo->gameDifficulty.id;
+
+        const auto& aiAccuracy = userSettings().aiAccuracyBonus;
+        const std::int8_t* bonus = &aiAccuracy.easy;
+
+        if (difficultyId == difficulties.easy->id) {
+            bonus = &aiAccuracy.easy;
+        } else if (difficultyId == difficulties.average->id) {
+            bonus = &aiAccuracy.average;
+        } else if (difficultyId == difficulties.hard->id) {
+            bonus = &aiAccuracy.hard;
+        } else if (difficultyId == difficulties.veryHard->id) {
+            bonus = &aiAccuracy.veryHard;
+        }
+
+        if (aiAccuracy.absolute) {
+            tmpAccuracy += *bonus;
+        } else {
+            tmpAccuracy += tmpAccuracy * *bonus / 100;
+        }
+
+        tmpAccuracy = std::clamp(tmpAccuracy, -100, 100);
+    }
+
+    const auto attacks = AttackClassCategories::get();
+    if (battleMsgData->currentRound > userSettings().disableAllowedRoundMax
+        && (attackClass->id == attacks.paralyze->id || attackClass->id == attacks.petrify->id)) {
+        tmpAccuracy = 0;
+    }
+
+    tmpAccuracy -= battle.getUnitAccuracyReduction(battleMsgData, unitId);
+    *accuracy = std::clamp(tmpAccuracy, -100, 100);
+}
+
+bool __stdcall attackShouldMissHooked(const int* accuracy)
+{
+    return game::gameFunctions().generateRandomNumber(100) > *accuracy;
 }
 
 } // namespace hooks

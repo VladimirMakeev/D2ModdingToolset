@@ -183,6 +183,14 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
                                               game::CMidgardID* targetUnitId,
                                               game::BattleAttackInfo** attackInfo);
 
+void __stdcall getAttackAccuracyHooked(int* accuracy,
+                                       const game::IAttack* attack,
+                                       const game::IMidgardObjectMap* objectMap,
+                                       const game::CMidgardID* unitId,
+                                       const game::BattleMsgData* battleMsgData);
+
+bool __stdcall attackShouldMissHooked(const int* accuracy);
+
 } // namespace hooks
 
 #endif // HOOKS_H
