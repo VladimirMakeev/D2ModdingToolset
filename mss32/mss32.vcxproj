@@ -300,6 +300,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\draganddropinterf.h" />
     <ClInclude Include="include\drainattackhooks.h" />
     <ClInclude Include="include\dynamiccast.h" />
+    <ClInclude Include="include\dynupgrade.h" />
     <ClInclude Include="include\editor.h" />
     <ClInclude Include="include\enclayoutspell.h" />
     <ClInclude Include="include\encparam.h" />
