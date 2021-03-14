@@ -360,6 +360,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\menunewskirmish.h" />
     <ClInclude Include="include\menunewskirmishsingle.h" />
     <ClInclude Include="include\midbag.h" />
+    <ClInclude Include="include\midcampaign.h" />
     <ClInclude Include="include\midclient.h" />
     <ClInclude Include="include\midclientcore.h" />
     <ClInclude Include="include\midcommandqueue2.h" />
