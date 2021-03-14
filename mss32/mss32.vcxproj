@@ -415,6 +415,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\scenarioheader.h" />
     <ClInclude Include="include\scenarioinfo.h" />
     <ClInclude Include="include\settings.h" />
+    <ClInclude Include="include\sitecategories.h" />
     <ClInclude Include="include\sitemerchantinterf.h" />
     <ClInclude Include="include\smartptr.h" />
     <ClInclude Include="include\sortedlist.h" />

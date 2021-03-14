@@ -1018,6 +1018,9 @@
     <ClInclude Include="..\lua\lapi.h">
       <Filter>Файлы заголовков\lua</Filter>
     </ClInclude>
+    <ClInclude Include="include\sitecategories.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
