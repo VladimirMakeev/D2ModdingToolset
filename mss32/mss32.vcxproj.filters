@@ -381,6 +381,9 @@
     <ClCompile Include="..\lua\lzio.c">
       <Filter>Исходные файлы\lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\doppelgangerhooks.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -1025,6 +1028,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\midcampaign.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\doppelgangerhooks.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

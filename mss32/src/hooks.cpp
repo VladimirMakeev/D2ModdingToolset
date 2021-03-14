@@ -39,6 +39,7 @@
 #include "ddcarryoveritems.h"
 #include "dialoginterf.h"
 #include "difficultylevel.h"
+#include "doppelgangerhooks.h"
 #include "drainattackhooks.h"
 #include "dynamiccast.h"
 #include "editor.h"
@@ -1122,64 +1123,6 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
     if (criticalHitDamage)
         *criticalHitDamage = critDamage;
     return totalDamage;
-}
-
-void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* thisptr,
-                                              int /*%edx*/,
-                                              game::IMidgardObjectMap* objectMap,
-                                              game::BattleMsgData* battleMsgData,
-                                              game::CMidgardID* targetUnitId,
-                                              game::BattleAttackInfo** attackInfo)
-{
-    using namespace game;
-
-    const auto& battle = BattleMsgDataApi::get();
-
-    if (battle.isUnitTransformed(&thisptr->unitId, battleMsgData) || !thisptr->unknown) {
-        thisptr->altAttack->vftable->onHit(thisptr->altAttack, objectMap, battleMsgData,
-                                           targetUnitId, attackInfo);
-        return;
-    }
-
-    const auto& fn = gameFunctions();
-
-    CMidUnit* targetUnit = fn.findUnitById(objectMap, targetUnitId);
-    CMidgardID targetUnitImplId = targetUnit->unitImpl->unitId;
-
-    CMidgardID globalTargetUnitImplId;
-    CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
-    unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &globalTargetUnitImplId,
-                                                &targetUnit->unitImpl->unitId);
-
-    const CMidUnit* unit = fn.findUnitById(objectMap, &thisptr->unitId);
-    const int unitLevel = fn.getUnitLevelByImplId(&unit->unitImpl->unitId);
-    const int targetLevel = fn.getUnitLevelByImplId(&targetUnitImplId);
-    const int globalLevel = fn.getUnitLevelByImplId(&globalTargetUnitImplId);
-
-    int transformLevel = unitLevel < targetLevel ? unitLevel : targetLevel;
-    if (transformLevel < globalLevel)
-        transformLevel = globalLevel;
-
-    CMidgardID transformUnitImplId;
-    unitGenerator->vftable->generateUnitImplId(unitGenerator, &transformUnitImplId,
-                                               &targetUnit->unitImpl->unitId, transformLevel);
-
-    unitGenerator->vftable->generateUnitImpl(unitGenerator, &transformUnitImplId);
-
-    const auto& visitors = VisitorApi::get();
-    visitors.transformUnit(&thisptr->unitId, &transformUnitImplId, false, objectMap, 1);
-
-    BattleAttackUnitInfo info{};
-    info.unitId = thisptr->unitId;
-    info.unitImplId = unit->unitImpl->unitId;
-    BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
-
-    battle.removeTransformStatuses(&thisptr->unitId, battleMsgData);
-
-    battle.setUnitStatus(battleMsgData, &thisptr->unitId, BattleStatus::TransformDoppelganger,
-                         true);
-
-    battle.setUnitHp(battleMsgData, &thisptr->unitId, unit->currentHp);
 }
 
 static bool isAttackClassUsesAccuracy(const game::LAttackClass* attackClass)

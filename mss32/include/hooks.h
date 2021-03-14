@@ -40,7 +40,6 @@ struct IMidgardObjectMap;
 struct BattleMsgData;
 struct CBatAttackGiveAttack;
 struct CBatAttackShatter;
-struct CBatAttackDoppelganger;
 struct BattleAttackInfo;
 struct CMidPlayer;
 struct CMidMsgBoxButtonHandler;
@@ -175,13 +174,6 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
                                   bool computeCriticalHit,
                                   int* attackDamage,
                                   int* criticalHitDamage);
-
-void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* thisptr,
-                                              int /*%edx*/,
-                                              game::IMidgardObjectMap* objectMap,
-                                              game::BattleMsgData* battleMsgData,
-                                              game::CMidgardID* targetUnitId,
-                                              game::BattleAttackInfo** attackInfo);
 
 void __stdcall getAttackAccuracyHooked(int* accuracy,
                                        const game::IAttack* attack,
