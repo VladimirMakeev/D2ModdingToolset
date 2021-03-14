@@ -1018,6 +1018,9 @@
     <ClInclude Include="..\lua\lapi.h">
       <Filter>Файлы заголовков\lua</Filter>
     </ClInclude>
+    <ClInclude Include="include\midsite.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\sitecategories.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
