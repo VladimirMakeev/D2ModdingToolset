@@ -239,6 +239,62 @@ enum class SiteId : int
     Trainer
 };
 
+/** Modifier source ids from LModifS.dbf. */
+enum class ModifierSourceId : int
+{
+    Unit = 0,
+    Stack = 1,
+    Attack = 3,
+};
+
+/** Modifier element types from LmodifE.dbf. */
+enum class ModifierElementType : int
+{
+    QtyTarget = 0,
+    ScoutingRange = 1,
+    Leadership = 2,
+    Power = 3,
+    QtyDamage = 4,
+    Armor = 5,
+    Hp = 6,
+    MoveAllowance = 7,
+    Initiative = 9,
+    MoveAbility = 10,
+    LeaderAbility = 11,
+    Immunity = 12,
+    Regeneration = 13,
+    Immunityclass = 14,
+    AttackDrain = 15,
+    FastRetreat = 16,
+    LowerCost = 17,
+};
+
+/** Ground ids from Lground.dbf. */
+enum class GroundId : int
+{
+    Plain = 0,
+    Forest = 1,
+    Water = 3,
+    Mountain = 4,
+};
+
+/** Leader ability ids from LleadA.dbf. */
+enum class LeaderAbilityId : int
+{
+    Zealot = 1,
+    Incorruptible = 3,
+    WeaponMaster = 6,
+    WandScrollUse = 7,
+    WeaponArmorUse = 8,
+    BannerUse = 9,
+    JewelryUse = 10,
+    Rod = 13,
+    OrbUse = 14,
+    TalismanUse = 15,
+    TravelItemUse = 16,
+    CriticalHit = 17,
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H

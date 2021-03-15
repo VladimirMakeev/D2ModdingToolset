@@ -17,20 +17,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTANDID_H
-#define TEXTANDID_H
+#ifndef LEADERABILITYCAT_H
+#define LEADERABILITYCAT_H
 
-#include "d2map.h"
-#include "d2pair.h"
+#include "categories.h"
 
 namespace game {
 
-struct TextAndId
+struct LLeaderAbilityTable : CEnumConstantTable<LeaderAbilityId>
+{ };
+
+struct LLeaderAbility : public Category<LeaderAbilityId>
+{ };
+
+namespace LeaderAbilityCategories {
+
+struct Categories
 {
-    Map<Pair<CMidgardID, char*>>* text;
-    CMidgardID id;
+    LLeaderAbility* orbUse;
+    LLeaderAbility* wandScrollUse;
+    LLeaderAbility* weaponArmorUse;
+    LLeaderAbility* incorruptible;
+    LLeaderAbility* criticalHit;
+    LLeaderAbility* travelItemUse;
+    LLeaderAbility* talismanUse;
+    LLeaderAbility* bannerUse;
+    LLeaderAbility* rod;
+    LLeaderAbility* weaponMaster;
+    LLeaderAbility* jewelryUse;
 };
+
+Categories& get();
+
+} // namespace LeaderAbilityCategories
 
 } // namespace game
 
-#endif // TEXTANDID_H
+#endif // LEADERABILITYCAT_H

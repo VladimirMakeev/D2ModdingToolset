@@ -199,8 +199,6 @@ using ComputeDamage = int(__stdcall*)(const IMidgardObjectMap* objectMap,
                                       int* attackDamage,
                                       int* criticalHitDamage);
 
-using ComputeAttackMiss = bool(__stdcall*)(int* accuracy);
-
 /**
  * Used for pathfinding.
  * Causes memory corruption (that leads to crash) on 144x144 maps if the position is out of map
@@ -261,7 +259,6 @@ struct Functions
     GetInterfaceText getInterfaceText;
     ComputePlayerDailyIncome computePlayerDailyIncome;
     ComputeDamage computeDamage;
-    ComputeAttackMiss computeAttackMiss;
     MarkMapPosition markMapPosition;
     GetUnitLevelByImplId getUnitLevelByImplId;
     GetAttackAccuracy getAttackAccuracy;

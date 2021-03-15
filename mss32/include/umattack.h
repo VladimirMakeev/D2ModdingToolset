@@ -17,20 +17,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTANDID_H
-#define TEXTANDID_H
+#ifndef UMATTACK_H
+#define UMATTACK_H
 
-#include "d2map.h"
-#include "d2pair.h"
+#include "attackmodified.h"
+#include "textandid.h"
+#include "ummodifier.h"
+#include "ussoldier.h"
+#include "usunit.h"
 
 namespace game {
 
-struct TextAndId
+struct CUmAttackData;
+
+struct CUmAttack
 {
-    Map<Pair<CMidgardID, char*>>* text;
+    IUsUnit* usUnit;
     CMidgardID id;
+    IUsSoldier* usSoldier;
+    CUmModifier umModifier;
+    CUmAttackData* data;
 };
+
+static_assert(sizeof(CUmAttack) == 24, "Size of CUmAttack structure must be exactly 24 bytes");
+
+struct CUmAttackData
+{
+    ModifierValue qtyDamage;
+    ModifierValue power;
+    ModifierValue initiative;
+    ModifierValue attackDrain;
+    TextAndId desc;
+    CAttackModified attackModified;
+};
+
+static_assert(sizeof(CUmAttackData) == 52, "Size of CUmAttackData structure must be exactly 52 bytes");
 
 } // namespace game
 
-#endif // TEXTANDID_H
+#endif // UMATTACK_H

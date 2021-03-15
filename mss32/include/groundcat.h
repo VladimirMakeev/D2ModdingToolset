@@ -17,20 +17,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTANDID_H
-#define TEXTANDID_H
+#ifndef GROUNDCAT_H
+#define GROUNDCAT_H
 
-#include "d2map.h"
-#include "d2pair.h"
+#include "categories.h"
 
 namespace game {
 
-struct TextAndId
+struct LGroundCategoryTable : CEnumConstantTable<GroundId>
+{ };
+
+struct LGroundCategory : public Category<GroundId>
+{ };
+
+namespace GroundCategories {
+
+struct Categories
 {
-    Map<Pair<CMidgardID, char*>>* text;
-    CMidgardID id;
+    LGroundCategory* plain;
+    LGroundCategory* water;
+    LGroundCategory* forest;
+    LGroundCategory* mountain;
 };
+
+Categories& get();
+
+} // namespace GroundCategoryCategories
 
 } // namespace game
 
-#endif // TEXTANDID_H
+#endif // GROUNDCAT_H

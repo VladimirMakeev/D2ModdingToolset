@@ -17,20 +17,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTANDID_H
-#define TEXTANDID_H
+#ifndef MODIFGROUP_H
+#define MODIFGROUP_H
 
-#include "d2map.h"
-#include "d2pair.h"
+#include "ummodifier.h"
 
 namespace game {
 
-struct TextAndId
+struct LModifGroupTable : public CEnumConstantTable<ModifierSourceId>
+{ };
+
+struct LModifGroup : public Category<ModifierSourceId>
 {
-    Map<Pair<CMidgardID, char*>>* text;
-    CMidgardID id;
+    CUmModifier* modifier;
 };
+
+static_assert(sizeof(LModifGroup) == 16, "Size of LModifGroup structure must be exactly 16 bytes");
 
 } // namespace game
 
-#endif // TEXTANDID_H
+#endif // MODIFGROUP_H

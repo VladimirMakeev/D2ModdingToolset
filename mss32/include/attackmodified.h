@@ -17,20 +17,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTANDID_H
-#define TEXTANDID_H
+#ifndef ATTACKMODIFIED_H
+#define ATTACKMODIFIED_H
 
-#include "d2map.h"
-#include "d2pair.h"
+#include "attack.h"
 
 namespace game {
 
-struct TextAndId
+struct CAttackModifiedData;
+
+struct CAttackModified : public IAttack
 {
-    Map<Pair<CMidgardID, char*>>* text;
-    CMidgardID id;
+    CMidgardID attackId;
+    CAttackModifiedData* data;
 };
+
+static_assert(sizeof(CAttackModified) == 12, "Size of CAttackModified structure must be exactly 12 bytes");
+
+struct CAttackModifiedData
+{
+    int unknown;
+    int initiative;
+    int power;
+    int qtyDamage;
+    int attackDrain;
+};
+
+static_assert(sizeof(CAttackModifiedData) == 20,
+              "Size of CAttackModifiedData structure must be exactly 20 bytes");
 
 } // namespace game
 
-#endif // TEXTANDID_H
+#endif // ATTACKMODIFIED_H
