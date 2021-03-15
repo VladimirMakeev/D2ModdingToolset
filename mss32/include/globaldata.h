@@ -22,7 +22,10 @@
 
 #include "d2map.h"
 #include "d2pair.h"
+#include "linkedlist.h"
 #include "midgardid.h"
+#include "smartptr.h"
+#include <cstddef>
 
 namespace game {
 
@@ -71,6 +74,9 @@ struct TItemTypeList;
 struct GlobalVariables;
 struct CUnitGenerator;
 struct CItemBase;
+struct CDynUpgrade;
+
+using DynUpgradeList = LinkedList<SmartPtr<CDynUpgrade>>;
 
 /** Holds global game information. */
 struct GlobalData
@@ -119,7 +125,7 @@ struct GlobalData
     TItemTypeList* itemTypes;
     int* actions;
     int* transf;
-    int* dynUpgrade;
+    DynUpgradeList* dynUpgrade;
     int* tileVariation;
     int* aiAttitudes;
     int* aiMessages;
@@ -129,6 +135,9 @@ struct GlobalData
 };
 
 static_assert(sizeof(GlobalData) == 204, "Size of GlobalData structure must be exactly 204 bytes");
+
+static_assert(offsetof(GlobalData, dynUpgrade) == 176,
+              "GlobalData::dynUpgrade offset must be 176 bytes");
 
 namespace GlobalDataApi {
 
@@ -144,6 +153,10 @@ struct Api
     using FindItemById = const CItemBase*(__thiscall*)(TItemTypeList* thisptr,
                                                        const CMidgardID* id);
     FindItemById findItemById;
+
+    using FindDynUpgradeById = const CDynUpgrade*(__thiscall*)(DynUpgradeList* thisptr,
+                                                               const CMidgardID* id);
+    FindDynUpgradeById findDynUpgradeById;
 };
 
 Api& get();

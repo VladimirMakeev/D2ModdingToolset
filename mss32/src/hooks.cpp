@@ -38,6 +38,8 @@
 #include "dbtable.h"
 #include "ddcarryoveritems.h"
 #include "dialoginterf.h"
+#include "difficultylevel.h"
+#include "doppelgangerhooks.h"
 #include "drainattackhooks.h"
 #include "dynamiccast.h"
 #include "editor.h"
@@ -74,6 +76,7 @@
 #include "racetype.h"
 #include "scenariodata.h"
 #include "scenariodataarray.h"
+#include "scenarioinfo.h"
 #include "settings.h"
 #include "sitemerchantinterf.h"
 #include "smartptr.h"
@@ -135,6 +138,8 @@ static Hooks getGameHooks()
         HookInfo{(void**)&game::CMidMusicApi::get().playCapitalTrack, playCapitalTrackHooked},
         // Fix game crash with pathfinding on 144x144 maps
         HookInfo{(void**)&fn.markMapPosition, markMapPositionHooked},
+        // Allow user to tweak accuracy computations
+        HookInfo{(void**)&fn.getAttackAccuracy, getAttackAccuracyHooked}
     };
     // clang-format on
 
@@ -188,6 +193,11 @@ static Hooks getGameHooks()
         // Allow doppelganger to transform into leveled units depending on its own level
         hooks.push_back(HookInfo{(void**)&game::CBatAttackDoppelgangerApi::get().onHit,
                                  doppelgangerAttackOnHitHooked});
+    }
+
+    if (userSettings().missChanceSingleRoll != baseSettings().missChanceSingleRoll) {
+        // Compute attack miss chance using single random value, instead of two
+        hooks.push_back(HookInfo{(void**)&fn.attackShouldMiss, attackShouldMissHooked});
     }
 
     return hooks;
@@ -1115,62 +1125,99 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
     return totalDamage;
 }
 
-void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* thisptr,
-                                              int /*%edx*/,
-                                              game::IMidgardObjectMap* objectMap,
-                                              game::BattleMsgData* battleMsgData,
-                                              game::CMidgardID* targetUnitId,
-                                              game::BattleAttackInfo** attackInfo)
+static bool isAttackClassUsesAccuracy(const game::LAttackClass* attackClass)
 {
-    using namespace game;
+    const auto attacks = game::AttackClassCategories::get();
+    const auto id = attackClass->id;
 
-    const auto& battle = BattleMsgDataApi::get();
+    return id == attacks.paralyze->id || id == attacks.petrify->id || id == attacks.damage->id
+           || id == attacks.drain->id || id == attacks.drainOverflow->id || id == attacks.fear->id
+           || id == attacks.lowerDamage->id || id == attacks.lowerInitiative->id
+           || id == attacks.poison->id || id == attacks.frostbite->id || id == attacks.blister->id
+           || id == attacks.bestowWards->id || id == attacks.shatter->id || id == attacks.revive->id
+           || id == attacks.drainLevel->id || id == attacks.transformOther->id;
+}
 
-    if (battle.isUnitTransformed(&thisptr->unitId, battleMsgData) || !thisptr->unknown) {
-        thisptr->altAttack->vftable->onHit(thisptr->altAttack, objectMap, battleMsgData,
-                                           targetUnitId, attackInfo);
+void __stdcall getAttackAccuracyHooked(int* accuracy,
+                                       const game::IAttack* attack,
+                                       const game::IMidgardObjectMap* objectMap,
+                                       const game::CMidgardID* unitId,
+                                       const game::BattleMsgData* battleMsgData)
+{
+    if (!attack) {
+        *accuracy = 100;
         return;
     }
 
+    using namespace game;
+
+    auto vftable = static_cast<const IAttackVftable*>(attack->vftable);
+    const auto attackClass = vftable->getAttackClass(attack);
+
+    if (!isAttackClassUsesAccuracy(attackClass)) {
+        *accuracy = 100;
+        return;
+    }
+
+    int tmpAccuracy{};
+    vftable->getPower(attack, &tmpAccuracy);
+
+    const auto& battle = BattleMsgDataApi::get();
+    auto groupId = battle.isUnitAttacker(battleMsgData, unitId) ? &battleMsgData->attackerGroupId
+                                                                : &battleMsgData->defenderGroupId;
+
     const auto& fn = gameFunctions();
 
-    CMidUnit* targetUnit = fn.findUnitById(objectMap, targetUnitId);
-    CMidgardID targetUnitImplId = targetUnit->unitImpl->unitId;
+    if (!fn.isGroupOwnerPlayerHuman(objectMap, groupId)) {
+        const auto& id = CMidgardIDApi::get();
 
-    CMidgardID globalTargetUnitImplId;
-    CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
-    unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &globalTargetUnitImplId,
-                                                &targetUnit->unitImpl->unitId);
+        CMidgardID scenarioInfoId{};
+        auto scenarioId = objectMap->vftable->getId(objectMap);
 
-    const CMidUnit* unit = fn.findUnitById(objectMap, &thisptr->unitId);
-    const int unitLevel = fn.getUnitLevelByImplId(&unit->unitImpl->unitId);
-    const int targetLevel = fn.getUnitLevelByImplId(&targetUnitImplId);
-    const int globalLevel = fn.getUnitLevelByImplId(&globalTargetUnitImplId);
+        id.fromParts(&scenarioInfoId, id.getCategory(scenarioId), id.getCategoryIndex(scenarioId),
+                     IdType::ScenarioInfo, 0);
 
-    int transformLevel = unitLevel < targetLevel ? unitLevel : targetLevel;
-    if (transformLevel < globalLevel)
-        transformLevel = globalLevel;
+        auto scenarioInfo = static_cast<const CScenarioInfo*>(
+            objectMap->vftable->findScenarioObjectById(objectMap, &scenarioInfoId));
 
-    CMidgardID transformUnitImplId;
-    unitGenerator->vftable->generateUnitImplId(unitGenerator, &transformUnitImplId,
-                                               &targetUnit->unitImpl->unitId, transformLevel);
+        const auto difficulties = DifficultyLevelCategories::get();
+        const auto difficultyId = scenarioInfo->gameDifficulty.id;
 
-    unitGenerator->vftable->generateUnitImpl(unitGenerator, &transformUnitImplId);
+        const auto& aiAccuracy = userSettings().aiAccuracyBonus;
+        const std::int8_t* bonus = &aiAccuracy.easy;
 
-    const auto& visitors = VisitorApi::get();
-    visitors.transformUnit(&thisptr->unitId, &transformUnitImplId, false, objectMap, 1);
+        if (difficultyId == difficulties.easy->id) {
+            bonus = &aiAccuracy.easy;
+        } else if (difficultyId == difficulties.average->id) {
+            bonus = &aiAccuracy.average;
+        } else if (difficultyId == difficulties.hard->id) {
+            bonus = &aiAccuracy.hard;
+        } else if (difficultyId == difficulties.veryHard->id) {
+            bonus = &aiAccuracy.veryHard;
+        }
 
-    BattleAttackUnitInfo info{};
-    info.unitId = thisptr->unitId;
-    info.unitImplId = unit->unitImpl->unitId;
-    BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
+        if (aiAccuracy.absolute) {
+            tmpAccuracy += *bonus;
+        } else {
+            tmpAccuracy += tmpAccuracy * *bonus / 100;
+        }
 
-    battle.removeTransformStatuses(&thisptr->unitId, battleMsgData);
+        tmpAccuracy = std::clamp(tmpAccuracy, -100, 100);
+    }
 
-    battle.setUnitStatus(battleMsgData, &thisptr->unitId, BattleStatus::TransformDoppelganger,
-                         true);
+    const auto attacks = AttackClassCategories::get();
+    if (battleMsgData->currentRound > userSettings().disableAllowedRoundMax
+        && (attackClass->id == attacks.paralyze->id || attackClass->id == attacks.petrify->id)) {
+        tmpAccuracy = 0;
+    }
 
-    battle.setUnitHp(battleMsgData, &thisptr->unitId, unit->currentHp);
+    tmpAccuracy -= battle.getUnitAccuracyReduction(battleMsgData, unitId);
+    *accuracy = std::clamp(tmpAccuracy, -100, 100);
+}
+
+bool __stdcall attackShouldMissHooked(const int* accuracy)
+{
+    return game::gameFunctions().generateRandomNumber(100) > *accuracy;
 }
 
 } // namespace hooks

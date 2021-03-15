@@ -55,7 +55,11 @@ static std::array<Functions, 4> functions = {{
         (ComputeDamage)0x65ccc7,
         (ComputeAttackMiss)0x626b5f,
         (MarkMapPosition)0x5cdf6f,
-        (GetUnitLevelByImplId)0x599581
+        (GetUnitLevelByImplId)0x599581,
+        (GetAttackAccuracy)0x628b0a,
+        (IsGroupOwnerPlayerHuman)0x628165,
+        (AttackShouldMiss)0x626b5f,
+        (GenerateRandomNumber)0x548e10,
     },
     // Russobit
     Functions{
@@ -87,7 +91,11 @@ static std::array<Functions, 4> functions = {{
         (ComputeDamage)0x65ccc7,
         (ComputeAttackMiss)0x626b5f,
         (MarkMapPosition)0x5cdf6f,
-        (GetUnitLevelByImplId)0x599581
+        (GetUnitLevelByImplId)0x599581,
+        (GetAttackAccuracy)0x628b0a,
+        (IsGroupOwnerPlayerHuman)0x628165,
+        (AttackShouldMiss)0x626b5f,
+        (GenerateRandomNumber)0x548e10,
     },
     // Gog
     Functions{
@@ -119,7 +127,11 @@ static std::array<Functions, 4> functions = {{
         (ComputeDamage)0x65b747,
         (ComputeAttackMiss)0x62569f,
         (MarkMapPosition)0x5cce8b,
-        (GetUnitLevelByImplId)0x59870b
+        (GetUnitLevelByImplId)0x59870b,
+        (GetAttackAccuracy)0x62764a,
+        (IsGroupOwnerPlayerHuman)0x626ca5,
+        (AttackShouldMiss)0x62569f,
+        (GenerateRandomNumber)0x54851f,
     },
     // Scenario Editor
     Functions{

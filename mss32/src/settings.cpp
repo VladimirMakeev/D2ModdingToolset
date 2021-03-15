@@ -30,14 +30,14 @@
 
 namespace hooks {
 
-template <typename T>
-static T readSetting(const sol::state& lua,
+template <typename T, typename Table, typename Key>
+static T readSetting(const sol::table_proxy<Table, Key>& table,
                      const char* name,
                      T def,
                      T min = std::numeric_limits<T>::min(),
                      T max = std::numeric_limits<T>::max())
 {
-    const std::optional<T> result = lua["settings"][name];
+    const std::optional<T> result = table[name];
     if (!result) {
         return def;
     }
@@ -45,28 +45,47 @@ static T readSetting(const sol::state& lua,
     return std::clamp<T>(*result, min, max);
 }
 
+static void readAiAccuracySettings(Settings& settings, const sol::state& lua)
+{
+    const auto table = lua["settings"]["aiAccuracyBonus"];
+    const auto& dflt = defaultSettings().aiAccuracyBonus;
+    auto& aiAccuracy = settings.aiAccuracyBonus;
+
+    aiAccuracy.absolute = readSetting(table, "absolute", dflt.absolute);
+    aiAccuracy.easy = readSetting(table, "easy", dflt.easy);
+    aiAccuracy.average = readSetting(table, "average", dflt.average);
+    aiAccuracy.hard = readSetting(table, "hard", dflt.hard);
+    aiAccuracy.veryHard = readSetting(table, "veryHard", dflt.veryHard);
+}
+
 static void readSettings(Settings& settings, const sol::state& lua)
 {
+    const auto table = lua["settings"];
+
     // clang-format off
-    settings.unitMaxDamage = readSetting(lua, "unitMaxDamage", defaultSettings().unitMaxDamage);
-    settings.unitMaxArmor = readSetting(lua, "unitMaxArmor", defaultSettings().unitMaxArmor);
-    settings.stackScoutRangeMax = readSetting(lua, "stackMaxScoutRange", defaultSettings().stackScoutRangeMax);
-    settings.shatteredArmorMax = readSetting(lua, "shatteredArmorMax", defaultSettings().shatteredArmorMax, 0, baseSettings().shatteredArmorMax);
-    settings.shatterDamageMax = readSetting(lua, "shatterDamageMax", defaultSettings().shatterDamageMax, 0, baseSettings().shatterDamageMax);
-    settings.drainAttackHeal = readSetting(lua, "drainAttackHeal", defaultSettings().drainAttackHeal);
-    settings.drainOverflowHeal = readSetting(lua, "drainOverflowHeal", defaultSettings().drainOverflowHeal);
-    settings.carryOverItemsMax = readSetting(lua, "carryOverItemsMax", defaultSettings().carryOverItemsMax, 0);
-    settings.criticalHitDamage = readSetting(lua, "criticalHitDamage", defaultSettings().criticalHitDamage);
-    settings.criticalHitChance = readSetting(lua, "criticalHitChance", defaultSettings().criticalHitChance, (uint8_t)0, (uint8_t)100);
-    settings.mageLeaderAccuracyReduction = readSetting(lua, "mageLeaderAccuracyReduction", defaultSettings().mageLeaderAccuracyReduction);
-    settings.showBanners = readSetting(lua, "showBanners", defaultSettings().showBanners);
-    settings.showResources = readSetting(lua, "showResources", defaultSettings().showResources);
-    settings.showLandConverted = readSetting(lua, "showLandConverted", defaultSettings().showLandConverted);
-    settings.preserveCapitalBuildings = readSetting(lua, "preserveCapitalBuildings", defaultSettings().preserveCapitalBuildings);
-    settings.allowShatterAttackToMiss = readSetting(lua, "allowShatterAttackToMiss", defaultSettings().allowShatterAttackToMiss);
-    settings.leveledDoppelgangerAttack = readSetting(lua, "leveledDoppelgangerAttack", defaultSettings().leveledDoppelgangerAttack);
-    settings.debugMode = readSetting(lua, "debugHooks", defaultSettings().debugMode);
+    settings.unitMaxDamage = readSetting(table, "unitMaxDamage", defaultSettings().unitMaxDamage);
+    settings.unitMaxArmor = readSetting(table, "unitMaxArmor", defaultSettings().unitMaxArmor);
+    settings.stackScoutRangeMax = readSetting(table, "stackMaxScoutRange", defaultSettings().stackScoutRangeMax);
+    settings.shatteredArmorMax = readSetting(table, "shatteredArmorMax", defaultSettings().shatteredArmorMax, 0, baseSettings().shatteredArmorMax);
+    settings.shatterDamageMax = readSetting(table, "shatterDamageMax", defaultSettings().shatterDamageMax, 0, baseSettings().shatterDamageMax);
+    settings.drainAttackHeal = readSetting(table, "drainAttackHeal", defaultSettings().drainAttackHeal);
+    settings.drainOverflowHeal = readSetting(table, "drainOverflowHeal", defaultSettings().drainOverflowHeal);
+    settings.carryOverItemsMax = readSetting(table, "carryOverItemsMax", defaultSettings().carryOverItemsMax, 0);
+    settings.criticalHitDamage = readSetting(table, "criticalHitDamage", defaultSettings().criticalHitDamage);
+    settings.criticalHitChance = readSetting(table, "criticalHitChance", defaultSettings().criticalHitChance, (uint8_t)0, (uint8_t)100);
+    settings.mageLeaderAccuracyReduction = readSetting(table, "mageLeaderAccuracyReduction", defaultSettings().mageLeaderAccuracyReduction);
+    settings.disableAllowedRoundMax = readSetting(table, "disableAllowedRoundMax", defaultSettings().disableAllowedRoundMax, (uint8_t)1);
+    settings.showBanners = readSetting(table, "showBanners", defaultSettings().showBanners);
+    settings.showResources = readSetting(table, "showResources", defaultSettings().showResources);
+    settings.showLandConverted = readSetting(table, "showLandConverted", defaultSettings().showLandConverted);
+    settings.preserveCapitalBuildings = readSetting(table, "preserveCapitalBuildings", defaultSettings().preserveCapitalBuildings);
+    settings.allowShatterAttackToMiss = readSetting(table, "allowShatterAttackToMiss", defaultSettings().allowShatterAttackToMiss);
+    settings.leveledDoppelgangerAttack = readSetting(table, "leveledDoppelgangerAttack", defaultSettings().leveledDoppelgangerAttack);
+    settings.missChanceSingleRoll = readSetting(table, "missChanceSingleRoll", defaultSettings().missChanceSingleRoll);
+    settings.debugMode = readSetting(table, "debugHooks", defaultSettings().debugMode);
     // clang-format on
+
+    readAiAccuracySettings(settings, lua);
 }
 
 const Settings& baseSettings()
@@ -86,12 +105,19 @@ const Settings& baseSettings()
         settings.criticalHitDamage = 5;
         settings.criticalHitChance = 100;
         settings.mageLeaderAccuracyReduction = 10;
+        settings.aiAccuracyBonus.absolute = true;
+        settings.aiAccuracyBonus.easy = -15;
+        settings.aiAccuracyBonus.average = 0;
+        settings.aiAccuracyBonus.hard = 5;
+        settings.aiAccuracyBonus.veryHard = 10;
+        settings.disableAllowedRoundMax = 40;
         settings.showBanners = false;
         settings.showResources = false;
         settings.showLandConverted = false;
         settings.preserveCapitalBuildings = false;
         settings.allowShatterAttackToMiss = false;
         settings.leveledDoppelgangerAttack = false;
+        settings.missChanceSingleRoll = false;
         settings.debugMode = false;
 
         initialized = true;

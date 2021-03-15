@@ -21,12 +21,53 @@
 #define MIDGARDSCENARIOMAP_H
 
 #include "midgardobjectmap.h"
+#include "sortedlist.h"
+#include <cstdint>
 
 namespace game {
 
+struct ScenarioObjectRecord
+{
+    CMidgardID objectId;
+    SmartPtr<IMidScenarioObject> object;
+    std::uint32_t partialId; /**< objectId.value & 0x7fffffff */
+    ScenarioObjectRecord* next;
+};
+
+static_assert(sizeof(ScenarioObjectRecord) == 20,
+              "Size of ScenarioObjectRecord structure must be exactly 20 bytes");
+
+struct CMidgardScenarioMapData
+{
+    char unknown;
+    char padding[3];
+    std::uint32_t objectsTotal;
+    ScenarioObjectRecord** records;
+    std::uint32_t recordsTotal;
+    int unknown2;
+    int unknown3;
+    char unknown4;
+    char unknown5;
+    char unknown6;
+    char unknown7;
+    int unknown8;
+    int unknown9;
+    void* allocator;
+};
+
+static_assert(sizeof(CMidgardScenarioMapData) == 40,
+              "Size of CMidgardScenarioMapData structure must be exactly 40 bytes");
+
+/** Stores scenario objects. */
 struct CMidgardScenarioMap : public IMidgardObjectMap
 {
-    char unknown[364];
+    CMidgardID scenarioFileId;
+    CMidgardScenarioMapData data;
+    /** Used to keep track of last free CMidgardID type index for each IdType. */
+    int freeIdTypeIndices[59];
+    SortedList<CMidgardID> list1;
+    SortedList<CMidgardID> list2; /**< Assumption: list of objects to be updated. */
+    SortedList<CMidgardID> list3;
 };
 
 static_assert(sizeof(CMidgardScenarioMap) == 368,

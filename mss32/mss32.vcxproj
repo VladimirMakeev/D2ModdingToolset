@@ -169,6 +169,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\ddcarryoveritems.cpp" />
     <ClCompile Include="src\dialoginterf.cpp" />
     <ClCompile Include="src\difficultylevel.cpp" />
+    <ClCompile Include="src\doppelgangerhooks.cpp" />
     <ClCompile Include="src\drainattackhooks.cpp" />
     <ClCompile Include="src\dynamiccast.cpp" />
     <ClCompile Include="src\editor.cpp" />
@@ -300,9 +301,11 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\deathanimcat.h" />
     <ClInclude Include="include\dialoginterf.h" />
     <ClInclude Include="include\difficultylevel.h" />
+    <ClInclude Include="include\doppelgangerhooks.h" />
     <ClInclude Include="include\draganddropinterf.h" />
     <ClInclude Include="include\drainattackhooks.h" />
     <ClInclude Include="include\dynamiccast.h" />
+    <ClInclude Include="include\dynupgrade.h" />
     <ClInclude Include="include\editor.h" />
     <ClInclude Include="include\enclayoutspell.h" />
     <ClInclude Include="include\encparam.h" />
@@ -367,6 +370,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\menunewskirmish.h" />
     <ClInclude Include="include\menunewskirmishsingle.h" />
     <ClInclude Include="include\midbag.h" />
+    <ClInclude Include="include\midcampaign.h" />
     <ClInclude Include="include\midclient.h" />
     <ClInclude Include="include\midclientcore.h" />
     <ClInclude Include="include\midcommandqueue2.h" />
@@ -390,6 +394,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midscenvariables.h" />
     <ClInclude Include="include\midserver.h" />
     <ClInclude Include="include\midserverbuilder.h" />
+    <ClInclude Include="include\midsite.h" />
     <ClInclude Include="include\midstack.h" />
     <ClInclude Include="include\midunit.h" />
     <ClInclude Include="include\midunitgroup.h" />
@@ -423,6 +428,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\scenarioheader.h" />
     <ClInclude Include="include\scenarioinfo.h" />
     <ClInclude Include="include\settings.h" />
+    <ClInclude Include="include\sitecategories.h" />
     <ClInclude Include="include\sitemerchantinterf.h" />
     <ClInclude Include="include\smartptr.h" />
     <ClInclude Include="include\sortedlist.h" />

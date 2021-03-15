@@ -38,12 +38,24 @@ struct Settings
     std::uint8_t criticalHitDamage;
     std::uint8_t criticalHitChance;
     std::uint8_t mageLeaderAccuracyReduction;
+    std::uint8_t disableAllowedRoundMax;
+
+    struct
+    {
+        std::int8_t easy;
+        std::int8_t average;
+        std::int8_t hard;
+        std::int8_t veryHard;
+        bool absolute;
+    } aiAccuracyBonus;
+
     bool showBanners;
     bool showResources;
     bool showLandConverted;
     bool preserveCapitalBuildings;
     bool allowShatterAttackToMiss;
     bool leveledDoppelgangerAttack;
+    bool missChanceSingleRoll;
     bool debugMode;
 };
 

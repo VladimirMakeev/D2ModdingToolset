@@ -230,6 +230,15 @@ enum class FortId : int
     Village = 4
 };
 
+/** Site ids from LSite.dbf. */
+enum class SiteId : int
+{
+    Merchant = 2,
+    MageTower = 4,
+    Mercenaries,
+    Trainer
+};
+
 /** Modifier source ids from LModifS.dbf. */
 enum class ModifierSourceId : int
 {

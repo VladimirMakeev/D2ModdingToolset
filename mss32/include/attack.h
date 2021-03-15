@@ -37,45 +37,45 @@ struct IAttackVftable
 {
     void* destructor;
 
-    using GetCStr = const char*(__thiscall*)(IAttack* thisptr);
+    using GetCStr = const char*(__thiscall*)(const IAttack* thisptr);
     GetCStr getName;
     GetCStr getDescription;
 
-    using GetAttackClass = LAttackClass*(__thiscall*)(IAttack* thisptr);
+    using GetAttackClass = LAttackClass*(__thiscall*)(const IAttack* thisptr);
     GetAttackClass getAttackClass;
 
-    using GetAttackSource = LAttackSource*(__thiscall*)(IAttack* thisptr);
+    using GetAttackSource = LAttackSource*(__thiscall*)(const IAttack* thisptr);
     GetAttackSource getAttackSource;
 
-    using GetInitiative = int*(__thiscall*)(IAttack* thisptr);
+    using GetInitiative = int*(__thiscall*)(const IAttack* thisptr);
     GetInitiative getInitiative;
 
-    using GetPower = int*(__thiscall*)(IAttack* thisptr);
+    using GetPower = int*(__thiscall*)(const IAttack* thisptr, int* power);
     GetPower getPower;
 
-    using GetAttackReach = LAttackReach*(__thiscall*)(IAttack* thisptr);
+    using GetAttackReach = LAttackReach*(__thiscall*)(const IAttack* thisptr);
     GetAttackReach getAttackReach;
 
-    using GetInt = int(__thiscall*)(IAttack* thisptr);
+    using GetInt = int(__thiscall*)(const IAttack* thisptr);
     GetInt getQtyDamage;
     GetInt getQtyHeal;
 
     /** Meaning assumed. */
-    using GetDrain = int(__thiscall*)(IAttack* thisptr, int damage);
+    using GetDrain = int(__thiscall*)(const IAttack* thisptr, int damage);
     GetDrain getDrain;
 
     GetInt getLevel;
     GetInt getAltAttack;
 
-    using GetBool = bool(__thiscall*)(IAttack* thisptr);
+    using GetBool = bool(__thiscall*)(const IAttack* thisptr);
     GetBool getInfinite;
 
-    using GetWards = IdVector*(__thiscall*)(IAttack* thisptr);
+    using GetWards = IdVector*(__thiscall*)(const IAttack* thisptr);
     GetWards getWards;
 
     GetBool getCritHit;
 
-    using CopyTo = bool(__thiscall*)(IAttack* thisptr, void* dest);
+    using CopyTo = bool(__thiscall*)(const IAttack* thisptr, void* dest);
     CopyTo copyTo;
 };
 
