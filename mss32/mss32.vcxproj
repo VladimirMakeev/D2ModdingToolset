@@ -145,6 +145,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\attackreachcat.cpp" />
     <ClCompile Include="src\attacksourcecat.cpp" />
     <ClCompile Include="src\autodialog.cpp" />
+    <ClCompile Include="src\batattackbestowwards.cpp" />
     <ClCompile Include="src\batattackdoppelganger.cpp" />
     <ClCompile Include="src\batattackdrain.cpp" />
     <ClCompile Include="src\batattackdrainoverflow.cpp" />
@@ -177,6 +178,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\functor.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\globaldata.cpp" />
+    <ClCompile Include="src\groundcat.cpp" />
     <ClCompile Include="src\hooks.cpp" />
     <ClCompile Include="src\idlist.cpp" />
     <ClCompile Include="src\idvector.cpp" />
@@ -184,6 +186,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\itemcategory.cpp" />
     <ClCompile Include="src\itemtransferhooks.cpp" />
     <ClCompile Include="src\iterators.cpp" />
+    <ClCompile Include="src\leaderabilitycat.cpp" />
     <ClCompile Include="src\listbox.cpp" />
     <ClCompile Include="src\log.cpp" />
     <ClCompile Include="src\lordtype.cpp" />
@@ -259,10 +262,12 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\attack.h" />
     <ClInclude Include="include\attackclasscat.h" />
     <ClInclude Include="include\attackimpl.h" />
+    <ClInclude Include="include\attackmodified.h" />
     <ClInclude Include="include\attackreachcat.h" />
     <ClInclude Include="include\attacksourcecat.h" />
     <ClInclude Include="include\autodialog.h" />
     <ClInclude Include="include\batattack.h" />
+    <ClInclude Include="include\batattackbestowwards.h" />
     <ClInclude Include="include\batattackdoppelganger.h" />
     <ClInclude Include="include\batattackdrain.h" />
     <ClInclude Include="include\batattackdrainoverflow.h" />
@@ -311,6 +316,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\gamesettings.h" />
     <ClInclude Include="include\globaldata.h" />
     <ClInclude Include="include\globalvariables.h" />
+    <ClInclude Include="include\groundcat.h" />
     <ClInclude Include="include\hooks.h" />
     <ClInclude Include="include\idlist.h" />
     <ClInclude Include="include\idvector.h" />
@@ -348,6 +354,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\itemwand.h" />
     <ClInclude Include="include\itemweapon.h" />
     <ClInclude Include="include\iterators.h" />
+    <ClInclude Include="include\leaderabilitycat.h" />
     <ClInclude Include="include\linkedlist.h" />
     <ClInclude Include="include\listbox.h" />
     <ClInclude Include="include\log.h" />
@@ -387,6 +394,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midunit.h" />
     <ClInclude Include="include\midunitgroup.h" />
     <ClInclude Include="include\midvillage.h" />
+    <ClInclude Include="include\modifgroup.h" />
     <ClInclude Include="include\mqanimation.h" />
     <ClInclude Include="include\mqnetservice.h" />
     <ClInclude Include="include\mqnetsession.h" />
@@ -424,9 +432,14 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\targetslist.h" />
     <ClInclude Include="include\taskmanagerholder.h" />
     <ClInclude Include="include\textandid.h" />
+    <ClInclude Include="include\umattack.h" />
+    <ClInclude Include="include\ummodifier.h" />
+    <ClInclude Include="include\umstack.h" />
+    <ClInclude Include="include\umunit.h" />
     <ClInclude Include="include\unitbranchcat.h" />
     <ClInclude Include="include\unitcat.h" />
     <ClInclude Include="include\unitgenerator.h" />
+    <ClInclude Include="include\unitmodifier.h" />
     <ClInclude Include="include\unitsforhire.h" />
     <ClInclude Include="include\ussoldier.h" />
     <ClInclude Include="include\ussoldierimpl.h" />

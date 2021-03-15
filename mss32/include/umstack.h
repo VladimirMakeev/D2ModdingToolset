@@ -17,20 +17,47 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTANDID_H
-#define TEXTANDID_H
+#ifndef UMSTACK_H
+#define UMSTACK_H
 
-#include "d2map.h"
-#include "d2pair.h"
+#include "groundcat.h"
+#include "leaderabilitycat.h"
+#include "smartptr.h"
+#include "textandid.h"
+#include "ummodifier.h"
+#include "usunit.h"
 
 namespace game {
 
-struct TextAndId
+struct CUmStackData;
+struct IUsStackLeader;
+
+struct CUmStack
 {
-    Map<Pair<CMidgardID, char*>>* text;
+    IUsUnit* usUnit;
     CMidgardID id;
+    IUsStackLeader* usStackLeader;
+    CUmModifier umModifier;
+    CUmStackData* data;
 };
+
+static_assert(sizeof(CUmStack) == 24, "Size of CUmStack structure must be exactly 24 bytes");
+
+struct CUmStackData
+{
+    ModifierValue moveAllowance;
+    ModifierValue scoutingRange;
+    ModifierValue leadership;
+    SmartPtr<LGroundCategory> moveAbility;
+    SmartPtr<LLeaderAbility> leaderAbility;
+    TextAndId desc;
+    bool fastRetreat;
+    char padding[3];
+    ModifierValue lowerCost;
+};
+
+static_assert(sizeof(CUmStackData) == 60, "Size of CUmStackData structure must be exactly 60 bytes");
 
 } // namespace game
 
-#endif // TEXTANDID_H
+#endif // UMSTACK_H

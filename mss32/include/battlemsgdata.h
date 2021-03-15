@@ -66,14 +66,14 @@ enum class BattleStatus : int
     Unsummoned             /**< unsummon effect applied ? */
 };
 
-struct UnknownUnitInfo
+struct ModifiedUnitInfo
 {
-    CMidgardID id1;
-    CMidgardID id2;
+    CMidgardID unitId;
+    CMidgardID modifierId;
 };
 
-static_assert(sizeof(UnknownUnitInfo) == 8,
-              "Size of UnknownUnitInfo structure must be exactly 8 bytes");
+static_assert(sizeof(ModifiedUnitInfo) == 8,
+              "Size of ModifiedUnitInfo structure must be exactly 8 bytes");
 
 /** Battle turn info. */
 struct BattleTurn
@@ -134,8 +134,10 @@ struct UnitInfo
     std::int8_t transformAppliedRound;
     char unknown6;
     CMidgardID summonOwner;
-    UnknownUnitInfo elements[8];
-    CMidgardID unknownIds[8];
+    /** Ids of units modified by this unit coupled with corresponding modifier ids. */
+    ModifiedUnitInfo modifiedUnits[8];
+    /** Modifiers applied to this unit. */
+    CMidgardID modifierIds[8];
     /** Total armor reduced by theurgist 'shatter' attacks. Negative values can increase armor. */
     int shatteredArmor;
     int fortificationArmor;
@@ -157,7 +159,8 @@ static_assert(offsetof(UnitInfo, unitFlags) == 48, "UnitInfo::unitFlags offset m
 static_assert(offsetof(UnitInfo, poisonAppliedRound) == 51,
               "UnitInfo::poisonAppliedRound offset must be 51 bytes");
 
-static_assert(offsetof(UnitInfo, elements) == 60, "UnitInfo::elements offset must be 60 bytes");
+static_assert(offsetof(UnitInfo, modifiedUnits) == 60,
+              "UnitInfo::modifiedUnits offset must be 60 bytes");
 
 static_assert(offsetof(UnitInfo, shatteredArmor) == 156,
               "UnitInfo::shatteredArmor offset must be 156 bytes");
