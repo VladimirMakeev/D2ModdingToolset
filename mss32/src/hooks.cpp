@@ -1111,8 +1111,14 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
                                                           computeCriticalHit, &damage, &critDamage);
 
     if (critDamage != 0) {
+        bool critMissed;
         int critChance = userSettings().criticalHitChance;
-        if (game::gameFunctions().computeAttackMiss(&critChance)) {
+        if (userSettings().missChanceSingleRoll != baseSettings().missChanceSingleRoll)
+            critMissed = attackShouldMissHooked(&critChance);
+        else
+            critMissed = game::gameFunctions().attackShouldMiss(&critChance);
+
+        if (critMissed) {
             totalDamage -= critDamage;
             critDamage = 0;
         }
