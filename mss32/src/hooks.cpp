@@ -1127,7 +1127,7 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
 
 static bool isAttackClassUsesAccuracy(const game::LAttackClass* attackClass)
 {
-    const auto attacks = game::AttackClassCategories::get();
+    const auto& attacks = game::AttackClassCategories::get();
     const auto id = attackClass->id;
 
     return id == attacks.paralyze->id || id == attacks.petrify->id || id == attacks.damage->id
@@ -1180,7 +1180,7 @@ void __stdcall getAttackAccuracyHooked(int* accuracy,
         auto scenarioInfo = static_cast<const CScenarioInfo*>(
             objectMap->vftable->findScenarioObjectById(objectMap, &scenarioInfoId));
 
-        const auto difficulties = DifficultyLevelCategories::get();
+        const auto& difficulties = DifficultyLevelCategories::get();
         const auto difficultyId = scenarioInfo->gameDifficulty.id;
 
         const auto& aiAccuracy = userSettings().aiAccuracyBonus;
@@ -1205,7 +1205,7 @@ void __stdcall getAttackAccuracyHooked(int* accuracy,
         tmpAccuracy = std::clamp(tmpAccuracy, -100, 100);
     }
 
-    const auto attacks = AttackClassCategories::get();
+    const auto& attacks = AttackClassCategories::get();
     if (battleMsgData->currentRound > userSettings().disableAllowedRoundMax
         && (attackClass->id == attacks.paralyze->id || attackClass->id == attacks.petrify->id)) {
         tmpAccuracy = 0;
