@@ -31,8 +31,8 @@ struct IMidgardObjectMap;
 /** Unit statuses in battle. */
 enum class BattleStatus : int
 {
-    Status0 = 0,
-    Dead,
+    XpCounted = 0,         /**< Unit was killed and its experience points were counted. */
+    Dead,                  /**< Unit dead. */
     Paralyze,              /**< Unit paralyzed. */
     Petrify,               /**< Unit petrified. */
     DisableLong,           /**< Long disable applied (paralyze, petrify or fear). */
@@ -59,8 +59,8 @@ enum class BattleStatus : int
     TransformDoppelganger, /**< Doppelganger transformation ? */
     TransformDrainLevel,   /**< Drain level applied ? */
     Summon,                /**< Unit was summoned during battle. */
-    FastRetreat,           /**< Fast retreat ? */
-    Retreat,               /**< Unit retreating. */
+    Retreated,             /**< Unit retreated from battle. */
+    Retreat,               /**< Unit is retreating. */
     Hidden,                /**< Unit is hidden. For example, while leader dueling a thief. */
     Defend,                /**< Defend was used in this round. */
     Unsummoned             /**< unsummon effect applied ? */
@@ -112,7 +112,14 @@ struct UnitInfo
     CMidgardID unitId2;
     /** Bitmask made of BattleStatus values used as shifts. */
     std::uint64_t unitStatuses;
-    char unknown[20];
+    /** Additional statuses, unused in RotE v3.01. */
+    std::uint64_t unitStatuses2;
+    /** Id of attack that applied poison effect. */
+    CMidgardID poisonAttackId;
+    /** Id of attack that applied frostbite effect. */
+    CMidgardID frostbiteAttackId;
+    /** Id of attack that applied blister effect. */
+    CMidgardID blisterAttackId;
     /** Bitmask with values for each of LAttackSource. */
     std::uint8_t attackSourceImmunityStatuses;
     char padding[3];
