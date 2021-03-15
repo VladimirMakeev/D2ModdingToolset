@@ -824,7 +824,7 @@ int __stdcall chooseUnitLaneHooked(const game::IUsSoldier* soldier)
     const LAttackReach* reach = attackVftable->getAttackReach(attack);
 
     // Place units with adjacent attack reach at the front lane, despite of their attack class
-    if (reach->id == AttackReachCategories::get().adjacentAttackReach->id) {
+    if (reach->id == AttackReachCategories::get().adjacent->id) {
         return 1;
     }
 

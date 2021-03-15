@@ -34,9 +34,9 @@ namespace AttackReachCategories {
 
 struct Categories
 {
-    LAttackReach* allAttackReach;
-    LAttackReach* anyAttackReach;
-    LAttackReach* adjacentAttackReach;
+    LAttackReach* all;
+    LAttackReach* any;
+    LAttackReach* adjacent;
 };
 
 Categories& get();

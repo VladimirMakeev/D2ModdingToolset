@@ -34,10 +34,10 @@ namespace GroundCategories {
 
 struct Categories
 {
-    LGroundCategory* plainGroundCategory;
-    LGroundCategory* waterGroundCategory;
-    LGroundCategory* forestGroundCategory;
-    LGroundCategory* mountainGroundCategory;
+    LGroundCategory* plain;
+    LGroundCategory* water;
+    LGroundCategory* forest;
+    LGroundCategory* mountain;
 };
 
 Categories& get();

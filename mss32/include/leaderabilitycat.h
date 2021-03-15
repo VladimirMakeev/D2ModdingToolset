@@ -34,17 +34,17 @@ namespace LeaderAbilityCategories {
 
 struct Categories
 {
-    LLeaderAbility* orbUseLeaderAbility;
-    LLeaderAbility* wandScrollUseLeaderAbility;
-    LLeaderAbility* weaponArmorUseLeaderAbility;
-    LLeaderAbility* incorruptibleLeaderAbility;
-    LLeaderAbility* criticalHitLeaderAbility;
-    LLeaderAbility* travelItemUseLeaderAbility;
-    LLeaderAbility* talismanUseLeaderAbility;
-    LLeaderAbility* bannerUseLeaderAbility;
-    LLeaderAbility* rodLeaderAbility;
-    LLeaderAbility* weaponMasterLeaderAbility;
-    LLeaderAbility* jewelryUseLeaderAbility;
+    LLeaderAbility* orbUse;
+    LLeaderAbility* wandScrollUse;
+    LLeaderAbility* weaponArmorUse;
+    LLeaderAbility* incorruptible;
+    LLeaderAbility* criticalHit;
+    LLeaderAbility* travelItemUse;
+    LLeaderAbility* talismanUse;
+    LLeaderAbility* bannerUse;
+    LLeaderAbility* rod;
+    LLeaderAbility* weaponMaster;
+    LLeaderAbility* jewelryUse;
 };
 
 Categories& get();
