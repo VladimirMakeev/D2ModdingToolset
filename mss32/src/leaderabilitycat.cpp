@@ -75,4 +75,4 @@ Categories& get()
     return categories[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::GroundCategories
+} // namespace game::LeaderAbilityCategories
