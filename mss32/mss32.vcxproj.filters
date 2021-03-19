@@ -408,6 +408,9 @@
     <ClCompile Include="src\bindings\dynupgradeview.cpp">
       <Filter>Исходные файлы\bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\scripts.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -1098,6 +1101,9 @@
     </ClInclude>
     <ClInclude Include="include\bindings\dynupgradeview.h">
       <Filter>Файлы заголовков\bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scripts.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

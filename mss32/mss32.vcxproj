@@ -218,6 +218,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\scenariodata.cpp" />
     <ClCompile Include="src\scenariodataarray.cpp" />
     <ClCompile Include="src\scenarioheader.cpp" />
+    <ClCompile Include="src\scripts.cpp" />
     <ClCompile Include="src\settings.cpp" />
     <ClCompile Include="src\sitemerchantinterf.cpp" />
     <ClCompile Include="src\smartptr.cpp" />
@@ -433,6 +434,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\scenariodataarray.h" />
     <ClInclude Include="include\scenarioheader.h" />
     <ClInclude Include="include\scenarioinfo.h" />
+    <ClInclude Include="include\scripts.h" />
     <ClInclude Include="include\settings.h" />
     <ClInclude Include="include\sitecategories.h" />
     <ClInclude Include="include\sitemerchantinterf.h" />
