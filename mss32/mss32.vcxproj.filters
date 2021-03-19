@@ -399,6 +399,9 @@
     <ClCompile Include="src\leaderabilitycat.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\unitimplview.cpp">
+      <Filter>Исходные файлы\bindings</Filter>
+    </ClCompile>
     <ClCompile Include="src\bindings\dynupgradeview.cpp">
       <Filter>Исходные файлы\bindings</Filter>
     </ClCompile>
@@ -1083,6 +1086,9 @@
     </ClInclude>
     <ClInclude Include="include\leaderabilitycat.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\unitimplview.h">
+      <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\dynupgradeview.h">
       <Filter>Файлы заголовков\bindings</Filter>
