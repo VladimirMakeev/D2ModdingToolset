@@ -34,6 +34,9 @@ std::string trimSpaces(const std::string& str);
 /** Returns full path to the game folder. */
 const std::filesystem::path& gameFolder();
 
+/** Returns full path to the scripts folder. */
+const std::filesystem::path& scriptsFolder();
+
 /** Returns full path to the executable that is currently running. */
 const std::filesystem::path& exePath();
 
@@ -48,6 +51,8 @@ bool replace(std::string& str, const std::string& keyword, const std::string& re
 
 /** Returns random number from range [min : max]. */
 int getRandomNumber(int min, int max);
+
+std::string readFile(const std::filesystem::path& file);
 
 } // namespace hooks
 

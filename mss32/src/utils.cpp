@@ -22,6 +22,7 @@
 #include "midgardid.h"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#include <fstream>
 #include <random>
 
 namespace hooks {
@@ -46,6 +47,12 @@ const std::filesystem::path& gameFolder()
         folder.remove_filename();
     }
 
+    return folder;
+}
+
+const std::filesystem::path& scriptsFolder()
+{
+    static const std::filesystem::path folder{gameFolder() / "Scripts"};
     return folder;
 }
 
@@ -100,6 +107,21 @@ int getRandomNumber(int min, int max)
 
     std::uniform_int_distribution<int> disribution(min, max);
     return disribution(rng);
+}
+
+std::string readFile(const std::filesystem::path& file)
+{
+    std::ifstream stream(file);
+    if (!stream) {
+        return {};
+    }
+
+    const auto size = static_cast<size_t>(std::filesystem::file_size(file));
+    std::string contents;
+    contents.resize(size);
+
+    stream.read(&contents[0], size);
+    return contents;
 }
 
 } // namespace hooks
