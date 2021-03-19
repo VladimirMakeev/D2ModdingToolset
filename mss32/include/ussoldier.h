@@ -104,13 +104,12 @@ struct IUsSoldierVftable
     GetBank getHealCost;
     GetBank getTrainingCost;
 
-    using GetDynUpg = const int*(__thiscall*)(const IUsSoldier* thisptr);
-    GetDynUpg getDynUpg1;
+    GetId getDynUpg1;
 
     using GetDynUpgLvl = int(__thiscall*)(const IUsSoldier* thisptr);
     GetDynUpgLvl getDynUpgLvl;
 
-    GetDynUpg getDynUpg2;
+    GetId getDynUpg2;
 
     GetBool getWaterOnly;
 };
