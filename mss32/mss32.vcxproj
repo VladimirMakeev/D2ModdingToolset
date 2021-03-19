@@ -155,6 +155,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\battlemsgdata.cpp" />
     <ClCompile Include="src\bindings\dynupgradeview.cpp" />
     <ClCompile Include="src\bindings\unitimplview.cpp" />
+    <ClCompile Include="src\bindings\unitview.cpp" />
     <ClCompile Include="src\buildingbranch.cpp" />
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
@@ -280,6 +281,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\battlemsgdata.h" />
     <ClInclude Include="include\bindings\dynupgradeview.h" />
     <ClInclude Include="include\bindings\unitimplview.h" />
+    <ClInclude Include="include\bindings\unitview.h" />
     <ClInclude Include="include\buildingbranch.h" />
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />

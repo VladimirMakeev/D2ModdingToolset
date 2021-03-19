@@ -393,6 +393,9 @@
     <ClCompile Include="src\batattackbestowwards.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\unitview.cpp">
+      <Filter>Исходные файлы\bindings</Filter>
+    </ClCompile>
     <ClCompile Include="src\groundcat.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -1086,6 +1089,9 @@
     </ClInclude>
     <ClInclude Include="include\leaderabilitycat.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\unitview.h">
+      <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\unitimplview.h">
       <Filter>Файлы заголовков\bindings</Filter>
