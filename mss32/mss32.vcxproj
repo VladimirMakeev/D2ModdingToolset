@@ -59,7 +59,7 @@
       <ConformanceMode>false</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\Detours\src;$(ProjectDir)..\GSL\include;$(ProjectDir)..\fmt\include;$(ProjectDir)include;$(ProjectDir)include\dbf;$(ProjectDir)..\lua;$(ProjectDir)..\sol2\single\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Detours\src;$(ProjectDir)..\GSL\include;$(ProjectDir)..\fmt\include;$(ProjectDir)include;$(ProjectDir)include\dbf;$(ProjectDir)..\lua;$(ProjectDir)..\sol2\single\include;$(ProjectDir)include\bindings;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -87,7 +87,7 @@ call ..\buildDetours.bat ..\Detours
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\Detours\src;$(ProjectDir)..\GSL\include;$(ProjectDir)..\fmt\include;$(ProjectDir)include;$(ProjectDir)include\dbf;$(ProjectDir)..\lua;$(ProjectDir)..\sol2\single\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Detours\src;$(ProjectDir)..\GSL\include;$(ProjectDir)..\fmt\include;$(ProjectDir)include;$(ProjectDir)include\dbf;$(ProjectDir)..\lua;$(ProjectDir)..\sol2\single\include;$(ProjectDir)include\bindings;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -153,6 +153,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\batattackshatter.cpp" />
     <ClCompile Include="src\battleattackinfo.cpp" />
     <ClCompile Include="src\battlemsgdata.cpp" />
+    <ClCompile Include="src\bindings\dynupgradeview.cpp" />
     <ClCompile Include="src\buildingbranch.cpp" />
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
@@ -276,6 +277,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batattackshatter.h" />
     <ClInclude Include="include\battleattackinfo.h" />
     <ClInclude Include="include\battlemsgdata.h" />
+    <ClInclude Include="include\bindings\dynupgradeview.h" />
     <ClInclude Include="include\buildingbranch.h" />
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />

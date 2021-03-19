@@ -28,6 +28,12 @@
     <Filter Include="Файлы заголовков\lua">
       <UniqueIdentifier>{eb0db09a-a4e9-4782-a6f4-3b75296449dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы заголовков\bindings">
+      <UniqueIdentifier>{ff59d289-ab38-48d8-9ce2-fc67d9b0d635}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\bindings">
+      <UniqueIdentifier>{2fc2b2fb-2a4b-4e72-a1aa-be670ba853b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\fmt\src\format.cc">
@@ -392,6 +398,9 @@
     </ClCompile>
     <ClCompile Include="src\leaderabilitycat.cpp">
       <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\dynupgradeview.cpp">
+      <Filter>Исходные файлы\bindings</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1074,6 +1083,9 @@
     </ClInclude>
     <ClInclude Include="include\leaderabilitycat.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\dynupgradeview.h">
+      <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
