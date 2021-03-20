@@ -140,6 +140,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="..\lua\lutf8lib.c" />
     <ClCompile Include="..\lua\lvm.c" />
     <ClCompile Include="..\lua\lzio.c" />
+    <ClCompile Include="src\attack.cpp" />
     <ClCompile Include="src\attackclasscat.cpp" />
     <ClCompile Include="src\attackimpl.cpp" />
     <ClCompile Include="src\attackreachcat.cpp" />
