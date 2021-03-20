@@ -411,6 +411,9 @@
     <ClCompile Include="src\batattacktransformself.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\transformselfhooks.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\attack.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -1109,6 +1112,9 @@
       <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\batattacktransformself.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\transformselfhooks.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\scripts.h">

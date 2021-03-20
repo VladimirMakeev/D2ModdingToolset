@@ -55,6 +55,7 @@ struct Settings
     bool preserveCapitalBuildings;
     bool allowShatterAttackToMiss;
     bool leveledDoppelgangerAttack;
+    bool leveledTransformSelfAttack;
     bool missChanceSingleRoll;
     bool debugMode;
 };

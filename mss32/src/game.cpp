@@ -59,6 +59,8 @@ static std::array<Functions, 4> functions = {{
         (IsGroupOwnerPlayerHuman)0x628165,
         (AttackShouldMiss)0x626b5f,
         (GenerateRandomNumber)0x548e10,
+        (GetUnitPositionInGroup)0x65fb1e,
+        (GetSummonUnitImplIdByAttack)0x661fe0,
     },
     // Russobit
     Functions{
@@ -94,6 +96,8 @@ static std::array<Functions, 4> functions = {{
         (IsGroupOwnerPlayerHuman)0x628165,
         (AttackShouldMiss)0x626b5f,
         (GenerateRandomNumber)0x548e10,
+        (GetUnitPositionInGroup)0x65fb1e,
+        (GetSummonUnitImplIdByAttack)0x661fe0,
     },
     // Gog
     Functions{
@@ -129,6 +133,8 @@ static std::array<Functions, 4> functions = {{
         (IsGroupOwnerPlayerHuman)0x626ca5,
         (AttackShouldMiss)0x62569f,
         (GenerateRandomNumber)0x54851f,
+        (GetUnitPositionInGroup)0x65e59e,
+        (GetSummonUnitImplIdByAttack)0x660a60,
     },
     // Scenario Editor
     Functions{

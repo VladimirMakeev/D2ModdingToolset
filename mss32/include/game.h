@@ -231,6 +231,16 @@ using AttackShouldMiss = bool(__stdcall*)(const int* accuracy);
 /** Generates random number in range [0 : maxValue) using special ingame generator. */
 using GenerateRandomNumber = int(__stdcall*)(unsigned int maxValue);
 
+using GetUnitPositionInGroup = int(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                               const CMidgardID* groupId,
+                                               const CMidgardID* unitId);
+
+/** Returns summon unit impl id for specified attack id according to size and position in group. */
+using GetSummonUnitImplIdByAttack = CMidgardID*(__stdcall*)(CMidgardID* summonImplId,
+                                                            const CMidgardID* attackId,
+                                                            int position,
+                                                            bool smallUnit);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -266,6 +276,8 @@ struct Functions
     IsGroupOwnerPlayerHuman isGroupOwnerPlayerHuman;
     AttackShouldMiss attackShouldMiss;
     GenerateRandomNumber generateRandomNumber;
+    GetUnitPositionInGroup getUnitPositionInGroup;
+    GetSummonUnitImplIdByAttack getSummonUnitImplIdByAttack;
 };
 
 /** Global variables used in game. */

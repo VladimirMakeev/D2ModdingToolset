@@ -26,6 +26,7 @@
 #include "batattackdrainoverflow.h"
 #include "batattackgiveattack.h"
 #include "batattackshatter.h"
+#include "batattacktransformself.h"
 #include "battleattackinfo.h"
 #include "battlemsgdata.h"
 #include "buildingbranch.h"
@@ -80,6 +81,7 @@
 #include "settings.h"
 #include "sitemerchantinterf.h"
 #include "smartptr.h"
+#include "transformselfhooks.h"
 #include "unitbranchcat.h"
 #include "unitgenerator.h"
 #include "unitsforhire.h"
@@ -139,7 +141,7 @@ static Hooks getGameHooks()
         // Fix game crash with pathfinding on 144x144 maps
         HookInfo{(void**)&fn.markMapPosition, markMapPositionHooked},
         // Allow user to tweak accuracy computations
-        HookInfo{(void**)&fn.getAttackAccuracy, getAttackAccuracyHooked}
+        HookInfo{(void**)&fn.getAttackAccuracy, getAttackAccuracyHooked},
     };
     // clang-format on
 
@@ -190,9 +192,15 @@ static Hooks getGameHooks()
     }
 
     if (userSettings().leveledDoppelgangerAttack != baseSettings().leveledDoppelgangerAttack) {
-        // Allow doppelganger to transform into leveled units depending on its own level
+        // Allow doppelganger to transform into leveled units using script logic
         hooks.push_back(HookInfo{(void**)&game::CBatAttackDoppelgangerApi::get().onHit,
                                  doppelgangerAttackOnHitHooked});
+    }
+
+    if (userSettings().leveledTransformSelfAttack != baseSettings().leveledTransformSelfAttack) {
+        // Allow transform self into leveled units using script logic
+        hooks.push_back(HookInfo{(void**)&game::CBatAttackTransformSelfApi::get().onHit,
+                                 transformSelfAttackOnHitHooked});
     }
 
     if (userSettings().missChanceSingleRoll != baseSettings().missChanceSingleRoll) {
