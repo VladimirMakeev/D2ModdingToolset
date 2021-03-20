@@ -146,9 +146,10 @@ using CreateBatAttack = IBatAttack*(__stdcall*)(IMidgardObjectMap* objectMap,
                                                 const LAttackClass* attackClass,
                                                 bool a7);
 
-using GetAttackByIdAndCheckTransfomed = IAttack*(__stdcall*)(IMidgardObjectMap* objectMap,
-                                                             const CMidgardID* id,
-                                                             int attackNumber);
+using GetAttackById = IAttack*(__stdcall*)(IMidgardObjectMap* objectMap,
+                                           const CMidgardID* id,
+                                           int attackNumber,
+                                           bool checkTransformed);
 
 using IsUnitImmuneToAttack = bool(__stdcall*)(IMidgardObjectMap* objectMap,
                                               BattleMsgData* battleMsgData,
@@ -250,7 +251,7 @@ struct Functions
     FindUnitById findUnitById;
     CastUnitImplToSoldier castUnitImplToSoldier;
     CreateBatAttack createBatAttack;
-    GetAttackByIdAndCheckTransfomed getAttackByIdAndCheckTransfomed;
+    GetAttackById getAttackById;
     IsUnitImmuneToAttack isUnitImmuneToAttack;
     AttackClassToNumber attackClassToNumber;
     AttackClassToString attackClassToString;
