@@ -144,8 +144,23 @@ struct Api
                                            bool keepHp,
                                            IMidgardObjectMap* objectMap,
                                            int apply);
-
     TransformUnit transformUnit;
+
+    /**
+     * Extracts unit from group.
+     * Uses CVisitorExtractUnitFromGroup.
+     * @param[in] unitId id of unit to extract.
+     * @param[in] groupId id of group to extract from.
+     * @param[in] objectMap interface used for objects search.
+     * @param apply specifies whether unit extraction should be applied.
+     * @returns true if unit was extracted when apply set to 1. If apply set to 0, returns whether
+     * visitor can be applied.
+     */
+    using ExtractUnitFromGroup = bool(__stdcall*)(const CMidgardID* unitId,
+                                                  const CMidgardID* groupId,
+                                                  IMidgardObjectMap* objectMap,
+                                                  int apply);
+    ExtractUnitFromGroup extractUnitFromGroup;
 };
 
 Api& get();

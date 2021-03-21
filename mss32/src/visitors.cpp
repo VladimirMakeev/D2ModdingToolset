@@ -32,14 +32,16 @@ std::array<Api, 3> functions = {{
         (Api::AddUnitToGroup)0x5e8bf8,
         (Api::ExchangeItem)0x5e86cc,
         (Api::TransformUnit)0x5e968e,
+        (Api::ExtractUnitFromGroup)0x5e8d72,
     },
     // Russobit
     Api{
         (Api::ChangeUnitHp)0x5e88f4,
         (Api::ForceUnitMax)0x5e972a,
-        (Api::AddUnitToGroup)0x5e972a,
+        (Api::AddUnitToGroup)0x5e8bf8,
         (Api::ExchangeItem)0x5e86cc,
         (Api::TransformUnit)0x5e968e,
+        (Api::ExtractUnitFromGroup)0x5e8d72,
     },
     // Gog
     Api{
@@ -48,6 +50,7 @@ std::array<Api, 3> functions = {{
         (Api::AddUnitToGroup)0x5e78f7,
         (Api::ExchangeItem)0x5e73cb,
         (Api::TransformUnit)0x5e838d,
+        (Api::ExtractUnitFromGroup)0x5e7a71,
     }
 }};
 // clang-format on
