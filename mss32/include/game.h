@@ -241,6 +241,24 @@ using GetSummonUnitImplIdByAttack = CMidgardID*(__stdcall*)(CMidgardID* summonIm
                                                             int position,
                                                             bool smallUnit);
 
+/**
+ * Returns summon unit impl id for specified summon attack.
+ * @param[inout] summonImplId where to store resulting unit impl id.
+ * @param[in] objectMap used for object search.
+ * @param[in] attackId summon attack id to choose one summon from list.
+ * @param[in] groupId id of group where summoned unit supposed to be.
+ * @param[in] targetUnitId special summon id to get position in group.
+ * @param canSummonBig determines wheter big unit can be summoned or not.
+ * @returns pointer to summonImplId.
+ */
+using GetSummonUnitImplId = CMidgardID*(__stdcall*)(CMidgardID* summonImplId,
+                                                    IMidgardObjectMap* objectMap,
+                                                    const CMidgardID* attackId,
+                                                    const CMidgardID* groupId,
+                                                    const CMidgardID* targetUnitId,
+                                                    bool canSummonBig);
+;
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -278,6 +296,7 @@ struct Functions
     GenerateRandomNumber generateRandomNumber;
     GetUnitPositionInGroup getUnitPositionInGroup;
     GetSummonUnitImplIdByAttack getSummonUnitImplIdByAttack;
+    GetSummonUnitImplId getSummonUnitImplId;
 };
 
 /** Global variables used in game. */
