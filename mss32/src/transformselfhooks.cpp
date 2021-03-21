@@ -29,6 +29,7 @@
 #include "midunit.h"
 #include "scripts.h"
 #include "unitgenerator.h"
+#include "unitimplview.h"
 #include "unitview.h"
 #include "ussoldier.h"
 #include "usunitimpl.h"
@@ -38,7 +39,7 @@
 
 namespace hooks {
 
-static int getTransformSelfLevel(const game::CMidUnit* unit)
+static int getTransformSelfLevel(const game::CMidUnit* unit, game::TUsUnitImpl* transformImpl)
 {
     const char* filename{"transformSelf.lua"};
     static std::string script{readFile({scriptsFolder() / filename})};
@@ -52,7 +53,7 @@ static int getTransformSelfLevel(const game::CMidUnit* unit)
         return 0;
     }
 
-    using GetLevel = std::function<int(const bindings::UnitView&)>;
+    using GetLevel = std::function<int(const bindings::UnitView&, const bindings::UnitImplView&)>;
     auto getLevel = getScriptFunction<GetLevel>(*lua, "getLevel");
     if (!getLevel) {
         return 0;
@@ -60,8 +61,9 @@ static int getTransformSelfLevel(const game::CMidUnit* unit)
 
     try {
         const bindings::UnitView attacker{unit};
+        const bindings::UnitImplView impl{transformImpl};
 
-        return (*getLevel)(attacker);
+        return (*getLevel)(attacker, impl);
     } catch (const std::exception& e) {
         logError("mssProxyError.log",
                  fmt::format("Failed to run '{:s}' script, reason: '{:s}'", filename, e.what()));
@@ -111,9 +113,15 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
         return;
     }
 
-    const auto transformLevel = getTransformSelfLevel(targetUnit);
+    const auto& global = GlobalDataApi::get();
+    auto globalData = *global.getGlobalData();
 
-    CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
+    auto transformImpl = static_cast<TUsUnitImpl*>(
+        global.findById(globalData->units, &transformImplId));
+
+    const auto transformLevel = getTransformSelfLevel(targetUnit, transformImpl);
+
+    CUnitGenerator* unitGenerator = globalData->unitGenerator;
 
     CMidgardID leveledImplId{transformImplId};
     unitGenerator->vftable->generateUnitImplId(unitGenerator, &leveledImplId, &transformImplId,
