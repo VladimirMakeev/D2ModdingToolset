@@ -423,6 +423,9 @@
     <ClCompile Include="src\batattacksummon.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\summonhooks.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\midunitgroup.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -1127,6 +1130,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\batattacksummon.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\summonhooks.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

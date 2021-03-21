@@ -56,6 +56,7 @@ struct Settings
     bool allowShatterAttackToMiss;
     bool leveledDoppelgangerAttack;
     bool leveledTransformSelfAttack;
+    bool leveledSummonAttack;
     bool missChanceSingleRoll;
     bool debugMode;
 };

@@ -82,6 +82,7 @@ static void readSettings(Settings& settings, const sol::state& lua)
     settings.allowShatterAttackToMiss = readSetting(table, "allowShatterAttackToMiss", defaultSettings().allowShatterAttackToMiss);
     settings.leveledDoppelgangerAttack = readSetting(table, "leveledDoppelgangerAttack", defaultSettings().leveledDoppelgangerAttack);
     settings.leveledTransformSelfAttack = readSetting(table, "leveledTransformSelfAttack", defaultSettings().leveledTransformSelfAttack);
+    settings.leveledSummonAttack = readSetting(table, "leveledSummonAttack", defaultSettings().leveledSummonAttack);
     settings.missChanceSingleRoll = readSetting(table, "missChanceSingleRoll", defaultSettings().missChanceSingleRoll);
     settings.debugMode = readSetting(table, "debugHooks", defaultSettings().debugMode);
     // clang-format on
@@ -119,6 +120,7 @@ const Settings& baseSettings()
         settings.allowShatterAttackToMiss = false;
         settings.leveledDoppelgangerAttack = false;
         settings.leveledTransformSelfAttack = false;
+        settings.leveledSummonAttack = false;
         settings.missChanceSingleRoll = false;
         settings.debugMode = false;
 

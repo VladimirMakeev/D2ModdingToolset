@@ -26,6 +26,7 @@
 #include "batattackdrainoverflow.h"
 #include "batattackgiveattack.h"
 #include "batattackshatter.h"
+#include "batattacksummon.h"
 #include "batattacktransformself.h"
 #include "battleattackinfo.h"
 #include "battlemsgdata.h"
@@ -81,6 +82,7 @@
 #include "settings.h"
 #include "sitemerchantinterf.h"
 #include "smartptr.h"
+#include "summonhooks.h"
 #include "transformselfhooks.h"
 #include "unitbranchcat.h"
 #include "unitgenerator.h"
@@ -201,6 +203,12 @@ static Hooks getGameHooks()
         // Allow transform self into leveled units using script logic
         hooks.push_back(HookInfo{(void**)&game::CBatAttackTransformSelfApi::get().onHit,
                                  transformSelfAttackOnHitHooked});
+    }
+
+    if (userSettings().leveledSummonAttack != baseSettings().leveledSummonAttack) {
+        // Allow summon leveled units using script logic
+        hooks.push_back(
+            HookInfo{(void**)&game::CBatAttackSummonApi::get().onHit, summonAttackOnHitHooked});
     }
 
     if (userSettings().missChanceSingleRoll != baseSettings().missChanceSingleRoll) {
