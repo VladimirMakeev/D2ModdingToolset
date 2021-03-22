@@ -21,6 +21,7 @@
 #include "attackimpl.h"
 #include "attackreachcat.h"
 #include "autodialog.h"
+#include "batattackbestowwards.h"
 #include "batattackdoppelganger.h"
 #include "batattackdrain.h"
 #include "batattackdrainoverflow.h"
@@ -28,6 +29,7 @@
 #include "batattackshatter.h"
 #include "battleattackinfo.h"
 #include "battlemsgdata.h"
+#include "bestowwardshooks.h"
 #include "buildingbranch.h"
 #include "buildingtype.h"
 #include "button.h"
@@ -200,6 +202,42 @@ static Hooks getGameHooks()
         hooks.push_back(HookInfo{(void**)&fn.attackShouldMiss, attackShouldMissHooked});
     }
 
+    if (userSettings().unrestrictedBestowWards != baseSettings().unrestrictedBestowWards) {
+        /**
+         * Allows Bestow Wards to:
+         * 1) Grant modifiers even if there are no source wards among them
+         * 2) Limit simultaneously applied modifiers to 8 so they are not bugging out and
+         * becoming permanent
+         * 3) Heal its targets to the ammount specified in QTY_HEAL
+         * 4) Heal retreating units
+         * 5) Use Revive as a secondary attack
+         * 6) Target a unit with a secondary attack even if there are no modifiers that can be
+         * applied to this unit
+         * 7) Reset attack class wards so such wards can be reapplied during battle
+         * 8) Treat modifiers with complete immunity correctly
+         */
+        hooks.push_back(HookInfo{(void**)&game::CBatAttackBestowWardsApi::get().canPerform,
+                                 bestowWardsAttackCanPerformHooked});
+        hooks.push_back(HookInfo{(void**)&game::CBatAttackBestowWardsApi::get().onHit,
+                                 bestowWardsAttackOnHitHooked});
+
+        /**
+         * Allow Bestow Wards (and any other attack with QTY_HEAL > 0) to heal units when battle
+         * ends (just like ordinary heal does)
+         */
+        hooks.push_back(
+            HookInfo{(void**)&fn.getUnitHealAttackNumber, getUnitHealAttackNumberHooked});
+
+        /**
+         * Fix Bestow Wards with double attack where modifiers granted by first attack are getting
+         * removed. The function is used as a backdoor to erase the next attack unit id if it equals
+         * current unit id, so modifiers granted by first attack are not removed.
+         */
+        hooks.push_back(
+            HookInfo{(void**)&game::BattleMsgDataApi::get().setUnknown9Bit1AndClearBoostLowerDamage,
+                     setUnknown9Bit1AndClearBoostLowerDamageHooked});
+    }
+
     return hooks;
 }
 
@@ -243,6 +281,12 @@ Hooks getHooks()
     hooks.emplace_back(
         HookInfo{(void**)&game::CAttackImplApi::get().constructor, attackImplCtorHooked});
 
+    if (userSettings().unrestrictedBestowWards != baseSettings().unrestrictedBestowWards) {
+        // Support display of heal ammount in UI for any attack that has QTY_HEAL > 0
+        hooks.push_back(
+            HookInfo{(void**)&fn.getAttackQtyDamageOrHeal, getAttackQtyDamageOrHealHooked});
+    }
+
     return hooks;
 }
 
@@ -255,6 +299,15 @@ Hooks getVftableHooks()
             // Fix an issue where shatter attack always hits regardless of its power value
             hooks.emplace_back(HookInfo{(void**)&game::CBatAttackShatterApi::vftable()->canMiss,
                                         shatterCanMissHooked});
+    }
+
+    if (userSettings().unrestrictedBestowWards != baseSettings().unrestrictedBestowWards) {
+        if (game::CBatAttackBestowWardsApi::vftable())
+            // Allow bestow wards to target dead units, so it can be coupled with Revive as a
+            // secondary attack
+            hooks.emplace_back(
+                HookInfo{(void**)&game::CBatAttackBestowWardsApi::vftable()->method15,
+                         bestowWardsMethod15Hooked});
     }
 
     return hooks;
@@ -1208,6 +1261,56 @@ void __stdcall getAttackAccuracyHooked(int* accuracy,
 bool __stdcall attackShouldMissHooked(const int* accuracy)
 {
     return game::gameFunctions().generateRandomNumber(100) > *accuracy;
+}
+
+int __stdcall getUnitHealAttackNumberHooked(const game::IMidgardObjectMap* objectMap,
+                                            const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    auto unit = fn.findUnitById(objectMap, unitId);
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+
+    auto attack = soldier->vftable->getAttackById(soldier);
+    int qtyHeal = attack->vftable->getQtyHeal(attack);
+    if (qtyHeal > 0)
+        return 1;
+
+    auto attack2 = soldier->vftable->getSecondAttackById(soldier);
+    if (attack2) {
+        qtyHeal = attack2->vftable->getQtyHeal(attack2);
+        if (qtyHeal > 0)
+            return 2;
+    }
+
+    return 0;
+}
+
+int __stdcall getAttackQtyDamageOrHealHooked(const game::IAttack* attack, int damageMax)
+{
+    int qtyHeal = attack->vftable->getQtyHeal(attack);
+    if (qtyHeal)
+        return qtyHeal;
+
+    int qtyDamage = attack->vftable->getQtyDamage(attack);
+    if (qtyDamage > damageMax)
+        qtyDamage = damageMax;
+
+    return qtyDamage;
+}
+
+void __stdcall setUnknown9Bit1AndClearBoostLowerDamageHooked(
+    const game::BattleMsgData* battleMsgData,
+    const game::CMidgardID* unitId,
+    game::CMidgardID* nextAttackUnitId)
+{
+    using namespace game;
+
+    BattleMsgDataApi::get().setUnknown9Bit1AndClearBoostLowerDamage(battleMsgData, unitId,
+                                                                    nextAttackUnitId);
+    if (nextAttackUnitId->value == unitId->value)
+        nextAttackUnitId->value = emptyId.value;
 }
 
 } // namespace hooks

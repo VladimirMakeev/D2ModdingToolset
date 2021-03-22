@@ -183,6 +183,16 @@ void __stdcall getAttackAccuracyHooked(int* accuracy,
 
 bool __stdcall attackShouldMissHooked(const int* accuracy);
 
+int __stdcall getUnitHealAttackNumberHooked(const game::IMidgardObjectMap* objectMap,
+                                            const game::CMidgardID* unitId);
+
+int __stdcall getAttackQtyDamageOrHealHooked(const game::IAttack* attack, int damageMax);
+
+void __stdcall setUnknown9Bit1AndClearBoostLowerDamageHooked(
+    const game::BattleMsgData* battleMsgData,
+    const game::CMidgardID* unitId,
+    game::CMidgardID* nextAttackUnitId);
+
 } // namespace hooks
 
 #endif // HOOKS_H

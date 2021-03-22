@@ -82,6 +82,7 @@ static void readSettings(Settings& settings, const sol::state& lua)
     settings.allowShatterAttackToMiss = readSetting(table, "allowShatterAttackToMiss", defaultSettings().allowShatterAttackToMiss);
     settings.leveledDoppelgangerAttack = readSetting(table, "leveledDoppelgangerAttack", defaultSettings().leveledDoppelgangerAttack);
     settings.missChanceSingleRoll = readSetting(table, "missChanceSingleRoll", defaultSettings().missChanceSingleRoll);
+    settings.unrestrictedBestowWards = readSetting(table, "unrestrictedBestowWards", defaultSettings().unrestrictedBestowWards);
     settings.debugMode = readSetting(table, "debugHooks", defaultSettings().debugMode);
     // clang-format on
 
@@ -118,6 +119,7 @@ const Settings& baseSettings()
         settings.allowShatterAttackToMiss = false;
         settings.leveledDoppelgangerAttack = false;
         settings.missChanceSingleRoll = false;
+        settings.unrestrictedBestowWards = false;
         settings.debugMode = false;
 
         initialized = true;

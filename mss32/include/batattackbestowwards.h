@@ -40,7 +40,7 @@ struct CBatAttackBestowWards : public CBatAttackBase
     IAttack* attack2Impl;
     bool attack2Initialized;
     char padding[3];
-    int attackImplCount;
+    int attackImplMagic;
 };
 
 static_assert(sizeof(CBatAttackBestowWards) == 32,

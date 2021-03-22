@@ -154,6 +154,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\batattackshatter.cpp" />
     <ClCompile Include="src\battleattackinfo.cpp" />
     <ClCompile Include="src\battlemsgdata.cpp" />
+    <ClCompile Include="src\bestowwardshooks.cpp" />
     <ClCompile Include="src\buildingbranch.cpp" />
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
@@ -280,6 +281,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batattackshatter.h" />
     <ClInclude Include="include\battleattackinfo.h" />
     <ClInclude Include="include\battlemsgdata.h" />
+    <ClInclude Include="include\bestowwardshooks.h" />
     <ClInclude Include="include\buildingbranch.h" />
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />

@@ -56,6 +56,7 @@ struct Settings
     bool allowShatterAttackToMiss;
     bool leveledDoppelgangerAttack;
     bool missChanceSingleRoll;
+    bool unrestrictedBestowWards;
     bool debugMode;
 };
 

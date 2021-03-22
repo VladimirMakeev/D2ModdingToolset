@@ -396,6 +396,9 @@
     <ClCompile Include="src\immunecat.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\bestowwardshooks.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\autoptr.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -1082,6 +1085,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\leaderabilitycat.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bestowwardshooks.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\autoptr.h">
