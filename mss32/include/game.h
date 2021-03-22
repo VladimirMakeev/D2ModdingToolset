@@ -39,6 +39,7 @@ struct CMidPlayer;
 struct BattleMsgData;
 struct CMidUnit;
 struct TUsUnitImpl;
+struct LAttackSource;
 struct LAttackClass;
 struct IBatAttack;
 struct IAttack;
@@ -140,7 +141,7 @@ using CastUnitImplToSoldier = IUsSoldier*(__stdcall*)(TUsUnitImpl* unitImpl);
 
 using CreateBatAttack = IBatAttack*(__stdcall*)(IMidgardObjectMap* objectMap,
                                                 BattleMsgData* battleMsgData,
-                                                const CMidgardID* id1,
+                                                const CMidgardID* unitId,
                                                 const CMidgardID* id2,
                                                 int attackNumber,
                                                 const LAttackClass* attackClass,
@@ -158,6 +159,8 @@ using IsUnitImmuneToAttack = bool(__stdcall*)(IMidgardObjectMap* objectMap,
 
 using AttackClassToNumber = int(__stdcall*)(const LAttackClass* attackClass);
 using AttackClassToString = const char*(__stdcall*)(const LAttackClass* attackClass);
+
+using AttackSourceToNumber = int(__stdcall*)(const LAttackSource* attackSource);
 
 /**
  * Returns pointer to units group of stack, fortification or ruin
@@ -230,6 +233,27 @@ using AttackShouldMiss = bool(__stdcall*)(const int* accuracy);
 /** Generates random number in range [0 : maxValue) using special ingame generator. */
 using GenerateRandomNumber = int(__stdcall*)(unsigned int maxValue);
 
+/**
+ * Returns number of attacks allowed in battle for specific id ???
+ * 1 or 0 for item, 1 or 2 for unit attacks and so on.
+ */
+using GetAttackImplMagic = int(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                           const CMidgardID* unitId,
+                                           int a3);
+
+/**
+ * If unit has primary or secondary attack from Heal class category, returns 1 for primary and 2 for
+ * secondary. In case of different attack class returns 0.
+ */
+using GetUnitHealAttackNumber = int(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                const CMidgardID* unitId);
+
+/**
+ * Returns attack damage or heal depending on its class, allows to specify max damage to return.
+ * Used for encyclopedia text generation, by CMidUnitDescriptor and elsewhere.
+ */
+using GetAttackQtyDamageOrHeal = int(__stdcall*)(const IAttack* attack, int damageMax);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -254,6 +278,7 @@ struct Functions
     IsUnitImmuneToAttack isUnitImmuneToAttack;
     AttackClassToNumber attackClassToNumber;
     AttackClassToString attackClassToString;
+    AttackSourceToNumber attackSourceToNumber;
     GetStackFortRuinGroup getStackFortRuinGroup;
     DeletePlayerBuildings deletePlayerBuildings;
     GetInterfaceText getInterfaceText;
@@ -265,6 +290,9 @@ struct Functions
     IsGroupOwnerPlayerHuman isGroupOwnerPlayerHuman;
     AttackShouldMiss attackShouldMiss;
     GenerateRandomNumber generateRandomNumber;
+    GetAttackImplMagic getAttackImplMagic;
+    GetUnitHealAttackNumber getUnitHealAttackNumber;
+    GetAttackQtyDamageOrHeal getAttackQtyDamageOrHeal;
 };
 
 /** Global variables used in game. */
