@@ -33,7 +33,7 @@ struct CBatAttackGiveAttack : public CBatAttackBase
 {
     CMidgardID unitId1;
     CMidgardID unitId2;
-    int attackIndex; /**< 1 if this is a unit's primary attack, 2 for secondary. */
+    int attackNumber; /**< 1 if this is a unit's primary attack, 2 for secondary. */
 };
 
 static_assert(sizeof(CBatAttackGiveAttack) == 16,

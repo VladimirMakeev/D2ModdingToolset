@@ -35,7 +35,7 @@ struct CBatAttackBestowWards : public CBatAttackBase
 {
     CMidgardID unitId;
     CMidgardID attackImplUnitId;
-    int attackIndex;
+    int attackNumber; /**< 1 if this is a unit's primary attack, 2 for secondary. */
     IAttack* attackImpl;
     IAttack* attack2Impl;
     bool attack2Initialized;
