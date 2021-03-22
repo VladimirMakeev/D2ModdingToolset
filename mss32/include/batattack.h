@@ -49,7 +49,7 @@ struct IBatAttackVftable
     using CanPerform = bool(__thiscall*)(IBatAttack* thisptr,
                                          IMidgardObjectMap* objectMap,
                                          BattleMsgData* battleMsgData,
-                                         CMidgardID* unitId);
+                                         CMidgardID* targetUnitId);
     CanPerform canPerform;
 
     /** Returns id of stack the attack can target: allies or enemies. */
@@ -100,25 +100,52 @@ struct IBatAttackVftable
                                              LAttackClass* attackClass);
     GetAttackClass getAttackClass;
 
-    using Method9 = bool(__thiscall*)(IBatAttack* thisptr,
-                                      int a2,
-                                      int a3,
-                                      LAttackClass* attackClass);
-    Method9 method9;
+    using Method11 = bool(__thiscall*)(IBatAttack* thisptr,
+                                       int a2,
+                                       int a3,
+                                       LAttackClass* attackClass);
+    Method11 method11;
 
     /** Called when attack hits the target. */
     OnAttack onHit;
 
-    using Method10 = bool(__thiscall*)(IBatAttack* thisptr,
+    /**
+     * Called to determine if the attack can target dead units. Every known attack returns false,
+     * except CBatAttackUsePotion that returns true if the potion is Revive potion.
+     */
+    using Method13 = bool(__thiscall*)(IBatAttack* thisptr,
                                        BattleMsgData* battleMsgData,
                                        IMidgardObjectMap* objectMap);
-    Method10 method10;
+    Method13 method13;
 
     using UnknownMethod = bool(__thiscall*)(IBatAttack* thisptr, BattleMsgData* battleMsgData);
-    UnknownMethod method11;
-    UnknownMethod method12;
-    UnknownMethod method13;
+
+    /**
+     * Called to determine if the attack can target dead units. Every known attack returns false,
+     * except CBatAttackRevive.
+     */
     UnknownMethod method14;
+
+    /**
+     * Called to determine if the attack can target dead units. Every known attack returns false,
+     * except CBatAttackHeal that always returns true. It has additional checks for dead targets,
+     * which succeed if the secondary attack is Revive.
+     */
+    UnknownMethod method15;
+
+    /**
+     * Called to determine if the attack can target dead units. Every known attack returns false,
+     * except CBatAttackDoppelganger that returns true if the unit is not transformed yet. It has
+     * additional check for dead targets (which seems to always fail though).
+     */
+    UnknownMethod method16;
+
+    /**
+     * Called to determine if the attack can target dead and retreated units. Every known attack
+     * returns false, except CBatAttackSummon (because it can summon in slots with dead or
+     * retreated units).
+     */
+    UnknownMethod method17;
 };
 
 static_assert(sizeof(IBatAttackVftable) == 18 * sizeof(void*),
