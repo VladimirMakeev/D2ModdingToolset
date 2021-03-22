@@ -97,28 +97,32 @@ static std::array<Api, 4> functions = {{
         (Api::Constructor)0x57f4e1,
         (Api::Init)0x57f676,
         (Api::ReadCategory)0x57f6ee,
-        (Api::InitDone)0x57f631
+        (Api::InitDone)0x57f631,
+        (Api::FindCategoryById)0x40acaa,
     },
     // Russobit
     Api{
         (Api::Constructor)0x57f4e1,
         (Api::Init)0x57f676,
         (Api::ReadCategory)0x57f6ee,
-        (Api::InitDone)0x57f631
+        (Api::InitDone)0x57f631,
+        (Api::FindCategoryById)0x40acaa,
     },
     // Gog
     Api{
         (Api::Constructor)0x57eb99,
         (Api::Init)0x57e2de,
         (Api::ReadCategory)0x57eda6,
-        (Api::InitDone)0x57ece9
+        (Api::InitDone)0x57ece9,
+        (Api::FindCategoryById)0x40a936,
     },
     // Scenario Editor
     Api{
         (Api::Constructor)0x52c128,
         (Api::Init)0x52c2bd,
         (Api::ReadCategory)0x52c335,
-        (Api::InitDone)0x52c278
+        (Api::InitDone)0x52c278,
+        (Api::FindCategoryById)0x4030b3,
     }
 }};
 
