@@ -228,8 +228,7 @@ game::IBatAttack* customAttackCtor(CustomAttack* attack,
     attack->id1 = *id1;
     attack->id2 = *id2;
     attack->attackNumber = attackNumber;
-    attack->attack = game::gameFunctions().getAttackByIdAndCheckTransfomed(objectMap, id1,
-                                                                           attackNumber);
+    attack->attack = game::gameFunctions().getAttackById(objectMap, id1, attackNumber, true);
     attack->vftable = &customAttackVftable;
     return attack;
 }

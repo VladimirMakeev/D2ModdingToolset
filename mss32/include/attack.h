@@ -86,6 +86,18 @@ struct IAttackVftable
 static_assert(sizeof(IAttackVftable) == 17 * sizeof(void*),
               "IAttack vftable must have exactly 17 methods");
 
+namespace IAttackApi {
+
+struct Api
+{
+    using GetId = const CMidgardID*(__thiscall*)(const IAttack* thisptr);
+    GetId getId;
+};
+
+Api& get();
+
+} // namespace IAttackApi
+
 } // namespace game
 
 #endif // ATTACK_H

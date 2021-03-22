@@ -42,6 +42,25 @@ struct CMidUnitGroup
     CFortification* city;
 };
 
+namespace CMidUnitGroupApi {
+
+struct Api
+{
+    /** Returns unit position in group, or -1 if unit not found. */
+    using GetUnitPosition = int(__thiscall*)(const CMidUnitGroup* thisptr,
+                                             const CMidgardID* unitId);
+    GetUnitPosition getUnitPosition;
+
+    /** Returns unit id by specified position in group, or emptyId in case of wrong position. */
+    using GetUnitIdByPosition = const CMidgardID*(__thiscall*)(const CMidUnitGroup* thisptr,
+                                                               int position);
+    GetUnitIdByPosition getUnitIdByPosition;
+};
+
+Api& get();
+
+} // namespace CMidUnitGroupApi
+
 } // namespace game
 
 #endif // MIDUNITGROUP_H

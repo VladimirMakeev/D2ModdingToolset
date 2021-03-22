@@ -23,13 +23,51 @@
 #include "battlemsgdata.h"
 #include "game.h"
 #include "globaldata.h"
+#include "log.h"
 #include "midgardobjectmap.h"
 #include "midunit.h"
+#include "scripts.h"
 #include "unitgenerator.h"
+#include "unitview.h"
 #include "usunitimpl.h"
+#include "utils.h"
 #include "visitors.h"
+#include <fmt/format.h>
 
 namespace hooks {
+
+static int getDoppelgangerTransformLevel(const game::CMidUnit* doppelganger,
+                                         const game::CMidUnit* targetUnit)
+{
+    const char* filename{"doppelganger.lua"};
+    static std::string script{readFile({scriptsFolder() / filename})};
+    if (script.empty()) {
+        logError("mssProxyError.log", fmt::format("Failed to read '{:s}' script file", filename));
+        return 0;
+    }
+
+    const auto lua{loadScript(script.c_str())};
+    if (!lua) {
+        return 0;
+    }
+
+    using GetLevel = std::function<int(const bindings::UnitView&, const bindings::UnitView&)>;
+    auto getLevel = getScriptFunction<GetLevel>(*lua, "getLevel");
+    if (!getLevel) {
+        return 0;
+    }
+
+    try {
+        const bindings::UnitView attacker{doppelganger};
+        const bindings::UnitView target{targetUnit};
+
+        return (*getLevel)(attacker, target);
+    } catch (const std::exception& e) {
+        logError("mssProxyError.log",
+                 fmt::format("Failed to run '{:s}' script, reason: '{:s}'", filename, e.what()));
+        return 0;
+    }
+}
 
 void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* thisptr,
                                               int /*%edx*/,
@@ -59,15 +97,9 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
                                                 &targetUnit->unitImpl->unitId);
 
     const CMidUnit* unit = fn.findUnitById(objectMap, &thisptr->unitId);
-    const int unitLevel = fn.getUnitLevelByImplId(&unit->unitImpl->unitId);
-    const int targetLevel = fn.getUnitLevelByImplId(&targetUnitImplId);
-    const int globalLevel = fn.getUnitLevelByImplId(&globalTargetUnitImplId);
+    const auto transformLevel = getDoppelgangerTransformLevel(unit, targetUnit);
 
-    int transformLevel = unitLevel < targetLevel ? unitLevel : targetLevel;
-    if (transformLevel < globalLevel)
-        transformLevel = globalLevel;
-
-    CMidgardID transformUnitImplId;
+    CMidgardID transformUnitImplId{targetUnit->unitImpl->unitId};
     unitGenerator->vftable->generateUnitImplId(unitGenerator, &transformUnitImplId,
                                                &targetUnit->unitImpl->unitId, transformLevel);
 

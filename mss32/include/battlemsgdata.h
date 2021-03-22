@@ -287,6 +287,12 @@ struct Api
 
     GetUnitIntValue getUnitAccuracyReduction;
 
+    using SetUnitBoolValue = void(__thiscall*)(BattleMsgData* thisptr,
+                                               const CMidgardID* unitId,
+                                               bool value);
+
+    SetUnitBoolValue setUnitShown;
+
     using UnitHasModifier = bool(__stdcall*)(const BattleMsgData* battleMsgData,
                                              const CMidgardID* modifierId,
                                              const CMidgardID* unitId);

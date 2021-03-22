@@ -147,9 +147,10 @@ using CreateBatAttack = IBatAttack*(__stdcall*)(IMidgardObjectMap* objectMap,
                                                 const LAttackClass* attackClass,
                                                 bool a7);
 
-using GetAttackByIdAndCheckTransfomed = IAttack*(__stdcall*)(IMidgardObjectMap* objectMap,
-                                                             const CMidgardID* id,
-                                                             int attackNumber);
+using GetAttackById = IAttack*(__stdcall*)(IMidgardObjectMap* objectMap,
+                                           const CMidgardID* id,
+                                           int attackNumber,
+                                           bool checkTransformed);
 
 using IsUnitImmuneToAttack = bool(__stdcall*)(IMidgardObjectMap* objectMap,
                                               BattleMsgData* battleMsgData,
@@ -233,6 +234,34 @@ using AttackShouldMiss = bool(__stdcall*)(const int* accuracy);
 /** Generates random number in range [0 : maxValue) using special ingame generator. */
 using GenerateRandomNumber = int(__stdcall*)(unsigned int maxValue);
 
+using GetUnitPositionInGroup = int(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                               const CMidgardID* groupId,
+                                               const CMidgardID* unitId);
+
+/** Returns summon unit impl id for specified attack id according to size and position in group. */
+using GetSummonUnitImplIdByAttack = CMidgardID*(__stdcall*)(CMidgardID* summonImplId,
+                                                            const CMidgardID* attackId,
+                                                            int position,
+                                                            bool smallUnit);
+
+/**
+ * Returns summon unit impl id for specified summon attack.
+ * @param[inout] summonImplId where to store resulting unit impl id.
+ * @param[in] objectMap used for object search.
+ * @param[in] attackId summon attack id to choose one summon from list.
+ * @param[in] groupId id of group where summoned unit supposed to be.
+ * @param[in] targetUnitId special summon id to get position in group.
+ * @param canSummonBig determines wheter big unit can be summoned or not.
+ * @returns pointer to summonImplId.
+ */
+using GetSummonUnitImplId = CMidgardID*(__stdcall*)(CMidgardID* summonImplId,
+                                                    IMidgardObjectMap* objectMap,
+                                                    const CMidgardID* attackId,
+                                                    const CMidgardID* groupId,
+                                                    const CMidgardID* targetUnitId,
+                                                    bool canSummonBig);
+;
+
 /**
  * Returns number of attacks allowed in battle for specific id ???
  * 1 or 0 for item, 1 or 2 for unit attacks and so on.
@@ -274,7 +303,7 @@ struct Functions
     FindUnitById findUnitById;
     CastUnitImplToSoldier castUnitImplToSoldier;
     CreateBatAttack createBatAttack;
-    GetAttackByIdAndCheckTransfomed getAttackByIdAndCheckTransfomed;
+    GetAttackById getAttackById;
     IsUnitImmuneToAttack isUnitImmuneToAttack;
     AttackClassToNumber attackClassToNumber;
     AttackClassToString attackClassToString;
@@ -290,6 +319,9 @@ struct Functions
     IsGroupOwnerPlayerHuman isGroupOwnerPlayerHuman;
     AttackShouldMiss attackShouldMiss;
     GenerateRandomNumber generateRandomNumber;
+    GetUnitPositionInGroup getUnitPositionInGroup;
+    GetSummonUnitImplIdByAttack getSummonUnitImplIdByAttack;
+    GetSummonUnitImplId getSummonUnitImplId;
     GetAttackImplMagic getAttackImplMagic;
     GetUnitHealAttackNumber getUnitHealAttackNumber;
     GetAttackQtyDamageOrHeal getAttackQtyDamageOrHeal;

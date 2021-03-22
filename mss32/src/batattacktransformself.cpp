@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,40 +17,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "visitors.h"
+#include "batattacktransformself.h"
 #include "version.h"
 #include <array>
 
-namespace game::VisitorApi {
+namespace game::CBatAttackTransformSelfApi {
 
 // clang-format off
-std::array<Api, 3> functions = {{
+static std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (Api::ChangeUnitHp)0x5e88f4,
-        (Api::ForceUnitMax)0x5e972a,
-        (Api::AddUnitToGroup)0x5e8bf8,
-        (Api::ExchangeItem)0x5e86cc,
-        (Api::TransformUnit)0x5e968e,
-        (Api::ExtractUnitFromGroup)0x5e8d72,
+        (IBatAttackVftable::OnAttack)0x662961,
     },
     // Russobit
     Api{
-        (Api::ChangeUnitHp)0x5e88f4,
-        (Api::ForceUnitMax)0x5e972a,
-        (Api::AddUnitToGroup)0x5e8bf8,
-        (Api::ExchangeItem)0x5e86cc,
-        (Api::TransformUnit)0x5e968e,
-        (Api::ExtractUnitFromGroup)0x5e8d72,
+        (IBatAttackVftable::OnAttack)0x662961,
     },
     // Gog
     Api{
-        (Api::ChangeUnitHp)0x5e75f3,
-        (Api::ForceUnitMax)0x5e8429,
-        (Api::AddUnitToGroup)0x5e78f7,
-        (Api::ExchangeItem)0x5e73cb,
-        (Api::TransformUnit)0x5e838d,
-        (Api::ExtractUnitFromGroup)0x5e7a71,
+        (IBatAttackVftable::OnAttack)0x6613e1,
     }
 }};
 // clang-format on
@@ -60,4 +45,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::VisitorApi
+} // namespace game::CBatAttackTransformSelfApi
