@@ -329,9 +329,8 @@ bool canPerformSecondaryAttack(game::CBatAttackBestowWards* thisptr,
         return false;
 
     if (!thisptr->attack2Initialized) {
-        thisptr->attack2Impl = fn.getAttackByIdAndCheckTransfomed(objectMap,
-                                                                  &thisptr->attackImplUnitId,
-                                                                  thisptr->attackNumber + 1);
+        thisptr->attack2Impl = fn.getAttackById(objectMap, &thisptr->attackImplUnitId,
+                                                thisptr->attackNumber + 1, true);
         thisptr->attack2Initialized = true;
     }
 
