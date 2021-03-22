@@ -24,6 +24,7 @@
 #include "battleattackinfo.h"
 #include "battlemsgdata.h"
 #include "game.h"
+#include "hooks.h"
 #include "log.h"
 #include "midgardobjectmap.h"
 #include "midunit.h"
@@ -31,7 +32,6 @@
 #include "usunitimpl.h"
 #include "utils.h"
 #include "visitors.h"
-#include "hooks.h"
 #include <fmt/format.h>
 
 namespace hooks {
@@ -88,8 +88,7 @@ static int drainAttack(game::IMidgardObjectMap* objectMap,
     const auto targetResultingHp = targetUnit->currentHp;
     auto drainDamage = (targetInitialHp - targetResultingHp) * drainHealPercent / 100;
 
-    auto attackVftable = static_cast<const IAttackVftable*>(attack->vftable);
-    drainDamage += attackVftable->getDrain(attack, targetInitialHp - targetResultingHp);
+    drainDamage += attack->vftable->getDrain(attack, targetInitialHp - targetResultingHp);
 
     const auto& battle = BattleMsgDataApi::get();
     battle.checkUnitDeath(objectMap, battleMsgData, targetUnitId);

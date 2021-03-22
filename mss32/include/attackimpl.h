@@ -86,7 +86,7 @@ struct Api
 Api& get();
 
 /** Returns address of CAttackImpl::vftable used in game. */
-const void* vftable();
+const IAttackVftable* vftable();
 
 } // namespace CAttackImplApi
 

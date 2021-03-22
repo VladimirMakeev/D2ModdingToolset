@@ -818,8 +818,7 @@ int __stdcall chooseUnitLaneHooked(const game::IUsSoldier* soldier)
 {
     using namespace game;
 
-    auto soldierVftable = (const IUsSoldierVftable*)soldier->vftable;
-    IAttack* attack = soldierVftable->getAttackById(soldier);
+    IAttack* attack = soldier->vftable->getAttackById(soldier);
     auto attackVftable = (const IAttackVftable*)attack->vftable;
     const LAttackReach* reach = attackVftable->getAttackReach(attack);
 
@@ -895,11 +894,9 @@ bool __fastcall giveAttackCanPerformHooked(game::CBatAttackGiveAttack* thisptr,
 
     CMidUnit* unit = fn.findUnitById(objectMap, unitId);
     auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
-    auto soldierVftable = static_cast<const IUsSoldierVftable*>(soldier->vftable);
 
-    auto attack = soldierVftable->getAttackById(soldier);
-    auto attackVftable = static_cast<const IAttackVftable*>(attack->vftable);
-    const auto attackClass = attackVftable->getAttackClass(attack);
+    auto attack = soldier->vftable->getAttackById(soldier);
+    const auto attackClass = attack->vftable->getAttackClass(attack);
 
     const auto& attackCategories = AttackClassCategories::get();
 
@@ -908,13 +905,12 @@ bool __fastcall giveAttackCanPerformHooked(game::CBatAttackGiveAttack* thisptr,
         return false;
     }
 
-    auto secondAttack = soldierVftable->getSecondAttackById(soldier);
+    auto secondAttack = soldier->vftable->getSecondAttackById(soldier);
     if (!secondAttack) {
         return true;
     }
 
-    auto secondAttackVftable = static_cast<const IAttackVftable*>(secondAttack->vftable);
-    const auto secondAttackClass = secondAttackVftable->getAttackClass(secondAttack);
+    const auto secondAttackClass = secondAttack->vftable->getAttackClass(secondAttack);
     // Do not allow to buff other units with this attack type as their second attack
     return secondAttackClass->id != attackCategories.giveAttack->id;
 }
@@ -952,10 +948,9 @@ bool __fastcall shatterCanPerformHooked(game::CBatAttackShatter* thisptr,
 
     CMidUnit* unit = fn.findUnitById(objectMap, unitId);
     auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
-    auto soldierVftable = (const IUsSoldierVftable*)soldier->vftable;
 
     int unitArmor{};
-    soldierVftable->getArmor(soldier, &unitArmor);
+    soldier->vftable->getArmor(soldier, &unitArmor);
 
     const int fortArmor = battle.getUnitFortificationArmor(battleMsgData, unitId);
     const int reducedArmor = unitArmor - shatteredArmor;
@@ -1157,8 +1152,7 @@ void __stdcall getAttackAccuracyHooked(int* accuracy,
 
     using namespace game;
 
-    auto vftable = static_cast<const IAttackVftable*>(attack->vftable);
-    const auto attackClass = vftable->getAttackClass(attack);
+    const auto attackClass = attack->vftable->getAttackClass(attack);
 
     if (!isAttackClassUsesAccuracy(attackClass)) {
         *accuracy = 100;
@@ -1166,7 +1160,7 @@ void __stdcall getAttackAccuracyHooked(int* accuracy,
     }
 
     int tmpAccuracy{};
-    vftable->getPower(attack, &tmpAccuracy);
+    attack->vftable->getPower(attack, &tmpAccuracy);
 
     const auto& battle = BattleMsgDataApi::get();
     auto groupId = battle.isUnitAttacker(battleMsgData, unitId) ? &battleMsgData->attackerGroupId

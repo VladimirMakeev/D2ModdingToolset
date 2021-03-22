@@ -29,9 +29,13 @@
 
 namespace game {
 
+struct IAttackVftable;
+
 /** Base class for units attacks. */
-struct IAttack : public IMidObject
-{ };
+struct IAttack
+{
+    const IAttackVftable* vftable;
+};
 
 struct IAttackVftable
 {

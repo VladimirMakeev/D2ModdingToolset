@@ -47,15 +47,15 @@ static std::array<Api, 4> functions = {{
     }
 }};
 
-static std::array<const void*, 4> vftables = {{
+static std::array<const IAttackVftable*, 4> vftables = {{
     // Akella
-    (const void*)0x6ed004,
+    (const IAttackVftable*)0x6ed004,
     // Russobit
-    (const void*)0x6ed004,
+    (const IAttackVftable*)0x6ed004,
     // Gog
-    (const void*)0x6eafa4,
+    (const IAttackVftable*)0x6eafa4,
     // Scenario Editor
-    (const void*)0x5e11c4
+    (const IAttackVftable*)0x5e11c4
 }};
 // clang-format on
 
@@ -64,7 +64,7 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-const void* vftable()
+const IAttackVftable* vftable()
 {
     return vftables[static_cast<int>(hooks::gameVersion())];
 }
