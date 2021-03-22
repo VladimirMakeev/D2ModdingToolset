@@ -755,7 +755,7 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
     auto lord = fn.getLordByPlayer(player);
     auto buildList = lord->data->buildList;
 
-    auto lordTypeApi = TLordTypeApi::get();
+    const auto& lordTypeApi = TLordTypeApi::get();
     BuildListIterator iterator;
     lordTypeApi.getIterator(buildList, &iterator);
 
@@ -775,7 +775,7 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
                                                                            &iterator.node->value);
 
         const LBuildingCategory* buildingCategory = &buildingType->data->category;
-        const auto buildingCategories = BuildingCategories::get();
+        const auto& buildingCategories = BuildingCategories::get();
 
         if (buildingCategory->id == buildingCategories.unit->id) {
             const TBuildingUnitUpgType* unitUpg = (const TBuildingUnitUpgType*)
