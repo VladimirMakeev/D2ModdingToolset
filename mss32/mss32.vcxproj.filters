@@ -393,6 +393,9 @@
     <ClCompile Include="src\leaderabilitycat.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\immunecat.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\autoptr.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>

@@ -30,6 +30,33 @@ struct LImmuneCatTable : CEnumConstantTable<ImmuneId>
 struct LImmuneCat : public Category<ImmuneId>
 { };
 
+namespace ImmuneCategories {
+
+struct Categories
+{
+    LImmuneCat* notimmune;
+    LImmuneCat* once;
+    LImmuneCat* always;
+};
+
+Categories& get();
+
+/** Returns address of LImmuneCat::vftable used in game. */
+const void* vftable();
+
+} // namespace ImmuneCategories
+
+namespace LImmuneCatTableApi {
+
+using Api = CategoryTableApi::Api<LImmuneCatTable, LImmuneCat>;
+
+Api& get();
+
+/** Returns address of LImmuneCatTable::vftable used in game. */
+const void* vftable();
+
+} // namespace LImmuneCatTableApi
+
 } // namespace game
 
 #endif // IMMUNECAT_H
