@@ -962,24 +962,14 @@ bool __fastcall shatterCanPerformHooked(game::CBatAttackShatter* thisptr,
     return false;
 }
 
-static game::UnitInfo* getUnitInfoById(game::BattleMsgData* battleMsgData,
-                                       const game::CMidgardID* unitId)
-{
-    for (auto& info : battleMsgData->unitsInfo) {
-        if (info.unitId1 == *unitId) {
-            return &info;
-        }
-    }
-
-    return nullptr;
-}
-
 void __fastcall setUnitShatteredArmorHooked(game::BattleMsgData* thisptr,
                                             int /*%edx*/,
                                             const game::CMidgardID* unitId,
                                             int armor)
 {
-    auto info = getUnitInfoById(thisptr, unitId);
+    using namespace game;
+
+    auto info = BattleMsgDataApi::get().getUnitInfoById(thisptr, unitId);
     if (!info) {
         return;
     }
