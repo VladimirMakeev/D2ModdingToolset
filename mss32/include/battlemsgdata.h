@@ -27,6 +27,9 @@
 namespace game {
 
 struct IMidgardObjectMap;
+struct IBatAttack;
+struct LAttackSource;
+struct LAttackClass;
 
 /** Unit statuses in battle. */
 enum class BattleStatus : int
@@ -283,6 +286,57 @@ struct Api
     IsUnitAttacker isUnitAttacker;
 
     GetUnitIntValue getUnitAccuracyReduction;
+
+    using UnitHasModifier = bool(__stdcall*)(const BattleMsgData* battleMsgData,
+                                             const CMidgardID* modifierId,
+                                             const CMidgardID* unitId);
+    UnitHasModifier unitHasModifier;
+
+    using GetUnitInfoById = UnitInfo*(__stdcall*)(BattleMsgData* battleMsgData,
+                                                  const CMidgardID* unitId);
+    GetUnitInfoById getUnitInfoById;
+
+    /**
+     * Calls check methods of the attack - from Method14 to Method17, then compares the results
+     * against unit statuses (xp counted, dead, unsummoned, retreated and hidden) to see if the
+     * attack can be performed. If all the checks are passed, calls CanPerform of the attack.
+     */
+    using CanPerformAttackOnUnitWithStatusCheck =
+        bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                         const BattleMsgData* battleMsgData,
+                         const IBatAttack* attack,
+                         const CMidgardID* unitId);
+    CanPerformAttackOnUnitWithStatusCheck canPerformAttackOnUnitWithStatusCheck;
+
+    using IsUnitAttackSourceWardRemoved = bool(__thiscall*)(BattleMsgData* thisptr,
+                                                            const CMidgardID* unitId,
+                                                            const LAttackSource* attackSource);
+    IsUnitAttackSourceWardRemoved isUnitAttackSourceWardRemoved;
+
+    using IsUnitAttackClassWardRemoved = bool(__thiscall*)(BattleMsgData* thisptr,
+                                                           const CMidgardID* unitId,
+                                                           const LAttackClass* attackClass);
+    IsUnitAttackClassWardRemoved isUnitAttackClassWardRemoved;
+
+    using UnitCanBeHealed = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                             const BattleMsgData* battleMsgData,
+                                             const CMidgardID* unitId);
+    UnitCanBeHealed unitCanBeHealed;
+
+    using UnitCanBeCured = bool(__stdcall*)(const BattleMsgData* battleMsgData,
+                                            const CMidgardID* unitId);
+    UnitCanBeCured unitCanBeCured;
+
+    using UnitCanBeRevived = bool(__stdcall*)(const BattleMsgData* battleMsgData,
+                                              const CMidgardID* unitId);
+    UnitCanBeRevived unitCanBeRevived;
+
+    /** Called at the end of battle turn to cleanup temporary unit statuses. */
+    using SetUnknown9Bit1AndClearBoostLowerDamage =
+        void(__stdcall*)(const BattleMsgData* battleMsgData,
+                         const CMidgardID* unitId,
+                         CMidgardID* nextAttackUnitId);
+    SetUnknown9Bit1AndClearBoostLowerDamage setUnknown9Bit1AndClearBoostLowerDamage;
 };
 
 Api& get();
