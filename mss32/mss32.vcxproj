@@ -282,6 +282,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\attacksourcecat.h" />
     <ClInclude Include="include\autodialog.h" />
     <ClInclude Include="include\autoptr.h" />
+    <ClInclude Include="include\avoidflickerimage.h" />
     <ClInclude Include="include\batattack.h" />
     <ClInclude Include="include\batattackbestowwards.h" />
     <ClInclude Include="include\batattackdoppelganger.h" />
