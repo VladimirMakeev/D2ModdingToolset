@@ -27,6 +27,7 @@
 #include "globaldata.h"
 #include "log.h"
 #include "mempool.h"
+#include "settings.h"
 #include "utils.h"
 #include <fmt/format.h>
 #include <limits>
@@ -160,6 +161,13 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
 
     if (id == categories.heal->id || id == categories.revive->id) {
         db.readHeal(&data->qtyHeal, dbTable, "QTY_HEAL", &thisptr->attackId);
+    } else if (id == categories.bestowWards->id) {
+        data->qtyHeal = 0;
+        if (userSettings().unrestrictedBestowWards != baseSettings().unrestrictedBestowWards) {
+            // Allow Bestow Wards to read QTY_HEAL values from DB
+            db.readIntWithBoundsCheck(&data->qtyHeal, dbTable, "QTY_HEAL", 0,
+                                      std::numeric_limits<int>::max());
+        }
     } else {
         data->qtyHeal = 0;
     }

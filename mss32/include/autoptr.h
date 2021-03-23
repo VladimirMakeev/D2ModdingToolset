@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,39 +17,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BATATTACKGIVEATTACK_H
-#define BATATTACKGIVEATTACK_H
-
-#include "batattack.h"
-#include "midgardid.h"
+#ifndef AUTOPTR_H
+#define AUTOPTR_H
 
 namespace game {
 
-/**
- * Gives additional attacks to allies.
- * Alchemist unit of Mountain Clans uses this attack.
- */
-struct CBatAttackGiveAttack : public CBatAttackBase
+template <typename T>
+struct AutoPtr
 {
-    CMidgardID unitId1;
-    CMidgardID unitId2;
-    int attackNumber; /**< 1 if this is a unit's primary attack, 2 for secondary. */
+    T* data;
 };
 
-static_assert(sizeof(CBatAttackGiveAttack) == 16,
-              "Size of CBatAttackGiveAttack structure must be exactly 16 bytes");
+using AutoPointer = AutoPtr<void>;
 
-namespace CBatAttackGiveAttackApi {
+namespace AutoPointerApi {
 
 struct Api
 {
-    IBatAttackVftable::CanPerform canPerform;
+    /**
+     * Replaces the held pointer. If the currently held pointer is not null - then its data gets
+     * deleted.
+     */
+    using Reset = void(__thiscall*)(AutoPointer* thisptr, void* data);
+    Reset reset;
 };
 
 Api& get();
 
-} // namespace CBatAttackGiveAttackApi
+} // namespace AutoPointerApi
 
 } // namespace game
 
-#endif // BATATTACKGIVEATTACK_H
+#endif // AUTOPTR_H

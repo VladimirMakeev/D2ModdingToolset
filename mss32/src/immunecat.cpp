@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,54 +17,49 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "buildingcat.h"
+#include "immunecat.h"
 #include "version.h"
 #include <array>
 
-namespace game {
-namespace BuildingCategories {
+namespace game::ImmuneCategories {
 
 // clang-format off
 static std::array<Categories, 4> categories = {{
     // Akella
     Categories{
-        (LBuildingCategory*)0x839a30,
-        (LBuildingCategory*)0x839a40,
-        (LBuildingCategory*)0x839a50,
-        (LBuildingCategory*)0x839a20
+        (LImmuneCat*)0x8393a8,
+        (LImmuneCat*)0x8393b8,
+        (LImmuneCat*)0x8393c8,
     },
     // Russobit
     Categories{
-        (LBuildingCategory*)0x839a30,
-        (LBuildingCategory*)0x839a40,
-        (LBuildingCategory*)0x839a50,
-        (LBuildingCategory*)0x839a20
+        (LImmuneCat*)0x8393a8,
+        (LImmuneCat*)0x8393b8,
+        (LImmuneCat*)0x8393c8,
     },
     // Gog
     Categories{
-        (LBuildingCategory*)0x8379e0,
-        (LBuildingCategory*)0x8379f0,
-        (LBuildingCategory*)0x837a00,
-        (LBuildingCategory*)0x8379d0
+        (LImmuneCat*)0x837358,
+        (LImmuneCat*)0x837368,
+        (LImmuneCat*)0x837378,
     },
     // Scenario Editor
     Categories{
-        (LBuildingCategory*)0x665af8,
-        (LBuildingCategory*)0x665b08,
-        (LBuildingCategory*)0x665b18,
-        (LBuildingCategory*)0x665ae8
-    }
+        (LImmuneCat*)0x665b30,
+        (LImmuneCat*)0x665b40,
+        (LImmuneCat*)0x665b50,
+    },
 }};
 
 static std::array<const void*, 4> vftables = {{
     // Akella
-    (const void*)0x6d153c,
+    (const void*)0x6e9cfc,
     // Russobit
-    (const void*)0x6d153c,
+    (const void*)0x6e9cfc,
     // Gog
-    (const void*)0x6cf4dc,
+    (const void*)0x6e7c9c,
     // Scenario Editor
-    (const void*)0x5df5dc
+    (const void*)0x5df754,
 }};
 // clang-format on
 
@@ -78,55 +73,55 @@ const void* vftable()
     return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace BuildingCategories
+} // namespace game::ImmuneCategories
 
-namespace LBuildingCategoryTableApi {
+namespace game::LImmuneCatTableApi {
 
 // clang-format off
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::Constructor)0x58b4a0,
-        (Api::Init)0x58b607,
-        (Api::ReadCategory)0x58b67f,
-        (Api::InitDone)0x58b5c2,
-        (Api::FindCategoryById)0x58c13d,
+        (Api::Constructor)0x584c37,
+        (Api::Init)0x584d87,
+        (Api::ReadCategory)0x584dff,
+        (Api::InitDone)0x584d42,
+        (Api::FindCategoryById)0x5a032c,
     },
     // Russobit
     Api{
-        (Api::Constructor)0x58b4a0,
-        (Api::Init)0x58b607,
-        (Api::ReadCategory)0x58b67f,
-        (Api::InitDone)0x58b5c2,
-        (Api::FindCategoryById)0x58c13d,
+        (Api::Constructor)0x584c37,
+        (Api::Init)0x584d87,
+        (Api::ReadCategory)0x584dff,
+        (Api::InitDone)0x584d42,
+        (Api::FindCategoryById)0x5a032c,
     },
     // Gog
     Api{
-        (Api::Constructor)0x58a60c,
-        (Api::Init)0x58a773,
-        (Api::ReadCategory)0x58a7eb,
-        (Api::InitDone)0x58a72e,
-        (Api::FindCategoryById)0x58b2cb,
+        (Api::Constructor)0x583dea,
+        (Api::Init)0x583f3a,
+        (Api::ReadCategory)0x583fb2,
+        (Api::InitDone)0x583ef5,
+        (Api::FindCategoryById)0x59f5c2,
     },
     // Scenario Editor
     Api{
-        (Api::Constructor)0x53b0a8,
-        (Api::Init)0x53b20f,
-        (Api::ReadCategory)0x53b287,
-        (Api::InitDone)0x53b1ca,
-        (Api::FindCategoryById)0x538d2d,
-    }
+        (Api::Constructor)0x53b4aa,
+        (Api::Init)0x53b5fa,
+        (Api::ReadCategory)0x53b672,
+        (Api::InitDone)0x53b5b5,
+        (Api::FindCategoryById)0x5485a1,
+    },
 }};
 
 static std::array<const void*, 4> vftables = {{
     // Akella
-    (const void*)0x6ea71c,
+    (const void*)0x6e9d04,
     // Russobit
-    (const void*)0x6ea71c,
+    (const void*)0x6e9d04,
     // Gog
-    (const void*)0x6e86bc,
+    (const void*)0x6e7ca4,
     // Scenario Editor
-    (const void*)0x5df714
+    (const void*)0x5df75c,
 }};
 // clang-format on
 
@@ -140,6 +135,4 @@ const void* vftable()
     return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace LBuildingCategoryTableApi
-
-} // namespace game
+} // namespace game::LImmuneCatTableApi

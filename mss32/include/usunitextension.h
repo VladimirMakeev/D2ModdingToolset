@@ -22,9 +22,15 @@
 
 namespace game {
 
+struct IUsUnitExtensionVftable
+{
+    void* destructor;
+};
+
+template <typename T = IUsUnitExtensionVftable>
 struct IUsUnitExtension
 {
-    const void* vftable;
+    const T* vftable;
 };
 
 } // namespace game

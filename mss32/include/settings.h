@@ -58,6 +58,7 @@ struct Settings
     bool leveledTransformSelfAttack;
     bool leveledSummonAttack;
     bool missChanceSingleRoll;
+    bool unrestrictedBestowWards;
     bool debugMode;
 };
 

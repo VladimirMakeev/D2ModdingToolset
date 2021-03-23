@@ -94,6 +94,13 @@ struct Api
     /** Performs necessary cleanup after categories was read. */
     using InitDone = void*(__thiscall*)(Table* table);
     InitDone initDone;
+
+    /** Looks for category with the specified id, otherwise initializes the value with null table
+     * and id = -1. */
+    using FindCategoryById = Category*(__thiscall*)(Table* thisptr,
+                                                    Category* value,
+                                                    const int* categoryId);
+    FindCategoryById findCategoryById;
 };
 
 } // namespace CategoryTableApi

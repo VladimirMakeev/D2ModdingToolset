@@ -59,6 +59,17 @@ static std::array<Categories, 3> categories = {{
         (LAttackSource*)0x8373a0
     }
 }};
+
+static std::array<const void*, 4> vftables = {{
+    // Akella
+    (const void*)0x6cead4,
+    // Russobit
+    (const void*)0x6cead4,
+    // Gog
+    (const void*)0x6cca74,
+    // Scenario Editor
+    (const void*)0x5da8cc,
+}};
 // clang-format on
 
 Categories& get()
@@ -66,4 +77,71 @@ Categories& get()
     return categories[static_cast<int>(hooks::gameVersion())];
 }
 
+const void* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
+
 } // namespace game::AttackSourceCategories
+
+namespace game::LAttackSourceTableApi {
+
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)0x585143,
+        (Api::Init)0x585306,
+        (Api::ReadCategory)0x58537e,
+        (Api::InitDone)0x5852c1,
+        (Api::FindCategoryById)0x40ad09,
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)0x585143,
+        (Api::Init)0x585306,
+        (Api::ReadCategory)0x58537e,
+        (Api::InitDone)0x5852c1,
+        (Api::FindCategoryById)0x40ad09,
+    },
+    // Gog
+    Api{
+        (Api::Constructor)0x5842f6,
+        (Api::Init)0x5844b9,
+        (Api::ReadCategory)0x584531,
+        (Api::InitDone)0x584474,
+        (Api::FindCategoryById)0x40a995,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x53bf3a,
+        (Api::Init)0x53c0fd,
+        (Api::ReadCategory)0x53c175,
+        (Api::InitDone)0x53c0b8,
+        (Api::FindCategoryById)0x4f2414,
+    },
+}};
+
+static std::array<const void*, 4> vftables = {{
+    // Akella
+    (const void*)0x6e9d5c,
+    // Russobit
+    (const void*)0x6e9d5c,
+    // Gog
+    (const void*)0x6e7cfc,
+    // Scenario Editor
+    (const void*)0x5df7dc,
+}};
+// clang-format on
+
+Api& get()
+{
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+const void* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
+
+} // namespace game::LAttackSourceTableApi

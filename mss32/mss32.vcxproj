@@ -146,6 +146,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\attackreachcat.cpp" />
     <ClCompile Include="src\attacksourcecat.cpp" />
     <ClCompile Include="src\autodialog.cpp" />
+    <ClCompile Include="src\autoptr.cpp" />
     <ClCompile Include="src\batattackbestowwards.cpp" />
     <ClCompile Include="src\batattackdoppelganger.cpp" />
     <ClCompile Include="src\batattackdrain.cpp" />
@@ -159,6 +160,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\bindings\dynupgradeview.cpp" />
     <ClCompile Include="src\bindings\unitimplview.cpp" />
     <ClCompile Include="src\bindings\unitview.cpp" />
+    <ClCompile Include="src\bestowwardshooks.cpp" />
     <ClCompile Include="src\buildingbranch.cpp" />
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
@@ -189,6 +191,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\hooks.cpp" />
     <ClCompile Include="src\idlist.cpp" />
     <ClCompile Include="src\idvector.cpp" />
+    <ClCompile Include="src\immunecat.cpp" />
     <ClCompile Include="src\interfmanager.cpp" />
     <ClCompile Include="src\itemcategory.cpp" />
     <ClCompile Include="src\itemtransferhooks.cpp" />
@@ -212,6 +215,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\midmusic.cpp" />
     <ClCompile Include="src\midscenvariables.cpp" />
     <ClCompile Include="src\midunitgroup.cpp" />
+    <ClCompile Include="src\midunit.cpp" />
     <ClCompile Include="src\musichooks.cpp" />
     <ClCompile Include="src\netmessages.cpp" />
     <ClCompile Include="src\phase.cpp" />
@@ -277,6 +281,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\attackreachcat.h" />
     <ClInclude Include="include\attacksourcecat.h" />
     <ClInclude Include="include\autodialog.h" />
+    <ClInclude Include="include\autoptr.h" />
     <ClInclude Include="include\batattack.h" />
     <ClInclude Include="include\batattackbestowwards.h" />
     <ClInclude Include="include\batattackdoppelganger.h" />
@@ -291,6 +296,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\bindings\dynupgradeview.h" />
     <ClInclude Include="include\bindings\unitimplview.h" />
     <ClInclude Include="include\bindings\unitview.h" />
+    <ClInclude Include="include\bestowwardshooks.h" />
     <ClInclude Include="include\buildingbranch.h" />
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />

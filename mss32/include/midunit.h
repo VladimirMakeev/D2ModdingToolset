@@ -58,6 +58,18 @@ static_assert(offsetof(CMidUnit, dynLevel) == 24, "CMidUnit::dynLevel offset mus
 static_assert(offsetof(CMidUnit, origTypeId) == 44, "CMidUnit::origTypeId offset must be 44 bytes");
 static_assert(offsetof(CMidUnit, origXp) == 60, "CMidUnit::origXp offset must be 60 bytes");
 
+namespace CMidUnitApi {
+
+struct Api
+{
+    using AddModifier = bool(__thiscall*)(CMidUnit* thisptr, const CMidgardID* modifierId);
+    AddModifier addModifier;
+};
+
+Api& get();
+
+} // namespace CMidUnitApi
+
 } // namespace game
 
 #endif // MIDUNIT_H

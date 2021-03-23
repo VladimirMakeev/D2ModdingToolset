@@ -35,7 +35,7 @@ struct CBatAttackShatter : public CBatAttackBase
 {
     CMidgardID unitId1;
     CMidgardID unitId2;
-    int attackIndex; /**< 1 if this is a unit's primary attack, 2 for secondary. */
+    int attackNumber; /**< 1 if this is a unit's primary attack, 2 for secondary. */
     IAttack* attack;
     int unknown2;
     int unknown3;

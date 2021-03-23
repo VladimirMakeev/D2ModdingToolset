@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,45 +17,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "attackimpl.h"
+#include "autoptr.h"
 #include "version.h"
 #include <array>
 
-namespace game::CAttackImplApi {
+namespace game::AutoPointerApi {
 
 // clang-format off
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::Constructor)0x5a5f0a,
-        (Api::InitData)0x5a6638
+        (Api::Reset)0x642930,
     },
     // Russobit
     Api{
-        (Api::Constructor)0x5a5f0a,
-        (Api::InitData)0x5a6638
+        (Api::Reset)0x642930,
     },
     // Gog
     Api{
-        (Api::Constructor)0x5a5156,
-        (Api::InitData)0x5a5884
+        (Api::Reset)0x6418f0,
     },
     // Scenario Editor
     Api{
-        (Api::Constructor)0x54e138,
-        (Api::InitData)0x54e866
+        (Api::Reset)nullptr,
     }
-}};
-
-static std::array<const IAttackVftable*, 4> vftables = {{
-    // Akella
-    (const IAttackVftable*)0x6ed004,
-    // Russobit
-    (const IAttackVftable*)0x6ed004,
-    // Gog
-    (const IAttackVftable*)0x6eafa4,
-    // Scenario Editor
-    (const IAttackVftable*)0x5e11c4
 }};
 // clang-format on
 
@@ -64,9 +49,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-const IAttackVftable* vftable()
-{
-    return vftables[static_cast<int>(hooks::gameVersion())];
-}
-
-} // namespace game::CAttackImplApi
+} // namespace game::AutoPointerApi

@@ -42,6 +42,15 @@ static std::array<Api, 3> functions = {{
         (Api::IsUnitAttacker)0x623b58,
         (Api::GetUnitIntValue)0x6233f6,
         (Api::SetUnitBoolValue)0x62371c,
+        (Api::UnitHasModifier)0x65e9c8,
+        (Api::GetUnitInfoById)0x622ef5,
+        (Api::CanPerformAttackOnUnitWithStatusCheck)0x64734d,
+        (Api::IsUnitAttackSourceWardRemoved)0x623d76,
+        (Api::IsUnitAttackClassWardRemoved)0x623dc7,
+        (Api::UnitCanBeHealed)0x65e938,
+        (Api::UnitCanBeCured)0x65d890,
+        (Api::UnitCanBeRevived)0x65d927,
+        (Api::SetUnknown9Bit1AndClearBoostLowerDamage)0x627ac9,
     },
     // Russobit
     Api{
@@ -60,6 +69,15 @@ static std::array<Api, 3> functions = {{
         (Api::IsUnitAttacker)0x623b58,
         (Api::GetUnitIntValue)0x6233f6,
         (Api::SetUnitBoolValue)0x62371c,
+        (Api::UnitHasModifier)0x65e9c8,
+        (Api::GetUnitInfoById)0x622ef5,
+        (Api::CanPerformAttackOnUnitWithStatusCheck)0x64734d,
+        (Api::IsUnitAttackSourceWardRemoved)0x623d76,
+        (Api::IsUnitAttackClassWardRemoved)0x623dc7,
+        (Api::UnitCanBeHealed)0x65e938,
+        (Api::UnitCanBeCured)0x65d890,
+        (Api::UnitCanBeRevived)0x65d927,
+        (Api::SetUnknown9Bit1AndClearBoostLowerDamage)0x627ac9,
     },
     // Gog
     Api{
@@ -78,6 +96,15 @@ static std::array<Api, 3> functions = {{
         (Api::IsUnitAttacker)0x6226e8,
         (Api::GetUnitIntValue)0x621f86,
         (Api::SetUnitBoolValue)0x6222ac,
+        (Api::UnitHasModifier)0x65d448,
+        (Api::GetUnitInfoById)0x621a85,
+        (Api::CanPerformAttackOnUnitWithStatusCheck)0x645b7d,
+        (Api::IsUnitAttackSourceWardRemoved)0x622906,
+        (Api::IsUnitAttackClassWardRemoved)0x622957,
+        (Api::UnitCanBeHealed)0x65d3b8,
+        (Api::UnitCanBeCured)0x65c310,
+        (Api::UnitCanBeRevived)0x65c3a7,
+        (Api::SetUnknown9Bit1AndClearBoostLowerDamage)0x626609,
     }
 }};
 // clang-format on

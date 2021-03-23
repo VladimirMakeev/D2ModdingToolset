@@ -111,14 +111,14 @@ bool __fastcall customAttackIsImmune(CustomAttack* thisptr,
                                                       thisptr->attack, false);
 }
 
-void __fastcall customAttackMethod8(CustomAttack* thisptr,
-                                    int /*%edx*/,
-                                    int a2,
-                                    int a3,
-                                    int a4,
-                                    int a5)
+void __fastcall customAttackOnMiss(CustomAttack* thisptr,
+                                   int /*%edx*/,
+                                   int a2,
+                                   int a3,
+                                   int a4,
+                                   int a5)
 {
-    logDebug("newAttackType.log", "CustomAttack method 8");
+    logDebug("newAttackType.log", "CustomAttack onMiss");
     // do nothing
 }
 
@@ -134,14 +134,14 @@ bool __fastcall customAttackGetAttackClass(CustomAttack* thisptr,
     return true;
 }
 
-bool __fastcall customAttackMethod9(CustomAttack* thisptr,
-                                    int /*%edx*/,
-                                    int a2,
-                                    int a3,
-                                    game::LAttackClass* attackClass)
+bool __fastcall customAttackMethod11(CustomAttack* thisptr,
+                                     int /*%edx*/,
+                                     int a2,
+                                     int a3,
+                                     game::LAttackClass* attackClass)
 {
-    logDebug("newAttackType.log", "CustomAttack method 9");
-    return thisptr->vftable->method9(thisptr, a2, a3, attackClass);
+    logDebug("newAttackType.log", "CustomAttack method 11");
+    return thisptr->vftable->method11(thisptr, a2, a3, attackClass);
 }
 
 void __fastcall customAttackDoAttack(CustomAttack* thisptr,
@@ -154,34 +154,10 @@ void __fastcall customAttackDoAttack(CustomAttack* thisptr,
     logDebug("newAttackType.log", "CustomAttack doAttack");
 }
 
-bool __fastcall customAttackMethod10(CustomAttack* thisptr,
+bool __fastcall customAttackMethod13(CustomAttack* thisptr,
                                      int /*%edx*/,
                                      game::BattleMsgData* battleMsgData,
                                      game::IMidgardObjectMap* objectMap)
-{
-    logDebug("newAttackType.log", "CustomAttack method 10");
-    return false;
-}
-
-bool __fastcall customAttackMethod11(CustomAttack* thisptr,
-                                     int /*%edx*/,
-                                     game::BattleMsgData* battleMsgData)
-{
-    logDebug("newAttackType.log", "CustomAttack method 11");
-    return false;
-}
-
-bool __fastcall customAttackMethod12(CustomAttack* thisptr,
-                                     int /*%edx*/,
-                                     game::BattleMsgData* battleMsgData)
-{
-    logDebug("newAttackType.log", "CustomAttack method 12");
-    return false;
-}
-
-bool __fastcall customAttackMethod13(CustomAttack* thisptr,
-                                     int /*%edx*/,
-                                     game::BattleMsgData* battleMsgData)
 {
     logDebug("newAttackType.log", "CustomAttack method 13");
     return false;
@@ -192,6 +168,30 @@ bool __fastcall customAttackMethod14(CustomAttack* thisptr,
                                      game::BattleMsgData* battleMsgData)
 {
     logDebug("newAttackType.log", "CustomAttack method 14");
+    return false;
+}
+
+bool __fastcall customAttackMethod15(CustomAttack* thisptr,
+                                     int /*%edx*/,
+                                     game::BattleMsgData* battleMsgData)
+{
+    logDebug("newAttackType.log", "CustomAttack method 15");
+    return false;
+}
+
+bool __fastcall customAttackMethod16(CustomAttack* thisptr,
+                                     int /*%edx*/,
+                                     game::BattleMsgData* battleMsgData)
+{
+    logDebug("newAttackType.log", "CustomAttack method 16");
+    return false;
+}
+
+bool __fastcall customAttackMethod17(CustomAttack* thisptr,
+                                     int /*%edx*/,
+                                     game::BattleMsgData* battleMsgData)
+{
+    logDebug("newAttackType.log", "CustomAttack method 17");
     return false;
 }
 
@@ -206,15 +206,15 @@ static const game::IBatAttackVftable customAttackVftable{
     (game::IBatAttackVftable::CanMiss)customAttackCanMiss,
     (game::IBatAttackVftable::Method7)customAttackMethod7,
     (game::IBatAttackVftable::IsImmune)customAttackIsImmune,
-    (game::IBatAttackVftable::OnAttack)customAttackMethod8,
+    (game::IBatAttackVftable::OnAttack)customAttackOnMiss,
     (game::IBatAttackVftable::GetAttackClass)customAttackGetAttackClass,
-    (game::IBatAttackVftable::Method9)customAttackMethod9,
+    (game::IBatAttackVftable::Method11)customAttackMethod11,
     (game::IBatAttackVftable::OnAttack)customAttackDoAttack,
-    (game::IBatAttackVftable::Method10)customAttackMethod10,
-    (game::IBatAttackVftable::UnknownMethod)customAttackMethod11,
-    (game::IBatAttackVftable::UnknownMethod)customAttackMethod12,
-    (game::IBatAttackVftable::UnknownMethod)customAttackMethod13,
-    (game::IBatAttackVftable::UnknownMethod)customAttackMethod14
+    (game::IBatAttackVftable::Method13)customAttackMethod13,
+    (game::IBatAttackVftable::UnknownMethod)customAttackMethod14,
+    (game::IBatAttackVftable::UnknownMethod)customAttackMethod15,
+    (game::IBatAttackVftable::UnknownMethod)customAttackMethod16,
+    (game::IBatAttackVftable::UnknownMethod)customAttackMethod17,
 };
 // clang-format on
 

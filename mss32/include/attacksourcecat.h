@@ -46,7 +46,21 @@ struct Categories
 
 Categories& get();
 
+/** Returns address of LAttackSource::vftable used in game. */
+const void* vftable();
+
 } // namespace AttackSourceCategories
+
+namespace LAttackSourceTableApi {
+
+using Api = CategoryTableApi::Api<LAttackSourceTable, LAttackSource>;
+
+Api& get();
+
+/** Returns address of LAttackSourceTable::vftable used in game. */
+const void* vftable();
+
+} // namespace LAttackSourceTableApi
 
 } // namespace game
 

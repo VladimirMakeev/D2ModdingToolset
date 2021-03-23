@@ -34,13 +34,13 @@ struct LAttackClass;
 struct LAttackSource;
 struct Bank;
 
-struct IUsSoldier : public IUsUnitExtension
+struct IUsSoldierVftable;
+
+struct IUsSoldier : public IUsUnitExtension<IUsSoldierVftable>
 { };
 
-struct IUsSoldierVftable
+struct IUsSoldierVftable : public IUsUnitExtensionVftable
 {
-    void* destructor;
-
     using GetCStr = const char*(__thiscall*)(const IUsSoldier* thisptr);
     GetCStr getName;
     GetCStr getDescription;
