@@ -421,6 +421,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midserverbuilder.h" />
     <ClInclude Include="include\midsite.h" />
     <ClInclude Include="include\midstack.h" />
+    <ClInclude Include="include\midstacktemplate.h" />
     <ClInclude Include="include\midunit.h" />
     <ClInclude Include="include\midunitgroup.h" />
     <ClInclude Include="include\midvillage.h" />
