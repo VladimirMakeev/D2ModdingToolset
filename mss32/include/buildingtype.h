@@ -24,7 +24,7 @@
 #include "currency.h"
 #include "midgardid.h"
 #include "midobject.h"
-#include "position.h"
+#include "mqpoint.h"
 #include "textandid.h"
 #include "unitbranchcat.h"
 
@@ -37,8 +37,8 @@ struct TBuildingTypeData
 {
     int frame1;
     int frame2;
-    Position pos;
-    Position pos2;
+    CMqPoint pos;
+    CMqPoint pos2;
     int posZ;
     TextAndId name;
     TextAndId description;

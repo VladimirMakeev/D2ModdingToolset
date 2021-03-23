@@ -45,7 +45,7 @@ struct IBatAttack;
 struct IAttack;
 struct CMidUnitGroup;
 struct Bank;
-struct Position;
+struct CMqPoint;
 
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
@@ -208,7 +208,7 @@ using ComputeDamage = int(__stdcall*)(const IMidgardObjectMap* objectMap,
  * Causes memory corruption (that leads to crash) on 144x144 maps if the position is out of map
  * bounds.
  */
-using MarkMapPosition = void(__thiscall*)(void* thisptr, Position* position);
+using MarkMapPosition = void(__thiscall*)(void* thisptr, CMqPoint* position);
 
 /** Returns unit level by impl id. If unit does not exist yet, computes its level. */
 using GetUnitLevelByImplId = int(__stdcall*)(const CMidgardID* unitImplId);

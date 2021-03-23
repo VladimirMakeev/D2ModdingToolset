@@ -20,14 +20,14 @@
 #ifndef MAPELEMENT_H
 #define MAPELEMENT_H
 
-#include "position.h"
+#include "mqpoint.h"
 
 namespace game {
 
 struct IMapElement
 {
     const void* vftable;
-    Position position;
+    CMqPoint position;
     int sizeX;
     int sizeY;
 };

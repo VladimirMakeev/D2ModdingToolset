@@ -17,12 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef POSITION_H
-#define POSITION_H
+#ifndef MQPOINT_H
+#define MQPOINT_H
 
 namespace game {
 
-struct Position
+struct CMqPoint
 {
     int x;
     int y;
@@ -30,4 +30,4 @@ struct Position
 
 } // namespace game
 
-#endif // POSITION_H
+#endif // MQPOINT_H

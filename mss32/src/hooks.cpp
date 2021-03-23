@@ -1141,7 +1141,7 @@ game::CDDCarryOverItems* __fastcall carryOverItemsCtorHooked(game::CDDCarryOverI
                                                          userSettings().carryOverItemsMax);
 }
 
-void __fastcall markMapPositionHooked(void* thisptr, int /*%edx*/, game::Position* position)
+void __fastcall markMapPositionHooked(void* thisptr, int /*%edx*/, game::CMqPoint* position)
 {
     if (position->x < 0 || position->x >= 144 || position->y < 0 || position->y >= 144)
         return;
