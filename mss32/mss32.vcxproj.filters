@@ -1156,6 +1156,9 @@
     <ClInclude Include="include\mqrect.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\mqimage2surface16.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\mqimage2.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
