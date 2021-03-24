@@ -295,6 +295,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\battleattackinfo.h" />
     <ClInclude Include="include\battlemsgdata.h" />
     <ClInclude Include="include\battleviewerinterf.h" />
+    <ClInclude Include="include\batunitanim.h" />
     <ClInclude Include="include\batviewer.h" />
     <ClInclude Include="include\batviewerutils.h" />
     <ClInclude Include="include\bindings\dynupgradeview.h" />

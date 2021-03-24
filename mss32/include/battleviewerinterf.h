@@ -172,7 +172,7 @@ struct CBattleViewerInterfData2
     LinkedList<void*> list3;
     char unknown2[8];
     CMidgardID unknownId2;
-    LinkedList<void*> list4;
+    LinkedList<void*> list4; /**< Each node contains 16 bytes of data. */
     int unknown3;
 };
 
