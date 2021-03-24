@@ -40,17 +40,22 @@ static T readSetting(const sol::table& table,
     return std::clamp<T>(table.get_or(name, def), min, max);
 }
 
-static void readAiAccuracySettings(Settings& settings, const sol::state& lua)
+static void readAiAccuracySettings(Settings& settings, const sol::table& table)
 {
-    const sol::table& table = lua["settings"]["aiAccuracyBonus"];
-    const auto& dflt = defaultSettings().aiAccuracyBonus;
+    const auto& def = defaultSettings().aiAccuracyBonus;
     auto& aiAccuracy = settings.aiAccuracyBonus;
 
-    aiAccuracy.absolute = readSetting(table, "absolute", dflt.absolute);
-    aiAccuracy.easy = readSetting(table, "easy", dflt.easy);
-    aiAccuracy.average = readSetting(table, "average", dflt.average);
-    aiAccuracy.hard = readSetting(table, "hard", dflt.hard);
-    aiAccuracy.veryHard = readSetting(table, "veryHard", dflt.veryHard);
+    auto bonuses = table.get<sol::optional<sol::table>>("aiAccuracyBonus");
+    if (!bonuses.has_value()) {
+        aiAccuracy = def;
+        return;
+    }
+
+    aiAccuracy.absolute = readSetting(bonuses.value(), "absolute", def.absolute);
+    aiAccuracy.easy = readSetting(bonuses.value(), "easy", def.easy);
+    aiAccuracy.average = readSetting(bonuses.value(), "average", def.average);
+    aiAccuracy.hard = readSetting(bonuses.value(), "hard", def.hard);
+    aiAccuracy.veryHard = readSetting(bonuses.value(), "veryHard", def.veryHard);
 }
 
 static void readSettings(Settings& settings, const sol::state& lua)
@@ -83,7 +88,7 @@ static void readSettings(Settings& settings, const sol::state& lua)
     settings.debugMode = readSetting(table, "debugHooks", defaultSettings().debugMode);
     // clang-format on
 
-    readAiAccuracySettings(settings, lua);
+    readAiAccuracySettings(settings, table);
 }
 
 const Settings& baseSettings()
