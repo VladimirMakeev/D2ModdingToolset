@@ -30,24 +30,19 @@
 
 namespace hooks {
 
-template <typename T, typename Table, typename Key>
-static T readSetting(const sol::table_proxy<Table, Key>& table,
+template <typename T>
+static T readSetting(const sol::table& table,
                      const char* name,
                      T def,
                      T min = std::numeric_limits<T>::min(),
                      T max = std::numeric_limits<T>::max())
 {
-    const std::optional<T> result = table[name];
-    if (!result) {
-        return def;
-    }
-
-    return std::clamp<T>(*result, min, max);
+    return std::clamp<T>(table.get_or(name, def), min, max);
 }
 
 static void readAiAccuracySettings(Settings& settings, const sol::state& lua)
 {
-    const auto table = lua["settings"]["aiAccuracyBonus"];
+    const sol::table& table = lua["settings"]["aiAccuracyBonus"];
     const auto& dflt = defaultSettings().aiAccuracyBonus;
     auto& aiAccuracy = settings.aiAccuracyBonus;
 
@@ -60,7 +55,7 @@ static void readAiAccuracySettings(Settings& settings, const sol::state& lua)
 
 static void readSettings(Settings& settings, const sol::state& lua)
 {
-    const auto table = lua["settings"];
+    const sol::table& table = lua["settings"];
 
     // clang-format off
     settings.unitMaxDamage = readSetting(table, "unitMaxDamage", defaultSettings().unitMaxDamage);
