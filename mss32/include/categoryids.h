@@ -295,6 +295,17 @@ enum class LeaderAbilityId : int
     CriticalHit = 17,
 };
 
+/** Terrain ids from LTerrain.dbf. */
+enum class TerrainId : int
+{
+    Human = 1,
+    Dwarf,
+    Heretic,
+    Undead,
+    Neutral,
+    Elf
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
