@@ -79,6 +79,20 @@ struct CTileVariation
 static_assert(sizeof(CTileVariation) == 8,
               "Size of CTileVariation structure must be exactly 8 bytes");
 
+struct TileVariationIterator
+{
+    char unknown;
+    char padding[3];
+    TileVariationRecord** records;
+    TileVariationRecord* record;
+    std::uint32_t recordsTotal;
+    bool found;
+    char padding2[3];
+};
+
+static_assert(sizeof(TileVariationIterator) == 20,
+              "Size of TileVariationIterator structure must be exactly 20 bytes");
+
 } // namespace game
 
 #endif // TILEVARIATION_H
