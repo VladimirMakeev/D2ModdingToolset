@@ -75,6 +75,7 @@ struct GlobalVariables;
 struct CUnitGenerator;
 struct CItemBase;
 struct CDynUpgrade;
+struct CTileVariation;
 
 using DynUpgradeList = LinkedList<SmartPtr<CDynUpgrade>>;
 
@@ -126,7 +127,7 @@ struct GlobalData
     int* actions;
     int* transf;
     DynUpgradeList* dynUpgrade;
-    int* tileVariation;
+    CTileVariation* tileVariation;
     int* aiAttitudes;
     int* aiMessages;
     GlobalVariables** globalVariables;

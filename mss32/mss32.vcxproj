@@ -473,6 +473,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\taskmanagerholder.h" />
     <ClInclude Include="include\terraincat.h" />
     <ClInclude Include="include\textandid.h" />
+    <ClInclude Include="include\tilevariation.h" />
     <ClInclude Include="include\transformselfhooks.h" />
     <ClInclude Include="include\umattack.h" />
     <ClInclude Include="include\ummodifier.h" />
