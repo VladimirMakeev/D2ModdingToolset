@@ -25,7 +25,8 @@
 
 namespace game {
 struct CMidgardID;
-}
+struct CMidMsgBoxButtonHandler;
+} // namespace game
 
 namespace hooks {
 
@@ -53,6 +54,14 @@ bool replace(std::string& str, const std::string& keyword, const std::string& re
 int getRandomNumber(int min, int max);
 
 std::string readFile(const std::filesystem::path& file);
+
+/** Shows native in-game message box with specified text. */
+void showMessageBox(const std::string& message,
+                    game::CMidMsgBoxButtonHandler* buttonHandler = nullptr,
+                    bool showCancel = false);
+
+/** Shows windows style message box that does not depend on game rendering and resources. */
+void showErrorMessageBox(const std::string& message);
 
 } // namespace hooks
 

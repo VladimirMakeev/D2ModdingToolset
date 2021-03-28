@@ -513,29 +513,6 @@ static size_t getScenariosTotal(const game::ScenarioDataArray& data)
     return (end - bgn) / sizeof(game::ScenarioData);
 }
 
-void showMessageBox(const std::string& message,
-                    game::CMidMsgBoxButtonHandler* buttonHandler,
-                    bool showCancel)
-{
-    using namespace game;
-
-    auto memAlloc = Memory::get().allocate;
-    if (!buttonHandler) {
-        buttonHandler = (CMidMsgBoxButtonHandlerStd*)memAlloc(sizeof(CMidMsgBoxButtonHandlerStd));
-        buttonHandler->vftable = CMidMsgBoxButtonHandlerStdApi::vftable();
-    }
-
-    CMidgardMsgBox* msgBox = (CMidgardMsgBox*)memAlloc(sizeof(CMidgardMsgBox));
-    CMidgardMsgBoxApi::get().constructor(msgBox, message.c_str(), showCancel, buttonHandler, 0,
-                                         nullptr);
-
-    InterfManagerImplPtr ptr;
-    CInterfManagerImplApi::get().get(&ptr);
-
-    ptr.data->CInterfManagerImpl::CInterfManager::vftable->showInterface(ptr.data, msgBox);
-    SmartPointerApi::get().createOrFree((SmartPointer*)&ptr, nullptr);
-}
-
 static void __fastcall buttonGenerateMapCallback(game::CMenuNewSkirmish* thisptr, int /*%edx*/)
 {
     std::string errorMessage;

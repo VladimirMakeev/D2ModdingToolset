@@ -42,7 +42,6 @@ struct CBatAttackGiveAttack;
 struct CBatAttackShatter;
 struct BattleAttackInfo;
 struct CMidPlayer;
-struct CMidMsgBoxButtonHandler;
 struct CEncLayoutSpell;
 struct CInterface;
 struct CEncParamBase;
@@ -95,11 +94,6 @@ game::LBuildingCategoryTable* __fastcall buildingCategoryTableCtorHooked(
     int /*%edx*/,
     const char* globalsFolderPath,
     void* codeBaseEnvProxy);
-
-/** Shows native in-game message box with specified text. */
-void showMessageBox(const std::string& message,
-                    game::CMidMsgBoxButtonHandler* buttonHandler = nullptr,
-                    bool showCancel = false);
 
 game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch* thisptr,
                                                            int /*%edx*/,

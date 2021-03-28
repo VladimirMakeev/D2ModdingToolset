@@ -19,7 +19,11 @@
 
 #include "utils.h"
 #include "game.h"
+#include "interfmanager.h"
+#include "mempool.h"
 #include "midgardid.h"
+#include "midgardmsgbox.h"
+#include "midmsgboxbuttonhandlerstd.h"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <fstream>
@@ -122,6 +126,34 @@ std::string readFile(const std::filesystem::path& file)
 
     stream.read(&contents[0], size);
     return contents;
+}
+
+void showMessageBox(const std::string& message,
+                    game::CMidMsgBoxButtonHandler* buttonHandler,
+                    bool showCancel)
+{
+    using namespace game;
+
+    auto memAlloc = Memory::get().allocate;
+    if (!buttonHandler) {
+        buttonHandler = (CMidMsgBoxButtonHandlerStd*)memAlloc(sizeof(CMidMsgBoxButtonHandlerStd));
+        buttonHandler->vftable = CMidMsgBoxButtonHandlerStdApi::vftable();
+    }
+
+    CMidgardMsgBox* msgBox = (CMidgardMsgBox*)memAlloc(sizeof(CMidgardMsgBox));
+    CMidgardMsgBoxApi::get().constructor(msgBox, message.c_str(), showCancel, buttonHandler, 0,
+                                         nullptr);
+
+    InterfManagerImplPtr ptr;
+    CInterfManagerImplApi::get().get(&ptr);
+
+    ptr.data->CInterfManagerImpl::CInterfManager::vftable->showInterface(ptr.data, msgBox);
+    SmartPointerApi::get().createOrFree((SmartPointer*)&ptr, nullptr);
+}
+
+void showErrorMessageBox(const std::string& message)
+{
+    MessageBox(NULL, message.c_str(), "mss32.dll proxy", MB_OK);
 }
 
 } // namespace hooks
