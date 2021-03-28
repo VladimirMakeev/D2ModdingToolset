@@ -182,8 +182,8 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
             if (category->id == FortCategories::get().village->id) {
                 auto village = static_cast<const CMidVillage*>(fortification);
 
-                BankApi::get().set(income, CurrencyType::Gold,
-                                   income->gold + cityIncome[village->tierLevel]);
+                const int gold{income->gold + cityIncome[village->tierLevel]};
+                BankApi::get().set(income, CurrencyType::Gold, std::clamp(gold, 0, 9999));
             }
         }
 
@@ -191,7 +191,8 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
     }
 
     // Custom capital city income
-    BankApi::get().set(income, CurrencyType::Gold, income->gold + cityIncome[0]);
+    const int gold{income->gold + cityIncome[0]};
+    BankApi::get().set(income, CurrencyType::Gold, std::clamp(gold, 0, 9999));
 
     auto& freeSmartPtr = SmartPointerApi::get().createOrFree;
     freeSmartPtr((SmartPointer*)&iteratorPtr, nullptr);
