@@ -169,6 +169,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\currency.cpp" />
     <ClCompile Include="src\customattack.cpp" />
     <ClCompile Include="src\customattacks.cpp" />
+    <ClCompile Include="src\d2osexception.cpp" />
     <ClCompile Include="src\d2string.cpp" />
     <ClCompile Include="src\dbfaccess.cpp" />
     <ClCompile Include="src\dbf\dbffile.cpp" />
@@ -315,6 +316,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\customattack.h" />
     <ClInclude Include="include\customattacks.h" />
     <ClInclude Include="include\d2map.h" />
+    <ClInclude Include="include\d2osexception.h" />
     <ClInclude Include="include\d2pair.h" />
     <ClInclude Include="include\d2string.h" />
     <ClInclude Include="include\d2vector.h" />

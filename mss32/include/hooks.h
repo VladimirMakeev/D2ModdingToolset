@@ -50,6 +50,7 @@ struct IMidDropManager;
 struct CListBoxInterf;
 struct CPhaseGame;
 struct CMqPoint;
+struct os_exception;
 }; // namespace game
 
 namespace hooks {
@@ -186,6 +187,8 @@ void __stdcall setUnknown9Bit1AndClearBoostLowerDamageHooked(
     const game::BattleMsgData* battleMsgData,
     const game::CMidgardID* unitId,
     game::CMidgardID* nextAttackUnitId);
+
+void __stdcall osExceptionHooked(const game::os_exception* thisptr, const void* throwInfo);
 
 } // namespace hooks
 

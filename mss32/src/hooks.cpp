@@ -37,6 +37,7 @@
 #include "button.h"
 #include "citystackinterf.h"
 #include "customattacks.h"
+#include "d2osexception.h"
 #include "d2string.h"
 #include "dbf/dbffile.h"
 #include "dbtable.h"
@@ -296,6 +297,9 @@ Hooks getHooks()
     // Support custom attack class in CAttackImpl constructor
     hooks.emplace_back(
         HookInfo{(void**)&game::CAttackImplApi::get().constructor, attackImplCtorHooked});
+    // Show and log game exceptions information
+    hooks.emplace_back(
+        HookInfo{(void**)&game::os_exceptionApi::get().throwException, osExceptionHooked});
 
     if (userSettings().unrestrictedBestowWards != baseSettings().unrestrictedBestowWards) {
         // Support display of heal ammount in UI for any attack that has QTY_HEAL > 0
@@ -1304,6 +1308,15 @@ void __stdcall setUnknown9Bit1AndClearBoostLowerDamageHooked(
                                                                     nextAttackUnitId);
     if (nextAttackUnitId->value == unitId->value)
         nextAttackUnitId->value = emptyId.value;
+}
+
+void __stdcall osExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)
+{
+    const auto message{fmt::format("Caught exception '{:s}'.", thisptr->message)};
+    logError("mssProxyError.log", message);
+    showErrorMessageBox(message + std::string{"\nThe game will probably crash now."});
+
+    game::os_exceptionApi::get().throwException(thisptr, throwInfo);
 }
 
 } // namespace hooks

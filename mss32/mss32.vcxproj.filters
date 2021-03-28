@@ -444,6 +444,9 @@
     <ClCompile Include="src\terraincat.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\d2osexception.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -1190,6 +1193,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\terraincat.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d2osexception.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
