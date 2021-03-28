@@ -147,6 +147,9 @@ static Hooks getGameHooks()
         HookInfo{(void**)&fn.markMapPosition, markMapPositionHooked},
         // Allow user to tweak accuracy computations
         HookInfo{(void**)&fn.getAttackAccuracy, getAttackAccuracyHooked},
+        // Fix game crash when AI controlled unit with transform self attack
+        // uses alternative attack with 'adjacent' attack range
+        HookInfo{(void**)&fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked},
     };
     // clang-format on
 
@@ -1314,9 +1317,22 @@ void __stdcall osExceptionHooked(const game::os_exception* thisptr, const void* 
 {
     const auto message{fmt::format("Caught exception '{:s}'.", thisptr->message)};
     logError("mssProxyError.log", message);
-    showErrorMessageBox(message + std::string{"\nThe game will probably crash now."});
+    showErrorMessageBox(message
+                        + fmt::format("\nThe {:s} will probably crash now.",
+                                      (executableIsGame() ? "game" : "editor")));
 
     game::os_exceptionApi::get().throwException(thisptr, throwInfo);
+}
+
+int __stdcall computeUnitEffectiveHpHooked(const game::IMidgardObjectMap* objectMap,
+                                           const game::CMidUnit* unit,
+                                           const game::BattleMsgData* battleMsgData)
+{
+    if (!unit) {
+        return 0;
+    }
+
+    return game::gameFunctions().computeUnitEffectiveHp(objectMap, unit, battleMsgData);
 }
 
 } // namespace hooks

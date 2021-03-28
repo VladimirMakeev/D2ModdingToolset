@@ -51,6 +51,7 @@ struct CListBoxInterf;
 struct CPhaseGame;
 struct CMqPoint;
 struct os_exception;
+struct CMidUnit;
 }; // namespace game
 
 namespace hooks {
@@ -189,6 +190,10 @@ void __stdcall setUnknown9Bit1AndClearBoostLowerDamageHooked(
     game::CMidgardID* nextAttackUnitId);
 
 void __stdcall osExceptionHooked(const game::os_exception* thisptr, const void* throwInfo);
+
+int __stdcall computeUnitEffectiveHpHooked(const game::IMidgardObjectMap* objectMap,
+                                           const game::CMidUnit* unit,
+                                           const game::BattleMsgData* battleMsgData);
 
 } // namespace hooks
 

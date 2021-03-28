@@ -283,6 +283,14 @@ using GetUnitHealAttackNumber = int(__stdcall*)(const IMidgardObjectMap* objectM
  */
 using GetAttackQtyDamageOrHeal = int(__stdcall*)(const IAttack* attack, int damageMax);
 
+/**
+ * Computes unit hp + (hp * armor).
+ * Used for battle AI.
+ */
+using ComputeUnitEffectiveHp = int(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                               const CMidUnit* unit,
+                                               const BattleMsgData* battleMsgData);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -325,6 +333,7 @@ struct Functions
     GetAttackImplMagic getAttackImplMagic;
     GetUnitHealAttackNumber getUnitHealAttackNumber;
     GetAttackQtyDamageOrHeal getAttackQtyDamageOrHeal;
+    ComputeUnitEffectiveHp computeUnitEffectiveHp;
 };
 
 /** Global variables used in game. */
