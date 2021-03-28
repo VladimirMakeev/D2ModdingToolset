@@ -44,18 +44,27 @@ static int getTransformSelfLevel(const game::CMidUnit* unit, game::TUsUnitImpl* 
     const char* filename{"transformSelf.lua"};
     static std::string script{readFile({scriptsFolder() / filename})};
     if (script.empty()) {
-        logError("mssProxyError.log", fmt::format("Failed to read '{:s}' script file", filename));
+        const auto message{fmt::format("Failed to read '{:s}' script file", filename)};
+
+        logError("mssProxyError.log", message);
+        showErrorMessageBox(message);
         return 0;
     }
 
     const auto lua{loadScript(script.c_str())};
     if (!lua) {
+        showErrorMessageBox(fmt::format("Failed to load '{:s}' script file.\n"
+                                        "See 'mssProxyError.log' for details.",
+                                        filename));
         return 0;
     }
 
     using GetLevel = std::function<int(const bindings::UnitView&, const bindings::UnitImplView&)>;
     auto getLevel = getScriptFunction<GetLevel>(*lua, "getLevel");
     if (!getLevel) {
+        showErrorMessageBox(fmt::format("Could not find function 'getLevel' in script '{:s}'.\n"
+                                        "Make sure function exists and has correct signature.",
+                                        filename));
         return 0;
     }
 
@@ -65,8 +74,11 @@ static int getTransformSelfLevel(const game::CMidUnit* unit, game::TUsUnitImpl* 
 
         return (*getLevel)(attacker, impl);
     } catch (const std::exception& e) {
-        logError("mssProxyError.log",
-                 fmt::format("Failed to run '{:s}' script, reason: '{:s}'", filename, e.what()));
+        const auto message{fmt::format("Failed to run '{:s}' script.\n"
+                                       "Reason: '{:s}'",
+                                       filename, e.what())};
+        logError("mssProxyError.log", message);
+        showErrorMessageBox(message);
         return 0;
     }
 }
