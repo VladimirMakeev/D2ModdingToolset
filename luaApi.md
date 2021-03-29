@@ -12,6 +12,12 @@ Scripts folder itself should be placed in the game folder.
 
 ### API reference
 
+#### Standalone functions
+```lua
+-- Writes message to 'luaDebug.log' file when debugHooks is set to true
+log('Unit current level:' .. unit.impl.level)
+```
+
 #### Unit
 Represents game unit that participates in a battle, takes damage and performs attacks.
 
@@ -65,8 +71,8 @@ function getLevel(doppelganger, target)
     -- Get least level value from both
     local level = math.min(impl.level, targImpl.level)
 
-    -- Make sure doppelganger transform level is not lesser than his base
-    local baseImpl = doppelganger.baseImpl
+    -- Make sure doppelganger transform level is not lesser than target's base
+    local baseImpl = target.baseImpl
     if (level < baseImpl.level) then
         level = baseImpl.level
     end
