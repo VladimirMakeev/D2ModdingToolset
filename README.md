@@ -16,22 +16,34 @@
 - Fixes game crash in battles with summoners involved;
 - Fixes AI unit placement logic for melee units with vampiric attacks;
 - Fixes Scenario Editor bug with elves race as a caster in "Cast spell on location" event effect;
-- Game rules and settings can be changed in Disciple.ini, section \[Disciple\];
+- Game rules and settings can be changed in Scripts/settings.lua;
   - <details>
     <summary>Settings:</summary>
   
-      - "UnitMaxDamage=\[300 : (2^31 - 1)\]" changes maximum unit damage per attack;
-      - "UnitMaxArmor=\[70: 100\]" changes maximum combined unit armor;
-      - "StackMaxScoutRange=\[7 : 100\]" changes maximum allowed scout range for troops; 
-      - "ShatteredArmorMax=\[0 : 100\]" changes total armor shatter damage;
-      - "ShatterDamageMax=\[0 : 100\]" changes maximum armor shatter damage per attack;
-      - "CriticalHitDamage=\[0 : 255\]" changes the percentage damage of critical hit;
-      - "ShowBanners=(0/1)" toggle show banners by default;
-      - "ShowResources=(0/1)" toggle show resources panel by default;
-      - "ShowLandConverted=(0/1)" toggle show percentage of land converted instead of minimap;
-      - "DrainAttackHeal=\["-(2^31 - 1) : (2^31 - 1)\]" changes percentage of L\_DRAIN attacks damage used as heal;
-      - "DrainOverflowHeal=\["-(2^31 - 1) : (2^31 - 1)\]" changes percentage of L\_DRAIN\_OVERFLOW attacks damage used as heal;
-      - "CarryOverItemsMax=\[0 : (2^31 - 1)\]" changes maximum number of items the player is allowed to transfer between campaign scenarios;
+      - "showBanners=(true/false)" toggle show banners by default;
+      - "showResources=(true/false)" toggle show resources panel by default;
+      - "showLandConverted=(true/false)" toggle show percentage of land converted instead of minimap;
+      - "preserveCapitalBuildings=(true/false)" allow scenarios with prebuilt capital cities;
+      - "carryOverItemsMax=\[0 : (2^31 - 1)\]" changes maximum number of items the player is allowed to transfer between campaign scenarios;
+      - "unitMaxDamage=\[300 : (2^31 - 1)\]" changes maximum unit damage per attack;
+      - "unitMaxArmor=\[70: 100\]" changes maximum combined unit armor;
+      - "stackMaxScoutRange=\[7 : 100\]" changes maximum allowed scout range for troops; 
+      - "shatteredArmorMax=\[0 : 100\]" changes total armor shatter damage;
+      - "shatterDamageMax=\[0 : 100\]" changes maximum armor shatter damage per attack;
+      - "allowShatterAttackToMiss=(true/false)" changes whether shatter attacks can miss or not;
+      - "criticalHitDamage=\[0 : 255\]" changes the percentage damage of critical hit;
+      - "criticalHitChance=\[0 : 100\]" changes the percentage chance of critical hit;
+      - "mageLeaderAccuracyReduction=\[0 : 100\]" allows to specify accuracy reduction per target for mage leader units;
+      - "drainAttackHeal=\[-(2^31 - 1) : (2^31 - 1)\]" changes percentage of L\_DRAIN attacks damage used as heal;
+      - "drainOverflowHeal=\[-(2^31 - 1) : (2^31 - 1)\]" changes percentage of L\_DRAIN\_OVERFLOW attacks damage used as heal;
+      - "leveledDoppelgangerAttack=(true/false)" change doppelganger attacks to copy units using with respect to their level using 'doppelganger.lua' script;
+      - "leveledTransformSelfAttack=(true/false)" change transform self attacks to compute transformed unit level using 'transformSelf.lua' script;
+      - "leveledSummonAttack=(true/false)" change summon attacks to compute summoned units levels using 'summon.lua' script;
+      - "disableAllowedRoundMax=\[1 : (2^31 - 1)\]" sets round in battle after which paralyze and petrify attacks starts missing targets constantly;
+      - "aiAccuracyBonus" these settings allows to configure AI accuracy in battle:
+        - "absolute=(true/false)" treat accuracy bonus as absolute or percentage value;
+      - "missChanceSingleRoll=(true/false)" if true, switches attacks miss check to a single random value roll instead of check against arithmetic mean of two random numbers;
+      - "debugHooks=(true/false)" create mss32 proxy dll log files with debug info;
   </details>
 - Buttons for bulk item transfer: transfer all items, potions, scrolls/wands or valuables between inventories with single click;
   - <details>
@@ -123,6 +135,21 @@
         - HORDES .. - Undead Hordes;
         - ELVES .. - Elven Alliance;
     </details>
+- Fixes bestow wards attack modifiers bugs and restrictions;
+  - <details>
+    <summary>Description:</summary>
+  
+    - Allows bestow wards attack to apply modifiers even if there are no source wards among them;
+    - Fixes bug with more than 8 simultaneously applied modifiers becoming permanent;
+    - Fixes modifiers that applied on first attack of double attack;
+    - Can heal and apply modifier effect at once. Set QTY\_HEAL > 0 in GAttacks.dbf and HEAL in GDynUpgr.dbf:
+      - Allows to heal retreating allies in main or alternative attack;
+      - Allows to heal allies when battle ends, same as ordinary heal;
+    - Use revive as a secondary attack;
+    - Target unit with a secondary attack even if there are no modifiers that can be applied;
+    - Attack class wards are properly reset and can be reapplied during battle;
+    - Modifiers with immunity handled correctly;
+    </details>
 - Can be used on vanilla version or with other mods installed;
 
 ### Tested on:
@@ -130,6 +157,7 @@
 
 ### Installation:
 Rename original mss32.dll to mss**23**.dll, then copy mss32.dll from this repository to game folder.
+Copy Scripts folder to the game folder.
 
 ### Deinstallation:
 Delete mss32.dll, then rename mss**23**.dll back to mss32.dll.
@@ -141,7 +169,7 @@ Installation and deinstallation process is the same, but with binkw32.dll.
 Build Debug or Release Win32 target using Visual Studio solution located in mss32 folder. 
 
 ### License
-[Detours](https://github.com/microsoft/Detours), [GSL](https://github.com/microsoft/GSL) and [fmt](https://github.com/fmtlib/fmt) submodules are using their own licenses.
+[Detours](https://github.com/microsoft/Detours), [GSL](https://github.com/microsoft/GSL), [fmt](https://github.com/fmtlib/fmt) and [sol2](https://github.com/ThePhD/sol2) submodules as well as [![Lua](https://www.andreas-rozek.de/Lua/Lua-Logo_64x64.png)](http://www.lua.org/license.html) are using their own licenses.
 
 
 This modification is not made or supported by Strategy First.<br />
