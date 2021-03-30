@@ -232,6 +232,12 @@ struct Api
      */
     using SummonUnitIdToPosition = int(__thiscall*)(const CMidgardID* id);
     SummonUnitIdToPosition summonUnitIdToPosition;
+
+    /** Creates a new id from the specified id and type. */
+    using ChangeType = CMidgardID*(__stdcall*)(CMidgardID* id,
+                                               const CMidgardID* src,
+                                               IdType newType);
+    ChangeType changeType;
 };
 
 Api& get();

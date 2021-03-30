@@ -47,6 +47,7 @@
 #include "doppelgangerhooks.h"
 #include "drainattackhooks.h"
 #include "dynamiccast.h"
+#include "dynupgrade.h"
 #include "editor.h"
 #include "enclayoutspell.h"
 #include "encparambase.h"
@@ -308,6 +309,12 @@ Hooks getHooks()
         // Support display of heal ammount in UI for any attack that has QTY_HEAL > 0
         hooks.push_back(
             HookInfo{(void**)&fn.getAttackQtyDamageOrHeal, getAttackQtyDamageOrHealHooked});
+    }
+
+    if (userSettings().shatterDamageUpgradeRatio != baseSettings().shatterDamageUpgradeRatio) {
+        // Allow users to customize shatter damage upgrade ratio
+        hooks.push_back(
+            HookInfo{(void**)&fn.applyDynUpgradeToAttackData, applyDynUpgradeToAttackDataHooked});
     }
 
     return hooks;
@@ -1333,6 +1340,67 @@ int __stdcall computeUnitEffectiveHpHooked(const game::IMidgardObjectMap* object
     }
 
     return game::gameFunctions().computeUnitEffectiveHp(objectMap, unit, battleMsgData);
+}
+
+void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImplId,
+                                                 game::CUnitGenerator* unitGenerator,
+                                                 int unitLevel,
+                                                 game::IdType dynUpgradeType,
+                                                 const game::CMidgardID* altAttackId,
+                                                 game::CAttackData* attackData)
+{
+    using namespace game;
+
+    CMidgardID leveledUnitImplId{};
+    unitGenerator->vftable->generateUnitImplId(unitGenerator, &leveledUnitImplId, unitImplId,
+                                               unitLevel);
+
+    CMidgardID globalUnitImplId{};
+    unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &globalUnitImplId,
+                                                &leveledUnitImplId);
+
+    CMidgardID leveledAttackId{};
+    CMidgardIDApi::get().changeType(&leveledAttackId, &leveledUnitImplId, dynUpgradeType);
+
+    CDynUpgrade* upgrade1;
+    CDynUpgrade* upgrade2;
+    int upgrade1Count;
+    int upgrade2Count;
+    gameFunctions().computeUnitDynUpgrade(&globalUnitImplId, unitLevel, &upgrade1, &upgrade2,
+                                          &upgrade1Count, &upgrade2Count);
+
+    attackData->attackId = leveledAttackId;
+    attackData->altAttack = *altAttackId;
+
+    if (upgrade1)
+        attackData->initiative += upgrade1->initiative * upgrade1Count;
+    if (upgrade2)
+        attackData->initiative += upgrade2->initiative * upgrade2Count;
+
+    if (attackData->power > 0) {
+        if (upgrade1)
+            attackData->power += upgrade1->power * upgrade1Count;
+        if (upgrade2)
+            attackData->power += upgrade2->power * upgrade2Count;
+    }
+
+    if (attackData->qtyDamage > 0) {
+        float factor = 1.0;
+        if (attackData->attackClass->id == AttackClassCategories::get().shatter->id)
+            factor = (float)userSettings().shatterDamageUpgradeRatio / 100;
+
+        if (upgrade1)
+            attackData->qtyDamage += lround(upgrade1->damage * upgrade1Count * factor);
+        if (upgrade2)
+            attackData->qtyDamage += lround(upgrade2->damage * upgrade2Count * factor);
+    }
+
+    if (attackData->qtyHeal > 0) {
+        if (upgrade1)
+            attackData->qtyHeal += upgrade1->heal * upgrade1Count;
+        if (upgrade2)
+            attackData->qtyHeal += upgrade2->heal * upgrade2Count;
+    }
 }
 
 } // namespace hooks

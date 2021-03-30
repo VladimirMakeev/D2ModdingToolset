@@ -29,7 +29,7 @@ const CMidgardID emptyId{0};
 namespace CMidgardIDApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::GetCategory)0x57fcc5,
@@ -42,7 +42,8 @@ static std::array<Api, 3> functions = {{
         (Api::IsIdStringValid)0x57fb49,
         (Api::IsSummonUnitId)0x64599f,
         (Api::SummonUnitIdFromPosition)0x645abe,
-        (Api::SummonUnitIdToPosition)0x645b37
+        (Api::SummonUnitIdToPosition)0x645b37,
+        (Api::ChangeType)0x599e59,
     },
     // Russobit
     Api{
@@ -56,7 +57,8 @@ static std::array<Api, 3> functions = {{
         (Api::IsIdStringValid)0x57fb49,
         (Api::IsSummonUnitId)0x64599f,
         (Api::SummonUnitIdFromPosition)0x645abe,
-        (Api::SummonUnitIdToPosition)0x645b37
+        (Api::SummonUnitIdToPosition)0x645b37,
+        (Api::ChangeType)0x599e59,
     },
     // Gog
     Api{
@@ -70,8 +72,24 @@ static std::array<Api, 3> functions = {{
         (Api::IsIdStringValid)0x57f201,
         (Api::IsSummonUnitId)0x6441cf,
         (Api::SummonUnitIdFromPosition)0x6442ee,
-        (Api::SummonUnitIdToPosition)0x644367
-    }
+        (Api::SummonUnitIdToPosition)0x644367,
+        (Api::ChangeType)0x598fe3,
+    },
+    // Scenario Editor
+    Api{
+        (Api::GetCategory)nullptr,
+        (Api::GetCategoryIndex)nullptr,
+        (Api::GetType)nullptr,
+        (Api::GetTypeIndex)nullptr,
+        (Api::ToString)nullptr,
+        (Api::FromString)nullptr,
+        (Api::FromParts)nullptr,
+        (Api::IsIdStringValid)nullptr,
+        (Api::IsSummonUnitId)nullptr,
+        (Api::SummonUnitIdFromPosition)nullptr,
+        (Api::SummonUnitIdToPosition)nullptr,
+        (Api::ChangeType)0x544a43,
+    },
 }};
 // clang-format on
 

@@ -39,6 +39,7 @@ struct Settings
     std::uint8_t criticalHitChance;
     std::uint8_t mageLeaderAccuracyReduction;
     std::uint8_t disableAllowedRoundMax;
+    std::uint8_t shatterDamageUpgradeRatio;
 
     struct
     {

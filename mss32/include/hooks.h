@@ -52,6 +52,7 @@ struct CPhaseGame;
 struct CMqPoint;
 struct os_exception;
 struct CMidUnit;
+struct CUnitGenerator;
 }; // namespace game
 
 namespace hooks {
@@ -194,6 +195,13 @@ void __stdcall osExceptionHooked(const game::os_exception* thisptr, const void* 
 int __stdcall computeUnitEffectiveHpHooked(const game::IMidgardObjectMap* objectMap,
                                            const game::CMidUnit* unit,
                                            const game::BattleMsgData* battleMsgData);
+
+void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImplId,
+                                                 game::CUnitGenerator* unitGenerator,
+                                                 int unitLevel,
+                                                 game::IdType dynUpgradeType,
+                                                 const game::CMidgardID* altAttackId,
+                                                 game::CAttackData* attackData);
 
 } // namespace hooks
 
