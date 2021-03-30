@@ -300,9 +300,12 @@ Hooks getHooks()
     // Support custom attack class in CAttackImpl constructor
     hooks.emplace_back(
         HookInfo{(void**)&game::CAttackImplApi::get().constructor, attackImplCtorHooked});
-    // Show and log game exceptions information
-    hooks.emplace_back(
-        HookInfo{(void**)&game::os_exceptionApi::get().throwException, osExceptionHooked});
+
+    if (userSettings().debugMode) {
+        // Show and log game exceptions information
+        hooks.emplace_back(
+            HookInfo{(void**)&game::os_exceptionApi::get().throwException, osExceptionHooked});
+    }
 
     if (userSettings().unrestrictedBestowWards != baseSettings().unrestrictedBestowWards) {
         // Support display of heal ammount in UI for any attack that has QTY_HEAL > 0
