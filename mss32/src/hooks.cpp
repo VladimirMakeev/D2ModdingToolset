@@ -1362,8 +1362,8 @@ void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImp
     CMidgardID leveledAttackId{};
     CMidgardIDApi::get().changeType(&leveledAttackId, &leveledUnitImplId, dynUpgradeType);
 
-    CDynUpgrade* upgrade1;
-    CDynUpgrade* upgrade2;
+    CDynUpgrade* upgrade1 = nullptr;
+    CDynUpgrade* upgrade2 = nullptr;
     int upgrade1Count;
     int upgrade2Count;
     gameFunctions().computeUnitDynUpgrade(&globalUnitImplId, unitLevel, &upgrade1, &upgrade2,
