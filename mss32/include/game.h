@@ -46,6 +46,9 @@ struct IAttack;
 struct CMidUnitGroup;
 struct Bank;
 struct CMqPoint;
+struct CUnitGenerator;
+struct CAttackData;
+struct CDynUpgrade;
 
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
@@ -291,6 +294,24 @@ using ComputeUnitEffectiveHp = int(__stdcall*)(const IMidgardObjectMap* objectMa
                                                const CMidUnit* unit,
                                                const BattleMsgData* battleMsgData);
 
+/**
+ * Calculates upgrade count for the specified unit level and applies upgrade values from
+ * GDynUpgr.dbf to the initial attack data.
+ */
+using ApplyDynUpgradeToAttackData = void(__stdcall*)(const CMidgardID* unitImplId,
+                                                     CUnitGenerator* unitGenerator,
+                                                     int unitLevel,
+                                                     IdType dynUpgradeType,
+                                                     const CMidgardID* altAttackId,
+                                                     CAttackData* attackData);
+
+using ComputeUnitDynUpgrade = void(__stdcall*)(const CMidgardID* unitImplId,
+                                               int unitLevel,
+                                               CDynUpgrade** upgrade1,
+                                               CDynUpgrade** upgrade2,
+                                               int* upgrade1Count,
+                                               int* upgrade2Count);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -334,6 +355,8 @@ struct Functions
     GetUnitHealAttackNumber getUnitHealAttackNumber;
     GetAttackQtyDamageOrHeal getAttackQtyDamageOrHeal;
     ComputeUnitEffectiveHp computeUnitEffectiveHp;
+    ApplyDynUpgradeToAttackData applyDynUpgradeToAttackData;
+    ComputeUnitDynUpgrade computeUnitDynUpgrade;
 };
 
 /** Global variables used in game. */

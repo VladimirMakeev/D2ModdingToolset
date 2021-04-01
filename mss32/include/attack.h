@@ -26,10 +26,12 @@
 #include "idvector.h"
 #include "midgardid.h"
 #include "midobject.h"
+#include "textandid.h"
 
 namespace game {
 
 struct IAttackVftable;
+struct CAttackData;
 
 /** Base class for units attacks. */
 struct IAttack
@@ -79,12 +81,34 @@ struct IAttackVftable
 
     GetBool getCritHit;
 
-    using CopyTo = bool(__thiscall*)(const IAttack* thisptr, void* dest);
-    CopyTo copyTo;
+    using GetData = bool(__thiscall*)(const IAttack* thisptr, CAttackData* value);
+    GetData getData;
 };
 
 static_assert(sizeof(IAttackVftable) == 17 * sizeof(void*),
               "IAttack vftable must have exactly 17 methods");
+
+/** Contains values and references to CAttackImplData fields. */
+struct CAttackData
+{
+    CMidgardID attackId;
+    int initiative;
+    int power;
+    int qtyDamage;
+    int qtyHeal;
+    TextAndId* name;
+    TextAndId* description;
+    LAttackClass* attackClass;
+    LAttackSource* attackSource;
+    LAttackReach* attackReach;
+    int level;
+    CMidgardID altAttack;
+    bool infinite;
+    char padding[3];
+    IdVector wards;
+    bool critHit;
+    char padding2[3];
+};
 
 namespace IAttackApi {
 

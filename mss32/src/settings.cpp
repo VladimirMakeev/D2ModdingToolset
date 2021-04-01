@@ -75,6 +75,7 @@ static void readSettings(Settings& settings, const sol::state& lua)
     settings.criticalHitChance = readSetting(table, "criticalHitChance", defaultSettings().criticalHitChance, (uint8_t)0, (uint8_t)100);
     settings.mageLeaderAccuracyReduction = readSetting(table, "mageLeaderAccuracyReduction", defaultSettings().mageLeaderAccuracyReduction);
     settings.disableAllowedRoundMax = readSetting(table, "disableAllowedRoundMax", defaultSettings().disableAllowedRoundMax, (uint8_t)1);
+    settings.shatterDamageUpgradeRatio = readSetting(table, "shatterDamageUpgradeRatio", defaultSettings().shatterDamageUpgradeRatio);
     settings.showBanners = readSetting(table, "showBanners", defaultSettings().showBanners);
     settings.showResources = readSetting(table, "showResources", defaultSettings().showResources);
     settings.showLandConverted = readSetting(table, "showLandConverted", defaultSettings().showLandConverted);
@@ -114,6 +115,7 @@ const Settings& baseSettings()
         settings.aiAccuracyBonus.hard = 5;
         settings.aiAccuracyBonus.veryHard = 10;
         settings.disableAllowedRoundMax = 40;
+        settings.shatterDamageUpgradeRatio = 100;
         settings.showBanners = false;
         settings.showResources = false;
         settings.showLandConverted = false;
