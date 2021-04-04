@@ -352,6 +352,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\hooks.h" />
     <ClInclude Include="include\idlist.h" />
     <ClInclude Include="include\idvector.h" />
+    <ClInclude Include="include\imgfactory.h" />
     <ClInclude Include="include\immunecat.h" />
     <ClInclude Include="include\interface.h" />
     <ClInclude Include="include\interfacechilds.h" />
