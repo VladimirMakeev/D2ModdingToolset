@@ -20,6 +20,8 @@
 #ifndef MQIMAGE2_H
 #define MQIMAGE2_H
 
+#include <cstdint>
+
 namespace game {
 
 struct IMqImage2Vftable;
@@ -37,13 +39,26 @@ struct IMqImage2Vftable
     using Destructor = void(__thiscall*)(IMqImage2* thisptr, char flags);
     Destructor destructor;
 
-    /** Returns image dimensions. */
+    /** Returns image dimensions as CMqPoint(width, height). */
     using GetSize = CMqPoint*(__thiscall*)(const IMqImage2* thisptr, CMqPoint* size);
     GetSize getSize;
 
-    void* method2;
-    void* method3;
-    void* method4;
+    /** Sets current image index. */
+    using SetImageIndex = std::uint32_t(__thiscall*)(IMqImage2* thisptr, std::uint32_t imageIndex);
+    SetImageIndex setImageIndex;
+
+    /** Returns current image index. */
+    using GetImageIndex = std::uint32_t(__thiscall*)(const IMqImage2* thisptr);
+    GetImageIndex getImageIndex;
+
+    /**
+     * Returns number of images depending on context.
+     * For animation related derived types, returns number of frames.
+     * For multi-layered images returns number of layers.
+     * For common images returns 1.
+     */
+    using GetImagesCount = std::uint32_t(__thiscall*)(const IMqImage2* thisptr);
+    GetImagesCount getImagesCount;
 
     /** Assumtion: renders image in CMqRect(start + offset, size) area. */
     using Render = void(__thiscall*)(const IMqImage2* thisptr,
@@ -54,9 +69,14 @@ struct IMqImage2Vftable
                                      int a6);
     Render render;
 
-    void* method6;
-    void* method7;
-    void* method8;
+    using SetUnknown = void(__thiscall*)(IMqImage2* thisptr);
+    SetUnknown setUnknown;
+
+    using ResetUnknown = void(__thiscall*)(IMqImage2* thisptr);
+    ResetUnknown resetUnknown;
+
+    using Method8 = int(__thiscall*)(IMqImage2* thisptr);
+    Method8 method8;
 };
 
 static_assert(sizeof(IMqImage2Vftable) == 9 * sizeof(void*),
