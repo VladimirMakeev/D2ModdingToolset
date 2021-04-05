@@ -154,6 +154,9 @@ static Hooks getGameHooks()
         HookInfo{(void**)&fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked},
         // Fix bestow wards becoming permanent on warded unit transformation
         HookInfo{(void**)&game::BattleMsgDataApi::get().beforeAttack, beforeAttackHooked},
+        // Fix bestow wards becoming permanent when more than 8 modifiers are applied at once.
+        // Also, this hook is required for UnrestrictedBestowWards.
+        HookInfo{(void**)&game::CBatAttackBestowWardsApi::get().onHit, bestowWardsAttackOnHitHooked},
     };
     // clang-format on
 
@@ -242,8 +245,6 @@ static Hooks getGameHooks()
          */
         hooks.push_back(HookInfo{(void**)&game::CBatAttackBestowWardsApi::get().canPerform,
                                  bestowWardsAttackCanPerformHooked});
-        hooks.push_back(HookInfo{(void**)&game::CBatAttackBestowWardsApi::get().onHit,
-                                 bestowWardsAttackOnHitHooked});
 
         /**
          * Allow Bestow Wards (and any other attack with QTY_HEAL > 0) to heal units when battle
