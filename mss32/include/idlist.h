@@ -26,6 +26,7 @@
 namespace game {
 
 using IdList = LinkedList<CMidgardID>;
+using IdListNode = LinkedListNode<CMidgardID>;
 
 namespace IdListApi {
 
@@ -38,6 +39,10 @@ struct Api
     /** Adds id to list. */
     using Add = int(__thiscall*)(IdList* list, const CMidgardID* id);
     Add add;
+
+    /** Removes id from the list. */
+    using Remove = void(__thiscall*)(IdList* list, int a2, IdListNode* node, int a4);
+    Remove remove;
 };
 
 Api& get();

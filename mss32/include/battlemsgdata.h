@@ -286,6 +286,7 @@ struct Api
     IsUnitAttacker isUnitAttacker;
 
     GetUnitIntValue getUnitAccuracyReduction;
+    SetUnitIntValue setUnitAccuracyReduction;
 
     using SetUnitBoolValue = void(__thiscall*)(BattleMsgData* thisptr,
                                                const CMidgardID* unitId,
@@ -343,6 +344,29 @@ struct Api
                          const CMidgardID* unitId,
                          CMidgardID* nextAttackUnitId);
     SetUnknown9Bit1AndClearBoostLowerDamage setUnknown9Bit1AndClearBoostLowerDamage;
+
+    /** Called at the end of battle turn of a previous unit before a unit attacks. */
+    using BeforeAttack = void(__stdcall*)(const BattleMsgData* battleMsgData,
+                                          const IMidgardObjectMap* objectMap,
+                                          const CMidgardID* unitId);
+    BeforeAttack beforeAttack;
+
+    /**
+     * Resets info about units modified by this unit. Called in BeforeAttack after corresponding
+     * modifiers are removed.
+     */
+    using ResetModifiedUnitsInfo = void(__thiscall*)(BattleMsgData* thisptr,
+                                                     const CMidgardID* unitId);
+    ResetModifiedUnitsInfo resetModifiedUnitsInfo;
+
+    /**
+     * Resets info about a modifier applied to this unit. Called in BeforeAttack after the modifier
+     * is removed.
+     */
+    using ResetUnitModifierInfo = void(__thiscall*)(BattleMsgData* thisptr,
+                                                    const CMidgardID* modifiedUnitId,
+                                                    const CMidgardID* modifierId);
+    ResetUnitModifierInfo resetUnitModifierInfo;
 };
 
 Api& get();

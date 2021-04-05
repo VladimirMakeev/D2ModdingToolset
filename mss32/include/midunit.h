@@ -49,7 +49,7 @@ struct CMidUnit : public IMidScenarioObject
     int hpBefore;
     int hpMax;
     int origXp;
-    IdList list;
+    IdList origModifiers;
 };
 
 static_assert(sizeof(CMidUnit) == 80, "Size of CMidUnit structure must be exactly 80 bytes");
@@ -62,8 +62,9 @@ namespace CMidUnitApi {
 
 struct Api
 {
-    using AddModifier = bool(__thiscall*)(CMidUnit* thisptr, const CMidgardID* modifierId);
-    AddModifier addModifier;
+    using AddRemoveModifier = bool(__thiscall*)(CMidUnit* thisptr, const CMidgardID* modifierId);
+    AddRemoveModifier addModifier;
+    AddRemoveModifier removeModifier;
 };
 
 Api& get();
