@@ -100,7 +100,12 @@ union UnitFlags
         std::uint8_t flag4 : 1;
         std::uint8_t unknown : 1;
         bool revived : 1;
-        std::uint8_t flag7 : 1;
+        /**
+         * Indicates that unit waited and then started retreating.
+         * Units with this flag set are skipped during turns order computation
+         * at the start of the round.
+         */
+        bool retreatingAfterWait : 1;
     } parts;
 
     std::uint8_t value;
@@ -196,7 +201,8 @@ struct BattleMsgData
     CMidgardID attackerStackUnitIds[6];
     CMidgardID defenderStackUnitIds[6];
     CMidgardID ids3[2];
-    CMidgardID ids4[4];
+    /** Ids of items that were used during battle. */
+    CMidgardID usedItemIds[4];
     std::int8_t currentRound; /**< Round counting starts from 1. */
     char padding[3];
     int unknown3;
@@ -205,8 +211,15 @@ struct BattleMsgData
     int unknown6;
     int unknown7;
     char unknown8;
+    /** Holds leaders positions before duel. */
     char unknown9;
-    char unknown10;
+    /**
+     * Indicates that battle is a duel.
+     * Before duel starts, group leaders change their positions to 2, so they face each other.
+     * Original positions are saved and restored when duel ends.
+     * Non-leader units in both groups are marked with BattleStatus::Hidden.
+     */
+    bool duel;
     char padding2;
     char unknown11[4];
 };
