@@ -57,13 +57,6 @@ using RespopupInitFunc = void (*)(void);
 using ToggleShowBannersInitFunc = void*(__thiscall*)(void* thisptr);
 
 /**
- * Assumption: processes unit modifiers during battle.
- * Called with unit pointer being a result of dynamic_cast without a nullptr checks.
- * Main reason of crashes in battles when summoners are involved.
- */
-using ProcessUnitModifiersFunc = bool(__thiscall*)(void* unit, int* a2);
-
-/**
  * Adds tier-1 unit from specified unit branch to player's hire list.
  * @param[in] race player race.
  * @param[in] buildings player buildings.
@@ -317,7 +310,6 @@ struct Functions
 {
     RespopupInitFunc respopupInit;
     ToggleShowBannersInitFunc toggleShowBannersInit;
-    ProcessUnitModifiersFunc processUnitModifiers;
     AddUnitToHireList addUnitToHireList;
     AddSideshowUnitToHireList addSideshowUnitToHireList;
     AddPlayerUnitsToHireList addPlayerUnitsToHireList;

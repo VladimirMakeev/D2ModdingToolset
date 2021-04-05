@@ -27,19 +27,23 @@ namespace game::CMidUnitApi {
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::AddModifier)0x5eabff,
+        (Api::AddRemoveModifier)0x5eabff,
+        (Api::AddRemoveModifier)0x5eac81,
     },
     // Russobit
     Api{
-        (Api::AddModifier)0x5eabff,
+        (Api::AddRemoveModifier)0x5eabff,
+        (Api::AddRemoveModifier)0x5eac81,
     },
     // Gog
     Api{
-        (Api::AddModifier)0x5e9902,
+        (Api::AddRemoveModifier)0x5e9902,
+        (Api::AddRemoveModifier)0x5e9984,
     },
     // Scenario Editor
     Api{
-        (Api::AddModifier)0x4ed994,
+        (Api::AddRemoveModifier)0x4ed994,
+        (Api::AddRemoveModifier)0x4eda16,
     },
 }};
 // clang-format on

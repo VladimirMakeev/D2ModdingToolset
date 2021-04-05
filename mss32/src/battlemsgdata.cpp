@@ -52,6 +52,9 @@ static std::array<Api, 3> functions = {{
         (Api::UnitCanBeCured)0x65d890,
         (Api::UnitCanBeRevived)0x65d927,
         (Api::SetUnknown9Bit1AndClearBoostLowerDamage)0x627ac9,
+        (Api::BeforeAttack)0x627bff,
+        (Api::ResetModifiedUnitsInfo)0x62326e,
+        (Api::ResetUnitModifierInfo)0x6231d4,
     },
     // Russobit
     Api{
@@ -80,6 +83,9 @@ static std::array<Api, 3> functions = {{
         (Api::UnitCanBeCured)0x65d890,
         (Api::UnitCanBeRevived)0x65d927,
         (Api::SetUnknown9Bit1AndClearBoostLowerDamage)0x627ac9,
+        (Api::BeforeAttack)0x627bff,
+        (Api::ResetModifiedUnitsInfo)0x62326e,
+        (Api::ResetUnitModifierInfo)0x6231d4,
     },
     // Gog
     Api{
@@ -108,6 +114,9 @@ static std::array<Api, 3> functions = {{
         (Api::UnitCanBeCured)0x65c310,
         (Api::UnitCanBeRevived)0x65c3a7,
         (Api::SetUnknown9Bit1AndClearBoostLowerDamage)0x626609,
+        (Api::BeforeAttack)0x62673f,
+        (Api::ResetModifiedUnitsInfo)0x621dfe,
+        (Api::ResetUnitModifierInfo)0x621d64,
     }
 }};
 // clang-format on

@@ -101,6 +101,7 @@
 #include <fmt/format.h>
 #include <fstream>
 #include <iterator>
+#include <set>
 #include <string>
 
 namespace hooks {
@@ -113,7 +114,7 @@ static Hooks getGameHooks()
     // clang-format off
     Hooks hooks{
         // Fix game crash in battles with summoners
-        HookInfo{(void**)&fn.processUnitModifiers, processUnitModifiersHooked},
+        HookInfo{(void**)&game::CMidUnitApi::get().removeModifier, removeModifierHooked},
         // Show buildings with custom branch category on the 'other buildings' tab
         HookInfo{(void**)&game::CBuildingBranchApi::get().constructor, buildingBranchCtorHooked},
         // Always place units with melee attack at the front lane in groups controlled by non-neutrals AI
@@ -151,6 +152,11 @@ static Hooks getGameHooks()
         // Fix game crash when AI controlled unit with transform self attack
         // uses alternative attack with 'adjacent' attack range
         HookInfo{(void**)&fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked},
+        // Fix bestow wards becoming permanent on warded unit transformation
+        HookInfo{(void**)&game::BattleMsgDataApi::get().beforeAttack, beforeAttackHooked},
+        // Fix bestow wards becoming permanent when more than 8 modifiers are applied at once.
+        // Also, this hook is required for UnrestrictedBestowWards.
+        HookInfo{(void**)&game::CBatAttackBestowWardsApi::get().onHit, bestowWardsAttackOnHitHooked},
     };
     // clang-format on
 
@@ -239,8 +245,6 @@ static Hooks getGameHooks()
          */
         hooks.push_back(HookInfo{(void**)&game::CBatAttackBestowWardsApi::get().canPerform,
                                  bestowWardsAttackCanPerformHooked});
-        hooks.push_back(HookInfo{(void**)&game::CBatAttackBestowWardsApi::get().onHit,
-                                 bestowWardsAttackOnHitHooked});
 
         /**
          * Allow Bestow Wards (and any other attack with QTY_HEAL > 0) to heal units when battle
@@ -371,13 +375,15 @@ void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/)
     return thisptr;
 }
 
-bool __fastcall processUnitModifiersHooked(void* thisptr, int /*%edx*/, int* a2)
+bool __fastcall removeModifierHooked(game::CMidUnit* thisptr,
+                                     int /*%edx*/,
+                                     const game::CMidgardID* modifierId)
 {
     if (!thisptr) {
         return false;
     }
 
-    return game::gameFunctions().processUnitModifiers(thisptr, a2);
+    return game::CMidUnitApi::get().removeModifier(thisptr, modifierId);
 }
 
 using ScriptLines = std::vector<std::string>;
@@ -1325,6 +1331,84 @@ void __stdcall setUnknown9Bit1AndClearBoostLowerDamageHooked(game::BattleMsgData
         battle.setUnitStatus(battleMsgData, unitId, BattleStatus::Defend, false);
         battle.setUnitAccuracyReduction(battleMsgData, unitId, 0);
     }
+}
+
+void removeModifier(game::BattleMsgData* battleMsgData,
+                    game::CMidUnit* unit,
+                    const game::CMidgardID* modifierId)
+{
+    using namespace game;
+
+    CMidUnitApi::get().removeModifier(unit, modifierId);
+
+    auto& mods = unit->origModifiers;
+    for (auto mod = mods.head->next; mod != mods.head; mod = mod->next) {
+        if (mod->data == *modifierId) {
+            const auto& list = IdListApi::get();
+            list.remove(&mods, 0, mod, 0);
+            break;
+        }
+    }
+
+    const auto& battle = BattleMsgDataApi::get();
+    battle.resetUnitModifierInfo(battleMsgData, &unit->unitId, modifierId);
+}
+
+void removeModifiers(game::BattleMsgData* battleMsgData,
+                     game::IMidgardObjectMap* objectMap,
+                     const game::CMidgardID* unitId,
+                     const game::CMidgardID* modifiedUnitId)
+{
+    using namespace game;
+
+    auto modifiedUnit = static_cast<CMidUnit*>(
+        objectMap->vftable->findScenarioObjectByIdForChange(objectMap, modifiedUnitId));
+
+    const auto& battle = BattleMsgDataApi::get();
+    auto unitInfo = battle.getUnitInfoById(battleMsgData, unitId);
+
+    auto& modifiedUnits = unitInfo->modifiedUnits;
+    for (size_t i = 0; i < sizeof(modifiedUnits) / sizeof(*modifiedUnits); i++) {
+        if (modifiedUnits[i].unitId != *modifiedUnitId)
+            continue;
+
+        CMidgardID modifierId;
+        const auto& id = CMidgardIDApi::get();
+        id.validateId(&modifierId, modifiedUnits[i].modifierId);
+
+        removeModifier(battleMsgData, modifiedUnit, &modifierId);
+    }
+}
+
+void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
+                                  game::IMidgardObjectMap* objectMap,
+                                  const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+    battle.setUnitStatus(battleMsgData, unitId, BattleStatus::Defend, false);
+
+    auto unitInfo = battle.getUnitInfoById(battleMsgData, unitId);
+
+    std::set<CMidgardID> modifiedUnitIds;
+    auto& modifiedUnits = unitInfo->modifiedUnits;
+    for (size_t i = 0; i < sizeof(modifiedUnits) / sizeof(*modifiedUnits); i++) {
+        if (modifiedUnits[i].unitId == invalidId)
+            continue;
+
+        CMidgardID modifiedUnitId;
+        const auto& id = CMidgardIDApi::get();
+        id.validateId(&modifiedUnitId, modifiedUnits[i].unitId);
+
+        modifiedUnitIds.insert(modifiedUnitId);
+    }
+
+    for (auto it = modifiedUnitIds.begin(); it != modifiedUnitIds.end(); it++)
+        removeModifiers(battleMsgData, objectMap, unitId, &(*it));
+    battle.resetModifiedUnitsInfo(battleMsgData, unitId);
+
+    battle.setUnitAccuracyReduction(battleMsgData, unitId, 0);
 }
 
 void __stdcall osExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)

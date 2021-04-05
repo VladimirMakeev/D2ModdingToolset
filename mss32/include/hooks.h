@@ -67,7 +67,9 @@ Hooks getVftableHooks();
 void respopupInitHooked(void);
 void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/);
 
-bool __fastcall processUnitModifiersHooked(void* thisptr, int /*%edx*/, int* a2);
+bool __fastcall removeModifierHooked(game::CMidUnit* thisptr,
+                                     int /*%edx*/,
+                                     const game::CMidgardID* modifierId);
 
 game::AutoDialogData* __fastcall loadScriptFileHooked(game::AutoDialogData* thisptr,
                                                       int /*%edx*/,
@@ -188,6 +190,10 @@ int __stdcall getAttackQtyDamageOrHealHooked(const game::IAttack* attack, int da
 void __stdcall setUnknown9Bit1AndClearBoostLowerDamageHooked(game::BattleMsgData* battleMsgData,
                                                              const game::CMidgardID* unitId,
                                                              game::CMidgardID* nextAttackUnitId);
+
+void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
+                                  game::IMidgardObjectMap* objectMap,
+                                  const game::CMidgardID* unitId);
 
 void __stdcall osExceptionHooked(const game::os_exception* thisptr, const void* throwInfo);
 

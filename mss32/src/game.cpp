@@ -29,7 +29,6 @@ static std::array<Functions, 4> functions = {{
     Functions{
         (RespopupInitFunc)0x4893ad,
         (ToggleShowBannersInitFunc)0x5b4015,
-        (ProcessUnitModifiersFunc)0x5eac81,
         (AddUnitToHireList)0x5d5bb4,
         (AddSideshowUnitToHireList)0x5d5ab6,
         (AddPlayerUnitsToHireList)0x5d59e8,
@@ -74,7 +73,6 @@ static std::array<Functions, 4> functions = {{
     Functions{
         (RespopupInitFunc)0x4893ad,
         (ToggleShowBannersInitFunc)0x5b4015,
-        (ProcessUnitModifiersFunc)0x5eac81,
         (AddUnitToHireList)0x5d5bb4,
         (AddSideshowUnitToHireList)0x5d5ab6,
         (AddPlayerUnitsToHireList)0x5d59e8,
@@ -119,7 +117,6 @@ static std::array<Functions, 4> functions = {{
     Functions{
         (RespopupInitFunc)0x488f96,
         (ToggleShowBannersInitFunc)0x5b32db,
-        (ProcessUnitModifiersFunc)0x5e9984,
         (AddUnitToHireList)0x5d4add,
         (AddSideshowUnitToHireList)0x5d49df,
         (AddPlayerUnitsToHireList)0x5d4911,
@@ -164,7 +161,6 @@ static std::array<Functions, 4> functions = {{
     Functions{
         (RespopupInitFunc)nullptr,
         (ToggleShowBannersInitFunc)nullptr,
-        (ProcessUnitModifiersFunc)nullptr,
         (AddUnitToHireList)nullptr,
         (AddSideshowUnitToHireList)nullptr,
         (AddPlayerUnitsToHireList)nullptr,

@@ -28,17 +28,20 @@ static std::array<Api, 3> functions = {{
     // Akella
     Api{
         (Api::SetEmpty)0x56ab57,
-        (Api::Add)0x5c9ebd
+        (Api::Add)0x5c9ebd,
+        (Api::Remove)0x408017,
     },
     // Russobit
     Api{
         (Api::SetEmpty)0x56ab57,
-        (Api::Add)0x5c9ebd
+        (Api::Add)0x5c9ebd,
+        (Api::Remove)0x408017,
     },
     // Gog
     Api{
         (Api::SetEmpty)0x42c2c1,
-        (Api::Add)0x56aff7
+        (Api::Add)0x56aff7,
+        (Api::Remove)0x407ca2,
     }
 }};
 // clang-format on

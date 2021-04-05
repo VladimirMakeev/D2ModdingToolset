@@ -238,6 +238,12 @@ struct Api
                                                const CMidgardID* src,
                                                IdType newType);
     ChangeType changeType;
+
+    /** Check if all parts of the id are correct and returns it as value. Otherwise, returns the
+     * invalidId.
+     */
+    using ValidateId = CMidgardID*(__stdcall*)(CMidgardID* value, CMidgardID id);
+    ValidateId validateId;
 };
 
 Api& get();
