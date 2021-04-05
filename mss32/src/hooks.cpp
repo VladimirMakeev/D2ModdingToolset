@@ -1310,17 +1310,21 @@ int __stdcall getAttackQtyDamageOrHealHooked(const game::IAttack* attack, int da
     return qtyDamage;
 }
 
-void __stdcall setUnknown9Bit1AndClearBoostLowerDamageHooked(
-    const game::BattleMsgData* battleMsgData,
-    const game::CMidgardID* unitId,
-    game::CMidgardID* nextAttackUnitId)
+void __stdcall setUnknown9Bit1AndClearBoostLowerDamageHooked(game::BattleMsgData* battleMsgData,
+                                                             const game::CMidgardID* unitId,
+                                                             game::CMidgardID* nextAttackUnitId)
 {
     using namespace game;
 
-    BattleMsgDataApi::get().setUnknown9Bit1AndClearBoostLowerDamage(battleMsgData, unitId,
-                                                                    nextAttackUnitId);
-    if (nextAttackUnitId->value == unitId->value)
+    const auto& battle = BattleMsgDataApi::get();
+    battle.setUnknown9Bit1AndClearBoostLowerDamage(battleMsgData, unitId, nextAttackUnitId);
+
+    if (nextAttackUnitId->value == unitId->value) {
         nextAttackUnitId->value = emptyId.value;
+
+        battle.setUnitStatus(battleMsgData, unitId, BattleStatus::Defend, false);
+        battle.setUnitAccuracyReduction(battleMsgData, unitId, 0);
+    }
 }
 
 void __stdcall osExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)

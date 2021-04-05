@@ -286,6 +286,7 @@ struct Api
     IsUnitAttacker isUnitAttacker;
 
     GetUnitIntValue getUnitAccuracyReduction;
+    SetUnitIntValue setUnitAccuracyReduction;
 
     using SetUnitBoolValue = void(__thiscall*)(BattleMsgData* thisptr,
                                                const CMidgardID* unitId,
