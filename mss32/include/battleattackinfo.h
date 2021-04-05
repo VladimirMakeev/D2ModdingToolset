@@ -26,6 +26,32 @@
 
 namespace game {
 
+/** Used by CBattleViewerInterf to show effects and play sounds. */
+enum class AttackEffect : int
+{
+    Damage,        /**< Assumption: unit was damaged by common attack. */
+    Paralyze,      /**< Unit paralyzed and passes its turn. Shows message with id 'X008TA0010'. */
+    Retreating,    /**< Unit retreating. Unit image in battlefield flips horizontally. */
+    Retreated,     /**< Unit retreated from battle. Unit disappears from battlefield. */
+    BreakParalyze, /**< Paralyze is over. Shows message with id 'X008TA0024'. */
+    BreakPetrify,  /**< Petrify is over. Shows message with id 'X008TA0025'. */
+    Poison,        /**< Unit takes damage from poison. Shows message with id 'X008TA0014'. */
+    Frostbite,     /**< Unit takes damage from frostbite. Shows message with id 'X008TA0015'. */
+    Blister,       /**< Unit takes damage from blister. Shows message with id 'X160TA0022'. */
+    Wait,          /**< Unit is waiting. Shows message with id 'X008TA0020'. */
+    Defend,        /**< Unit defending. Shows message with id 'X008TA0021'. */
+    Effect11,
+    Effect12,      /**< Assumption: unit hit by attack or item used. */
+    Untransform,   /**< Unit restores original form, except drain level. Message id 'X008TA0023'. */
+    Unsummon,      /**< Summoned unit unsummoned. */
+    GroupUpgrade,  /**< Unit gets promotion when battle won or gains experience.
+                    * Message id 'X008TA0005'.
+                    */
+    LevelRestored, /**< Unit restores original form after drain level. Message id 'X008TA0029'. */
+    Effect17,
+    Effect18 /**< Set as default in BattleAttackInfo constructor. */
+};
+
 /** Information about attack results for a specific unit in battle. */
 struct BattleAttackUnitInfo
 {
@@ -53,7 +79,7 @@ struct BattleAttackInfo
     CMidgardID unitId;
     bool attacker;
     char padding[3];
-    int unknown;
+    AttackEffect effect;
     int attackNumber;
     CMidgardID id;
     AttackUnitInfoList unitsInfo;
