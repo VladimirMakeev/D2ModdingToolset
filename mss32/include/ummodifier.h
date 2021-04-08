@@ -45,6 +45,7 @@ struct ModifierValue
 
 /** Modifier element types (bitflags), corresponds to ModifierElementType enum (values are not
  * identical). */
+// clang-format off
 enum class ModifierElementTypeFlag : int
 {
     // Used by CUmStack
@@ -68,6 +69,7 @@ enum class ModifierElementTypeFlag : int
     // Used by CUmAttack
     AttackDrain         = 0b1000000000000000,
 };
+// clang-format on
 
 struct CUmModifierVftable
 {
@@ -92,11 +94,11 @@ struct CUmModifierVftable
     using Method6 = bool(__thiscall*)(CUmModifier* thisptr);
     Method6 method6;
 
-    using IsType = bool(__thiscall*)(CUmModifier* thisptr, ModifierElementTypeFlag type);
-    IsType isType;
+    using HasElement = bool(__thiscall*)(CUmModifier* thisptr, ModifierElementTypeFlag type);
+    HasElement hasElement;
 
-    using GetValue = int(__thiscall*)(CUmModifier* thisptr);
-    GetValue getValue;
+    using GetFirstElementValue = int(__thiscall*)(CUmModifier* thisptr);
+    GetFirstElementValue getFirstElementValue;
 
     using GetDesc = const char*(__thiscall*)(CUmModifier* thisptr);
     GetDesc getDesc;

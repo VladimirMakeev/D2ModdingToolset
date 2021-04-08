@@ -23,13 +23,14 @@
 #include "batattackbestowwards.h"
 #include "battleattackinfo.h"
 #include "battlemsgdata.h"
+#include "dynamiccast.h"
 #include "game.h"
 #include "globaldata.h"
 #include "idvector.h"
 #include "immunecat.h"
 #include "midgardobjectmap.h"
 #include "midunit.h"
-#include "ummodifier.h"
+#include "umunit.h"
 #include "unitmodifier.h"
 #include "ussoldier.h"
 #include "visitors.h"
@@ -50,6 +51,15 @@ bool unitCanBeModified(game::BattleMsgData* battleMsgData, game::CMidgardID* tar
     return true;
 }
 
+game::CUmUnit* castUmModifierToUmUnit(game::CUmModifier* modifier)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    return (CUmUnit*)dynamicCast(modifier, 0, rtti.CUmModifierType, rtti.CUmUnitType, 0);
+}
+
 game::CUmModifier* getModifier(const game::CMidgardID* modifierId)
 {
     using namespace game;
@@ -61,29 +71,27 @@ game::CUmModifier* getModifier(const game::CMidgardID* modifierId)
     return unitModifier->group->modifier;
 }
 
-void getModifierAttackSource(game::CUmModifier* modifier, game::LAttackSource* value)
+void getModifierAttackSource(game::CUmUnit* modifier, game::LAttackSource* value)
 {
     using namespace game;
 
-    const int attackSourceId = modifier->vftable->getValue(modifier);
-
+    const int attackSourceId = (int)modifier->data->immunity.data->id;
     const auto attackSourceTable = (*GlobalDataApi::get().getGlobalData())->attackSources;
     LAttackSourceTableApi::get().findCategoryById(attackSourceTable, value, &attackSourceId);
 }
 
-void getModifierAttackClass(game::CUmModifier* modifier, game::LAttackClass* value)
+void getModifierAttackClass(game::CUmUnit* modifier, game::LAttackClass* value)
 {
     using namespace game;
 
-    const int attackClassId = modifier->vftable->getValue(modifier);
-
+    const int attackClassId = (int)modifier->data->immunityC.data->id;
     const auto attackClassTable = (*GlobalDataApi::get().getGlobalData())->attackClasses;
     LAttackClassTableApi::get().findCategoryById(attackClassTable, value, &attackClassId);
 }
 
 void resetUnitAttackSourceWard(game::BattleMsgData* battleMsgData,
                                const game::CMidgardID* unitId,
-                               game::CUmModifier* modifier)
+                               game::CUmUnit* modifier)
 {
     using namespace game;
 
@@ -98,7 +106,7 @@ void resetUnitAttackSourceWard(game::BattleMsgData* battleMsgData,
 
 void resetUnitAttackClassWard(game::BattleMsgData* battleMsgData,
                               const game::CMidgardID* unitId,
-                              game::CUmModifier* modifier)
+                              game::CUmUnit* modifier)
 {
     using namespace game;
 
@@ -113,7 +121,7 @@ void resetUnitAttackClassWard(game::BattleMsgData* battleMsgData,
 
 bool canApplyImmunityModifier(game::BattleMsgData* battleMsgData,
                               const game::CMidUnit* targetUnit,
-                              game::CUmModifier* modifier,
+                              game::CUmUnit* modifier,
                               game::ImmuneId immuneId)
 {
     using namespace game;
@@ -141,12 +149,10 @@ bool canApplyImmunityModifier(game::BattleMsgData* battleMsgData,
 
 bool canApplyImmunityclassModifier(game::BattleMsgData* battleMsgData,
                                    const game::CMidUnit* targetUnit,
-                                   game::CUmModifier* modifier,
+                                   game::CUmUnit* modifier,
                                    game::ImmuneId immuneId)
 {
     using namespace game;
-
-    const int attackClassId = modifier->vftable->getValue(modifier);
 
     LAttackClass attackClass{};
     getModifierAttackClass(modifier, &attackClass);
@@ -180,14 +186,31 @@ bool canApplyModifier(game::BattleMsgData* battleMsgData,
         return false;
 
     CUmModifier* modifier = getModifier(modifierId);
-    if (modifier->vftable->isType(modifier, ModifierElementTypeFlag::ImmunityOnce)) {
-        return canApplyImmunityModifier(battleMsgData, targetUnit, modifier, ImmuneId::Once);
-    } else if (modifier->vftable->isType(modifier, ModifierElementTypeFlag::ImmunityAlways)) {
-        return canApplyImmunityModifier(battleMsgData, targetUnit, modifier, ImmuneId::Always);
-    } else if (modifier->vftable->isType(modifier, ModifierElementTypeFlag::ImmunityclassOnce)) {
-        return canApplyImmunityclassModifier(battleMsgData, targetUnit, modifier, ImmuneId::Once);
-    } else if (modifier->vftable->isType(modifier, ModifierElementTypeFlag::ImmunityclassAlways)) {
-        return canApplyImmunityclassModifier(battleMsgData, targetUnit, modifier, ImmuneId::Always);
+
+    CUmUnit* umUnit = castUmModifierToUmUnit(modifier);
+    if (umUnit) {
+        if (modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::Hp)
+            || modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::Regeneration)
+            || modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::Armor))
+            return true;
+
+        if (modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::ImmunityOnce)
+            && canApplyImmunityModifier(battleMsgData, targetUnit, umUnit, ImmuneId::Once))
+            return true;
+
+        if (modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::ImmunityAlways)
+            && canApplyImmunityModifier(battleMsgData, targetUnit, umUnit, ImmuneId::Always))
+            return true;
+
+        if (modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::ImmunityclassOnce)
+            && canApplyImmunityclassModifier(battleMsgData, targetUnit, umUnit, ImmuneId::Once))
+            return true;
+
+        if (modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::ImmunityclassAlways)
+            && canApplyImmunityclassModifier(battleMsgData, targetUnit, umUnit, ImmuneId::Always))
+            return true;
+
+        return false;
     }
 
     return true;
@@ -267,10 +290,14 @@ bool applyModifier(game::CBatAttackBestowWards* thisptr,
     CMidUnitApi::get().addModifier(targetUnit, modifierId);
 
     CUmModifier* modifier = getModifier(modifierId);
-    if (modifier->vftable->isType(modifier, ModifierElementTypeFlag::ImmunityOnce)) {
-        resetUnitAttackSourceWard(battleMsgData, &targetUnit->unitId, modifier);
-    } else if (modifier->vftable->isType(modifier, ModifierElementTypeFlag::ImmunityclassOnce)) {
-        resetUnitAttackClassWard(battleMsgData, &targetUnit->unitId, modifier);
+
+    CUmUnit* umUnit = castUmModifierToUmUnit(modifier);
+    if (umUnit) {
+        if (modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::ImmunityOnce))
+            resetUnitAttackSourceWard(battleMsgData, &targetUnit->unitId, umUnit);
+
+        if (modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::ImmunityclassOnce))
+            resetUnitAttackClassWard(battleMsgData, &targetUnit->unitId, umUnit);
     }
 
     return true;

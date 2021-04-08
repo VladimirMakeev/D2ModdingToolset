@@ -68,6 +68,8 @@ struct Rtti
     TypeDescriptor* TBuildingTypeType;
     TypeDescriptor* TBuildingUnitUpgTypeType;
     TypeDescriptor* CMidStackType;
+    TypeDescriptor* CUmModifierType;
+    TypeDescriptor* CUmUnitType;
 };
 
 const Rtti& rtti();
