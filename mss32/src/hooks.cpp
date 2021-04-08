@@ -154,8 +154,13 @@ static Hooks getGameHooks()
         HookInfo{(void**)&fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked},
         // Fix bestow wards becoming permanent on warded unit transformation
         HookInfo{(void**)&game::BattleMsgDataApi::get().beforeAttack, beforeAttackHooked},
-        // Fix bestow wards becoming permanent when more than 8 modifiers are applied at once.
-        // Also, this hook is required for UnrestrictedBestowWards.
+        /**
+         * Fix Bestow Wards:
+         * 1) Becoming permanent when more than 8 modifiers are applied at once
+         * 2) Not resetting attack class wards (when reapplied)
+         * 3) Incorrectly resetting attack source ward if its modifier also contains hp, regen or armor element
+         * IMPORTANT: this hook is required for UnrestrictedBestowWards
+         */
         HookInfo{(void**)&game::CBatAttackBestowWardsApi::get().onHit, bestowWardsAttackOnHitHooked},
     };
     // clang-format on
@@ -233,15 +238,12 @@ static Hooks getGameHooks()
         /**
          * Allows Bestow Wards to:
          * 1) Grant modifiers even if there are no source wards among them
-         * 2) Limit simultaneously applied modifiers to 8 so they are not bugging out and
-         * becoming permanent
-         * 3) Heal its targets to the ammount specified in QTY_HEAL
-         * 4) Heal retreating units
-         * 5) Use Revive as a secondary attack
-         * 6) Target a unit with a secondary attack even if there are no modifiers that can be
+         * 2) Heal its targets to the ammount specified in QTY_HEAL
+         * 3) Heal retreating units
+         * 4) Use Revive as a secondary attack
+         * 5) Target a unit with a secondary attack even if there are no modifiers that can be
          * applied to this unit
-         * 7) Reset attack class wards so such wards can be reapplied during battle
-         * 8) Treat modifiers with complete immunity correctly
+         * 6) Treat modifiers with complete immunity correctly
          */
         hooks.push_back(HookInfo{(void**)&game::CBatAttackBestowWardsApi::get().canPerform,
                                  bestowWardsAttackCanPerformHooked});
