@@ -38,7 +38,7 @@ struct TLordType;
 struct CMidPlayer;
 struct BattleMsgData;
 struct CMidUnit;
-struct TUsUnitImpl;
+struct IUsUnit;
 struct LAttackSource;
 struct LAttackClass;
 struct IBatAttack;
@@ -133,7 +133,7 @@ using GetAllyOrEnemyStackId = CMidgardID*(__stdcall*)(CMidgardID* stackId,
 using FindUnitById = CMidUnit*(__stdcall*)(const IMidgardObjectMap* objectMap,
                                            const CMidgardID* unitId);
 
-using CastUnitImplToSoldier = IUsSoldier*(__stdcall*)(TUsUnitImpl* unitImpl);
+using CastUnitImplToSoldier = IUsSoldier*(__stdcall*)(IUsUnit* unitImpl);
 
 using CreateBatAttack = IBatAttack*(__stdcall*)(IMidgardObjectMap* objectMap,
                                                 BattleMsgData* battleMsgData,

@@ -22,10 +22,22 @@
 
 namespace game {
 
-struct IMidObject
+struct IMidObject;
+
+struct IMidObjectVftable
 {
-    const void* vftable;
+    using Destructor = void(__thiscall*)(IMidObject* thisptr, char flags);
+    Destructor destructor;
 };
+
+template <typename T = IMidObjectVftable>
+struct IMidObjectT
+{
+    const T* vftable;
+};
+
+struct IMidObject : public IMidObjectT<>
+{ };
 
 } // namespace game
 

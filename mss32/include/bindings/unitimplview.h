@@ -27,7 +27,7 @@ class state;
 }
 
 namespace game {
-struct TUsUnitImpl;
+struct IUsUnit;
 }
 
 namespace bindings {
@@ -37,7 +37,7 @@ class DynUpgradeView;
 class UnitImplView
 {
 public:
-    UnitImplView(game::TUsUnitImpl* unitImpl);
+    UnitImplView(game::IUsUnit* unitImpl);
 
     static void bind(sol::state& lua);
 
@@ -54,7 +54,7 @@ public:
     std::optional<DynUpgradeView> getDynUpgrade2() const;
 
 private:
-    game::TUsUnitImpl* impl;
+    game::IUsUnit* impl;
 };
 
 } // namespace bindings

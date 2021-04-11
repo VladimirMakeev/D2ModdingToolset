@@ -333,10 +333,20 @@ struct Api
                                                             const LAttackSource* attackSource);
     IsUnitAttackSourceWardRemoved isUnitAttackSourceWardRemoved;
 
+    using RemoveUnitAttackSourceWard = void(__thiscall*)(BattleMsgData* thisptr,
+                                                         const CMidgardID* unitId,
+                                                         const LAttackSource* attackSource);
+    RemoveUnitAttackSourceWard removeUnitAttackSourceWard;
+
     using IsUnitAttackClassWardRemoved = bool(__thiscall*)(BattleMsgData* thisptr,
                                                            const CMidgardID* unitId,
                                                            const LAttackClass* attackClass);
     IsUnitAttackClassWardRemoved isUnitAttackClassWardRemoved;
+
+    using RemoveUnitAttackClassWard = void(__thiscall*)(BattleMsgData* thisptr,
+                                                        const CMidgardID* unitId,
+                                                        const LAttackClass* attackClass);
+    RemoveUnitAttackClassWard removeUnitAttackClassWard;
 
     using UnitCanBeHealed = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
                                              const BattleMsgData* battleMsgData,

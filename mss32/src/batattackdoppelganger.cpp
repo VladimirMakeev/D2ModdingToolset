@@ -27,15 +27,21 @@ namespace game::CBatAttackDoppelgangerApi {
 static std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (IBatAttackVftable::OnAttack)0x66374d
+        (IBatAttackVftable::CanPerform)0x6633f3,
+        (IBatAttackVftable::IsImmune)0x66360b,
+        (IBatAttackVftable::OnAttack)0x66374d,
     },
     // Russobit
     Api{
-        (IBatAttackVftable::OnAttack)0x66374d
+        (IBatAttackVftable::CanPerform)0x6633f3,
+        (IBatAttackVftable::IsImmune)0x66360b,
+        (IBatAttackVftable::OnAttack)0x66374d,
     },
     // Gog
     Api{
-        (IBatAttackVftable::OnAttack)0x6621cd
+        (IBatAttackVftable::CanPerform)0x661e73,
+        (IBatAttackVftable::IsImmune)0x66208b,
+        (IBatAttackVftable::OnAttack)0x6621cd,
     }
 }};
 // clang-format on

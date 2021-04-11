@@ -36,7 +36,7 @@ struct Bank;
 
 struct IUsSoldierVftable;
 
-struct IUsSoldier : public IUsUnitExtension<IUsSoldierVftable>
+struct IUsSoldier : public IUsUnitExtensionT<IUsSoldierVftable>
 { };
 
 struct IUsSoldierVftable : public IUsUnitExtensionVftable

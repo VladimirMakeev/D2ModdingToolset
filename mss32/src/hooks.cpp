@@ -206,6 +206,17 @@ static Hooks getGameHooks()
         hooks.push_back(HookInfo{(void**)&fn.computeDamage, computeDamageHooked});
     }
 
+    if (userSettings().doppelgangerRespectsEnemyImmunity
+            != baseSettings().doppelgangerRespectsEnemyImmunity
+        || userSettings().doppelgangerRespectsAllyImmunity
+               != baseSettings().doppelgangerRespectsAllyImmunity) {
+        // Make Doppelganger attack respect target source/class wards and immunities
+        hooks.push_back(HookInfo{(void**)&game::CBatAttackDoppelgangerApi::get().canPerform,
+                                 doppelgangerAttackCanPerformHooked});
+        hooks.push_back(HookInfo{(void**)&game::CBatAttackDoppelgangerApi::get().isImmune,
+                                 doppelgangerAttackIsImmuneHooked});
+    }
+
     if (userSettings().leveledDoppelgangerAttack != baseSettings().leveledDoppelgangerAttack) {
         // Allow doppelganger to transform into leveled units using script logic
         hooks.push_back(HookInfo{(void**)&game::CBatAttackDoppelgangerApi::get().onHit,
@@ -712,7 +723,7 @@ void __stdcall createBuildingTypeHooked(const game::CDBTable* dbTable,
 
         constructor(unitBuilding, dbTable, globalData);
         unitBuilding->branch.vftable = UnitBranchCategories::vftable();
-        unitBuilding->vftable = TBuildingUnitUpgTypeApi::vftable();
+        unitBuilding->vftable = (IMidObjectVftable*)TBuildingUnitUpgTypeApi::vftable();
 
         auto* branches = (*globalData)->unitBranches;
         db.findUnitBranchCategory(&unitBuilding->branch, dbTable, "BRANCH", branches);

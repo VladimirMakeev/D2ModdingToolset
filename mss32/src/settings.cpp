@@ -81,6 +81,8 @@ static void readSettings(Settings& settings, const sol::state& lua)
     settings.showLandConverted = readSetting(table, "showLandConverted", defaultSettings().showLandConverted);
     settings.preserveCapitalBuildings = readSetting(table, "preserveCapitalBuildings", defaultSettings().preserveCapitalBuildings);
     settings.allowShatterAttackToMiss = readSetting(table, "allowShatterAttackToMiss", defaultSettings().allowShatterAttackToMiss);
+    settings.doppelgangerRespectsEnemyImmunity = readSetting(table, "doppelgangerRespectsEnemyImmunity", defaultSettings().doppelgangerRespectsEnemyImmunity);
+    settings.doppelgangerRespectsAllyImmunity = readSetting(table, "doppelgangerRespectsAllyImmunity", defaultSettings().doppelgangerRespectsAllyImmunity);
     settings.leveledDoppelgangerAttack = readSetting(table, "leveledDoppelgangerAttack", defaultSettings().leveledDoppelgangerAttack);
     settings.leveledTransformSelfAttack = readSetting(table, "leveledTransformSelfAttack", defaultSettings().leveledTransformSelfAttack);
     settings.leveledSummonAttack = readSetting(table, "leveledSummonAttack", defaultSettings().leveledSummonAttack);
@@ -121,6 +123,8 @@ const Settings& baseSettings()
         settings.showLandConverted = false;
         settings.preserveCapitalBuildings = false;
         settings.allowShatterAttackToMiss = false;
+        settings.doppelgangerRespectsEnemyImmunity = false;
+        settings.doppelgangerRespectsAllyImmunity = false;
         settings.leveledDoppelgangerAttack = false;
         settings.leveledTransformSelfAttack = false;
         settings.leveledSummonAttack = false;

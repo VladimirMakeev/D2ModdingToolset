@@ -28,7 +28,7 @@
 
 namespace game {
 
-struct TUsUnitImpl;
+struct IUsUnit;
 
 /** Holds unit related data in scenario file and game. */
 struct CMidUnit : public IMidScenarioObject
@@ -38,7 +38,7 @@ struct CMidUnit : public IMidScenarioObject
     StringAndId name;
     bool dynLevel;
     char padding[3];
-    TUsUnitImpl* unitImpl;
+    IUsUnit* unitImpl;
     int currentHp;
     int currentXp;
     bool transformed;

@@ -31,10 +31,10 @@ struct IAttack;
 struct CBatAttackDoppelganger : public CBatAttackBase
 {
     CMidgardID unitId;
-    CMidgardID id2;
-    int attackNumber;
-    IAttack* attack;
-    bool unknown;
+    CMidgardID attackImplUnitId;
+    int attackNumber; /**< 1 if this is a unit's primary attack, 2 for secondary. */
+    IAttack* altAttackImpl;
+    bool canTransform;
     bool unknown2;
     char padding[2];
     IBatAttack* altAttack;
@@ -47,6 +47,8 @@ namespace CBatAttackDoppelgangerApi {
 
 struct Api
 {
+    IBatAttackVftable::CanPerform canPerform;
+    IBatAttackVftable::IsImmune isImmune;
     IBatAttackVftable::OnAttack onHit;
 };
 

@@ -28,7 +28,6 @@ namespace game {
 
 struct TUsUnitImpl : public IUsUnit
 {
-    CMidgardID unitId;
     LUnitCategory category;
 };
 

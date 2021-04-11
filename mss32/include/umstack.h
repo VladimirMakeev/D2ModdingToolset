@@ -34,8 +34,7 @@ struct IUsStackLeader;
 
 struct CUmStack
 {
-    IUsUnit* usUnit;
-    CMidgardID id;
+    IUsUnit usUnit;
     IUsStackLeader* usStackLeader;
     CUmModifier umModifier;
     CUmStackData* data;
@@ -56,7 +55,8 @@ struct CUmStackData
     ModifierValue lowerCost;
 };
 
-static_assert(sizeof(CUmStackData) == 60, "Size of CUmStackData structure must be exactly 60 bytes");
+static_assert(sizeof(CUmStackData) == 60,
+              "Size of CUmStackData structure must be exactly 60 bytes");
 
 } // namespace game
 
