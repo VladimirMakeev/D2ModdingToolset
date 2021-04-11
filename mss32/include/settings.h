@@ -55,6 +55,8 @@ struct Settings
     bool showLandConverted;
     bool preserveCapitalBuildings;
     bool allowShatterAttackToMiss;
+    bool doppelgangerRespectsEnemyImmunity;
+    bool doppelgangerRespectsAllyImmunity;
     bool leveledDoppelgangerAttack;
     bool leveledTransformSelfAttack;
     bool leveledSummonAttack;

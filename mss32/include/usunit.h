@@ -24,8 +24,21 @@
 
 namespace game {
 
-struct IUsUnit : public IMidObject
-{ };
+struct IUsUnitVftable;
+
+struct IUsUnit : public IMidObjectT<IUsUnitVftable>
+{
+    CMidgardID unitId;
+};
+
+struct IUsUnitVftable : public IMidObjectVftable
+{
+    using Method1 = int(__thiscall*)(const IUsUnit* thisptr, const char* a2);
+    Method1 method1;
+
+    using GetCategory = const LUnitCategory*(__thiscall*)(const IUsUnit* thisptr);
+    GetCategory getCategory;
+};
 
 } // namespace game
 

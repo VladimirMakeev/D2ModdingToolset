@@ -28,10 +28,13 @@ struct IUsUnitExtensionVftable
 };
 
 template <typename T = IUsUnitExtensionVftable>
-struct IUsUnitExtension
+struct IUsUnitExtensionT
 {
     const T* vftable;
 };
+
+struct IUsUnitExtension : public IUsUnitExtensionT<>
+{ };
 
 } // namespace game
 

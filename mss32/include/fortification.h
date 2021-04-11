@@ -66,11 +66,8 @@ static_assert(offsetof(CFortification, group) == 60,
 static_assert(offsetof(CFortification, inventory) == 112,
               "CFortification::inventory offset must be 112 bytes");
 
-struct CFortificationVftable
+struct CFortificationVftable : public IMidObjectVftable
 {
-    using Destructor = void(__thiscall*)(CFortification* thisptr, char flags);
-    Destructor destructor;
-
     /** Serializes data to or from stream. */
     using Stream = void*(__thiscall*)(CFortification* thisptr, int a2, int a3);
     Stream stream;

@@ -18,17 +18,21 @@
  */
 
 #include "doppelgangerhooks.h"
+#include "attack.h"
 #include "batattackdoppelganger.h"
 #include "battleattackinfo.h"
 #include "battlemsgdata.h"
 #include "game.h"
 #include "globaldata.h"
+#include "immunecat.h"
 #include "log.h"
 #include "midgardobjectmap.h"
 #include "midunit.h"
 #include "scripts.h"
+#include "settings.h"
 #include "unitgenerator.h"
 #include "unitview.h"
+#include "ussoldier.h"
 #include "usunitimpl.h"
 #include "utils.h"
 #include "visitors.h"
@@ -81,6 +85,126 @@ static int getDoppelgangerTransformLevel(const game::CMidUnit* doppelganger,
     }
 }
 
+bool isAllyTarget(game::CBatAttackDoppelganger* thisptr,
+                  game::BattleMsgData* battleMsgData,
+                  game::CMidgardID* targetUnitId)
+{
+    using namespace game;
+
+    CMidgardID unitStackId{};
+    gameFunctions().getAllyOrEnemyStackId(&unitStackId, battleMsgData, &thisptr->unitId, true);
+
+    CMidgardID targetUnitStackId{};
+    gameFunctions().getAllyOrEnemyStackId(&targetUnitStackId, battleMsgData, targetUnitId, true);
+
+    return unitStackId == targetUnitStackId;
+}
+
+bool __fastcall doppelgangerAttackCanPerformHooked(game::CBatAttackDoppelganger* thisptr,
+                                                   int /*%edx*/,
+                                                   game::IMidgardObjectMap* objectMap,
+                                                   game::BattleMsgData* battleMsgData,
+                                                   game::CMidgardID* targetUnitId)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+    if (battle.isUnitTransformed(&thisptr->unitId, battleMsgData) || !thisptr->canTransform) {
+        return thisptr->altAttack->vftable->canPerform(thisptr->altAttack, objectMap, battleMsgData,
+                                                       targetUnitId);
+    }
+
+    if (battle.getUnitStatus(battleMsgData, targetUnitId, BattleStatus::Dead))
+        return false;
+
+    const auto& fn = gameFunctions();
+    const CMidUnit* targetUnit = fn.findUnitById(objectMap, targetUnitId);
+
+    const IUsUnit* targetUnitImpl = targetUnit->unitImpl;
+    const LUnitCategory* unitCategory = targetUnitImpl->vftable->getCategory(targetUnitImpl);
+    if (unitCategory->id == UnitId::Illusion || unitCategory->id == UnitId::Guardian)
+        return false;
+
+    const IUsSoldier* targetSoldier = fn.castUnitImplToSoldier(targetUnit->unitImpl);
+    if (!targetSoldier->vftable->getSizeSmall(targetSoldier))
+        return false;
+
+    const IAttack* targetAttack = targetSoldier->vftable->getAttackById(targetSoldier);
+    const LAttackClass* targetAttackClass = targetAttack->vftable->getAttackClass(targetAttack);
+    if (targetAttackClass->id == AttackClassId::Doppelganger)
+        return false;
+
+    bool ally = isAllyTarget(thisptr, battleMsgData, targetUnitId);
+    if (ally && !userSettings().doppelgangerRespectsAllyImmunity)
+        return true;
+    if (!ally && !userSettings().doppelgangerRespectsEnemyImmunity)
+        return true;
+
+    IAttack* attack = fn.getAttackById(objectMap, &thisptr->attackImplUnitId, thisptr->attackNumber,
+                                       false);
+    return !fn.isUnitImmuneToAttack(objectMap, battleMsgData, targetUnitId, attack, true);
+}
+
+/*
+ * CBatLogic::battleTurn incorrectly handles immunities to doppelganger and transform self
+ * attacks. Had to call removeUnitAttackSourceWard and removeUnitAttackClassWard here as a
+ * backdoor. CBatLogic::battleTurn needs to be rewritten someday.
+ */
+bool __fastcall doppelgangerAttackIsImmuneHooked(game::CBatAttackDoppelganger* thisptr,
+                                                 int /*%edx*/,
+                                                 game::IMidgardObjectMap* objectMap,
+                                                 game::BattleMsgData* battleMsgData,
+                                                 game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+    if (battle.isUnitTransformed(&thisptr->unitId, battleMsgData) || !thisptr->canTransform) {
+        return thisptr->altAttack->vftable->isImmune(thisptr->altAttack, objectMap, battleMsgData,
+                                                     unitId);
+    }
+
+    bool ally = isAllyTarget(thisptr, battleMsgData, unitId);
+    if (ally && !userSettings().doppelgangerRespectsAllyImmunity)
+        return false;
+    if (!ally && !userSettings().doppelgangerRespectsEnemyImmunity)
+        return false;
+
+    const auto& fn = gameFunctions();
+    IAttack* attack = fn.getAttackById(objectMap, &thisptr->attackImplUnitId, thisptr->attackNumber,
+                                       false);
+
+    const CMidUnit* targetUnit = fn.findUnitById(objectMap, unitId);
+    const IUsSoldier* targetSoldier = fn.castUnitImplToSoldier(targetUnit->unitImpl);
+
+    const LAttackSource* attackSource = attack->vftable->getAttackSource(attack);
+    const LImmuneCat* immuneCat = targetSoldier->vftable->getImmuneByAttackSource(targetSoldier,
+                                                                                  attackSource);
+
+    const LAttackClass* attackClass = attack->vftable->getAttackClass(attack);
+    const LImmuneCat* immuneCatC = targetSoldier->vftable->getImmuneByAttackClass(targetSoldier,
+                                                                                  attackClass);
+
+    bool result = false;
+    if (immuneCat->id == ImmuneCategories::get().once->id) {
+        result = !battle.isUnitAttackSourceWardRemoved(battleMsgData, unitId, attackSource);
+        if (result)
+            battle.removeUnitAttackSourceWard(battleMsgData, unitId, attackSource);
+    } else if (immuneCat->id == ImmuneCategories::get().always->id) {
+        result = true;
+    }
+
+    if (immuneCatC->id == ImmuneCategories::get().once->id) {
+        result = !battle.isUnitAttackClassWardRemoved(battleMsgData, unitId, attackClass);
+        if (result)
+            battle.removeUnitAttackClassWard(battleMsgData, unitId, attackClass);
+    } else if (immuneCatC->id == ImmuneCategories::get().always->id) {
+        result = true;
+    }
+
+    return result;
+}
+
 void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* thisptr,
                                               int /*%edx*/,
                                               game::IMidgardObjectMap* objectMap,
@@ -92,7 +216,7 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
 
     const auto& battle = BattleMsgDataApi::get();
 
-    if (battle.isUnitTransformed(&thisptr->unitId, battleMsgData) || !thisptr->unknown) {
+    if (battle.isUnitTransformed(&thisptr->unitId, battleMsgData) || !thisptr->canTransform) {
         thisptr->altAttack->vftable->onHit(thisptr->altAttack, objectMap, battleMsgData,
                                            targetUnitId, attackInfo);
         return;

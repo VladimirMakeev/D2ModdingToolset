@@ -32,8 +32,7 @@ struct CUmAttackData;
 
 struct CUmAttack
 {
-    IUsUnit* usUnit;
-    CMidgardID id;
+    IUsUnit usUnit;
     IUsSoldier* usSoldier;
     CUmModifier umModifier;
     CUmAttackData* data;
@@ -51,7 +50,8 @@ struct CUmAttackData
     CAttackModified attackModified;
 };
 
-static_assert(sizeof(CUmAttackData) == 52, "Size of CUmAttackData structure must be exactly 52 bytes");
+static_assert(sizeof(CUmAttackData) == 52,
+              "Size of CUmAttackData structure must be exactly 52 bytes");
 
 } // namespace game
 

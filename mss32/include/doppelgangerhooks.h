@@ -30,6 +30,18 @@ struct BattleAttackInfo;
 
 namespace hooks {
 
+bool __fastcall doppelgangerAttackCanPerformHooked(game::CBatAttackDoppelganger* thisptr,
+                                                   int /*%edx*/,
+                                                   game::IMidgardObjectMap* objectMap,
+                                                   game::BattleMsgData* battleMsgData,
+                                                   game::CMidgardID* targetUnitId);
+
+bool __fastcall doppelgangerAttackIsImmuneHooked(game::CBatAttackDoppelganger* thisptr,
+                                                 int /*%edx*/,
+                                                 game::IMidgardObjectMap* objectMap,
+                                                 game::BattleMsgData* battleMsgData,
+                                                 game::CMidgardID* unitId);
+
 void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* thisptr,
                                               int /*%edx*/,
                                               game::IMidgardObjectMap* objectMap,
@@ -37,6 +49,6 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
                                               game::CMidgardID* targetUnitId,
                                               game::BattleAttackInfo** attackInfo);
 
-}
+} // namespace hooks
 
 #endif // DOPPELGANGERHOOKS_H

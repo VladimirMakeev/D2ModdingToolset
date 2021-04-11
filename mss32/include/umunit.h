@@ -32,8 +32,7 @@ struct CUmUnitData;
 
 struct CUmUnit
 {
-    IUsUnit* usUnit;
-    CMidgardID id;
+    IUsUnit usUnit;
     IUsSoldier* usSoldier;
     CUmModifier umModifier;
     CUmUnitData* data;
