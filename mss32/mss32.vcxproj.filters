@@ -453,6 +453,9 @@
     <ClCompile Include="src\multilayerimg.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\pathinfolist.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\gameimages.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -1220,6 +1223,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\multilayerimg.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pathinfolist.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\gameimages.h">
