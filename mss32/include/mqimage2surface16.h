@@ -21,12 +21,13 @@
 #define MQIMAGE2SURFACE16_H
 
 #include "mqimage2.h"
+#include "mqpoint.h"
 #include "mqtexture.h"
 #include "smartptr.h"
+#include <cstddef>
 
 namespace game {
 
-// Actual size unknown
 struct CMqImage2Surface16
     : public IMqImage2
     , public IMqTexture
@@ -36,11 +37,16 @@ struct CMqImage2Surface16
     int unknown2;
     int unknown3;
     int unknown4;
-    int unknown5;
-    int unknown6;
-    bool unknown7;
+    CMqPoint size;
+    bool unknown5;
     char padding[3];
 };
+
+static_assert(sizeof(CMqImage2Surface16) == 44,
+              "Size of CMqImage2Surface16 structure must be exactly 44 bytes");
+
+static_assert(offsetof(CMqImage2Surface16, size) == 32,
+              "CMqImage2Surface16::size offset must be 32 bytes");
 
 } // namespace game
 
