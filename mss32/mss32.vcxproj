@@ -193,6 +193,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\hooks.cpp" />
     <ClCompile Include="src\idlist.cpp" />
     <ClCompile Include="src\idvector.cpp" />
+    <ClCompile Include="src\image2text.cpp" />
     <ClCompile Include="src\immunecat.cpp" />
     <ClCompile Include="src\interfmanager.cpp" />
     <ClCompile Include="src\itemcategory.cpp" />
@@ -355,6 +356,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\hooks.h" />
     <ClInclude Include="include\idlist.h" />
     <ClInclude Include="include\idvector.h" />
+    <ClInclude Include="include\image2text.h" />
     <ClInclude Include="include\imgfactory.h" />
     <ClInclude Include="include\immunecat.h" />
     <ClInclude Include="include\interface.h" />
