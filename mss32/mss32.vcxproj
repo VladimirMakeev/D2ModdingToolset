@@ -187,6 +187,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\fortcategory.cpp" />
     <ClCompile Include="src\functor.cpp" />
     <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\gameimages.cpp" />
     <ClCompile Include="src\globaldata.cpp" />
     <ClCompile Include="src\groundcat.cpp" />
     <ClCompile Include="src\hooks.cpp" />
@@ -346,6 +347,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\fullscreeninterf.h" />
     <ClInclude Include="include\functor.h" />
     <ClInclude Include="include\game.h" />
+    <ClInclude Include="include\gameimages.h" />
     <ClInclude Include="include\gamesettings.h" />
     <ClInclude Include="include\globaldata.h" />
     <ClInclude Include="include\globalvariables.h" />
