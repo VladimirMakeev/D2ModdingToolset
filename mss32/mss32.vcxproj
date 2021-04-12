@@ -196,6 +196,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\image2text.cpp" />
     <ClCompile Include="src\immunecat.cpp" />
     <ClCompile Include="src\interfmanager.cpp" />
+    <ClCompile Include="src\isolayers.cpp" />
     <ClCompile Include="src\itemcategory.cpp" />
     <ClCompile Include="src\itemtransferhooks.cpp" />
     <ClCompile Include="src\iterators.cpp" />
@@ -365,6 +366,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\interfdialog.h" />
     <ClInclude Include="include\interffullscreen.h" />
     <ClInclude Include="include\interfmanager.h" />
+    <ClInclude Include="include\isolayers.h" />
     <ClInclude Include="include\item.h" />
     <ClInclude Include="include\itemarmor.h" />
     <ClInclude Include="include\itembanner.h" />
