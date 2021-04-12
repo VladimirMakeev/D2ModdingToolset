@@ -450,6 +450,9 @@
     <ClCompile Include="src\image2text.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\multilayerimg.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\gameimages.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -1211,6 +1214,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\image2text.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\multilayerimg.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\gameimages.h">

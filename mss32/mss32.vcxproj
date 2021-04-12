@@ -219,6 +219,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\midscenvariables.cpp" />
     <ClCompile Include="src\midunitgroup.cpp" />
     <ClCompile Include="src\midunit.cpp" />
+    <ClCompile Include="src\multilayerimg.cpp" />
     <ClCompile Include="src\musichooks.cpp" />
     <ClCompile Include="src\netmessages.cpp" />
     <ClCompile Include="src\phase.cpp" />
@@ -446,6 +447,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mqrect.h" />
     <ClInclude Include="include\mqtexture.h" />
     <ClInclude Include="include\mqthread.h" />
+    <ClInclude Include="include\multilayerimg.h" />
     <ClInclude Include="include\musichooks.h" />
     <ClInclude Include="include\netdplayservice.h" />
     <ClInclude Include="include\netdplaysession.h" />
