@@ -68,6 +68,15 @@ static std::array<Functions, 4> functions = {{
         (ComputeUnitEffectiveHp)0x5d0053,
         (ApplyDynUpgradeToAttackData)0x59a76b,
         (ComputeUnitDynUpgrade)0x5998fc,
+        (ShowMovementPath)0x4cd533,
+        (GetMidgardPlan)0x5f756f,
+        (CastUnitImplToNoble)0x41b8cc,
+        (GetBlockingPathNearbyStackId)0x5ce204,
+        (GetFortOrRuinEntrance)0x4cdb5a,
+        (ShowImageOnGround)0x5adf66,
+        (StackCanMoveToPosition)0x4cdae4,
+        (IsWaterTileSurroundedByWater)0x5e773e,
+        (GetStackPositionById)0x5eecf2,
     },
     // Russobit
     Functions{
@@ -112,6 +121,15 @@ static std::array<Functions, 4> functions = {{
         (ComputeUnitEffectiveHp)0x5d0053,
         (ApplyDynUpgradeToAttackData)0x59a76b,
         (ComputeUnitDynUpgrade)0x5998fc,
+        (ShowMovementPath)0x4cd533,
+        (GetMidgardPlan)0x5f756f,
+        (CastUnitImplToNoble)0x41b8cc,
+        (GetBlockingPathNearbyStackId)0x5ce204,
+        (GetFortOrRuinEntrance)0x4cdb5a,
+        (ShowImageOnGround)0x5adf66,
+        (StackCanMoveToPosition)0x4cdae4,
+        (IsWaterTileSurroundedByWater)0x5e773e,
+        (GetStackPositionById)0x5eecf2,
     },
     // Gog
     Functions{
@@ -156,6 +174,15 @@ static std::array<Functions, 4> functions = {{
         (ComputeUnitEffectiveHp)0x5cef84,
         (ApplyDynUpgradeToAttackData)0x5998f5,
         (ComputeUnitDynUpgrade)0x598a86,
+        (ShowMovementPath)0x4ccc2c,
+        (GetMidgardPlan)0x5f61f2,
+        (CastUnitImplToNoble)0x41b399,
+        (GetBlockingPathNearbyStackId)0x5cd11f,
+        (GetFortOrRuinEntrance)0x4cd253,
+        (ShowImageOnGround)0x5ad1ee,
+        (StackCanMoveToPosition)0x4cd1dd,
+        (IsWaterTileSurroundedByWater)0x5e6453,
+        (GetStackPositionById)0x5ed9b2,
     },
     // Scenario Editor
     Functions{
@@ -200,6 +227,15 @@ static std::array<Functions, 4> functions = {{
         (ComputeUnitEffectiveHp)nullptr,
         (ApplyDynUpgradeToAttackData)0x545355,
         (ComputeUnitDynUpgrade)0x5444e6,
+        (ShowMovementPath)nullptr,
+        (GetMidgardPlan)nullptr,
+        (CastUnitImplToNoble)nullptr,
+        (GetBlockingPathNearbyStackId)nullptr,
+        (GetFortOrRuinEntrance)nullptr,
+        (ShowImageOnGround)nullptr,
+        (StackCanMoveToPosition)nullptr,
+        (IsWaterTileSurroundedByWater)nullptr,
+        (GetStackPositionById)nullptr,
     }
 }};
 
