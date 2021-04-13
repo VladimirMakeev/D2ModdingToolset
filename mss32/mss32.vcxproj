@@ -236,6 +236,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\settings.cpp" />
     <ClCompile Include="src\sitemerchantinterf.cpp" />
     <ClCompile Include="src\smartptr.cpp" />
+    <ClCompile Include="src\movepathhooks.cpp" />
     <ClCompile Include="src\stringarray.cpp" />
     <ClCompile Include="src\summonhooks.cpp" />
     <ClCompile Include="src\targetslist.cpp" />
@@ -479,6 +480,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\sitemerchantinterf.h" />
     <ClInclude Include="include\smartptr.h" />
     <ClInclude Include="include\sortedlist.h" />
+    <ClInclude Include="include\movepathhooks.h" />
     <ClInclude Include="include\stringandid.h" />
     <ClInclude Include="include\stringarray.h" />
     <ClInclude Include="include\subracecat.h" />
