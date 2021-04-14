@@ -310,8 +310,13 @@ std::string getAttackSourceText(game::IAttack* attack)
         return getTranslatedText("X005TA0151"); // "Air"
     else if (id == attackSources.earth->id)
         return getTranslatedText("X005TA0152"); // "Earth"
-    else
-        return "";
+    else {
+        // Support custom attack sources (Dwarfs Kingdom mod for instance)
+        const int lastKnownId = (int)AttackSourceId::Air; // 7
+        const int lastKnownIdNum = 152;                   // "X005TA0152"
+        int customIdNum = lastKnownIdNum + (int)id - lastKnownId;
+        return getTranslatedText(fmt::format("X005TA{:04d}", customIdNum).c_str());
+    }
 }
 
 std::string getAttackReachText(game::IAttack* attack)
