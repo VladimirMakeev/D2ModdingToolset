@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,27 +17,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MQPOINT_H
-#define MQPOINT_H
+#include "multilayerimg.h"
+#include "version.h"
+#include <array>
 
-namespace game {
+namespace game::CMultiLayerImgApi {
 
-struct CMqPoint
+// clang-format off
+static std::array<Api, 3> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)0x5b5c88,
+        (Api::AddImage)0x5b5db1,
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)0x5b5c88,
+        (Api::AddImage)0x5b5db1,
+    },
+    // Gog
+    Api{
+        (Api::Constructor)0x5b4f54,
+        (Api::AddImage)0x5b507d,
+    }
+}};
+// clang-format on
+
+Api& get()
 {
-    int x;
-    int y;
-};
-
-static constexpr bool operator==(const CMqPoint& a, const CMqPoint& b)
-{
-    return a.x == b.x && a.y == b.y;
+    return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-static constexpr bool operator!=(const CMqPoint& a, const CMqPoint& b)
-{
-    return !(a == b);
-}
-
-} // namespace game
-
-#endif // MQPOINT_H
+} // namespace game::CMultiLayerImgApi

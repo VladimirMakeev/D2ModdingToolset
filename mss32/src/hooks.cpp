@@ -75,6 +75,7 @@
 #include "midplayer.h"
 #include "midstack.h"
 #include "midunit.h"
+#include "movepathhooks.h"
 #include "musichooks.h"
 #include "pickupdropinterf.h"
 #include "playerbuildings.h"
@@ -275,6 +276,11 @@ static Hooks getGameHooks()
         hooks.push_back(
             HookInfo{(void**)&game::BattleMsgDataApi::get().setUnknown9Bit1AndClearBoostLowerDamage,
                      setUnknown9Bit1AndClearBoostLowerDamageHooked});
+    }
+
+    if (userSettings().movementCost.show) {
+        // Show movement cost
+        hooks.push_back(HookInfo{(void**)&fn.showMovementPath, showMovementPathHooked});
     }
 
     return hooks;

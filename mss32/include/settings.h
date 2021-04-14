@@ -25,6 +25,13 @@
 
 namespace hooks {
 
+struct Color
+{
+    std::uint8_t r{};
+    std::uint8_t g{};
+    std::uint8_t b{};
+};
+
 struct Settings
 {
     int unitMaxDamage;
@@ -63,6 +70,14 @@ struct Settings
     bool missChanceSingleRoll;
     bool unrestrictedBestowWards;
     bool detailedAttackDescription;
+
+    struct
+    {
+        Color textColor{};
+        Color outlineColor{};
+        bool show{};
+    } movementCost;
+
     bool debugMode;
 };
 

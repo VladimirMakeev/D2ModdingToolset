@@ -58,6 +58,44 @@ static void readAiAccuracySettings(Settings& settings, const sol::table& table)
     aiAccuracy.veryHard = readSetting(bonuses.value(), "veryHard", def.veryHard);
 }
 
+static Color readColor(const sol::table& table, const Color& def)
+{
+    Color color{};
+    color.r = readSetting(table, "red", def.r);
+    color.g = readSetting(table, "green", def.g);
+    color.b = readSetting(table, "blue", def.b);
+
+    return color;
+}
+
+static void readMovementCostColors(Settings& settings, const sol::table& table)
+{
+    const auto& defTextColor = defaultSettings().movementCost.textColor;
+    const auto& defOutlineColor = defaultSettings().movementCost.outlineColor;
+
+    settings.movementCost.show = defaultSettings().movementCost.show;
+    settings.movementCost.textColor = defTextColor;
+    settings.movementCost.outlineColor = defOutlineColor;
+
+    auto moveCost = table.get<sol::optional<sol::table>>("movementCost");
+    if (!moveCost.has_value()) {
+        return;
+    }
+
+    settings.movementCost.show = readSetting(moveCost.value(), "show",
+                                             defaultSettings().movementCost.show);
+
+    auto textColor = moveCost.value().get<sol::optional<sol::table>>("textColor");
+    if (textColor.has_value()) {
+        settings.movementCost.textColor = readColor(textColor.value(), defTextColor);
+    }
+
+    auto outlineColor = moveCost.value().get<sol::optional<sol::table>>("outlineColor");
+    if (outlineColor.has_value()) {
+        settings.movementCost.outlineColor = readColor(outlineColor.value(), defOutlineColor);
+    }
+}
+
 static void readSettings(Settings& settings, const sol::state& lua)
 {
     const sol::table& table = lua["settings"];
@@ -93,6 +131,7 @@ static void readSettings(Settings& settings, const sol::state& lua)
     // clang-format on
 
     readAiAccuracySettings(settings, table);
+    readMovementCostColors(settings, table);
 }
 
 const Settings& baseSettings()
@@ -132,6 +171,8 @@ const Settings& baseSettings()
         settings.missChanceSingleRoll = false;
         settings.unrestrictedBestowWards = false;
         settings.detailedAttackDescription = false;
+        settings.movementCost.textColor = Color{200, 200, 200};
+        settings.movementCost.show = false;
         settings.debugMode = false;
 
         initialized = true;
@@ -149,6 +190,7 @@ const Settings& defaultSettings()
         settings = baseSettings();
         settings.showBanners = true;
         settings.showResources = true;
+        settings.movementCost.show = true;
 
         initialized = true;
     }

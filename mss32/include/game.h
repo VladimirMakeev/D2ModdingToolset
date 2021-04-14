@@ -21,6 +21,7 @@
 #define GAME_H
 
 #include "idlist.h"
+#include "mqpoint.h"
 
 namespace game {
 
@@ -33,6 +34,7 @@ struct CDBTable;
 struct GlobalData;
 struct IMidObject;
 struct IUsSoldier;
+struct IUsNoble;
 struct IMidgardObjectMap;
 struct TLordType;
 struct CMidPlayer;
@@ -49,6 +51,9 @@ struct CMqPoint;
 struct CUnitGenerator;
 struct CAttackData;
 struct CDynUpgrade;
+struct CMidStack;
+struct CMidgardPlan;
+struct IMqImage2;
 struct IEncUnitDescriptor;
 struct CDialogInterf;
 
@@ -138,6 +143,7 @@ using FindUnitById = CMidUnit*(__stdcall*)(const IMidgardObjectMap* objectMap,
                                            const CMidgardID* unitId);
 
 using CastUnitImplToSoldier = IUsSoldier*(__stdcall*)(IUsUnit* unitImpl);
+using CastUnitImplToNoble = IUsNoble*(__stdcall*)(const IUsUnit* unitImpl);
 
 using CreateBatAttack = IBatAttack*(__stdcall*)(IMidgardObjectMap* objectMap,
                                                 BattleMsgData* battleMsgData,
@@ -309,6 +315,60 @@ using ComputeUnitDynUpgrade = void(__stdcall*)(const CMidgardID* unitImplId,
                                                int* upgrade1Count,
                                                int* upgrade2Count);
 
+using ShowMovementPath = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                          const CMidgardID* stackId,
+                                          LinkedList<CMqPoint>* path,
+                                          const CMqPoint* lastReachablePoint,
+                                          const CMqPoint* pathEnd,
+                                          bool a6);
+
+using GetMidgardPlan = CMidgardPlan*(__stdcall*)(const IMidgardObjectMap* objectMap);
+
+using GetBlockingPathNearbyStackId =
+    const CMidgardID*(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                  const CMidgardPlan* plan,
+                                  const CMidStack* stack,
+                                  const CMqPoint* lastReachablePoint,
+                                  const CMqPoint* pathEnd,
+                                  int a6);
+
+/**
+ * Searches fortification or ruin at specified position and returns its entrance point.
+ * @param[in] objectMap map to search objects.
+ * @param[in] plan used to search fortification and ruin objects by position.
+ * @param[in] stack used to check fort subrace. Entrance point returned only for forts with
+ * different subraces.
+ * @param[in] position position to check.
+ * @param[inout] entrance pointer to store the result.
+ * @returns true if entrance point found.
+ */
+using GetFortOrRuinEntrance = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                               const CMidgardPlan* plan,
+                                               const CMidStack* stack,
+                                               const CMqPoint* position,
+                                               CMqPoint* entrance);
+
+using ShowImageOnGround =
+    void(__stdcall*)(const CMqPoint* position, int* layer, const IMqImage2* image, int a4, int a5);
+
+/**
+ * Returns true if stack can move to specified position on a map.
+ * @param[in] objectMap map to search objects.
+ * @paran[in] position tile position to check.
+ * @param[in] stack stack to check.
+ * @param[in] plan pointer to plan object to check obstacles.
+ */
+using StackCanMoveToPosition = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                const CMqPoint* position,
+                                                const CMidStack* stack,
+                                                const CMidgardPlan* plan);
+
+using IsWaterTileSurroundedByWater = bool(__stdcall*)(const CMqPoint* position,
+                                                      const IMidgardObjectMap* objectMap);
+
+using GetStackPositionById = CMqPoint(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                  const CMidgardID* stackId);
+
 /** Applies percentage modifiers of the specified type to the value. */
 using ApplyPercentModifiers = int(__stdcall*)(int value,
                                               const IdList* unitModifiers,
@@ -367,6 +427,15 @@ struct Functions
     ComputeUnitEffectiveHp computeUnitEffectiveHp;
     ApplyDynUpgradeToAttackData applyDynUpgradeToAttackData;
     ComputeUnitDynUpgrade computeUnitDynUpgrade;
+    ShowMovementPath showMovementPath;
+    GetMidgardPlan getMidgardPlan;
+    CastUnitImplToNoble castUnitImplToNoble;
+    GetBlockingPathNearbyStackId getBlockingPathNearbyStackId;
+    GetFortOrRuinEntrance getFortOrRuinEntrance;
+    ShowImageOnGround showImageOnGround;
+    StackCanMoveToPosition stackCanMoveToPosition;
+    IsWaterTileSurroundedByWater isWaterTileSurroundedByWater;
+    GetStackPositionById getStackPositionById;
     ApplyPercentModifiers applyPercentModifiers;
     GenerateAttackDescription generateAttackDescription;
 };

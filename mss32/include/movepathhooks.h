@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,27 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MQPOINT_H
-#define MQPOINT_H
+#ifndef MOVEPATHHOOKS_H
+#define MOVEPATHHOOKS_H
+
+#include "linkedlist.h"
+#include "mqpoint.h"
 
 namespace game {
-
-struct CMqPoint
-{
-    int x;
-    int y;
-};
-
-static constexpr bool operator==(const CMqPoint& a, const CMqPoint& b)
-{
-    return a.x == b.x && a.y == b.y;
-}
-
-static constexpr bool operator!=(const CMqPoint& a, const CMqPoint& b)
-{
-    return !(a == b);
-}
-
+struct IMidgardObjectMap;
+struct CMidgardID;
 } // namespace game
 
-#endif // MQPOINT_H
+namespace hooks {
+
+void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* stackId,
+                                      game::LinkedList<game::CMqPoint>* path,
+                                      const game::CMqPoint* lastReachablePoint,
+                                      const game::CMqPoint* pathEnd,
+                                      bool a6);
+
+} // namespace hooks
+
+#endif // MOVEPATHHOOKS_H

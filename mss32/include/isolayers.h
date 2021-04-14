@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,27 +17,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MQPOINT_H
-#define MQPOINT_H
+#ifndef ISOLAYER_H
+#define ISOLAYER_H
 
 namespace game {
 
-struct CMqPoint
+/** Addresses of layer numbers read from IIsoLay.dbf. */
+struct IsoLayers
 {
-    int x;
-    int y;
+    int* symMovePath;
 };
 
-static constexpr bool operator==(const CMqPoint& a, const CMqPoint& b)
-{
-    return a.x == b.x && a.y == b.y;
-}
-
-static constexpr bool operator!=(const CMqPoint& a, const CMqPoint& b)
-{
-    return !(a == b);
-}
+IsoLayers& isoLayers();
 
 } // namespace game
 
-#endif // MQPOINT_H
+#endif // ISOLAYER_H

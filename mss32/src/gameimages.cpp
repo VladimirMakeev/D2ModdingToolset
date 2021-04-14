@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,27 +17,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MQPOINT_H
-#define MQPOINT_H
+#include "gameimages.h"
+#include "version.h"
+#include <array>
 
-namespace game {
+namespace game::GameImagesApi {
 
-struct CMqPoint
+// clang-format off
+static std::array<Api, 3> functions = {{
+    // Akella
+    Api{
+        (Api::GetGameImages)0x5ae7bc,
+        (Api::GetImage)0x5aedfb,
+        (Api::CreateOrFreeGameImages)0x4080e4,
+    },
+    // Russobit
+    Api{
+        (Api::GetGameImages)0x5ae7bc,
+        (Api::GetImage)0x5aedfb,
+        (Api::CreateOrFreeGameImages)0x4080e4,
+    },
+    // Gog
+    Api{
+        (Api::GetGameImages)0x5ada44,
+        (Api::GetImage)0x5ae0bf,
+        (Api::CreateOrFreeGameImages)0x407d6f,
+    }
+}};
+// clang-format on
+
+Api& get()
 {
-    int x;
-    int y;
-};
-
-static constexpr bool operator==(const CMqPoint& a, const CMqPoint& b)
-{
-    return a.x == b.x && a.y == b.y;
+    return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-static constexpr bool operator!=(const CMqPoint& a, const CMqPoint& b)
-{
-    return !(a == b);
-}
-
-} // namespace game
-
-#endif // MQPOINT_H
+} // namespace game::GameImagesApi

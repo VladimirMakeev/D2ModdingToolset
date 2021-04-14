@@ -17,37 +17,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MQIMAGE2SURFACE16_H
-#define MQIMAGE2SURFACE16_H
+#include "pathinfolist.h"
+#include "version.h"
+#include <array>
 
-#include "mqimage2.h"
-#include "mqpoint.h"
-#include "mqtexture.h"
-#include "smartptr.h"
-#include <cstddef>
+namespace game::PathInfoListApi {
 
-namespace game {
+// clang-format off
+static std::array<Api, 3> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)0x4cdc3b,
+        (Api::PopulateFromPath)0x4cd9df,
+        (Api::FreeNodes)0x4cdca8,
+        (Api::FreeNode)0x4c8755,
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)0x4cdc3b,
+        (Api::PopulateFromPath)0x4cd9df,
+        (Api::FreeNodes)0x4cdca8,
+        (Api::FreeNode)0x4c8755,
+    },
+    // Gog
+    Api{
+        (Api::Constructor)0x4cd334,
+        (Api::PopulateFromPath)0x4cd0d8,
+        (Api::FreeNodes)0x44df27,
+        (Api::FreeNode)0x5215fc,
+    }
+}};
+// clang-format on
 
-struct CMqImage2Surface16
-    : public IMqImage2
-    , public IMqTexture
+Api& get()
 {
-    SmartPointer ptr;
-    int unknown;
-    int unknown2;
-    int unknown3;
-    int unknown4;
-    CMqPoint size;
-    bool unknown5;
-    char padding[3];
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-static_assert(sizeof(CMqImage2Surface16) == 44,
-              "Size of CMqImage2Surface16 structure must be exactly 44 bytes");
-
-static_assert(offsetof(CMqImage2Surface16, size) == 32,
-              "CMqImage2Surface16::size offset must be 32 bytes");
-
-} // namespace game
-
-#endif // MQIMAGE2SURFACE16_H
+} // namespace game::PathInfoListApi

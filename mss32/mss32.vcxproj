@@ -187,14 +187,17 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\fortcategory.cpp" />
     <ClCompile Include="src\functor.cpp" />
     <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\gameimages.cpp" />
     <ClCompile Include="src\globaldata.cpp" />
     <ClCompile Include="src\groundcat.cpp" />
     <ClCompile Include="src\hooks.cpp" />
     <ClCompile Include="src\idlist.cpp" />
     <ClCompile Include="src\idvector.cpp" />
+    <ClCompile Include="src\image2text.cpp" />
     <ClCompile Include="src\immunecat.cpp" />
     <ClCompile Include="src\interfmanager.cpp" />
     <ClCompile Include="src\interftexthooks.cpp" />
+    <ClCompile Include="src\isolayers.cpp" />
     <ClCompile Include="src\itemcategory.cpp" />
     <ClCompile Include="src\itemtransferhooks.cpp" />
     <ClCompile Include="src\iterators.cpp" />
@@ -218,8 +221,10 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\midscenvariables.cpp" />
     <ClCompile Include="src\midunitgroup.cpp" />
     <ClCompile Include="src\midunit.cpp" />
+    <ClCompile Include="src\multilayerimg.cpp" />
     <ClCompile Include="src\musichooks.cpp" />
     <ClCompile Include="src\netmessages.cpp" />
+    <ClCompile Include="src\pathinfolist.cpp" />
     <ClCompile Include="src\phase.cpp" />
     <ClCompile Include="src\pickupdropinterf.cpp" />
     <ClCompile Include="src\playerincomehooks.cpp" />
@@ -232,6 +237,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\settings.cpp" />
     <ClCompile Include="src\sitemerchantinterf.cpp" />
     <ClCompile Include="src\smartptr.cpp" />
+    <ClCompile Include="src\movepathhooks.cpp" />
     <ClCompile Include="src\stringarray.cpp" />
     <ClCompile Include="src\summonhooks.cpp" />
     <ClCompile Include="src\targetslist.cpp" />
@@ -349,6 +355,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\fullscreeninterf.h" />
     <ClInclude Include="include\functor.h" />
     <ClInclude Include="include\game.h" />
+    <ClInclude Include="include\gameimages.h" />
     <ClInclude Include="include\gamesettings.h" />
     <ClInclude Include="include\globaldata.h" />
     <ClInclude Include="include\globalvariables.h" />
@@ -356,6 +363,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\hooks.h" />
     <ClInclude Include="include\idlist.h" />
     <ClInclude Include="include\idvector.h" />
+    <ClInclude Include="include\image2text.h" />
     <ClInclude Include="include\imgfactory.h" />
     <ClInclude Include="include\immunecat.h" />
     <ClInclude Include="include\interface.h" />
@@ -364,6 +372,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\interffullscreen.h" />
     <ClInclude Include="include\interfmanager.h" />
     <ClInclude Include="include\interftexthooks.h" />
+    <ClInclude Include="include\isolayers.h" />
     <ClInclude Include="include\item.h" />
     <ClInclude Include="include\itemarmor.h" />
     <ClInclude Include="include\itembanner.h" />
@@ -446,11 +455,13 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mqrect.h" />
     <ClInclude Include="include\mqtexture.h" />
     <ClInclude Include="include\mqthread.h" />
+    <ClInclude Include="include\multilayerimg.h" />
     <ClInclude Include="include\musichooks.h" />
     <ClInclude Include="include\netdplayservice.h" />
     <ClInclude Include="include\netdplaysession.h" />
     <ClInclude Include="include\netmessages.h" />
     <ClInclude Include="include\ordercat.h" />
+    <ClInclude Include="include\pathinfolist.h" />
     <ClInclude Include="include\phase.h" />
     <ClInclude Include="include\phasegame.h" />
     <ClInclude Include="include\pickupdropinterf.h" />
@@ -473,6 +484,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\sitemerchantinterf.h" />
     <ClInclude Include="include\smartptr.h" />
     <ClInclude Include="include\sortedlist.h" />
+    <ClInclude Include="include\movepathhooks.h" />
     <ClInclude Include="include\stringandid.h" />
     <ClInclude Include="include\stringarray.h" />
     <ClInclude Include="include\subracecat.h" />
