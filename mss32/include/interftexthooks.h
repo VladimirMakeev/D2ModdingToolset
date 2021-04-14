@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ATTACKMODIFIED_H
-#define ATTACKMODIFIED_H
+#ifndef INTERFTEXTHOOKS_H
+#define INTERFTEXTHOOKS_H
 
-#include "attack.h"
+#include "dialoginterf.h"
+#include "encunitdescriptor.h"
+#include "idlist.h"
 
-namespace game {
+namespace hooks {
 
-struct CAttackModifiedData;
+void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descriptor,
+                                               game::CDialogInterf* dialog,
+                                               int boostDamageLevel,
+                                               int lowerDamageLevel,
+                                               int lowerInitiativeLevel,
+                                               const game::IdList* modifiers,
+                                               int damageMax);
 
-struct CAttackModified : public IAttack
-{
-    CMidgardID attackId;
-    CAttackModifiedData* data;
-};
+} // namespace hooks
 
-static_assert(sizeof(CAttackModified) == 12,
-              "Size of CAttackModified structure must be exactly 12 bytes");
-
-struct CAttackModifiedData
-{
-    IAttack* impl;
-    int initiative;
-    int power;
-    int qtyDamage;
-    int attackDrain;
-};
-
-static_assert(sizeof(CAttackModifiedData) == 20,
-              "Size of CAttackModifiedData structure must be exactly 20 bytes");
-
-} // namespace game
-
-#endif // ATTACKMODIFIED_H
+#endif // INTERFTEXTHOOKS_H

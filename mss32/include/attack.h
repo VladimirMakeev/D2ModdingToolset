@@ -53,7 +53,7 @@ struct IAttackVftable
     using GetAttackSource = LAttackSource*(__thiscall*)(const IAttack* thisptr);
     GetAttackSource getAttackSource;
 
-    using GetInitiative = int*(__thiscall*)(const IAttack* thisptr);
+    using GetInitiative = int(__thiscall*)(const IAttack* thisptr);
     GetInitiative getInitiative;
 
     using GetPower = int*(__thiscall*)(const IAttack* thisptr, int* power);

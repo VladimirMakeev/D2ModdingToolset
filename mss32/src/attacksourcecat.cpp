@@ -24,7 +24,7 @@
 namespace game::AttackSourceCategories {
 
 // clang-format off
-static std::array<Categories, 3> categories = {{
+static std::array<Categories, 4> categories = {{
     // Akella
     Categories{
         (LAttackSource*)0x839420,
@@ -57,7 +57,18 @@ static std::array<Categories, 3> categories = {{
         (LAttackSource*)0x837390,
         (LAttackSource*)0x8373b0,
         (LAttackSource*)0x8373a0
-    }
+    },
+    // Scenario Editor
+    Categories{
+        (LAttackSource*)0x665ba8,
+        (LAttackSource*)0x665bc8,
+        (LAttackSource*)0x665be0,
+        (LAttackSource*)0x665bb8,
+        (LAttackSource*)0x665b98,
+        (LAttackSource*)0x665b68,
+        (LAttackSource*)0x665b88,
+        (LAttackSource*)0x665b78,
+    },
 }};
 
 static std::array<const void*, 4> vftables = {{

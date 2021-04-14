@@ -49,6 +49,10 @@ struct CMqPoint;
 struct CUnitGenerator;
 struct CAttackData;
 struct CDynUpgrade;
+struct IEncUnitDescriptor;
+struct CDialogInterf;
+
+enum class ModifierElementTypeFlag : int;
 
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
@@ -305,6 +309,20 @@ using ComputeUnitDynUpgrade = void(__stdcall*)(const CMidgardID* unitImplId,
                                                int* upgrade1Count,
                                                int* upgrade2Count);
 
+/** Applies percentage modifiers of the specified type to the value. */
+using ApplyPercentModifiers = int(__stdcall*)(int value,
+                                              const IdList* unitModifiers,
+                                              ModifierElementTypeFlag type);
+
+/** Creates a formatted description of attack for encyclopedia. */
+using GenerateAttackDescription = void(__stdcall*)(IEncUnitDescriptor* descriptor,
+                                                   CDialogInterf* dialog,
+                                                   int boostDamageLevel,
+                                                   int lowerDamageLevel,
+                                                   int lowerInitiativeLevel,
+                                                   const IdList* modifiers,
+                                                   int damageMax);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -349,6 +367,8 @@ struct Functions
     ComputeUnitEffectiveHp computeUnitEffectiveHp;
     ApplyDynUpgradeToAttackData applyDynUpgradeToAttackData;
     ComputeUnitDynUpgrade computeUnitDynUpgrade;
+    ApplyPercentModifiers applyPercentModifiers;
+    GenerateAttackDescription generateAttackDescription;
 };
 
 /** Global variables used in game. */

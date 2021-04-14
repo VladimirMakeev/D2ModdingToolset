@@ -68,6 +68,8 @@ static std::array<Functions, 4> functions = {{
         (ComputeUnitEffectiveHp)0x5d0053,
         (ApplyDynUpgradeToAttackData)0x59a76b,
         (ComputeUnitDynUpgrade)0x5998fc,
+        (ApplyPercentModifiers)0x577515,
+        (GenerateAttackDescription)0x57652b,
     },
     // Russobit
     Functions{
@@ -112,6 +114,8 @@ static std::array<Functions, 4> functions = {{
         (ComputeUnitEffectiveHp)0x5d0053,
         (ApplyDynUpgradeToAttackData)0x59a76b,
         (ComputeUnitDynUpgrade)0x5998fc,
+        (ApplyPercentModifiers)0x577515,
+        (GenerateAttackDescription)0x57652b,
     },
     // Gog
     Functions{
@@ -156,6 +160,8 @@ static std::array<Functions, 4> functions = {{
         (ComputeUnitEffectiveHp)0x5cef84,
         (ApplyDynUpgradeToAttackData)0x5998f5,
         (ComputeUnitDynUpgrade)0x598a86,
+        (ApplyPercentModifiers)0x576b6a,
+        (GenerateAttackDescription)0x575b80,
     },
     // Scenario Editor
     Functions{
@@ -182,7 +188,7 @@ static std::array<Functions, 4> functions = {{
         (AttackSourceToNumber)0x52426e,
         (GetStackFortRuinGroup)nullptr,
         (DeletePlayerBuildings)nullptr,
-        (GetInterfaceText)nullptr,
+        (GetInterfaceText)0x4d0a02,
         (ComputePlayerDailyIncome)nullptr,
         (ComputeDamage)nullptr,
         (MarkMapPosition)nullptr,
@@ -200,6 +206,8 @@ static std::array<Functions, 4> functions = {{
         (ComputeUnitEffectiveHp)nullptr,
         (ApplyDynUpgradeToAttackData)0x545355,
         (ComputeUnitDynUpgrade)0x5444e6,
+        (ApplyPercentModifiers)0x4c7fb1,
+        (GenerateAttackDescription)0x4c6fc7,
     }
 }};
 

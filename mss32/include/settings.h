@@ -62,6 +62,7 @@ struct Settings
     bool leveledSummonAttack;
     bool missChanceSingleRoll;
     bool unrestrictedBestowWards;
+    bool detailedAttackDescription;
     bool debugMode;
 };
 
