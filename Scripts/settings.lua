@@ -29,6 +29,8 @@ settings = {
 	shatteredArmorMax = 100,
 	-- Maximum armor shatter damage per attack [0 : 100]
 	shatterDamageMax = 100,
+	-- Percentage of damage upgrade value that shatter attack receives when a units levels up [0 : 255]
+	shatterDamageUpgradeRatio = 100,
 	-- Allow shatter attacks to miss
 	allowShatterAttackToMiss = false,
 
@@ -49,9 +51,19 @@ settings = {
 	-- Change summon attacks to compute summoned units levels using 'summon.lua' script
 	leveledSummonAttack = false,
 
+	-- Change doppelganger attacks to respect enemy/ally wards and immunities to the attack class and source
+	doppelgangerRespectsEnemyImmunity = false,
+	doppelgangerRespectsAllyImmunity = false,
+
+	-- Fix various bestow wards bugs and restrictions
+	unrestrictedBestowWards = false,
+
 	-- Round in battle after which paralyze and petrify attacks
 	-- starts missing targets constantly [1 : INT_MAX]
 	disableAllowedRoundMax = 40,
+	
+	-- Change accuracy reduction for mage leaders per each additional target
+	mageLeaderAccuracyReduction = 10,
 
 	aiAccuracyBonus = {
 		-- Treat AI accuracy bonus as absolute value or as percentage.
@@ -66,6 +78,20 @@ settings = {
 		hard = 5,
 		-- AI accuracy bonus on very hard difficulty [-100 : 100]
 		veryHard = 10
+	},
+
+	movementCost = {
+		-- Show stacks movement cost
+		show = true,
+
+		-- Color components are all in range [0 : 255]
+		textColor = {
+			red = 200, green = 200, blue = 200
+		},
+
+		outlineColor = {
+			red = 0, green = 0, blue = 0
+		}
 	},
 
 	-- If true, switches attacks miss check to a single random value roll
