@@ -147,13 +147,13 @@ The following settings can be changed in Scripts/settings.lua:
 - "movementCost" allows to display movement cost for each individual step of parties:
   - "show=(true/false)" toggles displaying of movement cost;
   - "textColor" specifies a color (RGB) of the text:
-    - "r=\[0 : 255\]";
-    - "g=\[0 : 255\]";
-    - "b=\[0 : 255\]";
+    - "red=\[0 : 255\]";
+    - "green=\[0 : 255\]";
+    - "blue=\[0 : 255\]";
   - "outlineColor" specifies a color (RGB) of the text outline:
-    - "r=\[0 : 255\]";
-    - "g=\[0 : 255\]";
-    - "b=\[0 : 255\]";
+    - "red=\[0 : 255\]";
+    - "green=\[0 : 255\]";
+    - "blue=\[0 : 255\]";
 </details>
 <details>
 <summary>Battle Mechanics</summary>
