@@ -20,7 +20,7 @@ settings = {
 	-- minimum value could not be less than highest armor value
 	-- of all units in GUnits.dbf
 	-- For example: not less than 65 because of Onyx Gargoyle in original game
-	unitMaxArmor = 100,
+	unitMaxArmor = 90,
 
 	-- Maximum allowed scout range for troops [7 : 100]
 	stackMaxScoutRange = 7,
