@@ -173,7 +173,7 @@ The following settings can be changed in Scripts/settings.lua:
 - "leveledDoppelgangerAttack=(true/false)" changes doppelganger attacks to copy units using with respect to their level using 'doppelganger.lua' script;
 - "leveledTransformSelfAttack=(true/false)" changes transform self attacks to compute transformed unit level using 'transformSelf.lua' script;
 - "leveledSummonAttack=(true/false)" changes summon attacks to compute summoned units levels using 'summon.lua' script;
-- "unrestrictedBestowWards=(true/false) fixes bestow wards attack modifiers bugs and restrictions, see more details under Features section;"
+- "unrestrictedBestowWards=(true/false)" fixes bestow wards attack modifiers bugs and restrictions, see more details under Features section;
 - "disableAllowedRoundMax=\[1 : (2^31 - 1)\]" sets a number of battle round after which paralyze and petrify attacks will constantly miss;
 - "missChanceSingleRoll=(true/false)" if true, switches attacks miss check to a single random value roll instead of check against arithmetic mean of two random numbers;
 - "mageLeaderAccuracyReduction=\[0 : 100\]" allows to set accuracy reduction for mage leaders per each additional target;
