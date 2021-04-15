@@ -83,12 +83,10 @@ settings = {
 	movementCost = {
 		-- Show stacks movement cost
 		show = true,
-
 		-- Color components are all in range [0 : 255]
 		textColor = {
 			red = 200, green = 200, blue = 200
 		},
-
 		outlineColor = {
 			red = 0, green = 0, blue = 0
 		}
