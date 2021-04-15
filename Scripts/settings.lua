@@ -70,13 +70,13 @@ settings = {
 		-- Absolute: accuracy += bonus;
 		-- Percentage: accuracy += accuracy * bonus / 100;
 		absolute = true,
-		-- AI accuracy bonus on easy difficulty [-100 : 100]
+		-- AI accuracy bonus on easy difficulty [-127 : 127]
 		easy = -15,
-		-- AI accuracy bonus on average difficulty [-100 : 100]
+		-- AI accuracy bonus on average difficulty [-127 : 127]
 		average = 0,
-		-- AI accuracy bonus on hard difficulty [-100 : 100]
+		-- AI accuracy bonus on hard difficulty [-127 : 127]
 		hard = 5,
-		-- AI accuracy bonus on very hard difficulty [-100 : 100]
+		-- AI accuracy bonus on very hard difficulty [-127 : 127]
 		veryHard = 10
 	},
 
