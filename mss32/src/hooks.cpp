@@ -20,6 +20,7 @@
 #include "hooks.h"
 #include "attackimpl.h"
 #include "attackreachcat.h"
+#include "attackutils.h"
 #include "autodialog.h"
 #include "batattackbestowwards.h"
 #include "batattackdoppelganger.h"
@@ -74,6 +75,7 @@
 #include "midplayer.h"
 #include "midstack.h"
 #include "midunit.h"
+#include "modifierutils.h"
 #include "movepathhooks.h"
 #include "musichooks.h"
 #include "pickupdropinterf.h"
@@ -1204,19 +1206,6 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
     return totalDamage;
 }
 
-static bool isAttackClassUsesAccuracy(const game::LAttackClass* attackClass)
-{
-    const auto& attacks = game::AttackClassCategories::get();
-    const auto id = attackClass->id;
-
-    return id == attacks.paralyze->id || id == attacks.petrify->id || id == attacks.damage->id
-           || id == attacks.drain->id || id == attacks.drainOverflow->id || id == attacks.fear->id
-           || id == attacks.lowerDamage->id || id == attacks.lowerInitiative->id
-           || id == attacks.poison->id || id == attacks.frostbite->id || id == attacks.blister->id
-           || id == attacks.bestowWards->id || id == attacks.shatter->id || id == attacks.revive->id
-           || id == attacks.drainLevel->id || id == attacks.transformOther->id;
-}
-
 void __stdcall getAttackAccuracyHooked(int* accuracy,
                                        const game::IAttack* attack,
                                        const game::IMidgardObjectMap* objectMap,
@@ -1349,53 +1338,6 @@ void __stdcall setUnknown9Bit1AndClearBoostLowerDamageHooked(game::BattleMsgData
 
         battle.setUnitStatus(battleMsgData, unitId, BattleStatus::Defend, false);
         battle.setUnitAccuracyReduction(battleMsgData, unitId, 0);
-    }
-}
-
-void removeModifier(game::BattleMsgData* battleMsgData,
-                    game::CMidUnit* unit,
-                    const game::CMidgardID* modifierId)
-{
-    using namespace game;
-
-    CMidUnitApi::get().removeModifier(unit, modifierId);
-
-    auto& mods = unit->origModifiers;
-    for (auto mod = mods.head->next; mod != mods.head; mod = mod->next) {
-        if (mod->data == *modifierId) {
-            const auto& list = IdListApi::get();
-            list.remove(&mods, 0, mod, 0);
-            break;
-        }
-    }
-
-    const auto& battle = BattleMsgDataApi::get();
-    battle.resetUnitModifierInfo(battleMsgData, &unit->unitId, modifierId);
-}
-
-void removeModifiers(game::BattleMsgData* battleMsgData,
-                     game::IMidgardObjectMap* objectMap,
-                     const game::CMidgardID* unitId,
-                     const game::CMidgardID* modifiedUnitId)
-{
-    using namespace game;
-
-    auto modifiedUnit = static_cast<CMidUnit*>(
-        objectMap->vftable->findScenarioObjectByIdForChange(objectMap, modifiedUnitId));
-
-    const auto& battle = BattleMsgDataApi::get();
-    auto unitInfo = battle.getUnitInfoById(battleMsgData, unitId);
-
-    auto& modifiedUnits = unitInfo->modifiedUnits;
-    for (size_t i = 0; i < sizeof(modifiedUnits) / sizeof(*modifiedUnits); i++) {
-        if (modifiedUnits[i].unitId != *modifiedUnitId)
-            continue;
-
-        CMidgardID modifierId;
-        const auto& id = CMidgardIDApi::get();
-        id.validateId(&modifierId, modifiedUnits[i].modifierId);
-
-        removeModifier(battleMsgData, modifiedUnit, &modifierId);
     }
 }
 
