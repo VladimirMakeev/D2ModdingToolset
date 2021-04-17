@@ -29,6 +29,7 @@
 #include "midplayer.h"
 #include "midscenvariables.h"
 #include "midvillage.h"
+#include "originalfunctions.h"
 #include "racecategory.h"
 #include "racetype.h"
 #include "utils.h"
@@ -58,7 +59,7 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
 {
     using namespace game;
 
-    gameFunctions().computePlayerDailyIncome(income, objectMap, playerId);
+    getOriginalFunctions().computePlayerDailyIncome(income, objectMap, playerId);
 
     auto playerObj = objectMap->vftable->findScenarioObjectById(objectMap, playerId);
     if (!playerObj) {

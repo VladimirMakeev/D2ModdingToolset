@@ -27,6 +27,7 @@
 #include "globaldata.h"
 #include "log.h"
 #include "mempool.h"
+#include "originalfunctions.h"
 #include "settings.h"
 #include "utils.h"
 #include <fmt/format.h>
@@ -233,8 +234,8 @@ game::IBatAttack* __stdcall createBatAttackHooked(game::IMidgardObjectMap* objec
         return customAttack;
     }
 
-    return gameFunctions().createBatAttack(objectMap, battleMsgData, id1, id2, attackNumber,
-                                           attackClass, a7);
+    return getOriginalFunctions().createBatAttack(objectMap, battleMsgData, id1, id2, attackNumber,
+                                                  attackClass, a7);
 }
 
 int __stdcall attackClassToNumberHooked(const game::LAttackClass* attackClass)
@@ -243,7 +244,7 @@ int __stdcall attackClassToNumberHooked(const game::LAttackClass* attackClass)
         return 23;
     }
 
-    return game::gameFunctions().attackClassToNumber(attackClass);
+    return getOriginalFunctions().attackClassToNumber(attackClass);
 }
 
 const char* __stdcall attackClassToStringHooked(const game::LAttackClass* attackClass)
@@ -252,7 +253,7 @@ const char* __stdcall attackClassToStringHooked(const game::LAttackClass* attack
         return "DAMA";
     }
 
-    return game::gameFunctions().attackClassToString(attackClass);
+    return getOriginalFunctions().attackClassToString(attackClass);
 }
 
 } // namespace hooks
