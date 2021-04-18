@@ -45,14 +45,14 @@
     Add buttons with predefined names to DLG\_CITY\_STACK, DLG\_EXCHANGE or DLG\_PICKUP\_DROP dialogs in Interf.dlg file.
     Every button is optional and can be ignored.
     Buttons and their meaning:
-      - Transfer all items to the left inventory: BTN\_TRANSF\_L\_ALL;
-      - Transfer all items to the right inventory: BTN\_TRANSF\_R\_ALL;
-      - Transfer all potions to the left: BTN\_TRANSF\_L\_POTIONS;
-      - Transfer all potions to the right: BTN\_TRANSF\_R\_POTIONS;
-      - Transfer all scrolls and wands to the left: BTN\_TRANSF\_L\_SPELLS;
-      - Transfer all scrolls and wands to the right: BTN\_TRANSF\_R\_SPELLS;
-      - Transfer all valuables to the left: BTN\_TRANSF\_L\_VALUABLES;
-      - Transfer all valuables to the right: BTN\_TRANSF\_R\_VALUABLES;
+    - Transfer all items to the left inventory: BTN\_TRANSF\_L\_ALL;
+    - Transfer all items to the right inventory: BTN\_TRANSF\_R\_ALL;
+    - Transfer all potions to the left: BTN\_TRANSF\_L\_POTIONS;
+    - Transfer all potions to the right: BTN\_TRANSF\_R\_POTIONS;
+    - Transfer all scrolls and wands to the left: BTN\_TRANSF\_L\_SPELLS;
+    - Transfer all scrolls and wands to the right: BTN\_TRANSF\_R\_SPELLS;
+    - Transfer all valuables to the left: BTN\_TRANSF\_L\_VALUABLES;
+    - Transfer all valuables to the right: BTN\_TRANSF\_R\_VALUABLES;
 
     Example of button description in Interf.dlg:
     ```
@@ -86,9 +86,9 @@
     WAV tracks in Music folder containing '<humn/dwrf/unde/here/elf>trk' as part of their names will be played in capital city window with accordance to race.
 
     Examples:
-      - battle10.wav - new music track for battle
-      - humntrk4.wav - new music track for Empire
-      - heretrk15.wav - new music track for Legions of the Damned    
+    - battle10.wav - new music track for battle
+    - humntrk4.wav - new music track for Empire
+    - heretrk15.wav - new music track for Legions of the Damned    
   </details>
 - <details>
     <summary>Fixes Scenario Editor to show spell cost information;</summary>
@@ -141,10 +141,11 @@
     - Allows to use revive as a secondary attack;
   </details>
 - <details>
-    <summary>Allows attack class immunity modifiers to be applied (also works with vanilla version);</summary>
+    <summary>Allows attack class immunity modifiers to be applied (e.g. banner of fear warding);</summary>
 
-    Works by adding IMMUNITYC and IMMUNITYCATC columns to GmodifL.dbf (similar to IMMUNITY and IMMUNITYCAT).
-    Then adding a new record with TYPE 14 and filling the columns accordingly to attack class and immunity.
+    Add IMMUNITYC and IMMUNITYCATC columns to GmodifL.dbf (similar to IMMUNITY and IMMUNITYCAT).
+    Then add a new record with TYPE 14 and filling the columns accordingly to attack class and immunity.
+    Also works in pure vanilla version.
   </details>
 
 ### Settings:
