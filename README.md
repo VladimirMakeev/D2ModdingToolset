@@ -2,11 +2,14 @@
 
 ### Features:
 - Can be used on vanilla version or with other mods installed;
-- Adds new custom building category for unit hire.
-  Buildings should be placed on the 'Other buildings' tab.
+- Adds new custom building category for unit hire.<br />
+  Buildings should be placed on the 'Other buildings' tab.<br />
   Custom category is created by adding 'L\_CUSTOM' record to LBuild.dbf;
 - Allows each race to hire up to 10 new tier-1 units in cities and capital.<br />
   New units are specified by adding a new columns SOLDIER\_N to Grace.dbf, N starting from 6;
+- Allows attack class immunity modifiers to be applied (also works with vanilla version).<br />
+  Works by adding IMMUNITYC and IMMUNITYCATC columns to GmodifL.dbf (similar to IMMUNITY and IMMUNITYCAT).<br />
+  Then adding a new record with TYPE 14 and filling the columns accordingly to attack class and immunity.
 - Allows scenarios with prebuilt capital cities;
 - Allows banners, resources panel and converted land percentage to be displayed by default;
 - Allows to display movement cost for each individual step of parties;
