@@ -148,10 +148,7 @@ struct UnitInfo
     CMidgardID blisterAttackId;
     /** Bitmask with values for each of LAttackSource. */
     std::uint8_t attackSourceImmunityStatuses;
-    /** Patched! Determines how modifiedUnits are treated (this field is split from padding). */
-    bool isOriginalModifiedUnits;
-    char padding[2];
-    // char padding[3]; // Original layout
+    char padding[3];
     /** Bitmask with values for each of LAttackClass. */
     std::uint32_t attackClassImmunityStatuses;
     std::int16_t unitHp;

@@ -1355,7 +1355,6 @@ void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
     for (auto it = modifiedUnitIds.begin(); it != modifiedUnitIds.end(); it++)
         removeModifiers(battleMsgData, objectMap, unitInfo, &(*it));
     battle.resetModifiedUnitsInfo(battleMsgData, unitId);
-    unitInfo->isOriginalModifiedUnits = true;
 
     battle.setUnitAccuracyReduction(battleMsgData, unitId, 0);
 }
