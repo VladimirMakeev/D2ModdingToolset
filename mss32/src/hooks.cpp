@@ -104,7 +104,6 @@
 #include <fmt/format.h>
 #include <fstream>
 #include <iterator>
-#include <set>
 #include <string>
 
 namespace hooks {
@@ -1352,22 +1351,11 @@ void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
 
     auto unitInfo = battle.getUnitInfoById(battleMsgData, unitId);
 
-    std::set<CMidgardID> modifiedUnitIds;
-    auto& modifiedUnits = unitInfo->modifiedUnits;
-    for (size_t i = 0; i < sizeof(modifiedUnits) / sizeof(*modifiedUnits); i++) {
-        if (modifiedUnits[i].unitId == invalidId)
-            continue;
-
-        CMidgardID modifiedUnitId;
-        const auto& id = CMidgardIDApi::get();
-        id.validateId(&modifiedUnitId, modifiedUnits[i].unitId);
-
-        modifiedUnitIds.insert(modifiedUnitId);
-    }
-
+    auto modifiedUnitIds = getModifiedUnitIds(unitInfo);
     for (auto it = modifiedUnitIds.begin(); it != modifiedUnitIds.end(); it++)
-        removeModifiers(battleMsgData, objectMap, unitId, &(*it));
+        removeModifiers(battleMsgData, objectMap, unitInfo, &(*it));
     battle.resetModifiedUnitsInfo(battleMsgData, unitId);
+    unitInfo->isOriginalModifiedUnits = true;
 
     battle.setUnitAccuracyReduction(battleMsgData, unitId, 0);
 }
