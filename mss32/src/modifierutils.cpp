@@ -229,10 +229,11 @@ bool isOriginalModifiedUnits(const game::UnitInfo* unitInfo)
 {
     using namespace game;
 
-    if (unitInfo->modifiedUnits.original[0].unitId == invalidId)
-        return true; // Assume original layout by default for empty struct
+    const auto& id = CMidgardIDApi::get();
 
-    return unitInfo->isOriginalModifiedUnits;
+    // Assume original layout for empty struct (invalidId)
+    CMidgardID testId = unitInfo->modifiedUnits.patched[0].modifierId;
+    return id.getType(&testId) != IdType::UnitModifier;
 }
 
 void resetModifiedUnitsInfo(game::ModifiedUnitsPatched& modifiedUnits)
@@ -317,7 +318,6 @@ bool switchToPatchedModifiedUnits(game::UnitInfo* unitInfo)
     }
 
     unitInfo->modifiedUnits = result;
-    unitInfo->isOriginalModifiedUnits = false;
     return true;
 }
 
@@ -350,8 +350,6 @@ bool addModifiedUnitInfo(const game::CMidgardID* unitId,
     auto unitInfo = battle.getUnitInfoById(battleMsgData, unitId);
     auto& modifiedUnits = unitInfo->modifiedUnits;
     if (isOriginalModifiedUnits(unitInfo)) {
-        unitInfo->isOriginalModifiedUnits = true; // Force the value in case of empty struct
-
         if (addModifiedUnitInfo(modifiedUnits, targetUnit->unitId, *modifierId)) {
             targetUnitInfo->modifierIds[modifierIndex] = *modifierId;
             return true;
