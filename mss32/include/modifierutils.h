@@ -27,6 +27,7 @@
 #include "umunit.h"
 #include "unitmodifier.h"
 #include "ussoldier.h"
+#include <set>
 
 namespace hooks {
 
@@ -67,10 +68,10 @@ bool canApplyAnyModifier(game::IAttack* attack,
                          game::BattleMsgData* battleMsgData,
                          game::CMidgardID* targetUnitId);
 
-bool addModifierInfo(const game::CMidgardID* unitId,
-                     game::BattleMsgData* battleMsgData,
-                     game::CMidUnit* targetUnit,
-                     const game::CMidgardID* modifierId);
+bool addModifiedUnitInfo(const game::CMidgardID* unitId,
+                         game::BattleMsgData* battleMsgData,
+                         game::CMidUnit* targetUnit,
+                         const game::CMidgardID* modifierId);
 
 bool applyModifier(const game::CMidgardID* unitId,
                    game::BattleMsgData* battleMsgData,
@@ -83,8 +84,13 @@ void removeModifier(game::BattleMsgData* battleMsgData,
 
 void removeModifiers(game::BattleMsgData* battleMsgData,
                      game::IMidgardObjectMap* objectMap,
-                     const game::CMidgardID* unitId,
+                     game::UnitInfo* unitInfo,
                      const game::CMidgardID* modifiedUnitId);
+
+std::set<game::CMidgardID> getModifiedUnitIds(const game::UnitInfo* unitInfo);
+
+std::set<game::CMidgardID> getUnitModifierIds(const game::UnitInfo* unitInfo,
+                                              const game::CMidgardID* modifiedUnitId);
 
 } // namespace hooks
 
