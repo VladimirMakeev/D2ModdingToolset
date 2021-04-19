@@ -20,6 +20,7 @@
 #include "customattacks.h"
 #include "attackclasscat.h"
 #include "attackimpl.h"
+#include "attackutils.h"
 #include "customattack.h"
 #include "dbf/dbffile.h"
 #include "dbtable.h"
@@ -140,14 +141,7 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
     const auto& categories = AttackClassCategories::get();
     const auto id = thisptr->data->attackClass.id;
 
-    if (id == categories.paralyze->id || id == categories.petrify->id || id == categories.damage->id
-        || id == categories.drain->id || id == categories.drainOverflow->id
-        || id == categories.fear->id || id == categories.lowerDamage->id
-        || id == categories.lowerInitiative->id || id == categories.poison->id
-        || id == categories.frostbite->id || id == categories.blister->id
-        || id == categories.bestowWards->id || id == categories.shatter->id
-        || id == categories.revive->id || id == categories.drainLevel->id
-        || id == categories.transformSelf->id || id == categories.transformOther->id) {
+    if (isAttackClassUsesAccuracy(&thisptr->data->attackClass)) {
         db.readPower(&data->power, &data->power, dbTable, "POWER", &thisptr->attackId);
     }
 
