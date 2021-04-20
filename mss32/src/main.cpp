@@ -126,16 +126,21 @@ static void adjustGameRestrictions()
     }
 }
 
-static bool setupHook(const hooks::HookInfo& hook)
+static bool setupHook(hooks::HookInfo& hook)
 {
     hooks::logDebug("mss32Proxy.log", fmt::format("Try to attach hook. Function {:p}, hook {:p}.",
-                                                  *hook.original, hook.hook));
+                                                  hook.target, hook.hook));
 
-    auto result = DetourAttach(hook.original, hook.hook);
+    // hook.original is an optional field that can point to where the new address of the original
+    // function should be placed.
+    void** pointer = hook.original ? hook.original : (void**)&hook.original;
+    *pointer = hook.target;
+
+    auto result = DetourAttach(pointer, hook.hook);
     if (result != NO_ERROR) {
         const std::string msg{
             fmt::format("Failed to attach hook. Function {:p}, hook {:p}. Error code: {:d}.",
-                        *hook.original, hook.hook, result)};
+                        hook.target, hook.hook, result)};
 
         hooks::logError("mssProxyError.log", msg);
         MessageBox(NULL, msg.c_str(), "mss32.dll proxy", MB_OK);
@@ -152,15 +157,7 @@ static bool setupHooks()
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
 
-    std::vector<void*> originals(hooks.size());
-    for (size_t i = 0; i < hooks.size(); i++) {
-        auto& hook = hooks[i];
-        if (hook.original == nullptr)
-            hook.original = &originals[i];
-        *hook.original = hook.target;
-    }
-
-    for (const auto& hook : hooks) {
+    for (auto& hook : hooks) {
         if (!setupHook(hook)) {
             return false;
         }
