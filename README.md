@@ -125,18 +125,22 @@
       - ELVES .. - Elven Alliance;
   </details>
 - <details>
-    <summary>Fixes bestow wards attack modifiers bugs and restrictions;</summary>
+    <summary>Fixes bestow wards attack bugs and restrictions;</summary>
 
-    - Fixes wards becoming permanent when more than 8 modifiers are applied simultaneously;
-    - Fixes wards becoming permanent on warded unit transformation;
+    - Fixes wards (hereafter called "modifiers") becoming permanent when more than 8 of them are applied simultaneously:
+      - A total of 8 can be applied to each single unit - rest are ignored;
+      - In case of single-target attack, total of 8 modifiers can be applied - rest are ignored. Double attack also has a total of 8;
+      - In case of all-targets attack, total of 12 modifiers can be applied - rest are ignored. **Important** requirement: only two different types of modifiers allowed, otherwise only first 8 will be applied;
+      - Up to 8 different modifiers can be potentially applied to the same target. Set QTY_WARDS to 5 (6, 7 or 8) and create additional WARD5 (6, 7, 8) columns in GAttacks.dbf;
+    - Fixes modifiers becoming permanent on warded unit transformation;
     - Fixes disappearing of modifiers applied on first attack of double attack;
     - Fixes attack source wards being reset incorrectly if its modifier also contains hp, regen or armor element;
     - Fixes attack class wards not being reset preventing it from being reapplied during battle;
     - Fixes incorrect handling of existing unit immunities;
-    - Allows bestow wards attack to apply modifiers even if there are no source wards among them;
+    - Allows to apply modifiers even if there are no source wards among them;
     - Allows to target unit with a secondary attack even if there are no modifiers that can be applied;
-    - Allows to heal and apply modifier effect at once. Set QTY\_HEAL > 0 in GAttacks.dbf and HEAL in GDynUpgr.dbf:
-      - Allows to heal retreating allies in main or alternative attack;
+    - Allows to heal and apply modifiers at once. Set QTY\_HEAL > 0 in GAttacks.dbf and HEAL in GDynUpgr.dbf:
+      - Allows to heal retreating allies by primary or secondary attack;
       - Allows to heal allies when battle ends, same as ordinary heal;
     - Allows to use revive as a secondary attack;
   </details>
@@ -185,7 +189,7 @@ The following settings can be changed in Scripts/settings.lua:
   - "leveledDoppelgangerAttack=(true/false)" changes doppelganger attacks to copy units using with respect to their level using 'doppelganger.lua' script;
   - "leveledTransformSelfAttack=(true/false)" changes transform self attacks to compute transformed unit level using 'transformSelf.lua' script;
   - "leveledSummonAttack=(true/false)" changes summon attacks to compute summoned units levels using 'summon.lua' script;
-  - "unrestrictedBestowWards=(true/false)" fixes bestow wards attack modifiers bugs and restrictions, see more details under Features section;
+  - "unrestrictedBestowWards=(true/false)" fixes bestow wards attack bugs and restrictions, see more details under Features section;
   - "disableAllowedRoundMax=\[1 : (2^31 - 1)\]" sets a number of battle round after which paralyze and petrify attacks will constantly miss;
   - "missChanceSingleRoll=(true/false)" if true, switches attacks miss check to a single random value roll instead of check against arithmetic mean of two random numbers;
   - "mageLeaderAccuracyReduction=\[0 : 100\]" allows to set accuracy reduction for mage leaders per each additional target;
