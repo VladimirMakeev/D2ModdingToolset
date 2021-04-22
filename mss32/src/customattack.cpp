@@ -19,7 +19,7 @@
 
 #include "customattack.h"
 #include "attackclasscat.h"
-#include "customattacks.h"
+#include "customattackhooks.h"
 #include "game.h"
 #include "log.h"
 #include "mempool.h"

@@ -34,7 +34,7 @@
 #include "buildingbranch.h"
 #include "buildingtype.h"
 #include "button.h"
-#include "customattacks.h"
+#include "customattackhooks.h"
 #include "d2string.h"
 #include "dbf/dbffile.h"
 #include "dbtable.h"

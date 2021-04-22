@@ -195,9 +195,6 @@
     <ClCompile Include="src\targetslist.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\customattacks.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="src\utils.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -466,6 +463,9 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\originalfunctions.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\customattackhooks.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1243,7 +1243,7 @@
     <ClInclude Include="include\originalfunctions.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="include\customattacks.h">
+    <ClInclude Include="include\customattackhooks.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
