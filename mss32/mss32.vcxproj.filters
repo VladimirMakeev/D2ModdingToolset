@@ -195,9 +195,6 @@
     <ClCompile Include="src\targetslist.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\customattacks.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="src\utils.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -465,10 +462,10 @@
     <ClCompile Include="src\movepathhooks.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\attackutils.cpp">
+    <ClCompile Include="src\originalfunctions.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\modifierutils.cpp">
+    <ClCompile Include="src\customattackhooks.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\batattackutils.cpp">
@@ -821,9 +818,6 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\targetslist.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="include\customattacks.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\utils.h">
@@ -1249,10 +1243,10 @@
     <ClInclude Include="include\movepathhooks.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="include\attackutils.h">
+    <ClInclude Include="include\originalfunctions.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="include\modifierutils.h">
+    <ClInclude Include="include\customattackhooks.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\batattackutils.h">
