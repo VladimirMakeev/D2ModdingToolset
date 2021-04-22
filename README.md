@@ -147,8 +147,8 @@
 - <details>
     <summary>Allows attack class immunity modifiers to be applied (e.g. banner of fear warding);</summary>
 
-    Add IMMUNITYC and IMMUNITYCATC columns to GmodifL.dbf (similar to IMMUNITY and IMMUNITYCAT).
-    Then add a new record with TYPE 14 and filling the columns accordingly to attack class and immunity.
+    Add IMMUNITYC and IMMUNITYCATC columns to GmodifL.dbf (similar to IMMUNITY and IMMUNITYCAT).<br />
+    Then add a new record with TYPE 14, and fill the columns accordingly to attack class and immunity.<br />
     Also works in pure vanilla version.
   </details>
 
