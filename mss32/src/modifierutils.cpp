@@ -225,44 +225,146 @@ bool canApplyAnyModifier(game::IAttack* attack,
     return false;
 }
 
-bool addModifierInfo(const game::CMidgardID* unitId,
-                     game::BattleMsgData* battleMsgData,
-                     game::CMidUnit* targetUnit,
-                     const game::CMidgardID* modifierId)
+bool isOriginalModifiedUnits(const game::UnitInfo* unitInfo)
+{
+    using namespace game;
+
+    const auto& id = CMidgardIDApi::get();
+
+    // Assume original layout for empty struct (invalidId)
+    CMidgardID testId = unitInfo->modifiedUnits.patched[0].modifierId;
+    return id.getType(&testId) != IdType::UnitModifier;
+}
+
+void resetModifiedUnitsInfo(game::ModifiedUnitsPatched& modifiedUnits)
+{
+    using namespace game;
+
+    // Regardless of the layout (original vs patched) the reset method is the same.
+    // See ResetModifiedUnitsInfo impl for reference.
+    for (size_t i = 0; i < std::size(modifiedUnits.original); i++) {
+        modifiedUnits.original[i].unitId = invalidId;
+        modifiedUnits.original[i].modifierId = invalidId;
+    }
+}
+
+bool addModifiedUnitInfo(game::ModifiedUnitInfoPatched& info,
+                         game::CMidgardID unitId,
+                         game::CMidgardID modifierId)
+{
+    using namespace game;
+
+    if (info.modifierId == invalidId)
+        info.modifierId = modifierId;
+    else if (info.modifierId != modifierId)
+        return false;
+
+    for (size_t i = 0; i < std::size(info.unitIds); i++) {
+        if (info.unitIds[i] == invalidId) {
+            info.unitIds[i] = unitId;
+            return true;
+        }
+        if (info.unitIds[i] == unitId) // Just in case, should not happen
+            return true;
+    }
+
+    return false;
+}
+
+bool addModifiedUnitInfo(game::ModifiedUnitsPatched& modifiedUnits,
+                         game::CMidgardID unitId,
+                         game::CMidgardID modifierId)
+{
+    using namespace game;
+
+    for (size_t i = 0; i < std::size(modifiedUnits.original); i++) {
+        if (modifiedUnits.original[i].unitId == invalidId) {
+            modifiedUnits.original[i].unitId = unitId;
+            modifiedUnits.original[i].modifierId = modifierId;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool addModifiedUnitInfoPatched(game::ModifiedUnitsPatched& modifiedUnits,
+                                game::CMidgardID unitId,
+                                game::CMidgardID modifierId)
+{
+    for (size_t i = 0; i < std::size(modifiedUnits.patched); i++) {
+        if (addModifiedUnitInfo(modifiedUnits.patched[i], unitId, modifierId))
+            return true;
+    }
+
+    return false;
+}
+
+bool switchToPatchedModifiedUnits(game::UnitInfo* unitInfo)
+{
+    using namespace game;
+
+    ModifiedUnitsPatched result;
+    resetModifiedUnitsInfo(result);
+
+    const auto& modifiedUnits = unitInfo->modifiedUnits;
+    for (size_t i = 0; i < std::size(modifiedUnits.original); i++) {
+        auto& info = modifiedUnits.original[i];
+        if (info.unitId == invalidId || info.modifierId == invalidId)
+            continue;
+
+        if (!addModifiedUnitInfoPatched(result, info.unitId, info.modifierId))
+            return false;
+    }
+
+    unitInfo->modifiedUnits = result;
+    return true;
+}
+
+size_t findFreeUnitModifierIndex(const game::UnitInfo* unitInfo)
+{
+    using namespace game;
+
+    auto& modifiers = unitInfo->modifierIds;
+    for (size_t i = 0; i < std::size(modifiers); i++) {
+        if (modifiers[i] == invalidId)
+            return i;
+    }
+
+    return -1;
+}
+
+bool addModifiedUnitInfo(const game::CMidgardID* unitId,
+                         game::BattleMsgData* battleMsgData,
+                         game::CMidUnit* targetUnit,
+                         const game::CMidgardID* modifierId)
 {
     using namespace game;
 
     const auto& battle = BattleMsgDataApi::get();
-    auto unitInfo = battle.getUnitInfoById(battleMsgData, unitId);
-
-    size_t unitIndex = -1;
-    auto& modifiedUnits = unitInfo->modifiedUnits;
-    for (size_t i = 0; i < sizeof(modifiedUnits) / sizeof(*modifiedUnits); i++) {
-        if (modifiedUnits[i].unitId == invalidId) {
-            unitIndex = i;
-            break;
-        }
-    }
-    if (unitIndex == -1)
-        return false;
-
     auto targetUnitInfo = battle.getUnitInfoById(battleMsgData, &targetUnit->unitId);
-
-    size_t modifierIndex = -1;
-    auto& modifiers = targetUnitInfo->modifierIds;
-    for (size_t i = 0; i < sizeof(modifiers) / sizeof(*modifiers); i++) {
-        if (modifiers[i] == invalidId) {
-            modifierIndex = i;
-            break;
-        }
-    }
+    size_t modifierIndex = findFreeUnitModifierIndex(targetUnitInfo);
     if (modifierIndex == -1)
         return false;
 
-    modifiedUnits[unitIndex].unitId = targetUnit->unitId;
-    modifiedUnits[unitIndex].modifierId = *modifierId;
-    modifiers[modifierIndex] = *modifierId;
-    return true;
+    auto unitInfo = battle.getUnitInfoById(battleMsgData, unitId);
+    auto& modifiedUnits = unitInfo->modifiedUnits;
+    if (isOriginalModifiedUnits(unitInfo)) {
+        if (addModifiedUnitInfo(modifiedUnits, targetUnit->unitId, *modifierId)) {
+            targetUnitInfo->modifierIds[modifierIndex] = *modifierId;
+            return true;
+        }
+
+        if (!switchToPatchedModifiedUnits(unitInfo))
+            return false;
+    }
+
+    if (addModifiedUnitInfoPatched(modifiedUnits, targetUnit->unitId, *modifierId)) {
+        targetUnitInfo->modifierIds[modifierIndex] = *modifierId;
+        return true;
+    }
+
+    return false;
 }
 
 bool applyModifier(const game::CMidgardID* unitId,
@@ -272,7 +374,7 @@ bool applyModifier(const game::CMidgardID* unitId,
 {
     using namespace game;
 
-    if (!addModifierInfo(unitId, battleMsgData, targetUnit, modifierId))
+    if (!addModifiedUnitInfo(unitId, battleMsgData, targetUnit, modifierId))
         return false;
 
     CMidUnitApi::get().addModifier(targetUnit, modifierId);
@@ -314,7 +416,7 @@ void removeModifier(game::BattleMsgData* battleMsgData,
 
 void removeModifiers(game::BattleMsgData* battleMsgData,
                      game::IMidgardObjectMap* objectMap,
-                     const game::CMidgardID* unitId,
+                     game::UnitInfo* unitInfo,
                      const game::CMidgardID* modifiedUnitId)
 {
     using namespace game;
@@ -322,20 +424,72 @@ void removeModifiers(game::BattleMsgData* battleMsgData,
     auto modifiedUnit = static_cast<CMidUnit*>(
         objectMap->vftable->findScenarioObjectByIdForChange(objectMap, modifiedUnitId));
 
-    const auto& battle = BattleMsgDataApi::get();
-    auto unitInfo = battle.getUnitInfoById(battleMsgData, unitId);
+    auto unitModifierIds = getUnitModifierIds(unitInfo, modifiedUnitId);
+    for (auto it = unitModifierIds.begin(); it != unitModifierIds.end(); it++)
+        removeModifier(battleMsgData, modifiedUnit, &(*it));
+}
 
-    auto& modifiedUnits = unitInfo->modifiedUnits;
-    for (size_t i = 0; i < sizeof(modifiedUnits) / sizeof(*modifiedUnits); i++) {
-        if (modifiedUnits[i].unitId != *modifiedUnitId)
-            continue;
+game::CMidgardID validateId(game::CMidgardID src)
+{
+    using namespace game;
 
-        CMidgardID modifierId;
-        const auto& id = CMidgardIDApi::get();
-        id.validateId(&modifierId, modifiedUnits[i].modifierId);
+    CMidgardID value;
+    const auto& id = CMidgardIDApi::get();
+    id.validateId(&value, src);
+    return value;
+}
 
-        removeModifier(battleMsgData, modifiedUnit, &modifierId);
+std::set<game::CMidgardID> getModifiedUnitIds(const game::UnitInfo* unitInfo)
+{
+    using namespace game;
+
+    std::set<CMidgardID> result;
+
+    const auto& modifiedUnits = unitInfo->modifiedUnits;
+    if (isOriginalModifiedUnits(unitInfo)) {
+        for (size_t i = 0; i < std::size(modifiedUnits.original); i++) {
+            const auto& info = modifiedUnits.original[i];
+            if (info.unitId != invalidId)
+                result.insert(validateId(info.unitId));
+        }
+    } else {
+        for (size_t i = 0; i < std::size(modifiedUnits.patched); i++) {
+            const auto& info = modifiedUnits.patched[i];
+            for (size_t j = 0; j < std::size(info.unitIds); j++) {
+                if (info.unitIds[j] != invalidId)
+                    result.insert(validateId(info.unitIds[j]));
+            }
+        }
     }
+
+    return result;
+}
+
+std::set<game::CMidgardID> getUnitModifierIds(const game::UnitInfo* unitInfo,
+                                              const game::CMidgardID* modifiedUnitId)
+{
+    using namespace game;
+
+    std::set<CMidgardID> result;
+
+    const auto& modifiedUnits = unitInfo->modifiedUnits;
+    if (isOriginalModifiedUnits(unitInfo)) {
+        for (size_t i = 0; i < std::size(modifiedUnits.original); i++) {
+            const auto& info = modifiedUnits.original[i];
+            if (info.unitId == *modifiedUnitId)
+                result.insert(validateId(info.modifierId));
+        }
+    } else {
+        for (size_t i = 0; i < std::size(modifiedUnits.patched); i++) {
+            const auto& info = modifiedUnits.patched[i];
+            for (size_t j = 0; j < std::size(info.unitIds); j++) {
+                if (info.unitIds[j] == *modifiedUnitId)
+                    result.insert(validateId(info.modifierId));
+            }
+        }
+    }
+
+    return result;
 }
 
 } // namespace hooks

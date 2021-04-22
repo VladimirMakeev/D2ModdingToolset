@@ -78,6 +78,24 @@ struct ModifiedUnitInfo
 static_assert(sizeof(ModifiedUnitInfo) == 8,
               "Size of ModifiedUnitInfo structure must be exactly 8 bytes");
 
+struct ModifiedUnitInfoPatched
+{
+    CMidgardID modifierId;
+    CMidgardID unitIds[7];
+};
+
+static_assert(sizeof(ModifiedUnitInfoPatched) == 32,
+              "Size of ModifiedUnitInfoPatched structure must be exactly 32 bytes");
+
+union ModifiedUnitsPatched
+{
+    ModifiedUnitInfo original[8];
+    ModifiedUnitInfoPatched patched[2];
+};
+
+static_assert(sizeof(ModifiedUnitsPatched) == 64,
+              "Size of ModifiedUnitsPatched union must be exactly 64 bytes");
+
 /** Battle turn info. */
 struct BattleTurn
 {
@@ -150,7 +168,8 @@ struct UnitInfo
     char unknown6;
     CMidgardID summonOwner;
     /** Ids of units modified by this unit coupled with corresponding modifier ids. */
-    ModifiedUnitInfo modifiedUnits[8];
+    // ModifiedUnitInfo modifiedUnits[8]; // Original layout
+    ModifiedUnitsPatched modifiedUnits;
     /** Modifiers applied to this unit. */
     CMidgardID modifierIds[8];
     /** Total armor reduced by theurgist 'shatter' attacks. Negative values can increase armor. */
