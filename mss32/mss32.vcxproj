@@ -145,6 +145,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\attackimpl.cpp" />
     <ClCompile Include="src\attackreachcat.cpp" />
     <ClCompile Include="src\attacksourcecat.cpp" />
+    <ClCompile Include="src\attackutils.cpp" />
     <ClCompile Include="src\autodialog.cpp" />
     <ClCompile Include="src\autoptr.cpp" />
     <ClCompile Include="src\batattackbestowwards.cpp" />
@@ -155,6 +156,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\batattackshatter.cpp" />
     <ClCompile Include="src\batattacksummon.cpp" />
     <ClCompile Include="src\batattacktransformself.cpp" />
+    <ClCompile Include="src\batattackutils.cpp" />
     <ClCompile Include="src\battleattackinfo.cpp" />
     <ClCompile Include="src\battlemsgdata.cpp" />
     <ClCompile Include="src\bindings\dynupgradeview.cpp" />
@@ -220,6 +222,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\midscenvariables.cpp" />
     <ClCompile Include="src\midunitgroup.cpp" />
     <ClCompile Include="src\midunit.cpp" />
+    <ClCompile Include="src\modifierutils.cpp" />
     <ClCompile Include="src\multilayerimg.cpp" />
     <ClCompile Include="src\musichooks.cpp" />
     <ClCompile Include="src\netmessages.cpp" />
@@ -289,6 +292,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\attackmodified.h" />
     <ClInclude Include="include\attackreachcat.h" />
     <ClInclude Include="include\attacksourcecat.h" />
+    <ClInclude Include="include\attackutils.h" />
     <ClInclude Include="include\autodialog.h" />
     <ClInclude Include="include\autoptr.h" />
     <ClInclude Include="include\avoidflickerimage.h" />
@@ -301,6 +305,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batattackshatter.h" />
     <ClInclude Include="include\batattacksummon.h" />
     <ClInclude Include="include\batattacktransformself.h" />
+    <ClInclude Include="include\batattackutils.h" />
     <ClInclude Include="include\battleattackinfo.h" />
     <ClInclude Include="include\battlemsgdata.h" />
     <ClInclude Include="include\battleviewerinterf.h" />
@@ -442,6 +447,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midunitgroup.h" />
     <ClInclude Include="include\midvillage.h" />
     <ClInclude Include="include\modifgroup.h" />
+    <ClInclude Include="include\modifierutils.h" />
     <ClInclude Include="include\mqanimation.h" />
     <ClInclude Include="include\mqimage2.h" />
     <ClInclude Include="include\mqimage2surface16.h" />

@@ -468,6 +468,9 @@
     <ClCompile Include="src\customattackhooks.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\batattackutils.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -1244,6 +1247,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\customattackhooks.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\batattackutils.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
