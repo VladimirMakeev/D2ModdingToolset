@@ -26,7 +26,6 @@
 #include "fortification.h"
 #include "functor.h"
 #include "globaldata.h"
-#include "hooks.h"
 #include "interfmanager.h"
 #include "itembase.h"
 #include "itemcategory.h"
@@ -39,6 +38,7 @@
 #include "midmsgboxbuttonhandlerstd.h"
 #include "midstack.h"
 #include "netmessages.h"
+#include "originalfunctions.h"
 #include "phasegame.h"
 #include "pickupdropinterf.h"
 #include "sitemerchantinterf.h"
@@ -300,8 +300,7 @@ game::CCityStackInterf* __fastcall cityStackInterfCtorHooked(game::CCityStackInt
 {
     using namespace game;
 
-    const auto& cityStackInterf = CCityStackInterfApi::get();
-    cityStackInterf.constructor(thisptr, taskOpenInterf, phaseGame, cityId);
+    getOriginalFunctions().cityStackInterfCtor(thisptr, taskOpenInterf, phaseGame, cityId);
 
     const auto& button = CButtonInterfApi::get();
     const auto freeFunctor = FunctorApi::get().createOrFree;
@@ -312,7 +311,8 @@ game::CCityStackInterf* __fastcall cityStackInterfCtorHooked(game::CCityStackInt
     ButtonCallback callback{};
     Functor functor;
 
-    auto dialogApi = CDialogInterfApi::get();
+    const auto& dialogApi = CDialogInterfApi::get();
+    const auto& cityStackInterf = CCityStackInterfApi::get();
 
     if (dialogApi.findControl(dialog, "BTN_TRANSF_L_ALL")) {
         callback.callback = (ButtonCallback::Callback)cityInterfTransferAllToStack;
@@ -474,8 +474,8 @@ game::CExchangeInterf* __fastcall exchangeInterfCtorHooked(game::CExchangeInterf
 {
     using namespace game;
 
-    const auto& exchangeInterf = CExchangeInterfApi::get();
-    exchangeInterf.constructor(thisptr, taskOpenInterf, phaseGame, stackLeftSide, stackRightSide);
+    getOriginalFunctions().exchangeInterfCtor(thisptr, taskOpenInterf, phaseGame, stackLeftSide,
+                                              stackRightSide);
 
     const auto& button = CButtonInterfApi::get();
     const auto freeFunctor = FunctorApi::get().createOrFree;
@@ -486,7 +486,8 @@ game::CExchangeInterf* __fastcall exchangeInterfCtorHooked(game::CExchangeInterf
     ButtonCallback callback{};
     Functor functor;
 
-    auto dialogApi = CDialogInterfApi::get();
+    const auto& dialogApi = CDialogInterfApi::get();
+    const auto& exchangeInterf = CExchangeInterfApi::get();
 
     if (dialogApi.findControl(dialog, "BTN_TRANSF_L_ALL")) {
         callback.callback = (ButtonCallback::Callback)exchangeTransferAllToLeftStack;
@@ -677,8 +678,7 @@ game::CPickUpDropInterf* __fastcall pickupDropInterfCtorHooked(game::CPickUpDrop
 {
     using namespace game;
 
-    const auto& pickupInterf = CPickUpDropInterfApi::get();
-    pickupInterf.constructor(thisptr, taskOpenInterf, phaseGame, stackId, bagId);
+    getOriginalFunctions().pickupDropInterfCtor(thisptr, taskOpenInterf, phaseGame, stackId, bagId);
 
     const auto& button = CButtonInterfApi::get();
     const auto freeFunctor = FunctorApi::get().createOrFree;
@@ -689,7 +689,8 @@ game::CPickUpDropInterf* __fastcall pickupDropInterfCtorHooked(game::CPickUpDrop
     ButtonCallback callback{};
     Functor functor;
 
-    auto dialogApi = CDialogInterfApi::get();
+    const auto& dialogApi = CDialogInterfApi::get();
+    const auto& pickupInterf = CPickUpDropInterfApi::get();
 
     if (dialogApi.findControl(dialog, "BTN_TRANSF_L_ALL")) {
         callback.callback = (ButtonCallback::Callback)pickupTransferAllToStack;
@@ -944,8 +945,8 @@ game::CSiteMerchantInterf* __fastcall siteMerchantInterfCtorHooked(
 {
     using namespace game;
 
-    const auto& merchantInterf = CSiteMerchantInterfApi::get();
-    merchantInterf.constructor(thisptr, taskOpenInterf, phaseGame, stackId, merchantId);
+    getOriginalFunctions().siteMerchantInterfCtor(thisptr, taskOpenInterf, phaseGame, stackId,
+                                                  merchantId);
 
     const auto& button = CButtonInterfApi::get();
     const auto freeFunctor = FunctorApi::get().createOrFree;
@@ -956,7 +957,8 @@ game::CSiteMerchantInterf* __fastcall siteMerchantInterfCtorHooked(
     ButtonCallback callback{};
     Functor functor;
 
-    auto dialogApi = CDialogInterfApi::get();
+    const auto& dialogApi = CDialogInterfApi::get();
+    const auto& merchantInterf = CSiteMerchantInterfApi::get();
 
     if (dialogApi.findControl(dialog, "BTN_SELL_ALL_VALUABLES")) {
         callback.callback = (ButtonCallback::Callback)merchantSellValuables;

@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CUSTOMATTACKS_H
-#define CUSTOMATTACKS_H
+#ifndef CUSTOMATTACKHOOKS_H
+#define CUSTOMATTACKHOOKS_H
 
 namespace game {
 struct LAttackClassTable;
@@ -60,4 +60,4 @@ const char* __stdcall attackClassToStringHooked(const game::LAttackClass* attack
 
 } // namespace hooks
 
-#endif // CUSTOMATTACKS_H
+#endif // CUSTOMATTACKHOOKS_H

@@ -168,7 +168,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\citystackinterf.cpp" />
     <ClCompile Include="src\currency.cpp" />
     <ClCompile Include="src\customattack.cpp" />
-    <ClCompile Include="src\customattacks.cpp" />
+    <ClCompile Include="src\customattackhooks.cpp" />
     <ClCompile Include="src\d2osexception.cpp" />
     <ClCompile Include="src\d2string.cpp" />
     <ClCompile Include="src\dbfaccess.cpp" />
@@ -223,6 +223,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\multilayerimg.cpp" />
     <ClCompile Include="src\musichooks.cpp" />
     <ClCompile Include="src\netmessages.cpp" />
+    <ClCompile Include="src\originalfunctions.cpp" />
     <ClCompile Include="src\pathinfolist.cpp" />
     <ClCompile Include="src\phase.cpp" />
     <ClCompile Include="src\pickupdropinterf.cpp" />
@@ -320,7 +321,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\citystackinterf.h" />
     <ClInclude Include="include\currency.h" />
     <ClInclude Include="include\customattack.h" />
-    <ClInclude Include="include\customattacks.h" />
+    <ClInclude Include="include\customattackhooks.h" />
     <ClInclude Include="include\d2map.h" />
     <ClInclude Include="include\d2osexception.h" />
     <ClInclude Include="include\d2pair.h" />
@@ -457,6 +458,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\netdplaysession.h" />
     <ClInclude Include="include\netmessages.h" />
     <ClInclude Include="include\ordercat.h" />
+    <ClInclude Include="include\originalfunctions.h" />
     <ClInclude Include="include\pathinfolist.h" />
     <ClInclude Include="include\phase.h" />
     <ClInclude Include="include\phasegame.h" />

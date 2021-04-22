@@ -30,7 +30,6 @@ namespace game {
 struct AutoDialogData;
 struct CMenuNewSkirmishSingle;
 struct CMidDataCache2;
-struct CMidgardID;
 struct GlobalData;
 struct CDBTable;
 struct LBuildingCategoryTable;
@@ -57,7 +56,12 @@ struct CUnitGenerator;
 
 namespace hooks {
 
-using HookInfo = std::pair<void**, void*>;
+struct HookInfo
+{
+    void* target;
+    void* hook;
+    void** original;
+};
 using Hooks = std::vector<HookInfo>;
 
 /** Returns array of hooks to setup. */
@@ -195,7 +199,7 @@ void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
                                   game::IMidgardObjectMap* objectMap,
                                   const game::CMidgardID* unitId);
 
-void __stdcall osExceptionHooked(const game::os_exception* thisptr, const void* throwInfo);
+void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const void* throwInfo);
 
 int __stdcall computeUnitEffectiveHpHooked(const game::IMidgardObjectMap* objectMap,
                                            const game::CMidUnit* unit,

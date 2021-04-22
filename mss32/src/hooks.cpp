@@ -30,18 +30,14 @@
 #include "batattacksummon.h"
 #include "batattacktransformself.h"
 #include "battleattackinfo.h"
-#include "battlemsgdata.h"
 #include "bestowwardshooks.h"
 #include "buildingbranch.h"
 #include "buildingtype.h"
 #include "button.h"
-#include "citystackinterf.h"
-#include "customattacks.h"
-#include "d2osexception.h"
+#include "customattackhooks.h"
 #include "d2string.h"
 #include "dbf/dbffile.h"
 #include "dbtable.h"
-#include "ddcarryoveritems.h"
 #include "dialoginterf.h"
 #include "difficultylevel.h"
 #include "doppelgangerhooks.h"
@@ -49,12 +45,9 @@
 #include "dynamiccast.h"
 #include "dynupgrade.h"
 #include "editor.h"
-#include "enclayoutspell.h"
 #include "encparambase.h"
-#include "exchangeinterf.h"
 #include "fortification.h"
 #include "functor.h"
-#include "game.h"
 #include "globaldata.h"
 #include "idlist.h"
 #include "interfmanager.h"
@@ -73,10 +66,9 @@
 #include "midmusic.h"
 #include "midplayer.h"
 #include "midstack.h"
-#include "midunit.h"
 #include "movepathhooks.h"
 #include "musichooks.h"
-#include "pickupdropinterf.h"
+#include "originalfunctions.h"
 #include "playerbuildings.h"
 #include "playerincomehooks.h"
 #include "racecategory.h"
@@ -85,7 +77,6 @@
 #include "scenariodataarray.h"
 #include "scenarioinfo.h"
 #include "settings.h"
-#include "sitemerchantinterf.h"
 #include "smartptr.h"
 #include "summonhooks.h"
 #include "transformselfhooks.h"
@@ -111,50 +102,51 @@ namespace hooks {
 static Hooks getGameHooks()
 {
     auto& fn = game::gameFunctions();
+    auto& orig = getOriginalFunctions();
 
     // clang-format off
     Hooks hooks{
         // Fix game crash in battles with summoners
-        HookInfo{(void**)&game::CMidUnitApi::get().removeModifier, removeModifierHooked},
+        HookInfo{(void*)game::CMidUnitApi::get().removeModifier, removeModifierHooked, (void**)&orig.removeModifier},
         // Show buildings with custom branch category on the 'other buildings' tab
-        HookInfo{(void**)&game::CBuildingBranchApi::get().constructor, buildingBranchCtorHooked},
+        HookInfo{(void*)game::CBuildingBranchApi::get().constructor, buildingBranchCtorHooked},
         // Always place units with melee attack at the front lane in groups controlled by non-neutrals AI
-        HookInfo{(void**)&fn.chooseUnitLane, chooseUnitLaneHooked},
+        HookInfo{(void*)fn.chooseUnitLane, chooseUnitLaneHooked},
         // Allow alchemists to buff retreating units
-        HookInfo{(void**)&game::CBatAttackGiveAttackApi::get().canPerform, giveAttackCanPerformHooked},
+        HookInfo{(void*)game::CBatAttackGiveAttackApi::get().canPerform, giveAttackCanPerformHooked},
         // Random map generation
-        //HookInfo{(void**)&game::CMenuNewSkirmishSingleApi::get().constructor, menuNewSkirmishSingleCtorHooked},
+        //HookInfo{(void*)game::CMenuNewSkirmishSingleApi::get().constructor, menuNewSkirmishSingleCtorHooked},
         // Support custom battle attack objects
-        HookInfo{(void**)&fn.createBatAttack, createBatAttackHooked},
+        HookInfo{(void*)fn.createBatAttack, createBatAttackHooked, (void**)&orig.createBatAttack},
         // Support immunity bitmask in BattleMsgData
-        HookInfo{(void**)&fn.attackClassToNumber, attackClassToNumberHooked},
+        HookInfo{(void*)fn.attackClassToNumber, attackClassToNumberHooked, (void**)&orig.attackClassToNumber},
         // Support custom attack animations?
-        HookInfo{(void**)&fn.attackClassToString, attackClassToStringHooked},
+        HookInfo{(void*)fn.attackClassToString, attackClassToStringHooked, (void**)&orig.attackClassToString},
         // Add items transfer buttons to city interface
-        HookInfo{(void**)&game::CCityStackInterfApi::get().constructor, cityStackInterfCtorHooked},
+        HookInfo{(void*)game::CCityStackInterfApi::get().constructor, cityStackInterfCtorHooked, (void**)&orig.cityStackInterfCtor},
         // Add items transfer buttons to stack exchange interface
-        HookInfo{(void**)&game::CExchangeInterfApi::get().constructor, exchangeInterfCtorHooked},
+        HookInfo{(void*)game::CExchangeInterfApi::get().constructor, exchangeInterfCtorHooked, (void**)&orig.exchangeInterfCtor},
         // Add items transfer buttons to pickup drop interface
-        HookInfo{(void**)&game::CPickUpDropInterfApi::get().constructor, pickupDropInterfCtorHooked},
+        HookInfo{(void*)game::CPickUpDropInterfApi::get().constructor, pickupDropInterfCtorHooked, (void**)&orig.pickupDropInterfCtor},
         // Add sell all valuables button to merchant interface
-        HookInfo{(void**)&game::CSiteMerchantInterfApi::get().constructor, siteMerchantInterfCtorHooked},
+        HookInfo{(void*)game::CSiteMerchantInterfApi::get().constructor, siteMerchantInterfCtorHooked, (void**)&orig.siteMerchantInterfCtor},
         // Cities can generate daily income depending on scenario variable settings
-        HookInfo{(void**)& fn.computePlayerDailyIncome, computePlayerDailyIncomeHooked},
+        HookInfo{(void*)fn.computePlayerDailyIncome, computePlayerDailyIncomeHooked, (void**)&orig.computePlayerDailyIncome},
         // Vampiric attacks can deal critical damage
-        HookInfo{(void**)&game::CBatAttackDrainApi::get().onHit, drainAttackOnHitHooked},
-        HookInfo{(void**)&game::CBatAttackDrainOverflowApi::get().onHit, drainOverflowAttackOnHitHooked},
+        HookInfo{(void*)game::CBatAttackDrainApi::get().onHit, drainAttackOnHitHooked},
+        HookInfo{(void*)game::CBatAttackDrainOverflowApi::get().onHit, drainOverflowAttackOnHitHooked},
         // Support additional music tracks for battle and capital cities
-        HookInfo{(void**)&game::CMidMusicApi::get().playBattleTrack, playBattleTrackHooked},
-        HookInfo{(void**)&game::CMidMusicApi::get().playCapitalTrack, playCapitalTrackHooked},
+        HookInfo{(void*)game::CMidMusicApi::get().playBattleTrack, playBattleTrackHooked},
+        HookInfo{(void*)game::CMidMusicApi::get().playCapitalTrack, playCapitalTrackHooked},
         // Fix game crash with pathfinding on 144x144 maps
-        HookInfo{(void**)&fn.markMapPosition, markMapPositionHooked},
+        HookInfo{(void*)fn.markMapPosition, markMapPositionHooked, (void**)&orig.markMapPosition},
         // Allow user to tweak accuracy computations
-        HookInfo{(void**)&fn.getAttackAccuracy, getAttackAccuracyHooked},
+        HookInfo{(void*)fn.getAttackAccuracy, getAttackAccuracyHooked},
         // Fix game crash when AI controlled unit with transform self attack
         // uses alternative attack with 'adjacent' attack range
-        HookInfo{(void**)&fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked},
+        HookInfo{(void*)fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked, (void**)&orig.computeUnitEffectiveHp},
         // Fix bestow wards becoming permanent on warded unit transformation
-        HookInfo{(void**)&game::BattleMsgDataApi::get().beforeAttack, beforeAttackHooked},
+        HookInfo{(void*)game::BattleMsgDataApi::get().beforeAttack, beforeAttackHooked},
         /**
          * Fix Bestow Wards:
          * 1) Becoming permanent when more than 8 modifiers are applied at once
@@ -162,54 +154,55 @@ static Hooks getGameHooks()
          * 3) Incorrectly resetting attack source ward if its modifier also contains hp, regen or armor element
          * IMPORTANT: this hook is required for UnrestrictedBestowWards
          */
-        HookInfo{(void**)&game::CBatAttackBestowWardsApi::get().onHit, bestowWardsAttackOnHitHooked},
+        HookInfo{(void*)game::CBatAttackBestowWardsApi::get().onHit, bestowWardsAttackOnHitHooked},
     };
     // clang-format on
 
     if (!unitsForHire().empty()) {
         hooks.push_back(
-            HookInfo{(void**)&fn.addPlayerUnitsToHireList, addPlayerUnitsToHireListHooked});
+            HookInfo{(void*)fn.addPlayerUnitsToHireList, addPlayerUnitsToHireListHooked});
     }
 
     if (userSettings().shatteredArmorMax != baseSettings().shatteredArmorMax) {
         // Allow users to customize total armor shatter damage
-        hooks.push_back(HookInfo{(void**)&game::CBatAttackShatterApi::get().canPerform,
-                                 shatterCanPerformHooked});
-        hooks.push_back(HookInfo{(void**)&game::BattleMsgDataApi::get().setUnitShatteredArmor,
+        hooks.push_back(
+            HookInfo{(void*)game::CBatAttackShatterApi::get().canPerform, shatterCanPerformHooked});
+        hooks.push_back(HookInfo{(void*)game::BattleMsgDataApi::get().setUnitShatteredArmor,
                                  setUnitShatteredArmorHooked});
     }
 
     if (userSettings().shatterDamageMax != baseSettings().shatterDamageMax) {
         // Allow users to customize maximum armor shatter damage per attack
         hooks.push_back(
-            HookInfo{(void**)&game::CBatAttackShatterApi::get().onHit, shatterOnHitHooked});
+            HookInfo{(void*)game::CBatAttackShatterApi::get().onHit, shatterOnHitHooked});
     }
 
     if (userSettings().showBanners != baseSettings().showBanners) {
         // Allow users to show banners by default
-        hooks.push_back(HookInfo{(void**)&fn.toggleShowBannersInit, toggleShowBannersInitHooked});
+        hooks.push_back(HookInfo{(void*)fn.toggleShowBannersInit, toggleShowBannersInitHooked});
     }
 
     if (userSettings().showResources != baseSettings().showResources
         || userSettings().showLandConverted != baseSettings().showLandConverted) {
         // Allow users to show resources panel by default
-        hooks.push_back(HookInfo{(void**)&fn.respopupInit, respopupInitHooked});
+        hooks.push_back(HookInfo{(void*)fn.respopupInit, respopupInitHooked});
     }
 
     if (userSettings().preserveCapitalBuildings != baseSettings().preserveCapitalBuildings) {
         // Allow scenarios with prebuilt buildings in capitals
-        hooks.push_back(HookInfo{(void**)&fn.deletePlayerBuildings, deletePlayerBuildingsHooked});
+        hooks.push_back(HookInfo{(void*)fn.deletePlayerBuildings, deletePlayerBuildingsHooked});
     }
 
     if (userSettings().carryOverItemsMax != baseSettings().carryOverItemsMax) {
         // Change maximum number of items that player can carry between campaign scenarios
-        hooks.push_back(HookInfo{(void**)&game::CDDCarryOverItemsApi::get().constructor,
-                                 carryOverItemsCtorHooked});
+        hooks.push_back(HookInfo{(void*)game::CDDCarryOverItemsApi::get().constructor,
+                                 carryOverItemsCtorHooked, (void**)&orig.carryOverItemsCtor});
     }
 
     if (userSettings().criticalHitChance != baseSettings().criticalHitChance) {
         // Allow users to specify critical hit chance
-        hooks.push_back(HookInfo{(void**)&fn.computeDamage, computeDamageHooked});
+        hooks.push_back(
+            HookInfo{(void*)fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage});
     }
 
     if (userSettings().doppelgangerRespectsEnemyImmunity
@@ -217,33 +210,33 @@ static Hooks getGameHooks()
         || userSettings().doppelgangerRespectsAllyImmunity
                != baseSettings().doppelgangerRespectsAllyImmunity) {
         // Make Doppelganger attack respect target source/class wards and immunities
-        hooks.push_back(HookInfo{(void**)&game::CBatAttackDoppelgangerApi::get().canPerform,
+        hooks.push_back(HookInfo{(void*)game::CBatAttackDoppelgangerApi::get().canPerform,
                                  doppelgangerAttackCanPerformHooked});
-        hooks.push_back(HookInfo{(void**)&game::CBatAttackDoppelgangerApi::get().isImmune,
+        hooks.push_back(HookInfo{(void*)game::CBatAttackDoppelgangerApi::get().isImmune,
                                  doppelgangerAttackIsImmuneHooked});
     }
 
     if (userSettings().leveledDoppelgangerAttack != baseSettings().leveledDoppelgangerAttack) {
         // Allow doppelganger to transform into leveled units using script logic
-        hooks.push_back(HookInfo{(void**)&game::CBatAttackDoppelgangerApi::get().onHit,
+        hooks.push_back(HookInfo{(void*)game::CBatAttackDoppelgangerApi::get().onHit,
                                  doppelgangerAttackOnHitHooked});
     }
 
     if (userSettings().leveledTransformSelfAttack != baseSettings().leveledTransformSelfAttack) {
         // Allow transform self into leveled units using script logic
-        hooks.push_back(HookInfo{(void**)&game::CBatAttackTransformSelfApi::get().onHit,
+        hooks.push_back(HookInfo{(void*)game::CBatAttackTransformSelfApi::get().onHit,
                                  transformSelfAttackOnHitHooked});
     }
 
     if (userSettings().leveledSummonAttack != baseSettings().leveledSummonAttack) {
         // Allow summon leveled units using script logic
         hooks.push_back(
-            HookInfo{(void**)&game::CBatAttackSummonApi::get().onHit, summonAttackOnHitHooked});
+            HookInfo{(void*)game::CBatAttackSummonApi::get().onHit, summonAttackOnHitHooked});
     }
 
     if (userSettings().missChanceSingleRoll != baseSettings().missChanceSingleRoll) {
         // Compute attack miss chance using single random value, instead of two
-        hooks.push_back(HookInfo{(void**)&fn.attackShouldMiss, attackShouldMissHooked});
+        hooks.push_back(HookInfo{(void*)fn.attackShouldMiss, attackShouldMissHooked});
     }
 
     if (userSettings().unrestrictedBestowWards != baseSettings().unrestrictedBestowWards) {
@@ -257,15 +250,14 @@ static Hooks getGameHooks()
          * applied to this unit
          * 6) Treat modifiers with complete immunity correctly
          */
-        hooks.push_back(HookInfo{(void**)&game::CBatAttackBestowWardsApi::get().canPerform,
+        hooks.push_back(HookInfo{(void*)game::CBatAttackBestowWardsApi::get().canPerform,
                                  bestowWardsAttackCanPerformHooked});
 
         /**
          * Allow Bestow Wards (and any other attack with QTY_HEAL > 0) to heal units when battle
          * ends (just like ordinary heal does)
          */
-        hooks.push_back(
-            HookInfo{(void**)&fn.getUnitHealAttackNumber, getUnitHealAttackNumberHooked});
+        hooks.push_back(HookInfo{(void*)fn.getUnitHealAttackNumber, getUnitHealAttackNumberHooked});
 
         /**
          * Fix Bestow Wards with double attack where modifiers granted by first attack are getting
@@ -273,13 +265,14 @@ static Hooks getGameHooks()
          * current unit id, so modifiers granted by first attack are not removed.
          */
         hooks.push_back(
-            HookInfo{(void**)&game::BattleMsgDataApi::get().setUnknown9Bit1AndClearBoostLowerDamage,
-                     setUnknown9Bit1AndClearBoostLowerDamageHooked});
+            HookInfo{(void*)game::BattleMsgDataApi::get().setUnknown9Bit1AndClearBoostLowerDamage,
+                     setUnknown9Bit1AndClearBoostLowerDamageHooked,
+                     (void**)&orig.setUnknown9Bit1AndClearBoostLowerDamage});
     }
 
     if (userSettings().movementCost.show) {
         // Show movement cost
-        hooks.push_back(HookInfo{(void**)&fn.showMovementPath, showMovementPathHooked});
+        hooks.push_back(HookInfo{(void*)fn.showMovementPath, showMovementPathHooked});
     }
 
     return hooks;
@@ -290,16 +283,18 @@ static Hooks getScenarioEditorHooks()
 {
     using namespace game;
 
+    auto& orig = getOriginalFunctions();
+
     // clang-format off
     Hooks hooks{
         // Check sites placement the same way as ruins, allowing them to be placed on water
-        HookInfo{(void**)&editorFunctions.canPlaceSite, editorFunctions.canPlaceRuin},
+        HookInfo{(void*)editorFunctions.canPlaceSite, editorFunctions.canPlaceRuin},
         // Allow editor to set elves race as caster in 'cast spell on location' event effect
-        HookInfo{(void**)&editorFunctions.radioButtonIndexToPlayerId, radioButtonIndexToPlayerIdHooked},
+        HookInfo{(void*)editorFunctions.radioButtonIndexToPlayerId, radioButtonIndexToPlayerIdHooked},
         // Fix DLG_R_C_SPELL so it shows actual spell info
-        HookInfo{(void**)&CEncLayoutSpellApi::get().constructor, encLayoutSpellCtorHooked},
+        HookInfo{(void*)CEncLayoutSpellApi::get().constructor, encLayoutSpellCtorHooked, (void**)&orig.encLayoutSpellCtor},
         // Allow editor to place more than 200 stacks on a map
-        HookInfo{(void**)&editorFunctions.countStacksOnMap, countStacksOnMapHooked}
+        HookInfo{(void*)editorFunctions.countStacksOnMap, countStacksOnMapHooked}
     };
     // clang-format on
 
@@ -311,36 +306,38 @@ Hooks getHooks()
     Hooks hooks{executableIsGame() ? getGameHooks() : getScenarioEditorHooks()};
 
     auto& fn = game::gameFunctions();
+    auto& orig = getOriginalFunctions();
+
     // Register buildings with custom branch category as unit buildings
-    hooks.emplace_back(HookInfo{(void**)&fn.createBuildingType, createBuildingTypeHooked});
+    hooks.emplace_back(HookInfo{(void*)fn.createBuildingType, createBuildingTypeHooked});
     // Support custom building branch category
-    hooks.emplace_back(HookInfo{(void**)&game::LBuildingCategoryTableApi::get().constructor,
+    hooks.emplace_back(HookInfo{(void*)game::LBuildingCategoryTableApi::get().constructor,
                                 buildingCategoryTableCtorHooked});
     // Increase maximum allowed game turn
-    hooks.emplace_back(HookInfo{(void**)&fn.isTurnValid, isTurnValidHooked});
+    hooks.emplace_back(HookInfo{(void*)fn.isTurnValid, isTurnValidHooked});
     // Support custom attack class category
-    hooks.emplace_back(HookInfo{(void**)&game::LAttackClassTableApi::get().constructor,
-                                attackClassTableCtorHooked});
+    hooks.emplace_back(
+        HookInfo{(void*)game::LAttackClassTableApi::get().constructor, attackClassTableCtorHooked});
     // Support custom attack class in CAttackImpl constructor
     hooks.emplace_back(
-        HookInfo{(void**)&game::CAttackImplApi::get().constructor, attackImplCtorHooked});
+        HookInfo{(void*)game::CAttackImplApi::get().constructor, attackImplCtorHooked});
 
     if (userSettings().debugMode) {
         // Show and log game exceptions information
-        hooks.emplace_back(
-            HookInfo{(void**)&game::os_exceptionApi::get().throwException, osExceptionHooked});
+        hooks.emplace_back(HookInfo{(void*)game::os_exceptionApi::get().throwException,
+                                    throwExceptionHooked, (void**)&orig.throwException});
     }
 
     if (userSettings().unrestrictedBestowWards != baseSettings().unrestrictedBestowWards) {
         // Support display of heal ammount in UI for any attack that has QTY_HEAL > 0
         hooks.push_back(
-            HookInfo{(void**)&fn.getAttackQtyDamageOrHeal, getAttackQtyDamageOrHealHooked});
+            HookInfo{(void*)fn.getAttackQtyDamageOrHeal, getAttackQtyDamageOrHealHooked});
     }
 
     if (userSettings().shatterDamageUpgradeRatio != baseSettings().shatterDamageUpgradeRatio) {
         // Allow users to customize shatter damage upgrade ratio
         hooks.push_back(
-            HookInfo{(void**)&fn.applyDynUpgradeToAttackData, applyDynUpgradeToAttackDataHooked});
+            HookInfo{(void*)fn.applyDynUpgradeToAttackData, applyDynUpgradeToAttackDataHooked});
     }
 
     return hooks;
@@ -353,7 +350,7 @@ Hooks getVftableHooks()
     if (userSettings().allowShatterAttackToMiss != baseSettings().allowShatterAttackToMiss) {
         if (game::CBatAttackShatterApi::vftable())
             // Fix an issue where shatter attack always hits regardless of its power value
-            hooks.emplace_back(HookInfo{(void**)&game::CBatAttackShatterApi::vftable()->canMiss,
+            hooks.emplace_back(HookInfo{(void*)&game::CBatAttackShatterApi::vftable()->canMiss,
                                         shatterCanMissHooked});
     }
 
@@ -361,9 +358,8 @@ Hooks getVftableHooks()
         if (game::CBatAttackBestowWardsApi::vftable())
             // Allow bestow wards to target dead units, so it can be coupled with Revive as a
             // secondary attack
-            hooks.emplace_back(
-                HookInfo{(void**)&game::CBatAttackBestowWardsApi::vftable()->method15,
-                         bestowWardsMethod15Hooked});
+            hooks.emplace_back(HookInfo{(void*)&game::CBatAttackBestowWardsApi::vftable()->method15,
+                                        bestowWardsMethod15Hooked});
     }
 
     return hooks;
@@ -402,7 +398,7 @@ bool __fastcall removeModifierHooked(game::CMidUnit* thisptr,
         return false;
     }
 
-    return game::CMidUnitApi::get().removeModifier(thisptr, modifierId);
+    return getOriginalFunctions().removeModifier(thisptr, modifierId);
 }
 
 using ScriptLines = std::vector<std::string>;
@@ -1139,9 +1135,8 @@ game::CEncLayoutSpell* __fastcall encLayoutSpellCtorHooked(game::CEncLayoutSpell
 
     // Show spell price and casting cost
     encParam->data->unknown2 = 4;
-    CEncLayoutSpellApi::get().constructor(thisptr, objectMap, interface, a2, spellId, encParam,
-                                          playerId);
-    return thisptr;
+    return getOriginalFunctions().encLayoutSpellCtor(thisptr, objectMap, interface, a2, spellId,
+                                                     encParam, playerId);
 }
 
 int __stdcall countStacksOnMapHooked(game::IMidgardObjectMap*)
@@ -1156,8 +1151,8 @@ game::CDDCarryOverItems* __fastcall carryOverItemsCtorHooked(game::CDDCarryOverI
                                                              game::CPhaseGame* phaseGame,
                                                              int carryOverItemsMax)
 {
-    return game::CDDCarryOverItemsApi::get().constructor(thisptr, dropManager, listBox, phaseGame,
-                                                         userSettings().carryOverItemsMax);
+    return getOriginalFunctions().carryOverItemsCtor(thisptr, dropManager, listBox, phaseGame,
+                                                     userSettings().carryOverItemsMax);
 }
 
 void __fastcall markMapPositionHooked(void* thisptr, int /*%edx*/, game::CMqPoint* position)
@@ -1165,7 +1160,7 @@ void __fastcall markMapPositionHooked(void* thisptr, int /*%edx*/, game::CMqPoin
     if (position->x < 0 || position->x >= 144 || position->y < 0 || position->y >= 144)
         return;
 
-    return game::gameFunctions().markMapPosition(thisptr, position);
+    return getOriginalFunctions().markMapPosition(thisptr, position);
 }
 
 int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
@@ -1179,18 +1174,14 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
 {
     int damage;
     int critDamage;
-    int totalDamage = game::gameFunctions().computeDamage(objectMap, battleMsgData, attackImpl,
-                                                          attackerUnitId, targetUnitId,
-                                                          computeCriticalHit, &damage, &critDamage);
+    int totalDamage = getOriginalFunctions().computeDamage(objectMap, battleMsgData, attackImpl,
+                                                           attackerUnitId, targetUnitId,
+                                                           computeCriticalHit, &damage,
+                                                           &critDamage);
 
     if (critDamage != 0) {
-        bool critMissed;
         int critChance = userSettings().criticalHitChance;
-        if (userSettings().missChanceSingleRoll != baseSettings().missChanceSingleRoll)
-            critMissed = attackShouldMissHooked(&critChance);
-        else
-            critMissed = game::gameFunctions().attackShouldMiss(&critChance);
-
+        bool critMissed = game::gameFunctions().attackShouldMiss(&critChance);
         if (critMissed) {
             totalDamage -= critDamage;
             critDamage = 0;
@@ -1341,12 +1332,13 @@ void __stdcall setUnknown9Bit1AndClearBoostLowerDamageHooked(game::BattleMsgData
 {
     using namespace game;
 
-    const auto& battle = BattleMsgDataApi::get();
-    battle.setUnknown9Bit1AndClearBoostLowerDamage(battleMsgData, unitId, nextAttackUnitId);
+    getOriginalFunctions().setUnknown9Bit1AndClearBoostLowerDamage(battleMsgData, unitId,
+                                                                   nextAttackUnitId);
 
     if (nextAttackUnitId->value == unitId->value) {
         nextAttackUnitId->value = emptyId.value;
 
+        const auto& battle = BattleMsgDataApi::get();
         battle.setUnitStatus(battleMsgData, unitId, BattleStatus::Defend, false);
         battle.setUnitAccuracyReduction(battleMsgData, unitId, 0);
     }
@@ -1430,7 +1422,7 @@ void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
     battle.setUnitAccuracyReduction(battleMsgData, unitId, 0);
 }
 
-void __stdcall osExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)
+void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)
 {
     const auto message{fmt::format("Caught exception '{:s}'.", thisptr->message)};
     logError("mssProxyError.log", message);
@@ -1438,7 +1430,7 @@ void __stdcall osExceptionHooked(const game::os_exception* thisptr, const void* 
                         + fmt::format("\nThe {:s} will probably crash now.",
                                       (executableIsGame() ? "game" : "editor")));
 
-    game::os_exceptionApi::get().throwException(thisptr, throwInfo);
+    getOriginalFunctions().throwException(thisptr, throwInfo);
 }
 
 int __stdcall computeUnitEffectiveHpHooked(const game::IMidgardObjectMap* objectMap,
@@ -1449,7 +1441,7 @@ int __stdcall computeUnitEffectiveHpHooked(const game::IMidgardObjectMap* object
         return 0;
     }
 
-    return game::gameFunctions().computeUnitEffectiveHp(objectMap, unit, battleMsgData);
+    return getOriginalFunctions().computeUnitEffectiveHp(objectMap, unit, battleMsgData);
 }
 
 void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImplId,

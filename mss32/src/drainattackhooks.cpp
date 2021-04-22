@@ -70,12 +70,7 @@ static int drainAttack(game::IMidgardObjectMap* objectMap,
 
     int attackDamage{};
     int criticalHitDamage{};
-    int fullDamage{};
-    if (userSettings().criticalHitChance != baseSettings().criticalHitChance)
-        fullDamage = computeDamageHooked(objectMap, battleMsgData, attack, attackerUnitId,
-                                         targetUnitId, true, &attackDamage, &criticalHitDamage);
-    else
-        fullDamage = fn.computeDamage(objectMap, battleMsgData, attack, attackerUnitId,
+    int fullDamage = fn.computeDamage(objectMap, battleMsgData, attack, attackerUnitId,
                                       targetUnitId, true, &attackDamage, &criticalHitDamage);
 
     auto targetUnit = static_cast<const CMidUnit*>(
