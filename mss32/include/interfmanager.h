@@ -28,22 +28,29 @@ namespace game {
 
 struct CInterfManager;
 struct CInterface;
+struct CMqRect;
 
 struct CInterfManagerVftable
 {
     void* unknown[4];
 
-    /** Assumption: Shows interface as top element. */
+    /** Shows interface as top element. */
     using ShowInterface = bool(__thiscall*)(CInterfManager* thisptr, CInterface* interface);
     ShowInterface showInterface;
 
     void* method5;
 
-    /** Assumption: Hides specified interface. */
+    /** Hides specified interface. */
     using HideInterface = bool(__thiscall*)(CInterfManager* thisptr, CInterface* interface);
     HideInterface hideInterface;
 
-    void* unknown2[16];
+    void* unknown2[9];
+
+    /** Returns game window resolution. */
+    using GetResolution = const CMqRect*(__thiscall*)(const CInterfManager* thisptr);
+    GetResolution getResolution;
+
+    void* unknown3[6];
 };
 
 static_assert(sizeof(CInterfManagerVftable) == 23 * sizeof(void*),
