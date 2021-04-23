@@ -32,11 +32,12 @@ struct CAttackModified : public IAttack
     CAttackModifiedData* data;
 };
 
-static_assert(sizeof(CAttackModified) == 12, "Size of CAttackModified structure must be exactly 12 bytes");
+static_assert(sizeof(CAttackModified) == 12,
+              "Size of CAttackModified structure must be exactly 12 bytes");
 
 struct CAttackModifiedData
 {
-    int unknown;
+    IAttack* impl;
     int initiative;
     int power;
     int qtyDamage;
