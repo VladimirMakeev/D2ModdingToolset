@@ -199,6 +199,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\image2text.cpp" />
     <ClCompile Include="src\immunecat.cpp" />
     <ClCompile Include="src\interfmanager.cpp" />
+    <ClCompile Include="src\interftexthooks.cpp" />
     <ClCompile Include="src\isolayers.cpp" />
     <ClCompile Include="src\itemcategory.cpp" />
     <ClCompile Include="src\itemtransferhooks.cpp" />
@@ -247,6 +248,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\targetslist.cpp" />
     <ClCompile Include="src\terraincat.cpp" />
     <ClCompile Include="src\textboxinterf.cpp" />
+    <ClCompile Include="src\textids.cpp" />
     <ClCompile Include="src\transformselfhooks.cpp" />
     <ClCompile Include="src\unitbranchcat.cpp" />
     <ClCompile Include="src\unitcat.cpp" />
@@ -377,6 +379,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\interfdialog.h" />
     <ClInclude Include="include\interffullscreen.h" />
     <ClInclude Include="include\interfmanager.h" />
+    <ClInclude Include="include\interftexthooks.h" />
     <ClInclude Include="include\isolayers.h" />
     <ClInclude Include="include\item.h" />
     <ClInclude Include="include\itemarmor.h" />
@@ -501,6 +504,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\terraincat.h" />
     <ClInclude Include="include\textandid.h" />
     <ClInclude Include="include\textboxinterf.h" />
+    <ClInclude Include="include\textids.h" />
     <ClInclude Include="include\tilevariation.h" />
     <ClInclude Include="include\transformselfhooks.h" />
     <ClInclude Include="include\umattack.h" />

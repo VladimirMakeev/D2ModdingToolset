@@ -154,6 +154,16 @@
     Then add a new record with TYPE 14, and fill the columns accordingly to attack class and immunity.<br />
     Also works in pure vanilla version.
   </details>
+- <details>
+    <summary>Fixes missing attack information in unit encyclopedia;</summary>
+
+    - Damage of secondary attack if its not either poison, blister or frostbite;
+    - Power (if applicable), source and reach of alternative attack;
+    - Value of boost/lower damage if its secondary attack;
+    - Value of lower initiative;
+    - Critical hit indication;
+    - Infinite effect indication;
+  </details>
 
 ### Settings:
 The following settings can be changed in Scripts/settings.lua:
@@ -173,6 +183,7 @@ The following settings can be changed in Scripts/settings.lua:
       - "red=\[0 : 255\]";
       - "green=\[0 : 255\]";
       - "blue=\[0 : 255\]";
+  - "detailedAttackDescription=(true/false)" fixes missing attack information in unit encyclopedia;
 </details>
 <details>
   <summary>Battle Mechanics</summary>

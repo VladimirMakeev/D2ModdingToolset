@@ -126,6 +126,7 @@ static void readSettings(Settings& settings, const sol::state& lua)
     settings.leveledSummonAttack = readSetting(table, "leveledSummonAttack", defaultSettings().leveledSummonAttack);
     settings.missChanceSingleRoll = readSetting(table, "missChanceSingleRoll", defaultSettings().missChanceSingleRoll);
     settings.unrestrictedBestowWards = readSetting(table, "unrestrictedBestowWards", defaultSettings().unrestrictedBestowWards);
+    settings.detailedAttackDescription = readSetting(table, "detailedAttackDescription", defaultSettings().detailedAttackDescription);
     settings.debugMode = readSetting(table, "debugHooks", defaultSettings().debugMode);
     // clang-format on
 
@@ -169,6 +170,7 @@ const Settings& baseSettings()
         settings.leveledSummonAttack = false;
         settings.missChanceSingleRoll = false;
         settings.unrestrictedBestowWards = false;
+        settings.detailedAttackDescription = false;
         settings.movementCost.textColor = Color{200, 200, 200};
         settings.movementCost.show = false;
         settings.debugMode = false;
@@ -216,9 +218,10 @@ const Settings& userSettings()
                 readSettings(settings, lua);
             } else {
                 const sol::error err = result;
-                hooks::logError("mssProxyError.log",
-                                fmt::format("Failed to settings script '{:s}'.\nReason: '{:s}'",
-                                            settingsPath.string(), err.what()));
+                hooks::logError(
+                    "mssProxyError.log",
+                    fmt::format("Failed to load settings script '{:s}'.\nReason: '{:s}'",
+                                settingsPath.string(), err.what()));
             }
         }
     }

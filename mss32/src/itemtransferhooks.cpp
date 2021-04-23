@@ -42,6 +42,7 @@
 #include "phasegame.h"
 #include "pickupdropinterf.h"
 #include "sitemerchantinterf.h"
+#include "textids.h"
 #include "utils.h"
 #include "visitors.h"
 #include <fmt/format.h>
@@ -870,7 +871,7 @@ static std::string bankToPriceMessage(const game::Bank& bank)
         priceText.append(text + '\n');
     }
 
-    auto message = getTranslatedText("X015TA0001");
+    auto message = getTranslatedText(textIds().interf.sellAllValuables.c_str());
     if (!message.empty()) {
         replace(message, "%PRICE%", priceText);
     } else {

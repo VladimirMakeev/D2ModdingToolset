@@ -52,6 +52,7 @@
 #include "globaldata.h"
 #include "idlist.h"
 #include "interfmanager.h"
+#include "interftexthooks.h"
 #include "itemtransferhooks.h"
 #include "iterators.h"
 #include "listbox.h"
@@ -322,6 +323,10 @@ Hooks getHooks()
     // Support custom attack class in CAttackImpl constructor
     hooks.emplace_back(
         HookInfo{(void*)game::CAttackImplApi::get().constructor, attackImplCtorHooked});
+    // Support display of heal ammount in UI for any attack that has QTY_HEAL > 0
+    // IMPORTANT: this hook is required for unrestrictedBestowWards and detailedAttackDescription
+    hooks.emplace_back(
+        HookInfo{(void*)fn.getAttackQtyDamageOrHeal, getAttackQtyDamageOrHealHooked});
 
     if (userSettings().debugMode) {
         // Show and log game exceptions information
@@ -329,16 +334,24 @@ Hooks getHooks()
                                     throwExceptionHooked, (void**)&orig.throwException});
     }
 
-    if (userSettings().unrestrictedBestowWards != baseSettings().unrestrictedBestowWards) {
-        // Support display of heal ammount in UI for any attack that has QTY_HEAL > 0
-        hooks.push_back(
-            HookInfo{(void*)fn.getAttackQtyDamageOrHeal, getAttackQtyDamageOrHealHooked});
-    }
-
     if (userSettings().shatterDamageUpgradeRatio != baseSettings().shatterDamageUpgradeRatio) {
         // Allow users to customize shatter damage upgrade ratio
         hooks.push_back(
             HookInfo{(void*)fn.applyDynUpgradeToAttackData, applyDynUpgradeToAttackDataHooked});
+    }
+
+    if (userSettings().detailedAttackDescription != baseSettings().detailedAttackDescription) {
+        /**
+         * Fix missing attack information in unit encyclopedia:
+         * 1) Damage of secondary attack if its not either poison, blister or frostbite
+         * 2) Power (if applicable), source and reach of alternative attack
+         * 3) Value of boost/lower damage if its secondary attack
+         * 4) Value of lower initiative
+         * 5) Critical hit indication
+         * 6) Infinite effect indication
+         */
+        hooks.push_back(
+            HookInfo{(void*)fn.generateAttackDescription, generateAttackDescriptionHooked});
     }
 
     return hooks;
@@ -1259,7 +1272,7 @@ void __stdcall getAttackAccuracyHooked(int* accuracy,
             tmpAccuracy += tmpAccuracy * *bonus / 100;
         }
 
-        tmpAccuracy = std::clamp(tmpAccuracy, -100, 100);
+        tmpAccuracy = std::clamp(tmpAccuracy, attackPowerLimits.min, attackPowerLimits.max);
     }
 
     const auto& attacks = AttackClassCategories::get();
@@ -1269,7 +1282,7 @@ void __stdcall getAttackAccuracyHooked(int* accuracy,
     }
 
     tmpAccuracy -= battle.getUnitAccuracyReduction(battleMsgData, unitId);
-    *accuracy = std::clamp(tmpAccuracy, -100, 100);
+    *accuracy = std::clamp(tmpAccuracy, attackPowerLimits.min, attackPowerLimits.max);
 }
 
 bool __stdcall attackShouldMissHooked(const int* accuracy)
