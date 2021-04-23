@@ -54,6 +54,10 @@ struct CDynUpgrade;
 struct CMidStack;
 struct CMidgardPlan;
 struct IMqImage2;
+struct IEncUnitDescriptor;
+struct CDialogInterf;
+
+enum class ModifierElementTypeFlag : int;
 
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
@@ -365,6 +369,20 @@ using IsWaterTileSurroundedByWater = bool(__stdcall*)(const CMqPoint* position,
 using GetStackPositionById = CMqPoint(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                   const CMidgardID* stackId);
 
+/** Applies percentage modifiers of the specified type to the value. */
+using ApplyPercentModifiers = int(__stdcall*)(int value,
+                                              const IdList* unitModifiers,
+                                              ModifierElementTypeFlag type);
+
+/** Creates a formatted description of attack for encyclopedia. */
+using GenerateAttackDescription = void(__stdcall*)(IEncUnitDescriptor* descriptor,
+                                                   CDialogInterf* dialog,
+                                                   int boostDamageLevel,
+                                                   int lowerDamageLevel,
+                                                   int lowerInitiativeLevel,
+                                                   const IdList* modifiers,
+                                                   int damageMax);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -418,6 +436,8 @@ struct Functions
     StackCanMoveToPosition stackCanMoveToPosition;
     IsWaterTileSurroundedByWater isWaterTileSurroundedByWater;
     GetStackPositionById getStackPositionById;
+    ApplyPercentModifiers applyPercentModifiers;
+    GenerateAttackDescription generateAttackDescription;
 };
 
 /** Global variables used in game. */

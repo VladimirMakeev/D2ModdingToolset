@@ -20,10 +20,23 @@
 #ifndef ATTACKUTILS_H
 #define ATTACKUTILS_H
 
-#include "attackclasscat.h"
+#include "restrictions.h"
+
+namespace game {
+struct CMidgardID;
+struct IAttack;
+struct LAttackClass;
+} // namespace game
 
 namespace hooks {
 
+extern const game::Restriction<int> attackPowerLimits;
+extern const game::Restriction<int> attackInitiativeLimits;
+
+game::IAttack* getAttack(const game::CMidgardID* attackId);
+int getBoostDamage(int level);
+int getLowerDamage(int level);
+int getLowerInitiative(int level);
 bool isAttackClassUsesAccuracy(const game::LAttackClass* attackClass);
 
 } // namespace hooks

@@ -77,6 +77,8 @@ static std::array<Functions, 4> functions = {{
         (StackCanMoveToPosition)0x4cdae4,
         (IsWaterTileSurroundedByWater)0x5e773e,
         (GetStackPositionById)0x5eecf2,
+        (ApplyPercentModifiers)0x577515,
+        (GenerateAttackDescription)0x57652b,
     },
     // Russobit
     Functions{
@@ -130,6 +132,8 @@ static std::array<Functions, 4> functions = {{
         (StackCanMoveToPosition)0x4cdae4,
         (IsWaterTileSurroundedByWater)0x5e773e,
         (GetStackPositionById)0x5eecf2,
+        (ApplyPercentModifiers)0x577515,
+        (GenerateAttackDescription)0x57652b,
     },
     // Gog
     Functions{
@@ -183,6 +187,8 @@ static std::array<Functions, 4> functions = {{
         (StackCanMoveToPosition)0x4cd1dd,
         (IsWaterTileSurroundedByWater)0x5e6453,
         (GetStackPositionById)0x5ed9b2,
+        (ApplyPercentModifiers)0x576b6a,
+        (GenerateAttackDescription)0x575b80,
     },
     // Scenario Editor
     Functions{
@@ -209,7 +215,7 @@ static std::array<Functions, 4> functions = {{
         (AttackSourceToNumber)0x52426e,
         (GetStackFortRuinGroup)nullptr,
         (DeletePlayerBuildings)nullptr,
-        (GetInterfaceText)nullptr,
+        (GetInterfaceText)0x4d0a02,
         (ComputePlayerDailyIncome)nullptr,
         (ComputeDamage)nullptr,
         (MarkMapPosition)nullptr,
@@ -236,6 +242,8 @@ static std::array<Functions, 4> functions = {{
         (StackCanMoveToPosition)nullptr,
         (IsWaterTileSurroundedByWater)nullptr,
         (GetStackPositionById)nullptr,
+        (ApplyPercentModifiers)0x4c7fb1,
+        (GenerateAttackDescription)0x4c6fc7,
     }
 }};
 

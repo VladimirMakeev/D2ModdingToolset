@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ATTACKMODIFIED_H
-#define ATTACKMODIFIED_H
+#include "unitutils.h"
+#include "globaldata.h"
+#include "midgardid.h"
+#include "unitgenerator.h"
 
-#include "attack.h"
+namespace hooks {
 
-namespace game {
-
-struct CAttackModifiedData;
-
-struct CAttackModified : public IAttack
+void generateUnitImplByAttackId(const game::CMidgardID* attackId)
 {
-    CMidgardID attackId;
-    CAttackModifiedData* data;
-};
+    using namespace game;
 
-static_assert(sizeof(CAttackModified) == 12,
-              "Size of CAttackModified structure must be exactly 12 bytes");
+    const auto& id = CMidgardIDApi::get();
+    int typeIndex = id.getTypeIndex(attackId);
+    int categoryIndex = id.getCategoryIndex(attackId);
+    IdCategory category = id.getCategory(attackId);
 
-struct CAttackModifiedData
-{
-    IAttack* impl;
-    int initiative;
-    int power;
-    int qtyDamage;
-    int attackDrain;
-};
+    CMidgardID unitImplId{};
+    id.fromParts(&unitImplId, category, categoryIndex, IdType::UnitGenerated, typeIndex);
 
-static_assert(sizeof(CAttackModifiedData) == 20,
-              "Size of CAttackModifiedData structure must be exactly 20 bytes");
+    CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
+    unitGenerator->vftable->generateUnitImpl(unitGenerator, &unitImplId);
+}
 
-} // namespace game
-
-#endif // ATTACKMODIFIED_H
+} // namespace hooks

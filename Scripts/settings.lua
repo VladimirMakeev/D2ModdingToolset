@@ -96,6 +96,9 @@ settings = {
 	-- instead of check against arithmetic mean of two random numbers
 	missChanceSingleRoll = false,
 
+	-- Fix missing attack information in unit encyclopedia
+	detailedAttackDescription = true,
+
 	-- Create mss32 proxy dll log files with debug info
 	debugHooks = false,
 }

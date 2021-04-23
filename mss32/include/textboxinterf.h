@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ATTACKMODIFIED_H
-#define ATTACKMODIFIED_H
+#ifndef TEXTBOXINTERFACE_H
+#define TEXTBOXINTERFACE_H
 
-#include "attack.h"
+#include "interface.h"
 
 namespace game {
 
-struct CAttackModifiedData;
+struct CTextBoxInterf : public CInterface
+{ };
 
-struct CAttackModified : public IAttack
+namespace CTextBoxInterfApi {
+
+struct Api
 {
-    CMidgardID attackId;
-    CAttackModifiedData* data;
+    using SetString = void(__thiscall*)(CTextBoxInterf* thisptr, const char* value);
+    SetString setString;
 };
 
-static_assert(sizeof(CAttackModified) == 12,
-              "Size of CAttackModified structure must be exactly 12 bytes");
+Api& get();
 
-struct CAttackModifiedData
-{
-    IAttack* impl;
-    int initiative;
-    int power;
-    int qtyDamage;
-    int attackDrain;
-};
-
-static_assert(sizeof(CAttackModifiedData) == 20,
-              "Size of CAttackModifiedData structure must be exactly 20 bytes");
+} // namespace CTextBoxInterfApi
 
 } // namespace game
 
-#endif // ATTACKMODIFIED_H
+#endif // TEXTBOXINTERFACE_H

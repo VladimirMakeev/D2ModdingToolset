@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,41 +17,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "globaldata.h"
+#include "textboxinterf.h"
 #include "version.h"
 #include <array>
 
-namespace game::GlobalDataApi {
+namespace game::CTextBoxInterfApi {
 
 // clang-format off
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::GetGlobalData)0x58004f,
-        (Api::FindById)0x583c35,
-        (Api::FindItemById)0x58452a,
-        (Api::FindDynUpgradeById)0x598644,
+        (Api::SetString)0x5341d6,
     },
     // Russobit
     Api{
-        (Api::GetGlobalData)0x58004f,
-        (Api::FindById)0x583c35,
-        (Api::FindItemById)0x58452a,
-        (Api::FindDynUpgradeById)0x598644,
+        (Api::SetString)0x5341d6,
     },
     // Gog
     Api{
-        (Api::GetGlobalData)0x57f707,
-        (Api::FindById)0x592f25,
-        (Api::FindItemById)0x5836dd,
-        (Api::FindDynUpgradeById)0x597781,
+        (Api::SetString)0x5337b0,
     },
     // Scenario Editor
     Api{
-        (Api::GetGlobalData)0x5286ce,
-        (Api::FindById)0x538beb,
-        (Api::FindItemById)0x52d10b,
-        (Api::FindDynUpgradeById)0x542c85,
+        (Api::SetString)0x48f51b,
     },
 }};
 // clang-format on
@@ -61,4 +49,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::GlobalDataApi
+} // namespace game::CTextBoxInterfApi

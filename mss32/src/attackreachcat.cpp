@@ -24,7 +24,7 @@
 namespace game::AttackReachCategories {
 
 // clang-format off
-static std::array<Categories, 3> categories = {{
+static std::array<Categories, 4> categories = {{
     // Akella
     Categories{
         (LAttackReach*)0x83a110,
@@ -42,7 +42,13 @@ static std::array<Categories, 3> categories = {{
         (LAttackReach*)0x8380c0,
         (LAttackReach*)0x8380d0,
         (LAttackReach*)0x8380b0
-    }
+    },
+    // Scenario Editor
+    Categories{
+        (LAttackReach*)0x665908,
+        (LAttackReach*)0x665918,
+        (LAttackReach*)0x6658f8,
+    },
 }};
 // clang-format on
 

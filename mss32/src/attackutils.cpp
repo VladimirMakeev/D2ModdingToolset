@@ -18,8 +18,63 @@
  */
 
 #include "attackutils.h"
+#include "attack.h"
+#include "globaldata.h"
+#include "globalvariables.h"
+#include "midgardid.h"
 
 namespace hooks {
+
+const game::Restriction<int> attackPowerLimits{-100, 100};
+const game::Restriction<int> attackInitiativeLimits{1, 150};
+
+game::IAttack* getAttack(const game::CMidgardID* attackId)
+{
+    using namespace game;
+
+    if (*attackId == emptyId)
+        return nullptr;
+
+    const auto& global = GlobalDataApi::get();
+    const auto attacks = (*global.getGlobalData())->attacks;
+
+    return (IAttack*)global.findById(attacks, attackId);
+}
+
+int getBoostDamage(int level)
+{
+    using namespace game;
+
+    const auto& global = GlobalDataApi::get();
+    const auto vars = *(*global.getGlobalData())->globalVariables;
+
+    int count = sizeof(vars->battleBoostDamage) / sizeof(*vars->battleBoostDamage);
+    return (0 < level && level <= count) ? vars->battleBoostDamage[level - 1] : 0;
+}
+
+int getLowerDamage(int level)
+{
+    using namespace game;
+
+    const auto& global = GlobalDataApi::get();
+    const auto vars = *(*global.getGlobalData())->globalVariables;
+
+    int count = sizeof(vars->battleLowerDamage) / sizeof(*vars->battleLowerDamage);
+    return (0 < level && level <= count) ? vars->battleLowerDamage[level - 1] : 0;
+}
+
+int getLowerInitiative(int level)
+{
+    using namespace game;
+
+    if (level != 1)
+        return 0;
+
+    const auto& global = GlobalDataApi::get();
+    const auto vars = *(*global.getGlobalData())->globalVariables;
+
+    return vars->battleLowerIni;
+}
 
 bool isAttackClassUsesAccuracy(const game::LAttackClass* attackClass)
 {

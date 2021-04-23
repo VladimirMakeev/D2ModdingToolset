@@ -87,6 +87,9 @@ std::string getTranslatedText(const char* textIdString)
 {
     using namespace game;
 
+    if (textIdString == nullptr || strlen(textIdString) == 0)
+        return "";
+
     CMidgardID textId{};
     CMidgardIDApi::get().fromString(&textId, textIdString);
 
