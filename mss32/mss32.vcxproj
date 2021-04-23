@@ -140,6 +140,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="..\lua\lutf8lib.c" />
     <ClCompile Include="..\lua\lvm.c" />
     <ClCompile Include="..\lua\lzio.c" />
+    <ClCompile Include="include\unitutils.cpp" />
     <ClCompile Include="src\attack.cpp" />
     <ClCompile Include="src\attackclasscat.cpp" />
     <ClCompile Include="src\attackimpl.cpp" />
@@ -508,6 +509,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\unitgenerator.h" />
     <ClInclude Include="include\unitmodifier.h" />
     <ClInclude Include="include\unitsforhire.h" />
+    <ClInclude Include="include\unitutils.h" />
     <ClInclude Include="include\ussoldier.h" />
     <ClInclude Include="include\ussoldierimpl.h" />
     <ClInclude Include="include\usunit.h" />
