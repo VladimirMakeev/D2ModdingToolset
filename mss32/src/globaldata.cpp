@@ -24,7 +24,7 @@
 namespace game::GlobalDataApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::GetGlobalData)0x58004f,
@@ -45,7 +45,14 @@ static std::array<Api, 3> functions = {{
         (Api::FindById)0x592f25,
         (Api::FindItemById)0x5836dd,
         (Api::FindDynUpgradeById)0x597781,
-    }
+    },
+    // Scenario Editor
+    Api{
+        (Api::GetGlobalData)0x5286ce,
+        (Api::FindById)0x538beb,
+        (Api::FindItemById)0x52d10b,
+        (Api::FindDynUpgradeById)0x542c85,
+    },
 }};
 // clang-format on
 
