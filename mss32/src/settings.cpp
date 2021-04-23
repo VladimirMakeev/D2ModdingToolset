@@ -208,7 +208,7 @@ const Settings& userSettings()
         initialized = true;
         settings = defaultSettings();
 
-        const auto settingsPath{hooks::gameFolder() / "Scripts" / "settings.lua"};
+        const auto settingsPath{hooks::scriptsFolder() / "settings.lua"};
         if (std::filesystem::exists(settingsPath)) {
             sol::state lua;
 

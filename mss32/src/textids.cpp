@@ -45,7 +45,7 @@ const TextIds& textIds()
     if (!initialized) {
         initialized = true;
 
-        const auto path{hooks::gameFolder() / "Scripts" / "textids.lua"};
+        const auto path{hooks::scriptsFolder() / "textids.lua"};
         if (std::filesystem::exists(path)) {
             sol::state lua;
 
