@@ -24,7 +24,7 @@
 namespace game::CDialogInterfApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::FindButton)0x50baaf,
@@ -45,7 +45,14 @@ static std::array<Api, 3> functions = {{
         (Api::FindListBox)0x50afd3,
         (Api::FindTextBox)0x50b013,
         (Api::FindControl)0x50b70a
-    }
+    },
+    // Scenario Editor
+    Api{
+        (Api::FindButton)nullptr,
+        (Api::FindListBox)nullptr,
+        (Api::FindTextBox)0x4a3571,
+        (Api::FindControl)nullptr,
+    },
 }};
 // clang-format on
 
