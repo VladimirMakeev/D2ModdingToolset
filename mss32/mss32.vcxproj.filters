@@ -477,6 +477,9 @@
     <ClCompile Include="src\modifierutils.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\textboxinterf.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="include\unitutils.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -1268,6 +1271,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\encunitdescriptor.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\textboxinterf.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\unitutils.h">

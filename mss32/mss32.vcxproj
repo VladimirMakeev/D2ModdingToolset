@@ -246,6 +246,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\summonhooks.cpp" />
     <ClCompile Include="src\targetslist.cpp" />
     <ClCompile Include="src\terraincat.cpp" />
+    <ClCompile Include="src\textboxinterf.cpp" />
     <ClCompile Include="src\transformselfhooks.cpp" />
     <ClCompile Include="src\unitbranchcat.cpp" />
     <ClCompile Include="src\unitcat.cpp" />
@@ -499,6 +500,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\taskmanagerholder.h" />
     <ClInclude Include="include\terraincat.h" />
     <ClInclude Include="include\textandid.h" />
+    <ClInclude Include="include\textboxinterf.h" />
     <ClInclude Include="include\tilevariation.h" />
     <ClInclude Include="include\transformselfhooks.h" />
     <ClInclude Include="include\umattack.h" />
