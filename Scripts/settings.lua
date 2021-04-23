@@ -97,7 +97,7 @@ settings = {
 	missChanceSingleRoll = false,
 
 	-- Fix missing attack information in unit encyclopedia
-	detailedAttackDescription = false,
+	detailedAttackDescription = true,
 
 	-- Create mss32 proxy dll log files with debug info
 	debugHooks = false,
