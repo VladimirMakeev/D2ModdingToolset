@@ -22,6 +22,7 @@
 
 #include "mqanimation.h"
 #include "mqnettraffic.h"
+#include "smartptr.h"
 #include <cstddef>
 
 namespace game {
@@ -31,18 +32,41 @@ struct IMqNetSession;
 struct CMidClient;
 struct CMidServer;
 struct GameSettings;
+struct CMenuPhase;
+struct CAutoDialog;
+struct CUiManager;
+struct CInterfManagerImpl;
+struct CMqFps;
 
 struct CMidgardData
 {
     char unknown[4];
-    IMqNetService** netService;
-    IMqNetSession** netSession;
-    char unknown2[28];
-    CMidClient** client;
-    CMidServer** server;
-    char unknown3[12];
+    IMqNetService* netService;
+    IMqNetSession* netSession;
+    void* directPlayLobbySession;
+    char unknown2[24];
+    CMidClient* client;
+    CMidServer* server;
+    bool multiplayerGame;
+    bool hotseatGame;
+    char unknown3;
+    bool lobbySessionExists;
+    char padding[3];
+    CMenuPhase* menuPhase;
     GameSettings** settings;
-    char unknown4[188];
+    void* interfImages;
+    CAutoDialog* autoDialog;
+    void* menuAnimations;
+    void* menuImages;
+    SmartPtr<CUiManager> uiManager;
+    char unknown4[32];
+    std::uint32_t netMessageId;
+    char unknown5[24];
+    SmartPtr<CInterfManagerImpl> interfManager;
+    char unknown6[88];
+    CMqFps* fps;
+    bool showFullSystemInfo;
+    char padding2[3];
 };
 
 static_assert(sizeof(CMidgardData) == 252,
