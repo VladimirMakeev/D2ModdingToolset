@@ -90,28 +90,28 @@ std::string getAttackPowerText(game::IAttack* attack,
 {
     using namespace game;
 
-    if (!isAttackClassUsesAccuracy(attack->vftable->getAttackClass(attack)))
-        return "100%";
+    std::string result;
+    if (isAttackClassUsesAccuracy(attack->vftable->getAttackClass(attack))) {
+        int attackPower;
+        attack->vftable->getPower(attack, &attackPower);
 
-    int attackPower;
-    attack->vftable->getPower(attack, &attackPower);
-    if (modifiers == nullptr)
-        return fmt::format("{:d}%", attackPower);
+        if (modifiers != nullptr) {
+            const auto& fn = gameFunctions();
+            int attackPowerModified = std::clamp(
+                fn.applyPercentModifiers(attackPower, modifiers, ModifierElementTypeFlag::Power),
+                attackPowerLimits.min, attackPowerLimits.max);
 
-    const auto& fn = gameFunctions();
-    int attackPowerModified = std::clamp(fn.applyPercentModifiers(attackPower, modifiers,
-                                                                  ModifierElementTypeFlag::Power),
-                                         attackPowerLimits.min, attackPowerLimits.max);
-
-    auto attackPowerColored = appendColoredBonus(fmt::format("{:d}%", attackPowerModified),
-                                                 attackPowerTotal - attackPowerModified);
+            result = appendColoredBonus(fmt::format("{:d}%", attackPowerModified),
+                                        attackPowerTotal - attackPowerModified);
+        } else
+            result = fmt::format("{:d}%", attackPower);
+    } else
+        result = "100%";
 
     if (userSettings().criticalHitChance != 100 && attack->vftable->getCritHit(attack)) {
-        return fmt::format("{:s} ({:d}%)", attackPowerColored.c_str(),
-                           userSettings().criticalHitChance);
-    }
-
-    return attackPowerColored;
+        return fmt::format("{:s} ({:d}%)", result.c_str(), userSettings().criticalHitChance);
+    } else
+        return result;
 }
 
 std::string getAttackDamageMaxText(const std::string& damage)
