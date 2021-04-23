@@ -1267,6 +1267,9 @@
     <ClInclude Include="include\modifierutils.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\encunitdescriptor.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\unitutils.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
