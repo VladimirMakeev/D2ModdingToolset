@@ -399,6 +399,9 @@ void removeModifier(game::BattleMsgData* battleMsgData,
 {
     using namespace game;
 
+    if (unit == nullptr) // Prevents the same crash with summoners that appears in removeModifier
+        return;
+
     CMidUnitApi::get().removeModifier(unit, modifierId);
 
     auto& mods = unit->origModifiers;
