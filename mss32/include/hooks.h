@@ -178,13 +178,13 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
                                   int* attackDamage,
                                   int* criticalHitDamage);
 
-void __stdcall getAttackAccuracyHooked(int* accuracy,
-                                       const game::IAttack* attack,
-                                       const game::IMidgardObjectMap* objectMap,
-                                       const game::CMidgardID* unitId,
-                                       const game::BattleMsgData* battleMsgData);
+void __stdcall getAttackPowerHooked(int* power,
+                                    const game::IAttack* attack,
+                                    const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* unitId,
+                                    const game::BattleMsgData* battleMsgData);
 
-bool __stdcall attackShouldMissHooked(const int* accuracy);
+bool __stdcall attackShouldMissHooked(const int* power);
 
 int __stdcall getUnitHealAttackNumberHooked(const game::IMidgardObjectMap* objectMap,
                                             const game::CMidgardID* unitId);

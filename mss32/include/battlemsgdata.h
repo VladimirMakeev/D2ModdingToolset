@@ -176,7 +176,7 @@ struct UnitInfo
     int shatteredArmor;
     int fortificationArmor;
     /** Applied by game to mage units. Reduction does not shown in unit encyclopedia. */
-    int accuracyReduction;
+    int attackPowerReduction;
 };
 
 static_assert(sizeof(UnitInfo) == 168, "Size of UnitInfo structure must be exactly 168 bytes");
@@ -317,8 +317,8 @@ struct Api
                                              const CMidgardID* unitId);
     IsUnitAttacker isUnitAttacker;
 
-    GetUnitIntValue getUnitAccuracyReduction;
-    SetUnitIntValue setUnitAccuracyReduction;
+    GetUnitIntValue getAttackPowerReduction;
+    SetUnitIntValue setAttackPowerReduction;
 
     using SetUnitBoolValue = void(__thiscall*)(BattleMsgData* thisptr,
                                                const CMidgardID* unitId,

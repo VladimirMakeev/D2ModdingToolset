@@ -142,8 +142,8 @@ static Hooks getGameHooks()
         HookInfo{(void*)game::CMidMusicApi::get().playCapitalTrack, playCapitalTrackHooked},
         // Fix game crash with pathfinding on 144x144 maps
         HookInfo{(void*)fn.markMapPosition, markMapPositionHooked, (void**)&orig.markMapPosition},
-        // Allow user to tweak accuracy computations
-        HookInfo{(void*)fn.getAttackAccuracy, getAttackAccuracyHooked},
+        // Allow user to tweak power computations
+        HookInfo{(void*)fn.getAttackPower, getAttackPowerHooked},
         // Fix game crash when AI controlled unit with transform self attack
         // uses alternative attack with 'adjacent' attack range
         HookInfo{(void*)fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked, (void**)&orig.computeUnitEffectiveHp},
@@ -1209,14 +1209,14 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
     return totalDamage;
 }
 
-void __stdcall getAttackAccuracyHooked(int* accuracy,
-                                       const game::IAttack* attack,
-                                       const game::IMidgardObjectMap* objectMap,
-                                       const game::CMidgardID* unitId,
-                                       const game::BattleMsgData* battleMsgData)
+void __stdcall getAttackPowerHooked(int* power,
+                                    const game::IAttack* attack,
+                                    const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* unitId,
+                                    const game::BattleMsgData* battleMsgData)
 {
     if (!attack) {
-        *accuracy = 100;
+        *power = 100;
         return;
     }
 
@@ -1224,13 +1224,13 @@ void __stdcall getAttackAccuracyHooked(int* accuracy,
 
     const auto attackClass = attack->vftable->getAttackClass(attack);
 
-    if (!isAttackClassUsesAccuracy(attackClass)) {
-        *accuracy = 100;
+    if (!attackHasPower(attackClass)) {
+        *power = 100;
         return;
     }
 
-    int tmpAccuracy{};
-    attack->vftable->getPower(attack, &tmpAccuracy);
+    int tmpPower{};
+    attack->vftable->getPower(attack, &tmpPower);
 
     const auto& battle = BattleMsgDataApi::get();
     auto groupId = battle.isUnitAttacker(battleMsgData, unitId) ? &battleMsgData->attackerGroupId
@@ -1253,41 +1253,41 @@ void __stdcall getAttackAccuracyHooked(int* accuracy,
         const auto& difficulties = DifficultyLevelCategories::get();
         const auto difficultyId = scenarioInfo->gameDifficulty.id;
 
-        const auto& aiAccuracy = userSettings().aiAccuracyBonus;
-        const std::int8_t* bonus = &aiAccuracy.easy;
+        const auto& aiAttackPower = userSettings().aiAttackPowerBonus;
+        const std::int8_t* bonus = &aiAttackPower.easy;
 
         if (difficultyId == difficulties.easy->id) {
-            bonus = &aiAccuracy.easy;
+            bonus = &aiAttackPower.easy;
         } else if (difficultyId == difficulties.average->id) {
-            bonus = &aiAccuracy.average;
+            bonus = &aiAttackPower.average;
         } else if (difficultyId == difficulties.hard->id) {
-            bonus = &aiAccuracy.hard;
+            bonus = &aiAttackPower.hard;
         } else if (difficultyId == difficulties.veryHard->id) {
-            bonus = &aiAccuracy.veryHard;
+            bonus = &aiAttackPower.veryHard;
         }
 
-        if (aiAccuracy.absolute) {
-            tmpAccuracy += *bonus;
+        if (aiAttackPower.absolute) {
+            tmpPower += *bonus;
         } else {
-            tmpAccuracy += tmpAccuracy * *bonus / 100;
+            tmpPower += tmpPower * *bonus / 100;
         }
 
-        tmpAccuracy = std::clamp(tmpAccuracy, attackPowerLimits.min, attackPowerLimits.max);
+        tmpPower = std::clamp(tmpPower, attackPowerLimits.min, attackPowerLimits.max);
     }
 
     const auto& attacks = AttackClassCategories::get();
     if (battleMsgData->currentRound > userSettings().disableAllowedRoundMax
         && (attackClass->id == attacks.paralyze->id || attackClass->id == attacks.petrify->id)) {
-        tmpAccuracy = 0;
+        tmpPower = 0;
     }
 
-    tmpAccuracy -= battle.getUnitAccuracyReduction(battleMsgData, unitId);
-    *accuracy = std::clamp(tmpAccuracy, attackPowerLimits.min, attackPowerLimits.max);
+    tmpPower -= battle.getAttackPowerReduction(battleMsgData, unitId);
+    *power = std::clamp(tmpPower, attackPowerLimits.min, attackPowerLimits.max);
 }
 
-bool __stdcall attackShouldMissHooked(const int* accuracy)
+bool __stdcall attackShouldMissHooked(const int* power)
 {
-    return game::gameFunctions().generateRandomNumber(100) > *accuracy;
+    return game::gameFunctions().generateRandomNumber(100) > *power;
 }
 
 int __stdcall getUnitHealAttackNumberHooked(const game::IMidgardObjectMap* objectMap,
@@ -1341,7 +1341,7 @@ void __stdcall setUnknown9Bit1AndClearBoostLowerDamageHooked(game::BattleMsgData
 
         const auto& battle = BattleMsgDataApi::get();
         battle.setUnitStatus(battleMsgData, unitId, BattleStatus::Defend, false);
-        battle.setUnitAccuracyReduction(battleMsgData, unitId, 0);
+        battle.setAttackPowerReduction(battleMsgData, unitId, 0);
     }
 }
 
@@ -1361,7 +1361,7 @@ void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
         removeModifiers(battleMsgData, objectMap, unitInfo, &(*it));
     battle.resetModifiedUnitsInfo(battleMsgData, unitId);
 
-    battle.setUnitAccuracyReduction(battleMsgData, unitId, 0);
+    battle.setAttackPowerReduction(battleMsgData, unitId, 0);
 }
 
 void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)

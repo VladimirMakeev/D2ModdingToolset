@@ -24,6 +24,7 @@
 #include "mqnettraffic.h"
 #include "smartptr.h"
 #include <cstddef>
+#include <cstdint>
 
 namespace game {
 
