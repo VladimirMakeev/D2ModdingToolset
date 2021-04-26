@@ -22,6 +22,7 @@
 #include "game.h"
 #include "globaldata.h"
 #include "log.h"
+#include "unitutils.h"
 #include "ussoldier.h"
 #include "usunitimpl.h"
 #include "utils.h"
@@ -46,87 +47,49 @@ void UnitImplView::bind(sol::state& lua)
 
 int UnitImplView::getLevel() const
 {
-    using namespace game;
-
-    auto soldier = gameFunctions().castUnitImplToSoldier(impl);
-    if (!soldier) {
-        hooks::logError("mssProxyError.log", fmt::format("Failed to cast unit impl {:s} to soldier",
-                                                         hooks::idToString(&impl->unitId)));
-        return 0;
-    }
-
-    auto vftable = static_cast<const IUsSoldierVftable*>(soldier->vftable);
-    return vftable->getLevel(soldier);
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    return soldier ? soldier->vftable->getLevel(soldier) : 0;
 }
 
 int UnitImplView::getXpNext() const
 {
-    using namespace game;
-
-    auto soldier = gameFunctions().castUnitImplToSoldier(impl);
-    if (!soldier) {
-        hooks::logError("mssProxyError.log", fmt::format("Failed to cast unit impl {:s} to soldier",
-                                                         hooks::idToString(&impl->unitId)));
-        return 0;
-    }
-
-    auto vftable = static_cast<const IUsSoldierVftable*>(soldier->vftable);
-    return vftable->getXpNext(soldier);
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    return soldier ? soldier->vftable->getXpNext(soldier) : 0;
 }
 
 int UnitImplView::getDynUpgLevel() const
 {
-    using namespace game;
-
-    auto soldier = gameFunctions().castUnitImplToSoldier(impl);
-    if (!soldier) {
-        hooks::logError("mssProxyError.log", fmt::format("Failed to cast unit impl {:s} to soldier",
-                                                         hooks::idToString(&impl->unitId)));
-        return 0;
-    }
-
-    auto vftable = static_cast<const IUsSoldierVftable*>(soldier->vftable);
-    return vftable->getDynUpgLvl(soldier);
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    return soldier ? soldier->vftable->getDynUpgLvl(soldier) : 0;
 }
 
 std::optional<DynUpgradeView> UnitImplView::getDynUpgrade1() const
 {
-    using namespace game;
-
-    auto soldier = gameFunctions().castUnitImplToSoldier(impl);
-    auto vftable = static_cast<const IUsSoldierVftable*>(soldier->vftable);
-
-    auto id = vftable->getDynUpg1(soldier);
-    if (!id) {
-        hooks::logError("mssProxyError.log", fmt::format("Dyn upgrade 1 id is null, unit impl {:s}",
-                                                         hooks::idToString(&impl->unitId)));
-        return std::nullopt;
-    }
-
-    const auto& globalApi = GlobalDataApi::get();
-    auto globalData = *globalApi.getGlobalData();
-
-    auto upgrade = globalApi.findDynUpgradeById(globalData->dynUpgrade, id);
-    if (!upgrade) {
-        hooks::logError("mssProxyError.log",
-                        fmt::format("Could not find dyn upgrade 1 {:s}", hooks::idToString(id)));
-        return std::nullopt;
-    }
-
-    return {upgrade};
+    return getDynUpgrade(1);
 }
 
 std::optional<DynUpgradeView> UnitImplView::getDynUpgrade2() const
 {
+    return getDynUpgrade(2);
+}
+
+std::optional<DynUpgradeView> UnitImplView::getDynUpgrade(int upgradeNumber) const
+{
     using namespace game;
 
-    auto soldier = gameFunctions().castUnitImplToSoldier(impl);
-    auto vftable = static_cast<const IUsSoldierVftable*>(soldier->vftable);
+    if (upgradeNumber != 1 && upgradeNumber != 2)
+        return std::nullopt;
 
-    auto id = vftable->getDynUpg2(soldier);
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    if (!soldier)
+        return std::nullopt;
+
+    auto id = upgradeNumber == 1 ? soldier->vftable->getDynUpg1(soldier)
+                                 : soldier->vftable->getDynUpg2(soldier);
     if (!id) {
-        hooks::logError("mssProxyError.log", fmt::format("Dyn upgrade 2 id is null, unit impl {:s}",
-                                                         hooks::idToString(&impl->unitId)));
+        hooks::logError("mssProxyError.log",
+                        fmt::format("Dyn upgrade {:d} id is null, unit impl {:s}", upgradeNumber,
+                                    hooks::idToString(&impl->unitId)));
         return std::nullopt;
     }
 
@@ -135,8 +98,8 @@ std::optional<DynUpgradeView> UnitImplView::getDynUpgrade2() const
 
     auto upgrade = globalApi.findDynUpgradeById(globalData->dynUpgrade, id);
     if (!upgrade) {
-        hooks::logError("mssProxyError.log",
-                        fmt::format("Could not find dyn upgrade 2 {:s}", hooks::idToString(id)));
+        hooks::logError("mssProxyError.log", fmt::format("Could not find dyn upgrade {:d} {:s}",
+                                                         upgradeNumber, hooks::idToString(id)));
         return std::nullopt;
     }
 

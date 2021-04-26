@@ -53,6 +53,9 @@ public:
     /** Returns dynamic upgrade 2. */
     std::optional<DynUpgradeView> getDynUpgrade2() const;
 
+protected:
+    std::optional<DynUpgradeView> getDynUpgrade(int upgradeNumber) const;
+
 private:
     game::IUsUnit* impl;
 };

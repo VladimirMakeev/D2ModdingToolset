@@ -18,9 +18,14 @@
  */
 
 #include "unitutils.h"
+#include "game.h"
 #include "globaldata.h"
+#include "log.h"
 #include "midgardid.h"
 #include "unitgenerator.h"
+#include "usunitimpl.h"
+#include "utils.h"
+#include <fmt/format.h>
 
 namespace hooks {
 
@@ -38,6 +43,19 @@ void generateUnitImplByAttackId(const game::CMidgardID* attackId)
 
     CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
     unitGenerator->vftable->generateUnitImpl(unitGenerator, &unitImplId);
+}
+
+game::IUsSoldier* castUnitImplToSoldierWithLogging(game::IUsUnit* unitImpl)
+{
+    using namespace game;
+
+    auto soldier = gameFunctions().castUnitImplToSoldier(unitImpl);
+    if (!soldier) {
+        hooks::logError("mssProxyError.log", fmt::format("Failed to cast unit impl {:s} to soldier",
+                                                         hooks::idToString(&unitImpl->unitId)));
+    }
+
+    return soldier;
 }
 
 } // namespace hooks
