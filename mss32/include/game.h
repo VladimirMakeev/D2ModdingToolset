@@ -219,7 +219,10 @@ using MarkMapPosition = void(__thiscall*)(void* thisptr, CMqPoint* position);
 /** Returns unit level by impl id. If unit does not exist yet, computes its level. */
 using GetUnitLevelByImplId = int(__stdcall*)(const CMidgardID* unitImplId);
 
-/** Returns attack power value adjusted according to game difficulty and batte round. */
+/**
+ * Returns attack power value (chance to hit / accuracy) adjusted according to game difficulty and
+ * batte round.
+ */
 using GetAttackPower = void(__stdcall*)(int* power,
                                         const IAttack* attack,
                                         const IMidgardObjectMap* objectMap,
@@ -231,7 +234,7 @@ using IsGroupOwnerPlayerHuman = bool(__stdcall*)(const IMidgardObjectMap* object
                                                  const CMidgardID* groupId);
 
 /**
- * Determines whether attack should miss or not depending on its power.
+ * Determines whether attack should miss or not depending on its power (chance to hit / accuracy).
  * Compares attack power with arithmetic mean of two random numbers.
  * @returns true if arithmetic mean is greater than power value.
  */

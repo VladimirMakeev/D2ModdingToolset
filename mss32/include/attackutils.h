@@ -37,7 +37,7 @@ game::IAttack* getAttack(const game::CMidgardID* attackId);
 int getBoostDamage(int level);
 int getLowerDamage(int level);
 int getLowerInitiative(int level);
-bool attackHasPower(const game::LAttackClass* attackClass);
+bool attackHasPower(const game::LAttackClass* attackClass); // Power is chance to hit / accuracy
 
 } // namespace hooks
 
