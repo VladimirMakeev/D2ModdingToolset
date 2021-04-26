@@ -76,7 +76,7 @@ int getLowerInitiative(int level)
     return vars->battleLowerIni;
 }
 
-bool isAttackClassUsesAccuracy(const game::LAttackClass* attackClass)
+bool attackHasPower(const game::LAttackClass* attackClass)
 {
     const auto& attacks = game::AttackClassCategories::get();
     const auto id = attackClass->id;

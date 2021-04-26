@@ -91,7 +91,7 @@ std::string getAttackPowerText(game::IAttack* attack,
     using namespace game;
 
     std::string result;
-    if (isAttackClassUsesAccuracy(attack->vftable->getAttackClass(attack))) {
+    if (attackHasPower(attack->vftable->getAttackClass(attack))) {
         int attackPower;
         attack->vftable->getPower(attack, &attackPower);
 
@@ -381,8 +381,7 @@ std::string getHitText(game::IEncUnitDescriptor* descriptor,
     auto result = getAttackPowerText(attack, modifiers,
                                      descriptor->vftable->getAttackPower(descriptor));
 
-    if (altAttack != nullptr
-        && isAttackClassUsesAccuracy(altAttack->vftable->getAttackClass(altAttack))) {
+    if (altAttack != nullptr && attackHasPower(altAttack->vftable->getAttackClass(altAttack))) {
         auto value = getAttackPowerText(altAttack, nullptr,
                                         descriptor->vftable->getAltAttackPower(descriptor));
         result = addAltAttackTextValue(result, value);

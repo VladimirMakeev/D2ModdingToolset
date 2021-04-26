@@ -219,23 +219,26 @@ using MarkMapPosition = void(__thiscall*)(void* thisptr, CMqPoint* position);
 /** Returns unit level by impl id. If unit does not exist yet, computes its level. */
 using GetUnitLevelByImplId = int(__stdcall*)(const CMidgardID* unitImplId);
 
-/** Returns attack accuracy value adjusted according to game difficulty and batte round. */
-using GetAttackAccuracy = void(__stdcall*)(int* accuracy,
-                                           const IAttack* attack,
-                                           const IMidgardObjectMap* objectMap,
-                                           const CMidgardID* unitId,
-                                           const BattleMsgData* battleMsgData);
+/**
+ * Returns attack power value (chance to hit / accuracy) adjusted according to game difficulty and
+ * batte round.
+ */
+using GetAttackPower = void(__stdcall*)(int* power,
+                                        const IAttack* attack,
+                                        const IMidgardObjectMap* objectMap,
+                                        const CMidgardID* unitId,
+                                        const BattleMsgData* battleMsgData);
 
 /** Returns true if group with specified id belongs to human controlled player. */
 using IsGroupOwnerPlayerHuman = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                  const CMidgardID* groupId);
 
 /**
- * Determines whether attack should miss or not depending on accuracy.
- * Compares accuracy with arithmetic mean of two random numbers.
- * @returns true if arithmetic mean is greater than accuracy value.
+ * Determines whether attack should miss or not depending on its power (chance to hit / accuracy).
+ * Compares attack power with arithmetic mean of two random numbers.
+ * @returns true if arithmetic mean is greater than power value.
  */
-using AttackShouldMiss = bool(__stdcall*)(const int* accuracy);
+using AttackShouldMiss = bool(__stdcall*)(const int* power);
 
 /** Generates random number in range [0 : maxValue) using special ingame generator. */
 using GenerateRandomNumber = int(__stdcall*)(unsigned int maxValue);
@@ -414,7 +417,7 @@ struct Functions
     ComputeDamage computeDamage;
     MarkMapPosition markMapPosition;
     GetUnitLevelByImplId getUnitLevelByImplId;
-    GetAttackAccuracy getAttackAccuracy;
+    GetAttackPower getAttackPower;
     IsGroupOwnerPlayerHuman isGroupOwnerPlayerHuman;
     AttackShouldMiss attackShouldMiss;
     GenerateRandomNumber generateRandomNumber;

@@ -44,7 +44,7 @@ struct Settings
     int carryOverItemsMax;
     std::uint8_t criticalHitDamage;
     std::uint8_t criticalHitChance;
-    std::uint8_t mageLeaderAccuracyReduction;
+    std::uint8_t mageLeaderAttackPowerReduction;
     std::uint8_t disableAllowedRoundMax;
     std::uint8_t shatterDamageUpgradeRatio;
 
@@ -55,7 +55,7 @@ struct Settings
         std::int8_t hard;
         std::int8_t veryHard;
         bool absolute;
-    } aiAccuracyBonus;
+    } aiAttackPowerBonus;
 
     bool showBanners;
     bool showResources;

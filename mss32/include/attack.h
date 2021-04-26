@@ -56,6 +56,7 @@ struct IAttackVftable
     using GetInitiative = int(__thiscall*)(const IAttack* thisptr);
     GetInitiative getInitiative;
 
+    /** Power is chance to hit / accuracy. */
     using GetPower = int*(__thiscall*)(const IAttack* thisptr, int* power);
     GetPower getPower;
 

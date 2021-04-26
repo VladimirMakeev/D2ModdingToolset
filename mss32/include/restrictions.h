@@ -40,7 +40,7 @@ struct GameRestrictions
     Restriction<int>* unitArmor;
     Restriction<int>* stackScoutRange;
     std::uint8_t* criticalHitDamage;
-    std::uint8_t* mageLeaderAccuracyReduction;
+    std::uint8_t* mageLeaderAttackPowerReduction;
 };
 
 GameRestrictions& gameRestrictions();

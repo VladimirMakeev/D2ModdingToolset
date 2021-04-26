@@ -40,22 +40,22 @@ static T readSetting(const sol::table& table,
     return std::clamp<T>(table.get_or(name, def), min, max);
 }
 
-static void readAiAccuracySettings(Settings& settings, const sol::table& table)
+static void readAiAttackPowerSettings(Settings& settings, const sol::table& table)
 {
-    const auto& def = defaultSettings().aiAccuracyBonus;
-    auto& aiAccuracy = settings.aiAccuracyBonus;
+    const auto& def = defaultSettings().aiAttackPowerBonus;
+    auto& aiAttackPower = settings.aiAttackPowerBonus;
 
     auto bonuses = table.get<sol::optional<sol::table>>("aiAccuracyBonus");
     if (!bonuses.has_value()) {
-        aiAccuracy = def;
+        aiAttackPower = def;
         return;
     }
 
-    aiAccuracy.absolute = readSetting(bonuses.value(), "absolute", def.absolute);
-    aiAccuracy.easy = readSetting(bonuses.value(), "easy", def.easy);
-    aiAccuracy.average = readSetting(bonuses.value(), "average", def.average);
-    aiAccuracy.hard = readSetting(bonuses.value(), "hard", def.hard);
-    aiAccuracy.veryHard = readSetting(bonuses.value(), "veryHard", def.veryHard);
+    aiAttackPower.absolute = readSetting(bonuses.value(), "absolute", def.absolute);
+    aiAttackPower.easy = readSetting(bonuses.value(), "easy", def.easy);
+    aiAttackPower.average = readSetting(bonuses.value(), "average", def.average);
+    aiAttackPower.hard = readSetting(bonuses.value(), "hard", def.hard);
+    aiAttackPower.veryHard = readSetting(bonuses.value(), "veryHard", def.veryHard);
 }
 
 static Color readColor(const sol::table& table, const Color& def)
@@ -111,7 +111,7 @@ static void readSettings(Settings& settings, const sol::state& lua)
     settings.carryOverItemsMax = readSetting(table, "carryOverItemsMax", defaultSettings().carryOverItemsMax, 0);
     settings.criticalHitDamage = readSetting(table, "criticalHitDamage", defaultSettings().criticalHitDamage);
     settings.criticalHitChance = readSetting(table, "criticalHitChance", defaultSettings().criticalHitChance, (uint8_t)0, (uint8_t)100);
-    settings.mageLeaderAccuracyReduction = readSetting(table, "mageLeaderAccuracyReduction", defaultSettings().mageLeaderAccuracyReduction);
+    settings.mageLeaderAttackPowerReduction = readSetting(table, "mageLeaderAccuracyReduction", defaultSettings().mageLeaderAttackPowerReduction);
     settings.disableAllowedRoundMax = readSetting(table, "disableAllowedRoundMax", defaultSettings().disableAllowedRoundMax, (uint8_t)1);
     settings.shatterDamageUpgradeRatio = readSetting(table, "shatterDamageUpgradeRatio", defaultSettings().shatterDamageUpgradeRatio);
     settings.showBanners = readSetting(table, "showBanners", defaultSettings().showBanners);
@@ -130,7 +130,7 @@ static void readSettings(Settings& settings, const sol::state& lua)
     settings.debugMode = readSetting(table, "debugHooks", defaultSettings().debugMode);
     // clang-format on
 
-    readAiAccuracySettings(settings, table);
+    readAiAttackPowerSettings(settings, table);
     readMovementCostColors(settings, table);
 }
 
@@ -150,12 +150,12 @@ const Settings& baseSettings()
         settings.carryOverItemsMax = 5;
         settings.criticalHitDamage = 5;
         settings.criticalHitChance = 100;
-        settings.mageLeaderAccuracyReduction = 10;
-        settings.aiAccuracyBonus.absolute = true;
-        settings.aiAccuracyBonus.easy = -15;
-        settings.aiAccuracyBonus.average = 0;
-        settings.aiAccuracyBonus.hard = 5;
-        settings.aiAccuracyBonus.veryHard = 10;
+        settings.mageLeaderAttackPowerReduction = 10;
+        settings.aiAttackPowerBonus.absolute = true;
+        settings.aiAttackPowerBonus.easy = -15;
+        settings.aiAttackPowerBonus.average = 0;
+        settings.aiAttackPowerBonus.hard = 5;
+        settings.aiAttackPowerBonus.veryHard = 10;
         settings.disableAllowedRoundMax = 40;
         settings.shatterDamageUpgradeRatio = 100;
         settings.showBanners = false;
