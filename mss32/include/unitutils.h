@@ -22,11 +22,14 @@
 
 namespace game {
 struct CMidgardID;
+struct IUsUnit;
+struct IUsSoldier;
 } // namespace game
 
 namespace hooks {
 
 void generateUnitImplByAttackId(const game::CMidgardID* attackId);
+game::IUsSoldier* castUnitImplToSoldierWithLogging(game::IUsUnit* unitImpl);
 
 } // namespace hooks
 
