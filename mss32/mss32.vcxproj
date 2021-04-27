@@ -438,6 +438,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\miditem.h" />
     <ClInclude Include="include\midmsgboxbuttonhandler.h" />
     <ClInclude Include="include\midmsgboxbuttonhandlerstd.h" />
+    <ClInclude Include="include\midmsgsender.h" />
     <ClInclude Include="include\midmusic.h" />
     <ClInclude Include="include\midobject.h" />
     <ClInclude Include="include\midplayer.h" />
