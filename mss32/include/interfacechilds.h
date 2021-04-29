@@ -24,10 +24,12 @@
 
 namespace game {
 
+struct CInterface;
+
 struct CInterfaceChilds
 {
     void* vftable;
-    Vector<int> childs;
+    Vector<CInterface*> childs;
 };
 
 static_assert(sizeof(CInterfaceChilds) == 20,
