@@ -489,6 +489,9 @@
     <ClCompile Include="include\unitutils.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\subracecat.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\newracehooks.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>

@@ -245,6 +245,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\smartptr.cpp" />
     <ClCompile Include="src\movepathhooks.cpp" />
     <ClCompile Include="src\stringarray.cpp" />
+    <ClCompile Include="src\subracecat.cpp" />
     <ClCompile Include="src\summonhooks.cpp" />
     <ClCompile Include="src\targetslist.cpp" />
     <ClCompile Include="src\terraincat.cpp" />
