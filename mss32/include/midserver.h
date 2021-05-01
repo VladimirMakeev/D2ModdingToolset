@@ -23,16 +23,24 @@
 #include "mqnetsystem.h"
 #include "mqthread.h"
 #include <cstddef>
+#include <cstdint>
 
 namespace game {
 
+struct IMqNetSession;
+struct IMqNetPlayerServer;
 struct CMidServerBuilderFull;
+struct CMidServerLogic;
 
 struct CMidServerData
 {
-    char unknown[24];
-    CMidServerBuilderFull** serverBuilder;
-    char unknown2[4];
+    IMqNetSession* netSession;
+    IMqNetPlayerServer* netPlayerServer;
+    char unknown[8];
+    std::uint32_t serverMessageId;
+    int unknown2;
+    CMidServerBuilderFull* serverBuilder;
+    CMidServerLogic* serverLogic;
 };
 
 static_assert(sizeof(CMidServerData) == 32,
