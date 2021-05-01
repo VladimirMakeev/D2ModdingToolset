@@ -472,6 +472,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\netdplayservice.h" />
     <ClInclude Include="include\netdplaysession.h" />
     <ClInclude Include="include\netmessages.h" />
+    <ClInclude Include="include\netplayerinfo.h" />
     <ClInclude Include="include\ordercat.h" />
     <ClInclude Include="include\originalfunctions.h" />
     <ClInclude Include="include\pathinfolist.h" />
