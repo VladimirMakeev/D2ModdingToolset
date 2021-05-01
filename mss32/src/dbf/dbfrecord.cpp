@@ -175,4 +175,9 @@ bool DbfRecord::value(bool& result, const DbfColumn& column) const
     return true;
 }
 
+bool DbfRecord::isDeleted() const
+{
+    return deleted;
+}
+
 } // namespace utils
