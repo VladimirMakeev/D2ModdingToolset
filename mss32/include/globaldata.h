@@ -77,6 +77,7 @@ struct CItemBase;
 struct CDynUpgrade;
 struct CTileVariation;
 
+using RacesMap = Map<Pair<CMidgardID, TRaceType*>>;
 using DynUpgradeList = LinkedList<SmartPtr<CDynUpgrade>>;
 
 /** Holds global game information. */
@@ -115,7 +116,7 @@ struct GlobalData
     LLandmarkCategoryTable* landmarkCategories;
     LDeathAnimCategoryTable* deathAnimCategories;
     Map<Pair<CMidgardID, TBuildingType*>>* buildings;
-    Map<Pair<CMidgardID, TRaceType*>>** races;
+    RacesMap** races;
     Map<Pair<CMidgardID, TSubRaceType*>>* subRaces;
     Map<Pair<CMidgardID, TLordType*>>* lords;
     Map<Pair<CMidgardID, TStrategicSpell*>>* spells;
