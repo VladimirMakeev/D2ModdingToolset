@@ -20,6 +20,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "globaldata.h"
 #include "idlist.h"
 #include "mqpoint.h"
 
@@ -56,6 +57,7 @@ struct CMidgardPlan;
 struct IMqImage2;
 struct IEncUnitDescriptor;
 struct CDialogInterf;
+struct LRaceCategory;
 
 enum class ModifierElementTypeFlag : int;
 
@@ -386,6 +388,18 @@ using GenerateAttackDescription = void(__stdcall*)(IEncUnitDescriptor* descripto
                                                    const IdList* modifiers,
                                                    int damageMax);
 
+/**
+ * Validates TRaceType objects.
+ * Checks valirity of unit, guardian, leader and buildings ids.
+ * Checks that all race categories were correctly read.
+ */
+using ValidateRaces = void(__thiscall*)(RacesMap** thisptr, GlobalData** globalData);
+
+/** Checks if race with specified category was loaded from Grace.dbf. */
+using CheckRaceCategoryExist = void(__stdcall*)(RacesMap** races,
+                                                const LRaceCategory* category,
+                                                const char* dbfFileName);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -441,6 +455,8 @@ struct Functions
     GetStackPositionById getStackPositionById;
     ApplyPercentModifiers applyPercentModifiers;
     GenerateAttackDescription generateAttackDescription;
+    ValidateRaces validateRaces;
+    CheckRaceCategoryExist checkRaceCategoryExist;
 };
 
 /** Global variables used in game. */
