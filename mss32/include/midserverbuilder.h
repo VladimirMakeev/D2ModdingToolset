@@ -33,14 +33,14 @@ struct CMidServerBuilderFull : public IMidServerBuilder
 {
     int unknown;
     char unknown2;
-    char unknown3;
-    char unknown4;
-    char unknown5;
-    int unknown6;
-    int unknown7;
+    bool useRandom;
+    bool multiplayerGame;
+    bool hotseatGame;
+    int value3; /**< Always set to 3 in constructor. */
+    int gameVersion;
     CMidgardID id;
-    int unknown8;
-    char string[261];
+    CMidgardID campaignId;
+    char scenarioFilePath[261];
 };
 
 static_assert(sizeof(CMidServerBuilderFull) == 292,
