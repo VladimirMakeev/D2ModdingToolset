@@ -25,6 +25,7 @@
 #include "midgardid.h"
 #include "mqnettraffic.h"
 #include <cstddef>
+#include <cstdint>
 
 namespace game {
 
@@ -46,7 +47,7 @@ struct CMidServerLogicCoreData
     IMidgardObjectMap* objectMap;
     LinkedList<void*> list;
     int unknown4;
-    int playerNetId;
+    std::uint32_t playerNetId;
     Vector<NetPlayerInfo>* players;
     int unknown6;
     int unknown7;

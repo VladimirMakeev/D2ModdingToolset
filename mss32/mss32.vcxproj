@@ -447,6 +447,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midscenvariables.h" />
     <ClInclude Include="include\midserver.h" />
     <ClInclude Include="include\midserverbuilder.h" />
+    <ClInclude Include="include\midserverlogic.h" />
     <ClInclude Include="include\midserverlogiccore.h" />
     <ClInclude Include="include\midsite.h" />
     <ClInclude Include="include\midstack.h" />
