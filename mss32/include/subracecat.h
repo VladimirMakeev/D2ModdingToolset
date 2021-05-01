@@ -30,6 +30,45 @@ struct LSubRaceCategoryTable : public CEnumConstantTable<SubRaceId>
 struct LSubRaceCategory : public Category<SubRaceId>
 { };
 
+namespace SubraceCategories {
+
+struct Categories
+{
+    LSubRaceCategory* custom;
+    LSubRaceCategory* human;
+    LSubRaceCategory* dwarf;
+    LSubRaceCategory* heretic;
+    LSubRaceCategory* undead;
+    LSubRaceCategory* neutral;
+    LSubRaceCategory* neutralHuman;
+    LSubRaceCategory* neutralElf;
+    LSubRaceCategory* neutralGreenSkin;
+    LSubRaceCategory* neutralDragon;
+    LSubRaceCategory* neutralMarsh;
+    LSubRaceCategory* neutralWater;
+    LSubRaceCategory* neutralBarbarian;
+    LSubRaceCategory* neutralWolf;
+    LSubRaceCategory* elf;
+};
+
+Categories& get();
+
+/** Returns address of LSubRaceCategory::vftable used in game. */
+const void* vftable();
+
+} // namespace SubraceCategories
+
+namespace LSubRaceCategoryTableApi {
+
+using Api = CategoryTableApi::Api<LSubRaceCategoryTable, LSubRaceCategory>;
+
+Api& get();
+
+/** Returns address of LSubRaceCategoryTable::vftable used in game. */
+const void* vftable();
+
+} // namespace LSubRaceCategoryTableApi
+
 } // namespace game
 
 #endif // SUBRACECAT_H
