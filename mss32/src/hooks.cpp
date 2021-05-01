@@ -71,6 +71,7 @@
 #include "modifierutils.h"
 #include "movepathhooks.h"
 #include "musichooks.h"
+#include "newracehooks.h"
 #include "originalfunctions.h"
 #include "playerbuildings.h"
 #include "playerincomehooks.h"
@@ -157,6 +158,8 @@ static Hooks getGameHooks()
          * IMPORTANT: this hook is required for UnrestrictedBestowWards
          */
         HookInfo{(void*)game::CBatAttackBestowWardsApi::get().onHit, bestowWardsAttackOnHitHooked},
+        // Support new race categories
+        HookInfo{(void*)game::LRaceCategoryTableApi::get().constructor, raceCategoryTableCtorHooked},
     };
     // clang-format on
 
