@@ -20,22 +20,24 @@
 #ifndef SCENARIODATAARRAY_H
 #define SCENARIODATAARRAY_H
 
+#include "d2vector.h"
+
 namespace game {
 
 struct ScenarioData;
 
-struct ScenarioDataArray
-{
-    ScenarioData* bgn;
-    ScenarioData* end;
-    ScenarioData* allocatedMemEnd;
-};
+using ScenarioDataArray = Vector<ScenarioData>;
 
 struct ScenarioDataArrayWrapped
 {
-    int initialized;
+    bool initialized;
+    char padding[3];
     ScenarioDataArray data;
+    int maxScenarioFileIndex;
 };
+
+static_assert(sizeof(ScenarioDataArrayWrapped) == 24,
+              "Size of ScenarioDataArrayWrapped structure must be exactly 24 bytes");
 
 namespace ScenarioDataArrayApi {
 
