@@ -326,6 +326,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\buildingtype.h" />
     <ClInclude Include="include\button.h" />
     <ClInclude Include="include\capital.h" />
+    <ClInclude Include="include\catalogvalidate.h" />
     <ClInclude Include="include\categories.h" />
     <ClInclude Include="include\categoryids.h" />
     <ClInclude Include="include\citystackinterf.h" />
