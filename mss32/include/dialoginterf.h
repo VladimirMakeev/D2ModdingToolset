@@ -28,6 +28,7 @@ namespace game {
 struct CButtonInterf;
 struct CListBoxInterf;
 struct CTextBoxInterf;
+struct CPictureInterf;
 
 /** Must be 104 bytes according to CDialogInterf constructor. */
 struct CDialogInterfData
@@ -70,6 +71,11 @@ struct Api
     /** Searches for ui element with specific name, returns nullptr if not found. */
     using FindControl = CInterface*(__thiscall*)(CDialogInterf* thisptr, const char* controlName);
     FindControl findControl;
+
+    /** Searches for picture ui element with specific name, returns nullptr if not found. */
+    using FindPicture = CPictureInterf*(__stdcall*)(CDialogInterf* thisptr,
+                                                    const char* controlName);
+    FindPicture findPicture;
 };
 
 Api& get();

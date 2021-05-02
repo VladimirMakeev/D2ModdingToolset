@@ -30,21 +30,24 @@ static std::array<Api, 4> functions = {{
         (Api::FindButton)0x50baaf,
         (Api::FindListBox)0x50bacf,
         (Api::FindTextBox)0x50bb0f,
-        (Api::FindControl)0x50c206
+        (Api::FindControl)0x50c206,
+        (Api::FindPicture)0x50badf,
     },
     // Russobit
     Api{
         (Api::FindButton)0x50baaf,
         (Api::FindListBox)0x50bacf,
         (Api::FindTextBox)0x50bb0f,
-        (Api::FindControl)0x50c206
+        (Api::FindControl)0x50c206,
+        (Api::FindPicture)0x50badf,
     },
     // Gog
     Api{
         (Api::FindButton)0x50afb3,
         (Api::FindListBox)0x50afd3,
         (Api::FindTextBox)0x50b013,
-        (Api::FindControl)0x50b70a
+        (Api::FindControl)0x50b70a,
+        (Api::FindPicture)0x50afe3,
     },
     // Scenario Editor
     Api{
@@ -52,6 +55,7 @@ static std::array<Api, 4> functions = {{
         (Api::FindListBox)nullptr,
         (Api::FindTextBox)0x4a3571,
         (Api::FindControl)nullptr,
+        (Api::FindPicture)nullptr,
     },
 }};
 // clang-format on
