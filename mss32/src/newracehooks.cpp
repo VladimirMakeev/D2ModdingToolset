@@ -121,14 +121,11 @@ void __fastcall validateRacesHooked(game::RacesMap** thisptr,
     auto current = racesMap->data.bgn;
     auto end = racesMap->data.end;
 
-    int i{1};
     while (current != end) {
         auto race = current->second;
         auto validateRace = static_cast<const TRaceTypeVftable*>(race->vftable)->validate;
         validateRace(race, globalData);
-        logDebug("newRace.log", fmt::format("Validated race {:d}", i));
         current++;
-        i++;
     }
 
     static const char dbfFileName[] = "Grace.dbf";
