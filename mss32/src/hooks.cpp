@@ -82,6 +82,8 @@
 #include "scenarioinfo.h"
 #include "settings.h"
 #include "smartptr.h"
+#include "subracecat.h"
+#include "subracehooks.h"
 #include "summonhooks.h"
 #include "transformselfhooks.h"
 #include "unitbranchcat.h"
@@ -162,6 +164,8 @@ static Hooks getGameHooks()
         HookInfo{(void*)game::LRaceCategoryTableApi::get().constructor, raceCategoryTableCtorHooked},
         // Validate new races in Grace.dbf, if any
         HookInfo{(void*)fn.validateRaces, validateRacesHooked},
+        // Support new subrace categories
+        HookInfo{(void*)game::LSubRaceCategoryTableApi::get().constructor, subRaceCategoryTableCtorHooked},
     };
     // clang-format on
 
