@@ -38,6 +38,7 @@
 - Fixes game crash when AI controlled unit with transform self attack uses alternative attack with 'adjacent' attack range;
 - Fixes game crash on 144x144 maps that occurs if there is a party standing on a lower-left or lower-right edge of the map;
 - Fixes AI unit placement logic for melee units with vampiric attacks;
+- Fixes AI targeting for single lower-damage and lower-initiative attacks;
 - Fixes Scenario Editor bug with elves race as a caster in "Cast spell on location" event effect;
 - <details>
     <summary>Buttons for bulk item transfer: transfer all items, potions, scrolls/wands or valuables between inventories with single click;</summary>

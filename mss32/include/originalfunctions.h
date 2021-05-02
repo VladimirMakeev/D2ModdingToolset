@@ -52,6 +52,7 @@ struct OriginalFunctions
     game::CMidUnitApi::Api::AddRemoveModifier removeModifier;
     game::BattleMsgDataApi::Api::SetUnknown9Bit1AndClearBoostLowerDamage
         setUnknown9Bit1AndClearBoostLowerDamage;
+    game::BattleMsgDataApi::Api::FindAttackTarget findAttackTarget;
 };
 
 OriginalFunctions& getOriginalFunctions();
