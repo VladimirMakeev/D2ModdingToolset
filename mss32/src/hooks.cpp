@@ -160,6 +160,8 @@ static Hooks getGameHooks()
          * IMPORTANT: this hook is required for UnrestrictedBestowWards
          */
         HookInfo{(void*)game::CBatAttackBestowWardsApi::get().onHit, bestowWardsAttackOnHitHooked},
+        // Fix AI not being able to find target for lower damage/ini attack
+        HookInfo{(void*)game::BattleMsgDataApi::get().findAttackTarget, findAttackTargetHooked, (void**)&orig.findAttackTarget},
         // Support new race categories
         HookInfo{(void*)game::LRaceCategoryTableApi::get().constructor, raceCategoryTableCtorHooked},
         // Validate new races in Grace.dbf, if any
@@ -1454,6 +1456,35 @@ void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImp
         if (upgrade2)
             attackData->qtyHeal += upgrade2->heal * upgrade2Count;
     }
+}
+
+bool __stdcall findAttackTargetHooked(game::IMidgardObjectMap* objectMap,
+                                      game::CMidgardID* unitId,
+                                      game::IAttack* attack,
+                                      game::CMidUnitGroup* targetGroup,
+                                      void* a5,
+                                      game::BattleMsgData* battleMsgData,
+                                      game::CMidgardID* targetUnitId)
+{
+    using namespace game;
+
+    if (getOriginalFunctions().findAttackTarget(objectMap, unitId, attack, targetGroup, a5,
+                                                battleMsgData, targetUnitId)) {
+        return true;
+    }
+
+    const auto& battle = BattleMsgDataApi::get();
+
+    auto attackClass = attack->vftable->getAttackClass(attack);
+    const auto& attackCategories = AttackClassCategories::get();
+    if (attackClass->id == attackCategories.lowerDamage->id) {
+        return battle.findBoostAttackTarget(objectMap, battleMsgData, targetGroup, a5,
+                                            targetUnitId);
+    } else if (attackClass->id == attackCategories.lowerInitiative->id) {
+        return battle.findFearAttackTarget(objectMap, battleMsgData, targetGroup, a5, targetUnitId);
+    }
+
+    return false;
 }
 
 } // namespace hooks

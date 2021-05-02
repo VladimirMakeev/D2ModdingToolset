@@ -27,9 +27,11 @@
 namespace game {
 
 struct IMidgardObjectMap;
+struct IAttack;
 struct IBatAttack;
 struct LAttackSource;
 struct LAttackClass;
+struct CMidUnitGroup;
 
 /** Unit statuses in battle. */
 enum class BattleStatus : int
@@ -409,6 +411,28 @@ struct Api
                                                     const CMidgardID* modifiedUnitId,
                                                     const CMidgardID* modifierId);
     ResetUnitModifierInfo resetUnitModifierInfo;
+
+    /** Used by AI to determine attack target depending on attack class. */
+    using FindAttackTarget = bool(__stdcall*)(IMidgardObjectMap* objectMap,
+                                              CMidgardID* unitId,
+                                              IAttack* attack,
+                                              CMidUnitGroup* targetGroup,
+                                              void* a5,
+                                              BattleMsgData* battleMsgData,
+                                              CMidgardID* targetUnitId);
+    FindAttackTarget findAttackTarget;
+
+    using FindSpecificAttackTarget = bool(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                      BattleMsgData* battleMsgData,
+                                                      CMidUnitGroup* targetGroup,
+                                                      void* a4,
+                                                      CMidgardID* targetUnitId);
+
+    /** Used by AI to determine boost attack target. */
+    FindSpecificAttackTarget findBoostAttackTarget;
+
+    /** Used by AI to determine fear attack target. */
+    FindSpecificAttackTarget findFearAttackTarget;
 };
 
 Api& get();
