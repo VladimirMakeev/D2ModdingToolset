@@ -51,6 +51,7 @@ struct CPhaseGame;
 struct CMqPoint;
 struct os_exception;
 struct CMidUnit;
+struct CMidUnitGroup;
 struct CUnitGenerator;
 }; // namespace game
 
@@ -211,6 +212,14 @@ void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImp
                                                  game::IdType dynUpgradeType,
                                                  const game::CMidgardID* altAttackId,
                                                  game::CAttackData* attackData);
+
+bool __stdcall findAttackTargetHooked(game::IMidgardObjectMap* objectMap,
+                                      game::CMidgardID* unitId,
+                                      game::IAttack* attack,
+                                      game::CMidUnitGroup* targetGroup,
+                                      void* a5,
+                                      game::BattleMsgData* battleMsgData,
+                                      game::CMidgardID* targetUnitId);
 
 } // namespace hooks
 
