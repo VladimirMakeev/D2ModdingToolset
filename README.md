@@ -63,10 +63,9 @@
 - <details>
     <summary>Button to sell all valuables with single click;</summary>
 
-    Add sell confirmation text to TApp.dbf with id X015TA0001. Text must contain keyword '%PRICE%' in it.
-    In case of missing text, stub message in english will be shown.
-
-    Example of confirmation text:
+    Add sell confirmation text to TApp.dbf. The text must contain '%PRICE%' keyword in it.<br />
+    Specify id of the text in 'sellAllValuables' field inside 'Scripts\\textids.lua' (default id is X015TA0001).<br />
+    In case of missing text, the following default message will be shown:
     ```
     Do you want to sell all valuables? Revenue will be:\n%PRICE%
     ```
@@ -164,10 +163,15 @@
     - Value of lower initiative;
     - Critical hit indication;
     - Infinite effect indication;
+
+    Critical-hit / infinite-effect indication text can be customized:<br />
+    Add desired text to TApp.dbf and TAppEdit.dbf.<br />
+    Specify id of the text in 'critHitAttack' / 'infiniteAttack' field inside 'Scripts\\textids.lua'.<br />
+    In case of missing text, defaults are: 'X160TA0017' for critical hit, and 'Lasting' for infinite effect.
   </details>
 
 ### Settings:
-The following settings can be changed in Scripts/settings.lua:
+The following settings can be changed in Scripts\\settings.lua:
 <details>
   <summary>User Interface</summary>
 
