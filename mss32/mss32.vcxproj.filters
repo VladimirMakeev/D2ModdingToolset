@@ -492,10 +492,10 @@
     <ClCompile Include="src\subracecat.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\newracehooks.cpp">
+    <ClCompile Include="src\subracehooks.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\subracehooks.cpp">
+    <ClCompile Include="src\racehooks.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1315,10 +1315,10 @@
     <ClInclude Include="include\midserverlogic.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="include\newracehooks.h">
+    <ClInclude Include="include\subracehooks.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="include\subracehooks.h">
+    <ClInclude Include="include\racehooks.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

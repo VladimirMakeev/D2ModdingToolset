@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef RACEHOOKS_H
-#define RACEHOOKS_H
+#ifndef NEWRACEHOOKS_H
+#define NEWRACEHOOKS_H
 
 #include "globaldata.h"
 
@@ -40,4 +40,4 @@ void __fastcall validateRacesHooked(game::RacesMap** thisptr,
 
 } // namespace hooks
 
-#endif // RACEHOOKS_H
+#endif // NEWRACEHOOKS_H

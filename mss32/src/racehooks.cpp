@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "newracehooks.h"
+#include "racehooks.h"
 #include "dbf/dbffile.h"
 #include "game.h"
 #include "log.h"

@@ -71,7 +71,7 @@
 #include "modifierutils.h"
 #include "movepathhooks.h"
 #include "musichooks.h"
-#include "newracehooks.h"
+#include "racehooks.h"
 #include "originalfunctions.h"
 #include "playerbuildings.h"
 #include "playerincomehooks.h"
