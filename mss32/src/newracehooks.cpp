@@ -19,8 +19,10 @@
 
 #include "newracehooks.h"
 #include "dbf/dbffile.h"
+#include "game.h"
 #include "log.h"
 #include "racecategory.h"
+#include "racetype.h"
 #include "utils.h"
 #include <algorithm>
 #include <fmt/format.h>
@@ -105,6 +107,45 @@ game::LRaceCategoryTable* __fastcall raceCategoryTableCtorHooked(game::LRaceCate
 
     logDebug("newRace.log", "LRaceCategoryTable c-tor hook finished");
     return thisptr;
+}
+
+void __fastcall validateRacesHooked(game::RacesMap** thisptr,
+                                    int /*%edx*/,
+                                    game::GlobalData** globalData)
+{
+    using namespace game;
+
+    logDebug("newRace.log", "Validate races hook started");
+
+    auto racesMap = *thisptr;
+    auto current = racesMap->data.bgn;
+    auto end = racesMap->data.end;
+
+    int i{1};
+    while (current != end) {
+        auto race = current->second;
+        auto validateRace = static_cast<const TRaceTypeVftable*>(race->vftable)->validate;
+        validateRace(race, globalData);
+        logDebug("newRace.log", fmt::format("Validated race {:d}", i));
+        current++;
+        i++;
+    }
+
+    static const char dbfFileName[] = "Grace.dbf";
+    const auto& fn = gameFunctions();
+    auto& races = RaceCategories::get();
+
+    fn.checkRaceExist(thisptr, races.human, dbfFileName);
+    fn.checkRaceExist(thisptr, races.dwarf, dbfFileName);
+    fn.checkRaceExist(thisptr, races.heretic, dbfFileName);
+    fn.checkRaceExist(thisptr, races.undead, dbfFileName);
+    fn.checkRaceExist(thisptr, races.elf, dbfFileName);
+
+    for (auto& race : newRaces) {
+        fn.checkRaceExist(thisptr, &race.first, dbfFileName);
+    }
+
+    logDebug("newRace.log", "Validate races hook finished");
 }
 
 } // namespace hooks

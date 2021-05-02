@@ -20,6 +20,8 @@
 #ifndef NEWRACEHOOKS_H
 #define NEWRACEHOOKS_H
 
+#include "globaldata.h"
+
 namespace game {
 struct LRaceCategoryTable;
 }
@@ -31,6 +33,10 @@ game::LRaceCategoryTable* __fastcall raceCategoryTableCtorHooked(game::LRaceCate
                                                                  int /*%edx*/,
                                                                  const char* globalsFolderPath,
                                                                  void* codeBaseEnvProxy);
+
+void __fastcall validateRacesHooked(game::RacesMap** thisptr,
+                                    int /*%edx*/,
+                                    game::GlobalData** globalData);
 
 } // namespace hooks
 

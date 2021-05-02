@@ -160,6 +160,8 @@ static Hooks getGameHooks()
         HookInfo{(void*)game::CBatAttackBestowWardsApi::get().onHit, bestowWardsAttackOnHitHooked},
         // Support new race categories
         HookInfo{(void*)game::LRaceCategoryTableApi::get().constructor, raceCategoryTableCtorHooked},
+        // Validate new races in Grace.dbf, if any
+        HookInfo{(void*)fn.validateRaces, validateRacesHooked},
     };
     // clang-format on
 

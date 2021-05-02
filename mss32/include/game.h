@@ -396,9 +396,9 @@ using GenerateAttackDescription = void(__stdcall*)(IEncUnitDescriptor* descripto
 using ValidateRaces = void(__thiscall*)(RacesMap** thisptr, GlobalData** globalData);
 
 /** Checks if race with specified category was loaded from Grace.dbf. */
-using CheckRaceCategoryExist = void(__stdcall*)(RacesMap** races,
-                                                const LRaceCategory* category,
-                                                const char* dbfFileName);
+using CheckRaceExist = void(__stdcall*)(RacesMap** races,
+                                        const LRaceCategory* category,
+                                        const char* dbfFileName);
 
 /** Game and editor functions that can be hooked. */
 struct Functions
@@ -456,7 +456,7 @@ struct Functions
     ApplyPercentModifiers applyPercentModifiers;
     GenerateAttackDescription generateAttackDescription;
     ValidateRaces validateRaces;
-    CheckRaceCategoryExist checkRaceCategoryExist;
+    CheckRaceExist checkRaceExist;
 };
 
 /** Global variables used in game. */
