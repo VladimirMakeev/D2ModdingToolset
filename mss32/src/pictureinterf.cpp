@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,46 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "dialoginterf.h"
+#include "pictureinterf.h"
 #include "version.h"
 #include <array>
 
-namespace game::CDialogInterfApi {
+namespace game::CPictureInterfApi {
 
 // clang-format off
-static std::array<Api, 4> functions = {{
+static std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (Api::FindButton)0x50baaf,
-        (Api::FindListBox)0x50bacf,
-        (Api::FindTextBox)0x50bb0f,
-        (Api::FindControl)0x50c206,
-        (Api::FindPicture)0x50badf,
+        (Api::SetImage)0x5318a0,
     },
     // Russobit
     Api{
-        (Api::FindButton)0x50baaf,
-        (Api::FindListBox)0x50bacf,
-        (Api::FindTextBox)0x50bb0f,
-        (Api::FindControl)0x50c206,
-        (Api::FindPicture)0x50badf,
+        (Api::SetImage)0x5318a0,
     },
     // Gog
     Api{
-        (Api::FindButton)0x50afb3,
-        (Api::FindListBox)0x50afd3,
-        (Api::FindTextBox)0x50b013,
-        (Api::FindControl)0x50b70a,
-        (Api::FindPicture)0x50afe3,
-    },
-    // Scenario Editor
-    Api{
-        (Api::FindButton)nullptr,
-        (Api::FindListBox)nullptr,
-        (Api::FindTextBox)0x4a3571,
-        (Api::FindControl)nullptr,
-        (Api::FindPicture)nullptr,
-    },
+        (Api::SetImage)0x530db8,
+    }
 }};
 // clang-format on
 
@@ -65,4 +45,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::CDialogInterfApi
+} // namespace game::CPictureInterfApi

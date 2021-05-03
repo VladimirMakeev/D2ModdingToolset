@@ -214,6 +214,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\menubase.cpp" />
     <ClCompile Include="src\menunewskirmish.cpp" />
     <ClCompile Include="src\menunewskirmishsingle.cpp" />
+    <ClCompile Include="src\menurace.cpp" />
     <ClCompile Include="src\middragdropinterf.cpp" />
     <ClCompile Include="src\midgard.cpp" />
     <ClCompile Include="src\midgardid.cpp" />
@@ -233,8 +234,10 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\pathinfolist.cpp" />
     <ClCompile Include="src\phase.cpp" />
     <ClCompile Include="src\pickupdropinterf.cpp" />
+    <ClCompile Include="src\pictureinterf.cpp" />
     <ClCompile Include="src\playerincomehooks.cpp" />
     <ClCompile Include="src\racecategory.cpp" />
+    <ClCompile Include="src\racelist.cpp" />
     <ClCompile Include="src\restrictions.cpp" />
     <ClCompile Include="src\scenariodata.cpp" />
     <ClCompile Include="src\scenariodataarray.cpp" />
@@ -328,6 +331,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\buildingtype.h" />
     <ClInclude Include="include\button.h" />
     <ClInclude Include="include\capital.h" />
+    <ClInclude Include="include\catalogvalidate.h" />
     <ClInclude Include="include\categories.h" />
     <ClInclude Include="include\categoryids.h" />
     <ClInclude Include="include\citystackinterf.h" />
@@ -424,6 +428,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\menubase.h" />
     <ClInclude Include="include\menunewskirmish.h" />
     <ClInclude Include="include\menunewskirmishsingle.h" />
+    <ClInclude Include="include\menuphase.h" />
+    <ClInclude Include="include\menurace.h" />
     <ClInclude Include="include\midbag.h" />
     <ClInclude Include="include\midcampaign.h" />
     <ClInclude Include="include\midclient.h" />
@@ -484,12 +490,14 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\phase.h" />
     <ClInclude Include="include\phasegame.h" />
     <ClInclude Include="include\pickupdropinterf.h" />
+    <ClInclude Include="include\pictureinterf.h" />
     <ClInclude Include="include\playerbuildings.h" />
     <ClInclude Include="include\playerincomehooks.h" />
     <ClInclude Include="include\popupdialoginterf.h" />
     <ClInclude Include="include\mqpoint.h" />
     <ClInclude Include="include\presentation.h" />
     <ClInclude Include="include\racecategory.h" />
+    <ClInclude Include="include\racelist.h" />
     <ClInclude Include="include\racetype.h" />
     <ClInclude Include="include\resetstackext.h" />
     <ClInclude Include="include\restrictions.h" />
