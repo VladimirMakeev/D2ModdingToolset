@@ -43,6 +43,9 @@ struct Api
      */
     using CreateOrFree = void*(__thiscall*)(SmartPointer* thisptr, void* data);
     CreateOrFree createOrFree;
+
+    using Copy = SmartPointer*(__thiscall*)(SmartPointer* thisptr, SmartPointer* other);
+    Copy copy;
 };
 
 Api& get();

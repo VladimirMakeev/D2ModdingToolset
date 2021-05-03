@@ -23,6 +23,7 @@
 #include "globaldata.h"
 #include "idlist.h"
 #include "mqpoint.h"
+#include "smartptr.h"
 
 namespace game {
 
@@ -388,6 +389,9 @@ using GenerateAttackDescription = void(__stdcall*)(IEncUnitDescriptor* descripto
                                                    const IdList* modifiers,
                                                    int damageMax);
 
+using CreateMenuAnimation = SmartPtr<IMqImage2>*(__stdcall*)(SmartPtr<IMqImage2>* animation,
+                                                             const char* animationName);
+
 /**
  * Validates TRaceType objects.
  * Checks valirity of unit, guardian, leader and buildings ids.
@@ -455,6 +459,7 @@ struct Functions
     GetStackPositionById getStackPositionById;
     ApplyPercentModifiers applyPercentModifiers;
     GenerateAttackDescription generateAttackDescription;
+    CreateMenuAnimation createMenuAnimation;
     ValidateRaces validateRaces;
     CheckRaceExist checkRaceExist;
 };
