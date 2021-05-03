@@ -22,6 +22,7 @@
 
 #include "idlist.h"
 #include "mqpoint.h"
+#include "smartptr.h"
 
 namespace game {
 
@@ -386,6 +387,9 @@ using GenerateAttackDescription = void(__stdcall*)(IEncUnitDescriptor* descripto
                                                    const IdList* modifiers,
                                                    int damageMax);
 
+using CreateMenuAnimation = SmartPtr<IMqImage2>*(__stdcall*)(SmartPtr<IMqImage2>* animation,
+                                                             const char* animationName);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -441,6 +445,7 @@ struct Functions
     GetStackPositionById getStackPositionById;
     ApplyPercentModifiers applyPercentModifiers;
     GenerateAttackDescription generateAttackDescription;
+    CreateMenuAnimation createMenuAnimation;
 };
 
 /** Global variables used in game. */

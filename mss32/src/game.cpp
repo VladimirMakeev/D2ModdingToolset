@@ -79,6 +79,7 @@ static std::array<Functions, 4> functions = {{
         (GetStackPositionById)0x5eecf2,
         (ApplyPercentModifiers)0x577515,
         (GenerateAttackDescription)0x57652b,
+        (CreateMenuAnimation)0x4eb465,
     },
     // Russobit
     Functions{
@@ -134,6 +135,7 @@ static std::array<Functions, 4> functions = {{
         (GetStackPositionById)0x5eecf2,
         (ApplyPercentModifiers)0x577515,
         (GenerateAttackDescription)0x57652b,
+        (CreateMenuAnimation)0x4eb465,
     },
     // Gog
     Functions{
@@ -189,6 +191,7 @@ static std::array<Functions, 4> functions = {{
         (GetStackPositionById)0x5ed9b2,
         (ApplyPercentModifiers)0x576b6a,
         (GenerateAttackDescription)0x575b80,
+        (CreateMenuAnimation)0x4ea917,
     },
     // Scenario Editor
     Functions{
@@ -244,6 +247,7 @@ static std::array<Functions, 4> functions = {{
         (GetStackPositionById)nullptr,
         (ApplyPercentModifiers)0x4c7fb1,
         (GenerateAttackDescription)0x4c6fc7,
+        (CreateMenuAnimation)nullptr,
     }
 }};
 
