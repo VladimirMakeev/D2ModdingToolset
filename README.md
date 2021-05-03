@@ -238,7 +238,7 @@ The following settings can be changed in 'Scripts\\settings.lua':
 </details>
 
 ### Scripting:
-The toolset uses Lua for settings and advanced game mechanics. See [a relative link](luaApi.md) for detailed information.
+The toolset uses Lua for settings and advanced game mechanics. See [luaApi](luaApi.md) for detailed information.
 
 ### Tested on:
 - Disciples 2 Rise of the Elves v3.01 (Akella, Russobit, GOG)
