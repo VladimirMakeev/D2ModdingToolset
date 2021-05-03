@@ -27,19 +27,23 @@ namespace game::SmartPointerApi {
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::CreateOrFree)0x5e4830
+        (Api::CreateOrFree)0x5e4830,
+        (Api::Copy)0x472528,
     },
     // Russobit
     Api{
-        (Api::CreateOrFree)0x5e4830
+        (Api::CreateOrFree)0x5e4830,
+        (Api::Copy)0x472528,
     },
     // Gog
     Api{
-        (Api::CreateOrFree)0x55b7bc
+        (Api::CreateOrFree)0x55b7bc,
+        (Api::Copy)0x5e357a,
     },
     // Scenario Editor
     Api{
-        (Api::CreateOrFree)0x534aa4
+        (Api::CreateOrFree)0x534aa4,
+        (Api::Copy)nullptr,
     }
 }};
 // clang-format on
