@@ -24,7 +24,7 @@
 namespace game::StringApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::InitFromString)0x403d80,
@@ -48,7 +48,15 @@ static std::array<Api, 3> functions = {{
         (Api::Free)0x40106a,
         (Api::Append)0x4010a5,
         (Api::AppendChar)0x4243a5
-    }
+    },
+    // Scenario Editor
+    Api{
+        (Api::InitFromString)0x402f6c,
+        (Api::InitFromStringN)0x403079,
+        (Api::Free)0x402fb2,
+        (Api::Append)0x4043ac,
+        (Api::AppendChar)0x472022,
+    },
 }};
 // clang-format on
 

@@ -80,6 +80,8 @@ static std::array<Functions, 4> functions = {{
         (ApplyPercentModifiers)0x577515,
         (GenerateAttackDescription)0x57652b,
         (CreateMenuAnimation)0x4eb465,
+        (GetAttackSourceText)0x61e1df,
+        (AppendAttackSourceText)0x61e923,
     },
     // Russobit
     Functions{
@@ -136,6 +138,8 @@ static std::array<Functions, 4> functions = {{
         (ApplyPercentModifiers)0x577515,
         (GenerateAttackDescription)0x57652b,
         (CreateMenuAnimation)0x4eb465,
+        (GetAttackSourceText)0x61e1df,
+        (AppendAttackSourceText)0x61e923,
     },
     // Gog
     Functions{
@@ -192,6 +196,8 @@ static std::array<Functions, 4> functions = {{
         (ApplyPercentModifiers)0x576b6a,
         (GenerateAttackDescription)0x575b80,
         (CreateMenuAnimation)0x4ea917,
+        (GetAttackSourceText)0x61cd1b,
+        (AppendAttackSourceText)0x61d45f,
     },
     // Scenario Editor
     Functions{
@@ -248,7 +254,9 @@ static std::array<Functions, 4> functions = {{
         (ApplyPercentModifiers)0x4c7fb1,
         (GenerateAttackDescription)0x4c6fc7,
         (CreateMenuAnimation)nullptr,
-    }
+        (GetAttackSourceText)0x521bf7,
+        (AppendAttackSourceText)0x52233b,
+    },
 }};
 
 static std::array<Variables, 4> variables = {{

@@ -169,6 +169,13 @@
     Specify id of the text in 'critHitAttack' / 'infiniteAttack' field inside 'Scripts\\textids.lua'.<br />
     In case of missing text, defaults are: 'X160TA0017' for critical hit, and 'Lasting' for infinite effect.
   </details>
+- <details>
+    <summary>Supports custom attack source text;</summary>
+
+    Add desired text to TApp.dbf and TAppEdit.dbf.<br />
+    Add a new entry to 'sources' list in 'Scripts\\customattacks.lua' - the file contains an example.<br />
+    Fill the entry with your custom source id (from LattS.dbf) and the text id (from TApp.dbf).
+  </details>
 
 ### Settings:
 The following settings can be changed in Scripts\\settings.lua:

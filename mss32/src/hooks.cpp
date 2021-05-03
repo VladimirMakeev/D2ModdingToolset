@@ -329,6 +329,9 @@ Hooks getHooks()
     // IMPORTANT: this hook is required for unrestrictedBestowWards and detailedAttackDescription
     hooks.emplace_back(
         HookInfo{(void*)fn.getAttackQtyDamageOrHeal, getAttackQtyDamageOrHealHooked});
+    // Support custom attack source text
+    hooks.emplace_back(HookInfo{(void*)fn.getAttackSourceText, getAttackSourceTextHooked});
+    hooks.emplace_back(HookInfo{(void*)fn.appendAttackSourceText, appendAttackSourceTextHooked});
 
     if (userSettings().debugMode) {
         // Show and log game exceptions information
