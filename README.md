@@ -12,7 +12,16 @@
 
     New units are specified by adding a new columns SOLDIER\_N to Grace.dbf, N starting from 6.
   </details>
-- Allows scenarios with prebuilt capital cities;
+- <details>
+    <summary>Allows scenarios with prebuilt capital cities;</summary>
+
+    1) Enable 'preserveCapitalBuildings' in 'Scripts\\settings.lua';
+    2) Start a scenario;
+    3) Build desired buildings in a capital;
+    4) Save the scenario;
+    5) Move the saved game from SaveGame folder to Exports;
+    6) Restart the scenario.
+  </details>
 - Allows banners, resources panel and converted land percentage to be displayed by default;
 - Allows to display movement cost for each individual step of parties;
 - Allows to specify a maximum allowed scout range for parties; 
@@ -178,7 +187,7 @@
   </details>
 
 ### Settings:
-The following settings can be changed in Scripts\\settings.lua:
+The following settings can be changed in 'Scripts\\settings.lua':
 <details>
   <summary>User Interface</summary>
 
@@ -212,9 +221,9 @@ The following settings can be changed in Scripts\\settings.lua:
   - "drainOverflowHeal=\[-(2^31 - 1) : (2^31 - 1)\]" changes percentage of L\_DRAIN\_OVERFLOW attacks damage used as heal;
   - "doppelgangerRespectsEnemyImmunity=(true/false)" sets whether doppelganger attack checks for enemy ward/immunity to the attack class and source;
   - "doppelgangerRespectsAllyImmunity=(true/false)" sets whether doppelganger attack checks for ally ward/immunity to the attack class and source;
-  - "leveledDoppelgangerAttack=(true/false)" changes doppelganger attacks to copy units using with respect to their level using 'doppelganger.lua' script;
-  - "leveledTransformSelfAttack=(true/false)" changes transform self attacks to compute transformed unit level using 'transformSelf.lua' script;
-  - "leveledSummonAttack=(true/false)" changes summon attacks to compute summoned units levels using 'summon.lua' script;
+  - "leveledDoppelgangerAttack=(true/false)" changes doppelganger attacks to copy units using with respect to their level using 'Scripts\\doppelganger.lua' script;
+  - "leveledTransformSelfAttack=(true/false)" changes transform self attacks to compute transformed unit level using 'Scripts\\transformSelf.lua' script;
+  - "leveledSummonAttack=(true/false)" changes summon attacks to compute summoned units levels using 'Scripts\\summon.lua' script;
   - "unrestrictedBestowWards=(true/false)" fixes bestow wards attack bugs and restrictions, see more details under Features section;
   - "disableAllowedRoundMax=\[1 : (2^31 - 1)\]" sets a number of battle round after which paralyze and petrify attacks will constantly miss;
   - "missChanceSingleRoll=(true/false)" if true, switches attacks miss check to a single random value roll instead of check against arithmetic mean of two random numbers;
@@ -234,6 +243,9 @@ The following settings can be changed in Scripts\\settings.lua:
   - "stackMaxScoutRange=\[7 : 100\]" changes maximum allowed scout range for parties; 
   - "debugHooks=(true/false)" create mss32 proxy dll log files with debug info;
 </details>
+
+### Scripting:
+The toolset uses Lua for settings and advanced game mechanics. See [luaApi](luaApi.md) for detailed information.
 
 ### Tested on:
 - Disciples 2 Rise of the Elves v3.01 (Akella, Russobit, GOG)
