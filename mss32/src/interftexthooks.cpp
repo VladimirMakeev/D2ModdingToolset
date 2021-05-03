@@ -20,6 +20,8 @@
 #include "interftexthooks.h"
 #include "attackimpl.h"
 #include "attackutils.h"
+#include "customattacks.h"
+#include "d2string.h"
 #include "dialoginterf.h"
 #include "encunitdescriptor.h"
 #include "game.h"
@@ -218,11 +220,10 @@ std::string getAttackInitiativeText(game::IAttack* attack,
                               initiativeTotalBoosted - initiativeModified);
 }
 
-std::string getAttackSourceText(game::IAttack* attack)
+std::string getAttackSourceText(const game::LAttackSource* attackSource)
 {
     using namespace game;
 
-    const LAttackSource* attackSource = attack->vftable->getAttackSource(attack);
     if (attackSource == nullptr)
         return getTranslatedText("X005TA0473"); // "None"
 
@@ -245,8 +246,19 @@ std::string getAttackSourceText(game::IAttack* attack)
         return getTranslatedText("X005TA0151"); // "Air"
     else if (id == attackSources.earth->id)
         return getTranslatedText("X005TA0152"); // "Earth"
-    else
-        return "";
+    else {
+        const auto& custom = customAttacks().sources;
+        const auto it = custom.find(id);
+        if (it != custom.end())
+            return getTranslatedText(it->second.textId.c_str());
+    }
+
+    return "";
+}
+
+std::string getAttackSourceText(game::IAttack* attack)
+{
+    return getAttackSourceText(attack->vftable->getAttackSource(attack));
 }
 
 std::string getAttackReachText(game::IAttack* attack)
@@ -560,6 +572,28 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
 
     auto textBox = CDialogInterfApi::get().findTextBox(dialog, "TXT_ATTACK_INFO");
     CTextBoxInterfApi::get().setString(textBox, description.c_str());
+}
+
+game::String* __stdcall getAttackSourceTextHooked(game::String* value,
+                                                  const game::LAttackSource* attackSource)
+{
+    const auto& stringApi = game::StringApi::get();
+    stringApi.initFromString(value, getAttackSourceText(attackSource).c_str());
+    return value;
+}
+
+void __stdcall appendAttackSourceTextHooked(const game::LAttackSource* attackSource,
+                                            game::String* value,
+                                            bool* valueIsNotEmpty)
+{
+    const auto& stringApi = game::StringApi::get();
+
+    auto text = getAttackSourceText(attackSource);
+
+    if (*valueIsNotEmpty)
+        stringApi.append(value, ", ", strlen(", "));
+    stringApi.append(value, text.c_str(), text.length());
+    *valueIsNotEmpty = true;
 }
 
 } // namespace hooks
