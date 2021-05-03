@@ -12,7 +12,16 @@
 
     New units are specified by adding a new columns SOLDIER\_N to Grace.dbf, N starting from 6.
   </details>
-- Allows scenarios with prebuilt capital cities;
+- <details>
+    <summary>Allows scenarios with prebuilt capital cities;</summary>
+
+    1) Enable 'preserveCapitalBuildings' in 'Scripts\\settings.lua';
+    2) Start a scenario;
+    3) Build desired buildings in a capital;
+    4) Save the scenario;
+    5) Move the saved game from SaveGame folder to Exports;
+    6) Restart the scenario.
+  </details>
 - Allows banners, resources panel and converted land percentage to be displayed by default;
 - Allows to display movement cost for each individual step of parties;
 - Allows to specify a maximum allowed scout range for parties; 
