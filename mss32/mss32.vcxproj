@@ -236,6 +236,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\pictureinterf.cpp" />
     <ClCompile Include="src\playerincomehooks.cpp" />
     <ClCompile Include="src\racecategory.cpp" />
+    <ClCompile Include="src\racelist.cpp" />
     <ClCompile Include="src\restrictions.cpp" />
     <ClCompile Include="src\scenariodata.cpp" />
     <ClCompile Include="src\scenariodataarray.cpp" />
@@ -493,6 +494,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mqpoint.h" />
     <ClInclude Include="include\presentation.h" />
     <ClInclude Include="include\racecategory.h" />
+    <ClInclude Include="include\racelist.h" />
     <ClInclude Include="include\racetype.h" />
     <ClInclude Include="include\resetstackext.h" />
     <ClInclude Include="include\restrictions.h" />
