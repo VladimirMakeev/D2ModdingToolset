@@ -21,11 +21,11 @@
 #define MENURACEHOOKS_H
 
 #include "racelist.h"
+#include "sortedracelist.h"
 
 namespace game {
 struct CMenuRace;
 struct CDialogInterf;
-struct LRaceCategory;
 } // namespace game
 
 namespace hooks {
@@ -45,6 +45,9 @@ const char* __stdcall getTransitionAnimationNameHooked(const game::LRaceCategory
                                                        bool scrollBack);
 
 game::RaceCategoryList* __stdcall getPlayableRacesHooked(game::RaceCategoryList* racesList);
+
+void __stdcall setRacesToSkipHooked(game::SortedRaceList* racesToSkip,
+                                    const game::RaceCategoryList* scenarioRaces);
 
 } // namespace hooks
 

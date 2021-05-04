@@ -28,6 +28,7 @@
 #include "textboxinterf.h"
 #include "utils.h"
 #include <fmt/format.h>
+#include <list>
 
 namespace hooks {
 
@@ -261,6 +262,44 @@ game::RaceCategoryList* __stdcall getPlayableRacesHooked(game::RaceCategoryList*
     list.freeNode(&tmpList, tmpList.head);
 
     return racesList;
+}
+
+void __stdcall setRacesToSkipHooked(game::SortedRaceList* racesToSkip,
+                                    const game::RaceCategoryList* scenarioRaces)
+{
+    using namespace game;
+
+    const auto& list = SortedRaceListApi::get();
+    list.clear(racesToSkip);
+
+    auto& raceCategories = RaceCategories::get();
+
+    std::list<LRaceCategory*> races;
+    races.push_back(raceCategories.human);
+    races.push_back(raceCategories.dwarf);
+    races.push_back(raceCategories.heretic);
+    races.push_back(raceCategories.undead);
+    races.push_back(raceCategories.elf);
+
+    for (auto& race : newRaces()) {
+        races.push_back(&race.category);
+    }
+
+    for (auto node = scenarioRaces->head->next; node != scenarioRaces->head; node = node->next) {
+        auto it = std::find_if(races.begin(), races.end(),
+                               [id = node->data.id](const LRaceCategory* category) {
+                                   return category->id == id;
+                               });
+
+        if (it != races.end()) {
+            races.erase(it);
+        }
+    }
+
+    SortedRaceListIterator iterator{};
+    for (auto& race : races) {
+        list.add(racesToSkip, &iterator, race);
+    }
 }
 
 } // namespace hooks

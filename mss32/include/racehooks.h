@@ -38,7 +38,7 @@ struct RaceDescription
 using NewRaces = std::vector<RaceDescription>;
 
 /** Returns new races categories and category names, if any. */
-const NewRaces& newRaces();
+NewRaces& newRaces();
 
 /** Reads new race categories from LRace.dbf. */
 game::LRaceCategoryTable* __fastcall raceCategoryTableCtorHooked(game::LRaceCategoryTable* thisptr,

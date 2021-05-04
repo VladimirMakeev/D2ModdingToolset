@@ -177,6 +177,7 @@ static Hooks getGameHooks()
         HookInfo{(void*)game::CMenuRaceApi::get().getRaceCategory, getRaceCategoryHooked},
         HookInfo{(void*)game::CMenuRaceApi::get().getRaceBgndImageName, getRaceBgndImageNameHooked},
         HookInfo{(void*)game::RaceCategoryListApi::get().getPlayableRaces, getPlayableRacesHooked},
+        HookInfo{(void*)game::CMenuRaceApi::get().setRacesToSkip, setRacesToSkipHooked},
     };
     // clang-format on
 

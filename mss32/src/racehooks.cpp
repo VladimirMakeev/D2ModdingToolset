@@ -71,7 +71,7 @@ static void checkNewRaceCategories(const std::filesystem::path& dbfFilePath)
     }
 }
 
-const NewRaces& newRaces()
+NewRaces& newRaces()
 {
     return newRacesData;
 }
