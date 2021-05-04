@@ -401,6 +401,8 @@ using AppendAttackSourceText = void(__stdcall*)(const LAttackSource* attackSourc
                                                 String* value,
                                                 bool* valueIsNotEmpty);
 
+using IsRaceCategoryUnplayable = bool(__stdcall*)(const LRaceCategory* raceCategory);
+
 /**
  * Validates TRaceType objects.
  * Checks valirity of unit, guardian, leader and buildings ids.
@@ -471,6 +473,7 @@ struct Functions
     CreateMenuAnimation createMenuAnimation;
     GetAttackSourceText getAttackSourceText;
     AppendAttackSourceText appendAttackSourceText;
+    IsRaceCategoryUnplayable isRaceCategoryUnplayable;
     ValidateRaces validateRaces;
     CheckRaceExist checkRaceExist;
 };
