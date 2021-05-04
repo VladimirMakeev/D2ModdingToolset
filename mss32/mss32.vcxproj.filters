@@ -504,6 +504,9 @@
     <ClCompile Include="src\customattacks.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\sortedracelist.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -1337,6 +1340,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\customattacks.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sortedracelist.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
