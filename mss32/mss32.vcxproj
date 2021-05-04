@@ -172,6 +172,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\currency.cpp" />
     <ClCompile Include="src\customattack.cpp" />
     <ClCompile Include="src\customattackhooks.cpp" />
+    <ClCompile Include="src\customattacks.cpp" />
     <ClCompile Include="src\d2osexception.cpp" />
     <ClCompile Include="src\d2string.cpp" />
     <ClCompile Include="src\dbfaccess.cpp" />
@@ -248,6 +249,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\sitemerchantinterf.cpp" />
     <ClCompile Include="src\smartptr.cpp" />
     <ClCompile Include="src\movepathhooks.cpp" />
+    <ClCompile Include="src\sortedracelist.cpp" />
     <ClCompile Include="src\stringarray.cpp" />
     <ClCompile Include="src\subracecat.cpp" />
     <ClCompile Include="src\subracehooks.cpp" />
@@ -339,6 +341,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\currency.h" />
     <ClInclude Include="include\customattack.h" />
     <ClInclude Include="include\customattackhooks.h" />
+    <ClInclude Include="include\customattacks.h" />
     <ClInclude Include="include\d2map.h" />
     <ClInclude Include="include\d2osexception.h" />
     <ClInclude Include="include\d2pair.h" />
@@ -514,6 +517,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\smartptr.h" />
     <ClInclude Include="include\sortedlist.h" />
     <ClInclude Include="include\movepathhooks.h" />
+    <ClInclude Include="include\sortedracelist.h" />
     <ClInclude Include="include\stringandid.h" />
     <ClInclude Include="include\stringarray.h" />
     <ClInclude Include="include\subracecat.h" />

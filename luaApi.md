@@ -9,6 +9,8 @@ Scripts folder itself should be placed in the game folder.
 - doppelganger.lua - logic that computes level of doppelganger transform (category L\_DOPPELGANGER)
 - transformSelf.lua - computes unit level for self transform attacks (category L\_TRANSFORM\_SELF)
 - summon.lua - computes summoned unit level for summon attacks (category L\_SUMMON)
+- textids.lua - contains interface text mapping for custom functionality
+- customattacks.lua - contains custom attacks descriptors, such as custom attack sources
 
 ### API reference
 

@@ -21,8 +21,8 @@
 #define MENURACE_H
 
 #include "menubase.h"
-#include "racecategory.h"
-#include "sortedlist.h"
+#include "racelist.h"
+#include "sortedracelist.h"
 
 namespace game {
 
@@ -31,7 +31,7 @@ struct IMqImage2;
 struct CMenuRaceData
 {
     int unknown;
-    SortedList<LRaceCategory> races;
+    SortedRaceList racesToSkip;
     char unknown2[24];
     int screenIndex;
     SmartPtr<IMqImage2> backgroundImage;
@@ -89,6 +89,14 @@ struct Api
     using GetTransitionAnimationName = const char*(__stdcall*)(const LRaceCategory* raceCategory,
                                                                bool scrollBack);
     GetTransitionAnimationName getTransitionAnimationName;
+
+    /**
+     * Fills list with races that are not present on selected scenario map
+     * and will be skipped during race selection.
+     */
+    using SetRacesToSkip = void(__stdcall*)(SortedRaceList* racesToSkip,
+                                            const RaceCategoryList* scenarioRaces);
+    SetRacesToSkip setRacesToSkip;
 };
 
 Api& get();

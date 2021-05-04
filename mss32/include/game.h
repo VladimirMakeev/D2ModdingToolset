@@ -58,6 +58,7 @@ struct CMidgardPlan;
 struct IMqImage2;
 struct IEncUnitDescriptor;
 struct CDialogInterf;
+struct String;
 struct LRaceCategory;
 
 enum class ModifierElementTypeFlag : int;
@@ -392,6 +393,14 @@ using GenerateAttackDescription = void(__stdcall*)(IEncUnitDescriptor* descripto
 using CreateMenuAnimation = SmartPtr<IMqImage2>*(__stdcall*)(SmartPtr<IMqImage2>* animation,
                                                              const char* animationName);
 
+/** Gets attack source interface text. */
+using GetAttackSourceText = String*(__stdcall*)(String* value, const LAttackSource* attackSource);
+
+/** Appends attack source interface text. */
+using AppendAttackSourceText = void(__stdcall*)(const LAttackSource* attackSource,
+                                                String* value,
+                                                bool* valueIsNotEmpty);
+
 /**
  * Validates TRaceType objects.
  * Checks valirity of unit, guardian, leader and buildings ids.
@@ -460,6 +469,8 @@ struct Functions
     ApplyPercentModifiers applyPercentModifiers;
     GenerateAttackDescription generateAttackDescription;
     CreateMenuAnimation createMenuAnimation;
+    GetAttackSourceText getAttackSourceText;
+    AppendAttackSourceText appendAttackSourceText;
     ValidateRaces validateRaces;
     CheckRaceExist checkRaceExist;
 };

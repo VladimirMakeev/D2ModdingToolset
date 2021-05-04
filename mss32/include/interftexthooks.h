@@ -23,6 +23,8 @@
 #include "idlist.h"
 
 namespace game {
+struct String;
+struct LAttackSource;
 struct IEncUnitDescriptor;
 struct CDialogInterf;
 } // namespace game
@@ -36,6 +38,13 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
                                                int lowerInitiativeLevel,
                                                const game::IdList* modifiers,
                                                int damageMax);
+
+game::String* __stdcall getAttackSourceTextHooked(game::String* value,
+                                                  const game::LAttackSource* attackSource);
+
+void __stdcall appendAttackSourceTextHooked(const game::LAttackSource* attackSource,
+                                            game::String* value,
+                                            bool* valueIsNotEmpty);
 
 } // namespace hooks
 

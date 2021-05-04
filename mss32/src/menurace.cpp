@@ -34,6 +34,7 @@ static std::array<Api, 3> functions = {{
         (Api::GetRaceCategory)0x4ee8ec,
         (Api::GetRaceBgndImageName)0x4ee976,
         (Api::GetTransitionAnimationName)0x4eeeb1,
+        (Api::SetRacesToSkip)0x4ee3d1,
     },
     // Russobit
     Api{
@@ -44,6 +45,7 @@ static std::array<Api, 3> functions = {{
         (Api::GetRaceCategory)0x4ee8ec,
         (Api::GetRaceBgndImageName)0x4ee976,
         (Api::GetTransitionAnimationName)0x4eeeb1,
+        (Api::SetRacesToSkip)0x4ee3d1,
     },
     // Gog
     Api{
@@ -54,6 +56,7 @@ static std::array<Api, 3> functions = {{
         (Api::GetRaceCategory)0x4edd34,
         (Api::GetRaceBgndImageName)0x4eddbe,
         (Api::GetTransitionAnimationName)0x4ee2f9,
+        (Api::SetRacesToSkip)0x4ed819,
     }
 }};
 // clang-format on

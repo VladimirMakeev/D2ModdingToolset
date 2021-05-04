@@ -80,6 +80,8 @@ static std::array<Functions, 4> functions = {{
         (ApplyPercentModifiers)0x577515,
         (GenerateAttackDescription)0x57652b,
         (CreateMenuAnimation)0x4eb465,
+        (GetAttackSourceText)0x61e1df,
+        (AppendAttackSourceText)0x61e923,
         (ValidateRaces)0x582ecb,
         (CheckRaceExist)0x582f6f,
     },
@@ -138,6 +140,8 @@ static std::array<Functions, 4> functions = {{
         (ApplyPercentModifiers)0x577515,
         (GenerateAttackDescription)0x57652b,
         (CreateMenuAnimation)0x4eb465,
+        (GetAttackSourceText)0x61e1df,
+        (AppendAttackSourceText)0x61e923,
         (ValidateRaces)0,
         (CheckRaceExist)0,
     },
@@ -196,6 +200,8 @@ static std::array<Functions, 4> functions = {{
         (ApplyPercentModifiers)0x576b6a,
         (GenerateAttackDescription)0x575b80,
         (CreateMenuAnimation)0x4ea917,
+        (GetAttackSourceText)0x61cd1b,
+        (AppendAttackSourceText)0x61d45f,
         (ValidateRaces)0,
         (CheckRaceExist)0,
     },
@@ -254,9 +260,11 @@ static std::array<Functions, 4> functions = {{
         (ApplyPercentModifiers)0x4c7fb1,
         (GenerateAttackDescription)0x4c6fc7,
         (CreateMenuAnimation)nullptr,
+        (GetAttackSourceText)0x521bf7,
+        (AppendAttackSourceText)0x52233b,
         (ValidateRaces)nullptr,
         (CheckRaceExist)nullptr,
-    }
+    },
 }};
 
 static std::array<Variables, 4> variables = {{
