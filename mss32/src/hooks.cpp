@@ -61,6 +61,8 @@
 #include "mapgen.h"
 #include "mempool.h"
 #include "menunewskirmishsingle.h"
+#include "menurace.h"
+#include "menuracehooks.h"
 #include "middatacache.h"
 #include "midgardid.h"
 #include "midgardmsgbox.h"
@@ -71,11 +73,11 @@
 #include "modifierutils.h"
 #include "movepathhooks.h"
 #include "musichooks.h"
-#include "racehooks.h"
 #include "originalfunctions.h"
 #include "playerbuildings.h"
 #include "playerincomehooks.h"
 #include "racecategory.h"
+#include "racehooks.h"
 #include "racetype.h"
 #include "scenariodata.h"
 #include "scenariodataarray.h"
@@ -168,6 +170,13 @@ static Hooks getGameHooks()
         HookInfo{(void*)fn.validateRaces, validateRacesHooked},
         // Support new subrace categories
         HookInfo{(void*)game::LSubRaceCategoryTableApi::get().constructor, subRaceCategoryTableCtorHooked},
+        // Support new races in CMenuRace
+        HookInfo{(void*)game::CMenuRaceApi::get().buttonNextCallback, menuRaceBtnNextCallbackHooked},
+        HookInfo{(void*)game::CMenuRaceApi::get().buttonPrevCallback, menuRaceBtnPrevCallbackHooked},
+        HookInfo{(void*)game::CMenuRaceApi::get().updateRaceDescription, updateRaceDescriptionHooked},
+        HookInfo{(void*)game::CMenuRaceApi::get().getRaceCategory, getRaceCategoryHooked},
+        HookInfo{(void*)game::CMenuRaceApi::get().getRaceBgndImageName, getRaceBgndImageNameHooked},
+        HookInfo{(void*)game::RaceCategoryListApi::get().getPlayableRaces, getPlayableRacesHooked},
     };
     // clang-format on
 
