@@ -189,6 +189,12 @@
     1) Add desired text to TApp.dbf and TAppEdit.dbf;
     2) Add a new entry to 'sources' list in 'Scripts\\customattacks.lua' (the file contains an example);
     3) Fill the entry with your custom source id (from LattS.dbf) and the text id (from TApp.dbf).
+
+    **Note** that the SOURCE column is limited to 1 digit in GAttacks.dbf.<br />
+    This means that only 2 additional sources (with id 8 and 9) can be added by default.<br />
+    The limit can be lifted by extending the SOURCE column size to 2 digits (similar to CLASS).<br />
+    For example, using Sdbf: go to main manu Table > Change structure, set SOURCE size to 2 and hit save:
+    ![image](https://user-images.githubusercontent.com/5180699/117063431-7f8cce80-ad2d-11eb-8765-b0cadaa80567.png)
   </details>
 
 ### Settings:
