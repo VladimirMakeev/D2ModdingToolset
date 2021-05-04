@@ -58,6 +58,7 @@ struct IMqImage2;
 struct IEncUnitDescriptor;
 struct CDialogInterf;
 struct String;
+struct LRaceCategory;
 
 enum class ModifierElementTypeFlag : int;
 
@@ -399,6 +400,8 @@ using AppendAttackSourceText = void(__stdcall*)(const LAttackSource* attackSourc
                                                 String* value,
                                                 bool* valueIsNotEmpty);
 
+using IsRaceCategoryUnplayable = bool(__stdcall*)(const LRaceCategory* raceCategory);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -457,6 +460,7 @@ struct Functions
     CreateMenuAnimation createMenuAnimation;
     GetAttackSourceText getAttackSourceText;
     AppendAttackSourceText appendAttackSourceText;
+    IsRaceCategoryUnplayable isRaceCategoryUnplayable;
 };
 
 /** Global variables used in game. */

@@ -82,6 +82,7 @@ static std::array<Functions, 4> functions = {{
         (CreateMenuAnimation)0x4eb465,
         (GetAttackSourceText)0x61e1df,
         (AppendAttackSourceText)0x61e923,
+        (IsRaceCategoryUnplayable)0x5e6691,
     },
     // Russobit
     Functions{
@@ -140,6 +141,7 @@ static std::array<Functions, 4> functions = {{
         (CreateMenuAnimation)0x4eb465,
         (GetAttackSourceText)0x61e1df,
         (AppendAttackSourceText)0x61e923,
+        (IsRaceCategoryUnplayable)0x5e6691,
     },
     // Gog
     Functions{
@@ -198,6 +200,7 @@ static std::array<Functions, 4> functions = {{
         (CreateMenuAnimation)0x4ea917,
         (GetAttackSourceText)0x61cd1b,
         (AppendAttackSourceText)0x61d45f,
+        (IsRaceCategoryUnplayable)0x5e53a6,
     },
     // Scenario Editor
     Functions{
@@ -256,6 +259,7 @@ static std::array<Functions, 4> functions = {{
         (CreateMenuAnimation)nullptr,
         (GetAttackSourceText)0x521bf7,
         (AppendAttackSourceText)0x52233b,
+        (IsRaceCategoryUnplayable)nullptr,
     },
 }};
 
