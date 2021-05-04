@@ -72,8 +72,9 @@
 - <details>
     <summary>Button to sell all valuables with single click;</summary>
 
-    Add sell confirmation text to TApp.dbf. The text must contain '%PRICE%' keyword in it.<br />
-    Specify id of the text in 'sellAllValuables' field inside 'Scripts\\textids.lua' (default id is X015TA0001).<br />
+    1) Add sell confirmation text to TApp.dbf. The text must contain '%PRICE%' keyword in it;
+    2) Specify id of the text in 'sellAllValuables' field inside 'Scripts\\textids.lua' (default id is X015TA0001).
+
     In case of missing text, the following default message will be shown:
     ```
     Do you want to sell all valuables? Revenue will be:\n%PRICE%
@@ -159,9 +160,12 @@
 - <details>
     <summary>Allows attack class immunity modifiers to be applied (e.g. banner of fear warding);</summary>
 
-    Add IMMUNITYC and IMMUNITYCATC columns to GmodifL.dbf (similar to IMMUNITY and IMMUNITYCAT).<br />
-    Then add a new record with TYPE 14, and fill the columns accordingly to attack class and immunity.<br />
-    Also works in pure vanilla version.
+    1) Add IMMUNITYC and IMMUNECATC columns to GmodifL.dbf (similar to IMMUNITY and IMMUNECAT);
+    2) Add a new record with TYPE 14, and fill the columns accordingly to attack class and immunity.
+
+    Also works in pure vanilla version.    
+    ![Video example](https://user-images.githubusercontent.com/5180699/117055075-6bdc6a80-ad23-11eb-87f8-fcbb6f465657.mp4)
+
   </details>
 - <details>
     <summary>Fixes missing attack information in unit encyclopedia;</summary>
@@ -174,16 +178,17 @@
     - Infinite effect indication;
 
     Critical-hit / infinite-effect indication text can be customized:<br />
-    Add desired text to TApp.dbf and TAppEdit.dbf.<br />
-    Specify id of the text in 'critHitAttack' / 'infiniteAttack' field inside 'Scripts\\textids.lua'.<br />
+    1) Add desired text to TApp.dbf and TAppEdit.dbf;
+    2) Specify id of the text in 'critHitAttack' / 'infiniteAttack' field inside 'Scripts\\textids.lua'.
+
     In case of missing text, defaults are: 'X160TA0017' for critical hit, and 'Lasting' for infinite effect.
   </details>
 - <details>
     <summary>Supports custom attack source text;</summary>
 
-    Add desired text to TApp.dbf and TAppEdit.dbf.<br />
-    Add a new entry to 'sources' list in 'Scripts\\customattacks.lua' - the file contains an example.<br />
-    Fill the entry with your custom source id (from LattS.dbf) and the text id (from TApp.dbf).
+    1) Add desired text to TApp.dbf and TAppEdit.dbf;
+    2) Add a new entry to 'sources' list in 'Scripts\\customattacks.lua' (the file contains an example);
+    3) Fill the entry with your custom source id (from LattS.dbf) and the text id (from TApp.dbf).
   </details>
 
 ### Settings:
