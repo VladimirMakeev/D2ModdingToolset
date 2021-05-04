@@ -21,12 +21,24 @@
 #define NEWRACEHOOKS_H
 
 #include "globaldata.h"
-
-namespace game {
-struct LRaceCategoryTable;
-}
+#include "racecategory.h"
+#include <string>
+#include <utility>
+#include <vector>
 
 namespace hooks {
+
+struct RaceDescription
+{
+    game::LRaceCategory category{};
+    std::string categoryName;
+    std::string abbreviation;
+};
+
+using NewRaces = std::vector<RaceDescription>;
+
+/** Returns new races categories and category names, if any. */
+const NewRaces& newRaces();
 
 /** Reads new race categories from LRace.dbf. */
 game::LRaceCategoryTable* __fastcall raceCategoryTableCtorHooked(game::LRaceCategoryTable* thisptr,

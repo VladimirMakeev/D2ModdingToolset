@@ -29,7 +29,7 @@
 
 namespace hooks {
 
-static std::vector<std::pair<game::LRaceCategory, std::string>> newRaces;
+static NewRaces newRacesData;
 
 static void checkNewRaceCategories(const std::filesystem::path& dbfFilePath)
 {
@@ -62,11 +62,18 @@ static void checkNewRaceCategories(const std::filesystem::path& dbfFilePath)
 
         if (std::none_of(std::begin(knownCategories), std::end(knownCategories),
                          [&categoryName](const char* name) { return categoryName == name; })) {
-            logDebug("newRace.log", fmt::format("Found new race category {:s}", categoryName));
+            std::string abbrev{categoryName.substr(2, 2)};
+            logDebug("newRace.log", fmt::format("Found new race category {:s}, abbrev {:s}",
+                                                categoryName, abbrev));
 
-            newRaces.push_back({game::LRaceCategory{}, categoryName});
+            newRacesData.push_back({game::LRaceCategory{}, categoryName, abbrev});
         }
     }
+}
+
+const NewRaces& newRaces()
+{
+    return newRacesData;
 }
 
 game::LRaceCategoryTable* __fastcall raceCategoryTableCtorHooked(game::LRaceCategoryTable* thisptr,
@@ -98,9 +105,9 @@ game::LRaceCategoryTable* __fastcall raceCategoryTableCtorHooked(game::LRaceCate
     table.readCategory(races.neutral, thisptr, "L_NEUTRAL", dbfFileName);
     table.readCategory(races.elf, thisptr, "L_ELF", dbfFileName);
 
-    for (auto& race : newRaces) {
-        logDebug("newRace.log", fmt::format("Read new race category {:s}", race.second));
-        table.readCategory(&race.first, thisptr, race.second.c_str(), dbfFileName);
+    for (auto& race : newRacesData) {
+        logDebug("newRace.log", fmt::format("Read new race category {:s}", race.categoryName));
+        table.readCategory(&race.category, thisptr, race.categoryName.c_str(), dbfFileName);
     }
 
     table.initDone(thisptr);
@@ -138,8 +145,8 @@ void __fastcall validateRacesHooked(game::RacesMap** thisptr,
     fn.checkRaceExist(thisptr, races.undead, dbfFileName);
     fn.checkRaceExist(thisptr, races.elf, dbfFileName);
 
-    for (auto& race : newRaces) {
-        fn.checkRaceExist(thisptr, &race.first, dbfFileName);
+    for (auto& race : newRacesData) {
+        fn.checkRaceExist(thisptr, &race.category, dbfFileName);
     }
 
     logDebug("newRace.log", "Validate races hook finished");
