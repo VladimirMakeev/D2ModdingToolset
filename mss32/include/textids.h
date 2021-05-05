@@ -26,7 +26,7 @@ namespace hooks {
 
 struct TextIds
 {
-    struct
+    struct Interf
     {
         std::string sellAllValuables;
         std::string infiniteAttack;

@@ -22,6 +22,7 @@
 #include "log.h"
 #include "unitimplview.h"
 #include "unitview.h"
+#include "utils.h"
 
 namespace hooks {
 
@@ -51,6 +52,23 @@ std::optional<sol::state> loadScript(const char* source)
     }
 
     return {std::move(lua)};
+}
+
+bool loadScript(const std::filesystem::path& path, sol::state& value)
+{
+    if (!std::filesystem::exists(path))
+        return false;
+
+    const auto result = value.load_file(path.string())();
+    if (!result.valid()) {
+        const sol::error err = result;
+        showErrorMessageBox(fmt::format("Failed to load script '{:s}'.\n"
+                                        "Reason: '{:s}'",
+                                        path.string(), err.what()));
+        return false;
+    }
+
+    return true;
 }
 
 } // namespace hooks

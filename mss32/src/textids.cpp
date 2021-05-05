@@ -19,22 +19,40 @@
 
 #include "textids.h"
 #include "log.h"
+#include "scripts.h"
 #include "utils.h"
 #include <fmt/format.h>
 #include <sol/sol.hpp>
 
 namespace hooks {
 
-static void readInterfTextIds(TextIds& textids, const sol::state& lua)
+void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
 {
-    const sol::table& table = lua["textids"];
     auto interf = table.get<sol::optional<sol::table>>("interf");
     if (!interf.has_value())
         return;
 
-    textids.interf.sellAllValuables = interf.value().get_or("sellAllValuables", std::string());
-    textids.interf.infiniteAttack = interf.value().get_or("infiniteAttack", std::string());
-    textids.interf.critHitAttack = interf.value().get_or("critHitAttack", std::string());
+    value.sellAllValuables = interf.value().get_or("sellAllValuables", std::string());
+    value.infiniteAttack = interf.value().get_or("infiniteAttack", std::string());
+    value.critHitAttack = interf.value().get_or("critHitAttack", std::string());
+}
+
+void initialize(TextIds& value)
+{
+    const auto path{hooks::scriptsFolder() / "textids.lua"};
+
+    try {
+        sol::state lua;
+        if (!loadScript(path, lua))
+            return;
+
+        const sol::table& table = lua["textids"];
+        readInterfTextIds(table, value.interf);
+    } catch (const std::exception& e) {
+        showErrorMessageBox(fmt::format("Failed to read script '{:s}'.\n"
+                                        "Reason: '{:s}'",
+                                        path.string(), e.what()));
+    }
 }
 
 const TextIds& textIds()
@@ -43,24 +61,8 @@ const TextIds& textIds()
     static bool initialized = false;
 
     if (!initialized) {
+        initialize(value);
         initialized = true;
-
-        const auto path{hooks::scriptsFolder() / "textids.lua"};
-        if (std::filesystem::exists(path)) {
-            sol::state lua;
-
-            auto config = lua.load_file(path.string());
-            const auto result = config();
-
-            if (result.valid()) {
-                readInterfTextIds(value, lua);
-            } else {
-                const sol::error err = result;
-                hooks::logError("mssProxyError.log",
-                                fmt::format("Failed to load textids script '{:s}'.\nReason: '{:s}'",
-                                            path.string(), err.what()));
-            }
-        }
     }
 
     return value;

@@ -21,6 +21,7 @@
 #define SCRIPTS_H
 
 #include "log.h"
+#include <filesystem>
 #include <fmt/format.h>
 #include <lua.hpp>
 #include <optional>
@@ -56,6 +57,8 @@ static inline std::optional<T> getScriptFunction(const sol::state& lua, const ch
 
 /** Returns lua state wrapper with specified script loaded in it and api bound. */
 std::optional<sol::state> loadScript(const char* source);
+
+bool loadScript(const std::filesystem::path& path, sol::state& value);
 
 } // namespace hooks
 
