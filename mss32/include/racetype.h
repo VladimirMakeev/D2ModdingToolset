@@ -29,6 +29,8 @@
 
 namespace game {
 
+struct GlobalData;
+
 /**
  * Holds leader names read from TLeader.dbf.
  * Must be 24 bytes according to TRaceType constructor.
@@ -81,6 +83,20 @@ struct TRaceType : public IMidObject
 };
 
 static_assert(sizeof(TRaceType) == 12, "Size of TRaceType structure must be exactly 12 bytes");
+
+struct TRaceTypeVftable : public IMidObjectVftable
+{
+    /**
+     * Validates contents of TRaceType object.
+     * Throws exception if race has invalid units, leaders or guardian.
+     * Also checks for validity of unit branches and city protection modifiers.
+     */
+    using Validate = void(__thiscall*)(TRaceType* thisptr, GlobalData** globalData);
+    Validate validate;
+};
+
+static_assert(sizeof(TRaceTypeVftable) == 2 * sizeof(void*),
+              "TRaceType vftable must have exactly 2 methods");
 
 } // namespace game
 
