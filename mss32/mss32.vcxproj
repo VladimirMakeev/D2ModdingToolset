@@ -168,6 +168,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
     <ClCompile Include="src\button.cpp" />
+    <ClCompile Include="src\capitaldata.cpp" />
     <ClCompile Include="src\capitaldatlist.cpp" />
     <ClCompile Include="src\citystackinterf.cpp" />
     <ClCompile Include="src\currency.cpp" />
@@ -333,6 +334,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\buildingtype.h" />
     <ClInclude Include="include\button.h" />
     <ClInclude Include="include\capital.h" />
+    <ClInclude Include="include\capitaldata.h" />
     <ClInclude Include="include\capitaldatlist.h" />
     <ClInclude Include="include\catalogvalidate.h" />
     <ClInclude Include="include\categories.h" />
