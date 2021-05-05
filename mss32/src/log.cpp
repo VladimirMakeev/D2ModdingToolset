@@ -37,10 +37,7 @@ static void logAction(const std::string& logFile, const std::string& message)
     const std::time_t time{std::time(nullptr)};
     const std::tm tm = *std::localtime(&time);
 
-    auto msg = message;
-    msg.erase(std::remove(msg.begin(), msg.end(), '\n'), msg.end());
-
-    file << "[" << std::put_time(&tm, "%c") << "] " << msg << "\n";
+    file << "[" << std::put_time(&tm, "%c") << "] " << message << "\n";
 }
 
 void logDebug(const std::string& logFile, const std::string& message)
