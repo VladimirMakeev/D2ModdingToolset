@@ -15,12 +15,12 @@
 - <details>
     <summary>Allows scenarios with prebuilt capital cities;</summary>
 
-    1) Enable 'preserveCapitalBuildings' in 'Scripts\\settings.lua';
-    2) Start a scenario;
-    3) Build desired buildings in a capital;
-    4) Save the scenario;
-    5) Move the saved game from SaveGame folder to Exports;
-    6) Restart the scenario.
+    - Enable 'preserveCapitalBuildings' in 'Scripts\\settings.lua';
+    - Start a scenario;
+    - Build desired buildings in a capital;
+    - Save the scenario;
+    - Move the saved game from SaveGame folder to Exports;
+    - Restart the scenario.
   </details>
 - Allows banners, resources panel and converted land percentage to be displayed by default;
 - Allows to display movement cost for each individual step of parties;
@@ -72,8 +72,9 @@
 - <details>
     <summary>Button to sell all valuables with single click;</summary>
 
-    Add sell confirmation text to TApp.dbf. The text must contain '%PRICE%' keyword in it.<br />
-    Specify id of the text in 'sellAllValuables' field inside 'Scripts\\textids.lua' (default id is X015TA0001).<br />
+    - Add sell confirmation text to TApp.dbf. The text must contain '%PRICE%' keyword in it;
+    - Specify id of the text in 'sellAllValuables' field inside 'Scripts\\textids.lua' (default id is X015TA0001).
+
     In case of missing text, the following default message will be shown:
     ```
     Do you want to sell all valuables? Revenue will be:\n%PRICE%
@@ -159,9 +160,12 @@
 - <details>
     <summary>Allows attack class immunity modifiers to be applied (e.g. banner of fear warding);</summary>
 
-    Add IMMUNITYC and IMMUNITYCATC columns to GmodifL.dbf (similar to IMMUNITY and IMMUNITYCAT).<br />
-    Then add a new record with TYPE 14, and fill the columns accordingly to attack class and immunity.<br />
-    Also works in pure vanilla version.
+    - Add IMMUNITYC and IMMUNECATC columns to GmodifL.dbf (similar to IMMUNITY and IMMUNECAT);
+    - Add a new record with TYPE 14, and fill the columns accordingly to attack class and immunity.
+
+    Also works in pure vanilla version.    
+    ![Video example](https://user-images.githubusercontent.com/5180699/117055075-6bdc6a80-ad23-11eb-87f8-fcbb6f465657.mp4)
+
   </details>
 - <details>
     <summary>Fixes missing attack information in unit encyclopedia;</summary>
@@ -173,17 +177,24 @@
     - Critical hit indication;
     - Infinite effect indication;
 
-    Critical-hit / infinite-effect indication text can be customized:<br />
-    Add desired text to TApp.dbf and TAppEdit.dbf.<br />
-    Specify id of the text in 'critHitAttack' / 'infiniteAttack' field inside 'Scripts\\textids.lua'.<br />
+    Critical-hit / infinite-effect indication text can be customized:
+    - Add desired text to TApp.dbf and TAppEdit.dbf;
+    - Specify id of the text in 'critHitAttack' / 'infiniteAttack' field inside 'Scripts\\textids.lua'.
+
     In case of missing text, defaults are: 'X160TA0017' for critical hit, and 'Lasting' for infinite effect.
   </details>
 - <details>
     <summary>Supports custom attack source text;</summary>
 
-    Add desired text to TApp.dbf and TAppEdit.dbf.<br />
-    Add a new entry to 'sources' list in 'Scripts\\customattacks.lua' - the file contains an example.<br />
-    Fill the entry with your custom source id (from LattS.dbf) and the text id (from TApp.dbf).
+    - Add desired text to TApp.dbf and TAppEdit.dbf;
+    - Add a new entry to 'sources' list in 'Scripts\\customattacks.lua' (the file contains an example);
+    - Fill the entry with your custom source id (from LattS.dbf) and the text id (from TApp.dbf).
+
+    **Note** that the SOURCE column is limited to 1 digit in GAttacks.dbf.<br />
+    This means that only 2 additional sources (with id 8 and 9) can be added by default.<br />
+    The limit can be lifted by extending the SOURCE column size to 2 digits (similar to CLASS).<br />
+    For example, using Sdbf: go to main manu Table > Change structure, set SOURCE size to 2 and hit save:
+    ![image](https://user-images.githubusercontent.com/5180699/117063431-7f8cce80-ad2d-11eb-8765-b0cadaa80567.png)
   </details>
 
 ### Settings:
