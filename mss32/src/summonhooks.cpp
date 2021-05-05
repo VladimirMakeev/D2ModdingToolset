@@ -45,10 +45,7 @@ static int getSummonLevel(const game::CMidUnit* summoner, game::TUsUnitImpl* sum
     const char* filename{"summon.lua"};
     static std::string script{readFile({scriptsFolder() / filename})};
     if (script.empty()) {
-        const auto message{fmt::format("Failed to read '{:s}' script file", filename)};
-
-        logError("mssProxyError.log", message);
-        showErrorMessageBox(message);
+        showErrorMessageBox(fmt::format("Failed to read '{:s}' script file", filename));
         return 0;
     }
 
@@ -75,11 +72,9 @@ static int getSummonLevel(const game::CMidUnit* summoner, game::TUsUnitImpl* sum
 
         return (*getLevel)(summonerUnit, impl);
     } catch (const std::exception& e) {
-        const auto message{fmt::format("Failed to run '{:s}' script.\n"
-                                       "Reason: '{:s}'",
-                                       filename, e.what())};
-        logError("mssProxyError.log", message);
-        showErrorMessageBox(message);
+        showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                        "Reason: '{:s}'",
+                                        filename, e.what()));
         return 0;
     }
 }

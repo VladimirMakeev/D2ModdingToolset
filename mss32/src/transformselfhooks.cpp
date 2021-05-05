@@ -44,10 +44,7 @@ static int getTransformSelfLevel(const game::CMidUnit* unit, game::TUsUnitImpl* 
     const char* filename{"transformSelf.lua"};
     static std::string script{readFile({scriptsFolder() / filename})};
     if (script.empty()) {
-        const auto message{fmt::format("Failed to read '{:s}' script file", filename)};
-
-        logError("mssProxyError.log", message);
-        showErrorMessageBox(message);
+        showErrorMessageBox(fmt::format("Failed to read '{:s}' script file", filename));
         return 0;
     }
 
@@ -74,11 +71,9 @@ static int getTransformSelfLevel(const game::CMidUnit* unit, game::TUsUnitImpl* 
 
         return (*getLevel)(attacker, impl);
     } catch (const std::exception& e) {
-        const auto message{fmt::format("Failed to run '{:s}' script.\n"
-                                       "Reason: '{:s}'",
-                                       filename, e.what())};
-        logError("mssProxyError.log", message);
-        showErrorMessageBox(message);
+        showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                        "Reason: '{:s}'",
+                                        filename, e.what()));
         return 0;
     }
 }

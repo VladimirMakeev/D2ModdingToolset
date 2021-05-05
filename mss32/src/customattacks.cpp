@@ -19,15 +19,15 @@
 
 #include "customattacks.h"
 #include "log.h"
+#include "scripts.h"
 #include "utils.h"
 #include <fmt/format.h>
 #include <sol/sol.hpp>
 
 namespace hooks {
 
-static void readAttackSources(CustomAttackSources& value, const sol::state& lua)
+void readAttackSources(const sol::table& table, CustomAttackSources& value)
 {
-    const sol::table& table = lua["customAttacks"];
     auto sources = table.get<sol::optional<sol::table>>("sources");
     if (!sources.has_value())
         return;
@@ -38,27 +38,32 @@ static void readAttackSources(CustomAttackSources& value, const sol::state& lua)
     }
 }
 
+void initialize(CustomAttacks& value)
+{
+    const auto path{hooks::scriptsFolder() / "customattacks.lua"};
+
+    try {
+        sol::state lua;
+        if (!loadScript(path, lua))
+            return;
+
+        const sol::table& table = lua["customAttacks"];
+        readAttackSources(table, value.sources);
+    } catch (const std::exception& e) {
+        showErrorMessageBox(fmt::format("Failed to read script '{:s}'.\n"
+                                        "Reason: '{:s}'",
+                                        path.string(), e.what()));
+    }
+}
+
 const CustomAttacks& customAttacks()
 {
     static CustomAttacks value;
     static bool initialized = false;
 
     if (!initialized) {
+        initialize(value);
         initialized = true;
-
-        const auto path{hooks::scriptsFolder() / "customattacks.lua"};
-        if (std::filesystem::exists(path)) {
-            sol::state lua;
-            const auto result = lua.load_file(path.string())();
-            if (result.valid()) {
-                readAttackSources(value.sources, lua);
-            } else {
-                const sol::error err = result;
-                hooks::logError("mssProxyError.log",
-                                fmt::format("Failed to load script '{:s}'.\nReason: '{:s}'",
-                                            path.string(), err.what()));
-            }
-        }
     }
 
     return value;
