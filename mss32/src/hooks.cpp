@@ -1390,11 +1390,9 @@ void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
 
 void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)
 {
-    const auto message{fmt::format("Caught exception '{:s}'.", thisptr->message)};
-    logError("mssProxyError.log", message);
-    showErrorMessageBox(message
-                        + fmt::format("\nThe {:s} will probably crash now.",
-                                      (executableIsGame() ? "game" : "editor")));
+    showErrorMessageBox(fmt::format("Caught exception '{:s}'.\n"
+                                    "The {:s} will probably crash now.",
+                                    thisptr->message, executableIsGame() ? "game" : "editor"));
 
     getOriginalFunctions().throwException(thisptr, throwInfo);
 }

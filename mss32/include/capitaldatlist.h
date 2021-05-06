@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Stanislav Egorov.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,25 +17,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTIDS_H
-#define TEXTIDS_H
+#ifndef CAPITALDATLIST_H
+#define CAPITALDATLIST_H
 
-#include <string>
+#include "linkedlist.h"
+#include "midgardid.h"
 
-namespace hooks {
+namespace game {
 
-struct TextIds
+struct CapitalDatRecord
 {
-    struct Interf
-    {
-        std::string sellAllValuables;
-        std::string infiniteAttack;
-        std::string critHitAttack;
-    } interf;
+    CMidgardID buildingId;
+    CMidgardID unknownId;
+    LinkedList<void*> list;
 };
 
-const TextIds& textIds();
+static_assert(sizeof(CapitalDatRecord) == 24,
+              "Size of CapitalDatRecord structure must be exactly 24 bytes");
 
-} // namespace hooks
+using CapitalDatList = LinkedList<CapitalDatRecord**>;
 
-#endif // TEXTIDS_H
+namespace CapitalDatListApi {
+
+struct Api
+{
+    using Constructor = CapitalDatList*(__thiscall*)(CapitalDatList* thisptr);
+    Constructor constructor;
+};
+
+Api& get();
+
+} // namespace CapitalDatListApi
+
+} // namespace game
+
+#endif // CAPITALDATLIST_H

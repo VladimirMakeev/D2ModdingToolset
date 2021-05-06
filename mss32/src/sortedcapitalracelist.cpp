@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Stanislav Egorov.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,25 +17,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTIDS_H
-#define TEXTIDS_H
+#include "sortedcapitalracelist.h"
+#include "version.h"
+#include <array>
 
-#include <string>
+namespace game::SortedCapitalRaceListApi {
 
-namespace hooks {
+// clang-format off
+static std::array<Api, 3> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)0x56b1ca,
+        (Api::Add)0x56b228,
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)0x56b1ca,
+        (Api::Add)0x56b228,
+    },
+    // Gog
+    Api{
+        (Api::Constructor)0x56a87a,
+        (Api::Add)0x56a8d8,
+    }
+}};
+// clang-format on
 
-struct TextIds
+Api& get()
 {
-    struct Interf
-    {
-        std::string sellAllValuables;
-        std::string infiniteAttack;
-        std::string critHitAttack;
-    } interf;
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-const TextIds& textIds();
-
-} // namespace hooks
-
-#endif // TEXTIDS_H
+} // namespace game::SortedCapitalRaceListApi

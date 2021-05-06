@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Stanislav Egorov.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,25 +17,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTIDS_H
-#define TEXTIDS_H
+#include "capitaldatlist.h"
+#include "version.h"
+#include <array>
 
-#include <string>
+namespace game::CapitalDatListApi {
 
-namespace hooks {
+// clang-format off
+static std::array<Api, 3> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)0x56aaea,
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)0x56aaea,
+    },
+    // Gog
+    Api{
+        (Api::Constructor)0x56a1f9,
+    }
+}};
+// clang-format on
 
-struct TextIds
+Api& get()
 {
-    struct Interf
-    {
-        std::string sellAllValuables;
-        std::string infiniteAttack;
-        std::string critHitAttack;
-    } interf;
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-const TextIds& textIds();
-
-} // namespace hooks
-
-#endif // TEXTIDS_H
+} // namespace game::CapitalDatListApi

@@ -19,6 +19,7 @@
 
 #include "settings.h"
 #include "log.h"
+#include "scripts.h"
 #include "utils.h"
 #include <algorithm>
 #include <fmt/format.h>
@@ -40,22 +41,21 @@ static T readSetting(const sol::table& table,
     return std::clamp<T>(table.get_or(name, def), min, max);
 }
 
-static void readAiAttackPowerSettings(Settings& settings, const sol::table& table)
+static void readAiAttackPowerSettings(const sol::table& table, Settings::AiAttackPowerBonus& value)
 {
     const auto& def = defaultSettings().aiAttackPowerBonus;
-    auto& aiAttackPower = settings.aiAttackPowerBonus;
 
     auto bonuses = table.get<sol::optional<sol::table>>("aiAccuracyBonus");
     if (!bonuses.has_value()) {
-        aiAttackPower = def;
+        value = def;
         return;
     }
 
-    aiAttackPower.absolute = readSetting(bonuses.value(), "absolute", def.absolute);
-    aiAttackPower.easy = readSetting(bonuses.value(), "easy", def.easy);
-    aiAttackPower.average = readSetting(bonuses.value(), "average", def.average);
-    aiAttackPower.hard = readSetting(bonuses.value(), "hard", def.hard);
-    aiAttackPower.veryHard = readSetting(bonuses.value(), "veryHard", def.veryHard);
+    value.absolute = readSetting(bonuses.value(), "absolute", def.absolute);
+    value.easy = readSetting(bonuses.value(), "easy", def.easy);
+    value.average = readSetting(bonuses.value(), "average", def.average);
+    value.hard = readSetting(bonuses.value(), "hard", def.hard);
+    value.veryHard = readSetting(bonuses.value(), "veryHard", def.veryHard);
 }
 
 static Color readColor(const sol::table& table, const Color& def)
@@ -68,38 +68,35 @@ static Color readColor(const sol::table& table, const Color& def)
     return color;
 }
 
-static void readMovementCostColors(Settings& settings, const sol::table& table)
+static void readMovementCostSettings(const sol::table& table, Settings::MovementCost& value)
 {
     const auto& defTextColor = defaultSettings().movementCost.textColor;
     const auto& defOutlineColor = defaultSettings().movementCost.outlineColor;
 
-    settings.movementCost.show = defaultSettings().movementCost.show;
-    settings.movementCost.textColor = defTextColor;
-    settings.movementCost.outlineColor = defOutlineColor;
+    value.show = defaultSettings().movementCost.show;
+    value.textColor = defTextColor;
+    value.outlineColor = defOutlineColor;
 
     auto moveCost = table.get<sol::optional<sol::table>>("movementCost");
     if (!moveCost.has_value()) {
         return;
     }
 
-    settings.movementCost.show = readSetting(moveCost.value(), "show",
-                                             defaultSettings().movementCost.show);
+    value.show = readSetting(moveCost.value(), "show", defaultSettings().movementCost.show);
 
     auto textColor = moveCost.value().get<sol::optional<sol::table>>("textColor");
     if (textColor.has_value()) {
-        settings.movementCost.textColor = readColor(textColor.value(), defTextColor);
+        value.textColor = readColor(textColor.value(), defTextColor);
     }
 
     auto outlineColor = moveCost.value().get<sol::optional<sol::table>>("outlineColor");
     if (outlineColor.has_value()) {
-        settings.movementCost.outlineColor = readColor(outlineColor.value(), defOutlineColor);
+        value.outlineColor = readColor(outlineColor.value(), defOutlineColor);
     }
 }
 
-static void readSettings(Settings& settings, const sol::state& lua)
+static void readSettings(const sol::table& table, Settings& settings)
 {
-    const sol::table& table = lua["settings"];
-
     // clang-format off
     settings.unitMaxDamage = readSetting(table, "unitMaxDamage", defaultSettings().unitMaxDamage);
     settings.unitMaxArmor = readSetting(table, "unitMaxArmor", defaultSettings().unitMaxArmor);
@@ -130,8 +127,8 @@ static void readSettings(Settings& settings, const sol::state& lua)
     settings.debugMode = readSetting(table, "debugHooks", defaultSettings().debugMode);
     // clang-format on
 
-    readAiAttackPowerSettings(settings, table);
-    readMovementCostColors(settings, table);
+    readAiAttackPowerSettings(table, settings.aiAttackPowerBonus);
+    readMovementCostSettings(table, settings.movementCost);
 }
 
 const Settings& baseSettings()
@@ -199,32 +196,34 @@ const Settings& defaultSettings()
     return settings;
 }
 
+void initializeUserSettings(Settings& value)
+{
+    const auto path{hooks::scriptsFolder() / "settings.lua"};
+
+    value = defaultSettings();
+
+    try {
+        sol::state lua;
+        if (!loadScript(path, lua))
+            return;
+
+        const sol::table& table = lua["settings"];
+        readSettings(table, value);
+    } catch (const std::exception& e) {
+        showErrorMessageBox(fmt::format("Failed to read script '{:s}'.\n"
+                                        "Reason: '{:s}'",
+                                        path.string(), e.what()));
+    }
+}
+
 const Settings& userSettings()
 {
     static Settings settings;
     static bool initialized = false;
 
     if (!initialized) {
+        initializeUserSettings(settings);
         initialized = true;
-        settings = defaultSettings();
-
-        const auto settingsPath{hooks::scriptsFolder() / "settings.lua"};
-        if (std::filesystem::exists(settingsPath)) {
-            sol::state lua;
-
-            auto config = lua.load_file(settingsPath.string());
-            const auto result = config();
-
-            if (result.valid()) {
-                readSettings(settings, lua);
-            } else {
-                const sol::error err = result;
-                hooks::logError(
-                    "mssProxyError.log",
-                    fmt::format("Failed to load settings script '{:s}'.\nReason: '{:s}'",
-                                settingsPath.string(), err.what()));
-            }
-        }
     }
 
     return settings;

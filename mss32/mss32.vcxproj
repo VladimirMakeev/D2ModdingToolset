@@ -168,6 +168,8 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
     <ClCompile Include="src\button.cpp" />
+    <ClCompile Include="src\capitaldata.cpp" />
+    <ClCompile Include="src\capitaldatlist.cpp" />
     <ClCompile Include="src\citystackinterf.cpp" />
     <ClCompile Include="src\currency.cpp" />
     <ClCompile Include="src\customattack.cpp" />
@@ -249,6 +251,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\sitemerchantinterf.cpp" />
     <ClCompile Include="src\smartptr.cpp" />
     <ClCompile Include="src\movepathhooks.cpp" />
+    <ClCompile Include="src\sortedcapitalracelist.cpp" />
     <ClCompile Include="src\sortedracelist.cpp" />
     <ClCompile Include="src\stringarray.cpp" />
     <ClCompile Include="src\subracecat.cpp" />
@@ -334,6 +337,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\buildingtype.h" />
     <ClInclude Include="include\button.h" />
     <ClInclude Include="include\capital.h" />
+    <ClInclude Include="include\capitaldata.h" />
+    <ClInclude Include="include\capitaldatlist.h" />
     <ClInclude Include="include\catalogvalidate.h" />
     <ClInclude Include="include\categories.h" />
     <ClInclude Include="include\categoryids.h" />
@@ -515,6 +520,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\sitecategories.h" />
     <ClInclude Include="include\sitemerchantinterf.h" />
     <ClInclude Include="include\smartptr.h" />
+    <ClInclude Include="include\sortedcapitalracelist.h" />
     <ClInclude Include="include\sortedlist.h" />
     <ClInclude Include="include\movepathhooks.h" />
     <ClInclude Include="include\sortedracelist.h" />

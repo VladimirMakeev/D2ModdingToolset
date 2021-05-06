@@ -46,10 +46,7 @@ static int getDoppelgangerTransformLevel(const game::CMidUnit* doppelganger,
     const char* filename{"doppelganger.lua"};
     static std::string script{readFile({scriptsFolder() / filename})};
     if (script.empty()) {
-        const auto message{fmt::format("Failed to read '{:s}' script file", filename)};
-
-        logError("mssProxyError.log", message);
-        showErrorMessageBox(message);
+        showErrorMessageBox(fmt::format("Failed to read '{:s}' script file", filename));
         return 0;
     }
 
@@ -76,11 +73,9 @@ static int getDoppelgangerTransformLevel(const game::CMidUnit* doppelganger,
 
         return (*getLevel)(attacker, target);
     } catch (const std::exception& e) {
-        const auto message{fmt::format("Failed to run '{:s}' script.\n"
-                                       "Reason: '{:s}'",
-                                       filename, e.what())};
-        logError("mssProxyError.log", message);
-        showErrorMessageBox(message);
+        showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                        "Reason: '{:s}'",
+                                        filename, e.what()));
         return 0;
     }
 }

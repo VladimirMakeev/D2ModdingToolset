@@ -415,6 +415,7 @@ using CheckRaceExist = void(__stdcall*)(RacesMap** races,
                                         const LRaceCategory* category,
                                         const char* dbfFileName);
 
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {

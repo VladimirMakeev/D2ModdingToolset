@@ -19,6 +19,7 @@
 
 #include "log.h"
 #include "settings.h"
+#include "utils.h"
 #include <chrono>
 #include <ctime>
 #include <fstream>
@@ -30,7 +31,9 @@ static void logAction(const std::string& logFile, const std::string& message)
 {
     using namespace std::chrono;
 
-    std::ofstream file(logFile.c_str(), std::ios_base::app);
+    const auto path{hooks::gameFolder() / logFile};
+
+    std::ofstream file(path.c_str(), std::ios_base::app);
     const std::time_t time{std::time(nullptr)};
     const std::tm tm = *std::localtime(&time);
 

@@ -48,7 +48,7 @@ struct Settings
     std::uint8_t disableAllowedRoundMax;
     std::uint8_t shatterDamageUpgradeRatio;
 
-    struct
+    struct AiAttackPowerBonus
     {
         std::int8_t easy;
         std::int8_t average;
@@ -71,7 +71,7 @@ struct Settings
     bool unrestrictedBestowWards;
     bool detailedAttackDescription;
 
-    struct
+    struct MovementCost
     {
         Color textColor{};
         Color outlineColor{};

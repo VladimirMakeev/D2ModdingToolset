@@ -20,6 +20,7 @@
 #include "utils.h"
 #include "game.h"
 #include "interfmanager.h"
+#include "log.h"
 #include "mempool.h"
 #include "midgardid.h"
 #include "midgardmsgbox.h"
@@ -156,6 +157,7 @@ void showMessageBox(const std::string& message,
 
 void showErrorMessageBox(const std::string& message)
 {
+    logError("mssProxyError.log", message);
     MessageBox(NULL, message.c_str(), "mss32.dll proxy", MB_OK);
 }
 
