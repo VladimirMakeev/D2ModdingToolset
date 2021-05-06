@@ -49,7 +49,7 @@ struct Api
     using Constructor = SortedCapitalRaceList*(__thiscall*)(SortedCapitalRaceList* thisptr);
     Constructor constructor;
 
-    using Add = SortedCapitalRaceListIterator*(__thiscall*)(SortedCapitalRaceListIterator* thisptr,
+    using Add = SortedCapitalRaceListIterator*(__thiscall*)(SortedCapitalRaceList* thisptr,
                                                             SortedCapitalRaceListIterator* iterator,
                                                             const LRaceCategory* race,
                                                             CapitalDatList** list);
