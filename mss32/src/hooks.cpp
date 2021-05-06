@@ -35,6 +35,8 @@
 #include "buildingbranch.h"
 #include "buildingtype.h"
 #include "button.h"
+#include "capitaldata.h"
+#include "capitaldatahooks.h"
 #include "customattackhooks.h"
 #include "d2string.h"
 #include "dbf/dbffile.h"
@@ -178,6 +180,9 @@ static Hooks getGameHooks()
         HookInfo{(void*)game::CMenuRaceApi::get().getRaceBgndImageName, getRaceBgndImageNameHooked},
         HookInfo{(void*)game::RaceCategoryListApi::get().getPlayableRaces, getPlayableRacesHooked},
         HookInfo{(void*)game::CMenuRaceApi::get().setRacesToSkip, setRacesToSkipHooked},
+        // Support new races in Capital.dat
+        HookInfo{(void*)game::CapitalDataApi::get().allocate, allocateCapitalDataHooked},
+        HookInfo{(void*)game::CapitalDataApi::get().read, readCapitalDataHooked},
     };
     // clang-format on
 
