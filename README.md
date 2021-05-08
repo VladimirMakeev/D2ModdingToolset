@@ -184,11 +184,17 @@
     In case of missing text, defaults are: 'X160TA0017' for critical hit, and 'Lasting' for infinite effect.
   </details>
 - <details>
-    <summary>Supports custom attack source text;</summary>
+    <summary>Supports custom attack sources;</summary>
 
-    - Add desired text to TApp.dbf and TAppEdit.dbf;
-    - Add a new entry to 'sources' list in 'Scripts\\customattacks.lua' (the file contains an example);
-    - Fill the entry with your custom source id (from LattS.dbf) and the text id (from TApp.dbf).
+    - Add a name for a custom source to TApp.dbf and TAppEdit.dbf;
+    - Add NAME_TXT (Character, size 10) and IMMUNE_POW (Number, size 2) columns to LattS.dbf;
+    ![image](https://user-images.githubusercontent.com/5180699/117533496-db897880-aff5-11eb-92ad-4b5bf70602a0.png)
+    - Add a new entry in LattS.dbf;
+    - Specify the custom source ID and TEXT accordingly;
+    - Specify the id of the source name from TApp.dbf in NAME_TXT ('X005TA0153' for instance);
+    - Specify IMMUNE_POW: the value is used by AI to determine how powerful a unit with such ward or immunity is. The greater - the better. For example, elemental immunities have average power of 5, while weapon immunity has 57.
+
+    ![image](https://user-images.githubusercontent.com/5180699/117533697-e2fd5180-aff6-11eb-905f-24e9c736a9b6.png)
 
     **Note** that the SOURCE column is limited to 1 digit in GAttacks.dbf.<br />
     This means that only 2 additional sources (with id 8 and 9) can be added by default.<br />
