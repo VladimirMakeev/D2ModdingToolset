@@ -457,4 +457,23 @@ void __fastcall removeUnitAttackSourceWardHooked(game::BattleMsgData* thisptr,
     unitInfo->attackSourceImmunityStatusesPatched |= flag;
 }
 
+void __stdcall addUnitToBattleMsgDataHooked(game::IMidgardObjectMap* objectMap,
+                                            game::CMidUnitGroup* group,
+                                            const game::CMidgardID* unitId,
+                                            char attackerFlags,
+                                            game::BattleMsgData* battleMsgData)
+{
+    using namespace game;
+
+    int i;
+    for (i = 0; i < 22 && battleMsgData->unitsInfo[i].unitId1 != invalidId; ++i)
+        ;
+
+    battleMsgData->unitsInfo[i].attackClassImmunityStatuses = 0;
+    battleMsgData->unitsInfo[i].attackSourceImmunityStatusesPatched = 0;
+
+    getOriginalFunctions().addUnitToBattleMsgData(objectMap, group, unitId, attackerFlags,
+                                                  battleMsgData);
+}
+
 } // namespace hooks

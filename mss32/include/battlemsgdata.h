@@ -435,6 +435,13 @@ struct Api
 
     /** Used by AI to determine fear attack target. */
     FindSpecificAttackTarget findFearAttackTarget;
+
+    using AddUnitToBattleMsgData = void(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                    CMidUnitGroup* group,
+                                                    const CMidgardID* unitId,
+                                                    char attackerFlags,
+                                                    BattleMsgData* battleMsgData);
+    AddUnitToBattleMsgData addUnitToBattleMsgData;
 };
 
 Api& get();

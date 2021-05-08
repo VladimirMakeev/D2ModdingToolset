@@ -163,6 +163,7 @@ static Hooks getGameHooks()
         HookInfo{(void*)fn.getUnitAttackSourceImmunities, getUnitAttackSourceImmunitiesHooked},
         HookInfo{(void*)game::BattleMsgDataApi::get().isUnitAttackSourceWardRemoved, isUnitAttackSourceWardRemovedHooked},
         HookInfo{(void*)game::BattleMsgDataApi::get().removeUnitAttackSourceWard, removeUnitAttackSourceWardHooked},
+        HookInfo{(void*)game::BattleMsgDataApi::get().addUnitToBattleMsgData, addUnitToBattleMsgDataHooked, (void**)&orig.addUnitToBattleMsgData},
     };
     // clang-format on
 

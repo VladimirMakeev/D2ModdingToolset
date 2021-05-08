@@ -37,6 +37,7 @@ struct IBatAttack;
 struct IMidgardObjectMap;
 struct BattleMsgData;
 struct CMidgardID;
+struct CMidUnitGroup;
 } // namespace game
 
 namespace hooks {
@@ -91,6 +92,12 @@ void __fastcall removeUnitAttackSourceWardHooked(game::BattleMsgData* thisptr,
                                                  int /*%edx*/,
                                                  const game::CMidgardID* unitId,
                                                  const game::LAttackSource* attackSource);
+
+void __stdcall addUnitToBattleMsgDataHooked(game::IMidgardObjectMap* objectMap,
+                                            game::CMidUnitGroup* group,
+                                            const game::CMidgardID* unitId,
+                                            char attackerFlags,
+                                            game::BattleMsgData* battleMsgData);
 
 } // namespace hooks
 

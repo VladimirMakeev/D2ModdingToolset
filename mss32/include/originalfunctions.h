@@ -55,6 +55,7 @@ struct OriginalFunctions
     game::BattleMsgDataApi::Api::FindAttackTarget findAttackTarget;
     game::GetSoldierImmunityPower getSoldierImmunityPower;
     game::GetAttackSourceWardFlagPosition getAttackSourceWardFlagPosition;
+    game::BattleMsgDataApi::Api::AddUnitToBattleMsgData addUnitToBattleMsgData;
 };
 
 OriginalFunctions& getOriginalFunctions();
