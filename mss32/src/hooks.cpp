@@ -186,6 +186,8 @@ static Hooks getGameHooks()
         // Support new races in Capital.dat
         HookInfo{(void*)game::CapitalDataApi::get().allocate, allocateCapitalDataHooked},
         HookInfo{(void*)game::CapitalDataApi::get().read, readCapitalDataHooked},
+        // Support new races in capital buldings dialogs
+        HookInfo{(void*)game::CBuildingBranchApi::get().createDialogName, buildingBranchCreateDialogNameHooked},
     };
     // clang-format on
 
@@ -1531,6 +1533,49 @@ void __stdcall loadLordFaceImagesHooked(const char** faceNames,
     }
 
     getOriginalFunctions().loadLordFaceImages(faceNames, facesTotal, faces);
+}
+
+char* __fastcall buildingBranchCreateDialogNameHooked(game::CBuildingBranch* thisptr, int /*%edx*/)
+{
+    using namespace game;
+
+    const auto& races = RaceCategories::get();
+    const auto raceId{thisptr->data->raceCategory.id};
+
+    char raceLetter{'?'};
+    if (raceId == races.human->id) {
+        raceLetter = 'H';
+    } else if (raceId == races.dwarf->id) {
+        raceLetter = 'M';
+    } else if (raceId == races.heretic->id) {
+        raceLetter = 'E';
+    } else if (raceId == races.undead->id) {
+        raceLetter = 'U';
+    } else if (raceId == races.elf->id) {
+        raceLetter = 'F';
+    } else {
+        for (const auto& race : newRaces()) {
+            if (raceId == race.category.id) {
+                // TODO: get these new race letters from lua
+                raceLetter = 'N';
+                break;
+            }
+        }
+    }
+
+    static const std::array<const char*, 5> branchNames = {
+        {"FIGHTER", "MAGE", "ARCHER", "OTHER", "SPECIAL"}};
+
+    const auto dialogName{
+        fmt::format("DLG_{:c}_{:s}", raceLetter, branchNames[thisptr->data->branchNumber])};
+
+    logDebug("capital.log", fmt::format("Race id {:d}, building branch dialog name '{:s}'",
+                                        (int)raceId, dialogName));
+
+    StringApi::get().initFromStringN(&thisptr->data->branchDialogName, dialogName.c_str(),
+                                     dialogName.length());
+
+    return thisptr->data->branchDialogName.string;
 }
 
 } // namespace hooks

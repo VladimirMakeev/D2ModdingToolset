@@ -229,6 +229,8 @@ void __stdcall loadLordFaceImagesHooked(const char** faceNames,
                                         size_t facesTotal,
                                         game::Vector<game::ImagePair>* faces);
 
+char* __fastcall buildingBranchCreateDialogNameHooked(game::CBuildingBranch* thisptr, int /*%edx*/);
+
 } // namespace hooks
 
 #endif // HOOKS_H
