@@ -53,6 +53,7 @@ struct os_exception;
 struct CMidUnit;
 struct CMidUnitGroup;
 struct CUnitGenerator;
+struct LRaceCategory;
 }; // namespace game
 
 namespace hooks {
@@ -220,6 +221,8 @@ bool __stdcall findAttackTargetHooked(game::IMidgardObjectMap* objectMap,
                                       void* a5,
                                       game::BattleMsgData* battleMsgData,
                                       game::CMidgardID* targetUnitId);
+
+bool __stdcall isRaceCategoryUnplayableHooked(const game::LRaceCategory* raceCategory);
 
 } // namespace hooks
 

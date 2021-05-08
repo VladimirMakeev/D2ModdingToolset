@@ -181,6 +181,7 @@ static Hooks getGameHooks()
         HookInfo{(void*)game::CMenuRaceApi::get().getRaceBgndImageName, getRaceBgndImageNameHooked},
         HookInfo{(void*)game::RaceCategoryListApi::get().getPlayableRaces, getPlayableRacesHooked},
         HookInfo{(void*)game::CMenuRaceApi::get().setRacesToSkip, setRacesToSkipHooked},
+        HookInfo{(void*)fn.isRaceCategoryUnplayable, isRaceCategoryUnplayableHooked},
         // Support new races in Capital.dat
         HookInfo{(void*)game::CapitalDataApi::get().allocate, allocateCapitalDataHooked},
         HookInfo{(void*)game::CapitalDataApi::get().read, readCapitalDataHooked},
@@ -1508,6 +1509,14 @@ bool __stdcall findAttackTargetHooked(game::IMidgardObjectMap* objectMap,
     }
 
     return false;
+}
+
+bool __stdcall isRaceCategoryUnplayableHooked(const game::LRaceCategory* raceCategory)
+{
+    using namespace game;
+
+    const auto& races = RaceCategories::get();
+    return raceCategory->id == races.neutral->id;
 }
 
 } // namespace hooks
