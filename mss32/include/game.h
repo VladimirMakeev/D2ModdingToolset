@@ -20,6 +20,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "d2pair.h"
 #include "globaldata.h"
 #include "idlist.h"
 #include "mqpoint.h"
@@ -411,6 +412,13 @@ using CheckRaceExist = void(__stdcall*)(RacesMap** races,
                                         const LRaceCategory* category,
                                         const char* dbfFileName);
 
+using ImagePtr = SmartPtr<IMqImage2>;
+using ImagePair = Pair<ImagePtr, ImagePtr>;
+
+using LoadLordFaceImages = void(__stdcall*)(const char** faceNames,
+                                            size_t facesTotal,
+                                            Vector<ImagePair>* faces);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -470,6 +478,7 @@ struct Functions
     IsRaceCategoryUnplayable isRaceCategoryUnplayable;
     ValidateRaces validateRaces;
     CheckRaceExist checkRaceExist;
+    LoadLordFaceImages loadLordFaceImages;
 };
 
 /** Global variables used in game. */

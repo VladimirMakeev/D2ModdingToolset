@@ -83,6 +83,7 @@ static std::array<Functions, 4> functions = {{
         (IsRaceCategoryUnplayable)0x5e6691,
         (ValidateRaces)0x582ecb,
         (CheckRaceExist)0x582f6f,
+        (LoadLordFaceImages)0x4e69ce,
     },
     // Russobit
     Functions{
