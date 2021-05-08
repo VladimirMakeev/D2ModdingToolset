@@ -76,6 +76,7 @@
 #include "movepathhooks.h"
 #include "musichooks.h"
 #include "originalfunctions.h"
+#include "phasegame.h"
 #include "playerbuildings.h"
 #include "playerincomehooks.h"
 #include "racecategory.h"
@@ -842,7 +843,7 @@ game::LBuildingCategoryTable* __fastcall buildingCategoryTableCtorHooked(
 
 game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch* thisptr,
                                                            int /*%edx*/,
-                                                           int phaseGame,
+                                                           game::CPhaseGame* phaseGame,
                                                            int* branchNumber)
 {
     using namespace game;
@@ -858,13 +859,18 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
     thisptr->data = data;
     thisptr->vftable = CBuildingBranchApi::vftable();
 
-    buildingBranch.initData2(&thisptr->data->unk1);
+    buildingBranch.initBranchList(&thisptr->data->list);
     thisptr->data->branchNumber = *branchNumber;
-    buildingBranch.initData3(&thisptr->data->unk12);
 
-    const auto& fn = gameFunctions();
-    const CMidgardID* playerId = fn.getPlayerIdFromPhase(phaseGame + 8);
-    auto objectMap = fn.getObjectMapFromPhase(phaseGame + 8);
+    auto* dialogName = &thisptr->data->branchDialogName;
+    StringApi::get().free(dialogName);
+    dialogName->string = nullptr;
+    dialogName->length = 0;
+    dialogName->lengthAllocated = 0;
+
+    const auto& phase = CPhaseApi::get();
+    auto playerId = phase.getCurrentPlayerId(&phaseGame->phase);
+    auto objectMap = phase.getObjectMap(&phaseGame->phase);
     auto findScenarioObjectById = objectMap->vftable->findScenarioObjectById;
 
     auto playerObject = findScenarioObjectById(objectMap, playerId);
@@ -879,6 +885,7 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
     thisptr->data->raceCategory.table = playerRace->table;
     thisptr->data->raceCategory.id = playerRace->id;
 
+    const auto& fn = gameFunctions();
     auto lord = fn.getLordByPlayer(player);
     auto buildList = lord->data->buildList;
 
@@ -918,12 +925,12 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
             const int num = *branchNumber;
 
             if (unitBranch.id == unitBranchCategories.sideshow->id) {
-                buildingBranch.addSideshowUnitBuilding(&thisptr->data->unk1, unitUpg);
+                buildingBranch.addSideshowUnitBuilding(&thisptr->data->list, unitUpg);
             } else if (unitBranch.id == unitBranchCategories.fighter->id && num == 0
                        || unitBranch.id == unitBranchCategories.mage->id && num == 1
                        || unitBranch.id == unitBranchCategories.archer->id && num == 2
                        || unitBranch.id == unitBranchCategories.special->id && num == 4) {
-                buildingBranch.addUnitBuilding(phaseGame, thisptr->data, unitUpg);
+                buildingBranch.addUnitBuilding(phaseGame, &thisptr->data->list, unitUpg);
             }
 
         } else if ((buildingCategory->id == buildingCategories.guild->id
@@ -931,7 +938,7 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
                     || buildingCategory->id == buildingCategories.magic->id
                     || (customCategoryExists && (buildingCategory->id == custom.id)))
                    && *branchNumber == 3) {
-            buildingBranch.addBuilding(phaseGame, thisptr->data, buildingType);
+            buildingBranch.addBuilding(phaseGame, &thisptr->data->list, buildingType);
         }
 
         lordTypeApi.advanceIterator(&iterator.node, &iterator.node2->unknown);

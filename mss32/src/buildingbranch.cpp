@@ -29,31 +29,31 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::Constructor)0x4aaa69,
         (Api::InitData)0x4aaee5,
-        (Api::InitData2)0x4ab326,
-        (Api::InitData3)0x4ab246,
+        (Api::InitBranchList)0x4ab326,
         (Api::AddSideshowUnitBuilding)0x4aae31,
         (Api::AddUnitBuilding)0x4aad34,
-        (Api::AddBuilding)0x4aadbf
+        (Api::AddBuilding)0x4aadbf,
+        (Api::CreateDialogName)0x4ab172,
     },
     // Russobit
     Api{
         (Api::Constructor)0x4aaa69,
         (Api::InitData)0x4aaee5,
-        (Api::InitData2)0x4ab326,
-        (Api::InitData3)0x4ab246,
+        (Api::InitBranchList)0x4ab326,
         (Api::AddSideshowUnitBuilding)0x4aae31,
         (Api::AddUnitBuilding)0x4aad34,
-        (Api::AddBuilding)0x4aadbf
+        (Api::AddBuilding)0x4aadbf,
+        (Api::CreateDialogName)0x4ab172,
     },
     // Gog
     Api{
         (Api::Constructor)0x4aa283,
         (Api::InitData)0x4aa6ff,
-        (Api::InitData2)0x4aab40,
-        (Api::InitData3)0x4aaa60,
+        (Api::InitBranchList)0x4aab40,
         (Api::AddSideshowUnitBuilding)0x4aa64b,
         (Api::AddUnitBuilding)0x4aa54e,
-        (Api::AddBuilding)0x4aa5d9
+        (Api::AddBuilding)0x4aa5d9,
+        (Api::CreateDialogName)0x4aa98c,
     }
 }};
 

@@ -27,15 +27,18 @@ namespace game::CPhaseApi {
 static std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (Api::GetObjectMap)0x404f06
+        (Api::GetObjectMap)0x404f06,
+        (Api::GetCurrentPlayerId)0x404e71,
     },
     // Russobit
     Api{
-        (Api::GetObjectMap)0x404f06
+        (Api::GetObjectMap)0x404f06,
+        (Api::GetCurrentPlayerId)0x404e71,
     },
     // Gog
     Api{
-        (Api::GetObjectMap)0x404b8e
+        (Api::GetObjectMap)0x404b8e,
+        (Api::GetCurrentPlayerId)0x404af9,
     }
 }};
 // clang-format on

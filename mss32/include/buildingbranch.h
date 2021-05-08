@@ -20,28 +20,30 @@
 #ifndef BUILDINGBRANCH_H
 #define BUILDINGBRANCH_H
 
+#include "d2pair.h"
+#include "d2string.h"
 #include "racecategory.h"
+#include "sortedlist.h"
 
 namespace game {
 
 struct TBuildingUnitUpgType;
 struct TBuildingType;
+struct CPhaseGame;
+
+/**
+ * Each node stores pair of building id type indices.
+ * First element in pair is a id type index of TBuildingType::buildingId.
+ * Second element in pair is a id type index of TBuildingTypeData::requiredId.
+ */
+using BuildingBranchList = SortedList<Pair<int, int>>;
 
 struct CBuildingBranchData
 {
-    int unk1;
-    int unk2;
-    int unk3;
-    int unk4;
-    int unk5;
-    int unk6;
-    int unk7;
+    BuildingBranchList list;
     int branchNumber;
     LRaceCategory raceCategory;
-    int unk12;
-    int unk13;
-    int unk14;
-    int unk15;
+    String branchDialogName;
 };
 
 static_assert(sizeof(CBuildingBranchData) == 60,
@@ -67,18 +69,15 @@ struct Api
     using InitData = CBuildingBranchData*(__thiscall*)(CBuildingBranchData* thisptr);
     InitData initData;
 
-    using InitData2 = void*(__thiscall*)(void*);
-    InitData2 initData2;
-
-    using InitData3 = void*(__thiscall*)(void*);
-    InitData3 initData3;
+    using InitBranchList = void*(__thiscall*)(BuildingBranchList* list);
+    InitBranchList initBranchList;
 
     /**
      * Adds sideshow unit building to building branch.
      * @param[in] unknown pointer to CBuildingBranch::data->unk1.
      * @param[in] building sideshow unit building to add.
      */
-    using AddSideshowUnitBuilding = void(__stdcall*)(int* unknown,
+    using AddSideshowUnitBuilding = void(__stdcall*)(BuildingBranchList* list,
                                                      const TBuildingUnitUpgType* building);
     AddSideshowUnitBuilding addSideshowUnitBuilding;
 
@@ -88,8 +87,8 @@ struct Api
      * @param[in] data pointer to building branch data.
      * @param[in] building unit building to add.
      */
-    using AddUnitBuilding = void(__stdcall*)(int phaseGame,
-                                             const CBuildingBranchData* data,
+    using AddUnitBuilding = void(__stdcall*)(CPhaseGame* phaseGame,
+                                             BuildingBranchList* list,
                                              const TBuildingUnitUpgType* building);
     AddUnitBuilding addUnitBuilding;
 
@@ -99,10 +98,13 @@ struct Api
      * @param[in] data pointer to building branch data.
      * @param[in] building building to add.
      */
-    using AddBuilding = void(__stdcall*)(int phaseGame,
-                                         const CBuildingBranchData* data,
+    using AddBuilding = void(__stdcall*)(CPhaseGame* phaseGame,
+                                         BuildingBranchList* list,
                                          const TBuildingType* building);
     AddBuilding addBuilding;
+
+    using CreateDialogName = char*(__thiscall*)(CBuildingBranch* thisptr);
+    CreateDialogName createDialogName;
 };
 
 Api& get();
