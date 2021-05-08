@@ -258,6 +258,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\terraincat.cpp" />
     <ClCompile Include="src\textboxinterf.cpp" />
     <ClCompile Include="src\textids.cpp" />
+    <ClCompile Include="src\tilevariation.cpp" />
     <ClCompile Include="src\transformselfhooks.cpp" />
     <ClCompile Include="src\unitbranchcat.cpp" />
     <ClCompile Include="src\unitcat.cpp" />
