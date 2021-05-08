@@ -126,10 +126,6 @@ using AddObjectAndCheckDuplicates = bool(__thiscall*)(void* thisptr, const IMidO
  */
 using ChooseUnitLane = int(__stdcall*)(const IUsSoldier* soldier);
 
-/** Assumption: returns current player id. */
-using GetPlayerIdFromPhase = const CMidgardID*(__thiscall*)(int phase);
-using GetObjectMapFromPhase = const IMidgardObjectMap*(__thiscall*)(int phase);
-
 /** Returns lord type for specified player. */
 using GetLordByPlayer = const TLordType*(__stdcall*)(const CMidPlayer* player);
 
@@ -415,7 +411,6 @@ using CheckRaceExist = void(__stdcall*)(RacesMap** races,
                                         const LRaceCategory* category,
                                         const char* dbfFileName);
 
-
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -427,8 +422,6 @@ struct Functions
     CreateBuildingType createBuildingType;
     AddObjectAndCheckDuplicates addObjectAndCheckDuplicates;
     ChooseUnitLane chooseUnitLane;
-    GetPlayerIdFromPhase getPlayerIdFromPhase;
-    GetObjectMapFromPhase getObjectMapFromPhase;
     GetLordByPlayer getLordByPlayer;
     IsTurnValid isTurnValid;
     GetAllyOrEnemyStackId getAllyOrEnemyStackId;
