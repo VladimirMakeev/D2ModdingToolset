@@ -45,6 +45,7 @@ struct CMidUnit;
 struct IUsUnit;
 struct LAttackSource;
 struct LAttackClass;
+struct LImmuneCat;
 struct IBatAttack;
 struct IAttack;
 struct CMidUnitGroup;
@@ -168,10 +169,12 @@ using IsUnitImmuneToAttack = bool(__stdcall*)(IMidgardObjectMap* objectMap,
                                               IAttack* attack,
                                               bool checkAlwaysImmuneOnly);
 
-using AttackClassToNumber = int(__stdcall*)(const LAttackClass* attackClass);
+/** Returns bit flag position (0-31) for the specified attack class. */
+using GetAttackClassWardFlagPosition = int(__stdcall*)(const LAttackClass* attackClass);
 using AttackClassToString = const char*(__stdcall*)(const LAttackClass* attackClass);
 
-using AttackSourceToNumber = int(__stdcall*)(const LAttackSource* attackSource);
+/** Returns bit flag position (0-7) for the specified attack source. */
+using GetAttackSourceWardFlagPosition = int(__stdcall*)(const LAttackSource* attackSource);
 
 /**
  * Returns pointer to units group of stack, fortification or ruin
@@ -415,6 +418,18 @@ using CheckRaceCategoryExist = void(__stdcall*)(RacesMap** races,
                                                 const LRaceCategory* category,
                                                 const char* dbfFileName);
 
+/** Gets a list of sources to which the unit has the specified immunity. */
+using GetUnitAttackSourceImmunities = void(__stdcall*)(const LImmuneCat* immuneCat,
+                                                       const CMidUnit* unit,
+                                                       LinkedList<LAttackSource>* value);
+
+/** Gets a list of sources to which the soldier has the specified immunity. */
+using GetSoldierAttackSourceImmunities = void(__stdcall*)(const IUsSoldier* soldier,
+                                                          bool alwaysImmune,
+                                                          LinkedList<LAttackSource>* value);
+
+/** Gets immunity power coefficient to be used by AI for overall soldier power calculation. */
+using GetSoldierImmunityPower = double(__stdcall*)(const IUsSoldier* soldier);
 
 /** Game and editor functions that can be hooked. */
 struct Functions
@@ -437,9 +452,9 @@ struct Functions
     CreateBatAttack createBatAttack;
     GetAttackById getAttackById;
     IsUnitImmuneToAttack isUnitImmuneToAttack;
-    AttackClassToNumber attackClassToNumber;
+    GetAttackClassWardFlagPosition getAttackClassWardFlagPosition;
     AttackClassToString attackClassToString;
-    AttackSourceToNumber attackSourceToNumber;
+    GetAttackSourceWardFlagPosition getAttackSourceWardFlagPosition;
     GetStackFortRuinGroup getStackFortRuinGroup;
     DeletePlayerBuildings deletePlayerBuildings;
     GetInterfaceText getInterfaceText;
@@ -477,6 +492,9 @@ struct Functions
     IsRaceCategoryUnplayable isRaceCategoryUnplayable;
     ValidateRaces validateRaces;
     CheckRaceCategoryExist checkRaceCategoryExist;
+    GetUnitAttackSourceImmunities getUnitAttackSourceImmunities;
+    GetSoldierAttackSourceImmunities getSoldierAttackSourceImmunities;
+    GetSoldierImmunityPower getSoldierImmunityPower;
 };
 
 /** Global variables used in game. */

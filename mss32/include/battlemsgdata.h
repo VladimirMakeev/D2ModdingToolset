@@ -149,8 +149,10 @@ struct UnitInfo
     /** Id of attack that applied blister effect. */
     CMidgardID blisterAttackId;
     /** Bitmask with values for each of LAttackSource. */
-    std::uint8_t attackSourceImmunityStatuses;
-    char padding[3];
+    // Original layout
+    // std::uint8_t attackSourceImmunityStatuses;
+    // char padding[3];
+    std::uint32_t attackSourceImmunityStatusesPatched;
     /** Bitmask with values for each of LAttackClass. */
     std::uint32_t attackClassImmunityStatuses;
     std::int16_t unitHp;

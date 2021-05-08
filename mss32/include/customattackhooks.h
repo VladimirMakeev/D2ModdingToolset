@@ -20,10 +20,17 @@
 #ifndef CUSTOMATTACKHOOKS_H
 #define CUSTOMATTACKHOOKS_H
 
+#include "linkedlist.h"
+
 namespace game {
-struct LAttackClassTable;
 struct LAttackClass;
+struct LAttackClassTable;
+struct LAttackSource;
+struct LAttackSourceTable;
+struct LImmuneCat;
+struct CMidUnit;
 struct CAttackImpl;
+struct IUsSoldier;
 struct CDBTable;
 struct GlobalData;
 struct IBatAttack;
@@ -41,6 +48,11 @@ game::LAttackClassTable* __fastcall attackClassTableCtorHooked(game::LAttackClas
                                                                const char* globalsFolderPath,
                                                                void* codeBaseEnvProxy);
 
+game::LAttackSourceTable* __fastcall attackSourceTableCtorHooked(game::LAttackSourceTable* thisptr,
+                                                                 int /*%edx*/,
+                                                                 const char* globalsFolderPath,
+                                                                 void* codeBaseEnvProxy);
+
 game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
                                                    int /*%edx*/,
                                                    const game::CDBTable* dbTable,
@@ -54,9 +66,31 @@ game::IBatAttack* __stdcall createBatAttackHooked(game::IMidgardObjectMap* objec
                                                   const game::LAttackClass* attackClass,
                                                   bool a7);
 
-int __stdcall attackClassToNumberHooked(const game::LAttackClass* attackClass);
+int __stdcall getAttackClassWardFlagPositionHooked(const game::LAttackClass* attackClass);
 
 const char* __stdcall attackClassToStringHooked(const game::LAttackClass* attackClass);
+
+void __stdcall getUnitAttackSourceImmunitiesHooked(const game::LImmuneCat* immuneCat,
+                                                   const game::CMidUnit* unit,
+                                                   game::LinkedList<game::LAttackSource>* value);
+
+void __stdcall getSoldierAttackSourceImmunitiesHooked(const game::IUsSoldier* soldier,
+                                                      bool alwaysImmune,
+                                                      game::LinkedList<game::LAttackSource>* value);
+
+double __stdcall getSoldierImmunityPowerHooked(const game::IUsSoldier* soldier);
+
+int __stdcall getAttackSourceWardFlagPositionHooked(const game::LAttackSource* attackSource);
+
+bool __fastcall isUnitAttackSourceWardRemovedHooked(game::BattleMsgData* thisptr,
+                                                    int /*%edx*/,
+                                                    const game::CMidgardID* unitId,
+                                                    const game::LAttackSource* attackSource);
+
+void __fastcall removeUnitAttackSourceWardHooked(game::BattleMsgData* thisptr,
+                                                 int /*%edx*/,
+                                                 const game::CMidgardID* unitId,
+                                                 const game::LAttackSource* attackSource);
 
 } // namespace hooks
 

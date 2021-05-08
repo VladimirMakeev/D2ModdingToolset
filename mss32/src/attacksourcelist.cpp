@@ -17,33 +17,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CUSTOMATTACKS_H
-#define CUSTOMATTACKS_H
+#include "attacksourcelist.h"
+#include "version.h"
+#include <array>
 
-#include "attacksourcecat.h"
-#include <string>
-#include <vector>
+namespace game::AttackSourceListApi {
 
-namespace hooks {
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::Add)0x40a271,
+    },
+    // Russobit
+    Api{
+        (Api::Add)0x40a271,
+    },
+    // Gog
+    Api{
+        (Api::Add)0x409ef4,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Add)0x5237c8,
+    }
+}};
+// clang-format on
 
-struct CustomAttackSource
+Api& get()
 {
-    game::LAttackSource source;
-    std::string text;
-    std::string nameId;
-    double immunityPower;
-    int wardFlagPosition;
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-using CustomAttackSources = std::vector<CustomAttackSource>;
-
-struct CustomAttacks
-{
-    CustomAttackSources sources;
-};
-
-CustomAttacks& getCustomAttacks();
-
-} // namespace hooks
-
-#endif // CUSTOMATTACKS_H
+} // namespace game::AttackSourceListApi

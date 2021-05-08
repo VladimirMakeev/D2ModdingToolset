@@ -17,33 +17,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CUSTOMATTACKS_H
-#define CUSTOMATTACKS_H
+#ifndef ATTACKSOURCELIST_H
+#define ATTACKSOURCELIST_H
 
 #include "attacksourcecat.h"
-#include <string>
-#include <vector>
+#include "linkedlist.h"
 
-namespace hooks {
+namespace game {
 
-struct CustomAttackSource
+using AttackSourceList = LinkedList<LAttackSource>;
+using AttackSourceListNode = LinkedListNode<LAttackSource>;
+
+namespace AttackSourceListApi {
+
+struct Api
 {
-    game::LAttackSource source;
-    std::string text;
-    std::string nameId;
-    double immunityPower;
-    int wardFlagPosition;
+    /** Adds AttackSource to list. */
+    using Add = int(__thiscall*)(AttackSourceList* list, const LAttackSource* attackSource);
+    Add add;
 };
 
-using CustomAttackSources = std::vector<CustomAttackSource>;
+Api& get();
 
-struct CustomAttacks
-{
-    CustomAttackSources sources;
-};
+} // namespace AttackSourceListApi
 
-CustomAttacks& getCustomAttacks();
+} // namespace game
 
-} // namespace hooks
-
-#endif // CUSTOMATTACKS_H
+#endif // ATTACKSOURCELIST_H

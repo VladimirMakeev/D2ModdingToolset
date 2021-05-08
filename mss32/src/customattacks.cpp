@@ -18,53 +18,12 @@
  */
 
 #include "customattacks.h"
-#include "log.h"
-#include "scripts.h"
-#include "utils.h"
-#include <fmt/format.h>
-#include <sol/sol.hpp>
 
 namespace hooks {
 
-void readAttackSources(const sol::table& table, CustomAttackSources& value)
-{
-    auto sources = table.get<sol::optional<sol::table>>("sources");
-    if (!sources.has_value())
-        return;
-
-    for (const auto& entry : sources.value()) {
-        const auto& source = entry.second.as<sol::table>();
-        value[source["id"]] = {source["textId"]};
-    }
-}
-
-void initialize(CustomAttacks& value)
-{
-    const auto path{hooks::scriptsFolder() / "customattacks.lua"};
-
-    try {
-        sol::state lua;
-        if (!loadScript(path, lua))
-            return;
-
-        const sol::table& table = lua["customAttacks"];
-        readAttackSources(table, value.sources);
-    } catch (const std::exception& e) {
-        showErrorMessageBox(fmt::format("Failed to read script '{:s}'.\n"
-                                        "Reason: '{:s}'",
-                                        path.string(), e.what()));
-    }
-}
-
-const CustomAttacks& customAttacks()
+CustomAttacks& getCustomAttacks()
 {
     static CustomAttacks value;
-    static bool initialized = false;
-
-    if (!initialized) {
-        initialize(value);
-        initialized = true;
-    }
 
     return value;
 }

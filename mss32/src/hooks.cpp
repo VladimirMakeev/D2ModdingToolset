@@ -121,7 +121,7 @@ static Hooks getGameHooks()
         // Support custom battle attack objects
         HookInfo{(void*)fn.createBatAttack, createBatAttackHooked, (void**)&orig.createBatAttack},
         // Support immunity bitmask in BattleMsgData
-        HookInfo{(void*)fn.attackClassToNumber, attackClassToNumberHooked, (void**)&orig.attackClassToNumber},
+        HookInfo{(void*)fn.getAttackClassWardFlagPosition, getAttackClassWardFlagPositionHooked, (void**)&orig.getAttackClassWardFlagPosition},
         // Support custom attack animations?
         HookInfo{(void*)fn.attackClassToString, attackClassToStringHooked, (void**)&orig.attackClassToString},
         // Add items transfer buttons to city interface
@@ -159,6 +159,10 @@ static Hooks getGameHooks()
         HookInfo{(void*)game::CBatAttackBestowWardsApi::get().onHit, bestowWardsAttackOnHitHooked},
         // Fix AI not being able to find target for lower damage/ini attack
         HookInfo{(void*)game::BattleMsgDataApi::get().findAttackTarget, findAttackTargetHooked, (void**)&orig.findAttackTarget},
+        // Support custom attack sources
+        HookInfo{(void*)fn.getUnitAttackSourceImmunities, getUnitAttackSourceImmunitiesHooked},
+        HookInfo{(void*)game::BattleMsgDataApi::get().isUnitAttackSourceWardRemoved, isUnitAttackSourceWardRemovedHooked},
+        HookInfo{(void*)game::BattleMsgDataApi::get().removeUnitAttackSourceWard, removeUnitAttackSourceWardHooked},
     };
     // clang-format on
 
@@ -329,9 +333,18 @@ Hooks getHooks()
     // IMPORTANT: this hook is required for unrestrictedBestowWards and detailedAttackDescription
     hooks.emplace_back(
         HookInfo{(void*)fn.getAttackQtyDamageOrHeal, getAttackQtyDamageOrHealHooked});
-    // Support custom attack source text
+    // Support custom attack sources
+    hooks.emplace_back(HookInfo{(void*)game::LAttackSourceTableApi::get().constructor,
+                                attackSourceTableCtorHooked});
+    hooks.emplace_back(HookInfo{(void*)fn.getSoldierAttackSourceImmunities,
+                                getSoldierAttackSourceImmunitiesHooked});
+    hooks.emplace_back(HookInfo{(void*)fn.getSoldierImmunityPower, getSoldierImmunityPowerHooked,
+                                (void**)&orig.getSoldierImmunityPower});
     hooks.emplace_back(HookInfo{(void*)fn.getAttackSourceText, getAttackSourceTextHooked});
     hooks.emplace_back(HookInfo{(void*)fn.appendAttackSourceText, appendAttackSourceTextHooked});
+    hooks.emplace_back(HookInfo{(void*)fn.getAttackSourceWardFlagPosition,
+                                getAttackSourceWardFlagPositionHooked,
+                                (void**)&orig.getAttackSourceWardFlagPosition});
 
     if (userSettings().debugMode) {
         // Show and log game exceptions information
