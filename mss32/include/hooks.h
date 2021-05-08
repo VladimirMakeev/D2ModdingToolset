@@ -21,6 +21,7 @@
 #define HOOKS_H
 
 #include "attack.h"
+#include "game.h"
 #include "idlist.h"
 #include <string>
 #include <utility>
@@ -223,6 +224,10 @@ bool __stdcall findAttackTargetHooked(game::IMidgardObjectMap* objectMap,
                                       game::CMidgardID* targetUnitId);
 
 bool __stdcall isRaceCategoryUnplayableHooked(const game::LRaceCategory* raceCategory);
+
+void __stdcall loadLordFaceImagesHooked(const char** faceNames,
+                                        size_t facesTotal,
+                                        game::Vector<game::ImagePair>* faces);
 
 } // namespace hooks
 

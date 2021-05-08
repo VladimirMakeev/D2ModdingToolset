@@ -53,6 +53,7 @@ struct OriginalFunctions
     game::BattleMsgDataApi::Api::SetUnknown9Bit1AndClearBoostLowerDamage
         setUnknown9Bit1AndClearBoostLowerDamage;
     game::BattleMsgDataApi::Api::FindAttackTarget findAttackTarget;
+    game::LoadLordFaceImages loadLordFaceImages;
 };
 
 OriginalFunctions& getOriginalFunctions();

@@ -182,6 +182,7 @@ static Hooks getGameHooks()
         HookInfo{(void*)game::RaceCategoryListApi::get().getPlayableRaces, getPlayableRacesHooked},
         HookInfo{(void*)game::CMenuRaceApi::get().setRacesToSkip, setRacesToSkipHooked},
         HookInfo{(void*)fn.isRaceCategoryUnplayable, isRaceCategoryUnplayableHooked},
+        HookInfo{(void*)fn.loadLordFaceImages, loadLordFaceImagesHooked, (void**)& orig.loadLordFaceImages},
         // Support new races in Capital.dat
         HookInfo{(void*)game::CapitalDataApi::get().allocate, allocateCapitalDataHooked},
         HookInfo{(void*)game::CapitalDataApi::get().read, readCapitalDataHooked},
@@ -1517,6 +1518,19 @@ bool __stdcall isRaceCategoryUnplayableHooked(const game::LRaceCategory* raceCat
 
     const auto& races = RaceCategories::get();
     return raceCategory->id == races.neutral->id;
+}
+
+void __stdcall loadLordFaceImagesHooked(const char** faceNames,
+                                        size_t facesTotal,
+                                        game::Vector<game::ImagePair>* faces)
+{
+    static const char* names[20] = {"FACE_HU_0", "FACE_HU_1", "FACE_HU_2", "FACE_HU_3"};
+
+    if (!faceNames) {
+        faceNames = names;
+    }
+
+    getOriginalFunctions().loadLordFaceImages(faceNames, facesTotal, faces);
 }
 
 } // namespace hooks
