@@ -52,6 +52,8 @@ public:
     bool value(bool& result, const std::string& columnName) const;
     bool value(bool& result, const DbfColumn& column) const;
 
+    bool isDeleted() const;
+
 private:
     const DbfFile* dbf{};
     RecordData data{};

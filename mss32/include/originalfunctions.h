@@ -39,7 +39,7 @@ struct OriginalFunctions
     game::ComputeUnitEffectiveHp computeUnitEffectiveHp;
     game::ComputePlayerDailyIncome computePlayerDailyIncome;
     game::CreateBatAttack createBatAttack;
-    game::AttackClassToNumber attackClassToNumber;
+    game::GetAttackClassWardFlagPosition getAttackClassWardFlagPosition;
     game::AttackClassToString attackClassToString;
     game::MarkMapPosition markMapPosition;
     game::CCityStackInterfApi::Api::Constructor cityStackInterfCtor;
@@ -53,6 +53,9 @@ struct OriginalFunctions
     game::BattleMsgDataApi::Api::SetUnknown9Bit1AndClearBoostLowerDamage
         setUnknown9Bit1AndClearBoostLowerDamage;
     game::BattleMsgDataApi::Api::FindAttackTarget findAttackTarget;
+    game::GetSoldierImmunityPower getSoldierImmunityPower;
+    game::GetAttackSourceWardFlagPosition getAttackSourceWardFlagPosition;
+    game::BattleMsgDataApi::Api::AddUnitToBattleMsgData addUnitToBattleMsgData;
 };
 
 OriginalFunctions& getOriginalFunctions();

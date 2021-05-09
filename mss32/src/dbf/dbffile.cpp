@@ -61,7 +61,16 @@ bool DbfFile::open(const std::filesystem::path& file)
     }
 
     recordsData.resize(recordsDataLength);
-    stream.read(reinterpret_cast<char*>(&recordsData[0]), recordsDataLength);
+
+    // Workaround for a bug in Sdbf where it inserts additional EOF between header and data blocks
+    char possibleEOF{};
+    stream.read(&possibleEOF, 1);
+    if (possibleEOF == 0x1A) {
+        stream.read(reinterpret_cast<char*>(&recordsData[0]), recordsDataLength);
+    } else {
+        recordsData[0] = possibleEOF;
+        stream.read(reinterpret_cast<char*>(&recordsData[1]), recordsDataLength - 1);
+    }
 
     valid = true;
     return true;
