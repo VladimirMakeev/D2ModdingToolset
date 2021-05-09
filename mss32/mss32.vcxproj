@@ -454,6 +454,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midgardmsgbox.h" />
     <ClInclude Include="include\midgardobjectmap.h" />
     <ClInclude Include="include\midgardscenariomap.h" />
+    <ClInclude Include="include\midgardstream.h" />
     <ClInclude Include="include\midinventory.h" />
     <ClInclude Include="include\miditem.h" />
     <ClInclude Include="include\midmsgboxbuttonhandler.h" />
