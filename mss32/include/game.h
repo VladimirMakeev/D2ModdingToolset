@@ -127,10 +127,6 @@ using AddObjectAndCheckDuplicates = bool(__thiscall*)(void* thisptr, const IMidO
  */
 using ChooseUnitLane = int(__stdcall*)(const IUsSoldier* soldier);
 
-/** Assumption: returns current player id. */
-using GetPlayerIdFromPhase = const CMidgardID*(__thiscall*)(int phase);
-using GetObjectMapFromPhase = const IMidgardObjectMap*(__thiscall*)(int phase);
-
 /** Returns lord type for specified player. */
 using GetLordByPlayer = const TLordType*(__stdcall*)(const CMidPlayer* player);
 
@@ -415,9 +411,9 @@ using IsRaceCategoryUnplayable = bool(__stdcall*)(const LRaceCategory* raceCateg
 using ValidateRaces = void(__thiscall*)(RacesMap** thisptr, GlobalData** globalData);
 
 /** Checks if race with specified category was loaded from Grace.dbf. */
-using CheckRaceCategoryExist = void(__stdcall*)(RacesMap** races,
-                                                const LRaceCategory* category,
-                                                const char* dbfFileName);
+using CheckRaceExist = void(__stdcall*)(RacesMap** races,
+                                        const LRaceCategory* category,
+                                        const char* dbfFileName);
 
 /** Gets a list of sources to which the unit has the specified immunity. */
 using GetUnitAttackSourceImmunities = void(__stdcall*)(const LImmuneCat* immuneCat,
@@ -443,8 +439,6 @@ struct Functions
     CreateBuildingType createBuildingType;
     AddObjectAndCheckDuplicates addObjectAndCheckDuplicates;
     ChooseUnitLane chooseUnitLane;
-    GetPlayerIdFromPhase getPlayerIdFromPhase;
-    GetObjectMapFromPhase getObjectMapFromPhase;
     GetLordByPlayer getLordByPlayer;
     IsTurnValid isTurnValid;
     GetAllyOrEnemyStackId getAllyOrEnemyStackId;
@@ -492,7 +486,7 @@ struct Functions
     AppendAttackSourceText appendAttackSourceText;
     IsRaceCategoryUnplayable isRaceCategoryUnplayable;
     ValidateRaces validateRaces;
-    CheckRaceCategoryExist checkRaceCategoryExist;
+    CheckRaceExist checkRaceExist;
     GetUnitAttackSourceImmunities getUnitAttackSourceImmunities;
     GetSoldierAttackSourceImmunities getSoldierAttackSourceImmunities;
     GetSoldierImmunityPower getSoldierImmunityPower;

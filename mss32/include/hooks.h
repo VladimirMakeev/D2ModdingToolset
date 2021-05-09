@@ -107,7 +107,7 @@ game::LBuildingCategoryTable* __fastcall buildingCategoryTableCtorHooked(
 
 game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch* thisptr,
                                                            int /*%edx*/,
-                                                           int phaseGame,
+                                                           game::CPhaseGame* phaseGame,
                                                            int* branchNumber);
 
 int __stdcall chooseUnitLaneHooked(const game::IUsSoldier* soldier);

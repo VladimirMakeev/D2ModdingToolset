@@ -44,7 +44,21 @@ struct Categories
 
 Categories& get();
 
+/** Returns address of LTerrainCategory::vftable used in game. */
+const void* vftable();
+
 } // namespace TerrainCategories
+
+namespace LTerrainCategoryTableApi {
+
+using Api = CategoryTableApi::Api<LTerrainCategoryTable, LTerrainCategory>;
+
+Api& get();
+
+/** Returns address of LTerrainCategoryTable::vftable used in game. */
+const void* vftable();
+
+} // namespace LTerrainCategoryTableApi
 
 } // namespace game
 

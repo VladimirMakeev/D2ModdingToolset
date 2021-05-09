@@ -93,6 +93,30 @@ struct TileVariationIterator
 static_assert(sizeof(TileVariationIterator) == 20,
               "Size of TileVariationIterator structure must be exactly 20 bytes");
 
+namespace CTileVariationApi {
+
+struct Api
+{
+    /** Checks correctness of all tile variation data records. */
+    using CheckData = void(__stdcall*)(const CTileVariationData* data);
+    CheckData checkData;
+
+    /**
+     * Checks correctness of specific tile variation data records.
+     * @returns true if tile variation has no more than 'maxIndex' of records
+     * with specified terrain and ground and each record has non zero quantity.
+     */
+    using CheckRecordsCorrect = bool(__stdcall*)(const CTileVariationData* data,
+                                                 const LTerrainCategory* terrain,
+                                                 const LGroundCategory* ground,
+                                                 int maxIndex);
+    CheckRecordsCorrect checkRecordsCorrect;
+};
+
+Api& get();
+
+} // namespace CTileVariationApi
+
 } // namespace game
 
 #endif // TILEVARIATION_H

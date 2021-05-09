@@ -24,6 +24,7 @@ namespace game {
 
 struct CMidClient;
 struct IMidgardObjectMap;
+struct CMidgardID;
 
 struct CPhaseData
 {
@@ -47,6 +48,9 @@ struct Api
 {
     using GetObjectMap = IMidgardObjectMap*(__thiscall*)(CPhase* thisptr);
     GetObjectMap getObjectMap;
+
+    using GetCurrentPlayerId = const CMidgardID*(__thiscall*)(CPhase* thisptr);
+    GetCurrentPlayerId getCurrentPlayerId;
 };
 
 Api& get();

@@ -17,29 +17,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "phase.h"
+#include "tilevariation.h"
 #include "version.h"
 #include <array>
 
-namespace game::CPhaseApi {
+namespace game::CTileVariationApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::GetObjectMap)0x404f06,
-        (Api::GetCurrentPlayerId)0x404e71,
+        (Api::CheckData)0x59b07e,
+        (Api::CheckRecordsCorrect)0x59b8f2,
     },
     // Russobit
     Api{
-        (Api::GetObjectMap)0x404f06,
-        (Api::GetCurrentPlayerId)0x404e71,
+        (Api::CheckData)0x59b07e,
+        (Api::CheckRecordsCorrect)0x59b8f2,
     },
     // Gog
     Api{
-        (Api::GetObjectMap)0x404b8e,
-        (Api::GetCurrentPlayerId)0x404af9,
-    }
+        (Api::CheckData)0x59a1d0,
+        (Api::CheckRecordsCorrect)0x59aa44,
+    },
+    // Scenario Editor
+    Api{
+        (Api::CheckData)0x53dd3a,
+        (Api::CheckRecordsCorrect)0x53e5ae,
+    },
 }};
 // clang-format on
 
@@ -48,4 +53,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::CPhaseApi
+} // namespace game::CTileVariationApi
