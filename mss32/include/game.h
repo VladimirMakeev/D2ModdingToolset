@@ -170,11 +170,12 @@ using IsUnitImmuneToAttack = bool(__stdcall*)(IMidgardObjectMap* objectMap,
                                               bool checkAlwaysImmuneOnly);
 
 /** Returns bit flag position (0-31) for the specified attack class. */
-using GetAttackClassWardFlagPosition = int(__stdcall*)(const LAttackClass* attackClass);
+using GetAttackClassWardFlagPosition = std::uint32_t(__stdcall*)(const LAttackClass* attackClass);
 using AttackClassToString = const char*(__stdcall*)(const LAttackClass* attackClass);
 
 /** Returns bit flag position (0-7) for the specified attack source. */
-using GetAttackSourceWardFlagPosition = int(__stdcall*)(const LAttackSource* attackSource);
+using GetAttackSourceWardFlagPosition =
+    std::uint32_t(__stdcall*)(const LAttackSource* attackSource);
 
 /**
  * Returns pointer to units group of stack, fortification or ruin

@@ -127,12 +127,12 @@ static void fillCustomAttackSources(const std::filesystem::path& dbfFilePath)
         return;
     }
 
-    static const int lastBaseSourceWardFlagPosition = 7;
+    static const std::uint32_t lastBaseSourceWardFlagPosition = 7;
     static const std::array<const char*, 8> baseSources = {
         {"L_WEAPON", "L_MIND", "L_LIFE", "L_DEATH", "L_FIRE", "L_WATER", "L_AIR", "L_EARTH"}};
 
     auto& customSources = getCustomAttacks().sources;
-    int wardFlagPosition = lastBaseSourceWardFlagPosition;
+    std::uint32_t wardFlagPosition = lastBaseSourceWardFlagPosition;
     const auto recordsTotal{dbf.recordsTotal()};
     for (std::uint32_t i = 0; i < recordsTotal; ++i) {
         utils::DbfRecord record;
@@ -331,7 +331,7 @@ game::IBatAttack* __stdcall createBatAttackHooked(game::IMidgardObjectMap* objec
                                                   attackClass, a7);
 }
 
-int __stdcall getAttackClassWardFlagPositionHooked(const game::LAttackClass* attackClass)
+std::uint32_t __stdcall getAttackClassWardFlagPositionHooked(const game::LAttackClass* attackClass)
 {
     if (attackClass->id == customAttackClass.id) {
         return 23;
@@ -417,7 +417,8 @@ double __stdcall getSoldierImmunityPowerHooked(const game::IUsSoldier* soldier)
     return result;
 }
 
-int __stdcall getAttackSourceWardFlagPositionHooked(const game::LAttackSource* attackSource)
+std::uint32_t __stdcall getAttackSourceWardFlagPositionHooked(
+    const game::LAttackSource* attackSource)
 {
     for (const auto& custom : getCustomAttacks().sources) {
         if (custom.source.id == attackSource->id)
@@ -438,8 +439,8 @@ bool __fastcall isUnitAttackSourceWardRemovedHooked(game::BattleMsgData* thisptr
     if (unitInfo == nullptr)
         return false;
 
-    int flag = 1 << gameFunctions().getAttackSourceWardFlagPosition(attackSource);
-    return (unitInfo->attackSourceImmunityStatusesPatched & flag) != 0;
+    std::uint32_t flag = 1 << gameFunctions().getAttackSourceWardFlagPosition(attackSource);
+    return (unitInfo->attackSourceImmunityStatuses.patched & flag) != 0;
 }
 
 void __fastcall removeUnitAttackSourceWardHooked(game::BattleMsgData* thisptr,
@@ -453,8 +454,8 @@ void __fastcall removeUnitAttackSourceWardHooked(game::BattleMsgData* thisptr,
     if (unitInfo == nullptr)
         return;
 
-    int flag = 1 << gameFunctions().getAttackSourceWardFlagPosition(attackSource);
-    unitInfo->attackSourceImmunityStatusesPatched |= flag;
+    std::uint32_t flag = 1 << gameFunctions().getAttackSourceWardFlagPosition(attackSource);
+    unitInfo->attackSourceImmunityStatuses.patched |= flag;
 }
 
 void __stdcall addUnitToBattleMsgDataHooked(game::IMidgardObjectMap* objectMap,
@@ -469,8 +470,15 @@ void __stdcall addUnitToBattleMsgDataHooked(game::IMidgardObjectMap* objectMap,
     for (i = 0; i < 22 && battleMsgData->unitsInfo[i].unitId1 != invalidId; ++i)
         ;
 
+    if (i == 22) {
+        logError("mssProxyError.log",
+                 fmt::format("Could not find a free slot for a new unit {:s} in battle msg data",
+                             hooks::idToString(unitId)));
+        return;
+    }
+
     battleMsgData->unitsInfo[i].attackClassImmunityStatuses = 0;
-    battleMsgData->unitsInfo[i].attackSourceImmunityStatusesPatched = 0;
+    battleMsgData->unitsInfo[i].attackSourceImmunityStatuses.patched = 0;
 
     getOriginalFunctions().addUnitToBattleMsgData(objectMap, group, unitId, attackerFlags,
                                                   battleMsgData);

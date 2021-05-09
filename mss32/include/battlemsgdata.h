@@ -98,6 +98,19 @@ union ModifiedUnitsPatched
 static_assert(sizeof(ModifiedUnitsPatched) == 64,
               "Size of ModifiedUnitsPatched union must be exactly 64 bytes");
 
+union AttackSourceImmunityStatusesPatched
+{
+    struct
+    {
+        std::uint8_t value;
+        char padding[3];
+    } original;
+    std::uint32_t patched;
+};
+
+static_assert(sizeof(AttackSourceImmunityStatusesPatched) == 4,
+              "Size of AttackSourceImmunityStatusesPatched union must be exactly 4 bytes");
+
 /** Battle turn info. */
 struct BattleTurn
 {
@@ -149,10 +162,7 @@ struct UnitInfo
     /** Id of attack that applied blister effect. */
     CMidgardID blisterAttackId;
     /** Bitmask with values for each of LAttackSource. */
-    // Original layout
-    // std::uint8_t attackSourceImmunityStatuses;
-    // char padding[3];
-    std::uint32_t attackSourceImmunityStatusesPatched;
+    AttackSourceImmunityStatusesPatched attackSourceImmunityStatuses;
     /** Bitmask with values for each of LAttackClass. */
     std::uint32_t attackClassImmunityStatuses;
     std::int16_t unitHp;

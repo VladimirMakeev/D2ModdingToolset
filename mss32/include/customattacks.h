@@ -32,7 +32,7 @@ struct CustomAttackSource
     std::string text;
     std::string nameId;
     double immunityPower;
-    int wardFlagPosition;
+    std::uint32_t wardFlagPosition;
 };
 
 using CustomAttackSources = std::vector<CustomAttackSource>;

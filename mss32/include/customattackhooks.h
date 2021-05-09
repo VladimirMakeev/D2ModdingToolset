@@ -67,7 +67,7 @@ game::IBatAttack* __stdcall createBatAttackHooked(game::IMidgardObjectMap* objec
                                                   const game::LAttackClass* attackClass,
                                                   bool a7);
 
-int __stdcall getAttackClassWardFlagPositionHooked(const game::LAttackClass* attackClass);
+std::uint32_t __stdcall getAttackClassWardFlagPositionHooked(const game::LAttackClass* attackClass);
 
 const char* __stdcall attackClassToStringHooked(const game::LAttackClass* attackClass);
 
@@ -81,7 +81,8 @@ void __stdcall getSoldierAttackSourceImmunitiesHooked(const game::IUsSoldier* so
 
 double __stdcall getSoldierImmunityPowerHooked(const game::IUsSoldier* soldier);
 
-int __stdcall getAttackSourceWardFlagPositionHooked(const game::LAttackSource* attackSource);
+std::uint32_t __stdcall getAttackSourceWardFlagPositionHooked(
+    const game::LAttackSource* attackSource);
 
 bool __fastcall isUnitAttackSourceWardRemovedHooked(game::BattleMsgData* thisptr,
                                                     int /*%edx*/,

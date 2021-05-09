@@ -88,8 +88,8 @@ void resetUnitAttackSourceWard(game::BattleMsgData* battleMsgData,
 
     auto unitInfo = BattleMsgDataApi::get().getUnitInfoById(battleMsgData, unitId);
 
-    int flag = 1 << gameFunctions().getAttackSourceWardFlagPosition(&attackSource);
-    unitInfo->attackSourceImmunityStatusesPatched &= ~flag;
+    std::uint32_t flag = 1 << gameFunctions().getAttackSourceWardFlagPosition(&attackSource);
+    unitInfo->attackSourceImmunityStatuses.patched &= ~flag;
 }
 
 void resetUnitAttackClassWard(game::BattleMsgData* battleMsgData,
@@ -103,7 +103,7 @@ void resetUnitAttackClassWard(game::BattleMsgData* battleMsgData,
 
     auto unitInfo = BattleMsgDataApi::get().getUnitInfoById(battleMsgData, unitId);
 
-    int flag = 1 << gameFunctions().getAttackClassWardFlagPosition(&attackClass);
+    std::uint32_t flag = 1 << gameFunctions().getAttackClassWardFlagPosition(&attackClass);
     unitInfo->attackClassImmunityStatuses &= ~flag;
 }
 

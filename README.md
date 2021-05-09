@@ -192,7 +192,7 @@
     - Add a new entry in LattS.dbf;
     - Specify the custom source ID and TEXT accordingly;
     - Specify the id of the source name from TApp.dbf in NAME_TXT ('X005TA0153' for instance);
-    - Specify IMMUNE_POW: the value is used by AI to determine how powerful a unit with such ward or immunity is. The greater - the better. For example, elemental immunities have average power of 5, while weapon immunity has 57.
+    - Specify IMMUNE_POW: the value is used by AI to determine how powerful a unit with such ward or immunity is. The greater - the better. For example, elemental immunities have average power of 5, while weapon immunity has 57. Can be omitted - 5 is the default.
 
     ![image](https://user-images.githubusercontent.com/5180699/117533697-e2fd5180-aff6-11eb-905f-24e9c736a9b6.png)
 
