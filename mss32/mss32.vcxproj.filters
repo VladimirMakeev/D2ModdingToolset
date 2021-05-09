@@ -522,6 +522,9 @@
     <ClCompile Include="src\attacksourcelist.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\midgardmapblock.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -1370,6 +1373,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\attacksourcelist.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midgardmapblock.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
