@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Stanislav Egorov.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,15 +17,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "customattacks.h"
+#include "tilevariation.h"
+#include "version.h"
+#include <array>
 
-namespace hooks {
+namespace game::CTileVariationApi {
 
-CustomAttacks& getCustomAttacks()
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::CheckData)0x59b07e,
+        (Api::CheckRecordsCorrect)0x59b8f2,
+    },
+    // Russobit
+    Api{
+        (Api::CheckData)0x59b07e,
+        (Api::CheckRecordsCorrect)0x59b8f2,
+    },
+    // Gog
+    Api{
+        (Api::CheckData)0x59a1d0,
+        (Api::CheckRecordsCorrect)0x59aa44,
+    },
+    // Scenario Editor
+    Api{
+        (Api::CheckData)0x53dd3a,
+        (Api::CheckRecordsCorrect)0x53e5ae,
+    },
+}};
+// clang-format on
+
+Api& get()
 {
-    static CustomAttacks value;
-
-    return value;
+    return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace hooks
+} // namespace game::CTileVariationApi

@@ -17,49 +17,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERRAINCAT_H
-#define TERRAINCAT_H
+#ifndef TERRAINCOUNTLIST_H
+#define TERRAINCOUNTLIST_H
 
-#include "categories.h"
+#include "sortedlist.h"
+#include "terraincat.h"
 
 namespace game {
 
-struct LTerrainCategoryTable : public CEnumConstantTable<TerrainId>
-{ };
-
-struct LTerrainCategory : public Category<TerrainId>
-{ };
-
-namespace TerrainCategories {
-
-struct Categories
+struct TerrainCount
 {
-    LTerrainCategory* human;
-    LTerrainCategory* heretic;
-    LTerrainCategory* dwarf;
-    LTerrainCategory* undead;
-    LTerrainCategory* neutral;
-    LTerrainCategory* elf;
+    LTerrainCategory terrain;
+    int tilesCount;
 };
 
-Categories& get();
+static_assert(sizeof(TerrainCount) == 16,
+              "Size of TerrainCount structure must be exactly 16 bytes");
 
-/** Returns address of LTerrainCategory::vftable used in game. */
-const void* vftable();
+using TerrainCountList = SortedList<TerrainCount>;
 
-} // namespace TerrainCategories
+namespace TerrainCountListApi {
 
-namespace LTerrainCategoryTableApi {
-
-using Api = CategoryTableApi::Api<LTerrainCategoryTable, LTerrainCategory>;
+struct Api
+{
+    /** Returns pointer to TerrainCount::tilesCount found by specified terrain category. */
+    using GetTilesCount = int*(__thiscall*)(TerrainCountList thisptr,
+                                            const LTerrainCategory* terrain);
+    GetTilesCount getTilesCount;
+};
 
 Api& get();
 
-/** Returns address of LTerrainCategoryTable::vftable used in game. */
-const void* vftable();
-
-} // namespace LTerrainCategoryTableApi
+} // namespace TerrainCountListApi
 
 } // namespace game
 
-#endif // TERRAINCAT_H
+#endif // TERRAINCOUNTLIST_H

@@ -20,16 +20,20 @@
 #include "customattackhooks.h"
 #include "attackclasscat.h"
 #include "attackimpl.h"
+#include "attacksourcelist.h"
 #include "attackutils.h"
 #include "customattack.h"
+#include "customattacks.h"
 #include "dbf/dbffile.h"
 #include "dbtable.h"
 #include "game.h"
 #include "globaldata.h"
+#include "immunecat.h"
 #include "log.h"
 #include "mempool.h"
 #include "originalfunctions.h"
 #include "settings.h"
+#include "ussoldier.h"
 #include "utils.h"
 #include <fmt/format.h>
 #include <limits>
@@ -109,6 +113,101 @@ game::LAttackClassTable* __fastcall attackClassTableCtorHooked(game::LAttackClas
     table.initDone(thisptr);
 
     logDebug("newAttackType.log", "LAttackClassTable c-tor hook finished");
+    return thisptr;
+}
+
+static void fillCustomAttackSources(const std::filesystem::path& dbfFilePath)
+{
+    using namespace game;
+
+    utils::DbfFile dbf;
+    if (!dbf.open(dbfFilePath)) {
+        logError("mssProxyError.log",
+                 fmt::format("Could not open {:s}", dbfFilePath.filename().string()));
+        return;
+    }
+
+    static const std::uint32_t lastBaseSourceWardFlagPosition = 7;
+    static const std::array<const char*, 8> baseSources = {
+        {"L_WEAPON", "L_MIND", "L_LIFE", "L_DEATH", "L_FIRE", "L_WATER", "L_AIR", "L_EARTH"}};
+
+    auto& customSources = getCustomAttacks().sources;
+    std::uint32_t wardFlagPosition = lastBaseSourceWardFlagPosition;
+    const auto recordsTotal{dbf.recordsTotal()};
+    for (std::uint32_t i = 0; i < recordsTotal; ++i) {
+        utils::DbfRecord record;
+        if (!dbf.record(record, i)) {
+            logError("mssProxyError.log", fmt::format("Could not read record {:d} from {:s}", i,
+                                                      dbfFilePath.filename().string()));
+            return;
+        }
+
+        if (record.isDeleted()) {
+            continue;
+        }
+
+        std::string text;
+        record.value(text, "TEXT");
+        text = trimSpaces(text);
+
+        if (std::none_of(std::begin(baseSources), std::end(baseSources),
+                         [&text](const char* baseText) { return text == baseText; })) {
+            std::string nameId;
+            record.value(nameId, "NAME_TXT");
+
+            int immunityPower = 5; // 5 is the default
+            record.value(immunityPower, "IMMUNE_POW");
+
+            logDebug(
+                "customAttacks.log",
+                fmt::format("Found custom attack source {:s}, name id {:s}, immunity power {:d}",
+                            text, nameId, immunityPower));
+
+            customSources.push_back(
+                {LAttackSource{AttackSourceCategories::vftable(), nullptr, (AttackSourceId)-1},
+                 text, nameId, (double)immunityPower, ++wardFlagPosition});
+        }
+    }
+}
+
+game::LAttackSourceTable* __fastcall attackSourceTableCtorHooked(game::LAttackSourceTable* thisptr,
+                                                                 int /*%edx*/,
+                                                                 const char* globalsFolderPath,
+                                                                 void* codeBaseEnvProxy)
+{
+    using namespace game;
+    logDebug("customAttacks.log", "LAttackSourceTable c-tor hook started");
+
+    static const char dbfFileName[] = "LAttS.dbf";
+    fillCustomAttackSources(std::filesystem::path(globalsFolderPath) / dbfFileName);
+
+    thisptr->bgn = nullptr;
+    thisptr->end = nullptr;
+    thisptr->allocatedMemEnd = nullptr;
+    thisptr->allocator = nullptr;
+    thisptr->vftable = LAttackSourceTableApi::vftable();
+
+    const auto& table = LAttackSourceTableApi::get();
+    auto& sources = AttackSourceCategories::get();
+
+    table.init(thisptr, codeBaseEnvProxy, globalsFolderPath, dbfFileName);
+    table.readCategory(sources.weapon, thisptr, "L_WEAPON", dbfFileName);
+    table.readCategory(sources.mind, thisptr, "L_MIND", dbfFileName);
+    table.readCategory(sources.life, thisptr, "L_LIFE", dbfFileName);
+    table.readCategory(sources.death, thisptr, "L_DEATH", dbfFileName);
+    table.readCategory(sources.fire, thisptr, "L_FIRE", dbfFileName);
+    table.readCategory(sources.water, thisptr, "L_WATER", dbfFileName);
+    table.readCategory(sources.air, thisptr, "L_AIR", dbfFileName);
+    table.readCategory(sources.earth, thisptr, "L_EARTH", dbfFileName);
+
+    for (auto& custom : getCustomAttacks().sources) {
+        logDebug("customAttacks.log",
+                 fmt::format("Reading custom attack source {:s}", custom.text));
+        table.readCategory(&custom.source, thisptr, custom.text.c_str(), dbfFileName);
+    }
+
+    table.initDone(thisptr);
+    logDebug("customAttacks.log", "LAttackSourceTable c-tor hook finished");
     return thisptr;
 }
 
@@ -232,13 +331,13 @@ game::IBatAttack* __stdcall createBatAttackHooked(game::IMidgardObjectMap* objec
                                                   attackClass, a7);
 }
 
-int __stdcall attackClassToNumberHooked(const game::LAttackClass* attackClass)
+std::uint32_t __stdcall getAttackClassWardFlagPositionHooked(const game::LAttackClass* attackClass)
 {
     if (attackClass->id == customAttackClass.id) {
         return 23;
     }
 
-    return getOriginalFunctions().attackClassToNumber(attackClass);
+    return getOriginalFunctions().getAttackClassWardFlagPosition(attackClass);
 }
 
 const char* __stdcall attackClassToStringHooked(const game::LAttackClass* attackClass)
@@ -248,6 +347,141 @@ const char* __stdcall attackClassToStringHooked(const game::LAttackClass* attack
     }
 
     return getOriginalFunctions().attackClassToString(attackClass);
+}
+
+static void getSoldierAttackSourceImmunities(const game::LImmuneCat* immuneCat,
+                                             const game::IUsSoldier* soldier,
+                                             game::LinkedList<game::LAttackSource>* value)
+{
+    using namespace game;
+
+    const auto& sources = AttackSourceCategories::get();
+    const auto& sourceListApi = AttackSourceListApi::get();
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.weapon)->id)
+        sourceListApi.add(value, sources.weapon);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.mind)->id)
+        sourceListApi.add(value, sources.mind);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.life)->id)
+        sourceListApi.add(value, sources.life);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.death)->id)
+        sourceListApi.add(value, sources.death);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.fire)->id)
+        sourceListApi.add(value, sources.fire);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.water)->id)
+        sourceListApi.add(value, sources.water);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.air)->id)
+        sourceListApi.add(value, sources.air);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.earth)->id)
+        sourceListApi.add(value, sources.earth);
+
+    for (const auto& custom : getCustomAttacks().sources) {
+        if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, &custom.source)->id)
+            sourceListApi.add(value, &custom.source);
+    }
+}
+
+void __stdcall getUnitAttackSourceImmunitiesHooked(const game::LImmuneCat* immuneCat,
+                                                   const game::CMidUnit* unit,
+                                                   game::LinkedList<game::LAttackSource>* value)
+{
+    using namespace game;
+
+    const auto soldier = gameFunctions().castUnitImplToSoldier(unit->unitImpl);
+    getSoldierAttackSourceImmunities(immuneCat, soldier, value);
+}
+
+void __stdcall getSoldierAttackSourceImmunitiesHooked(const game::IUsSoldier* soldier,
+                                                      bool alwaysImmune,
+                                                      game::LinkedList<game::LAttackSource>* value)
+{
+    using namespace game;
+
+    const auto& immunities = ImmuneCategories::get();
+    getSoldierAttackSourceImmunities(alwaysImmune ? immunities.always : immunities.once, soldier,
+                                     value);
+}
+
+double __stdcall getSoldierImmunityPowerHooked(const game::IUsSoldier* soldier)
+{
+    using namespace game;
+
+    double result = getOriginalFunctions().getSoldierImmunityPower(soldier);
+
+    const auto& immunities = ImmuneCategories::get();
+    for (const auto& custom : getCustomAttacks().sources) {
+        auto immuneCat = soldier->vftable->getImmuneByAttackSource(soldier, &custom.source);
+        if (immuneCat->id != immunities.notimmune->id)
+            result += custom.immunityPower;
+    }
+
+    return result;
+}
+
+std::uint32_t __stdcall getAttackSourceWardFlagPositionHooked(
+    const game::LAttackSource* attackSource)
+{
+    for (const auto& custom : getCustomAttacks().sources) {
+        if (custom.source.id == attackSource->id)
+            return custom.wardFlagPosition;
+    }
+
+    return getOriginalFunctions().getAttackSourceWardFlagPosition(attackSource);
+}
+
+bool __fastcall isUnitAttackSourceWardRemovedHooked(game::BattleMsgData* thisptr,
+                                                    int /*%edx*/,
+                                                    const game::CMidgardID* unitId,
+                                                    const game::LAttackSource* attackSource)
+{
+    using namespace game;
+
+    auto unitInfo = BattleMsgDataApi::get().getUnitInfoById(thisptr, unitId);
+    if (unitInfo == nullptr)
+        return false;
+
+    std::uint32_t flag = 1 << gameFunctions().getAttackSourceWardFlagPosition(attackSource);
+    return (unitInfo->attackSourceImmunityStatuses.patched & flag) != 0;
+}
+
+void __fastcall removeUnitAttackSourceWardHooked(game::BattleMsgData* thisptr,
+                                                 int /*%edx*/,
+                                                 const game::CMidgardID* unitId,
+                                                 const game::LAttackSource* attackSource)
+{
+    using namespace game;
+
+    auto unitInfo = BattleMsgDataApi::get().getUnitInfoById(thisptr, unitId);
+    if (unitInfo == nullptr)
+        return;
+
+    std::uint32_t flag = 1 << gameFunctions().getAttackSourceWardFlagPosition(attackSource);
+    unitInfo->attackSourceImmunityStatuses.patched |= flag;
+}
+
+void __stdcall addUnitToBattleMsgDataHooked(game::IMidgardObjectMap* objectMap,
+                                            game::CMidUnitGroup* group,
+                                            const game::CMidgardID* unitId,
+                                            char attackerFlags,
+                                            game::BattleMsgData* battleMsgData)
+{
+    using namespace game;
+
+    int i;
+    for (i = 0; i < 22 && battleMsgData->unitsInfo[i].unitId1 != invalidId; ++i)
+        ;
+
+    if (i == 22) {
+        logError("mssProxyError.log",
+                 fmt::format("Could not find a free slot for a new unit {:s} in battle msg data",
+                             hooks::idToString(unitId)));
+        return;
+    }
+
+    battleMsgData->unitsInfo[i].attackClassImmunityStatuses = 0;
+    battleMsgData->unitsInfo[i].attackSourceImmunityStatuses.patched = 0;
+
+    getOriginalFunctions().addUnitToBattleMsgData(objectMap, group, unitId, attackerFlags,
+                                                  battleMsgData);
 }
 
 } // namespace hooks

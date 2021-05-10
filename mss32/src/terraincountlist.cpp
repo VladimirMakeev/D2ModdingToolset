@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Stanislav Egorov.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,33 +17,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CUSTOMATTACKS_H
-#define CUSTOMATTACKS_H
+#include "terraincountlist.h"
+#include "version.h"
+#include <array>
 
-#include "attacksourcecat.h"
-#include <string>
-#include <vector>
+namespace game::TerrainCountListApi {
 
-namespace hooks {
+// clang-format off
+static std::array<Api, 3> functions = {{
+    // Akella
+    Api{
+        (Api::GetTilesCount)0x4462f7,
+    },
+    // Russobit
+    Api{
+        (Api::GetTilesCount)0x4462f7,
+    },
+    // Gog
+    Api{
+        (Api::GetTilesCount)0x445efb,
+    },
+}};
 
-struct CustomAttackSource
+// clang-format on
+
+Api& get()
 {
-    game::LAttackSource source;
-    std::string text;
-    std::string nameId;
-    double immunityPower;
-    std::uint32_t wardFlagPosition;
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-using CustomAttackSources = std::vector<CustomAttackSource>;
-
-struct CustomAttacks
-{
-    CustomAttackSources sources;
-};
-
-CustomAttacks& getCustomAttacks();
-
-} // namespace hooks
-
-#endif // CUSTOMATTACKS_H
+} // namespace game::TerrainCountListApi

@@ -247,10 +247,10 @@ std::string getAttackSourceText(const game::LAttackSource* attackSource)
     else if (id == attackSources.earth->id)
         return getTranslatedText("X005TA0152"); // "Earth"
     else {
-        const auto& custom = customAttacks().sources;
-        const auto it = custom.find(id);
-        if (it != custom.end())
-            return getTranslatedText(it->second.textId.c_str());
+        for (const auto& custom : getCustomAttacks().sources) {
+            if (id == custom.source.id)
+                return getTranslatedText(custom.nameId.c_str());
+        }
     }
 
     return "";

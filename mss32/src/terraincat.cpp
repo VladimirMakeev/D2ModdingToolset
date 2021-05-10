@@ -21,7 +21,8 @@
 #include "version.h"
 #include <array>
 
-namespace game::TerrainCategories {
+namespace game {
+namespace TerrainCategories {
 
 // clang-format off
 static std::array<Categories, 4> categories = {{
@@ -62,6 +63,18 @@ static std::array<Categories, 4> categories = {{
         (LTerrainCategory*)0x664ed8,
     },
 }};
+
+static std::array<const void*, 4> vftables = {{
+    // Akella
+    (const void*)0x6cf9d4,
+    // Russobit
+    (const void*)0x6cf9d4,
+    // Gog
+    (const void*)0x6cd974,
+    // Scenario Editor
+    (const void*)0x5ca8e4
+}};
+
 // clang-format on
 
 Categories& get()
@@ -69,4 +82,73 @@ Categories& get()
     return categories[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::TerrainCategories
+const void* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
+
+} // namespace TerrainCategories
+
+namespace LTerrainCategoryTableApi {
+
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)0x58a72a,
+        (Api::Init)0x58a8bf,
+        (Api::ReadCategory)0x58a937,
+        (Api::InitDone)0x58a87a,
+        (Api::FindCategoryById)0x4791c3,
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)0x58a72a,
+        (Api::Init)0x58a8bf,
+        (Api::ReadCategory)0x58a937,
+        (Api::InitDone)0x58a87a,
+        (Api::FindCategoryById)0x4791c3,
+    },
+    // Gog
+    Api{
+        (Api::Constructor)0x589899,
+        (Api::Init)0x589a2e,
+        (Api::ReadCategory)0x589aa6,
+        (Api::InitDone)0x5899e9,
+        (Api::FindCategoryById)0x478d8f,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x52aaa4,
+        (Api::Init)0x52ac39,
+        (Api::ReadCategory)0x52acb1,
+        (Api::InitDone)0x52abf4,
+        (Api::FindCategoryById)0x4e443a,
+    }
+}};
+
+static std::array<const void*, 4> vftables = {{
+    // Akella
+    (const void*)0x6ea63c,
+    // Russobit
+    (const void*)0x6ea63c,
+    // Gog
+    (const void*)0x6e85dc,
+    // Scenario Editor
+    (const void*)0x5ddb9c
+}};
+// clang-format on
+
+Api& get()
+{
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+const void* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
+
+} // namespace LTerrainCategoryTableApi
+
+} // namespace game

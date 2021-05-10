@@ -146,6 +146,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\attackimpl.cpp" />
     <ClCompile Include="src\attackreachcat.cpp" />
     <ClCompile Include="src\attacksourcecat.cpp" />
+    <ClCompile Include="src\attacksourcelist.cpp" />
     <ClCompile Include="src\attackutils.cpp" />
     <ClCompile Include="src\autodialog.cpp" />
     <ClCompile Include="src\autoptr.cpp" />
@@ -223,6 +224,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\middragdropinterf.cpp" />
     <ClCompile Include="src\midgard.cpp" />
     <ClCompile Include="src\midgardid.cpp" />
+    <ClCompile Include="src\midgardmapblock.cpp" />
     <ClCompile Include="src\midgardmsgbox.cpp" />
     <ClCompile Include="src\miditem.cpp" />
     <ClCompile Include="src\midmsgboxbuttonhandlerstd.cpp" />
@@ -260,8 +262,10 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\summonhooks.cpp" />
     <ClCompile Include="src\targetslist.cpp" />
     <ClCompile Include="src\terraincat.cpp" />
+    <ClCompile Include="src\terraincountlist.cpp" />
     <ClCompile Include="src\textboxinterf.cpp" />
     <ClCompile Include="src\textids.cpp" />
+    <ClCompile Include="src\tilevariation.cpp" />
     <ClCompile Include="src\transformselfhooks.cpp" />
     <ClCompile Include="src\unitbranchcat.cpp" />
     <ClCompile Include="src\unitcat.cpp" />
@@ -309,6 +313,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\attackmodified.h" />
     <ClInclude Include="include\attackreachcat.h" />
     <ClInclude Include="include\attacksourcecat.h" />
+    <ClInclude Include="include\attacksourcelist.h" />
     <ClInclude Include="include\attackutils.h" />
     <ClInclude Include="include\autodialog.h" />
     <ClInclude Include="include\autoptr.h" />
@@ -452,9 +457,11 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\middropmanager.h" />
     <ClInclude Include="include\midgard.h" />
     <ClInclude Include="include\midgardid.h" />
+    <ClInclude Include="include\midgardmapblock.h" />
     <ClInclude Include="include\midgardmsgbox.h" />
     <ClInclude Include="include\midgardobjectmap.h" />
     <ClInclude Include="include\midgardscenariomap.h" />
+    <ClInclude Include="include\midgardstream.h" />
     <ClInclude Include="include\midinventory.h" />
     <ClInclude Include="include\miditem.h" />
     <ClInclude Include="include\midmsgboxbuttonhandler.h" />
@@ -534,6 +541,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\targetslist.h" />
     <ClInclude Include="include\taskmanagerholder.h" />
     <ClInclude Include="include\terraincat.h" />
+    <ClInclude Include="include\terraincountlist.h" />
     <ClInclude Include="include\textandid.h" />
     <ClInclude Include="include\textboxinterf.h" />
     <ClInclude Include="include\textids.h" />
