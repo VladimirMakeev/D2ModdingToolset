@@ -80,8 +80,7 @@ game::BattleMsgData* __fastcall battleMsgDataCtorHooked(game::BattleMsgData* thi
 
     for (auto& unitInfo : thisptr->unitsInfo) {
         memset(&unitInfo.modifiedUnits, 0, sizeof(ModifiedUnitsPatched));
-        auto buff = modifiedUnitsPatchedFactory.create();
-        unitInfo.modifiedUnits.patched = buff;
+        unitInfo.modifiedUnits.patched = modifiedUnitsPatchedFactory.create();
         resetModifiedUnitsInfo(&unitInfo);
     }
 
@@ -139,10 +138,10 @@ game::BattleMsgData* __fastcall battleMsgDataCopyHooked(game::BattleMsgData* thi
 
     const size_t count = sizeof(thisptr->unitsInfo) / sizeof(*thisptr->unitsInfo);
     for (size_t i = 0; i < count; i++) {
-        auto buff = modifiedUnitsPatchedFactory.create();
-        memcpy(buff, src->unitsInfo[i].modifiedUnits.patched,
+        auto modifiedUnits = modifiedUnitsPatchedFactory.create();
+        memcpy(modifiedUnits, src->unitsInfo[i].modifiedUnits.patched,
                sizeof(ModifiedUnitInfo) * ModifiedUnitInfoCountPatched);
-        thisptr->unitsInfo[i].modifiedUnits.patched = buff;
+        thisptr->unitsInfo[i].modifiedUnits.patched = modifiedUnits;
     }
 
     return thisptr;
@@ -150,9 +149,10 @@ game::BattleMsgData* __fastcall battleMsgDataCopyHooked(game::BattleMsgData* thi
 
 void __fastcall battleMsgDataDtorHooked(game::BattleMsgData* thisptr, int /*%edx*/)
 {
+    using namespace game;
+
     for (auto& unitInfo : thisptr->unitsInfo) {
-        auto buff = unitInfo.modifiedUnits.patched;
-        modifiedUnitsPatchedFactory.destroy(buff);
+        modifiedUnitsPatchedFactory.destroy(unitInfo.modifiedUnits.patched);
         unitInfo.modifiedUnits.patched = nullptr;
     }
 }
