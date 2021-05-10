@@ -24,6 +24,7 @@
 #include "midgardid.h"
 #include "midscenarioobject.h"
 #include "mqpoint.h"
+#include "terraincountlist.h"
 #include <cstdint>
 
 namespace game {
@@ -66,6 +67,12 @@ struct Api
                                      IMidgardObjectMap* objectMap,
                                      IMidgardStreamEnv* streamEnv);
     Stream stream;
+
+    /** Counts number of tiles with plain ground and their terrain coverage for each race. */
+    using CountTerrainCoverage = bool(__thiscall*)(const CMidgardMapBlock* thisptr,
+                                                   TerrainCountList* terrainCoverage,
+                                                   int* plainTiles);
+    CountTerrainCoverage countTerrainCoverage;
 };
 
 Api& get();
