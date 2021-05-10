@@ -258,6 +258,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\summonhooks.cpp" />
     <ClCompile Include="src\targetslist.cpp" />
     <ClCompile Include="src\terraincat.cpp" />
+    <ClCompile Include="src\terraincountlist.cpp" />
     <ClCompile Include="src\textboxinterf.cpp" />
     <ClCompile Include="src\textids.cpp" />
     <ClCompile Include="src\tilevariation.cpp" />
@@ -532,6 +533,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\targetslist.h" />
     <ClInclude Include="include\taskmanagerholder.h" />
     <ClInclude Include="include\terraincat.h" />
+    <ClInclude Include="include\terraincountlist.h" />
     <ClInclude Include="include\textandid.h" />
     <ClInclude Include="include\textboxinterf.h" />
     <ClInclude Include="include\textids.h" />
