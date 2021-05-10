@@ -1,0 +1,160 @@
+/*
+ * This file is part of the modding toolset for Disciples 2.
+ * (https://github.com/VladimirMakeev/D2ModdingToolset)
+ * Copyright (C) 2021 Stanislav Egorov.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "battlemsgdatahooks.h"
+#include "log.h"
+#include "modifierutils.h"
+#include "originalfunctions.h"
+#include <fmt/format.h>
+#include <mutex>
+
+namespace hooks {
+
+class ModifiedUnitsPatchedFactory
+{
+public:
+    ModifiedUnitsPatchedFactory()
+    { }
+
+    ~ModifiedUnitsPatchedFactory()
+    {
+        if (items.size() != 0) {
+            logError("mssProxyError.log",
+                     fmt::format("{:d} instances of ModifiedUnitsPatched remained on finalization",
+                                 items.size()));
+        }
+    }
+
+    game::ModifiedUnitInfo* create()
+    {
+        auto value = new game::ModifiedUnitInfo[game::ModifiedUnitInfoCountPatched];
+
+        lock.lock();
+        items.push_back(value);
+        lock.unlock();
+
+        return value;
+    }
+
+    void destroy(game::ModifiedUnitInfo* value)
+    {
+        lock.lock();
+        auto it = std::find(items.begin(), items.end(), value);
+        if (it != items.end()) {
+            delete[] value;
+            items.erase(it);
+        } else {
+            logError("mssProxyError.log",
+                     fmt::format("Attempt to destroy invalid ModifiedUnitsPatched {:p}",
+                                 (void*)value));
+        }
+        lock.unlock();
+    }
+
+private:
+    std::mutex lock;
+    std::vector<game::ModifiedUnitInfo*> items;
+} modifiedUnitsPatchedFactory;
+
+game::BattleMsgData* __fastcall battleMsgDataCtorHooked(game::BattleMsgData* thisptr, int /*%edx*/)
+{
+    using namespace game;
+
+    getOriginalFunctions().battleMsgDataCtor(thisptr);
+
+    for (auto& unitInfo : thisptr->unitsInfo) {
+        memset(&unitInfo.modifiedUnits, 0, sizeof(ModifiedUnitsPatched));
+        auto buff = modifiedUnitsPatchedFactory.create();
+        unitInfo.modifiedUnits.patched = buff;
+        resetModifiedUnitsInfo(&unitInfo);
+    }
+
+    return thisptr;
+}
+
+game::BattleMsgData* __fastcall battleMsgDataCopyCtorHooked(game::BattleMsgData* thisptr,
+                                                            int /*%edx*/,
+                                                            const game::BattleMsgData* src)
+{
+    using namespace game;
+
+    getOriginalFunctions().battleMsgDataCtor(thisptr);
+
+    for (auto& unitInfo : thisptr->unitsInfo) {
+        memset(&unitInfo.modifiedUnits, 0, sizeof(ModifiedUnitsPatched));
+    }
+
+    return battleMsgDataCopyHooked(thisptr, 0, src);
+}
+
+game::BattleMsgData* __fastcall battleMsgDataCopyAssignHooked(game::BattleMsgData* thisptr,
+                                                              int /*%edx*/,
+                                                              const game::BattleMsgData* src)
+{
+    using namespace game;
+
+    if (thisptr == src)
+        return thisptr;
+
+    const size_t count = sizeof(thisptr->unitsInfo) / sizeof(*thisptr->unitsInfo);
+    ModifiedUnitInfo* prev[count];
+    for (size_t i = 0; i < count; i++) {
+        prev[i] = thisptr->unitsInfo[i].modifiedUnits.patched;
+    }
+
+    *thisptr = *src;
+
+    for (size_t i = 0; i < count; i++) {
+        memcpy(prev[i], src->unitsInfo[i].modifiedUnits.patched,
+               sizeof(ModifiedUnitInfo) * ModifiedUnitInfoCountPatched);
+        thisptr->unitsInfo[i].modifiedUnits.patched = prev[i];
+    }
+
+    return thisptr;
+}
+
+game::BattleMsgData* __fastcall battleMsgDataCopyHooked(game::BattleMsgData* thisptr,
+                                                        int /*%edx*/,
+                                                        const game::BattleMsgData* src)
+{
+    using namespace game;
+
+    *thisptr = *src;
+
+    const size_t count = sizeof(thisptr->unitsInfo) / sizeof(*thisptr->unitsInfo);
+    for (size_t i = 0; i < count; i++) {
+        auto buff = modifiedUnitsPatchedFactory.create();
+        memcpy(buff, src->unitsInfo[i].modifiedUnits.patched,
+               sizeof(ModifiedUnitInfo) * ModifiedUnitInfoCountPatched);
+        thisptr->unitsInfo[i].modifiedUnits.patched = buff;
+    }
+
+    return thisptr;
+}
+
+void __fastcall battleMsgDataDtorHooked(game::BattleMsgData* thisptr, int /*%edx*/)
+{
+    for (auto& unitInfo : thisptr->unitsInfo) {
+        auto buff = unitInfo.modifiedUnits.patched;
+        modifiedUnitsPatchedFactory.destroy(buff);
+        unitInfo.modifiedUnits.patched = nullptr;
+    }
+}
+
+} // namespace hooks

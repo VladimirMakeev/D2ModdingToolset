@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef USUNIT_H
-#define USUNIT_H
+#include "commandmsg.h"
+#include "version.h"
+#include <array>
 
-#include "midobject.h"
+namespace game::CCommandMsgApi {
 
-namespace game {
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::Destructor)0x47b64d,
+    },
+    // Russobit
+    Api{
+        (Api::Destructor)0x47b64d,
+    },
+    // Gog
+    Api{
+        (Api::Destructor)0x47b184,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Destructor)nullptr,
+    },
+}};
+// clang-format on
 
-struct IUsUnitVftable;
-struct LUnitCategory;
-
-struct IUsUnit : public IMidObjectT<IUsUnitVftable>
+Api& get()
 {
-    CMidgardID unitId;
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-struct IUsUnitVftable : public IMidObjectVftable
-{
-    using Method1 = int(__thiscall*)(const IUsUnit* thisptr, const char* a2);
-    Method1 method1;
-
-    using GetCategory = const LUnitCategory*(__thiscall*)(const IUsUnit* thisptr);
-    GetCategory getCategory;
-};
-
-} // namespace game
-
-#endif // USUNIT_H
+} // namespace game::CCommandMsgApi

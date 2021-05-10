@@ -20,14 +20,21 @@
 #ifndef MODIFIERUTILS_H
 #define MODIFIERUTILS_H
 
-#include "attack.h"
-#include "battlemsgdata.h"
 #include "immunecat.h"
-#include "midunit.h"
-#include "umunit.h"
-#include "unitmodifier.h"
-#include "ussoldier.h"
+#include "midgardid.h"
 #include <set>
+
+namespace game {
+struct IMidgardObjectMap;
+struct CMidUnit;
+struct UnitInfo;
+struct CUmModifier;
+struct CUmUnit;
+struct LAttackSource;
+struct LAttackClass;
+struct IAttack;
+struct BattleMsgData;
+} // namespace game
 
 namespace hooks {
 
@@ -67,6 +74,8 @@ bool canApplyAnyModifier(game::IAttack* attack,
                          game::IMidgardObjectMap* objectMap,
                          game::BattleMsgData* battleMsgData,
                          game::CMidgardID* targetUnitId);
+
+void resetModifiedUnitsInfo(game::UnitInfo* unitInfo);
 
 bool addModifiedUnitInfo(const game::CMidgardID* unitId,
                          game::BattleMsgData* battleMsgData,

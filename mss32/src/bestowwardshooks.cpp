@@ -26,6 +26,7 @@
 #include "idvector.h"
 #include "midgardobjectmap.h"
 #include "modifierutils.h"
+#include "usunit.h"
 
 namespace hooks {
 

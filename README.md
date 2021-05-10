@@ -137,14 +137,8 @@
 - <details>
     <summary>Fixes bestow wards attack bugs and restrictions;</summary>
 
-    - Fixes wards (hereafter called "modifiers") becoming permanent when more than 8 of them are applied simultaneously:
-      - A total of 8 can be applied to each single unit - rest are ignored;
-      - In case of single-target attack, total of 8 modifiers can be applied - rest are ignored.<br />
-      Double attack also has a total of 8;
-      - In case of all-targets attack, total of 12 modifiers can be applied - rest are ignored.<br />
-      **Important requirement**: only two different types allowed (QTY_WARDS <= 2 in GAttacks.dbf), otherwise only first 8 modifiers can be applied;
-      - Up to 8 different modifiers can be potentially applied to the same target.<br />
-      Set QTY_WARDS to 5 (6, 7 or 8) and create additional WARD5 (6, 7, 8) columns in GAttacks.dbf;
+    - Fixes wards (hereafter called "modifiers") becoming permanent when more than 8 of them are applied simultaneously;<br />
+      A total of 8 can be applied to each unit: set QTY_WARDS to 5 (6, 7 or 8) and create additional WARD5 (6, 7, 8) columns in GAttacks.dbf.
     - Fixes modifiers becoming permanent on warded unit transformation;
     - Fixes disappearing of modifiers applied on first attack of double attack;
     - Fixes attack source wards being reset incorrectly if its modifier also contains hp, regen or armor element;
@@ -241,7 +235,6 @@ The following settings can be changed in 'Scripts\\settings.lua':
   - "leveledDoppelgangerAttack=(true/false)" changes doppelganger attacks to copy units using with respect to their level using 'Scripts\\doppelganger.lua' script;
   - "leveledTransformSelfAttack=(true/false)" changes transform self attacks to compute transformed unit level using 'Scripts\\transformSelf.lua' script;
   - "leveledSummonAttack=(true/false)" changes summon attacks to compute summoned units levels using 'Scripts\\summon.lua' script;
-  - "unrestrictedBestowWards=(true/false)" fixes bestow wards attack bugs and restrictions, see more details under Features section;
   - "disableAllowedRoundMax=\[1 : (2^31 - 1)\]" sets a number of battle round after which paralyze and petrify attacks will constantly miss;
   - "missChanceSingleRoll=(true/false)" if true, switches attacks miss check to a single random value roll instead of check against arithmetic mean of two random numbers;
   - "mageLeaderAccuracyReduction=\[0 : 100\]" allows to set accuracy reduction for mage leaders per each additional target;

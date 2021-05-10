@@ -80,19 +80,12 @@ struct ModifiedUnitInfo
 static_assert(sizeof(ModifiedUnitInfo) == 8,
               "Size of ModifiedUnitInfo structure must be exactly 8 bytes");
 
-struct ModifiedUnitInfoPatched
-{
-    CMidgardID modifierId;
-    CMidgardID unitIds[7];
-};
-
-static_assert(sizeof(ModifiedUnitInfoPatched) == 32,
-              "Size of ModifiedUnitInfoPatched structure must be exactly 32 bytes");
-
+/** Array of 48 items (8 modifiers x 6 units). */
+static const int ModifiedUnitInfoCountPatched = 48;
 union ModifiedUnitsPatched
 {
     ModifiedUnitInfo original[8];
-    ModifiedUnitInfoPatched patched[2];
+    ModifiedUnitInfo* patched;
 };
 
 static_assert(sizeof(ModifiedUnitsPatched) == 64,
@@ -182,7 +175,6 @@ struct UnitInfo
     char unknown6;
     CMidgardID summonOwner;
     /** Ids of units modified by this unit coupled with corresponding modifier ids. */
-    // ModifiedUnitInfo modifiedUnits[8]; // Original layout
     ModifiedUnitsPatched modifiedUnits;
     /** Modifiers applied to this unit. */
     CMidgardID modifierIds[8];
@@ -452,6 +444,24 @@ struct Api
                                                     char attackerFlags,
                                                     BattleMsgData* battleMsgData);
     AddUnitToBattleMsgData addUnitToBattleMsgData;
+
+    using Constructor = BattleMsgData*(__thiscall*)(BattleMsgData* thisptr);
+    Constructor constructor;
+
+    using CopyConstructor = BattleMsgData*(__thiscall*)(BattleMsgData* thisptr,
+                                                        const BattleMsgData* src);
+    CopyConstructor copyConstructor;
+    CopyConstructor copyConstructor2;
+
+    using CopyAssignment = BattleMsgData*(__thiscall*)(BattleMsgData* thisptr,
+                                                       const BattleMsgData* src);
+    CopyAssignment copyAssignment;
+
+    using Copy = BattleMsgData*(__thiscall*)(BattleMsgData* thisptr, const BattleMsgData* src);
+    Copy copy;
+
+    using Destructor = void(__thiscall*)(BattleMsgData* thisptr);
+    Destructor destructor;
 };
 
 Api& get();

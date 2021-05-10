@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef USUNIT_H
-#define USUNIT_H
+#ifndef CMDBATTLESTARTMSG_H
+#define CMDBATTLESTARTMSG_H
 
-#include "midobject.h"
+#include "battlemsgdata.h"
+#include "commandmsg.h"
 
 namespace game {
 
-struct IUsUnitVftable;
-struct LUnitCategory;
-
-struct IUsUnit : public IMidObjectT<IUsUnitVftable>
+struct CCmdBattleStartMsg
+    : public CCommandMsgTempl<CommandMsgId::BattleStart, CommandMsgParam::Value1>
 {
-    CMidgardID unitId;
+    int battleBackgroundIndex;
+    int unknown2;
+    BattleMsgData battleMsgData;
+    int unknown3;
+    int unknown4;
 };
 
-struct IUsUnitVftable : public IMidObjectVftable
-{
-    using Method1 = int(__thiscall*)(const IUsUnit* thisptr, const char* a2);
-    Method1 method1;
+static_assert(offsetof(CCmdBattleStartMsg, battleMsgData) == 24,
+              "CCmdBattleStartMsg::battleMsgData offset must be 24 bytes");
 
-    using GetCategory = const LUnitCategory*(__thiscall*)(const IUsUnit* thisptr);
-    GetCategory getCategory;
+namespace CCmdBattleStartMsgApi {
+
+struct Api
+{
+    using Destructor = void(__thiscall*)(CCmdBattleStartMsg* thisptr);
+    Destructor destructor;
 };
+
+Api& get();
+
+CCommandMsgVftable* vftable();
+
+} // namespace CCmdBattleStartMsgApi
 
 } // namespace game
 
-#endif // USUNIT_H
+#endif // CMDBATTLESTARTMSG_H

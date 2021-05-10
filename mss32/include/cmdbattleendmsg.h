@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef USUNIT_H
-#define USUNIT_H
+#ifndef CMDBATTLEENDMSG_H
+#define CMDBATTLEENDMSG_H
 
-#include "midobject.h"
+#include "battlemsgdata.h"
+#include "commandmsg.h"
 
 namespace game {
 
-struct IUsUnitVftable;
-struct LUnitCategory;
-
-struct IUsUnit : public IMidObjectT<IUsUnitVftable>
+struct CCmdBattleEndMsg : public CCommandMsgTempl<CommandMsgId::BattleEnd, CommandMsgParam::Value2>
 {
-    CMidgardID unitId;
+    BattleMsgData battleMsgData;
+    int unknown2;
 };
 
-struct IUsUnitVftable : public IMidObjectVftable
-{
-    using Method1 = int(__thiscall*)(const IUsUnit* thisptr, const char* a2);
-    Method1 method1;
+static_assert(offsetof(CCmdBattleEndMsg, battleMsgData) == 16,
+              "CCmdBattleEndMsg::battleMsgData offset must be 16 bytes");
 
-    using GetCategory = const LUnitCategory*(__thiscall*)(const IUsUnit* thisptr);
-    GetCategory getCategory;
+namespace CCmdBattleEndMsgApi {
+
+struct Api
+{
+    using Destructor = void(__thiscall*)(CCmdBattleEndMsg* thisptr);
+    Destructor destructor;
 };
+
+Api& get();
+
+CCommandMsgVftable* vftable();
+
+} // namespace CCmdBattleEndMsgApi
 
 } // namespace game
 
-#endif // USUNIT_H
+#endif // CMDBATTLEENDMSG_H

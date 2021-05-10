@@ -55,9 +55,6 @@ settings = {
 	doppelgangerRespectsEnemyImmunity = false,
 	doppelgangerRespectsAllyImmunity = false,
 
-	-- Fix various bestow wards bugs and restrictions
-	unrestrictedBestowWards = false,
-
 	-- Round in battle after which paralyze and petrify attacks
 	-- starts missing targets constantly [1 : INT_MAX]
 	disableAllowedRoundMax = 40,

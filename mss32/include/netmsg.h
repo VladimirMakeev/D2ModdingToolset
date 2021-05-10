@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,49 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef USUNIT_H
-#define USUNIT_H
-
-#include "midobject.h"
+#ifndef NETMSG_H
+#define NETMSG_H
 
 namespace game {
 
-struct IUsUnitVftable;
-struct LUnitCategory;
+struct CNetMsgVftable;
+struct CMqStream;
 
-struct IUsUnit : public IMidObjectT<IUsUnitVftable>
+template <typename T = CNetMsgVftable>
+struct CNetMsgT
 {
-    CMidgardID unitId;
+    const T* vftable;
 };
 
-struct IUsUnitVftable : public IMidObjectVftable
-{
-    using Method1 = int(__thiscall*)(const IUsUnit* thisptr, const char* a2);
-    Method1 method1;
+struct CNetMsg : public CNetMsgT<>
+{ };
 
-    using GetCategory = const LUnitCategory*(__thiscall*)(const IUsUnit* thisptr);
-    GetCategory getCategory;
+struct CNetMsgVftable
+{
+    using Destructor = void(__thiscall*)(CNetMsg* thisptr, char flags);
+    Destructor destructor;
+
+    using Serialize = void(__thiscall*)(CNetMsg* thisptr, CMqStream* stream);
+    Serialize serialize;
 };
+
+static_assert(sizeof(CNetMsgVftable) == 2 * sizeof(void*),
+              "CNetMsg vftable must have exactly 2 methods");
+
+namespace CNetMsgApi {
+
+struct Api
+{
+    using Destructor = void(__thiscall*)(CNetMsg* thisptr);
+    Destructor destructor;
+};
+
+Api& get();
+
+CNetMsgVftable* vftable();
+
+} // namespace CNetMsgApi
 
 } // namespace game
 
-#endif // USUNIT_H
+#endif // NETMSG_H

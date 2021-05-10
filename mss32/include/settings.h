@@ -68,7 +68,6 @@ struct Settings
     bool leveledTransformSelfAttack;
     bool leveledSummonAttack;
     bool missChanceSingleRoll;
-    bool unrestrictedBestowWards;
     bool detailedAttackDescription;
 
     struct MovementCost
