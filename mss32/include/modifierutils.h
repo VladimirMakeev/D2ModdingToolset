@@ -96,9 +96,9 @@ void removeModifiers(game::BattleMsgData* battleMsgData,
                      game::UnitInfo* unitInfo,
                      const game::CMidgardID* modifiedUnitId);
 
-std::set<game::CMidgardID> getModifiedUnitIds(const game::UnitInfo* unitInfo);
+std::set<game::CMidgardID> getModifiedUnitIds(game::UnitInfo* unitInfo);
 
-std::set<game::CMidgardID> getUnitModifierIds(const game::UnitInfo* unitInfo,
+std::set<game::CMidgardID> getUnitModifierIds(game::UnitInfo* unitInfo,
                                               const game::CMidgardID* modifiedUnitId);
 
 } // namespace hooks

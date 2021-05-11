@@ -122,6 +122,7 @@ static void readSettings(const sol::table& table, Settings& settings)
     settings.leveledTransformSelfAttack = readSetting(table, "leveledTransformSelfAttack", defaultSettings().leveledTransformSelfAttack);
     settings.leveledSummonAttack = readSetting(table, "leveledSummonAttack", defaultSettings().leveledSummonAttack);
     settings.missChanceSingleRoll = readSetting(table, "missChanceSingleRoll", defaultSettings().missChanceSingleRoll);
+    settings.unrestrictedBestowWards = readSetting(table, "unrestrictedBestowWards", defaultSettings().unrestrictedBestowWards);
     settings.detailedAttackDescription = readSetting(table, "detailedAttackDescription", defaultSettings().detailedAttackDescription);
     settings.debugMode = readSetting(table, "debugHooks", defaultSettings().debugMode);
     // clang-format on
@@ -165,6 +166,7 @@ const Settings& baseSettings()
         settings.leveledTransformSelfAttack = false;
         settings.leveledSummonAttack = false;
         settings.missChanceSingleRoll = false;
+        settings.unrestrictedBestowWards = false;
         settings.detailedAttackDescription = false;
         settings.movementCost.textColor = Color{200, 200, 200};
         settings.movementCost.show = false;

@@ -21,8 +21,8 @@
 #include "log.h"
 #include "modifierutils.h"
 #include "originalfunctions.h"
+#include <atomic>
 #include <fmt/format.h>
-#include <mutex>
 
 namespace hooks {
 
@@ -30,46 +30,32 @@ class ModifiedUnitsPatchedFactory
 {
 public:
     ModifiedUnitsPatchedFactory()
+        : count(0)
     { }
 
     ~ModifiedUnitsPatchedFactory()
     {
-        if (items.size() != 0) {
+        if (count != 0) {
             logError("mssProxyError.log",
                      fmt::format("{:d} instances of ModifiedUnitsPatched remained on finalization",
-                                 items.size()));
+                                 count));
         }
     }
 
     game::ModifiedUnitInfo* create()
     {
-        auto value = new game::ModifiedUnitInfo[game::ModifiedUnitInfoCountPatched];
-
-        lock.lock();
-        items.push_back(value);
-        lock.unlock();
-
-        return value;
+        count++;
+        return new game::ModifiedUnitInfo[game::ModifiedUnitCountPatched];
     }
 
     void destroy(game::ModifiedUnitInfo* value)
     {
-        lock.lock();
-        auto it = std::find(items.begin(), items.end(), value);
-        if (it != items.end()) {
-            delete[] value;
-            items.erase(it);
-        } else {
-            logError("mssProxyError.log",
-                     fmt::format("Attempt to destroy invalid ModifiedUnitsPatched {:p}",
-                                 (void*)value));
-        }
-        lock.unlock();
+        count--;
+        delete[] value;
     }
 
 private:
-    std::mutex lock;
-    std::vector<game::ModifiedUnitInfo*> items;
+    std::atomic<int> count;
 } modifiedUnitsPatchedFactory;
 
 game::BattleMsgData* __fastcall battleMsgDataCtorHooked(game::BattleMsgData* thisptr, int /*%edx*/)
@@ -121,7 +107,7 @@ game::BattleMsgData* __fastcall battleMsgDataCopyAssignHooked(game::BattleMsgDat
 
     for (size_t i = 0; i < count; i++) {
         memcpy(prev[i], src->unitsInfo[i].modifiedUnits.patched,
-               sizeof(ModifiedUnitInfo) * ModifiedUnitInfoCountPatched);
+               sizeof(ModifiedUnitInfo) * ModifiedUnitCountPatched);
         thisptr->unitsInfo[i].modifiedUnits.patched = prev[i];
     }
 
@@ -140,7 +126,7 @@ game::BattleMsgData* __fastcall battleMsgDataCopyHooked(game::BattleMsgData* thi
     for (size_t i = 0; i < count; i++) {
         auto modifiedUnits = modifiedUnitsPatchedFactory.create();
         memcpy(modifiedUnits, src->unitsInfo[i].modifiedUnits.patched,
-               sizeof(ModifiedUnitInfo) * ModifiedUnitInfoCountPatched);
+               sizeof(ModifiedUnitInfo) * ModifiedUnitCountPatched);
         thisptr->unitsInfo[i].modifiedUnits.patched = modifiedUnits;
     }
 

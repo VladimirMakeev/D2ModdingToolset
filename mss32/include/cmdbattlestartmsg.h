@@ -35,6 +35,9 @@ struct CCmdBattleStartMsg
     int unknown4;
 };
 
+static_assert(sizeof(CCmdBattleStartMsg) == 3952,
+              "Size of CCmdBattleStartMsg structure must be exactly 3952 bytes");
+
 static_assert(offsetof(CCmdBattleStartMsg, battleMsgData) == 24,
               "CCmdBattleStartMsg::battleMsgData offset must be 24 bytes");
 

@@ -197,20 +197,6 @@ static Hooks getGameHooks()
         HookInfo{fn.getUnitAttackSourceImmunities, getUnitAttackSourceImmunitiesHooked},
         HookInfo{battle.isUnitAttackSourceWardRemoved, isUnitAttackSourceWardRemovedHooked},
         HookInfo{battle.removeUnitAttackSourceWard, removeUnitAttackSourceWardHooked},
-        // Support extended modifier count for bestow wards
-        HookInfo{battle.constructor, battleMsgDataCtorHooked, (void**)&orig.battleMsgDataCtor},
-        HookInfo{battle.copyConstructor, battleMsgDataCopyCtorHooked},
-        HookInfo{battle.copyConstructor2, battleMsgDataCopyCtorHooked},
-        HookInfo{battle.copyAssignment, battleMsgDataCopyAssignHooked},
-        HookInfo{battle.copy, battleMsgDataCopyHooked},
-        HookInfo{battle.destructor, battleMsgDataDtorHooked},
-        HookInfo{CStackBattleActionMsgApi::vftable()->serialize, stackBattleActionMsgSerializeHooked, (void**)&orig.stackBattleActionMsgSerialize},
-        HookInfo{CCmdBattleStartMsgApi::vftable()->serialize, cmdBattleStartMsgSerializeHooked, (void**)&orig.cmdBattleStartMsgSerialize},
-        HookInfo{CCmdBattleChooseActionMsgApi::vftable()->serialize, cmdBattleChooseActionMsgSerializeHooked, (void**)&orig.cmdBattleChooseActionMsgSerialize},
-        HookInfo{CCmdBattleResultMsgApi::vftable()->serialize, cmdBattleResultMsgSerializeHooked, (void**)&orig.cmdBattleResultMsgSerialize},
-        HookInfo{CCmdBattleEndMsgApi::vftable()->serialize, cmdBattleEndMsgSerializeHooked, (void**)&orig.cmdBattleEndMsgSerialize},
-        HookInfo{CCommandMsgApi::get().destructor, commandMsgDtorHooked, (void**)&orig.commandMsgDtor},
-        HookInfo{CNetMsgApi::get().destructor, netMsgDtorHooked, (void**)&orig.netMsgDtor},
     };
     // clang-format on
 
@@ -288,6 +274,25 @@ static Hooks getGameHooks()
     if (userSettings().missChanceSingleRoll != baseSettings().missChanceSingleRoll) {
         // Compute attack miss chance using single random value, instead of two
         hooks.push_back(HookInfo{fn.attackShouldMiss, attackShouldMissHooked});
+    }
+
+    if (userSettings().unrestrictedBestowWards != baseSettings().unrestrictedBestowWards) {
+        // Support extended modifier count for bestow wards
+        // clang-format off
+        hooks.emplace_back(HookInfo{battle.constructor, battleMsgDataCtorHooked, (void**)&orig.battleMsgDataCtor});
+        hooks.emplace_back(HookInfo{battle.copyConstructor, battleMsgDataCopyCtorHooked});
+        hooks.emplace_back(HookInfo{battle.copyConstructor2, battleMsgDataCopyCtorHooked});
+        hooks.emplace_back(HookInfo{battle.copyAssignment, battleMsgDataCopyAssignHooked});
+        hooks.emplace_back(HookInfo{battle.copy, battleMsgDataCopyHooked});
+        hooks.emplace_back(HookInfo{battle.destructor, battleMsgDataDtorHooked});
+        hooks.emplace_back(HookInfo{CStackBattleActionMsgApi::vftable()->serialize, stackBattleActionMsgSerializeHooked, (void**)&orig.stackBattleActionMsgSerialize});
+        hooks.emplace_back(HookInfo{CCmdBattleStartMsgApi::vftable()->serialize, cmdBattleStartMsgSerializeHooked, (void**)&orig.cmdBattleStartMsgSerialize});
+        hooks.emplace_back(HookInfo{CCmdBattleChooseActionMsgApi::vftable()->serialize, cmdBattleChooseActionMsgSerializeHooked, (void**)&orig.cmdBattleChooseActionMsgSerialize});
+        hooks.emplace_back(HookInfo{CCmdBattleResultMsgApi::vftable()->serialize, cmdBattleResultMsgSerializeHooked, (void**)&orig.cmdBattleResultMsgSerialize});
+        hooks.emplace_back(HookInfo{CCmdBattleEndMsgApi::vftable()->serialize, cmdBattleEndMsgSerializeHooked, (void**)&orig.cmdBattleEndMsgSerialize});
+        hooks.emplace_back(HookInfo{CCommandMsgApi::get().destructor, commandMsgDtorHooked, (void**)&orig.commandMsgDtor});
+        hooks.emplace_back(HookInfo{CNetMsgApi::get().destructor, netMsgDtorHooked, (void**)&orig.netMsgDtor});
+        // clang-format on
     }
 
     if (userSettings().movementCost.show) {

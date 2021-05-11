@@ -43,6 +43,8 @@ struct CMqStream
     char padding[3];
 };
 
+static_assert(sizeof(CMqStream) == 8, "Size of CMqStream structure must be exactly 8 bytes");
+
 } // namespace game
 
 #endif // MQSTREAM_H

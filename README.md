@@ -138,13 +138,13 @@
     <summary>Fixes bestow wards attack bugs and restrictions;</summary>
 
     - Fixes wards (hereafter called "modifiers") becoming permanent when more than 8 of them are applied simultaneously;<br />
-      A total of 8 can be applied to each unit: set QTY_WARDS to 5 (6, 7 or 8) and create additional WARD5 (6, 7, 8) columns in GAttacks.dbf.
-    - Fixes modifiers becoming permanent on warded unit transformation;
+      Up to 8 modifiers can be applied to each unit (8 x 6 = 48 total). If needed, set QTY_WARDS to 5 (6, 7 or 8) and create additional WARD5 (6, 7, 8) columns in GAttacks.dbf.
+    - Fixes modifiers becoming permanent after modified unit is transformed;
     - Fixes disappearing of modifiers applied on first attack of double attack;
     - Fixes attack source wards being reset incorrectly if its modifier also contains hp, regen or armor element;
     - Fixes attack class wards not being reset preventing it from being reapplied during battle;
     - Fixes incorrect handling of existing unit immunities;
-    - Allows to apply modifiers even if there are no source wards among them;
+    - Allows to apply modifiers even if there are no attack source wards among them;
     - Allows to target unit with a secondary attack even if there are no modifiers that can be applied;
     - Allows to heal and apply modifiers at once. Set QTY\_HEAL > 0 in GAttacks.dbf and HEAL in GDynUpgr.dbf:
       - Allows to heal retreating allies by primary or secondary attack;
@@ -235,6 +235,7 @@ The following settings can be changed in 'Scripts\\settings.lua':
   - "leveledDoppelgangerAttack=(true/false)" changes doppelganger attacks to copy units using with respect to their level using 'Scripts\\doppelganger.lua' script;
   - "leveledTransformSelfAttack=(true/false)" changes transform self attacks to compute transformed unit level using 'Scripts\\transformSelf.lua' script;
   - "leveledSummonAttack=(true/false)" changes summon attacks to compute summoned units levels using 'Scripts\\summon.lua' script;
+  - "unrestrictedBestowWards=(true/false)" increases total wards limit per caster from 8 to 48, see more details under Features section;
   - "disableAllowedRoundMax=\[1 : (2^31 - 1)\]" sets a number of battle round after which paralyze and petrify attacks will constantly miss;
   - "missChanceSingleRoll=(true/false)" if true, switches attacks miss check to a single random value roll instead of check against arithmetic mean of two random numbers;
   - "mageLeaderAccuracyReduction=\[0 : 100\]" allows to set accuracy reduction for mage leaders per each additional target;

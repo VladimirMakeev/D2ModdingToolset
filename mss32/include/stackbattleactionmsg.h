@@ -35,6 +35,9 @@ struct CStackBattleActionMsg : public CNetMsg
     int unknown3;
 };
 
+static_assert(sizeof(CStackBattleActionMsg) == 3944,
+              "Size of CStackBattleActionMsg structure must be exactly 3944 bytes");
+
 namespace CStackBattleActionMsgApi {
 
 CNetMsgVftable* vftable();

@@ -35,6 +35,9 @@ struct CCmdBattleResultMsg
     LAttackClass attackClass;
 };
 
+static_assert(sizeof(CCmdBattleResultMsg) == 3984,
+              "Size of CCmdBattleResultMsg structure must be exactly 3984 bytes");
+
 static_assert(offsetof(CCmdBattleResultMsg, battleMsgData) == 16,
               "CCmdBattleResultMsg::battleMsgData offset must be 16 bytes");
 

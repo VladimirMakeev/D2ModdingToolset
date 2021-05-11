@@ -34,6 +34,8 @@ struct CNetMsgT
 struct CNetMsg : public CNetMsgT<>
 { };
 
+static_assert(sizeof(CNetMsg) == 4, "Size of CNetMsg structure must be exactly 4 bytes");
+
 struct CNetMsgVftable
 {
     using Destructor = void(__thiscall*)(CNetMsg* thisptr, char flags);

@@ -40,6 +40,9 @@ struct CCmdBattleChooseActionMsg
     SortedList<int> list4;
 };
 
+static_assert(sizeof(CCmdBattleChooseActionMsg) == 4064,
+              "Size of CCmdBattleChooseActionMsg structure must be exactly 4064 bytes");
+
 static_assert(offsetof(CCmdBattleChooseActionMsg, battleMsgData) == 16,
               "CCmdBattleChooseActionMsg::battleMsgData offset must be 16 bytes");
 

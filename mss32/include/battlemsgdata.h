@@ -81,7 +81,7 @@ static_assert(sizeof(ModifiedUnitInfo) == 8,
               "Size of ModifiedUnitInfo structure must be exactly 8 bytes");
 
 /** Array of 48 items (8 modifiers x 6 units). */
-static const int ModifiedUnitInfoCountPatched = 48;
+static const size_t ModifiedUnitCountPatched = 48;
 union ModifiedUnitsPatched
 {
     ModifiedUnitInfo original[8];

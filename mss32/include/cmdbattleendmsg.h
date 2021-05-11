@@ -29,7 +29,11 @@ struct CCmdBattleEndMsg : public CCommandMsgTempl<CommandMsgId::BattleEnd, Comma
 {
     BattleMsgData battleMsgData;
     int unknown2;
+    char padding[4];
 };
+
+static_assert(sizeof(CCmdBattleEndMsg) == 3944,
+              "Size of CCmdBattleEndMsg structure must be exactly 3940 bytes");
 
 static_assert(offsetof(CCmdBattleEndMsg, battleMsgData) == 16,
               "CCmdBattleEndMsg::battleMsgData offset must be 16 bytes");

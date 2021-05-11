@@ -34,6 +34,8 @@ struct CCommandMsg : public CNetMsgT<CCommandMsgVftable>
     IdList* ids;
 };
 
+static_assert(sizeof(CCommandMsg) == 16, "Size of CCommandMsg structure must be exactly 16 bytes");
+
 enum class CommandMsgId : int
 {
     BattleStart = 8,

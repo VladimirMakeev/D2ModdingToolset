@@ -48,7 +48,7 @@ void serializeMsgWithBattleMsgData(game::CNetMsg* msg,
 
     for (auto& unitInfo : battleMsgData->unitsInfo) {
         stream->vftable->serialize(stream, unitInfo.modifiedUnits.patched,
-                                   sizeof(ModifiedUnitInfo) * ModifiedUnitInfoCountPatched);
+                                   sizeof(ModifiedUnitInfo) * ModifiedUnitCountPatched);
     }
 }
 
