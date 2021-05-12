@@ -22,6 +22,17 @@
 
 namespace game {
 
+struct CMqStreamVftable;
+
+struct CMqStream
+{
+    const CMqStreamVftable* vftable;
+    bool read;
+    char padding[3];
+};
+
+static_assert(sizeof(CMqStream) == 8, "Size of CMqStream structure must be exactly 8 bytes");
+
 struct CMqStreamVftable
 {
     using Destructor = void(__thiscall*)(CMqStream* thisptr, char flags);
@@ -35,15 +46,6 @@ struct CMqStreamVftable
 
 static_assert(sizeof(CMqStreamVftable) == 5 * sizeof(void*),
               "CMqStream vftable must have exactly 5 methods");
-
-struct CMqStream
-{
-    const CMqStreamVftable* vftable;
-    bool read;
-    char padding[3];
-};
-
-static_assert(sizeof(CMqStream) == 8, "Size of CMqStream structure must be exactly 8 bytes");
 
 } // namespace game
 
