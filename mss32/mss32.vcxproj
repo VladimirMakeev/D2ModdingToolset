@@ -140,7 +140,6 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="..\lua\lutf8lib.c" />
     <ClCompile Include="..\lua\lvm.c" />
     <ClCompile Include="..\lua\lzio.c" />
-    <ClCompile Include="include\unitutils.cpp" />
     <ClCompile Include="src\attack.cpp" />
     <ClCompile Include="src\attackclasscat.cpp" />
     <ClCompile Include="src\attackimpl.cpp" />
@@ -161,6 +160,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\batattackutils.cpp" />
     <ClCompile Include="src\battleattackinfo.cpp" />
     <ClCompile Include="src\battlemsgdata.cpp" />
+    <ClCompile Include="src\battlemsgdatahooks.cpp" />
     <ClCompile Include="src\bindings\dynupgradeview.cpp" />
     <ClCompile Include="src\bindings\unitimplview.cpp" />
     <ClCompile Include="src\bindings\unitview.cpp" />
@@ -172,6 +172,12 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\capitaldata.cpp" />
     <ClCompile Include="src\capitaldatlist.cpp" />
     <ClCompile Include="src\citystackinterf.cpp" />
+    <ClCompile Include="src\cmdbattlechooseactionmsg.cpp" />
+    <ClCompile Include="src\cmdbattleendmsg.cpp" />
+    <ClCompile Include="src\cmdbattleresultmsg.cpp" />
+    <ClCompile Include="src\cmdbattlestartmsg.cpp" />
+    <ClCompile Include="src\commandmsg.cpp" />
+    <ClCompile Include="src\commandmsghooks.cpp" />
     <ClCompile Include="src\currency.cpp" />
     <ClCompile Include="src\customattack.cpp" />
     <ClCompile Include="src\customattackhooks.cpp" />
@@ -234,6 +240,9 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\multilayerimg.cpp" />
     <ClCompile Include="src\musichooks.cpp" />
     <ClCompile Include="src\netmessages.cpp" />
+    <ClCompile Include="src\netmsg.cpp" />
+    <ClCompile Include="src\netmsghooks.cpp" />
+    <ClCompile Include="src\netmsgutils.cpp" />
     <ClCompile Include="src\originalfunctions.cpp" />
     <ClCompile Include="src\pathinfolist.cpp" />
     <ClCompile Include="src\phase.cpp" />
@@ -253,6 +262,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\movepathhooks.cpp" />
     <ClCompile Include="src\sortedcapitalracelist.cpp" />
     <ClCompile Include="src\sortedracelist.cpp" />
+    <ClCompile Include="src\stackbattleactionmsg.cpp" />
     <ClCompile Include="src\stringarray.cpp" />
     <ClCompile Include="src\subracecat.cpp" />
     <ClCompile Include="src\summonhooks.cpp" />
@@ -266,6 +276,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\unitbranchcat.cpp" />
     <ClCompile Include="src\unitcat.cpp" />
     <ClCompile Include="src\unitsforhire.cpp" />
+    <ClCompile Include="src\unitutils.cpp" />
     <ClCompile Include="src\utils.cpp" />
     <ClCompile Include="src\version.cpp" />
     <ClCompile Include="src\visitors.cpp" />
@@ -326,6 +337,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batattackutils.h" />
     <ClInclude Include="include\battleattackinfo.h" />
     <ClInclude Include="include\battlemsgdata.h" />
+    <ClInclude Include="include\battlemsgdatahooks.h" />
     <ClInclude Include="include\battleviewerinterf.h" />
     <ClInclude Include="include\batunitanim.h" />
     <ClInclude Include="include\batviewer.h" />
@@ -345,6 +357,12 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\categories.h" />
     <ClInclude Include="include\categoryids.h" />
     <ClInclude Include="include\citystackinterf.h" />
+    <ClInclude Include="include\cmdbattlechooseactionmsg.h" />
+    <ClInclude Include="include\cmdbattleendmsg.h" />
+    <ClInclude Include="include\cmdbattleresultmsg.h" />
+    <ClInclude Include="include\cmdbattlestartmsg.h" />
+    <ClInclude Include="include\commandmsg.h" />
+    <ClInclude Include="include\commandmsghooks.h" />
     <ClInclude Include="include\currency.h" />
     <ClInclude Include="include\customattack.h" />
     <ClInclude Include="include\customattackhooks.h" />
@@ -488,6 +506,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mqnetsystem.h" />
     <ClInclude Include="include\mqnettraffic.h" />
     <ClInclude Include="include\mqrect.h" />
+    <ClInclude Include="include\mqstream.h" />
     <ClInclude Include="include\mqtexture.h" />
     <ClInclude Include="include\mqthread.h" />
     <ClInclude Include="include\multilayerimg.h" />
@@ -495,6 +514,9 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\netdplayservice.h" />
     <ClInclude Include="include\netdplaysession.h" />
     <ClInclude Include="include\netmessages.h" />
+    <ClInclude Include="include\netmsg.h" />
+    <ClInclude Include="include\netmsghooks.h" />
+    <ClInclude Include="include\netmsgutils.h" />
     <ClInclude Include="include\netplayerinfo.h" />
     <ClInclude Include="include\ordercat.h" />
     <ClInclude Include="include\originalfunctions.h" />
@@ -526,6 +548,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\sortedlist.h" />
     <ClInclude Include="include\movepathhooks.h" />
     <ClInclude Include="include\sortedracelist.h" />
+    <ClInclude Include="include\stackbattleactionmsg.h" />
     <ClInclude Include="include\stringandid.h" />
     <ClInclude Include="include\stringarray.h" />
     <ClInclude Include="include\subracecat.h" />

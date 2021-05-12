@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef USUNIT_H
-#define USUNIT_H
-
-#include "midobject.h"
+#ifndef MQSTREAM_H
+#define MQSTREAM_H
 
 namespace game {
 
-struct IUsUnitVftable;
-struct LUnitCategory;
+struct CMqStreamVftable;
 
-struct IUsUnit : public IMidObjectT<IUsUnitVftable>
+struct CMqStream
 {
-    CMidgardID unitId;
+    const CMqStreamVftable* vftable;
+    bool read;
+    char padding[3];
 };
 
-struct IUsUnitVftable : public IMidObjectVftable
-{
-    using Method1 = int(__thiscall*)(const IUsUnit* thisptr, const char* a2);
-    Method1 method1;
+static_assert(sizeof(CMqStream) == 8, "Size of CMqStream structure must be exactly 8 bytes");
 
-    using GetCategory = const LUnitCategory*(__thiscall*)(const IUsUnit* thisptr);
-    GetCategory getCategory;
+struct CMqStreamVftable
+{
+    using Destructor = void(__thiscall*)(CMqStream* thisptr, char flags);
+    Destructor destructor;
+
+    using Serialize = void(__thiscall*)(CMqStream* thisptr, const void* data, int count);
+    Serialize serialize;
+
+    void* methods[3];
 };
+
+static_assert(sizeof(CMqStreamVftable) == 5 * sizeof(void*),
+              "CMqStream vftable must have exactly 5 methods");
 
 } // namespace game
 
-#endif // USUNIT_H
+#endif // MQSTREAM_H

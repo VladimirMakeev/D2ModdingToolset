@@ -50,6 +50,17 @@ static const std::array<Rtti, 3> types = {{
         (TypeDescriptor*)0x78ef80,
         (TypeDescriptor*)0x7b00e8,
         (TypeDescriptor*)0x7b0120,
+        (TypeDescriptor*)0x78ee30,
+        (TypeDescriptor*)0x78eee0,
+        (TypeDescriptor*)0x7962b8,
+        (TypeDescriptor*)0x78fd70,
+        (TypeDescriptor*)0x7927b8,
+        (TypeDescriptor*)0x7927e0,
+        (TypeDescriptor*)0x792808,
+        (TypeDescriptor*)0x78fd98,
+        (TypeDescriptor*)0x793600,
+        (TypeDescriptor*)0x793630,
+        (TypeDescriptor*)0x792828,
     },
     // Russobit
     Rtti{
@@ -61,6 +72,17 @@ static const std::array<Rtti, 3> types = {{
         (TypeDescriptor*)0x78ef80,
         (TypeDescriptor*)0x7b00e8,
         (TypeDescriptor*)0x7b0120,
+        (TypeDescriptor*)0x78ee30,
+        (TypeDescriptor*)0x78eee0,
+        (TypeDescriptor*)0x7962b8,
+        (TypeDescriptor*)0x78fd70,
+        (TypeDescriptor*)0x7927b8,
+        (TypeDescriptor*)0x7927e0,
+        (TypeDescriptor*)0x792808,
+        (TypeDescriptor*)0x78fd98,
+        (TypeDescriptor*)0x793600,
+        (TypeDescriptor*)0x793630,
+        (TypeDescriptor*)0x792828,
     },
     // Gog
     Rtti{
@@ -72,6 +94,17 @@ static const std::array<Rtti, 3> types = {{
         (TypeDescriptor*)0x78cf28,
         (TypeDescriptor*)0x7ae0a0,
         (TypeDescriptor*)0x7ae0d8,
+        (TypeDescriptor*)0x78cdd8,
+        (TypeDescriptor*)0x78ce88,
+        (TypeDescriptor*)0x794260,
+        (TypeDescriptor*)0x78dd18,
+        (TypeDescriptor*)0x790760,
+        (TypeDescriptor*)0x790788,
+        (TypeDescriptor*)0x7907b0,
+        (TypeDescriptor*)0x78dd40,
+        (TypeDescriptor*)0x7915a8,
+        (TypeDescriptor*)0x7915d8,
+        (TypeDescriptor*)0x7907d0,
     }
 }};
 // clang-format on
