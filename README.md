@@ -138,7 +138,9 @@
     <summary>Fixes bestow wards attack bugs and restrictions;</summary>
 
     - Fixes wards (hereafter called "modifiers") becoming permanent when more than 8 of them are applied simultaneously;<br />
-      Up to 8 modifiers can be applied to each unit (8 x 6 = 48 total). If needed, set QTY_WARDS to 5 (6, 7 or 8) and create additional WARD5 (6, 7, 8) columns in GAttacks.dbf.
+      Up to 8 modifiers can be applied to each unit (8 x 6 = 48 total).<br />
+      If needed, set QTY_WARDS to 5 (6, 7 or 8) and create additional WARD5 (6, 7, 8) columns in GAttacks.dbf.<br />
+      ![Video example](https://user-images.githubusercontent.com/5180699/118235525-8ccc5a80-b49d-11eb-81ba-51e394d960b2.mp4)
     - Fixes modifiers becoming permanent after modified unit is transformed;
     - Fixes disappearing of modifiers applied on first attack of double attack;
     - Fixes attack source wards being reset incorrectly if its modifier also contains hp, regen or armor element;
@@ -157,7 +159,7 @@
     - Add IMMUNITYC and IMMUNECATC columns to GmodifL.dbf (similar to IMMUNITY and IMMUNECAT);
     - Add a new record with TYPE 14, and fill the columns accordingly to attack class and immunity.
 
-    Also works in pure vanilla version.    
+    Also works in pure vanilla version.<br />
     ![Video example](https://user-images.githubusercontent.com/5180699/117055075-6bdc6a80-ad23-11eb-87f8-fcbb6f465657.mp4)
 
   </details>
