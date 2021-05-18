@@ -27,22 +27,36 @@ namespace game {
 
 using IdList = LinkedList<CMidgardID>;
 using IdListNode = LinkedListNode<CMidgardID>;
+using IdListIterator = LinkedListIterator<CMidgardID>;
 
 namespace IdListApi {
 
 struct Api
 {
     /** Clears list contents. */
-    using SetEmpty = bool(__thiscall*)(IdList* list);
-    SetEmpty setEmpty;
+    using Clear = bool(__thiscall*)(IdList* thisptr);
+    Clear clear;
 
-    /** Adds id to list. */
-    using Add = int(__thiscall*)(IdList* list, const CMidgardID* id);
-    Add add;
+    /** Adds id to list's end. */
+    using PushBack = int(__thiscall*)(IdList* thisptr, const CMidgardID* id);
+    PushBack push_back;
 
-    /** Removes id from the list. */
-    using Remove = void(__thiscall*)(IdList* list, int a2, IdListNode* node, int a4);
-    Remove remove;
+    /** Erases id from list. */
+    using Erase = void(__thiscall*)(IdList* thisptr, IdListIterator pos);
+    Erase erase;
+
+    using GetIterator = IdListIterator*(__thiscall*)(IdList* thisptr, IdListIterator* value);
+    GetIterator begin;
+    GetIterator end;
+
+    using Find = IdListIterator*(__stdcall*)(IdListIterator* value,
+                                             IdListIterator begin,
+                                             IdListIterator end,
+                                             const CMidgardID* id);
+    Find find;
+
+    using IteratorEquals = bool(__thiscall*)(IdListIterator* thisptr, IdListIterator* value);
+    IteratorEquals iteratorEquals;
 };
 
 Api& get();

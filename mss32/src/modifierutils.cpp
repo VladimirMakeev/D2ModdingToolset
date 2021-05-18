@@ -23,6 +23,7 @@
 #include "dynamiccast.h"
 #include "game.h"
 #include "globaldata.h"
+#include "listutils.h"
 #include "midgardobjectmap.h"
 #include "midunit.h"
 #include "settings.h"
@@ -336,14 +337,7 @@ void removeModifier(game::BattleMsgData* battleMsgData,
 
     CMidUnitApi::get().removeModifier(unit, modifierId);
 
-    auto& mods = unit->origModifiers;
-    for (auto mod = mods.head->next; mod != mods.head; mod = mod->next) {
-        if (mod->data == *modifierId) {
-            const auto& list = IdListApi::get();
-            list.remove(&mods, 0, mod, 0);
-            break;
-        }
-    }
+    removeIdFromList(unit->origModifiers, modifierId);
 
     BattleMsgDataApi::get().resetUnitModifierInfo(battleMsgData, &unit->unitId, modifierId);
 }

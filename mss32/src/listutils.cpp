@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,40 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LINKEDLIST_H
-#define LINKEDLIST_H
+#include "listutils.h"
 
-#include <cstdint>
+namespace hooks {
 
-namespace game {
-
-template <typename T>
-struct LinkedListNode
+bool removeIdFromList(game::IdList& list, const game::CMidgardID* id)
 {
-    LinkedListNode<T>* next;
-    LinkedListNode<T>* prev;
-    T data;
-};
+    using namespace game;
 
-/** Implementation of std::list<T> used in game. */
-template <typename T>
-struct LinkedList
-{
-    std::uint32_t length;
-    LinkedListNode<T>* head;
-    int unknown;
-    void* allocator;
-};
+    const auto& listApi = IdListApi::get();
 
-template <typename T>
-struct LinkedListIterator
-{
-    char unknown;
-    char padding[3];
-    LinkedListNode<T>* node;
-    LinkedListNode<T>* node2;
-};
+    IdListIterator it, begin, end;
+    listApi.begin(&list, &begin);
+    listApi.end(&list, &end);
+    listApi.find(&it, begin, end, id);
+    if (!listApi.iteratorEquals(&it, &end)) {
+        listApi.erase(&list, it);
+        return true;
+    }
 
-} // namespace game
+    return false;
+}
 
-#endif // LINKEDLIST_H
+} // namespace hooks

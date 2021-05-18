@@ -24,24 +24,46 @@
 namespace game::IdListApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::SetEmpty)0x56ab57,
-        (Api::Add)0x5c9ebd,
-        (Api::Remove)0x408017,
+        (Api::Clear)0x56ab57,
+        (Api::PushBack)0x5c9ebd,
+        (Api::Erase)0x408017,
+        (Api::GetIterator)0x4dee1a,
+        (Api::GetIterator)0x470bec,
+        (Api::Find)0x40b8e2,
+        (Api::IteratorEquals)0x474a74,
     },
     // Russobit
     Api{
-        (Api::SetEmpty)0x56ab57,
-        (Api::Add)0x5c9ebd,
-        (Api::Remove)0x408017,
+        (Api::Clear)0x56ab57,
+        (Api::PushBack)0x5c9ebd,
+        (Api::Erase)0x408017,
+        (Api::GetIterator)0x4dee1a,
+        (Api::GetIterator)0x470bec,
+        (Api::Find)0x40b8e2,
+        (Api::IteratorEquals)0x474a74,
     },
     // Gog
     Api{
-        (Api::SetEmpty)0x42c2c1,
-        (Api::Add)0x56aff7,
-        (Api::Remove)0x407ca2,
+        (Api::Clear)0x42c2c1,
+        (Api::PushBack)0x56aff7,
+        (Api::Erase)0x407ca2,
+        (Api::GetIterator)0x4c7e28,
+        (Api::GetIterator)0x40b43f,
+        (Api::Find)0x40b5c0,
+        (Api::IteratorEquals)0x5d8fbb,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Clear)0x470799,
+        (Api::PushBack)0x49bb17,
+        (Api::Erase)0x408987,
+        (Api::GetIterator)0x4bf530,
+        (Api::GetIterator)0x486901,
+        (Api::Find)0x440cd1,
+        (Api::IteratorEquals)0x41ec65,
     }
 }};
 // clang-format on

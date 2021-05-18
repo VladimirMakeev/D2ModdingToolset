@@ -682,7 +682,7 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
     using namespace game;
 
     const auto& list = IdListApi::get();
-    list.setEmpty(hireList);
+    list.clear(hireList);
 
     const auto& id = CMidgardIDApi::get();
     if (id.getType(a3) != IdType::Fortification) {
@@ -741,7 +741,7 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
     if (!unitsForHire().empty()) {
         const auto& units = unitsForHire()[raceIndex];
         for (const auto& unit : units) {
-            list.add(hireList, &unit);
+            list.push_back(hireList, &unit);
         }
     }
 
