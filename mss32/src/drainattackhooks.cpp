@@ -146,15 +146,15 @@ void __fastcall drainOverflowAttackOnHitHooked(game::CBatAttackDrainOverflow* th
         return;
     }
 
-    CMidgardID alliedStackId{};
-    fn.getAllyOrEnemyStackId(&alliedStackId, battleMsgData, &thisptr->unitId, true);
+    CMidgardID unitGroupId{};
+    fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, &thisptr->unitId, true);
 
     const auto& attack = CBatAttackDrainOverflowApi::get();
 
     DrainOverflowHealData healData{};
     attack.healDataCtor(&healData);
 
-    attack.computeDrainOverflowGroupHeal(&healData, objectMap, &alliedStackId, &thisptr->unitId,
+    attack.computeDrainOverflowGroupHeal(&healData, objectMap, &unitGroupId, &thisptr->unitId,
                                          drainOverflow);
 
     DrainOverflowHealIterator tmpIterator{};

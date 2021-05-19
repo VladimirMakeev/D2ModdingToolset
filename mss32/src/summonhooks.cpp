@@ -89,7 +89,7 @@ void __fastcall summonAttackOnHitHooked(game::CBatAttackSummon* thisptr,
     using namespace game;
 
     CMidgardID targetGroupId{emptyId};
-    thisptr->vftable->getTargetStackId(thisptr, &targetGroupId, battleMsgData);
+    thisptr->vftable->getTargetGroupId(thisptr, &targetGroupId, battleMsgData);
 
     const auto& fn = gameFunctions();
 

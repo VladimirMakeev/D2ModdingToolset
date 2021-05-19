@@ -1016,14 +1016,14 @@ bool __fastcall giveAttackCanPerformHooked(game::CBatAttackGiveAttack* thisptr,
 {
     using namespace game;
 
-    CMidgardID targetStackId{};
-    thisptr->vftable->getTargetStackId(thisptr, &targetStackId, battleMsgData);
+    CMidgardID targetGroupId{};
+    thisptr->vftable->getTargetGroupId(thisptr, &targetGroupId, battleMsgData);
 
     auto& fn = gameFunctions();
-    CMidgardID alliedStackId{};
-    fn.getAllyOrEnemyStackId(&alliedStackId, battleMsgData, unitId, true);
+    CMidgardID unitGroupId{};
+    fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, unitId, true);
 
-    if (targetStackId != alliedStackId) {
+    if (targetGroupId != unitGroupId) {
         // Do not allow to give additional attacks to enemies
         return false;
     }
@@ -1064,14 +1064,14 @@ bool __fastcall shatterCanPerformHooked(game::CBatAttackShatter* thisptr,
 {
     using namespace game;
 
-    CMidgardID targetStackId{};
-    thisptr->vftable->getTargetStackId(thisptr, &targetStackId, battleMsgData);
+    CMidgardID targetGroupId{};
+    thisptr->vftable->getTargetGroupId(thisptr, &targetGroupId, battleMsgData);
 
     auto& fn = gameFunctions();
-    CMidgardID alliedStackId{};
-    fn.getAllyOrEnemyStackId(&alliedStackId, battleMsgData, unitId, true);
+    CMidgardID unitGroupId{};
+    fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, unitId, true);
 
-    if (targetStackId != alliedStackId) {
+    if (targetGroupId != unitGroupId) {
         // Can't target allies
         return false;
     }

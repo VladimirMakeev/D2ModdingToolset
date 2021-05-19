@@ -44,14 +44,14 @@ bool __fastcall customAttackCanPerform(CustomAttack* thisptr,
     return true;
 }
 
-game::CMidgardID* __fastcall customAttackGetTargetStackId(CustomAttack* thisptr,
+game::CMidgardID* __fastcall customAttackGetTargetGroupId(CustomAttack* thisptr,
                                                           int /*%edx*/,
-                                                          game::CMidgardID* targetStackId,
+                                                          game::CMidgardID* targetGroupId,
                                                           game::BattleMsgData* battleMsgData)
 {
-    logDebug("newAttackType.log", "CustomAttack getTargetStackId");
-    game::gameFunctions().getAllyOrEnemyStackId(targetStackId, battleMsgData, &thisptr->id1, false);
-    return targetStackId;
+    logDebug("newAttackType.log", "CustomAttack getTargetGroupId");
+    game::gameFunctions().getAllyOrEnemyGroupId(targetGroupId, battleMsgData, &thisptr->id1, false);
+    return targetGroupId;
 }
 
 void __fastcall customAttackFillTargetsList(CustomAttack* thisptr,
@@ -199,7 +199,7 @@ bool __fastcall customAttackMethod17(CustomAttack* thisptr,
 static const game::IBatAttackVftable customAttackVftable{
     (game::IBatAttackVftable::Destructor)customAttackDtor,
     (game::IBatAttackVftable::CanPerform)customAttackCanPerform,
-    (game::IBatAttackVftable::GetTargetStackId)customAttackGetTargetStackId,
+    (game::IBatAttackVftable::GetTargetGroupId)customAttackGetTargetGroupId,
     (game::IBatAttackVftable::FillTargetsList)customAttackFillTargetsList,
     (game::IBatAttackVftable::FillTargetsList)customAttackFillTargetsList2,
     (game::IBatAttackVftable::Method5)customAttackMethod5,

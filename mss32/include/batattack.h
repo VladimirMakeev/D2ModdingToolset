@@ -52,11 +52,11 @@ struct IBatAttackVftable
                                          CMidgardID* targetUnitId);
     CanPerform canPerform;
 
-    /** Returns id of stack the attack can target: allies or enemies. */
-    using GetTargetStackId = CMidgardID*(__thiscall*)(IBatAttack* thisptr,
-                                                      CMidgardID* targetStackId,
-                                                      BattleMsgData* battleMsgData);
-    GetTargetStackId getTargetStackId;
+    /** Returns id of group the attack can target: allies or enemies. */
+    using GetTargetGroupId = CMidgardID*(__thiscall*)(IBatAttack* thisptr,
+                                                      CMidgardID* targetGroupId,
+                                                      const BattleMsgData* battleMsgData);
+    GetTargetGroupId getTargetGroupId;
 
     /** Fills attack targets list with positions of units in groups. */
     using FillTargetsList = void(__thiscall*)(IBatAttack* thisptr,

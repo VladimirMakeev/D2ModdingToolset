@@ -57,7 +57,7 @@ struct Api
      * @param[in] objectMap map where to search for objects.
      * @param[in] battleMsgData battle information.
      * @param[in] attack battle attack for which targets list will be filled.
-     * @param[in] stackId id of stack whose unit performing the attack.
+     * @param[in] groupId id of a group whose unit performing the attack.
      * @param[in] id unit or item id performing the attack.
      * @param allies specifies whether the attack should target allies or not.
      * @param[inout] targetsList list to fill.
@@ -67,7 +67,7 @@ struct Api
     using Fill = void(__stdcall*)(IMidgardObjectMap* objectMap,
                                   BattleMsgData* battleMsgData,
                                   IBatAttack* attack,
-                                  CMidgardID* stackId,
+                                  CMidgardID* groupId,
                                   CMidgardID* id,
                                   bool allies,
                                   TargetsList* targetsList,

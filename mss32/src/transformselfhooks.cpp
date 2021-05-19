@@ -89,13 +89,13 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
 
     const auto& fn = gameFunctions();
 
-    CMidgardID targetStackId{emptyId};
-    fn.getAllyOrEnemyStackId(&targetStackId, battleMsgData, targetUnitId, true);
+    CMidgardID targetGroupId{emptyId};
+    fn.getAllyOrEnemyGroupId(&targetGroupId, battleMsgData, targetUnitId, true);
 
-    CMidgardID attackerStackId{emptyId};
-    fn.getAllyOrEnemyStackId(&attackerStackId, battleMsgData, &thisptr->unitId, true);
+    CMidgardID unitGroupId{emptyId};
+    fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, &thisptr->unitId, true);
 
-    if (*targetUnitId != thisptr->unitId && targetStackId != attackerStackId) {
+    if (*targetUnitId != thisptr->unitId && targetGroupId != unitGroupId) {
         auto altAttack = thisptr->altAttack;
         altAttack->vftable->onHit(altAttack, objectMap, battleMsgData, targetUnitId, attackInfo);
         return;
@@ -104,7 +104,7 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
     auto attack = fn.getAttackById(objectMap, &thisptr->id2, thisptr->attackNumber, false);
     auto attackId = IAttackApi::get().getId(attack);
 
-    const auto position = fn.getUnitPositionInGroup(objectMap, &targetStackId, targetUnitId);
+    const auto position = fn.getUnitPositionInGroup(objectMap, &targetGroupId, targetUnitId);
 
     const CMidUnit* targetUnit = fn.findUnitById(objectMap, targetUnitId);
     const CMidgardID targetUnitImplId{targetUnit->unitImpl->unitId};

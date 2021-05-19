@@ -86,13 +86,13 @@ bool isAllyTarget(game::CBatAttackDoppelganger* thisptr,
 {
     using namespace game;
 
-    CMidgardID unitStackId{};
-    gameFunctions().getAllyOrEnemyStackId(&unitStackId, battleMsgData, &thisptr->unitId, true);
+    CMidgardID unitGroupId{};
+    gameFunctions().getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, &thisptr->unitId, true);
 
-    CMidgardID targetUnitStackId{};
-    gameFunctions().getAllyOrEnemyStackId(&targetUnitStackId, battleMsgData, targetUnitId, true);
+    CMidgardID targetUnitGroupId{};
+    gameFunctions().getAllyOrEnemyGroupId(&targetUnitGroupId, battleMsgData, targetUnitId, true);
 
-    return unitStackId == targetUnitStackId;
+    return unitGroupId == targetUnitGroupId;
 }
 
 bool __fastcall doppelgangerAttackCanPerformHooked(game::CBatAttackDoppelganger* thisptr,

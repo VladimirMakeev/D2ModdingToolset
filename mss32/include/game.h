@@ -134,7 +134,7 @@ using GetLordByPlayer = const TLordType*(__stdcall*)(const CMidPlayer* player);
 using IsTurnValid = bool(__stdcall*)(int turn);
 
 /** Returns stack id of allies or enemies for specified unit id. */
-using GetAllyOrEnemyStackId = CMidgardID*(__stdcall*)(CMidgardID* stackId,
+using getAllyOrEnemyGroupId = CMidgardID*(__stdcall*)(CMidgardID* value,
                                                       const BattleMsgData* battleMsgData,
                                                       const CMidgardID* unitId,
                                                       bool allies);
@@ -441,7 +441,7 @@ struct Functions
     ChooseUnitLane chooseUnitLane;
     GetLordByPlayer getLordByPlayer;
     IsTurnValid isTurnValid;
-    GetAllyOrEnemyStackId getAllyOrEnemyStackId;
+    getAllyOrEnemyGroupId getAllyOrEnemyGroupId;
     FindUnitById findUnitById;
     CastUnitImplToSoldier castUnitImplToSoldier;
     CreateBatAttack createBatAttack;
