@@ -56,7 +56,10 @@ struct Api
     Find find;
 
     using IteratorEquals = bool(__thiscall*)(IdListIterator* thisptr, IdListIterator* value);
-    IteratorEquals iteratorEquals;
+    IteratorEquals iterator_equals;
+
+    using Shuffle = void(__stdcall*)(IdList* list);
+    Shuffle shuffle;
 };
 
 Api& get();
