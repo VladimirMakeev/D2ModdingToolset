@@ -210,6 +210,92 @@ game::LAttackSourceTable* __fastcall attackSourceTableCtorHooked(game::LAttackSo
     return thisptr;
 }
 
+static void fillCustomAttackReaches(const std::filesystem::path& dbfFilePath)
+{
+    using namespace game;
+
+    utils::DbfFile dbf;
+    if (!dbf.open(dbfFilePath)) {
+        logError("mssProxyError.log",
+                 fmt::format("Could not open {:s}", dbfFilePath.filename().string()));
+        return;
+    }
+
+    static const std::array<const char*, 3> baseReaches = {{"L_ALL", "L_ANY", "L_ADJACENT"}};
+
+    auto& customReaches = getCustomAttacks().reaches;
+    const auto recordsTotal{dbf.recordsTotal()};
+    for (std::uint32_t i = 0; i < recordsTotal; ++i) {
+        utils::DbfRecord record;
+        if (!dbf.record(record, i)) {
+            logError("mssProxyError.log", fmt::format("Could not read record {:d} from {:s}", i,
+                                                      dbfFilePath.filename().string()));
+            return;
+        }
+
+        if (record.isDeleted()) {
+            continue;
+        }
+
+        std::string text;
+        record.value(text, "TEXT");
+        text = trimSpaces(text);
+
+        if (std::none_of(std::begin(baseReaches), std::end(baseReaches),
+                         [&text](const char* baseText) { return text == baseText; })) {
+            std::string reachTxt;
+            record.value(reachTxt, "REACH_TXT");
+
+            std::string targetsTxt;
+            record.value(targetsTxt, "TARGETS_TXT");
+
+            std::string scriptFile;
+            record.value(scriptFile, "SCRIPT_FILE");
+
+            logDebug("customAttacks.log", fmt::format("Found custom attack reach {:s}", text));
+
+            customReaches.push_back(
+                {LAttackReach{AttackReachCategories::vftable(), nullptr, (AttackReachId)-1}, text,
+                 reachTxt, targetsTxt, scriptFile});
+        }
+    }
+}
+
+game::LAttackReachTable* __fastcall attackReachTableCtorHooked(game::LAttackReachTable* thisptr,
+                                                               int /*%edx*/,
+                                                               const char* globalsFolderPath,
+                                                               void* codeBaseEnvProxy)
+{
+    using namespace game;
+    logDebug("customAttacks.log", "LAttackReachTable c-tor hook started");
+
+    static const char dbfFileName[] = "LAttR.dbf";
+    fillCustomAttackReaches(std::filesystem::path(globalsFolderPath) / dbfFileName);
+
+    thisptr->bgn = nullptr;
+    thisptr->end = nullptr;
+    thisptr->allocatedMemEnd = nullptr;
+    thisptr->allocator = nullptr;
+    thisptr->vftable = LAttackReachTableApi::vftable();
+
+    const auto& table = LAttackReachTableApi::get();
+    auto& reaches = AttackReachCategories::get();
+
+    table.init(thisptr, codeBaseEnvProxy, globalsFolderPath, dbfFileName);
+    table.readCategory(reaches.all, thisptr, "L_ALL", dbfFileName);
+    table.readCategory(reaches.any, thisptr, "L_ANY", dbfFileName);
+    table.readCategory(reaches.adjacent, thisptr, "L_ADJACENT", dbfFileName);
+
+    for (auto& custom : getCustomAttacks().reaches) {
+        logDebug("customAttacks.log", fmt::format("Reading custom attack reach {:s}", custom.text));
+        table.readCategory(&custom.reach, thisptr, custom.text.c_str(), dbfFileName);
+    }
+
+    table.initDone(thisptr);
+    logDebug("customAttacks.log", "LAttackReachTable c-tor hook finished");
+    return thisptr;
+}
+
 game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
                                                    int /*%edx*/,
                                                    const game::CDBTable* dbTable,

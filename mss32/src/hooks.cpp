@@ -365,6 +365,9 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{fn.getAttackSourceWardFlagPosition,
                                 getAttackSourceWardFlagPositionHooked,
                                 (void**)&orig.getAttackSourceWardFlagPosition});
+    // Support custom attack reaches
+    hooks.emplace_back(
+        HookInfo{LAttackReachTableApi::get().constructor, attackReachTableCtorHooked});
 
     if (userSettings().debugMode) {
         // Show and log game exceptions information

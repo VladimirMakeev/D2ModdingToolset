@@ -20,6 +20,7 @@
 #ifndef CUSTOMATTACKS_H
 #define CUSTOMATTACKS_H
 
+#include "attackreachcat.h"
 #include "attacksourcecat.h"
 #include <string>
 #include <vector>
@@ -37,9 +38,21 @@ struct CustomAttackSource
 
 using CustomAttackSources = std::vector<CustomAttackSource>;
 
+struct CustomAttackReach
+{
+    game::LAttackReach reach;
+    std::string text;
+    std::string reachTxt;
+    std::string targetsTxt;
+    std::string scriptFile;
+};
+
+using CustomAttackReaches = std::vector<CustomAttackReach>;
+
 struct CustomAttacks
 {
     CustomAttackSources sources;
+    CustomAttackReaches reaches;
 };
 
 CustomAttacks& getCustomAttacks();

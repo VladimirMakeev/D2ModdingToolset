@@ -27,6 +27,8 @@ struct LAttackClass;
 struct LAttackClassTable;
 struct LAttackSource;
 struct LAttackSourceTable;
+struct LAttackReach;
+struct LAttackReachTable;
 struct LImmuneCat;
 struct CMidUnit;
 struct CAttackImpl;
@@ -53,6 +55,11 @@ game::LAttackSourceTable* __fastcall attackSourceTableCtorHooked(game::LAttackSo
                                                                  int /*%edx*/,
                                                                  const char* globalsFolderPath,
                                                                  void* codeBaseEnvProxy);
+
+game::LAttackReachTable* __fastcall attackReachTableCtorHooked(game::LAttackReachTable* thisptr,
+                                                               int /*%edx*/,
+                                                               const char* globalsFolderPath,
+                                                               void* codeBaseEnvProxy);
 
 game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
                                                    int /*%edx*/,
