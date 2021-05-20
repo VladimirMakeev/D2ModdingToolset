@@ -57,17 +57,14 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
     const auto& rtti = RttiApi::rtti();
 
     auto stackObj = objectMap->vftable->findScenarioObjectById(objectMap, stackId);
-    auto stack = static_cast<const CMidStack*>(
+    auto stack = static_cast<CMidStack*>(
         dynamicCast(stackObj, 0, rtti.IMidScenarioObjectType, rtti.CMidStackType, 0));
-
     auto leaderObj = objectMap->vftable->findScenarioObjectById(objectMap, &stack->leaderId);
     auto leader = static_cast<const CMidUnit*>(leaderObj);
     auto unitImpl = leader->unitImpl;
     const bool noble = fn.castUnitImplToNoble(unitImpl) != nullptr;
-
     auto soldier = fn.castUnitImplToSoldier(unitImpl);
     const bool waterOnly = soldier->vftable->getWaterOnly(soldier);
-
     const CMqPoint* positionPtr{};
     bool pathLeadsToAction{};
     if (!a6) {
@@ -88,12 +85,10 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
             }
         }
     }
-
     const auto& pathApi = PathInfoListApi::get();
-
     PathInfoList pathInfo;
+  
     pathApi.constructor(&pathInfo);
-
     {
         CMqPoint point{};
         point.x = positionPtr->x;
@@ -102,11 +97,11 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
     }
 
     const auto& imagesApi = GameImagesApi::get();
-
     GameImagesPtr imagesPtr;
     imagesApi.getGameImages(&imagesPtr);
     auto images = *imagesPtr.data;
 
+    const int maxMovepoints = game::CMidStackApi::get().getMaxMovepoints(stack, objectMap);
     const auto& memAlloc = Memory::get().allocate;
 
     auto gameSettings = *CMidgardApi::get().instance()->data->settings;
@@ -127,6 +122,8 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
     bool v61 = *positionPtr != stackPosition;
 
     int turnNumber{};
+    int realMoveCost = 0;
+    int realTurnCost = 0;
     bool manyTurnsToTravel{};
 
     std::uint32_t index{};
@@ -161,7 +158,7 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
             if (pathLeadsToAction) {
                 // Red flag with a scroll, noble actions
                 imageName = "MOVENEGO";
-
+                    realMoveCost = realMoveCost + 1 + (maxMovepoints - 1) / 2;    // adding half-of-max-move to red flags
                 if (!noble) {
                     // Red flag with a sword, battle
                     imageName = "MOVEBATTLE";
@@ -182,17 +179,23 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
         const auto imagesCount{flagImage->vftable->getImagesCount(flagImage)};
         flagImage->vftable->setImageIndex(flagImage, index % imagesCount);
 
+        const auto prev = node->prev;
+        const auto prevTurnsToReach{prev->data.turnsToReach};
+        const auto currTurnsToReach{node->data.turnsToReach};
+        bool differ;  //differ has been changed to bool from const bool in order use custom end of turn condition
+
         CImage2Text* turnNumberImage{};
 
         if (displayPathTurn && !firstNode) {
             bool drawTurnNumber{};
             turnNumber = 0;
-
-            const auto prev = node->prev;
-            const auto prevTurnsToReach{prev->data.turnsToReach};
-            const auto currTurnsToReach{node->data.turnsToReach};
-            const bool differ{prevTurnsToReach != currTurnsToReach};
-
+            differ = false;
+            realMoveCost = realMoveCost + (node->data.moveCostTotal - node->prev->data.moveCostTotal);  //custom movecost calculation algorithm
+            if (realMoveCost >= ((maxMovepoints * realTurnCost) + stack->movement)) {                   //that uses stack vftable, current movepoints
+                realMoveCost = (maxMovepoints * realTurnCost) + stack->movement;                        //and max movepoints of the stack
+                realTurnCost++;
+                differ = true;
+            }
             // Check previous node, draw turn number only if number of turns to reach is different
             // and previous one is not 0
             if (differ) {
@@ -225,13 +228,13 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
                 CImage2TextApi::get().constructor(turnNumberImage, 32, 64);
 
                 std::string text{turnString};
-                replace(text, "%TURN%", fmt::format("{:d}", turnNumber));
+                replace(text, "%TURN%", fmt::format("{:d}", realTurnCost));
                 CImage2TextApi::get().setText(turnNumberImage, text.c_str());
             }
         }
 
         CImage2Text* moveCostImage{};
-
+        
         if (pathAllowed && !turnNumberImage) {
             moveCostImage = static_cast<CImage2Text*>(memAlloc(sizeof(CImage2Text)));
             CImage2TextApi::get().constructor(moveCostImage, 32, 64);
@@ -240,7 +243,7 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
                 "\\fmedium;\\hC;\\vT;\\c{:03d};{:03d};{:03d};\\o{:03d};{:03d};{:03d};{:d}",
                 (int)moveCostColor.r, (int)moveCostColor.g, (int)moveCostColor.b,
                 (int)moveCostOutline.r, (int)moveCostOutline.g, (int)moveCostOutline.b,
-                node->data.moveCostTotal)};
+                realMoveCost)};
 
             CImage2TextApi::get().setText(moveCostImage, moveCostString.c_str());
         }
