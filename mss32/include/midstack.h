@@ -91,6 +91,18 @@ static_assert(offsetof(CMidStack, leaderEquppedItems) == 124,
 
 static_assert(offsetof(CMidStack, orderTargetId) == 172,
               "CMidStack::orderTargetId offset must be 172 bytes");
+    
+namespace CMidStackApi {
+
+struct Api
+{
+    using  GetMaxMovepoints = int (__thiscall*)(CMidStack* thisptr,const IMidgardObjectMap* objectMap);
+    GetMaxMovepoints getMaxMovepoints;
+};
+
+Api& get();
+
+} // namespace CMidStackApi
 
 } // namespace game
 
