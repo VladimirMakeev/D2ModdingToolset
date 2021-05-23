@@ -32,6 +32,7 @@
 #include "midgardid.h"
 #include "mqrect.h"
 #include "sortedlist.h"
+#include "unitpositionlist.h"
 #include <cstddef>
 
 namespace game {
@@ -90,16 +91,29 @@ static_assert(offsetof(CBattleViewerUnknown, data3) == 112,
 static_assert(offsetof(CBattleViewerUnknown, string) == 208,
               "CBattleViewerUnknown::string offset must be 208 bytes");
 
+struct CBattleViewerTargetData
+{
+    bool unknownFlag;
+    char padding[3];
+    CMidgardID targetGroupId;
+    UnitPositionList targetPositions;
+};
+
+static_assert(sizeof(CBattleViewerTargetData) == 36,
+              "Size of CBattleViewerTargetData structure must be exactly 36 bytes");
+
 struct CBattleViewerInterfData
 {
     CAvoidFlickerImage avoidFlickerImage;
     char unknown[4];
     BattleMsgData battleMsgData;
     SortedList<void*> unknownList; /** < Each node contains 16 bytes of data. */
-    CMidgardID unknownId;
-    char unknown21[108];
+    CMidgardID unitImplId;
+    CBattleViewerTargetData unitTargetData;
+    CBattleViewerTargetData itemTargetData[2];
     BattleAttackInfo** attackInfo;
-    char unknown3[8];
+    char unknown3[4];
+    CMidgardID itemId;
     Vector<void*> unknownArray; /**< Each element contains 32 bytes of data. */
     CBatViewer2DEngine* batViewer2dEngine;
     CMqRect dialogInterfArea;
@@ -192,6 +206,20 @@ struct CBattleViewerInterf : public CDragAndDropInterf
 
 static_assert(sizeof(CBattleViewerInterf) == 36,
               "Size of CBattleViewerInterf structure must be exactly 36 bytes");
+
+namespace BattleViewerInterfApi {
+
+struct Api
+{
+    using HighlightAttackTargets = bool(__thiscall*)(CBattleViewerInterf* thisptr,
+                                                     CMqPoint* mousePosition,
+                                                     bool a3);
+    HighlightAttackTargets highlightAttackTargets;
+};
+
+Api& get();
+
+} // namespace BattleViewerInterfApi
 
 } // namespace game
 

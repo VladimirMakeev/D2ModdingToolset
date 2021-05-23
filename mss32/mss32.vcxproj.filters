@@ -564,6 +564,9 @@
     <ClCompile Include="src\listutils.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\battleviewerinterf.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\unitpositionlist.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
