@@ -220,6 +220,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\lordtype.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mapgen.cpp" />
+    <ClCompile Include="src\mapgraphics.cpp" />
     <ClCompile Include="src\mempool.cpp" />
     <ClCompile Include="src\menubase.cpp" />
     <ClCompile Include="src\menunewskirmish.cpp" />
@@ -458,6 +459,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\lordtype.h" />
     <ClInclude Include="include\mapelement.h" />
     <ClInclude Include="include\mapgen.h" />
+    <ClInclude Include="include\mapgraphics.h" />
     <ClInclude Include="include\mempool.h" />
     <ClInclude Include="include\menubase.h" />
     <ClInclude Include="include\menunewskirmish.h" />
