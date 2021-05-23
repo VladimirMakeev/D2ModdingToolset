@@ -314,6 +314,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="..\lua\lundump.h" />
     <ClInclude Include="..\lua\lvm.h" />
     <ClInclude Include="..\lua\lzio.h" />
+    <ClInclude Include="include\2denginemap.h" />
     <ClInclude Include="include\aipriority.h" />
     <ClInclude Include="include\attack.h" />
     <ClInclude Include="include\attackclasscat.h" />
