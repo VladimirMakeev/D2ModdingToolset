@@ -32,6 +32,7 @@
 #include "netmsg.h"
 #include "pickupdropinterf.h"
 #include "sitemerchantinterf.h"
+#include "terrainnamelist.h"
 
 namespace hooks {
 
@@ -70,6 +71,8 @@ struct OriginalFunctions
     game::GetTerrainByAbbreviation getTerrainByAbbreviation;
     game::GetTilePrefixByName getTilePrefixByName;
     game::GetTilePrefixName getTilePrefixName;
+    game::TerrainNameListApi::Api::GetTerrainNameList getTerrainNameList;
+
 };
 
 OriginalFunctions& getOriginalFunctions();

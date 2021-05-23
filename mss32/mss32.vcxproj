@@ -277,6 +277,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\terraincountlist.cpp" />
     <ClCompile Include="src\terrainhooks.cpp" />
     <ClCompile Include="src\terrainnamelist.cpp" />
+    <ClCompile Include="src\terrainnamelisthooks.cpp" />
     <ClCompile Include="src\textboxinterf.cpp" />
     <ClCompile Include="src\textids.cpp" />
     <ClCompile Include="src\tileindices.cpp" />
@@ -579,6 +580,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\terraincountlist.h" />
     <ClInclude Include="include\terrainhooks.h" />
     <ClInclude Include="include\terrainnamelist.h" />
+    <ClInclude Include="include\terrainnamelisthooks.h" />
     <ClInclude Include="include\textandid.h" />
     <ClInclude Include="include\textboxinterf.h" />
     <ClInclude Include="include\textids.h" />
