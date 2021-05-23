@@ -280,6 +280,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\textids.cpp" />
     <ClCompile Include="src\tileindices.cpp" />
     <ClCompile Include="src\tilevariation.cpp" />
+    <ClCompile Include="src\tilevariationhooks.cpp" />
     <ClCompile Include="src\transformselfhooks.cpp" />
     <ClCompile Include="src\unitbranchcat.cpp" />
     <ClCompile Include="src\unitcat.cpp" />
@@ -581,6 +582,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\textids.h" />
     <ClInclude Include="include\tileindices.h" />
     <ClInclude Include="include\tilevariation.h" />
+    <ClInclude Include="include\tilevariationhooks.h" />
     <ClInclude Include="include\transformselfhooks.h" />
     <ClInclude Include="include\umattack.h" />
     <ClInclude Include="include\ummodifier.h" />

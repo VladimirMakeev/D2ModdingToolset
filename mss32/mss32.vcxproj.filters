@@ -585,6 +585,9 @@
     <ClCompile Include="src\racehooks.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\tilevariationhooks.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -1514,6 +1517,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\terrainhooks.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tilevariationhooks.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
