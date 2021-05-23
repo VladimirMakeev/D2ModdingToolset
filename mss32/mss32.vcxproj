@@ -232,6 +232,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\midgard.cpp" />
     <ClCompile Include="src\midgardid.cpp" />
     <ClCompile Include="src\midgardmapblock.cpp" />
+    <ClCompile Include="src\midgardmapblockhooks.cpp" />
     <ClCompile Include="src\midgardmsgbox.cpp" />
     <ClCompile Include="src\miditem.cpp" />
     <ClCompile Include="src\midmsgboxbuttonhandlerstd.cpp" />
@@ -486,6 +487,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midgard.h" />
     <ClInclude Include="include\midgardid.h" />
     <ClInclude Include="include\midgardmapblock.h" />
+    <ClInclude Include="include\midgardmapblockhooks.h" />
     <ClInclude Include="include\midgardmsgbox.h" />
     <ClInclude Include="include\midgardobjectmap.h" />
     <ClInclude Include="include\midgardscenariomap.h" />
