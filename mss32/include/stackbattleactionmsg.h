@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef USUNIT_H
-#define USUNIT_H
+#ifndef STACKBATTLEACTIONMSG_H
+#define STACKBATTLEACTIONMSG_H
 
-#include "midobject.h"
+#include "battlemsgdata.h"
+#include "netmsg.h"
 
 namespace game {
 
-struct IUsUnitVftable;
-struct LUnitCategory;
-
-struct IUsUnit : public IMidObjectT<IUsUnitVftable>
+struct CStackBattleActionMsg : public CNetMsg
 {
-    CMidgardID unitId;
+    int unknown;
+    BattleMsgData battleMsgData;
+    int unknown2;
+    CMidgardID unknownId;
+    CMidgardID unknownId2;
+    int unknown3;
 };
 
-struct IUsUnitVftable : public IMidObjectVftable
-{
-    using Method1 = int(__thiscall*)(const IUsUnit* thisptr, const char* a2);
-    Method1 method1;
+static_assert(sizeof(CStackBattleActionMsg) == 3944,
+              "Size of CStackBattleActionMsg structure must be exactly 3944 bytes");
 
-    using GetCategory = const LUnitCategory*(__thiscall*)(const IUsUnit* thisptr);
-    GetCategory getCategory;
-};
+namespace CStackBattleActionMsgApi {
+
+CNetMsgVftable* vftable();
+
+} // namespace CStackBattleActionMsgApi
 
 } // namespace game
 
-#endif // USUNIT_H
+#endif // STACKBATTLEACTIONMSG_H

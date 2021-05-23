@@ -20,14 +20,21 @@
 #ifndef MODIFIERUTILS_H
 #define MODIFIERUTILS_H
 
-#include "attack.h"
-#include "battlemsgdata.h"
 #include "immunecat.h"
-#include "midunit.h"
-#include "umunit.h"
-#include "unitmodifier.h"
-#include "ussoldier.h"
+#include "midgardid.h"
 #include <set>
+
+namespace game {
+struct IMidgardObjectMap;
+struct CMidUnit;
+struct UnitInfo;
+struct CUmModifier;
+struct CUmUnit;
+struct LAttackSource;
+struct LAttackClass;
+struct IAttack;
+struct BattleMsgData;
+} // namespace game
 
 namespace hooks {
 
@@ -68,6 +75,8 @@ bool canApplyAnyModifier(game::IAttack* attack,
                          game::BattleMsgData* battleMsgData,
                          game::CMidgardID* targetUnitId);
 
+void resetModifiedUnitsInfo(game::UnitInfo* unitInfo);
+
 bool addModifiedUnitInfo(const game::CMidgardID* unitId,
                          game::BattleMsgData* battleMsgData,
                          game::CMidUnit* targetUnit,
@@ -87,9 +96,9 @@ void removeModifiers(game::BattleMsgData* battleMsgData,
                      game::UnitInfo* unitInfo,
                      const game::CMidgardID* modifiedUnitId);
 
-std::set<game::CMidgardID> getModifiedUnitIds(const game::UnitInfo* unitInfo);
+std::set<game::CMidgardID> getModifiedUnitIds(game::UnitInfo* unitInfo);
 
-std::set<game::CMidgardID> getUnitModifierIds(const game::UnitInfo* unitInfo,
+std::set<game::CMidgardID> getUnitModifierIds(game::UnitInfo* unitInfo,
                                               const game::CMidgardID* modifiedUnitId);
 
 } // namespace hooks

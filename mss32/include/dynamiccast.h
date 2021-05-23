@@ -70,6 +70,17 @@ struct Rtti
     TypeDescriptor* CMidStackType;
     TypeDescriptor* CUmModifierType;
     TypeDescriptor* CUmUnitType;
+    TypeDescriptor* CNetMsgType;
+    TypeDescriptor* CCommandMsgType;
+    TypeDescriptor* CStackBattleActionMsgType;
+    TypeDescriptor* CCmdBattleStartMsgType;
+    TypeDescriptor* CCmdBattleChooseActionMsgType;
+    TypeDescriptor* CCmdBattleResultMsgType;
+    TypeDescriptor* CCmdBattleEndMsgType;
+    TypeDescriptor* CCommandMsgTempl_8_1_Type;  // CCmdBattleStartMsg
+    TypeDescriptor* CCommandMsgTempl_9_0_Type;  // CCmdBattleChooseActionMsg
+    TypeDescriptor* CCommandMsgTempl_10_0_Type; // CCmdBattleResultMsg
+    TypeDescriptor* CCommandMsgTempl_11_2_Type; // CCmdBattleEndMsg
 };
 
 const Rtti& rtti();

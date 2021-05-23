@@ -32,7 +32,6 @@
 #include "log.h"
 #include "mempool.h"
 #include "originalfunctions.h"
-#include "settings.h"
 #include "ussoldier.h"
 #include "utils.h"
 #include <fmt/format.h>
@@ -257,11 +256,8 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
         db.readHeal(&data->qtyHeal, dbTable, "QTY_HEAL", &thisptr->attackId);
     } else if (id == categories.bestowWards->id) {
         data->qtyHeal = 0;
-        if (userSettings().unrestrictedBestowWards != baseSettings().unrestrictedBestowWards) {
-            // Allow Bestow Wards to read QTY_HEAL values from DB
-            db.readIntWithBoundsCheck(&data->qtyHeal, dbTable, "QTY_HEAL", 0,
-                                      std::numeric_limits<int>::max());
-        }
+        db.readIntWithBoundsCheck(&data->qtyHeal, dbTable, "QTY_HEAL", 0,
+                                  std::numeric_limits<int>::max());
     } else {
         data->qtyHeal = 0;
     }

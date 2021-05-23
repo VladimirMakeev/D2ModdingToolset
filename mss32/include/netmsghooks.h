@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef USUNIT_H
-#define USUNIT_H
-
-#include "midobject.h"
+#ifndef NETMSGHOOKS_H
+#define NETMSGHOOKS_H
 
 namespace game {
-
-struct IUsUnitVftable;
-struct LUnitCategory;
-
-struct IUsUnit : public IMidObjectT<IUsUnitVftable>
-{
-    CMidgardID unitId;
-};
-
-struct IUsUnitVftable : public IMidObjectVftable
-{
-    using Method1 = int(__thiscall*)(const IUsUnit* thisptr, const char* a2);
-    Method1 method1;
-
-    using GetCategory = const LUnitCategory*(__thiscall*)(const IUsUnit* thisptr);
-    GetCategory getCategory;
-};
-
+struct CMqStream;
+struct CNetMsg;
+struct CStackBattleActionMsg;
 } // namespace game
 
-#endif // USUNIT_H
+namespace hooks {
+
+void __fastcall stackBattleActionMsgSerializeHooked(game::CStackBattleActionMsg* thisptr,
+                                                    int /*%edx*/,
+                                                    game::CMqStream* stream);
+
+void __fastcall netMsgDtorHooked(game::CNetMsg* thisptr, int /*%edx*/);
+
+} // namespace hooks
+
+#endif // NETMSGHOOKS_H

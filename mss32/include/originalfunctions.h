@@ -22,12 +22,14 @@
 
 #include "battlemsgdata.h"
 #include "citystackinterf.h"
+#include "commandmsg.h"
 #include "d2osexception.h"
 #include "ddcarryoveritems.h"
 #include "enclayoutspell.h"
 #include "exchangeinterf.h"
 #include "game.h"
 #include "midunit.h"
+#include "netmsg.h"
 #include "pickupdropinterf.h"
 #include "sitemerchantinterf.h"
 
@@ -53,10 +55,18 @@ struct OriginalFunctions
     game::BattleMsgDataApi::Api::SetUnknown9Bit1AndClearBoostLowerDamage
         setUnknown9Bit1AndClearBoostLowerDamage;
     game::BattleMsgDataApi::Api::FindAttackTarget findAttackTarget;
+    game::BattleMsgDataApi::Api::Constructor battleMsgDataCtor;
     game::LoadLordFaceImages loadLordFaceImages;
     game::GetSoldierImmunityPower getSoldierImmunityPower;
     game::GetAttackSourceWardFlagPosition getAttackSourceWardFlagPosition;
     game::BattleMsgDataApi::Api::AddUnitToBattleMsgData addUnitToBattleMsgData;
+    game::CNetMsgVftable::Serialize stackBattleActionMsgSerialize;
+    game::CNetMsgVftable::Serialize cmdBattleStartMsgSerialize;
+    game::CNetMsgVftable::Serialize cmdBattleChooseActionMsgSerialize;
+    game::CNetMsgVftable::Serialize cmdBattleResultMsgSerialize;
+    game::CNetMsgVftable::Serialize cmdBattleEndMsgSerialize;
+    game::CCommandMsgApi::Api::Destructor commandMsgDtor;
+    game::CNetMsgApi::Api::Destructor netMsgDtor;
 };
 
 OriginalFunctions& getOriginalFunctions();

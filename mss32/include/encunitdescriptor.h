@@ -77,7 +77,7 @@ struct IEncUnitDescriptorVftable
 
     GetBool attacksTwice;
 
-    void* methods2[23];
+    void* methods[23];
 };
 
 static_assert(sizeof(IEncUnitDescriptorVftable) == 43 * sizeof(void*),
