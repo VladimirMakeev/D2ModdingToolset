@@ -73,6 +73,7 @@
 #include "menuracehooks.h"
 #include "middatacache.h"
 #include "midgardid.h"
+#include "midgardmapblockhooks.h"
 #include "midgardmsgbox.h"
 #include "midmsgboxbuttonhandlerstd.h"
 #include "midmusic.h"
@@ -98,6 +99,13 @@
 #include "subracecat.h"
 #include "subracehooks.h"
 #include "summonhooks.h"
+#include "terraincat.h"
+#include "terrainhooks.h"
+#include "terrainnamelisthooks.h"
+#include "tileindices.h"
+#include "tileindiceshooks.h"
+#include "tilevariation.h"
+#include "tilevariationhooks.h"
 #include "transformselfhooks.h"
 #include "unitbranchcat.h"
 #include "unitgenerator.h"
@@ -225,6 +233,28 @@ static Hooks getGameHooks()
         {(void*)game::CapitalDataApi::get().read, readCapitalDataHooked},
         // Support new races in capital buldings dialogs
         {(void*)game::CBuildingBranchApi::get().createDialogName, buildingBranchCreateDialogNameHooked},
+        // Support custom terrain categories
+        {(void*)game::LTerrainCategoryTableApi::get().constructor, terrainCategoryTableCtorHooked},
+        {(void*)fn.getTerrainByAbbreviation, getTerrainByAbbreviationHooked, (void**)&orig.getTerrainByAbbreviation},
+        // Check CTileVariation records correctness
+        {(void*)game::CTileVariationApi::get().checkData, checkTileVariationDataHooked},
+        // Map custom races to custom terrains
+        {(void*)fn.getTerrainByRace, getTerrainByRaceHooked},
+        {(void*)fn.getTerrainByRace2, getTerrainByRaceHooked},
+        // Map custom terrains to custom races
+        {(void*)fn.getRaceByTerrain, getRaceByTerrainHooked},
+        {(void*)fn.getPlayableRaceByTerrain, getPlayableRaceByTerrainHooked},
+        // Map tile prefix names to numbers and vice versa
+        {(void*)fn.getTilePrefixByName, getTilePrefixByNameHooked, (void**)&orig.getTilePrefixByName},
+        {(void*)fn.getTilePrefixName, getTilePrefixNameHooked, (void**)&orig.getTilePrefixName},
+        // Support custom terrains in terrain names list
+        {(void*)game::TerrainNameListApi::get().getTerrainNameList, getTerrainNameListHooked, (void**)&orig.getTerrainNameList},
+        // Support custom terrain tiles
+        {(void*)game::TileIndicesApi::get().constructor, tileIndicesCtorHooked},
+        {(void*)game::TileIndicesApi::get().getTileDataIndex, getTileDataIndexHooked},
+        {(void*)fn.getNumberByTerrainGround, getNumberByTerrainGroundHooked},
+        // Support custom tiles in terrain coverage logic
+        {(void*)game::CMidgardMapBlockApi::get().countTerrainCoverage, countTerrainCoverageHooked},
     };
     // clang-format on
 
