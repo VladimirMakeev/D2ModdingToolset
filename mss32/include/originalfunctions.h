@@ -67,6 +67,9 @@ struct OriginalFunctions
     game::CNetMsgVftable::Serialize cmdBattleEndMsgSerialize;
     game::CCommandMsgApi::Api::Destructor commandMsgDtor;
     game::CNetMsgApi::Api::Destructor netMsgDtor;
+    game::GetTerrainByAbbreviation getTerrainByAbbreviation;
+    game::GetTilePrefixByName getTilePrefixByName;
+    game::GetTilePrefixName getTilePrefixName;
 };
 
 OriginalFunctions& getOriginalFunctions();
