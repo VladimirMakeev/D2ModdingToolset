@@ -86,6 +86,15 @@ static std::array<Functions, 4> functions = {{
         (GetUnitAttackSourceImmunities)0x408b0d,
         (GetSoldierAttackSourceImmunities)0x61e3c8,
         (GetSoldierImmunityPower)0x5de4e6,
+        (GetTerrainByAbbreviation)0x5a6fbb,
+        (GetTerrainByRace)0x5f105e,
+        (GetTerrainByRace)0x5e6449,
+        (GetRaceByTerrain)0x5e64c4,
+        (GetRaceByTerrain)0x5db0ab,
+        (GetTilePrefixByName)0x5bbb1c,
+        (GetTilePrefixName)0x5bb5d4,
+        (GetNumberByTerrainGround)0x5cbf2f,
+        (ThrowGenericException)0x596690,
     },
     // Russobit
     Functions{
@@ -148,6 +157,15 @@ static std::array<Functions, 4> functions = {{
         (GetUnitAttackSourceImmunities)0x408b0d,
         (GetSoldierAttackSourceImmunities)0x61e3c8,
         (GetSoldierImmunityPower)0x5de4e6,
+        (GetTerrainByAbbreviation)0x5a6fbb,
+        (GetTerrainByRace)0x5f105e,
+        (GetTerrainByRace)0x5e6449,
+        (GetRaceByTerrain)0x5e64c4,
+        (GetRaceByTerrain)0x5db0ab,
+        (GetTilePrefixByName)0x5bbb1c,
+        (GetTilePrefixName)0x5bb5d4,
+        (GetNumberByTerrainGround)0x5cbf2f,
+        (ThrowGenericException)0x596690,
     },
     // Gog
     Functions{
@@ -210,6 +228,15 @@ static std::array<Functions, 4> functions = {{
         (GetUnitAttackSourceImmunities)0x408790,
         (GetSoldierAttackSourceImmunities)0x61cf04,
         (GetSoldierImmunityPower)0x5dd21b,
+        (GetTerrainByAbbreviation)0x5a621c,
+        (GetTerrainByRace)0x5efd35,
+        (GetTerrainByRace)0x5e515e,
+        (GetRaceByTerrain)0x5e51d9,
+        (GetRaceByTerrain)0x5d9de0,
+        (GetTilePrefixByName)0x5baacc,
+        (GetTilePrefixName)0x5ba584,
+        (GetNumberByTerrainGround)0x5cae4b,
+        (ThrowGenericException)0x5957b5,
     },
     // Scenario Editor
     Functions{
@@ -272,6 +299,15 @@ static std::array<Functions, 4> functions = {{
         (GetUnitAttackSourceImmunities)nullptr,
         (GetSoldierAttackSourceImmunities)0x521de0,
         (GetSoldierImmunityPower)0x4d7666,
+        (GetTerrainByAbbreviation)nullptr,
+        (GetTerrainByRace)nullptr,
+        (GetTerrainByRace)nullptr,
+        (GetRaceByTerrain)nullptr,
+        (GetRaceByTerrain)nullptr,
+        (GetTilePrefixByName)nullptr,
+        (GetTilePrefixName)nullptr,
+        (GetNumberByTerrainGround)nullptr,
+        (ThrowGenericException)nullptr,
     },
 }};
 
