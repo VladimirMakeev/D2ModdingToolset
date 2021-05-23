@@ -67,6 +67,9 @@ static std::array<Api, 3> functions = {{
         (Api::CopyAssignment)0x622a21,
         (Api::Copy)0x62e200,
         (Api::Destructor)0x622a16,
+        (Api::AddAttackTargets)0x62884b,
+        (Api::GetLeaderEquippedBattleItemIndex)0x634f1e,
+        (Api::GetUnitInfos)0x623531,
     },
     // Russobit
     Api{
@@ -110,6 +113,9 @@ static std::array<Api, 3> functions = {{
         (Api::CopyAssignment)0x622a21,
         (Api::Copy)0x62e200,
         (Api::Destructor)0x622a16,
+        (Api::AddAttackTargets)0x62884b,
+        (Api::GetLeaderEquippedBattleItemIndex)0x634f1e,
+        (Api::GetUnitInfos)0x623531,
     },
     // Gog
     Api{
@@ -153,7 +159,10 @@ static std::array<Api, 3> functions = {{
         (Api::CopyAssignment)0x6215b1,
         (Api::Copy)0x62cc40,
         (Api::Destructor)0x6215a6,
-    }
+        (Api::AddAttackTargets)0x62738b,
+        (Api::GetLeaderEquippedBattleItemIndex)0x63395e,
+        (Api::GetUnitInfos)0x6220c1,
+    },
 }};
 // clang-format on
 

@@ -20,7 +20,8 @@
 #ifndef BATTLEMSGDATA_H
 #define BATTLEMSGDATA_H
 
-#include "midgardid.h"
+#include "idlist.h"
+#include "unitinfolist.h"
 #include <cstddef>
 #include <cstdint>
 
@@ -31,6 +32,7 @@ struct IAttack;
 struct IBatAttack;
 struct LAttackSource;
 struct LAttackClass;
+struct LAttackReach;
 struct CMidUnitGroup;
 
 /** Unit statuses in battle. */
@@ -69,6 +71,18 @@ enum class BattleStatus : int
     Hidden,                /**< Unit is hidden. For example, while leader dueling a thief. */
     Defend,                /**< Defend was used in this round. */
     Unsummoned             /**< unsummon effect applied ? */
+};
+
+enum class BattleAction : int
+{
+    Attack = 0,
+    Skip,
+    Retreat,
+    Wait,
+    Defend,
+    Auto,
+    UseItem,
+    Resolve,
 };
 
 struct ModifiedUnitInfo
@@ -462,6 +476,25 @@ struct Api
 
     using Destructor = void(__thiscall*)(BattleMsgData* thisptr);
     Destructor destructor;
+
+    using AddAttackTargets = void(__stdcall*)(IdList* value,
+                                              IMidgardObjectMap* objectMap,
+                                              IAttack* attack,
+                                              IBatAttack* batAttack,
+                                              const LAttackReach* attackReach,
+                                              const BattleMsgData* battleMsgData,
+                                              BattleAction action,
+                                              const CMidgardID* targetUnitId);
+    AddAttackTargets addAttackTargets;
+
+    using GetLeaderEquippedBattleItemIndex = int(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                             const CMidgardID* unitId,
+                                                             const BattleMsgData* battleMsgData,
+                                                             const CMidgardID* itemId);
+    GetLeaderEquippedBattleItemIndex getLeaderEquippedBattleItemIndex;
+
+    using GetUnitInfos = void(__thiscall*)(BattleMsgData* thisptr, UnitInfoList* value, bool a3);
+    GetUnitInfos getUnitInfos;
 };
 
 Api& get();
