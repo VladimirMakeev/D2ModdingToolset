@@ -33,7 +33,7 @@ static std::array<Api, 4> functions = {{
         (Api::GetIterator)0x4dee1a,
         (Api::GetIterator)0x470bec,
         (Api::Find)0x40b8e2,
-        (Api::IteratorEquals)0x474a74,
+        (Api::Equals)0x474a74,
         (Api::Shuffle)0x46b079,
     },
     // Russobit
@@ -44,7 +44,7 @@ static std::array<Api, 4> functions = {{
         (Api::GetIterator)0x4dee1a,
         (Api::GetIterator)0x470bec,
         (Api::Find)0x40b8e2,
-        (Api::IteratorEquals)0x474a74,
+        (Api::Equals)0x474a74,
         (Api::Shuffle)0x46b079,
     },
     // Gog
@@ -55,7 +55,7 @@ static std::array<Api, 4> functions = {{
         (Api::GetIterator)0x4c7e28,
         (Api::GetIterator)0x40b43f,
         (Api::Find)0x40b5c0,
-        (Api::IteratorEquals)0x5d8fbb,
+        (Api::Equals)0x5d8fbb,
         (Api::Shuffle)0x46a9f5,
     },
     // Scenario Editor
@@ -66,7 +66,7 @@ static std::array<Api, 4> functions = {{
         (Api::GetIterator)0x4bf530,
         (Api::GetIterator)0x486901,
         (Api::Find)0x440cd1,
-        (Api::IteratorEquals)0x41ec65,
+        (Api::Equals)0x41ec65,
         (Api::Shuffle)0x471a79,
     },
 }};

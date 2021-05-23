@@ -55,8 +55,8 @@ struct Api
                                              const CMidgardID* id);
     Find find;
 
-    using IteratorEquals = bool(__thiscall*)(IdListIterator* thisptr, IdListIterator* value);
-    IteratorEquals iterator_equals;
+    using Equals = bool(__thiscall*)(IdListIterator* thisptr, const IdListIterator* value);
+    Equals equals;
 
     using Shuffle = void(__stdcall*)(IdList* list);
     Shuffle shuffle;
