@@ -273,6 +273,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\terrainnamelist.cpp" />
     <ClCompile Include="src\textboxinterf.cpp" />
     <ClCompile Include="src\textids.cpp" />
+    <ClCompile Include="src\tileindices.cpp" />
     <ClCompile Include="src\tilevariation.cpp" />
     <ClCompile Include="src\transformselfhooks.cpp" />
     <ClCompile Include="src\unitbranchcat.cpp" />
@@ -568,6 +569,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\textandid.h" />
     <ClInclude Include="include\textboxinterf.h" />
     <ClInclude Include="include\textids.h" />
+    <ClInclude Include="include\tileindices.h" />
     <ClInclude Include="include\tilevariation.h" />
     <ClInclude Include="include\transformselfhooks.h" />
     <ClInclude Include="include\umattack.h" />
