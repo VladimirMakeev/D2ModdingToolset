@@ -41,7 +41,7 @@ namespace TerrainCountListApi {
 struct Api
 {
     /** Returns pointer to TerrainCount::tilesCount found by specified terrain category. */
-    using GetTilesCount = int*(__thiscall*)(TerrainCountList thisptr,
+    using GetTilesCount = int*(__thiscall*)(TerrainCountList* thisptr,
                                             const LTerrainCategory* terrain);
     GetTilesCount getTilesCount;
 };
