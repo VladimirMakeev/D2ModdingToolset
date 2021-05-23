@@ -20,11 +20,12 @@
 #ifndef MIDUNITGROUP_H
 #define MIDUNITGROUP_H
 
+#include "idlist.h"
 #include "idvector.h"
-#include "midgardid.h"
 
 namespace game {
 
+struct IMidgardObjectMap;
 struct CFortification;
 
 /** Represents group of 6 units in game. */
@@ -55,6 +56,11 @@ struct Api
     using GetUnitIdByPosition = const CMidgardID*(__thiscall*)(const CMidUnitGroup* thisptr,
                                                                int position);
     GetUnitIdByPosition getUnitIdByPosition;
+
+    using AddUnitIdsAvailableForSummons = void(__stdcall*)(IdList* value,
+                                                           IMidgardObjectMap* objectMap,
+                                                           CMidUnitGroup* group);
+    AddUnitIdsAvailableForSummons addUnitIdsAvailableForSummons;
 };
 
 Api& get();
