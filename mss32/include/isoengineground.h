@@ -17,39 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERRAINCOUNTLIST_H
-#define TERRAINCOUNTLIST_H
-
-#include "sortedlist.h"
-#include "terraincat.h"
+#ifndef ISOENGINEGROUND_H
+#define ISOENGINEGROUND_H
 
 namespace game {
 
-struct TerrainCount
+struct CIsoEngineGroundData
 {
-    LTerrainCategory terrain;
-    int tilesCount;
+    char unknown[5448];
 };
 
-static_assert(sizeof(TerrainCount) == 16,
-              "Size of TerrainCount structure must be exactly 16 bytes");
+static_assert(sizeof(CIsoEngineGroundData) == 5448,
+              "Size of CIsoEngineGroundData structure must be exactly 5448 bytes");
 
-using TerrainCountList = SortedList<TerrainCount>;
-
-namespace TerrainCountListApi {
-
-struct Api
+struct CIsoEngineGround
 {
-    /** Returns pointer to TerrainCount::tilesCount found by specified terrain category. */
-    using GetTilesCount = int*(__thiscall*)(TerrainCountList* thisptr,
-                                            const LTerrainCategory* terrain);
-    GetTilesCount getTilesCount;
+    void* vftable;
+    CIsoEngineGroundData* data;
 };
 
-Api& get();
-
-} // namespace TerrainCountListApi
+static_assert(sizeof(CIsoEngineGround) == 8,
+              "Size of CIsoEngineGround structure must be exactly 8 bytes");
 
 } // namespace game
 
-#endif // TERRAINCOUNTLIST_H
+#endif // ISOENGINEGROUND_H

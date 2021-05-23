@@ -17,39 +17,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERRAINCOUNTLIST_H
-#define TERRAINCOUNTLIST_H
+#include "terrainnamelist.h"
+#include "version.h"
+#include <array>
 
-#include "sortedlist.h"
-#include "terraincat.h"
+namespace game::TerrainNameListApi {
 
-namespace game {
+// clang-format off
+static std::array<Api, 3> functions = {{
+    // Akella
+    Api{
+        (Api::GetTerrainNameList)0x5a6d29,
+        (Api::Add)0x5a728e,
+    },
+    // Russobit
+    Api{
+        (Api::GetTerrainNameList)0x5a6d29,
+        (Api::Add)0x5a728e,
+    },
+    // Gog
+    Api{
+        (Api::GetTerrainNameList)0x5a5f8a,
+        (Api::Add)0x5a64ef,
+    }
+}};
+// clang-format on
 
-struct TerrainCount
+Api& get()
 {
-    LTerrainCategory terrain;
-    int tilesCount;
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-static_assert(sizeof(TerrainCount) == 16,
-              "Size of TerrainCount structure must be exactly 16 bytes");
-
-using TerrainCountList = SortedList<TerrainCount>;
-
-namespace TerrainCountListApi {
-
-struct Api
-{
-    /** Returns pointer to TerrainCount::tilesCount found by specified terrain category. */
-    using GetTilesCount = int*(__thiscall*)(TerrainCountList* thisptr,
-                                            const LTerrainCategory* terrain);
-    GetTilesCount getTilesCount;
-};
-
-Api& get();
-
-} // namespace TerrainCountListApi
-
-} // namespace game
-
-#endif // TERRAINCOUNTLIST_H
+} // namespace game::TerrainNameListApi

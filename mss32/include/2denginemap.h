@@ -17,39 +17,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERRAINCOUNTLIST_H
-#define TERRAINCOUNTLIST_H
-
-#include "sortedlist.h"
-#include "terraincat.h"
+#ifndef C2DENGINEMAP_H
+#define C2DENGINEMAP_H
 
 namespace game {
 
-struct TerrainCount
+struct C2DEngineMap
 {
-    LTerrainCategory terrain;
-    int tilesCount;
+    void* vftable;
 };
-
-static_assert(sizeof(TerrainCount) == 16,
-              "Size of TerrainCount structure must be exactly 16 bytes");
-
-using TerrainCountList = SortedList<TerrainCount>;
-
-namespace TerrainCountListApi {
-
-struct Api
-{
-    /** Returns pointer to TerrainCount::tilesCount found by specified terrain category. */
-    using GetTilesCount = int*(__thiscall*)(TerrainCountList* thisptr,
-                                            const LTerrainCategory* terrain);
-    GetTilesCount getTilesCount;
-};
-
-Api& get();
-
-} // namespace TerrainCountListApi
 
 } // namespace game
 
-#endif // TERRAINCOUNTLIST_H
+#endif // C2DENGINEMAP_H

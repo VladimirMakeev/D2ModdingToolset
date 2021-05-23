@@ -62,6 +62,8 @@ struct IEncUnitDescriptor;
 struct CDialogInterf;
 struct String;
 struct LRaceCategory;
+struct LTerrainCategory;
+struct LGroundCategory;
 
 enum class ModifierElementTypeFlag : int;
 
@@ -436,6 +438,32 @@ using GetSoldierAttackSourceImmunities = void(__stdcall*)(const IUsSoldier* sold
 /** Gets immunity power coefficient to be used by AI for overall soldier power calculation. */
 using GetSoldierImmunityPower = double(__stdcall*)(const IUsSoldier* soldier);
 
+/**
+ * Returns terrain category by its abbreviation string.
+ * Used in processing GTileDbi.dbf records.
+ */
+using GetTerrainByAbbreviation = LTerrainCategory*(__stdcall*)(LTerrainCategory* category,
+                                                               const char* abbreviation);
+
+/** Returns terrain category that corresponds to specified race category. */
+using GetTerrainByRace = const LTerrainCategory*(__stdcall*)(const LRaceCategory* race);
+
+/** Returns race category that corresponds to specified terrain category. */
+using GetRaceByTerrain = const LRaceCategory*(__stdcall*)(const LTerrainCategory* terrain);
+
+/** Returns tile prefix number by tile prefix name. */
+using GetTilePrefixByName = int(__stdcall*)(const char* tileNamePrefix);
+
+/** Returns tile prefix name by tile prefix number. */
+using GetTilePrefixName = const char*(__stdcall*)(int tilePrefixNumber);
+
+/** Assumption: returns color index for minimap. */
+using GetNumberByTerrainGround = int(__stdcall*)(const LTerrainCategory* terrain,
+                                                 const LGroundCategory* ground);
+
+/** Throws MqDbException with specified message. */
+using ThrowGenericException = void(__stdcall*)(const char* message);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -499,6 +527,15 @@ struct Functions
     GetUnitAttackSourceImmunities getUnitAttackSourceImmunities;
     GetSoldierAttackSourceImmunities getSoldierAttackSourceImmunities;
     GetSoldierImmunityPower getSoldierImmunityPower;
+    GetTerrainByAbbreviation getTerrainByAbbreviation;
+    GetTerrainByRace getTerrainByRace;
+    GetTerrainByRace getTerrainByRace2;
+    GetRaceByTerrain getRaceByTerrain;
+    GetRaceByTerrain getPlayableRaceByTerrain;
+    GetTilePrefixByName getTilePrefixByName;
+    GetTilePrefixName getTilePrefixName;
+    GetNumberByTerrainGround getNumberByTerrainGround;
+    ThrowGenericException throwGenericException;
 };
 
 /** Global variables used in game. */
