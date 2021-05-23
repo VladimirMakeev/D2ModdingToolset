@@ -420,6 +420,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\interffullscreen.h" />
     <ClInclude Include="include\interfmanager.h" />
     <ClInclude Include="include\interftexthooks.h" />
+    <ClInclude Include="include\isoengineground.h" />
     <ClInclude Include="include\isolayers.h" />
     <ClInclude Include="include\item.h" />
     <ClInclude Include="include\itemarmor.h" />
