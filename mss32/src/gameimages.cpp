@@ -30,18 +30,24 @@ static std::array<Api, 3> functions = {{
         (Api::GetGameImages)0x5ae7bc,
         (Api::GetImage)0x5aedfb,
         (Api::CreateOrFreeGameImages)0x4080e4,
+        (Api::GetImageNames)0x5c817c,
+        (Api::GetRaceLogoImageName)0x5c649b,
     },
     // Russobit
     Api{
         (Api::GetGameImages)0x5ae7bc,
         (Api::GetImage)0x5aedfb,
         (Api::CreateOrFreeGameImages)0x4080e4,
+        (Api::GetImageNames)0x5c817c,
+        (Api::GetRaceLogoImageName)0x5c649b,
     },
     // Gog
     Api{
         (Api::GetGameImages)0x5ada44,
         (Api::GetImage)0x5ae0bf,
         (Api::CreateOrFreeGameImages)0x407d6f,
+        (Api::GetImageNames)0x5c7165,
+        (Api::GetRaceLogoImageName)0x5c5484,
     }
 }};
 // clang-format on
