@@ -231,6 +231,9 @@ void __stdcall loadLordFaceImagesHooked(const char** faceNames,
 
 char* __fastcall buildingBranchCreateDialogNameHooked(game::CBuildingBranch* thisptr, int /*%edx*/);
 
+bool __stdcall ignorePlayerEventsHooked(const game::CMidgardID* playerId,
+                                        const game::IMidgardObjectMap* objectMap);
+
 } // namespace hooks
 
 #endif // HOOKS_H

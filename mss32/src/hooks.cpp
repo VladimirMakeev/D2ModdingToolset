@@ -255,6 +255,8 @@ static Hooks getGameHooks()
         {(void*)fn.getNumberByTerrainGround, getNumberByTerrainGroundHooked},
         // Support custom tiles in terrain coverage logic
         {(void*)game::CMidgardMapBlockApi::get().countTerrainCoverage, countTerrainCoverageHooked},
+        // Do not ignore events for custom races
+        {(void*)fn.ignorePlayerEvents, ignorePlayerEventsHooked},
     };
     // clang-format on
 
@@ -1637,6 +1639,41 @@ char* __fastcall buildingBranchCreateDialogNameHooked(game::CBuildingBranch* thi
                                      dialogName.length());
 
     return thisptr->data->branchDialogName.string;
+}
+
+bool __stdcall ignorePlayerEventsHooked(const game::CMidgardID* playerId,
+                                        const game::IMidgardObjectMap* objectMap)
+{
+    using namespace game;
+
+    if (*playerId == emptyId) {
+        return true;
+    }
+
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+
+    auto playerObj = objectMap->vftable->findScenarioObjectById(objectMap, playerId);
+
+    CMidPlayer* player = (CMidPlayer*)dynamicCast(playerObj, 0, rtti.IMidScenarioObjectType,
+                                                  rtti.CMidPlayerType, 0);
+
+    const auto& races = RaceCategories::get();
+    const auto raceCatId{player->raceType->data->raceType.id};
+
+    if (raceCatId == races.human->id || raceCatId == races.dwarf->id
+        || raceCatId == races.heretic->id || raceCatId == races.undead->id
+        || raceCatId == races.neutral->id || raceCatId == races.elf->id) {
+        return false;
+    }
+
+    for (const auto& race : newRaces()) {
+        if (raceCatId == race.category.id) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 } // namespace hooks
