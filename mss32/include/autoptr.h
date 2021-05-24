@@ -22,15 +22,17 @@
 
 namespace game {
 
+struct IMidObject;
+
 template <typename T>
 struct AutoPtr
 {
     T* data;
 };
 
-using AutoPointer = AutoPtr<void>;
+using MidObjectPtr = AutoPtr<IMidObject>;
 
-namespace AutoPointerApi {
+namespace AutoPtrApi {
 
 struct Api
 {
@@ -38,13 +40,13 @@ struct Api
      * Replaces the held pointer. If the currently held pointer is not null - then its data gets
      * deleted.
      */
-    using Reset = void(__thiscall*)(AutoPointer* thisptr, void* data);
+    using Reset = void(__thiscall*)(MidObjectPtr* thisptr, IMidObject* data);
     Reset reset;
 };
 
 Api& get();
 
-} // namespace AutoPointerApi
+} // namespace AutoPtrApi
 
 } // namespace game
 
