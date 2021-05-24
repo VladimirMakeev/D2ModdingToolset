@@ -564,6 +564,9 @@
     <ClCompile Include="src\listutils.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\battleviewerinterfhooks.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\battleviewerinterf.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -1478,6 +1481,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\listutils.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\battleviewerinterfhooks.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\unitpositionlist.h">

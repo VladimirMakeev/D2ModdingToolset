@@ -163,6 +163,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\battlemsgdata.cpp" />
     <ClCompile Include="src\battlemsgdatahooks.cpp" />
     <ClCompile Include="src\battleviewerinterf.cpp" />
+    <ClCompile Include="src\battleviewerinterfhooks.cpp" />
     <ClCompile Include="src\batviewer2dengine.cpp" />
     <ClCompile Include="src\bindings\dynupgradeview.cpp" />
     <ClCompile Include="src\bindings\unitimplview.cpp" />
@@ -347,6 +348,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\battlemsgdata.h" />
     <ClInclude Include="include\battlemsgdatahooks.h" />
     <ClInclude Include="include\battleviewerinterf.h" />
+    <ClInclude Include="include\battleviewerinterfhooks.h" />
     <ClInclude Include="include\batunitanim.h" />
     <ClInclude Include="include\batviewer.h" />
     <ClInclude Include="include\batviewer2dengine.h" />
