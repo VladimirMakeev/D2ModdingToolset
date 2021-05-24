@@ -576,6 +576,9 @@
     <ClCompile Include="src\mqrect.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\batimagesloader.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -1478,6 +1481,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\unitinfolist.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\batimagesloader.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
