@@ -456,6 +456,10 @@ using GetNumberByTerrainGround = int(__stdcall*)(const LTerrainCategory* terrain
 /** Throws MqDbException with specified message. */
 using ThrowGenericException = void(__stdcall*)(const char* message);
 
+/** Returns true if game should ignore events for specified player. */
+using IgnorePlayerEvents = bool(__stdcall*)(const CMidgardID* playerId,
+                                            const IMidgardObjectMap* objectMap);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -527,6 +531,7 @@ struct Functions
     GetTilePrefixName getTilePrefixName;
     GetNumberByTerrainGround getNumberByTerrainGround;
     ThrowGenericException throwGenericException;
+    IgnorePlayerEvents ignorePlayerEvents;
 };
 
 /** Global variables used in game. */

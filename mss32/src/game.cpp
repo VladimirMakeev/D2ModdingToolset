@@ -95,6 +95,7 @@ static std::array<Functions, 4> functions = {{
         (GetTilePrefixName)0x5bb5d4,
         (GetNumberByTerrainGround)0x5cbf2f,
         (ThrowGenericException)0x596690,
+        (IgnorePlayerEvents)0x5e66ec,
     },
     // Russobit
     Functions{
@@ -166,6 +167,7 @@ static std::array<Functions, 4> functions = {{
         (GetTilePrefixName)0x5bb5d4,
         (GetNumberByTerrainGround)0x5cbf2f,
         (ThrowGenericException)0x596690,
+        (IgnorePlayerEvents)0x5e66ec,
     },
     // Gog
     Functions{
@@ -237,6 +239,7 @@ static std::array<Functions, 4> functions = {{
         (GetTilePrefixName)0x5ba584,
         (GetNumberByTerrainGround)0x5cae4b,
         (ThrowGenericException)0x5957b5,
+        (IgnorePlayerEvents)0x5e5401,
     },
     // Scenario Editor
     Functions{
