@@ -26,12 +26,16 @@
 namespace game {
 
 /**
- * List of unit positions (0-5) to highlight during single battle turn.
+ * List of unit positions (0-5) to mark during single battle turn.
  * The second component of the pair is unknown.
  */
-using UnitPositionList = SortedList<Pair<int, int>>;
-using UnitPositionListNode = SortedListNode<Pair<int, int>>;
-using UnitPositionListIterator = SortedListIterator<Pair<int, int>>;
+using UnitPositionPair = Pair<int, bool>;
+using UnitPositionList = SortedList<UnitPositionPair>;
+using UnitPositionListNode = SortedListNode<UnitPositionPair>;
+using UnitPositionListIterator = SortedListIterator<UnitPositionPair>;
+
+static_assert(sizeof(UnitPositionPair) == 8,
+              "Size of UnitPositionPair structure must be exactly 8 bytes");
 
 namespace UnitPositionListApi {
 
@@ -52,7 +56,7 @@ struct Api
     GetIterator begin;
     GetIterator end;
 
-    using Dereference = Pair<int, int>*(__thiscall*)(UnitPositionListIterator* thisptr);
+    using Dereference = UnitPositionPair*(__thiscall*)(UnitPositionListIterator* thisptr);
     Dereference dereference;
 
     using Equals = bool(__thiscall*)(UnitPositionListIterator* thisptr,
@@ -61,6 +65,11 @@ struct Api
 
     using Preincrement = UnitPositionListIterator*(__thiscall*)(UnitPositionListIterator* thisptr);
     Preincrement preinc;
+
+    using FindByPosition = UnitPositionPair*(__stdcall*)(UnitPositionPair* value,
+                                                         const UnitPositionList* list,
+                                                         int unitPosition);
+    FindByPosition findByPosition;
 };
 
 Api& get();

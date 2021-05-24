@@ -35,6 +35,7 @@ static std::array<Api, 3> functions = {{
         (Api::Dereference)0x62b790,
         (Api::Equals)0x6402e0,
         (Api::Preincrement)0x640560,
+        (Api::FindByPosition)0x634eaf,
     },
     // Russobit
     Api{
@@ -46,6 +47,7 @@ static std::array<Api, 3> functions = {{
         (Api::Dereference)0x62b790,
         (Api::Equals)0x6402e0,
         (Api::Preincrement)0x640560,
+        (Api::FindByPosition)0x634eaf,
     },
     // Gog
     Api{
@@ -57,6 +59,7 @@ static std::array<Api, 3> functions = {{
         (Api::Dereference)0x63eeb0,
         (Api::Equals)0x6678d0,
         (Api::Preincrement)0x642390,
+        (Api::FindByPosition)0x6338ef,
     },
 }};
 // clang-format on
