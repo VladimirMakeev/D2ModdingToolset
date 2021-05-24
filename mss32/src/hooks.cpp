@@ -257,6 +257,8 @@ static Hooks getGameHooks()
         {(void*)game::CMidgardMapBlockApi::get().countTerrainCoverage, countTerrainCoverageHooked},
         // Do not ignore events for custom races
         {(void*)fn.ignorePlayerEvents, ignorePlayerEventsHooked},
+        // Support custom race preview images
+        {(void*)fn.getRacePreviewImage, getRacePreviewImageHooked},
     };
     // clang-format on
 
@@ -1674,6 +1676,43 @@ bool __stdcall ignorePlayerEventsHooked(const game::CMidgardID* playerId,
     }
 
     return true;
+}
+
+game::IMqImage2* __stdcall getRacePreviewImageHooked(const game::LRaceCategory* race)
+{
+    using namespace game;
+
+    const auto& loadImage = AutoDialogApi::get().loadImage;
+    const auto& races = RaceCategories::get();
+    const auto raceCatId{race->id};
+
+    if (raceCatId == races.human->id) {
+        return loadImage("GODHU");
+    }
+
+    if (raceCatId == races.heretic->id) {
+        return loadImage("GODHE");
+    }
+
+    if (raceCatId == races.dwarf->id) {
+        return loadImage("GODDW");
+    }
+
+    if (raceCatId == races.undead->id) {
+        return loadImage("GODUN");
+    }
+
+    if (raceCatId == races.elf->id) {
+        return loadImage("GODEL");
+    }
+
+    for (const auto& race : newRaces()) {
+        if (raceCatId == race.category.id) {
+            return loadImage(fmt::format("GOD{:s}", race.abbreviation).c_str());
+        }
+    }
+
+    return nullptr;
 }
 
 } // namespace hooks

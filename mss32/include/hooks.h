@@ -234,6 +234,8 @@ char* __fastcall buildingBranchCreateDialogNameHooked(game::CBuildingBranch* thi
 bool __stdcall ignorePlayerEventsHooked(const game::CMidgardID* playerId,
                                         const game::IMidgardObjectMap* objectMap);
 
+game::IMqImage2* __stdcall getRacePreviewImageHooked(const game::LRaceCategory* race);
+
 } // namespace hooks
 
 #endif // HOOKS_H
