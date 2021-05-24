@@ -96,6 +96,7 @@ static std::array<Functions, 4> functions = {{
         (GetNumberByTerrainGround)0x5cbf2f,
         (ThrowGenericException)0x596690,
         (IgnorePlayerEvents)0x5e66ec,
+        (GetRacePreviewImage)0x4f1c4c,
     },
     // Russobit
     Functions{
@@ -168,6 +169,7 @@ static std::array<Functions, 4> functions = {{
         (GetNumberByTerrainGround)0x5cbf2f,
         (ThrowGenericException)0x596690,
         (IgnorePlayerEvents)0x5e66ec,
+        (GetRacePreviewImage)0x4f1c4c,
     },
     // Gog
     Functions{
@@ -240,6 +242,7 @@ static std::array<Functions, 4> functions = {{
         (GetNumberByTerrainGround)0x5cae4b,
         (ThrowGenericException)0x5957b5,
         (IgnorePlayerEvents)0x5e5401,
+        (GetRacePreviewImage)0x4f1095,
     },
     // Scenario Editor
     Functions{
@@ -311,6 +314,8 @@ static std::array<Functions, 4> functions = {{
         (GetTilePrefixName)nullptr,
         (GetNumberByTerrainGround)nullptr,
         (ThrowGenericException)nullptr,
+        (IgnorePlayerEvents)nullptr,
+        (GetRacePreviewImage)nullptr,
     },
 }};
 
