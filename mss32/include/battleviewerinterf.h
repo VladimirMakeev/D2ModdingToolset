@@ -107,8 +107,8 @@ struct CBattleViewerUnknownUnitData
     CMidgardID unknownId;
     int unknown;
     bool unknown2;
-    bool isBigUnit;
-    bool unknown3;
+    bool isUnitBig;
+    bool isUnitRetreating;
     char padding;
 };
 
@@ -245,13 +245,13 @@ struct Api
                                              CBattleViewerGroupAreas* groupAreas,
                                              int unitPosition,
                                              bool isUnitBig,
-                                             bool unknown3);
+                                             bool isUnitRetreating);
     GetUnitRect getUnitRect;
     GetUnitRect getUnitRectPlusExtra;
 
     using GetBoolById = bool(__thiscall*)(CUnknownUnitDataList* thisptr, const CMidgardID* unitId);
     GetBoolById isUnitBig;
-    GetBoolById getUnknown3;
+    GetBoolById isUnitRetreating;
 
     using SetUnitId = void(__thiscall*)(CBatBigFace* thisptr, const CMidgardID* unitId);
     SetUnitId setUnitId;

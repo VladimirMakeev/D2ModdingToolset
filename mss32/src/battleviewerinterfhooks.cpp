@@ -42,17 +42,17 @@ void markAttackTarget(game::CBattleViewerInterf* viewer,
     const auto& engineApi = BatViewer2DEngineApi::get();
 
     bool isUnitBig = false;
-    bool unknown3 = false;
+    bool isUnitRetreating = false;
     if (*targetId != emptyId) {
         isUnitBig = viewerApi.isUnitBig(&viewer->data->unknownUnitData, targetId);
-        unknown3 = viewerApi.getUnknown3(&viewer->data->unknownUnitData, targetId);
+        isUnitRetreating = viewerApi.isUnitRetreating(&viewer->data->unknownUnitData, targetId);
     }
 
     CMqRect unitRect{};
     bool isUnitOnTheLeft = viewerApi.isUnitOnTheLeft(viewer, targetIsAttacker);
     viewerApi.getUnitRect(&unitRect,
                           isUnitOnTheLeft ? &viewer->data->groupAreas2 : &viewer->data->groupAreas1,
-                          targetPosition, isUnitBig, unknown3);
+                          targetPosition, isUnitBig, isUnitRetreating);
 
     IMqImage2* image = loaderApi.loadMarkImage(viewer->data->imagesLoader, isUnitBig);
     if (image == nullptr)
@@ -112,14 +112,15 @@ bool isUnitSelected(game::CBattleViewerInterf* viewer,
     }
 
     bool isUnitBig = viewerApi.isUnitBig(&viewer->data->unknownUnitData, targetId);
-    bool unknown3 = viewerApi.getUnknown3(&viewer->data->unknownUnitData, targetId);
+    bool isUnitRetreating = viewerApi.isUnitRetreating(&viewer->data->unknownUnitData, targetId);
     bool isUnitOnTheLeft = viewerApi.isUnitOnTheLeft(viewer, targetInfo->unitFlags.parts.attacker);
 
     CMqRect unitRect{};
     viewerApi.getUnitRectPlusExtra(&unitRect,
                                    isUnitOnTheLeft ? &viewer->data->groupAreas2
                                                    : &viewer->data->groupAreas1,
-                                   targetInfo->unitFlags.parts.indexInGroup, isUnitBig, unknown3);
+                                   targetInfo->unitFlags.parts.indexInGroup, isUnitBig,
+                                   isUnitRetreating);
 
     return rectApi.ptInRect(&unitRect, mousePosition);
 }
