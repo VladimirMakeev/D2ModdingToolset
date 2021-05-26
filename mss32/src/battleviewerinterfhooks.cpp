@@ -131,7 +131,7 @@ void markAttackTargets(game::CBattleViewerInterf* viewer,
                        const game::UnitInfo* targetInfo,
                        bool a3,
                        bool isAllAttackReach,
-                       bool unknown,
+                       bool isBattleGoing,
                        game::UnitPositionList* targetPositions)
 {
     using namespace game;
@@ -160,7 +160,8 @@ void markAttackTargets(game::CBattleViewerInterf* viewer,
     UnitPositionPair positionPair;
     listApi.findByPosition(&positionPair, targetPositions,
                            targetInfo->unitFlags.parts.indexInGroup);
-    if (isAllAttackReach && unknown && selectedPositionInTargetGroup != -1 && positionPair.second) {
+    if (isAllAttackReach && isBattleGoing && selectedPositionInTargetGroup != -1
+        && positionPair.second) {
         markAllAttackTargets(viewer, targetGroup, targetInfo, targetPositions);
     } else {
         markAttackTarget(viewer, selectedUnitId, targetInfo->unitFlags.parts.attacker,
@@ -172,7 +173,7 @@ bool markAttackTargets(game::CBattleViewerInterf* viewer,
                        const game::CMqPoint* mousePosition,
                        bool a3,
                        const game::IAttack* attack,
-                       bool unknown,
+                       bool isBattleGoing,
                        const game::CMidgardID* targetGroupId,
                        game::UnitPositionList* targetPositions)
 {
@@ -200,7 +201,7 @@ bool markAttackTargets(game::CBattleViewerInterf* viewer,
         result = isUnitSelected(viewer, mousePosition, listApi.dereference(&it), &selectedUnitId);
         if (result) {
             markAttackTargets(viewer, targetGroupId, &selectedUnitId, listApi.dereference(&it), a3,
-                              isAllAttackReach, unknown, targetPositions);
+                              isAllAttackReach, isBattleGoing, targetPositions);
             break;
         }
     }
@@ -239,7 +240,7 @@ bool unmarkAttackTargets(game::CBattleViewerInterf* viewer,
 bool getTargetData(game::CBattleViewerInterf* viewer,
                    const game::IAttack** attack,
                    const game::CBattleViewerTargetData** targetData,
-                   bool* unknown)
+                   bool* isBattleGoing)
 {
     using namespace game;
 
@@ -257,11 +258,11 @@ bool getTargetData(game::CBattleViewerInterf* viewer,
 
         *attack = fn.getAttackById(viewer->data->objectMap, &viewer->data->itemId, 1, true);
         *targetData = &viewer->data->itemTargetData[itemIndex];
-        *unknown = true;
+        *isBattleGoing = true;
     } else {
         *attack = fn.getAttackById(viewer->data->objectMap, &viewer->data->unitId, 1, true);
         *targetData = &viewer->data->unitTargetData;
-        *unknown = (*targetData)->unknown;
+        *isBattleGoing = (*targetData)->isBattleGoing;
     }
 
     return true;
@@ -281,15 +282,15 @@ bool __fastcall markAttackTargetsHooked(game::CBattleViewerInterf* thisptr,
 
     const IAttack* attack = nullptr;
     const CBattleViewerTargetData* targetData = nullptr;
-    bool unknown = false;
-    if (!getTargetData(thisptr, &attack, &targetData, &unknown))
+    bool isBattleGoing = false;
+    if (!getTargetData(thisptr, &attack, &targetData, &isBattleGoing))
         return false;
 
     UnitPositionList targetPositions{};
     listApi.constructor(&targetPositions);
     listApi.copyAssignment(&targetPositions, &targetData->targetPositions);
 
-    bool result = markAttackTargets(thisptr, mousePosition, a3, attack, unknown,
+    bool result = markAttackTargets(thisptr, mousePosition, a3, attack, isBattleGoing,
                                     &targetData->targetGroupId, &targetPositions);
     if (!result)
         result = unmarkAttackTargets(thisptr, mousePosition, a3);

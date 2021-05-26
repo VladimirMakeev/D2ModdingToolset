@@ -93,7 +93,7 @@ static_assert(offsetof(CBattleViewerUnknown, string) == 208,
 
 struct CBattleViewerTargetData
 {
-    bool unknown;
+    bool isBattleGoing;
     char padding[3];
     CMidgardID targetGroupId;
     UnitPositionList targetPositions;
