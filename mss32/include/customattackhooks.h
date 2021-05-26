@@ -20,7 +20,7 @@
 #ifndef CUSTOMATTACKHOOKS_H
 #define CUSTOMATTACKHOOKS_H
 
-#include "linkedlist.h"
+#include "idlist.h"
 
 namespace game {
 struct LAttackClass;
@@ -35,11 +35,14 @@ struct CAttackImpl;
 struct IUsSoldier;
 struct CDBTable;
 struct GlobalData;
+struct IAttack;
 struct IBatAttack;
 struct IMidgardObjectMap;
 struct BattleMsgData;
 struct CMidgardID;
 struct CMidUnitGroup;
+
+enum class BattleAction : int;
 } // namespace game
 
 namespace hooks {
@@ -106,6 +109,15 @@ void __stdcall addUnitToBattleMsgDataHooked(game::IMidgardObjectMap* objectMap,
                                             const game::CMidgardID* unitId,
                                             char attackerFlags,
                                             game::BattleMsgData* battleMsgData);
+
+void __stdcall addAttackTargetsHooked(game::IdList* value,
+                                      game::IMidgardObjectMap* objectMap,
+                                      game::IAttack* attack,
+                                      game::IBatAttack* batAttack,
+                                      const game::LAttackReach* attackReach,
+                                      const game::BattleMsgData* battleMsgData,
+                                      game::BattleAction action,
+                                      const game::CMidgardID* targetUnitId);
 
 } // namespace hooks
 

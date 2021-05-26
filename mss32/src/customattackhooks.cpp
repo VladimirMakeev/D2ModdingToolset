@@ -29,8 +29,10 @@
 #include "game.h"
 #include "globaldata.h"
 #include "immunecat.h"
+#include "listutils.h"
 #include "log.h"
 #include "mempool.h"
+#include "midunitgroup.h"
 #include "originalfunctions.h"
 #include "ussoldier.h"
 #include "utils.h"
@@ -564,6 +566,53 @@ void __stdcall addUnitToBattleMsgDataHooked(game::IMidgardObjectMap* objectMap,
 
     getOriginalFunctions().addUnitToBattleMsgData(objectMap, group, unitId, attackerFlags,
                                                   battleMsgData);
+}
+
+void __stdcall addAttackTargetsHooked(game::IdList* value,
+                                      game::IMidgardObjectMap* objectMap,
+                                      game::IAttack* attack,
+                                      game::IBatAttack* batAttack,
+                                      const game::LAttackReach* attackReach,
+                                      const game::BattleMsgData* battleMsgData,
+                                      game::BattleAction action,
+                                      const game::CMidgardID* targetUnitId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& id = CMidgardIDApi::get();
+    const auto& listApi = IdListApi::get();
+    const auto& groupApi = CMidUnitGroupApi::get();
+    const auto& attackClasses = AttackClassCategories::get();
+
+    if (action == BattleAction::Attack || action == BattleAction::UseItem) {
+        if (attackReach->id == AttackReachCategories::get().all->id) {
+            CMidgardID targetGroupId{};
+            batAttack->vftable->getTargetGroupId(batAttack, &targetGroupId, battleMsgData);
+
+            void* tmp{};
+            CMidUnitGroup* targetGroup = fn.getStackFortRuinGroup(tmp, objectMap, &targetGroupId);
+
+            CMidgardID summonUnitId{};
+            id.isSummonUnitId(&summonUnitId, targetUnitId);
+
+            if (summonUnitId != emptyId
+                || groupApi.getUnitPosition(targetGroup, targetUnitId) != -1) {
+                if (attack != nullptr
+                    && attack->vftable->getAttackClass(attack)->id == attackClasses.summon->id) {
+                    groupApi.addUnitIdsAvailableForSummons(value, objectMap, targetGroup);
+                } else {
+                    const auto& unitIds = targetGroup->units;
+                    for (const CMidgardID* unitId = unitIds.bgn; unitId != unitIds.end; ++unitId) {
+                        listApi.push_back(value, unitId);
+                    }
+                }
+            }
+        }
+    }
+
+    addUniqueIdToList(*value, targetUnitId);
+    listApi.shuffle(value);
 }
 
 } // namespace hooks
