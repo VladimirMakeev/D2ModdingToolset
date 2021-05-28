@@ -84,9 +84,10 @@ struct Api
     Begin begin;
 
     /** Inserts new element to the list. */
-    using Insert = TargetsListIterator*(__thiscall*)(TargetsList* thisptr,
-                                                     TargetsListIterator* iterator,
-                                                     int* unitPosition);
+    using Insert =
+        Pair<TargetsListIterator, bool>*(__thiscall*)(TargetsList* thisptr,
+                                                      Pair<TargetsListIterator, bool>* iterator,
+                                                      int* unitPosition);
     Insert insert;
 
     /** Removes existing element from list. */
