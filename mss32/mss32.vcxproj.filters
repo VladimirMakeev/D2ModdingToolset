@@ -570,6 +570,9 @@
     <ClCompile Include="src\mapgraphics.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\menulord.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\capitaldatahooks.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -1517,6 +1520,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\mapgraphics.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menulord.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\menuracehooks.h">
