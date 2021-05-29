@@ -57,6 +57,7 @@
 #include "encparambase.h"
 #include "fortification.h"
 #include "functor.h"
+#include "gameimages.h"
 #include "globaldata.h"
 #include "idlist.h"
 #include "interfmanager.h"
@@ -227,7 +228,7 @@ static Hooks getGameHooks()
         {(void*)game::RaceCategoryListApi::get().getPlayableRaces, getPlayableRacesHooked},
         {(void*)game::CMenuRaceApi::get().setRacesToSkip, setRacesToSkipHooked},
         {(void*)fn.isRaceCategoryUnplayable, isRaceCategoryUnplayableHooked},
-        {(void*)fn.loadLordFaceImages, loadLordFaceImagesHooked, (void**)& orig.loadLordFaceImages},
+        {(void*)fn.loadLordFaceImages, loadLordFaceImagesHooked, (void**)&orig.loadLordFaceImages},
         // Support new races in Capital.dat
         {(void*)game::CapitalDataApi::get().allocate, allocateCapitalDataHooked},
         {(void*)game::CapitalDataApi::get().read, readCapitalDataHooked},
@@ -259,6 +260,8 @@ static Hooks getGameHooks()
         {(void*)fn.ignorePlayerEvents, ignorePlayerEventsHooked},
         // Support custom race preview images
         {(void*)fn.getRacePreviewImage, getRacePreviewImageHooked},
+        // Support custom race logo images
+        {(void*)GameImagesApi::get().getRaceLogoImageName, getRaceLogoImageNameHooked}
     };
     // clang-format on
 
@@ -1713,6 +1716,45 @@ game::IMqImage2* __stdcall getRacePreviewImageHooked(const game::LRaceCategory* 
     }
 
     return nullptr;
+}
+
+void __stdcall getRaceLogoImageNameHooked(game::LinkedList<game::String>* imageNames,
+                                          void* storage,
+                                          const game::LRaceCategory* race)
+{
+    using namespace game;
+
+    const auto& races = RaceCategories::get();
+    const auto raceCatId{race->id};
+
+    std::string imageName;
+
+    if (raceCatId == races.human->id) {
+        imageName = "LOGOHU";
+    } else if (raceCatId == races.dwarf->id) {
+        imageName = "LOGODW";
+    } else if (raceCatId == races.heretic->id) {
+        imageName = "LOGOHE";
+    } else if (raceCatId == races.undead->id) {
+        imageName = "LOGOUN";
+    } else if (raceCatId == races.elf->id) {
+        imageName = "LOGOEL";
+    } else {
+        for (const auto& customRace : newRaces()) {
+            if (raceCatId == customRace.category.id) {
+                imageName = fmt::format("LOGO{:s}", customRace.abbreviation);
+                break;
+            }
+        }
+    }
+
+    if (imageName.empty()) {
+        return;
+    }
+
+    const int nameLength = static_cast<int>(imageName.length());
+    GameImagesApi::get().getImageNames(imageNames, storage, imageName.c_str(), nameLength,
+                                       nameLength);
 }
 
 } // namespace hooks

@@ -236,6 +236,10 @@ bool __stdcall ignorePlayerEventsHooked(const game::CMidgardID* playerId,
 
 game::IMqImage2* __stdcall getRacePreviewImageHooked(const game::LRaceCategory* race);
 
+void __stdcall getRaceLogoImageNameHooked(game::LinkedList<game::String>* imageNames,
+                                          void* storage,
+                                          const game::LRaceCategory* race);
+
 } // namespace hooks
 
 #endif // HOOKS_H
