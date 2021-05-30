@@ -20,6 +20,7 @@
 #ifndef TARGETSLIST_H
 #define TARGETSLIST_H
 
+#include "d2pair.h"
 #include "sortedlist.h"
 
 namespace game {
