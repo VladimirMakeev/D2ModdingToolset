@@ -268,8 +268,17 @@ std::string getAttackReachText(game::IAttack* attack)
     auto reach = attack->vftable->getAttackReach(attack);
     if (reach->id == AttackReachCategories::get().adjacent->id)
         return getTranslatedText("X005TA0201"); // "Adjacent units"
-    else
+    else if (reach->id == AttackReachCategories::get().all->id
+             || reach->id == AttackReachCategories::get().any->id)
         return getTranslatedText("X005TA0200"); // "Any unit"
+    else {
+        for (const auto& custom : getCustomAttacks().reaches) {
+            if (reach->id == custom.reach.id)
+                return getTranslatedText(custom.reachTxt.c_str());
+        }
+    }
+
+    return "";
 }
 
 std::string getAttackTargetsText(game::IAttack* attack)
@@ -279,8 +288,17 @@ std::string getAttackTargetsText(game::IAttack* attack)
     auto reach = attack->vftable->getAttackReach(attack);
     if (reach->id == AttackReachCategories::get().all->id)
         return getTranslatedText("X005TA0674"); // "6"
-    else
+    else if (reach->id == AttackReachCategories::get().any->id
+             || reach->id == AttackReachCategories::get().adjacent->id)
         return getTranslatedText("X005TA0675"); // "1"
+    else {
+        for (const auto& custom : getCustomAttacks().reaches) {
+            if (reach->id == custom.reach.id)
+                return getTranslatedText(custom.targetsTxt.c_str());
+        }
+    }
+
+    return "";
 }
 
 std::string getInfiniteText()
