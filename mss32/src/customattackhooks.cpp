@@ -251,16 +251,16 @@ static void fillCustomAttackReaches(const std::filesystem::path& dbfFilePath)
             record.value(reachTxt, "REACH_TXT");
 
             std::string targetsTxt;
-            record.value(targetsTxt, "TARGETS_TXT");
+            record.value(targetsTxt, "TARG_TXT");
 
             std::string scriptFile;
-            record.value(scriptFile, "SCRIPT_FILE");
+            record.value(scriptFile, "SCRIPTFILE");
 
             logDebug("customAttacks.log", fmt::format("Found custom attack reach {:s}", text));
 
             customReaches.push_back(
                 {LAttackReach{AttackReachCategories::vftable(), nullptr, (AttackReachId)-1}, text,
-                 reachTxt, targetsTxt, scriptFile});
+                 reachTxt, targetsTxt, trimSpaces(scriptFile)});
         }
     }
 }
