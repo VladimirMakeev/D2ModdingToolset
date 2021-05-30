@@ -65,13 +65,13 @@ void __fastcall customAttackFillTargetsList(CustomAttack* thisptr,
                                      &thisptr->id2, false, targetsList, true);
 }
 
-void __fastcall customAttackFillTargetsList2(CustomAttack* thisptr,
-                                             int /*%edx*/,
-                                             game::IMidgardObjectMap* objectMap,
-                                             game::BattleMsgData* battleMsgData,
-                                             game::TargetsList* targetsList)
+void __fastcall customAttackFillAltTargetsList(CustomAttack* thisptr,
+                                               int /*%edx*/,
+                                               game::IMidgardObjectMap* objectMap,
+                                               game::BattleMsgData* battleMsgData,
+                                               game::TargetsList* targetsList)
 {
-    logDebug("newAttackType.log", "CustomAttack fillTargetsList2");
+    logDebug("newAttackType.log", "CustomAttack fillAltTargetsList");
     // do nothing
 }
 
@@ -201,7 +201,7 @@ static const game::IBatAttackVftable customAttackVftable{
     (game::IBatAttackVftable::CanPerform)customAttackCanPerform,
     (game::IBatAttackVftable::GetTargetGroupId)customAttackGetTargetGroupId,
     (game::IBatAttackVftable::FillTargetsList)customAttackFillTargetsList,
-    (game::IBatAttackVftable::FillTargetsList)customAttackFillTargetsList2,
+    (game::IBatAttackVftable::FillTargetsList)customAttackFillAltTargetsList,
     (game::IBatAttackVftable::Method5)customAttackMethod5,
     (game::IBatAttackVftable::CanMiss)customAttackCanMiss,
     (game::IBatAttackVftable::Method7)customAttackMethod7,

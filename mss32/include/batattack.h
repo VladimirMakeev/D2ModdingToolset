@@ -64,7 +64,7 @@ struct IBatAttackVftable
                                               BattleMsgData* battleMsgData,
                                               TargetsList* targetsList);
     FillTargetsList fillTargetsList;
-    FillTargetsList fillTargetsList2;
+    FillTargetsList fillAltTargetsList;
 
     using Method5 = bool(__thiscall*)(IBatAttack* thisptr,
                                       IMidgardObjectMap* objectMap,
