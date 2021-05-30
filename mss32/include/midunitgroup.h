@@ -47,6 +47,9 @@ namespace CMidUnitGroupApi {
 
 struct Api
 {
+    using GetUnitId = CMidgardID*(__thiscall*)(const CMidUnitGroup* thisptr, int index);
+    GetUnitId getUnitId;
+
     /** Returns unit position in group, or -1 if unit not found. */
     using GetUnitPosition = int(__thiscall*)(const CMidUnitGroup* thisptr,
                                              const CMidgardID* unitId);
