@@ -95,6 +95,16 @@ struct Api
                                                 size_t imagesTotal,
                                                 ImagePtrPairs* faceImages);
     LoadLordFaceImages loadLordFaceImages;
+
+    /** Returns lord animation for selected lord face. */
+    using GetLordAnimation = void(__stdcall*)(const CMenuPhase* menuPhase,
+                                              int selectedFace,
+                                              ImagePtrPair* animations);
+    GetLordAnimation getLordAnimation;
+
+    /** Loads lord portrait transition animation by name. */
+    using LoadLordAnimation = ImagePtr*(__stdcall*)(ImagePtr* animation, const char* animationName);
+    LoadLordAnimation loadLordAnimation;
 };
 
 Api& get();
