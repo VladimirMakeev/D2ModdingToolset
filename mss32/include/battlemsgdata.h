@@ -478,15 +478,15 @@ struct Api
     using Destructor = void(__thiscall*)(BattleMsgData* thisptr);
     Destructor destructor;
 
-    using AddAttackTargets = void(__stdcall*)(IdList* value,
-                                              IMidgardObjectMap* objectMap,
-                                              IAttack* attack,
-                                              IBatAttack* batAttack,
-                                              const LAttackReach* attackReach,
-                                              const BattleMsgData* battleMsgData,
-                                              BattleAction action,
-                                              const CMidgardID* targetUnitId);
-    AddAttackTargets addAttackTargets;
+    using GetTargetsToAttack = void(__stdcall*)(IdList* value,
+                                                IMidgardObjectMap* objectMap,
+                                                IAttack* attack,
+                                                IBatAttack* batAttack,
+                                                const LAttackReach* attackReach,
+                                                const BattleMsgData* battleMsgData,
+                                                BattleAction action,
+                                                const CMidgardID* targetUnitId);
+    GetTargetsToAttack getTargetsToAttack;
 
     using GetLeaderEquippedBattleItemIndex = int(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                              const CMidgardID* unitId,

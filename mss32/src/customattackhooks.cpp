@@ -570,14 +570,14 @@ void __stdcall addUnitToBattleMsgDataHooked(game::IMidgardObjectMap* objectMap,
                                                   battleMsgData);
 }
 
-void __stdcall addAttackTargetsHooked(game::IdList* value,
-                                      game::IMidgardObjectMap* objectMap,
-                                      game::IAttack* attack,
-                                      game::IBatAttack* batAttack,
-                                      const game::LAttackReach* attackReach,
-                                      const game::BattleMsgData* battleMsgData,
-                                      game::BattleAction action,
-                                      const game::CMidgardID* targetUnitId)
+void __stdcall getTargetsToAttackHooked(game::IdList* value,
+                                        game::IMidgardObjectMap* objectMap,
+                                        game::IAttack* attack,
+                                        game::IBatAttack* batAttack,
+                                        const game::LAttackReach* attackReach,
+                                        const game::BattleMsgData* battleMsgData,
+                                        game::BattleAction action,
+                                        const game::CMidgardID* targetUnitId)
 {
     using namespace game;
 
