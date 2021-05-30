@@ -504,7 +504,7 @@ struct Api
      * @param[in] batAttack battle attack for which targets list will be filled.
      * @param[in] unitId id of a unit performing the attack.
      * @param[in] attackUnitOrItemId unit or item id performing the attack.
-     * @param allies specifies whether the attack should target allies or not.
+     * @param targetAllies specifies whether the attack should target allies or not.
      * @param[inout] targetsList list to fill.
      * @param checkTransformed specifies whether the attack should check units transformations or
      * not.
@@ -514,10 +514,30 @@ struct Api
                                              IBatAttack* batAttack,
                                              CMidgardID* unitId,
                                              CMidgardID* attackUnitOrItemId,
-                                             bool allies,
-                                             TargetsList* targetsList,
+                                             bool targetAllies,
+                                             TargetsList* value,
                                              bool checkTransformed);
     FillTargetsList fillTargetsList;
+
+    using FillTargetsListForAllAnyAttackReach = void(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                                 BattleMsgData* battleMsgData,
+                                                                 IBatAttack* batAttack,
+                                                                 CMidgardID* targetGroupId,
+                                                                 TargetsList* value);
+    FillTargetsListForAllAnyAttackReach fillTargetsListForAllAttackReach;
+    FillTargetsListForAllAnyAttackReach fillTargetsListForAnyAttackReach;
+
+    using FillTargetsListForAdjacentAttackReach = void(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                                   BattleMsgData* battleMsgData,
+                                                                   IBatAttack* batAttack,
+                                                                   CMidgardID* targetGroupId,
+                                                                   CMidgardID* unitGroupId,
+                                                                   CMidgardID* unitId,
+                                                                   TargetsList* value);
+    FillTargetsListForAdjacentAttackReach fillTargetsListForAdjacentAttackReach;
+
+    using IsAutoBattle = bool(__thiscall*)(const BattleMsgData* thisptr);
+    IsAutoBattle isAutoBattle;
 };
 
 Api& get();

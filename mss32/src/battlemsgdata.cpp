@@ -71,6 +71,10 @@ static std::array<Api, 3> functions = {{
         (Api::GetLeaderEquippedBattleItemIndex)0x634f1e,
         (Api::GetUnitInfos)0x623531,
         (Api::FillTargetsList)0x65b725,
+        (Api::FillTargetsListForAllAnyAttackReach)0x65bbc6,
+        (Api::FillTargetsListForAllAnyAttackReach)0x65bcf7,
+        (Api::FillTargetsListForAdjacentAttackReach)0x65be28,
+        (Api::IsAutoBattle)0x6243c8,
     },
     // Russobit
     Api{
@@ -118,6 +122,10 @@ static std::array<Api, 3> functions = {{
         (Api::GetLeaderEquippedBattleItemIndex)0x634f1e,
         (Api::GetUnitInfos)0x623531,
         (Api::FillTargetsList)0x65b725,
+        (Api::FillTargetsListForAllAnyAttackReach)0x65bbc6,
+        (Api::FillTargetsListForAllAnyAttackReach)0x65bcf7,
+        (Api::FillTargetsListForAdjacentAttackReach)0x65be28,
+        (Api::IsAutoBattle)0x6243c8,
     },
     // Gog
     Api{
@@ -165,6 +173,10 @@ static std::array<Api, 3> functions = {{
         (Api::GetLeaderEquippedBattleItemIndex)0x63395e,
         (Api::GetUnitInfos)0x6220c1,
         (Api::FillTargetsList)0x65a1a5,
+        (Api::FillTargetsListForAllAnyAttackReach)0x65a646,
+        (Api::FillTargetsListForAllAnyAttackReach)0x65a777,
+        (Api::FillTargetsListForAdjacentAttackReach)0x65a8a8,
+        (Api::IsAutoBattle)0x622f58,
     },
 }};
 // clang-format on
