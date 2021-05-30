@@ -19,6 +19,7 @@
 
 #include "customattack.h"
 #include "attackclasscat.h"
+#include "battlemsgdata.h"
 #include "customattackhooks.h"
 #include "game.h"
 #include "log.h"
@@ -61,8 +62,8 @@ void __fastcall customAttackFillTargetsList(CustomAttack* thisptr,
                                             game::TargetsList* targetsList)
 {
     logDebug("newAttackType.log", "CustomAttack fillTargetsList");
-    game::TargetsListApi::get().fill(objectMap, battleMsgData, thisptr, &thisptr->id1,
-                                     &thisptr->id2, false, targetsList, true);
+    game::BattleMsgDataApi::get().fillTargetsList(objectMap, battleMsgData, thisptr, &thisptr->id1,
+                                                  &thisptr->id2, false, targetsList, true);
 }
 
 void __fastcall customAttackFillAltTargetsList(CustomAttack* thisptr,

@@ -29,7 +29,6 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::Constructor)0x42904e,
         (Api::Destructor)0x416331,
-        (Api::Fill)0x65b725,
         (Api::Clear)0x668710,
         (Api::Begin)0x6686d0,
         (Api::Insert)0x477d8a,
@@ -40,7 +39,6 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::Constructor)0x42904e,
         (Api::Destructor)0x416331,
-        (Api::Fill)0x65b725,
         (Api::Clear)0x668710,
         (Api::Begin)0x6686d0,
         (Api::Insert)0x477d8a,
@@ -51,7 +49,6 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::Constructor)0x428ada,
         (Api::Destructor)0x415fdc,
-        (Api::Fill)0x65a1a5,
         (Api::Clear)0x667190,
         (Api::Begin)0x667150,
         (Api::Insert)0x477985,

@@ -53,28 +53,6 @@ struct Api
     using Destructor = TargetsList*(__thiscall*)(TargetsList* thisptr);
     Destructor destructor;
 
-    /**
-     * Fills targets list for a specified attack.
-     * @param[in] objectMap map where to search for objects.
-     * @param[in] battleMsgData battle information.
-     * @param[in] attack battle attack for which targets list will be filled.
-     * @param[in] groupId id of a group whose unit performing the attack.
-     * @param[in] id unit or item id performing the attack.
-     * @param allies specifies whether the attack should target allies or not.
-     * @param[inout] targetsList list to fill.
-     * @param checkTransformed specifies whether the attack should check units transformations or
-     * not.
-     */
-    using Fill = void(__stdcall*)(IMidgardObjectMap* objectMap,
-                                  BattleMsgData* battleMsgData,
-                                  IBatAttack* attack,
-                                  CMidgardID* groupId,
-                                  CMidgardID* id,
-                                  bool allies,
-                                  TargetsList* targetsList,
-                                  bool checkTransformed);
-    Fill fill;
-
     /** Clears list contents. */
     using Clear = void(__thiscall*)(TargetsList* thisptr);
     Clear clear;

@@ -21,6 +21,7 @@
 #define BATTLEMSGDATA_H
 
 #include "idlist.h"
+#include "targetslist.h"
 #include "unitinfolist.h"
 #include <cstddef>
 #include <cstdint>
@@ -363,7 +364,7 @@ struct Api
     using CanPerformAttackOnUnitWithStatusCheck =
         bool(__stdcall*)(const IMidgardObjectMap* objectMap,
                          const BattleMsgData* battleMsgData,
-                         const IBatAttack* attack,
+                         const IBatAttack* batAttack,
                          const CMidgardID* unitId);
     CanPerformAttackOnUnitWithStatusCheck canPerformAttackOnUnitWithStatusCheck;
 
@@ -495,6 +496,28 @@ struct Api
 
     using GetUnitInfos = void(__thiscall*)(BattleMsgData* thisptr, UnitInfoList* value, bool a3);
     GetUnitInfos getUnitInfos;
+
+    /**
+     * Fills targets list for a specified attack.
+     * @param[in] objectMap map where to search for objects.
+     * @param[in] battleMsgData battle information.
+     * @param[in] batAttack battle attack for which targets list will be filled.
+     * @param[in] unitId id of a unit performing the attack.
+     * @param[in] attackUnitOrItemId unit or item id performing the attack.
+     * @param allies specifies whether the attack should target allies or not.
+     * @param[inout] targetsList list to fill.
+     * @param checkTransformed specifies whether the attack should check units transformations or
+     * not.
+     */
+    using FillTargetsList = void(__stdcall*)(IMidgardObjectMap* objectMap,
+                                             BattleMsgData* battleMsgData,
+                                             IBatAttack* batAttack,
+                                             CMidgardID* unitId,
+                                             CMidgardID* attackUnitOrItemId,
+                                             bool allies,
+                                             TargetsList* targetsList,
+                                             bool checkTransformed);
+    FillTargetsList fillTargetsList;
 };
 
 Api& get();
