@@ -120,11 +120,11 @@ void __stdcall getTargetsToAttackHooked(game::IdList* value,
                                         game::BattleAction action,
                                         const game::CMidgardID* targetUnitId);
 
-void __stdcall fillTargetsListHooked(game::IMidgardObjectMap* objectMap,
-                                     game::BattleMsgData* battleMsgData,
-                                     game::IBatAttack* batAttack,
-                                     game::CMidgardID* unitId,
-                                     game::CMidgardID* attackUnitOrItemId,
+void __stdcall fillTargetsListHooked(const game::IMidgardObjectMap* objectMap,
+                                     const game::BattleMsgData* battleMsgData,
+                                     const game::IBatAttack* batAttack,
+                                     const game::CMidgardID* unitId,
+                                     const game::CMidgardID* attackUnitOrItemId,
                                      bool targetAllies,
                                      game::TargetsList* value,
                                      bool checkTransformed);

@@ -154,13 +154,13 @@ using CreateBatAttack = IBatAttack*(__stdcall*)(IMidgardObjectMap* objectMap,
                                                 const LAttackClass* attackClass,
                                                 bool a7);
 
-using GetAttackById = IAttack*(__stdcall*)(IMidgardObjectMap* objectMap,
+using GetAttackById = IAttack*(__stdcall*)(const IMidgardObjectMap* objectMap,
                                            const CMidgardID* id,
                                            int attackNumber,
                                            bool checkTransformed);
 
-using IsUnitImmuneToAttack = bool(__stdcall*)(IMidgardObjectMap* objectMap,
-                                              BattleMsgData* battleMsgData,
+using IsUnitImmuneToAttack = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                              const BattleMsgData* battleMsgData,
                                               const CMidgardID* unitId,
                                               IAttack* attack,
                                               bool checkAlwaysImmuneOnly);
@@ -178,7 +178,7 @@ using GetAttackSourceWardFlagPosition =
  * Actual object type found determined by specified id IdType.
  */
 using GetStackFortRuinGroup = CMidUnitGroup*(__thiscall*)(void* thisptr,
-                                                          IMidgardObjectMap* objectMap,
+                                                          const IMidgardObjectMap* objectMap,
                                                           const CMidgardID* objectId);
 
 using DeletePlayerBuildings = int(__stdcall*)(IMidgardObjectMap* objectMap, CMidPlayer* player);

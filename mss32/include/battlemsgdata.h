@@ -509,31 +509,32 @@ struct Api
      * @param checkTransformed specifies whether the attack should check units transformations or
      * not.
      */
-    using FillTargetsList = void(__stdcall*)(IMidgardObjectMap* objectMap,
-                                             BattleMsgData* battleMsgData,
-                                             IBatAttack* batAttack,
-                                             CMidgardID* unitId,
-                                             CMidgardID* attackUnitOrItemId,
+    using FillTargetsList = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                             const BattleMsgData* battleMsgData,
+                                             const IBatAttack* batAttack,
+                                             const CMidgardID* unitId,
+                                             const CMidgardID* attackUnitOrItemId,
                                              bool targetAllies,
                                              TargetsList* value,
                                              bool checkTransformed);
     FillTargetsList fillTargetsList;
 
-    using FillTargetsListForAllAnyAttackReach = void(__stdcall*)(IMidgardObjectMap* objectMap,
-                                                                 BattleMsgData* battleMsgData,
-                                                                 IBatAttack* batAttack,
-                                                                 CMidgardID* targetGroupId,
+    using FillTargetsListForAllAnyAttackReach = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                                 const BattleMsgData* battleMsgData,
+                                                                 const IBatAttack* batAttack,
+                                                                 const CMidgardID* targetGroupId,
                                                                  TargetsList* value);
     FillTargetsListForAllAnyAttackReach fillTargetsListForAllAttackReach;
     FillTargetsListForAllAnyAttackReach fillTargetsListForAnyAttackReach;
 
-    using FillTargetsListForAdjacentAttackReach = void(__stdcall*)(IMidgardObjectMap* objectMap,
-                                                                   BattleMsgData* battleMsgData,
-                                                                   IBatAttack* batAttack,
-                                                                   CMidgardID* targetGroupId,
-                                                                   CMidgardID* unitGroupId,
-                                                                   CMidgardID* unitId,
-                                                                   TargetsList* value);
+    using FillTargetsListForAdjacentAttackReach =
+        void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                         const BattleMsgData* battleMsgData,
+                         const IBatAttack* batAttack,
+                         const CMidgardID* targetGroupId,
+                         const CMidgardID* unitGroupId,
+                         const CMidgardID* unitId,
+                         TargetsList* value);
     FillTargetsListForAdjacentAttackReach fillTargetsListForAdjacentAttackReach;
 
     using IsAutoBattle = bool(__thiscall*)(const BattleMsgData* thisptr);
