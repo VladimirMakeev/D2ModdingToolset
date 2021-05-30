@@ -56,9 +56,9 @@ static inline std::optional<T> getScriptFunction(const sol::state& lua, const ch
 }
 
 /** Returns lua state wrapper with specified script loaded in it and api bound. */
-std::optional<sol::state> loadScript(const char* source);
-
-bool loadScript(const std::filesystem::path& path, sol::state& value);
+std::optional<sol::state> loadScriptFile(const std::filesystem::path& path,
+                                         bool alwaysExists = false,
+                                         bool bindApi = false);
 
 } // namespace hooks
 

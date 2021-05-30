@@ -40,13 +40,12 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
 void initialize(TextIds& value)
 {
     const auto path{hooks::scriptsFolder() / "textids.lua"};
-
     try {
-        sol::state lua;
-        if (!loadScript(path, lua))
+        const auto lua{loadScriptFile(path)};
+        if (!lua)
             return;
 
-        const sol::table& table = lua["textids"];
+        const sol::table& table = (*lua)["textids"];
         readInterfTextIds(table, value.interf);
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to read script '{:s}'.\n"

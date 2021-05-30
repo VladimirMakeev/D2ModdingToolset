@@ -43,18 +43,9 @@ namespace hooks {
 static int getDoppelgangerTransformLevel(const game::CMidUnit* doppelganger,
                                          const game::CMidUnit* targetUnit)
 {
-    const char* filename{"doppelganger.lua"};
-    static std::string script{readFile({scriptsFolder() / filename})};
-    if (script.empty()) {
-        showErrorMessageBox(fmt::format("Failed to read '{:s}' script file", filename));
-        return 0;
-    }
-
-    const auto lua{loadScript(script.c_str())};
+    const auto path{scriptsFolder() / "doppelganger.lua"};
+    const auto lua{loadScriptFile(path, true, true)};
     if (!lua) {
-        showErrorMessageBox(fmt::format("Failed to load '{:s}' script file.\n"
-                                        "See 'mssProxyError.log' for details.",
-                                        filename));
         return 0;
     }
 
@@ -63,7 +54,7 @@ static int getDoppelgangerTransformLevel(const game::CMidUnit* doppelganger,
     if (!getLevel) {
         showErrorMessageBox(fmt::format("Could not find function 'getLevel' in script '{:s}'.\n"
                                         "Make sure function exists and has correct signature.",
-                                        filename));
+                                        path.string()));
         return 0;
     }
 
@@ -75,7 +66,7 @@ static int getDoppelgangerTransformLevel(const game::CMidUnit* doppelganger,
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
                                         "Reason: '{:s}'",
-                                        filename, e.what()));
+                                        path.string(), e.what()));
         return 0;
     }
 }
