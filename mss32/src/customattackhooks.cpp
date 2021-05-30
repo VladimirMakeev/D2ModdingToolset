@@ -26,12 +26,14 @@
 #include "customattacks.h"
 #include "dbf/dbffile.h"
 #include "dbtable.h"
+#include "dynamiccast.h"
 #include "game.h"
 #include "globaldata.h"
 #include "immunecat.h"
 #include "listutils.h"
 #include "log.h"
 #include "mempool.h"
+#include "midplayer.h"
 #include "midunitgroup.h"
 #include "originalfunctions.h"
 #include "ussoldier.h"
@@ -613,6 +615,85 @@ void __stdcall addAttackTargetsHooked(game::IdList* value,
 
     addUniqueIdToList(*value, targetUnitId);
     listApi.shuffle(value);
+}
+
+void __stdcall fillTargetsListHooked(game::IMidgardObjectMap* objectMap,
+                                     game::BattleMsgData* battleMsgData,
+                                     game::IBatAttack* batAttack,
+                                     game::CMidgardID* unitId,
+                                     game::CMidgardID* attackUnitOrItemId,
+                                     bool targetAllies,
+                                     game::TargetsList* value,
+                                     bool checkTransformed)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& id = CMidgardIDApi::get();
+    const auto& rtti = RttiApi::rtti();
+    const auto& battle = BattleMsgDataApi::get();
+    const auto& attackReaches = AttackReachCategories::get();
+    const auto& listApi = TargetsListApi::get();
+    const auto& groupApi = CMidUnitGroupApi::get();
+
+    CMidgardID unitGroupId{};
+    fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, unitId, true);
+
+    CMidgardID targetGroupId{};
+    fn.getAllyOrEnemyGroupId(&targetGroupId, battleMsgData, unitId, targetAllies);
+
+    IAttack* attack = fn.getAttackById(objectMap, attackUnitOrItemId, 1, checkTransformed);
+    LAttackReach* attackReach = attack->vftable->getAttackReach(attack);
+    if (attackReach->id == attackReaches.all->id) {
+        battle.fillTargetsListForAllAttackReach(objectMap, battleMsgData, batAttack, &targetGroupId,
+                                                value);
+    } else if (attackReach->id == attackReaches.any->id) {
+        battle.fillTargetsListForAnyAttackReach(objectMap, battleMsgData, batAttack, &targetGroupId,
+                                                value);
+    } else {
+        battle.fillTargetsListForAdjacentAttackReach(objectMap, battleMsgData, batAttack,
+                                                     &targetGroupId, &unitGroupId, unitId, value);
+    }
+
+    bool excludeImmuneTargets = true;
+    if (!battle.isAutoBattle(battleMsgData)) {
+        CMidgardID playerId{};
+        id.validateId(&playerId, battle.isUnitAttacker(battleMsgData, unitId)
+                                     ? battleMsgData->attackerPlayerId
+                                     : battleMsgData->defenderPlayerId);
+        if (playerId != emptyId) {
+            auto playerObj = objectMap->vftable->findScenarioObjectById(objectMap, &playerId);
+            const auto dynamicCast = RttiApi::get().dynamicCast;
+            CMidPlayer* player = (CMidPlayer*)dynamicCast(playerObj, 0, rtti.IMidScenarioObjectType,
+                                                          rtti.CMidPlayerType, 0);
+            if (player) {
+                excludeImmuneTargets = !player->isHuman;
+            }
+        }
+    }
+
+    if (excludeImmuneTargets) {
+        void* tmp{};
+        auto targetGroup = fn.getStackFortRuinGroup(tmp, objectMap, &targetGroupId);
+        auto unitGroup = fn.getStackFortRuinGroup(tmp, objectMap, &unitGroupId);
+
+        TargetsListIterator it, end;
+        listApi.end(value, &end);
+        for (listApi.begin(value, &it); !listApi.equals(&it, &end); listApi.preinc(&it)) {
+            int targetPosition = *listApi.dereference(&it);
+
+            CMidgardID unitId{};
+            if (targetPosition >= 0) {
+                unitId = *groupApi.getUnitIdByPosition(targetGroup, targetPosition);
+            } else {
+                unitId = *groupApi.getUnitIdByPosition(unitGroup, -(targetPosition + 1));
+            }
+
+            if (fn.isUnitImmuneToAttack(objectMap, battleMsgData, &unitId, attack, true)) {
+                listApi.erase(value, &targetPosition);
+            }
+        }
+    }
 }
 
 } // namespace hooks

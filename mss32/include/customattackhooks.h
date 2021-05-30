@@ -21,6 +21,7 @@
 #define CUSTOMATTACKHOOKS_H
 
 #include "idlist.h"
+#include "targetslist.h"
 
 namespace game {
 struct LAttackClass;
@@ -118,6 +119,15 @@ void __stdcall addAttackTargetsHooked(game::IdList* value,
                                       const game::BattleMsgData* battleMsgData,
                                       game::BattleAction action,
                                       const game::CMidgardID* targetUnitId);
+
+void __stdcall fillTargetsListHooked(game::IMidgardObjectMap* objectMap,
+                                     game::BattleMsgData* battleMsgData,
+                                     game::IBatAttack* batAttack,
+                                     game::CMidgardID* unitId,
+                                     game::CMidgardID* attackUnitOrItemId,
+                                     bool targetAllies,
+                                     game::TargetsList* value,
+                                     bool checkTransformed);
 
 } // namespace hooks
 
