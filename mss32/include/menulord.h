@@ -39,7 +39,7 @@ struct CMenuLordData
 {
     LLordCategory lordCategory;
     LDifficultyLevel difficulty;
-    int unknown;
+    int selectedFace;
     char unknown2[24];
     ImagePtrPairs lordFaces;
     int unknown3;
