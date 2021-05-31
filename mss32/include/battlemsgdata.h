@@ -462,6 +462,12 @@ struct Api
 
     using Destructor = void(__thiscall*)(BattleMsgData* thisptr);
     Destructor destructor;
+
+    using RemoveUnitInfo = void(__thiscall*)(BattleMsgData* thisptr, const CMidgardID* unitId);
+    RemoveUnitInfo removeUnitInfo;
+
+    using DecreaseUnitAttacks = bool(__thiscall*)(BattleMsgData* thisptr, const CMidgardID* unitId);
+    DecreaseUnitAttacks decreaseUnitAttacks;
 };
 
 Api& get();

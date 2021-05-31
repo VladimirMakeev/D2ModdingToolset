@@ -21,6 +21,7 @@
 #define BATTLEMSGDATAHOOKS_H
 
 namespace game {
+struct CMidgardID;
 struct BattleMsgData;
 } // namespace game
 
@@ -41,6 +42,10 @@ game::BattleMsgData* __fastcall battleMsgDataCopyHooked(game::BattleMsgData* thi
                                                         const game::BattleMsgData* src);
 
 void __fastcall battleMsgDataDtorHooked(game::BattleMsgData* thisptr, int /*%edx*/);
+
+void __fastcall removeUnitInfoHooked(game::BattleMsgData* thisptr,
+                                     int /*%edx*/,
+                                     const game::CMidgardID* unitId);
 
 } // namespace hooks
 

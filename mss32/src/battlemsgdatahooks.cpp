@@ -143,4 +143,47 @@ void __fastcall battleMsgDataDtorHooked(game::BattleMsgData* thisptr, int /*%edx
     }
 }
 
+void resetUnitInfo(game::UnitInfo* unitInfo)
+{
+    using namespace game;
+
+    unitInfo->unitId1 = invalidId;
+    resetModifiedUnitsInfo(unitInfo);
+    for (auto& modifierId : unitInfo->modifierIds) {
+        modifierId = invalidId;
+    }
+}
+
+void __fastcall removeUnitInfoHooked(game::BattleMsgData* thisptr,
+                                     int /*%edx*/,
+                                     const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+
+    size_t index;
+    ModifiedUnitsPatched modifiedUnits{};
+    const size_t count = sizeof(thisptr->unitsInfo) / sizeof(*thisptr->unitsInfo);
+    for (index = 0; index < count; ++index) {
+        if (thisptr->unitsInfo[index].unitId1 == *unitId) {
+            modifiedUnits = thisptr->unitsInfo[index].modifiedUnits;
+            break;
+        }
+    }
+
+    for (size_t i = index; i + 1 < count; ++i) {
+        memcpy(&thisptr->unitsInfo[i], &thisptr->unitsInfo[i + 1], sizeof(UnitInfo));
+    }
+
+    if (index < count) {
+        auto lastInfo = &thisptr->unitsInfo[count - 1];
+        lastInfo->modifiedUnits = modifiedUnits;
+        resetUnitInfo(lastInfo);
+    }
+
+    while (battle.decreaseUnitAttacks(thisptr, unitId))
+        ;
+}
+
 } // namespace hooks
