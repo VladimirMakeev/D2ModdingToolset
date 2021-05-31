@@ -194,6 +194,9 @@ static Hooks getGameHooks()
         {battle.isUnitAttackSourceWardRemoved, isUnitAttackSourceWardRemovedHooked},
         {battle.removeUnitAttackSourceWard, removeUnitAttackSourceWardHooked},
         {battle.addUnitToBattleMsgData, addUnitToBattleMsgDataHooked, (void**)&orig.addUnitToBattleMsgData},
+        // Fix occasional crash with incorrect removal of summoned unit info
+        // Fix persistent crash with summons when unrestrictedBestowWards is enabled
+        {battle.removeUnitInfo, removeUnitInfoHooked},
     };
     // clang-format on
 
