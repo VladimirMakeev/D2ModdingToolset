@@ -58,6 +58,23 @@ private:
     std::atomic<int> count;
 } modifiedUnitsPatchedFactory;
 
+void resetUnitInfo(game::UnitInfo* unitInfo)
+{
+    using namespace game;
+
+    auto modifiedUnits = unitInfo->modifiedUnits;
+    memset(unitInfo, 0, sizeof(UnitInfo));
+
+    unitInfo->unitId1 = invalidId;
+
+    unitInfo->modifiedUnits = modifiedUnits;
+    resetModifiedUnitsInfo(unitInfo);
+
+    for (auto& modifierId : unitInfo->modifierIds) {
+        modifierId = invalidId;
+    }
+}
+
 game::BattleMsgData* __fastcall battleMsgDataCtorHooked(game::BattleMsgData* thisptr, int /*%edx*/)
 {
     using namespace game;
@@ -140,23 +157,6 @@ void __fastcall battleMsgDataDtorHooked(game::BattleMsgData* thisptr, int /*%edx
     for (auto& unitInfo : thisptr->unitsInfo) {
         modifiedUnitsPatchedFactory.destroy(unitInfo.modifiedUnits.patched);
         unitInfo.modifiedUnits.patched = nullptr;
-    }
-}
-
-void resetUnitInfo(game::UnitInfo* unitInfo)
-{
-    using namespace game;
-
-    auto modifiedUnits = unitInfo->modifiedUnits;
-    memset(unitInfo, 0, sizeof(UnitInfo));
-
-    unitInfo->unitId1 = invalidId;
-
-    unitInfo->modifiedUnits = modifiedUnits;
-    resetModifiedUnitsInfo(unitInfo);
-
-    for (auto& modifierId : unitInfo->modifierIds) {
-        modifierId = invalidId;
     }
 }
 
