@@ -97,8 +97,8 @@ game::BattleMsgData* __fastcall battleMsgDataCopyAssignHooked(game::BattleMsgDat
     if (thisptr == src)
         return thisptr;
 
-    const size_t count = sizeof(thisptr->unitsInfo) / sizeof(*thisptr->unitsInfo);
-    ModifiedUnitInfo* prev[count];
+    const size_t count = std::size(thisptr->unitsInfo);
+    std::vector<ModifiedUnitInfo*> prev(count);
     for (size_t i = 0; i < count; i++) {
         prev[i] = thisptr->unitsInfo[i].modifiedUnits.patched;
     }
@@ -122,7 +122,7 @@ game::BattleMsgData* __fastcall battleMsgDataCopyHooked(game::BattleMsgData* thi
 
     *thisptr = *src;
 
-    const size_t count = sizeof(thisptr->unitsInfo) / sizeof(*thisptr->unitsInfo);
+    const size_t count = std::size(thisptr->unitsInfo);
     for (size_t i = 0; i < count; i++) {
         auto modifiedUnits = modifiedUnitsPatchedFactory.create();
         memcpy(modifiedUnits, src->unitsInfo[i].modifiedUnits.patched,
@@ -164,7 +164,7 @@ void __fastcall removeUnitInfoHooked(game::BattleMsgData* thisptr,
 
     size_t index;
     ModifiedUnitsPatched modifiedUnits{};
-    const size_t count = sizeof(thisptr->unitsInfo) / sizeof(*thisptr->unitsInfo);
+    const size_t count = std::size(thisptr->unitsInfo);
     for (index = 0; index < count; ++index) {
         if (thisptr->unitsInfo[index].unitId1 == *unitId) {
             modifiedUnits = thisptr->unitsInfo[index].modifiedUnits;

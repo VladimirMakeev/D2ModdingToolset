@@ -20,6 +20,7 @@
 #include "netmsgutils.h"
 #include "battlemsgdata.h"
 #include "mqstream.h"
+#include <vector>
 
 namespace hooks {
 
@@ -31,8 +32,8 @@ void serializeMsgWithBattleMsgData(game::CNetMsg* msg,
     using namespace game;
 
     if (stream->read) {
-        const size_t count = sizeof(battleMsgData->unitsInfo) / sizeof(*battleMsgData->unitsInfo);
-        ModifiedUnitInfo* prev[count];
+        const size_t count = std::size(battleMsgData->unitsInfo);
+        std::vector<ModifiedUnitInfo*> prev(count);
         for (size_t i = 0; i < count; i++) {
             prev[i] = battleMsgData->unitsInfo[i].modifiedUnits.patched;
         }
