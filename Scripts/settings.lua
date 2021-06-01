@@ -29,7 +29,7 @@ settings = {
 	shatteredArmorMax = 100,
 	-- Maximum armor shatter damage per attack [0 : 100]
 	shatterDamageMax = 100,
-	-- Percentage of damage upgrade value that shatter attack receives when a units levels up [0 : 255]
+	-- Percentage of damage upgrade value that shatter attack receives when units level up [0 : 255]
 	shatterDamageUpgradeRatio = 100,
 	-- Allow shatter attacks to miss
 	allowShatterAttackToMiss = false,
@@ -44,7 +44,7 @@ settings = {
 	-- Percentage of L_DRAIN_OVERFLOW attacks damage used as heal [INT_MIN : INT_MAX]
 	drainOverflowHeal = 50,
 
-	-- Change doppelganger attacks to copy units with respect to their level
+	-- Change doppelganger attacks to compute level of a copy using 'doppelganger.lua' script
 	leveledDoppelgangerAttack = false,
 	-- Change transform self attacks to compute transformed unit level using 'transformSelf.lua' script
 	leveledTransformSelfAttack = false,
