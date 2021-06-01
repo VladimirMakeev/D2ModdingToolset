@@ -29,6 +29,7 @@ struct TextIds
     struct Interf
     {
         std::string sellAllValuables;
+        std::string sellAllItems;
         std::string infiniteAttack;
         std::string critHitAttack;
     } interf;

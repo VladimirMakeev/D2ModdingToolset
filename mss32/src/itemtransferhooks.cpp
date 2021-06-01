@@ -752,17 +752,18 @@ game::CPickUpDropInterf* __fastcall pickupDropInterfCtorHooked(game::CPickUpDrop
     return thisptr;
 }
 
-struct SellValuablesMsgBoxHandler : public game::CMidMsgBoxButtonHandler
+struct SellItemsMsgBoxHandler : public game::CMidMsgBoxButtonHandler
 {
     game::CSiteMerchantInterf* merchantInterf;
 };
 
-void __fastcall customMsgBoxHandlerDtor(SellValuablesMsgBoxHandler*, int /*%edx*/, char)
+void __fastcall sellItemsMsgBoxHandlerDtor(SellItemsMsgBoxHandler*, int /*%edx*/, char)
 { }
 
-static void sellValuablesToMerchant(game::CPhaseGame* phaseGame,
-                                    const game::CMidgardID* merchantId,
-                                    const game::CMidgardID* stackId)
+static void sellItemsToMerchant(game::CPhaseGame* phaseGame,
+                                const game::CMidgardID* merchantId,
+                                const game::CMidgardID* stackId,
+                                std::optional<ItemFilter> itemFilter = std::nullopt)
 {
     using namespace game;
 
@@ -791,7 +792,7 @@ static void sellValuablesToMerchant(game::CPhaseGame* phaseGame,
     std::vector<CMidgardID> itemsToSell;
     for (int i = 0; i < itemsTotal; ++i) {
         auto item = inventory.vftable->getItem(&inventory, i);
-        if (isValuable(objectMap, item)) {
+        if (!itemFilter || (itemFilter && (*itemFilter)(objectMap, item))) {
             itemsToSell.push_back(*item);
         }
     }
@@ -802,10 +803,10 @@ static void sellValuablesToMerchant(game::CPhaseGame* phaseGame,
     }
 }
 
-void __fastcall customMsgBoxHandlerFunction(SellValuablesMsgBoxHandler* thisptr,
-                                            int /*%edx*/,
-                                            game::CMidgardMsgBox* msgBox,
-                                            bool okPressed)
+void __fastcall sellValuablesMsgBoxHandlerFunction(SellItemsMsgBoxHandler* thisptr,
+                                                   int /*%edx*/,
+                                                   game::CMidgardMsgBox* msgBox,
+                                                   bool okPressed)
 {
     using namespace game;
 
@@ -814,7 +815,7 @@ void __fastcall customMsgBoxHandlerFunction(SellValuablesMsgBoxHandler* thisptr,
 
     if (okPressed) {
         auto data = merchant->data;
-        sellValuablesToMerchant(phaseGame, &data->merchantId, &data->stackId);
+        sellItemsToMerchant(phaseGame, &data->merchantId, &data->stackId, isValuable);
     }
 
     auto manager = phaseGame->data->interfManager.data;
@@ -826,9 +827,37 @@ void __fastcall customMsgBoxHandlerFunction(SellValuablesMsgBoxHandler* thisptr,
     }
 }
 
-game::CMidMsgBoxButtonHandlerVftable customMsgBoxHandlerVftable{
-    (game::CMidMsgBoxButtonHandlerVftable::Destructor)customMsgBoxHandlerDtor,
-    (game::CMidMsgBoxButtonHandlerVftable::Handler)customMsgBoxHandlerFunction};
+game::CMidMsgBoxButtonHandlerVftable sellValuablesMsgBoxHandlerVftable{
+    (game::CMidMsgBoxButtonHandlerVftable::Destructor)sellItemsMsgBoxHandlerDtor,
+    (game::CMidMsgBoxButtonHandlerVftable::Handler)sellValuablesMsgBoxHandlerFunction};
+
+void __fastcall sellAllItemsMsgBoxHandlerFunction(SellItemsMsgBoxHandler* thisptr,
+                                                  int /*%edx*/,
+                                                  game::CMidgardMsgBox* msgBox,
+                                                  bool okPressed)
+{
+    using namespace game;
+
+    auto merchant = thisptr->merchantInterf;
+    auto phaseGame = merchant->dragDropInterf.phaseGame;
+
+    if (okPressed) {
+        auto data = merchant->data;
+        sellItemsToMerchant(phaseGame, &data->merchantId, &data->stackId);
+    }
+
+    auto manager = phaseGame->data->interfManager.data;
+    auto vftable = manager->CInterfManagerImpl::CInterfManager::vftable;
+    vftable->hideInterface(manager, msgBox);
+
+    if (msgBox) {
+        msgBox->vftable->destructor(msgBox, 1);
+    }
+}
+
+game::CMidMsgBoxButtonHandlerVftable sellAllItemsMsgBoxHandlerVftable{
+    (game::CMidMsgBoxButtonHandlerVftable::Destructor)sellItemsMsgBoxHandlerDtor,
+    (game::CMidMsgBoxButtonHandlerVftable::Handler)sellAllItemsMsgBoxHandlerFunction};
 
 static std::string bankToPriceMessage(const game::Bank& bank)
 {
@@ -871,31 +900,20 @@ static std::string bankToPriceMessage(const game::Bank& bank)
         priceText.append(text + '\n');
     }
 
-    auto message = getTranslatedText(textIds().interf.sellAllValuables.c_str());
-    if (!message.empty()) {
-        replace(message, "%PRICE%", priceText);
-    } else {
-        // fallback in case of interface text could not be found
-        message = fmt::format("Do you want to sell all valuables? Revenue will be:\n{:s}",
-                              priceText);
-    }
-
-    return message;
+    return priceText;
 }
 
-void __fastcall merchantSellValuables(game::CSiteMerchantInterf* thisptr, int /*%edx*/)
+static game::Bank computeItemsSellPrice(game::IMidgardObjectMap* objectMap,
+                                        const game::CMidgardID* stackId,
+                                        std::optional<ItemFilter> itemFilter = std::nullopt)
 {
     using namespace game;
 
-    auto phaseGame = thisptr->dragDropInterf.phaseGame;
-    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
-
-    auto stackId = &thisptr->data->stackId;
     auto stackObj = objectMap->vftable->findScenarioObjectById(objectMap, stackId);
     if (!stackObj) {
         logError("mssProxyError.log",
                  fmt::format("Could not find stack {:s}", idToString(stackId)));
-        return;
+        return {};
     }
 
     const auto dynamicCast = RttiApi::get().dynamicCast;
@@ -906,7 +924,7 @@ void __fastcall merchantSellValuables(game::CSiteMerchantInterf* thisptr, int /*
     if (!stack) {
         logError("mssProxyError.log",
                  fmt::format("Failed to cast scenario oject {:s} to stack", idToString(stackId)));
-        return;
+        return {};
     }
 
     auto& inventory = stack->inventory;
@@ -917,23 +935,75 @@ void __fastcall merchantSellValuables(game::CSiteMerchantInterf* thisptr, int /*
     Bank sellPrice{};
     for (int i = 0; i < itemsTotal; ++i) {
         auto item = inventory.vftable->getItem(&inventory, i);
-        if (isValuable(objectMap, item)) {
+        if (!itemFilter || (itemFilter && (*itemFilter)(objectMap, item))) {
             Bank price{};
             getSellingPrice(&price, objectMap, item);
             bankAdd(&sellPrice, &price);
         }
     }
 
+    return sellPrice;
+}
+
+void __fastcall merchantSellValuables(game::CSiteMerchantInterf* thisptr, int /*%edx*/)
+{
+    using namespace game;
+
+    auto phaseGame = thisptr->dragDropInterf.phaseGame;
+    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto stackId = &thisptr->data->stackId;
+
+    const auto sellPrice = computeItemsSellPrice(objectMap, stackId, isValuable);
     if (BankApi::get().isZero(&sellPrice)) {
-        // no items to sell
+        // No items to sell
         return;
     }
 
+    const auto priceText = bankToPriceMessage(sellPrice);
+    auto message = getTranslatedText(textIds().interf.sellAllValuables.c_str());
+    if (!message.empty()) {
+        replace(message, "%PRICE%", priceText);
+    } else {
+        // Fallback in case of interface text could not be found
+        message = fmt::format("Do you want to sell all valuables? Revenue will be:\n{:s}",
+                              priceText);
+    }
+
     auto memAlloc = Memory::get().allocate;
-    auto handler = (SellValuablesMsgBoxHandler*)memAlloc(sizeof(SellValuablesMsgBoxHandler));
-    handler->vftable = &customMsgBoxHandlerVftable;
+    auto handler = (SellItemsMsgBoxHandler*)memAlloc(sizeof(SellItemsMsgBoxHandler));
+    handler->vftable = &sellValuablesMsgBoxHandlerVftable;
     handler->merchantInterf = thisptr;
-    hooks::showMessageBox(bankToPriceMessage(sellPrice), handler, true);
+    hooks::showMessageBox(message, handler, true);
+}
+
+void __fastcall merchantSellAll(game::CSiteMerchantInterf* thisptr, int /*%edx*/)
+{
+    using namespace game;
+
+    auto phaseGame = thisptr->dragDropInterf.phaseGame;
+    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto stackId = &thisptr->data->stackId;
+
+    const auto sellPrice = computeItemsSellPrice(objectMap, stackId);
+    if (BankApi::get().isZero(&sellPrice)) {
+        // No items to sell
+        return;
+    }
+
+    const auto priceText = bankToPriceMessage(sellPrice);
+    auto message = getTranslatedText(textIds().interf.sellAllItems.c_str());
+    if (!message.empty()) {
+        replace(message, "%PRICE%", priceText);
+    } else {
+        // Fallback in case of interface text could not be found
+        message = fmt::format("Do you want to sell all items? Revenue will be:\n{:s}", priceText);
+    }
+
+    auto memAlloc = Memory::get().allocate;
+    auto handler = (SellItemsMsgBoxHandler*)memAlloc(sizeof(SellItemsMsgBoxHandler));
+    handler->vftable = &sellAllItemsMsgBoxHandlerVftable;
+    handler->merchantInterf = thisptr;
+    hooks::showMessageBox(message, handler, true);
 }
 
 game::CSiteMerchantInterf* __fastcall siteMerchantInterfCtorHooked(
@@ -965,6 +1035,13 @@ game::CSiteMerchantInterf* __fastcall siteMerchantInterfCtorHooked(
         callback.callback = (ButtonCallback::Callback)merchantSellValuables;
         merchantInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
         button.assignFunctor(dialog, "BTN_SELL_ALL_VALUABLES", dialogName, &functor, 0);
+        freeFunctor(&functor, nullptr);
+    }
+
+    if (dialogApi.findControl(dialog, "BTN_SELL_ALL")) {
+        callback.callback = (ButtonCallback::Callback)merchantSellAll;
+        merchantInterf.createButtonFunctor(&functor, 0, thisptr, &callback);
+        button.assignFunctor(dialog, "BTN_SELL_ALL", dialogName, &functor, 0);
         freeFunctor(&functor, nullptr);
     }
 

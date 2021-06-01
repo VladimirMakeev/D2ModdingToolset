@@ -8,12 +8,17 @@ textids = {
 		-- Fallback text is "Do you want to sell all valuables? Revenue will be:\n%PRICE%"
 		sellAllValuables = "X015TA0001",
 
+		-- Defines text id to use as "sell all items" message.
+		-- The text must contain keyword "%PRICE%".
+		-- Fallback text is "Do you want to sell all items? Revenue will be:\n%PRICE%"
+		sellAllItems = "",
+
 		-- Defines text id to mark Infinite attacks in unit encyclopedia.
 		-- Fallback text is "Lasting".
 		infiniteAttack = "",
 
 		-- Defines text id to mark Critical Hit attacks in unit encyclopedia.
 		-- Fallback text id is the standard "X160TA0017".
-		critHitAttack = ""
+		critHitAttack = "",
 	}
 }
