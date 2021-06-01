@@ -28,6 +28,7 @@
 #include "enclayoutspell.h"
 #include "exchangeinterf.h"
 #include "game.h"
+#include "menulord.h"
 #include "midunit.h"
 #include "netmsg.h"
 #include "pickupdropinterf.h"
@@ -72,7 +73,7 @@ struct OriginalFunctions
     game::GetTilePrefixByName getTilePrefixByName;
     game::GetTilePrefixName getTilePrefixName;
     game::TerrainNameListApi::Api::GetTerrainNameList getTerrainNameList;
-
+    game::CMenuLordApi::Api::Constructor menuLordCtor;
 };
 
 OriginalFunctions& getOriginalFunctions();

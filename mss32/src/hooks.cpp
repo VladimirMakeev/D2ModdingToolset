@@ -69,6 +69,7 @@
 #include "lordtype.h"
 #include "mapgen.h"
 #include "mempool.h"
+#include "menulordhooks.h"
 #include "menunewskirmishsingle.h"
 #include "menurace.h"
 #include "menuracehooks.h"
@@ -228,7 +229,10 @@ static Hooks getGameHooks()
         {(void*)game::RaceCategoryListApi::get().getPlayableRaces, getPlayableRacesHooked},
         {(void*)game::CMenuRaceApi::get().setRacesToSkip, setRacesToSkipHooked},
         {(void*)fn.isRaceCategoryUnplayable, isRaceCategoryUnplayableHooked},
-        {(void*)fn.loadLordFaceImages, loadLordFaceImagesHooked, (void**)&orig.loadLordFaceImages},
+        // Support custom races in CMenuLord
+        {(void*)game::CMenuLordApi::get().constructor, menuLordCtorHooked, (void**)&orig.menuLordCtor},
+        {(void*)game::CMenuLordApi::get().getLordFacesByRace, getLordFacesByRaceHooked},
+        {(void*)game::CMenuLordApi::get().getLordAnimation, getLordAnimationHooked},
         // Support new races in Capital.dat
         {(void*)game::CapitalDataApi::get().allocate, allocateCapitalDataHooked},
         {(void*)game::CapitalDataApi::get().read, readCapitalDataHooked},
@@ -1588,19 +1592,6 @@ bool __stdcall isRaceCategoryUnplayableHooked(const game::LRaceCategory* raceCat
 
     const auto& races = RaceCategories::get();
     return raceCategory->id == races.neutral->id;
-}
-
-void __stdcall loadLordFaceImagesHooked(const char** faceNames,
-                                        size_t facesTotal,
-                                        game::Vector<game::ImagePair>* faces)
-{
-    static const char* names[20] = {"FACE_HU_0", "FACE_HU_1", "FACE_HU_2", "FACE_HU_3"};
-
-    if (!faceNames) {
-        faceNames = names;
-    }
-
-    getOriginalFunctions().loadLordFaceImages(faceNames, facesTotal, faces);
 }
 
 char* __fastcall buildingBranchCreateDialogNameHooked(game::CBuildingBranch* thisptr, int /*%edx*/)

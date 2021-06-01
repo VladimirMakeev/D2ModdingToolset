@@ -225,10 +225,6 @@ bool __stdcall findAttackTargetHooked(game::IMidgardObjectMap* objectMap,
 
 bool __stdcall isRaceCategoryUnplayableHooked(const game::LRaceCategory* raceCategory);
 
-void __stdcall loadLordFaceImagesHooked(const char** faceNames,
-                                        size_t facesTotal,
-                                        game::Vector<game::ImagePair>* faces);
-
 char* __fastcall buildingBranchCreateDialogNameHooked(game::CBuildingBranch* thisptr, int /*%edx*/);
 
 bool __stdcall ignorePlayerEventsHooked(const game::CMidgardID* playerId,
