@@ -147,8 +147,14 @@ void resetUnitInfo(game::UnitInfo* unitInfo)
 {
     using namespace game;
 
+    auto modifiedUnits = unitInfo->modifiedUnits;
+    memset(unitInfo, 0, sizeof(UnitInfo));
+
     unitInfo->unitId1 = invalidId;
+
+    unitInfo->modifiedUnits = modifiedUnits;
     resetModifiedUnitsInfo(unitInfo);
+
     for (auto& modifierId : unitInfo->modifierIds) {
         modifierId = invalidId;
     }
