@@ -22,7 +22,7 @@
 #include "globaldata.h"
 #include "globalvariables.h"
 #include "midgardid.h"
-#include <xutility>
+#include <array>
 
 namespace hooks {
 
