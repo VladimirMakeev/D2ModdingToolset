@@ -552,22 +552,20 @@ void __stdcall addUnitToBattleMsgDataHooked(game::IMidgardObjectMap* objectMap,
 {
     using namespace game;
 
-    int i;
-    for (i = 0; i < 22 && battleMsgData->unitsInfo[i].unitId1 != invalidId; ++i)
-        ;
+    for (auto& unitsInfo : battleMsgData->unitsInfo) {
+        if (unitsInfo.unitId1 == invalidId) {
+            unitsInfo.attackClassImmunityStatuses = 0;
+            unitsInfo.attackSourceImmunityStatuses.patched = 0;
 
-    if (i == 22) {
-        logError("mssProxyError.log",
-                 fmt::format("Could not find a free slot for a new unit {:s} in battle msg data",
-                             hooks::idToString(unitId)));
-        return;
+            getOriginalFunctions().addUnitToBattleMsgData(objectMap, group, unitId, attackerFlags,
+                                                          battleMsgData);
+            return;
+        }
     }
 
-    battleMsgData->unitsInfo[i].attackClassImmunityStatuses = 0;
-    battleMsgData->unitsInfo[i].attackSourceImmunityStatuses.patched = 0;
-
-    getOriginalFunctions().addUnitToBattleMsgData(objectMap, group, unitId, attackerFlags,
-                                                  battleMsgData);
+    logError("mssProxyError.log",
+             fmt::format("Could not find a free slot for a new unit {:s} in battle msg data",
+                         hooks::idToString(unitId)));
 }
 
 void __stdcall getTargetsToAttackHooked(game::IdList* value,
