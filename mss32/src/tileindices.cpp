@@ -24,7 +24,7 @@
 namespace game::TileIndicesApi {
 
 // clang-format off
-std::array<Api, 3> functions = {{
+std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::Constructor)0x5ac1d4,
@@ -45,7 +45,14 @@ std::array<Api, 3> functions = {{
         (Api::CreateBorderTiles)0x5ab6fe,
         (Api::CreateTerrainTiles)0x5ab689,
         (Api::GetTileDataIndex)0x5ac471,
-    }
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x55227c,
+        (Api::CreateBorderTiles)0x55251e,
+        (Api::CreateTerrainTiles)0x5524a9,
+        (Api::GetTileDataIndex)0x553221,
+    },
 }};
 // clang-format on
 
