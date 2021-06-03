@@ -214,12 +214,6 @@ static Hooks getGameHooks()
         // Fix occasional crash with incorrect removal of summoned unit info
         // Fix persistent crash with summons when unrestrictedBestowWards is enabled
         {battle.removeUnitInfo, removeUnitInfoHooked},
-        // Support new race categories
-        {(void*)game::LRaceCategoryTableApi::get().constructor, raceCategoryTableCtorHooked},
-        // Validate new races in Grace.dbf, if any
-        {(void*)fn.validateRaces, validateRacesHooked},
-        // Support new subrace categories
-        {(void*)game::LSubRaceCategoryTableApi::get().constructor, subRaceCategoryTableCtorHooked},
         // Support new races in CMenuRace
         {(void*)game::CMenuRaceApi::get().buttonNextCallback, menuRaceBtnNextCallbackHooked},
         {(void*)game::CMenuRaceApi::get().buttonPrevCallback, menuRaceBtnPrevCallbackHooked},
@@ -228,7 +222,6 @@ static Hooks getGameHooks()
         {(void*)game::CMenuRaceApi::get().getRaceBgndImageName, getRaceBgndImageNameHooked},
         {(void*)game::RaceCategoryListApi::get().getPlayableRaces, getPlayableRacesHooked},
         {(void*)game::CMenuRaceApi::get().setRacesToSkip, setRacesToSkipHooked},
-        {(void*)fn.isRaceCategoryUnplayable, isRaceCategoryUnplayableHooked},
         // Support custom races in CMenuLord
         {(void*)game::CMenuLordApi::get().constructor, menuLordCtorHooked, (void**)&orig.menuLordCtor},
         {(void*)game::CMenuLordApi::get().getLordFacesByRace, getLordFacesByRaceHooked},
@@ -238,28 +231,9 @@ static Hooks getGameHooks()
         {(void*)game::CapitalDataApi::get().read, readCapitalDataHooked},
         // Support new races in capital buldings dialogs
         {(void*)game::CBuildingBranchApi::get().createDialogName, buildingBranchCreateDialogNameHooked},
-        // Support custom terrain categories
-        {(void*)game::LTerrainCategoryTableApi::get().constructor, terrainCategoryTableCtorHooked},
-        {(void*)fn.getTerrainByAbbreviation, getTerrainByAbbreviationHooked, (void**)&orig.getTerrainByAbbreviation},
-        // Check CTileVariation records correctness
-        {(void*)game::CTileVariationApi::get().checkData, checkTileVariationDataHooked},
-        // Map custom races to custom terrains
-        {(void*)fn.getTerrainByRace, getTerrainByRaceHooked},
-        {(void*)fn.getTerrainByRace2, getTerrainByRaceHooked},
         // Map custom terrains to custom races
         {(void*)fn.getRaceByTerrain, getRaceByTerrainHooked},
         {(void*)fn.getPlayableRaceByTerrain, getPlayableRaceByTerrainHooked},
-        // Map tile prefix names to numbers and vice versa
-        {(void*)fn.getTilePrefixByName, getTilePrefixByNameHooked, (void**)&orig.getTilePrefixByName},
-        {(void*)fn.getTilePrefixName, getTilePrefixNameHooked, (void**)&orig.getTilePrefixName},
-        // Support custom terrains in terrain names list
-        {(void*)game::TerrainNameListApi::get().getTerrainNameList, getTerrainNameListHooked, (void**)&orig.getTerrainNameList},
-        // Support custom terrain tiles
-        {(void*)game::TileIndicesApi::get().constructor, tileIndicesCtorHooked},
-        {(void*)game::TileIndicesApi::get().getTileDataIndex, getTileDataIndexHooked},
-        {(void*)fn.getNumberByTerrainGround, getNumberByTerrainGroundHooked},
-        // Support custom tiles in terrain coverage logic
-        {(void*)game::CMidgardMapBlockApi::get().countTerrainCoverage, countTerrainCoverageHooked},
         // Do not ignore events for custom races
         {(void*)fn.ignorePlayerEvents, ignorePlayerEventsHooked},
         // Support custom race preview images
@@ -434,6 +408,49 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{fn.getAttackSourceWardFlagPosition,
                                 getAttackSourceWardFlagPositionHooked,
                                 (void**)&orig.getAttackSourceWardFlagPosition});
+
+    // Support custom race categories
+    hooks.emplace_back(HookInfo{(void*)game::LRaceCategoryTableApi::get().constructor,
+                                raceCategoryTableCtorHooked});
+    // Validate custom races in Grace.dbf, if any
+    hooks.emplace_back(HookInfo{(void*)fn.validateRaces, validateRacesHooked});
+    // Treat custom race categories as playable
+    hooks.emplace_back(
+        HookInfo{(void*)fn.isRaceCategoryUnplayable, isRaceCategoryUnplayableHooked});
+    // Support new custom subrace categories
+    hooks.emplace_back(HookInfo{(void*)game::LSubRaceCategoryTableApi::get().constructor,
+                                subRaceCategoryTableCtorHooked});
+
+    // Support custom terrain categories
+    hooks.emplace_back(HookInfo{(void*)game::LTerrainCategoryTableApi::get().constructor,
+                                terrainCategoryTableCtorHooked});
+    hooks.emplace_back(HookInfo{(void*)fn.getTerrainByAbbreviation, getTerrainByAbbreviationHooked,
+                                (void**)&orig.getTerrainByAbbreviation});
+    // Check CTileVariation records correctness
+    hooks.emplace_back(
+        HookInfo{(void*)game::CTileVariationApi::get().checkData, checkTileVariationDataHooked});
+    // Map custom races to custom terrains
+    hooks.emplace_back(HookInfo{(void*)fn.getTerrainByRace, getTerrainByRaceHooked});
+    hooks.emplace_back(HookInfo{(void*)fn.getTerrainByRace2, getTerrainByRaceHooked});
+    // Support custom terrain tiles
+    hooks.emplace_back(
+        HookInfo{(void*)game::TileIndicesApi::get().constructor, tileIndicesCtorHooked});
+    hooks.emplace_back(
+        HookInfo{(void*)game::TileIndicesApi::get().getTileDataIndex, getTileDataIndexHooked});
+    // Map tile prefix names to numbers and vice versa
+    hooks.emplace_back(HookInfo{(void*)fn.getTilePrefixByName, getTilePrefixByNameHooked,
+                                (void**)&orig.getTilePrefixByName});
+    hooks.emplace_back(HookInfo{(void*)fn.getTilePrefixName, getTilePrefixNameHooked,
+                                (void**)&orig.getTilePrefixName});
+    // Assumption: iso palette indices for terrain and ground
+    hooks.emplace_back(
+        HookInfo{(void*)fn.getNumberByTerrainGround, getNumberByTerrainGroundHooked});
+    // Support custom tiles in terrain coverage logic
+    hooks.emplace_back(HookInfo{(void*)game::CMidgardMapBlockApi::get().countTerrainCoverage,
+                                countTerrainCoverageHooked});
+    // Support custom terrains in terrain names list
+    hooks.emplace_back(HookInfo{(void*)game::TerrainNameListApi::get().getTerrainNameList,
+                                getTerrainNameListHooked, (void**)&orig.getTerrainNameList});
 
     if (userSettings().debugMode) {
         // Show and log game exceptions information
