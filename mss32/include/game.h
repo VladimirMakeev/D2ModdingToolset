@@ -418,13 +418,6 @@ using CheckRaceExist = void(__stdcall*)(RacesMap** races,
                                         const LRaceCategory* category,
                                         const char* dbfFileName);
 
-using ImagePtr = SmartPtr<IMqImage2>;
-using ImagePair = Pair<ImagePtr, ImagePtr>;
-
-using LoadLordFaceImages = void(__stdcall*)(const char** faceNames,
-                                            size_t facesTotal,
-                                            Vector<ImagePair>* faces);
-
 /** Gets a list of sources to which the unit has the specified immunity. */
 using GetUnitAttackSourceImmunities = void(__stdcall*)(const LImmuneCat* immuneCat,
                                                        const CMidUnit* unit,
@@ -530,7 +523,6 @@ struct Functions
     IsRaceCategoryUnplayable isRaceCategoryUnplayable;
     ValidateRaces validateRaces;
     CheckRaceExist checkRaceExist;
-    LoadLordFaceImages loadLordFaceImages;
     GetUnitAttackSourceImmunities getUnitAttackSourceImmunities;
     GetSoldierAttackSourceImmunities getSoldierAttackSourceImmunities;
     GetSoldierImmunityPower getSoldierImmunityPower;
