@@ -24,7 +24,7 @@
 namespace game::TerrainCountListApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::GetTilesCount)0x4462f7,
@@ -36,6 +36,10 @@ static std::array<Api, 3> functions = {{
     // Gog
     Api{
         (Api::GetTilesCount)0x445efb,
+    },
+    // Scenario Editor
+    Api{
+        (Api::GetTilesCount)0x4c90db,
     },
 }};
 

@@ -24,7 +24,7 @@
 namespace game::TerrainNameListApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::GetTerrainNameList)0x5a6d29,
@@ -39,7 +39,12 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::GetTerrainNameList)0x5a5f8a,
         (Api::Add)0x5a64ef,
-    }
+    },
+    // Scenario Editor
+    Api{
+        (Api::GetTerrainNameList)0x53a351,
+        (Api::Add)0x53a8b6,
+    },
 }};
 // clang-format on
 

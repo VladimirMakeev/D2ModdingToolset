@@ -48,10 +48,10 @@ static std::array<Api, 4> functions = {{
     },
     // Scenario Editor
     Api{
-        (Api::GetMapGraphics)nullptr,
-        (Api::SetMapGraphics)nullptr,
-        (Api::GetTileIndex)nullptr,
-        (Api::StoreBlackTiles)nullptr,
+        (Api::GetMapGraphics)0x49aac3,
+        (Api::SetMapGraphics)0x4044be,
+        (Api::GetTileIndex)0x49ba3f,
+        (Api::StoreBlackTiles)0x49ba8f,
     }
 }};
 // clang-format on

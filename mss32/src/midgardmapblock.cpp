@@ -43,7 +43,7 @@ static std::array<Api, 4> functions = {{
     // Scenario Editor
     Api{
         (Api::Stream)0x5027f1,
-        (Api::CountTerrainCoverage)nullptr,
+        (Api::CountTerrainCoverage)0x502642,
     },
 }};
 
