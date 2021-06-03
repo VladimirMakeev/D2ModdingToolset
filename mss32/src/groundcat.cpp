@@ -24,7 +24,7 @@
 namespace game::GroundCategories {
 
 // clang-format off
-static std::array<Categories, 3> categories = {{
+static std::array<Categories, 4> categories = {{
     // Akella
     Categories{
         (LGroundCategory*)0x839360,
@@ -45,7 +45,14 @@ static std::array<Categories, 3> categories = {{
         (LGroundCategory*)0x837320,
         (LGroundCategory*)0x837330,
         (LGroundCategory*)0x837340,
-    }
+    },
+    // Scenario Editor
+    Categories{
+        (LGroundCategory*)0x664e90,
+        (LGroundCategory*)0x664ea0,
+        (LGroundCategory*)0x664eb0,
+        (LGroundCategory*)0x664ec0,
+    },
 }};
 // clang-format on
 
