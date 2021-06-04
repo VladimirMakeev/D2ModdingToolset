@@ -129,6 +129,14 @@ void __stdcall fillTargetsListHooked(const game::IMidgardObjectMap* objectMap,
                                      game::TargetsList* value,
                                      bool checkTransformed);
 
+void __stdcall fillEmptyTargetsListHooked(const game::IMidgardObjectMap* objectMap,
+                                          const game::BattleMsgData* battleMsgData,
+                                          const game::IBatAttack* batAttack,
+                                          const game::CMidgardID* unitId,
+                                          const game::CMidgardID* attackUnitOrItemId,
+                                          bool targetAllies,
+                                          game::TargetsList* value);
+
 } // namespace hooks
 
 #endif // CUSTOMATTACKHOOKS_H

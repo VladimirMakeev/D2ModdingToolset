@@ -44,7 +44,8 @@ struct CustomAttackReach
     std::string text;
     std::string reachTxt;
     std::string targetsTxt;
-    std::string scriptFile;
+    std::string selectionScript;
+    std::string attackScript;
 };
 
 using CustomAttackReaches = std::vector<CustomAttackReach>;

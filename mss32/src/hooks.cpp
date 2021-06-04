@@ -32,6 +32,8 @@
 #include "batattacktransformself.h"
 #include "battleattackinfo.h"
 #include "battlemsgdatahooks.h"
+#include "battleviewerinterf.h"
+#include "battleviewerinterfhooks.h"
 #include "bestowwardshooks.h"
 #include "buildingbranch.h"
 #include "buildingtype.h"
@@ -197,6 +199,11 @@ static Hooks getGameHooks()
         {fn.getUnitAttackSourceImmunities, getUnitAttackSourceImmunitiesHooked},
         {battle.isUnitAttackSourceWardRemoved, isUnitAttackSourceWardRemovedHooked},
         {battle.removeUnitAttackSourceWard, removeUnitAttackSourceWardHooked},
+        // Support custom attack reaches
+        {battle.fillTargetsList, fillTargetsListHooked},
+        {battle.fillEmptyTargetsList, fillEmptyTargetsListHooked},
+        {battle.getTargetsToAttack, getTargetsToAttackHooked},
+        {BattleViewerInterfApi::get().markAttackTargets, markAttackTargetsHooked},
     };
     // clang-format on
 
