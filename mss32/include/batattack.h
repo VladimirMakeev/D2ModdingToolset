@@ -118,7 +118,8 @@ struct IBatAttackVftable
                                        IMidgardObjectMap* objectMap);
     Method13 method13;
 
-    using UnknownMethod = bool(__thiscall*)(IBatAttack* thisptr, BattleMsgData* battleMsgData);
+    using UnknownMethod = bool(__thiscall*)(const IBatAttack* thisptr,
+                                            const BattleMsgData* battleMsgData);
 
     /**
      * Called to determine if the attack can target dead units. Every known attack returns false,
