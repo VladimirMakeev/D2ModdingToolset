@@ -1,0 +1,85 @@
+/*
+ * This file is part of the modding toolset for Disciples 2.
+ * (https://github.com/VladimirMakeev/D2ModdingToolset)
+ * Copyright (C) 2021 Stanislav Egorov.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef CUSTOMATTACKUTILS_H
+#define CUSTOMATTACKUTILS_H
+
+#include "targetslist.h"
+#include <filesystem>
+
+namespace game {
+struct CMidgardID;
+struct IMidgardObjectMap;
+struct BattleMsgData;
+struct IAttack;
+struct IBatAttack;
+} // namespace game
+
+namespace bindings {
+class UnitSlotView;
+} // namespace bindings
+
+namespace hooks {
+
+struct CustomAttackReach;
+
+void fillCustomAttackSources(const std::filesystem::path& dbfFilePath);
+
+void fillCustomAttackReaches(const std::filesystem::path& dbfFilePath);
+
+void filterTargetsToSelect(const std::string scriptFile,
+                           const bindings::UnitSlotView& attacker,
+                           const std::vector<bindings::UnitSlotView>& allies,
+                           std::vector<bindings::UnitSlotView>& targets,
+                           bool targetsAreAllies);
+
+std::vector<bindings::UnitSlotView> getTargetSlots(const game::IMidgardObjectMap* objectMap,
+                                                   const game::BattleMsgData* battleMsgData,
+                                                   const game::IBatAttack* batAttack,
+                                                   const game::CMidgardID* targetGroupId);
+
+std::vector<bindings::UnitSlotView> getAllySlots(const game::IMidgardObjectMap* objectMap,
+                                                 const game::BattleMsgData* battleMsgData,
+                                                 const game::IBatAttack* batAttack,
+                                                 const game::CMidgardID* unitGroupId,
+                                                 const game::CMidgardID* unitId);
+
+void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
+                                         const game::BattleMsgData* battleMsgData,
+                                         const game::IBatAttack* batAttack,
+                                         const game::CMidgardID* targetGroupId,
+                                         const game::CMidgardID* unitGroupId,
+                                         const game::CMidgardID* unitId,
+                                         const CustomAttackReach& attackReach,
+                                         game::TargetsList* value);
+
+bool shouldExcludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
+                                const game::BattleMsgData* battleMsgData,
+                                const game::CMidgardID* unitId);
+
+void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
+                          const game::BattleMsgData* battleMsgData,
+                          const game::IAttack* attack,
+                          const game::CMidgardID* unitGroupId,
+                          const game::CMidgardID* targetGroupId,
+                          game::TargetsList* value);
+
+} // namespace hooks
+
+#endif // CUSTOMATTACKUTILS_H

@@ -18,11 +18,16 @@
  */
 
 #include "unitutils.h"
+#include "attacksourcecat.h"
+#include "attacksourcelist.h"
+#include "customattacks.h"
 #include "game.h"
 #include "globaldata.h"
+#include "immunecat.h"
 #include "log.h"
 #include "midgardid.h"
 #include "unitgenerator.h"
+#include "ussoldier.h"
 #include "usunitimpl.h"
 #include "utils.h"
 #include <fmt/format.h>
@@ -56,6 +61,37 @@ game::IUsSoldier* castUnitImplToSoldierWithLogging(game::IUsUnit* unitImpl)
     }
 
     return soldier;
+}
+
+void getSoldierAttackSourceImmunities(const game::LImmuneCat* immuneCat,
+                                      const game::IUsSoldier* soldier,
+                                      game::LinkedList<game::LAttackSource>* value)
+{
+    using namespace game;
+
+    const auto& sources = AttackSourceCategories::get();
+    const auto& sourceListApi = AttackSourceListApi::get();
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.weapon)->id)
+        sourceListApi.add(value, sources.weapon);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.mind)->id)
+        sourceListApi.add(value, sources.mind);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.life)->id)
+        sourceListApi.add(value, sources.life);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.death)->id)
+        sourceListApi.add(value, sources.death);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.fire)->id)
+        sourceListApi.add(value, sources.fire);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.water)->id)
+        sourceListApi.add(value, sources.water);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.air)->id)
+        sourceListApi.add(value, sources.air);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.earth)->id)
+        sourceListApi.add(value, sources.earth);
+
+    for (const auto& custom : getCustomAttacks().sources) {
+        if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, &custom.source)->id)
+            sourceListApi.add(value, &custom.source);
+    }
 }
 
 } // namespace hooks

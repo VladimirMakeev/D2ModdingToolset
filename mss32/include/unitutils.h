@@ -20,16 +20,23 @@
 #ifndef UNITUTILS_H
 #define UNITUTILS_H
 
+#include "linkedlist.h"
+
 namespace game {
 struct CMidgardID;
 struct IUsUnit;
 struct IUsSoldier;
+struct LImmuneCat;
+struct LAttackSource;
 } // namespace game
 
 namespace hooks {
 
 void generateUnitImplByAttackId(const game::CMidgardID* attackId);
 game::IUsSoldier* castUnitImplToSoldierWithLogging(game::IUsUnit* unitImpl);
+void getSoldierAttackSourceImmunities(const game::LImmuneCat* immuneCat,
+                                      const game::IUsSoldier* soldier,
+                                      game::LinkedList<game::LAttackSource>* value);
 
 } // namespace hooks
 
