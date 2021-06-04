@@ -167,6 +167,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\batviewer2dengine.cpp" />
     <ClCompile Include="src\bindings\dynupgradeview.cpp" />
     <ClCompile Include="src\bindings\unitimplview.cpp" />
+    <ClCompile Include="src\bindings\unitslotview.cpp" />
     <ClCompile Include="src\bindings\unitview.cpp" />
     <ClCompile Include="src\bestowwardshooks.cpp" />
     <ClCompile Include="src\buildingbranch.cpp" />
@@ -355,6 +356,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batviewerutils.h" />
     <ClInclude Include="include\bindings\dynupgradeview.h" />
     <ClInclude Include="include\bindings\unitimplview.h" />
+    <ClInclude Include="include\bindings\unitslotview.h" />
     <ClInclude Include="include\bindings\unitview.h" />
     <ClInclude Include="include\bestowwardshooks.h" />
     <ClInclude Include="include\buildingbranch.h" />

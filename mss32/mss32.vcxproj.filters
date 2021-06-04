@@ -585,6 +585,9 @@
     <ClCompile Include="src\batviewer2dengine.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\unitslotview.cpp">
+      <Filter>Исходные файлы\bindings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -1497,6 +1500,9 @@
     </ClInclude>
     <ClInclude Include="include\batviewer2dengine.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\unitslotview.h">
+      <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

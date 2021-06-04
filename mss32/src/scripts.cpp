@@ -22,6 +22,7 @@
 #include "dynupgradeview.h"
 #include "log.h"
 #include "unitimplview.h"
+#include "unitslotview.h"
 #include "unitview.h"
 #include "utils.h"
 
@@ -61,6 +62,7 @@ static void doBindApi(sol::state& lua)
 
     bindings::UnitView::bind(lua);
     bindings::UnitImplView::bind(lua);
+    bindings::UnitSlotView::bind(lua);
     bindings::DynUpgradeView::bind(lua);
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }
