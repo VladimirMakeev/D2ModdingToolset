@@ -162,7 +162,7 @@ using GetAttackById = IAttack*(__stdcall*)(const IMidgardObjectMap* objectMap,
 using IsUnitImmuneToAttack = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
                                               const BattleMsgData* battleMsgData,
                                               const CMidgardID* unitId,
-                                              IAttack* attack,
+                                              const IAttack* attack,
                                               bool checkAlwaysImmuneOnly);
 
 /** Returns bit flag position (0-31) for the specified attack class. */
