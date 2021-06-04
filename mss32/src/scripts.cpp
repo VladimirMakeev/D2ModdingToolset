@@ -18,6 +18,7 @@
  */
 
 #include "scripts.h"
+#include "categoryids.h"
 #include "dynupgradeview.h"
 #include "log.h"
 #include "unitimplview.h"
@@ -28,6 +29,36 @@ namespace hooks {
 
 static void doBindApi(sol::state& lua)
 {
+    using namespace game;
+
+    // clang-format off
+    lua.new_enum("Race",
+        "Human", RaceId::Human,
+        "Undead", RaceId::Undead,
+        "Heretic", RaceId::Heretic,
+        "Dwarf", RaceId::Dwarf,
+        "Neutral", RaceId::Neutral,
+        "Elf", RaceId::Elf
+    );
+    lua.new_enum("Subrace",
+        "Custom", SubRaceId::Custom,
+        "Human", SubRaceId::Human,
+        "Undead", SubRaceId::Undead,
+        "Heretic", SubRaceId::Heretic,
+        "Dwarf", SubRaceId::Dwarf,
+        "Neutral", SubRaceId::Neutral,
+        "NeutralHuman", SubRaceId::NeutralHuman,
+        "NeutralElf", SubRaceId::NeutralElf,
+        "NeutralGreenSkin", SubRaceId::NeutralGreenSkin,
+        "NeutralDragon", SubRaceId::NeutralDragon,
+        "NeutralMarsh", SubRaceId::NeutralMarsh,
+        "NeutralWater", SubRaceId::NeutralWater,
+        "NeutralBarbarian", SubRaceId::NeutralBarbarian,
+        "NeutralWolf", SubRaceId::NeutralWolf,
+        "Elf", SubRaceId::Elf
+    );
+    // clang-format on
+
     bindings::UnitView::bind(lua);
     bindings::UnitImplView::bind(lua);
     bindings::DynUpgradeView::bind(lua);

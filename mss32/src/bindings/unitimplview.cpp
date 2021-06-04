@@ -22,6 +22,9 @@
 #include "game.h"
 #include "globaldata.h"
 #include "log.h"
+#include "midsubrace.h"
+#include "racecategory.h"
+#include "racetype.h"
 #include "unitutils.h"
 #include "ussoldier.h"
 #include "usunitimpl.h"
@@ -40,6 +43,15 @@ void UnitImplView::bind(sol::state& lua)
     auto impl = lua.new_usertype<UnitImplView>("UnitImpl");
     impl["level"] = sol::property(&UnitImplView::getLevel);
     impl["xpNext"] = sol::property(&UnitImplView::getXpNext);
+    impl["xpKilled"] = sol::property(&UnitImplView::getXpKilled);
+    impl["armor"] = sol::property(&UnitImplView::getArmor);
+    impl["regen"] = sol::property(&UnitImplView::getRegen);
+    impl["race"] = sol::property(&UnitImplView::getRace);
+    impl["subrace"] = sol::property(&UnitImplView::getSubRace);
+    impl["small"] = sol::property(&UnitImplView::isSmall);
+    impl["male"] = sol::property(&UnitImplView::isMale);
+    impl["waterOnly"] = sol::property(&UnitImplView::isWaterOnly);
+    impl["attacksTwice"] = sol::property(&UnitImplView::attacksTwice);
     impl["dynUpgLvl"] = sol::property(&UnitImplView::getDynUpgLevel);
     impl["dynUpg1"] = sol::property(&UnitImplView::getDynUpgrade1);
     impl["dynUpg2"] = sol::property(&UnitImplView::getDynUpgrade2);
@@ -61,6 +73,74 @@ int UnitImplView::getDynUpgLevel() const
 {
     auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
     return soldier ? soldier->vftable->getDynUpgLvl(soldier) : 0;
+}
+
+int UnitImplView::getXpKilled() const
+{
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    return soldier ? soldier->vftable->getXpKilled(soldier) : 0;
+}
+
+int UnitImplView::getArmor() const
+{
+    int armor;
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    return soldier ? *soldier->vftable->getArmor(soldier, &armor) : 0;
+}
+
+int UnitImplView::getRegen() const
+{
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    return soldier ? *soldier->vftable->getRegen(soldier) : 0;
+}
+
+int UnitImplView::getRace() const
+{
+    using namespace game;
+
+    const auto& globalApi = GlobalDataApi::get();
+
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    if (!soldier)
+        return 0;
+
+    auto raceId = soldier->vftable->getRaceId(soldier);
+    auto races = (*globalApi.getGlobalData())->races;
+    auto race = (TRaceType*)globalApi.findById(races, raceId);
+    if (!race)
+        return 0;
+
+    return (int)race->data->raceType.id;
+}
+
+int UnitImplView::getSubRace() const
+{
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    return soldier ? (int)soldier->vftable->getSubrace(soldier)->id : 0;
+}
+
+bool UnitImplView::isSmall() const
+{
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    return soldier ? soldier->vftable->getSizeSmall(soldier) : false;
+}
+
+bool UnitImplView::isMale() const
+{
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    return soldier ? soldier->vftable->getSexM(soldier) : false;
+}
+
+bool UnitImplView::isWaterOnly() const
+{
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    return soldier ? soldier->vftable->getWaterOnly(soldier) : false;
+}
+
+bool UnitImplView::attacksTwice() const
+{
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    return soldier ? soldier->vftable->getAttackTwice(soldier) : false;
 }
 
 std::optional<DynUpgradeView> UnitImplView::getDynUpgrade1() const
