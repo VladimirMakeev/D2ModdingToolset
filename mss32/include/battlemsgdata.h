@@ -537,8 +537,32 @@ struct Api
                          TargetsList* value);
     FillTargetsListForAdjacentAttackReach fillTargetsListForAdjacentAttackReach;
 
+    using FillEmptyTargetsList = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                  const BattleMsgData* battleMsgData,
+                                                  const IBatAttack* batAttack,
+                                                  const CMidgardID* unitId,
+                                                  const CMidgardID* attackUnitOrItemId,
+                                                  bool targetAllies,
+                                                  TargetsList* value);
+    FillEmptyTargetsList fillEmptyTargetsList;
+
+    using FillEmptyTargetsListForAllAnyAttackReach =
+        void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                         const CMidgardID* targetGroupId,
+                         TargetsList* value);
+    FillEmptyTargetsListForAllAnyAttackReach fillEmptyTargetsListForAllAttackReach;
+    FillEmptyTargetsListForAllAnyAttackReach fillEmptyTargetsListForAnyAttackReach;
+
+    FillTargetsListForAdjacentAttackReach fillEmptyTargetsListForAdjacentAttackReach;
+
     using IsAutoBattle = bool(__thiscall*)(const BattleMsgData* thisptr);
     IsAutoBattle isAutoBattle;
+
+    using AlliesNotPreventingAdjacentAttack = bool(__stdcall*)(const BattleMsgData* battleMsgData,
+                                                               const CMidUnitGroup* unitGroup,
+                                                               int unitPosition,
+                                                               bool targetsAreAllies);
+    AlliesNotPreventingAdjacentAttack alliesNotPreventingAdjacentAttack;
 };
 
 Api& get();

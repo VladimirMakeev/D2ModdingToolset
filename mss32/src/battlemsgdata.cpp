@@ -74,7 +74,12 @@ static std::array<Api, 3> functions = {{
         (Api::FillTargetsListForAllAnyAttackReach)0x65bbc6,
         (Api::FillTargetsListForAllAnyAttackReach)0x65bcf7,
         (Api::FillTargetsListForAdjacentAttackReach)0x65be28,
+        (Api::FillEmptyTargetsList)0x66411a,
+        (Api::FillEmptyTargetsListForAllAnyAttackReach)0x664226,
+        (Api::FillEmptyTargetsListForAllAnyAttackReach)0x66429c,
+        (Api::FillTargetsListForAdjacentAttackReach)0x664312,
         (Api::IsAutoBattle)0x6243c8,
+        (Api::AlliesNotPreventingAdjacentAttack)0x65c19c,
     },
     // Russobit
     Api{
@@ -125,7 +130,12 @@ static std::array<Api, 3> functions = {{
         (Api::FillTargetsListForAllAnyAttackReach)0x65bbc6,
         (Api::FillTargetsListForAllAnyAttackReach)0x65bcf7,
         (Api::FillTargetsListForAdjacentAttackReach)0x65be28,
+        (Api::FillEmptyTargetsList)0x66411a,
+        (Api::FillEmptyTargetsListForAllAnyAttackReach)0x664226,
+        (Api::FillEmptyTargetsListForAllAnyAttackReach)0x66429c,
+        (Api::FillTargetsListForAdjacentAttackReach)0x664312,
         (Api::IsAutoBattle)0x6243c8,
+        (Api::AlliesNotPreventingAdjacentAttack)0x65c19c,
     },
     // Gog
     Api{
@@ -176,7 +186,12 @@ static std::array<Api, 3> functions = {{
         (Api::FillTargetsListForAllAnyAttackReach)0x65a646,
         (Api::FillTargetsListForAllAnyAttackReach)0x65a777,
         (Api::FillTargetsListForAdjacentAttackReach)0x65a8a8,
+        (Api::FillEmptyTargetsList)0x662b9a,
+        (Api::FillEmptyTargetsListForAllAnyAttackReach)0x662ca6,
+        (Api::FillEmptyTargetsListForAllAnyAttackReach)0x662d1c,
+        (Api::FillTargetsListForAdjacentAttackReach)0x662d92,
         (Api::IsAutoBattle)0x622f58,
+        (Api::AlliesNotPreventingAdjacentAttack)0x65ac1c,
     },
 }};
 // clang-format on
