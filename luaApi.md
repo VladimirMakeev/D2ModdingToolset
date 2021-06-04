@@ -10,6 +10,9 @@ Scripts folder itself should be placed in the game folder.
 - transformSelf.lua - computes unit level for self transform attacks (category L\_TRANSFORM\_SELF)
 - summon.lua - computes summoned unit level for summon attacks (category L\_SUMMON)
 - textids.lua - contains interface text mapping for custom functionality
+- allTargetsToSelect.lua - contains target selection logic for any/all attack reach
+- adjacentTargetsToSelect.lua - contains target selection logic for adjacent attack reach
+- woundedFemaleGreenskinTargetsToSelect.lua - contains target selection logic that only allows to reach wounded female greenskins
 
 ### API reference
 
@@ -19,6 +22,15 @@ Scripts folder itself should be placed in the game folder.
 log('Unit current level:' .. unit.impl.level)
 ```
 
+#### Enumerations
+```lua
+Race = { Human, Undead, Heretic, Dwarf, Neutral, Elf }
+```
+```lua
+Subrace = { Custom, Human, Undead, Heretic, Dwarf, Neutral, NeutralHuman, NeutralElf, NeutralGreenSkin,
+            NeutralDragon, NeutralMarsh, NeutralWater, NeutralBarbarian, NeutralWolf, Elf }
+```
+
 #### Unit
 Represents game unit that participates in a battle, takes damage and performs attacks.
 
@@ -26,6 +38,10 @@ Methods:
 ```lua
 -- Returns unit's current experience points.
 unit.xp
+-- Returns unit's current hit points.
+unit.hp
+-- Returns unit's maximum hit points.
+unit.hpMax
 -- Returns unit's current implementation.
 -- Current implementation describes unit stats according to its levels
 -- and possible transformations applied during battle.
@@ -43,6 +59,24 @@ Methods:
 impl.level
 -- Returns experience points needed for next level. XP_NEXT value from GUnits.dbf.
 impl.xpNext
+-- Returns experience points granted for killing the unit. XP_KILLED value from GUnits.dbf.
+impl.xpKilled
+-- Returns unit's armor. ARMOR value from GUnits.dbf.
+impl.armor
+-- Returns unit's regen. REGEN value from GUnits.dbf.
+impl.regen
+-- Returns unit's race. ID value from Lrace.dbf. See Race enumeration for all possible values.
+impl.race
+-- Returns unit's subrace. ID value from LSubRace.dbf. See Subrace enumeration for all possible values.
+impl.subrace
+-- Indicates if the unit is small (occupies single slot). SIZE_SMALL value from GUnits.dbf.
+impl.small
+-- Indicates if the unit is male. SEX_M value from GUnits.dbf.
+impl.male
+-- Indicates if the unit is water only. WATER_ONLY value from GUnits.dbf.
+impl.waterOnly
+-- Indicates if the unit attacks twice. ATCK_TWICE value from GUnits.dbf.
+impl.attacksTwice
 -- Returns level after which dynUpgrade2 rules are applied. DYN_UPG_LV from GUnits.dbf.
 impl.dynUpgLvl
 -- Returns dynamic upgrade 1.
@@ -103,3 +137,4 @@ function getLevel(summoner, summonImpl)
     return math.max(summonerLevel * 2, summonLevel)
 end
 ```
+See [Scripts](Scripts) directory for additional examples.
