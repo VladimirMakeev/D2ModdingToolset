@@ -428,6 +428,14 @@ using GetSoldierAttackSourceImmunities = void(__stdcall*)(const IUsSoldier* sold
 /** Gets immunity power coefficient to be used by AI for overall soldier power calculation. */
 using GetSoldierImmunityPower = double(__stdcall*)(const IUsSoldier* soldier);
 
+/** Gets distance between unit positions in battle. Used for adjacent attack reach calculations. */
+using GetUnitPositionDistance = int(__stdcall*)(int unitPosition,
+                                                int targetPosition,
+                                                bool isTargetAlly);
+
+using GetUnitRaceCategory = LRaceCategory*(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                       const CMidgardID* unitId);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -490,6 +498,8 @@ struct Functions
     GetUnitAttackSourceImmunities getUnitAttackSourceImmunities;
     GetSoldierAttackSourceImmunities getSoldierAttackSourceImmunities;
     GetSoldierImmunityPower getSoldierImmunityPower;
+    GetUnitPositionDistance getUnitPositionDistance;
+    GetUnitRaceCategory getUnitRaceCategory;
 };
 
 /** Global variables used in game. */

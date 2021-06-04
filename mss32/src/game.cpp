@@ -86,6 +86,8 @@ static std::array<Functions, 4> functions = {{
         (GetUnitAttackSourceImmunities)0x408b0d,
         (GetSoldierAttackSourceImmunities)0x61e3c8,
         (GetSoldierImmunityPower)0x5de4e6,
+        (GetUnitPositionDistance)0x65c053,
+        (GetUnitRaceCategory)0x65472b,
     },
     // Russobit
     Functions{
@@ -148,6 +150,8 @@ static std::array<Functions, 4> functions = {{
         (GetUnitAttackSourceImmunities)0x408b0d,
         (GetSoldierAttackSourceImmunities)0x61e3c8,
         (GetSoldierImmunityPower)0x5de4e6,
+        (GetUnitPositionDistance)0x65c053,
+        (GetUnitRaceCategory)0x65472b,
     },
     // Gog
     Functions{
@@ -210,6 +214,8 @@ static std::array<Functions, 4> functions = {{
         (GetUnitAttackSourceImmunities)0x408790,
         (GetSoldierAttackSourceImmunities)0x61cf04,
         (GetSoldierImmunityPower)0x5dd21b,
+        (GetUnitPositionDistance)0x65aad3,
+        (GetUnitRaceCategory)0x652f1b,
     },
     // Scenario Editor
     Functions{
@@ -272,6 +278,8 @@ static std::array<Functions, 4> functions = {{
         (GetUnitAttackSourceImmunities)nullptr,
         (GetSoldierAttackSourceImmunities)0x521de0,
         (GetSoldierImmunityPower)0x4d7666,
+        (GetUnitPositionDistance)nullptr,
+        (GetUnitRaceCategory)nullptr,
     },
 }};
 
