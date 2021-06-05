@@ -544,6 +544,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\racecategory.h" />
     <ClInclude Include="include\racelist.h" />
     <ClInclude Include="include\racetype.h" />
+    <ClInclude Include="include\radiobuttoninterf.h" />
     <ClInclude Include="include\resetstackext.h" />
     <ClInclude Include="include\restrictions.h" />
     <ClInclude Include="include\scenariodata.h" />
