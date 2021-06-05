@@ -29,6 +29,11 @@ struct CButtonInterf;
 struct CListBoxInterf;
 struct CTextBoxInterf;
 struct CPictureInterf;
+struct CRadioButtonInterf;
+struct CToggleButton;
+struct CSpinButtonInterf;
+struct CEditBoxInterf;
+struct CScrollBarInterf;
 
 /** Must be 104 bytes according to CDialogInterf constructor. */
 struct CDialogInterfData
@@ -54,28 +59,42 @@ namespace CDialogInterfApi {
 
 struct Api
 {
-    /** Searches for button ui element with specific name, returns nullptr if not found. */
-    using FindButton = CButtonInterf*(__stdcall*)(CDialogInterf* thisptr, const char* controlName);
-    FindButton findButton;
-
-    /** Searches for list box ui element with specific name, returns nullptr if not found. */
-    using FindListBox = CListBoxInterf*(__stdcall*)(CDialogInterf* thisptr,
-                                                    const char* controlName);
-    FindListBox findListBox;
-
-    /** Searches for text box ui element with specific name, returns nullptr if not found. */
-    using FindTextBox = CTextBoxInterf*(__stdcall*)(CDialogInterf* thisptr,
-                                                    const char* controlName);
-    FindTextBox findTextBox;
-
     /** Searches for ui element with specific name, returns nullptr if not found. */
     using FindControl = CInterface*(__thiscall*)(CDialogInterf* thisptr, const char* controlName);
     FindControl findControl;
 
+    template <typename T>
+    using FindUiElement = T*(__stdcall*)(CDialogInterf* thisptr, const char* controlName);
+
+    /** Searches for button ui element with specific name, returns nullptr if not found. */
+    FindUiElement<CButtonInterf> findButton;
+
+    /** Searches for list box ui element with specific name, returns nullptr if not found. */
+    FindUiElement<CListBoxInterf> findListBox;
+
+    /** Searches for text box ui element with specific name, returns nullptr if not found. */
+    FindUiElement<CTextBoxInterf> findTextBox;
+
     /** Searches for picture ui element with specific name, returns nullptr if not found. */
-    using FindPicture = CPictureInterf*(__stdcall*)(CDialogInterf* thisptr,
-                                                    const char* controlName);
-    FindPicture findPicture;
+    FindUiElement<CPictureInterf> findPicture;
+
+    /** Searches for radio button ui element with specific name, returns nullptr if not found. */
+    FindUiElement<CRadioButtonInterf> findRadioButton;
+
+    /** Searches for toggle button ui element with specific name, returns nullptr if not found. */
+    FindUiElement<CToggleButton> findToggleButton;
+
+    /** Searches for spin button ui element with specific name, returns nullptr if not found. */
+    FindUiElement<CSpinButtonInterf> findSpinButton;
+
+    /** Searches for edit box ui element with specific name, returns nullptr if not found. */
+    FindUiElement<CEditBoxInterf> findEditBox;
+
+    /**
+     * Searches for scroll bar ui element with specific name, returns nullptr if not found.
+     * CScrollBarInterf used only in Scenario Editor.
+     */
+    FindUiElement<CScrollBarInterf> findScrollBar;
 };
 
 Api& get();
