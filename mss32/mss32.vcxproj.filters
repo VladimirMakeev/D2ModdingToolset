@@ -1492,6 +1492,9 @@
     <ClInclude Include="include\menulord.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\taskmanager.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\task.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
