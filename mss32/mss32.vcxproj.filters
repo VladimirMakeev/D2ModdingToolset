@@ -1507,6 +1507,9 @@
     <ClInclude Include="include\taskmapchange.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\isoview.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\radiobuttoninterf.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
