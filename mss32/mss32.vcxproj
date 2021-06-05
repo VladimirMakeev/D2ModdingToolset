@@ -405,6 +405,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\fortification.h" />
     <ClInclude Include="include\fullscreeninterf.h" />
     <ClInclude Include="include\functor.h" />
+    <ClInclude Include="include\functordispatch1.h" />
     <ClInclude Include="include\game.h" />
     <ClInclude Include="include\gameimages.h" />
     <ClInclude Include="include\gamesettings.h" />
