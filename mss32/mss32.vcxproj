@@ -568,6 +568,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\summonhooks.h" />
     <ClInclude Include="include\targetslist.h" />
     <ClInclude Include="include\task.h" />
+    <ClInclude Include="include\taskbase.h" />
     <ClInclude Include="include\taskmanager.h" />
     <ClInclude Include="include\taskmanagerholder.h" />
     <ClInclude Include="include\terraincat.h" />
