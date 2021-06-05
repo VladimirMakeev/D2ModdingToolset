@@ -1498,6 +1498,9 @@
     <ClInclude Include="include\task.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\freetask.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\radiobuttoninterf.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>

@@ -403,6 +403,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\factoryimageanim.h" />
     <ClInclude Include="include\fortcategory.h" />
     <ClInclude Include="include\fortification.h" />
+    <ClInclude Include="include\freetask.h" />
     <ClInclude Include="include\fullscreeninterf.h" />
     <ClInclude Include="include\functor.h" />
     <ClInclude Include="include\functordispatch1.h" />
