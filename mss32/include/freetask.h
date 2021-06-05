@@ -17,35 +17,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TASKMANAGERHOLDER_H
-#define TASKMANAGERHOLDER_H
+#ifndef FREETASK_H
+#define FREETASK_H
+
+#include "smartptr.h"
+#include "task.h"
 
 namespace game {
 
-struct ITask;
 struct CTaskManager;
-struct ITaskManagerHolderVftable;
+struct CInterfManagerImpl;
 
-struct ITaskManagerHolder
+struct CFreeTask : public ITask
 {
-    ITaskManagerHolderVftable* vftable;
+    CTaskManager* taskManager;
+    SmartPtr<CInterfManagerImpl> interfManager;
 };
-
-struct ITaskManagerHolderVftable
-{
-    using Destructor = void(__thiscall*)(ITaskManagerHolder* thisptr, char flags);
-    Destructor destructor;
-
-    using GetTaskManager = CTaskManager*(__thiscall*)(ITaskManagerHolder* thisptr);
-    GetTaskManager getTaskManager;
-
-    using GetTask = ITask*(__thiscall*)(ITaskManagerHolder* thisptr);
-    GetTask getTask;
-};
-
-static_assert(sizeof(ITaskManagerHolderVftable) == 3 * sizeof(void*),
-              "ITaskManagerHolder vftable must have exactly 3 methods");
 
 } // namespace game
 
-#endif // TASKMANAGERHOLDER_H
+#endif // FREETASK_H

@@ -17,35 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TASKMANAGERHOLDER_H
-#define TASKMANAGERHOLDER_H
+#ifndef FUNCTORDISPATCH1_H
+#define FUNCTORDISPATCH1_H
 
 namespace game {
 
-struct ITask;
-struct CTaskManager;
-struct ITaskManagerHolderVftable;
+template <typename T>
+struct CBFunctorDispatch1Vftable;
 
-struct ITaskManagerHolder
+template <typename T>
+struct CBFunctorDispatch1
 {
-    ITaskManagerHolderVftable* vftable;
+    CBFunctorDispatch1Vftable<T>* vftable;
 };
 
-struct ITaskManagerHolderVftable
+template <typename T>
+struct CBFunctorDispatch1Vftable
 {
-    using Destructor = void(__thiscall*)(ITaskManagerHolder* thisptr, char flags);
-    Destructor destructor;
-
-    using GetTaskManager = CTaskManager*(__thiscall*)(ITaskManagerHolder* thisptr);
-    GetTaskManager getTaskManager;
-
-    using GetTask = ITask*(__thiscall*)(ITaskManagerHolder* thisptr);
-    GetTask getTask;
+    /** Calls functor-specific callback function, passing it T as a single parameter. */
+    using RunCallback = void(__thiscall)(CBFunctorDispatch1<T>* thistr, T value);
+    RunCallback runCallback;
 };
-
-static_assert(sizeof(ITaskManagerHolderVftable) == 3 * sizeof(void*),
-              "ITaskManagerHolder vftable must have exactly 3 methods");
 
 } // namespace game
 
-#endif // TASKMANAGERHOLDER_H
+#endif // FUNCTORDISPATCH1_H

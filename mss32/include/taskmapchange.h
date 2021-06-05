@@ -17,35 +17,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TASKMANAGERHOLDER_H
-#define TASKMANAGERHOLDER_H
+#ifndef TASKMAPCHANGE_H
+#define TASKMAPCHANGE_H
+
+#include "taskbase.h"
 
 namespace game {
 
-struct ITask;
 struct CTaskManager;
-struct ITaskManagerHolderVftable;
 
-struct ITaskManagerHolder
+namespace editor {
+
+struct CMapInterf;
+
+enum class BrushSize : int
 {
-    ITaskManagerHolderVftable* vftable;
+    Brush1x1,
+    Brush3x3,
+    Brush5x5
 };
 
-struct ITaskManagerHolderVftable
+struct CTaskMapChangeData
 {
-    using Destructor = void(__thiscall*)(ITaskManagerHolder* thisptr, char flags);
-    Destructor destructor;
-
-    using GetTaskManager = CTaskManager*(__thiscall*)(ITaskManagerHolder* thisptr);
-    GetTaskManager getTaskManager;
-
-    using GetTask = ITask*(__thiscall*)(ITaskManagerHolder* thisptr);
-    GetTask getTask;
+    CTaskManager* taskManager;
+    CMapInterf* mapInterface;
+    BrushSize brushSize;
+    int unknown;
+    int unknown2;
+    SmartPointer ptr;
+    SmartPointer ptr2;
+    SmartPointer ptr3;
 };
 
-static_assert(sizeof(ITaskManagerHolderVftable) == 3 * sizeof(void*),
-              "ITaskManagerHolder vftable must have exactly 3 methods");
+static_assert(sizeof(CTaskMapChangeData) == 44,
+              "Size of CTaskMapChangeData structure must be exactly 44 bytes");
 
+/** Base class for map changing tools logic. */
+struct CTaskMapChange : CTaskBase
+{
+    CTaskMapChangeData* mapChangeData;
+};
+
+} // namespace editor
 } // namespace game
 
-#endif // TASKMANAGERHOLDER_H
+#endif // TASKMAPCHANGE_H

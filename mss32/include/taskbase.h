@@ -17,35 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TASKMANAGERHOLDER_H
-#define TASKMANAGERHOLDER_H
+#ifndef TASKBASE_H
+#define TASKBASE_H
 
-namespace game {
+#include "freetask.h"
 
-struct ITask;
-struct CTaskManager;
-struct ITaskManagerHolderVftable;
+namespace game::editor {
 
-struct ITaskManagerHolder
+struct CTaskBaseData
 {
-    ITaskManagerHolderVftable* vftable;
+    char unknown[8];
 };
 
-struct ITaskManagerHolderVftable
+static_assert(sizeof(CTaskBaseData) == 8,
+              "Size of CTaskBaseData structure must be exactly 8 bytes");
+
+struct CTaskBase : public CFreeTask
 {
-    using Destructor = void(__thiscall*)(ITaskManagerHolder* thisptr, char flags);
-    Destructor destructor;
-
-    using GetTaskManager = CTaskManager*(__thiscall*)(ITaskManagerHolder* thisptr);
-    GetTaskManager getTaskManager;
-
-    using GetTask = ITask*(__thiscall*)(ITaskManagerHolder* thisptr);
-    GetTask getTask;
+    CTaskBaseData* taskBaseData;
 };
 
-static_assert(sizeof(ITaskManagerHolderVftable) == 3 * sizeof(void*),
-              "ITaskManagerHolder vftable must have exactly 3 methods");
+} // namespace game::editor
 
-} // namespace game
-
-#endif // TASKMANAGERHOLDER_H
+#endif // TASKBASE_H

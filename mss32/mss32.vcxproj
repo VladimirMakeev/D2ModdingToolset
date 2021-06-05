@@ -222,6 +222,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mapgen.cpp" />
     <ClCompile Include="src\mapgraphics.cpp" />
+    <ClCompile Include="src\mapinterf.cpp" />
     <ClCompile Include="src\mempool.cpp" />
     <ClCompile Include="src\menubase.cpp" />
     <ClCompile Include="src\menulord.cpp" />
@@ -275,6 +276,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\subracehooks.cpp" />
     <ClCompile Include="src\summonhooks.cpp" />
     <ClCompile Include="src\targetslist.cpp" />
+    <ClCompile Include="src\taskchangecolor.cpp" />
     <ClCompile Include="src\terraincat.cpp" />
     <ClCompile Include="src\terraincountlist.cpp" />
     <ClCompile Include="src\terrainhooks.cpp" />
@@ -414,8 +416,10 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\factoryimageanim.h" />
     <ClInclude Include="include\fortcategory.h" />
     <ClInclude Include="include\fortification.h" />
+    <ClInclude Include="include\freetask.h" />
     <ClInclude Include="include\fullscreeninterf.h" />
     <ClInclude Include="include\functor.h" />
+    <ClInclude Include="include\functordispatch1.h" />
     <ClInclude Include="include\game.h" />
     <ClInclude Include="include\gameimages.h" />
     <ClInclude Include="include\gamesettings.h" />
@@ -436,6 +440,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\interftexthooks.h" />
     <ClInclude Include="include\isoengineground.h" />
     <ClInclude Include="include\isolayers.h" />
+    <ClInclude Include="include\isoview.h" />
     <ClInclude Include="include\item.h" />
     <ClInclude Include="include\itemarmor.h" />
     <ClInclude Include="include\itembanner.h" />
@@ -473,6 +478,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mapelement.h" />
     <ClInclude Include="include\mapgen.h" />
     <ClInclude Include="include\mapgraphics.h" />
+    <ClInclude Include="include\mapinterf.h" />
     <ClInclude Include="include\mempool.h" />
     <ClInclude Include="include\menubase.h" />
     <ClInclude Include="include\menulord.h" />
@@ -558,6 +564,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\racecategory.h" />
     <ClInclude Include="include\racelist.h" />
     <ClInclude Include="include\racetype.h" />
+    <ClInclude Include="include\radiobuttoninterf.h" />
     <ClInclude Include="include\resetstackext.h" />
     <ClInclude Include="include\restrictions.h" />
     <ClInclude Include="include\scenariodata.h" />
@@ -580,7 +587,12 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\subracehooks.h" />
     <ClInclude Include="include\summonhooks.h" />
     <ClInclude Include="include\targetslist.h" />
+    <ClInclude Include="include\task.h" />
+    <ClInclude Include="include\taskbase.h" />
+    <ClInclude Include="include\taskchangecolor.h" />
+    <ClInclude Include="include\taskmanager.h" />
     <ClInclude Include="include\taskmanagerholder.h" />
+    <ClInclude Include="include\taskmapchange.h" />
     <ClInclude Include="include\terraincat.h" />
     <ClInclude Include="include\terraincountlist.h" />
     <ClInclude Include="include\terrainhooks.h" />

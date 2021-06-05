@@ -17,35 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TASKMANAGERHOLDER_H
-#define TASKMANAGERHOLDER_H
+#include "taskchangecolor.h"
 
-namespace game {
+namespace game::editor::CTaskChangeColorApi {
 
-struct ITask;
-struct CTaskManager;
-struct ITaskManagerHolderVftable;
-
-struct ITaskManagerHolder
+Api& get()
 {
-    ITaskManagerHolderVftable* vftable;
-};
+    static Api api{(Api::Constructor)0x4065a2, (Api::GetTerrain)0x40679c};
 
-struct ITaskManagerHolderVftable
-{
-    using Destructor = void(__thiscall*)(ITaskManagerHolder* thisptr, char flags);
-    Destructor destructor;
+    return api;
+}
 
-    using GetTaskManager = CTaskManager*(__thiscall*)(ITaskManagerHolder* thisptr);
-    GetTaskManager getTaskManager;
-
-    using GetTask = ITask*(__thiscall*)(ITaskManagerHolder* thisptr);
-    GetTask getTask;
-};
-
-static_assert(sizeof(ITaskManagerHolderVftable) == 3 * sizeof(void*),
-              "ITaskManagerHolder vftable must have exactly 3 methods");
-
-} // namespace game
-
-#endif // TASKMANAGERHOLDER_H
+} // namespace game::editor::CTaskChangeColorApi

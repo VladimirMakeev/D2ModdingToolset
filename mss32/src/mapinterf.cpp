@@ -17,35 +17,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TASKMANAGERHOLDER_H
-#define TASKMANAGERHOLDER_H
+#include "mapinterf.h"
 
-namespace game {
+namespace game::editor::CMapInterfApi {
 
-struct ITask;
-struct CTaskManager;
-struct ITaskManagerHolderVftable;
-
-struct ITaskManagerHolder
+Api& get()
 {
-    ITaskManagerHolderVftable* vftable;
-};
+    // clang-format off
+    static Api api{
+        (Api::CreateMapChangeTask)0x4628aa,
+        (Api::CreateTask)0x462ad3,
+        (Api::CreateTask)0x462918,
+        (Api::CreateTask)0x462b42,
+        (Api::CreateTask)0x462997,
+    };
+    // clang-format on
 
-struct ITaskManagerHolderVftable
-{
-    using Destructor = void(__thiscall*)(ITaskManagerHolder* thisptr, char flags);
-    Destructor destructor;
+    return api;
+}
 
-    using GetTaskManager = CTaskManager*(__thiscall*)(ITaskManagerHolder* thisptr);
-    GetTaskManager getTaskManager;
-
-    using GetTask = ITask*(__thiscall*)(ITaskManagerHolder* thisptr);
-    GetTask getTask;
-};
-
-static_assert(sizeof(ITaskManagerHolderVftable) == 3 * sizeof(void*),
-              "ITaskManagerHolder vftable must have exactly 3 methods");
-
-} // namespace game
-
-#endif // TASKMANAGERHOLDER_H
+} // namespace game::editor::CMapInterfApi

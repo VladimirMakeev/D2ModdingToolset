@@ -17,35 +17,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TASKMANAGERHOLDER_H
-#define TASKMANAGERHOLDER_H
+#ifndef ISOVIEW_H
+#define ISOVIEW_H
+
+#include "fullscreeninterf.h"
 
 namespace game {
 
-struct ITask;
-struct CTaskManager;
-struct ITaskManagerHolderVftable;
+struct CDialogInterf;
 
-struct ITaskManagerHolder
+namespace editor {
+
+struct CIsoViewData
 {
-    ITaskManagerHolderVftable* vftable;
+    char unknown[16];
+    CDialogInterf* dialogInterf;
+    char unknown2[72];
 };
 
-struct ITaskManagerHolderVftable
+static_assert(sizeof(CIsoViewData) == 92,
+              "Size of CIsoViewData structure must be exactly 92 bytes");
+
+static_assert(offsetof(CIsoViewData, dialogInterf) == 16,
+              "CIsoViewData::dialogInterf offset must be 16 bytes");
+
+/** Represents DLG_ISO_VIEW from ScenEdit.dlg. */
+struct CIsoView : public CFullScreenInterf
 {
-    using Destructor = void(__thiscall*)(ITaskManagerHolder* thisptr, char flags);
-    Destructor destructor;
-
-    using GetTaskManager = CTaskManager*(__thiscall*)(ITaskManagerHolder* thisptr);
-    GetTaskManager getTaskManager;
-
-    using GetTask = ITask*(__thiscall*)(ITaskManagerHolder* thisptr);
-    GetTask getTask;
+    CIsoViewData* isoViewData;
 };
 
-static_assert(sizeof(ITaskManagerHolderVftable) == 3 * sizeof(void*),
-              "ITaskManagerHolder vftable must have exactly 3 methods");
-
+} // namespace editor
 } // namespace game
 
-#endif // TASKMANAGERHOLDER_H
+#endif // ISOVIEW_H

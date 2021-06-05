@@ -17,35 +17,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TASKMANAGERHOLDER_H
-#define TASKMANAGERHOLDER_H
+#ifndef RADIOBUTTONINTERF_H
+#define RADIOBUTTONINTERF_H
+
+#include "d2pair.h"
+#include "functordispatch1.h"
+#include "interface.h"
 
 namespace game {
 
-struct ITask;
-struct CTaskManager;
-struct ITaskManagerHolderVftable;
+struct CToggleButtonInterf;
 
-struct ITaskManagerHolder
+struct CRadioButtonInterfData
 {
-    ITaskManagerHolderVftable* vftable;
+    Vector<Pair<CToggleButtonInterf*, bool>> buttons;
+    char unknown;
+    char padding[3];
+    int selectedButton;
+    SmartPtr<CBFunctorDispatch1<int>> onButtonPressed;
 };
 
-struct ITaskManagerHolderVftable
+static_assert(sizeof(CRadioButtonInterfData) == 32,
+              "Size of CRadioButtonInterfData structure must be exactly 32 bytes");
+
+/**
+ * Radio button ui element.
+ * Represents RADIO from Interf.dlg or ScenEdit.dlg files.
+ */
+struct CRadioButtonInterf : public CInterface
 {
-    using Destructor = void(__thiscall*)(ITaskManagerHolder* thisptr, char flags);
-    Destructor destructor;
-
-    using GetTaskManager = CTaskManager*(__thiscall*)(ITaskManagerHolder* thisptr);
-    GetTaskManager getTaskManager;
-
-    using GetTask = ITask*(__thiscall*)(ITaskManagerHolder* thisptr);
-    GetTask getTask;
+    CRadioButtonInterfData* data;
 };
 
-static_assert(sizeof(ITaskManagerHolderVftable) == 3 * sizeof(void*),
-              "ITaskManagerHolder vftable must have exactly 3 methods");
+static_assert(sizeof(CRadioButtonInterf) == 12,
+              "Size of CRadioButtonInterf structure must be exactly 12 bytes");
 
 } // namespace game
 
-#endif // TASKMANAGERHOLDER_H
+#endif // RADIOBUTTONINTERF_H
