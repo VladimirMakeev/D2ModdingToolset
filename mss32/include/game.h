@@ -146,8 +146,8 @@ using FindUnitById = CMidUnit*(__stdcall*)(const IMidgardObjectMap* objectMap,
 using CastUnitImplToSoldier = IUsSoldier*(__stdcall*)(IUsUnit* unitImpl);
 using CastUnitImplToNoble = IUsNoble*(__stdcall*)(const IUsUnit* unitImpl);
 
-using CreateBatAttack = IBatAttack*(__stdcall*)(IMidgardObjectMap* objectMap,
-                                                BattleMsgData* battleMsgData,
+using CreateBatAttack = IBatAttack*(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                const BattleMsgData* battleMsgData,
                                                 const CMidgardID* unitId,
                                                 const CMidgardID* id2,
                                                 int attackNumber,
