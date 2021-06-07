@@ -61,8 +61,8 @@ struct Api
     GetUnitIdByPosition getUnitIdByPosition;
 
     using AddUnitIdsAvailableForSummons = void(__stdcall*)(IdList* value,
-                                                           IMidgardObjectMap* objectMap,
-                                                           CMidUnitGroup* group);
+                                                           const IMidgardObjectMap* objectMap,
+                                                           const CMidUnitGroup* group);
     AddUnitIdsAvailableForSummons addUnitIdsAvailableForSummons;
 };
 
