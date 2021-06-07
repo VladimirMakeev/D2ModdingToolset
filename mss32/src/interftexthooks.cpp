@@ -273,8 +273,11 @@ std::string getAttackReachText(game::IAttack* attack)
         return getTranslatedText("X005TA0200"); // "Any unit"
     else {
         for (const auto& custom : getCustomAttacks().reaches) {
-            if (reach->id == custom.reach.id)
-                return getTranslatedText(custom.reachTxt.c_str());
+            if (reach->id == custom.reach.id) {
+                auto value = getTranslatedText(custom.reachTxt.c_str());
+                // Fixes vertical tab in case of multiline
+                return fmt::format("\\p110;{:s}\\p0;", value);
+            }
         }
     }
 
@@ -293,8 +296,11 @@ std::string getAttackTargetsText(game::IAttack* attack)
         return getTranslatedText("X005TA0675"); // "1"
     else {
         for (const auto& custom : getCustomAttacks().reaches) {
-            if (reach->id == custom.reach.id)
-                return getTranslatedText(custom.targetsTxt.c_str());
+            if (reach->id == custom.reach.id) {
+                auto value = getTranslatedText(custom.targetsTxt.c_str());
+                // Fixes vertical tab in case of multiline
+                return fmt::format("\\p110;{:s}\\p0;", value);
+            }
         }
     }
 
