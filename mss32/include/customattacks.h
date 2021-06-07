@@ -46,6 +46,7 @@ struct CustomAttackReach
     std::string targetsTxt;
     std::string selectionScript;
     std::string attackScript;
+    bool markAttackTargets;
 };
 
 using CustomAttackReaches = std::vector<CustomAttackReach>;
