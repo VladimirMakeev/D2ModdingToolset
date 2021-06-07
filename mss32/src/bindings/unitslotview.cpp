@@ -19,6 +19,7 @@
 
 #include "unitslotview.h"
 #include "game.h"
+#include "midunit.h"
 #include "unitview.h"
 #include <sol/sol.hpp>
 
@@ -43,6 +44,8 @@ void UnitSlotView::bind(sol::state& lua)
                                                sol::meta_function::equal_to, &operator==);
     slot["unit"] = sol::property(&getUnit);
     slot["position"] = sol::property(&getPosition);
+    slot["line"] = sol::property(&getLine);
+    slot["column"] = sol::property(&getColumn);
     slot["frontline"] = sol::property(&isFrontline);
     slot["backline"] = sol::property(&isBackline);
     lua.set_function("distance", &getDistance);
@@ -56,6 +59,16 @@ std::optional<UnitView> UnitSlotView::getUnit() const
 int UnitSlotView::getPosition() const
 {
     return position;
+}
+
+int UnitSlotView::getLine() const
+{
+    return position % 2;
+}
+
+int UnitSlotView::getColumn() const
+{
+    return position / 2;
 }
 
 bool UnitSlotView::isFrontline() const
@@ -74,6 +87,13 @@ int UnitSlotView::getDistance(const UnitSlotView& to) const
 
     const auto& fn = gameFunctions();
     return fn.getUnitPositionDistance(position, to.position, groupId == to.groupId);
+}
+
+game::CMidgardID UnitSlotView::getUnitId() const
+{
+    using namespace game;
+
+    return unit ? unit->unitId : emptyId;
 }
 
 } // namespace bindings

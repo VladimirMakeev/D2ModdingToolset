@@ -45,9 +45,13 @@ public:
 
     std::optional<UnitView> getUnit() const;
     int getPosition() const;
+    int getLine() const;
+    int getColumn() const;
     bool isFrontline() const;
     bool isBackline() const;
     int getDistance(const UnitSlotView& to) const;
+
+    game::CMidgardID getUnitId() const;
 
 private:
     const game::CMidUnit* unit;
