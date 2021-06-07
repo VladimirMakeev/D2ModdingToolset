@@ -178,12 +178,12 @@ game::LAttackReachTable* __fastcall attackReachTableCtorHooked(game::LAttackReac
     thisptr->vftable = LAttackReachTableApi::vftable();
 
     const auto& table = LAttackReachTableApi::get();
-    auto& reaches = AttackReachCategories::get();
+    const auto& attackReaches = AttackReachCategories::get();
 
     table.init(thisptr, codeBaseEnvProxy, globalsFolderPath, dbfFileName);
-    table.readCategory(reaches.all, thisptr, "L_ALL", dbfFileName);
-    table.readCategory(reaches.any, thisptr, "L_ANY", dbfFileName);
-    table.readCategory(reaches.adjacent, thisptr, "L_ADJACENT", dbfFileName);
+    table.readCategory(attackReaches.all, thisptr, "L_ALL", dbfFileName);
+    table.readCategory(attackReaches.any, thisptr, "L_ANY", dbfFileName);
+    table.readCategory(attackReaches.adjacent, thisptr, "L_ADJACENT", dbfFileName);
 
     for (auto& custom : getCustomAttacks().reaches) {
         logDebug("customAttacks.log", fmt::format("Reading custom attack reach {:s}", custom.text));
@@ -444,39 +444,39 @@ void __stdcall getTargetsToAttackHooked(game::IdList* value,
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& id = CMidgardIDApi::get();
-    const auto& listApi = IdListApi::get();
-    const auto& groupApi = CMidUnitGroupApi::get();
-    const auto& attackClasses = AttackClassCategories::get();
+    const auto& attackReaches = AttackReachCategories::get();
 
     if (action == BattleAction::Attack || action == BattleAction::UseItem) {
-        if (attackReach->id == AttackReachCategories::get().all->id) {
-            CMidgardID targetGroupId{};
-            batAttack->vftable->getTargetGroupId(batAttack, &targetGroupId, battleMsgData);
+        CMidgardID targetGroupId{};
+        batAttack->vftable->getTargetGroupId(batAttack, &targetGroupId, battleMsgData);
 
-            void* tmp{};
-            CMidUnitGroup* targetGroup = fn.getStackFortRuinGroup(tmp, objectMap, &targetGroupId);
+        if (attackReach->id == attackReaches.all->id) {
+            getTargetsToAttackForAllAttackReach(objectMap, battleMsgData, attack, batAttack,
+                                                &targetGroupId, targetUnitId, value);
+        } else if (attackReach->id == attackReaches.any->id) {
+            addUniqueIdToList(*value, targetUnitId);
+        } else if (attackReach->id == attackReaches.adjacent->id) {
+            addUniqueIdToList(*value, targetUnitId);
+        } else {
+            for (const auto& custom : getCustomAttacks().reaches) {
+                if (attackReach->id == custom.reach.id) {
+                    // This is a hack. Every attack in the game has its unitId as a first field,
+                    // but its not a part of CBatAttackBase.
+                    CMidgardID* unitId = (CMidgardID*)(batAttack + 1);
 
-            CMidgardID summonUnitId{};
-            id.isSummonUnitId(&summonUnitId, targetUnitId);
+                    CMidgardID unitGroupId{};
+                    fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, unitId, true);
 
-            if (summonUnitId != emptyId
-                || groupApi.getUnitPosition(targetGroup, targetUnitId) != -1) {
-                if (attack != nullptr
-                    && attack->vftable->getAttackClass(attack)->id == attackClasses.summon->id) {
-                    groupApi.addUnitIdsAvailableForSummons(value, objectMap, targetGroup);
-                } else {
-                    const auto& unitIds = targetGroup->units;
-                    for (const CMidgardID* unitId = unitIds.bgn; unitId != unitIds.end; ++unitId) {
-                        listApi.push_back(value, unitId);
-                    }
+                    getTargetsToAttackForCustomAttackReach(objectMap, battleMsgData, batAttack,
+                                                           &targetGroupId, targetUnitId,
+                                                           &unitGroupId, unitId, custom, value);
+                    return;
                 }
             }
         }
+    } else {
+        addUniqueIdToList(*value, targetUnitId);
     }
-
-    addUniqueIdToList(*value, targetUnitId);
-    listApi.shuffle(value);
 }
 
 void __stdcall fillTargetsListHooked(const game::IMidgardObjectMap* objectMap,

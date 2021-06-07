@@ -20,6 +20,7 @@
 #ifndef CUSTOMATTACKUTILS_H
 #define CUSTOMATTACKUTILS_H
 
+#include "idlist.h"
 #include "targetslist.h"
 #include <filesystem>
 
@@ -39,26 +40,28 @@ namespace hooks {
 
 struct CustomAttackReach;
 
+using UnitSlots = std::vector<bindings::UnitSlotView>;
+
 void fillCustomAttackSources(const std::filesystem::path& dbfFilePath);
 
 void fillCustomAttackReaches(const std::filesystem::path& dbfFilePath);
 
-void filterTargetsToSelect(const std::string scriptFile,
-                           const bindings::UnitSlotView& attacker,
-                           const std::vector<bindings::UnitSlotView>& allies,
-                           std::vector<bindings::UnitSlotView>& targets,
-                           bool targetsAreAllies);
+UnitSlots getTargetsToSelectOrAttack(const std::string scriptFile,
+                                     const bindings::UnitSlotView& attacker,
+                                     const bindings::UnitSlotView& selected,
+                                     const UnitSlots& allies,
+                                     const UnitSlots& targets,
+                                     bool targetsAreAllies);
 
-std::vector<bindings::UnitSlotView> getTargetSlots(const game::IMidgardObjectMap* objectMap,
-                                                   const game::BattleMsgData* battleMsgData,
-                                                   const game::IBatAttack* batAttack,
-                                                   const game::CMidgardID* targetGroupId);
+UnitSlots getTargets(const game::IMidgardObjectMap* objectMap,
+                     const game::BattleMsgData* battleMsgData,
+                     const game::IBatAttack* batAttack,
+                     const game::CMidgardID* targetGroupId);
 
-std::vector<bindings::UnitSlotView> getAllySlots(const game::IMidgardObjectMap* objectMap,
-                                                 const game::BattleMsgData* battleMsgData,
-                                                 const game::IBatAttack* batAttack,
-                                                 const game::CMidgardID* unitGroupId,
-                                                 const game::CMidgardID* unitId);
+UnitSlots getAllies(const game::IMidgardObjectMap* objectMap,
+                    const game::BattleMsgData* battleMsgData,
+                    const game::CMidgardID* unitGroupId,
+                    const game::CMidgardID* unitId);
 
 void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
                                          const game::BattleMsgData* battleMsgData,
@@ -68,6 +71,43 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
                                          const game::CMidgardID* unitId,
                                          const CustomAttackReach& attackReach,
                                          game::TargetsList* value);
+
+void getTargetsToAttackForAllAttackReach(const game::IMidgardObjectMap* objectMap,
+                                         const game::BattleMsgData* battleMsgData,
+                                         const game::IAttack* attack,
+                                         const game::IBatAttack* batAttack,
+                                         const game::CMidgardID* targetGroupId,
+                                         const game::CMidgardID* targetUnitId,
+                                         game::IdList* value);
+
+UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
+                                                 const game::BattleMsgData* battleMsgData,
+                                                 const game::IBatAttack* batAttack,
+                                                 const game::CMidgardID* targetGroupId,
+                                                 const game::CMidgardID* targetUnitId,
+                                                 const game::CMidgardID* unitGroupId,
+                                                 const game::CMidgardID* unitId,
+                                                 const CustomAttackReach& attackReach);
+
+UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
+                                                 const game::BattleMsgData* battleMsgData,
+                                                 const game::IAttack* attack,
+                                                 const game::CMidgardID* targetGroupId,
+                                                 const game::CMidgardID* targetUnitId,
+                                                 const game::CMidgardID* unitGroupId,
+                                                 const game::CMidgardID* unitId,
+                                                 const game::CMidgardID* attackUnitId,
+                                                 const CustomAttackReach& attackReach);
+
+void getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
+                                            const game::BattleMsgData* battleMsgData,
+                                            const game::IBatAttack* batAttack,
+                                            const game::CMidgardID* targetGroupId,
+                                            const game::CMidgardID* targetUnitId,
+                                            const game::CMidgardID* unitGroupId,
+                                            const game::CMidgardID* unitId,
+                                            const CustomAttackReach& attackReach,
+                                            game::IdList* value);
 
 bool shouldExcludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
                                 const game::BattleMsgData* battleMsgData,

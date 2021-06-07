@@ -18,12 +18,15 @@
  */
 
 #include "customattackutils.h"
+#include "attack.h"
+#include "attackclasscat.h"
 #include "batattack.h"
 #include "battlemsgdata.h"
 #include "customattacks.h"
 #include "dbffile.h"
 #include "dynamiccast.h"
 #include "game.h"
+#include "listutils.h"
 #include "log.h"
 #include "midgardobjectmap.h"
 #include "midplayer.h"
@@ -149,44 +152,44 @@ void fillCustomAttackReaches(const std::filesystem::path& dbfFilePath)
     }
 }
 
-void filterTargetsToSelect(const std::string scriptFile,
-                           const bindings::UnitSlotView& attacker,
-                           const std::vector<bindings::UnitSlotView>& allies,
-                           std::vector<bindings::UnitSlotView>& targets,
-                           bool targetsAreAllies)
+UnitSlots getTargetsToSelectOrAttack(const std::string scriptFile,
+                                     const bindings::UnitSlotView& attacker,
+                                     const bindings::UnitSlotView& selected,
+                                     const UnitSlots& allies,
+                                     const UnitSlots& targets,
+                                     bool targetsAreAllies)
 {
     const auto path{scriptsFolder() / scriptFile};
     const auto lua{loadScriptFile(path, true, true)};
     if (!lua) {
-        return;
+        return UnitSlots();
     }
 
-    using FilterTargetsToSelect = std::function<void(const bindings::UnitSlotView&,
-                                                     const std::vector<bindings::UnitSlotView>&,
-                                                     std::vector<bindings::UnitSlotView>&, bool)>;
-    auto filterTargetsToSelect = getScriptFunction<FilterTargetsToSelect>(*lua,
-                                                                          "filterTargetsToSelect");
-    if (!filterTargetsToSelect) {
-        showErrorMessageBox(
-            fmt::format("Could not find function 'filterTargetsToSelect' in script '{:s}'.\n"
-                        "Make sure function exists and has correct signature.",
-                        path.string()));
-        return;
+    using GetTargets = std::function<sol::table(const bindings::UnitSlotView&,
+                                                const bindings::UnitSlotView&, const UnitSlots&,
+                                                const UnitSlots&, bool)>;
+    auto getTargets = getScriptFunction<GetTargets>(*lua, "getTargets");
+    if (!getTargets) {
+        showErrorMessageBox(fmt::format("Could not find function 'getTargets' in script '{:s}'.\n"
+                                        "Make sure function exists and has correct signature.",
+                                        path.string()));
+        return UnitSlots();
     }
 
     try {
-        (*filterTargetsToSelect)(attacker, allies, targets, targetsAreAllies);
+        return (*getTargets)(attacker, selected, allies, targets, targetsAreAllies).as<UnitSlots>();
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
                                         "Reason: '{:s}'",
                                         path.string(), e.what()));
+        return UnitSlots();
     }
 }
 
-std::vector<bindings::UnitSlotView> getTargetSlots(const game::IMidgardObjectMap* objectMap,
-                                                   const game::BattleMsgData* battleMsgData,
-                                                   const game::IBatAttack* batAttack,
-                                                   const game::CMidgardID* targetGroupId)
+UnitSlots getTargets(const game::IMidgardObjectMap* objectMap,
+                     const game::BattleMsgData* battleMsgData,
+                     const game::IBatAttack* batAttack,
+                     const game::CMidgardID* targetGroupId)
 {
     using namespace game;
 
@@ -196,7 +199,7 @@ std::vector<bindings::UnitSlotView> getTargetSlots(const game::IMidgardObjectMap
     void* tmp{};
     auto targetGroup = fn.getStackFortRuinGroup(tmp, objectMap, targetGroupId);
 
-    std::vector<bindings::UnitSlotView> value;
+    UnitSlots value;
     bool isSummonAttack = batAttack->vftable->method17(batAttack, battleMsgData);
     for (size_t i = 0; i < std::size(targetGroup->positions); ++i) {
         CMidgardID targetUnitId = targetGroup->positions[i];
@@ -229,11 +232,10 @@ std::vector<bindings::UnitSlotView> getTargetSlots(const game::IMidgardObjectMap
     return value;
 }
 
-std::vector<bindings::UnitSlotView> getAllySlots(const game::IMidgardObjectMap* objectMap,
-                                                 const game::BattleMsgData* battleMsgData,
-                                                 const game::IBatAttack* batAttack,
-                                                 const game::CMidgardID* unitGroupId,
-                                                 const game::CMidgardID* unitId)
+std::vector<bindings::UnitSlotView> getAllies(const game::IMidgardObjectMap* objectMap,
+                                              const game::BattleMsgData* battleMsgData,
+                                              const game::CMidgardID* unitGroupId,
+                                              const game::CMidgardID* unitId)
 {
     using namespace game;
 
@@ -243,7 +245,7 @@ std::vector<bindings::UnitSlotView> getAllySlots(const game::IMidgardObjectMap* 
     void* tmp{};
     auto unitGroup = fn.getStackFortRuinGroup(tmp, objectMap, unitGroupId);
 
-    std::vector<bindings::UnitSlotView> value;
+    UnitSlots value;
     for (size_t i = 0; i < std::size(unitGroup->positions); ++i) {
         CMidgardID allyUnitId = unitGroup->positions[i];
         if (allyUnitId == emptyId || allyUnitId == *unitId)
@@ -282,7 +284,6 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
     const auto& fn = gameFunctions();
     const auto& listApi = TargetsListApi::get();
     const auto& groupApi = CMidUnitGroupApi::get();
-    const auto& battle = BattleMsgDataApi::get();
 
     listApi.clear(value);
 
@@ -293,15 +294,142 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
     int unitPosition = groupApi.getUnitPosition(unitGroup, unitId);
     bindings::UnitSlotView attacker(unit, unitPosition, unitGroupId);
 
-    auto targets = getTargetSlots(objectMap, battleMsgData, batAttack, targetGroupId);
-    auto allies = getAllySlots(objectMap, battleMsgData, batAttack, unitGroupId, unitId);
-    filterTargetsToSelect(attackReach.selectionScript, attacker, allies, targets,
-                          unitGroupId == targetGroupId);
+    bindings::UnitSlotView selected(nullptr, -1, &emptyId);
 
-    for (const auto& target : targets) {
-        Pair<TargetsListIterator, bool> tmp{};
+    auto targets = getTargets(objectMap, battleMsgData, batAttack, targetGroupId);
+    auto allies = getAllies(objectMap, battleMsgData, unitGroupId, unitId);
+
+    auto targetsToSelect = getTargetsToSelectOrAttack(attackReach.selectionScript, attacker,
+                                                      selected, allies, targets,
+                                                      unitGroupId == targetGroupId);
+    for (const auto& target : targetsToSelect) {
         int position = target.getPosition();
+        Pair<TargetsListIterator, bool> tmp{};
         listApi.insert(value, &tmp, &position);
+    }
+}
+
+void getTargetsToAttackForAllAttackReach(const game::IMidgardObjectMap* objectMap,
+                                         const game::BattleMsgData* battleMsgData,
+                                         const game::IAttack* attack,
+                                         const game::IBatAttack* batAttack,
+                                         const game::CMidgardID* targetGroupId,
+                                         const game::CMidgardID* targetUnitId,
+                                         game::IdList* value)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& id = CMidgardIDApi::get();
+    const auto& listApi = IdListApi::get();
+    const auto& groupApi = CMidUnitGroupApi::get();
+    const auto& attackClasses = AttackClassCategories::get();
+
+    void* tmp{};
+    CMidUnitGroup* targetGroup = fn.getStackFortRuinGroup(tmp, objectMap, targetGroupId);
+
+    CMidgardID summonUnitId{};
+    id.isSummonUnitId(&summonUnitId, targetUnitId);
+
+    if (summonUnitId != emptyId || groupApi.getUnitPosition(targetGroup, targetUnitId) != -1) {
+        if (attack != nullptr
+            && attack->vftable->getAttackClass(attack)->id == attackClasses.summon->id) {
+            groupApi.addUnitIdsAvailableForSummons(value, objectMap, targetGroup);
+        } else {
+            const auto& unitIds = targetGroup->units;
+            for (const CMidgardID* unitId = unitIds.bgn; unitId != unitIds.end; ++unitId) {
+                listApi.push_back(value, unitId);
+            }
+        }
+    }
+
+    addUniqueIdToList(*value, targetUnitId);
+    listApi.shuffle(value);
+}
+
+UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
+                                                 const game::BattleMsgData* battleMsgData,
+                                                 const game::IBatAttack* batAttack,
+                                                 const game::CMidgardID* targetGroupId,
+                                                 const game::CMidgardID* targetUnitId,
+                                                 const game::CMidgardID* unitGroupId,
+                                                 const game::CMidgardID* unitId,
+                                                 const CustomAttackReach& attackReach)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& groupApi = CMidUnitGroupApi::get();
+
+    void* tmp{};
+    auto unitGroup = fn.getStackFortRuinGroup(tmp, objectMap, unitGroupId);
+    auto targetGroup = fn.getStackFortRuinGroup(tmp, objectMap, targetGroupId);
+
+    auto unit = fn.findUnitById(objectMap, unitId);
+    int unitPosition = groupApi.getUnitPosition(unitGroup, unitId);
+    bindings::UnitSlotView attacker(unit, unitPosition, unitGroupId);
+
+    auto target = fn.findUnitById(objectMap, targetUnitId);
+    int targetPosition = groupApi.getUnitPosition(targetGroup, targetUnitId);
+    bindings::UnitSlotView selected(target, targetPosition, targetGroupId);
+
+    auto targets = getTargets(objectMap, battleMsgData, batAttack, targetGroupId);
+    auto allies = getAllies(objectMap, battleMsgData, unitGroupId, unitId);
+
+    return getTargetsToSelectOrAttack(attackReach.attackScript, attacker, selected, allies, targets,
+                                      unitGroupId == targetGroupId);
+}
+
+UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
+                                                 const game::BattleMsgData* battleMsgData,
+                                                 const game::IAttack* attack,
+                                                 const game::CMidgardID* targetGroupId,
+                                                 const game::CMidgardID* targetUnitId,
+                                                 const game::CMidgardID* unitGroupId,
+                                                 const game::CMidgardID* unitId,
+                                                 const game::CMidgardID* attackUnitId,
+                                                 const CustomAttackReach& attackReach)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    const auto attackClass = attack->vftable->getAttackClass(attack);
+    const auto batAttack = fn.createBatAttack(objectMap, battleMsgData, unitId, attackUnitId, 1,
+                                              attackClass, false);
+
+    auto result = getTargetsToAttackForCustomAttackReach(objectMap, battleMsgData, batAttack,
+                                                         targetGroupId, targetUnitId, unitGroupId,
+                                                         unitId, attackReach);
+
+    batAttack->vftable->destructor(batAttack, true);
+    return result;
+}
+
+void getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
+                                            const game::BattleMsgData* battleMsgData,
+                                            const game::IBatAttack* batAttack,
+                                            const game::CMidgardID* targetGroupId,
+                                            const game::CMidgardID* targetUnitId,
+                                            const game::CMidgardID* unitGroupId,
+                                            const game::CMidgardID* unitId,
+                                            const CustomAttackReach& attackReach,
+                                            game::IdList* value)
+{
+    using namespace game;
+
+    const auto& id = CMidgardIDApi::get();
+    const auto& listApi = IdListApi::get();
+
+    auto targets = getTargetsToAttackForCustomAttackReach(objectMap, battleMsgData, batAttack,
+                                                          targetGroupId, targetUnitId, unitGroupId,
+                                                          unitId, attackReach);
+    for (const auto& target : targets) {
+        CMidgardID targetId = target.getUnitId();
+        if (targetId == emptyId) {
+            id.summonUnitIdFromPosition(&targetId, target.getPosition());
+        }
+        listApi.push_back(value, &targetId);
     }
 }
 
