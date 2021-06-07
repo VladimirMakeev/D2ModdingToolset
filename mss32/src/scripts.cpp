@@ -87,7 +87,8 @@ std::optional<sol::state> loadScriptFile(const std::filesystem::path& path,
             return std::nullopt;
         }
 
-        lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::math);
+        lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::table,
+                           sol::lib::os);
         doBindApi(lua);
 
         result = lua.safe_script(sources[pathString].c_str(),
