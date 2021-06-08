@@ -213,7 +213,7 @@ void markAttackTargets(game::CBattleViewerInterf* viewer,
                        const game::CMidgardID* targetGroupId,
                        const game::CMidgardID* selectedUnitId,
                        const game::UnitInfo* targetInfo,
-                       bool a3,
+                       bool setBigFace,
                        const game::IAttack* attack,
                        bool isBattleGoing,
                        bool isItemAttack,
@@ -225,7 +225,7 @@ void markAttackTargets(game::CBattleViewerInterf* viewer,
     const auto& viewerApi = BattleViewerInterfApi::get();
     const auto& engineApi = BatViewer2DEngineApi::get();
 
-    if (a3) {
+    if (setBigFace) {
         CBatBigFace* bigFace = viewerApi.getBigFace(viewer);
         viewerApi.setUnitId(bigFace, selectedUnitId);
     }
@@ -245,7 +245,7 @@ void markAttackTargets(game::CBattleViewerInterf* viewer,
 
 bool markAttackTargetsIfUnitSelected(game::CBattleViewerInterf* viewer,
                                      const game::CMqPoint* mousePosition,
-                                     bool a3,
+                                     bool setBigFace,
                                      const game::IAttack* attack,
                                      bool isBattleGoing,
                                      bool isItemAttack,
@@ -269,8 +269,8 @@ bool markAttackTargetsIfUnitSelected(game::CBattleViewerInterf* viewer,
         CMidgardID selectedUnitId{};
         result = isUnitSelected(viewer, mousePosition, listApi.dereference(&it), &selectedUnitId);
         if (result) {
-            markAttackTargets(viewer, targetGroupId, &selectedUnitId, listApi.dereference(&it), a3,
-                              attack, isBattleGoing, isItemAttack, targetPositions);
+            markAttackTargets(viewer, targetGroupId, &selectedUnitId, listApi.dereference(&it),
+                              setBigFace, attack, isBattleGoing, isItemAttack, targetPositions);
             break;
         }
     }
@@ -281,7 +281,7 @@ bool markAttackTargetsIfUnitSelected(game::CBattleViewerInterf* viewer,
 
 bool unmarkAttackTargets(game::CBattleViewerInterf* viewer,
                          const game::CMqPoint* mousePosition,
-                         bool a3)
+                         bool setBigFace)
 {
     using namespace game;
 
@@ -298,7 +298,7 @@ bool unmarkAttackTargets(game::CBattleViewerInterf* viewer,
     if (selectedUnitId == emptyId)
         return false;
 
-    if (a3) {
+    if (setBigFace) {
         CBatBigFace* bigFace = viewerApi.getBigFace(viewer);
         viewerApi.setUnitId(bigFace, &selectedUnitId);
     }
@@ -343,7 +343,7 @@ bool getTargetData(game::CBattleViewerInterf* viewer,
 bool __fastcall markAttackTargetsHooked(game::CBattleViewerInterf* thisptr,
                                         int /*%edx*/,
                                         const game::CMqPoint* mousePosition,
-                                        bool a3)
+                                        bool setBigFace)
 {
     using namespace game;
 
@@ -363,11 +363,11 @@ bool __fastcall markAttackTargetsHooked(game::CBattleViewerInterf* thisptr,
     listApi.constructor(&targetPositions);
     listApi.copyAssignment(&targetPositions, &targetData->targetPositions);
 
-    bool result = markAttackTargetsIfUnitSelected(thisptr, mousePosition, a3, attack, isBattleGoing,
-                                                  isItemAttack, &targetData->targetGroupId,
-                                                  &targetPositions);
+    bool result = markAttackTargetsIfUnitSelected(thisptr, mousePosition, setBigFace, attack,
+                                                  isBattleGoing, isItemAttack,
+                                                  &targetData->targetGroupId, &targetPositions);
     if (!result)
-        result = unmarkAttackTargets(thisptr, mousePosition, a3);
+        result = unmarkAttackTargets(thisptr, mousePosition, setBigFace);
 
     listApi.destructor(&targetPositions);
     return result;
