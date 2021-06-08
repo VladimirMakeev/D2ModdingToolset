@@ -50,7 +50,7 @@ void generateUnitImplByAttackId(const game::CMidgardID* attackId)
     unitGenerator->vftable->generateUnitImpl(unitGenerator, &unitImplId);
 }
 
-game::IUsSoldier* castUnitImplToSoldierWithLogging(game::IUsUnit* unitImpl)
+game::IUsSoldier* castUnitImplToSoldierWithLogging(const game::IUsUnit* unitImpl)
 {
     using namespace game;
 

@@ -143,7 +143,7 @@ using getAllyOrEnemyGroupId = CMidgardID*(__stdcall*)(CMidgardID* value,
 using FindUnitById = CMidUnit*(__stdcall*)(const IMidgardObjectMap* objectMap,
                                            const CMidgardID* unitId);
 
-using CastUnitImplToSoldier = IUsSoldier*(__stdcall*)(IUsUnit* unitImpl);
+using CastUnitImplToSoldier = IUsSoldier*(__stdcall*)(const IUsUnit* unitImpl);
 using CastUnitImplToNoble = IUsNoble*(__stdcall*)(const IUsUnit* unitImpl);
 
 using CreateBatAttack = IBatAttack*(__stdcall*)(const IMidgardObjectMap* objectMap,

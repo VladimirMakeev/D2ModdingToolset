@@ -33,7 +33,7 @@ struct LAttackSource;
 namespace hooks {
 
 void generateUnitImplByAttackId(const game::CMidgardID* attackId);
-game::IUsSoldier* castUnitImplToSoldierWithLogging(game::IUsUnit* unitImpl);
+game::IUsSoldier* castUnitImplToSoldierWithLogging(const game::IUsUnit* unitImpl);
 void getSoldierAttackSourceImmunities(const game::LImmuneCat* immuneCat,
                                       const game::IUsSoldier* soldier,
                                       game::LinkedList<game::LAttackSource>* value);
