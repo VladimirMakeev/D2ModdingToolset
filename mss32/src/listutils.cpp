@@ -57,16 +57,4 @@ bool addUniqueIdToList(game::IdList& list, const game::CMidgardID* id)
     return false;
 }
 
-bool addNonEmptyIdToList(game::IdList& list, const game::CMidgardID* id)
-{
-    using namespace game;
-
-    if (*id != emptyId) {
-        IdListApi::get().push_back(&list, id);
-        return true;
-    }
-
-    return false;
-}
-
 } // namespace hooks

@@ -26,7 +26,6 @@ namespace hooks {
 
 bool removeIdFromList(game::IdList& list, const game::CMidgardID* id);
 bool addUniqueIdToList(game::IdList& list, const game::CMidgardID* id);
-bool addNonEmptyIdToList(game::IdList& list, const game::CMidgardID* id);
 
 } // namespace hooks
 
