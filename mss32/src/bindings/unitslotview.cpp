@@ -96,4 +96,9 @@ game::CMidgardID UnitSlotView::getUnitId() const
     return unit ? unit->unitId : emptyId;
 }
 
+const game::CMidUnit* UnitSlotView::getUnit2() const
+{
+    return unit;
+}
+
 } // namespace bindings

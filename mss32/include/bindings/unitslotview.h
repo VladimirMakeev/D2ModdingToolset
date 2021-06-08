@@ -52,6 +52,7 @@ public:
     int getDistance(const UnitSlotView& to) const;
 
     game::CMidgardID getUnitId() const;
+    const game::CMidUnit* getUnit2() const;
 
 private:
     const game::CMidUnit* unit;
