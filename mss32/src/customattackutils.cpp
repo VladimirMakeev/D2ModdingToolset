@@ -34,6 +34,7 @@
 #include "midunitgroup.h"
 #include "scripts.h"
 #include "unitslotview.h"
+#include "unitutils.h"
 #include "ussoldier.h"
 #include "utils.h"
 #include <fmt/format.h>
@@ -203,29 +204,17 @@ UnitSlots getTargets(const game::IMidgardObjectMap* objectMap,
     bool isSummonAttack = batAttack->vftable->method17(batAttack, battleMsgData);
     for (size_t i = 0; i < std::size(targetGroup->positions); ++i) {
         CMidgardID targetUnitId = targetGroup->positions[i];
-        if (isSummonAttack) {
-            if (targetUnitId == emptyId) {
-                value.emplace_back(bindings::UnitSlotView(nullptr, i, targetGroupId));
-            } else if (battle.canPerformAttackOnUnitWithStatusCheck(objectMap, battleMsgData,
-                                                                    batAttack, &targetUnitId)) {
-                auto targetUnit = fn.findUnitById(objectMap, &targetUnitId);
-                value.emplace_back(bindings::UnitSlotView(targetUnit, i, targetGroupId));
-            }
-        } else {
-            if (targetUnitId == emptyId)
-                continue;
-
+        if (targetUnitId != emptyId) {
             auto targetUnit = fn.findUnitById(objectMap, &targetUnitId);
-            if (i % 2) {
-                const IUsSoldier* targetSoldier = fn.castUnitImplToSoldier(targetUnit->unitImpl);
-                if (!targetSoldier->vftable->getSizeSmall(targetSoldier))
-                    continue;
-            }
+            if (i % 2 && !isUnitSmall(targetUnit))
+                continue;
 
             if (battle.canPerformAttackOnUnitWithStatusCheck(objectMap, battleMsgData, batAttack,
                                                              &targetUnitId)) {
                 value.emplace_back(bindings::UnitSlotView(targetUnit, i, targetGroupId));
             }
+        } else if (isSummonAttack) {
+            value.emplace_back(bindings::UnitSlotView(nullptr, i, targetGroupId));
         }
     }
 
@@ -252,11 +241,8 @@ std::vector<bindings::UnitSlotView> getAllies(const game::IMidgardObjectMap* obj
             continue;
 
         auto allyUnit = fn.findUnitById(objectMap, &allyUnitId);
-        if (i % 2) {
-            const IUsSoldier* allySoldier = fn.castUnitImplToSoldier(allyUnit->unitImpl);
-            if (!allySoldier->vftable->getSizeSmall(allySoldier))
-                continue;
-        }
+        if (i % 2 && !isUnitSmall(allyUnit))
+            continue;
 
         if (battle.getUnitStatus(battleMsgData, &allyUnitId, BattleStatus::Dead)
             || battle.getUnitStatus(battleMsgData, &allyUnitId, BattleStatus::Retreated)
@@ -302,10 +288,20 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
     auto targetsToSelect = getTargetsToSelectOrAttack(attackReach.selectionScript, attacker,
                                                       selected, allies, targets,
                                                       unitGroupId == targetGroupId);
+
+    bool isSummonAttack = batAttack->vftable->method17(batAttack, battleMsgData);
     for (const auto& target : targetsToSelect) {
         int position = target.getPosition();
         Pair<TargetsListIterator, bool> tmp{};
         listApi.insert(value, &tmp, &position);
+
+        if (isSummonAttack && !(position % 2)) {
+            auto unit = target.getUnit2();
+            if (unit && !isUnitSmall(unit)) {
+                int backPosition = position + 1;
+                listApi.insert(value, &tmp, &backPosition);
+            }
+        }
     }
 }
 
@@ -419,17 +415,16 @@ void getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* objec
     using namespace game;
 
     const auto& id = CMidgardIDApi::get();
-    const auto& listApi = IdListApi::get();
 
     auto targets = getTargetsToAttackForCustomAttackReach(objectMap, battleMsgData, batAttack,
                                                           targetGroupId, targetUnitId, unitGroupId,
                                                           unitId, attackReach);
     for (const auto& target : targets) {
-        CMidgardID targetId = target.getUnitId();
-        if (targetId == emptyId) {
-            id.summonUnitIdFromPosition(&targetId, target.getPosition());
+        CMidgardID targetUnitId = target.getUnitId();
+        if (targetUnitId == emptyId) {
+            id.summonUnitIdFromPosition(&targetUnitId, target.getPosition());
         }
-        listApi.push_back(value, &targetId);
+        addUniqueIdToList(*value, &targetUnitId);
     }
 }
 
