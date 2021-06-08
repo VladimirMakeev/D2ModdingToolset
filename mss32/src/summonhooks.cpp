@@ -154,9 +154,7 @@ void __fastcall summonAttackOnHitHooked(game::CBatAttackSummon* thisptr,
     }
 
     auto soldier = fn.castUnitImplToSoldier(unitImpl);
-    auto vftable = static_cast<const IUsSoldierVftable*>(soldier->vftable);
-
-    const auto summonIsBig = !vftable->getSizeSmall(soldier);
+    const auto summonIsBig = !soldier->vftable->getSizeSmall(soldier);
     if (summonIsBig && !positionEven) {
         position--;
     }

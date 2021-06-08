@@ -30,6 +30,7 @@
 #include "scripts.h"
 #include "unitgenerator.h"
 #include "unitimplview.h"
+#include "unitutils.h"
 #include "unitview.h"
 #include "ussoldier.h"
 #include "usunitimpl.h"
@@ -100,12 +101,8 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
     const CMidUnit* targetUnit = fn.findUnitById(objectMap, targetUnitId);
     const CMidgardID targetUnitImplId{targetUnit->unitImpl->unitId};
 
-    auto soldier = gameFunctions().castUnitImplToSoldier(targetUnit->unitImpl);
-    auto vftable = static_cast<const IUsSoldierVftable*>(soldier->vftable);
-    const auto small = vftable->getSizeSmall(soldier);
-
     CMidgardID transformImplId{emptyId};
-    fn.getSummonUnitImplIdByAttack(&transformImplId, attackId, position, small);
+    fn.getSummonUnitImplIdByAttack(&transformImplId, attackId, position, isUnitSmall(targetUnit));
 
     if (transformImplId == emptyId) {
         return;
