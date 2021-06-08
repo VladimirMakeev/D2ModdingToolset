@@ -26,6 +26,7 @@
 #include "immunecat.h"
 #include "log.h"
 #include "midgardid.h"
+#include "midunit.h"
 #include "unitgenerator.h"
 #include "ussoldier.h"
 #include "usunitimpl.h"
@@ -92,6 +93,16 @@ void getSoldierAttackSourceImmunities(const game::LImmuneCat* immuneCat,
         if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, &custom.source)->id)
             sourceListApi.add(value, &custom.source);
     }
+}
+
+bool isUnitSmall(const game::CMidUnit* unit)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+    return soldier->vftable->getSizeSmall(soldier);
 }
 
 } // namespace hooks

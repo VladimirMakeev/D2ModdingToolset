@@ -24,6 +24,7 @@
 
 namespace game {
 struct CMidgardID;
+struct CMidUnit;
 struct IUsUnit;
 struct IUsSoldier;
 struct LImmuneCat;
@@ -37,6 +38,7 @@ game::IUsSoldier* castUnitImplToSoldierWithLogging(const game::IUsUnit* unitImpl
 void getSoldierAttackSourceImmunities(const game::LImmuneCat* immuneCat,
                                       const game::IUsSoldier* soldier,
                                       game::LinkedList<game::LAttackSource>* value);
+bool isUnitSmall(const game::CMidUnit* unit);
 
 } // namespace hooks
 
