@@ -10,6 +10,7 @@ Frontline positions are even, backline - odd.
 3 2 vs 2 3
 5 4    4 5
 --]]
+
 function getTargets(attacker, selected, allies, targets, targetsAreAllies)
 	-- If targets are enemies and the attacker stands on the backline (position % 2 ~= 0)
 	if not targetsAreAllies and attacker.backline then
