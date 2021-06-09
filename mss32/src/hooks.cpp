@@ -1480,14 +1480,14 @@ void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImp
     }
 
     if (attackData->qtyDamage > 0) {
-        float factor = 1.0;
+        float ratio = 1.0;
         if (attackData->attackClass->id == AttackClassCategories::get().shatter->id)
-            factor = (float)userSettings().shatterDamageUpgradeRatio / 100;
+            ratio = (float)userSettings().shatterDamageUpgradeRatio / 100;
 
         if (upgrade1)
-            attackData->qtyDamage += lround(upgrade1->damage * upgrade1Count * factor);
+            attackData->qtyDamage += lround(upgrade1->damage * upgrade1Count * ratio);
         if (upgrade2)
-            attackData->qtyDamage += lround(upgrade2->damage * upgrade2Count * factor);
+            attackData->qtyDamage += lround(upgrade2->damage * upgrade2Count * ratio);
     }
 
     if (attackData->qtyHeal > 0) {
