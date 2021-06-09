@@ -110,9 +110,9 @@ union AttackSourceImmunityStatusesPatched
 {
     struct
     {
-        std::uint8_t value;
+        std::uint8_t original;
         char padding[3];
-    } original;
+    };
     std::uint32_t patched;
 };
 
