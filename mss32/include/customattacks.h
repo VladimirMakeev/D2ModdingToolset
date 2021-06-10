@@ -50,6 +50,7 @@ struct CustomAttackReach
     std::string selectionScript;
     std::string attackScript;
     bool markAttackTargets;
+    bool aiMelee;
 };
 
 using CustomAttackReaches = std::vector<CustomAttackReach>;
