@@ -163,7 +163,7 @@ struct Api
                                                     int maxBound);
     ReadIntWithBoundsCheck readIntWithBoundsCheck;
 
-    ReadBoolValue readCriticalHit;
+    ReadBoolValue readBool;
 };
 
 Api& get();

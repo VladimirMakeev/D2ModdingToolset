@@ -283,7 +283,7 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
     }
 
     if (id == categories.damage->id) {
-        db.readCriticalHit(&data->critHit, dbTable, "CRIT_HIT");
+        db.readBool(&data->critHit, dbTable, "CRIT_HIT");
     } else {
         data->critHit = false;
     }
