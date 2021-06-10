@@ -371,8 +371,8 @@ Hooks getHooks()
         HookInfo{LAttackSourceTableApi::get().constructor, attackSourceTableCtorHooked});
     hooks.emplace_back(
         HookInfo{fn.getSoldierAttackSourceImmunities, getSoldierAttackSourceImmunitiesHooked});
-    hooks.emplace_back(HookInfo{fn.getSoldierImmunityPower, getSoldierImmunityPowerHooked,
-                                (void**)&orig.getSoldierImmunityPower});
+    hooks.emplace_back(HookInfo{fn.getSoldierImmunityAiRating, getSoldierImmunityAiRatingHooked,
+                                (void**)&orig.getSoldierImmunityAiRating});
     hooks.emplace_back(HookInfo{fn.getAttackSourceText, getAttackSourceTextHooked});
     hooks.emplace_back(HookInfo{fn.appendAttackSourceText, appendAttackSourceTextHooked});
     hooks.emplace_back(HookInfo{fn.getAttackSourceWardFlagPosition,

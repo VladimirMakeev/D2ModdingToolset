@@ -90,7 +90,7 @@ void __stdcall getSoldierAttackSourceImmunitiesHooked(const game::IUsSoldier* so
                                                       bool alwaysImmune,
                                                       game::LinkedList<game::LAttackSource>* value);
 
-double __stdcall getSoldierImmunityPowerHooked(const game::IUsSoldier* soldier);
+double __stdcall getSoldierImmunityAiRatingHooked(const game::IUsSoldier* soldier);
 
 std::uint32_t __stdcall getAttackSourceWardFlagPositionHooked(
     const game::LAttackSource* attackSource);

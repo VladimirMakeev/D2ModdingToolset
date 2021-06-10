@@ -362,17 +362,17 @@ void __stdcall getSoldierAttackSourceImmunitiesHooked(const game::IUsSoldier* so
                                      value);
 }
 
-double __stdcall getSoldierImmunityPowerHooked(const game::IUsSoldier* soldier)
+double __stdcall getSoldierImmunityAiRatingHooked(const game::IUsSoldier* soldier)
 {
     using namespace game;
 
-    double result = getOriginalFunctions().getSoldierImmunityPower(soldier);
+    double result = getOriginalFunctions().getSoldierImmunityAiRating(soldier);
 
     const auto& immunities = ImmuneCategories::get();
     for (const auto& custom : getCustomAttacks().sources) {
         auto immuneCat = soldier->vftable->getImmuneByAttackSource(soldier, &custom.source);
         if (immuneCat->id != immunities.notimmune->id)
-            result += custom.immunityPower;
+            result += custom.immunityAiRating;
     }
 
     return result;

@@ -82,17 +82,17 @@ void fillCustomAttackSources(const std::filesystem::path& dbfFilePath)
             std::string nameId;
             record.value(nameId, "NAME_TXT");
 
-            int immunityPower = 5; // 5 is the default
-            record.value(immunityPower, "IMMUNE_POW");
+            int immunityAiRating = 5; // 5 is the default
+            record.value(immunityAiRating, "IMMU_AI_R");
 
-            logDebug(
-                "customAttacks.log",
-                fmt::format("Found custom attack source {:s}, name id {:s}, immunity power {:d}",
-                            text, nameId, immunityPower));
+            logDebug("customAttacks.log",
+                     fmt::format(
+                         "Found custom attack source {:s}, name id {:s}, immunity ai rating {:d}",
+                         text, nameId, immunityAiRating));
 
             customSources.push_back(
                 {LAttackSource{AttackSourceCategories::vftable(), nullptr, (AttackSourceId)-1},
-                 text, nameId, (double)immunityPower, ++wardFlagPosition});
+                 text, nameId, (double)immunityAiRating, ++wardFlagPosition});
         }
     }
 }

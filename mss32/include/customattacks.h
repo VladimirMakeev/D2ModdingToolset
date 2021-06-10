@@ -35,7 +35,7 @@ struct CustomAttackSource
     game::LAttackSource source;
     std::string text;
     std::string nameId;
-    double immunityPower;
+    double immunityAiRating;
     std::uint32_t wardFlagPosition;
 };
 
