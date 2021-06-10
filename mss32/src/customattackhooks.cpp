@@ -178,12 +178,12 @@ game::LAttackReachTable* __fastcall attackReachTableCtorHooked(game::LAttackReac
     thisptr->vftable = LAttackReachTableApi::vftable();
 
     const auto& table = LAttackReachTableApi::get();
-    const auto& attackReaches = AttackReachCategories::get();
+    const auto& reaches = AttackReachCategories::get();
 
     table.init(thisptr, codeBaseEnvProxy, globalsFolderPath, dbfFileName);
-    table.readCategory(attackReaches.all, thisptr, "L_ALL", dbfFileName);
-    table.readCategory(attackReaches.any, thisptr, "L_ANY", dbfFileName);
-    table.readCategory(attackReaches.adjacent, thisptr, "L_ADJACENT", dbfFileName);
+    table.readCategory(reaches.all, thisptr, "L_ALL", dbfFileName);
+    table.readCategory(reaches.any, thisptr, "L_ANY", dbfFileName);
+    table.readCategory(reaches.adjacent, thisptr, "L_ADJACENT", dbfFileName);
 
     for (auto& custom : getCustomAttacks().reaches) {
         logDebug("customAttacks.log", fmt::format("Reading custom attack reach {:s}", custom.text));
@@ -455,18 +455,18 @@ void __stdcall getTargetsToAttackHooked(game::IdList* value,
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& attackReaches = AttackReachCategories::get();
+    const auto& reaches = AttackReachCategories::get();
 
     if (action == BattleAction::Attack || action == BattleAction::UseItem) {
         CMidgardID targetGroupId{};
         batAttack->vftable->getTargetGroupId(batAttack, &targetGroupId, battleMsgData);
 
-        if (attackReach->id == attackReaches.all->id) {
+        if (attackReach->id == reaches.all->id) {
             getTargetsToAttackForAllAttackReach(objectMap, battleMsgData, attack, batAttack,
                                                 &targetGroupId, targetUnitId, value);
-        } else if (attackReach->id == attackReaches.any->id) {
+        } else if (attackReach->id == reaches.any->id) {
             addUniqueIdToList(*value, targetUnitId);
-        } else if (attackReach->id == attackReaches.adjacent->id) {
+        } else if (attackReach->id == reaches.adjacent->id) {
             addUniqueIdToList(*value, targetUnitId);
         } else {
             for (const auto& custom : getCustomAttacks().reaches) {
@@ -503,7 +503,7 @@ void __stdcall fillTargetsListHooked(const game::IMidgardObjectMap* objectMap,
 
     const auto& fn = gameFunctions();
     const auto& battle = BattleMsgDataApi::get();
-    const auto& attackReaches = AttackReachCategories::get();
+    const auto& reaches = AttackReachCategories::get();
 
     CMidgardID unitGroupId{};
     fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, unitId, true);
@@ -513,13 +513,13 @@ void __stdcall fillTargetsListHooked(const game::IMidgardObjectMap* objectMap,
 
     IAttack* attack = fn.getAttackById(objectMap, attackUnitOrItemId, 1, checkTransformed);
     LAttackReach* attackReach = attack->vftable->getAttackReach(attack);
-    if (attackReach->id == attackReaches.all->id) {
+    if (attackReach->id == reaches.all->id) {
         battle.fillTargetsListForAllAttackReach(objectMap, battleMsgData, batAttack, &targetGroupId,
                                                 value);
-    } else if (attackReach->id == attackReaches.any->id) {
+    } else if (attackReach->id == reaches.any->id) {
         battle.fillTargetsListForAnyAttackReach(objectMap, battleMsgData, batAttack, &targetGroupId,
                                                 value);
-    } else if (attackReach->id == attackReaches.adjacent->id) {
+    } else if (attackReach->id == reaches.adjacent->id) {
         battle.fillTargetsListForAdjacentAttackReach(objectMap, battleMsgData, batAttack,
                                                      &targetGroupId, &unitGroupId, unitId, value);
     } else {
@@ -550,7 +550,7 @@ void __stdcall fillEmptyTargetsListHooked(const game::IMidgardObjectMap* objectM
 
     const auto& fn = gameFunctions();
     const auto& battle = BattleMsgDataApi::get();
-    const auto& attackReaches = AttackReachCategories::get();
+    const auto& reaches = AttackReachCategories::get();
 
     CMidgardID unitGroupId{};
     fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, unitId, true);
@@ -560,11 +560,11 @@ void __stdcall fillEmptyTargetsListHooked(const game::IMidgardObjectMap* objectM
 
     IAttack* attack = fn.getAttackById(objectMap, attackUnitOrItemId, 1, true);
     LAttackReach* attackReach = attack->vftable->getAttackReach(attack);
-    if (attackReach->id == attackReaches.all->id) {
+    if (attackReach->id == reaches.all->id) {
         battle.fillEmptyTargetsListForAllAttackReach(objectMap, &targetGroupId, value);
-    } else if (attackReach->id == attackReaches.any->id) {
+    } else if (attackReach->id == reaches.any->id) {
         battle.fillEmptyTargetsListForAnyAttackReach(objectMap, &targetGroupId, value);
-    } else if (attackReach->id == attackReaches.adjacent->id) {
+    } else if (attackReach->id == reaches.adjacent->id) {
         battle.fillEmptyTargetsListForAdjacentAttackReach(objectMap, battleMsgData, batAttack,
                                                           &targetGroupId, &unitGroupId, unitId,
                                                           value);

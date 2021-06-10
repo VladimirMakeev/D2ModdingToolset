@@ -171,7 +171,7 @@ bool markAttackTargetsForAllOrCustomAttackReach(game::CBattleViewerInterf* viewe
     const auto& fn = gameFunctions();
     const auto& listApi = UnitPositionListApi::get();
     const auto& groupApi = CMidUnitGroupApi::get();
-    const auto& attackReaches = AttackReachCategories::get();
+    const auto& reaches = AttackReachCategories::get();
 
     if (!isBattleGoing || attack == nullptr)
         return false;
@@ -191,7 +191,7 @@ bool markAttackTargetsForAllOrCustomAttackReach(game::CBattleViewerInterf* viewe
         return false;
 
     auto attackReach = attack->vftable->getAttackReach(attack);
-    if (attackReach->id == attackReaches.all->id) {
+    if (attackReach->id == reaches.all->id) {
         markAllAttackTargets(viewer, targetGroup, targetInfo, targetPositions);
         return true;
     } else {
