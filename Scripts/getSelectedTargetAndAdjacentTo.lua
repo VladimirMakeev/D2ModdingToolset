@@ -12,10 +12,10 @@ Frontline positions are even, backline - odd.
 --]]
 
 function getTargets(attacker, selected, allies, targets, targetsAreAllies)
-	local result = { selected }
+	-- Get targets by the left/right of the selected (selective-cleave attack)
+	local result = {selected}
 	for i = 1, #targets do
 		local target = targets[i]
-		-- If the target is by the left/right of the selected (selective-cleave attack)
 		if math.abs(target.position - selected.position) == 2 then
 			table.insert(result, target)
 		end

@@ -12,6 +12,6 @@ Frontline positions are even, backline - odd.
 --]]
 
 function getTargets(attacker, selected, allies, targets, targetsAreAllies)
-	-- Allow any target to be selected
+	-- Get all targets
 	return targets
 end

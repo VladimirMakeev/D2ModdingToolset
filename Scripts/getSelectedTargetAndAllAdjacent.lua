@@ -12,12 +12,11 @@ Frontline positions are even, backline - odd.
 --]]
 
 function getTargets(attacker, selected, allies, targets, targetsAreAllies)
-	local result = {}
-
-	-- Get targets closest to selected, including the selected (2x2 area splash)
+	-- Get targets in 2x2 area including the selected (splash attack)
+	local result = {selected}
 	for i = 1, #targets do
 		local target = targets[i]
-		if target.column == selected.column then
+		if target ~= selected and target.column == selected.column then
 			table.insert(result, target)
 		elseif target.column - selected.column == 1 then
 			table.insert(result, target)
@@ -25,6 +24,5 @@ function getTargets(attacker, selected, allies, targets, targetsAreAllies)
 			table.insert(result, target)
 		end
 	end
-	
 	return result
 end

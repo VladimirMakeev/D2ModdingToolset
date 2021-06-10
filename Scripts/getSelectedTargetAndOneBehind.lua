@@ -12,12 +12,13 @@ Frontline positions are even, backline - odd.
 --]]
 
 function getTargets(attacker, selected, allies, targets, targetsAreAllies)
-	local result = { selected }
+	-- Get target that stands directly behind the selected (pierce attack)
+	local result = {selected}
 	for i = 1, #targets do
 		local target = targets[i]
-		-- If the target stands directly behind the selected (pierce attack)
 		if target.position == selected.position + 1 then
 			table.insert(result, target)
+			break
 		end
 	end
 	return result

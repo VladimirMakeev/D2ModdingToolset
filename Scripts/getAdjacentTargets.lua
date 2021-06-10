@@ -40,7 +40,12 @@ function getTargets(attacker, selected, allies, targets, targetsAreAllies)
 	for i = 1, #targets do
 		local target = targets[i]
 		if target == attacker or target:distance(attacker) == closestDistance then
-			table.insert(result, target)
+			if target == selected then
+				-- Ensure first target in case of custom damage ratio
+				table.insert(result, 1, target)
+			else
+				table.insert(result, target)
+			end
 		end
 	end
 	return result

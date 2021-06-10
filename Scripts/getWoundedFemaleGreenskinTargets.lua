@@ -12,10 +12,10 @@ Frontline positions are even, backline - odd.
 --]]
 
 function getTargets(attacker, selected, allies, targets, targetsAreAllies)
+	-- Get only wounded female greenskins (to demonstrate various API, also for the lulz)
 	local result = {}
 	for i = 1, #targets do
 		local target = targets[i]
-		-- Only wounded female greenskins are allowed (to demonstrate various API, also for the lulz)
 		if not target.unit.impl.male and (target.unit.hp < target.unit.hpMax) and (target.unit.impl.subrace == Subrace.NeutralGreenSkin) then
 			table.insert(result, target)
 		end

@@ -12,9 +12,9 @@ Frontline positions are even, backline - odd.
 --]]
 
 function getTargets(attacker, selected, allies, targets, targetsAreAllies)
-	local result = { selected }
+	local result = {selected}
 
-	-- Add 2 random closest targets (chain attack)
+	-- Get 2 random targets closest to each other (chain attack)
 	math.randomseed(os.time())
 	local current = selected
 	for n = 1, 2 do
@@ -29,22 +29,22 @@ function getTargets(attacker, selected, allies, targets, targetsAreAllies)
 						unique = false
 						break
 					end
-				end				
+				end
 				if unique then
 					table.insert(closest, target)
 				end
 			end
 		end
-		
+
 		-- Halt if no unique closest targets found
 		if #closest == 0 then
 			break
 		end
-		
+
 		-- Pick a random closest target
 		current = closest[math.random(#closest)]
 		table.insert(result, current)
 	end
-	
+
 	return result
 end
