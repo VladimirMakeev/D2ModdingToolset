@@ -23,7 +23,7 @@ namespace hooks {
 
 CustomAttacks& getCustomAttacks()
 {
-    static CustomAttacks value;
+    static CustomAttacks value{};
 
     return value;
 }

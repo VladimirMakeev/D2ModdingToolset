@@ -25,6 +25,7 @@
 namespace game {
 struct CMidgardID;
 struct IAttack;
+struct CAttackImpl;
 struct LAttackClass;
 } // namespace game
 
@@ -34,6 +35,7 @@ extern const game::Restriction<int> attackPowerLimits;
 extern const game::Restriction<int> attackInitiativeLimits;
 
 game::IAttack* getAttack(const game::CMidgardID* attackId);
+game::CAttackImpl* getAttackImpl(const game::IAttack* attack);
 int getBoostDamage(int level);
 int getLowerDamage(int level);
 int getLowerInitiative(int level);

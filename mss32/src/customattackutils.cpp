@@ -20,6 +20,8 @@
 #include "customattackutils.h"
 #include "attack.h"
 #include "attackclasscat.h"
+#include "attackimpl.h"
+#include "attackutils.h"
 #include "batattack.h"
 #include "battlemsgdata.h"
 #include "customattacks.h"
@@ -489,6 +491,54 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
             listApi.erase(value, &targetPosition);
         }
     }
+}
+
+void initializeAttackDamageRatio()
+{
+    utils::DbfFile dbf;
+    const std::filesystem::path dbfFilePath{gameFolder() / "globals" / "Gattacks.dbf"};
+    if (!dbf.open(dbfFilePath)) {
+        logError("mssProxyError.log",
+                 fmt::format("Could not open {:s}", dbfFilePath.filename().string()));
+        return;
+    }
+
+    getCustomAttacks().customizeDamageRatio = dbf.column(damageRatioColumnName)
+                                              && dbf.column(damageRatioPerTargetColumnName);
+}
+
+void applyAttackDamageRatio(const game::BattleMsgData* battleMsgData,
+                            const game::IAttack* attack,
+                            const game::CMidgardID* attackerUnitId,
+                            int* damage,
+                            int* critDamage)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+
+    auto attackImpl = getAttackImpl(attack);
+    if (!attackImpl)
+        return;
+
+    auto damageRatio = attackImpl->data->damageRatio;
+    if (damageRatio == 100)
+        return;
+
+    auto targetInfo = battle.getUnitInfoById(battleMsgData, attackerUnitId);
+    if (!targetInfo)
+        return;
+
+    auto counter = targetInfo->damageRatioCounter++;
+    if (counter == 0)
+        return;
+
+    double ratio = (double)damageRatio / 100;
+    if (attackImpl->data->damageRatioPerTarget)
+        ratio = pow(ratio, counter);
+
+    *damage = lround(ratio * *damage);
+    *critDamage = lround(ratio * *critDamage);
 }
 
 } // namespace hooks

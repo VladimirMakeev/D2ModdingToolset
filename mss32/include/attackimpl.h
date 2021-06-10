@@ -23,6 +23,7 @@
 #include "attack.h"
 #include "textandid.h"
 #include <cstddef>
+#include <cstdint>
 
 namespace game {
 
@@ -46,7 +47,15 @@ struct CAttackImplData
     char padding[3];
     IdVector wards;
     bool critHit;
-    char padding2[3];
+    union
+    {
+        struct
+        {
+            std::uint8_t damageRatio;
+            bool damageRatioPerTarget;
+        };
+        char padding2[3];
+    };
 };
 
 static_assert(sizeof(CAttackImplData) == 100,

@@ -44,6 +44,8 @@
 #include "cmdbattlestartmsg.h"
 #include "commandmsghooks.h"
 #include "customattackhooks.h"
+#include "customattacks.h"
+#include "customattackutils.h"
 #include "d2string.h"
 #include "dbf/dbffile.h"
 #include "dbtable.h"
@@ -162,6 +164,7 @@ static Hooks getGameHooks()
         // uses alternative attack with 'adjacent' attack range
         {fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked, (void**)&orig.computeUnitEffectiveHp},
         // Fix bestow wards becoming permanent on warded unit transformation
+        // Support attack damage ratio
         {battle.beforeAttack, beforeAttackHooked},
         /**
          * Allows bestow wards to:
@@ -204,11 +207,20 @@ static Hooks getGameHooks()
         {battle.fillEmptyTargetsList, fillEmptyTargetsListHooked},
         {battle.getTargetsToAttack, getTargetsToAttackHooked},
         {BattleViewerInterfApi::get().markAttackTargets, markAttackTargetsHooked},
+        // Allow users to specify critical hit chance
+        // Support attack damage ratio
+        {fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage},
     };
     // clang-format on
 
     if (!unitsForHire().empty()) {
         hooks.emplace_back(HookInfo{fn.addPlayerUnitsToHireList, addPlayerUnitsToHireListHooked});
+    }
+
+    if (getCustomAttacks().customizeDamageRatio) {
+        // Support attack damage ratio
+        hooks.emplace_back(HookInfo{battle.getAttackPowerReduction, getAttackPowerReductionHooked});
+        hooks.emplace_back(HookInfo{battle.setAttackPowerReduction, setAttackPowerReductionHooked});
     }
 
     if (userSettings().shatteredArmorMax != baseSettings().shatteredArmorMax) {
@@ -243,12 +255,6 @@ static Hooks getGameHooks()
         // Change maximum number of items that player can carry between campaign scenarios
         hooks.emplace_back(HookInfo{CDDCarryOverItemsApi::get().constructor,
                                     carryOverItemsCtorHooked, (void**)&orig.carryOverItemsCtor});
-    }
-
-    if (userSettings().criticalHitChance != baseSettings().criticalHitChance) {
-        // Allow users to specify critical hit chance
-        hooks.emplace_back(
-            HookInfo{fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage});
     }
 
     if (userSettings().doppelgangerRespectsEnemyImmunity
@@ -1232,7 +1238,7 @@ void __fastcall markMapPositionHooked(void* thisptr, int /*%edx*/, game::CMqPoin
 
 int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
                                   const game::BattleMsgData* battleMsgData,
-                                  const game::IAttack* attackImpl,
+                                  const game::IAttack* attack,
                                   const game::CMidgardID* attackerUnitId,
                                   const game::CMidgardID* targetUnitId,
                                   bool computeCriticalHit,
@@ -1241,25 +1247,26 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
 {
     int damage;
     int critDamage;
-    int totalDamage = getOriginalFunctions().computeDamage(objectMap, battleMsgData, attackImpl,
-                                                           attackerUnitId, targetUnitId,
-                                                           computeCriticalHit, &damage,
-                                                           &critDamage);
+    getOriginalFunctions().computeDamage(objectMap, battleMsgData, attack, attackerUnitId,
+                                         targetUnitId, computeCriticalHit, &damage, &critDamage);
 
-    if (critDamage != 0) {
-        int critChance = userSettings().criticalHitChance;
-        bool critMissed = game::gameFunctions().attackShouldMiss(&critChance);
-        if (critMissed) {
-            totalDamage -= critDamage;
-            critDamage = 0;
+    if (userSettings().criticalHitChance != baseSettings().criticalHitChance) {
+        if (critDamage != 0) {
+            int critChance = userSettings().criticalHitChance;
+            if (game::gameFunctions().attackShouldMiss(&critChance))
+                critDamage = 0;
         }
+    }
+
+    if (getCustomAttacks().customizeDamageRatio) {
+        applyAttackDamageRatio(battleMsgData, attack, attackerUnitId, &damage, &critDamage);
     }
 
     if (attackDamage)
         *attackDamage = damage;
     if (criticalHitDamage)
         *criticalHitDamage = critDamage;
-    return totalDamage;
+    return damage + critDamage;
 }
 
 void __stdcall getAttackPowerHooked(int* power,
@@ -1415,6 +1422,9 @@ void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
     resetModifiedUnitsInfo(unitInfo);
 
     battle.setAttackPowerReduction(battleMsgData, unitId, 0);
+
+    if (getCustomAttacks().customizeDamageRatio)
+        unitInfo->damageRatioCounter = 0;
 }
 
 void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)

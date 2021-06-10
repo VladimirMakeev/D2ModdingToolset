@@ -288,6 +288,17 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
         data->critHit = false;
     }
 
+    if (getCustomAttacks().customizeDamageRatio) {
+        int damageRatio;
+        db.readIntWithBoundsCheck(&damageRatio, dbTable, damageRatioColumnName, 0, 255);
+        if (damageRatio == 0)
+            damageRatio = 100;
+        data->damageRatio = (std::uint8_t)damageRatio;
+
+        data->damageRatioPerTarget = false;
+        db.readBool(&data->damageRatioPerTarget, dbTable, damageRatioPerTargetColumnName);
+    }
+
     return thisptr;
 }
 

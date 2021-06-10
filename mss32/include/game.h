@@ -206,7 +206,7 @@ using ComputePlayerDailyIncome = Bank*(__stdcall*)(Bank* income,
  */
 using ComputeDamage = int(__stdcall*)(const IMidgardObjectMap* objectMap,
                                       const BattleMsgData* battleMsgData,
-                                      const IAttack* attackImpl,
+                                      const IAttack* attack,
                                       const CMidgardID* attackerUnitId,
                                       const CMidgardID* targetUnitId,
                                       bool computeCriticalHit,

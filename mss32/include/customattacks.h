@@ -27,6 +27,9 @@
 
 namespace hooks {
 
+static const char damageRatioColumnName[] = "DAM_RATIO";
+static const char damageRatioPerTargetColumnName[] = "DR_REPEAT";
+
 struct CustomAttackSource
 {
     game::LAttackSource source;
@@ -55,6 +58,7 @@ struct CustomAttacks
 {
     CustomAttackSources sources;
     CustomAttackReaches reaches;
+    bool customizeDamageRatio;
 };
 
 CustomAttacks& getCustomAttacks();

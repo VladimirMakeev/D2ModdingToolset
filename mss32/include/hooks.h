@@ -172,7 +172,7 @@ void __fastcall markMapPositionHooked(void* thisptr, int /*%edx*/, game::CMqPoin
 
 int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
                                   const game::BattleMsgData* battleMsgData,
-                                  const game::IAttack* attackImpl,
+                                  const game::IAttack* attack,
                                   const game::CMidgardID* attackerUnitId,
                                   const game::CMidgardID* targetUnitId,
                                   bool computeCriticalHit,

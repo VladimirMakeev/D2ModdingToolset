@@ -120,6 +120,14 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
                           const game::CMidgardID* targetGroupId,
                           game::TargetsList* value);
 
+void initializeAttackDamageRatio();
+
+void applyAttackDamageRatio(const game::BattleMsgData* battleMsgData,
+                            const game::IAttack* attack,
+                            const game::CMidgardID* attackerUnitId,
+                            int* damage,
+                            int* critDamage);
+
 } // namespace hooks
 
 #endif // CUSTOMATTACKUTILS_H
