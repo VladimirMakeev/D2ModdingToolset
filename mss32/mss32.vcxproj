@@ -223,6 +223,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\mapgen.cpp" />
     <ClCompile Include="src\mapgraphics.cpp" />
     <ClCompile Include="src\mapinterf.cpp" />
+    <ClCompile Include="src\mapinterfhooks.cpp" />
     <ClCompile Include="src\mempool.cpp" />
     <ClCompile Include="src\menubase.cpp" />
     <ClCompile Include="src\menulord.cpp" />
@@ -479,6 +480,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mapgen.h" />
     <ClInclude Include="include\mapgraphics.h" />
     <ClInclude Include="include\mapinterf.h" />
+    <ClInclude Include="include\mapinterfhooks.h" />
     <ClInclude Include="include\mempool.h" />
     <ClInclude Include="include\menubase.h" />
     <ClInclude Include="include\menulord.h" />

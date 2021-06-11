@@ -68,6 +68,8 @@
 #include "log.h"
 #include "lordtype.h"
 #include "mapgen.h"
+#include "mapinterf.h"
+#include "mapinterfhooks.h"
 #include "mempool.h"
 #include "menulordhooks.h"
 #include "menunewskirmishsingle.h"
@@ -101,6 +103,7 @@
 #include "subracecat.h"
 #include "subracehooks.h"
 #include "summonhooks.h"
+#include "taskchangecolor.h"
 #include "terraincat.h"
 #include "terrainhooks.h"
 #include "terrainnamelisthooks.h"
@@ -363,7 +366,10 @@ static Hooks getScenarioEditorHooks()
         // Fix DLG_R_C_SPELL so it shows actual spell info
         {CEncLayoutSpellApi::get().constructor, encLayoutSpellCtorHooked, (void**)&orig.encLayoutSpellCtor},
         // Allow editor to place more than 200 stacks on a map
-        {editorFunctions.countStacksOnMap, countStacksOnMapHooked}
+        {editorFunctions.countStacksOnMap, countStacksOnMapHooked},
+        // Support custom terrains coloring
+        {editor::CMapInterfApi::get().createMapChangeTask, createMapChangeTaskHooked},
+        {editor::CTaskChangeColorApi::get().getTerrain, getTerrainBySelection},
     };
     // clang-format on
 
