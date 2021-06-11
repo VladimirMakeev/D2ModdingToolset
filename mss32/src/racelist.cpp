@@ -24,7 +24,7 @@
 namespace game::RaceCategoryListApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::Constructor)0x424628,
@@ -51,7 +51,16 @@ static std::array<Api, 3> functions = {{
         (Api::FreeNode)0x5215fc,
         (Api::Add)0x42bf66,
         (Api::GetPlayableRaces)0x4eb764,
-    }
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x402fed,
+        (Api::CopyConstructor)nullptr,
+        (Api::FreeNodes)0x43ee56,
+        (Api::FreeNode)0x4fd186,
+        (Api::Add)0x419441,
+        (Api::GetPlayableRaces)nullptr,
+    },
 }};
 // clang-format on
 
