@@ -26,6 +26,7 @@
 #include "customattackutils.h"
 #include "dbf/dbffile.h"
 #include "dbtable.h"
+#include "dynamiccast.h"
 #include "game.h"
 #include "globaldata.h"
 #include "immunecat.h"
@@ -571,6 +572,44 @@ void __stdcall fillEmptyTargetsListHooked(const game::IMidgardObjectMap* objectM
     } else {
         // Do nothing - custom attack reaches process empty targets in fillTargetsListHooked
     }
+}
+
+bool __stdcall isGroupSuitableForAiNobleMisfitHooked(const game::IMidgardObjectMap* objectMap,
+                                                     const game::CMidUnitGroup* group)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& reaches = AttackReachCategories::get();
+
+    const auto& unitIds = group->units;
+    if (unitIds.end - unitIds.bgn < 2)
+        return false;
+
+    for (const CMidgardID* unitId = unitIds.bgn; unitId != unitIds.end; ++unitId) {
+        auto unit = static_cast<const CMidUnit*>(
+            objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+
+        auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+        if (!soldier->vftable->getSizeSmall(soldier))
+            continue;
+
+        auto attack = soldier->vftable->getAttackById(soldier);
+        auto reach = attack->vftable->getAttackReach(attack);
+        if (reach->id == reaches.all->id || reach->id == reaches.any->id) {
+            return true;
+        } else if (reach->id != reaches.adjacent->id) {
+            for (const auto& custom : getCustomAttacks().reaches) {
+                if (reach->id == custom.reach.id) {
+                    if (!custom.aiMelee)
+                        return true;
+                    break;
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 } // namespace hooks

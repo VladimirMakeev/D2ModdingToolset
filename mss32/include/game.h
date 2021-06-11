@@ -436,6 +436,9 @@ using GetUnitPositionDistance = int(__stdcall*)(int unitPosition,
 using GetUnitRaceCategory = LRaceCategory*(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                        const CMidgardID* unitId);
 
+using IsGroupSuitableForAiNobleMisfit = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                         const CMidUnitGroup* group);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -500,6 +503,7 @@ struct Functions
     GetSoldierImmunityAiRating getSoldierImmunityAiRating;
     GetUnitPositionDistance getUnitPositionDistance;
     GetUnitRaceCategory getUnitRaceCategory;
+    IsGroupSuitableForAiNobleMisfit isGroupSuitableForAiNobleMisfit;
 };
 
 /** Global variables used in game. */

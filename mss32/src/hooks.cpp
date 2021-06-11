@@ -207,6 +207,7 @@ static Hooks getGameHooks()
         {battle.fillEmptyTargetsList, fillEmptyTargetsListHooked},
         {battle.getTargetsToAttack, getTargetsToAttackHooked},
         {BattleViewerInterfApi::get().markAttackTargets, markAttackTargetsHooked},
+        {fn.isGroupSuitableForAiNobleMisfit, isGroupSuitableForAiNobleMisfitHooked},
         // Allow users to specify critical hit chance
         // Support attack damage ratio
         {fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage},
