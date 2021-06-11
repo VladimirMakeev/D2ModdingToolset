@@ -612,4 +612,52 @@ bool __stdcall isGroupSuitableForAiNobleMisfitHooked(const game::IMidgardObjectM
     return false;
 }
 
+bool __stdcall isUnitSuitableForAiNobleDuelHooked(const game::IMidgardObjectMap* objectMap,
+                                                  const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& attackClasses = AttackClassCategories::get();
+    const auto& attackReaches = AttackReachCategories::get();
+
+    auto unit = static_cast<const CMidUnit*>(
+        objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+
+    if (unit->currentHp >= 100)
+        return false;
+
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+    auto attack = soldier->vftable->getAttackById(soldier);
+
+    auto attackClassId = attack->vftable->getAttackClass(attack)->id;
+    if (attackClassId == attackClasses.damage->id) {
+        auto attackDamage = attack->vftable->getQtyDamage(attack);
+
+        auto attackReach = attack->vftable->getAttackReach(attack);
+        if (attackReach->id == attackReaches.all->id) {
+            return attackDamage < 40;
+        } else {
+            for (auto& custom : getCustomAttacks().reaches) {
+                if (attackReach->id == custom.reach.id) {
+                    auto attackInitiative = attack->vftable->getInitiative(attack);
+                    return attackDamage < 40 && attackInitiative <= 50;
+                }
+            }
+        }
+    } else if (attackClassId == attackClasses.heal->id
+               || attackClassId == attackClasses.boostDamage->id
+               || attackClassId == attackClasses.lowerDamage->id
+               || attackClassId == attackClasses.lowerInitiative->id
+               || attackClassId == attackClasses.revive->id
+               || attackClassId == attackClasses.cure->id
+               || attackClassId == attackClasses.bestowWards->id
+               || attackClassId == attackClasses.shatter->id
+               || attackClassId == attackClasses.giveAttack->id) {
+        return true;
+    }
+
+    return false;
+}
+
 } // namespace hooks

@@ -439,6 +439,9 @@ using GetUnitRaceCategory = LRaceCategory*(__stdcall*)(const IMidgardObjectMap* 
 using IsGroupSuitableForAiNobleMisfit = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                          const CMidUnitGroup* group);
 
+using IsUnitSuitableForAiNobleDuel = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                      const CMidgardID* unitId);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -504,6 +507,7 @@ struct Functions
     GetUnitPositionDistance getUnitPositionDistance;
     GetUnitRaceCategory getUnitRaceCategory;
     IsGroupSuitableForAiNobleMisfit isGroupSuitableForAiNobleMisfit;
+    IsUnitSuitableForAiNobleDuel isUnitSuitableForAiNobleDuel;
 };
 
 /** Global variables used in game. */

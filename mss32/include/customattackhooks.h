@@ -140,6 +140,9 @@ void __stdcall fillEmptyTargetsListHooked(const game::IMidgardObjectMap* objectM
 bool __stdcall isGroupSuitableForAiNobleMisfitHooked(const game::IMidgardObjectMap* objectMap,
                                                      const game::CMidUnitGroup* group);
 
+bool __stdcall isUnitSuitableForAiNobleDuelHooked(const game::IMidgardObjectMap* objectMap,
+                                                  const game::CMidgardID* unitId);
+
 } // namespace hooks
 
 #endif // CUSTOMATTACKHOOKS_H
