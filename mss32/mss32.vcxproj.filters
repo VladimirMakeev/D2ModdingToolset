@@ -1537,6 +1537,9 @@
     <ClInclude Include="include\togglebutton.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\menubaseeditor.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
