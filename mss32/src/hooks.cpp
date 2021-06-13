@@ -72,6 +72,8 @@
 #include "mapinterfhooks.h"
 #include "mempool.h"
 #include "menulordhooks.h"
+#include "menunewmap.h"
+#include "menunewmaphooks.h"
 #include "menunewskirmishsingle.h"
 #include "menurace.h"
 #include "menuracehooks.h"
@@ -370,6 +372,8 @@ static Hooks getScenarioEditorHooks()
         // Support custom terrains coloring
         {editor::CMapInterfApi::get().createMapChangeTask, createMapChangeTaskHooked},
         {editor::CTaskChangeColorApi::get().getTerrain, getTerrainBySelection},
+        // Support custom races in new map menu
+        {editor::CMenuNewMapApi::get().getCreationSettings, getNewMapCreationSettingsHooked},
     };
     // clang-format on
 
