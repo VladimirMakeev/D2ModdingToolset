@@ -582,6 +582,9 @@
     <ClCompile Include="src\menunewmap.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\sortedpointlist.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -1546,7 +1549,9 @@
     <ClInclude Include="include\menubaseeditor.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-  </ItemGroup>
+    <ClInclude Include="include\sortedpointlist.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
       <Filter>Файлы ресурсов</Filter>
