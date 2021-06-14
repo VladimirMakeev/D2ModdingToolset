@@ -225,6 +225,7 @@ bool __stdcall findAttackTargetHooked(game::IMidgardObjectMap* objectMap,
                                       game::CMidgardID* targetUnitId);
 
 bool __stdcall isRaceCategoryUnplayableHooked(const game::LRaceCategory* raceCategory);
+bool __stdcall isRaceCategoryPlayableHooked(const game::LRaceCategory* raceCategory);
 
 char* __fastcall buildingBranchCreateDialogNameHooked(game::CBuildingBranch* thisptr, int /*%edx*/);
 

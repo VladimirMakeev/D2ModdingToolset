@@ -376,6 +376,7 @@ static Hooks getScenarioEditorHooks()
         {editor::CMenuNewMapApi::get().getCreationSettings, getNewMapCreationSettingsHooked},
         // Map custom races to new sub races
         {editorFunctions.getSubRaceByRace, getSubRaceByRaceHooked},
+        {editorFunctions.isRaceCategoryPlayable, isRaceCategoryPlayableHooked},
     };
     // clang-format on
 
@@ -1621,6 +1622,11 @@ bool __stdcall isRaceCategoryUnplayableHooked(const game::LRaceCategory* raceCat
 
     const auto& races = RaceCategories::get();
     return raceCategory->id == races.neutral->id;
+}
+
+bool __stdcall isRaceCategoryPlayableHooked(const game::LRaceCategory* raceCategory)
+{
+    return !isRaceCategoryUnplayableHooked(raceCategory);
 }
 
 char* __fastcall buildingBranchCreateDialogNameHooked(game::CBuildingBranch* thisptr, int /*%edx*/)
