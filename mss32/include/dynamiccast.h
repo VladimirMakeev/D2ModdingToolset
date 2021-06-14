@@ -81,6 +81,7 @@ struct Rtti
     TypeDescriptor* CCommandMsgTempl_9_0_Type;  // CCmdBattleChooseActionMsg
     TypeDescriptor* CCommandMsgTempl_10_0_Type; // CCmdBattleResultMsg
     TypeDescriptor* CCommandMsgTempl_11_2_Type; // CCmdBattleEndMsg
+    TypeDescriptor* CMidgardMapType;
 };
 
 const Rtti& rtti();
