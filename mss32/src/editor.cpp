@@ -27,7 +27,10 @@ EditorFunctions editorFunctions{
     (FindPlayerByRaceCategory)0x4e1bf5,
     (CanPlace)0x511142,
     (CanPlace)0x512376,
-    (CountStacksOnMap)0x40b631
+    (CountStacksOnMap)0x40b631,
+    (GetSubRaceByRace)0x50b1a6,
+    (IsRaceCategoryPlayable)0x419193,
+    (ChangeCapitalTerrain)0x50afb4,
 };
 // clang-format on
 
