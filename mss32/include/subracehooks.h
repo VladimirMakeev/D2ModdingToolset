@@ -20,11 +20,22 @@
 #ifndef SUBRACEHOOKS_H
 #define SUBRACEHOOKS_H
 
-namespace game {
-struct LSubRaceCategoryTable;
-}
+#include "subracecat.h"
+#include <string>
+#include <vector>
 
 namespace hooks {
+
+struct SubRaceDescription
+{
+    game::LSubRaceCategory category{};
+    std::string categoryName;
+};
+
+using NewSubRaces = std::vector<SubRaceDescription>;
+
+/** Returns new sub races categories and category names, if any. */
+NewSubRaces& newSubRaces();
 
 /** Reads new subrace categories from LSubRace.dbf. */
 game::LSubRaceCategoryTable* __fastcall subRaceCategoryTableCtorHooked(

@@ -27,8 +27,6 @@
 
 namespace hooks {
 
-static std::vector<std::pair<game::LSubRaceCategory, std::string>> newSubRaces;
-
 static void checkNewSubRaceCategories(const std::filesystem::path& dbfFilePath)
 {
     utils::DbfFile dbf;
@@ -64,9 +62,15 @@ static void checkNewSubRaceCategories(const std::filesystem::path& dbfFilePath)
                          [&categoryName](const char* name) { return categoryName == name; })) {
             logDebug("newRace.log", fmt::format("Found new subrace category {:s}", categoryName));
 
-            newSubRaces.push_back({game::LSubRaceCategory{}, categoryName});
+            newSubRaces().push_back({game::LSubRaceCategory{}, categoryName});
         }
     }
+}
+
+NewSubRaces& newSubRaces()
+{
+    static NewSubRaces subRaces;
+    return subRaces;
 }
 
 game::LSubRaceCategoryTable* __fastcall subRaceCategoryTableCtorHooked(
@@ -112,9 +116,10 @@ game::LSubRaceCategoryTable* __fastcall subRaceCategoryTableCtorHooked(
     table.readCategory(subraces.neutralWolf, thisptr, "L_NEUTRAL_WOLF", dbfFileName);
     table.readCategory(subraces.elf, thisptr, "L_NEUTRAL_WOLF", dbfFileName);
 
-    for (auto& subrace : newSubRaces) {
-        logDebug("newRace.log", fmt::format("Read new subrace category {:s}", subrace.second));
-        table.readCategory(&subrace.first, thisptr, subrace.second.c_str(), dbfFileName);
+    for (auto& subrace : newSubRaces()) {
+        logDebug("newRace.log",
+                 fmt::format("Read new subrace category {:s}", subrace.categoryName));
+        table.readCategory(&subrace.category, thisptr, subrace.categoryName.c_str(), dbfFileName);
     }
 
     table.initDone(thisptr);
