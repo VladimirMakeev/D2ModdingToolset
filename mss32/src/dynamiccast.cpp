@@ -24,22 +24,26 @@
 namespace game::RttiApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api {
-        (Api::DynamicCast)0x66d466
+        (Api::DynamicCast)0x66d466,
     },
     // Russobit
     Api {
-        (Api::DynamicCast)0x66d466
+        (Api::DynamicCast)0x66d466,
     },
     // Gog
     Api {
-        (Api::DynamicCast)0x66bda6
-    }
+        (Api::DynamicCast)0x66bda6,
+    },
+    // Scenario Editor
+    Api {
+        (Api::DynamicCast)0x57109c,
+    },
 }};
 
-static const std::array<Rtti, 3> types = {{
+static const std::array<Rtti, 4> types = {{
     // Akella
     Rtti{
         (TypeDescriptor*)0x78eda8,
@@ -61,6 +65,7 @@ static const std::array<Rtti, 3> types = {{
         (TypeDescriptor*)0x793600,
         (TypeDescriptor*)0x793630,
         (TypeDescriptor*)0x792828,
+        (TypeDescriptor*)0x7b28e8,
     },
     // Russobit
     Rtti{
@@ -83,6 +88,7 @@ static const std::array<Rtti, 3> types = {{
         (TypeDescriptor*)0x793600,
         (TypeDescriptor*)0x793630,
         (TypeDescriptor*)0x792828,
+        (TypeDescriptor*)0x7b28e8,
     },
     // Gog
     Rtti{
@@ -105,7 +111,31 @@ static const std::array<Rtti, 3> types = {{
         (TypeDescriptor*)0x7915a8,
         (TypeDescriptor*)0x7915d8,
         (TypeDescriptor*)0x7907d0,
-    }
+        (TypeDescriptor*)0x7b0898,
+    },
+    // Scenario Editor
+    Rtti{
+        (TypeDescriptor*)0x648b48,
+        (TypeDescriptor*)0x649788,
+        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)0x648b90,
+        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)0x656310,
+    },
 }};
 // clang-format on
 

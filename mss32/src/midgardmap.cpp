@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,21 +17,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "editor.h"
+#include "midgardmap.h"
+#include "version.h"
+#include <array>
 
-namespace game {
+namespace game::CMidgardMapApi {
 
 // clang-format off
-EditorFunctions editorFunctions{
-    (RadioButtonIndexToPlayerId)0x429f1b,
-    (FindPlayerByRaceCategory)0x4e1bf5,
-    (CanPlace)0x511142,
-    (CanPlace)0x512376,
-    (CountStacksOnMap)0x40b631,
-    (GetSubRaceByRace)0x50b1a6,
-    (IsRaceCategoryPlayable)0x419193,
-    (ChangeCapitalTerrain)0x50afb4,
-};
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::ChangeTerrain)nullptr,
+    },
+    // Russobit
+    Api{
+        (Api::ChangeTerrain)nullptr,
+    },
+    // Gog
+    Api{
+        (Api::ChangeTerrain)nullptr,
+    },
+    // Scenario Editor
+    Api{
+        (Api::ChangeTerrain)0x4e3d8d,
+    },
+}};
 // clang-format on
 
-} // namespace game
+Api& get()
+{
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+} // namespace game::CMidgardMapApi

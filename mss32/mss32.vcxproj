@@ -237,6 +237,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\middragdropinterf.cpp" />
     <ClCompile Include="src\midgard.cpp" />
     <ClCompile Include="src\midgardid.cpp" />
+    <ClCompile Include="src\midgardmap.cpp" />
     <ClCompile Include="src\midgardmapblock.cpp" />
     <ClCompile Include="src\midgardmapblockhooks.cpp" />
     <ClCompile Include="src\midgardmsgbox.cpp" />
@@ -272,6 +273,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\smartptr.cpp" />
     <ClCompile Include="src\movepathhooks.cpp" />
     <ClCompile Include="src\sortedcapitalracelist.cpp" />
+    <ClCompile Include="src\sortedpointlist.cpp" />
     <ClCompile Include="src\sortedracelist.cpp" />
     <ClCompile Include="src\stackbattleactionmsg.cpp" />
     <ClCompile Include="src\stringarray.cpp" />
@@ -506,6 +508,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\middropmanager.h" />
     <ClInclude Include="include\midgard.h" />
     <ClInclude Include="include\midgardid.h" />
+    <ClInclude Include="include\midgardmap.h" />
     <ClInclude Include="include\midgardmapblock.h" />
     <ClInclude Include="include\midgardmapblockhooks.h" />
     <ClInclude Include="include\midgardmsgbox.h" />
@@ -587,6 +590,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\sortedcapitalracelist.h" />
     <ClInclude Include="include\sortedlist.h" />
     <ClInclude Include="include\movepathhooks.h" />
+    <ClInclude Include="include\sortedpointlist.h" />
     <ClInclude Include="include\sortedracelist.h" />
     <ClInclude Include="include\spinbuttoninterf.h" />
     <ClInclude Include="include\stackbattleactionmsg.h" />
