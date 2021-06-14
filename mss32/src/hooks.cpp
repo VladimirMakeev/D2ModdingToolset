@@ -1754,7 +1754,7 @@ void __stdcall getRaceLogoImageNameHooked(game::LinkedList<game::String>* imageN
     } else if (raceCatId == races.heretic->id) {
         imageName = "LOGOHE";
     } else if (raceCatId == races.undead->id) {
-        imageName = "LOGOUN";
+        imageName = "LOGOUD";
     } else if (raceCatId == races.elf->id) {
         imageName = "LOGOEL";
     } else {
