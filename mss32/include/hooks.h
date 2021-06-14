@@ -55,6 +55,7 @@ struct CMidUnit;
 struct CMidUnitGroup;
 struct CUnitGenerator;
 struct LRaceCategory;
+struct LSubRaceCategory;
 }; // namespace game
 
 namespace hooks {
@@ -235,6 +236,9 @@ game::IMqImage2* __stdcall getRacePreviewImageHooked(const game::LRaceCategory* 
 void __stdcall getRaceLogoImageNameHooked(game::LinkedList<game::String>* imageNames,
                                           void* storage,
                                           const game::LRaceCategory* race);
+
+const game::LSubRaceCategory* __stdcall getSubRaceByRaceHooked(
+    const game::LRaceCategory* raceCategory);
 
 } // namespace hooks
 

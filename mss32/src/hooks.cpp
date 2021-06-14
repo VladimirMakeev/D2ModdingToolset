@@ -374,6 +374,8 @@ static Hooks getScenarioEditorHooks()
         {editor::CTaskChangeColorApi::get().getTerrain, getTerrainBySelection},
         // Support custom races in new map menu
         {editor::CMenuNewMapApi::get().getCreationSettings, getNewMapCreationSettingsHooked},
+        // Map custom races to new sub races
+        {editorFunctions.getSubRaceByRace, getSubRaceByRaceHooked},
     };
     // clang-format on
 
@@ -1773,6 +1775,51 @@ void __stdcall getRaceLogoImageNameHooked(game::LinkedList<game::String>* imageN
     const int nameLength = static_cast<int>(imageName.length());
     GameImagesApi::get().getImageNames(imageNames, storage, imageName.c_str(), nameLength,
                                        nameLength);
+}
+
+const game::LSubRaceCategory* __stdcall getSubRaceByRaceHooked(
+    const game::LRaceCategory* raceCategory)
+{
+    using namespace game;
+
+    const auto& races = RaceCategories::get();
+    const auto& subRaces = SubraceCategories::get();
+    const auto raceCatId{raceCategory->id};
+
+    if (raceCatId == races.human->id) {
+        return subRaces.human;
+    }
+
+    if (raceCatId == races.heretic->id) {
+        return subRaces.heretic;
+    }
+
+    if (raceCatId == races.dwarf->id) {
+        return subRaces.dwarf;
+    }
+
+    if (raceCatId == races.undead->id) {
+        return subRaces.undead;
+    }
+
+    if (raceCatId == races.elf->id) {
+        return subRaces.elf;
+    }
+
+    if (raceCatId == races.neutral->id) {
+        return subRaces.neutral;
+    }
+
+    for (size_t i = 0; i < newRaces().size(); ++i) {
+        if (raceCatId == newRaces()[i].category.id) {
+            logDebug("newRace.log",
+                     fmt::format("Map new race category {:s} to new sub race {:s} category",
+                                 newRaces()[i].categoryName, newSubRaces()[i].categoryName));
+            return &newSubRaces()[i].category;
+        }
+    }
+
+    return subRaces.custom;
 }
 
 } // namespace hooks
