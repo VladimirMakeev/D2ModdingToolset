@@ -585,6 +585,9 @@
     <ClCompile Include="src\sortedpointlist.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\midgardmap.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -1552,6 +1555,10 @@
     <ClInclude Include="include\sortedpointlist.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\midgardmap.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+  </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
       <Filter>Файлы ресурсов</Filter>
