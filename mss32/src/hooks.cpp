@@ -36,6 +36,7 @@
 #include "buildingbranch.h"
 #include "buildingtype.h"
 #include "button.h"
+#include "capital.h"
 #include "capitaldata.h"
 #include "capitaldatahooks.h"
 #include "cmdbattlechooseactionmsg.h"
@@ -79,6 +80,7 @@
 #include "menuracehooks.h"
 #include "middatacache.h"
 #include "midgardid.h"
+#include "midgardmap.h"
 #include "midgardmapblockhooks.h"
 #include "midgardmsgbox.h"
 #include "midmsgboxbuttonhandlerstd.h"
@@ -377,6 +379,8 @@ static Hooks getScenarioEditorHooks()
         // Map custom races to new sub races
         {editorFunctions.getSubRaceByRace, getSubRaceByRaceHooked},
         {editorFunctions.isRaceCategoryPlayable, isRaceCategoryPlayableHooked},
+        // Support custom terrains placement under capital
+        {editorFunctions.changeCapitalTerrain, changeCapitalTerrainHooked},
     };
     // clang-format on
 
@@ -1818,14 +1822,72 @@ const game::LSubRaceCategory* __stdcall getSubRaceByRaceHooked(
 
     for (size_t i = 0; i < newRaces().size(); ++i) {
         if (raceCatId == newRaces()[i].category.id) {
-            logDebug("newRace.log",
-                     fmt::format("Map new race category {:s} to new sub race {:s} category",
-                                 newRaces()[i].categoryName, newSubRaces()[i].categoryName));
             return &newSubRaces()[i].category;
         }
     }
 
     return subRaces.custom;
+}
+
+bool __stdcall changeCapitalTerrainHooked(const game::TRaceType* raceType,
+                                          const game::CCapital* capital,
+                                          game::IMidgardObjectMap* objectMap,
+                                          game::CVisitorAddPlayer* visitor)
+{
+    using namespace game;
+
+    auto terrain = getTerrainByRaceHooked(&raceType->data->raceType);
+
+    const auto& pos = capital->mapElement.position;
+    CMqRect capitalArea{};
+    capitalArea.p1 = pos;
+    capitalArea.p2.x = pos.x + capital->mapElement.sizeX;
+    capitalArea.p2.y = pos.y + capital->mapElement.sizeY;
+
+    const auto& list = SortedPointListApi::get();
+
+    int dummy{};
+    bool tmp{};
+    SortedPointList tiles;
+    SortedPointList tiles2;
+    list.constructor(&tiles, &tmp, &dummy, false);
+
+    list.constructor(&tiles2, &tmp, &dummy, false);
+
+    SortedPointListIterator iterator{};
+    for (int y = capitalArea.p1.y; y != capitalArea.p2.y; ++y) {
+        for (int x = capitalArea.p1.x; x != capitalArea.p2.x; ++x) {
+            CMqPoint tile{x, y};
+            list.add(&tiles, &iterator, &tile);
+        }
+    }
+
+    const auto& id = CMidgardIDApi::get();
+    auto scenarioId = objectMap->vftable->getId(objectMap);
+
+    CMidgardID mapId{};
+    id.fromParts(&mapId, id.getCategory(scenarioId), id.getCategoryIndex(scenarioId), IdType::Map,
+                 0);
+
+    auto mapObject = objectMap->vftable->findScenarioObjectByIdForChange(objectMap, &mapId);
+
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+
+    auto map = (CMidgardMap*)dynamicCast(mapObject, 0, rtti.IMidScenarioObjectType,
+                                         rtti.CMidgardMapType, 0);
+    if (!map) {
+        logError("mssProxyError.log",
+                 fmt::format("Could not find CMidgardMap by id {:s}", idToString(&mapId)));
+        return false;
+    }
+
+    auto result = CMidgardMapApi::get().changeTerrain(map, visitor, terrain, &tiles, &tiles2,
+                                                      objectMap);
+
+    list.destructor(&tiles);
+    list.destructor(&tiles2);
+    return result;
 }
 
 } // namespace hooks

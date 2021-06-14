@@ -56,6 +56,9 @@ struct CMidUnitGroup;
 struct CUnitGenerator;
 struct LRaceCategory;
 struct LSubRaceCategory;
+struct TRaceType;
+struct CCapital;
+struct CVisitorAddPlayer;
 }; // namespace game
 
 namespace hooks {
@@ -240,6 +243,12 @@ void __stdcall getRaceLogoImageNameHooked(game::LinkedList<game::String>* imageN
 
 const game::LSubRaceCategory* __stdcall getSubRaceByRaceHooked(
     const game::LRaceCategory* raceCategory);
+
+bool __stdcall changeCapitalTerrainHooked(const game::TRaceType* raceType,
+                                          const game::CCapital* capital,
+                                          game::IMidgardObjectMap* objectMap,
+                                          game::CVisitorAddPlayer* visitor);
+;
 
 } // namespace hooks
 
