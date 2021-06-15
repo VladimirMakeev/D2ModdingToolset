@@ -92,6 +92,8 @@ static std::array<Functions, 4> functions = {{
         (IsGroupSuitableForAiNobleMisfit)0x45c8e5,
         (IsUnitSuitableForAiNobleDuel)0x45c9b3,
         (IsAttackEffectiveAgainstGroup)0x5d269c,
+        (IsAttackBetterThanItemUsage)0x452aa9,
+        (ComputeAttackDamageCheckTransformed)0x5d400c,
     },
     // Russobit
     Functions{
@@ -160,6 +162,8 @@ static std::array<Functions, 4> functions = {{
         (IsGroupSuitableForAiNobleMisfit)0x45c8e5,
         (IsUnitSuitableForAiNobleDuel)0x45c9b3,
         (IsAttackEffectiveAgainstGroup)0x5d269c,
+        (IsAttackBetterThanItemUsage)0x452aa9,
+        (ComputeAttackDamageCheckTransformed)0x5d400c,
     },
     // Gog
     Functions{
@@ -228,6 +232,8 @@ static std::array<Functions, 4> functions = {{
         (IsGroupSuitableForAiNobleMisfit)0x45c1e5,
         (IsUnitSuitableForAiNobleDuel)0x45c2b3,
         (IsAttackEffectiveAgainstGroup)0x5d15cd,
+        (IsAttackBetterThanItemUsage)0x452475,
+        (ComputeAttackDamageCheckTransformed)0x5d2f3d,
     },
     // Scenario Editor
     Functions{
@@ -296,6 +302,8 @@ static std::array<Functions, 4> functions = {{
         (IsGroupSuitableForAiNobleMisfit)nullptr,
         (IsUnitSuitableForAiNobleDuel)nullptr,
         (IsAttackEffectiveAgainstGroup)nullptr,
+        (IsAttackBetterThanItemUsage)nullptr,
+        (ComputeAttackDamageCheckTransformed)nullptr,
     },
 }};
 

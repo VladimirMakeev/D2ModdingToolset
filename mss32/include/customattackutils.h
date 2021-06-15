@@ -130,6 +130,8 @@ void applyAttackDamageRatio(const game::BattleMsgData* battleMsgData,
 
 double computeTotalDamageRatio(const game::IAttack* attack, int targetCount);
 
+int computeAverageTotalDamage(const game::IAttack* attack, int damage);
+
 } // namespace hooks
 
 #endif // CUSTOMATTACKUTILS_H

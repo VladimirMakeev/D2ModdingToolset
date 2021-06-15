@@ -54,6 +54,7 @@ struct os_exception;
 struct CMidUnit;
 struct CMidUnitGroup;
 struct CUnitGenerator;
+struct IItem;
 }; // namespace game
 
 namespace hooks {
@@ -228,6 +229,10 @@ bool __stdcall findDoppelgangerAttackTargetHooked(game::IMidgardObjectMap* objec
                                                   game::CMidUnitGroup* targetGroup,
                                                   game::TargetsList* targets,
                                                   game::CMidgardID* targetUnitId);
+
+bool __stdcall isAttackBetterThanItemUsageHooked(game::IItem* item,
+                                                 game::IUsSoldier* soldier,
+                                                 game::CMidgardID* unitImplId);
 
 } // namespace hooks
 

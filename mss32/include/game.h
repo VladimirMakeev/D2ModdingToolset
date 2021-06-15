@@ -61,6 +61,7 @@ struct IEncUnitDescriptor;
 struct CDialogInterf;
 struct String;
 struct LRaceCategory;
+struct IItem;
 
 enum class ModifierElementTypeFlag : int;
 
@@ -449,6 +450,15 @@ using IsAttackEffectiveAgainstGroup = bool(__stdcall*)(const IMidgardObjectMap* 
                                                        const IAttack* attack,
                                                        const CMidUnitGroup* group);
 
+using IsAttackBetterThanItemUsage = bool(__stdcall*)(const IItem* item,
+                                                     const IUsSoldier* soldier,
+                                                     const CMidgardID* unitImplId);
+
+using ComputeAttackDamageCheckTransformed = int(__stdcall*)(const IUsSoldier* soldier,
+                                                            const CMidgardID* unitImplId,
+                                                            const BattleMsgData* battleMsgData,
+                                                            const CMidgardID* unitId);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -517,6 +527,8 @@ struct Functions
     IsGroupSuitableForAiNobleMisfit isGroupSuitableForAiNobleMisfit;
     IsUnitSuitableForAiNobleDuel isUnitSuitableForAiNobleDuel;
     IsAttackEffectiveAgainstGroup isAttackEffectiveAgainstGroup;
+    IsAttackBetterThanItemUsage isAttackBetterThanItemUsage;
+    ComputeAttackDamageCheckTransformed computeAttackDamageCheckTransformed;
 };
 
 /** Global variables used in game. */

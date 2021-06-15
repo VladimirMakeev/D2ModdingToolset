@@ -64,6 +64,7 @@
 #include "idlist.h"
 #include "interfmanager.h"
 #include "interftexthooks.h"
+#include "itembattle.h"
 #include "itemtransferhooks.h"
 #include "iterators.h"
 #include "listbox.h"
@@ -214,6 +215,7 @@ static Hooks getGameHooks()
         {fn.isGroupSuitableForAiNobleMisfit, isGroupSuitableForAiNobleMisfitHooked},
         {fn.isUnitSuitableForAiNobleDuel, isUnitSuitableForAiNobleDuelHooked},
         {fn.getAttackReachAiRating, getAttackReachAiRatingHooked},
+        {fn.isAttackBetterThanItemUsage, isAttackBetterThanItemUsageHooked},
         // Allow users to specify critical hit chance
         // Support attack damage ratio
         {fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage},
@@ -1598,6 +1600,38 @@ bool __stdcall findDoppelgangerAttackTargetHooked(game::IMidgardObjectMap* objec
 
     *targetUnitId = primaryTarget->unitId;
     return true;
+}
+
+bool __stdcall isAttackBetterThanItemUsageHooked(game::IItem* item,
+                                                 game::IUsSoldier* soldier,
+                                                 game::CMidgardID* unitImplId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& attackClasses = AttackClassCategories::get();
+
+    auto itemBattle = (CItemBattle*)dynamicCast(item, 0, rtti.IItemType, rtti.CItemBattleType, 0);
+
+    auto itemAttack = getAttack(&itemBattle->attackId);
+    if (itemAttack->vftable->getQtyDamage(itemAttack) == 0)
+        return false;
+
+    auto attackClass = itemAttack->vftable->getAttackClass(itemAttack);
+    if (attackClass->id == attackClasses.shatter->id)
+        return false;
+
+    auto itemDamage = computeAverageTotalDamage(itemAttack,
+                                                itemAttack->vftable->getQtyDamage(itemAttack));
+
+    auto soldierDamage = fn.computeAttackDamageCheckTransformed(soldier, unitImplId, nullptr,
+                                                                &emptyId);
+    soldierDamage = computeAverageTotalDamage(soldier->vftable->getAttackById(soldier),
+                                              soldierDamage);
+
+    return soldierDamage >= itemDamage;
 }
 
 } // namespace hooks
