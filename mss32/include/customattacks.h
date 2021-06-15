@@ -51,6 +51,7 @@ struct CustomAttackReach
     std::string attackScript;
     bool markAttackTargets;
     bool melee;
+    std::uint32_t maxTargets;
 };
 
 using CustomAttackReaches = std::vector<CustomAttackReach>;
