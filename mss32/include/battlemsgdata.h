@@ -444,7 +444,7 @@ struct Api
                                               CMidgardID* unitId,
                                               IAttack* attack,
                                               CMidUnitGroup* targetGroup,
-                                              void* a5,
+                                              TargetsList* targets,
                                               BattleMsgData* battleMsgData,
                                               CMidgardID* targetUnitId);
     FindAttackTarget findAttackTarget;
@@ -452,14 +452,21 @@ struct Api
     using FindSpecificAttackTarget = bool(__stdcall*)(IMidgardObjectMap* objectMap,
                                                       BattleMsgData* battleMsgData,
                                                       CMidUnitGroup* targetGroup,
-                                                      void* a4,
+                                                      TargetsList* targets,
                                                       CMidgardID* targetUnitId);
-
     /** Used by AI to determine boost attack target. */
     FindSpecificAttackTarget findBoostAttackTarget;
-
     /** Used by AI to determine fear attack target. */
     FindSpecificAttackTarget findFearAttackTarget;
+
+    using FindSpecificAttackTarget2 = bool(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                       CMidgardID* unitId,
+                                                       BattleMsgData* battleMsgData,
+                                                       CMidUnitGroup* targetGroup,
+                                                       TargetsList* targets,
+                                                       CMidgardID* targetUnitId);
+    /** Used by AI to determine doppelganger attack target. */
+    FindSpecificAttackTarget2 findDoppelgangerAttackTarget;
 
     using AddUnitToBattleMsgData = void(__stdcall*)(IMidgardObjectMap* objectMap,
                                                     CMidUnitGroup* group,
