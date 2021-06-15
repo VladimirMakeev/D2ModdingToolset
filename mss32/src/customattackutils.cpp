@@ -35,6 +35,7 @@
 #include "midunit.h"
 #include "midunitgroup.h"
 #include "scripts.h"
+#include "targetslistutils.h"
 #include "unitslotview.h"
 #include "unitutils.h"
 #include "ussoldier.h"
@@ -472,7 +473,6 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
 
     const auto& fn = gameFunctions();
     const auto& listApi = TargetsListApi::get();
-    const auto& groupApi = CMidUnitGroupApi::get();
 
     void* tmp{};
     auto unitGroup = fn.getStackFortRuinGroup(tmp, objectMap, unitGroupId);
@@ -483,13 +483,7 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
     for (listApi.begin(value, &it); !listApi.equals(&it, &end); listApi.preinc(&it)) {
         int targetPosition = *listApi.dereference(&it);
 
-        CMidgardID unitId{};
-        if (targetPosition >= 0) {
-            unitId = *groupApi.getUnitIdByPosition(targetGroup, targetPosition);
-        } else {
-            unitId = *groupApi.getUnitIdByPosition(unitGroup, -(targetPosition + 1));
-        }
-
+        auto unitId = getTargetUnitId(targetPosition, targetGroup, unitGroup);
         if (fn.isUnitImmuneToAttack(objectMap, battleMsgData, &unitId, attack, true)) {
             listApi.erase(value, &targetPosition);
         }
