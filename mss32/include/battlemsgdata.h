@@ -440,69 +440,70 @@ struct Api
     ResetUnitModifierInfo resetUnitModifierInfo;
 
     /** Used by AI to determine attack target depending on attack class. */
-    using FindAttackTarget = bool(__stdcall*)(IMidgardObjectMap* objectMap,
-                                              CMidgardID* unitId,
-                                              IAttack* attack,
-                                              CMidUnitGroup* targetGroup,
-                                              TargetsList* targets,
-                                              BattleMsgData* battleMsgData,
+    using FindAttackTarget = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                              const CMidgardID* unitId,
+                                              const IAttack* attack,
+                                              const CMidUnitGroup* targetGroup,
+                                              const TargetsList* targets,
+                                              const BattleMsgData* battleMsgData,
                                               CMidgardID* targetUnitId);
     FindAttackTarget findAttackTarget;
 
-    using FindSpecificAttackTarget = bool(__stdcall*)(IMidgardObjectMap* objectMap,
-                                                      BattleMsgData* battleMsgData,
-                                                      CMidUnitGroup* targetGroup,
-                                                      TargetsList* targets,
+    using FindSpecificAttackTarget = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                      const BattleMsgData* battleMsgData,
+                                                      const CMidUnitGroup* targetGroup,
+                                                      const TargetsList* targets,
                                                       CMidgardID* targetUnitId);
     /** Used by AI to determine boost attack target. */
     FindSpecificAttackTarget findBoostAttackTarget;
     /** Used by AI to determine fear attack target. */
     FindSpecificAttackTarget findFearAttackTarget;
 
-    using FindSpecificAttackTarget2 = bool(__stdcall*)(IMidgardObjectMap* objectMap,
-                                                       CMidgardID* unitId,
-                                                       BattleMsgData* battleMsgData,
-                                                       CMidUnitGroup* targetGroup,
-                                                       TargetsList* targets,
-                                                       CMidgardID* targetUnitId);
+    using FindDoppelgangerAttackTarget = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                          const CMidgardID* unitId,
+                                                          const BattleMsgData* battleMsgData,
+                                                          const CMidUnitGroup* targetGroup,
+                                                          const TargetsList* targets,
+                                                          CMidgardID* targetUnitId);
     /** Used by AI to determine doppelganger attack target. */
-    FindSpecificAttackTarget2 findDoppelgangerAttackTarget;
+    FindDoppelgangerAttackTarget findDoppelgangerAttackTarget;
 
-    using FindDamageAttackTargetWithNonAllReach = bool(__stdcall*)(IMidgardObjectMap* objectMap,
-                                                                   IAttack* attack,
-                                                                   int damage,
-                                                                   CMidUnitGroup* targetGroup,
-                                                                   TargetsList* targets,
-                                                                   BattleMsgData* battleMsgData,
-                                                                   CMidgardID* targetUnitId);
+    using FindDamageAttackTargetWithNonAllReach =
+        bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                         const IAttack* attack,
+                         int damage,
+                         const CMidUnitGroup* targetGroup,
+                         const TargetsList* targets,
+                         const BattleMsgData* battleMsgData,
+                         CMidgardID* targetUnitId);
     /** Used by AI to determine damage attack target with non-all reach. */
     FindDamageAttackTargetWithNonAllReach findDamageAttackTargetWithNonAllReach;
 
-    using FindDamageAttackTargetWithAnyReach = bool(__stdcall*)(IMidgardObjectMap* objectMap,
-                                                                CMidUnitGroup* targetGroup,
-                                                                TargetsList* targets,
+    using FindDamageAttackTargetWithAnyReach = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                                const CMidUnitGroup* targetGroup,
+                                                                const TargetsList* targets,
                                                                 int damage,
-                                                                BattleMsgData* battleMsgData,
-                                                                LAttackClass* attackClass,
-                                                                LAttackSource* attackSource,
-                                                                BattleStatus* filterByStatus,
+                                                                const BattleMsgData* battleMsgData,
+                                                                const LAttackClass* attackClass,
+                                                                const LAttackSource* attackSource,
+                                                                const BattleStatus* filterByStatus,
                                                                 CMidgardID* targetUnitId);
     /** Used by AI to determine damage attack target with any reach. */
     FindDamageAttackTargetWithAnyReach findDamageAttackTargetWithAnyReach;
 
     using FindDamageAttackTargetWithAdjacentReach =
         CMidgardID*(__stdcall*)(CMidgardID* targetUnitId,
-                                IMidgardObjectMap* objectMap,
-                                CMidUnitGroup* targetGroup,
-                                TargetsList* targets,
-                                BattleMsgData* battleMsgData,
-                                LAttackSource* attackSource,
-                                LAttackClass* attackClass);
+                                const IMidgardObjectMap* objectMap,
+                                const CMidUnitGroup* targetGroup,
+                                const TargetsList* targets,
+                                const BattleMsgData* battleMsgData,
+                                const LAttackSource* attackSource,
+                                const LAttackClass* attackClass);
     /** Used by AI to determine damage attack target with adjacent reach. */
     FindDamageAttackTargetWithAdjacentReach findDamageAttackTargetWithAdjacentReach;
 
-    using AddUnitToBattleMsgData = void(__stdcall*)(IMidgardObjectMap* objectMap,
-                                                    CMidUnitGroup* group,
+    using AddUnitToBattleMsgData = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                    const CMidUnitGroup* group,
                                                     const CMidgardID* unitId,
                                                     char attackerFlags,
                                                     BattleMsgData* battleMsgData);
@@ -527,9 +528,9 @@ struct Api
     Destructor destructor;
 
     using GetTargetsToAttack = void(__stdcall*)(IdList* value,
-                                                IMidgardObjectMap* objectMap,
-                                                IAttack* attack,
-                                                IBatAttack* batAttack,
+                                                const IMidgardObjectMap* objectMap,
+                                                const IAttack* attack,
+                                                const IBatAttack* batAttack,
                                                 const LAttackReach* attackReach,
                                                 const BattleMsgData* battleMsgData,
                                                 BattleAction action,

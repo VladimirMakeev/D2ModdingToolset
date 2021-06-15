@@ -58,7 +58,7 @@ struct Api
     Clear clear;
 
     /** Returns iterator pointing to the first element in the list. */
-    using GetIterator = TargetsListIterator*(__thiscall*)(TargetsList* thisptr,
+    using GetIterator = TargetsListIterator*(__thiscall*)(const TargetsList* thisptr,
                                                           TargetsListIterator* iterator);
     GetIterator begin;
     GetIterator end;
@@ -78,10 +78,10 @@ struct Api
      * Returns pointer to list node value depending on iterator.
      * Same as @code{.cpp} thisptr->node.value; @endcode
      */
-    using Dereference = int*(__thiscall*)(TargetsListIterator* thisptr);
+    using Dereference = int*(__thiscall*)(const TargetsListIterator* thisptr);
     Dereference dereference;
 
-    using Equals = bool(__thiscall*)(TargetsListIterator* thisptr,
+    using Equals = bool(__thiscall*)(const TargetsListIterator* thisptr,
                                      const TargetsListIterator* value);
     Equals equals;
 

@@ -53,8 +53,8 @@ struct IBatAttackVftable
     CanPerform canPerform;
 
     /** Returns id of group the attack can target: allies or enemies. */
-    using GetTargetGroupId = CMidgardID*(__thiscall*)(IBatAttack* thisptr,
-                                                      CMidgardID* targetGroupId,
+    using GetTargetGroupId = CMidgardID*(__thiscall*)(const IBatAttack* thisptr,
+                                                      const CMidgardID* targetGroupId,
                                                       const BattleMsgData* battleMsgData);
     GetTargetGroupId getTargetGroupId;
 

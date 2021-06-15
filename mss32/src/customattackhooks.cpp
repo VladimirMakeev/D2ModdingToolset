@@ -453,8 +453,8 @@ void __fastcall removeUnitAttackSourceWardHooked(game::BattleMsgData* thisptr,
     unitInfo->attackSourceImmunityStatuses.patched |= flag;
 }
 
-void __stdcall addUnitToBattleMsgDataHooked(game::IMidgardObjectMap* objectMap,
-                                            game::CMidUnitGroup* group,
+void __stdcall addUnitToBattleMsgDataHooked(const game::IMidgardObjectMap* objectMap,
+                                            const game::CMidUnitGroup* group,
                                             const game::CMidgardID* unitId,
                                             char attackerFlags,
                                             game::BattleMsgData* battleMsgData)
@@ -478,9 +478,9 @@ void __stdcall addUnitToBattleMsgDataHooked(game::IMidgardObjectMap* objectMap,
 }
 
 void __stdcall getTargetsToAttackHooked(game::IdList* value,
-                                        game::IMidgardObjectMap* objectMap,
-                                        game::IAttack* attack,
-                                        game::IBatAttack* batAttack,
+                                        const game::IMidgardObjectMap* objectMap,
+                                        const game::IAttack* attack,
+                                        const game::IBatAttack* batAttack,
                                         const game::LAttackReach* attackReach,
                                         const game::BattleMsgData* battleMsgData,
                                         game::BattleAction action,
@@ -682,12 +682,12 @@ bool __stdcall isUnitSuitableForAiNobleDuelHooked(const game::IMidgardObjectMap*
     return false;
 }
 
-bool __stdcall findAttackTargetHooked(game::IMidgardObjectMap* objectMap,
-                                      game::CMidgardID* unitId,
-                                      game::IAttack* attack,
-                                      game::CMidUnitGroup* targetGroup,
-                                      game::TargetsList* targets,
-                                      game::BattleMsgData* battleMsgData,
+bool __stdcall findAttackTargetHooked(const game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* unitId,
+                                      const game::IAttack* attack,
+                                      const game::CMidUnitGroup* targetGroup,
+                                      const game::TargetsList* targets,
+                                      const game::BattleMsgData* battleMsgData,
                                       game::CMidgardID* targetUnitId)
 {
     using namespace game;
@@ -712,11 +712,11 @@ bool __stdcall findAttackTargetHooked(game::IMidgardObjectMap* objectMap,
     return false;
 }
 
-bool __stdcall findDoppelgangerAttackTargetHooked(game::IMidgardObjectMap* objectMap,
-                                                  game::CMidgardID* unitId,
-                                                  game::BattleMsgData* battleMsgData,
-                                                  game::CMidUnitGroup* targetGroup,
-                                                  game::TargetsList* targets,
+bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap* objectMap,
+                                                  const game::CMidgardID* unitId,
+                                                  const game::BattleMsgData* battleMsgData,
+                                                  const game::CMidUnitGroup* targetGroup,
+                                                  const game::TargetsList* targets,
                                                   game::CMidgardID* targetUnitId)
 {
     using namespace game;
@@ -774,12 +774,12 @@ bool __stdcall findDoppelgangerAttackTargetHooked(game::IMidgardObjectMap* objec
     return true;
 }
 
-bool __stdcall findDamageAttackTargetWithNonAllReachHooked(game::IMidgardObjectMap* objectMap,
-                                                           game::IAttack* attack,
+bool __stdcall findDamageAttackTargetWithNonAllReachHooked(const game::IMidgardObjectMap* objectMap,
+                                                           const game::IAttack* attack,
                                                            int damage,
-                                                           game::CMidUnitGroup* targetGroup,
-                                                           game::TargetsList* targets,
-                                                           game::BattleMsgData* battleMsgData,
+                                                           const game::CMidUnitGroup* targetGroup,
+                                                           const game::TargetsList* targets,
+                                                           const game::BattleMsgData* battleMsgData,
                                                            game::CMidgardID* targetUnitId)
 {
     using namespace game;
@@ -801,9 +801,9 @@ bool __stdcall findDamageAttackTargetWithNonAllReachHooked(game::IMidgardObjectM
     }
 }
 
-bool __stdcall isAttackBetterThanItemUsageHooked(game::IItem* item,
-                                                 game::IUsSoldier* soldier,
-                                                 game::CMidgardID* unitImplId)
+bool __stdcall isAttackBetterThanItemUsageHooked(const game::IItem* item,
+                                                 const game::IUsSoldier* soldier,
+                                                 const game::CMidgardID* unitImplId)
 {
     using namespace game;
 
