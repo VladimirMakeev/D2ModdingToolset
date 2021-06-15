@@ -468,6 +468,39 @@ struct Api
     /** Used by AI to determine doppelganger attack target. */
     FindSpecificAttackTarget2 findDoppelgangerAttackTarget;
 
+    using FindDamageAttackTargetWithNonAllReach = bool(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                                   IAttack* attack,
+                                                                   int damage,
+                                                                   CMidUnitGroup* targetGroup,
+                                                                   TargetsList* targets,
+                                                                   BattleMsgData* battleMsgData,
+                                                                   CMidgardID* targetUnitId);
+    /** Used by AI to determine damage attack target with non-all reach. */
+    FindDamageAttackTargetWithNonAllReach findDamageAttackTargetWithNonAllReach;
+
+    using FindDamageAttackTargetWithAnyReach = bool(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                                CMidUnitGroup* targetGroup,
+                                                                TargetsList* targets,
+                                                                int damage,
+                                                                BattleMsgData* battleMsgData,
+                                                                LAttackClass* attackClass,
+                                                                LAttackSource* attackSource,
+                                                                BattleStatus* filterByStatus,
+                                                                CMidgardID* targetUnitId);
+    /** Used by AI to determine damage attack target with any reach. */
+    FindDamageAttackTargetWithAnyReach findDamageAttackTargetWithAnyReach;
+
+    using FindDamageAttackTargetWithAdjacentReach =
+        CMidgardID*(__stdcall*)(CMidgardID* targetUnitId,
+                                IMidgardObjectMap* objectMap,
+                                CMidUnitGroup* targetGroup,
+                                TargetsList* targets,
+                                BattleMsgData* battleMsgData,
+                                LAttackSource* attackSource,
+                                LAttackClass* attackClass);
+    /** Used by AI to determine damage attack target with adjacent reach. */
+    FindDamageAttackTargetWithAdjacentReach findDamageAttackTargetWithAdjacentReach;
+
     using AddUnitToBattleMsgData = void(__stdcall*)(IMidgardObjectMap* objectMap,
                                                     CMidUnitGroup* group,
                                                     const CMidgardID* unitId,
