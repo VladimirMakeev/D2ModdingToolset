@@ -40,6 +40,7 @@ int getBoostDamage(int level);
 int getLowerDamage(int level);
 int getLowerInitiative(int level);
 bool attackHasPower(const game::LAttackClass* attackClass); // Power is chance to hit / accuracy
+bool isMeleeAttack(const game::IAttack* attack);
 
 } // namespace hooks
 

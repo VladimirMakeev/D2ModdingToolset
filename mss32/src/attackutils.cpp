@@ -20,6 +20,7 @@
 #include "attackutils.h"
 #include "attack.h"
 #include "attackmodified.h"
+#include "customattacks.h"
 #include "dynamiccast.h"
 #include "globaldata.h"
 #include "globalvariables.h"
@@ -112,6 +113,27 @@ bool attackHasPower(const game::LAttackClass* attackClass)
            || id == attacks.bestowWards->id || id == attacks.shatter->id || id == attacks.revive->id
            || id == attacks.drainLevel->id || id == attacks.transformSelf->id
            || id == attacks.transformOther->id;
+}
+
+bool isMeleeAttack(const game::IAttack* attack)
+{
+    using namespace game;
+
+    const auto& attackReaches = AttackReachCategories::get();
+
+    auto attackReach = attack->vftable->getAttackReach(attack);
+    if (attackReach->id == attackReaches.adjacent->id) {
+        return true;
+    } else if (attackReach->id != attackReaches.all->id
+               && attackReach->id != attackReaches.any->id) {
+        for (auto& custom : getCustomAttacks().reaches) {
+            if (attackReach->id == custom.reach.id) {
+                return custom.aiMelee;
+            }
+        }
+    }
+
+    return false;
 }
 
 } // namespace hooks
