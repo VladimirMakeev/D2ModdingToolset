@@ -774,6 +774,33 @@ bool __stdcall findDoppelgangerAttackTargetHooked(game::IMidgardObjectMap* objec
     return true;
 }
 
+bool __stdcall findDamageAttackTargetWithNonAllReachHooked(game::IMidgardObjectMap* objectMap,
+                                                           game::IAttack* attack,
+                                                           int damage,
+                                                           game::CMidUnitGroup* targetGroup,
+                                                           game::TargetsList* targets,
+                                                           game::BattleMsgData* battleMsgData,
+                                                           game::CMidgardID* targetUnitId)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+
+    auto attackSource = attack->vftable->getAttackSource(attack);
+    auto attackClass = attack->vftable->getAttackClass(attack);
+    if (isMeleeAttack(attack)) {
+        auto id = battle.findDamageAttackTargetWithAdjacentReach(targetUnitId, objectMap,
+                                                                 targetGroup, targets,
+                                                                 battleMsgData, attackSource,
+                                                                 attackClass);
+        return *id != emptyId;
+    } else {
+        return battle.findDamageAttackTargetWithAnyReach(objectMap, targetGroup, targets, damage,
+                                                         battleMsgData, attackClass, attackSource,
+                                                         0, targetUnitId);
+    }
+}
+
 bool __stdcall isAttackBetterThanItemUsageHooked(game::IItem* item,
                                                  game::IUsSoldier* soldier,
                                                  game::CMidgardID* unitImplId)

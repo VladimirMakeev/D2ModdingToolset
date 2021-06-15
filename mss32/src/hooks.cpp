@@ -207,6 +207,7 @@ static Hooks getGameHooks()
         {battle.fillEmptyTargetsList, fillEmptyTargetsListHooked},
         {battle.getTargetsToAttack, getTargetsToAttackHooked},
         {battle.findDoppelgangerAttackTarget, findDoppelgangerAttackTargetHooked},
+        {battle.findDamageAttackTargetWithNonAllReach, findDamageAttackTargetWithNonAllReachHooked},
         {BattleViewerInterfApi::get().markAttackTargets, markAttackTargetsHooked},
         {fn.isGroupSuitableForAiNobleMisfit, isGroupSuitableForAiNobleMisfitHooked},
         {fn.isUnitSuitableForAiNobleDuel, isUnitSuitableForAiNobleDuelHooked},
