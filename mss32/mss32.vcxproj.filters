@@ -591,6 +591,9 @@
     <ClCompile Include="src\idlistutils.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\targetslistutils.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\gameutils.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -1511,6 +1514,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\idlistutils.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\targetslistutils.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\gameutils.h">
