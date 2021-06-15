@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LISTUTILS_H
-#define LISTUTILS_H
+#ifndef IDLISTUTILS_H
+#define IDLISTUTILS_H
 
 #include "idlist.h"
 
@@ -29,4 +29,4 @@ bool addUniqueIdToList(game::IdList& list, const game::CMidgardID* id);
 
 } // namespace hooks
 
-#endif // LISTUTILS_H
+#endif // IDLISTUTILS_H

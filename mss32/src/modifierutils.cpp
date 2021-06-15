@@ -23,7 +23,7 @@
 #include "dynamiccast.h"
 #include "game.h"
 #include "globaldata.h"
-#include "listutils.h"
+#include "idlistutils.h"
 #include "midgardobjectmap.h"
 #include "midunit.h"
 #include "settings.h"

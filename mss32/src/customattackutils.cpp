@@ -28,7 +28,7 @@
 #include "dbffile.h"
 #include "dynamiccast.h"
 #include "game.h"
-#include "listutils.h"
+#include "idlistutils.h"
 #include "log.h"
 #include "midgardobjectmap.h"
 #include "midplayer.h"

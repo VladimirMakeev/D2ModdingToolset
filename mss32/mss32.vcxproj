@@ -222,7 +222,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\iterators.cpp" />
     <ClCompile Include="src\leaderabilitycat.cpp" />
     <ClCompile Include="src\listbox.cpp" />
-    <ClCompile Include="src\listutils.cpp" />
+    <ClCompile Include="src\idlistutils.cpp" />
     <ClCompile Include="src\log.cpp" />
     <ClCompile Include="src\lordtype.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -463,7 +463,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\leaderabilitycat.h" />
     <ClInclude Include="include\linkedlist.h" />
     <ClInclude Include="include\listbox.h" />
-    <ClInclude Include="include\listutils.h" />
+    <ClInclude Include="include\idlistutils.h" />
     <ClInclude Include="include\log.h" />
     <ClInclude Include="include\lordcat.h" />
     <ClInclude Include="include\lordtype.h" />

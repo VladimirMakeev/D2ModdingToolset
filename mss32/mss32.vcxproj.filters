@@ -561,9 +561,6 @@
     <ClCompile Include="src\unitutils.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\listutils.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="src\battleviewerinterfhooks.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -589,6 +586,9 @@
       <Filter>Исходные файлы\bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\customattackutils.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\idlistutils.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1486,9 +1486,6 @@
     <ClInclude Include="include\netmsgutils.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="include\listutils.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="include\battleviewerinterfhooks.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -1508,6 +1505,9 @@
       <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\customattackutils.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\idlistutils.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
