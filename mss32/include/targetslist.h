@@ -33,7 +33,7 @@ struct CMidgardID;
 /**
  * List of targets to attack during single battle turn.
  * Contains units positions in groups.
- * Position values are positive for allied units and negative for enemies.
+ * Position values are positive for target group and negative for other group.
  * Negative position computed as -(unitPosition + 1).
  */
 using TargetsList = SortedList<int>;
