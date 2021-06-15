@@ -995,7 +995,7 @@ int __stdcall chooseUnitLaneHooked(const game::IUsSoldier* soldier)
     } else {
         for (auto& custom : getCustomAttacks().reaches) {
             if (reach->id == custom.reach.id) {
-                return custom.aiMelee ? 1 : 0;
+                return custom.melee ? 1 : 0;
             }
         }
     }

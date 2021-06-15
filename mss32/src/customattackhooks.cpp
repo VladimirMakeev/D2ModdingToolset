@@ -601,7 +601,7 @@ bool __stdcall isGroupSuitableForAiNobleMisfitHooked(const game::IMidgardObjectM
         } else if (reach->id != reaches.adjacent->id) {
             for (const auto& custom : getCustomAttacks().reaches) {
                 if (reach->id == custom.reach.id) {
-                    if (!custom.aiMelee)
+                    if (!custom.melee)
                         return true;
                     break;
                 }

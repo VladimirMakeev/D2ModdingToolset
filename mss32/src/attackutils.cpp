@@ -128,7 +128,7 @@ bool isMeleeAttack(const game::IAttack* attack)
                && attackReach->id != attackReaches.any->id) {
         for (auto& custom : getCustomAttacks().reaches) {
             if (attackReach->id == custom.reach.id) {
-                return custom.aiMelee;
+                return custom.melee;
             }
         }
     }
