@@ -147,7 +147,7 @@ void fillCustomAttackReaches(const std::filesystem::path& dbfFilePath)
             record.value(markAttackTargets, "MRK_TARGET");
 
             bool aiMelee = false;
-            record.value(markAttackTargets, "AI_MELEE");
+            record.value(aiMelee, "AI_MELEE");
 
             logDebug("customAttacks.log", fmt::format("Found custom attack reach {:s}", text));
 
