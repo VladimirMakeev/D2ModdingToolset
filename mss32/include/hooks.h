@@ -54,7 +54,6 @@ struct os_exception;
 struct CMidUnit;
 struct CMidUnitGroup;
 struct CUnitGenerator;
-struct IItem;
 }; // namespace game
 
 namespace hooks {
@@ -214,25 +213,6 @@ void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImp
                                                  game::IdType dynUpgradeType,
                                                  const game::CMidgardID* altAttackId,
                                                  game::CAttackData* attackData);
-
-bool __stdcall findAttackTargetHooked(game::IMidgardObjectMap* objectMap,
-                                      game::CMidgardID* unitId,
-                                      game::IAttack* attack,
-                                      game::CMidUnitGroup* targetGroup,
-                                      game::TargetsList* targets,
-                                      game::BattleMsgData* battleMsgData,
-                                      game::CMidgardID* targetUnitId);
-
-bool __stdcall findDoppelgangerAttackTargetHooked(game::IMidgardObjectMap* objectMap,
-                                                  game::CMidgardID* unitId,
-                                                  game::BattleMsgData* battleMsgData,
-                                                  game::CMidUnitGroup* targetGroup,
-                                                  game::TargetsList* targets,
-                                                  game::CMidgardID* targetUnitId);
-
-bool __stdcall isAttackBetterThanItemUsageHooked(game::IItem* item,
-                                                 game::IUsSoldier* soldier,
-                                                 game::CMidgardID* unitImplId);
 
 } // namespace hooks
 
