@@ -105,4 +105,34 @@ bool isUnitSmall(const game::CMidUnit* unit)
     return soldier->vftable->getSizeSmall(soldier);
 }
 
+game::CMidgardID getGlobalUnitImplId(const game::CMidUnit* unit)
+{
+    using namespace game;
+
+    CMidgardID globalImplId{};
+    CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
+    unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &globalImplId,
+                                                &unit->unitImpl->unitId);
+
+    return globalImplId;
+}
+
+game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidUnit* unit)
+{
+    using namespace game;
+
+    const auto& globalApi = GlobalDataApi::get();
+
+    const CMidgardID globalImplId{getGlobalUnitImplId(unit)};
+
+    auto globalData = *globalApi.getGlobalData();
+    auto result = (TUsUnitImpl*)globalApi.findById(globalData->units, &globalImplId);
+    if (!result) {
+        logError("mssProxyError.log",
+                 fmt::format("Could not find unit impl {:s}", idToString(&globalImplId)));
+    }
+
+    return result;
+}
+
 } // namespace hooks

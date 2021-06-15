@@ -27,6 +27,7 @@ struct CMidgardID;
 struct CMidUnit;
 struct IUsUnit;
 struct IUsSoldier;
+struct TUsUnitImpl;
 struct LImmuneCat;
 struct LAttackSource;
 } // namespace game
@@ -39,6 +40,8 @@ void getSoldierAttackSourceImmunities(const game::LImmuneCat* immuneCat,
                                       const game::IUsSoldier* soldier,
                                       game::LinkedList<game::LAttackSource>* value);
 bool isUnitSmall(const game::CMidUnit* unit);
+game::CMidgardID getGlobalUnitImplId(const game::CMidUnit* unit);
+game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidUnit* unit);
 
 } // namespace hooks
 
