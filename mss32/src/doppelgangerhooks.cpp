@@ -213,15 +213,11 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
     CMidUnit* targetUnit = fn.findUnitById(objectMap, targetUnitId);
     CMidgardID targetUnitImplId = targetUnit->unitImpl->unitId;
 
-    CMidgardID globalTargetUnitImplId;
-    CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
-    unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &globalTargetUnitImplId,
-                                                &targetUnit->unitImpl->unitId);
-
     const CMidUnit* unit = fn.findUnitById(objectMap, &thisptr->unitId);
     const auto transformLevel = getDoppelgangerTransformLevel(unit, targetUnit);
 
     CMidgardID transformUnitImplId{targetUnit->unitImpl->unitId};
+    CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
     unitGenerator->vftable->generateUnitImplId(unitGenerator, &transformUnitImplId,
                                                &targetUnit->unitImpl->unitId, transformLevel);
 
