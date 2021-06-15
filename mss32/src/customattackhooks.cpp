@@ -379,6 +379,35 @@ double __stdcall getSoldierImmunityAiRatingHooked(const game::IUsSoldier* soldie
     return result;
 }
 
+double __stdcall getAttackReachAiRatingHooked(const game::IUsSoldier* soldier, int targetCount)
+{
+    using namespace game;
+
+    const auto& reaches = AttackReachCategories::get();
+
+    auto attack = soldier->vftable->getAttackById(soldier);
+    auto attackReach = attack->vftable->getAttackReach(attack);
+
+    if (attackReach->id == reaches.all->id) {
+        int targetFactor = targetCount - 1;
+        return 1.0 + 0.4 * targetFactor;
+    } else if (attackReach->id == reaches.any->id) {
+        return 1.5;
+    } else if (attackReach->id != reaches.adjacent->id) {
+        for (const auto& custom : getCustomAttacks().reaches) {
+            if (attackReach->id == custom.reach.id) {
+                int targetFactor = std::min(targetCount, (int)custom.maxTargets) - 1;
+                if (targetFactor == 0 && !custom.melee)
+                    return 1.5;
+                else
+                    return 1.0 + 0.4 * targetFactor;
+            }
+        }
+    }
+
+    return 1.0;
+}
+
 std::uint32_t __stdcall getAttackSourceWardFlagPositionHooked(
     const game::LAttackSource* attackSource)
 {
