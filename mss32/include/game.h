@@ -442,6 +442,10 @@ using IsGroupSuitableForAiNobleMisfit = bool(__stdcall*)(const IMidgardObjectMap
 using IsUnitSuitableForAiNobleDuel = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                       const CMidgardID* unitId);
 
+using IsAttackEffectiveAgainstGroup = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                       const IAttack* attack,
+                                                       const CMidUnitGroup* group);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -508,6 +512,7 @@ struct Functions
     GetUnitRaceCategory getUnitRaceCategory;
     IsGroupSuitableForAiNobleMisfit isGroupSuitableForAiNobleMisfit;
     IsUnitSuitableForAiNobleDuel isUnitSuitableForAiNobleDuel;
+    IsAttackEffectiveAgainstGroup isAttackEffectiveAgainstGroup;
 };
 
 /** Global variables used in game. */

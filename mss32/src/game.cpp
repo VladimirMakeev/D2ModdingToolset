@@ -90,6 +90,7 @@ static std::array<Functions, 4> functions = {{
         (GetUnitRaceCategory)0x65472b,
         (IsGroupSuitableForAiNobleMisfit)0x45c8e5,
         (IsUnitSuitableForAiNobleDuel)0x45c9b3,
+        (IsAttackEffectiveAgainstGroup)0x5d269c,
     },
     // Russobit
     Functions{
@@ -156,6 +157,7 @@ static std::array<Functions, 4> functions = {{
         (GetUnitRaceCategory)0x65472b,
         (IsGroupSuitableForAiNobleMisfit)0x45c8e5,
         (IsUnitSuitableForAiNobleDuel)0x45c9b3,
+        (IsAttackEffectiveAgainstGroup)0x5d269c,
     },
     // Gog
     Functions{
@@ -222,6 +224,7 @@ static std::array<Functions, 4> functions = {{
         (GetUnitRaceCategory)0x652f1b,
         (IsGroupSuitableForAiNobleMisfit)0x45c1e5,
         (IsUnitSuitableForAiNobleDuel)0x45c2b3,
+        (IsAttackEffectiveAgainstGroup)0x5d15cd,
     },
     // Scenario Editor
     Functions{
@@ -288,6 +291,7 @@ static std::array<Functions, 4> functions = {{
         (GetUnitRaceCategory)nullptr,
         (IsGroupSuitableForAiNobleMisfit)nullptr,
         (IsUnitSuitableForAiNobleDuel)nullptr,
+        (IsAttackEffectiveAgainstGroup)nullptr,
     },
 }};
 
