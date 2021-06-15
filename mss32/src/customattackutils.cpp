@@ -557,9 +557,7 @@ double computeTotalDamageRatio(const game::IAttack* attack, int targetCount)
     double value = 1.0;
     double ratio = (double)damageRatio / 100;
     for (int i = 1; i < targetCount; i++) {
-        if (attackImpl->data->damageRatioPerTarget)
-            ratio = pow(ratio, i);
-        value += ratio;
+        value += attackImpl->data->damageRatioPerTarget ? pow(ratio, i) : ratio;
     }
 
     return value;
