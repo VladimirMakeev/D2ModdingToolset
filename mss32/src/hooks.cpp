@@ -982,26 +982,9 @@ int __stdcall chooseUnitLaneHooked(const game::IUsSoldier* soldier)
 {
     using namespace game;
 
-    const auto& reaches = AttackReachCategories::get();
-
-    IAttack* attack = soldier->vftable->getAttackById(soldier);
-    auto attackVftable = (const IAttackVftable*)attack->vftable;
-    const LAttackReach* reach = attackVftable->getAttackReach(attack);
-
     // Place units with adjacent attack reach at the front lane, despite of their attack class
-    if (reach->id == reaches.adjacent->id) {
-        return 1;
-    } else if (reach->id == reaches.all->id || reach->id == reaches.any->id) {
-        return 0;
-    } else {
-        for (auto& custom : getCustomAttacks().reaches) {
-            if (reach->id == custom.reach.id) {
-                return custom.melee ? 1 : 0;
-            }
-        }
-    }
-
-    return 0;
+    IAttack* attack = soldier->vftable->getAttackById(soldier);
+    return isMeleeAttack(attack) ? 1 : 0;
 }
 
 bool __stdcall isTurnValidHooked(int turn)

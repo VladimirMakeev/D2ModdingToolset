@@ -609,7 +609,6 @@ bool __stdcall isGroupSuitableForAiNobleMisfitHooked(const game::IMidgardObjectM
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& reaches = AttackReachCategories::get();
 
     const auto& unitIds = group->units;
     if (unitIds.end - unitIds.bgn < 2)
@@ -624,18 +623,8 @@ bool __stdcall isGroupSuitableForAiNobleMisfitHooked(const game::IMidgardObjectM
             continue;
 
         auto attack = soldier->vftable->getAttackById(soldier);
-        auto reach = attack->vftable->getAttackReach(attack);
-        if (reach->id == reaches.all->id || reach->id == reaches.any->id) {
+        if (!isMeleeAttack(attack))
             return true;
-        } else if (reach->id != reaches.adjacent->id) {
-            for (const auto& custom : getCustomAttacks().reaches) {
-                if (reach->id == custom.reach.id) {
-                    if (!custom.melee)
-                        return true;
-                    break;
-                }
-            }
-        }
     }
 
     return false;
