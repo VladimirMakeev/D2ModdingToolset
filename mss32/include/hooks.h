@@ -22,6 +22,7 @@
 
 #include "attack.h"
 #include "idlist.h"
+#include "targetslist.h"
 #include <string>
 #include <utility>
 #include <vector>
@@ -217,9 +218,16 @@ bool __stdcall findAttackTargetHooked(game::IMidgardObjectMap* objectMap,
                                       game::CMidgardID* unitId,
                                       game::IAttack* attack,
                                       game::CMidUnitGroup* targetGroup,
-                                      void* a5,
+                                      game::TargetsList* targets,
                                       game::BattleMsgData* battleMsgData,
                                       game::CMidgardID* targetUnitId);
+
+bool __stdcall findDoppelgangerAttackTargetHooked(game::IMidgardObjectMap* objectMap,
+                                                  game::CMidgardID* unitId,
+                                                  game::BattleMsgData* battleMsgData,
+                                                  game::CMidUnitGroup* targetGroup,
+                                                  game::TargetsList* targets,
+                                                  game::CMidgardID* targetUnitId);
 
 } // namespace hooks
 

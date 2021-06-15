@@ -59,6 +59,7 @@
 #include "encparambase.h"
 #include "fortification.h"
 #include "functor.h"
+#include "gameutils.h"
 #include "globaldata.h"
 #include "idlist.h"
 #include "interfmanager.h"
@@ -95,10 +96,12 @@
 #include "smartptr.h"
 #include "stackbattleactionmsg.h"
 #include "summonhooks.h"
+#include "targetslistutils.h"
 #include "transformselfhooks.h"
 #include "unitbranchcat.h"
 #include "unitgenerator.h"
 #include "unitsforhire.h"
+#include "unitutils.h"
 #include "ussoldier.h"
 #include "usunitimpl.h"
 #include "utils.h"
@@ -206,6 +209,7 @@ static Hooks getGameHooks()
         {battle.fillTargetsList, fillTargetsListHooked},
         {battle.fillEmptyTargetsList, fillEmptyTargetsListHooked},
         {battle.getTargetsToAttack, getTargetsToAttackHooked},
+        {battle.findDoppelgangerAttackTarget, findDoppelgangerAttackTargetHooked},
         {BattleViewerInterfApi::get().markAttackTargets, markAttackTargetsHooked},
         {fn.isGroupSuitableForAiNobleMisfit, isGroupSuitableForAiNobleMisfitHooked},
         {fn.isUnitSuitableForAiNobleDuel, isUnitSuitableForAiNobleDuelHooked},
@@ -1524,13 +1528,13 @@ bool __stdcall findAttackTargetHooked(game::IMidgardObjectMap* objectMap,
                                       game::CMidgardID* unitId,
                                       game::IAttack* attack,
                                       game::CMidUnitGroup* targetGroup,
-                                      void* a5,
+                                      game::TargetsList* targets,
                                       game::BattleMsgData* battleMsgData,
                                       game::CMidgardID* targetUnitId)
 {
     using namespace game;
 
-    if (getOriginalFunctions().findAttackTarget(objectMap, unitId, attack, targetGroup, a5,
+    if (getOriginalFunctions().findAttackTarget(objectMap, unitId, attack, targetGroup, targets,
                                                 battleMsgData, targetUnitId)) {
         return true;
     }
@@ -1540,13 +1544,76 @@ bool __stdcall findAttackTargetHooked(game::IMidgardObjectMap* objectMap,
     auto attackClass = attack->vftable->getAttackClass(attack);
     const auto& attackCategories = AttackClassCategories::get();
     if (attackClass->id == attackCategories.lowerDamage->id) {
-        return battle.findBoostAttackTarget(objectMap, battleMsgData, targetGroup, a5,
+        return battle.findBoostAttackTarget(objectMap, battleMsgData, targetGroup, targets,
                                             targetUnitId);
     } else if (attackClass->id == attackCategories.lowerInitiative->id) {
-        return battle.findFearAttackTarget(objectMap, battleMsgData, targetGroup, a5, targetUnitId);
+        return battle.findFearAttackTarget(objectMap, battleMsgData, targetGroup, targets,
+                                           targetUnitId);
     }
 
     return false;
+}
+
+bool __stdcall findDoppelgangerAttackTargetHooked(game::IMidgardObjectMap* objectMap,
+                                                  game::CMidgardID* unitId,
+                                                  game::BattleMsgData* battleMsgData,
+                                                  game::CMidUnitGroup* targetGroup,
+                                                  game::TargetsList* targets,
+                                                  game::CMidgardID* targetUnitId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& groupApi = CMidUnitGroupApi::get();
+    const auto& listApi = TargetsListApi::get();
+
+    auto unit = static_cast<CMidUnit*>(
+        objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+
+    CMidUnitGroup* enemyGroup = getAllyOrEnemyGroup(objectMap, battleMsgData, unitId, false);
+
+    int unitPosition = groupApi.getUnitPosition(targetGroup, unitId);
+
+    int primaryXpKilled = 0;
+    int secondaryXpKilled = 0;
+    CMidUnit* primaryTarget = nullptr;
+    CMidUnit* secondaryTarget = nullptr;
+    TargetsListIterator it, end;
+    listApi.end(targets, &end);
+    for (listApi.begin(targets, &it); !listApi.equals(&it, &end); listApi.preinc(&it)) {
+        int targetPosition = *listApi.dereference(&it);
+
+        auto targetId = getTargetUnitId(targetPosition, targetGroup, enemyGroup);
+        auto targetUnit = static_cast<CMidUnit*>(
+            objectMap->vftable->findScenarioObjectById(objectMap, &targetId));
+
+        auto soldier = fn.castUnitImplToSoldier(getGlobalUnitImpl(targetUnit));
+
+        auto attack = soldier->vftable->getAttackById(soldier);
+        if (!fn.isAttackEffectiveAgainstGroup(objectMap, attack, enemyGroup))
+            continue;
+
+        auto xpKilled = soldier->vftable->getXpKilled(soldier);
+        if (isMeleeAttack(attack) == unitPosition % 2 == 0) {
+            if (isGreaterPickRandomIfEqual(xpKilled, primaryXpKilled)) {
+                primaryXpKilled = xpKilled;
+                primaryTarget = targetUnit;
+            }
+        } else if (primaryTarget == nullptr) {
+            if (isGreaterPickRandomIfEqual(xpKilled, secondaryXpKilled)) {
+                secondaryXpKilled = xpKilled;
+                secondaryTarget = targetUnit;
+            }
+        }
+    }
+
+    if (primaryTarget == nullptr)
+        primaryTarget = secondaryTarget;
+    if (primaryTarget == nullptr)
+        return false;
+
+    *targetUnitId = primaryTarget->unitId;
+    return true;
 }
 
 } // namespace hooks
