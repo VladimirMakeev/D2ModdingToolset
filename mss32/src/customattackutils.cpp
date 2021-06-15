@@ -144,7 +144,7 @@ void fillCustomAttackReaches(const std::filesystem::path& dbfFilePath)
             record.value(attackScript, "ATT_SCRIPT");
 
             bool markAttackTargets = false;
-            record.value(markAttackTargets, "MRK_TARGET");
+            record.value(markAttackTargets, "MRK_TARGTS");
 
             bool melee = false;
             record.value(melee, "MELEE");
