@@ -425,8 +425,11 @@ using GetSoldierAttackSourceImmunities = void(__stdcall*)(const IUsSoldier* sold
                                                           bool alwaysImmune,
                                                           LinkedList<LAttackSource>* value);
 
-/** Gets immunity power coefficient to be used by AI for overall soldier power calculation. */
+/** Gets immunity rating to be used by AI for overall soldier rating calculation. */
 using GetSoldierImmunityAiRating = double(__stdcall*)(const IUsSoldier* soldier);
+
+/** Gets attack reach rating to be used by AI for overall soldier rating calculation. */
+using GetAttackReachAiRating = double(__stdcall*)(const IUsSoldier* soldier, int targetCount);
 
 /** Gets distance between unit positions in battle. Used for adjacent attack reach calculations. */
 using GetUnitPositionDistance = int(__stdcall*)(int unitPosition,
@@ -508,6 +511,7 @@ struct Functions
     GetUnitAttackSourceImmunities getUnitAttackSourceImmunities;
     GetSoldierAttackSourceImmunities getSoldierAttackSourceImmunities;
     GetSoldierImmunityAiRating getSoldierImmunityAiRating;
+    GetAttackReachAiRating getAttackReachAiRating;
     GetUnitPositionDistance getUnitPositionDistance;
     GetUnitRaceCategory getUnitRaceCategory;
     IsGroupSuitableForAiNobleMisfit isGroupSuitableForAiNobleMisfit;
