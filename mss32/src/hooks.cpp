@@ -1594,7 +1594,7 @@ bool __stdcall findDoppelgangerAttackTargetHooked(game::IMidgardObjectMap* objec
             continue;
 
         auto xpKilled = soldier->vftable->getXpKilled(soldier);
-        if (isMeleeAttack(attack) == unitPosition % 2 == 0) {
+        if (isMeleeAttack(attack) == (unitPosition % 2 == 0)) {
             if (isGreaterPickRandomIfEqual(xpKilled, primaryXpKilled)) {
                 primaryXpKilled = xpKilled;
                 primaryTarget = targetUnit;
