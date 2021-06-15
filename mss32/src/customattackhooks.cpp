@@ -396,11 +396,11 @@ double __stdcall getAttackReachAiRatingHooked(const game::IUsSoldier* soldier, i
     } else if (attackReach->id != reaches.adjacent->id) {
         for (const auto& custom : getCustomAttacks().reaches) {
             if (attackReach->id == custom.reach.id) {
-                int targetFactor = std::min(targetCount, (int)custom.maxTargets) - 1;
-                if (targetFactor == 0 && !custom.melee)
+                int count = std::min(targetCount, (int)custom.maxTargets);
+                if (count == 1 && !custom.melee)
                     return 1.5;
                 else
-                    return 1.0 + 0.4 * targetFactor;
+                    return 1.0 + 0.4 * (computeTotalDamageRatio(attack, count) - 1);
             }
         }
     }

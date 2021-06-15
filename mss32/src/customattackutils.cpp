@@ -541,4 +541,28 @@ void applyAttackDamageRatio(const game::BattleMsgData* battleMsgData,
     *critDamage = lround(ratio * *critDamage);
 }
 
+double computeTotalDamageRatio(const game::IAttack* attack, int targetCount)
+{
+    if (!getCustomAttacks().customizeDamageRatio)
+        return targetCount;
+
+    auto attackImpl = getAttackImpl(attack);
+    if (!attackImpl)
+        return targetCount;
+
+    auto damageRatio = attackImpl->data->damageRatio;
+    if (damageRatio == 100)
+        return targetCount;
+
+    double value = 1.0;
+    double ratio = (double)damageRatio / 100;
+    for (int i = 1; i < targetCount; i++) {
+        if (attackImpl->data->damageRatioPerTarget)
+            ratio = pow(ratio, i);
+        value += ratio;
+    }
+
+    return value;
+}
+
 } // namespace hooks
