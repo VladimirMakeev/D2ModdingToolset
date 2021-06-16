@@ -115,8 +115,7 @@ struct CBattleViewerUnknownUnitData
 static_assert(sizeof(CBattleViewerUnknownUnitData) == 12,
               "Size of CBattleViewerUnknownUnitData structure must be exactly 12 bytes");
 
-struct CUnknownUnitDataList : SortedList<Pair<CMidgardID, CBattleViewerUnknownUnitData>>
-{ };
+using CUnknownUnitDataList = SortedList<Pair<CMidgardID, CBattleViewerUnknownUnitData>>;
 
 struct CBattleViewerInterfData
 {
