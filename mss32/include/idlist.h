@@ -33,6 +33,12 @@ namespace IdListApi {
 
 struct Api
 {
+    using Constructor = IdList*(__thiscall*)(IdList* thisptr);
+    Constructor constructor;
+
+    using Destructor = void(__thiscall*)(IdList* thisptr);
+    Destructor destructor;
+
     /** Clears list contents. */
     using Clear = bool(__thiscall*)(IdList* thisptr);
     Clear clear;
@@ -44,6 +50,9 @@ struct Api
     /** Erases id from list. */
     using Erase = void(__thiscall*)(IdList* thisptr, IdListIterator pos);
     Erase erase;
+
+    using Front = CMidgardID*(__thiscall*)(IdList* thisptr);
+    Front front;
 
     using GetIterator = IdListIterator*(__thiscall*)(IdList* thisptr, IdListIterator* value);
     GetIterator begin;
@@ -57,6 +66,12 @@ struct Api
 
     using Equals = bool(__thiscall*)(IdListIterator* thisptr, const IdListIterator* value);
     Equals equals;
+
+    using Dereference = CMidgardID*(__thiscall*)(IdListIterator* thisptr);
+    Dereference dereference;
+
+    using Preincrement = IdListIterator*(__thiscall*)(IdListIterator* thisptr);
+    Preincrement preinc;
 
     using Shuffle = void(__stdcall*)(IdList* list);
     Shuffle shuffle;
