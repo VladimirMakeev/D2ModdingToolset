@@ -929,4 +929,25 @@ bool __stdcall cAiHireUnitEvalHooked(const game::IMidgardObjectMap* objectMap,
     return false;
 }
 
+double __stdcall getMeleeUnitToHireAiRatingHooked(const game::CMidgardID* unitImplId,
+                                                  bool a2,
+                                                  bool a3)
+{
+    using namespace game;
+
+    if (!a2 || a3)
+        return 0.0;
+
+    const auto& fn = gameFunctions();
+    const auto& global = GlobalDataApi::get();
+
+    auto globalData = *global.getGlobalData();
+    auto unitImpl = static_cast<TUsUnitImpl*>(global.findById(globalData->units, unitImplId));
+
+    auto soldier = fn.castUnitImplToSoldier(unitImpl);
+    auto attack = soldier->vftable->getAttackById(soldier);
+
+    return isMeleeAttack(attack) ? 100.0 : 0.0;
+}
+
 } // namespace hooks

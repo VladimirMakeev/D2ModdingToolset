@@ -472,6 +472,10 @@ using IsSmallMeleeFighter = bool(__stdcall*)(const IUsSoldier* soldier);
 using CAiHireUnitEval = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
                                          const CMidUnitGroup* group);
 
+using GetMeleeUnitToHireAiRating = double(__stdcall*)(const CMidgardID* unitImplId,
+                                                      bool a2,
+                                                      bool a3);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -546,6 +550,7 @@ struct Functions
     FillAttackTransformIdList fillAttackTransformIdList;
     IsSmallMeleeFighter isSmallMeleeFighter;
     CAiHireUnitEval cAiHireUnitEval;
+    GetMeleeUnitToHireAiRating getMeleeUnitToHireAiRating;
 };
 
 /** Global variables used in game. */

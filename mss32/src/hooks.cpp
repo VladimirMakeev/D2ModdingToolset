@@ -216,6 +216,7 @@ static Hooks getGameHooks()
         {fn.getSummonUnitImplIdByAttack, getSummonUnitImplIdByAttackHooked},
         {fn.isSmallMeleeFighter, isSmallMeleeFighterHooked},
         {fn.cAiHireUnitEval, cAiHireUnitEvalHooked},
+        {fn.getMeleeUnitToHireAiRating, getMeleeUnitToHireAiRatingHooked},
         // Allow users to specify critical hit chance
         // Support attack damage ratio
         {fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage},

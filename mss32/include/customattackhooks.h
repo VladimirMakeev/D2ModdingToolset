@@ -183,6 +183,10 @@ bool __stdcall isSmallMeleeFighterHooked(const game::IUsSoldier* soldier);
 bool __stdcall cAiHireUnitEvalHooked(const game::IMidgardObjectMap* objectMap,
                                      const game::CMidUnitGroup* group);
 
+double __stdcall getMeleeUnitToHireAiRatingHooked(const game::CMidgardID* unitImplId,
+                                                  bool a2,
+                                                  bool a3);
+
 } // namespace hooks
 
 #endif // CUSTOMATTACKHOOKS_H
