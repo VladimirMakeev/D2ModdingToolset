@@ -183,14 +183,14 @@
     <summary>Supports custom attack sources;</summary>
 
     - Add a name for a custom source to TApp.dbf and TAppEdit.dbf;
-    - Add NAME_TXT (Character, size 10) and IMMUNE_POW (Number, size 2) columns to LattS.dbf;
-    ![image](https://user-images.githubusercontent.com/5180699/117533496-db897880-aff5-11eb-92ad-4b5bf70602a0.png)
+    - Add NAME_TXT (Character, size 10) and IMMU_AI_R (Number, size 2) columns to LattS.dbf;
+    ![image](https://user-images.githubusercontent.com/5180699/122281972-8cd3d600-cef3-11eb-8795-69c09d4da288.png)
     - Add a new entry in LattS.dbf;
     - Specify the custom source ID and TEXT accordingly;
     - Specify the id of the source name from TApp.dbf in NAME_TXT ('X005TA0153' for instance);
-    - Specify IMMUNE_POW: the value is used by AI to determine how powerful a unit with such ward or immunity is. The greater - the better. For example, elemental immunities have average power of 5, while weapon immunity has 57. Can be omitted - 5 is the default.
+    - Specify IMMU_AI_R: AI rating of the source immunity - used to determine how powerful a unit with such ward or immunity is. The greater - the better. For example, elemental immunities have average rating of 5, while weapon immunity has 57. Can be omitted - 5 is the default.
 
-    ![image](https://user-images.githubusercontent.com/5180699/117533697-e2fd5180-aff6-11eb-905f-24e9c736a9b6.png)
+    ![image](https://user-images.githubusercontent.com/5180699/122281194-ac1e3380-cef2-11eb-902a-29821d0ceae5.png)
 
     **Note** that the SOURCE column is limited to 1 digit in GAttacks.dbf.<br />
     This means that only 2 additional sources (with id 8 and 9) can be added by default.<br />
