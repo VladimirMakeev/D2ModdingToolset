@@ -187,6 +187,11 @@ double __stdcall getMeleeUnitToHireAiRatingHooked(const game::CMidgardID* unitIm
                                                   bool a2,
                                                   bool a3);
 
+int __stdcall computeTargetUnitAiPriorityHooked(const game::IMidgardObjectMap* objectMap,
+                                                const game::CMidgardID* unitId,
+                                                const game::BattleMsgData* battleMsgData,
+                                                int attackerDamage);
+
 } // namespace hooks
 
 #endif // CUSTOMATTACKHOOKS_H

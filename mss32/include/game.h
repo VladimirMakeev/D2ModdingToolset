@@ -476,6 +476,11 @@ using GetMeleeUnitToHireAiRating = double(__stdcall*)(const CMidgardID* unitImpl
                                                       bool a2,
                                                       bool a3);
 
+using ComputeTargetUnitAiPriority = int(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                    const CMidgardID* unitId,
+                                                    const BattleMsgData* battleMsgData,
+                                                    int attackerDamage);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -551,6 +556,7 @@ struct Functions
     IsSmallMeleeFighter isSmallMeleeFighter;
     CAiHireUnitEval cAiHireUnitEval;
     GetMeleeUnitToHireAiRating getMeleeUnitToHireAiRating;
+    ComputeTargetUnitAiPriority computeTargetUnitAiPriority;
 };
 
 /** Global variables used in game. */

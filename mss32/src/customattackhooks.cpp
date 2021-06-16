@@ -950,4 +950,57 @@ double __stdcall getMeleeUnitToHireAiRatingHooked(const game::CMidgardID* unitIm
     return isMeleeAttack(attack) ? 100.0 : 0.0;
 }
 
+int __stdcall computeTargetUnitAiPriorityHooked(const game::IMidgardObjectMap* objectMap,
+                                                const game::CMidgardID* unitId,
+                                                const game::BattleMsgData* battleMsgData,
+                                                int attackerDamage)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& attackClasses = AttackClassCategories::get();
+
+    auto unit = static_cast<const CMidUnit*>(
+        objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+
+    auto attack = soldier->vftable->getAttackById(soldier);
+    auto attackClassId = attack->vftable->getAttackClass(attack)->id;
+
+    AttackClassId attack2ClassId = (AttackClassId)-1;
+    auto attack2 = soldier->vftable->getSecondAttackById(soldier);
+    if (attack2)
+        attack2ClassId = attack2->vftable->getAttackClass(attack2)->id;
+
+    int modifier = 0;
+    if (!soldier->vftable->getSizeSmall(soldier) || isMeleeAttack(attack)
+        || attackClassId == attackClasses.boostDamage->id) {
+        int effectiveHp = fn.computeUnitEffectiveHp(objectMap, unit, battleMsgData);
+        modifier = effectiveHp > attackerDamage ? -effectiveHp : effectiveHp;
+    } else {
+        modifier = soldier->vftable->getXpKilled(soldier);
+        if (attackClassId == attackClasses.heal->id || attack2ClassId == attackClasses.heal->id) {
+            modifier *= 2;
+        } else if (attackClassId == attackClasses.paralyze->id
+                   || attack2ClassId == attackClasses.paralyze->id) {
+            modifier *= 8;
+        } else if (attackClassId == attackClasses.petrify->id
+                   || attack2ClassId == attackClasses.petrify->id) {
+            modifier *= 8;
+        } else if (attackClassId == attackClasses.summon->id
+                   || attack2ClassId == attackClasses.summon->id) {
+            modifier *= 10;
+        } else if (attackClassId == attackClasses.transformOther->id
+                   || attack2ClassId == attackClasses.transformOther->id) {
+            modifier *= 9;
+        } else if (attackClassId == attackClasses.giveAttack->id
+                   || attack2ClassId == attackClasses.giveAttack->id) {
+            modifier *= 3;
+        }
+    }
+
+    return 10000 + modifier;
+}
+
 } // namespace hooks
