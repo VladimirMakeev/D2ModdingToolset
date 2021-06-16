@@ -25,6 +25,8 @@
 
 namespace game {
 
+struct IMqImage2;
+
 /**
  * Stores AutoDialog script (.dlg) information.
  */
@@ -52,6 +54,9 @@ struct Api
                                                         const char* filePath,
                                                         int /*unknown*/);
     LoadScriptFile loadScriptFile;
+
+    using LoadImage = IMqImage2*(__stdcall*)(const char* imageName);
+    LoadImage loadImage;
 };
 
 /** Returns AutoDialog functions according to determined version of the game. */

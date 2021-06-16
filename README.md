@@ -70,7 +70,7 @@
     ```
   </details>
 - <details>
-    <summary>Button to sell all valuables with single click;</summary>
+    <summary>Button to sell all valuables with a single click;</summary>
 
     - Add sell confirmation text to TApp.dbf. The text must contain '%PRICE%' keyword in it;
     - Specify id of the text in 'sellAllValuables' field inside 'Scripts\\textids.lua' (default id is X015TA0001).
@@ -86,6 +86,25 @@
     Example of button description in Interf.dlg:
     ```
     BUTTON	BTN_SELL_ALL_VALUABLES,417,425,460,460,DLG_CITY_STACK_RETURN_D,DLG_CITY_STACK_RETURN_H,DLG_CITY_STACK_RETURN_C,DLG_CITY_STACK_RETURN_D,"Sell all valuables",0
+    ```
+  </details>
+- <details>
+    <summary>Button to sell all items with a single click;</summary>
+
+    - Add sell confirmation text to TApp.dbf. The text must contain '%PRICE%' keyword in it;
+    - Specify id of the text in 'sellAllItems' field inside 'Scripts\\textids.lua'.
+
+    In case of missing text, the following default message will be shown:
+    ```
+    Do you want to sell all items? Revenue will be:\n%PRICE%
+    ```
+
+    Add button with name BTN\_SELL\_ALL to DLG\_MERCHANT in Interf.dlg file.
+    Button is optional.
+
+    Example of button description in Interf.dlg:
+    ```
+    BUTTON	BTN_SELL_ALL,417,425,460,460,DLG_CITY_STACK_RETURN_D,DLG_CITY_STACK_RETURN_H,DLG_CITY_STACK_RETURN_C,DLG_CITY_STACK_RETURN_D,"Sell all items",0
     ```
   </details>
 - <details>

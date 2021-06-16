@@ -25,6 +25,7 @@
 #include "globaldata.h"
 #include "globalvariables.h"
 #include "midgardid.h"
+#include <array>
 
 namespace hooks {
 
@@ -73,7 +74,7 @@ int getBoostDamage(int level)
     const auto& global = GlobalDataApi::get();
     const auto vars = *(*global.getGlobalData())->globalVariables;
 
-    int count = sizeof(vars->battleBoostDamage) / sizeof(*vars->battleBoostDamage);
+    int count = std::size(vars->battleBoostDamage);
     return (0 < level && level <= count) ? vars->battleBoostDamage[level - 1] : 0;
 }
 
@@ -84,7 +85,7 @@ int getLowerDamage(int level)
     const auto& global = GlobalDataApi::get();
     const auto vars = *(*global.getGlobalData())->globalVariables;
 
-    int count = sizeof(vars->battleLowerDamage) / sizeof(*vars->battleLowerDamage);
+    int count = std::size(vars->battleLowerDamage);
     return (0 < level && level <= count) ? vars->battleLowerDamage[level - 1] : 0;
 }
 

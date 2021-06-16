@@ -27,15 +27,18 @@ namespace game::AutoDialogApi {
 std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (Api::LoadScriptFile)0x50e227
+        (Api::LoadScriptFile)0x50e227,
+        (Api::LoadImage)0x5c9d20,
     },
     // Russobit
     Api{
-        (Api::LoadScriptFile)0x50e227
+        (Api::LoadScriptFile)0x50e227,
+        (Api::LoadImage)0x5c9d20,
     },
     // Gog
     Api{
-        (Api::LoadScriptFile)0x50d6eb
+        (Api::LoadScriptFile)0x50d6eb,
+        (Api::LoadImage)0x5c8cee,
     }
 }};
 // clang-format on

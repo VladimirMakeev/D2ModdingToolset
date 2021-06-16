@@ -43,6 +43,10 @@ game::BattleMsgData* __fastcall battleMsgDataCopyHooked(game::BattleMsgData* thi
 
 void __fastcall battleMsgDataDtorHooked(game::BattleMsgData* thisptr, int /*%edx*/);
 
+void __fastcall removeUnitInfoHooked(game::BattleMsgData* thisptr,
+                                     int /*%edx*/,
+                                     const game::CMidgardID* unitId);
+
 int __fastcall getAttackPowerReductionHooked(const game::BattleMsgData* thisptr,
                                              int /*%edx*/,
                                              const game::CMidgardID* unitId);

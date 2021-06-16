@@ -222,6 +222,9 @@ static Hooks getGameHooks()
         // Allow users to specify critical hit chance
         // Support attack damage ratio
         {fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage},
+        // Fix occasional crash with incorrect removal of summoned unit info
+        // Fix persistent crash with summons when unrestrictedBestowWards is enabled
+        {battle.removeUnitInfo, removeUnitInfoHooked},
     };
     // clang-format on
 

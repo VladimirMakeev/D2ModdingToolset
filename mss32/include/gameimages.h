@@ -20,12 +20,15 @@
 #ifndef GAMEIMAGES_H
 #define GAMEIMAGES_H
 
+#include "d2string.h"
+#include "linkedlist.h"
 #include "smartptr.h"
 
 namespace game {
 
 struct CLogFile;
 struct IMqImage2;
+struct LRaceCategory;
 
 /** Stores game images information read from .ff files. */
 struct GameImages
@@ -78,6 +81,20 @@ struct Api
 
     using CreateOrFreeGameImages = void(__thiscall*)(GameImagesPtr* thisptr, GameImages** data);
     CreateOrFreeGameImages createOrFreeGameImages;
+
+    /** Searches storage for specific image names and stores them in list. */
+    using GetImageNames = void(__stdcall*)(LinkedList<String>* imageNames,
+                                           void* storage,
+                                           const char* imageName,
+                                           int a4,
+                                           int a5);
+    GetImageNames getImageNames;
+
+    /** Returns race logo image name(s) for specified race category. */
+    using GetRaceLogoImageName = void(__stdcall*)(LinkedList<String>* imageNames,
+                                                  void* storage,
+                                                  const LRaceCategory* race);
+    GetRaceLogoImageName getRaceLogoImageName;
 };
 
 Api& get();
