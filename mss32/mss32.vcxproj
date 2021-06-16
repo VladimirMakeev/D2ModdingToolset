@@ -252,6 +252,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\netmsg.cpp" />
     <ClCompile Include="src\netmsghooks.cpp" />
     <ClCompile Include="src\netmsgutils.cpp" />
+    <ClCompile Include="src\ordercat.cpp" />
     <ClCompile Include="src\originalfunctions.cpp" />
     <ClCompile Include="src\pathinfolist.cpp" />
     <ClCompile Include="src\phase.cpp" />

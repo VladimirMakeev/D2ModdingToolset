@@ -30,6 +30,29 @@ struct LOrderCategoryTable : public CEnumConstantTable<OrderId>
 struct LOrderCategory : public Category<OrderId>
 { };
 
+namespace OrderCategories {
+
+struct Categories
+{
+    LOrderCategory* bezerk;
+    LOrderCategory* normal;
+    LOrderCategory* defendLocation;
+    LOrderCategory* assist;
+    LOrderCategory* guard;
+    LOrderCategory* moveToLocation;
+    LOrderCategory* roam;
+    LOrderCategory* defendCity;
+    LOrderCategory* defendStack;
+    LOrderCategory* secureCity;
+    LOrderCategory* steal;
+    LOrderCategory* attackStack;
+    LOrderCategory* stand;
+};
+
+Categories& get();
+
+} // namespace OrderCategories
+
 } // namespace game
 
 #endif // ORDERCAT_H
