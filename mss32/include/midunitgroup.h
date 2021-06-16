@@ -25,13 +25,15 @@
 
 namespace game {
 
+struct CMidUnitGroupVftable;
 struct IMidgardObjectMap;
 struct CFortification;
+struct CVisitorAddUnitToGroup;
 
 /** Represents group of 6 units in game. */
 struct CMidUnitGroup
 {
-    const void* vftable;
+    const CMidUnitGroupVftable* vftable;
     IdVector units;
     CMidgardID positions[6];
     /**
@@ -42,6 +44,40 @@ struct CMidUnitGroup
     int maxUnitsAllowed;
     CFortification* city;
 };
+
+struct CMidUnitGroupVftable
+{
+    using Destructor = void(__thiscall*)(CMidUnitGroup* thisptr, char flags);
+    Destructor destructor;
+
+    using AddLeader = bool(__thiscall*)(CMidUnitGroup* thisptr,
+                                        const CMidgardID* unitId,
+                                        int position,
+                                        const IMidgardObjectMap* objectMap);
+    AddLeader addLeader;
+
+    using RemoveAllUnits = bool(__thiscall*)(CMidUnitGroup* thisptr,
+                                             const CMidgardID* groupId,
+                                             const IMidgardObjectMap* objectMap);
+    RemoveAllUnits removeAllUnits;
+
+    using Stream = void(__thiscall*)(CMidUnitGroup* thisptr, int a2, const CMidgardID* groupId);
+    Stream stream;
+
+    void* methods[2];
+
+    using AddUnit = bool(__thiscall*)(CMidUnitGroup* thisptr,
+                                      const CVisitorAddUnitToGroup* visitor,
+                                      const CMidgardID* unitId,
+                                      int position,
+                                      const IMidgardObjectMap* objectMap);
+    AddUnit addUnit;
+
+    void* methods2[3];
+};
+
+static_assert(sizeof(CMidUnitGroupVftable) == 10 * sizeof(void*),
+              "CMidUnitGroup vftable must have exactly 10 methods");
 
 namespace CMidUnitGroupApi {
 
