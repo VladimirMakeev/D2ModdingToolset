@@ -57,6 +57,7 @@ static std::array<Functions, 4> functions = {{
         (IsGroupOwnerPlayerHuman)0x628165,
         (AttackShouldMiss)0x626b5f,
         (GenerateRandomNumber)0x548e10,
+        (GenerateRandomNumberStd)0x548e67,
         (GetUnitPositionInGroup)0x65fb1e,
         (GetSummonUnitImplIdByAttack)0x661fe0,
         (GetSummonUnitImplId)0x664b5c,
@@ -94,6 +95,7 @@ static std::array<Functions, 4> functions = {{
         (IsAttackEffectiveAgainstGroup)0x5d269c,
         (IsAttackBetterThanItemUsage)0x452aa9,
         (ComputeAttackDamageCheckTransformed)0x5d400c,
+        (FillAttackTransformIdList)0x5989b2,
     },
     // Russobit
     Functions{
@@ -127,6 +129,7 @@ static std::array<Functions, 4> functions = {{
         (IsGroupOwnerPlayerHuman)0x628165,
         (AttackShouldMiss)0x626b5f,
         (GenerateRandomNumber)0x548e10,
+        (GenerateRandomNumberStd)0x548e67,
         (GetUnitPositionInGroup)0x65fb1e,
         (GetSummonUnitImplIdByAttack)0x661fe0,
         (GetSummonUnitImplId)0x664b5c,
@@ -164,6 +167,7 @@ static std::array<Functions, 4> functions = {{
         (IsAttackEffectiveAgainstGroup)0x5d269c,
         (IsAttackBetterThanItemUsage)0x452aa9,
         (ComputeAttackDamageCheckTransformed)0x5d400c,
+        (FillAttackTransformIdList)0x5989b2,
     },
     // Gog
     Functions{
@@ -197,6 +201,7 @@ static std::array<Functions, 4> functions = {{
         (IsGroupOwnerPlayerHuman)0x626ca5,
         (AttackShouldMiss)0x62569f,
         (GenerateRandomNumber)0x54851f,
+        (GenerateRandomNumberStd)0x548576,
         (GetUnitPositionInGroup)0x65e59e,
         (GetSummonUnitImplIdByAttack)0x660a60,
         (GetSummonUnitImplId)0x6635dc,
@@ -234,6 +239,7 @@ static std::array<Functions, 4> functions = {{
         (IsAttackEffectiveAgainstGroup)0x5d15cd,
         (IsAttackBetterThanItemUsage)0x452475,
         (ComputeAttackDamageCheckTransformed)0x5d2f3d,
+        (FillAttackTransformIdList)0x597b00,
     },
     // Scenario Editor
     Functions{
@@ -267,6 +273,7 @@ static std::array<Functions, 4> functions = {{
         (IsGroupOwnerPlayerHuman)nullptr,
         (AttackShouldMiss)nullptr,
         (GenerateRandomNumber)nullptr,
+        (GenerateRandomNumberStd)nullptr,
         (GetUnitPositionInGroup)nullptr,
         (GetSummonUnitImplIdByAttack)nullptr,
         (GetSummonUnitImplId)nullptr,
@@ -304,6 +311,7 @@ static std::array<Functions, 4> functions = {{
         (IsAttackEffectiveAgainstGroup)nullptr,
         (IsAttackBetterThanItemUsage)nullptr,
         (ComputeAttackDamageCheckTransformed)nullptr,
+        (FillAttackTransformIdList)nullptr,
     },
 }};
 

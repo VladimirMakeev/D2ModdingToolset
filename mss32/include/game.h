@@ -248,6 +248,9 @@ using AttackShouldMiss = bool(__stdcall*)(const int* power);
 /** Generates random number in range [0 : maxValue) using special ingame generator. */
 using GenerateRandomNumber = int(__stdcall*)(unsigned int maxValue);
 
+/** Generates random number in range [0 : maxValue) using standard CRT rand(). */
+using GenerateRandomNumberStd = int(__stdcall*)(unsigned int maxValue);
+
 using GetUnitPositionInGroup = int(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                const CMidgardID* groupId,
                                                const CMidgardID* unitId);
@@ -459,6 +462,11 @@ using ComputeAttackDamageCheckTransformed = int(__stdcall*)(const IUsSoldier* so
                                                             const BattleMsgData* battleMsgData,
                                                             const CMidgardID* unitId);
 
+using FillAttackTransformIdList = void(__thiscall*)(const void* thisptr,
+                                                    IdList* value,
+                                                    const CMidgardID* attackId,
+                                                    bool sizeSmall);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -492,6 +500,7 @@ struct Functions
     IsGroupOwnerPlayerHuman isGroupOwnerPlayerHuman;
     AttackShouldMiss attackShouldMiss;
     GenerateRandomNumber generateRandomNumber;
+    GenerateRandomNumberStd generateRandomNumberStd;
     GetUnitPositionInGroup getUnitPositionInGroup;
     GetSummonUnitImplIdByAttack getSummonUnitImplIdByAttack;
     GetSummonUnitImplId getSummonUnitImplId;
@@ -529,6 +538,7 @@ struct Functions
     IsAttackEffectiveAgainstGroup isAttackEffectiveAgainstGroup;
     IsAttackBetterThanItemUsage isAttackBetterThanItemUsage;
     ComputeAttackDamageCheckTransformed computeAttackDamageCheckTransformed;
+    FillAttackTransformIdList fillAttackTransformIdList;
 };
 
 /** Global variables used in game. */
