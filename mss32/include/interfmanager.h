@@ -54,7 +54,7 @@ struct CInterfManagerVftable
 };
 
 static_assert(sizeof(CInterfManagerVftable) == 23 * sizeof(void*),
-              "CInterfManagerVftable vftable must have exactly 23 methods");
+              "CInterfManager vftable must have exactly 23 methods");
 
 struct CInterfManager
 {

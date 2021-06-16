@@ -81,7 +81,7 @@ struct IEncUnitDescriptorVftable
 };
 
 static_assert(sizeof(IEncUnitDescriptorVftable) == 43 * sizeof(void*),
-              "IEncUnitDescriptorVftable vftable must have exactly 43 methods");
+              "IEncUnitDescriptor vftable must have exactly 43 methods");
 
 struct IEncUnitDescriptor
 {
