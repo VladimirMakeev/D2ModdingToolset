@@ -40,6 +40,7 @@ static std::array<Functions, 4> functions = {{
         (GetAllyOrEnemyGroupId)0x65afb2,
         (FindUnitById)0x625180,
         (CastUnitImplToSoldier)0x40a79d,
+        (CastUnitImplToStackLeader)0x40a7c3,
         (CreateBatAttack)0x64630e,
         (GetAttackById)0x645df6,
         (IsUnitImmuneToAttack)0x65baa8,
@@ -100,6 +101,7 @@ static std::array<Functions, 4> functions = {{
         (CAiHireUnitEval)0x44c89a,
         (GetMeleeUnitToHireAiRating)0x44cad9,
         (ComputeTargetUnitAiPriority)0x5d00c0,
+        (IsPlayerRaceUnplayable)0x5e6643,
     },
     // Russobit
     Functions{
@@ -116,6 +118,7 @@ static std::array<Functions, 4> functions = {{
         (GetAllyOrEnemyGroupId)0x65afb2,
         (FindUnitById)0x625180,
         (CastUnitImplToSoldier)0x40a79d,
+        (CastUnitImplToStackLeader)0x40a7c3,
         (CreateBatAttack)0x64630e,
         (GetAttackById)0x645df6,
         (IsUnitImmuneToAttack)0x65baa8,
@@ -176,6 +179,7 @@ static std::array<Functions, 4> functions = {{
         (CAiHireUnitEval)0x44c89a,
         (GetMeleeUnitToHireAiRating)0x44cad9,
         (ComputeTargetUnitAiPriority)0x5d00c0,
+        (IsPlayerRaceUnplayable)0x5e6643,
     },
     // Gog
     Functions{
@@ -192,6 +196,7 @@ static std::array<Functions, 4> functions = {{
         (GetAllyOrEnemyGroupId)0x659a32,
         (FindUnitById)0x623cc0,
         (CastUnitImplToSoldier)0x40a3f9,
+        (CastUnitImplToStackLeader)0x40a41f,
         (CreateBatAttack)0x644b3e,
         (GetAttackById)0x644626,
         (IsUnitImmuneToAttack)0x65a528,
@@ -252,6 +257,7 @@ static std::array<Functions, 4> functions = {{
         (CAiHireUnitEval)0x44c2ae,
         (GetMeleeUnitToHireAiRating)0x44c4e7,
         (ComputeTargetUnitAiPriority)0x5ceff1,
+        (IsPlayerRaceUnplayable)0x5e5358,
     },
     // Scenario Editor
     Functions{
@@ -268,6 +274,7 @@ static std::array<Functions, 4> functions = {{
         (GetAllyOrEnemyGroupId)nullptr,
         (FindUnitById)nullptr,
         (CastUnitImplToSoldier)nullptr,
+        (CastUnitImplToStackLeader)nullptr,
         (CreateBatAttack)nullptr,
         (GetAttackById)nullptr,
         (IsUnitImmuneToAttack)nullptr,
@@ -328,6 +335,7 @@ static std::array<Functions, 4> functions = {{
         (CAiHireUnitEval)nullptr,
         (GetMeleeUnitToHireAiRating)nullptr,
         (ComputeTargetUnitAiPriority)nullptr,
+        (IsPlayerRaceUnplayable)0x4e1ccc,
     },
 }};
 

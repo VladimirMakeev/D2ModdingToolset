@@ -37,6 +37,7 @@ struct GlobalData;
 struct IMidObject;
 struct IUsSoldier;
 struct IUsNoble;
+struct IUsStackLeader;
 struct IMidgardObjectMap;
 struct TLordType;
 struct CMidPlayer;
@@ -146,6 +147,7 @@ using FindUnitById = CMidUnit*(__stdcall*)(const IMidgardObjectMap* objectMap,
 
 using CastUnitImplToSoldier = IUsSoldier*(__stdcall*)(const IUsUnit* unitImpl);
 using CastUnitImplToNoble = IUsNoble*(__stdcall*)(const IUsUnit* unitImpl);
+using CastUnitImplToStackLeader = IUsStackLeader*(__stdcall*)(const IUsUnit* unitImpl);
 
 using CreateBatAttack = IBatAttack*(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                 const BattleMsgData* battleMsgData,
@@ -481,6 +483,9 @@ using ComputeTargetUnitAiPriority = int(__stdcall*)(const IMidgardObjectMap* obj
                                                     const BattleMsgData* battleMsgData,
                                                     int attackerDamage);
 
+using IsPlayerRaceUnplayable = bool(__stdcall*)(const CMidgardID* playerId,
+                                                const IMidgardObjectMap* objectMap);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -497,6 +502,7 @@ struct Functions
     GetAllyOrEnemyGroupId getAllyOrEnemyGroupId;
     FindUnitById findUnitById;
     CastUnitImplToSoldier castUnitImplToSoldier;
+    CastUnitImplToStackLeader castUnitImplToStackLeader;
     CreateBatAttack createBatAttack;
     GetAttackById getAttackById;
     IsUnitImmuneToAttack isUnitImmuneToAttack;
@@ -557,6 +563,7 @@ struct Functions
     CAiHireUnitEval cAiHireUnitEval;
     GetMeleeUnitToHireAiRating getMeleeUnitToHireAiRating;
     ComputeTargetUnitAiPriority computeTargetUnitAiPriority;
+    IsPlayerRaceUnplayable isPlayerRaceUnplayable;
 };
 
 /** Global variables used in game. */
