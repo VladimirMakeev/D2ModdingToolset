@@ -833,4 +833,65 @@ bool __stdcall isAttackBetterThanItemUsageHooked(const game::IItem* item,
     return soldierDamage >= itemDamage;
 }
 
+game::CMidgardID* __stdcall getSummonUnitImplIdByAttackHooked(game::CMidgardID* summonImplId,
+                                                              const game::CMidgardID* attackId,
+                                                              int position,
+                                                              bool smallUnit)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& listApi = IdListApi::get();
+    const auto& global = GlobalDataApi::get();
+
+    IdList summonImplIds{};
+    listApi.constructor(&summonImplIds);
+
+    auto globalData = *global.getGlobalData();
+    const auto transf = globalData->transf;
+    fn.fillAttackTransformIdList(transf, &summonImplIds, attackId, smallUnit);
+
+    if (summonImplIds.length == 0) {
+        *summonImplId = emptyId;
+    } else if (summonImplIds.length == 1) {
+        *summonImplId = *listApi.front(&summonImplIds);
+    } else {
+        IdListIterator randomIt;
+        listApi.begin(&summonImplIds, &randomIt);
+
+        int random = fn.generateRandomNumberStd(summonImplIds.length);
+        for (int i = 0; i < random; i++) {
+            listApi.preinc(&randomIt);
+        }
+
+        if (position % 2 == 0) {
+            *summonImplId = *listApi.dereference(&randomIt);
+        } else {
+            IdListIterator end;
+            listApi.end(&summonImplIds, &end);
+
+            IdListIterator it = randomIt;
+            do {
+                auto unitImpl = static_cast<TUsUnitImpl*>(
+                    global.findById(globalData->units, listApi.dereference(&it)));
+
+                const auto soldier = fn.castUnitImplToSoldier(unitImpl);
+                const auto attack = soldier->vftable->getAttackById(soldier);
+                if (!isMeleeAttack(attack))
+                    break;
+
+                listApi.preinc(&it);
+                if (listApi.equals(&it, &end)) {
+                    listApi.begin(&summonImplIds, &it);
+                }
+            } while (!listApi.equals(&it, &randomIt));
+
+            *summonImplId = *listApi.dereference(&it);
+        }
+    }
+
+    listApi.destructor(&summonImplIds);
+    return summonImplId;
+}
+
 } // namespace hooks

@@ -213,6 +213,7 @@ static Hooks getGameHooks()
         {fn.isUnitSuitableForAiNobleDuel, isUnitSuitableForAiNobleDuelHooked},
         {fn.getAttackReachAiRating, getAttackReachAiRatingHooked},
         {fn.isAttackBetterThanItemUsage, isAttackBetterThanItemUsageHooked},
+        {fn.getSummonUnitImplIdByAttack, getSummonUnitImplIdByAttackHooked},
         // Allow users to specify critical hit chance
         // Support attack damage ratio
         {fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage},

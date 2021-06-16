@@ -173,6 +173,11 @@ bool __stdcall isAttackBetterThanItemUsageHooked(const game::IItem* item,
                                                  const game::IUsSoldier* soldier,
                                                  const game::CMidgardID* unitImplId);
 
+game::CMidgardID* __stdcall getSummonUnitImplIdByAttackHooked(game::CMidgardID* summonImplId,
+                                                              const game::CMidgardID* attackId,
+                                                              int position,
+                                                              bool smallUnit);
+
 } // namespace hooks
 
 #endif // CUSTOMATTACKHOOKS_H
