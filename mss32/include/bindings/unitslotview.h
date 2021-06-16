@@ -39,7 +39,7 @@ class UnitSlotView
 {
 public:
     UnitSlotView(const game::CMidUnit* unit, int position, const game::CMidgardID* groupId);
-    bool operator==(const UnitSlotView& value);
+    bool operator==(const UnitSlotView& value) const;
 
     static void bind(sol::state& lua);
 

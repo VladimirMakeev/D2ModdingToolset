@@ -33,7 +33,7 @@ UnitSlotView::UnitSlotView(const game::CMidUnit* unit,
     , groupId(*groupId)
 { }
 
-bool UnitSlotView::operator==(const UnitSlotView& value)
+bool UnitSlotView::operator==(const UnitSlotView& value) const
 {
     return position == value.position && groupId == value.groupId;
 }
