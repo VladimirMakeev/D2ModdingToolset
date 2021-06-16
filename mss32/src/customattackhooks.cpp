@@ -894,4 +894,18 @@ game::CMidgardID* __stdcall getSummonUnitImplIdByAttackHooked(game::CMidgardID* 
     return summonImplId;
 }
 
+bool __stdcall isSmallMeleeFighterHooked(const game::IUsSoldier* soldier)
+{
+    using namespace game;
+
+    if (!soldier->vftable->getSizeSmall(soldier))
+        return false;
+
+    const auto attack = soldier->vftable->getAttackById(soldier);
+    if (attack->vftable->getQtyDamage(attack) == 0)
+        return false;
+
+    return isMeleeAttack(attack);
+}
+
 } // namespace hooks

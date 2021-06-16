@@ -178,6 +178,8 @@ game::CMidgardID* __stdcall getSummonUnitImplIdByAttackHooked(game::CMidgardID* 
                                                               int position,
                                                               bool smallUnit);
 
+bool __stdcall isSmallMeleeFighterHooked(const game::IUsSoldier* soldier);
+
 } // namespace hooks
 
 #endif // CUSTOMATTACKHOOKS_H

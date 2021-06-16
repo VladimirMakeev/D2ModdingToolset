@@ -467,6 +467,8 @@ using FillAttackTransformIdList = void(__thiscall*)(const void* thisptr,
                                                     const CMidgardID* attackId,
                                                     bool sizeSmall);
 
+using IsSmallMeleeFighter = bool(__stdcall*)(const IUsSoldier* soldier);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -539,6 +541,7 @@ struct Functions
     IsAttackBetterThanItemUsage isAttackBetterThanItemUsage;
     ComputeAttackDamageCheckTransformed computeAttackDamageCheckTransformed;
     FillAttackTransformIdList fillAttackTransformIdList;
+    IsSmallMeleeFighter isSmallMeleeFighter;
 };
 
 /** Global variables used in game. */
