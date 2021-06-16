@@ -197,7 +197,6 @@ static std::array<Api, 3> functions = {{
         (Api::Destructor)0x6215a6,
         (Api::RemoveUnitInfo)0x6221e2,
         (Api::DecreaseUnitAttacks)0x622546,
-    },
         (Api::GetTargetsToAttack)0x62738b,
         (Api::GetLeaderEquippedBattleItemIndex)0x63395e,
         (Api::GetUnitInfos)0x6220c1,

@@ -584,7 +584,6 @@ struct Functions
     CheckRaceExist checkRaceExist;
     GetUnitAttackSourceImmunities getUnitAttackSourceImmunities;
     GetSoldierAttackSourceImmunities getSoldierAttackSourceImmunities;
-    GetSoldierImmunityPower getSoldierImmunityPower;
     GetTerrainByAbbreviation getTerrainByAbbreviation;
     GetTerrainByRace getTerrainByRace;
     GetTerrainByRace getTerrainByRace2;
