@@ -215,6 +215,7 @@ static Hooks getGameHooks()
         {fn.isAttackBetterThanItemUsage, isAttackBetterThanItemUsageHooked},
         {fn.getSummonUnitImplIdByAttack, getSummonUnitImplIdByAttackHooked},
         {fn.isSmallMeleeFighter, isSmallMeleeFighterHooked},
+        {fn.cAiHireUnitEval, cAiHireUnitEvalHooked},
         // Allow users to specify critical hit chance
         // Support attack damage ratio
         {fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage},

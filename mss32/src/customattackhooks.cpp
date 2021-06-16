@@ -908,4 +908,25 @@ bool __stdcall isSmallMeleeFighterHooked(const game::IUsSoldier* soldier)
     return isMeleeAttack(attack);
 }
 
+bool __stdcall cAiHireUnitEvalHooked(const game::IMidgardObjectMap* objectMap,
+                                     const game::CMidUnitGroup* group)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    const auto& unitIds = group->units;
+    for (const CMidgardID* unitId = unitIds.bgn; unitId != unitIds.end; ++unitId) {
+        auto unit = static_cast<const CMidUnit*>(
+            objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+
+        auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+        auto attack = soldier->vftable->getAttackById(soldier);
+        if (isMeleeAttack(attack))
+            return true;
+    }
+
+    return false;
+}
+
 } // namespace hooks
