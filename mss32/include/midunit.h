@@ -46,8 +46,8 @@ struct CMidUnit : public IMidScenarioObject
     CMidgardID origTypeId;
     bool keepHp;
     char padding3[3];
-    int origHp;
-    int origHpMax;
+    int hpBefore;
+    int hpBefMax;
     int origXp;
     IdList origModifiers;
 };
