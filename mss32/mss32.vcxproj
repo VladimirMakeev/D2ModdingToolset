@@ -597,6 +597,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\unitutils.h" />
     <ClInclude Include="include\ussoldier.h" />
     <ClInclude Include="include\ussoldierimpl.h" />
+    <ClInclude Include="include\usstackleader.h" />
     <ClInclude Include="include\usunit.h" />
     <ClInclude Include="include\usunitextension.h" />
     <ClInclude Include="include\usunitimpl.h" />
