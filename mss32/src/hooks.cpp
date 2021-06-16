@@ -218,6 +218,7 @@ static Hooks getGameHooks()
         {fn.cAiHireUnitEval, cAiHireUnitEvalHooked},
         {fn.getMeleeUnitToHireAiRating, getMeleeUnitToHireAiRatingHooked},
         {fn.computeTargetUnitAiPriority, computeTargetUnitAiPriorityHooked},
+        {CMidStackApi::vftable()->initialize, midStackInitializeHooked},
         // Allow users to specify critical hit chance
         // Support attack damage ratio
         {fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage},

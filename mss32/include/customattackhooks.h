@@ -32,6 +32,7 @@ struct LAttackReach;
 struct LAttackReachTable;
 struct LImmuneCat;
 struct CMidUnit;
+struct CMidStack;
 struct CAttackImpl;
 struct IUsSoldier;
 struct CDBTable;
@@ -43,6 +44,7 @@ struct BattleMsgData;
 struct CMidgardID;
 struct CMidUnitGroup;
 struct IItem;
+struct CMqPoint;
 
 enum class BattleAction : int;
 } // namespace game
@@ -191,6 +193,14 @@ int __stdcall computeTargetUnitAiPriorityHooked(const game::IMidgardObjectMap* o
                                                 const game::CMidgardID* unitId,
                                                 const game::BattleMsgData* battleMsgData,
                                                 int attackerDamage);
+
+bool __fastcall midStackInitializeHooked(game::CMidStack* thisptr,
+                                         int /*%edx*/,
+                                         const game::IMidgardObjectMap* objectMap,
+                                         const game::CMidgardID* leaderId,
+                                         const game::CMidgardID* ownerId,
+                                         const game::CMidgardID* subraceId,
+                                         const game::CMqPoint* position);
 
 } // namespace hooks
 

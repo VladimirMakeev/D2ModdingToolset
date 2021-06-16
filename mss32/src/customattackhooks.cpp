@@ -35,12 +35,14 @@
 #include "itembattle.h"
 #include "log.h"
 #include "mempool.h"
+#include "midstack.h"
 #include "midunitgroup.h"
 #include "originalfunctions.h"
 #include "scripts.h"
 #include "targetslistutils.h"
 #include "unitutils.h"
 #include "ussoldier.h"
+#include "usstackleader.h"
 #include "usunitimpl.h"
 #include "utils.h"
 #include <fmt/format.h>
@@ -1001,6 +1003,68 @@ int __stdcall computeTargetUnitAiPriorityHooked(const game::IMidgardObjectMap* o
     }
 
     return 10000 + modifier;
+}
+
+bool __fastcall midStackInitializeHooked(game::CMidStack* thisptr,
+                                         int /*%edx*/,
+                                         const game::IMidgardObjectMap* objectMap,
+                                         const game::CMidgardID* leaderId,
+                                         const game::CMidgardID* ownerId,
+                                         const game::CMidgardID* subraceId,
+                                         const game::CMqPoint* position)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& stackApi = CMidStackApi::get();
+
+    auto leader = static_cast<const CMidUnit*>(
+        objectMap->vftable->findScenarioObjectById(objectMap, leaderId));
+
+    auto stackLeader = fn.castUnitImplToStackLeader(leader->unitImpl);
+    if (!stackLeader)
+        return false;
+
+    int unitPosition = 2;
+    auto soldier = fn.castUnitImplToSoldier(leader->unitImpl);
+    if (soldier->vftable->getSizeSmall(soldier)) {
+        auto attack = soldier->vftable->getAttackById(soldier);
+        if (!isMeleeAttack(attack))
+            unitPosition = 3;
+    }
+
+    if (!thisptr->group.vftable->addLeader(&thisptr->group, leaderId, unitPosition, objectMap))
+        return false;
+    thisptr->leaderId = *leaderId;
+    thisptr->leaderAlive = leader->currentHp > 0;
+
+    if (!thisptr->inventory.vftable->method1(&thisptr->inventory, &thisptr->stackId, objectMap, 0))
+        return false;
+
+    if (!stackApi.setPosition(thisptr, objectMap, position, false))
+        return false;
+
+    if (!stackApi.setOwner(thisptr, objectMap, ownerId, subraceId))
+        return false;
+
+    thisptr->facing = 0;
+    thisptr->upgCount = 0;
+    thisptr->invisible = 0;
+    thisptr->aiIgnore = 0;
+    thisptr->movement = stackLeader->vftable->getMovement(stackLeader);
+
+    if (fn.isPlayerRaceUnplayable(ownerId, objectMap)) {
+        thisptr->order = *OrderCategories::get().stand;
+    } else {
+        thisptr->order = *OrderCategories::get().normal;
+    }
+    thisptr->orderTargetId = emptyId;
+
+    thisptr->aiOrder = *OrderCategories::get().normal;
+    thisptr->aiOrderTargetId = emptyId;
+
+    thisptr->creatLvl = soldier->vftable->getLevel(soldier);
+    return true;
 }
 
 } // namespace hooks
