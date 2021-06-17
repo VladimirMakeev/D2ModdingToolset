@@ -252,6 +252,7 @@
     - Add DAM_RATIO (Numeric, size 3) and DR_REPEAT (Logical) columns to Gattacks.dbf;
     - DAM_RATIO specifies a portion of the attack damage recieved by additional targets (0-255%). 100 or empty is the vanilla behavior;
     - DR_REPEAT specifies whether the DAM_RATIO should be applies for every consequent target. For instance, if the DAMAGE = 50 and DAM_RATIO = 20, then the first target receives 50, second - 10 (50 * 0,2), third - 2 (10 * 0,2) and so on.
+
     ![image](https://user-images.githubusercontent.com/5180699/122287564-bee83680-cef9-11eb-88ae-fd7421df4369.png)
   </details>
 
