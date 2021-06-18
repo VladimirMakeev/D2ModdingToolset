@@ -12,7 +12,7 @@ Frontline positions are even, backline - odd.
 --]]
 
 function getTargets(attacker, selected, allies, targets, targetsAreAllies)
-	-- Get target that stands directly behind the selected (pierce attack)
+	-- Get all targets from the selected column (pierce attack)
 	local result = {selected}
 	for i = 1, #targets do
 		local target = targets[i]
