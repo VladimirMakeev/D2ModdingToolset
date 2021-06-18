@@ -162,7 +162,7 @@ void fillCustomAttackReaches(const std::filesystem::path& dbfFilePath)
     }
 }
 
-UnitSlots getTargetsToSelectOrAttack(const std::string scriptFile,
+UnitSlots getTargetsToSelectOrAttack(const std::string& scriptFile,
                                      const bindings::UnitSlotView& attacker,
                                      const bindings::UnitSlotView& selected,
                                      const UnitSlots& allies,
