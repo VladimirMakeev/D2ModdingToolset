@@ -772,7 +772,7 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
     if (!unitsForHire().empty()) {
         const auto& units = unitsForHire()[raceIndex];
         for (const auto& unit : units) {
-            list.push_back(hireList, &unit);
+            list.pushBack(hireList, &unit);
         }
     }
 

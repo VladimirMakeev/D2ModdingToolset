@@ -50,7 +50,7 @@ bool addUniqueIdToList(game::IdList& list, const game::CMidgardID* id)
     listApi.end(&list, &end);
     listApi.find(&it, begin, end, id);
     if (listApi.equals(&it, &end)) {
-        listApi.push_back(&list, id);
+        listApi.pushBack(&list, id);
         return true;
     }
 

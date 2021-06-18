@@ -343,7 +343,7 @@ void getTargetsToAttackForAllAttackReach(const game::IMidgardObjectMap* objectMa
         } else {
             const auto& unitIds = targetGroup->units;
             for (const CMidgardID* unitId = unitIds.bgn; unitId != unitIds.end; ++unitId) {
-                listApi.push_back(value, unitId);
+                listApi.pushBack(value, unitId);
             }
         }
     }

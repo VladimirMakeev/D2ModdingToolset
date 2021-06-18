@@ -45,7 +45,7 @@ struct Api
 
     /** Adds id to list's end. */
     using PushBack = int(__thiscall*)(IdList* thisptr, const CMidgardID* id);
-    PushBack push_back;
+    PushBack pushBack;
 
     /** Erases id from list. */
     using Erase = void(__thiscall*)(IdList* thisptr, IdListIterator pos);
