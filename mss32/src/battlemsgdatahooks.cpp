@@ -160,6 +160,24 @@ void __fastcall battleMsgDataDtorHooked(game::BattleMsgData* thisptr, int /*%edx
     }
 }
 
+int __fastcall getAttackPowerReductionHooked(const game::BattleMsgData* thisptr,
+                                             int /*%edx*/,
+                                             const game::CMidgardID* unitId)
+{
+    auto unitInfo = game::BattleMsgDataApi::get().getUnitInfoById(thisptr, unitId);
+    return unitInfo ? (int)unitInfo->attackPowerReductionPatched : 0;
+}
+
+void __fastcall setAttackPowerReductionHooked(game::BattleMsgData* thisptr,
+                                              int /*%edx*/,
+                                              const game::CMidgardID* unitId,
+                                              int value)
+{
+    auto unitInfo = game::BattleMsgDataApi::get().getUnitInfoById(thisptr, unitId);
+    if (unitInfo)
+        unitInfo->attackPowerReductionPatched = (std::int8_t)value;
+}
+
 void __fastcall removeUnitInfoHooked(game::BattleMsgData* thisptr,
                                      int /*%edx*/,
                                      const game::CMidgardID* unitId)

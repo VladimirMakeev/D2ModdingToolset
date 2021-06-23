@@ -20,24 +20,33 @@
 #ifndef CUSTOMATTACKHOOKS_H
 #define CUSTOMATTACKHOOKS_H
 
-#include "linkedlist.h"
+#include "idlist.h"
+#include "targetslist.h"
 
 namespace game {
 struct LAttackClass;
 struct LAttackClassTable;
 struct LAttackSource;
 struct LAttackSourceTable;
+struct LAttackReach;
+struct LAttackReachTable;
 struct LImmuneCat;
 struct CMidUnit;
+struct CMidStack;
 struct CAttackImpl;
 struct IUsSoldier;
 struct CDBTable;
 struct GlobalData;
+struct IAttack;
 struct IBatAttack;
 struct IMidgardObjectMap;
 struct BattleMsgData;
 struct CMidgardID;
 struct CMidUnitGroup;
+struct IItem;
+struct CMqPoint;
+
+enum class BattleAction : int;
 } // namespace game
 
 namespace hooks {
@@ -53,6 +62,11 @@ game::LAttackSourceTable* __fastcall attackSourceTableCtorHooked(game::LAttackSo
                                                                  int /*%edx*/,
                                                                  const char* globalsFolderPath,
                                                                  void* codeBaseEnvProxy);
+
+game::LAttackReachTable* __fastcall attackReachTableCtorHooked(game::LAttackReachTable* thisptr,
+                                                               int /*%edx*/,
+                                                               const char* globalsFolderPath,
+                                                               void* codeBaseEnvProxy);
 
 game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
                                                    int /*%edx*/,
@@ -79,7 +93,9 @@ void __stdcall getSoldierAttackSourceImmunitiesHooked(const game::IUsSoldier* so
                                                       bool alwaysImmune,
                                                       game::LinkedList<game::LAttackSource>* value);
 
-double __stdcall getSoldierImmunityPowerHooked(const game::IUsSoldier* soldier);
+double __stdcall getSoldierImmunityAiRatingHooked(const game::IUsSoldier* soldier);
+
+double __stdcall getAttackReachAiRatingHooked(const game::IUsSoldier* soldier, int targetCount);
 
 std::uint32_t __stdcall getAttackSourceWardFlagPositionHooked(
     const game::LAttackSource* attackSource);
@@ -94,11 +110,97 @@ void __fastcall removeUnitAttackSourceWardHooked(game::BattleMsgData* thisptr,
                                                  const game::CMidgardID* unitId,
                                                  const game::LAttackSource* attackSource);
 
-void __stdcall addUnitToBattleMsgDataHooked(game::IMidgardObjectMap* objectMap,
-                                            game::CMidUnitGroup* group,
+void __stdcall addUnitToBattleMsgDataHooked(const game::IMidgardObjectMap* objectMap,
+                                            const game::CMidUnitGroup* group,
                                             const game::CMidgardID* unitId,
                                             char attackerFlags,
                                             game::BattleMsgData* battleMsgData);
+
+void __stdcall getTargetsToAttackHooked(game::IdList* value,
+                                        const game::IMidgardObjectMap* objectMap,
+                                        const game::IAttack* attack,
+                                        const game::IBatAttack* batAttack,
+                                        const game::LAttackReach* attackReach,
+                                        const game::BattleMsgData* battleMsgData,
+                                        game::BattleAction action,
+                                        const game::CMidgardID* targetUnitId);
+
+void __stdcall fillTargetsListHooked(const game::IMidgardObjectMap* objectMap,
+                                     const game::BattleMsgData* battleMsgData,
+                                     const game::IBatAttack* batAttack,
+                                     const game::CMidgardID* unitId,
+                                     const game::CMidgardID* attackUnitOrItemId,
+                                     bool targetAllies,
+                                     game::TargetsList* value,
+                                     bool checkTransformed);
+
+void __stdcall fillEmptyTargetsListHooked(const game::IMidgardObjectMap* objectMap,
+                                          const game::BattleMsgData* battleMsgData,
+                                          const game::IBatAttack* batAttack,
+                                          const game::CMidgardID* unitId,
+                                          const game::CMidgardID* attackUnitOrItemId,
+                                          bool targetAllies,
+                                          game::TargetsList* value);
+
+bool __stdcall isGroupSuitableForAiNobleMisfitHooked(const game::IMidgardObjectMap* objectMap,
+                                                     const game::CMidUnitGroup* group);
+
+bool __stdcall isUnitSuitableForAiNobleDuelHooked(const game::IMidgardObjectMap* objectMap,
+                                                  const game::CMidgardID* unitId);
+
+bool __stdcall findAttackTargetHooked(const game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* unitId,
+                                      const game::IAttack* attack,
+                                      const game::CMidUnitGroup* targetGroup,
+                                      const game::TargetsList* targets,
+                                      const game::BattleMsgData* battleMsgData,
+                                      game::CMidgardID* targetUnitId);
+
+bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap* objectMap,
+                                                  const game::CMidgardID* unitId,
+                                                  const game::BattleMsgData* battleMsgData,
+                                                  const game::CMidUnitGroup* targetGroup,
+                                                  const game::TargetsList* targets,
+                                                  game::CMidgardID* targetUnitId);
+
+bool __stdcall findDamageAttackTargetWithNonAllReachHooked(const game::IMidgardObjectMap* objectMap,
+                                                           const game::IAttack* attack,
+                                                           int damage,
+                                                           const game::CMidUnitGroup* targetGroup,
+                                                           const game::TargetsList* targets,
+                                                           const game::BattleMsgData* battleMsgData,
+                                                           game::CMidgardID* targetUnitId);
+
+bool __stdcall isAttackBetterThanItemUsageHooked(const game::IItem* item,
+                                                 const game::IUsSoldier* soldier,
+                                                 const game::CMidgardID* unitImplId);
+
+game::CMidgardID* __stdcall getSummonUnitImplIdByAttackHooked(game::CMidgardID* summonImplId,
+                                                              const game::CMidgardID* attackId,
+                                                              int position,
+                                                              bool smallUnit);
+
+bool __stdcall isSmallMeleeFighterHooked(const game::IUsSoldier* soldier);
+
+bool __stdcall cAiHireUnitEvalHooked(const game::IMidgardObjectMap* objectMap,
+                                     const game::CMidUnitGroup* group);
+
+double __stdcall getMeleeUnitToHireAiRatingHooked(const game::CMidgardID* unitImplId,
+                                                  bool a2,
+                                                  bool a3);
+
+int __stdcall computeTargetUnitAiPriorityHooked(const game::IMidgardObjectMap* objectMap,
+                                                const game::CMidgardID* unitId,
+                                                const game::BattleMsgData* battleMsgData,
+                                                int attackerDamage);
+
+bool __fastcall midStackInitializeHooked(game::CMidStack* thisptr,
+                                         int /*%edx*/,
+                                         const game::IMidgardObjectMap* objectMap,
+                                         const game::CMidgardID* leaderId,
+                                         const game::CMidgardID* ownerId,
+                                         const game::CMidgardID* subraceId,
+                                         const game::CMqPoint* position);
 
 } // namespace hooks
 

@@ -32,6 +32,8 @@
 #include "batattacktransformself.h"
 #include "battleattackinfo.h"
 #include "battlemsgdatahooks.h"
+#include "battleviewerinterf.h"
+#include "battleviewerinterfhooks.h"
 #include "bestowwardshooks.h"
 #include "buildingbranch.h"
 #include "buildingtype.h"
@@ -42,6 +44,8 @@
 #include "cmdbattlestartmsg.h"
 #include "commandmsghooks.h"
 #include "customattackhooks.h"
+#include "customattacks.h"
+#include "customattackutils.h"
 #include "d2string.h"
 #include "dbf/dbffile.h"
 #include "dbtable.h"
@@ -160,6 +164,7 @@ static Hooks getGameHooks()
         // uses alternative attack with 'adjacent' attack range
         {fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked, (void**)&orig.computeUnitEffectiveHp},
         // Fix bestow wards becoming permanent on warded unit transformation
+        // Support attack damage ratio
         {battle.beforeAttack, beforeAttackHooked},
         /**
          * Allows bestow wards to:
@@ -194,6 +199,29 @@ static Hooks getGameHooks()
         {battle.isUnitAttackSourceWardRemoved, isUnitAttackSourceWardRemovedHooked},
         {battle.removeUnitAttackSourceWard, removeUnitAttackSourceWardHooked},
         {battle.addUnitToBattleMsgData, addUnitToBattleMsgDataHooked, (void**)&orig.addUnitToBattleMsgData},
+        {fn.getUnitAttackSourceImmunities, getUnitAttackSourceImmunitiesHooked},
+        {battle.isUnitAttackSourceWardRemoved, isUnitAttackSourceWardRemovedHooked},
+        {battle.removeUnitAttackSourceWard, removeUnitAttackSourceWardHooked},
+        // Support custom attack reaches
+        {battle.fillTargetsList, fillTargetsListHooked},
+        {battle.fillEmptyTargetsList, fillEmptyTargetsListHooked},
+        {battle.getTargetsToAttack, getTargetsToAttackHooked},
+        {battle.findDoppelgangerAttackTarget, findDoppelgangerAttackTargetHooked},
+        {battle.findDamageAttackTargetWithNonAllReach, findDamageAttackTargetWithNonAllReachHooked},
+        {BattleViewerInterfApi::get().markAttackTargets, markAttackTargetsHooked},
+        {fn.isGroupSuitableForAiNobleMisfit, isGroupSuitableForAiNobleMisfitHooked},
+        {fn.isUnitSuitableForAiNobleDuel, isUnitSuitableForAiNobleDuelHooked},
+        {fn.getAttackReachAiRating, getAttackReachAiRatingHooked},
+        {fn.isAttackBetterThanItemUsage, isAttackBetterThanItemUsageHooked},
+        {fn.getSummonUnitImplIdByAttack, getSummonUnitImplIdByAttackHooked},
+        {fn.isSmallMeleeFighter, isSmallMeleeFighterHooked},
+        {fn.cAiHireUnitEval, cAiHireUnitEvalHooked},
+        {fn.getMeleeUnitToHireAiRating, getMeleeUnitToHireAiRatingHooked},
+        {fn.computeTargetUnitAiPriority, computeTargetUnitAiPriorityHooked},
+        {CMidStackApi::vftable()->initialize, midStackInitializeHooked},
+        // Allow users to specify critical hit chance
+        // Support attack damage ratio
+        {fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage},
         // Fix occasional crash with incorrect removal of summoned unit info
         // Fix persistent crash with summons when unrestrictedBestowWards is enabled
         {battle.removeUnitInfo, removeUnitInfoHooked},
@@ -202,6 +230,12 @@ static Hooks getGameHooks()
 
     if (!unitsForHire().empty()) {
         hooks.emplace_back(HookInfo{fn.addPlayerUnitsToHireList, addPlayerUnitsToHireListHooked});
+    }
+
+    if (getCustomAttacks().customizeDamageRatio) {
+        // Support attack damage ratio
+        hooks.emplace_back(HookInfo{battle.getAttackPowerReduction, getAttackPowerReductionHooked});
+        hooks.emplace_back(HookInfo{battle.setAttackPowerReduction, setAttackPowerReductionHooked});
     }
 
     if (userSettings().shatteredArmorMax != baseSettings().shatteredArmorMax) {
@@ -236,12 +270,6 @@ static Hooks getGameHooks()
         // Change maximum number of items that player can carry between campaign scenarios
         hooks.emplace_back(HookInfo{CDDCarryOverItemsApi::get().constructor,
                                     carryOverItemsCtorHooked, (void**)&orig.carryOverItemsCtor});
-    }
-
-    if (userSettings().criticalHitChance != baseSettings().criticalHitChance) {
-        // Allow users to specify critical hit chance
-        hooks.emplace_back(
-            HookInfo{fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage});
     }
 
     if (userSettings().doppelgangerRespectsEnemyImmunity
@@ -358,13 +386,16 @@ Hooks getHooks()
         HookInfo{LAttackSourceTableApi::get().constructor, attackSourceTableCtorHooked});
     hooks.emplace_back(
         HookInfo{fn.getSoldierAttackSourceImmunities, getSoldierAttackSourceImmunitiesHooked});
-    hooks.emplace_back(HookInfo{fn.getSoldierImmunityPower, getSoldierImmunityPowerHooked,
-                                (void**)&orig.getSoldierImmunityPower});
+    hooks.emplace_back(HookInfo{fn.getSoldierImmunityAiRating, getSoldierImmunityAiRatingHooked,
+                                (void**)&orig.getSoldierImmunityAiRating});
     hooks.emplace_back(HookInfo{fn.getAttackSourceText, getAttackSourceTextHooked});
     hooks.emplace_back(HookInfo{fn.appendAttackSourceText, appendAttackSourceTextHooked});
     hooks.emplace_back(HookInfo{fn.getAttackSourceWardFlagPosition,
                                 getAttackSourceWardFlagPositionHooked,
                                 (void**)&orig.getAttackSourceWardFlagPosition});
+    // Support custom attack reaches
+    hooks.emplace_back(
+        HookInfo{LAttackReachTableApi::get().constructor, attackReachTableCtorHooked});
 
     if (userSettings().debugMode) {
         // Show and log game exceptions information
@@ -682,7 +713,7 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
     using namespace game;
 
     const auto& list = IdListApi::get();
-    list.setEmpty(hireList);
+    list.clear(hireList);
 
     const auto& id = CMidgardIDApi::get();
     if (id.getType(a3) != IdType::Fortification) {
@@ -741,7 +772,7 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
     if (!unitsForHire().empty()) {
         const auto& units = unitsForHire()[raceIndex];
         for (const auto& unit : units) {
-            list.add(hireList, &unit);
+            list.pushBack(hireList, &unit);
         }
     }
 
@@ -959,16 +990,9 @@ int __stdcall chooseUnitLaneHooked(const game::IUsSoldier* soldier)
 {
     using namespace game;
 
-    IAttack* attack = soldier->vftable->getAttackById(soldier);
-    auto attackVftable = (const IAttackVftable*)attack->vftable;
-    const LAttackReach* reach = attackVftable->getAttackReach(attack);
-
     // Place units with adjacent attack reach at the front lane, despite of their attack class
-    if (reach->id == AttackReachCategories::get().adjacent->id) {
-        return 1;
-    }
-
-    return 0;
+    IAttack* attack = soldier->vftable->getAttackById(soldier);
+    return isMeleeAttack(attack) ? 1 : 0;
 }
 
 bool __stdcall isTurnValidHooked(int turn)
@@ -1016,14 +1040,14 @@ bool __fastcall giveAttackCanPerformHooked(game::CBatAttackGiveAttack* thisptr,
 {
     using namespace game;
 
-    CMidgardID targetStackId{};
-    thisptr->vftable->getTargetStackId(thisptr, &targetStackId, battleMsgData);
+    CMidgardID targetGroupId{};
+    thisptr->vftable->getTargetGroupId(thisptr, &targetGroupId, battleMsgData);
 
     auto& fn = gameFunctions();
-    CMidgardID alliedStackId{};
-    fn.getAllyOrEnemyStackId(&alliedStackId, battleMsgData, unitId, true);
+    CMidgardID unitGroupId{};
+    fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, unitId, true);
 
-    if (targetStackId != alliedStackId) {
+    if (targetGroupId != unitGroupId) {
         // Do not allow to give additional attacks to enemies
         return false;
     }
@@ -1064,14 +1088,14 @@ bool __fastcall shatterCanPerformHooked(game::CBatAttackShatter* thisptr,
 {
     using namespace game;
 
-    CMidgardID targetStackId{};
-    thisptr->vftable->getTargetStackId(thisptr, &targetStackId, battleMsgData);
+    CMidgardID targetGroupId{};
+    thisptr->vftable->getTargetGroupId(thisptr, &targetGroupId, battleMsgData);
 
     auto& fn = gameFunctions();
-    CMidgardID alliedStackId{};
-    fn.getAllyOrEnemyStackId(&alliedStackId, battleMsgData, unitId, true);
+    CMidgardID unitGroupId{};
+    fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, unitId, true);
 
-    if (targetStackId != alliedStackId) {
+    if (targetGroupId != unitGroupId) {
         // Can't target allies
         return false;
     }
@@ -1222,7 +1246,7 @@ void __fastcall markMapPositionHooked(void* thisptr, int /*%edx*/, game::CMqPoin
 
 int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
                                   const game::BattleMsgData* battleMsgData,
-                                  const game::IAttack* attackImpl,
+                                  const game::IAttack* attack,
                                   const game::CMidgardID* attackerUnitId,
                                   const game::CMidgardID* targetUnitId,
                                   bool computeCriticalHit,
@@ -1231,25 +1255,26 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
 {
     int damage;
     int critDamage;
-    int totalDamage = getOriginalFunctions().computeDamage(objectMap, battleMsgData, attackImpl,
-                                                           attackerUnitId, targetUnitId,
-                                                           computeCriticalHit, &damage,
-                                                           &critDamage);
+    getOriginalFunctions().computeDamage(objectMap, battleMsgData, attack, attackerUnitId,
+                                         targetUnitId, computeCriticalHit, &damage, &critDamage);
 
-    if (critDamage != 0) {
-        int critChance = userSettings().criticalHitChance;
-        bool critMissed = game::gameFunctions().attackShouldMiss(&critChance);
-        if (critMissed) {
-            totalDamage -= critDamage;
-            critDamage = 0;
+    if (userSettings().criticalHitChance != baseSettings().criticalHitChance) {
+        if (critDamage != 0) {
+            int critChance = userSettings().criticalHitChance;
+            if (game::gameFunctions().attackShouldMiss(&critChance))
+                critDamage = 0;
         }
+    }
+
+    if (getCustomAttacks().customizeDamageRatio) {
+        applyAttackDamageRatio(battleMsgData, attack, attackerUnitId, &damage, &critDamage);
     }
 
     if (attackDamage)
         *attackDamage = damage;
     if (criticalHitDamage)
         *criticalHitDamage = critDamage;
-    return totalDamage;
+    return damage + critDamage;
 }
 
 void __stdcall getAttackPowerHooked(int* power,
@@ -1405,6 +1430,9 @@ void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
     resetModifiedUnitsInfo(unitInfo);
 
     battle.setAttackPowerReduction(battleMsgData, unitId, 0);
+
+    if (getCustomAttacks().customizeDamageRatio)
+        unitInfo->damageRatioCounter = 0;
 }
 
 void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)
@@ -1470,14 +1498,14 @@ void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImp
     }
 
     if (attackData->qtyDamage > 0) {
-        float factor = 1.0;
+        float ratio = 1.0;
         if (attackData->attackClass->id == AttackClassCategories::get().shatter->id)
-            factor = (float)userSettings().shatterDamageUpgradeRatio / 100;
+            ratio = (float)userSettings().shatterDamageUpgradeRatio / 100;
 
         if (upgrade1)
-            attackData->qtyDamage += lround(upgrade1->damage * upgrade1Count * factor);
+            attackData->qtyDamage += lround(upgrade1->damage * upgrade1Count * ratio);
         if (upgrade2)
-            attackData->qtyDamage += lround(upgrade2->damage * upgrade2Count * factor);
+            attackData->qtyDamage += lround(upgrade2->damage * upgrade2Count * ratio);
     }
 
     if (attackData->qtyHeal > 0) {
@@ -1486,35 +1514,6 @@ void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImp
         if (upgrade2)
             attackData->qtyHeal += upgrade2->heal * upgrade2Count;
     }
-}
-
-bool __stdcall findAttackTargetHooked(game::IMidgardObjectMap* objectMap,
-                                      game::CMidgardID* unitId,
-                                      game::IAttack* attack,
-                                      game::CMidUnitGroup* targetGroup,
-                                      void* a5,
-                                      game::BattleMsgData* battleMsgData,
-                                      game::CMidgardID* targetUnitId)
-{
-    using namespace game;
-
-    if (getOriginalFunctions().findAttackTarget(objectMap, unitId, attack, targetGroup, a5,
-                                                battleMsgData, targetUnitId)) {
-        return true;
-    }
-
-    const auto& battle = BattleMsgDataApi::get();
-
-    auto attackClass = attack->vftable->getAttackClass(attack);
-    const auto& attackCategories = AttackClassCategories::get();
-    if (attackClass->id == attackCategories.lowerDamage->id) {
-        return battle.findBoostAttackTarget(objectMap, battleMsgData, targetGroup, a5,
-                                            targetUnitId);
-    } else if (attackClass->id == attackCategories.lowerInitiative->id) {
-        return battle.findFearAttackTarget(objectMap, battleMsgData, targetGroup, a5, targetUnitId);
-    }
-
-    return false;
 }
 
 } // namespace hooks

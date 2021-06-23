@@ -22,10 +22,26 @@
 
 namespace game {
 
+struct IMidDropManagerVftable;
+
 struct IMidDropManager
 {
-    void* vftable;
+    IMidDropManagerVftable* vftable;
 };
+
+struct IMidDropManagerVftable
+{
+    using Destructor = void(__thiscall*)(IMidDropManager* thisptr, char flags);
+    Destructor destructor;
+
+    using Method1 = int(__thiscall*)(IMidDropManager* thisptr);
+    Method1 method1;
+
+    void* methods[12];
+};
+
+static_assert(sizeof(IMidDropManagerVftable) == 14 * sizeof(void*),
+              "IMidDropManager vftable must have exactly 14 methods");
 
 } // namespace game
 

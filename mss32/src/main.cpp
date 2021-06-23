@@ -19,6 +19,7 @@
 
 #pragma comment(lib, "detours.lib")
 
+#include "customattackutils.h"
 #include "hooks.h"
 #include "log.h"
 #include "restrictions.h"
@@ -231,6 +232,8 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
                    "mss32.dll proxy", MB_OK);
         return FALSE;
     }
+
+    hooks::initializeAttackDamageRatio();
 
     adjustGameRestrictions();
     setupVftableHooks();

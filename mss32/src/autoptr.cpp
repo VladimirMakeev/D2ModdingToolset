@@ -21,7 +21,7 @@
 #include "version.h"
 #include <array>
 
-namespace game::AutoPointerApi {
+namespace game::AutoPtrApi {
 
 // clang-format off
 static std::array<Api, 4> functions = {{
@@ -49,4 +49,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::AutoPointerApi
+} // namespace game::AutoPtrApi

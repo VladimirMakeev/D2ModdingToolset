@@ -37,7 +37,12 @@ struct CMidInventory
 struct CMidInventoryVftable
 {
     void* destructor;
-    void* method1;
+
+    using Method1 = bool(__thiscall*)(CMidInventory* thisptr,
+                                      const CMidgardID* groupId,
+                                      const IMidgardObjectMap* objectMap,
+                                      int a4);
+    Method1 method1;
 
     /** Runs CVisitorDestroyItem for each item in inventory. */
     using Clear = bool(__thiscall*)(CMidInventory* thisptr, int* a2, IMidgardObjectMap* objectMap);

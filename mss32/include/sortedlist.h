@@ -34,6 +34,7 @@ struct SortedListNode
     T value;
 };
 
+/** Implementation of std::set<T> used in game. */
 template <typename T>
 struct SortedList
 {

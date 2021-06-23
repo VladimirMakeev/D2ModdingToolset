@@ -32,6 +32,7 @@
 #include "midgardid.h"
 #include "mqrect.h"
 #include "sortedlist.h"
+#include "unitpositionlist.h"
 #include <cstddef>
 
 namespace game {
@@ -90,16 +91,44 @@ static_assert(offsetof(CBattleViewerUnknown, data3) == 112,
 static_assert(offsetof(CBattleViewerUnknown, string) == 208,
               "CBattleViewerUnknown::string offset must be 208 bytes");
 
+struct CBattleViewerTargetData
+{
+    bool isBattleGoing;
+    char padding[3];
+    CMidgardID targetGroupId;
+    UnitPositionList targetPositions;
+};
+
+static_assert(sizeof(CBattleViewerTargetData) == 36,
+              "Size of CBattleViewerTargetData structure must be exactly 36 bytes");
+
+struct CBattleViewerUnknownUnitData
+{
+    CMidgardID unknownId;
+    int unknown;
+    bool unknown2;
+    bool isUnitBig;
+    bool isUnitRetreating;
+    char padding;
+};
+
+static_assert(sizeof(CBattleViewerUnknownUnitData) == 12,
+              "Size of CBattleViewerUnknownUnitData structure must be exactly 12 bytes");
+
+using CUnknownUnitDataList = SortedList<Pair<CMidgardID, CBattleViewerUnknownUnitData>>;
+
 struct CBattleViewerInterfData
 {
     CAvoidFlickerImage avoidFlickerImage;
     char unknown[4];
     BattleMsgData battleMsgData;
-    SortedList<void*> unknownList; /** < Each node contains 16 bytes of data. */
-    CMidgardID unknownId;
-    char unknown21[108];
+    CUnknownUnitDataList unknownUnitData;
+    CMidgardID unitId;
+    CBattleViewerTargetData unitTargetData;
+    CBattleViewerTargetData itemTargetData[2];
     BattleAttackInfo** attackInfo;
-    char unknown3[8];
+    char unknown3[4];
+    CMidgardID itemId;
     Vector<void*> unknownArray; /**< Each element contains 32 bytes of data. */
     CBatViewer2DEngine* batViewer2dEngine;
     CMqRect dialogInterfArea;
@@ -171,7 +200,7 @@ struct CBattleViewerInterfData2
     LinkedList<void*> list2;
     LinkedList<void*> list3;
     char unknown2[8];
-    CMidgardID unknownId2;
+    CMidgardID selectedUnitId;
     LinkedList<void*> list4; /**< Each node contains 16 bytes of data. */
     int unknown3;
 };
@@ -192,6 +221,49 @@ struct CBattleViewerInterf : public CDragAndDropInterf
 
 static_assert(sizeof(CBattleViewerInterf) == 36,
               "Size of CBattleViewerInterf structure must be exactly 36 bytes");
+
+namespace BattleViewerInterfApi {
+
+struct Api
+{
+    using MarkAttackTargets = bool(__thiscall*)(CBattleViewerInterf* thisptr,
+                                                const CMqPoint* mousePosition,
+                                                bool a3);
+    MarkAttackTargets markAttackTargets;
+
+    using IsUnitOnTheLeft = bool(__thiscall*)(const CBattleViewerInterf* thisptr, bool isAttacker);
+    IsUnitOnTheLeft isUnitOnTheLeft;
+
+    using IsFlipped = bool(__thiscall*)(const CBattleViewerInterf* thisptr);
+    IsFlipped isFlipped;
+
+    using GetBigFace = CBatBigFace*(__thiscall*)(const CBattleViewerInterf* thisptr);
+    GetBigFace getBigFace;
+
+    using GetUnitRect = CMqRect*(__stdcall*)(CMqRect* value,
+                                             CBattleViewerGroupAreas* groupAreas,
+                                             int unitPosition,
+                                             bool isUnitBig,
+                                             bool isUnitRetreating);
+    GetUnitRect getUnitRect;
+    GetUnitRect getUnitRectPlusExtra;
+
+    using GetBoolById = bool(__thiscall*)(CUnknownUnitDataList* thisptr, const CMidgardID* unitId);
+    GetBoolById isUnitBig;
+    GetBoolById isUnitRetreating;
+
+    using SetUnitId = void(__thiscall*)(CBatBigFace* thisptr, const CMidgardID* unitId);
+    SetUnitId setUnitId;
+
+    using GetSelectedUnitId = CMidgardID*(__thiscall*)(const CBatUnitGroup2* thisptr,
+                                                       CMidgardID* value,
+                                                       const CMqPoint* mousePosition);
+    GetSelectedUnitId getSelectedUnitId;
+};
+
+Api& get();
+
+} // namespace BattleViewerInterfApi
 
 } // namespace game
 

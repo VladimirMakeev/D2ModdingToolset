@@ -32,6 +32,24 @@ struct CMqRect
 
 static_assert(sizeof(CMqRect) == 16, "Size of CMqRect structure must be exactly 16 bytes");
 
+namespace MqRectApi {
+
+struct Api
+{
+    using Constructor = CMqRect*(__thiscall*)(CMqRect* thisptr);
+    Constructor constructor;
+
+    using PtInRect = bool(__thiscall*)(const CMqRect* thisptr, const CMqPoint* pt);
+    PtInRect ptInRect;
+
+    using GetCenter = CMqPoint*(__thiscall*)(const CMqRect* thisptr, CMqPoint* value);
+    GetCenter getCenter;
+};
+
+Api& get();
+
+} // namespace MqRectApi
+
 } // namespace game
 
 #endif // MQRECT_H

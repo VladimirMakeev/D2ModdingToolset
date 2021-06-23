@@ -202,20 +202,59 @@
     <summary>Supports custom attack sources;</summary>
 
     - Add a name for a custom source to TApp.dbf and TAppEdit.dbf;
-    - Add NAME_TXT (Character, size 10) and IMMUNE_POW (Number, size 2) columns to LattS.dbf;
-    ![image](https://user-images.githubusercontent.com/5180699/117533496-db897880-aff5-11eb-92ad-4b5bf70602a0.png)
+    - Add NAME_TXT (Character, size 10) and IMMU_AI_R (Numeric, size 2) columns to LattS.dbf;
+    ![image](https://user-images.githubusercontent.com/5180699/122281972-8cd3d600-cef3-11eb-8795-69c09d4da288.png)
     - Add a new entry in LattS.dbf;
     - Specify the custom source ID and TEXT accordingly;
     - Specify the id of the source name from TApp.dbf in NAME_TXT ('X005TA0153' for instance);
-    - Specify IMMUNE_POW: the value is used by AI to determine how powerful a unit with such ward or immunity is. The greater - the better. For example, elemental immunities have average power of 5, while weapon immunity has 57. Can be omitted - 5 is the default.
+    - Specify IMMU_AI_R: AI rating of the source immunity - used to determine how powerful a unit with such ward or immunity is. The greater - the better. For example, elemental immunities have average rating of 5, while weapon immunity has 57. Can be omitted - 5 is the default.
 
-    ![image](https://user-images.githubusercontent.com/5180699/117533697-e2fd5180-aff6-11eb-905f-24e9c736a9b6.png)
+    ![image](https://user-images.githubusercontent.com/5180699/122281194-ac1e3380-cef2-11eb-902a-29821d0ceae5.png)
 
     **Note** that the SOURCE column is limited to 1 digit in GAttacks.dbf.<br />
     This means that only 2 additional sources (with id 8 and 9) can be added by default.<br />
     The limit can be lifted by extending the SOURCE column size to 2 digits (similar to CLASS).<br />
     For example, using Sdbf: go to main manu Table > Change structure, set SOURCE size to 2 and hit save:
     ![image](https://user-images.githubusercontent.com/5180699/117063431-7f8cce80-ad2d-11eb-8765-b0cadaa80567.png)
+  </details>
+- <details>
+    <summary>Supports custom attack reaches;</summary>
+
+    ![Demo video](https://user-images.githubusercontent.com/5180699/122282606-46cb4200-cef4-11eb-9774-e479edc00d21.mp4)    
+    Customizable via Lua scripting and additional columns in LAttR.dbf.<br />
+    [Scripts](Scripts) includes example targeting scripts demonstrated in the video above.<br />
+    [Examples](Examples) includes an example of LAttR.dbf.<br />
+    
+    Additional columns of LAttR.dbf:
+    - REACH_TXT (Character, size 10) specifies an id for 'Reach' encyclopedia description from TApp.dbf and TAppEdit.dbf. For example 'X005TA0201' is the standard 'Adjacent units';
+    - TARGET_TXT (Character, size 10) similar to REACH_TXT but for 'Targets' entry (either '1' or '6' in vanilla);
+    - SEL_SCRIPT (Character, size 48) contains a file name of a targeting script from Scripts directory. The script determines which units allowed to be **selected** for attack;
+    - ATT_SCRIPT (Character, size 48) similar to SEL_SCRIPT, but determines which units will be **affected** by attack;
+    - MRK_TARGTS (Logical) determines whether ATT_SCRIPT should be used to also mark targets with circle animation on battlefield. Usually should be **true**, except when the attack affects random targets (L_CHAIN for instance);
+    - MAX_TARGTS (Numeric, size 1) specifies maximum number of targets that can be affected by attack. Used solely for AI rating calculations;
+    - MELEE (Logical) determines whether the attack considered as melee. Used by AI for unit hiring, positioning and targeting.
+    
+    Example descriptions for TARGET_TXT:
+    ```
+    X005TA1000 All adjacent units
+    X005TA1001 The target and all adjacent units
+    X005TA1002 The target and one of the adjacent units
+    X005TA1003 All units in the target line
+    X005TA1004 All units in the target column
+    X005TA1005 Covers 2x2 area
+    X005TA1006 Randomly bounces to 2 additional targets
+    ```
+  </details>
+- <details>
+    <summary>Supports custom attack damage ratio for additional targets;</summary>
+
+    The main purpose is to complement custom attack reaches.<br />
+    Allows to reduce or increase incoming damage for additional attack targets:
+    - Add DAM_RATIO (Numeric, size 3) and DR_REPEAT (Logical) columns to Gattacks.dbf;
+    - DAM_RATIO specifies a portion of the attack damage recieved by additional targets (0-255%). 100 or empty is the vanilla behavior;
+    - DR_REPEAT specifies whether the DAM_RATIO should be applies for every consequent target. For instance, if the DAMAGE = 50 and DAM_RATIO = 20, then the first target receives 50, second - 10 (50 * 0,2), third - 2 (10 * 0,2) and so on.
+
+    ![image](https://user-images.githubusercontent.com/5180699/122287564-bee83680-cef9-11eb-88ae-fd7421df4369.png)
   </details>
 
 ### Settings:

@@ -52,9 +52,88 @@ static std::array<Categories, 4> categories = {{
 }};
 // clang-format on
 
+static std::array<const void*, 4> vftables = {{
+    // Akella
+    (const void*)0x6ceacc,
+    // Russobit
+    (const void*)0x6ceacc,
+    // Gog
+    (const void*)0x6cca6c,
+    // Scenario Editor
+    (const void*)0x5df46c,
+}};
+// clang-format on
+
 Categories& get()
 {
     return categories[static_cast<int>(hooks::gameVersion())];
 }
 
+const void* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
+
 } // namespace game::AttackReachCategories
+
+namespace game::LAttackReachTableApi {
+
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)0x5926dc,
+        (Api::Init)0x59282c,
+        (Api::ReadCategory)0x5928a4,
+        (Api::InitDone)0x5927e7,
+        (Api::FindCategoryById)0x40ad68,
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)0x5926dc,
+        (Api::Init)0x59282c,
+        (Api::ReadCategory)0x5928a4,
+        (Api::InitDone)0x5927e7,
+        (Api::FindCategoryById)0x40ad68,
+    },
+    // Gog
+    Api{
+        (Api::Constructor)0x5917f4,
+        (Api::Init)0x591944,
+        (Api::ReadCategory)0x5919bc,
+        (Api::InitDone)0x5918ff,
+        (Api::FindCategoryById)0x40a9f4,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x537abb,
+        (Api::Init)0x537c0b,
+        (Api::ReadCategory)0x537c83,
+        (Api::InitDone)0x537bc6,
+        (Api::FindCategoryById)0x54ece4,
+    },
+}};
+
+static std::array<const void*, 4> vftables = {{
+    // Akella
+    (const void*)0x6eb3ec,
+    // Russobit
+    (const void*)0x6eb3ec,
+    // Gog
+    (const void*)0x6e938c,
+    // Scenario Editor
+    (const void*)0x5df474,
+}};
+// clang-format on
+
+Api& get()
+{
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+const void* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
+
+} // namespace game::LAttackReachTableApi

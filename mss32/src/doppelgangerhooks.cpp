@@ -43,18 +43,9 @@ namespace hooks {
 static int getDoppelgangerTransformLevel(const game::CMidUnit* doppelganger,
                                          const game::CMidUnit* targetUnit)
 {
-    const char* filename{"doppelganger.lua"};
-    static std::string script{readFile({scriptsFolder() / filename})};
-    if (script.empty()) {
-        showErrorMessageBox(fmt::format("Failed to read '{:s}' script file", filename));
-        return 0;
-    }
-
-    const auto lua{loadScript(script.c_str())};
+    const auto path{scriptsFolder() / "doppelganger.lua"};
+    const auto lua{loadScriptFile(path, true, true)};
     if (!lua) {
-        showErrorMessageBox(fmt::format("Failed to load '{:s}' script file.\n"
-                                        "See 'mssProxyError.log' for details.",
-                                        filename));
         return 0;
     }
 
@@ -63,7 +54,7 @@ static int getDoppelgangerTransformLevel(const game::CMidUnit* doppelganger,
     if (!getLevel) {
         showErrorMessageBox(fmt::format("Could not find function 'getLevel' in script '{:s}'.\n"
                                         "Make sure function exists and has correct signature.",
-                                        filename));
+                                        path.string()));
         return 0;
     }
 
@@ -75,7 +66,7 @@ static int getDoppelgangerTransformLevel(const game::CMidUnit* doppelganger,
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
                                         "Reason: '{:s}'",
-                                        filename, e.what()));
+                                        path.string(), e.what()));
         return 0;
     }
 }
@@ -86,13 +77,13 @@ bool isAllyTarget(game::CBatAttackDoppelganger* thisptr,
 {
     using namespace game;
 
-    CMidgardID unitStackId{};
-    gameFunctions().getAllyOrEnemyStackId(&unitStackId, battleMsgData, &thisptr->unitId, true);
+    CMidgardID unitGroupId{};
+    gameFunctions().getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, &thisptr->unitId, true);
 
-    CMidgardID targetUnitStackId{};
-    gameFunctions().getAllyOrEnemyStackId(&targetUnitStackId, battleMsgData, targetUnitId, true);
+    CMidgardID targetUnitGroupId{};
+    gameFunctions().getAllyOrEnemyGroupId(&targetUnitGroupId, battleMsgData, targetUnitId, true);
 
-    return unitStackId == targetUnitStackId;
+    return unitGroupId == targetUnitGroupId;
 }
 
 bool __fastcall doppelgangerAttackCanPerformHooked(game::CBatAttackDoppelganger* thisptr,
@@ -222,15 +213,11 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
     CMidUnit* targetUnit = fn.findUnitById(objectMap, targetUnitId);
     CMidgardID targetUnitImplId = targetUnit->unitImpl->unitId;
 
-    CMidgardID globalTargetUnitImplId;
-    CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
-    unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &globalTargetUnitImplId,
-                                                &targetUnit->unitImpl->unitId);
-
     const CMidUnit* unit = fn.findUnitById(objectMap, &thisptr->unitId);
     const auto transformLevel = getDoppelgangerTransformLevel(unit, targetUnit);
 
     CMidgardID transformUnitImplId{targetUnit->unitImpl->unitId};
+    CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
     unitGenerator->vftable->generateUnitImplId(unitGenerator, &transformUnitImplId,
                                                &targetUnit->unitImpl->unitId, transformLevel);
 

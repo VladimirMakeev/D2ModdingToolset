@@ -82,6 +82,11 @@ struct Rtti
     TypeDescriptor* CCommandMsgTempl_10_0_Type; // CCmdBattleResultMsg
     TypeDescriptor* CCommandMsgTempl_11_2_Type; // CCmdBattleEndMsg
     TypeDescriptor* CMidgardMapType;
+    TypeDescriptor* IAttackType;
+    TypeDescriptor* CAttackImplType;
+    TypeDescriptor* CAttackModifiedType;
+    TypeDescriptor* IItemType;
+    TypeDescriptor* CItemBattleType;
 };
 
 const Rtti& rtti();

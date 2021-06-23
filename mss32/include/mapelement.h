@@ -24,15 +24,38 @@
 
 namespace game {
 
+struct IMapElementVftable;
+struct IMidgardObjectMap;
+struct CMidgardID;
+
 struct IMapElement
 {
-    const void* vftable;
+    const IMapElementVftable* vftable;
     CMqPoint position;
     int sizeX;
     int sizeY;
 };
 
 static_assert(sizeof(IMapElement) == 20, "Size of IMapElement structure must be exactly 20 bytes");
+
+struct IMapElementVftable
+{
+    using Destructor = void(__thiscall*)(IMapElement* thisptr, char flags);
+    Destructor destructor;
+
+    using Initialize = bool(__thiscall*)(IMapElement* thisptr,
+                                         const IMidgardObjectMap* objectMap,
+                                         const CMidgardID* leaderId,
+                                         const CMidgardID* ownerId,
+                                         const CMidgardID* subraceId,
+                                         const CMqPoint* position);
+    Initialize initialize;
+
+    void* method2;
+};
+
+static_assert(sizeof(IMapElementVftable) == 3 * sizeof(void*),
+              "IMapElement vftable must have exactly 3 methods");
 
 } // namespace game
 

@@ -52,11 +52,11 @@ struct IBatAttackVftable
                                          CMidgardID* targetUnitId);
     CanPerform canPerform;
 
-    /** Returns id of stack the attack can target: allies or enemies. */
-    using GetTargetStackId = CMidgardID*(__thiscall*)(IBatAttack* thisptr,
-                                                      CMidgardID* targetStackId,
-                                                      BattleMsgData* battleMsgData);
-    GetTargetStackId getTargetStackId;
+    /** Returns id of group the attack can target: allies or enemies. */
+    using GetTargetGroupId = CMidgardID*(__thiscall*)(const IBatAttack* thisptr,
+                                                      const CMidgardID* targetGroupId,
+                                                      const BattleMsgData* battleMsgData);
+    GetTargetGroupId getTargetGroupId;
 
     /** Fills attack targets list with positions of units in groups. */
     using FillTargetsList = void(__thiscall*)(IBatAttack* thisptr,
@@ -64,7 +64,7 @@ struct IBatAttackVftable
                                               BattleMsgData* battleMsgData,
                                               TargetsList* targetsList);
     FillTargetsList fillTargetsList;
-    FillTargetsList fillTargetsList2;
+    FillTargetsList fillAltTargetsList;
 
     using Method5 = bool(__thiscall*)(IBatAttack* thisptr,
                                       IMidgardObjectMap* objectMap,
@@ -118,7 +118,8 @@ struct IBatAttackVftable
                                        IMidgardObjectMap* objectMap);
     Method13 method13;
 
-    using UnknownMethod = bool(__thiscall*)(IBatAttack* thisptr, BattleMsgData* battleMsgData);
+    using UnknownMethod = bool(__thiscall*)(const IBatAttack* thisptr,
+                                            const BattleMsgData* battleMsgData);
 
     /**
      * Called to determine if the attack can target dead units. Every known attack returns false,

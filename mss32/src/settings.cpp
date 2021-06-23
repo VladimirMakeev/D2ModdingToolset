@@ -198,16 +198,15 @@ const Settings& defaultSettings()
 
 void initializeUserSettings(Settings& value)
 {
-    const auto path{hooks::scriptsFolder() / "settings.lua"};
-
     value = defaultSettings();
 
+    const auto path{scriptsFolder() / "settings.lua"};
     try {
-        sol::state lua;
-        if (!loadScript(path, lua))
+        const auto lua{loadScriptFile(path)};
+        if (!lua)
             return;
 
-        const sol::table& table = lua["settings"];
+        const sol::table& table = (*lua)["settings"];
         readSettings(table, value);
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to read script '{:s}'.\n"

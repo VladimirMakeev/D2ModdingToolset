@@ -42,18 +42,9 @@ namespace hooks {
 
 static int getSummonLevel(const game::CMidUnit* summoner, game::TUsUnitImpl* summonImpl)
 {
-    const char* filename{"summon.lua"};
-    static std::string script{readFile({scriptsFolder() / filename})};
-    if (script.empty()) {
-        showErrorMessageBox(fmt::format("Failed to read '{:s}' script file", filename));
-        return 0;
-    }
-
-    const auto lua{loadScript(script.c_str())};
+    const auto path{scriptsFolder() / "summon.lua"};
+    const auto lua{loadScriptFile(path, true, true)};
     if (!lua) {
-        showErrorMessageBox(fmt::format("Failed to load '{:s}' script file.\n"
-                                        "See 'mssProxyError.log' for details.",
-                                        filename));
         return 0;
     }
 
@@ -62,7 +53,7 @@ static int getSummonLevel(const game::CMidUnit* summoner, game::TUsUnitImpl* sum
     if (!getLevel) {
         showErrorMessageBox(fmt::format("Could not find function 'getLevel' in script '{:s}'.\n"
                                         "Make sure function exists and has correct signature.",
-                                        filename));
+                                        path.string()));
         return 0;
     }
 
@@ -74,7 +65,7 @@ static int getSummonLevel(const game::CMidUnit* summoner, game::TUsUnitImpl* sum
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
                                         "Reason: '{:s}'",
-                                        filename, e.what()));
+                                        path.string(), e.what()));
         return 0;
     }
 }
@@ -89,7 +80,7 @@ void __fastcall summonAttackOnHitHooked(game::CBatAttackSummon* thisptr,
     using namespace game;
 
     CMidgardID targetGroupId{emptyId};
-    thisptr->vftable->getTargetStackId(thisptr, &targetGroupId, battleMsgData);
+    thisptr->vftable->getTargetGroupId(thisptr, &targetGroupId, battleMsgData);
 
     const auto& fn = gameFunctions();
 
@@ -163,9 +154,7 @@ void __fastcall summonAttackOnHitHooked(game::CBatAttackSummon* thisptr,
     }
 
     auto soldier = fn.castUnitImplToSoldier(unitImpl);
-    auto vftable = static_cast<const IUsSoldierVftable*>(soldier->vftable);
-
-    const auto summonIsBig = !vftable->getSizeSmall(soldier);
+    const auto summonIsBig = !soldier->vftable->getSizeSmall(soldier);
     if (summonIsBig && !positionEven) {
         position--;
     }

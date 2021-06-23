@@ -19,6 +19,7 @@
 
 #include "customattack.h"
 #include "attackclasscat.h"
+#include "battlemsgdata.h"
 #include "customattackhooks.h"
 #include "game.h"
 #include "log.h"
@@ -44,14 +45,14 @@ bool __fastcall customAttackCanPerform(CustomAttack* thisptr,
     return true;
 }
 
-game::CMidgardID* __fastcall customAttackGetTargetStackId(CustomAttack* thisptr,
+game::CMidgardID* __fastcall customAttackGetTargetGroupId(CustomAttack* thisptr,
                                                           int /*%edx*/,
-                                                          game::CMidgardID* targetStackId,
+                                                          game::CMidgardID* targetGroupId,
                                                           game::BattleMsgData* battleMsgData)
 {
-    logDebug("newAttackType.log", "CustomAttack getTargetStackId");
-    game::gameFunctions().getAllyOrEnemyStackId(targetStackId, battleMsgData, &thisptr->id1, false);
-    return targetStackId;
+    logDebug("newAttackType.log", "CustomAttack getTargetGroupId");
+    game::gameFunctions().getAllyOrEnemyGroupId(targetGroupId, battleMsgData, &thisptr->id1, false);
+    return targetGroupId;
 }
 
 void __fastcall customAttackFillTargetsList(CustomAttack* thisptr,
@@ -61,17 +62,17 @@ void __fastcall customAttackFillTargetsList(CustomAttack* thisptr,
                                             game::TargetsList* targetsList)
 {
     logDebug("newAttackType.log", "CustomAttack fillTargetsList");
-    game::TargetsListApi::get().fill(objectMap, battleMsgData, thisptr, &thisptr->id1,
-                                     &thisptr->id2, false, targetsList, true);
+    game::BattleMsgDataApi::get().fillTargetsList(objectMap, battleMsgData, thisptr, &thisptr->id1,
+                                                  &thisptr->id2, false, targetsList, true);
 }
 
-void __fastcall customAttackFillTargetsList2(CustomAttack* thisptr,
-                                             int /*%edx*/,
-                                             game::IMidgardObjectMap* objectMap,
-                                             game::BattleMsgData* battleMsgData,
-                                             game::TargetsList* targetsList)
+void __fastcall customAttackFillAltTargetsList(CustomAttack* thisptr,
+                                               int /*%edx*/,
+                                               game::IMidgardObjectMap* objectMap,
+                                               game::BattleMsgData* battleMsgData,
+                                               game::TargetsList* targetsList)
 {
-    logDebug("newAttackType.log", "CustomAttack fillTargetsList2");
+    logDebug("newAttackType.log", "CustomAttack fillAltTargetsList");
     // do nothing
 }
 
@@ -199,9 +200,9 @@ bool __fastcall customAttackMethod17(CustomAttack* thisptr,
 static const game::IBatAttackVftable customAttackVftable{
     (game::IBatAttackVftable::Destructor)customAttackDtor,
     (game::IBatAttackVftable::CanPerform)customAttackCanPerform,
-    (game::IBatAttackVftable::GetTargetStackId)customAttackGetTargetStackId,
+    (game::IBatAttackVftable::GetTargetGroupId)customAttackGetTargetGroupId,
     (game::IBatAttackVftable::FillTargetsList)customAttackFillTargetsList,
-    (game::IBatAttackVftable::FillTargetsList)customAttackFillTargetsList2,
+    (game::IBatAttackVftable::FillTargetsList)customAttackFillAltTargetsList,
     (game::IBatAttackVftable::Method5)customAttackMethod5,
     (game::IBatAttackVftable::CanMiss)customAttackCanMiss,
     (game::IBatAttackVftable::Method7)customAttackMethod7,

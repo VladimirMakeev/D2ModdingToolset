@@ -47,6 +47,15 @@ void __fastcall removeUnitInfoHooked(game::BattleMsgData* thisptr,
                                      int /*%edx*/,
                                      const game::CMidgardID* unitId);
 
+int __fastcall getAttackPowerReductionHooked(const game::BattleMsgData* thisptr,
+                                             int /*%edx*/,
+                                             const game::CMidgardID* unitId);
+
+void __fastcall setAttackPowerReductionHooked(game::BattleMsgData* thisptr,
+                                              int /*%edx*/,
+                                              const game::CMidgardID* unitId,
+                                              int value);
+
 } // namespace hooks
 
 #endif // BATTLEMSGDATAHOOKS_H

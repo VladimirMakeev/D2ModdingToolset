@@ -22,6 +22,7 @@
 
 #include "attack.h"
 #include "idlist.h"
+#include "targetslist.h"
 #include <string>
 #include <utility>
 #include <vector>
@@ -172,7 +173,7 @@ void __fastcall markMapPositionHooked(void* thisptr, int /*%edx*/, game::CMqPoin
 
 int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
                                   const game::BattleMsgData* battleMsgData,
-                                  const game::IAttack* attackImpl,
+                                  const game::IAttack* attack,
                                   const game::CMidgardID* attackerUnitId,
                                   const game::CMidgardID* targetUnitId,
                                   bool computeCriticalHit,
@@ -212,14 +213,6 @@ void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImp
                                                  game::IdType dynUpgradeType,
                                                  const game::CMidgardID* altAttackId,
                                                  game::CAttackData* attackData);
-
-bool __stdcall findAttackTargetHooked(game::IMidgardObjectMap* objectMap,
-                                      game::CMidgardID* unitId,
-                                      game::IAttack* attack,
-                                      game::CMidUnitGroup* targetGroup,
-                                      void* a5,
-                                      game::BattleMsgData* battleMsgData,
-                                      game::CMidgardID* targetUnitId);
 
 } // namespace hooks
 

@@ -18,11 +18,17 @@
  */
 
 #include "unitutils.h"
+#include "attacksourcecat.h"
+#include "attacksourcelist.h"
+#include "customattacks.h"
 #include "game.h"
 #include "globaldata.h"
+#include "immunecat.h"
 #include "log.h"
 #include "midgardid.h"
+#include "midunit.h"
 #include "unitgenerator.h"
+#include "ussoldier.h"
 #include "usunitimpl.h"
 #include "utils.h"
 #include <fmt/format.h>
@@ -45,7 +51,7 @@ void generateUnitImplByAttackId(const game::CMidgardID* attackId)
     unitGenerator->vftable->generateUnitImpl(unitGenerator, &unitImplId);
 }
 
-game::IUsSoldier* castUnitImplToSoldierWithLogging(game::IUsUnit* unitImpl)
+game::IUsSoldier* castUnitImplToSoldierWithLogging(const game::IUsUnit* unitImpl)
 {
     using namespace game;
 
@@ -56,6 +62,77 @@ game::IUsSoldier* castUnitImplToSoldierWithLogging(game::IUsUnit* unitImpl)
     }
 
     return soldier;
+}
+
+void getSoldierAttackSourceImmunities(const game::LImmuneCat* immuneCat,
+                                      const game::IUsSoldier* soldier,
+                                      game::LinkedList<game::LAttackSource>* value)
+{
+    using namespace game;
+
+    const auto& sources = AttackSourceCategories::get();
+    const auto& sourceListApi = AttackSourceListApi::get();
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.weapon)->id)
+        sourceListApi.add(value, sources.weapon);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.mind)->id)
+        sourceListApi.add(value, sources.mind);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.life)->id)
+        sourceListApi.add(value, sources.life);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.death)->id)
+        sourceListApi.add(value, sources.death);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.fire)->id)
+        sourceListApi.add(value, sources.fire);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.water)->id)
+        sourceListApi.add(value, sources.water);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.air)->id)
+        sourceListApi.add(value, sources.air);
+    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.earth)->id)
+        sourceListApi.add(value, sources.earth);
+
+    for (const auto& custom : getCustomAttacks().sources) {
+        if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, &custom.source)->id)
+            sourceListApi.add(value, &custom.source);
+    }
+}
+
+bool isUnitSmall(const game::CMidUnit* unit)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+    return soldier->vftable->getSizeSmall(soldier);
+}
+
+game::CMidgardID getGlobalUnitImplId(const game::CMidUnit* unit)
+{
+    using namespace game;
+
+    CMidgardID globalImplId{};
+    CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
+    unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &globalImplId,
+                                                &unit->unitImpl->unitId);
+
+    return globalImplId;
+}
+
+game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidUnit* unit)
+{
+    using namespace game;
+
+    const auto& globalApi = GlobalDataApi::get();
+
+    const CMidgardID globalImplId{getGlobalUnitImplId(unit)};
+
+    auto globalData = *globalApi.getGlobalData();
+    auto result = (TUsUnitImpl*)globalApi.findById(globalData->units, &globalImplId);
+    if (!result) {
+        logError("mssProxyError.log",
+                 fmt::format("Could not find unit impl {:s}", idToString(&globalImplId)));
+    }
+
+    return result;
 }
 
 } // namespace hooks

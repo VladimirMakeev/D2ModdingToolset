@@ -265,22 +265,48 @@ std::string getAttackReachText(game::IAttack* attack)
 {
     using namespace game;
 
+    const auto& reaches = AttackReachCategories::get();
+
     auto reach = attack->vftable->getAttackReach(attack);
-    if (reach->id == AttackReachCategories::get().adjacent->id)
+    if (reach->id == reaches.adjacent->id)
         return getTranslatedText("X005TA0201"); // "Adjacent units"
-    else
+    else if (reach->id == reaches.all->id || reach->id == reaches.any->id)
         return getTranslatedText("X005TA0200"); // "Any unit"
+    else {
+        for (const auto& custom : getCustomAttacks().reaches) {
+            if (reach->id == custom.reach.id) {
+                auto value = getTranslatedText(custom.reachTxt.c_str());
+                // Fixes vertical tab in case of multiline
+                return fmt::format("\\p110;{:s}\\p0;", value);
+            }
+        }
+    }
+
+    return "";
 }
 
 std::string getAttackTargetsText(game::IAttack* attack)
 {
     using namespace game;
 
+    const auto& reaches = AttackReachCategories::get();
+
     auto reach = attack->vftable->getAttackReach(attack);
-    if (reach->id == AttackReachCategories::get().all->id)
+    if (reach->id == reaches.all->id)
         return getTranslatedText("X005TA0674"); // "6"
-    else
+    else if (reach->id == reaches.any->id || reach->id == reaches.adjacent->id)
         return getTranslatedText("X005TA0675"); // "1"
+    else {
+        for (const auto& custom : getCustomAttacks().reaches) {
+            if (reach->id == custom.reach.id) {
+                auto value = getTranslatedText(custom.targetsTxt.c_str());
+                // Fixes vertical tab in case of multiline
+                return fmt::format("\\p110;{:s}\\p0;", value);
+            }
+        }
+    }
+
+    return "";
 }
 
 std::string getInfiniteText()

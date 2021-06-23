@@ -30,6 +30,7 @@
 #include "scripts.h"
 #include "unitgenerator.h"
 #include "unitimplview.h"
+#include "unitutils.h"
 #include "unitview.h"
 #include "ussoldier.h"
 #include "usunitimpl.h"
@@ -41,18 +42,9 @@ namespace hooks {
 
 static int getTransformSelfLevel(const game::CMidUnit* unit, game::TUsUnitImpl* transformImpl)
 {
-    const char* filename{"transformSelf.lua"};
-    static std::string script{readFile({scriptsFolder() / filename})};
-    if (script.empty()) {
-        showErrorMessageBox(fmt::format("Failed to read '{:s}' script file", filename));
-        return 0;
-    }
-
-    const auto lua{loadScript(script.c_str())};
+    const auto path{scriptsFolder() / "transformSelf.lua"};
+    const auto lua{loadScriptFile(path, true, true)};
     if (!lua) {
-        showErrorMessageBox(fmt::format("Failed to load '{:s}' script file.\n"
-                                        "See 'mssProxyError.log' for details.",
-                                        filename));
         return 0;
     }
 
@@ -61,7 +53,7 @@ static int getTransformSelfLevel(const game::CMidUnit* unit, game::TUsUnitImpl* 
     if (!getLevel) {
         showErrorMessageBox(fmt::format("Could not find function 'getLevel' in script '{:s}'.\n"
                                         "Make sure function exists and has correct signature.",
-                                        filename));
+                                        path.string()));
         return 0;
     }
 
@@ -73,7 +65,7 @@ static int getTransformSelfLevel(const game::CMidUnit* unit, game::TUsUnitImpl* 
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
                                         "Reason: '{:s}'",
-                                        filename, e.what()));
+                                        path.string(), e.what()));
         return 0;
     }
 }
@@ -89,13 +81,13 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
 
     const auto& fn = gameFunctions();
 
-    CMidgardID targetStackId{emptyId};
-    fn.getAllyOrEnemyStackId(&targetStackId, battleMsgData, targetUnitId, true);
+    CMidgardID targetGroupId{emptyId};
+    fn.getAllyOrEnemyGroupId(&targetGroupId, battleMsgData, targetUnitId, true);
 
-    CMidgardID attackerStackId{emptyId};
-    fn.getAllyOrEnemyStackId(&attackerStackId, battleMsgData, &thisptr->unitId, true);
+    CMidgardID unitGroupId{emptyId};
+    fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, &thisptr->unitId, true);
 
-    if (*targetUnitId != thisptr->unitId && targetStackId != attackerStackId) {
+    if (*targetUnitId != thisptr->unitId && targetGroupId != unitGroupId) {
         auto altAttack = thisptr->altAttack;
         altAttack->vftable->onHit(altAttack, objectMap, battleMsgData, targetUnitId, attackInfo);
         return;
@@ -104,17 +96,13 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
     auto attack = fn.getAttackById(objectMap, &thisptr->id2, thisptr->attackNumber, false);
     auto attackId = IAttackApi::get().getId(attack);
 
-    const auto position = fn.getUnitPositionInGroup(objectMap, &targetStackId, targetUnitId);
+    const auto position = fn.getUnitPositionInGroup(objectMap, &targetGroupId, targetUnitId);
 
     const CMidUnit* targetUnit = fn.findUnitById(objectMap, targetUnitId);
     const CMidgardID targetUnitImplId{targetUnit->unitImpl->unitId};
 
-    auto soldier = gameFunctions().castUnitImplToSoldier(targetUnit->unitImpl);
-    auto vftable = static_cast<const IUsSoldierVftable*>(soldier->vftable);
-    const auto small = vftable->getSizeSmall(soldier);
-
     CMidgardID transformImplId{emptyId};
-    fn.getSummonUnitImplIdByAttack(&transformImplId, attackId, position, small);
+    fn.getSummonUnitImplIdByAttack(&transformImplId, attackId, position, isUnitSmall(targetUnit));
 
     if (transformImplId == emptyId) {
         return;

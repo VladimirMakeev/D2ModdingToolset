@@ -20,6 +20,7 @@
 #ifndef TARGETSLIST_H
 #define TARGETSLIST_H
 
+#include "d2pair.h"
 #include "sortedlist.h"
 
 namespace game {
@@ -32,7 +33,7 @@ struct CMidgardID;
 /**
  * List of targets to attack during single battle turn.
  * Contains units positions in groups.
- * Position values are positive for allied units and negative for enemies.
+ * Position values are positive for target group and negative for other group.
  * Negative position computed as -(unitPosition + 1).
  */
 using TargetsList = SortedList<int>;
@@ -52,53 +53,40 @@ struct Api
     using Destructor = TargetsList*(__thiscall*)(TargetsList* thisptr);
     Destructor destructor;
 
-    /**
-     * Fills targets list for a specified attack.
-     * @param[in] objectMap map where to search for objects.
-     * @param[in] battleMsgData battle information.
-     * @param[in] attack battle attack for which targets list will be filled.
-     * @param[in] stackId id of stack whose unit performing the attack.
-     * @param[in] id unit or item id performing the attack.
-     * @param allies specifies whether the attack should target allies or not.
-     * @param[inout] targetsList list to fill.
-     * @param checkTransformed specifies whether the attack should check units transformations or
-     * not.
-     */
-    using Fill = void(__stdcall*)(IMidgardObjectMap* objectMap,
-                                  BattleMsgData* battleMsgData,
-                                  IBatAttack* attack,
-                                  CMidgardID* stackId,
-                                  CMidgardID* id,
-                                  bool allies,
-                                  TargetsList* targetsList,
-                                  bool checkTransformed);
-    Fill fill;
-
     /** Clears list contents. */
     using Clear = void(__thiscall*)(TargetsList* thisptr);
     Clear clear;
 
     /** Returns iterator pointing to the first element in the list. */
-    using Begin = TargetsListIterator*(__thiscall*)(TargetsList* thisptr,
-                                                    TargetsListIterator* iterator);
-    Begin begin;
+    using GetIterator = TargetsListIterator*(__thiscall*)(const TargetsList* thisptr,
+                                                          TargetsListIterator* iterator);
+    GetIterator begin;
+    GetIterator end;
 
     /** Inserts new element to the list. */
-    using Insert = TargetsListIterator*(__thiscall*)(TargetsList* thisptr,
-                                                     TargetsListIterator* iterator,
-                                                     int* unitPosition);
+    using Insert =
+        Pair<TargetsListIterator, bool>*(__thiscall*)(TargetsList* thisptr,
+                                                      Pair<TargetsListIterator, bool>* iterator,
+                                                      int* unitPosition);
     Insert insert;
 
     /** Removes existing element from list. */
-    using Remove = void(__thiscall*)(TargetsList* thisptr, int* unitPosition);
-    Remove remove;
+    using Erase = void(__thiscall*)(TargetsList* thisptr, int* unitPosition);
+    Erase erase;
 
     /**
      * Returns pointer to list node value depending on iterator.
      * Same as @code{.cpp} thisptr->node.value; @endcode
      */
-    using Get = int*(__thiscall*)(TargetsListIterator* thisptr);
-    Get get;
+    using Dereference = int*(__thiscall*)(const TargetsListIterator* thisptr);
+    Dereference dereference;
+
+    using Equals = bool(__thiscall*)(const TargetsListIterator* thisptr,
+                                     const TargetsListIterator* value);
+    Equals equals;
+
+    using Preincrement = TargetsListIterator*(__thiscall*)(TargetsListIterator* thisptr);
+    Preincrement preinc;
 };
 
 Api& get();
