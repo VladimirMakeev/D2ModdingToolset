@@ -42,7 +42,7 @@ void UnitSlotView::bind(sol::state& lua)
 {
     auto slot = lua.new_usertype<UnitSlotView>("UnitSlot", "distance", &getDistance,
                                                sol::meta_function::equal_to, &operator==);
-    slot["unit"] = sol::property(&getUnit);
+    slot["unit"] = sol::property(&getUnitView);
     slot["position"] = sol::property(&getPosition);
     slot["line"] = sol::property(&getLine);
     slot["column"] = sol::property(&getColumn);
@@ -51,7 +51,7 @@ void UnitSlotView::bind(sol::state& lua)
     lua.set_function("distance", &getDistance);
 }
 
-std::optional<UnitView> UnitSlotView::getUnit() const
+std::optional<UnitView> UnitSlotView::getUnitView() const
 {
     return {UnitView(unit)};
 }
@@ -96,7 +96,7 @@ game::CMidgardID UnitSlotView::getUnitId() const
     return unit ? unit->unitId : emptyId;
 }
 
-const game::CMidUnit* UnitSlotView::getUnit2() const
+const game::CMidUnit* UnitSlotView::getUnit() const
 {
     return unit;
 }

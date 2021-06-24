@@ -305,7 +305,7 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
         listApi.insert(value, &tmp, &position);
 
         if (isSummonAttack && !(position % 2)) {
-            auto unit = target.getUnit2();
+            auto unit = target.getUnit();
             if (unit && !isUnitSmall(unit)) {
                 int backPosition = position + 1;
                 listApi.insert(value, &tmp, &backPosition);
