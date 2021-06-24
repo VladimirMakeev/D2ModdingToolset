@@ -88,6 +88,9 @@ struct Api
                                                   const GlobalData** globalData);
     Constructor constructor;
 
+    using Constructor2 = CAttackImpl*(__thiscall*)(CAttackImpl* thisptr, const CAttackData* data);
+    Constructor2 constructor2;
+
     using InitData = CAttackImplData*(__thiscall*)(CAttackImplData* thisptr);
     InitData initData;
 };

@@ -309,6 +309,28 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
     return thisptr;
 }
 
+game::CAttackImpl* __fastcall attackImplCtor2Hooked(game::CAttackImpl* thisptr,
+                                                    int /*%edx*/,
+                                                    const game::CAttackData* data)
+{
+    auto result = getOriginalFunctions().attackImplCtor2(thisptr, data);
+
+    thisptr->data->damageRatio = data->damageRatio;
+    thisptr->data->damageRatioPerTarget = data->damageRatioPerTarget;
+
+    return result;
+}
+
+void __fastcall attackImplGetDataHooked(game::CAttackImpl* thisptr,
+                                        int /*%edx*/,
+                                        game::CAttackData* value)
+{
+    getOriginalFunctions().attackImplGetData(thisptr, value);
+
+    value->damageRatio = thisptr->data->damageRatio;
+    value->damageRatioPerTarget = thisptr->data->damageRatioPerTarget;
+}
+
 game::IBatAttack* __stdcall createBatAttackHooked(game::IMidgardObjectMap* objectMap,
                                                   game::BattleMsgData* battleMsgData,
                                                   const game::CMidgardID* id1,

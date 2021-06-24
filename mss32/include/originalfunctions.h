@@ -20,6 +20,7 @@
 #ifndef ORIGINALFUNCTIONS_H
 #define ORIGINALFUNCTIONS_H
 
+#include "attackimpl.h"
 #include "battlemsgdata.h"
 #include "citystackinterf.h"
 #include "commandmsg.h"
@@ -66,6 +67,8 @@ struct OriginalFunctions
     game::CNetMsgVftable::Serialize cmdBattleEndMsgSerialize;
     game::CCommandMsgApi::Api::Destructor commandMsgDtor;
     game::CNetMsgApi::Api::Destructor netMsgDtor;
+    game::CAttackImplApi::Api::Constructor2 attackImplCtor2;
+    game::IAttackVftable::GetData attackImplGetData;
 };
 
 OriginalFunctions& getOriginalFunctions();

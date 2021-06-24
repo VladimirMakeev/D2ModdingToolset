@@ -375,7 +375,12 @@ Hooks getHooks()
     hooks.emplace_back(
         HookInfo{LAttackClassTableApi::get().constructor, attackClassTableCtorHooked});
     // Support custom attack class in CAttackImpl constructor
+    // Support attack damage ratio
     hooks.emplace_back(HookInfo{CAttackImplApi::get().constructor, attackImplCtorHooked});
+    hooks.emplace_back(HookInfo{CAttackImplApi::get().constructor2, attackImplCtor2Hooked,
+                                (void**)&orig.attackImplCtor2});
+    hooks.emplace_back(HookInfo{CAttackImplApi::vftable()->getData, attackImplGetDataHooked,
+                                (void**)&orig.attackImplGetData});
     /**
      * Display heal/damage value for any attack with qtyHeal/qtyDamage > 0 regardless of its class.
      * This hook is required for detailedAttackDescription.
