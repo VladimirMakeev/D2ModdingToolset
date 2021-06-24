@@ -43,7 +43,7 @@ public:
 
     static void bind(sol::state& lua);
 
-    std::optional<UnitView> getUnit() const;
+    std::optional<UnitView> getUnitView() const;
     int getPosition() const;
     int getLine() const;
     int getColumn() const;
@@ -52,7 +52,7 @@ public:
     int getDistance(const UnitSlotView& to) const;
 
     game::CMidgardID getUnitId() const;
-    const game::CMidUnit* getUnit2() const;
+    const game::CMidUnit* getUnit() const;
 
 private:
     const game::CMidUnit* unit;
