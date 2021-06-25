@@ -14,8 +14,9 @@ Scripts folder itself should be placed in the game folder.
 - getAdjacentTargets.lua - contains selection/attack targeting logic for adjacent/all-adjacent attack reach
 - getSelectedTargetAndAllAdjacentToIt.lua - contains attack targeting logic for selective-cleave attack reach
 - getSelectedTargetAndOneAdjacentToIt.lua - contains attack targeting logic for single selective-cleave attack reach
+- getSelectedTargetAndOneBehind.lua - contains attack targeting logic for pierce attack reach
 - getSelectedLineTargets.lua - contains attack targeting logic for wide-cleave attack reach
-- getSelectedColumnTargets.lua - contains attack targeting logic for pierce attack reach
+- getSelectedColumnTargets.lua - contains attack targeting logic for column attack reach
 - getSelectedArea2x2Targets.lua - contains attack targeting logic for 2x2 area splash attack reach
 - getSelectedTargetAndTwoChainedRandom.lua - contains attack targeting logic for random chain attack reach
 - getWoundedFemaleGreenskinTargets.lua - contains targeting logic that only allows to reach wounded female greenskins
