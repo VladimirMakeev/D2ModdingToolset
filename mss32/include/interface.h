@@ -33,6 +33,9 @@ struct CInterfManagerImpl;
 struct CInterface;
 struct IMqRenderer2;
 struct CMqPoint;
+struct Tooltip;
+
+using TooltipPtr = SmartPtr<Tooltip>;
 
 struct CInterfaceData
 {
@@ -41,7 +44,7 @@ struct CInterfaceData
     CMqRect area;
     CInterfaceChilds childs;
     SmartPointer unknown6;
-    SmartPointer unknown7;
+    TooltipPtr tooltip;
 };
 
 static_assert(sizeof(CInterfaceData) == 64,
@@ -158,8 +161,12 @@ struct CInterfaceVftable
     void* method28;
     void* method29;
     void* method30;
-    void* method31;
-    void* method32;
+
+    using SetTooltip = void(__thiscall*)(CInterface* thisptr, TooltipPtr* tooltip);
+    SetTooltip setTooltip;
+
+    using GetTooltip = TooltipPtr*(__thiscall*)(CInterface* thisptr);
+    GetTooltip getTooltip;
 
     /**
      * Sets specified element as parent of this interface.

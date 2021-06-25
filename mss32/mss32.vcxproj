@@ -617,6 +617,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\tileindices.h" />
     <ClInclude Include="include\tilevariation.h" />
     <ClInclude Include="include\togglebutton.h" />
+    <ClInclude Include="include\tooltip.h" />
     <ClInclude Include="include\transformselfhooks.h" />
     <ClInclude Include="include\umattack.h" />
     <ClInclude Include="include\ummodifier.h" />
