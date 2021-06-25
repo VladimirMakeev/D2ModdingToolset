@@ -22,6 +22,8 @@
 
 #include "attackreachcat.h"
 #include "attacksourcecat.h"
+#include "midgardid.h"
+#include <map>
 #include <string>
 #include <vector>
 
@@ -56,11 +58,17 @@ struct CustomAttackReach
 
 using CustomAttackReaches = std::vector<CustomAttackReach>;
 
+struct CustomDamageRatio
+{
+    bool enabled;
+    std::map<game::CMidgardID, double> ratios;
+};
+
 struct CustomAttacks
 {
     CustomAttackSources sources;
     CustomAttackReaches reaches;
-    bool customizeDamageRatio;
+    CustomDamageRatio damageRatio;
 };
 
 CustomAttacks& getCustomAttacks();

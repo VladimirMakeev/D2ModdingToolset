@@ -196,16 +196,8 @@ struct UnitInfo
     /** Total armor reduced by theurgist 'shatter' attacks. Negative values can increase armor. */
     int shatteredArmor;
     int fortificationArmor;
-    union
-    {
-        struct
-        {
-            std::int8_t attackPowerReductionPatched;
-            std::uint8_t damageRatioCounter;
-        };
-        /** Applied by game to mage units. Reduction does not shown in unit encyclopedia. */
-        int attackPowerReduction;
-    };
+    /** Applied by game to mage units. Reduction does not shown in unit encyclopedia. */
+    int attackPowerReduction;
 };
 
 static_assert(sizeof(UnitInfo) == 168, "Size of UnitInfo structure must be exactly 168 bytes");

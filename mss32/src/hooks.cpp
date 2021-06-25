@@ -164,7 +164,7 @@ static Hooks getGameHooks()
         // uses alternative attack with 'adjacent' attack range
         {fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked, (void**)&orig.computeUnitEffectiveHp},
         // Fix bestow wards becoming permanent on warded unit transformation
-        // Support attack damage ratio
+        // Support custom attack damage ratio
         {battle.beforeAttack, beforeAttackHooked},
         /**
          * Allows bestow wards to:
@@ -220,7 +220,7 @@ static Hooks getGameHooks()
         {fn.computeTargetUnitAiPriority, computeTargetUnitAiPriorityHooked},
         {CMidStackApi::vftable()->initialize, midStackInitializeHooked},
         // Allow users to specify critical hit chance
-        // Support attack damage ratio
+        // Support custom attack damage ratio
         {fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage},
         // Fix occasional crash with incorrect removal of summoned unit info
         // Fix persistent crash with summons when unrestrictedBestowWards is enabled
@@ -230,12 +230,6 @@ static Hooks getGameHooks()
 
     if (!unitsForHire().empty()) {
         hooks.emplace_back(HookInfo{fn.addPlayerUnitsToHireList, addPlayerUnitsToHireListHooked});
-    }
-
-    if (getCustomAttacks().customizeDamageRatio) {
-        // Support attack damage ratio
-        hooks.emplace_back(HookInfo{battle.getAttackPowerReduction, getAttackPowerReductionHooked});
-        hooks.emplace_back(HookInfo{battle.setAttackPowerReduction, setAttackPowerReductionHooked});
     }
 
     if (userSettings().shatteredArmorMax != baseSettings().shatteredArmorMax) {
@@ -375,7 +369,7 @@ Hooks getHooks()
     hooks.emplace_back(
         HookInfo{LAttackClassTableApi::get().constructor, attackClassTableCtorHooked});
     // Support custom attack class in CAttackImpl constructor
-    // Support attack damage ratio
+    // Support custom attack damage ratio
     hooks.emplace_back(HookInfo{CAttackImplApi::get().constructor, attackImplCtorHooked});
     hooks.emplace_back(HookInfo{CAttackImplApi::get().constructor2, attackImplCtor2Hooked,
                                 (void**)&orig.attackImplCtor2});
@@ -1271,8 +1265,13 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
         }
     }
 
-    if (getCustomAttacks().customizeDamageRatio) {
-        applyAttackDamageRatio(battleMsgData, attack, attackerUnitId, &damage, &critDamage);
+    auto& customDamageRatio = getCustomAttacks().damageRatio;
+    if (customDamageRatio.enabled) {
+        auto ratio = customDamageRatio.ratios.find(*targetUnitId);
+        if (ratio != customDamageRatio.ratios.end()) {
+            damage = (int)ceil(ratio->second * damage);
+            critDamage = (int)ceil(ratio->second * critDamage);
+        }
     }
 
     if (attackDamage)
@@ -1436,8 +1435,9 @@ void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
 
     battle.setAttackPowerReduction(battleMsgData, unitId, 0);
 
-    if (getCustomAttacks().customizeDamageRatio)
-        unitInfo->damageRatioCounter = 0;
+    auto& customDamageRatio = getCustomAttacks().damageRatio;
+    if (customDamageRatio.enabled)
+        customDamageRatio.ratios.clear();
 }
 
 void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)

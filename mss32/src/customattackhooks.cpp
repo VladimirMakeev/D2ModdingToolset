@@ -295,7 +295,7 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
         data->critHit = false;
     }
 
-    if (getCustomAttacks().customizeDamageRatio) {
+    if (getCustomAttacks().damageRatio.enabled) {
         int damageRatio;
         db.readIntWithBoundsCheck(&damageRatio, dbTable, damageRatioColumnName, 0, 255);
         if (damageRatio == 0)
@@ -514,6 +514,7 @@ void __stdcall getTargetsToAttackHooked(game::IdList* value,
 
     const auto& fn = gameFunctions();
     const auto& reaches = AttackReachCategories::get();
+    const auto& listApi = IdListApi::get();
 
     if (action == BattleAction::Attack || action == BattleAction::UseItem) {
         CMidgardID targetGroupId{};
@@ -523,9 +524,9 @@ void __stdcall getTargetsToAttackHooked(game::IdList* value,
             getTargetsToAttackForAllAttackReach(objectMap, battleMsgData, attack, batAttack,
                                                 &targetGroupId, targetUnitId, value);
         } else if (attackReach->id == reaches.any->id) {
-            addUniqueIdToList(*value, targetUnitId);
+            listApi.pushBack(value, targetUnitId);
         } else if (attackReach->id == reaches.adjacent->id) {
-            addUniqueIdToList(*value, targetUnitId);
+            listApi.pushBack(value, targetUnitId);
         } else {
             for (const auto& custom : getCustomAttacks().reaches) {
                 if (attackReach->id == custom.reach.id) {
@@ -539,13 +540,15 @@ void __stdcall getTargetsToAttackHooked(game::IdList* value,
                     getTargetsToAttackForCustomAttackReach(objectMap, battleMsgData, batAttack,
                                                            &targetGroupId, targetUnitId,
                                                            &unitGroupId, unitId, custom, value);
-                    return;
                 }
             }
         }
     } else {
-        addUniqueIdToList(*value, targetUnitId);
+        listApi.pushBack(value, targetUnitId);
     }
+
+    if (getCustomAttacks().damageRatio.enabled)
+        computeAttackDamageRatio(attack, value);
 }
 
 void __stdcall fillTargetsListHooked(const game::IMidgardObjectMap* objectMap,
