@@ -1063,7 +1063,7 @@ bool __fastcall midStackInitializeHooked(game::CMidStack* thisptr,
     thisptr->leaderId = *leaderId;
     thisptr->leaderAlive = leader->currentHp > 0;
 
-    if (!thisptr->inventory.vftable->method1(&thisptr->inventory, &thisptr->stackId, objectMap, 0))
+    if (!thisptr->inventory.vftable->method1(&thisptr->inventory, &thisptr->stackId, objectMap))
         return false;
 
     if (!stackApi.setPosition(thisptr, objectMap, position, false))
