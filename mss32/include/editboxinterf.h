@@ -34,10 +34,10 @@ struct EditBoxData
     int minInputLength;
     SmartPointer ptr;
     int maxInputLength;
-    String string;
+    String formatString;
     String inputString;
     int editCursorPos;
-    char unknown;
+    bool allowEnter;
     char padding[3];
 };
 
@@ -49,7 +49,7 @@ struct CEditBoxInterfData
     EditBoxData editBoxData;
     CImage2Fill* image2Fill;
     char unknown[12];
-    CImage2TextBackground* image2TextBgnd;
+    CImage2TextBackground* background;
     CMqPoint bgndImagePos;
 };
 
