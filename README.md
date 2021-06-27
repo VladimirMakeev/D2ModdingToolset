@@ -237,14 +237,15 @@
     Example descriptions for TARGET_TXT:
     ```
     X005TA1000 All adjacent units
-    X005TA1001 The target and all adjacent units
-    X005TA1002 The target and one of the adjacent units
-    X005TA1003 All units in the target line
-    X005TA1004 All units in the target column
-    X005TA1005 The target and the one behind it
-    X005TA1006 The target and the one behind it
-    X005TA1007 Covers 2x2 area
-    X005TA1008 Randomly bounces to 2 additional targets
+    X005TA1001 The target and all units adjacent to it
+    X005TA1002 The target and one unit adjacent to it
+    X005TA1003 All units in the adjacent line
+    X005TA1004 The target and the unit behind it
+    X005TA1005 The target and the unit behind it
+    X005TA1006 All units in the target line
+    X005TA1007 All units in the target column
+    X005TA1008 All units in 2x2 area
+    X005TA1009 Randomly bounces to 2 additional targets
     ```
   </details>
 - <details>
