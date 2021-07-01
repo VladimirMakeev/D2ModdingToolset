@@ -304,6 +304,9 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
 
         data->damageRatioPerTarget = false;
         db.readBool(&data->damageRatioPerTarget, dbTable, damageRatioPerTargetColumnName);
+
+        data->damageSplit = false;
+        db.readBool(&data->damageSplit, dbTable, damageSplitColumnName);
     }
 
     return thisptr;
@@ -317,6 +320,7 @@ game::CAttackImpl* __fastcall attackImplCtor2Hooked(game::CAttackImpl* thisptr,
 
     thisptr->data->damageRatio = data->damageRatio;
     thisptr->data->damageRatioPerTarget = data->damageRatioPerTarget;
+    thisptr->data->damageSplit = data->damageSplit;
 
     return result;
 }
@@ -329,6 +333,7 @@ void __fastcall attackImplGetDataHooked(game::CAttackImpl* thisptr,
 
     value->damageRatio = thisptr->data->damageRatio;
     value->damageRatioPerTarget = thisptr->data->damageRatioPerTarget;
+    value->damageSplit = thisptr->data->damageSplit;
 }
 
 game::IBatAttack* __stdcall createBatAttackHooked(game::IMidgardObjectMap* objectMap,

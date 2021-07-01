@@ -53,6 +53,7 @@ struct CAttackImplData
         {
             std::uint8_t damageRatio;
             bool damageRatioPerTarget;
+            bool damageSplit;
         };
         char padding2[3];
     };

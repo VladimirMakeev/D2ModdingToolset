@@ -504,7 +504,8 @@ void initializeAttackDamageRatio()
     }
 
     getCustomAttacks().damageRatio.enabled = dbf.column(damageRatioColumnName)
-                                             && dbf.column(damageRatioPerTargetColumnName);
+                                             && dbf.column(damageRatioPerTargetColumnName)
+                                             && dbf.column(damageSplitColumnName);
 }
 
 void computeAttackDamageRatio(const game::IAttack* attack, const game::IdList* targets)
@@ -520,20 +521,38 @@ void computeAttackDamageRatio(const game::IAttack* attack, const game::IdList* t
     if (!attackImpl)
         return;
 
-    auto damageRatio = attackImpl->data->damageRatio;
-    if (damageRatio == 100)
-        return;
-
-    double ratio = (double)damageRatio / 100;
-
     auto& ratios = getCustomAttacks().damageRatio.ratios;
-    IdListIterator it, end;
-    listApi.end(targets, &end);
-    for (listApi.begin(targets, &it), listApi.preinc(&it); !listApi.equals(&it, &end);
-         listApi.preinc(&it)) {
-        if (attackImpl->data->damageRatioPerTarget)
-            ratio = pow(ratio, ratios.size() + 1);
-        ratios[*listApi.dereference(&it)] = ratio;
+    auto damageRatio = attackImpl->data->damageRatio;
+    if (attackImpl->data->damageSplit) {
+        std::vector<double> relativeRatios;
+        relativeRatios.push_back(1.0);
+
+        double totalRatio = 1.0;
+        double ratio = (double)damageRatio / 100;
+        for (uint32_t i = 1; i < targets->length; i++) {
+            relativeRatios.push_back(ratio);
+            totalRatio += ratio;
+            if (attackImpl->data->damageRatioPerTarget)
+                ratio *= ratio;
+        }
+
+        auto relativeIt = relativeRatios.begin();
+        IdListIterator it, end;
+        for (listApi.begin(targets, &it), listApi.end(targets, &end); !listApi.equals(&it, &end);
+             listApi.preinc(&it)) {
+            CMidgardID unitId = *listApi.dereference(&it);
+            ratios[unitId] = *(relativeIt++) / totalRatio;
+        }
+    } else if (damageRatio != 100) {
+        double ratio = (double)damageRatio / 100;
+        IdListIterator it, end;
+        for (listApi.begin(targets, &it), listApi.end(targets, &end), listApi.preinc(&it);
+             !listApi.equals(&it, &end); listApi.preinc(&it)) {
+            CMidgardID unitId = *listApi.dereference(&it);
+            ratios[unitId] = ratio;
+            if (attackImpl->data->damageRatioPerTarget)
+                ratio *= ratio;
+        }
     }
 }
 
@@ -547,16 +566,20 @@ double computeTotalDamageRatio(const game::IAttack* attack, int targetCount)
         return targetCount;
 
     auto damageRatio = attackImpl->data->damageRatio;
-    if (damageRatio == 100)
-        return targetCount;
+    if (attackImpl->data->damageSplit) {
+        return 1.0;
+    } else if (damageRatio != 100) {
+        double ratio = (double)damageRatio / 100;
 
-    double value = 1.0;
-    double ratio = (double)damageRatio / 100;
-    for (int i = 1; i < targetCount; i++) {
-        value += attackImpl->data->damageRatioPerTarget ? pow(ratio, i) : ratio;
+        double value = 1.0;
+        for (int i = 1; i < targetCount; i++) {
+            value += attackImpl->data->damageRatioPerTarget ? pow(ratio, i) : ratio;
+        }
+
+        return value;
     }
 
-    return value;
+    return targetCount;
 }
 
 int computeAverageTotalDamage(const game::IAttack* attack, int damage)

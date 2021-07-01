@@ -31,6 +31,7 @@ namespace hooks {
 
 static const char damageRatioColumnName[] = "DAM_RATIO";
 static const char damageRatioPerTargetColumnName[] = "DR_REPEAT";
+static const char damageSplitColumnName[] = "DAM_SPLIT";
 
 struct CustomAttackSource
 {
