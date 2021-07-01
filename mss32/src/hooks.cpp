@@ -128,8 +128,6 @@ static Hooks getGameHooks()
         {CMidUnitApi::get().removeModifier, removeModifierHooked, (void**)&orig.removeModifier},
         // Show buildings with custom branch category on the 'other buildings' tab
         {CBuildingBranchApi::get().constructor, buildingBranchCtorHooked},
-        // Always place units with melee attack at the front lane in groups controlled by non-neutrals AI
-        {fn.chooseUnitLane, chooseUnitLaneHooked},
         // Allow alchemists to buff retreating units
         {CBatAttackGiveAttackApi::get().canPerform, giveAttackCanPerformHooked},
         // Random map generation
@@ -211,14 +209,12 @@ static Hooks getGameHooks()
         {BattleViewerInterfApi::get().markAttackTargets, markAttackTargetsHooked},
         {fn.isGroupSuitableForAiNobleMisfit, isGroupSuitableForAiNobleMisfitHooked},
         {fn.isUnitSuitableForAiNobleDuel, isUnitSuitableForAiNobleDuelHooked},
-        {fn.getAttackReachAiRating, getAttackReachAiRatingHooked},
         {fn.isAttackBetterThanItemUsage, isAttackBetterThanItemUsageHooked},
         {fn.getSummonUnitImplIdByAttack, getSummonUnitImplIdByAttackHooked},
         {fn.isSmallMeleeFighter, isSmallMeleeFighterHooked},
         {fn.cAiHireUnitEval, cAiHireUnitEvalHooked},
         {fn.getMeleeUnitToHireAiRating, getMeleeUnitToHireAiRatingHooked},
         {fn.computeTargetUnitAiPriority, computeTargetUnitAiPriorityHooked},
-        {CMidStackApi::vftable()->initialize, midStackInitializeHooked},
         // Allow users to specify critical hit chance
         // Support custom attack damage ratio
         {fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage},
@@ -396,6 +392,11 @@ Hooks getHooks()
     hooks.emplace_back(
         HookInfo{LAttackReachTableApi::get().constructor, attackReachTableCtorHooked});
     hooks.emplace_back(HookInfo{fn.getAttackClassAiRating, getAttackClassAiRatingHooked});
+    hooks.emplace_back(HookInfo{fn.getAttackReachAiRating, getAttackReachAiRatingHooked});
+    hooks.emplace_back(HookInfo{CMidStackApi::vftable()->initialize, midStackInitializeHooked});
+    // Always place melee units at the front lane in groups controlled by non-neutrals AI
+    // Support custom attack reaches
+    hooks.emplace_back(HookInfo{fn.chooseUnitLane, chooseUnitLaneHooked});
 
     if (userSettings().debugMode) {
         // Show and log game exceptions information
@@ -418,6 +419,8 @@ Hooks getHooks()
          * 4) Value of lower initiative
          * 5) Critical hit indication
          * 6) Infinite effect indication
+         * 7) Support custom attack sources
+         * 8) Support custom attack reaches
          */
         hooks.emplace_back(HookInfo{fn.generateAttackDescription, generateAttackDescriptionHooked});
     }
