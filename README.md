@@ -234,6 +234,12 @@
     - MAX_TARGTS (Numeric, size 1) specifies maximum number of targets that can be affected by attack. Used solely for AI rating calculations;
     - MELEE (Logical) determines whether the attack considered as melee. Used by AI for unit hiring, positioning and targeting.
     
+    **Note** that the REACH column is limited to 1 digit in GAttacks.dbf.<br />
+    This means that only 6 additional reaches (id 4-9) can be added by default.<br />
+    The limit can be lifted by extending the REACH column size to 2 digits (similar to CLASS).<br />
+    For example, using Sdbf: go to main manu Table > Change structure, set REACH size to 2 and hit save:
+    ![image](https://user-images.githubusercontent.com/5180699/124194675-af5c1680-dad1-11eb-97d3-a59637594b37.png)
+
     Example descriptions for TARGET_TXT:
     ```
     X005TA1000 All adjacent units
@@ -253,11 +259,15 @@
 
     The main purpose is to complement custom attack reaches.<br />
     Allows to reduce or increase incoming damage for additional attack targets:
-    - Add DAM_RATIO (Numeric, size 3) and DR_REPEAT (Logical) columns to Gattacks.dbf;
+    - Add DAM_RATIO (Numeric, size 3), DR_REPEAT (Logical) and DAM_SPLIT (Logical) columns to Gattacks.dbf;
     - DAM_RATIO specifies a portion of the attack damage received by additional targets (0-255%). 100 or empty is the vanilla behavior;
-    - DR_REPEAT specifies whether the DAM_RATIO should be applied for every consequent target. For instance, if the DAMAGE = 50 and DAM_RATIO = 20, then the first target receives 50, second - 10 (50 * 0,2), third - 2 (10 * 0,2) and so on.
+    - DR_REPEAT specifies whether the DAM_RATIO should be applied for every consequent target. For instance, if QTY_DAM = 50 and DAM_RATIO = 20, then the first target receives 50, second - 10 (50 * 0,2), third - 2 (10 * 0,2) and so on.
+    - DAM_SPLIT specifies whether the attack damage (QTY_DAM) is split between all the affected targets.<br />
+    For instance, if QTY_DAM = 100 and there are 3 affected targets, then every target will receive 33 damage.<br />
+    DAM_RATIO and DR_REPEAT also apply, but determine a ratio between additional and first target damage.<br />
+    For instance, if QTY_DAM = 100, DAM_RATIO = 25 and there are 3 affected targets then the damage distribution will be 67-17-17 (67 * 0,25 ~ 17; 67 + 17 + 17 ~ 100).
 
-    ![image](https://user-images.githubusercontent.com/5180699/122287564-bee83680-cef9-11eb-88ae-fd7421df4369.png)
+    ![image](https://user-images.githubusercontent.com/5180699/124194976-2b565e80-dad2-11eb-8395-58614dcd669f.png)
   </details>
 
 ### Settings:
