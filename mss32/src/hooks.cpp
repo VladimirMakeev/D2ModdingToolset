@@ -395,6 +395,7 @@ Hooks getHooks()
     // Support custom attack reaches
     hooks.emplace_back(
         HookInfo{LAttackReachTableApi::get().constructor, attackReachTableCtorHooked});
+    hooks.emplace_back(HookInfo{fn.getAttackClassAiRating, getAttackClassAiRatingHooked});
 
     if (userSettings().debugMode) {
         // Show and log game exceptions information

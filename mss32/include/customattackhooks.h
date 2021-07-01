@@ -104,6 +104,8 @@ void __stdcall getSoldierAttackSourceImmunitiesHooked(const game::IUsSoldier* so
 
 double __stdcall getSoldierImmunityAiRatingHooked(const game::IUsSoldier* soldier);
 
+double __stdcall getAttackClassAiRatingHooked(const game::IUsSoldier* soldier, bool a2);
+
 double __stdcall getAttackReachAiRatingHooked(const game::IUsSoldier* soldier, int targetCount);
 
 std::uint32_t __stdcall getAttackSourceWardFlagPositionHooked(

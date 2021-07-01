@@ -407,6 +407,56 @@ double __stdcall getSoldierImmunityAiRatingHooked(const game::IUsSoldier* soldie
     return result;
 }
 
+double __stdcall getAttackClassAiRatingHooked(const game::IUsSoldier* soldier, bool a2)
+{
+    using namespace game;
+
+    const auto& classes = AttackClassCategories::get();
+    const auto& reaches = AttackReachCategories::get();
+
+    auto attack = soldier->vftable->getAttackById(soldier);
+    auto attackClass = attack->vftable->getAttackClass(attack);
+    if (attackClass->id == classes.paralyze->id || attackClass->id == classes.petrify->id) {
+        return 30.0;
+    } else if (attackClass->id == classes.damage->id || attackClass->id == classes.heal->id) {
+        return 1.0;
+    } else if (attackClass->id == classes.drain->id) {
+        return 1.5;
+    } else if (attackClass->id == classes.fear->id) {
+        return 30.0;
+    } else if (attackClass->id == classes.boostDamage->id
+               || attackClass->id == classes.bestowWards->id) {
+        return 40.0;
+    } else if (attackClass->id == classes.shatter->id) {
+        return 30.0;
+    } else if (attackClass->id == classes.lowerDamage->id
+               || attackClass->id == classes.lowerInitiative->id) {
+        return 40.0;
+    } else if (attackClass->id == classes.drainOverflow->id) {
+        return 2.0;
+    } else if (attackClass->id == classes.summon->id) {
+        return 200.0;
+    } else if (attackClass->id == classes.drainLevel->id) {
+        return 100.0;
+    } else if (attackClass->id == classes.giveAttack->id) {
+        return 50.0;
+    } else if (attackClass->id == classes.doppelganger->id) {
+        return a2 ? 100.0 : 200.0;
+    } else if (attackClass->id == classes.transformSelf->id) {
+        return 100.0;
+    } else if (attackClass->id == classes.transformOther->id) {
+        auto attackReach = attack->vftable->getAttackReach(attack);
+        for (const auto& custom : getCustomAttacks().reaches) {
+            if (attackReach->id == custom.reach.id) {
+                return 60.0 + 8.0 * (custom.maxTargets - 1);
+            }
+        }
+        return attackReach->id == reaches.all->id ? 100.0 : 60.0;
+    }
+
+    return 1.0;
+}
+
 double __stdcall getAttackReachAiRatingHooked(const game::IUsSoldier* soldier, int targetCount)
 {
     using namespace game;

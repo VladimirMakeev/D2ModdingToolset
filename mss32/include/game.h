@@ -436,6 +436,9 @@ using GetSoldierAttackSourceImmunities = void(__stdcall*)(const IUsSoldier* sold
 /** Gets immunity rating to be used by AI for overall soldier rating calculation. */
 using GetSoldierImmunityAiRating = double(__stdcall*)(const IUsSoldier* soldier);
 
+/** Gets attack class rating to be used by AI for overall soldier rating calculation. */
+using GetAttackClassAiRating = double(__stdcall*)(const IUsSoldier* soldier, bool a2);
+
 /** Gets attack reach rating to be used by AI for overall soldier rating calculation. */
 using GetAttackReachAiRating = double(__stdcall*)(const IUsSoldier* soldier, int targetCount);
 
@@ -596,6 +599,7 @@ struct Functions
     IgnorePlayerEvents ignorePlayerEvents;
     GetRacePreviewImage getRacePreviewImage;
     GetSoldierImmunityAiRating getSoldierImmunityAiRating;
+    GetAttackClassAiRating getAttackClassAiRating;
     GetAttackReachAiRating getAttackReachAiRating;
     GetUnitPositionDistance getUnitPositionDistance;
     GetUnitRaceCategory getUnitRaceCategory;
