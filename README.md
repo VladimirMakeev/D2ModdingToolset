@@ -191,12 +191,13 @@
     - Value of lower initiative;
     - Critical hit indication;
     - Infinite effect indication;
+    - Custom attack sources;
+    - Custom attack reaches;
+    - Custom attack damage ratios.
 
-    Critical-hit / infinite-effect indication text can be customized:
+    Some text can be customized, like critical-hit / infinite-effect indication (check [textids.lua](Scripts/textids.lua) for complete list):
     - Add desired text to TApp.dbf and TAppEdit.dbf;
-    - Specify id of the text in 'critHitAttack' / 'infiniteAttack' field inside 'Scripts\\textids.lua'.
-
-    In case of missing text, defaults are: 'X160TA0017' for critical hit, and 'Lasting' for infinite effect.
+    - Specify text id in a corresponding field inside 'Scripts\\textids.lua'.
   </details>
 - <details>
     <summary>Supports custom attack sources;</summary>
