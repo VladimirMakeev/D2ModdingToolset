@@ -603,7 +603,7 @@ void __stdcall getTargetsToAttackHooked(game::IdList* value,
     }
 
     if (getCustomAttacks().damageRatio.enabled)
-        computeAttackDamageRatio(attack, value);
+        fillCustomDamageRatios(attack, value);
 }
 
 void __stdcall fillTargetsListHooked(const game::IMidgardObjectMap* objectMap,

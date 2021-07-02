@@ -1273,8 +1273,8 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
     if (customDamageRatio.enabled) {
         auto ratio = customDamageRatio.ratios.find(*targetUnitId);
         if (ratio != customDamageRatio.ratios.end()) {
-            damage = (int)ceil(ratio->second * damage);
-            critDamage = (int)ceil(ratio->second * critDamage);
+            damage = applyAttackDamageRatio(damage, ratio->second);
+            critDamage = applyAttackDamageRatio(critDamage, ratio->second);
         }
     }
 
