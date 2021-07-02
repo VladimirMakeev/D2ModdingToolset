@@ -20,5 +20,24 @@ textids = {
 		-- Defines text id to mark Critical Hit attacks in unit encyclopedia.
 		-- Fallback text id is the standard "X160TA0017".
 		critHitAttack = "",
+
+		-- Defines text id to format Critical Hit damage in unit encyclopedia.
+		-- The text must contain keywords "%DMG%" and "%CRIT%".
+		-- Fallback text is "%DMG% (%CRIT%)".
+		critHitDamage = "",
+
+		-- Defines text id to format rated damage in unit encyclopedia.
+		-- The text must contain keywords "%DMG%" and "%RATED%".
+		-- Fallback text is "%DMG%, %RATED%".
+		ratedDamage = "",
+
+		-- Defines text id for rated damage separator in unit encyclopedia.
+		-- Fallback text is ", ".
+		ratedDamageSeparator = "",
+
+		-- Defines text id to format split damage in unit encyclopedia.
+		-- The text must contain keyword "%DMG%".
+		-- Fallback text is "%DMG%, split between targets".
+		splitDamage = "",
 	}
 }

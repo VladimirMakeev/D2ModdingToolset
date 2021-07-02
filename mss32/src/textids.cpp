@@ -36,6 +36,10 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.sellAllItems = interf.value().get_or("sellAllItems", std::string());
     value.infiniteAttack = interf.value().get_or("infiniteAttack", std::string());
     value.critHitAttack = interf.value().get_or("critHitAttack", std::string());
+    value.critHitDamage = interf.value().get_or("critHitDamage", std::string());
+    value.ratedDamage = interf.value().get_or("ratedDamage", std::string());
+    value.ratedDamageSeparator = interf.value().get_or("ratedDamageSeparator", std::string());
+    value.splitDamage = interf.value().get_or("splitDamage", std::string());
 }
 
 void initialize(TextIds& value)

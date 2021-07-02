@@ -421,6 +421,7 @@ Hooks getHooks()
          * 6) Infinite effect indication
          * 7) Support custom attack sources
          * 8) Support custom attack reaches
+         * 9) Support custom attack damage ratio
          */
         hooks.emplace_back(HookInfo{fn.generateAttackDescription, generateAttackDescriptionHooked});
     }
