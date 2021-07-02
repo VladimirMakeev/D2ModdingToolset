@@ -162,7 +162,7 @@ static Hooks getGameHooks()
         // uses alternative attack with 'adjacent' attack range
         {fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked, (void**)&orig.computeUnitEffectiveHp},
         // Fix bestow wards becoming permanent on warded unit transformation
-        // Support custom attack damage ratio
+        // Support custom attack damage ratios
         {battle.beforeAttack, beforeAttackHooked},
         /**
          * Allows bestow wards to:
@@ -216,7 +216,7 @@ static Hooks getGameHooks()
         {fn.getMeleeUnitToHireAiRating, getMeleeUnitToHireAiRatingHooked},
         {fn.computeTargetUnitAiPriority, computeTargetUnitAiPriorityHooked},
         // Allow users to specify critical hit chance
-        // Support custom attack damage ratio
+        // Support custom attack damage ratios
         {fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage},
         // Fix occasional crash with incorrect removal of summoned unit info
         // Fix persistent crash with summons when unrestrictedBestowWards is enabled
@@ -365,7 +365,7 @@ Hooks getHooks()
     hooks.emplace_back(
         HookInfo{LAttackClassTableApi::get().constructor, attackClassTableCtorHooked});
     // Support custom attack class in CAttackImpl constructor
-    // Support custom attack damage ratio
+    // Support custom attack damage ratios
     hooks.emplace_back(HookInfo{CAttackImplApi::get().constructor, attackImplCtorHooked});
     hooks.emplace_back(HookInfo{CAttackImplApi::get().constructor2, attackImplCtor2Hooked,
                                 (void**)&orig.attackImplCtor2});
@@ -421,7 +421,7 @@ Hooks getHooks()
          * 6) Infinite effect indication
          * 7) Support custom attack sources
          * 8) Support custom attack reaches
-         * 9) Support custom attack damage ratio
+         * 9) Support custom attack damage ratios
          */
         hooks.emplace_back(HookInfo{fn.generateAttackDescription, generateAttackDescriptionHooked});
     }
