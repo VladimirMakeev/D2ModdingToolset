@@ -32,6 +32,10 @@ struct TextIds
         std::string sellAllItems;
         std::string infiniteAttack;
         std::string critHitAttack;
+        std::string critHitDamage;
+        std::string ratedDamage;
+        std::string ratedDamageSeparator;
+        std::string splitDamage;
     } interf;
 };
 

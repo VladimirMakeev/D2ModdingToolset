@@ -22,6 +22,8 @@
 
 #include "attackreachcat.h"
 #include "attacksourcecat.h"
+#include "midgardid.h"
+#include <map>
 #include <string>
 #include <vector>
 
@@ -29,6 +31,7 @@ namespace hooks {
 
 static const char damageRatioColumnName[] = "DAM_RATIO";
 static const char damageRatioPerTargetColumnName[] = "DR_REPEAT";
+static const char damageSplitColumnName[] = "DAM_SPLIT";
 
 struct CustomAttackSource
 {
@@ -56,11 +59,17 @@ struct CustomAttackReach
 
 using CustomAttackReaches = std::vector<CustomAttackReach>;
 
+struct CustomDamageRatio
+{
+    bool enabled;
+    std::map<game::CMidgardID, double> ratios;
+};
+
 struct CustomAttacks
 {
     CustomAttackSources sources;
     CustomAttackReaches reaches;
-    bool customizeDamageRatio;
+    CustomDamageRatio damageRatio;
 };
 
 CustomAttacks& getCustomAttacks();

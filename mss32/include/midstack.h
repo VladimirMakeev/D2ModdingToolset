@@ -86,6 +86,9 @@ static_assert(offsetof(CMidStack, stackId) == 24, "CMidStack::stackId offset mus
 
 static_assert(offsetof(CMidStack, leaderId) == 40, "CMidStack::leaderId offset must be 40 bytes");
 
+static_assert(offsetof(CMidStack, inventory) == 100,
+              "CMidStack::inventory offset must be 64 bytes");
+
 static_assert(offsetof(CMidStack, leaderEquppedItems) == 124,
               "CMidStack::leaderEquppedItems offset must be 124 bytes");
 

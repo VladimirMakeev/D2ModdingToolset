@@ -53,6 +53,7 @@ struct CAttackImplData
         {
             std::uint8_t damageRatio;
             bool damageRatioPerTarget;
+            bool damageSplit;
         };
         char padding2[3];
     };
@@ -87,6 +88,9 @@ struct Api
                                                   const CDBTable* dbTable,
                                                   const GlobalData** globalData);
     Constructor constructor;
+
+    using Constructor2 = CAttackImpl*(__thiscall*)(CAttackImpl* thisptr, const CAttackData* data);
+    Constructor2 constructor2;
 
     using InitData = CAttackImplData*(__thiscall*)(CAttackImplData* thisptr);
     InitData initData;

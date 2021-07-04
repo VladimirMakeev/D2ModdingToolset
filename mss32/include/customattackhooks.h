@@ -34,6 +34,7 @@ struct LImmuneCat;
 struct CMidUnit;
 struct CMidStack;
 struct CAttackImpl;
+struct CAttackData;
 struct IUsSoldier;
 struct CDBTable;
 struct GlobalData;
@@ -73,6 +74,14 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
                                                    const game::CDBTable* dbTable,
                                                    const game::GlobalData** globalData);
 
+game::CAttackImpl* __fastcall attackImplCtor2Hooked(game::CAttackImpl* thisptr,
+                                                    int /*%edx*/,
+                                                    const game::CAttackData* data);
+
+void __fastcall attackImplGetDataHooked(game::CAttackImpl* thisptr,
+                                        int /*%edx*/,
+                                        game::CAttackData* value);
+
 game::IBatAttack* __stdcall createBatAttackHooked(game::IMidgardObjectMap* objectMap,
                                                   game::BattleMsgData* battleMsgData,
                                                   const game::CMidgardID* id1,
@@ -94,6 +103,8 @@ void __stdcall getSoldierAttackSourceImmunitiesHooked(const game::IUsSoldier* so
                                                       game::LinkedList<game::LAttackSource>* value);
 
 double __stdcall getSoldierImmunityAiRatingHooked(const game::IUsSoldier* soldier);
+
+double __stdcall getAttackClassAiRatingHooked(const game::IUsSoldier* soldier, bool a2);
 
 double __stdcall getAttackReachAiRatingHooked(const game::IUsSoldier* soldier, int targetCount);
 

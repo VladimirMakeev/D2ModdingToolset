@@ -150,12 +150,12 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)nullptr,
         (TypeDescriptor*)nullptr,
         (TypeDescriptor*)0x656310,
-        (TypeDescriptor*)nullptr,
-        (TypeDescriptor*)nullptr,
-        (TypeDescriptor*)nullptr,
-        (TypeDescriptor*)nullptr,
-        (TypeDescriptor*)nullptr,
-        },
+        (TypeDescriptor*)0x65a5a8,
+        (TypeDescriptor*)0x65bd50,
+        (TypeDescriptor*)0x65bd70,
+        (TypeDescriptor*)0x655a90,
+        (TypeDescriptor*)0x65b0d0,
+    },
 }};
 // clang-format on
 

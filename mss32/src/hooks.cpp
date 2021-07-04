@@ -128,8 +128,6 @@ static Hooks getGameHooks()
         {CMidUnitApi::get().removeModifier, removeModifierHooked, (void**)&orig.removeModifier},
         // Show buildings with custom branch category on the 'other buildings' tab
         {CBuildingBranchApi::get().constructor, buildingBranchCtorHooked},
-        // Always place units with melee attack at the front lane in groups controlled by non-neutrals AI
-        {fn.chooseUnitLane, chooseUnitLaneHooked},
         // Allow alchemists to buff retreating units
         {CBatAttackGiveAttackApi::get().canPerform, giveAttackCanPerformHooked},
         // Random map generation
@@ -164,7 +162,7 @@ static Hooks getGameHooks()
         // uses alternative attack with 'adjacent' attack range
         {fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked, (void**)&orig.computeUnitEffectiveHp},
         // Fix bestow wards becoming permanent on warded unit transformation
-        // Support attack damage ratio
+        // Support custom attack damage ratios
         {battle.beforeAttack, beforeAttackHooked},
         /**
          * Allows bestow wards to:
@@ -211,16 +209,14 @@ static Hooks getGameHooks()
         {BattleViewerInterfApi::get().markAttackTargets, markAttackTargetsHooked},
         {fn.isGroupSuitableForAiNobleMisfit, isGroupSuitableForAiNobleMisfitHooked},
         {fn.isUnitSuitableForAiNobleDuel, isUnitSuitableForAiNobleDuelHooked},
-        {fn.getAttackReachAiRating, getAttackReachAiRatingHooked},
         {fn.isAttackBetterThanItemUsage, isAttackBetterThanItemUsageHooked},
         {fn.getSummonUnitImplIdByAttack, getSummonUnitImplIdByAttackHooked},
         {fn.isSmallMeleeFighter, isSmallMeleeFighterHooked},
         {fn.cAiHireUnitEval, cAiHireUnitEvalHooked},
         {fn.getMeleeUnitToHireAiRating, getMeleeUnitToHireAiRatingHooked},
         {fn.computeTargetUnitAiPriority, computeTargetUnitAiPriorityHooked},
-        {CMidStackApi::vftable()->initialize, midStackInitializeHooked},
         // Allow users to specify critical hit chance
-        // Support attack damage ratio
+        // Support custom attack damage ratios
         {fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage},
         // Fix occasional crash with incorrect removal of summoned unit info
         // Fix persistent crash with summons when unrestrictedBestowWards is enabled
@@ -230,12 +226,6 @@ static Hooks getGameHooks()
 
     if (!unitsForHire().empty()) {
         hooks.emplace_back(HookInfo{fn.addPlayerUnitsToHireList, addPlayerUnitsToHireListHooked});
-    }
-
-    if (getCustomAttacks().customizeDamageRatio) {
-        // Support attack damage ratio
-        hooks.emplace_back(HookInfo{battle.getAttackPowerReduction, getAttackPowerReductionHooked});
-        hooks.emplace_back(HookInfo{battle.setAttackPowerReduction, setAttackPowerReductionHooked});
     }
 
     if (userSettings().shatteredArmorMax != baseSettings().shatteredArmorMax) {
@@ -375,7 +365,12 @@ Hooks getHooks()
     hooks.emplace_back(
         HookInfo{LAttackClassTableApi::get().constructor, attackClassTableCtorHooked});
     // Support custom attack class in CAttackImpl constructor
+    // Support custom attack damage ratios
     hooks.emplace_back(HookInfo{CAttackImplApi::get().constructor, attackImplCtorHooked});
+    hooks.emplace_back(HookInfo{CAttackImplApi::get().constructor2, attackImplCtor2Hooked,
+                                (void**)&orig.attackImplCtor2});
+    hooks.emplace_back(HookInfo{CAttackImplApi::vftable()->getData, attackImplGetDataHooked,
+                                (void**)&orig.attackImplGetData});
     /**
      * Display heal/damage value for any attack with qtyHeal/qtyDamage > 0 regardless of its class.
      * This hook is required for detailedAttackDescription.
@@ -396,6 +391,12 @@ Hooks getHooks()
     // Support custom attack reaches
     hooks.emplace_back(
         HookInfo{LAttackReachTableApi::get().constructor, attackReachTableCtorHooked});
+    hooks.emplace_back(HookInfo{fn.getAttackClassAiRating, getAttackClassAiRatingHooked});
+    hooks.emplace_back(HookInfo{fn.getAttackReachAiRating, getAttackReachAiRatingHooked});
+    hooks.emplace_back(HookInfo{CMidStackApi::vftable()->initialize, midStackInitializeHooked});
+    // Always place melee units at the front lane in groups controlled by non-neutrals AI
+    // Support custom attack reaches
+    hooks.emplace_back(HookInfo{fn.chooseUnitLane, chooseUnitLaneHooked});
 
     if (userSettings().debugMode) {
         // Show and log game exceptions information
@@ -418,6 +419,9 @@ Hooks getHooks()
          * 4) Value of lower initiative
          * 5) Critical hit indication
          * 6) Infinite effect indication
+         * 7) Support custom attack sources
+         * 8) Support custom attack reaches
+         * 9) Support custom attack damage ratios
          */
         hooks.emplace_back(HookInfo{fn.generateAttackDescription, generateAttackDescriptionHooked});
     }
@@ -1266,8 +1270,13 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
         }
     }
 
-    if (getCustomAttacks().customizeDamageRatio) {
-        applyAttackDamageRatio(battleMsgData, attack, attackerUnitId, &damage, &critDamage);
+    auto& customDamageRatio = getCustomAttacks().damageRatio;
+    if (customDamageRatio.enabled) {
+        auto ratio = customDamageRatio.ratios.find(*targetUnitId);
+        if (ratio != customDamageRatio.ratios.end()) {
+            damage = applyAttackDamageRatio(damage, ratio->second);
+            critDamage = applyAttackDamageRatio(critDamage, ratio->second);
+        }
     }
 
     if (attackDamage)
@@ -1431,8 +1440,9 @@ void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
 
     battle.setAttackPowerReduction(battleMsgData, unitId, 0);
 
-    if (getCustomAttacks().customizeDamageRatio)
-        unitInfo->damageRatioCounter = 0;
+    auto& customDamageRatio = getCustomAttacks().damageRatio;
+    if (customDamageRatio.enabled)
+        customDamageRatio.ratios.clear();
 }
 
 void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)

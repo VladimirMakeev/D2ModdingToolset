@@ -51,10 +51,10 @@ struct Api
     using Erase = void(__thiscall*)(IdList* thisptr, IdListIterator pos);
     Erase erase;
 
-    using Front = CMidgardID*(__thiscall*)(IdList* thisptr);
+    using Front = CMidgardID*(__thiscall*)(const IdList* thisptr);
     Front front;
 
-    using GetIterator = IdListIterator*(__thiscall*)(IdList* thisptr, IdListIterator* value);
+    using GetIterator = IdListIterator*(__thiscall*)(const IdList* thisptr, IdListIterator* value);
     GetIterator begin;
     GetIterator end;
 

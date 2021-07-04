@@ -503,47 +503,76 @@ void initializeAttackDamageRatio()
         return;
     }
 
-    getCustomAttacks().customizeDamageRatio = dbf.column(damageRatioColumnName)
-                                              && dbf.column(damageRatioPerTargetColumnName);
+    getCustomAttacks().damageRatio.enabled = dbf.column(damageRatioColumnName)
+                                             && dbf.column(damageRatioPerTargetColumnName)
+                                             && dbf.column(damageSplitColumnName);
 }
 
-void applyAttackDamageRatio(const game::BattleMsgData* battleMsgData,
-                            const game::IAttack* attack,
-                            const game::CMidgardID* attackerUnitId,
-                            int* damage,
-                            int* critDamage)
+void fillCustomDamageRatios(const game::IAttack* attack, const game::IdList* targets)
 {
     using namespace game;
 
-    const auto& battle = BattleMsgDataApi::get();
+    const auto& listApi = IdListApi::get();
+
+    auto ratios = computeAttackDamageRatio(attack, targets->length);
+    if (ratios.empty())
+        return;
+
+    auto& customRatios = getCustomAttacks().damageRatio.ratios;
+    auto ratioIt = ratios.begin();
+    IdListIterator it, end;
+    for (listApi.begin(targets, &it), listApi.end(targets, &end); !listApi.equals(&it, &end);
+         listApi.preinc(&it)) {
+        CMidgardID unitId = *listApi.dereference(&it);
+        customRatios[unitId] = *(ratioIt++);
+    }
+}
+
+int applyAttackDamageRatio(int damage, double ratio)
+{
+    if (damage == 0)
+        return 0;
+
+    int result = lround(ratio * damage);
+    return result > 0 ? result : 1;
+}
+
+std::vector<double> computeAttackDamageRatio(const game::IAttack* attack, int targetCount)
+{
+    std::vector<double> result;
+
+    if (targetCount < 2)
+        return result;
 
     auto attackImpl = getAttackImpl(attack);
     if (!attackImpl)
-        return;
+        return result;
 
-    auto damageRatio = attackImpl->data->damageRatio;
-    if (damageRatio == 100)
-        return;
+    if (attackImpl->data->damageRatio == 100 && !attackImpl->data->damageSplit)
+        return result;
 
-    auto targetInfo = battle.getUnitInfoById(battleMsgData, attackerUnitId);
-    if (!targetInfo)
-        return;
+    double ratio = (double)attackImpl->data->damageRatio / 100;
+    double totalRatio = 1.0;
+    result.push_back(1.0);
+    for (int i = 1; i < targetCount; i++) {
+        result.push_back(ratio);
+        totalRatio += ratio;
+        if (attackImpl->data->damageRatioPerTarget)
+            ratio *= ratio;
+    }
 
-    auto counter = targetInfo->damageRatioCounter++;
-    if (counter == 0)
-        return;
+    if (attackImpl->data->damageSplit) {
+        for (auto it = result.begin(); it != result.end(); ++it) {
+            *it = *it / totalRatio;
+        }
+    }
 
-    double ratio = (double)damageRatio / 100;
-    if (attackImpl->data->damageRatioPerTarget)
-        ratio = pow(ratio, counter);
-
-    *damage = lround(ratio * *damage);
-    *critDamage = lround(ratio * *critDamage);
+    return result;
 }
 
 double computeTotalDamageRatio(const game::IAttack* attack, int targetCount)
 {
-    if (!getCustomAttacks().customizeDamageRatio)
+    if (!getCustomAttacks().damageRatio.enabled)
         return targetCount;
 
     auto attackImpl = getAttackImpl(attack);
@@ -551,16 +580,20 @@ double computeTotalDamageRatio(const game::IAttack* attack, int targetCount)
         return targetCount;
 
     auto damageRatio = attackImpl->data->damageRatio;
-    if (damageRatio == 100)
-        return targetCount;
+    if (attackImpl->data->damageSplit) {
+        return 1.0;
+    } else if (damageRatio != 100) {
+        double ratio = (double)damageRatio / 100;
 
-    double value = 1.0;
-    double ratio = (double)damageRatio / 100;
-    for (int i = 1; i < targetCount; i++) {
-        value += attackImpl->data->damageRatioPerTarget ? pow(ratio, i) : ratio;
+        double value = 1.0;
+        for (int i = 1; i < targetCount; i++) {
+            value += attackImpl->data->damageRatioPerTarget ? pow(ratio, i) : ratio;
+        }
+
+        return value;
     }
 
-    return value;
+    return targetCount;
 }
 
 int computeAverageTotalDamage(const game::IAttack* attack, int damage)

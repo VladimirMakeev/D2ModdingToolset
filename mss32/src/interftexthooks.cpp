@@ -21,6 +21,7 @@
 #include "attackimpl.h"
 #include "attackutils.h"
 #include "customattacks.h"
+#include "customattackutils.h"
 #include "d2string.h"
 #include "dialoginterf.h"
 #include "encunitdescriptor.h"
@@ -124,7 +125,92 @@ std::string getAttackDamageMaxText(const std::string& damage)
     return max;
 }
 
-std::string getAttackDamageModifiableText(game::IAttack* attack,
+std::string getAttackPlusCritDamageText(const std::string& damage, int critDamage)
+{
+    auto text = getTranslatedText(textIds().interf.critHitDamage.c_str());
+    if (text.empty())
+        text = "%DMG% (%CRIT%)";
+
+    replace(text, "%DMG%", damage);
+    replace(text, "%CRIT%", fmt::format("{:d}", critDamage));
+    return text;
+}
+
+std::string getRatedAttackDamageText(const game::IAttack* attack,
+                                     const std::string& damageText,
+                                     int damage,
+                                     int critDamage,
+                                     int maxTargets)
+{
+    auto ratios = computeAttackDamageRatio(attack, maxTargets);
+    if (ratios.empty())
+        return damageText;
+
+    auto result = getTranslatedText(textIds().interf.ratedDamage.c_str());
+    if (result.empty())
+        result = "%DMG%, %RATED%";
+
+    auto separator = getTranslatedText(textIds().interf.ratedDamageSeparator.c_str());
+    if (separator.empty())
+        separator = ", ";
+
+    std::string rated;
+    for (auto it = ++(ratios.begin()); it < ratios.end(); ++it) {
+        if (!rated.empty())
+            rated += separator;
+
+        auto ratedDamageText = fmt::format("{:d}", applyAttackDamageRatio(damage, *it));
+        if (critDamage)
+            rated += getAttackPlusCritDamageText(ratedDamageText,
+                                                 applyAttackDamageRatio(critDamage, *it));
+        else
+            rated += ratedDamageText;
+    }
+
+    replace(result, "%DMG%", damageText);
+    replace(result, "%RATED%", rated);
+    return result;
+}
+
+std::string getSplitAttackDamageText(const std::string& damageText)
+{
+    auto result = getTranslatedText(textIds().interf.splitDamage.c_str());
+    if (result.empty())
+        result = "%DMG%, split between targets";
+
+    replace(result, "%DMG%", damageText);
+    return result;
+}
+
+std::string getRatedOrSplitAttackDamageText(const game::IAttack* attack,
+                                            const std::string& damageText,
+                                            int damage,
+                                            int critDamage)
+{
+    int maxTargets = 0;
+    auto reach = attack->vftable->getAttackReach(attack);
+    for (const auto& custom : getCustomAttacks().reaches) {
+        if (reach->id == custom.reach.id) {
+            maxTargets = custom.maxTargets;
+            break;
+        }
+    }
+
+    if (maxTargets == 0)
+        return damageText;
+
+    auto attackImpl = getAttackImpl(attack);
+    if (!attackImpl)
+        return damageText;
+
+    if (attackImpl->data->damageSplit) {
+        return getSplitAttackDamageText(damageText);
+    } else {
+        return getRatedAttackDamageText(attack, damageText, damage, critDamage, maxTargets);
+    }
+}
+
+std::string getAttackDamageModifiableText(const game::IAttack* attack,
                                           const game::IdList* modifiers,
                                           int damageTotal,
                                           int boostDamageLevel,
@@ -154,9 +240,15 @@ std::string getAttackDamageModifiableText(game::IAttack* attack,
                                       ? damagePlusBonus
                                       : getAttackDamageMaxText(damagePlusBonus);
 
+    int critDamage = 0;
     if (attack->vftable->getCritHit(attack)) {
-        int critDamage = damageTotalBoosted * userSettings().criticalHitDamage / 100;
-        return fmt::format("{:s} ({:d})", damagePlusBonusPlusMax.c_str(), critDamage);
+        critDamage = damageTotalBoosted * userSettings().criticalHitDamage / 100;
+        damagePlusBonusPlusMax = getAttackPlusCritDamageText(damagePlusBonusPlusMax, critDamage);
+    }
+
+    if (getCustomAttacks().damageRatio.enabled) {
+        damagePlusBonusPlusMax = getRatedOrSplitAttackDamageText(attack, damagePlusBonusPlusMax,
+                                                                 damageTotalBoosted, critDamage);
     }
 
     return damagePlusBonusPlusMax;
@@ -275,9 +367,7 @@ std::string getAttackReachText(game::IAttack* attack)
     else {
         for (const auto& custom : getCustomAttacks().reaches) {
             if (reach->id == custom.reach.id) {
-                auto value = getTranslatedText(custom.reachTxt.c_str());
-                // Fixes vertical tab in case of multiline
-                return fmt::format("\\p110;{:s}\\p0;", value);
+                return getTranslatedText(custom.reachTxt.c_str());
             }
         }
     }
@@ -299,9 +389,7 @@ std::string getAttackTargetsText(game::IAttack* attack)
     else {
         for (const auto& custom : getCustomAttacks().reaches) {
             if (reach->id == custom.reach.id) {
-                auto value = getTranslatedText(custom.targetsTxt.c_str());
-                // Fixes vertical tab in case of multiline
-                return fmt::format("\\p110;{:s}\\p0;", value);
+                return getTranslatedText(custom.targetsTxt.c_str());
             }
         }
     }
@@ -432,24 +520,22 @@ std::string getSourceText(game::IAttack* attack, game::IAttack* altAttack)
 {
     auto result = getAttackSourceText(attack);
 
-    if (altAttack != nullptr) {
-        auto value = addAltAttackTextValue(result, getAttackSourceText(altAttack));
-        result = fmt::format("\\p110;{:s}\\p0;", value); // Fixes vertical tab in case of multiline
-    }
+    if (altAttack != nullptr)
+        result = addAltAttackTextValue(result, getAttackSourceText(altAttack));
 
-    return result;
+    // Fixes vertical tab in case of multiline
+    return fmt::format("\\p110;{:s}\\p0;", result);
 }
 
 std::string getReachText(game::IAttack* attack, game::IAttack* altAttack)
 {
     auto result = getAttackReachText(attack);
 
-    if (altAttack != nullptr) {
-        auto value = addAltAttackTextValue(result, getAttackReachText(altAttack));
-        result = fmt::format("\\p110;{:s}\\p0;", value); // Fixes vertical tab in case of multiline
-    }
+    if (altAttack != nullptr)
+        result = addAltAttackTextValue(result, getAttackReachText(altAttack));
 
-    return result;
+    // Fixes vertical tab in case of multiline
+    return fmt::format("\\p110;{:s}\\p0;", result);
 }
 
 std::string getTargetsText(game::IAttack* attack, game::IAttack* altAttack)
@@ -459,7 +545,8 @@ std::string getTargetsText(game::IAttack* attack, game::IAttack* altAttack)
     if (altAttack != nullptr)
         result = addAltAttackTextValue(result, getAttackTargetsText(altAttack));
 
-    return result;
+    // Fixes vertical tab in case of multiline
+    return fmt::format("\\p110;{:s}\\p0;", result);
 }
 
 std::string getSecondText(game::IAttack* attack2)
@@ -526,7 +613,8 @@ std::string getDamageText(game::IEncUnitDescriptor* descriptor,
             result = addAltAttackTextValue(result, altDamage, false);
     }
 
-    return result;
+    // Fixes vertical tab in case of multiline
+    return fmt::format("\\p110;{:s}\\p0;", result);
 }
 
 std::string getInitText(game::IEncUnitDescriptor* descriptor,
