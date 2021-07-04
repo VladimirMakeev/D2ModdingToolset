@@ -65,11 +65,27 @@ static std::array<Api, 3> functions = {{
         (Api::GetSelectedUnitId)0x64c98c,
     },
 }};
+
+static std::array<IBatViewerVftable*, 4> vftables = {{
+    // Akella
+    (IBatViewerVftable*)0x6f4294,
+    // Russobit
+    (IBatViewerVftable*)0x6f4294,
+    // Gog
+    (IBatViewerVftable*)0x6f2244,
+    // Scenario Editor
+    (IBatViewerVftable*)nullptr,
+}};
 // clang-format on
 
 Api& get()
 {
     return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+const IBatViewerVftable* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::BattleViewerInterfApi

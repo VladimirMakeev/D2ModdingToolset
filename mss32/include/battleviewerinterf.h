@@ -272,6 +272,8 @@ struct Api
 
 Api& get();
 
+const IBatViewerVftable* vftable();
+
 } // namespace BattleViewerInterfApi
 
 } // namespace game
