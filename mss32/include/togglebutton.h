@@ -48,6 +48,18 @@ struct CToggleButton : public CInterface
 static_assert(sizeof(CToggleButton) == 12,
               "Size of CToggleButton structure must be exactly 12 bytes");
 
+namespace CToggleButtonApi {
+
+struct Api
+{
+    using SetChecked = void(__thiscall*)(CToggleButton* thisptr, bool checked);
+    SetChecked setChecked;
+};
+
+Api& get();
+
+} // namespace CToggleButtonApi
+
 } // namespace game
 
 #endif // TOGGLEBUTTON_H
