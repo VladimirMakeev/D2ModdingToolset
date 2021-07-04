@@ -164,6 +164,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\battlemsgdatahooks.cpp" />
     <ClCompile Include="src\battleviewerinterf.cpp" />
     <ClCompile Include="src\battleviewerinterfhooks.cpp" />
+    <ClCompile Include="src\batunitanim.cpp" />
     <ClCompile Include="src\batviewer2dengine.cpp" />
     <ClCompile Include="src\bindings\dynupgradeview.cpp" />
     <ClCompile Include="src\bindings\unitimplview.cpp" />
@@ -237,7 +238,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\menunewskirmish.cpp" />
     <ClCompile Include="src\menunewskirmishsingle.cpp" />
     <ClCompile Include="src\menurace.cpp" />
-    <ClCompile Include="src\middragdropinterf.cpp" />
+    <ClCompile Include="src\draganddropinterf.cpp" />
     <ClCompile Include="src\midgard.cpp" />
     <ClCompile Include="src\midgardid.cpp" />
     <ClCompile Include="src\midgardmap.cpp" />
@@ -293,6 +294,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\textids.cpp" />
     <ClCompile Include="src\tileindices.cpp" />
     <ClCompile Include="src\tilevariation.cpp" />
+    <ClCompile Include="src\togglebutton.cpp" />
     <ClCompile Include="src\transformselfhooks.cpp" />
     <ClCompile Include="src\unitbranchcat.cpp" />
     <ClCompile Include="src\unitcat.cpp" />
