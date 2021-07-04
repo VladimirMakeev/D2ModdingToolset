@@ -20,12 +20,57 @@
 #ifndef BATVIEWER_H
 #define BATVIEWER_H
 
+#include "unitpositionlist.h"
+
 namespace game {
+
+struct IBatViewer;
+struct IBatViewerVftable;
+struct BatViewerTargetData;
+struct BatViewerTargetDataSet;
+struct CMidgardID;
+struct BattleMsgData;
 
 struct IBatViewer
 {
-    void* vftable;
+    const IBatViewerVftable* vftable;
 };
+
+struct IBatViewerVftable
+{
+    using Destructor = void(__thiscall*)(IBatViewer* thisptr, bool freeMemory);
+    Destructor destructor;
+
+    using Update = void(__thiscall*)(IBatViewer* thisptr,
+                                     const BattleMsgData* battleMsgData,
+                                     const CMidgardID* unitId,
+                                     const SortedList<int>* actionButtons,
+                                     const BatViewerTargetDataSet* targetData);
+    Update update;
+
+    void* methods[2];
+};
+
+static_assert(sizeof(IBatViewerVftable) == 4 * sizeof(void*),
+              "IBatViewer vftable must have exactly 4 methods");
+
+struct BatViewerTargetData
+{
+    CMidgardID targetGroupId;
+    UnitPositionList targetPositions;
+};
+
+static_assert(sizeof(BatViewerTargetData) == 32,
+              "Size of BatViewerTargetData structure must be exactly 32 bytes");
+
+struct BatViewerTargetDataSet
+{
+    BatViewerTargetData attack;
+    BatViewerTargetData items[2];
+};
+
+static_assert(sizeof(BatViewerTargetDataSet) == 96,
+              "Size of BatViewerTargetDataSet structure must be exactly 96 bytes");
 
 } // namespace game
 
