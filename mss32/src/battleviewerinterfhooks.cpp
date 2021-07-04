@@ -327,12 +327,12 @@ bool getTargetData(game::CBattleViewerInterf* viewer,
                                                                 &viewer->data->itemId);
 
         *attack = fn.getAttackById(viewer->data->objectMap, &viewer->data->itemId, 1, true);
-        *targetData = &viewer->data->itemTargetData[itemIndex];
+        *targetData = &viewer->data->targetData.items[itemIndex];
         *isBattleGoing = true;
         *isItemAttack = true;
     } else {
         *attack = fn.getAttackById(viewer->data->objectMap, &viewer->data->unitId, 1, true);
-        *targetData = &viewer->data->unitTargetData;
+        *targetData = &viewer->data->targetData.attack;
         *isBattleGoing = (*targetData)->isBattleGoing;
         *isItemAttack = false;
     }
