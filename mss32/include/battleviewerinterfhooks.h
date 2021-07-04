@@ -30,7 +30,7 @@ namespace hooks {
 bool __fastcall markAttackTargetsHooked(game::CBattleViewerInterf* thisptr,
                                         int /*%edx*/,
                                         const game::CMqPoint* mousePosition,
-                                        bool a3);
+                                        bool setBigFace);
 
 } // namespace hooks
 

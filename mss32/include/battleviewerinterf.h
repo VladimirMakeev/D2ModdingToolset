@@ -228,7 +228,7 @@ struct Api
 {
     using MarkAttackTargets = bool(__thiscall*)(CBattleViewerInterf* thisptr,
                                                 const CMqPoint* mousePosition,
-                                                bool a3);
+                                                bool setBigFace);
     MarkAttackTargets markAttackTargets;
 
     using IsUnitOnTheLeft = bool(__thiscall*)(const CBattleViewerInterf* thisptr, bool isAttacker);
