@@ -221,6 +221,11 @@ static Hooks getGameHooks()
         // Fix occasional crash with incorrect removal of summoned unit info
         // Fix persistent crash with summons when unrestrictedBestowWards is enabled
         {battle.removeUnitInfo, removeUnitInfoHooked},
+        // Fix bug where transform-self attack is unable to target self if alt attack is targeting allies
+        {CBatAttackTransformSelfApi::vftable()->fillTargetsList, transformSelfAttackFillTargetsListHooked},
+        // Allow transform self into leveled units using script logic
+        // Fix bug where transform-self attack is unable to target self if alt attack is targeting allies
+        {CBatAttackTransformSelfApi::vftable()->onHit, transformSelfAttackOnHitHooked},
     };
     // clang-format on
 
@@ -277,12 +282,6 @@ static Hooks getGameHooks()
         // Allow doppelganger to transform into leveled units using script logic
         hooks.emplace_back(
             HookInfo{CBatAttackDoppelgangerApi::get().onHit, doppelgangerAttackOnHitHooked});
-    }
-
-    if (userSettings().leveledTransformSelfAttack != baseSettings().leveledTransformSelfAttack) {
-        // Allow transform self into leveled units using script logic
-        hooks.emplace_back(
-            HookInfo{CBatAttackTransformSelfApi::get().onHit, transformSelfAttackOnHitHooked});
     }
 
     if (userSettings().leveledSummonAttack != baseSettings().leveledSummonAttack) {
