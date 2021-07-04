@@ -35,8 +35,13 @@ static std::array<Api, 3> functions = {{
         (Api::GetUnitRect)0x633c79,
         (Api::GetBoolById)0x63fad0,
         (Api::GetBoolById)0x63faf0,
+        (Api::GetBoolById)0x63f980,
         (Api::SetUnitId)0x650809,
         (Api::GetSelectedUnitId)0x64e04c,
+        (Api::GetUnitAnimation)0x63b447,
+        (Api::UpdateUnknownUnitData)0x639743,
+        (Api::CBattleViewerTargetDataSetConstructor)0x63f800,
+        (Api::CBattleViewerTargetDataSetSetAttacker)0x63f890,
     },
     // Russobit
     Api{
@@ -48,8 +53,13 @@ static std::array<Api, 3> functions = {{
         (Api::GetUnitRect)0x633c79,
         (Api::GetBoolById)0x63fad0,
         (Api::GetBoolById)0x63faf0,
+        (Api::GetBoolById)0x63f980,
         (Api::SetUnitId)0x650809,
         (Api::GetSelectedUnitId)0x64e04c,
+        (Api::GetUnitAnimation)0x63b447,
+        (Api::UpdateUnknownUnitData)0x639743,
+        (Api::CBattleViewerTargetDataSetConstructor)0x63f800,
+        (Api::CBattleViewerTargetDataSetSetAttacker)0x63f890,
     },
     // Gog
     Api{
@@ -61,8 +71,13 @@ static std::array<Api, 3> functions = {{
         (Api::GetUnitRect)0x6326b9,
         (Api::GetBoolById)0x63e4c0,
         (Api::GetBoolById)0x63e4e0,
+        (Api::GetBoolById)0x63e370,
         (Api::SetUnitId)0x64f149,
         (Api::GetSelectedUnitId)0x64c98c,
+        (Api::GetUnitAnimation)0x639e87,
+        (Api::UpdateUnknownUnitData)0x638183,
+        (Api::CBattleViewerTargetDataSetConstructor)0x63e1f0,
+        (Api::CBattleViewerTargetDataSetSetAttacker)0x63e280,
     },
 }};
 

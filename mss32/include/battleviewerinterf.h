@@ -164,7 +164,8 @@ struct CBattleViewerInterfData
     bool unknown9;
     bool flippedBattle;
     bool bothPlayersHuman;
-    char unknown6[3];
+    bool unknown6;
+    char unknown61[2];
     CMidgardMsgBox* messageBox;
     IMidgardObjectMap* objectMap;
     bool stickyEncy;
@@ -201,7 +202,13 @@ struct CBattleViewerInterfData2
     char padding[2];
     CMidgardID unknownId;
     LAttackClass attackClass;
-    char unknown[32];
+    char unknown;
+    bool unknown4;
+    char unknown5[26];
+    bool unknown6;
+    bool unknown7;
+    bool unknown8;
+    char unknown9;
     CBatEncyclopediaInterf* encyclopedia;
     char unknown1[48];
     CBatLog* log;
@@ -211,7 +218,10 @@ struct CBattleViewerInterfData2
     char unknown2[8];
     CMidgardID selectedUnitId;
     LinkedList<void*> list4; /**< Each node contains 16 bytes of data. */
-    int unknown3;
+    char unknown3;
+    bool unknown10;
+    char unknown11;
+    char unknown12;
 };
 
 static_assert(sizeof(CBattleViewerInterfData2) == 196,
@@ -266,6 +276,7 @@ struct Api
     using GetBoolById = bool(__thiscall*)(CUnknownUnitDataList* thisptr, const CMidgardID* unitId);
     GetBoolById isUnitBig;
     GetBoolById isUnitRetreating;
+    GetBoolById getUnknown2;
 
     using SetUnitId = void(__thiscall*)(CBatBigFace* thisptr, const CMidgardID* unitId);
     SetUnitId setUnitId;
@@ -274,6 +285,21 @@ struct Api
                                                        CMidgardID* value,
                                                        const CMqPoint* mousePosition);
     GetSelectedUnitId getSelectedUnitId;
+
+    using GetUnitAnimation = CBatUnitAnim**(__thiscall*)(const CBattleViewerInterf* thisptr,
+                                                         const CMidgardID* unitId);
+    GetUnitAnimation getUnitAnimation;
+
+    using UpdateUnknownUnitData = void(__thiscall*)(CBattleViewerInterf* thisptr, bool a2);
+    UpdateUnknownUnitData updateUnknownUnitData;
+
+    using CBattleViewerTargetDataSetConstructor = CBattleViewerTargetDataSet*(
+        __thiscall*)(CBattleViewerTargetDataSet* thisptr, const BatViewerTargetDataSet* src);
+    CBattleViewerTargetDataSetConstructor battleViewerTargetDataSetCtor;
+
+    using CBattleViewerTargetDataSetSetAttacker =
+        void(__thiscall*)(CBattleViewerTargetDataSet* thisptr, const CMidgardID* attackerGroupId);
+    CBattleViewerTargetDataSetSetAttacker battleViewerTargetDataSetSetAttacker;
 };
 
 Api& get();
