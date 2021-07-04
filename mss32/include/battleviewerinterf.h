@@ -231,6 +231,12 @@ struct CBattleViewerInterf : public CDragAndDropInterf
 static_assert(sizeof(CBattleViewerInterf) == 36,
               "Size of CBattleViewerInterf structure must be exactly 36 bytes");
 
+static inline CBattleViewerInterf* castBatViewerToBattleViewerInterf(IBatViewer* value)
+{
+    return reinterpret_cast<CBattleViewerInterf*>((std::uintptr_t)value
+                                                  - offsetof(CBattleViewerInterf, batViewer));
+}
+
 namespace BattleViewerInterfApi {
 
 struct Api
