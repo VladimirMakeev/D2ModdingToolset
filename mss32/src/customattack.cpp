@@ -125,8 +125,8 @@ void __fastcall customAttackOnMiss(CustomAttack* thisptr,
 
 bool __fastcall customAttackGetAttackClass(CustomAttack* thisptr,
                                            int /*%edx*/,
-                                           int a2,
-                                           int a3,
+                                           const game::CMidgardID* targetUnitId,
+                                           const game::BattleMsgData* battleMsgData,
                                            game::LAttackClass* attackClass)
 {
     logDebug("newAttackType.log", "CustomAttack getAttackClass");
@@ -135,14 +135,14 @@ bool __fastcall customAttackGetAttackClass(CustomAttack* thisptr,
     return true;
 }
 
-bool __fastcall customAttackMethod11(CustomAttack* thisptr,
-                                     int /*%edx*/,
-                                     int a2,
-                                     int a3,
-                                     game::LAttackClass* attackClass)
+bool __fastcall customAttackGetUnderlyingAttackClass(CustomAttack* thisptr,
+                                                     int /*%edx*/,
+                                                     const game::CMidgardID* targetUnitId,
+                                                     const game::BattleMsgData* battleMsgData,
+                                                     game::LAttackClass* attackClass)
 {
-    logDebug("newAttackType.log", "CustomAttack method 11");
-    return thisptr->vftable->method11(thisptr, a2, a3, attackClass);
+    logDebug("newAttackType.log", "CustomAttack getUnderlyingAttackClass");
+    return thisptr->vftable->getAttackClass(thisptr, targetUnitId, battleMsgData, attackClass);
 }
 
 void __fastcall customAttackDoAttack(CustomAttack* thisptr,
@@ -209,7 +209,7 @@ static const game::IBatAttackVftable customAttackVftable{
     (game::IBatAttackVftable::IsImmune)customAttackIsImmune,
     (game::IBatAttackVftable::OnAttack)customAttackOnMiss,
     (game::IBatAttackVftable::GetAttackClass)customAttackGetAttackClass,
-    (game::IBatAttackVftable::Method11)customAttackMethod11,
+    (game::IBatAttackVftable::GetAttackClass)customAttackGetUnderlyingAttackClass,
     (game::IBatAttackVftable::OnAttack)customAttackDoAttack,
     (game::IBatAttackVftable::Method13)customAttackMethod13,
     (game::IBatAttackVftable::UnknownMethod)customAttackMethod14,
