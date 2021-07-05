@@ -143,6 +143,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\attack.cpp" />
     <ClCompile Include="src\attackclasscat.cpp" />
     <ClCompile Include="src\attackimpl.cpp" />
+    <ClCompile Include="src\attackmodified.cpp" />
     <ClCompile Include="src\attackreachcat.cpp" />
     <ClCompile Include="src\attacksourcecat.cpp" />
     <ClCompile Include="src\attacksourcelist.cpp" />

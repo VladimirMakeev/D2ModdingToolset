@@ -47,6 +47,12 @@ struct CAttackModifiedData
 static_assert(sizeof(CAttackModifiedData) == 20,
               "Size of CAttackModifiedData structure must be exactly 20 bytes");
 
+namespace CAttackModifiedApi {
+
+const IAttackVftable* vftable();
+
+} // namespace CAttackModifiedApi
+
 } // namespace game
 
 #endif // ATTACKMODIFIED_H
