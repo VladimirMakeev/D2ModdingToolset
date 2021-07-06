@@ -62,13 +62,17 @@ bool DbfFile::open(const std::filesystem::path& file)
 
     recordsData.resize(recordsDataLength);
 
-    // Workaround for a bug in Sdbf where it inserts additional EOF between header and data blocks
-    char possibleEOF{};
-    stream.read(&possibleEOF, 1);
-    if (possibleEOF == 0x1A) {
+    // https://en.wikipedia.org/wiki/.dbf#Database_records
+    // Each record begins with a 1-byte "deletion" flag. The byte's value is a space (0x20), if the
+    // record is active, or an asterisk (0x2A), if the record is deleted.
+    char firstChar{};
+    stream.read(&firstChar, 1);
+    if (firstChar != 0x20 && firstChar != 0x2A) {
+        // Workaround for different file formats from Sdbf/SergDBF where there is an additional
+        // EOF/NUL between header and data blocks
         stream.read(reinterpret_cast<char*>(&recordsData[0]), recordsDataLength);
     } else {
-        recordsData[0] = possibleEOF;
+        recordsData[0] = firstChar;
         stream.read(reinterpret_cast<char*>(&recordsData[1]), recordsDataLength - 1);
     }
 
