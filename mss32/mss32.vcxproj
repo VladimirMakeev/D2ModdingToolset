@@ -300,6 +300,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\unitbranchcat.cpp" />
     <ClCompile Include="src\unitcat.cpp" />
     <ClCompile Include="src\unitinfolist.cpp" />
+    <ClCompile Include="src\unitpositionlinkedlist.cpp" />
     <ClCompile Include="src\unitpositionlist.cpp" />
     <ClCompile Include="src\unitsforhire.cpp" />
     <ClCompile Include="src\unitutils.cpp" />
@@ -633,7 +634,9 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\unitgenerator.h" />
     <ClInclude Include="include\unitinfolist.h" />
     <ClInclude Include="include\unitmodifier.h" />
+    <ClInclude Include="include\unitpositionlinkedlist.h" />
     <ClInclude Include="include\unitpositionlist.h" />
+    <ClInclude Include="include\unitpositionpair.h" />
     <ClInclude Include="include\unitsforhire.h" />
     <ClInclude Include="include\unitutils.h" />
     <ClInclude Include="include\ussoldier.h" />

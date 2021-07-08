@@ -22,21 +22,13 @@
 
 #include "d2pair.h"
 #include "sortedlist.h"
+#include "unitpositionpair.h"
 
 namespace game {
 
-/**
- * List of unit positions (0-5) to mark during single battle turn.
- * The second component determines if the position is in attack's target list
- * (IBatAttack::FillTargetList; position has frame highlight on group panel).
- */
-using UnitPositionPair = Pair<int, bool>;
 using UnitPositionList = SortedList<UnitPositionPair>;
 using UnitPositionListNode = SortedListNode<UnitPositionPair>;
 using UnitPositionListIterator = SortedListIterator<UnitPositionPair>;
-
-static_assert(sizeof(UnitPositionPair) == 8,
-              "Size of UnitPositionPair structure must be exactly 8 bytes");
 
 namespace UnitPositionListApi {
 
