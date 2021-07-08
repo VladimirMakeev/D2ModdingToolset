@@ -22,6 +22,7 @@
 
 #include "idlist.h"
 #include "idvector.h"
+#include "unitpositionlist.h"
 
 namespace game {
 
@@ -100,6 +101,11 @@ struct Api
                                                            const IMidgardObjectMap* objectMap,
                                                            const CMidUnitGroup* group);
     AddUnitIdsAvailableForSummons addUnitIdsAvailableForSummons;
+
+    using UnknownFunction = void(__stdcall*)(CMidUnitGroup* group1,
+                                             CMidUnitGroup* group2,
+                                             UnitPositionList* positions);
+    UnknownFunction unknownFunction;
 };
 
 Api& get();

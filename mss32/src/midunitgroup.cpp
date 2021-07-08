@@ -31,6 +31,7 @@ std::array<Api, 3> functions = {{
         (Api::GetUnitPosition)0x5f5897,
         (Api::GetUnitIdByPosition)0x5f586f,
         (Api::AddUnitIdsAvailableForSummons)0x628a02,
+        (Api::UnknownFunction)0x631c50,
     },
     // Russobit
     Api{
@@ -38,6 +39,7 @@ std::array<Api, 3> functions = {{
         (Api::GetUnitPosition)0x5f5897,
         (Api::GetUnitIdByPosition)0x5f586f,
         (Api::AddUnitIdsAvailableForSummons)0x628a02,
+        (Api::UnknownFunction)0x631c50,
     },
     // Gog
     Api{
@@ -45,6 +47,7 @@ std::array<Api, 3> functions = {{
         (Api::GetUnitPosition)0x5f455f,
         (Api::GetUnitIdByPosition)0x5f4537,
         (Api::AddUnitIdsAvailableForSummons)0x627542,
+        (Api::UnknownFunction)0x630690,
     },
 }};
 // clang-format on
