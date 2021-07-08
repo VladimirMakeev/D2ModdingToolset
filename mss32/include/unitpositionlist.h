@@ -45,7 +45,7 @@ struct Api
     using Constructor = UnitPositionList*(__thiscall*)(UnitPositionList* thisptr);
     Constructor constructor;
 
-    using Destructor = UnitPositionList*(__thiscall*)(UnitPositionList* thisptr);
+    using Destructor = void(__thiscall*)(UnitPositionList* thisptr);
     Destructor destructor;
 
     using CopyAssignment = UnitPositionList*(__thiscall*)(UnitPositionList* thisptr,

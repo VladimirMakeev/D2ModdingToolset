@@ -37,7 +37,7 @@ struct Api
     using Constructor = UnitInfoList*(__thiscall*)(UnitInfoList* thisptr);
     Constructor constructor;
 
-    using Destructor = UnitInfoList*(__thiscall*)(UnitInfoList* thisptr);
+    using Destructor = void(__thiscall*)(UnitInfoList* thisptr);
     Destructor destructor;
 
     using Sort = void(__thiscall*)(UnitInfoList* thisptr);
