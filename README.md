@@ -37,6 +37,10 @@
 - Allows to customize shatter attacks: maximum damage per hit, maximum armor that can be shattered, whether attack can miss or not, and its upgrade ratio;
 - Allows doppelganger, transform and summon attacks to produce leveled versions of units;
 - Allows doppelganger attacks to respect enemy and ally wards and immunities to the attack class and source;
+- <details>
+    <summary>Allows transform self attack to not consume a unit turn for transformation (once per turn);</summary>
+    ![Demo video](https://user-images.githubusercontent.com/5180699/124916545-76550200-dffb-11eb-8b12-3147e40ef04b.mp4)
+  </details>
 - Allows to set a maximum number of items the player is allowed to transfer between campaign scenarios;
 - Allows to load and create scenarios with no magic (maximum spell level set to 0);
 - Allows Scenario Editor to place merchants, mages, trainers and mercenaries on water tiles;
@@ -48,6 +52,7 @@
 - Fixes game crash on 144x144 maps that occurs if there is a party standing on a lower-left or lower-right edge of the map;
 - Fixes AI unit placement logic for melee units with vampiric attacks;
 - Fixes AI targeting for single lower-damage and lower-initiative attacks;
+- Fixes incorrect function of transform-self attack in cases where its alternative attack targets allies (heal, summon, etc.);
 - Fixes Scenario Editor bug with elves race as a caster in "Cast spell on location" event effect;
 - <details>
     <summary>Buttons for bulk item transfer: transfer all items, potions, scrolls/wands or valuables between inventories with single click;</summary>
@@ -221,11 +226,11 @@
 - <details>
     <summary>Supports custom attack reaches;</summary>
 
-    ![Demo video](https://user-images.githubusercontent.com/5180699/122282606-46cb4200-cef4-11eb-9774-e479edc00d21.mp4)    
+    ![Demo video](https://user-images.githubusercontent.com/5180699/122282606-46cb4200-cef4-11eb-9774-e479edc00d21.mp4)
     Customizable via Lua scripting and additional columns in LAttR.dbf.<br />
     [Scripts](Scripts) includes example targeting scripts demonstrated in the video above.<br />
     [Examples](Examples) includes an example of LAttR.dbf.<br />
-    
+
     Additional columns of LAttR.dbf:
     - REACH_TXT (Character, size 10) specifies an id for 'Reach' encyclopedia description from TApp.dbf and TAppEdit.dbf. For example 'X005TA0201' is the standard 'Adjacent units';
     - TARGET_TXT (Character, size 10) similar to REACH_TXT but for 'Targets' entry (either '1' or '6' in vanilla);
@@ -310,6 +315,7 @@ The following settings can be changed in 'Scripts\\settings.lua':
   - "leveledTransformSelfAttack=(true/false)" changes transform self attacks to compute transformed unit level using 'Scripts\\transformSelf.lua' script;
   - "leveledSummonAttack=(true/false)" changes summon attacks to compute summoned units levels using 'Scripts\\summon.lua' script;
   - "unrestrictedBestowWards=(true/false)" increases total wards limit per caster from 8 to 48, see more details under Features section;
+  - "freeTransformSelfAttack=(true/false)" allows transform-self attack to not consume a unit turn for transformation (once per turn), see more details under Features section;
   - "disableAllowedRoundMax=\[1 : (2^31 - 1)\]" sets a number of battle round after which paralyze and petrify attacks will constantly miss;
   - "missChanceSingleRoll=(true/false)" if true, switches attacks miss check to a single random value roll instead of check against arithmetic mean of two random numbers;
   - "mageLeaderAccuracyReduction=\[0 : 100\]" allows to set accuracy reduction for mage leaders per each additional target;
