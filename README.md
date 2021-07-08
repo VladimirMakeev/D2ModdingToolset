@@ -37,10 +37,7 @@
 - Allows to customize shatter attacks: maximum damage per hit, maximum armor that can be shattered, whether attack can miss or not, and its upgrade ratio;
 - Allows doppelganger, transform and summon attacks to produce leveled versions of units;
 - Allows doppelganger attacks to respect enemy and ally wards and immunities to the attack class and source;
-- <details>
-    <summary>Allows transform self attack to not consume a unit turn for transformation (once per turn);</summary>
-    ![Demo video](https://user-images.githubusercontent.com/5180699/124916545-76550200-dffb-11eb-8b12-3147e40ef04b.mp4)
-  </details>
+- Allows transform-self attack to not consume a unit turn for transformation, once per turn (![demo video](https://user-images.githubusercontent.com/5180699/124916545-76550200-dffb-11eb-8b12-3147e40ef04b.mp4));
 - Allows to set a maximum number of items the player is allowed to transfer between campaign scenarios;
 - Allows to load and create scenarios with no magic (maximum spell level set to 0);
 - Allows Scenario Editor to place merchants, mages, trainers and mercenaries on water tiles;
