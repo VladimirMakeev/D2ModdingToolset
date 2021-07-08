@@ -22,6 +22,7 @@
 #include "batattacktransformself.h"
 #include "battleattackinfo.h"
 #include "battlemsgdata.h"
+#include "customattacks.h"
 #include "game.h"
 #include "globaldata.h"
 #include "log.h"
@@ -130,6 +131,17 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
     visitors.transformUnit(targetUnitId, &transformImplId, false, objectMap, 1);
 
     const auto& battle = BattleMsgDataApi::get();
+
+    if (userSettings().freeTransformSelfAttack != baseSettings().freeTransformSelfAttack) {
+        auto& customTransformSelf = getCustomAttacks().transformSelf;
+        if (customTransformSelf.freeAttackUnitId != targetUnit->unitId) {
+            customTransformSelf.freeAttackUnitId = targetUnit->unitId;
+
+            const auto soldier = fn.castUnitImplToSoldier(targetUnit->unitImpl);
+            battle.giveAttack(battleMsgData, &targetUnit->unitId,
+                              soldier->vftable->getAttackTwice(soldier) ? 2 : 1, 1);
+        }
+    }
 
     BattleAttackUnitInfo info{};
     info.unitId = *targetUnitId;
