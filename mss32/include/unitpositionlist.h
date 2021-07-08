@@ -40,6 +40,10 @@ struct Api
     using Destructor = void(__thiscall*)(UnitPositionList* thisptr);
     Destructor destructor;
 
+    using CopyConstructor = UnitPositionList*(__thiscall*)(UnitPositionList* thisptr,
+                                                           const UnitPositionList* src);
+    CopyConstructor copyConstructor;
+
     using CopyAssignment = UnitPositionList*(__thiscall*)(UnitPositionList* thisptr,
                                                           const UnitPositionList* src);
     CopyAssignment copyAssignment;
@@ -63,6 +67,9 @@ struct Api
                                                          const UnitPositionList* list,
                                                          int unitPosition);
     FindByPosition findByPosition;
+
+    using HasNegativePosition = bool(__stdcall*)(const UnitPositionList* thisptr);
+    HasNegativePosition hasNegativePosition;
 };
 
 Api& get();
