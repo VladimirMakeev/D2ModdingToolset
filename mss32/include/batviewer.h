@@ -31,6 +31,8 @@ struct BatViewerTargetDataSet;
 struct CMidgardID;
 struct BattleMsgData;
 
+enum class BattleAction : int;
+
 struct IBatViewer
 {
     const IBatViewerVftable* vftable;
@@ -44,7 +46,7 @@ struct IBatViewerVftable
     using Update = void(__thiscall*)(IBatViewer* thisptr,
                                      const BattleMsgData* battleMsgData,
                                      const CMidgardID* unitId,
-                                     const SortedList<int>* actionButtons,
+                                     const SortedList<BattleAction>* actions,
                                      const BatViewerTargetDataSet* targetData);
     Update update;
 
