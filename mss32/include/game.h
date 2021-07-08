@@ -524,6 +524,8 @@ using GetRacePreviewImage = IMqImage2*(__stdcall*)(const LRaceCategory* race);
 using IsPlayerRaceUnplayable = bool(__stdcall*)(const CMidgardID* playerId,
                                                 const IMidgardObjectMap* objectMap);
 
+using IsSupportAttackClass = bool(__stdcall*)(const LAttackClass* value);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -614,6 +616,7 @@ struct Functions
     GetMeleeUnitToHireAiRating getMeleeUnitToHireAiRating;
     ComputeTargetUnitAiPriority computeTargetUnitAiPriority;
     IsPlayerRaceUnplayable isPlayerRaceUnplayable;
+    IsSupportAttackClass isSupportAttackClass;
 };
 
 /** Global variables used in game. */
