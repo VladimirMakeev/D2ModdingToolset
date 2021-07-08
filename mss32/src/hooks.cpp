@@ -226,6 +226,9 @@ static Hooks getGameHooks()
         // Allow transform self into leveled units using script logic
         // Fix bug where transform-self attack is unable to target self if alt attack is targeting allies
         {CBatAttackTransformSelfApi::vftable()->onHit, transformSelfAttackOnHitHooked},
+        // Fix inability to target self for transformation in case of transform-self + summon attack
+        {BattleViewerInterfApi::vftable()->update, battleViewerInterfUpdateHooked},
+
     };
     // clang-format on
 
