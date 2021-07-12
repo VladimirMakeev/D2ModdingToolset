@@ -29,6 +29,7 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::Constructor)0x640100,
         (Api::Destructor)0x6401a0,
+        (Api::CopyConstructor)0x640180,
         (Api::CopyAssignment)0x6401c0,
         (Api::GetIterator)0x6403f0,
         (Api::GetIterator)0x6401e0,
@@ -36,11 +37,13 @@ static std::array<Api, 3> functions = {{
         (Api::Equals)0x6402e0,
         (Api::Preincrement)0x640560,
         (Api::FindByPosition)0x634eaf,
+        (Api::HasNegativePosition)0x631bfb,
     },
     // Russobit
     Api{
         (Api::Constructor)0x640100,
         (Api::Destructor)0x6401a0,
+        (Api::CopyConstructor)0x640180,
         (Api::CopyAssignment)0x6401c0,
         (Api::GetIterator)0x6403f0,
         (Api::GetIterator)0x6401e0,
@@ -48,11 +51,13 @@ static std::array<Api, 3> functions = {{
         (Api::Equals)0x6402e0,
         (Api::Preincrement)0x640560,
         (Api::FindByPosition)0x634eaf,
+        (Api::HasNegativePosition)0x631bfb,
     },
     // Gog
     Api{
         (Api::Constructor)0x63eb00,
         (Api::Destructor)0x63eba0,
+        (Api::CopyConstructor)0x63eb80,
         (Api::CopyAssignment)0x63ebc0,
         (Api::GetIterator)0x667400,
         (Api::GetIterator)0x63ebe0,
@@ -60,6 +65,7 @@ static std::array<Api, 3> functions = {{
         (Api::Equals)0x6678d0,
         (Api::Preincrement)0x642390,
         (Api::FindByPosition)0x6338ef,
+        (Api::HasNegativePosition)0x63063b,
     },
 }};
 // clang-format on

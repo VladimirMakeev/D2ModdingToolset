@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,38 +17,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "midunitgroup.h"
+#include "uimanager.h"
 #include "version.h"
 #include <array>
 
-namespace game::CMidUnitGroupApi {
+namespace game::CUIManagerApi {
 
 // clang-format off
-std::array<Api, 3> functions = {{
+static std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (Api::GetUnitId)0x5f57f1,
-        (Api::GetUnitPosition)0x5f5897,
-        (Api::GetUnitIdByPosition)0x5f586f,
-        (Api::AddUnitIdsAvailableForSummons)0x628a02,
-        (Api::UnknownFunction)0x631c50,
+        (Api::Get)0x561afc,
+        (Api::CreateUnknownData)0x561f57,
+        (Api::UnknownDataCopy)0x562081,
+        (Api::UnknownDataDestructor)0x562050,
+        (Api::GetMousePosition)0x561c4f,
     },
     // Russobit
     Api{
-        (Api::GetUnitId)0x5f57f1,
-        (Api::GetUnitPosition)0x5f5897,
-        (Api::GetUnitIdByPosition)0x5f586f,
-        (Api::AddUnitIdsAvailableForSummons)0x628a02,
-        (Api::UnknownFunction)0x631c50,
+        (Api::Get)0x561afc,
+        (Api::CreateUnknownData)0x561f57,
+        (Api::UnknownDataCopy)0x562081,
+        (Api::UnknownDataDestructor)0x562050,
+        (Api::GetMousePosition)0x561c4f,
     },
     // Gog
     Api{
-        (Api::GetUnitId)0x5f44b9,
-        (Api::GetUnitPosition)0x5f455f,
-        (Api::GetUnitIdByPosition)0x5f4537,
-        (Api::AddUnitIdsAvailableForSummons)0x627542,
-        (Api::UnknownFunction)0x630690,
-    },
+        (Api::Get)0x561299,
+        (Api::CreateUnknownData)0x5616f4,
+        (Api::UnknownDataCopy)0x56181e,
+        (Api::UnknownDataDestructor)0x5617ed,
+        (Api::GetMousePosition)0x5613ec,
+    }
 }};
 // clang-format on
 
@@ -57,4 +57,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::CMidUnitGroupApi
+} // namespace game::CUIManagerApi

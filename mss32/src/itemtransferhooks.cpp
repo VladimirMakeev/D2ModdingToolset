@@ -306,7 +306,7 @@ game::CCityStackInterf* __fastcall cityStackInterfCtorHooked(game::CCityStackInt
     const auto& button = CButtonInterfApi::get();
     const auto freeFunctor = FunctorApi::get().createOrFree;
     const char dialogName[] = "DLG_CITY_STACK";
-    auto dialog = CMidDragDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
+    auto dialog = CDragAndDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
 
     using ButtonCallback = CCityStackInterfApi::Api::ButtonCallback;
     ButtonCallback callback{};
@@ -481,7 +481,7 @@ game::CExchangeInterf* __fastcall exchangeInterfCtorHooked(game::CExchangeInterf
     const auto& button = CButtonInterfApi::get();
     const auto freeFunctor = FunctorApi::get().createOrFree;
     const char dialogName[] = "DLG_EXCHANGE";
-    auto dialog = CMidDragDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
+    auto dialog = CDragAndDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
 
     using ButtonCallback = CExchangeInterfApi::Api::ButtonCallback;
     ButtonCallback callback{};
@@ -684,7 +684,7 @@ game::CPickUpDropInterf* __fastcall pickupDropInterfCtorHooked(game::CPickUpDrop
     const auto& button = CButtonInterfApi::get();
     const auto freeFunctor = FunctorApi::get().createOrFree;
     const char dialogName[] = "DLG_PICKUP_DROP";
-    auto dialog = CMidDragDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
+    auto dialog = CDragAndDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
 
     using ButtonCallback = CPickUpDropInterfApi::Api::ButtonCallback;
     ButtonCallback callback{};
@@ -1022,7 +1022,7 @@ game::CSiteMerchantInterf* __fastcall siteMerchantInterfCtorHooked(
     const auto& button = CButtonInterfApi::get();
     const auto freeFunctor = FunctorApi::get().createOrFree;
     const char dialogName[] = "DLG_MERCHANT";
-    auto dialog = CMidDragDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
+    auto dialog = CDragAndDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
 
     using ButtonCallback = CSiteMerchantInterfApi::Api::ButtonCallback;
     ButtonCallback callback{};

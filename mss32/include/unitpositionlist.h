@@ -22,21 +22,13 @@
 
 #include "d2pair.h"
 #include "sortedlist.h"
+#include "unitpositionpair.h"
 
 namespace game {
 
-/**
- * List of unit positions (0-5) to mark during single battle turn.
- * The second component determines if the position is in attack's target list
- * (IBatAttack::FillTargetList; position has frame highlight on group panel).
- */
-using UnitPositionPair = Pair<int, bool>;
 using UnitPositionList = SortedList<UnitPositionPair>;
 using UnitPositionListNode = SortedListNode<UnitPositionPair>;
 using UnitPositionListIterator = SortedListIterator<UnitPositionPair>;
-
-static_assert(sizeof(UnitPositionPair) == 8,
-              "Size of UnitPositionPair structure must be exactly 8 bytes");
 
 namespace UnitPositionListApi {
 
@@ -45,8 +37,12 @@ struct Api
     using Constructor = UnitPositionList*(__thiscall*)(UnitPositionList* thisptr);
     Constructor constructor;
 
-    using Destructor = UnitPositionList*(__thiscall*)(UnitPositionList* thisptr);
+    using Destructor = void(__thiscall*)(UnitPositionList* thisptr);
     Destructor destructor;
+
+    using CopyConstructor = UnitPositionList*(__thiscall*)(UnitPositionList* thisptr,
+                                                           const UnitPositionList* src);
+    CopyConstructor copyConstructor;
 
     using CopyAssignment = UnitPositionList*(__thiscall*)(UnitPositionList* thisptr,
                                                           const UnitPositionList* src);
@@ -71,6 +67,9 @@ struct Api
                                                          const UnitPositionList* list,
                                                          int unitPosition);
     FindByPosition findByPosition;
+
+    using HasNegativePosition = bool(__stdcall*)(const UnitPositionList* thisptr);
+    HasNegativePosition hasNegativePosition;
 };
 
 Api& get();

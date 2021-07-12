@@ -70,6 +70,10 @@ struct CustomAttacks
     CustomAttackSources sources;
     CustomAttackReaches reaches;
     CustomDamageRatio damageRatio;
+    struct
+    {
+        game::CMidgardID freeAttackUnitId;
+    } transformSelf;
 };
 
 CustomAttacks& getCustomAttacks();

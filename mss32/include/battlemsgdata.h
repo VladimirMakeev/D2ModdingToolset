@@ -610,6 +610,12 @@ struct Api
                                                                int unitPosition,
                                                                bool targetsAreAllies);
     AlliesNotPreventingAdjacentAttack alliesNotPreventingAdjacentAttack;
+
+    using GiveAttack = void(__thiscall*)(BattleMsgData* thistr,
+                                         const CMidgardID* unitId,
+                                         char attacksCount,
+                                         int lastIndex);
+    GiveAttack giveAttack;
 };
 
 Api& get();

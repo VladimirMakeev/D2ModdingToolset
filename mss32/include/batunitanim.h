@@ -119,6 +119,20 @@ struct CBatUnitAnim : public IMqAnimation
 
 static_assert(sizeof(CBatUnitAnim) == 8, "Size of CBatUnitAnim structure must be exactly 8 bytes");
 
+namespace BatUnitAnimApi {
+
+struct Api
+{
+    using Update = void(__thiscall*)(CBatUnitAnim* thisptr,
+                                     const BattleMsgData* battleMsgData,
+                                     bool a3);
+    Update update;
+};
+
+Api& get();
+
+} // namespace BatUnitAnimApi
+
 } // namespace game
 
 #endif // BATUNITANIM_H

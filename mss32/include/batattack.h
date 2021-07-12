@@ -94,17 +94,12 @@ struct IBatAttackVftable
     /** Called when attack misses the target. */
     OnAttack onMiss;
 
-    using GetAttackClass = bool(__thiscall*)(IBatAttack* thisptr,
-                                             int a2,
-                                             int a3,
+    using GetAttackClass = bool(__thiscall*)(const IBatAttack* thisptr,
+                                             const CMidgardID* targetUnitId,
+                                             const BattleMsgData* battleMsgData,
                                              LAttackClass* attackClass);
     GetAttackClass getAttackClass;
-
-    using Method11 = bool(__thiscall*)(IBatAttack* thisptr,
-                                       int a2,
-                                       int a3,
-                                       LAttackClass* attackClass);
-    Method11 method11;
+    GetAttackClass getUnderlyingAttackClass;
 
     /** Called when attack hits the target. */
     OnAttack onHit;

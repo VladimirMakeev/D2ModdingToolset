@@ -50,7 +50,7 @@ struct Api
     Constructor constructor;
 
     /** Frees memory allocated for list. */
-    using Destructor = TargetsList*(__thiscall*)(TargetsList* thisptr);
+    using Destructor = void(__thiscall*)(TargetsList* thisptr);
     Destructor destructor;
 
     /** Clears list contents. */

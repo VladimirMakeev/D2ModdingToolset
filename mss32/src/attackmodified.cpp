@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,28 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "batattacktransformself.h"
+#include "attackmodified.h"
 #include "version.h"
 #include <array>
 
-namespace game::CBatAttackTransformSelfApi {
+namespace game::CAttackModifiedApi {
 
 // clang-format off
-static std::array<IBatAttackVftable*, 4> vftables = {{
+static std::array<IAttackVftable*, 4> vftables = {{
     // Akella
-    (IBatAttackVftable*)0x6f54ac,
+    (IAttackVftable*)0x6ed69c,
     // Russobit
-    (IBatAttackVftable*)0x6f54ac,
+    (IAttackVftable*)0x6ed69c,
     // Gog
-    (IBatAttackVftable*)0x6f345c,
+    (IAttackVftable*)0x6eb63c,
     // Scenario Editor
-    (IBatAttackVftable*)nullptr,
+    (IAttackVftable*)0x5e17e4,
 }};
 // clang-format on
 
-IBatAttackVftable* vftable()
+const IAttackVftable* vftable()
 {
     return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::CBatAttackTransformSelfApi
+} // namespace game::CAttackModifiedApi

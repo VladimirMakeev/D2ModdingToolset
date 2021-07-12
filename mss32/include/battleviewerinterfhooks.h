@@ -20,9 +20,17 @@
 #ifndef BATTLEVIEWERINTERFHOOKS_H
 #define BATTLEVIEWERINTERFHOOKS_H
 
+#include "sortedlist.h"
+
 namespace game {
 struct CBattleViewerInterf;
 struct CMqPoint;
+struct IBatViewer;
+struct BattleMsgData;
+struct CMidgardID;
+struct BatViewerTargetDataSet;
+
+enum class BattleAction : int;
 } // namespace game
 
 namespace hooks {
@@ -30,7 +38,14 @@ namespace hooks {
 bool __fastcall markAttackTargetsHooked(game::CBattleViewerInterf* thisptr,
                                         int /*%edx*/,
                                         const game::CMqPoint* mousePosition,
-                                        bool a3);
+                                        bool setBigFace);
+
+void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
+                                               int /*%edx*/,
+                                               const game::BattleMsgData* battleMsgData,
+                                               const game::CMidgardID* unitId,
+                                               const game::SortedList<game::BattleAction>* actions,
+                                               const game::BatViewerTargetDataSet* targetData);
 
 } // namespace hooks
 

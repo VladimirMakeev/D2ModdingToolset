@@ -22,12 +22,14 @@
 #include "batattacktransformself.h"
 #include "battleattackinfo.h"
 #include "battlemsgdata.h"
+#include "customattacks.h"
 #include "game.h"
 #include "globaldata.h"
 #include "log.h"
 #include "midgardobjectmap.h"
 #include "midunit.h"
 #include "scripts.h"
+#include "settings.h"
 #include "unitgenerator.h"
 #include "unitimplview.h"
 #include "unitutils.h"
@@ -81,13 +83,7 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
 
     const auto& fn = gameFunctions();
 
-    CMidgardID targetGroupId{emptyId};
-    fn.getAllyOrEnemyGroupId(&targetGroupId, battleMsgData, targetUnitId, true);
-
-    CMidgardID unitGroupId{emptyId};
-    fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, &thisptr->unitId, true);
-
-    if (*targetUnitId != thisptr->unitId && targetGroupId != unitGroupId) {
+    if (*targetUnitId != thisptr->unitId) {
         auto altAttack = thisptr->altAttack;
         altAttack->vftable->onHit(altAttack, objectMap, battleMsgData, targetUnitId, attackInfo);
         return;
@@ -95,6 +91,9 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
 
     auto attack = fn.getAttackById(objectMap, &thisptr->id2, thisptr->attackNumber, false);
     auto attackId = IAttackApi::get().getId(attack);
+
+    CMidgardID targetGroupId{emptyId};
+    fn.getAllyOrEnemyGroupId(&targetGroupId, battleMsgData, targetUnitId, true);
 
     const auto position = fn.getUnitPositionInGroup(objectMap, &targetGroupId, targetUnitId);
 
@@ -108,26 +107,41 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
         return;
     }
 
-    const auto& global = GlobalDataApi::get();
-    auto globalData = *global.getGlobalData();
+    if (userSettings().leveledTransformSelfAttack != baseSettings().leveledTransformSelfAttack) {
+        const auto& global = GlobalDataApi::get();
+        auto globalData = *global.getGlobalData();
 
-    auto transformImpl = static_cast<TUsUnitImpl*>(
-        global.findById(globalData->units, &transformImplId));
+        auto transformImpl = static_cast<TUsUnitImpl*>(
+            global.findById(globalData->units, &transformImplId));
 
-    const auto transformLevel = getTransformSelfLevel(targetUnit, transformImpl);
+        const auto transformLevel = getTransformSelfLevel(targetUnit, transformImpl);
 
-    CUnitGenerator* unitGenerator = globalData->unitGenerator;
+        CUnitGenerator* unitGenerator = globalData->unitGenerator;
 
-    CMidgardID leveledImplId{transformImplId};
-    unitGenerator->vftable->generateUnitImplId(unitGenerator, &leveledImplId, &transformImplId,
-                                               transformLevel);
+        CMidgardID leveledImplId{transformImplId};
+        unitGenerator->vftable->generateUnitImplId(unitGenerator, &leveledImplId, &transformImplId,
+                                                   transformLevel);
 
-    unitGenerator->vftable->generateUnitImpl(unitGenerator, &leveledImplId);
+        unitGenerator->vftable->generateUnitImpl(unitGenerator, &leveledImplId);
+
+        transformImplId = leveledImplId;
+    }
 
     const auto& visitors = VisitorApi::get();
-    visitors.transformUnit(targetUnitId, &leveledImplId, false, objectMap, 1);
+    visitors.transformUnit(targetUnitId, &transformImplId, false, objectMap, 1);
 
     const auto& battle = BattleMsgDataApi::get();
+
+    if (userSettings().freeTransformSelfAttack != baseSettings().freeTransformSelfAttack) {
+        auto& customTransformSelf = getCustomAttacks().transformSelf;
+        if (customTransformSelf.freeAttackUnitId != targetUnit->unitId) {
+            customTransformSelf.freeAttackUnitId = targetUnit->unitId;
+
+            const auto soldier = fn.castUnitImplToSoldier(targetUnit->unitImpl);
+            battle.giveAttack(battleMsgData, &targetUnit->unitId,
+                              soldier->vftable->getAttackTwice(soldier) ? 2 : 1, 1);
+        }
+    }
 
     BattleAttackUnitInfo info{};
     info.unitId = *targetUnitId;
@@ -138,6 +152,37 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
     battle.setUnitStatus(battleMsgData, targetUnitId, BattleStatus::TransformSelf, true);
 
     battle.setUnitHp(battleMsgData, targetUnitId, targetUnit->currentHp);
+}
+
+void __fastcall transformSelfAttackFillTargetsListHooked(game::CBatAttackTransformSelf* thisptr,
+                                                         int /*%edx*/,
+                                                         game::IMidgardObjectMap* objectMap,
+                                                         game::BattleMsgData* battleMsgData,
+                                                         game::TargetsList* targetsList)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& listApi = TargetsListApi::get();
+
+    CMidgardID unitGroupId{emptyId};
+    fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, &thisptr->unitId, true);
+
+    int unitPosition = fn.getUnitPositionInGroup(objectMap, &unitGroupId, &thisptr->unitId);
+
+    auto altAttack = thisptr->altAttack;
+    if (altAttack) {
+        altAttack->vftable->fillTargetsList(altAttack, objectMap, battleMsgData, targetsList);
+
+        CMidgardID targetGroupId{emptyId};
+        altAttack->vftable->getTargetGroupId(altAttack, &targetGroupId, battleMsgData);
+
+        if (targetGroupId != unitGroupId)
+            unitPosition = -(unitPosition + 1);
+    }
+
+    Pair<TargetsListIterator, bool> tmp{};
+    listApi.insert(targetsList, &tmp, &unitPosition);
 }
 
 } // namespace hooks

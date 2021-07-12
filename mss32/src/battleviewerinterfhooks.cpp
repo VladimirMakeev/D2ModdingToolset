@@ -21,11 +21,18 @@
 #include "attack.h"
 #include "batimagesloader.h"
 #include "battleviewerinterf.h"
+#include "batunitanim.h"
 #include "batviewer2dengine.h"
+#include "button.h"
 #include "customattacks.h"
 #include "customattackutils.h"
+#include "dialoginterf.h"
+#include "functor.h"
 #include "game.h"
+#include "middragdropinterf.h"
 #include "midunitgroup.h"
+#include "togglebutton.h"
+#include "uimanager.h"
 #include "unitinfolist.h"
 #include "unitpositionlist.h"
 #include "unitslotview.h"
@@ -327,12 +334,12 @@ bool getTargetData(game::CBattleViewerInterf* viewer,
                                                                 &viewer->data->itemId);
 
         *attack = fn.getAttackById(viewer->data->objectMap, &viewer->data->itemId, 1, true);
-        *targetData = &viewer->data->itemTargetData[itemIndex];
+        *targetData = &viewer->data->targetData.items[itemIndex];
         *isBattleGoing = true;
         *isItemAttack = true;
     } else {
         *attack = fn.getAttackById(viewer->data->objectMap, &viewer->data->unitId, 1, true);
-        *targetData = &viewer->data->unitTargetData;
+        *targetData = &viewer->data->targetData.attack;
         *isBattleGoing = (*targetData)->isBattleGoing;
         *isItemAttack = false;
     }
@@ -371,6 +378,278 @@ bool __fastcall markAttackTargetsHooked(game::CBattleViewerInterf* thisptr,
 
     listApi.destructor(&targetPositions);
     return result;
+}
+
+void setUIManagerUnknownData(game::CBattleViewerInterf* viewer,
+                             game::BattleViewerInterfApi::Api::Callback callback)
+{
+    using namespace game;
+
+    const auto& viewerApi = BattleViewerInterfApi::get();
+    const auto& uiManagerApi = CUIManagerApi::get();
+    const auto& smartPtrApi = SmartPointerApi::get();
+    const auto functorApi = FunctorApi::get();
+
+    Functor functor;
+    BattleViewerInterfApi::Api::ButtonCallback buttonCallback{callback};
+    viewerApi.createButtonFunctor(&functor, 0, viewer, &buttonCallback);
+
+    UIManagerPtr uiManager;
+    uiManagerApi.get(&uiManager);
+
+    CUIManagerUnknownData uiManagerUnknownData;
+    uiManagerApi.createUnknownData(uiManager.data, &uiManagerUnknownData, &functor, 5);
+    uiManagerApi.unknownDataCopy(&viewer->data2->uiManagerUnknownData, &uiManagerUnknownData);
+
+    uiManagerApi.unknownDataDtor(&uiManagerUnknownData);
+    smartPtrApi.createOrFree((SmartPointer*)&uiManager, nullptr);
+    functorApi.createOrFree(&functor, nullptr);
+}
+
+void updateForNormalAttack(game::CBattleViewerInterf* viewer)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& id = CMidgardIDApi::get();
+    const auto& viewerApi = BattleViewerInterfApi::get();
+    const auto& listApi = UnitPositionListApi::get();
+    const auto& linkedListApi = UnitPositionLinkedListApi::get();
+    const auto& groupApi = CMidUnitGroupApi::get();
+    const auto& attackReaches = AttackReachCategories::get();
+    const auto& attackClasses = AttackClassCategories::get();
+
+    CMidgardID otherGroupId = invalidId;
+    CMidgardID attackerGroupId{};
+    id.validateId(&attackerGroupId, viewer->data->battleMsgData.attackerGroupId);
+    if (viewer->data->targetData.attack.targetGroupId == attackerGroupId) {
+        id.validateId(&otherGroupId, viewer->data->battleMsgData.defenderGroupId);
+    } else {
+        otherGroupId = attackerGroupId;
+    }
+
+    bool unknown = viewer->data->targetData.attack.unknown == false;
+    viewerApi.unknownMethod4(&viewer->data->unknownVector);
+
+    void* tmp{};
+    auto targetGroup = fn.getStackFortRuinGroup(tmp, viewer->data->objectMap,
+                                                &viewer->data->targetData.attack.targetGroupId);
+    auto otherGroup = fn.getStackFortRuinGroup(tmp, viewer->data->objectMap, &otherGroupId);
+
+    UnitPositionList targetPositions{};
+    listApi.copyConstructor(&targetPositions, &viewer->data->targetData.attack.targetPositions);
+
+    bool hasNegativePosition = listApi.hasNegativePosition(&targetPositions);
+    groupApi.unknownFunction(targetGroup, otherGroup, &targetPositions);
+
+    UnitPositionLinkedList targetPositions2{};
+    linkedListApi.constructor(&targetPositions2);
+    viewerApi.fillTargetPositions(viewer->data->targetData.attack.unknown, &targetPositions,
+                                  &targetPositions2);
+
+    auto attack = fn.getAttackById(viewer->data->objectMap, &viewer->data->unitId, 1, true);
+    auto attackClass = attack->vftable->getAttackClass(attack);
+    viewer->data2->attackClass = *attackClass;
+
+    bool isSupportAttack = fn.isSupportAttackClass(attackClass);
+    auto attackReach = attack->vftable->getAttackReach(attack);
+    bool isAllAttackReach = attackReach->id == attackReaches.all->id;
+    if (isAllAttackReach) {
+        for (auto group : {viewer->data->batUnitGroup1, viewer->data->batUnitGroup3,
+                           viewer->data->batUnitGroup2, viewer->data->batUnitGroup4}) {
+            viewerApi.highlightGroupFrame(group, &viewer->data->targetData.attack.targetGroupId,
+                                          isSupportAttack);
+        }
+    }
+
+    UnitPositionLinkedListIterator it, end;
+    for (linkedListApi.begin(&targetPositions2, &it), linkedListApi.end(&targetPositions2, &end);
+         !linkedListApi.equals(&it, &end); linkedListApi.preinc(&it)) {
+        UnitPositionPair* targetPosition = linkedListApi.dereference(&it);
+
+        int absolutePosition;
+        bool unknown2;
+        CMidgardID targetUnitId = invalidId;
+        if (targetPosition->first >= 0) {
+            absolutePosition = targetPosition->first;
+            unknown2 = viewer->data->targetData.attack.unknown;
+            targetUnitId = *groupApi.getUnitIdByPosition(targetGroup, absolutePosition);
+        } else {
+            absolutePosition = -(targetPosition->first + 1);
+            unknown2 = unknown;
+            targetUnitId = *groupApi.getUnitIdByPosition(otherGroup, absolutePosition);
+        }
+
+        bool unknown3 = hasNegativePosition;
+        bool positionForSummon = targetUnitId != viewer->data->unitId
+                                 && (targetUnitId == emptyId
+                                     || attackClass->id == attackClasses.summon->id);
+        if (positionForSummon) {
+            targetUnitId = emptyId;
+            id.summonUnitIdFromPosition(&targetUnitId, absolutePosition);
+            unknown3 = true;
+
+            if (!targetPosition->second)
+                continue;
+
+            viewerApi.unknownMethod3(unknown2 ? viewer->data->batUnitGroup1
+                                              : viewer->data->batUnitGroup2,
+                                     &viewer->data->targetData.attack.targetGroupId,
+                                     absolutePosition);
+            viewerApi.unknownMethod3(unknown2 ? viewer->data->batUnitGroup3
+                                              : viewer->data->batUnitGroup4,
+                                     &viewer->data->targetData.attack.targetGroupId,
+                                     absolutePosition);
+        } else if (targetPosition->second) {
+            viewerApi.unknownMethod2(unknown2 ? viewer->data->batUnitGroup1
+                                              : viewer->data->batUnitGroup2,
+                                     &targetUnitId, isSupportAttack);
+            viewerApi.unknownMethod2(unknown2 ? viewer->data->batUnitGroup3
+                                              : viewer->data->batUnitGroup4,
+                                     &targetUnitId, isSupportAttack);
+        }
+
+        bool unknown4 = targetPosition->second || (targetPosition->first >= 0 && isAllAttackReach);
+        viewerApi.unknownMethod5(viewer, targetPosition->first, &targetUnitId, unknown2, unknown3,
+                                 positionForSummon, unknown4);
+    }
+
+    if (viewerApi.isFlipped(viewer) != viewer->data->targetData.attack.unknown)
+        viewerApi.setCheckedForRightUnitsToggleButton(viewer,
+                                                      viewer->data->targetData.attack.unknown);
+
+    linkedListApi.destructor(&targetPositions2);
+    listApi.destructor(&targetPositions);
+}
+
+void getMousePosition(game::CMqPoint* value)
+{
+    using namespace game;
+
+    const auto& uiManagerApi = CUIManagerApi::get();
+    const auto& smartPtrApi = SmartPointerApi::get();
+
+    UIManagerPtr uiManager;
+    uiManagerApi.get(&uiManager);
+
+    uiManagerApi.getMousePosition(uiManager.data, value);
+
+    smartPtrApi.createOrFree((SmartPointer*)&uiManager, nullptr);
+}
+
+void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
+                                               int /*%edx*/,
+                                               const game::BattleMsgData* battleMsgData,
+                                               const game::CMidgardID* unitId,
+                                               const game::SortedList<game::BattleAction>* actions,
+                                               const game::BatViewerTargetDataSet* targetData)
+{
+    using namespace game;
+
+    const auto& id = CMidgardIDApi::get();
+    const auto& battle = BattleMsgDataApi::get();
+    const auto& viewerApi = BattleViewerInterfApi::get();
+    const auto& animApi = BatUnitAnimApi::get();
+    const auto& dragDropApi = CDragAndDropInterfApi::get();
+    const auto& dialogApi = CDialogInterfApi::get();
+    const auto& toggleButtonApi = CToggleButtonApi::get();
+    const auto& listApi = TargetsListApi::get();
+
+    auto viewer = castBatViewerToBattleViewerInterf(thisptr);
+    viewer->data->unknown6 = false;
+    viewer->data->unitId = *unitId;
+    battle.copyAssignment(&viewer->data->battleMsgData, battleMsgData);
+
+    CMidgardID attackerGroupId{};
+    id.validateId(&attackerGroupId, viewer->data->battleMsgData.attackerGroupId);
+
+    viewerApi.battleViewerTargetDataSetCtor(&viewer->data->targetData, targetData);
+    viewerApi.battleViewerTargetDataSetSetAttacker(&viewer->data->targetData, &attackerGroupId);
+
+    auto unitAnimation = *viewerApi.getUnitAnimation(viewer, unitId);
+    animApi.update(unitAnimation, &viewer->data->battleMsgData, false);
+
+    viewerApi.updateUnknown(viewer, false);
+    viewer->data2->unknown4 = false;
+
+    auto dialog = CDragAndDropInterfApi::get().getDialog(viewer);
+    bool unknown2 = viewerApi.getUnknown2(&viewer->data->unknownUnitData, &viewer->data->unitId);
+    bool autoBattle = unknown2 ? viewer->data2->unknown6 : viewer->data2->unknown7;
+    if (viewer->data2->unknown8 != unknown2) {
+        auto button = dialogApi.findToggleButton(dialog, "TOG_AUTOBATTLE");
+        toggleButtonApi.setChecked(button, autoBattle);
+        viewer->data2->unknown8 = unknown2;
+    }
+
+    if (autoBattle) {
+        setUIManagerUnknownData(viewer, viewerApi.autoBattleCallback);
+        return;
+    }
+
+    if (viewer->data2->unknown10) {
+        setUIManagerUnknownData(viewer, viewerApi.disableAutoBattleAndResolveCallback);
+        return;
+    }
+
+    auto button = dialogApi.findToggleButton(dialog, "TOG_RIGHTUNITS");
+    ((CToggleButtonVftable*)button->vftable)->setEnabled(button, true);
+
+    viewer->data2->normalAttack = false;
+    bool canUseItem = false;
+    TargetsListIterator it, end;
+    for (listApi.begin((TargetsList*)actions, &it), listApi.end((TargetsList*)actions, &end);
+         !listApi.equals(&it, &end); listApi.preinc(&it)) {
+        BattleAction action = (BattleAction)*listApi.dereference(&it);
+        switch (action) {
+        case BattleAction::Attack:
+            viewer->data2->normalAttack = true;
+            break;
+        case BattleAction::Retreat: {
+            auto button = dialogApi.findButton(dialog, "BTN_RETREAT");
+            ((CButtonInterfApi::Vftable*)button->vftable)->setEnabled(button, true);
+            break;
+        }
+        case BattleAction::Wait: {
+            auto button = dialogApi.findButton(dialog, "BTN_WAIT");
+            ((CButtonInterfApi::Vftable*)button->vftable)->setEnabled(button, true);
+            break;
+        }
+        case BattleAction::Defend: {
+            auto button = dialogApi.findButton(dialog, "BTN_DEFEND");
+            ((CButtonInterfApi::Vftable*)button->vftable)->setEnabled(button, true);
+            break;
+        }
+        case BattleAction::UseItem:
+            canUseItem = true;
+            break;
+        }
+    }
+    viewer->data2->unknown3 = 0;
+
+    auto bigFace2 = viewerApi.getBigFace2(viewer);
+    viewerApi.setUnknown(bigFace2, false);
+
+    viewerApi.updateUnknown2(viewer, canUseItem);
+
+    for (auto group : {viewer->data->batUnitGroup1, viewer->data->batUnitGroup3,
+                       viewer->data->batUnitGroup2, viewer->data->batUnitGroup4}) {
+        viewerApi.unknownMethod(group, &viewer->data->unitId);
+    }
+
+    if (viewer->data2->normalAttack)
+        updateForNormalAttack(viewer);
+
+    viewerApi.unknownMethod6(viewer, false);
+    viewerApi.setUnitId(bigFace2, &viewer->data->unitId);
+    viewerApi.unknownMethod7(viewer);
+
+    CMqPoint mousePosition;
+    getMousePosition(&mousePosition);
+    mousePosition.x -= viewer->data->dialogInterfArea.p1.x;
+    mousePosition.y -= viewer->data->dialogInterfArea.p1.y;
+
+    viewerApi.markAttackTargets(viewer, &mousePosition, false);
+    viewerApi.unknownMethod8(viewer, &mousePosition);
 }
 
 } // namespace hooks

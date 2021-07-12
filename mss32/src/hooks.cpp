@@ -221,6 +221,14 @@ static Hooks getGameHooks()
         // Fix occasional crash with incorrect removal of summoned unit info
         // Fix persistent crash with summons when unrestrictedBestowWards is enabled
         {battle.removeUnitInfo, removeUnitInfoHooked},
+        // Fix bug where transform-self attack is unable to target self if alt attack is targeting allies
+        {CBatAttackTransformSelfApi::vftable()->fillTargetsList, transformSelfAttackFillTargetsListHooked},
+        // Allow transform self into leveled units using script logic
+        // Fix bug where transform-self attack is unable to target self if alt attack is targeting allies
+        {CBatAttackTransformSelfApi::vftable()->onHit, transformSelfAttackOnHitHooked},
+        // Fix inability to target self for transformation in case of transform-self + summon attack
+        {BattleViewerInterfApi::vftable()->update, battleViewerInterfUpdateHooked},
+
     };
     // clang-format on
 
@@ -277,12 +285,6 @@ static Hooks getGameHooks()
         // Allow doppelganger to transform into leveled units using script logic
         hooks.emplace_back(
             HookInfo{CBatAttackDoppelgangerApi::get().onHit, doppelgangerAttackOnHitHooked});
-    }
-
-    if (userSettings().leveledTransformSelfAttack != baseSettings().leveledTransformSelfAttack) {
-        // Allow transform self into leveled units using script logic
-        hooks.emplace_back(
-            HookInfo{CBatAttackTransformSelfApi::get().onHit, transformSelfAttackOnHitHooked});
     }
 
     if (userSettings().leveledSummonAttack != baseSettings().leveledSummonAttack) {
@@ -1440,9 +1442,14 @@ void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
 
     battle.setAttackPowerReduction(battleMsgData, unitId, 0);
 
-    auto& customDamageRatio = getCustomAttacks().damageRatio;
+    auto& customAttacks = getCustomAttacks();
+    auto& customDamageRatio = customAttacks.damageRatio;
     if (customDamageRatio.enabled)
         customDamageRatio.ratios.clear();
+
+    auto& customTransformSelf = customAttacks.transformSelf;
+    if (customTransformSelf.freeAttackUnitId != *unitId)
+        customTransformSelf.freeAttackUnitId = emptyId;
 }
 
 void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)

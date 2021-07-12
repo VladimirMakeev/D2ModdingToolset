@@ -42,12 +42,7 @@ static_assert(sizeof(CBatAttackTransformSelf) == 24,
 
 namespace CBatAttackTransformSelfApi {
 
-struct Api
-{
-    IBatAttackVftable::OnAttack onHit;
-};
-
-Api& get();
+IBatAttackVftable* vftable();
 
 } // namespace CBatAttackTransformSelfApi
 

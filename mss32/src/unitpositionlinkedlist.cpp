@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,37 +17,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "midunitgroup.h"
+#include "unitpositionlinkedlist.h"
 #include "version.h"
 #include <array>
 
-namespace game::CMidUnitGroupApi {
+namespace game::UnitPositionLinkedListApi {
 
 // clang-format off
-std::array<Api, 3> functions = {{
+static std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (Api::GetUnitId)0x5f57f1,
-        (Api::GetUnitPosition)0x5f5897,
-        (Api::GetUnitIdByPosition)0x5f586f,
-        (Api::AddUnitIdsAvailableForSummons)0x628a02,
-        (Api::UnknownFunction)0x631c50,
+        (Api::Constructor)0x640620,
+        (Api::Destructor)0x6406b0,
+        (Api::GetIterator)0x640720,
+        (Api::GetIterator)0x62b930,
+        (Api::Dereference)0x62d280,
+        (Api::Equals)0x669930,
+        (Api::Preincrement)0x640780,
     },
     // Russobit
     Api{
-        (Api::GetUnitId)0x5f57f1,
-        (Api::GetUnitPosition)0x5f5897,
-        (Api::GetUnitIdByPosition)0x5f586f,
-        (Api::AddUnitIdsAvailableForSummons)0x628a02,
-        (Api::UnknownFunction)0x631c50,
+        (Api::Constructor)0x640620,
+        (Api::Destructor)0x6406b0,
+        (Api::GetIterator)0x640720,
+        (Api::GetIterator)0x62b930,
+        (Api::Dereference)0x62d280,
+        (Api::Equals)0x669930,
+        (Api::Preincrement)0x640780,
     },
     // Gog
     Api{
-        (Api::GetUnitId)0x5f44b9,
-        (Api::GetUnitPosition)0x5f455f,
-        (Api::GetUnitIdByPosition)0x5f4537,
-        (Api::AddUnitIdsAvailableForSummons)0x627542,
-        (Api::UnknownFunction)0x630690,
+        (Api::Constructor)0x63eef0,
+        (Api::Destructor)0x63ef80,
+        (Api::GetIterator)0x63f830,
+        (Api::GetIterator)0x667720,
+        (Api::Dereference)0x62c8e0,
+        (Api::Equals)0x642ed0,
+        (Api::Preincrement)0x6681f0,
     },
 }};
 // clang-format on
@@ -57,4 +63,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::CMidUnitGroupApi
+} // namespace game::UnitPositionLinkedListApi

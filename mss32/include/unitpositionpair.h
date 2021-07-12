@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,44 +17,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DRAGANDDROPINTERF_H
-#define DRAGANDDROPINTERF_H
+#ifndef UNITPOSITIONPAIR_H
+#define UNITPOSITIONPAIR_H
 
-#include "fullscreeninterf.h"
-#include "middropmanager.h"
+#include "d2pair.h"
+#include "linkedlist.h"
 
 namespace game {
 
-struct CDialogInterf;
+/**
+ * Unit position (0-5) to mark during single battle turn.
+ * The second component determines if the position is in attack's target list
+ * (IBatAttack::FillTargetList; position has frame highlight on group panel).
+ */
+using UnitPositionPair = Pair<int, bool>;
 
-struct CDragAndDropInterfData
-{
-    char unknown[60];
-    CDialogInterf* dialogInterf;
-    char unknown2[8];
-};
-
-static_assert(sizeof(CDragAndDropInterfData) == 72,
-              "Size of CDragAndDropInterfData structure must be exactly 72 bytes");
-
-struct CDragAndDropInterf : public CFullScreenInterf
-{
-    IMidDropManager dropManager;
-    CDragAndDropInterfData* dragAndDropInterfData;
-};
-
-namespace CDragAndDropInterfApi {
-
-struct Api
-{
-    using GetDialog = CDialogInterf*(__thiscall*)(CDragAndDropInterf* thisptr);
-    GetDialog getDialog;
-};
-
-Api& get();
-
-} // namespace CDragAndDropInterfApi
+static_assert(sizeof(UnitPositionPair) == 8,
+              "Size of UnitPositionPair structure must be exactly 8 bytes");
 
 } // namespace game
 
-#endif // DRAGANDDROPINTERF_H
+#endif // UNITPOSITIONPAIR_H
