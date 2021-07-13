@@ -648,6 +648,9 @@
     <ClCompile Include="src\attacktypepairvector.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\midunitdescriptor.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -1667,6 +1670,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\attacktypepairvector.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midunitdescriptor.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
