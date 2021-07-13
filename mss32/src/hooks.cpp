@@ -96,9 +96,12 @@
 #include "stackbattleactionmsg.h"
 #include "summonhooks.h"
 #include "transformselfhooks.h"
+#include "umattack.h"
+#include "umattackhooks.h"
 #include "unitbranchcat.h"
 #include "unitgenerator.h"
 #include "unitsforhire.h"
+#include "unitutils.h"
 #include "ussoldier.h"
 #include "usunitimpl.h"
 #include "utils.h"
@@ -228,7 +231,8 @@ static Hooks getGameHooks()
         {CBatAttackTransformSelfApi::vftable()->onHit, transformSelfAttackOnHitHooked},
         // Fix inability to target self for transformation in case of transform-self + summon attack
         {BattleViewerInterfApi::vftable()->update, battleViewerInterfUpdateHooked},
-
+        // Fix missing modifiers of alternative attacks
+        {fn.getUnitAttacks, getUnitAttacksHooked},
     };
     // clang-format on
 
@@ -399,6 +403,9 @@ Hooks getHooks()
     // Always place melee units at the front lane in groups controlled by non-neutrals AI
     // Support custom attack reaches
     hooks.emplace_back(HookInfo{fn.chooseUnitLane, chooseUnitLaneHooked});
+    // Fix missing modifiers of alternative attacks
+    hooks.emplace_back(
+        HookInfo{CUmAttackApi::vftable()->getAttackById, umAttackGetAttackByIdHooked});
 
     if (userSettings().debugMode) {
         // Show and log game exceptions information
@@ -1530,6 +1537,42 @@ void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImp
             attackData->qtyHeal += upgrade1->heal * upgrade1Count;
         if (upgrade2)
             attackData->qtyHeal += upgrade2->heal * upgrade2Count;
+    }
+}
+
+void __stdcall getUnitAttacksHooked(const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* unitId,
+                                    game::AttackTypePairVector* value,
+                                    bool checkAltAttack)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& vectorApi = AttackTypePairVectorApi::get();
+
+    auto unit = fn.findUnitById(objectMap, unitId);
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+
+    auto attack = getAttack(soldier, true, checkAltAttack);
+    AttackTypePair pair{attack, AttackType::Primary};
+    vectorApi.pushBack(value, &pair);
+
+    auto attack2 = getAttack(soldier, false, checkAltAttack);
+    if (attack2) {
+        AttackTypePair pair{attack2, AttackType::Secondary};
+        vectorApi.pushBack(value, &pair);
+    }
+
+    auto item1Attack = fn.getItemAttack(objectMap, unitId, 1);
+    if (item1Attack) {
+        AttackTypePair pair{item1Attack, AttackType::Item};
+        vectorApi.pushBack(value, &pair);
+    }
+
+    auto item2Attack = fn.getItemAttack(objectMap, unitId, 2);
+    if (item2Attack) {
+        AttackTypePair pair{item2Attack, AttackType::Item};
+        vectorApi.pushBack(value, &pair);
     }
 }
 

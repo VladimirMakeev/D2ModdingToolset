@@ -309,6 +309,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\unitsforhire.cpp" />
     <ClCompile Include="src\unitutils.cpp" />
     <ClCompile Include="src\ussoldierimpl.cpp" />
+    <ClCompile Include="src\umattackhooks.cpp" />
     <ClCompile Include="src\utils.cpp" />
     <ClCompile Include="src\version.cpp" />
     <ClCompile Include="src\visitors.cpp" />
@@ -648,6 +649,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\unitutils.h" />
     <ClInclude Include="include\ussoldier.h" />
     <ClInclude Include="include\ussoldierimpl.h" />
+    <ClInclude Include="include\umattackhooks.h" />
     <ClInclude Include="include\usstackleader.h" />
     <ClInclude Include="include\usunit.h" />
     <ClInclude Include="include\usunitextension.h" />
