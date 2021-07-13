@@ -18,17 +18,21 @@
  */
 
 #include "unitutils.h"
+#include "attack.h"
 #include "attacksourcecat.h"
 #include "attacksourcelist.h"
 #include "customattacks.h"
+#include "dynamiccast.h"
 #include "game.h"
 #include "globaldata.h"
 #include "immunecat.h"
 #include "log.h"
 #include "midgardid.h"
 #include "midunit.h"
+#include "ummodifier.h"
 #include "unitgenerator.h"
 #include "ussoldier.h"
+#include "ussoldierimpl.h"
 #include "usunitimpl.h"
 #include "utils.h"
 #include <fmt/format.h>
@@ -133,6 +137,56 @@ game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidUnit* unit)
     }
 
     return result;
+}
+
+game::TUsSoldierImpl* getSoldierImpl(const game::IUsSoldier* soldier)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    auto current = soldier;
+    while (current) {
+        auto soldierImpl = (TUsSoldierImpl*)dynamicCast(current, 0, rtti.IUsSoldierType,
+                                                        rtti.TUsSoldierImplType, 0);
+        if (soldierImpl)
+            return soldierImpl;
+
+        auto modifier = (CUmModifier*)dynamicCast(current, 0, rtti.IUsSoldierType,
+                                                  rtti.CUmModifierType, 0);
+        current = modifier ? fn.castUnitImplToSoldier(modifier->data->underlying) : nullptr;
+    }
+
+    return nullptr;
+}
+
+game::IAttack* getAttack(const game::IUsSoldier* soldier, bool primary, bool checkAltAttack)
+{
+    using namespace game;
+
+    auto attack = primary ? soldier->vftable->getAttackById(soldier)
+                          : soldier->vftable->getSecondAttackById(soldier);
+    if (attack == nullptr)
+        return nullptr;
+
+    if (!checkAltAttack)
+        return attack;
+
+    auto altAttackId = attack->vftable->getAltAttackId(attack);
+    if (*altAttackId == emptyId)
+        return attack;
+
+    auto soldierImpl = getSoldierImpl(soldier);
+
+    // HACK: temporary swapping attack ids to get alt attack wrapped in CAttackModified
+    auto attackId = soldierImpl->data->attackId;
+    soldierImpl->data->attackId = *altAttackId;
+    attack = soldier->vftable->getAttackById(soldier);
+    soldierImpl->data->attackId = attackId;
+
+    return attack;
 }
 
 } // namespace hooks
