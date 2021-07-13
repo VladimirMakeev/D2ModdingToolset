@@ -49,6 +49,14 @@ static_assert(sizeof(CAttackModifiedData) == 20,
 
 namespace CAttackModifiedApi {
 
+struct Api
+{
+    using Wrap = void(__thiscall*)(CAttackModified* thisptr, const IAttack* attack);
+    Wrap wrap;
+};
+
+Api& get();
+
 const IAttackVftable* vftable();
 
 } // namespace CAttackModifiedApi

@@ -24,6 +24,25 @@
 namespace game::CAttackModifiedApi {
 
 // clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::Wrap)0x5aa317,
+    },
+    // Russobit
+    Api{
+        (Api::Wrap)0x5aa317,
+    },
+    // Gog
+    Api{
+        (Api::Wrap)0x5a959f,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Wrap)0x551678,
+    },
+}};
+
 static std::array<IAttackVftable*, 4> vftables = {{
     // Akella
     (IAttackVftable*)0x6ed69c,
@@ -35,6 +54,11 @@ static std::array<IAttackVftable*, 4> vftables = {{
     (IAttackVftable*)0x5e17e4,
 }};
 // clang-format on
+
+Api& get()
+{
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
 const IAttackVftable* vftable()
 {
