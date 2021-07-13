@@ -144,6 +144,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\attackclasscat.cpp" />
     <ClCompile Include="src\attackimpl.cpp" />
     <ClCompile Include="src\attackmodified.cpp" />
+    <ClCompile Include="src\attacktypepairvector.cpp" />
     <ClCompile Include="src\attackreachcat.cpp" />
     <ClCompile Include="src\attacksourcecat.cpp" />
     <ClCompile Include="src\attacksourcelist.cpp" />
@@ -349,6 +350,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\attackclasscat.h" />
     <ClInclude Include="include\attackimpl.h" />
     <ClInclude Include="include\attackmodified.h" />
+    <ClInclude Include="include\attacktypepairvector.h" />
     <ClInclude Include="include\attackreachcat.h" />
     <ClInclude Include="include\attacksourcecat.h" />
     <ClInclude Include="include\attacksourcelist.h" />
