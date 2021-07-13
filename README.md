@@ -50,6 +50,7 @@
 - Fixes AI unit placement logic for melee units with vampiric attacks;
 - Fixes AI targeting for single lower-damage and lower-initiative attacks;
 - Fixes incorrect function of transform-self attack in cases where its alternative attack targets allies (heal, summon, etc.);
+- Fixes missing modifiers of alternative attacks (![demo video](https://user-images.githubusercontent.com/5180699/125460215-144ef648-5497-4674-b9d6-ac7d2fa95125.mp4));
 - Fixes Scenario Editor bug with elves race as a caster in "Cast spell on location" event effect;
 - <details>
     <summary>Buttons for bulk item transfer: transfer all items, potions, scrolls/wands or valuables between inventories with single click;</summary>
