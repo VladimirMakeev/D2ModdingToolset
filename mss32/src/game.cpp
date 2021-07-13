@@ -115,6 +115,8 @@ static std::array<Functions, 4> functions = {{
         (ComputeTargetUnitAiPriority)0x5d00c0,
         (IsPlayerRaceUnplayable)0x5e6643,
         (IsSupportAttackClass)0x631e50,
+        (GetUnitAttacks)0x645fe5,
+        (GetItemAttack)0x646182,
     },
     // Russobit
     Functions{
@@ -206,6 +208,8 @@ static std::array<Functions, 4> functions = {{
         (ComputeTargetUnitAiPriority)0x5d00c0,
         (IsPlayerRaceUnplayable)0x5e6643,
         (IsSupportAttackClass)0x631e50,
+        (GetUnitAttacks)0x645fe5,
+        (GetItemAttack)0x646182,
     },
     // Gog
     Functions{
@@ -297,6 +301,8 @@ static std::array<Functions, 4> functions = {{
         (ComputeTargetUnitAiPriority)0x5ceff1,
         (IsPlayerRaceUnplayable)0x5e5358,
         (IsSupportAttackClass)0x630890,
+        (GetUnitAttacks)0x644815,
+        (GetItemAttack)0x6449b2,
     },
     // Scenario Editor
     Functions{
@@ -388,6 +394,8 @@ static std::array<Functions, 4> functions = {{
         (ComputeTargetUnitAiPriority)nullptr,
         (IsPlayerRaceUnplayable)0x4e1ccc,
         (IsSupportAttackClass)nullptr,
+        (GetUnitAttacks)nullptr,
+        (GetItemAttack)nullptr,
     },
 }};
 
