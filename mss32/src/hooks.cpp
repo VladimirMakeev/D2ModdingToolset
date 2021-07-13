@@ -78,6 +78,8 @@
 #include "midmusic.h"
 #include "midplayer.h"
 #include "midstack.h"
+#include "midunitdescriptor.h"
+#include "midunitdescriptorhooks.h"
 #include "modifierutils.h"
 #include "movepathhooks.h"
 #include "musichooks.h"
@@ -406,6 +408,11 @@ Hooks getHooks()
     // Fix missing modifiers of alternative attacks
     hooks.emplace_back(
         HookInfo{CUmAttackApi::vftable()->getAttackById, umAttackGetAttackByIdHooked});
+    // Fix incorrect representation of alternative attack modifiers in unit encyclopedia
+    hooks.emplace_back(
+        HookInfo{CMidUnitDescriptorApi::get().getAttack, midUnitDescriptorGetAttackHooked});
+    hooks.emplace_back(HookInfo{CMidUnitDescriptorApi::vftable()->getAttackInitiative,
+                                midUnitDescriptorGetAttackInitiativeHooked});
 
     if (userSettings().debugMode) {
         // Show and log game exceptions information

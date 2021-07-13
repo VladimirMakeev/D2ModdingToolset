@@ -252,6 +252,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\midscenvariables.cpp" />
     <ClCompile Include="src\midstack.cpp" />
     <ClCompile Include="src\midunitdescriptor.cpp" />
+    <ClCompile Include="src\midunitdescriptorhooks.cpp" />
     <ClCompile Include="src\midunitgroup.cpp" />
     <ClCompile Include="src\midunit.cpp" />
     <ClCompile Include="src\modifierutils.cpp" />
@@ -551,6 +552,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midsubrace.h" />
     <ClInclude Include="include\midunit.h" />
     <ClInclude Include="include\midunitdescriptor.h" />
+    <ClInclude Include="include\midunitdescriptorhooks.h" />
     <ClInclude Include="include\midunitgroup.h" />
     <ClInclude Include="include\midvillage.h" />
     <ClInclude Include="include\modifgroup.h" />
