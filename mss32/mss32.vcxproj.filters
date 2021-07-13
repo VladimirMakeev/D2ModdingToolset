@@ -645,6 +645,9 @@
     <ClCompile Include="src\attackmodified.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\umattack.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\attacktypepairvector.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>

@@ -40,6 +40,16 @@ struct CUmAttack
 
 static_assert(sizeof(CUmAttack) == 24, "Size of CUmAttack structure must be exactly 24 bytes");
 
+struct CUmAttack_IUsSoldier
+{
+    IUsSoldier* usSoldier;
+    CUmModifier umModifier;
+    CUmAttackData* data;
+};
+
+static_assert(sizeof(CUmAttack_IUsSoldier) == 16,
+              "Size of CUmAttack_IUsSoldier structure must be exactly 20 bytes");
+
 struct CUmAttackData
 {
     ModifierValue qtyDamage;
@@ -52,6 +62,12 @@ struct CUmAttackData
 
 static_assert(sizeof(CUmAttackData) == 52,
               "Size of CUmAttackData structure must be exactly 52 bytes");
+
+namespace CUmAttackApi {
+
+const IUsSoldierVftable* vftable();
+
+} // namespace CUmAttackApi
 
 } // namespace game
 
