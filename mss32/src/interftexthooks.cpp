@@ -187,16 +187,26 @@ std::string getRatedOrSplitAttackDamageText(const game::IAttack* attack,
                                             int damage,
                                             int critDamage)
 {
+    using namespace game;
+
+    const auto& reaches = AttackReachCategories::get();
+
     int maxTargets = 0;
     auto reach = attack->vftable->getAttackReach(attack);
-    for (const auto& custom : getCustomAttacks().reaches) {
-        if (reach->id == custom.reach.id) {
-            maxTargets = custom.maxTargets;
-            break;
+    if (reach->id == reaches.all->id) {
+        maxTargets = 6;
+    } else if (reach->id == reaches.any->id || reach->id == reaches.adjacent->id) {
+        maxTargets = 1;
+    } else {
+        for (const auto& custom : getCustomAttacks().reaches) {
+            if (reach->id == custom.reach.id) {
+                maxTargets = custom.maxTargets;
+                break;
+            }
         }
     }
 
-    if (maxTargets == 0)
+    if (maxTargets < 2)
         return damageText;
 
     auto attackImpl = getAttackImpl(attack);
