@@ -551,14 +551,16 @@ std::vector<double> computeAttackDamageRatio(const game::IAttack* attack, int ta
     if (attackImpl->data->damageRatio == 100 && !attackImpl->data->damageSplit)
         return result;
 
-    double ratio = (double)attackImpl->data->damageRatio / 100;
+    const double ratio = (double)attackImpl->data->damageRatio / 100;
+
+    double currentRatio = ratio;
     double totalRatio = 1.0;
     result.push_back(1.0);
     for (int i = 1; i < targetCount; i++) {
-        result.push_back(ratio);
-        totalRatio += ratio;
+        result.push_back(currentRatio);
+        totalRatio += currentRatio;
         if (attackImpl->data->damageRatioPerTarget)
-            ratio *= ratio;
+            currentRatio *= ratio;
     }
 
     if (attackImpl->data->damageSplit) {
