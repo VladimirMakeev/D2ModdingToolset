@@ -38,6 +38,7 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.critHitAttack = interf.value().get_or("critHitAttack", std::string());
     value.critHitDamage = interf.value().get_or("critHitDamage", std::string());
     value.ratedDamage = interf.value().get_or("ratedDamage", std::string());
+    value.ratedDamageEqual = interf.value().get_or("ratedDamageEqual", std::string());
     value.ratedDamageSeparator = interf.value().get_or("ratedDamageSeparator", std::string());
     value.splitDamage = interf.value().get_or("splitDamage", std::string());
 }

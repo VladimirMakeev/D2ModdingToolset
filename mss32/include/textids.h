@@ -34,6 +34,7 @@ struct TextIds
         std::string critHitAttack;
         std::string critHitDamage;
         std::string ratedDamage;
+        std::string ratedDamageEqual;
         std::string ratedDamageSeparator;
         std::string splitDamage;
     } interf;
