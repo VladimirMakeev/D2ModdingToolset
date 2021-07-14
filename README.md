@@ -223,8 +223,7 @@
 - <details>
     <summary>Supports custom attack reaches;</summary>
 
-    ![Demo video](https://user-images.githubusercontent.com/5180699/122282606-46cb4200-cef4-11eb-9774-e479edc00d21.mp4)
-    Customizable via Lua scripting and additional columns in LAttR.dbf.<br />
+    ![Demo video](https://user-images.githubusercontent.com/5180699/122282606-46cb4200-cef4-11eb-9774-e479edc00d21.mp4). Customizable via Lua scripting and additional columns in LAttR.dbf.<br />
     [Scripts](Scripts) includes example targeting scripts demonstrated in the video above.<br />
     [Examples](Examples) includes an example of LAttR.dbf.<br />
 
