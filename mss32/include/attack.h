@@ -73,7 +73,9 @@ struct IAttackVftable
     GetDrain getDrain;
 
     GetInt getLevel;
-    GetInt getAltAttack;
+
+    using GetId = const CMidgardID*(__thiscall*)(const IAttack* thisptr);
+    GetId getAltAttackId;
 
     using GetBool = bool(__thiscall*)(const IAttack* thisptr);
     GetBool getInfinite;

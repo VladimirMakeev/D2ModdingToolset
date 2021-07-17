@@ -110,7 +110,7 @@ struct CUmModifierVftable
 struct CUmModifierData
 {
     int unknown;
-    int unknown2;
+    IUsUnit* underlying;
     CMidgardID modifierId;
 };
 

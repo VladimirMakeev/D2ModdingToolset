@@ -20,6 +20,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "attacktypepairvector.h"
 #include "globaldata.h"
 #include "idlist.h"
 #include "mqpoint.h"
@@ -526,6 +527,16 @@ using IsPlayerRaceUnplayable = bool(__stdcall*)(const CMidgardID* playerId,
 
 using IsSupportAttackClass = bool(__stdcall*)(const LAttackClass* value);
 
+/** Returns a vector of attack + attack-number pairs by unit. */
+using GetUnitAttacks = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                        const CMidgardID* unitId,
+                                        AttackTypePairVector* value,
+                                        bool checkAltAttack);
+
+using GetItemAttack = IAttack*(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                           const CMidgardID* unitId,
+                                           int itemNumber);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -617,6 +628,8 @@ struct Functions
     ComputeTargetUnitAiPriority computeTargetUnitAiPriority;
     IsPlayerRaceUnplayable isPlayerRaceUnplayable;
     IsSupportAttackClass isSupportAttackClass;
+    GetUnitAttacks getUnitAttacks;
+    GetItemAttack getItemAttack;
 };
 
 /** Global variables used in game. */

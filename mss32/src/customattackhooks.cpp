@@ -585,8 +585,8 @@ void __stdcall getTargetsToAttackHooked(game::IdList* value,
         } else {
             for (const auto& custom : getCustomAttacks().reaches) {
                 if (attackReach->id == custom.reach.id) {
-                    // This is a hack. Every attack in the game has its unitId as a first field,
-                    // but its not a part of CBatAttackBase.
+                    // HACK: every attack in the game has its unitId as a first field, but its not a
+                    // part of CBatAttackBase.
                     CMidgardID* unitId = (CMidgardID*)(batAttack + 1);
 
                     CMidgardID unitGroupId{};

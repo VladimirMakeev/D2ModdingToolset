@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,50 +17,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ATTACKMODIFIED_H
-#define ATTACKMODIFIED_H
+#ifndef ATTACKTYPEPAIRVECTOR_H
+#define ATTACKTYPEPAIRVECTOR_H
 
-#include "attack.h"
+#include "d2pair.h"
+#include "d2vector.h"
 
 namespace game {
+struct IAttack;
 
-struct CAttackModifiedData;
-
-struct CAttackModified : public IAttack
+enum class AttackType : int
 {
-    CMidgardID attackId;
-    CAttackModifiedData* data;
+    Primary,
+    Secondary,
+    Item,
 };
 
-static_assert(sizeof(CAttackModified) == 12,
-              "Size of CAttackModified structure must be exactly 12 bytes");
+using AttackTypePair = Pair<IAttack*, AttackType>;
+using AttackTypePairVector = Vector<AttackTypePair>;
 
-struct CAttackModifiedData
-{
-    IAttack* underlying;
-    int initiative;
-    int power;
-    int qtyDamage;
-    int attackDrain;
-};
-
-static_assert(sizeof(CAttackModifiedData) == 20,
-              "Size of CAttackModifiedData structure must be exactly 20 bytes");
-
-namespace CAttackModifiedApi {
+namespace AttackTypePairVectorApi {
 
 struct Api
 {
-    using Wrap = void(__thiscall*)(CAttackModified* thisptr, const IAttack* attack);
-    Wrap wrap;
+    using PushBack = void(__thiscall*)(AttackTypePairVector* thisptr, const AttackTypePair* value);
+    PushBack pushBack;
 };
 
 Api& get();
 
-const IAttackVftable* vftable();
-
-} // namespace CAttackModifiedApi
+} // namespace AttackTypePairVectorApi
 
 } // namespace game
 
-#endif // ATTACKMODIFIED_H
+#endif // ATTACKTYPEPAIRVECTOR_H

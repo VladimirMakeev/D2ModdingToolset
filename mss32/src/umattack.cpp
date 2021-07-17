@@ -17,52 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "attackmodified.h"
+#include "umattack.h"
 #include "version.h"
 #include <array>
 
-namespace game::CAttackModifiedApi {
+namespace game::CUmAttackApi {
 
 // clang-format off
-static std::array<Api, 4> functions = {{
+static std::array<IUsSoldierVftable*, 4> vftables = {{
     // Akella
-    Api{
-        (Api::Wrap)0x5aa317,
-    },
+    (IUsSoldierVftable*)0x6ecf2c,
     // Russobit
-    Api{
-        (Api::Wrap)0x5aa317,
-    },
+    (IUsSoldierVftable*)0x6ecf2c,
     // Gog
-    Api{
-        (Api::Wrap)0x5a959f,
-    },
+    (IUsSoldierVftable*)0x6eaecc,
     // Scenario Editor
-    Api{
-        (Api::Wrap)0x551678,
-    },
-}};
-
-static std::array<IAttackVftable*, 4> vftables = {{
-    // Akella
-    (IAttackVftable*)0x6ed69c,
-    // Russobit
-    (IAttackVftable*)0x6ed69c,
-    // Gog
-    (IAttackVftable*)0x6eb63c,
-    // Scenario Editor
-    (IAttackVftable*)0x5e17e4,
+    (IUsSoldierVftable*)0x5e10ec,
 }};
 // clang-format on
 
-Api& get()
-{
-    return functions[static_cast<int>(hooks::gameVersion())];
-}
-
-const IAttackVftable* vftable()
+const IUsSoldierVftable* vftable()
 {
     return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::CAttackModifiedApi
+} // namespace game::CUmAttackApi

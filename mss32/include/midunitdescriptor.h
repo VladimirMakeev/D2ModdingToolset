@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,50 +17,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ATTACKMODIFIED_H
-#define ATTACKMODIFIED_H
+#ifndef MIDUNITDESCRIPTOR_H
+#define MIDUNITDESCRIPTOR_H
 
-#include "attack.h"
+#include "encunitdescriptor.h"
 
 namespace game {
 
-struct CAttackModifiedData;
+struct IAttack;
+struct IUsSoldier;
 
-struct CAttackModified : public IAttack
-{
-    CMidgardID attackId;
-    CAttackModifiedData* data;
-};
+struct CMidUnitDescriptor : public IEncUnitDescriptor
+{ };
 
-static_assert(sizeof(CAttackModified) == 12,
-              "Size of CAttackModified structure must be exactly 12 bytes");
-
-struct CAttackModifiedData
-{
-    IAttack* underlying;
-    int initiative;
-    int power;
-    int qtyDamage;
-    int attackDrain;
-};
-
-static_assert(sizeof(CAttackModifiedData) == 20,
-              "Size of CAttackModifiedData structure must be exactly 20 bytes");
-
-namespace CAttackModifiedApi {
+namespace CMidUnitDescriptorApi {
 
 struct Api
 {
-    using Wrap = void(__thiscall*)(CAttackModified* thisptr, const IAttack* attack);
-    Wrap wrap;
+    using GetSoldier = IUsSoldier*(__thiscall*)(const CMidUnitDescriptor* thisptr);
+    GetSoldier getSoldier;
+
+    using GetAttack = IAttack*(__thiscall*)(const CMidUnitDescriptor* thisptr);
+    GetAttack getAttack;
 };
 
 Api& get();
 
-const IAttackVftable* vftable();
+const IEncUnitDescriptorVftable* vftable();
 
-} // namespace CAttackModifiedApi
+} // namespace CMidUnitDescriptorApi
 
 } // namespace game
 
-#endif // ATTACKMODIFIED_H
+#endif // MIDUNITDESCRIPTOR_H

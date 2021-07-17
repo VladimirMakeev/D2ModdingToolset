@@ -21,6 +21,7 @@
 #define HOOKS_H
 
 #include "attack.h"
+#include "attacktypepairvector.h"
 #include "idlist.h"
 #include "targetslist.h"
 #include <string>
@@ -213,6 +214,11 @@ void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImp
                                                  game::IdType dynUpgradeType,
                                                  const game::CMidgardID* altAttackId,
                                                  game::CAttackData* attackData);
+
+void __stdcall getUnitAttacksHooked(const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* unitId,
+                                    game::AttackTypePairVector* value,
+                                    bool checkAltAttack);
 
 } // namespace hooks
 

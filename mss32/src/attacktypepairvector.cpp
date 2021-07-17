@@ -17,41 +17,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "attackmodified.h"
+#include "attacktypepairvector.h"
 #include "version.h"
 #include <array>
 
-namespace game::CAttackModifiedApi {
+namespace game::AttackTypePairVectorApi {
 
 // clang-format off
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::Wrap)0x5aa317,
+        (Api::PushBack)0x6479b0,
     },
     // Russobit
     Api{
-        (Api::Wrap)0x5aa317,
+        (Api::PushBack)0x6479b0,
     },
     // Gog
     Api{
-        (Api::Wrap)0x5a959f,
+        (Api::PushBack)0x6461e0,
     },
     // Scenario Editor
     Api{
-        (Api::Wrap)0x551678,
-    },
-}};
-
-static std::array<IAttackVftable*, 4> vftables = {{
-    // Akella
-    (IAttackVftable*)0x6ed69c,
-    // Russobit
-    (IAttackVftable*)0x6ed69c,
-    // Gog
-    (IAttackVftable*)0x6eb63c,
-    // Scenario Editor
-    (IAttackVftable*)0x5e17e4,
+        (Api::PushBack)nullptr,
+    }
 }};
 // clang-format on
 
@@ -60,9 +49,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-const IAttackVftable* vftable()
-{
-    return vftables[static_cast<int>(hooks::gameVersion())];
-}
-
-} // namespace game::CAttackModifiedApi
+} // namespace game::AttackTypePairVectorApi
