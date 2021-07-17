@@ -17,31 +17,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTIDS_H
-#define TEXTIDS_H
+#ifndef ATTACKTYPEPAIRVECTOR_H
+#define ATTACKTYPEPAIRVECTOR_H
 
-#include <string>
+#include "d2pair.h"
+#include "d2vector.h"
 
-namespace hooks {
+namespace game {
+struct IAttack;
 
-struct TextIds
+enum class AttackType : int
 {
-    struct Interf
-    {
-        std::string sellAllValuables;
-        std::string sellAllItems;
-        std::string infiniteAttack;
-        std::string critHitAttack;
-        std::string critHitDamage;
-        std::string ratedDamage;
-        std::string ratedDamageEqual;
-        std::string ratedDamageSeparator;
-        std::string splitDamage;
-    } interf;
+    Primary,
+    Secondary,
+    Item,
 };
 
-const TextIds& textIds();
+using AttackTypePair = Pair<IAttack*, AttackType>;
+using AttackTypePairVector = Vector<AttackTypePair>;
 
-} // namespace hooks
+namespace AttackTypePairVectorApi {
 
-#endif // TEXTIDS_H
+struct Api
+{
+    using PushBack = void(__thiscall*)(AttackTypePairVector* thisptr, const AttackTypePair* value);
+    PushBack pushBack;
+};
+
+Api& get();
+
+} // namespace AttackTypePairVectorApi
+
+} // namespace game
+
+#endif // ATTACKTYPEPAIRVECTOR_H

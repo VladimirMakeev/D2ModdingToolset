@@ -83,6 +83,12 @@ struct TUsSoldierImpl : public IUsSoldier
     TUsSoldierImplData* data;
 };
 
+namespace TUsSoldierImplApi {
+
+const IUsSoldierVftable* vftable();
+
+} // namespace TUsSoldierImplApi
+
 } // namespace game
 
 #endif // USSOLDIERIMPL_H

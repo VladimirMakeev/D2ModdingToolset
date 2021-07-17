@@ -17,31 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTIDS_H
-#define TEXTIDS_H
+#ifndef MIDUNITDESCRIPTORHOOKS_H
+#define MIDUNITDESCRIPTORHOOKS_H
 
-#include <string>
+namespace game {
+struct CMidUnitDescriptor;
+struct IAttack;
+} // namespace game
 
 namespace hooks {
 
-struct TextIds
-{
-    struct Interf
-    {
-        std::string sellAllValuables;
-        std::string sellAllItems;
-        std::string infiniteAttack;
-        std::string critHitAttack;
-        std::string critHitDamage;
-        std::string ratedDamage;
-        std::string ratedDamageEqual;
-        std::string ratedDamageSeparator;
-        std::string splitDamage;
-    } interf;
-};
+game::IAttack* __fastcall midUnitDescriptorGetAttackHooked(const game::CMidUnitDescriptor* thisptr,
+                                                           int /*%edx*/);
 
-const TextIds& textIds();
+int __fastcall midUnitDescriptorGetAttackInitiativeHooked(const game::CMidUnitDescriptor* thisptr,
+                                                          int /*%edx*/);
 
 } // namespace hooks
 
-#endif // TEXTIDS_H
+#endif // MIDUNITDESCRIPTORHOOKS_H

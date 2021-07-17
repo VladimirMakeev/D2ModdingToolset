@@ -22,10 +22,16 @@
 
 namespace game {
 
+struct IEncUnitDescriptorVftable;
 struct CMidgardID;
 struct LAttackClass;
 struct LAttackSource;
 struct LAttackReach;
+
+struct IEncUnitDescriptor
+{
+    const IEncUnitDescriptorVftable* vftable;
+};
 
 struct IEncUnitDescriptorVftable
 {
@@ -82,11 +88,6 @@ struct IEncUnitDescriptorVftable
 
 static_assert(sizeof(IEncUnitDescriptorVftable) == 43 * sizeof(void*),
               "IEncUnitDescriptor vftable must have exactly 43 methods");
-
-struct IEncUnitDescriptor
-{
-    const IEncUnitDescriptorVftable* vftable;
-};
 
 } // namespace game
 

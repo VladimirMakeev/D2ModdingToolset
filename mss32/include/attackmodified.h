@@ -37,7 +37,7 @@ static_assert(sizeof(CAttackModified) == 12,
 
 struct CAttackModifiedData
 {
-    IAttack* impl;
+    IAttack* underlying;
     int initiative;
     int power;
     int qtyDamage;
@@ -48,6 +48,14 @@ static_assert(sizeof(CAttackModifiedData) == 20,
               "Size of CAttackModifiedData structure must be exactly 20 bytes");
 
 namespace CAttackModifiedApi {
+
+struct Api
+{
+    using Wrap = void(__thiscall*)(CAttackModified* thisptr, const IAttack* attack);
+    Wrap wrap;
+};
+
+Api& get();
 
 const IAttackVftable* vftable();
 

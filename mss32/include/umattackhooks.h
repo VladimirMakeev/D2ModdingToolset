@@ -17,31 +17,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTIDS_H
-#define TEXTIDS_H
+#ifndef UMATTACKHOOKS_H
+#define UMATTACKHOOKS_H
 
-#include <string>
+namespace game {
+struct IAttack;
+struct CUmAttack_IUsSoldier;
+} // namespace game
 
 namespace hooks {
 
-struct TextIds
-{
-    struct Interf
-    {
-        std::string sellAllValuables;
-        std::string sellAllItems;
-        std::string infiniteAttack;
-        std::string critHitAttack;
-        std::string critHitDamage;
-        std::string ratedDamage;
-        std::string ratedDamageEqual;
-        std::string ratedDamageSeparator;
-        std::string splitDamage;
-    } interf;
-};
-
-const TextIds& textIds();
+game::IAttack* __fastcall umAttackGetAttackByIdHooked(const game::CUmAttack_IUsSoldier* thisptr,
+                                                      int /*%edx*/);
 
 } // namespace hooks
 
-#endif // TEXTIDS_H
+#endif // UMATTACKHOOKS_H

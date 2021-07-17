@@ -17,41 +17,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "attackmodified.h"
+#include "midunitdescriptor.h"
 #include "version.h"
 #include <array>
 
-namespace game::CAttackModifiedApi {
+namespace game::CMidUnitDescriptorApi {
 
 // clang-format off
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::Wrap)0x5aa317,
+        (Api::GetSoldier)0x57eda2,
+        (Api::GetAttack)0x57edb8,
     },
     // Russobit
     Api{
-        (Api::Wrap)0x5aa317,
+        (Api::GetSoldier)0x57eda2,
+        (Api::GetAttack)0x57edb8,
     },
     // Gog
     Api{
-        (Api::Wrap)0x5a959f,
+        (Api::GetSoldier)0x57e45d,
+        (Api::GetAttack)0x57e473,
     },
     // Scenario Editor
     Api{
-        (Api::Wrap)0x551678,
+        (Api::GetSoldier)0x4d01e6,
+        (Api::GetAttack)0x4d01fc,
     },
 }};
 
-static std::array<IAttackVftable*, 4> vftables = {{
+static std::array<IEncUnitDescriptorVftable*, 4> vftables = {{
     // Akella
-    (IAttackVftable*)0x6ed69c,
+    (IEncUnitDescriptorVftable*)0x6e919c,
     // Russobit
-    (IAttackVftable*)0x6ed69c,
+    (IEncUnitDescriptorVftable*)0x6e919c,
     // Gog
-    (IAttackVftable*)0x6eb63c,
+    (IEncUnitDescriptorVftable*)0x6e713c,
     // Scenario Editor
-    (IAttackVftable*)0x5e17e4,
+    (IEncUnitDescriptorVftable*)0x5d869c,
 }};
 // clang-format on
 
@@ -60,9 +64,9 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-const IAttackVftable* vftable()
+const IEncUnitDescriptorVftable* vftable()
 {
     return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::CAttackModifiedApi
+} // namespace game::CMidUnitDescriptorApi

@@ -50,6 +50,7 @@
 - Fixes AI unit placement logic for melee units with vampiric attacks;
 - Fixes AI targeting for single lower-damage and lower-initiative attacks;
 - Fixes incorrect function of transform-self attack in cases where its alternative attack targets allies (heal, summon, etc.);
+- Fixes missing modifiers of alternative attacks (![demo video](https://user-images.githubusercontent.com/5180699/125460215-144ef648-5497-4674-b9d6-ac7d2fa95125.mp4));
 - Fixes Scenario Editor bug with elves race as a caster in "Cast spell on location" event effect;
 - <details>
     <summary>Buttons for bulk item transfer: transfer all items, potions, scrolls/wands or valuables between inventories with single click;</summary>
@@ -223,8 +224,7 @@
 - <details>
     <summary>Supports custom attack reaches;</summary>
 
-    ![Demo video](https://user-images.githubusercontent.com/5180699/122282606-46cb4200-cef4-11eb-9774-e479edc00d21.mp4)
-    Customizable via Lua scripting and additional columns in LAttR.dbf.<br />
+    ![Demo video](https://user-images.githubusercontent.com/5180699/122282606-46cb4200-cef4-11eb-9774-e479edc00d21.mp4). Customizable via Lua scripting and additional columns in LAttR.dbf.<br />
     [Scripts](Scripts) includes example targeting scripts demonstrated in the video above.<br />
     [Examples](Examples) includes an example of LAttR.dbf.<br />
 
@@ -234,14 +234,8 @@
     - SEL_SCRIPT (Character, size 48) contains a file name of a targeting script from Scripts directory. The script determines which units allowed to be **selected** for attack;
     - ATT_SCRIPT (Character, size 48) similar to SEL_SCRIPT, but determines which units will be **affected** by attack;
     - MRK_TARGTS (Logical) determines whether ATT_SCRIPT should be used to also mark targets with circle animation on battlefield. Usually should be **true**, except when the attack affects random targets (L_CHAIN for instance);
-    - MAX_TARGTS (Numeric, size 1) specifies maximum number of targets that can be affected by attack. Used solely for AI rating calculations;
+    - MAX_TARGTS (Numeric, size 1) specifies maximum number of targets that can be affected by attack. Used for AI rating calculations, and for damage ratio display formatting in unit encyclopedia;
     - MELEE (Logical) determines whether the attack considered as melee. Used by AI for unit hiring, positioning and targeting.
-    
-    **Note** that the REACH column is limited to 1 digit in GAttacks.dbf.<br />
-    This means that only 6 additional reaches (id 4-9) can be added by default.<br />
-    The limit can be lifted by extending the REACH column size to 2 digits (similar to CLASS).<br />
-    For example, using Sdbf: go to main manu Table > Change structure, set REACH size to 2 and hit save:
-    ![image](https://user-images.githubusercontent.com/5180699/124194675-af5c1680-dad1-11eb-97d3-a59637594b37.png)
 
     Example descriptions for TARGET_TXT:
     ```
@@ -256,6 +250,12 @@
     X005TA1008 All units in 2x2 area
     X005TA1009 Randomly bounces to 2 additional targets
     ```
+
+    **Note** that the REACH column is limited to 1 digit in GAttacks.dbf.<br />
+    This means that only 6 additional reaches (id 4-9) can be added by default.<br />
+    The limit can be lifted by extending the REACH column size to 2 digits (similar to CLASS).<br />
+    For example, using Sdbf: go to main manu Table > Change structure, set REACH size to 2 and hit save:
+    ![image](https://user-images.githubusercontent.com/5180699/124194675-af5c1680-dad1-11eb-97d3-a59637594b37.png)
   </details>
 - <details>
     <summary>Supports custom attack damage ratio for additional targets;</summary>
@@ -271,6 +271,8 @@
     For instance, if QTY_DAM = 100, DAM_RATIO = 25 and there are 3 affected targets then the damage distribution will be 67-17-17 (67 * 0,25 ~ 17; 67 + 17 + 17 ~ 100).
 
     ![image](https://user-images.githubusercontent.com/5180699/124194976-2b565e80-dad2-11eb-8395-58614dcd669f.png)
+
+    **Note** that damage ratio representation in unit encyclopedia can be customized. Check [textids.lua](Scripts/textids.lua).
   </details>
 
 ### Settings:

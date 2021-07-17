@@ -17,31 +17,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTIDS_H
-#define TEXTIDS_H
-
-#include <string>
+#include "umattackhooks.h"
+#include "game.h"
+#include "umattack.h"
 
 namespace hooks {
 
-struct TextIds
+game::IAttack* __fastcall umAttackGetAttackByIdHooked(const game::CUmAttack_IUsSoldier* thisptr,
+                                                      int /*%edx*/)
 {
-    struct Interf
-    {
-        std::string sellAllValuables;
-        std::string sellAllItems;
-        std::string infiniteAttack;
-        std::string critHitAttack;
-        std::string critHitDamage;
-        std::string ratedDamage;
-        std::string ratedDamageEqual;
-        std::string ratedDamageSeparator;
-        std::string splitDamage;
-    } interf;
-};
+    using namespace game;
 
-const TextIds& textIds();
+    const auto& fn = gameFunctions();
+    const auto& attackModifiedApi = CAttackModifiedApi::get();
+
+    auto unitImpl = thisptr->umModifier.data->underlying;
+    auto soldier = fn.castUnitImplToSoldier(unitImpl);
+
+    auto attack = soldier->vftable->getAttackById(soldier);
+    auto altAttackId = attack->vftable->getAltAttackId(attack);
+    if (*altAttackId != emptyId)
+        return attack;
+
+    auto attackModified = &thisptr->data->attackModified;
+    attackModifiedApi.wrap(attackModified, attack);
+    return attackModified;
+}
 
 } // namespace hooks
-
-#endif // TEXTIDS_H

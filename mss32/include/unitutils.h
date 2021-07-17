@@ -28,8 +28,10 @@ struct CMidUnit;
 struct IUsUnit;
 struct IUsSoldier;
 struct TUsUnitImpl;
+struct TUsSoldierImpl;
 struct LImmuneCat;
 struct LAttackSource;
+struct IAttack;
 } // namespace game
 
 namespace hooks {
@@ -42,6 +44,8 @@ void getSoldierAttackSourceImmunities(const game::LImmuneCat* immuneCat,
 bool isUnitSmall(const game::CMidUnit* unit);
 game::CMidgardID getGlobalUnitImplId(const game::CMidUnit* unit);
 game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidUnit* unit);
+game::TUsSoldierImpl* getSoldierImpl(const game::IUsSoldier* soldier);
+game::IAttack* getAttack(const game::IUsSoldier* soldier, bool primary, bool checkAltAttack);
 
 } // namespace hooks
 

@@ -17,31 +17,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTIDS_H
-#define TEXTIDS_H
+#ifndef MIDUNITDESCRIPTOR_H
+#define MIDUNITDESCRIPTOR_H
 
-#include <string>
+#include "encunitdescriptor.h"
 
-namespace hooks {
+namespace game {
 
-struct TextIds
+struct IAttack;
+struct IUsSoldier;
+
+struct CMidUnitDescriptor : public IEncUnitDescriptor
+{ };
+
+namespace CMidUnitDescriptorApi {
+
+struct Api
 {
-    struct Interf
-    {
-        std::string sellAllValuables;
-        std::string sellAllItems;
-        std::string infiniteAttack;
-        std::string critHitAttack;
-        std::string critHitDamage;
-        std::string ratedDamage;
-        std::string ratedDamageEqual;
-        std::string ratedDamageSeparator;
-        std::string splitDamage;
-    } interf;
+    using GetSoldier = IUsSoldier*(__thiscall*)(const CMidUnitDescriptor* thisptr);
+    GetSoldier getSoldier;
+
+    using GetAttack = IAttack*(__thiscall*)(const CMidUnitDescriptor* thisptr);
+    GetAttack getAttack;
 };
 
-const TextIds& textIds();
+Api& get();
 
-} // namespace hooks
+const IEncUnitDescriptorVftable* vftable();
 
-#endif // TEXTIDS_H
+} // namespace CMidUnitDescriptorApi
+
+} // namespace game
+
+#endif // MIDUNITDESCRIPTOR_H

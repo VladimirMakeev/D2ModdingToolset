@@ -31,6 +31,11 @@ textids = {
 		-- Fallback text is "%DMG%, %RATED%".
 		ratedDamage = "",
 
+		-- Defines text id to format equal rated damage in unit encyclopedia.
+		-- The text must contain keywords "%DMG%", %TARGETS% and "%RATED%".
+		-- Fallback text is "%DMG%, (%TARGETS%x) %RATED%".
+		ratedDamageEqual = "",
+
 		-- Defines text id for rated damage separator in unit encyclopedia.
 		-- Fallback text is ", ".
 		ratedDamageSeparator = "",

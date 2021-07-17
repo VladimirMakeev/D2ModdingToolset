@@ -87,6 +87,8 @@ struct Rtti
     TypeDescriptor* CAttackModifiedType;
     TypeDescriptor* IItemType;
     TypeDescriptor* CItemBattleType;
+    TypeDescriptor* IUsSoldierType;
+    TypeDescriptor* TUsSoldierImplType;
 };
 
 const Rtti& rtti();

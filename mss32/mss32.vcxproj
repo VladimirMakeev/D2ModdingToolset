@@ -144,6 +144,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\attackclasscat.cpp" />
     <ClCompile Include="src\attackimpl.cpp" />
     <ClCompile Include="src\attackmodified.cpp" />
+    <ClCompile Include="src\attacktypepairvector.cpp" />
     <ClCompile Include="src\attackreachcat.cpp" />
     <ClCompile Include="src\attacksourcecat.cpp" />
     <ClCompile Include="src\attacksourcelist.cpp" />
@@ -250,6 +251,8 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\midmusic.cpp" />
     <ClCompile Include="src\midscenvariables.cpp" />
     <ClCompile Include="src\midstack.cpp" />
+    <ClCompile Include="src\midunitdescriptor.cpp" />
+    <ClCompile Include="src\midunitdescriptorhooks.cpp" />
     <ClCompile Include="src\midunitgroup.cpp" />
     <ClCompile Include="src\midunit.cpp" />
     <ClCompile Include="src\modifierutils.cpp" />
@@ -298,6 +301,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\togglebutton.cpp" />
     <ClCompile Include="src\transformselfhooks.cpp" />
     <ClCompile Include="src\uimanager.cpp" />
+    <ClCompile Include="src\umattack.cpp" />
     <ClCompile Include="src\unitbranchcat.cpp" />
     <ClCompile Include="src\unitcat.cpp" />
     <ClCompile Include="src\unitinfolist.cpp" />
@@ -305,6 +309,8 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\unitpositionlist.cpp" />
     <ClCompile Include="src\unitsforhire.cpp" />
     <ClCompile Include="src\unitutils.cpp" />
+    <ClCompile Include="src\ussoldierimpl.cpp" />
+    <ClCompile Include="src\umattackhooks.cpp" />
     <ClCompile Include="src\utils.cpp" />
     <ClCompile Include="src\version.cpp" />
     <ClCompile Include="src\visitors.cpp" />
@@ -349,6 +355,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\attackclasscat.h" />
     <ClInclude Include="include\attackimpl.h" />
     <ClInclude Include="include\attackmodified.h" />
+    <ClInclude Include="include\attacktypepairvector.h" />
     <ClInclude Include="include\attackreachcat.h" />
     <ClInclude Include="include\attacksourcecat.h" />
     <ClInclude Include="include\attacksourcelist.h" />
@@ -544,6 +551,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midstacktemplate.h" />
     <ClInclude Include="include\midsubrace.h" />
     <ClInclude Include="include\midunit.h" />
+    <ClInclude Include="include\midunitdescriptor.h" />
+    <ClInclude Include="include\midunitdescriptorhooks.h" />
     <ClInclude Include="include\midunitgroup.h" />
     <ClInclude Include="include\midvillage.h" />
     <ClInclude Include="include\modifgroup.h" />
@@ -642,6 +651,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\unitutils.h" />
     <ClInclude Include="include\ussoldier.h" />
     <ClInclude Include="include\ussoldierimpl.h" />
+    <ClInclude Include="include\umattackhooks.h" />
     <ClInclude Include="include\usstackleader.h" />
     <ClInclude Include="include\usunit.h" />
     <ClInclude Include="include\usunitextension.h" />
