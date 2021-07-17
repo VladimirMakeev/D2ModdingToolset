@@ -136,40 +136,54 @@ std::string getAttackPlusCritDamageText(const std::string& damage, int critDamag
     return text;
 }
 
+std::string getRatedAttackDamageText(int damage, int critDamage, double ratio)
+{
+    auto result = fmt::format("{:d}", applyAttackDamageRatio(damage, ratio));
+    if (critDamage)
+        result = getAttackPlusCritDamageText(result, applyAttackDamageRatio(critDamage, ratio));
+
+    return result;
+}
+
 std::string getRatedAttackDamageText(const game::IAttack* attack,
                                      const std::string& damageText,
                                      int damage,
                                      int critDamage,
-                                     int maxTargets)
+                                     int maxTargets,
+                                     bool sameRatio)
 {
     auto ratios = computeAttackDamageRatio(attack, maxTargets);
-    if (ratios.empty())
+    if (ratios.size() < 2)
         return damageText;
+    else if (sameRatio && ratios.size() > 2) {
+        auto result = getTranslatedText(textIds().interf.ratedDamageEqual.c_str());
+        if (result.empty())
+            result = "%DMG%, (%TARGETS%x) %RATED%";
 
-    auto result = getTranslatedText(textIds().interf.ratedDamage.c_str());
-    if (result.empty())
-        result = "%DMG%, %RATED%";
+        replace(result, "%DMG%", damageText);
+        replace(result, "%TARGETS%", fmt::format("{:d}", ratios.size() - 1));
+        replace(result, "%RATED%", getRatedAttackDamageText(damage, critDamage, ratios[1]));
+        return result;
+    } else {
+        auto result = getTranslatedText(textIds().interf.ratedDamage.c_str());
+        if (result.empty())
+            result = "%DMG%, %RATED%";
 
-    auto separator = getTranslatedText(textIds().interf.ratedDamageSeparator.c_str());
-    if (separator.empty())
-        separator = ", ";
+        auto separator = getTranslatedText(textIds().interf.ratedDamageSeparator.c_str());
+        if (separator.empty())
+            separator = ", ";
 
-    std::string rated;
-    for (auto it = ++(ratios.begin()); it < ratios.end(); ++it) {
-        if (!rated.empty())
-            rated += separator;
+        std::string rated;
+        for (auto it = ++(ratios.begin()); it < ratios.end(); ++it) {
+            if (!rated.empty())
+                rated += separator;
+            rated += getRatedAttackDamageText(damage, critDamage, *it);
+        }
 
-        auto ratedDamageText = fmt::format("{:d}", applyAttackDamageRatio(damage, *it));
-        if (critDamage)
-            rated += getAttackPlusCritDamageText(ratedDamageText,
-                                                 applyAttackDamageRatio(critDamage, *it));
-        else
-            rated += ratedDamageText;
+        replace(result, "%DMG%", damageText);
+        replace(result, "%RATED%", rated);
+        return result;
     }
-
-    replace(result, "%DMG%", damageText);
-    replace(result, "%RATED%", rated);
-    return result;
 }
 
 std::string getSplitAttackDamageText(const std::string& damageText)
@@ -187,16 +201,26 @@ std::string getRatedOrSplitAttackDamageText(const game::IAttack* attack,
                                             int damage,
                                             int critDamage)
 {
+    using namespace game;
+
+    const auto& reaches = AttackReachCategories::get();
+
     int maxTargets = 0;
     auto reach = attack->vftable->getAttackReach(attack);
-    for (const auto& custom : getCustomAttacks().reaches) {
-        if (reach->id == custom.reach.id) {
-            maxTargets = custom.maxTargets;
-            break;
+    if (reach->id == reaches.all->id) {
+        maxTargets = 6;
+    } else if (reach->id == reaches.any->id || reach->id == reaches.adjacent->id) {
+        maxTargets = 1;
+    } else {
+        for (const auto& custom : getCustomAttacks().reaches) {
+            if (reach->id == custom.reach.id) {
+                maxTargets = custom.maxTargets;
+                break;
+            }
         }
     }
 
-    if (maxTargets == 0)
+    if (maxTargets < 2)
         return damageText;
 
     auto attackImpl = getAttackImpl(attack);
@@ -206,7 +230,8 @@ std::string getRatedOrSplitAttackDamageText(const game::IAttack* attack,
     if (attackImpl->data->damageSplit) {
         return getSplitAttackDamageText(damageText);
     } else {
-        return getRatedAttackDamageText(attack, damageText, damage, critDamage, maxTargets);
+        return getRatedAttackDamageText(attack, damageText, damage, critDamage, maxTargets,
+                                        !attackImpl->data->damageRatioPerTarget);
     }
 }
 
