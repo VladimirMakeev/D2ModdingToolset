@@ -1456,12 +1456,11 @@ void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
 
     battle.setAttackPowerReduction(battleMsgData, unitId, 0);
 
-    auto& customAttacks = getCustomAttacks();
-    auto& customDamageRatio = customAttacks.damageRatio;
+    auto& customDamageRatio = getCustomAttacks().damageRatio;
     if (customDamageRatio.enabled)
         customDamageRatio.ratios.clear();
 
-    auto& customTransformSelf = customAttacks.transformSelf;
+    auto& customTransformSelf = getCustomAttacks().transformSelf;
     if (customTransformSelf.freeAttackUnitId != *unitId)
         customTransformSelf.freeAttackUnitId = emptyId;
 }

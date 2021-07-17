@@ -21,6 +21,7 @@
 #include "attackclasscat.h"
 #include "attackimpl.h"
 #include "attackutils.h"
+#include "batattacktransformself.h"
 #include "customattack.h"
 #include "customattacks.h"
 #include "customattackutils.h"
@@ -556,6 +557,64 @@ void __stdcall addUnitToBattleMsgDataHooked(const game::IMidgardObjectMap* objec
                          hooks::idToString(unitId)));
 }
 
+bool __stdcall getTargetsToAttackForAllOrCustomReach(game::IdList* value,
+                                                     const game::IMidgardObjectMap* objectMap,
+                                                     const game::IAttack* attack,
+                                                     const game::IBatAttack* batAttack,
+                                                     const game::LAttackReach* attackReach,
+                                                     const game::BattleMsgData* battleMsgData,
+                                                     game::BattleAction action,
+                                                     const game::CMidgardID* targetUnitId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& reaches = AttackReachCategories::get();
+    const auto& classes = AttackClassCategories::get();
+
+    if (action != BattleAction::Attack && action != BattleAction::UseItem)
+        return false;
+
+    LAttackClass attackClass{};
+    batAttack->vftable->getUnderlyingAttackClass(batAttack, targetUnitId, battleMsgData,
+                                                 &attackClass);
+    bool isTransformSelfAttack = attackClass.id == classes.transformSelf->id;
+
+    // HACK: every attack in the game except CBatAttackTransformSelf has its unitId as a first
+    // field, but its not a part of CBatAttackBase.
+    CMidgardID* unitId = (CMidgardID*)(batAttack + 1);
+    if (isTransformSelfAttack)
+        unitId = &((CBatAttackTransformSelf*)batAttack)->unitId;
+
+    auto& customTransformSelf = getCustomAttacks().transformSelf;
+    customTransformSelf.targetSelf = isTransformSelfAttack && *unitId == *targetUnitId;
+    if (customTransformSelf.targetSelf)
+        return false;
+
+    CMidgardID targetGroupId{};
+    batAttack->vftable->getTargetGroupId(batAttack, &targetGroupId, battleMsgData);
+
+    if (attackReach->id == reaches.all->id) {
+        getTargetsToAttackForAllAttackReach(objectMap, battleMsgData, attack, batAttack,
+                                            &targetGroupId, targetUnitId, value);
+        return true;
+    } else if (attackReach->id != reaches.any->id && attackReach->id != reaches.adjacent->id) {
+        for (const auto& custom : getCustomAttacks().reaches) {
+            if (attackReach->id == custom.reach.id) {
+                CMidgardID unitGroupId{};
+                fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, unitId, true);
+
+                getTargetsToAttackForCustomAttackReach(objectMap, battleMsgData, batAttack,
+                                                       &targetGroupId, targetUnitId, &unitGroupId,
+                                                       unitId, custom, value);
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 void __stdcall getTargetsToAttackHooked(game::IdList* value,
                                         const game::IMidgardObjectMap* objectMap,
                                         const game::IAttack* attack,
@@ -567,38 +626,10 @@ void __stdcall getTargetsToAttackHooked(game::IdList* value,
 {
     using namespace game;
 
-    const auto& fn = gameFunctions();
-    const auto& reaches = AttackReachCategories::get();
     const auto& listApi = IdListApi::get();
 
-    if (action == BattleAction::Attack || action == BattleAction::UseItem) {
-        CMidgardID targetGroupId{};
-        batAttack->vftable->getTargetGroupId(batAttack, &targetGroupId, battleMsgData);
-
-        if (attackReach->id == reaches.all->id) {
-            getTargetsToAttackForAllAttackReach(objectMap, battleMsgData, attack, batAttack,
-                                                &targetGroupId, targetUnitId, value);
-        } else if (attackReach->id == reaches.any->id) {
-            listApi.pushBack(value, targetUnitId);
-        } else if (attackReach->id == reaches.adjacent->id) {
-            listApi.pushBack(value, targetUnitId);
-        } else {
-            for (const auto& custom : getCustomAttacks().reaches) {
-                if (attackReach->id == custom.reach.id) {
-                    // HACK: every attack in the game has its unitId as a first field, but its not a
-                    // part of CBatAttackBase.
-                    CMidgardID* unitId = (CMidgardID*)(batAttack + 1);
-
-                    CMidgardID unitGroupId{};
-                    fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, unitId, true);
-
-                    getTargetsToAttackForCustomAttackReach(objectMap, battleMsgData, batAttack,
-                                                           &targetGroupId, targetUnitId,
-                                                           &unitGroupId, unitId, custom, value);
-                }
-            }
-        }
-    } else {
+    if (!getTargetsToAttackForAllOrCustomReach(value, objectMap, attack, batAttack, attackReach,
+                                               battleMsgData, action, targetUnitId)) {
         listApi.pushBack(value, targetUnitId);
     }
 
