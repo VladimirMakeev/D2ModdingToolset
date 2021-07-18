@@ -35,12 +35,31 @@ template <typename T, typename U>
 struct CBFunctorDispatch2Vftable
 {
     /** Calls functor-specific callback function, passing it T and U as a parameters. */
-    using RunCallback = void(__thiscall*)(CBFunctorDispatch2<T, U>* thistr, T value, U value2);
+    using RunCallback = void(__thiscall*)(CBFunctorDispatch2<T, U>* thisptr, T value, U value2);
     RunCallback runCallback;
 };
 
 static_assert(sizeof(CBFunctorDispatch2Vftable<void*, void*>) == 1 * sizeof(void*),
               "CBFunctorDispatch2 vftable must have exactly 1 method");
+
+template <typename T, typename U, typename Ret>
+struct CBFunctorDispatch2wRetVftable;
+
+template <typename T, typename U, typename Ret>
+struct CBFunctorDispatch2wRet
+{
+    CBFunctorDispatch2wRetVftable<T, U, Ret>* vftable;
+};
+
+template <typename T, typename U, typename Ret>
+struct CBFunctorDispatch2wRetVftable
+{
+    /** Calls functor-specific callback function, passing it T and U as a parameters. */
+    using RunCallback = Ret(__thiscall*)(CBFunctorDispatch2wRet<T, U, Ret>* thisptr,
+                                         T value,
+                                         U value2);
+    RunCallback runCallback;
+};
 
 } // namespace game
 
