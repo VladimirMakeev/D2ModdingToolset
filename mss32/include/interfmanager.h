@@ -20,6 +20,8 @@
 #ifndef INTERFMANAGER_H
 #define INTERFMANAGER_H
 
+#include "functordispatch2.h"
+#include "linkedlist.h"
 #include "presentation.h"
 #include "smartptr.h"
 #include <cstddef>
@@ -29,28 +31,71 @@ namespace game {
 struct CInterfManager;
 struct CInterface;
 struct CMqRect;
+struct CTooltipImpl;
+struct CCursorImpl;
+struct IInterfBorderDisplay;
+
+using GlobalKeyPressDispatch = CBFunctorDispatch2wRet<unsigned short, unsigned short, bool>;
+using GlobalKeyPressDispatchPtr = SmartPtr<GlobalKeyPressDispatch>;
 
 struct CInterfManagerVftable
 {
-    void* unknown[4];
+    using Destructor = void(__thiscall*)(CInterfManager* thisptr, char flags);
+    Destructor destructor;
+
+    /** Returns true if interfaces list is empty. */
+    using IsInterfacesEmpty = bool(__thiscall*)(const CInterfManager* thisptr);
+    IsInterfacesEmpty isInterfacesEmpty;
+
+    /** Returns topmost interface or nullptr if interfaces list is empty. */
+    using GetInterface = CInterface*(__thiscall*)(CInterfManager* thisptr);
+    GetInterface getInterface;
+
+    void* unknown;
 
     /** Shows interface as top element. */
     using ShowInterface = bool(__thiscall*)(CInterfManager* thisptr, CInterface* interface);
     ShowInterface showInterface;
 
-    void* method5;
+    /**
+     * Removes topmost interface from list and returns it.
+     * Second element in the list is chosen as the new top.
+     */
+    GetInterface removeInterface;
 
     /** Hides specified interface. */
     using HideInterface = bool(__thiscall*)(CInterfManager* thisptr, CInterface* interface);
     HideInterface hideInterface;
 
-    void* unknown2[9];
+    /** Clears the list deleting all interfaces. */
+    using ClearInterfaces = void(__thiscall*)(CInterfManager* thisptr);
+    ClearInterfaces clearInterfaces;
+
+    using SetBorderDisplay = void(__thiscall*)(CInterfManager* thisptr,
+                                               IInterfBorderDisplay* borderDisplay);
+    SetBorderDisplay setBorderDisplay;
+
+    void* methods[4];
+
+    using SetGlobalKeyHandler = void(__thiscall*)(CInterfManager* thisptr,
+                                                  GlobalKeyPressDispatchPtr* handler);
+    SetGlobalKeyHandler setGlobalKeyHandler;
+
+    void* methods2[2];
 
     /** Returns game window resolution. */
     using GetResolution = const CMqRect*(__thiscall*)(const CInterfManager* thisptr);
     GetResolution getResolution;
 
-    void* unknown3[6];
+    void* methods3[2];
+
+    using GetTooltip = CTooltipImpl*(__thiscall*)(CInterfManager* thisptr);
+    GetTooltip getTooltip;
+
+    using GetCursor = CCursorImpl*(__thiscall*)(CInterfManager* thisptr);
+    GetCursor getCursor;
+
+    void* methods4[2];
 };
 
 static_assert(sizeof(CInterfManagerVftable) == 23 * sizeof(void*),
@@ -61,11 +106,26 @@ struct CInterfManager
     const CInterfManagerVftable* vftable;
 };
 
-/** Must be 200 bytes according to CInterfManagerImpl constructor. */
 struct CInterfManagerImplData
 {
-    char unknown[200];
+    char unknown[8];
+    SmartPtr<CTooltipImpl> tooltipImpl;
+    SmartPtr<CCursorImpl> cursorImpl;
+    /** Topmost interface is always first in the list. */
+    LinkedList<CInterface*> interfaces;
+    char unknown2[100];
+    /**
+     * Called before processing handleKeyboard() of topmost interface.
+     * Used for checking special key combinations globally in the game.
+     */
+    GlobalKeyPressDispatchPtr onKeyPressed;
+    char unknown3[28];
+    IInterfBorderDisplay* borderDisplay;
+    char unknown4[20];
 };
+
+static_assert(sizeof(CInterfManagerImplData) == 200,
+              "Size of CInterfManagerImplData structure must be exactly 200 bytes");
 
 struct CInterfManagerImpl
     : public CInterfManager
