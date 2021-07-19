@@ -64,7 +64,7 @@ struct Api
     CapitalDataPtrSetData capitalDataPtrSetData;
 
     /** Reads Capital.dat information into CapitalData. */
-    using Read = void(__stdcall*)(const char* imagesFolderPath, const char* filename);
+    using Read = int(__stdcall*)(const char* imagesFolderPath, const char* filename);
     Read read;
 
     /** Reads single Capital.dat entry for specified race. */

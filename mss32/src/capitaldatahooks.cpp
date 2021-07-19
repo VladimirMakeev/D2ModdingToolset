@@ -111,7 +111,7 @@ game::CapitalData** __fastcall allocateCapitalDataHooked(game::CapitalData** thi
     return thisptr;
 }
 
-void __stdcall readCapitalDataHooked(const char* imagesFolderPath, const char* filename)
+int __stdcall readCapitalDataHooked(const char* imagesFolderPath, const char* filename)
 {
     using namespace game;
 
@@ -127,32 +127,39 @@ void __stdcall readCapitalDataHooked(const char* imagesFolderPath, const char* f
 
     if (!capitalData.readEntry(&dataPtr, filePath.string().c_str(), races.human)) {
         showErrorMessageBox(fmt::format("Failed to read Capital.dat entry for empire"));
+        return 0;
     }
 
     if (!capitalData.readEntry(&dataPtr, filePath.string().c_str(), races.heretic)) {
         showErrorMessageBox(
             fmt::format("Failed to read Capital.dat entry for legions of the damned"));
+        return 0;
     }
 
     if (!capitalData.readEntry(&dataPtr, filePath.string().c_str(), races.dwarf)) {
         showErrorMessageBox(fmt::format("Failed to read Capital.dat entry for mountain clans"));
+        return 0;
     }
 
     if (!capitalData.readEntry(&dataPtr, filePath.string().c_str(), races.undead)) {
         showErrorMessageBox(fmt::format("Failed to read Capital.dat entry for undead hordes"));
+        return 0;
     }
 
     if (!capitalData.readEntry(&dataPtr, filePath.string().c_str(), races.elf)) {
         showErrorMessageBox(fmt::format("Failed to read Capital.dat entry for elves"));
+        return 0;
     }
 
     for (const auto& race : newRaces()) {
         if (!capitalData.readEntry(&dataPtr, filePath.string().c_str(), &race.category)) {
             showErrorMessageBox(fmt::format("Failed to read Capital.dat entry for new race"));
+            return 0;
         }
     }
 
     capitalData.capitalDataPtrSetData(&ptr, nullptr);
+    return 1;
 }
 
 } // namespace hooks

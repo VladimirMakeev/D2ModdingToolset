@@ -28,7 +28,7 @@ namespace hooks {
 
 game::CapitalData** __fastcall allocateCapitalDataHooked(game::CapitalData** thisptr, int /*%edx*/);
 
-void __stdcall readCapitalDataHooked(const char* imagesFolderPath, const char* filename);
+int __stdcall readCapitalDataHooked(const char* imagesFolderPath, const char* filename);
 
 } // namespace hooks
 
