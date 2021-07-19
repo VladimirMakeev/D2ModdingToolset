@@ -569,25 +569,24 @@ bool __stdcall getTargetsToAttackForAllOrCustomReach(game::IdList* value,
     using namespace game;
 
     const auto& fn = gameFunctions();
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
     const auto& reaches = AttackReachCategories::get();
-    const auto& classes = AttackClassCategories::get();
 
     if (action != BattleAction::Attack && action != BattleAction::UseItem)
         return false;
 
-    LAttackClass attackClass{};
-    batAttack->vftable->getUnderlyingAttackClass(batAttack, targetUnitId, battleMsgData,
-                                                 &attackClass);
-    bool isTransformSelfAttack = attackClass.id == classes.transformSelf->id;
+    auto transformSelfAttack = (CBatAttackTransformSelf*)
+        dynamicCast(batAttack, 0, rtti.IBatAttackType, rtti.CBatAttackTransformSelfType, 0);
 
     // HACK: every attack in the game except CBatAttackTransformSelf has its unitId as a first
     // field, but its not a part of CBatAttackBase.
     CMidgardID* unitId = (CMidgardID*)(batAttack + 1);
-    if (isTransformSelfAttack)
-        unitId = &((CBatAttackTransformSelf*)batAttack)->unitId;
+    if (transformSelfAttack)
+        unitId = &transformSelfAttack->unitId;
 
     auto& customTransformSelf = getCustomAttacks().transformSelf;
-    customTransformSelf.targetSelf = isTransformSelfAttack && *unitId == *targetUnitId;
+    customTransformSelf.targetSelf = transformSelfAttack && *unitId == *targetUnitId;
     if (customTransformSelf.targetSelf)
         return false;
 

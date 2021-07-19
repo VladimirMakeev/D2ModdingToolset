@@ -23,15 +23,16 @@
 
 namespace hooks {
 
-game::IAttack* __fastcall umAttackGetAttackByIdHooked(const game::CUmAttack_IUsSoldier* thisptr,
-                                                      int /*%edx*/)
+game::IAttack* __fastcall umAttackGetAttackByIdHooked(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
     using namespace game;
 
     const auto& fn = gameFunctions();
     const auto& attackModifiedApi = CAttackModifiedApi::get();
 
-    auto unitImpl = thisptr->umModifier.data->underlying;
+    auto umattack = castSoldierToUmAttack(thisptr);
+
+    auto unitImpl = umattack->umModifier.data->underlying;
     auto soldier = fn.castUnitImplToSoldier(unitImpl);
 
     auto attack = soldier->vftable->getAttackById(soldier);
@@ -39,7 +40,7 @@ game::IAttack* __fastcall umAttackGetAttackByIdHooked(const game::CUmAttack_IUsS
     if (*altAttackId != emptyId)
         return attack;
 
-    auto attackModified = &thisptr->data->attackModified;
+    auto attackModified = &umattack->data->attackModified;
     attackModifiedApi.wrap(attackModified, attack);
     return attackModified;
 }

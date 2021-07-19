@@ -22,12 +22,12 @@
 
 namespace game {
 struct IAttack;
-struct CUmAttack_IUsSoldier;
+struct IUsSoldier;
 } // namespace game
 
 namespace hooks {
 
-game::IAttack* __fastcall umAttackGetAttackByIdHooked(const game::CUmAttack_IUsSoldier* thisptr,
+game::IAttack* __fastcall umAttackGetAttackByIdHooked(const game::IUsSoldier* thisptr,
                                                       int /*%edx*/);
 
 } // namespace hooks
