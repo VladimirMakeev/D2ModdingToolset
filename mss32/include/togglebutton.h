@@ -48,6 +48,35 @@ struct CToggleButton : public CInterface
 static_assert(sizeof(CToggleButton) == 12,
               "Size of CToggleButton structure must be exactly 12 bytes");
 
+struct CToggleButtonVftable : public CInterfaceVftable
+{
+    void* method34;
+
+    using SetEnabled = void(__thiscall*)(CToggleButton* thisptr, bool value);
+    SetEnabled setEnabled;
+
+    void* method36;
+    void* method37;
+};
+
+static_assert(sizeof(CToggleButtonVftable) == 38 * sizeof(void*),
+              "CToggleButton vftable must have exactly 38 methods");
+
+static_assert(offsetof(CToggleButtonVftable, setEnabled) == 140,
+              "CToggleButtonVftable::setEnabled offset must be 140 bytes");
+
+namespace CToggleButtonApi {
+
+struct Api
+{
+    using SetChecked = void(__thiscall*)(CToggleButton* thisptr, bool checked);
+    SetChecked setChecked;
+};
+
+Api& get();
+
+} // namespace CToggleButtonApi
+
 } // namespace game
 
 #endif // TOGGLEBUTTON_H

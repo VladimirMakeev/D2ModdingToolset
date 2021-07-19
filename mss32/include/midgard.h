@@ -35,7 +35,7 @@ struct CMidServer;
 struct GameSettings;
 struct CMenuPhase;
 struct CAutoDialog;
-struct CUiManager;
+struct CUIManager;
 struct CInterfManagerImpl;
 struct CMqFps;
 
@@ -59,7 +59,7 @@ struct CMidgardData
     CAutoDialog* autoDialog;
     void* menuAnimations;
     void* menuImages;
-    SmartPtr<CUiManager> uiManager;
+    SmartPtr<CUIManager> uiManager;
     char unknown4[32];
     std::uint32_t netMessageId;
     char unknown5[24];

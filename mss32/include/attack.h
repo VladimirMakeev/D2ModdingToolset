@@ -27,6 +27,7 @@
 #include "midgardid.h"
 #include "midobject.h"
 #include "textandid.h"
+#include <cstdint>
 
 namespace game {
 
@@ -72,7 +73,9 @@ struct IAttackVftable
     GetDrain getDrain;
 
     GetInt getLevel;
-    GetInt getAltAttack;
+
+    using GetId = const CMidgardID*(__thiscall*)(const IAttack* thisptr);
+    GetId getAltAttackId;
 
     using GetBool = bool(__thiscall*)(const IAttack* thisptr);
     GetBool getInfinite;
@@ -82,7 +85,7 @@ struct IAttackVftable
 
     GetBool getCritHit;
 
-    using GetData = bool(__thiscall*)(const IAttack* thisptr, CAttackData* value);
+    using GetData = void(__thiscall*)(const IAttack* thisptr, CAttackData* value);
     GetData getData;
 };
 
@@ -108,7 +111,16 @@ struct CAttackData
     char padding[3];
     IdVector wards;
     bool critHit;
-    char padding2[3];
+    union
+    {
+        struct
+        {
+            std::uint8_t damageRatio;
+            bool damageRatioPerTarget;
+            bool damageSplit;
+        };
+        char padding2[3];
+    };
 };
 
 namespace IAttackApi {

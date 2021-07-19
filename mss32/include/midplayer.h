@@ -24,23 +24,12 @@
 #include "currency.h"
 #include "midgardid.h"
 #include "midscenarioobject.h"
+#include "sortedlist.h"
 #include "stringandid.h"
 
 namespace game {
 
 struct TRaceType;
-
-/** Must be 24 bytes according to CMidPlayer constructor. */
-struct CMidPlayerSpyData
-{
-    char unknown[24];
-};
-
-/** Must be 24 bytes according to CMidPlayer constructor. */
-struct CMidPlayerExmapData
-{
-    char unknown[24];
-};
 
 /** Holds player related data in scenario file and game. */
 struct CMidPlayer : public IMidScenarioObject
@@ -59,7 +48,7 @@ struct CMidPlayer : public IMidScenarioObject
     CMidgardID buildingsId;
     int researchTurn;
     int constructionTurn;
-    CMidPlayerSpyData spyData;
+    SortedList<CMidgardID> spyData;
     Bank bank;
     Bank spellBank;
     bool isHuman;
@@ -67,12 +56,17 @@ struct CMidPlayer : public IMidScenarioObject
     CMidgardID capturedById;
     bool alwaysAi;
     char padding2[3];
-    CMidPlayerExmapData exmapData;
-    int unknown2;
-    int unknown3;
+    SortedList<std::uint64_t> exmapData; // Each node contains 8 bytes of data
 };
 
 static_assert(sizeof(CMidPlayer) == 176, "Size of CMidPlayer structure must be exactly 176 bytes");
+
+static_assert(offsetof(CMidPlayer, bank) == 112, "CMidPlayer::bank offset must be 112 bytes");
+
+static_assert(offsetof(CMidPlayer, spellBank) == 124,
+              "CMidPlayer::spellBank offset must be 124 bytes");
+
+static_assert(offsetof(CMidPlayer, isHuman) == 136, "CMidPlayer::isHuman offset must be 136 bytes");
 
 } // namespace game
 

@@ -42,6 +42,15 @@ struct LinkedList
     void* allocator;
 };
 
+template <typename T>
+struct LinkedListIterator
+{
+    char unknown;
+    char padding[3];
+    LinkedListNode<T>* node;
+    LinkedListNode<T>* node2;
+};
+
 } // namespace game
 
 #endif // LINKEDLIST_H

@@ -27,19 +27,28 @@ namespace game::CMidUnitGroupApi {
 std::array<Api, 3> functions = {{
     // Akella
     Api{
+        (Api::GetUnitId)0x5f57f1,
         (Api::GetUnitPosition)0x5f5897,
         (Api::GetUnitIdByPosition)0x5f586f,
+        (Api::AddUnitIdsAvailableForSummons)0x628a02,
+        (Api::UnknownFunction)0x631c50,
     },
     // Russobit
     Api{
+        (Api::GetUnitId)0x5f57f1,
         (Api::GetUnitPosition)0x5f5897,
         (Api::GetUnitIdByPosition)0x5f586f,
+        (Api::AddUnitIdsAvailableForSummons)0x628a02,
+        (Api::UnknownFunction)0x631c50,
     },
     // Gog
     Api{
+        (Api::GetUnitId)0x5f44b9,
         (Api::GetUnitPosition)0x5f455f,
         (Api::GetUnitIdByPosition)0x5f4537,
-    }
+        (Api::AddUnitIdsAvailableForSummons)0x627542,
+        (Api::UnknownFunction)0x630690,
+    },
 }};
 // clang-format on
 

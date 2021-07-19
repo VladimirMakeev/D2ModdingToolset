@@ -33,6 +33,9 @@ struct CInterfManagerImpl;
 struct CInterface;
 struct IMqRenderer2;
 struct CMqPoint;
+struct Tooltip;
+
+using TooltipPtr = SmartPtr<Tooltip>;
 
 struct CInterfaceData
 {
@@ -41,7 +44,7 @@ struct CInterfaceData
     CMqRect area;
     CInterfaceChilds childs;
     SmartPointer unknown6;
-    SmartPointer unknown7;
+    TooltipPtr tooltip;
 };
 
 static_assert(sizeof(CInterfaceData) == 64,
@@ -70,7 +73,8 @@ struct CInterfaceVftable
                                    IMqRenderer2* renderer);
     Draw draw;
 
-    void* method2;
+    using Method2 = int(__thiscall*)(CInterface* thisptr, int a2);
+    Method2 method2;
 
     /**
      * Handles mouse buttons events.
@@ -88,10 +92,24 @@ struct CInterfaceVftable
     using HandleKeyboard = int(__thiscall*)(CInterface* thisptr, int key, int a3);
     HandleKeyboard handleKeyboard;
 
-    void* method5;
-    void* method6;
-    void* method7;
-    void* method8;
+    using Method5 = void(__thiscall*)(CInterface* thisptr, int a2, int a3);
+    Method5 method5;
+
+    /** Calls method30 to get the pointer. */
+    using Method6 = SmartPointer*(__thiscall*)(CInterface* thisptr,
+                                               SmartPointer* ptr,
+                                               const CMqPoint* point);
+    Method6 method6;
+
+    /** Returns tooltip of the interface element under the point. */
+    using GetTooltipAtPoint = TooltipPtr*(__thiscall*)(CInterface* thisptr,
+                                                       TooltipPtr* tooltip,
+                                                       const CMqPoint* point);
+    GetTooltipAtPoint getTooltipAtPoint;
+
+    using Method8 = void*(__thiscall*)(CInterface* thisptr, void* a2, void* a3);
+    Method8 method8;
+
     void* method9;
     void* method10;
 
@@ -101,12 +119,26 @@ struct CInterfaceVftable
     using GetArea = CMqRect*(__thiscall*)(CInterface* thisptr);
     GetArea getArea;
 
-    void* method13;
-    void* method14;
+    using SetArea = bool(__thiscall*)(CInterface* thisptr, const CMqRect* area);
+    SetArea setArea;
+
+    /** Returns true if specified point is inside interface element area. */
+    using IsPointInside = bool(__thiscall*)(const CInterface* thisptr, const CMqPoint* point);
+    IsPointInside isPointInside;
+
     void* method15;
     void* method16;
-    void* method17;
-    void* method18;
+
+    /** Assumption: resizes interface element and its childs. */
+    using Method17 = bool(__thiscall*)(CInterface* thisptr, const CMqPoint* size);
+    Method17 method17;
+
+    /**
+     * Assumption: centers interface element inside specified area.
+     * Centers inside parent element if input area is nullptr.
+     */
+    using Method18 = bool(__thiscall*)(CInterface* thisptr, const CMqRect* area);
+    Method18 method18;
 
     /** Returns parent element. */
     using GetParent = CInterface*(__thiscall*)(CInterface* thisptr);
@@ -155,11 +187,30 @@ struct CInterfaceVftable
     using DeleteChildAt = void(__thiscall*)(CInterface* thisptr, const int* index);
     DeleteChildAt deleteChildAt;
 
-    void* method28;
-    void* method29;
-    void* method30;
-    void* method31;
-    void* method32;
+    /**
+     * Returns interface element under specified point.
+     * Check if point is inside interface area or its childs.
+     * @param deepCheck if true checks whole hierarchy, otherwise checks direct childs only.
+     * @returns nullptr if nothing found.
+     */
+    using GetInterfaceAtPoint = CInterface*(__thiscall*)(const CInterface* thisptr,
+                                                         const CMqPoint* point,
+                                                         bool deepCheck);
+    GetInterfaceAtPoint getInterfaceAtPoint;
+
+    /** Sets unknown6. */
+    using Method29 = SmartPointer*(__thiscall*)(CInterface* thisptr, SmartPointer* a2);
+    Method29 method29;
+
+    /** Returns unknown6. */
+    using Method30 = SmartPointer*(__thiscall*)(CInterface* thisptr);
+    Method30 method30;
+
+    using SetTooltip = void(__thiscall*)(CInterface* thisptr, TooltipPtr* tooltip);
+    SetTooltip setTooltip;
+
+    using GetTooltip = TooltipPtr*(__thiscall*)(CInterface* thisptr);
+    GetTooltip getTooltip;
 
     /**
      * Sets specified element as parent of this interface.

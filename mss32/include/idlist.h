@@ -27,22 +27,54 @@ namespace game {
 
 using IdList = LinkedList<CMidgardID>;
 using IdListNode = LinkedListNode<CMidgardID>;
+using IdListIterator = LinkedListIterator<CMidgardID>;
 
 namespace IdListApi {
 
 struct Api
 {
+    using Constructor = IdList*(__thiscall*)(IdList* thisptr);
+    Constructor constructor;
+
+    using Destructor = void(__thiscall*)(IdList* thisptr);
+    Destructor destructor;
+
     /** Clears list contents. */
-    using SetEmpty = bool(__thiscall*)(IdList* list);
-    SetEmpty setEmpty;
+    using Clear = bool(__thiscall*)(IdList* thisptr);
+    Clear clear;
 
-    /** Adds id to list. */
-    using Add = int(__thiscall*)(IdList* list, const CMidgardID* id);
-    Add add;
+    /** Adds id to list's end. */
+    using PushBack = int(__thiscall*)(IdList* thisptr, const CMidgardID* id);
+    PushBack pushBack;
 
-    /** Removes id from the list. */
-    using Remove = void(__thiscall*)(IdList* list, int a2, IdListNode* node, int a4);
-    Remove remove;
+    /** Erases id from list. */
+    using Erase = void(__thiscall*)(IdList* thisptr, IdListIterator pos);
+    Erase erase;
+
+    using Front = CMidgardID*(__thiscall*)(const IdList* thisptr);
+    Front front;
+
+    using GetIterator = IdListIterator*(__thiscall*)(const IdList* thisptr, IdListIterator* value);
+    GetIterator begin;
+    GetIterator end;
+
+    using Find = IdListIterator*(__stdcall*)(IdListIterator* value,
+                                             IdListIterator begin,
+                                             IdListIterator end,
+                                             const CMidgardID* id);
+    Find find;
+
+    using Equals = bool(__thiscall*)(IdListIterator* thisptr, const IdListIterator* value);
+    Equals equals;
+
+    using Dereference = CMidgardID*(__thiscall*)(IdListIterator* thisptr);
+    Dereference dereference;
+
+    using Preincrement = IdListIterator*(__thiscall*)(IdListIterator* thisptr);
+    Preincrement preinc;
+
+    using Shuffle = void(__stdcall*)(IdList* list);
+    Shuffle shuffle;
 };
 
 Api& get();

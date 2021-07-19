@@ -20,25 +20,33 @@
 #ifndef PICTUREINTERF_H
 #define PICTUREINTERF_H
 
+#include "functordispatch1.h"
+#include "functordispatch2.h"
 #include "interface.h"
 
 namespace game {
 
 struct IMqImage2;
 struct CMqPoint;
+struct CPictureInterf;
 
 struct CPictureInterfData
 {
-    char unknown[20];
+    int widgetChildIndex;
+    SmartPtr<CBFunctorDispatch2<std::uint32_t, CPictureInterf*>> onMouseButtonPressed;
+    SmartPtr<CBFunctorDispatch1<CPictureInterf*>> onMouseDoubleClicked;
 };
 
 static_assert(sizeof(CPictureInterfData) == 20,
               "Size of CPictureInterfData structure must be exactly 20 bytes");
 
-/** Picture ui element. */
+/**
+ * Picture ui element.
+ * Represents IMAGE from Interf.dlg or ScenEdit.dlg files.
+ */
 struct CPictureInterf : public CInterface
 {
-    CPictureInterfData* pictureData;
+    CPictureInterfData* data;
 };
 
 static_assert(sizeof(CPictureInterf) == 12,
@@ -54,7 +62,7 @@ struct Api
      */
     using SetImage = void(__thiscall*)(CPictureInterf* thisptr,
                                        IMqImage2* image,
-                                       const CMqPoint* position);
+                                       const CMqPoint* offset);
     SetImage setImage;
 };
 

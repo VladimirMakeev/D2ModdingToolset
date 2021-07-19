@@ -86,11 +86,37 @@ static_assert(offsetof(CMidStack, stackId) == 24, "CMidStack::stackId offset mus
 
 static_assert(offsetof(CMidStack, leaderId) == 40, "CMidStack::leaderId offset must be 40 bytes");
 
+static_assert(offsetof(CMidStack, inventory) == 100,
+              "CMidStack::inventory offset must be 64 bytes");
+
 static_assert(offsetof(CMidStack, leaderEquppedItems) == 124,
               "CMidStack::leaderEquppedItems offset must be 124 bytes");
 
 static_assert(offsetof(CMidStack, orderTargetId) == 172,
               "CMidStack::orderTargetId offset must be 172 bytes");
+
+namespace CMidStackApi {
+
+struct Api
+{
+    using SetPosition = bool(__thiscall*)(CMidStack* thisptr,
+                                          const IMidgardObjectMap* objectMap,
+                                          const CMqPoint* position,
+                                          bool checkArea);
+    SetPosition setPosition;
+
+    using SetOwner = bool(__thiscall*)(CMidStack* thisptr,
+                                       const IMidgardObjectMap* objectMap,
+                                       const CMidgardID* ownerId,
+                                       const CMidgardID* subraceId);
+    SetOwner setOwner;
+};
+
+Api& get();
+
+const IMapElementVftable* vftable();
+
+} // namespace CMidStackApi
 
 } // namespace game
 

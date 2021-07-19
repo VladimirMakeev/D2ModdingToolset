@@ -37,6 +37,7 @@
 - Allows to customize shatter attacks: maximum damage per hit, maximum armor that can be shattered, whether attack can miss or not, and its upgrade ratio;
 - Allows doppelganger, transform and summon attacks to produce leveled versions of units;
 - Allows doppelganger attacks to respect enemy and ally wards and immunities to the attack class and source;
+- Allows transform-self attack to not consume a unit turn for transformation, once per turn (![demo video](https://user-images.githubusercontent.com/5180699/124916545-76550200-dffb-11eb-8b12-3147e40ef04b.mp4));
 - Allows to set a maximum number of items the player is allowed to transfer between campaign scenarios;
 - Allows to load and create scenarios with no magic (maximum spell level set to 0);
 - Allows Scenario Editor to place merchants, mages, trainers and mercenaries on water tiles;
@@ -48,6 +49,8 @@
 - Fixes game crash on 144x144 maps that occurs if there is a party standing on a lower-left or lower-right edge of the map;
 - Fixes AI unit placement logic for melee units with vampiric attacks;
 - Fixes AI targeting for single lower-damage and lower-initiative attacks;
+- Fixes incorrect function of transform-self attack in cases where its alternative attack targets allies (heal, summon, etc.);
+- Fixes missing modifiers of alternative attacks (![demo video](https://user-images.githubusercontent.com/5180699/125460215-144ef648-5497-4674-b9d6-ac7d2fa95125.mp4));
 - Fixes Scenario Editor bug with elves race as a caster in "Cast spell on location" event effect;
 - <details>
     <summary>Buttons for bulk item transfer: transfer all items, potions, scrolls/wands or valuables between inventories with single click;</summary>
@@ -191,31 +194,85 @@
     - Value of lower initiative;
     - Critical hit indication;
     - Infinite effect indication;
+    - Custom attack sources;
+    - Custom attack reaches;
+    - Custom attack damage ratios.
 
-    Critical-hit / infinite-effect indication text can be customized:
+    Some text can be customized, like critical-hit / infinite-effect indication (check [textids.lua](Scripts/textids.lua) for complete list):
     - Add desired text to TApp.dbf and TAppEdit.dbf;
-    - Specify id of the text in 'critHitAttack' / 'infiniteAttack' field inside 'Scripts\\textids.lua'.
-
-    In case of missing text, defaults are: 'X160TA0017' for critical hit, and 'Lasting' for infinite effect.
+    - Specify text id in a corresponding field inside 'Scripts\\textids.lua'.
   </details>
 - <details>
     <summary>Supports custom attack sources;</summary>
 
     - Add a name for a custom source to TApp.dbf and TAppEdit.dbf;
-    - Add NAME_TXT (Character, size 10) and IMMUNE_POW (Number, size 2) columns to LattS.dbf;
-    ![image](https://user-images.githubusercontent.com/5180699/117533496-db897880-aff5-11eb-92ad-4b5bf70602a0.png)
+    - Add NAME_TXT (Character, size 10) and IMMU_AI_R (Numeric, size 2) columns to LattS.dbf;
+    ![image](https://user-images.githubusercontent.com/5180699/122281972-8cd3d600-cef3-11eb-8795-69c09d4da288.png)
     - Add a new entry in LattS.dbf;
     - Specify the custom source ID and TEXT accordingly;
     - Specify the id of the source name from TApp.dbf in NAME_TXT ('X005TA0153' for instance);
-    - Specify IMMUNE_POW: the value is used by AI to determine how powerful a unit with such ward or immunity is. The greater - the better. For example, elemental immunities have average power of 5, while weapon immunity has 57. Can be omitted - 5 is the default.
+    - Specify IMMU_AI_R: AI rating of the source immunity - used to determine how powerful a unit with such ward or immunity is. The greater - the better. For example, elemental immunities have average rating of 5, while weapon immunity has 57. Can be omitted - 5 is the default.
 
-    ![image](https://user-images.githubusercontent.com/5180699/117533697-e2fd5180-aff6-11eb-905f-24e9c736a9b6.png)
+    ![image](https://user-images.githubusercontent.com/5180699/122281194-ac1e3380-cef2-11eb-902a-29821d0ceae5.png)
 
     **Note** that the SOURCE column is limited to 1 digit in GAttacks.dbf.<br />
     This means that only 2 additional sources (with id 8 and 9) can be added by default.<br />
     The limit can be lifted by extending the SOURCE column size to 2 digits (similar to CLASS).<br />
     For example, using Sdbf: go to main manu Table > Change structure, set SOURCE size to 2 and hit save:
     ![image](https://user-images.githubusercontent.com/5180699/117063431-7f8cce80-ad2d-11eb-8765-b0cadaa80567.png)
+  </details>
+- <details>
+    <summary>Supports custom attack reaches;</summary>
+
+    ![Demo video](https://user-images.githubusercontent.com/5180699/122282606-46cb4200-cef4-11eb-9774-e479edc00d21.mp4). Customizable via Lua scripting and additional columns in LAttR.dbf.<br />
+    [Scripts](Scripts) includes example targeting scripts demonstrated in the video above.<br />
+    [Examples](Examples) includes an example of LAttR.dbf.<br />
+
+    Additional columns of LAttR.dbf:
+    - REACH_TXT (Character, size 10) specifies an id for 'Reach' encyclopedia description from TApp.dbf and TAppEdit.dbf. For example 'X005TA0201' is the standard 'Adjacent units';
+    - TARGET_TXT (Character, size 10) similar to REACH_TXT but for 'Targets' entry (either '1' or '6' in vanilla);
+    - SEL_SCRIPT (Character, size 48) contains a file name of a targeting script from Scripts directory. The script determines which units allowed to be **selected** for attack;
+    - ATT_SCRIPT (Character, size 48) similar to SEL_SCRIPT, but determines which units will be **affected** by attack;
+    - MRK_TARGTS (Logical) determines whether ATT_SCRIPT should be used to also mark targets with circle animation on battlefield. Usually should be **true**, except when the attack affects random targets (L_CHAIN for instance);
+    - MAX_TARGTS (Numeric, size 1) specifies maximum number of targets that can be affected by attack. Used for AI rating calculations, and for damage ratio display formatting in unit encyclopedia;
+    - MELEE (Logical) determines whether the attack considered as melee. Used by AI for unit hiring, positioning and targeting.
+
+    Example descriptions for TARGET_TXT:
+    ```
+    X005TA1000 All adjacent units
+    X005TA1001 The target and all units adjacent to it
+    X005TA1002 The target and one unit adjacent to it
+    X005TA1003 All units in the adjacent line
+    X005TA1004 The target and the unit behind it
+    X005TA1005 The target and the unit behind it
+    X005TA1006 All units in the target line
+    X005TA1007 All units in the target column
+    X005TA1008 All units in 2x2 area
+    X005TA1009 Randomly bounces to 2 additional targets
+    ```
+
+    **Note** that the REACH column is limited to 1 digit in GAttacks.dbf.<br />
+    This means that only 6 additional reaches (id 4-9) can be added by default.<br />
+    The limit can be lifted by extending the REACH column size to 2 digits (similar to CLASS).<br />
+    For example, using Sdbf: go to main manu Table > Change structure, set REACH size to 2 and hit save:
+    ![image](https://user-images.githubusercontent.com/5180699/124194675-af5c1680-dad1-11eb-97d3-a59637594b37.png)
+  </details>
+- <details>
+    <summary>Supports custom attack damage ratio for additional targets;</summary>
+
+    The main purpose is to complement custom attack reaches.<br />
+    Allows to reduce or increase incoming damage for additional attack targets:
+    - Add DAM_RATIO (Numeric, size 3), DR_REPEAT (Logical) and DAM_SPLIT (Logical) columns to Gattacks.dbf;
+    - DAM_RATIO specifies a portion of the attack damage received by additional targets (0-255%). 100 or empty is the vanilla behavior;
+    - DR_REPEAT specifies whether the DAM_RATIO should be applied for every consequent target. For instance, if QTY_DAM = 50 and DAM_RATIO = 20, then the first target receives 50, second - 10 (50 * 0,2), third - 2 (10 * 0,2) and so on.
+    - DAM_SPLIT specifies whether the attack damage (QTY_DAM) is split between all the affected targets.<br />
+    For instance, if QTY_DAM = 100 and there are 3 affected targets, then every target will receive 33 damage.<br />
+    DAM_RATIO and DR_REPEAT also apply, but determine a ratio between additional and first target damage.<br />
+    For instance, if QTY_DAM = 100, DAM_RATIO = 25 and there are 3 affected targets then the damage distribution will be 67-17-17 (67 * 0,25 ~ 17; 67 + 17 + 17 ~ 100).
+
+    ![image](https://user-images.githubusercontent.com/5180699/124194976-2b565e80-dad2-11eb-8395-58614dcd669f.png)
+
+    **Note** that damage ratio representation in unit encyclopedia can be customized. Check [textids.lua](Scripts/textids.lua).
   </details>
 
 ### Settings:
@@ -257,6 +314,7 @@ The following settings can be changed in 'Scripts\\settings.lua':
   - "leveledTransformSelfAttack=(true/false)" changes transform self attacks to compute transformed unit level using 'Scripts\\transformSelf.lua' script;
   - "leveledSummonAttack=(true/false)" changes summon attacks to compute summoned units levels using 'Scripts\\summon.lua' script;
   - "unrestrictedBestowWards=(true/false)" increases total wards limit per caster from 8 to 48, see more details under Features section;
+  - "freeTransformSelfAttack=(true/false)" allows transform-self attack to not consume a unit turn for transformation (once per turn), see more details under Features section;
   - "disableAllowedRoundMax=\[1 : (2^31 - 1)\]" sets a number of battle round after which paralyze and petrify attacks will constantly miss;
   - "missChanceSingleRoll=(true/false)" if true, switches attacks miss check to a single random value roll instead of check against arithmetic mean of two random numbers;
   - "mageLeaderAccuracyReduction=\[0 : 100\]" allows to set accuracy reduction for mage leaders per each additional target;

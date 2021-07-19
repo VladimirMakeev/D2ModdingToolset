@@ -25,27 +25,12 @@
 #include "midunit.h"
 #include "unitgenerator.h"
 #include "unitimplview.h"
+#include "unitutils.h"
 #include "ussoldier.h"
 #include "usunitimpl.h"
 #include "utils.h"
 #include <fmt/format.h>
 #include <sol/sol.hpp>
-
-namespace {
-
-game::CMidgardID getUnitBaseImplId(const game::CMidUnit* unit)
-{
-    using namespace game;
-
-    CMidgardID baseImplId{};
-    CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
-    unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &baseImplId,
-                                                &unit->unitImpl->unitId);
-
-    return baseImplId;
-}
-
-} // namespace
 
 namespace bindings {
 
@@ -57,6 +42,8 @@ void UnitView::bind(sol::state& lua)
 {
     auto unit = lua.new_usertype<UnitView>("Unit");
     unit["xp"] = sol::property(&UnitView::getXp);
+    unit["hp"] = sol::property(&UnitView::getHp);
+    unit["hpMax"] = sol::property(&UnitView::getHpMax);
     unit["impl"] = sol::property(&UnitView::getImpl);
     unit["baseImpl"] = sol::property(&UnitView::getBaseImpl);
 }
@@ -68,26 +55,24 @@ std::optional<UnitImplView> UnitView::getImpl() const
 
 std::optional<UnitImplView> UnitView::getBaseImpl() const
 {
-    using namespace game;
-
-    const auto& globalApi = GlobalDataApi::get();
-    auto globalData = *globalApi.getGlobalData();
-
-    const CMidgardID baseImplId{getUnitBaseImplId(unit)};
-
-    auto unitImpl = (TUsUnitImpl*)globalApi.findById(globalData->units, &baseImplId);
-    if (!unitImpl) {
-        hooks::logError("mssProxyError.log", fmt::format("Could not find unit impl {:s}",
-                                                         hooks::idToString(&baseImplId)));
-        return std::nullopt;
-    }
-
-    return {unitImpl};
+    return {hooks::getGlobalUnitImpl(unit)};
 }
 
 int UnitView::getXp() const
 {
     return unit->currentXp;
+}
+
+int UnitView::getHp() const
+{
+    return unit->currentHp;
+}
+
+int UnitView::getHpMax() const
+{
+    using namespace game;
+
+    return CMidUnitApi::get().getHpMax(unit);
 }
 
 } // namespace bindings

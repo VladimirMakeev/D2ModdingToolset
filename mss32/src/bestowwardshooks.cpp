@@ -80,13 +80,13 @@ bool __fastcall bestowWardsAttackCanPerformHooked(game::CBatAttackBestowWards* t
 {
     using namespace game;
 
-    CMidgardID targetStackId{};
-    thisptr->vftable->getTargetStackId(thisptr, &targetStackId, battleMsgData);
+    CMidgardID targetGroupId{};
+    thisptr->vftable->getTargetGroupId(thisptr, &targetGroupId, battleMsgData);
 
-    CMidgardID targetUnitStackId{};
-    gameFunctions().getAllyOrEnemyStackId(&targetUnitStackId, battleMsgData, targetUnitId, true);
+    CMidgardID targetUnitGroupId{};
+    gameFunctions().getAllyOrEnemyGroupId(&targetUnitGroupId, battleMsgData, targetUnitId, true);
 
-    if (targetUnitStackId != targetStackId)
+    if (targetUnitGroupId != targetGroupId)
         return false;
 
     if (canHeal(thisptr->attackImpl, objectMap, battleMsgData, targetUnitId))

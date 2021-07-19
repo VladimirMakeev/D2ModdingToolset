@@ -20,26 +20,61 @@
 #ifndef CUSTOMATTACKS_H
 #define CUSTOMATTACKS_H
 
+#include "attackreachcat.h"
 #include "attacksourcecat.h"
+#include "midgardid.h"
+#include <map>
 #include <string>
 #include <vector>
 
 namespace hooks {
+
+static const char damageRatioColumnName[] = "DAM_RATIO";
+static const char damageRatioPerTargetColumnName[] = "DR_REPEAT";
+static const char damageSplitColumnName[] = "DAM_SPLIT";
 
 struct CustomAttackSource
 {
     game::LAttackSource source;
     std::string text;
     std::string nameId;
-    double immunityPower;
+    double immunityAiRating;
     std::uint32_t wardFlagPosition;
 };
 
 using CustomAttackSources = std::vector<CustomAttackSource>;
 
+struct CustomAttackReach
+{
+    game::LAttackReach reach;
+    std::string text;
+    std::string reachTxt;
+    std::string targetsTxt;
+    std::string selectionScript;
+    std::string attackScript;
+    bool markAttackTargets;
+    bool melee;
+    std::uint32_t maxTargets;
+};
+
+using CustomAttackReaches = std::vector<CustomAttackReach>;
+
+struct CustomDamageRatio
+{
+    bool enabled;
+    std::map<game::CMidgardID, double> ratios;
+};
+
 struct CustomAttacks
 {
     CustomAttackSources sources;
+    CustomAttackReaches reaches;
+    CustomDamageRatio damageRatio;
+    struct
+    {
+        game::CMidgardID freeAttackUnitId;
+        bool targetSelf;
+    } transformSelf;
 };
 
 CustomAttacks& getCustomAttacks();

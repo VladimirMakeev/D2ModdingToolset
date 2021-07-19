@@ -20,7 +20,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "d2pair.h"
+#include "attacktypepairvector.h"
 #include "globaldata.h"
 #include "idlist.h"
 #include "mqpoint.h"
@@ -38,6 +38,7 @@ struct GlobalData;
 struct IMidObject;
 struct IUsSoldier;
 struct IUsNoble;
+struct IUsStackLeader;
 struct IMidgardObjectMap;
 struct TLordType;
 struct CMidPlayer;
@@ -64,6 +65,7 @@ struct String;
 struct LRaceCategory;
 struct LTerrainCategory;
 struct LGroundCategory;
+struct IItem;
 
 enum class ModifierElementTypeFlag : int;
 
@@ -137,7 +139,7 @@ using GetLordByPlayer = const TLordType*(__stdcall*)(const CMidPlayer* player);
 using IsTurnValid = bool(__stdcall*)(int turn);
 
 /** Returns stack id of allies or enemies for specified unit id. */
-using GetAllyOrEnemyStackId = CMidgardID*(__stdcall*)(CMidgardID* stackId,
+using GetAllyOrEnemyGroupId = CMidgardID*(__stdcall*)(CMidgardID* value,
                                                       const BattleMsgData* battleMsgData,
                                                       const CMidgardID* unitId,
                                                       bool allies);
@@ -146,26 +148,27 @@ using GetAllyOrEnemyStackId = CMidgardID*(__stdcall*)(CMidgardID* stackId,
 using FindUnitById = CMidUnit*(__stdcall*)(const IMidgardObjectMap* objectMap,
                                            const CMidgardID* unitId);
 
-using CastUnitImplToSoldier = IUsSoldier*(__stdcall*)(IUsUnit* unitImpl);
+using CastUnitImplToSoldier = IUsSoldier*(__stdcall*)(const IUsUnit* unitImpl);
 using CastUnitImplToNoble = IUsNoble*(__stdcall*)(const IUsUnit* unitImpl);
+using CastUnitImplToStackLeader = IUsStackLeader*(__stdcall*)(const IUsUnit* unitImpl);
 
-using CreateBatAttack = IBatAttack*(__stdcall*)(IMidgardObjectMap* objectMap,
-                                                BattleMsgData* battleMsgData,
+using CreateBatAttack = IBatAttack*(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                const BattleMsgData* battleMsgData,
                                                 const CMidgardID* unitId,
                                                 const CMidgardID* id2,
                                                 int attackNumber,
                                                 const LAttackClass* attackClass,
                                                 bool a7);
 
-using GetAttackById = IAttack*(__stdcall*)(IMidgardObjectMap* objectMap,
+using GetAttackById = IAttack*(__stdcall*)(const IMidgardObjectMap* objectMap,
                                            const CMidgardID* id,
                                            int attackNumber,
                                            bool checkTransformed);
 
-using IsUnitImmuneToAttack = bool(__stdcall*)(IMidgardObjectMap* objectMap,
-                                              BattleMsgData* battleMsgData,
+using IsUnitImmuneToAttack = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                              const BattleMsgData* battleMsgData,
                                               const CMidgardID* unitId,
-                                              IAttack* attack,
+                                              const IAttack* attack,
                                               bool checkAlwaysImmuneOnly);
 
 /** Returns bit flag position (0-31) for the specified attack class. */
@@ -181,7 +184,7 @@ using GetAttackSourceWardFlagPosition =
  * Actual object type found determined by specified id IdType.
  */
 using GetStackFortRuinGroup = CMidUnitGroup*(__thiscall*)(void* thisptr,
-                                                          IMidgardObjectMap* objectMap,
+                                                          const IMidgardObjectMap* objectMap,
                                                           const CMidgardID* objectId);
 
 using DeletePlayerBuildings = int(__stdcall*)(IMidgardObjectMap* objectMap, CMidPlayer* player);
@@ -209,7 +212,7 @@ using ComputePlayerDailyIncome = Bank*(__stdcall*)(Bank* income,
  */
 using ComputeDamage = int(__stdcall*)(const IMidgardObjectMap* objectMap,
                                       const BattleMsgData* battleMsgData,
-                                      const IAttack* attackImpl,
+                                      const IAttack* attack,
                                       const CMidgardID* attackerUnitId,
                                       const CMidgardID* targetUnitId,
                                       bool computeCriticalHit,
@@ -249,6 +252,9 @@ using AttackShouldMiss = bool(__stdcall*)(const int* power);
 
 /** Generates random number in range [0 : maxValue) using special ingame generator. */
 using GenerateRandomNumber = int(__stdcall*)(unsigned int maxValue);
+
+/** Generates random number in range [0 : maxValue) using standard CRT rand(). */
+using GenerateRandomNumberStd = int(__stdcall*)(unsigned int maxValue);
 
 using GetUnitPositionInGroup = int(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                const CMidgardID* groupId,
@@ -428,8 +434,60 @@ using GetSoldierAttackSourceImmunities = void(__stdcall*)(const IUsSoldier* sold
                                                           bool alwaysImmune,
                                                           LinkedList<LAttackSource>* value);
 
-/** Gets immunity power coefficient to be used by AI for overall soldier power calculation. */
-using GetSoldierImmunityPower = double(__stdcall*)(const IUsSoldier* soldier);
+/** Gets immunity rating to be used by AI for overall soldier rating calculation. */
+using GetSoldierImmunityAiRating = double(__stdcall*)(const IUsSoldier* soldier);
+
+/** Gets attack class rating to be used by AI for overall soldier rating calculation. */
+using GetAttackClassAiRating = double(__stdcall*)(const IUsSoldier* soldier, bool a2);
+
+/** Gets attack reach rating to be used by AI for overall soldier rating calculation. */
+using GetAttackReachAiRating = double(__stdcall*)(const IUsSoldier* soldier, int targetCount);
+
+/** Gets distance between unit positions in battle. Used for adjacent attack reach calculations. */
+using GetUnitPositionDistance = int(__stdcall*)(int unitPosition,
+                                                int targetPosition,
+                                                bool isTargetAlly);
+
+using GetUnitRaceCategory = LRaceCategory*(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                       const CMidgardID* unitId);
+
+using IsGroupSuitableForAiNobleMisfit = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                         const CMidUnitGroup* group);
+
+using IsUnitSuitableForAiNobleDuel = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                      const CMidgardID* unitId);
+
+using IsAttackEffectiveAgainstGroup = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                       const IAttack* attack,
+                                                       const CMidUnitGroup* group);
+
+using IsAttackBetterThanItemUsage = bool(__stdcall*)(const IItem* item,
+                                                     const IUsSoldier* soldier,
+                                                     const CMidgardID* unitImplId);
+
+using ComputeAttackDamageCheckTransformed = int(__stdcall*)(const IUsSoldier* soldier,
+                                                            const CMidgardID* unitImplId,
+                                                            const BattleMsgData* battleMsgData,
+                                                            const CMidgardID* unitId);
+
+using FillAttackTransformIdList = void(__thiscall*)(const void* thisptr,
+                                                    IdList* value,
+                                                    const CMidgardID* attackId,
+                                                    bool sizeSmall);
+
+using IsSmallMeleeFighter = bool(__stdcall*)(const IUsSoldier* soldier);
+
+using CAiHireUnitEval = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                         const CMidUnitGroup* group);
+
+using GetMeleeUnitToHireAiRating = double(__stdcall*)(const CMidgardID* unitImplId,
+                                                      bool a2,
+                                                      bool a3);
+
+using ComputeTargetUnitAiPriority = int(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                    const CMidgardID* unitId,
+                                                    const BattleMsgData* battleMsgData,
+                                                    int attackerDamage);
 
 /**
  * Returns terrain category by its abbreviation string.
@@ -464,6 +522,21 @@ using IgnorePlayerEvents = bool(__stdcall*)(const CMidgardID* playerId,
 /** Returns race's scenario preview image. */
 using GetRacePreviewImage = IMqImage2*(__stdcall*)(const LRaceCategory* race);
 
+using IsPlayerRaceUnplayable = bool(__stdcall*)(const CMidgardID* playerId,
+                                                const IMidgardObjectMap* objectMap);
+
+using IsSupportAttackClass = bool(__stdcall*)(const LAttackClass* value);
+
+/** Returns a vector of attack + attack-number pairs by unit. */
+using GetUnitAttacks = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                        const CMidgardID* unitId,
+                                        AttackTypePairVector* value,
+                                        bool checkAltAttack);
+
+using GetItemAttack = IAttack*(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                           const CMidgardID* unitId,
+                                           int itemNumber);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -477,9 +550,10 @@ struct Functions
     ChooseUnitLane chooseUnitLane;
     GetLordByPlayer getLordByPlayer;
     IsTurnValid isTurnValid;
-    GetAllyOrEnemyStackId getAllyOrEnemyStackId;
+    GetAllyOrEnemyGroupId getAllyOrEnemyGroupId;
     FindUnitById findUnitById;
     CastUnitImplToSoldier castUnitImplToSoldier;
+    CastUnitImplToStackLeader castUnitImplToStackLeader;
     CreateBatAttack createBatAttack;
     GetAttackById getAttackById;
     IsUnitImmuneToAttack isUnitImmuneToAttack;
@@ -497,6 +571,7 @@ struct Functions
     IsGroupOwnerPlayerHuman isGroupOwnerPlayerHuman;
     AttackShouldMiss attackShouldMiss;
     GenerateRandomNumber generateRandomNumber;
+    GenerateRandomNumberStd generateRandomNumberStd;
     GetUnitPositionInGroup getUnitPositionInGroup;
     GetSummonUnitImplIdByAttack getSummonUnitImplIdByAttack;
     GetSummonUnitImplId getSummonUnitImplId;
@@ -525,7 +600,6 @@ struct Functions
     CheckRaceExist checkRaceExist;
     GetUnitAttackSourceImmunities getUnitAttackSourceImmunities;
     GetSoldierAttackSourceImmunities getSoldierAttackSourceImmunities;
-    GetSoldierImmunityPower getSoldierImmunityPower;
     GetTerrainByAbbreviation getTerrainByAbbreviation;
     GetTerrainByRace getTerrainByRace;
     GetTerrainByRace getTerrainByRace2;
@@ -537,6 +611,25 @@ struct Functions
     ThrowGenericException throwGenericException;
     IgnorePlayerEvents ignorePlayerEvents;
     GetRacePreviewImage getRacePreviewImage;
+    GetSoldierImmunityAiRating getSoldierImmunityAiRating;
+    GetAttackClassAiRating getAttackClassAiRating;
+    GetAttackReachAiRating getAttackReachAiRating;
+    GetUnitPositionDistance getUnitPositionDistance;
+    GetUnitRaceCategory getUnitRaceCategory;
+    IsGroupSuitableForAiNobleMisfit isGroupSuitableForAiNobleMisfit;
+    IsUnitSuitableForAiNobleDuel isUnitSuitableForAiNobleDuel;
+    IsAttackEffectiveAgainstGroup isAttackEffectiveAgainstGroup;
+    IsAttackBetterThanItemUsage isAttackBetterThanItemUsage;
+    ComputeAttackDamageCheckTransformed computeAttackDamageCheckTransformed;
+    FillAttackTransformIdList fillAttackTransformIdList;
+    IsSmallMeleeFighter isSmallMeleeFighter;
+    CAiHireUnitEval cAiHireUnitEval;
+    GetMeleeUnitToHireAiRating getMeleeUnitToHireAiRating;
+    ComputeTargetUnitAiPriority computeTargetUnitAiPriority;
+    IsPlayerRaceUnplayable isPlayerRaceUnplayable;
+    IsSupportAttackClass isSupportAttackClass;
+    GetUnitAttacks getUnitAttacks;
+    GetItemAttack getItemAttack;
 };
 
 /** Global variables used in game. */

@@ -18,57 +18,96 @@
  */
 
 #include "scripts.h"
+#include "categoryids.h"
 #include "dynupgradeview.h"
 #include "log.h"
 #include "unitimplview.h"
+#include "unitslotview.h"
 #include "unitview.h"
 #include "utils.h"
 
 namespace hooks {
 
-static void bindApi(sol::state& lua)
+static void doBindApi(sol::state& lua)
 {
+    using namespace game;
+
+    // clang-format off
+    lua.new_enum("Race",
+        "Human", RaceId::Human,
+        "Undead", RaceId::Undead,
+        "Heretic", RaceId::Heretic,
+        "Dwarf", RaceId::Dwarf,
+        "Neutral", RaceId::Neutral,
+        "Elf", RaceId::Elf
+    );
+    lua.new_enum("Subrace",
+        "Custom", SubRaceId::Custom,
+        "Human", SubRaceId::Human,
+        "Undead", SubRaceId::Undead,
+        "Heretic", SubRaceId::Heretic,
+        "Dwarf", SubRaceId::Dwarf,
+        "Neutral", SubRaceId::Neutral,
+        "NeutralHuman", SubRaceId::NeutralHuman,
+        "NeutralElf", SubRaceId::NeutralElf,
+        "NeutralGreenSkin", SubRaceId::NeutralGreenSkin,
+        "NeutralDragon", SubRaceId::NeutralDragon,
+        "NeutralMarsh", SubRaceId::NeutralMarsh,
+        "NeutralWater", SubRaceId::NeutralWater,
+        "NeutralBarbarian", SubRaceId::NeutralBarbarian,
+        "NeutralWolf", SubRaceId::NeutralWolf,
+        "Elf", SubRaceId::Elf
+    );
+    // clang-format on
+
     bindings::UnitView::bind(lua);
     bindings::UnitImplView::bind(lua);
+    bindings::UnitSlotView::bind(lua);
     bindings::DynUpgradeView::bind(lua);
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }
 
-std::optional<sol::state> loadScript(const char* source)
+std::optional<sol::state> loadScriptFile(const std::filesystem::path& path,
+                                         bool alwaysExists,
+                                         bool bindApi)
 {
-    sol::state lua;
-    lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::math);
-    bindApi(lua);
-
-    const auto result = lua.safe_script(source, [](lua_State*, sol::protected_function_result pfr) {
-        return pfr;
-    });
-
-    if (!result.valid()) {
-        const sol::error err = result;
-        logError("mssProxyError.log",
-                 fmt::format("Failed to load script. Reason: '{:s}'", err.what()));
+    if (!alwaysExists && !std::filesystem::exists(path))
         return std::nullopt;
+
+    sol::state lua;
+    sol::protected_function_result result;
+    std::string pathString = path.string();
+    if (bindApi) {
+        static std::unordered_map<std::string, std::string> sources;
+        if (sources.find(pathString) == sources.end())
+            sources[pathString] = readFile(path);
+
+        if (sources[pathString].empty()) {
+            showErrorMessageBox(fmt::format("Failed to read '{:s}' script file", pathString));
+            return std::nullopt;
+        }
+
+        lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::table,
+                           sol::lib::os);
+        doBindApi(lua);
+
+        result = lua.safe_script(sources[pathString].c_str(),
+                                 [](lua_State*, sol::protected_function_result pfr) {
+                                     return pfr;
+                                 });
+    } else {
+        result = lua.load_file(pathString)();
     }
 
-    return {std::move(lua)};
-}
-
-bool loadScript(const std::filesystem::path& path, sol::state& value)
-{
-    if (!std::filesystem::exists(path))
-        return false;
-
-    const auto result = value.load_file(path.string())();
     if (!result.valid()) {
         const sol::error err = result;
         showErrorMessageBox(fmt::format("Failed to load script '{:s}'.\n"
                                         "Reason: '{:s}'",
-                                        path.string(), err.what()));
-        return false;
+                                        pathString, err.what()));
+        return std::nullopt;
     }
 
-    return true;
+    return {std::move(lua)};
 }
 
 } // namespace hooks

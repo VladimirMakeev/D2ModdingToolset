@@ -19,6 +19,9 @@
 
 #include "attackutils.h"
 #include "attack.h"
+#include "attackmodified.h"
+#include "customattacks.h"
+#include "dynamiccast.h"
 #include "globaldata.h"
 #include "globalvariables.h"
 #include "midgardid.h"
@@ -40,6 +43,28 @@ game::IAttack* getAttack(const game::CMidgardID* attackId)
     const auto attacks = (*global.getGlobalData())->attacks;
 
     return (IAttack*)global.findById(attacks, attackId);
+}
+
+game::CAttackImpl* getAttackImpl(const game::IAttack* attack)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    auto current = attack;
+    while (current) {
+        auto attackImpl = (CAttackImpl*)dynamicCast(current, 0, rtti.IAttackType,
+                                                    rtti.CAttackImplType, 0);
+        if (attackImpl)
+            return attackImpl;
+
+        auto attackModified = (CAttackModified*)dynamicCast(current, 0, rtti.IAttackType,
+                                                            rtti.CAttackModifiedType, 0);
+        current = attackModified ? attackModified->data->underlying : nullptr;
+    }
+
+    return nullptr;
 }
 
 int getBoostDamage(int level)
@@ -89,6 +114,27 @@ bool attackHasPower(const game::LAttackClass* attackClass)
            || id == attacks.bestowWards->id || id == attacks.shatter->id || id == attacks.revive->id
            || id == attacks.drainLevel->id || id == attacks.transformSelf->id
            || id == attacks.transformOther->id;
+}
+
+bool isMeleeAttack(const game::IAttack* attack)
+{
+    using namespace game;
+
+    const auto& attackReaches = AttackReachCategories::get();
+
+    auto attackReach = attack->vftable->getAttackReach(attack);
+    if (attackReach->id == attackReaches.adjacent->id) {
+        return true;
+    } else if (attackReach->id != attackReaches.all->id
+               && attackReach->id != attackReaches.any->id) {
+        for (auto& custom : getCustomAttacks().reaches) {
+            if (attackReach->id == custom.reach.id) {
+                return custom.melee;
+            }
+        }
+    }
+
+    return false;
 }
 
 } // namespace hooks

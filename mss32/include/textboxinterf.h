@@ -20,12 +20,42 @@
 #ifndef TEXTBOXINTERFACE_H
 #define TEXTBOXINTERFACE_H
 
+#include "d2string.h"
 #include "interface.h"
 
 namespace game {
 
+struct CImage2Text;
+
+struct CTextBoxInterfData
+{
+    int widgetChildIndex;
+    CImage2Text* image2Text;
+    CMqPoint pos;
+    int unknown;
+    String text;
+    int unknown2;
+    int unknown3;
+    String format;
+    SmartPointer ptr;
+    void* unknown4;
+    void* unknown5;
+};
+
+static_assert(sizeof(CTextBoxInterfData) == 76,
+              "Size of CTextBoxInterfData structure must be exactly 76 bytes");
+
+/**
+ * Text ui element.
+ * Represents TEXT from Interf.dlg or ScenEdit.dlg files.
+ */
 struct CTextBoxInterf : public CInterface
-{ };
+{
+    CTextBoxInterfData* data;
+};
+
+static_assert(sizeof(CTextBoxInterf) == 12,
+              "Size of CTextBoxInterf structure must be exactly 12 bytes");
 
 namespace CTextBoxInterfApi {
 

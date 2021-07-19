@@ -20,17 +20,21 @@
 #ifndef MIDUNITGROUP_H
 #define MIDUNITGROUP_H
 
+#include "idlist.h"
 #include "idvector.h"
-#include "midgardid.h"
+#include "unitpositionlist.h"
 
 namespace game {
 
+struct CMidUnitGroupVftable;
+struct IMidgardObjectMap;
 struct CFortification;
+struct CVisitorAddUnitToGroup;
 
 /** Represents group of 6 units in game. */
 struct CMidUnitGroup
 {
-    const void* vftable;
+    const CMidUnitGroupVftable* vftable;
     IdVector units;
     CMidgardID positions[6];
     /**
@@ -42,10 +46,47 @@ struct CMidUnitGroup
     CFortification* city;
 };
 
+struct CMidUnitGroupVftable
+{
+    using Destructor = void(__thiscall*)(CMidUnitGroup* thisptr, char flags);
+    Destructor destructor;
+
+    using AddLeader = bool(__thiscall*)(CMidUnitGroup* thisptr,
+                                        const CMidgardID* unitId,
+                                        int position,
+                                        const IMidgardObjectMap* objectMap);
+    AddLeader addLeader;
+
+    using RemoveAllUnits = bool(__thiscall*)(CMidUnitGroup* thisptr,
+                                             const CMidgardID* groupId,
+                                             const IMidgardObjectMap* objectMap);
+    RemoveAllUnits removeAllUnits;
+
+    using Stream = void(__thiscall*)(CMidUnitGroup* thisptr, int a2, const CMidgardID* groupId);
+    Stream stream;
+
+    void* methods[2];
+
+    using AddUnit = bool(__thiscall*)(CMidUnitGroup* thisptr,
+                                      const CVisitorAddUnitToGroup* visitor,
+                                      const CMidgardID* unitId,
+                                      int position,
+                                      const IMidgardObjectMap* objectMap);
+    AddUnit addUnit;
+
+    void* methods2[3];
+};
+
+static_assert(sizeof(CMidUnitGroupVftable) == 10 * sizeof(void*),
+              "CMidUnitGroup vftable must have exactly 10 methods");
+
 namespace CMidUnitGroupApi {
 
 struct Api
 {
+    using GetUnitId = CMidgardID*(__thiscall*)(const CMidUnitGroup* thisptr, int index);
+    GetUnitId getUnitId;
+
     /** Returns unit position in group, or -1 if unit not found. */
     using GetUnitPosition = int(__thiscall*)(const CMidUnitGroup* thisptr,
                                              const CMidgardID* unitId);
@@ -55,6 +96,16 @@ struct Api
     using GetUnitIdByPosition = const CMidgardID*(__thiscall*)(const CMidUnitGroup* thisptr,
                                                                int position);
     GetUnitIdByPosition getUnitIdByPosition;
+
+    using AddUnitIdsAvailableForSummons = void(__stdcall*)(IdList* value,
+                                                           const IMidgardObjectMap* objectMap,
+                                                           const CMidUnitGroup* group);
+    AddUnitIdsAvailableForSummons addUnitIdsAvailableForSummons;
+
+    using UnknownFunction = void(__stdcall*)(CMidUnitGroup* group1,
+                                             CMidUnitGroup* group2,
+                                             UnitPositionList* positions);
+    UnknownFunction unknownFunction;
 };
 
 Api& get();

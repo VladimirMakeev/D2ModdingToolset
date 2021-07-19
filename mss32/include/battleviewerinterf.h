@@ -32,6 +32,9 @@
 #include "midgardid.h"
 #include "mqrect.h"
 #include "sortedlist.h"
+#include "uimanager.h"
+#include "unitpositionlinkedlist.h"
+#include "unitpositionlist.h"
 #include <cstddef>
 
 namespace game {
@@ -46,6 +49,7 @@ struct CMidgardMsgBox;
 struct IMidgardObjectMap;
 struct CBatEncyclopediaInterf;
 struct CBatLog;
+struct Functor;
 
 struct CBattleViewerGroupAreas
 {
@@ -90,17 +94,54 @@ static_assert(offsetof(CBattleViewerUnknown, data3) == 112,
 static_assert(offsetof(CBattleViewerUnknown, string) == 208,
               "CBattleViewerUnknown::string offset must be 208 bytes");
 
+struct CBattleViewerTargetData
+{
+    bool isBattleGoing;
+    bool unknown;
+    char padding[2];
+    CMidgardID targetGroupId;
+    UnitPositionList targetPositions;
+};
+
+static_assert(sizeof(CBattleViewerTargetData) == 36,
+              "Size of CBattleViewerTargetData structure must be exactly 36 bytes");
+
+struct CBattleViewerTargetDataSet
+{
+    CBattleViewerTargetData attack;
+    CBattleViewerTargetData items[2];
+};
+
+static_assert(sizeof(CBattleViewerTargetDataSet) == 108,
+              "Size of CBattleViewerTargetDataSet structure must be exactly 108 bytes");
+
+struct CBattleViewerUnknownUnitData
+{
+    CMidgardID unknownId;
+    int unknown;
+    bool unknown2;
+    bool isUnitBig;
+    bool isUnitRetreating;
+    char padding;
+};
+
+static_assert(sizeof(CBattleViewerUnknownUnitData) == 12,
+              "Size of CBattleViewerUnknownUnitData structure must be exactly 12 bytes");
+
+using CUnknownUnitDataList = SortedList<Pair<CMidgardID, CBattleViewerUnknownUnitData>>;
+
 struct CBattleViewerInterfData
 {
     CAvoidFlickerImage avoidFlickerImage;
     char unknown[4];
     BattleMsgData battleMsgData;
-    SortedList<void*> unknownList; /** < Each node contains 16 bytes of data. */
-    CMidgardID unknownId;
-    char unknown21[108];
+    CUnknownUnitDataList unknownUnitData;
+    CMidgardID unitId;
+    CBattleViewerTargetDataSet targetData;
     BattleAttackInfo** attackInfo;
-    char unknown3[8];
-    Vector<void*> unknownArray; /**< Each element contains 32 bytes of data. */
+    char unknown3[4];
+    CMidgardID itemId;
+    Vector<void*> unknownVector; /**< Each element contains 32 bytes of data. */
     CBatViewer2DEngine* batViewer2dEngine;
     CMqRect dialogInterfArea;
     CBatImagesLoader* imagesLoader;
@@ -126,7 +167,8 @@ struct CBattleViewerInterfData
     bool unknown9;
     bool flippedBattle;
     bool bothPlayersHuman;
-    char unknown6[3];
+    bool unknown6;
+    char unknown61[2];
     CMidgardMsgBox* messageBox;
     IMidgardObjectMap* objectMap;
     bool stickyEncy;
@@ -163,7 +205,15 @@ struct CBattleViewerInterfData2
     char padding[2];
     CMidgardID unknownId;
     LAttackClass attackClass;
-    char unknown[32];
+    bool normalAttack;
+    bool unknown4;
+    char unknown5;
+    char unknown51;
+    CUIManagerUnknownData uiManagerUnknownData;
+    bool unknown6;
+    bool unknown7;
+    bool unknown8;
+    char unknown9;
     CBatEncyclopediaInterf* encyclopedia;
     char unknown1[48];
     CBatLog* log;
@@ -171,9 +221,12 @@ struct CBattleViewerInterfData2
     LinkedList<void*> list2;
     LinkedList<void*> list3;
     char unknown2[8];
-    CMidgardID unknownId2;
+    CMidgardID selectedUnitId;
     LinkedList<void*> list4; /**< Each node contains 16 bytes of data. */
-    int unknown3;
+    char unknown3;
+    bool unknown10;
+    char unknown11;
+    char unknown12;
 };
 
 static_assert(sizeof(CBattleViewerInterfData2) == 196,
@@ -192,6 +245,143 @@ struct CBattleViewerInterf : public CDragAndDropInterf
 
 static_assert(sizeof(CBattleViewerInterf) == 36,
               "Size of CBattleViewerInterf structure must be exactly 36 bytes");
+
+static inline CBattleViewerInterf* castBatViewerToBattleViewerInterf(IBatViewer* value)
+{
+    return reinterpret_cast<CBattleViewerInterf*>((std::uintptr_t)value
+                                                  - offsetof(CBattleViewerInterf, batViewer));
+}
+
+namespace BattleViewerInterfApi {
+
+struct Api
+{
+    using MarkAttackTargets = bool(__thiscall*)(CBattleViewerInterf* thisptr,
+                                                const CMqPoint* mousePosition,
+                                                bool setBigFace);
+    MarkAttackTargets markAttackTargets;
+
+    using IsUnitOnTheLeft = bool(__thiscall*)(const CBattleViewerInterf* thisptr, bool isAttacker);
+    IsUnitOnTheLeft isUnitOnTheLeft;
+
+    using IsFlipped = bool(__thiscall*)(const CBattleViewerInterf* thisptr);
+    IsFlipped isFlipped;
+
+    using GetBigFace = CBatBigFace*(__thiscall*)(const CBattleViewerInterf* thisptr);
+    GetBigFace getBigFace;
+    GetBigFace getBigFace2;
+
+    using GetUnitRect = CMqRect*(__stdcall*)(CMqRect* value,
+                                             CBattleViewerGroupAreas* groupAreas,
+                                             int unitPosition,
+                                             bool isUnitBig,
+                                             bool isUnitRetreating);
+    GetUnitRect getUnitRect;
+    GetUnitRect getUnitRectPlusExtra;
+
+    using GetBoolById = bool(__thiscall*)(CUnknownUnitDataList* thisptr, const CMidgardID* unitId);
+    GetBoolById isUnitBig;
+    GetBoolById isUnitRetreating;
+    GetBoolById getUnknown2;
+
+    using SetUnitId = void(__thiscall*)(CBatBigFace* thisptr, const CMidgardID* unitId);
+    SetUnitId setUnitId;
+
+    using SetUnknown = void(__thiscall*)(CBatBigFace* thisptr, bool a2);
+    SetUnknown setUnknown;
+
+    using GetSelectedUnitId = CMidgardID*(__thiscall*)(const CBatUnitGroup2* thisptr,
+                                                       CMidgardID* value,
+                                                       const CMqPoint* mousePosition);
+    GetSelectedUnitId getSelectedUnitId;
+
+    using HighlightGroupFrame = void(__thiscall*)(CBatUnitGroup2* thisptr,
+                                                  const CMidgardID* targetGroupId,
+                                                  bool isSupportAttack);
+    HighlightGroupFrame highlightGroupFrame;
+
+    using UnknownMethod = void(__thiscall*)(CBatUnitGroup2* thisptr, const CMidgardID* unitId);
+    UnknownMethod unknownMethod;
+
+    using UnknownMethod2 = void(__thiscall*)(CBatUnitGroup2* thisptr,
+                                             const CMidgardID* targetUnitId,
+                                             bool isSupportAttack);
+    UnknownMethod2 unknownMethod2;
+
+    using UnknownMethod3 = void(__thiscall*)(CBatUnitGroup2* thisptr,
+                                             const CMidgardID* targetGroupId,
+                                             int unitPosition);
+    UnknownMethod3 unknownMethod3;
+
+    using GetUnitAnimation = CBatUnitAnim**(__thiscall*)(const CBattleViewerInterf* thisptr,
+                                                         const CMidgardID* unitId);
+    GetUnitAnimation getUnitAnimation;
+
+    using UpdateUnknown = void(__thiscall*)(CBattleViewerInterf* thisptr, bool a2);
+    UpdateUnknown updateUnknown;
+    UpdateUnknown updateUnknown2;
+
+    using CBattleViewerTargetDataSetConstructor = CBattleViewerTargetDataSet*(
+        __thiscall*)(CBattleViewerTargetDataSet* thisptr, const BatViewerTargetDataSet* src);
+    CBattleViewerTargetDataSetConstructor battleViewerTargetDataSetCtor;
+
+    using CBattleViewerTargetDataSetSetAttacker =
+        void(__thiscall*)(CBattleViewerTargetDataSet* thisptr, const CMidgardID* attackerGroupId);
+    CBattleViewerTargetDataSetSetAttacker battleViewerTargetDataSetSetAttacker;
+
+    using Callback = void(__thiscall*)(CBattleViewerInterf* thisptr);
+    Callback autoBattleCallback;
+    Callback disableAutoBattleAndResolveCallback;
+
+    struct ButtonCallback
+    {
+        Callback callback;
+        int unknown;
+    };
+
+    using CreateButtonFunctor = Functor*(__stdcall*)(Functor* functor,
+                                                     int a2,
+                                                     CBattleViewerInterf* viewer,
+                                                     ButtonCallback* callback);
+    CreateButtonFunctor createButtonFunctor;
+
+    using UnknownMethod4 = void(__thiscall*)(Vector<void*>* thisptr);
+    UnknownMethod4 unknownMethod4;
+
+    using FillTargetPositions = void(__stdcall*)(bool a1,
+                                                 UnitPositionList* positions,
+                                                 UnitPositionLinkedList* value);
+    FillTargetPositions fillTargetPositions;
+
+    using UnknownMethod5 = void(__thiscall*)(CBattleViewerInterf* thisptr,
+                                             int targetPosition,
+                                             const CMidgardID* targetUnitId,
+                                             bool a4,
+                                             bool a5,
+                                             bool positionForSummon,
+                                             bool a7);
+    UnknownMethod5 unknownMethod5;
+
+    using SetCheckedForRightUnitsToggleButton = void(__stdcall*)(CBattleViewerInterf* thisptr,
+                                                                 bool checked);
+    SetCheckedForRightUnitsToggleButton setCheckedForRightUnitsToggleButton;
+
+    using UnknownMethod6 = void(__thiscall*)(CBattleViewerInterf* thisptr, bool a2);
+    UnknownMethod6 unknownMethod6;
+
+    using UnknownMethod7 = void(__thiscall*)(CBattleViewerInterf* thisptr);
+    UnknownMethod7 unknownMethod7;
+
+    using UnknownMethod8 = bool(__thiscall*)(CBattleViewerInterf* thisptr,
+                                             const CMqPoint* mousePosition);
+    UnknownMethod8 unknownMethod8;
+};
+
+Api& get();
+
+const IBatViewerVftable* vftable();
+
+} // namespace BattleViewerInterfApi
 
 } // namespace game
 

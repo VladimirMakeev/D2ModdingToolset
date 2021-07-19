@@ -20,6 +20,7 @@
 #ifndef LISTBOX_H
 #define LISTBOX_H
 
+#include "functordispatch1.h"
 #include "interface.h"
 #include <cstddef>
 
@@ -27,14 +28,13 @@ namespace game {
 
 struct CDialogInterf;
 struct Functor;
+struct CImage2TextBackground;
+struct CListBoxInterfData;
 
-/** Must be 148 bytes according to CListBoxInterf constructor. */
-struct CListBoxInterfData
-{
-    char unknown[148];
-};
-
-/** List box ui element. */
+/**
+ * List box ui element.
+ * Represents LBOX and TLBOX from Interf.dlg or ScenEdit.dlg files.
+ */
 struct CListBoxInterf : public CInterface
 {
     CListBoxInterfData* listBoxData;
@@ -52,11 +52,39 @@ static_assert(sizeof(CListBoxInterf) == 12,
 static_assert(offsetof(CListBoxInterf, listBoxData) == 8,
               "CListBoxInterf::listBoxData offset must be 8 bytes");
 
-/** Must be 48 bytes according to CListBoxDisplayText constructor. */
+struct CListBoxInterfData
+{
+    int unknown;
+    int unknown2;
+    int unknown3;
+    int unknown4;
+    int unknown5;
+    CListBoxInterf::LBDisplay* display;
+    SmartPointer ptr;
+    SmartPointer ptr2;
+    int unknown7;
+    int unknown8;
+    int selectedElement;
+    int elementsTotal;
+    int unknown13[10];
+    Vector<int> childIndices;
+    SmartPtr<CBFunctorDispatch1<int>> onSelectionConfirmed;
+    SmartPtr<CBFunctorDispatch1<int>> ptr4;
+    SmartPointer ptr5;
+    CImage2TextBackground* image2TextBgnd;
+    CMqPoint bgndImagePos;
+};
+
+static_assert(sizeof(CListBoxInterfData) == 148,
+              "Size of CListBoxInterfData structure must be exactly 148 bytes");
+
 struct CListBoxDisplayTextData
 {
     char unknown[48];
 };
+
+static_assert(sizeof(CListBoxDisplayTextData) == 48,
+              "Size of CListBoxDisplayTextData structure must be exactly 48 bytes");
 
 /** Assumption: implements rendering for list box containing text elements. */
 struct CListBoxDisplayText : public CListBoxInterf::LBDisplay

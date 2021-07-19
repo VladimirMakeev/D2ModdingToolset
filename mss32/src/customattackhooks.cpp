@@ -20,19 +20,31 @@
 #include "customattackhooks.h"
 #include "attackclasscat.h"
 #include "attackimpl.h"
-#include "attacksourcelist.h"
 #include "attackutils.h"
+#include "batattacktransformself.h"
 #include "customattack.h"
 #include "customattacks.h"
+#include "customattackutils.h"
 #include "dbf/dbffile.h"
 #include "dbtable.h"
+#include "dynamiccast.h"
 #include "game.h"
+#include "gameutils.h"
 #include "globaldata.h"
+#include "idlistutils.h"
 #include "immunecat.h"
+#include "itembattle.h"
 #include "log.h"
 #include "mempool.h"
+#include "midstack.h"
+#include "midunitgroup.h"
 #include "originalfunctions.h"
+#include "scripts.h"
+#include "targetslistutils.h"
+#include "unitutils.h"
 #include "ussoldier.h"
+#include "usstackleader.h"
+#include "usunitimpl.h"
 #include "utils.h"
 #include <fmt/format.h>
 #include <limits>
@@ -115,60 +127,6 @@ game::LAttackClassTable* __fastcall attackClassTableCtorHooked(game::LAttackClas
     return thisptr;
 }
 
-static void fillCustomAttackSources(const std::filesystem::path& dbfFilePath)
-{
-    using namespace game;
-
-    utils::DbfFile dbf;
-    if (!dbf.open(dbfFilePath)) {
-        logError("mssProxyError.log",
-                 fmt::format("Could not open {:s}", dbfFilePath.filename().string()));
-        return;
-    }
-
-    static const std::uint32_t lastBaseSourceWardFlagPosition = 7;
-    static const std::array<const char*, 8> baseSources = {
-        {"L_WEAPON", "L_MIND", "L_LIFE", "L_DEATH", "L_FIRE", "L_WATER", "L_AIR", "L_EARTH"}};
-
-    auto& customSources = getCustomAttacks().sources;
-    std::uint32_t wardFlagPosition = lastBaseSourceWardFlagPosition;
-    const auto recordsTotal{dbf.recordsTotal()};
-    for (std::uint32_t i = 0; i < recordsTotal; ++i) {
-        utils::DbfRecord record;
-        if (!dbf.record(record, i)) {
-            logError("mssProxyError.log", fmt::format("Could not read record {:d} from {:s}", i,
-                                                      dbfFilePath.filename().string()));
-            return;
-        }
-
-        if (record.isDeleted()) {
-            continue;
-        }
-
-        std::string text;
-        record.value(text, "TEXT");
-        text = trimSpaces(text);
-
-        if (std::none_of(std::begin(baseSources), std::end(baseSources),
-                         [&text](const char* baseText) { return text == baseText; })) {
-            std::string nameId;
-            record.value(nameId, "NAME_TXT");
-
-            int immunityPower = 5; // 5 is the default
-            record.value(immunityPower, "IMMUNE_POW");
-
-            logDebug(
-                "customAttacks.log",
-                fmt::format("Found custom attack source {:s}, name id {:s}, immunity power {:d}",
-                            text, nameId, immunityPower));
-
-            customSources.push_back(
-                {LAttackSource{AttackSourceCategories::vftable(), nullptr, (AttackSourceId)-1},
-                 text, nameId, (double)immunityPower, ++wardFlagPosition});
-        }
-    }
-}
-
 game::LAttackSourceTable* __fastcall attackSourceTableCtorHooked(game::LAttackSourceTable* thisptr,
                                                                  int /*%edx*/,
                                                                  const char* globalsFolderPath,
@@ -207,6 +165,41 @@ game::LAttackSourceTable* __fastcall attackSourceTableCtorHooked(game::LAttackSo
 
     table.initDone(thisptr);
     logDebug("customAttacks.log", "LAttackSourceTable c-tor hook finished");
+    return thisptr;
+}
+
+game::LAttackReachTable* __fastcall attackReachTableCtorHooked(game::LAttackReachTable* thisptr,
+                                                               int /*%edx*/,
+                                                               const char* globalsFolderPath,
+                                                               void* codeBaseEnvProxy)
+{
+    using namespace game;
+    logDebug("customAttacks.log", "LAttackReachTable c-tor hook started");
+
+    static const char dbfFileName[] = "LAttR.dbf";
+    fillCustomAttackReaches(std::filesystem::path(globalsFolderPath) / dbfFileName);
+
+    thisptr->bgn = nullptr;
+    thisptr->end = nullptr;
+    thisptr->allocatedMemEnd = nullptr;
+    thisptr->allocator = nullptr;
+    thisptr->vftable = LAttackReachTableApi::vftable();
+
+    const auto& table = LAttackReachTableApi::get();
+    const auto& reaches = AttackReachCategories::get();
+
+    table.init(thisptr, codeBaseEnvProxy, globalsFolderPath, dbfFileName);
+    table.readCategory(reaches.all, thisptr, "L_ALL", dbfFileName);
+    table.readCategory(reaches.any, thisptr, "L_ANY", dbfFileName);
+    table.readCategory(reaches.adjacent, thisptr, "L_ADJACENT", dbfFileName);
+
+    for (auto& custom : getCustomAttacks().reaches) {
+        logDebug("customAttacks.log", fmt::format("Reading custom attack reach {:s}", custom.text));
+        table.readCategory(&custom.reach, thisptr, custom.text.c_str(), dbfFileName);
+    }
+
+    table.initDone(thisptr);
+    logDebug("customAttacks.log", "LAttackReachTable c-tor hook finished");
     return thisptr;
 }
 
@@ -298,12 +291,50 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
     }
 
     if (id == categories.damage->id) {
-        db.readCriticalHit(&data->critHit, dbTable, "CRIT_HIT");
+        db.readBool(&data->critHit, dbTable, "CRIT_HIT");
     } else {
         data->critHit = false;
     }
 
+    if (getCustomAttacks().damageRatio.enabled) {
+        int damageRatio;
+        db.readIntWithBoundsCheck(&damageRatio, dbTable, damageRatioColumnName, 0, 255);
+        if (damageRatio == 0)
+            damageRatio = 100;
+        data->damageRatio = (std::uint8_t)damageRatio;
+
+        data->damageRatioPerTarget = false;
+        db.readBool(&data->damageRatioPerTarget, dbTable, damageRatioPerTargetColumnName);
+
+        data->damageSplit = false;
+        db.readBool(&data->damageSplit, dbTable, damageSplitColumnName);
+    }
+
     return thisptr;
+}
+
+game::CAttackImpl* __fastcall attackImplCtor2Hooked(game::CAttackImpl* thisptr,
+                                                    int /*%edx*/,
+                                                    const game::CAttackData* data)
+{
+    auto result = getOriginalFunctions().attackImplCtor2(thisptr, data);
+
+    thisptr->data->damageRatio = data->damageRatio;
+    thisptr->data->damageRatioPerTarget = data->damageRatioPerTarget;
+    thisptr->data->damageSplit = data->damageSplit;
+
+    return result;
+}
+
+void __fastcall attackImplGetDataHooked(game::CAttackImpl* thisptr,
+                                        int /*%edx*/,
+                                        game::CAttackData* value)
+{
+    getOriginalFunctions().attackImplGetData(thisptr, value);
+
+    value->damageRatio = thisptr->data->damageRatio;
+    value->damageRatioPerTarget = thisptr->data->damageRatioPerTarget;
+    value->damageSplit = thisptr->data->damageSplit;
 }
 
 game::IBatAttack* __stdcall createBatAttackHooked(game::IMidgardObjectMap* objectMap,
@@ -345,37 +376,6 @@ const char* __stdcall attackClassToStringHooked(const game::LAttackClass* attack
     return getOriginalFunctions().attackClassToString(attackClass);
 }
 
-static void getSoldierAttackSourceImmunities(const game::LImmuneCat* immuneCat,
-                                             const game::IUsSoldier* soldier,
-                                             game::LinkedList<game::LAttackSource>* value)
-{
-    using namespace game;
-
-    const auto& sources = AttackSourceCategories::get();
-    const auto& sourceListApi = AttackSourceListApi::get();
-    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.weapon)->id)
-        sourceListApi.add(value, sources.weapon);
-    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.mind)->id)
-        sourceListApi.add(value, sources.mind);
-    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.life)->id)
-        sourceListApi.add(value, sources.life);
-    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.death)->id)
-        sourceListApi.add(value, sources.death);
-    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.fire)->id)
-        sourceListApi.add(value, sources.fire);
-    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.water)->id)
-        sourceListApi.add(value, sources.water);
-    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.air)->id)
-        sourceListApi.add(value, sources.air);
-    if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, sources.earth)->id)
-        sourceListApi.add(value, sources.earth);
-
-    for (const auto& custom : getCustomAttacks().sources) {
-        if (immuneCat->id == soldier->vftable->getImmuneByAttackSource(soldier, &custom.source)->id)
-            sourceListApi.add(value, &custom.source);
-    }
-}
-
 void __stdcall getUnitAttackSourceImmunitiesHooked(const game::LImmuneCat* immuneCat,
                                                    const game::CMidUnit* unit,
                                                    game::LinkedList<game::LAttackSource>* value)
@@ -397,20 +397,99 @@ void __stdcall getSoldierAttackSourceImmunitiesHooked(const game::IUsSoldier* so
                                      value);
 }
 
-double __stdcall getSoldierImmunityPowerHooked(const game::IUsSoldier* soldier)
+double __stdcall getSoldierImmunityAiRatingHooked(const game::IUsSoldier* soldier)
 {
     using namespace game;
 
-    double result = getOriginalFunctions().getSoldierImmunityPower(soldier);
+    double result = getOriginalFunctions().getSoldierImmunityAiRating(soldier);
 
     const auto& immunities = ImmuneCategories::get();
     for (const auto& custom : getCustomAttacks().sources) {
         auto immuneCat = soldier->vftable->getImmuneByAttackSource(soldier, &custom.source);
         if (immuneCat->id != immunities.notimmune->id)
-            result += custom.immunityPower;
+            result += custom.immunityAiRating;
     }
 
     return result;
+}
+
+double __stdcall getAttackClassAiRatingHooked(const game::IUsSoldier* soldier, bool a2)
+{
+    using namespace game;
+
+    const auto& classes = AttackClassCategories::get();
+    const auto& reaches = AttackReachCategories::get();
+
+    auto attack = soldier->vftable->getAttackById(soldier);
+    auto attackClass = attack->vftable->getAttackClass(attack);
+    if (attackClass->id == classes.paralyze->id || attackClass->id == classes.petrify->id) {
+        return 30.0;
+    } else if (attackClass->id == classes.damage->id || attackClass->id == classes.heal->id) {
+        return 1.0;
+    } else if (attackClass->id == classes.drain->id) {
+        return 1.5;
+    } else if (attackClass->id == classes.fear->id) {
+        return 30.0;
+    } else if (attackClass->id == classes.boostDamage->id
+               || attackClass->id == classes.bestowWards->id) {
+        return 40.0;
+    } else if (attackClass->id == classes.shatter->id) {
+        return 30.0;
+    } else if (attackClass->id == classes.lowerDamage->id
+               || attackClass->id == classes.lowerInitiative->id) {
+        return 40.0;
+    } else if (attackClass->id == classes.drainOverflow->id) {
+        return 2.0;
+    } else if (attackClass->id == classes.summon->id) {
+        return 200.0;
+    } else if (attackClass->id == classes.drainLevel->id) {
+        return 100.0;
+    } else if (attackClass->id == classes.giveAttack->id) {
+        return 50.0;
+    } else if (attackClass->id == classes.doppelganger->id) {
+        return a2 ? 100.0 : 200.0;
+    } else if (attackClass->id == classes.transformSelf->id) {
+        return 100.0;
+    } else if (attackClass->id == classes.transformOther->id) {
+        auto attackReach = attack->vftable->getAttackReach(attack);
+        for (const auto& custom : getCustomAttacks().reaches) {
+            if (attackReach->id == custom.reach.id) {
+                return 60.0 + 8.0 * (custom.maxTargets - 1);
+            }
+        }
+        return attackReach->id == reaches.all->id ? 100.0 : 60.0;
+    }
+
+    return 1.0;
+}
+
+double __stdcall getAttackReachAiRatingHooked(const game::IUsSoldier* soldier, int targetCount)
+{
+    using namespace game;
+
+    const auto& reaches = AttackReachCategories::get();
+
+    auto attack = soldier->vftable->getAttackById(soldier);
+    auto attackReach = attack->vftable->getAttackReach(attack);
+
+    if (attackReach->id == reaches.all->id) {
+        int targetFactor = targetCount - 1;
+        return 1.0 + 0.4 * targetFactor;
+    } else if (attackReach->id == reaches.any->id) {
+        return 1.5;
+    } else if (attackReach->id != reaches.adjacent->id) {
+        for (const auto& custom : getCustomAttacks().reaches) {
+            if (attackReach->id == custom.reach.id) {
+                int count = std::min(targetCount, (int)custom.maxTargets);
+                if (count == 1 && !custom.melee)
+                    return 1.5;
+                else
+                    return 1.0 + 0.4 * (computeTotalDamageRatio(attack, count) - 1);
+            }
+        }
+    }
+
+    return 1.0;
 }
 
 std::uint32_t __stdcall getAttackSourceWardFlagPositionHooked(
@@ -454,30 +533,648 @@ void __fastcall removeUnitAttackSourceWardHooked(game::BattleMsgData* thisptr,
     unitInfo->attackSourceImmunityStatuses.patched |= flag;
 }
 
-void __stdcall addUnitToBattleMsgDataHooked(game::IMidgardObjectMap* objectMap,
-                                            game::CMidUnitGroup* group,
+void __stdcall addUnitToBattleMsgDataHooked(const game::IMidgardObjectMap* objectMap,
+                                            const game::CMidUnitGroup* group,
                                             const game::CMidgardID* unitId,
                                             char attackerFlags,
                                             game::BattleMsgData* battleMsgData)
 {
     using namespace game;
 
-    int i;
-    for (i = 0; i < 22 && battleMsgData->unitsInfo[i].unitId1 != invalidId; ++i)
-        ;
+    for (auto& unitsInfo : battleMsgData->unitsInfo) {
+        if (unitsInfo.unitId1 == invalidId) {
+            unitsInfo.attackClassImmunityStatuses = 0;
+            unitsInfo.attackSourceImmunityStatuses.patched = 0;
 
-    if (i == 22) {
-        logError("mssProxyError.log",
-                 fmt::format("Could not find a free slot for a new unit {:s} in battle msg data",
-                             hooks::idToString(unitId)));
-        return;
+            getOriginalFunctions().addUnitToBattleMsgData(objectMap, group, unitId, attackerFlags,
+                                                          battleMsgData);
+            return;
+        }
     }
 
-    battleMsgData->unitsInfo[i].attackClassImmunityStatuses = 0;
-    battleMsgData->unitsInfo[i].attackSourceImmunityStatuses.patched = 0;
+    logError("mssProxyError.log",
+             fmt::format("Could not find a free slot for a new unit {:s} in battle msg data",
+                         hooks::idToString(unitId)));
+}
 
-    getOriginalFunctions().addUnitToBattleMsgData(objectMap, group, unitId, attackerFlags,
-                                                  battleMsgData);
+bool __stdcall getTargetsToAttackForAllOrCustomReach(game::IdList* value,
+                                                     const game::IMidgardObjectMap* objectMap,
+                                                     const game::IAttack* attack,
+                                                     const game::IBatAttack* batAttack,
+                                                     const game::LAttackReach* attackReach,
+                                                     const game::BattleMsgData* battleMsgData,
+                                                     game::BattleAction action,
+                                                     const game::CMidgardID* targetUnitId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& reaches = AttackReachCategories::get();
+
+    if (action != BattleAction::Attack && action != BattleAction::UseItem)
+        return false;
+
+    auto transformSelfAttack = (CBatAttackTransformSelf*)
+        dynamicCast(batAttack, 0, rtti.IBatAttackType, rtti.CBatAttackTransformSelfType, 0);
+
+    // HACK: every attack in the game except CBatAttackTransformSelf has its unitId as a first
+    // field, but its not a part of CBatAttackBase.
+    CMidgardID* unitId = (CMidgardID*)(batAttack + 1);
+    if (transformSelfAttack)
+        unitId = &transformSelfAttack->unitId;
+
+    auto& customTransformSelf = getCustomAttacks().transformSelf;
+    customTransformSelf.targetSelf = transformSelfAttack && *unitId == *targetUnitId;
+    if (customTransformSelf.targetSelf)
+        return false;
+
+    CMidgardID targetGroupId{};
+    batAttack->vftable->getTargetGroupId(batAttack, &targetGroupId, battleMsgData);
+
+    if (attackReach->id == reaches.all->id) {
+        getTargetsToAttackForAllAttackReach(objectMap, battleMsgData, attack, batAttack,
+                                            &targetGroupId, targetUnitId, value);
+        return true;
+    } else if (attackReach->id != reaches.any->id && attackReach->id != reaches.adjacent->id) {
+        for (const auto& custom : getCustomAttacks().reaches) {
+            if (attackReach->id == custom.reach.id) {
+                CMidgardID unitGroupId{};
+                fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, unitId, true);
+
+                getTargetsToAttackForCustomAttackReach(objectMap, battleMsgData, batAttack,
+                                                       &targetGroupId, targetUnitId, &unitGroupId,
+                                                       unitId, custom, value);
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+void __stdcall getTargetsToAttackHooked(game::IdList* value,
+                                        const game::IMidgardObjectMap* objectMap,
+                                        const game::IAttack* attack,
+                                        const game::IBatAttack* batAttack,
+                                        const game::LAttackReach* attackReach,
+                                        const game::BattleMsgData* battleMsgData,
+                                        game::BattleAction action,
+                                        const game::CMidgardID* targetUnitId)
+{
+    using namespace game;
+
+    const auto& listApi = IdListApi::get();
+
+    if (!getTargetsToAttackForAllOrCustomReach(value, objectMap, attack, batAttack, attackReach,
+                                               battleMsgData, action, targetUnitId)) {
+        listApi.pushBack(value, targetUnitId);
+    }
+
+    if (getCustomAttacks().damageRatio.enabled)
+        fillCustomDamageRatios(attack, value);
+}
+
+void __stdcall fillTargetsListHooked(const game::IMidgardObjectMap* objectMap,
+                                     const game::BattleMsgData* battleMsgData,
+                                     const game::IBatAttack* batAttack,
+                                     const game::CMidgardID* unitId,
+                                     const game::CMidgardID* attackUnitOrItemId,
+                                     bool targetAllies,
+                                     game::TargetsList* value,
+                                     bool checkTransformed)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& battle = BattleMsgDataApi::get();
+    const auto& reaches = AttackReachCategories::get();
+
+    CMidgardID unitGroupId{};
+    fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, unitId, true);
+
+    CMidgardID targetGroupId{};
+    fn.getAllyOrEnemyGroupId(&targetGroupId, battleMsgData, unitId, targetAllies);
+
+    IAttack* attack = fn.getAttackById(objectMap, attackUnitOrItemId, 1, checkTransformed);
+    LAttackReach* attackReach = attack->vftable->getAttackReach(attack);
+    if (attackReach->id == reaches.all->id) {
+        battle.fillTargetsListForAllAttackReach(objectMap, battleMsgData, batAttack, &targetGroupId,
+                                                value);
+    } else if (attackReach->id == reaches.any->id) {
+        battle.fillTargetsListForAnyAttackReach(objectMap, battleMsgData, batAttack, &targetGroupId,
+                                                value);
+    } else if (attackReach->id == reaches.adjacent->id) {
+        battle.fillTargetsListForAdjacentAttackReach(objectMap, battleMsgData, batAttack,
+                                                     &targetGroupId, &unitGroupId, unitId, value);
+    } else {
+        for (const auto& custom : getCustomAttacks().reaches) {
+            if (attackReach->id == custom.reach.id) {
+                fillTargetsListForCustomAttackReach(objectMap, battleMsgData, batAttack,
+                                                    &targetGroupId, &unitGroupId, unitId, custom,
+                                                    value);
+                break;
+            }
+        }
+    }
+
+    if (shouldExcludeImmuneTargets(objectMap, battleMsgData, unitId)) {
+        excludeImmuneTargets(objectMap, battleMsgData, attack, &unitGroupId, &targetGroupId, value);
+    }
+}
+
+void __stdcall fillEmptyTargetsListHooked(const game::IMidgardObjectMap* objectMap,
+                                          const game::BattleMsgData* battleMsgData,
+                                          const game::IBatAttack* batAttack,
+                                          const game::CMidgardID* unitId,
+                                          const game::CMidgardID* attackUnitOrItemId,
+                                          bool targetAllies,
+                                          game::TargetsList* value)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& battle = BattleMsgDataApi::get();
+    const auto& reaches = AttackReachCategories::get();
+
+    CMidgardID unitGroupId{};
+    fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, unitId, true);
+
+    CMidgardID targetGroupId{};
+    fn.getAllyOrEnemyGroupId(&targetGroupId, battleMsgData, unitId, targetAllies);
+
+    IAttack* attack = fn.getAttackById(objectMap, attackUnitOrItemId, 1, true);
+    LAttackReach* attackReach = attack->vftable->getAttackReach(attack);
+    if (attackReach->id == reaches.all->id) {
+        battle.fillEmptyTargetsListForAllAttackReach(objectMap, &targetGroupId, value);
+    } else if (attackReach->id == reaches.any->id) {
+        battle.fillEmptyTargetsListForAnyAttackReach(objectMap, &targetGroupId, value);
+    } else if (attackReach->id == reaches.adjacent->id) {
+        battle.fillEmptyTargetsListForAdjacentAttackReach(objectMap, battleMsgData, batAttack,
+                                                          &targetGroupId, &unitGroupId, unitId,
+                                                          value);
+    } else {
+        // Do nothing - custom attack reaches process empty targets in fillTargetsListHooked
+    }
+}
+
+bool __stdcall isGroupSuitableForAiNobleMisfitHooked(const game::IMidgardObjectMap* objectMap,
+                                                     const game::CMidUnitGroup* group)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    const auto& unitIds = group->units;
+    if (unitIds.end - unitIds.bgn < 2)
+        return false;
+
+    for (const CMidgardID* unitId = unitIds.bgn; unitId != unitIds.end; ++unitId) {
+        auto unit = static_cast<const CMidUnit*>(
+            objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+
+        auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+        if (!soldier->vftable->getSizeSmall(soldier))
+            continue;
+
+        auto attack = soldier->vftable->getAttackById(soldier);
+        if (!isMeleeAttack(attack))
+            return true;
+    }
+
+    return false;
+}
+
+bool __stdcall isUnitSuitableForAiNobleDuelHooked(const game::IMidgardObjectMap* objectMap,
+                                                  const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& attackClasses = AttackClassCategories::get();
+    const auto& attackReaches = AttackReachCategories::get();
+
+    auto unit = static_cast<const CMidUnit*>(
+        objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+
+    if (unit->currentHp >= 100)
+        return false;
+
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+    auto attack = soldier->vftable->getAttackById(soldier);
+
+    auto attackClassId = attack->vftable->getAttackClass(attack)->id;
+    if (attackClassId == attackClasses.damage->id) {
+        auto attackDamage = attack->vftable->getQtyDamage(attack);
+
+        auto attackReach = attack->vftable->getAttackReach(attack);
+        if (attackReach->id == attackReaches.all->id) {
+            return attackDamage < 40;
+        } else {
+            for (auto& custom : getCustomAttacks().reaches) {
+                if (attackReach->id == custom.reach.id) {
+                    auto attackInitiative = attack->vftable->getInitiative(attack);
+                    return attackDamage < 40 && attackInitiative <= 50;
+                }
+            }
+        }
+    } else if (attackClassId == attackClasses.heal->id
+               || attackClassId == attackClasses.boostDamage->id
+               || attackClassId == attackClasses.lowerDamage->id
+               || attackClassId == attackClasses.lowerInitiative->id
+               || attackClassId == attackClasses.revive->id
+               || attackClassId == attackClasses.cure->id
+               || attackClassId == attackClasses.bestowWards->id
+               || attackClassId == attackClasses.shatter->id
+               || attackClassId == attackClasses.giveAttack->id) {
+        return true;
+    }
+
+    return false;
+}
+
+bool __stdcall findAttackTargetHooked(const game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* unitId,
+                                      const game::IAttack* attack,
+                                      const game::CMidUnitGroup* targetGroup,
+                                      const game::TargetsList* targets,
+                                      const game::BattleMsgData* battleMsgData,
+                                      game::CMidgardID* targetUnitId)
+{
+    using namespace game;
+
+    if (getOriginalFunctions().findAttackTarget(objectMap, unitId, attack, targetGroup, targets,
+                                                battleMsgData, targetUnitId)) {
+        return true;
+    }
+
+    const auto& battle = BattleMsgDataApi::get();
+
+    auto attackClass = attack->vftable->getAttackClass(attack);
+    const auto& attackCategories = AttackClassCategories::get();
+    if (attackClass->id == attackCategories.lowerDamage->id) {
+        return battle.findBoostAttackTarget(objectMap, battleMsgData, targetGroup, targets,
+                                            targetUnitId);
+    } else if (attackClass->id == attackCategories.lowerInitiative->id) {
+        return battle.findFearAttackTarget(objectMap, battleMsgData, targetGroup, targets,
+                                           targetUnitId);
+    }
+
+    return false;
+}
+
+bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap* objectMap,
+                                                  const game::CMidgardID* unitId,
+                                                  const game::BattleMsgData* battleMsgData,
+                                                  const game::CMidUnitGroup* targetGroup,
+                                                  const game::TargetsList* targets,
+                                                  game::CMidgardID* targetUnitId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& groupApi = CMidUnitGroupApi::get();
+    const auto& listApi = TargetsListApi::get();
+
+    auto unit = static_cast<CMidUnit*>(
+        objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+
+    CMidUnitGroup* enemyGroup = getAllyOrEnemyGroup(objectMap, battleMsgData, unitId, false);
+
+    int unitPosition = groupApi.getUnitPosition(targetGroup, unitId);
+
+    int primaryXpKilled = 0;
+    int secondaryXpKilled = 0;
+    CMidUnit* primaryTarget = nullptr;
+    CMidUnit* secondaryTarget = nullptr;
+    TargetsListIterator it, end;
+    listApi.end(targets, &end);
+    for (listApi.begin(targets, &it); !listApi.equals(&it, &end); listApi.preinc(&it)) {
+        int targetPosition = *listApi.dereference(&it);
+
+        auto targetId = getTargetUnitId(targetPosition, targetGroup, enemyGroup);
+        auto targetUnit = static_cast<CMidUnit*>(
+            objectMap->vftable->findScenarioObjectById(objectMap, &targetId));
+
+        auto soldier = fn.castUnitImplToSoldier(getGlobalUnitImpl(targetUnit));
+
+        auto attack = soldier->vftable->getAttackById(soldier);
+        if (!fn.isAttackEffectiveAgainstGroup(objectMap, attack, enemyGroup))
+            continue;
+
+        auto xpKilled = soldier->vftable->getXpKilled(soldier);
+        if (isMeleeAttack(attack) == (unitPosition % 2 == 0)) {
+            if (isGreaterPickRandomIfEqual(xpKilled, primaryXpKilled)) {
+                primaryXpKilled = xpKilled;
+                primaryTarget = targetUnit;
+            }
+        } else if (primaryTarget == nullptr) {
+            if (isGreaterPickRandomIfEqual(xpKilled, secondaryXpKilled)) {
+                secondaryXpKilled = xpKilled;
+                secondaryTarget = targetUnit;
+            }
+        }
+    }
+
+    if (primaryTarget == nullptr)
+        primaryTarget = secondaryTarget;
+    if (primaryTarget == nullptr)
+        return false;
+
+    *targetUnitId = primaryTarget->unitId;
+    return true;
+}
+
+bool __stdcall findDamageAttackTargetWithNonAllReachHooked(const game::IMidgardObjectMap* objectMap,
+                                                           const game::IAttack* attack,
+                                                           int damage,
+                                                           const game::CMidUnitGroup* targetGroup,
+                                                           const game::TargetsList* targets,
+                                                           const game::BattleMsgData* battleMsgData,
+                                                           game::CMidgardID* targetUnitId)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+
+    auto attackSource = attack->vftable->getAttackSource(attack);
+    auto attackClass = attack->vftable->getAttackClass(attack);
+    if (isMeleeAttack(attack)) {
+        auto id = battle.findDamageAttackTargetWithAdjacentReach(targetUnitId, objectMap,
+                                                                 targetGroup, targets,
+                                                                 battleMsgData, attackSource,
+                                                                 attackClass);
+        return *id != emptyId;
+    } else {
+        return battle.findDamageAttackTargetWithAnyReach(objectMap, targetGroup, targets, damage,
+                                                         battleMsgData, attackClass, attackSource,
+                                                         0, targetUnitId);
+    }
+}
+
+bool __stdcall isAttackBetterThanItemUsageHooked(const game::IItem* item,
+                                                 const game::IUsSoldier* soldier,
+                                                 const game::CMidgardID* unitImplId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& attackClasses = AttackClassCategories::get();
+
+    auto itemBattle = (CItemBattle*)dynamicCast(item, 0, rtti.IItemType, rtti.CItemBattleType, 0);
+
+    auto itemAttack = getAttack(&itemBattle->attackId);
+    if (itemAttack->vftable->getQtyDamage(itemAttack) == 0)
+        return false;
+
+    auto attackClass = itemAttack->vftable->getAttackClass(itemAttack);
+    if (attackClass->id == attackClasses.shatter->id)
+        return false;
+
+    auto itemDamage = computeAverageTotalDamage(itemAttack,
+                                                itemAttack->vftable->getQtyDamage(itemAttack));
+
+    auto soldierDamage = fn.computeAttackDamageCheckTransformed(soldier, unitImplId, nullptr,
+                                                                &emptyId);
+    soldierDamage = computeAverageTotalDamage(soldier->vftable->getAttackById(soldier),
+                                              soldierDamage);
+
+    return soldierDamage >= itemDamage;
+}
+
+game::CMidgardID* __stdcall getSummonUnitImplIdByAttackHooked(game::CMidgardID* summonImplId,
+                                                              const game::CMidgardID* attackId,
+                                                              int position,
+                                                              bool smallUnit)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& listApi = IdListApi::get();
+    const auto& global = GlobalDataApi::get();
+
+    IdList summonImplIds{};
+    listApi.constructor(&summonImplIds);
+
+    auto globalData = *global.getGlobalData();
+    const auto transf = globalData->transf;
+    fn.fillAttackTransformIdList(transf, &summonImplIds, attackId, smallUnit);
+
+    if (summonImplIds.length == 0) {
+        *summonImplId = emptyId;
+    } else if (summonImplIds.length == 1) {
+        *summonImplId = *listApi.front(&summonImplIds);
+    } else {
+        IdListIterator randomIt;
+        listApi.begin(&summonImplIds, &randomIt);
+
+        int random = fn.generateRandomNumberStd(summonImplIds.length);
+        for (int i = 0; i < random; i++) {
+            listApi.preinc(&randomIt);
+        }
+
+        if (position % 2 == 0) {
+            *summonImplId = *listApi.dereference(&randomIt);
+        } else {
+            IdListIterator end;
+            listApi.end(&summonImplIds, &end);
+
+            IdListIterator it = randomIt;
+            do {
+                auto unitImpl = static_cast<TUsUnitImpl*>(
+                    global.findById(globalData->units, listApi.dereference(&it)));
+
+                const auto soldier = fn.castUnitImplToSoldier(unitImpl);
+                const auto attack = soldier->vftable->getAttackById(soldier);
+                if (!isMeleeAttack(attack))
+                    break;
+
+                listApi.preinc(&it);
+                if (listApi.equals(&it, &end)) {
+                    listApi.begin(&summonImplIds, &it);
+                }
+            } while (!listApi.equals(&it, &randomIt));
+
+            *summonImplId = *listApi.dereference(&it);
+        }
+    }
+
+    listApi.destructor(&summonImplIds);
+    return summonImplId;
+}
+
+bool __stdcall isSmallMeleeFighterHooked(const game::IUsSoldier* soldier)
+{
+    using namespace game;
+
+    if (!soldier->vftable->getSizeSmall(soldier))
+        return false;
+
+    const auto attack = soldier->vftable->getAttackById(soldier);
+    if (attack->vftable->getQtyDamage(attack) == 0)
+        return false;
+
+    return isMeleeAttack(attack);
+}
+
+bool __stdcall cAiHireUnitEvalHooked(const game::IMidgardObjectMap* objectMap,
+                                     const game::CMidUnitGroup* group)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    const auto& unitIds = group->units;
+    for (const CMidgardID* unitId = unitIds.bgn; unitId != unitIds.end; ++unitId) {
+        auto unit = static_cast<const CMidUnit*>(
+            objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+
+        auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+        auto attack = soldier->vftable->getAttackById(soldier);
+        if (isMeleeAttack(attack))
+            return true;
+    }
+
+    return false;
+}
+
+double __stdcall getMeleeUnitToHireAiRatingHooked(const game::CMidgardID* unitImplId,
+                                                  bool a2,
+                                                  bool a3)
+{
+    using namespace game;
+
+    if (!a2 || a3)
+        return 0.0;
+
+    const auto& fn = gameFunctions();
+    const auto& global = GlobalDataApi::get();
+
+    auto globalData = *global.getGlobalData();
+    auto unitImpl = static_cast<TUsUnitImpl*>(global.findById(globalData->units, unitImplId));
+
+    auto soldier = fn.castUnitImplToSoldier(unitImpl);
+    auto attack = soldier->vftable->getAttackById(soldier);
+
+    return isMeleeAttack(attack) ? 100.0 : 0.0;
+}
+
+int __stdcall computeTargetUnitAiPriorityHooked(const game::IMidgardObjectMap* objectMap,
+                                                const game::CMidgardID* unitId,
+                                                const game::BattleMsgData* battleMsgData,
+                                                int attackerDamage)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& attackClasses = AttackClassCategories::get();
+
+    auto unit = static_cast<const CMidUnit*>(
+        objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+
+    auto attack = soldier->vftable->getAttackById(soldier);
+    auto attackClassId = attack->vftable->getAttackClass(attack)->id;
+
+    AttackClassId attack2ClassId = (AttackClassId)-1;
+    auto attack2 = soldier->vftable->getSecondAttackById(soldier);
+    if (attack2)
+        attack2ClassId = attack2->vftable->getAttackClass(attack2)->id;
+
+    int modifier = 0;
+    if (!soldier->vftable->getSizeSmall(soldier) || isMeleeAttack(attack)
+        || attackClassId == attackClasses.boostDamage->id) {
+        int effectiveHp = fn.computeUnitEffectiveHp(objectMap, unit, battleMsgData);
+        modifier = effectiveHp > attackerDamage ? -effectiveHp : effectiveHp;
+    } else {
+        modifier = soldier->vftable->getXpKilled(soldier);
+        if (attackClassId == attackClasses.heal->id || attack2ClassId == attackClasses.heal->id) {
+            modifier *= 2;
+        } else if (attackClassId == attackClasses.paralyze->id
+                   || attack2ClassId == attackClasses.paralyze->id) {
+            modifier *= 8;
+        } else if (attackClassId == attackClasses.petrify->id
+                   || attack2ClassId == attackClasses.petrify->id) {
+            modifier *= 8;
+        } else if (attackClassId == attackClasses.summon->id
+                   || attack2ClassId == attackClasses.summon->id) {
+            modifier *= 10;
+        } else if (attackClassId == attackClasses.transformOther->id
+                   || attack2ClassId == attackClasses.transformOther->id) {
+            modifier *= 9;
+        } else if (attackClassId == attackClasses.giveAttack->id
+                   || attack2ClassId == attackClasses.giveAttack->id) {
+            modifier *= 3;
+        }
+    }
+
+    return 10000 + modifier;
+}
+
+bool __fastcall midStackInitializeHooked(game::CMidStack* thisptr,
+                                         int /*%edx*/,
+                                         const game::IMidgardObjectMap* objectMap,
+                                         const game::CMidgardID* leaderId,
+                                         const game::CMidgardID* ownerId,
+                                         const game::CMidgardID* subraceId,
+                                         const game::CMqPoint* position)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& stackApi = CMidStackApi::get();
+
+    auto leader = static_cast<const CMidUnit*>(
+        objectMap->vftable->findScenarioObjectById(objectMap, leaderId));
+
+    auto stackLeader = fn.castUnitImplToStackLeader(leader->unitImpl);
+    if (!stackLeader)
+        return false;
+
+    int unitPosition = 2;
+    auto soldier = fn.castUnitImplToSoldier(leader->unitImpl);
+    if (soldier->vftable->getSizeSmall(soldier)) {
+        auto attack = soldier->vftable->getAttackById(soldier);
+        if (!isMeleeAttack(attack))
+            unitPosition = 3;
+    }
+
+    if (!thisptr->group.vftable->addLeader(&thisptr->group, leaderId, unitPosition, objectMap))
+        return false;
+    thisptr->leaderId = *leaderId;
+    thisptr->leaderAlive = leader->currentHp > 0;
+
+    if (!thisptr->inventory.vftable->method1(&thisptr->inventory, &thisptr->stackId, objectMap))
+        return false;
+
+    if (!stackApi.setPosition(thisptr, objectMap, position, false))
+        return false;
+
+    if (!stackApi.setOwner(thisptr, objectMap, ownerId, subraceId))
+        return false;
+
+    thisptr->facing = 0;
+    thisptr->upgCount = 0;
+    thisptr->invisible = 0;
+    thisptr->aiIgnore = 0;
+    thisptr->movement = stackLeader->vftable->getMovement(stackLeader);
+
+    if (fn.isPlayerRaceUnplayable(ownerId, objectMap)) {
+        thisptr->order = *OrderCategories::get().stand;
+    } else {
+        thisptr->order = *OrderCategories::get().normal;
+    }
+    thisptr->orderTargetId = emptyId;
+
+    thisptr->aiOrder = *OrderCategories::get().normal;
+    thisptr->aiOrderTargetId = emptyId;
+
+    thisptr->creatLvl = soldier->vftable->getLevel(soldier);
+    return true;
 }
 
 } // namespace hooks

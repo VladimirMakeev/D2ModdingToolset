@@ -36,18 +36,22 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.sellAllItems = interf.value().get_or("sellAllItems", std::string());
     value.infiniteAttack = interf.value().get_or("infiniteAttack", std::string());
     value.critHitAttack = interf.value().get_or("critHitAttack", std::string());
+    value.critHitDamage = interf.value().get_or("critHitDamage", std::string());
+    value.ratedDamage = interf.value().get_or("ratedDamage", std::string());
+    value.ratedDamageEqual = interf.value().get_or("ratedDamageEqual", std::string());
+    value.ratedDamageSeparator = interf.value().get_or("ratedDamageSeparator", std::string());
+    value.splitDamage = interf.value().get_or("splitDamage", std::string());
 }
 
 void initialize(TextIds& value)
 {
     const auto path{hooks::scriptsFolder() / "textids.lua"};
-
     try {
-        sol::state lua;
-        if (!loadScript(path, lua))
+        const auto lua{loadScriptFile(path)};
+        if (!lua)
             return;
 
-        const sol::table& table = lua["textids"];
+        const sol::table& table = (*lua)["textids"];
         readInterfTextIds(table, value.interf);
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to read script '{:s}'.\n"

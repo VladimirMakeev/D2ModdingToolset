@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2021 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,32 +17,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "middragdropinterf.h"
-#include "version.h"
-#include <array>
+#ifndef GAMEUTILS_H
+#define GAMEUTILS_H
 
-namespace game::CMidDragDropInterfApi {
+namespace game {
+struct CMidgardID;
+struct CMidUnitGroup;
+struct IMidgardObjectMap;
+struct BattleMsgData;
+} // namespace game
 
-// clang-format off
-static std::array<Api, 3> functions = {{
-    // Akella
-    Api{
-        (Api::GetDialog)0x56cea4
-    },
-    // Russobit
-    Api{
-        (Api::GetDialog)0x56cea4
-    },
-    // Gog
-    Api{
-        (Api::GetDialog)0x56c54e
-    }
-}};
-// clang-format on
+namespace hooks {
 
-Api& get()
-{
-    return functions[static_cast<int>(hooks::gameVersion())];
-}
+bool isGreaterPickRandomIfEqual(int first, int second);
+game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMap,
+                                         const game::BattleMsgData* battleMsgData,
+                                         const game::CMidgardID* unitId,
+                                         bool ally);
 
-} // namespace game::CMidDragDropInterfApi
+} // namespace hooks
+
+#endif // GAMEUTILS_H

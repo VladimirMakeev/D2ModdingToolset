@@ -48,6 +48,8 @@ public:
 
     /** Returns unit's current experience points. */
     int getXp() const;
+    int getHp() const;
+    int getHpMax() const;
 
 private:
     const game::CMidUnit* unit;

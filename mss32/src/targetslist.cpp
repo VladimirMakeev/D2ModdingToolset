@@ -29,34 +29,40 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::Constructor)0x42904e,
         (Api::Destructor)0x416331,
-        (Api::Fill)0x65b725,
         (Api::Clear)0x668710,
-        (Api::Begin)0x6686d0,
+        (Api::GetIterator)0x6686d0,
+        (Api::GetIterator)0x680ae3,
         (Api::Insert)0x477d8a,
-        (Api::Remove)0x6686f0,
-        (Api::Get)0x62b790
+        (Api::Erase)0x6686f0,
+        (Api::Dereference)0x62b790,
+        (Api::Equals)0x668cc0,
+        (Api::Preincrement)0x640560,
     },
     // Russobit
     Api{
         (Api::Constructor)0x42904e,
         (Api::Destructor)0x416331,
-        (Api::Fill)0x65b725,
         (Api::Clear)0x668710,
-        (Api::Begin)0x6686d0,
+        (Api::GetIterator)0x6686d0,
+        (Api::GetIterator)0x680ae3,
         (Api::Insert)0x477d8a,
-        (Api::Remove)0x6686f0,
-        (Api::Get)0x62b790
+        (Api::Erase)0x6686f0,
+        (Api::Dereference)0x62b790,
+        (Api::Equals)0x668cc0,
+        (Api::Preincrement)0x640560,
     },
     // Gog
     Api{
         (Api::Constructor)0x428ada,
         (Api::Destructor)0x415fdc,
-        (Api::Fill)0x65a1a5,
         (Api::Clear)0x667190,
-        (Api::Begin)0x667150,
+        (Api::GetIterator)0x667150,
+        (Api::GetIterator)0x5d309e,
         (Api::Insert)0x477985,
-        (Api::Remove)0x667170,
-        (Api::Get)0x63eeb0
+        (Api::Erase)0x667170,
+        (Api::Dereference)0x63eeb0,
+        (Api::Equals)0x6678d0,
+        (Api::Preincrement)0x642390,
     }
 }};
 // clang-format on

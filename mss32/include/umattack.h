@@ -25,6 +25,7 @@
 #include "ummodifier.h"
 #include "ussoldier.h"
 #include "usunit.h"
+#include <cstddef>
 
 namespace game {
 
@@ -52,6 +53,17 @@ struct CUmAttackData
 
 static_assert(sizeof(CUmAttackData) == 52,
               "Size of CUmAttackData structure must be exactly 52 bytes");
+
+static inline CUmAttack* castSoldierToUmAttack(const IUsSoldier* soldier)
+{
+    return reinterpret_cast<CUmAttack*>((std::uintptr_t)soldier - offsetof(CUmAttack, usSoldier));
+}
+
+namespace CUmAttackApi {
+
+const IUsSoldierVftable* vftable();
+
+} // namespace CUmAttackApi
 
 } // namespace game
 

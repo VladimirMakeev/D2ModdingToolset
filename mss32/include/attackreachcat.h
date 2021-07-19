@@ -41,7 +41,21 @@ struct Categories
 
 Categories& get();
 
+/** Returns address of LAttackReach::vftable used in game. */
+const void* vftable();
+
 } // namespace AttackReachCategories
+
+namespace LAttackReachTableApi {
+
+using Api = CategoryTableApi::Api<LAttackReachTable, LAttackReach>;
+
+Api& get();
+
+/** Returns address of LAttackReachTable::vftable used in game. */
+const void* vftable();
+
+} // namespace LAttackReachTableApi
 
 } // namespace game
 

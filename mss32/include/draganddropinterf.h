@@ -25,9 +25,13 @@
 
 namespace game {
 
+struct CDialogInterf;
+
 struct CDragAndDropInterfData
 {
-    char unknown[72];
+    char unknown[60];
+    CDialogInterf* dialogInterf;
+    char unknown2[8];
 };
 
 static_assert(sizeof(CDragAndDropInterfData) == 72,
@@ -38,6 +42,18 @@ struct CDragAndDropInterf : public CFullScreenInterf
     IMidDropManager dropManager;
     CDragAndDropInterfData* dragAndDropInterfData;
 };
+
+namespace CDragAndDropInterfApi {
+
+struct Api
+{
+    using GetDialog = CDialogInterf*(__thiscall*)(CDragAndDropInterf* thisptr);
+    GetDialog getDialog;
+};
+
+Api& get();
+
+} // namespace CDragAndDropInterfApi
 
 } // namespace game
 

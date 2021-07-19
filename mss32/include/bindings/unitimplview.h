@@ -47,6 +47,15 @@ public:
     int getXpNext() const;
     /** Returns level after which dynUpgrade2 rules are applied. */
     int getDynUpgLevel() const;
+    int getXpKilled() const;
+    int getArmor() const;
+    int getRegen() const;
+    int getRace() const;
+    int getSubRace() const;
+    bool isSmall() const;
+    bool isMale() const;
+    bool isWaterOnly() const;
+    bool attacksTwice() const;
 
     /** Returns dynamic upgrade 1. */
     std::optional<DynUpgradeView> getDynUpgrade1() const;

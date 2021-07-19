@@ -35,9 +35,12 @@ template <typename T>
 struct CBFunctorDispatch1Vftable
 {
     /** Calls functor-specific callback function, passing it T as a single parameter. */
-    using RunCallback = void(__thiscall)(CBFunctorDispatch1<T>* thistr, T value);
+    using RunCallback = void(__thiscall*)(CBFunctorDispatch1<T>* thistr, T value);
     RunCallback runCallback;
 };
+
+static_assert(sizeof(CBFunctorDispatch1Vftable<void*>) == 1 * sizeof(void*),
+              "CBFunctorDispatch1 vftable must have exactly 1 method");
 
 } // namespace game
 

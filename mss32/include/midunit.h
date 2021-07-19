@@ -47,7 +47,7 @@ struct CMidUnit : public IMidScenarioObject
     bool keepHp;
     char padding3[3];
     int hpBefore;
-    int hpMax;
+    int hpBefMax;
     int origXp;
     IdList origModifiers;
 };
@@ -65,6 +65,9 @@ struct Api
     using AddRemoveModifier = bool(__thiscall*)(CMidUnit* thisptr, const CMidgardID* modifierId);
     AddRemoveModifier addModifier;
     AddRemoveModifier removeModifier;
+
+    using GetHpMax = int(__thiscall*)(const CMidUnit* thisptr);
+    GetHpMax getHpMax;
 };
 
 Api& get();
