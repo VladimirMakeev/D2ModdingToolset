@@ -62,21 +62,44 @@ struct IMidgardObjectMapVftable
         IMidScenarioObject*(__thiscall*)(IMidgardObjectMap* thisptr, const CMidgardID* id);
     FindScenarioObjectByIdForChange findScenarioObjectByIdForChange;
 
-    void* unknown;
+    /**
+     * Finds scenario object by its id and adds it to erase list.
+     * Deletes object record locally.
+     * Returns true if object was deleted.
+     */
+    using DeleteScenarioObjectById = bool(__thiscall*)(IMidgardObjectMap* thisptr,
+                                                       const CMidgardID* id);
+    DeleteScenarioObjectById deleteScenarioObjectById;
 
-    /** Assumption: stores id of scenario object. */
-    using InsertObjectId = bool(__thiscall*)(IMidgardObjectMap* thisptr,
-                                             const IMidScenarioObject* object);
-    InsertObjectId insertObjectId;
-    void* unknownMethod;
+    /**
+     * Adds scenario object to the map.
+     * Updates list of added objects.
+     * Returns true if object was added.
+     */
+    using InsertObject = bool(__thiscall*)(IMidgardObjectMap* thisptr,
+                                           const IMidScenarioObject* object);
+    InsertObject insertObject;
 
-    /** Creates id with IdCategory::Scenario and specified type. */
     using CreateScenarioId = void(__thiscall*)(IMidgardObjectMap* thisptr,
                                                CMidgardID* scenarioId,
                                                IdType type);
+
+    /**
+     * Creates id with IdCategory::Scenario and specified type.
+     * Increments free type index for specified IdType.
+     */
+    CreateScenarioId createScenarioIdIncFreeIndex;
+
+    /** Creates id with IdCategory::Scenario and specified type. */
     CreateScenarioId createScenarioId;
 
-    void* unknown3[2];
+    /** Sets free type index for specified IdType. */
+    using SetFreeTypeIndex = void(__thiscall*)(IMidgardObjectMap* thisptr,
+                                               IdType type,
+                                               int freeTypeIndex);
+    SetFreeTypeIndex setFreeTypeIndex;
+
+    void* unknown;
 };
 
 static_assert(sizeof(IMidgardObjectMapVftable) == 13 * sizeof(void*),
