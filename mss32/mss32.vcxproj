@@ -588,6 +588,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\playerincomehooks.h" />
     <ClInclude Include="include\popupdialoginterf.h" />
     <ClInclude Include="include\mqpoint.h" />
+    <ClInclude Include="include\popupinterf.h" />
     <ClInclude Include="include\presentation.h" />
     <ClInclude Include="include\racecategory.h" />
     <ClInclude Include="include\racelist.h" />

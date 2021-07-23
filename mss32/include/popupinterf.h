@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,23 +17,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef POPUPDIALOGINTERF_H
-#define POPUPDIALOGINTERF_H
+#ifndef POPUPINTERF_H
+#define POPUPINTERF_H
 
-#include "interfdialog.h"
+#include "popupdialoginterf.h"
+#include "taskmanagerholder.h"
 
 namespace game {
 
-struct CDialogInterf;
-
-struct CPopupDialogInterf : public CInterfDialog
+struct CPopupInterfData
 {
-    CDialogInterf** dialog;
+    CDialogInterf* dialog;
+    CTaskManager* taskManager;
+    ITask* task;
 };
 
-static_assert(offsetof(CPopupDialogInterf, dialog) == 12,
-              "CPopupDialogInterf::dialog offset must be 12 bytes");
+static_assert(sizeof(CPopupInterfData) == 12,
+              "Size of CPopupInterfData structure must be exactly 12 bytes");
+
+struct CPopupInterf
+    : public CPopupDialogInterf
+    , public ITaskManagerHolder
+{
+    CPopupInterfData* popupData;
+};
+
+static_assert(sizeof(CPopupInterf) == 24,
+              "Size of CPopupInterf structure must be exactly 24 bytes");
+
+static_assert(offsetof(CPopupInterf, popupData) == 20,
+              "CPopupInterf::popupData offset must be 20 bytes");
 
 } // namespace game
 
-#endif // POPUPDIALOGINTERF_H
+#endif // POPUPINTERF_H
