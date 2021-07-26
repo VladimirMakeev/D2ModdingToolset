@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,23 +17,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef POPUPDIALOGINTERF_H
-#define POPUPDIALOGINTERF_H
-
-#include "interfdialog.h"
+#ifndef FUNCTORDISPATCH3_H
+#define FUNCTORDISPATCH3_H
 
 namespace game {
 
-struct CDialogInterf;
+template <typename T, typename U, typename V>
+struct CBFunctorDispatch3Vftable;
 
-struct CPopupDialogInterf : public CInterfDialog
+template <typename T, typename U, typename V>
+struct CBFunctorDispatch3
 {
-    CDialogInterf** dialog;
+    CBFunctorDispatch3Vftable<T, U, V>* vftable;
 };
 
-static_assert(offsetof(CPopupDialogInterf, dialog) == 12,
-              "CPopupDialogInterf::dialog offset must be 12 bytes");
+template <typename T, typename U, typename V>
+struct CBFunctorDispatch3Vftable
+{
+    /** Calls functor-specific callback function, passing it T, U and V as a parameters. */
+    using RunCallback = void(__thiscall*)(CBFunctorDispatch3<T, U, V>* thisptr,
+                                          T value,
+                                          U value2,
+                                          V value3);
+    RunCallback runCallback;
+};
 
 } // namespace game
 
-#endif // POPUPDIALOGINTERF_H
+#endif // FUNCTORDISPATCH3_H

@@ -65,9 +65,9 @@ struct CMidgardScenarioMap : public IMidgardObjectMap
     CMidgardScenarioMapData data;
     /** Used to keep track of last free CMidgardID type index for each IdType. */
     int freeIdTypeIndices[59];
-    SortedList<CMidgardID> list1;
-    SortedList<CMidgardID> list2; /**< Assumption: list of objects to be updated. */
-    SortedList<CMidgardID> list3;
+    SortedList<CMidgardID> addedObjects;
+    SortedList<CMidgardID> changedObjects;
+    SortedList<CMidgardID> objectsToErase;
 };
 
 static_assert(sizeof(CMidgardScenarioMap) == 368,
