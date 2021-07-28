@@ -64,8 +64,17 @@ struct CUnitPickerInterfData
     ITask* task;
     SmartPtr<CBFunctorDispatch3<CMidgardID, int, bool>> onUnitPicked;
     UnitPickerSubrace selectedSubRace;
-    bool enabledButtons[14];
-    char padding[2];
+
+    union
+    {
+        struct
+        {
+            bool enabledButtons[14];
+            char padding[2];
+        } original;
+
+        bool enabledButtons[16];
+    };
 };
 
 static_assert(sizeof(CUnitPickerInterfData) == 64,

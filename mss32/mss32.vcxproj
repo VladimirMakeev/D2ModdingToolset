@@ -319,6 +319,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\unitcat.cpp" />
     <ClCompile Include="src\unitinfolist.cpp" />
     <ClCompile Include="src\unitpickerinterf.cpp" />
+    <ClCompile Include="src\unitpickerinterfhooks.cpp" />
     <ClCompile Include="src\unitpositionlinkedlist.cpp" />
     <ClCompile Include="src\unitpositionlist.cpp" />
     <ClCompile Include="src\unitsforhire.cpp" />
@@ -673,6 +674,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\unitinfolist.h" />
     <ClInclude Include="include\unitmodifier.h" />
     <ClInclude Include="include\unitpickerinterf.h" />
+    <ClInclude Include="include\unitpickerinterfhooks.h" />
     <ClInclude Include="include\unitpositionlinkedlist.h" />
     <ClInclude Include="include\unitpositionlist.h" />
     <ClInclude Include="include\unitpositionpair.h" />

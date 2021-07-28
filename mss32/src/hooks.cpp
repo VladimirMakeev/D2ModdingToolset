@@ -126,6 +126,8 @@
 #include "umattackhooks.h"
 #include "unitbranchcat.h"
 #include "unitgenerator.h"
+#include "unitpickerinterf.h"
+#include "unitpickerinterfhooks.h"
 #include "unitsforhire.h"
 #include "unitutils.h"
 #include "ussoldier.h"
@@ -384,6 +386,7 @@ static Hooks getGameHooks()
 static Hooks getScenarioEditorHooks()
 {
     using namespace game;
+    using namespace editor;
 
     auto& orig = getOriginalFunctions();
 
@@ -398,15 +401,20 @@ static Hooks getScenarioEditorHooks()
         // Allow editor to place more than 200 stacks on a map
         {editorFunctions.countStacksOnMap, countStacksOnMapHooked},
         // Support custom terrains coloring
-        {editor::CMapInterfApi::get().createMapChangeTask, createMapChangeTaskHooked},
-        {editor::CTaskChangeColorApi::get().getTerrain, getTerrainBySelection},
+        {CMapInterfApi::get().createMapChangeTask, createMapChangeTaskHooked},
+        {CTaskChangeColorApi::get().getTerrain, getTerrainBySelection},
         // Support custom races in new map menu
-        {editor::CMenuNewMapApi::get().getCreationSettings, getNewMapCreationSettingsHooked},
+        {CMenuNewMapApi::get().getCreationSettings, getNewMapCreationSettingsHooked},
         // Map custom races to new sub races
         {editorFunctions.getSubRaceByRace, getSubRaceByRaceHooked},
         {editorFunctions.isRaceCategoryPlayable, isRaceCategoryPlayableHooked},
         // Support custom terrains placement under capital
         {editorFunctions.changeCapitalTerrain, changeCapitalTerrainHooked},
+        // Support new subraces in unit picker
+        {CUnitPickerInterfApi::get().dataConstructor, unitPickerDataCtorHooked, (void**)&orig.unitPickerDataCtor},
+        {CUnitPickerInterfApi::get().updateRadioButton, unitPickerUpdateRadioButtonHooked},
+        {CUnitPickerInterfApi::get().updateEnabledButtons, unitPickerUpdateEnabledButtonsHooked},
+        {CUnitPickerInterfApi::get().onTogglePressed, unitPickerOnTogglePressedHooked},
     };
     // clang-format on
 

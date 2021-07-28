@@ -35,6 +35,7 @@
 #include "pickupdropinterf.h"
 #include "sitemerchantinterf.h"
 #include "terrainnamelist.h"
+#include "unitpickerinterf.h"
 
 namespace hooks {
 
@@ -76,6 +77,7 @@ struct OriginalFunctions
     game::GetTilePrefixName getTilePrefixName;
     game::TerrainNameListApi::Api::GetTerrainNameList getTerrainNameList;
     game::CMenuLordApi::Api::Constructor menuLordCtor;
+    game::editor::CUnitPickerInterfApi::Api::DataConstructor unitPickerDataCtor;
 };
 
 OriginalFunctions& getOriginalFunctions();
