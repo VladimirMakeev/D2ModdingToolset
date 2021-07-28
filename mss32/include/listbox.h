@@ -139,8 +139,8 @@ struct Api
      * @param elementsTotal max number of elements to show in list box.
      * @returns unknown.
      */
-    using InitContents = bool(__thiscall*)(CListBoxInterf* thisptr, int elementsTotal);
-    InitContents initContents;
+    using SetElementsTotal = bool(__thiscall*)(CListBoxInterf* thisptr, int elementsTotal);
+    SetElementsTotal setElementsTotal;
 
     /**
      * Assumption: returns index of currently selected list box element.

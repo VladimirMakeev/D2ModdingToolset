@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Stanislav Egorov.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "togglebutton.h"
+#include "unitpickerinterf.h"
 #include "version.h"
 #include <array>
 
-namespace game::CToggleButtonApi {
-
-// clang-format off
-static std::array<Api, 4> functions = {{
-    // Akella
-    Api{
-        (Api::SetChecked)0x5355b3,
-    },
-    // Russobit
-    Api{
-        (Api::SetChecked)0x5355b3,
-    },
-    // Gog
-    Api{
-        (Api::SetChecked)0x534b91,
-    },
-    // Scenario Editor
-    Api{
-        (Api::SetChecked)0x4945d1,
-    },
-}};
-// clang-format on
+namespace game::editor::CUnitPickerInterfApi {
 
 Api& get()
 {
-    return functions[static_cast<int>(hooks::gameVersion())];
+    // clang-format off
+    static Api api{
+        (Api::DataConstructor)0x44183e,
+        (Api::UpdateRadioButton)0x441a71,
+        (Api::UpdateEnabledButtons)0x441c86,
+        (Api::UpdateEditLevel)0x44240e,
+        (Api::FilterUnits)0x442680,
+        (Api::SortUnits)0x442705,
+        (Api::OnTogglePressed)0x442520,
+        (UnitPickerSubrace*)0x663650,
+        (UnitPickerSortMethod*)0x64ea08,
+    };
+    // clang-format on
+
+    return api;
 }
 
-} // namespace game::CToggleButtonApi
+} // namespace game::editor::CUnitPickerInterfApi

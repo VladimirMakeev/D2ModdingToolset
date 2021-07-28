@@ -813,7 +813,7 @@ static void menuNewSkirmishCtor(game::CMenuNewSkirmish* thisptr, int a1, const c
     }
 
     CListBoxInterf* lBox = CDialogInterfApi::get().findListBox(dialog, "TLBOX_GAME_SLOT");
-    listBox.initContents(lBox, scenariosTotal);
+    listBox.setElementsTotal(lBox, scenariosTotal);
     menu.updateScenarioUi(unknown, dialog, listBox.selectedIndex(lBox));
 }
 

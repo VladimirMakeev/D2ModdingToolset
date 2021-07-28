@@ -279,6 +279,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\playerincomehooks.cpp" />
     <ClCompile Include="src\racecategory.cpp" />
     <ClCompile Include="src\racelist.cpp" />
+    <ClCompile Include="src\radiobuttoninterf.cpp" />
     <ClCompile Include="src\restrictions.cpp" />
     <ClCompile Include="src\scenariodata.cpp" />
     <ClCompile Include="src\scenariodataarray.cpp" />
@@ -317,6 +318,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\unitbranchcat.cpp" />
     <ClCompile Include="src\unitcat.cpp" />
     <ClCompile Include="src\unitinfolist.cpp" />
+    <ClCompile Include="src\unitpickerinterf.cpp" />
     <ClCompile Include="src\unitpositionlinkedlist.cpp" />
     <ClCompile Include="src\unitpositionlist.cpp" />
     <ClCompile Include="src\unitsforhire.cpp" />
@@ -670,6 +672,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\unitgenerator.h" />
     <ClInclude Include="include\unitinfolist.h" />
     <ClInclude Include="include\unitmodifier.h" />
+    <ClInclude Include="include\unitpickerinterf.h" />
     <ClInclude Include="include\unitpositionlinkedlist.h" />
     <ClInclude Include="include\unitpositionlist.h" />
     <ClInclude Include="include\unitpositionpair.h" />

@@ -26,12 +26,12 @@
 
 namespace game {
 
-struct CToggleButtonInterf;
+struct CToggleButton;
 
 struct CRadioButtonInterfData
 {
-    Vector<Pair<CToggleButtonInterf*, bool>> buttons;
-    char unknown;
+    Vector<Pair<CToggleButton*, bool /* enabled */>> buttons;
+    bool enabled;
     char padding[3];
     int selectedButton;
     SmartPtr<CBFunctorDispatch1<int>> onButtonPressed;
@@ -51,6 +51,29 @@ struct CRadioButtonInterf : public CInterface
 
 static_assert(sizeof(CRadioButtonInterf) == 12,
               "Size of CRadioButtonInterf structure must be exactly 12 bytes");
+
+namespace CRadioButtonInterfApi {
+
+struct Api
+{
+    /** Enables or disables radio button. */
+    using SetEnabled = void(__thiscall*)(CRadioButtonInterf* thisptr, bool enabled);
+    SetEnabled setEnabled;
+
+    /** Enables or disables toggle button with specified index. */
+    using SetButtonEnabled = void(__thiscall*)(CRadioButtonInterf* thisptr,
+                                               int buttonIndex,
+                                               bool enabled);
+    SetButtonEnabled setButtonEnabled;
+
+    /** Sets toggle button with specified index checked. */
+    using SetCheckedButton = void(__thiscall*)(CRadioButtonInterf* thisptr, int buttonIndex);
+    SetCheckedButton setCheckedButton;
+};
+
+Api& get();
+
+} // namespace CRadioButtonInterfApi
 
 } // namespace game
 
