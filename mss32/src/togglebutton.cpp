@@ -24,7 +24,7 @@
 namespace game::CToggleButtonApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::SetChecked)0x5355b3,
@@ -36,7 +36,11 @@ static std::array<Api, 3> functions = {{
     // Gog
     Api{
         (Api::SetChecked)0x534b91,
-    }
+    },
+    // Scenario Editor
+    Api{
+        (Api::SetChecked)0x4945d1,
+    },
 }};
 // clang-format on
 
