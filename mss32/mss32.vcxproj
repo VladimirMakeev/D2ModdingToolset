@@ -272,6 +272,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\playerincomehooks.cpp" />
     <ClCompile Include="src\racecategory.cpp" />
     <ClCompile Include="src\racelist.cpp" />
+    <ClCompile Include="src\radiobuttoninterf.cpp" />
     <ClCompile Include="src\restrictions.cpp" />
     <ClCompile Include="src\scenariodata.cpp" />
     <ClCompile Include="src\scenariodataarray.cpp" />
