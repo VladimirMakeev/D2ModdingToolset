@@ -297,7 +297,7 @@ int __stdcall getTilePrefixByNameHooked(const char* tileNamePrefix)
 const char* __stdcall getTilePrefixNameHooked(int tilePrefixNumber)
 {
     if (tilePrefixNumber >= customTilePrefixStartNumber) {
-        const auto index{tilePrefixNumber - customTilePrefixStartNumber};
+        const size_t index = tilePrefixNumber - customTilePrefixStartNumber;
 
         if (customTerrains().size() <= index) {
             return nullptr;
