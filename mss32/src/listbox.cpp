@@ -24,28 +24,35 @@
 namespace game::CListBoxInterfApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::AssignFunctor)0x5c9b66,
         (Api::AssignDisplayTextFunctor)0x5c9982,
-        (Api::InitContents)0x536047,
-        (Api::SelectedIndex)0x5838db
+        (Api::SetElementsTotal)0x536047,
+        (Api::SelectedIndex)0x5838db,
     },
     // Russobit
     Api{
         (Api::AssignFunctor)0x5c9b66,
         (Api::AssignDisplayTextFunctor)0x5c9982,
-        (Api::InitContents)0x536047,
-        (Api::SelectedIndex)0x5838db
+        (Api::SetElementsTotal)0x536047,
+        (Api::SelectedIndex)0x5838db,
     },
     // Gog
     Api{
         (Api::AssignFunctor)0x5c8b34,
         (Api::AssignDisplayTextFunctor)0x5c8950,
-        (Api::InitContents)0x535665,
-        (Api::SelectedIndex)0x535361
-    }
+        (Api::SetElementsTotal)0x535665,
+        (Api::SelectedIndex)0x535361,
+    },
+    // Scenario Editor
+    Api{
+        (Api::AssignFunctor)0,
+        (Api::AssignDisplayTextFunctor)0,
+        (Api::SetElementsTotal)0x48d410,
+        (Api::SelectedIndex)0x48d127,
+    },
 }};
 // clang-format on
 
