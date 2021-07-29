@@ -382,7 +382,7 @@ UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* 
     auto allies = getAllies(objectMap, battleMsgData, unitGroupId, unitId);
 
     return getTargetsToSelectOrAttack(attackReach.attackScript, attacker, selected, allies, targets,
-                                      unitGroupId == targetGroupId);
+                                      *unitGroupId == *targetGroupId);
 }
 
 UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
