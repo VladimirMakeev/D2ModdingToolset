@@ -296,7 +296,7 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
 
     auto targetsToSelect = getTargetsToSelectOrAttack(attackReach.selectionScript, attacker,
                                                       selected, allies, targets,
-                                                      unitGroupId == targetGroupId);
+                                                      *unitGroupId == *targetGroupId);
 
     bool isSummonAttack = batAttack->vftable->method17(batAttack, battleMsgData);
     for (const auto& target : targetsToSelect) {
