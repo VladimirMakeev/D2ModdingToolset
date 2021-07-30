@@ -179,3 +179,32 @@ end
 ```
 
 See [Scripts](Scripts) directory for additional examples.
+
+### Targeting scripts (custom attack reaches, specified via Globals\LAttR.dbf)
+Targeting scripts are used to specify either selection or attack targets of custom attack reach:
+- **Selection** targets are targets that can be **selected (clicked)** (specified as SEL_SCRIPT in LAttR.dbf);
+- **Attack** targets are targets that will be **affected by attack** (specified as ATT_SCRIPT in LAttR.dbf).
+
+For instance, in case of "pierce" attack, you can only click adjacent targets, but the attack will not only affect the selected target but also the one behind it (if any).
+
+Thus the "pierce" attack uses **getAdjacentTargets.lua as selection** script and **getSelectedTargetAndOneBehindIt.lua as attack** script.
+#### getSelectedTargetAndOneBehindIt.lua
+```lua
+function getTargets(attacker, selected, allies, targets, targetsAreAllies)
+	-- Get the selected target and the one behind it (pierce attack)
+	local result = {selected}
+	for i = 1, #targets do
+		local target = targets[i]
+		if target.backline and target.position == selected.position + 1 then
+			table.insert(result, target)
+			break
+		end
+	end
+	return result
+end
+```
+- attacker - _unit slot_ of the attacker unit;
+- selected - _unit slot_ of the unit that was selected (clicked);
+- allies - _unit slots_ of all the allies on the battlefield (excluding the attacker);
+- targets - _unit slots_ of all the targets on the battlefield on which the attack can be performed. For instance, if targets are allies and the attack is Revive, then _targets_ will only include dead allies that can be revived;
+- targetsAreAllies - specified whether targets are allies.
