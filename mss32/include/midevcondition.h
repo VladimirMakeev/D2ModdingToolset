@@ -20,7 +20,7 @@
 #ifndef MIDEVCONDITION_H
 #define MIDEVCONDITION_H
 
-#include "eventconditionat.h"
+#include "eventconditioncat.h"
 
 namespace game {
 

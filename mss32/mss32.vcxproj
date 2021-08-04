@@ -439,6 +439,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\encparambase.h" />
     <ClInclude Include="include\encunitdescriptor.h" />
     <ClInclude Include="include\eventconditionat.h" />
+    <ClInclude Include="include\eventconditions.h" />
     <ClInclude Include="include\exchangeinterf.h" />
     <ClInclude Include="include\factoryimageanim.h" />
     <ClInclude Include="include\fortcategory.h" />
