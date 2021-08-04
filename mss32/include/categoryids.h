@@ -306,6 +306,28 @@ enum class TerrainId : int
     Elf
 };
 
+/** Event condition ids from LEvCond.dbf. */
+enum class EventConditionId : int
+{
+    Frequency,
+    Location = 2,
+    EnterCity,
+    OwnCity,
+    KillStack,
+    OwnItem,
+    LeaderOwnItem,
+    Diplomacy,
+    Alliance,
+    LootRuin,
+    TransformLand,
+    VisitSite,
+    LeaderToZone = 14,
+    LeaderToCity,
+    ItemToLocation,
+    StackExists,
+    VariableInRange,
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
