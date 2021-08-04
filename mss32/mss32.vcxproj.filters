@@ -1714,10 +1714,13 @@
     <ClInclude Include="include\midevcondition.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="include\eventconditionat.h">
+    <ClInclude Include="include\eventconditions.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="include\eventconditions.h">
+    <ClInclude Include="include\eventconditioncat.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\eventeffectcat.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

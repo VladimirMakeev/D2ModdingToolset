@@ -328,6 +328,35 @@ enum class EventConditionId : int
     VariableInRange,
 };
 
+/** Event effect ids from LEvEffct.dbf. */
+enum class EventEffectId : int
+{
+    Win,
+    CreateStack,
+    CastSpell,
+    CastSpellMap,
+    ChangeOwner,
+    MoveBeside,
+    Battle,
+    EnableEvent,
+    GiveSpell,
+    GiveItem,
+    MoveStack,
+    Ally,
+    Diplomacy,
+    Unfog,
+    RemoveMountain,
+    RemoveLandmark,
+    ChangeObjective,
+    Popup,
+    ChangeOrder,
+    DestroyItem,
+    RemoveStack,
+    ChangeLandmark,
+    ChangeTerrain,
+    ModifyVariable,
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
