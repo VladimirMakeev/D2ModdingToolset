@@ -1717,6 +1717,9 @@
     <ClInclude Include="include\eventconditions.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\mideveffect.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\eventconditioncat.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>

@@ -530,6 +530,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\middragdropinterf.h" />
     <ClInclude Include="include\middropmanager.h" />
     <ClInclude Include="include\midevcondition.h" />
+    <ClInclude Include="include\mideveffect.h" />
     <ClInclude Include="include\midevent.h" />
     <ClInclude Include="include\midgard.h" />
     <ClInclude Include="include\midgardid.h" />
