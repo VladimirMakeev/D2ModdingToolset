@@ -30,6 +30,47 @@ struct LEventCondCategoryTable : public CEnumConstantTable<EventConditionId>
 struct LEventCondCategory : public Category<EventConditionId>
 { };
 
+namespace EventCondCategories {
+
+struct Categories
+{
+    LEventCondCategory* frequency;
+    LEventCondCategory* location;
+    LEventCondCategory* enterCity;
+    LEventCondCategory* ownCity;
+    LEventCondCategory* killStack;
+    LEventCondCategory* ownItem;
+    LEventCondCategory* leaderOwnItem;
+    LEventCondCategory* diplomacy;
+    LEventCondCategory* alliance;
+    LEventCondCategory* lootRuin;
+    LEventCondCategory* transformLand;
+    LEventCondCategory* visitSite;
+    LEventCondCategory* leaderToZone;
+    LEventCondCategory* leaderToCity;
+    LEventCondCategory* itemToLocation;
+    LEventCondCategory* stackExists;
+    LEventCondCategory* varInRange;
+};
+
+Categories& get();
+
+/** Returns address of LEventCondCategory::vftable used in game. */
+const void* vftable();
+
+} // namespace EventCondCategories
+
+namespace LEventCondCategoryTableApi {
+
+using Api = CategoryTableApi::Api<LEventCondCategoryTable, LEventCondCategory>;
+
+Api& get();
+
+/** Returns address of LEventCondCategoryTable::vftable used in game. */
+const void* vftable();
+
+} // namespace LEventCondCategoryTableApi
+
 } // namespace game
 
 #endif // EVENTCONDITIONCAT_H
