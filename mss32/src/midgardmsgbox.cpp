@@ -24,19 +24,23 @@
 namespace game::CMidgardMsgBoxApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::Constructor)0x5c87a3
+        (Api::Constructor)0x5c87a3,
     },
     // Russobit
     Api{
-        (Api::Constructor)0x5c87a3
+        (Api::Constructor)0x5c87a3,
     },
     // Gog
     Api{
-        (Api::Constructor)0x5c7771
-    }
+        (Api::Constructor)0x5c7771,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x4d1bc4,
+    },
 }};
 // clang-format on
 
