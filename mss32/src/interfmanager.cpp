@@ -24,19 +24,23 @@
 namespace game::CInterfManagerImplApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::Get)0x530ae7
+        (Api::Get)0x530ae7,
     },
     // Russobit
     Api{
-        (Api::Get)0x530ae7
+        (Api::Get)0x530ae7,
     },
     // Gog
     Api{
-        (Api::Get)0x530014
-    }
+        (Api::Get)0x530014,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Get)0x48bce2,
+    },
 }};
 // clang-format on
 
