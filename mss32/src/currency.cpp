@@ -24,7 +24,7 @@
 namespace game::BankApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 5> functions = {{
     // Akella
     Api{
         (Api::Add)0x58748f,
@@ -39,7 +39,7 @@ static std::array<Api, 3> functions = {{
         (Api::IsZero)0x58797e,
         (Api::IsValid)0x58790f,
         (Api::ToString)0x5872d9,
-        (Api::FromString)0x5873ab
+        (Api::FromString)0x5873ab,
     },
     // Russobit
     Api{
@@ -55,7 +55,7 @@ static std::array<Api, 3> functions = {{
         (Api::IsZero)0x58797e,
         (Api::IsValid)0x58790f,
         (Api::ToString)0x5872d9,
-        (Api::FromString)0x5873ab
+        (Api::FromString)0x5873ab,
     },
     // Gog
     Api{
@@ -71,8 +71,24 @@ static std::array<Api, 3> functions = {{
         (Api::IsZero)0x586b31,
         (Api::IsValid)0x586ac2,
         (Api::ToString)0x58648c,
-        (Api::FromString)0x58655e
-    }
+        (Api::FromString)0x58655e,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Add)0x52de01,
+        (Api::Subtract)0,
+        (Api::Multiply)0x52decb,
+        (Api::Divide)0,
+        (Api::Less)0x52e0bf,
+        (Api::Copy)0x52db19,
+        (Api::SetInvalid)0x52dae8,
+        (Api::SetZero)0x52e233,
+        (Api::SetCurrency)0x52e148,
+        (Api::IsZero)0x52e20a,
+        (Api::IsValid)0x52e19b,
+        (Api::ToString)0x52dd15,
+        (Api::FromString)0x52dde7,
+    },
 }};
 // clang-format on
 
