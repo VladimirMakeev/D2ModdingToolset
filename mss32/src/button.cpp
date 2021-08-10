@@ -24,19 +24,23 @@
 namespace game::CButtonInterfApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::AssignFunctor)0x5c93d6
+        (Api::AssignFunctor)0x5c93d6,
     },
     // Russobit
     Api{
-        (Api::AssignFunctor)0x5c93d6
+        (Api::AssignFunctor)0x5c93d6,
     },
     // Gog
     Api{
-        (Api::AssignFunctor)0x5c83a4
-    }
+        (Api::AssignFunctor)0x5c83a4,
+    },
+    // Scenario Editor
+    Api{
+        (Api::AssignFunctor)0x4d0ee8,
+    },
 }};
 
 static std::array<Vftable*, 3> vftables = {{

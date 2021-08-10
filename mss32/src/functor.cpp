@@ -24,19 +24,23 @@
 namespace game::FunctorApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::CreateOrFree)0x49c5d7
+        (Api::CreateOrFree)0x49c5d7,
     },
     // Russobit
     Api{
-        (Api::CreateOrFree)0x49c5d7
+        (Api::CreateOrFree)0x49c5d7,
     },
     // Gog
     Api{
-        (Api::CreateOrFree)0x495146
-    }
+        (Api::CreateOrFree)0x495146,
+    },
+    // Scenario Editor
+    Api{
+        (Api::CreateOrFree)0x4575fe,
+    },
 }};
 // clang-format on
 
