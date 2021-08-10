@@ -45,6 +45,18 @@ struct Bank
     std::int16_t gold;
 };
 
+static inline bool operator==(const Bank& a, const Bank& b) noexcept
+{
+    return a.gold == b.gold && a.infernalMana == b.infernalMana && a.lifeMana == b.lifeMana
+           && a.deathMana == b.deathMana && a.runicMana == b.runicMana
+           && a.groveMana == b.groveMana;
+}
+
+static inline bool operator!=(const Bank& a, const Bank& b) noexcept
+{
+    return !(a == b);
+}
+
 namespace BankApi {
 
 struct Api
