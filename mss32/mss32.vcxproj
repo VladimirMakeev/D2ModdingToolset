@@ -186,6 +186,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\cmdbattlestartmsg.cpp" />
     <ClCompile Include="src\commandmsg.cpp" />
     <ClCompile Include="src\commandmsghooks.cpp" />
+    <ClCompile Include="src\condinterf.cpp" />
     <ClCompile Include="src\currency.cpp" />
     <ClCompile Include="src\customattack.cpp" />
     <ClCompile Include="src\customattackhooks.cpp" />
@@ -409,6 +410,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\cmdbattlestartmsg.h" />
     <ClInclude Include="include\commandmsg.h" />
     <ClInclude Include="include\commandmsghooks.h" />
+    <ClInclude Include="include\condinterf.h" />
     <ClInclude Include="include\condinterfhandler.h" />
     <ClInclude Include="include\currency.h" />
     <ClInclude Include="include\customattack.h" />
