@@ -204,6 +204,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\doppelgangerhooks.cpp" />
     <ClCompile Include="src\drainattackhooks.cpp" />
     <ClCompile Include="src\dynamiccast.cpp" />
+    <ClCompile Include="src\editboxinterf.cpp" />
     <ClCompile Include="src\editor.cpp" />
     <ClCompile Include="src\enclayoutspell.cpp" />
     <ClCompile Include="src\eventconditioncat.cpp" />

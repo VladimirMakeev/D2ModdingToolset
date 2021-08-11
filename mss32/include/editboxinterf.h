@@ -28,12 +28,24 @@ namespace game {
 struct CEditBoxFocus;
 struct CImage2Fill;
 struct CImage2TextBackground;
+struct CDialogInterf;
+
+enum class EditFilter : int
+{
+    NoFilter,        /**< Any input allowed. */
+    TextOnly,        /**< Only text characters, punctuation marks are not allowed. */
+    AlphaNum,        /**< Text, digits, punctuation marks, some special characters. */
+    DigitsOnly,      /**< Only digits. */
+    AlphaNumNoSlash, /**< Text, digits, some punctuation marks. '\', '/' not allowed. */
+    NamesDot,        /**< Same as EditFilter::Names, but allows punctuation marks. */
+    Names,           /**< Only characters suitable for Windows file names. */
+};
 
 struct EditBoxData
 {
-    int minInputLength;
+    EditFilter filter;
     SmartPointer ptr;
-    int maxInputLength;
+    int maxInputLength; /**< Allowed range is [1 : 4096]. */
     String formatString;
     String inputString;
     int editCursorPos;
@@ -67,6 +79,33 @@ struct CEditBoxInterf : public CInterface
 
 static_assert(sizeof(CEditBoxInterf) == 12,
               "Size of CEditBoxInterf structure must be exactly 12 bytes");
+
+namespace CEditBoxInterfApi {
+
+struct Api
+{
+    /**
+     * Searches for specified edit box and sets its filter and max input length.
+     * @returns found edit box.
+     */
+    using SetFilterAndLength = CEditBoxInterf*(__stdcall*)(CDialogInterf* dialog,
+                                                           const char* controlName,
+                                                           const char* dialogName,
+                                                           EditFilter filter,
+                                                           int inputLength);
+    SetFilterAndLength setFilterAndLength;
+
+    /**
+     * Sets max input length of edit box.
+     * Updates edit box state after changing length.
+     */
+    using SetInputLength = void(__thiscall*)(CEditBoxInterf* thisptr, int length);
+    SetInputLength setInputLength;
+};
+
+Api& get();
+
+} // namespace CEditBoxInterfApi
 
 } // namespace game
 

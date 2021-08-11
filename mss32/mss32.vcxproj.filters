@@ -678,6 +678,9 @@
     <ClCompile Include="src\condinterf.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\editboxinterf.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\testcondition.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
