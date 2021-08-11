@@ -245,6 +245,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\menurace.cpp" />
     <ClCompile Include="src\draganddropinterf.cpp" />
     <ClCompile Include="src\midevcondition.cpp" />
+    <ClCompile Include="src\midevent.cpp" />
     <ClCompile Include="src\midgard.cpp" />
     <ClCompile Include="src\midgardid.cpp" />
     <ClCompile Include="src\midgardmap.cpp" />

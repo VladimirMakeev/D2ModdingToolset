@@ -31,6 +31,8 @@ namespace game {
 
 struct CMidEvCondition;
 struct CMidEvEffect;
+struct CScenarioVisitor;
+struct IMidgardObjectMap;
 
 /** Holds event related data in scenario file and game. */
 struct CMidEvent : public IMidScenarioObject
@@ -58,6 +60,32 @@ static_assert(offsetof(CMidEvent, racesCanTrigger) == 48,
               "CMidEvent::racesCanTrigger offset must be 48 bytes");
 
 static_assert(offsetof(CMidEvent, chance) == 84, "CMidEvent::chance offset must be 84 bytes");
+
+namespace CMidEventApi {
+
+struct Api
+{
+    /**
+     * Adds event condition to the event.
+     * Used in Scenario Editor only.
+     * @param[in] visitor not used by the function and can be null.
+     * @returns true if condition was successfully added.
+     */
+    using AddCondition = bool(__thiscall*)(CMidEvent* thisptr,
+                                           CScenarioVisitor* visitor,
+                                           CMidEvCondition* condition);
+    AddCondition addCondition;
+
+    /** Returns true if event affects player with specified id. */
+    using AffectsPlayer = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                           const CMidgardID* playerId,
+                                           const CMidgardID* eventId);
+    AffectsPlayer affectsPlayer;
+};
+
+Api& get();
+
+} // namespace CMidEventApi
 
 } // namespace game
 
