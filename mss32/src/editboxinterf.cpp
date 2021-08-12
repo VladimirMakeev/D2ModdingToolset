@@ -29,21 +29,25 @@ static std::array<Api, 4> functions = {{
     Api{
         (Api::SetFilterAndLength)0x5c9c86,
         (Api::SetInputLength)0x5390dc,
+        (Api::SetString)0x5391f9,
     },
     // Russobit
     Api{
         (Api::SetFilterAndLength)0x5c9c86,
         (Api::SetInputLength)0x5390dc,
+        (Api::SetString)0x5391f9,
     },
     // Gog
     Api{
         (Api::SetFilterAndLength)0x5c8c54,
         (Api::SetInputLength)0x5386e4,
+        (Api::SetString)0x538801,
     },
     // Scenario Editor
     Api{
         (Api::SetFilterAndLength)0x4d18b8,
         (Api::SetInputLength)0x492cb3,
+        (Api::SetString)0x492ddb,
     },
 }};
 // clang-format on

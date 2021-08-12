@@ -101,6 +101,9 @@ struct Api
      */
     using SetInputLength = void(__thiscall*)(CEditBoxInterf* thisptr, int length);
     SetInputLength setInputLength;
+
+    using SetString = void(__thiscall*)(CEditBoxInterf* thisptr, const char* string);
+    SetString setString;
 };
 
 Api& get();
