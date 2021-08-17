@@ -43,6 +43,8 @@
 #include "cmdbattleresultmsg.h"
 #include "cmdbattlestartmsg.h"
 #include "commandmsghooks.h"
+#include "condinterf.h"
+#include "condinterfhooks.h"
 #include "customattackhooks.h"
 #include "customattacks.h"
 #include "customattackutils.h"
@@ -57,6 +59,7 @@
 #include "dynupgrade.h"
 #include "editor.h"
 #include "encparambase.h"
+#include "eventconditioncathooks.h"
 #include "fortification.h"
 #include "functor.h"
 #include "globaldata.h"
@@ -72,6 +75,8 @@
 #include "mempool.h"
 #include "menunewskirmishsingle.h"
 #include "middatacache.h"
+#include "midevconditionhooks.h"
+#include "mideventhooks.h"
 #include "midgardid.h"
 #include "midgardmsgbox.h"
 #include "midmsgboxbuttonhandlerstd.h"
@@ -97,6 +102,7 @@
 #include "smartptr.h"
 #include "stackbattleactionmsg.h"
 #include "summonhooks.h"
+#include "testconditionhooks.h"
 #include "transformselfhooks.h"
 #include "umattack.h"
 #include "umattackhooks.h"
@@ -235,6 +241,8 @@ static Hooks getGameHooks()
         {BattleViewerInterfApi::vftable()->update, battleViewerInterfUpdateHooked},
         // Fix missing modifiers of alternative attacks
         {fn.getUnitAttacks, getUnitAttacksHooked},
+        // Support custom event conditions
+        {ITestConditionApi::get().create, createTestConditionHooked, (void**)&orig.createTestCondition},
     };
     // clang-format on
 
@@ -346,7 +354,13 @@ static Hooks getScenarioEditorHooks()
         // Fix DLG_R_C_SPELL so it shows actual spell info
         {CEncLayoutSpellApi::get().constructor, encLayoutSpellCtorHooked, (void**)&orig.encLayoutSpellCtor},
         // Allow editor to place more than 200 stacks on a map
-        {editorFunctions.countStacksOnMap, countStacksOnMapHooked}
+        {editorFunctions.countStacksOnMap, countStacksOnMapHooked},
+        // Support custom event conditions
+        {CMidEvConditionApi::get().getInfoString, eventConditionGetInfoStringHooked, (void**)&orig.eventConditionGetInfoString},
+        {CMidEvConditionApi::get().getDescription, eventConditionGetDescriptionHooked, (void**)&orig.eventConditionGetDescription},
+        {CMidEvConditionApi::get().getBrief, eventConditionGetBriefHooked, (void**)&orig.eventConditionGetBrief},
+        {editor::CCondInterfApi::get().createFromCategory, createCondInterfFromCategoryHooked, (void**)&orig.createCondInterfFromCategory},
+        {CMidEventApi::get().checkValid, checkEventValidHooked, (void**)&orig.checkEventValid},
     };
     // clang-format on
 
@@ -441,6 +455,14 @@ Hooks getHooks()
          */
         hooks.emplace_back(HookInfo{fn.generateAttackDescription, generateAttackDescriptionHooked});
     }
+
+    // Support custom event conditions
+    hooks.emplace_back(
+        HookInfo{LEventCondCategoryTableApi::get().constructor, eventCondCategoryTableCtorHooked});
+
+    hooks.emplace_back(HookInfo{CMidEvConditionApi::get().createFromCategory,
+                                createEventConditionFromCategoryHooked,
+                                (void**)&orig.createEventConditionFromCategory});
 
     return hooks;
 }

@@ -24,15 +24,19 @@
 #include "battlemsgdata.h"
 #include "citystackinterf.h"
 #include "commandmsg.h"
+#include "condinterf.h"
 #include "d2osexception.h"
 #include "ddcarryoveritems.h"
 #include "enclayoutspell.h"
 #include "exchangeinterf.h"
 #include "game.h"
+#include "midevcondition.h"
+#include "midevent.h"
 #include "midunit.h"
 #include "netmsg.h"
 #include "pickupdropinterf.h"
 #include "sitemerchantinterf.h"
+#include "testcondition.h"
 
 namespace hooks {
 
@@ -69,6 +73,13 @@ struct OriginalFunctions
     game::CNetMsgApi::Api::Destructor netMsgDtor;
     game::CAttackImplApi::Api::Constructor2 attackImplCtor2;
     game::IAttackVftable::GetData attackImplGetData;
+    game::CMidEvConditionApi::Api::CreateFromCategory createEventConditionFromCategory;
+    game::CMidEvConditionApi::Api::GetInfoString eventConditionGetInfoString;
+    game::CMidEvConditionApi::Api::GetDescription eventConditionGetDescription;
+    game::CMidEvConditionApi::Api::GetDescription eventConditionGetBrief;
+    game::editor::CCondInterfApi::Api::CreateFromCategory createCondInterfFromCategory;
+    game::ITestConditionApi::Api::Create createTestCondition;
+    game::CMidEventApi::Api::CheckValid checkEventValid;
 };
 
 OriginalFunctions& getOriginalFunctions();

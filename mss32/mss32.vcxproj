@@ -187,6 +187,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\commandmsg.cpp" />
     <ClCompile Include="src\commandmsghooks.cpp" />
     <ClCompile Include="src\condinterf.cpp" />
+    <ClCompile Include="src\condinterfhooks.cpp" />
     <ClCompile Include="src\currency.cpp" />
     <ClCompile Include="src\customattack.cpp" />
     <ClCompile Include="src\customattackhooks.cpp" />
@@ -245,8 +246,11 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\menunewskirmishsingle.cpp" />
     <ClCompile Include="src\menurace.cpp" />
     <ClCompile Include="src\draganddropinterf.cpp" />
+    <ClCompile Include="src\midcondownresource.cpp" />
     <ClCompile Include="src\midevcondition.cpp" />
+    <ClCompile Include="src\midevconditionhooks.cpp" />
     <ClCompile Include="src\midevent.cpp" />
+    <ClCompile Include="src\mideventhooks.cpp" />
     <ClCompile Include="src\midgard.cpp" />
     <ClCompile Include="src\midgardid.cpp" />
     <ClCompile Include="src\midgardmap.cpp" />
@@ -302,6 +306,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\terraincountlist.cpp" />
     <ClCompile Include="src\terrainnamelist.cpp" />
     <ClCompile Include="src\testcondition.cpp" />
+    <ClCompile Include="src\testconditionhooks.cpp" />
     <ClCompile Include="src\textboxinterf.cpp" />
     <ClCompile Include="src\textids.cpp" />
     <ClCompile Include="src\tileindices.cpp" />
@@ -416,6 +421,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\commandmsghooks.h" />
     <ClInclude Include="include\condinterf.h" />
     <ClInclude Include="include\condinterfhandler.h" />
+    <ClInclude Include="include\condinterfhooks.h" />
     <ClInclude Include="include\currency.h" />
     <ClInclude Include="include\customattack.h" />
     <ClInclude Include="include\customattackhooks.h" />
@@ -537,12 +543,15 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midclient.h" />
     <ClInclude Include="include\midclientcore.h" />
     <ClInclude Include="include\midcommandqueue2.h" />
+    <ClInclude Include="include\midcondownresource.h" />
     <ClInclude Include="include\middatacache.h" />
     <ClInclude Include="include\middragdropinterf.h" />
     <ClInclude Include="include\middropmanager.h" />
     <ClInclude Include="include\midevcondition.h" />
+    <ClInclude Include="include\midevconditionhooks.h" />
     <ClInclude Include="include\mideveffect.h" />
     <ClInclude Include="include\midevent.h" />
+    <ClInclude Include="include\mideventhooks.h" />
     <ClInclude Include="include\midgard.h" />
     <ClInclude Include="include\midgardid.h" />
     <ClInclude Include="include\midgardmap.h" />
@@ -648,6 +657,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\terraincountlist.h" />
     <ClInclude Include="include\terrainnamelist.h" />
     <ClInclude Include="include\testcondition.h" />
+    <ClInclude Include="include\testconditionhooks.h" />
     <ClInclude Include="include\textandid.h" />
     <ClInclude Include="include\textboxinterf.h" />
     <ClInclude Include="include\textids.h" />
