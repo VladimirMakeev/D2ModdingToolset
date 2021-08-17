@@ -44,5 +44,15 @@ textids = {
 		-- The text must contain keyword "%DMG%".
 		-- Fallback text is "%DMG%, split between targets".
 		splitDamage = "",
+
+		-- Text ids for L_OWN_RESOURCE event condition
+		ownResource = {
+			-- Message to show when there are more than two conditions of type
+			-- Fallback text is "At most two conditions of type "Own resource" is allowed per event."
+			tooMany = "",
+			-- Message to show when two conditions are mutually exclusive
+			-- Fallback text is "Conditions of type "Own resource" are mutually exclusive."
+			mutuallyExclusive = "",
+		},
 	}
 }
