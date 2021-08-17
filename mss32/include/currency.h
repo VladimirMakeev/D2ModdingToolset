@@ -47,14 +47,61 @@ struct Bank
 
 static inline bool operator==(const Bank& a, const Bank& b) noexcept
 {
-    return a.gold == b.gold && a.infernalMana == b.infernalMana && a.lifeMana == b.lifeMana
-           && a.deathMana == b.deathMana && a.runicMana == b.runicMana
-           && a.groveMana == b.groveMana;
+    // clang-format off
+    return a.gold == b.gold
+        && a.infernalMana == b.infernalMana
+        && a.lifeMana == b.lifeMana
+        && a.deathMana == b.deathMana
+        && a.runicMana == b.runicMana
+        && a.groveMana == b.groveMana;
+    // clang-format on
 }
 
 static inline bool operator!=(const Bank& a, const Bank& b) noexcept
 {
     return !(a == b);
+}
+
+/** Same as calling BankApi::get().less(a, b). */
+static inline bool operator<(const Bank& a, const Bank& b) noexcept
+{
+    // clang-format off
+    return a.infernalMana < b.infernalMana
+        || a.lifeMana < b.lifeMana
+        || a.deathMana < b.deathMana
+        || a.runicMana < b.runicMana
+        || a.gold < b.gold
+        || a.groveMana < b.groveMana;
+    // clang-format on
+}
+
+static inline bool operator<=(const Bank& a, const Bank& b) noexcept
+{
+    return (a < b) || (a == b);
+}
+
+static inline bool operator>(const Bank& a, const Bank& b) noexcept
+{
+    // clang-format off
+    return a.infernalMana > b.infernalMana
+        && a.lifeMana > b.lifeMana
+        && a.deathMana > b.deathMana
+        && a.runicMana > b.runicMana
+        && a.gold > b.gold
+        && a.groveMana > b.groveMana;
+    // clang-format on
+}
+
+static inline bool operator>=(const Bank& a, const Bank& b) noexcept
+{
+    // clang-format off
+    return a.infernalMana >= b.infernalMana
+        && a.lifeMana >= b.lifeMana
+        && a.deathMana >= b.deathMana
+        && a.runicMana >= b.runicMana
+        && a.gold >= b.gold
+        && a.groveMana >= b.groveMana;
+    // clang-format on
 }
 
 namespace BankApi {
@@ -90,7 +137,7 @@ struct Api
     Divide divide;
 
     /**
-     * Returns true if bank is less than other in each currency.
+     * Returns true if bank is less than other in any currency.
      * Comparison sequence: infernal, life, death, runic, gold and the grove is the last one.
      */
     using Less = bool(__thiscall*)(const Bank* bank, const Bank* other);
