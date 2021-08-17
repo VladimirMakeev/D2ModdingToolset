@@ -92,8 +92,9 @@ struct CInterfaceVftable
     using HandleKeyboard = int(__thiscall*)(CInterface* thisptr, int key, int a3);
     HandleKeyboard handleKeyboard;
 
-    using Method5 = void(__thiscall*)(CInterface* thisptr, int a2, int a3);
-    Method5 method5;
+    /** Meaning assumed. */
+    using OnVisibilityChanged = void(__thiscall*)(CInterface* thisptr, int a2, int a3);
+    OnVisibilityChanged onVisibilityChanged;
 
     /** Calls method30 to get the pointer. */
     using Method6 = SmartPointer*(__thiscall*)(CInterface* thisptr,
