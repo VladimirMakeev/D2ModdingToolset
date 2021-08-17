@@ -33,6 +33,7 @@ struct CMidEvCondition;
 struct CMidEvEffect;
 struct CScenarioVisitor;
 struct IMidgardObjectMap;
+struct CDialogInterf;
 
 /** Holds event related data in scenario file and game. */
 struct CMidEvent : public IMidScenarioObject
@@ -75,6 +76,15 @@ struct Api
                                            CScenarioVisitor* visitor,
                                            CMidEvCondition* condition);
     AddCondition addCondition;
+
+    /**
+     * Checks correctness of event conditions and effects.
+     * Used in Scenario Editor only.
+     */
+    using CheckValid = bool(__stdcall*)(CDialogInterf* dialog,
+                                        const IMidgardObjectMap* objectMap,
+                                        const CMidgardID* eventId);
+    CheckValid checkValid;
 
     /** Returns true if event affects player with specified id. */
     using AffectsPlayer = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
