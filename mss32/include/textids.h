@@ -37,6 +37,13 @@ struct TextIds
         std::string ratedDamageEqual;
         std::string ratedDamageSeparator;
         std::string splitDamage;
+
+        struct OwnResource
+        {
+            std::string tooMany;
+            std::string mutuallyExclusive;
+        } ownResource;
+
     } interf;
 };
 

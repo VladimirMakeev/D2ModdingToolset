@@ -41,6 +41,15 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.ratedDamageEqual = interf.value().get_or("ratedDamageEqual", std::string());
     value.ratedDamageSeparator = interf.value().get_or("ratedDamageSeparator", std::string());
     value.splitDamage = interf.value().get_or("splitDamage", std::string());
+
+    auto ownResource = interf.value().get<sol::optional<sol::table>>("ownResource");
+    if (!ownResource.has_value()) {
+        return;
+    }
+
+    value.ownResource.tooMany = ownResource.value().get_or("tooMany", std::string());
+    value.ownResource.mutuallyExclusive = ownResource.value().get_or("mutuallyExclusive",
+                                                                     std::string());
 }
 
 void initialize(TextIds& value)
