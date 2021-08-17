@@ -208,6 +208,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\editor.cpp" />
     <ClCompile Include="src\enclayoutspell.cpp" />
     <ClCompile Include="src\eventconditioncat.cpp" />
+    <ClCompile Include="src\eventconditioncathooks.cpp" />
     <ClCompile Include="src\exchangeinterf.cpp" />
     <ClCompile Include="src\fortcategory.cpp" />
     <ClCompile Include="src\functor.cpp" />
@@ -447,6 +448,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\encparambase.h" />
     <ClInclude Include="include\encunitdescriptor.h" />
     <ClInclude Include="include\eventconditioncat.h" />
+    <ClInclude Include="include\eventconditioncathooks.h" />
     <ClInclude Include="include\eventconditions.h" />
     <ClInclude Include="include\eventeffectcat.h" />
     <ClInclude Include="include\eventeffects.h" />
