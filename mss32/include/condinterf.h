@@ -92,6 +92,21 @@ struct Api
                                                      ButtonCallback* callback);
     CreateButtonFunctor createButtonFunctor;
 
+    struct RadioButtonCallback
+    {
+        using Callback = void(__thiscall*)(CCondInterf* thisptr, int selectedButton);
+
+        Callback callback;
+        int unknown;
+    };
+
+    // Same hack as with button. Here we reusing logic from CCondStackExistsInterf.
+    using CreateRadioButtonFunctor = Functor*(__stdcall*)(Functor* functor,
+                                                          int a2,
+                                                          CCondInterf* condInterf,
+                                                          RadioButtonCallback* callback);
+    CreateRadioButtonFunctor createRadioButtonFunctor;
+
     using GetObjectMap = IMidgardObjectMap*(__thiscall*)(void* thisptr);
     GetObjectMap getObjectMap;
 };
