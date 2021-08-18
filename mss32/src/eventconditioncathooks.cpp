@@ -29,6 +29,7 @@
 namespace hooks {
 
 static const char* ownResourceCategoryName{"L_OWN_RESOURCE"};
+static const char* gameModeCategoryName{"L_GAME_MODE"};
 
 CustomEventConditions& customEventConditions()
 {
@@ -37,7 +38,24 @@ CustomEventConditions& customEventConditions()
     return customConditions;
 }
 
-static bool checkCustomConditions(const std::filesystem::path& dbfFilePath)
+static void readCustomCondition(const utils::DbfRecord& record, CustomEventCondition& condition)
+{
+    const auto& idApi = game::CMidgardIDApi::get();
+
+    std::string info;
+    record.value(info, "INFO");
+    idApi.fromString(&condition.infoText, info.c_str());
+
+    std::string brief;
+    record.value(brief, "BRIEF");
+    idApi.fromString(&condition.brief, brief.c_str());
+
+    std::string descr;
+    record.value(descr, "DESCR");
+    idApi.fromString(&condition.description, descr.c_str());
+}
+
+static bool readCustomConditions(const std::filesystem::path& dbfFilePath)
 {
     utils::DbfFile dbf;
     if (!dbf.open(dbfFilePath)) {
@@ -45,6 +63,8 @@ static bool checkCustomConditions(const std::filesystem::path& dbfFilePath)
                  fmt::format("Could not open {:s}", dbfFilePath.filename().string()));
         return false;
     }
+
+    bool customConditions{false};
 
     const auto recordsTotal{dbf.recordsTotal()};
     for (std::uint32_t i = 0; i < recordsTotal; ++i) {
@@ -64,26 +84,15 @@ static bool checkCustomConditions(const std::filesystem::path& dbfFilePath)
         categoryName = trimSpaces(categoryName);
 
         if (ownResourceCategoryName == categoryName) {
-            const auto& idApi = game::CMidgardIDApi::get();
-            auto& ownResource = customEventConditions().ownResource;
-
-            std::string info;
-            record.value(info, "INFO");
-            idApi.fromString(&ownResource.infoText, info.c_str());
-
-            std::string brief;
-            record.value(brief, "BRIEF");
-            idApi.fromString(&ownResource.brief, brief.c_str());
-
-            std::string descr;
-            record.value(descr, "DESCR");
-            idApi.fromString(&ownResource.description, descr.c_str());
-
-            return true;
+            readCustomCondition(record, customEventConditions().ownResource);
+            customConditions = true;
+        } else if (gameModeCategoryName == categoryName) {
+            readCustomCondition(record, customEventConditions().gameMode);
+            customConditions = true;
         }
     }
 
-    return false;
+    return customConditions;
 }
 
 game::LEventCondCategoryTable* __fastcall eventCondCategoryTableCtorHooked(
@@ -97,7 +106,7 @@ game::LEventCondCategoryTable* __fastcall eventCondCategoryTableCtorHooked(
     static const char dbfFileName[] = "LEvCond.dbf";
     const auto dbfFilePath{std::filesystem::path(globalsFolderPath) / dbfFileName};
 
-    const bool customConditionsExist{checkCustomConditions(dbfFilePath)};
+    const bool customConditionsExist{readCustomConditions(dbfFilePath)};
 
     thisptr->bgn = nullptr;
     thisptr->end = nullptr;
@@ -130,6 +139,8 @@ game::LEventCondCategoryTable* __fastcall eventCondCategoryTableCtorHooked(
     if (customConditionsExist) {
         table.readCategory(&customEventConditions().ownResource.category, thisptr,
                            ownResourceCategoryName, dbfFileName);
+        table.readCategory(&customEventConditions().gameMode.category, thisptr,
+                           gameModeCategoryName, dbfFileName);
     }
 
     table.initDone(thisptr);

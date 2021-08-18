@@ -36,6 +36,7 @@ struct CustomEventCondition
 struct CustomEventConditions
 {
     CustomEventCondition ownResource{};
+    CustomEventCondition gameMode{};
 };
 
 CustomEventConditions& customEventConditions();
