@@ -26,6 +26,20 @@
 
 namespace hooks {
 
+void readOwnResourceTextIds(const sol::table& table, TextIds::Interf::OwnResource& value)
+{
+    value.tooMany = table.get_or("tooMany", std::string());
+    value.mutuallyExclusive = table.get_or("mutuallyExclusive", std::string());
+}
+
+void readGameModeTextIds(const sol::table& table, TextIds::Interf::GameMode& value)
+{
+    value.tooMany = table.get_or("tooMany", std::string());
+    value.single = table.get_or("single", std::string());
+    value.hotseat = table.get_or("hotseat", std::string());
+    value.online = table.get_or("online", std::string());
+}
+
 void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
 {
     auto interf = table.get<sol::optional<sol::table>>("interf");
@@ -43,13 +57,14 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.splitDamage = interf.value().get_or("splitDamage", std::string());
 
     auto ownResource = interf.value().get<sol::optional<sol::table>>("ownResource");
-    if (!ownResource.has_value()) {
-        return;
+    if (ownResource.has_value()) {
+        readOwnResourceTextIds(ownResource.value(), value.ownResource);
     }
 
-    value.ownResource.tooMany = ownResource.value().get_or("tooMany", std::string());
-    value.ownResource.mutuallyExclusive = ownResource.value().get_or("mutuallyExclusive",
-                                                                     std::string());
+    auto gameMode = interf.value().get<sol::optional<sol::table>>("gameMode");
+    if (gameMode.has_value()) {
+        readGameModeTextIds(gameMode.value(), value.gameMode);
+    }
 }
 
 void initialize(TextIds& value)

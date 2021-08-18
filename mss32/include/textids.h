@@ -44,6 +44,14 @@ struct TextIds
             std::string mutuallyExclusive;
         } ownResource;
 
+        struct GameMode
+        {
+            std::string tooMany;
+            std::string single;
+            std::string hotseat;
+            std::string online;
+        } gameMode;
+
     } interf;
 };
 
