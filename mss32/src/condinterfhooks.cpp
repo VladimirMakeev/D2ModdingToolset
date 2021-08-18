@@ -19,6 +19,7 @@
 
 #include "condinterfhooks.h"
 #include "eventconditioncathooks.h"
+#include "midcondgamemode.h"
 #include "midcondownresource.h"
 #include "originalfunctions.h"
 
@@ -30,8 +31,15 @@ game::editor::CCondInterf* __stdcall createCondInterfFromCategoryHooked(
     const game::CMidgardID* eventId,
     const game::LEventCondCategory* category)
 {
-    if (category->id == customEventConditions().ownResource.category.id) {
+    const auto& conditions = customEventConditions();
+    const auto id = category->id;
+
+    if (id == conditions.ownResource.category.id) {
         return createCondOwnResourceInterf(task, a2, eventId);
+    }
+
+    if (id == conditions.gameMode.category.id) {
+        return createCondGameModeInterf(task, a2, eventId);
     }
 
     return getOriginalFunctions().createCondInterfFromCategory(task, a2, eventId, category);

@@ -246,6 +246,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\menunewskirmishsingle.cpp" />
     <ClCompile Include="src\menurace.cpp" />
     <ClCompile Include="src\draganddropinterf.cpp" />
+    <ClCompile Include="src\midcondgamemode.cpp" />
     <ClCompile Include="src\midcondownresource.cpp" />
     <ClCompile Include="src\midevcondition.cpp" />
     <ClCompile Include="src\midevconditionhooks.cpp" />
@@ -543,6 +544,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midclient.h" />
     <ClInclude Include="include\midclientcore.h" />
     <ClInclude Include="include\midcommandqueue2.h" />
+    <ClInclude Include="include\midcondgamemode.h" />
     <ClInclude Include="include\midcondownresource.h" />
     <ClInclude Include="include\middatacache.h" />
     <ClInclude Include="include\middragdropinterf.h" />

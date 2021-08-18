@@ -705,6 +705,9 @@
     <ClCompile Include="src\mideventhooks.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\midcondgamemode.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -1790,6 +1793,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\mideventhooks.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midcondgamemode.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

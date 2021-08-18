@@ -19,6 +19,7 @@
 
 #include "testconditionhooks.h"
 #include "eventconditioncathooks.h"
+#include "midcondgamemode.h"
 #include "midcondownresource.h"
 #include "originalfunctions.h"
 
@@ -28,8 +29,15 @@ game::ITestCondition* __stdcall createTestConditionHooked(game::CMidEvCondition*
                                                           bool samePlayer,
                                                           const game::CMidgardID* triggererStackId)
 {
-    if (eventCondition->category.id == customEventConditions().ownResource.category.id) {
+    const auto& conditions = customEventConditions();
+    const auto id = eventCondition->category.id;
+
+    if (id == conditions.ownResource.category.id) {
         return createTestOwnResource(eventCondition);
+    }
+
+    if (id == conditions.gameMode.category.id) {
+        return createTestGameMode(eventCondition);
     }
 
     return getOriginalFunctions().createTestCondition(eventCondition, samePlayer, triggererStackId);

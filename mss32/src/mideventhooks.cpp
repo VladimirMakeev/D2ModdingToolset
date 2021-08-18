@@ -19,6 +19,7 @@
 
 #include "mideventhooks.h"
 #include "eventconditioncathooks.h"
+#include "midcondgamemode.h"
 #include "midcondownresource.h"
 #include "midevent.h"
 #include "originalfunctions.h"
@@ -48,7 +49,8 @@ bool __stdcall checkEventValidHooked(game::CDialogInterf* dialog,
         return false;
     }
 
-    return checkOwnResourceConditionsValid(dialog, objectMap, eventId);
+    return checkOwnResourceConditionsValid(dialog, objectMap, eventId)
+           && checkGameModeConditionValid(dialog, objectMap, eventId);
 }
 
 } // namespace hooks

@@ -21,6 +21,7 @@
 #include "d2string.h"
 #include "eventconditioncathooks.h"
 #include "game.h"
+#include "midcondgamemode.h"
 #include "midcondownresource.h"
 #include "originalfunctions.h"
 #include <fmt/format.h>
@@ -30,21 +31,34 @@ namespace hooks {
 game::CMidEvCondition* __stdcall createEventConditionFromCategoryHooked(
     const game::LEventCondCategory* category)
 {
-    using namespace game;
+    const auto& conditions = customEventConditions();
+    const auto id = category->id;
 
-    if (category->id != customEventConditions().ownResource.category.id) {
-        return getOriginalFunctions().createEventConditionFromCategory(category);
+    if (id == conditions.ownResource.category.id) {
+        return createMidCondOwnResource();
     }
 
-    return createMidCondOwnResource();
+    if (id == conditions.gameMode.category.id) {
+        return createMidCondGameMode();
+    }
+
+    return getOriginalFunctions().createEventConditionFromCategory(category);
 }
 
 void __stdcall eventConditionGetInfoStringHooked(game::String* info,
                                                  const game::IMidgardObjectMap* objectMap,
                                                  const game::CMidEvCondition* eventCondition)
 {
-    if (eventCondition->category.id == customEventConditions().ownResource.category.id) {
+    const auto& conditions = customEventConditions();
+    const auto id = eventCondition->category.id;
+
+    if (id == conditions.ownResource.category.id) {
         midCondOwnResourceGetInfoString(info, objectMap, eventCondition);
+        return;
+    }
+
+    if (id == conditions.gameMode.category.id) {
+        midCondGameModeGetInfoString(info, objectMap, eventCondition);
         return;
     }
 
@@ -54,12 +68,22 @@ void __stdcall eventConditionGetInfoStringHooked(game::String* info,
 void __stdcall eventConditionGetDescriptionHooked(game::String* description,
                                                   const game::LEventCondCategory* category)
 {
-    const auto& ownResource = customEventConditions().ownResource;
+    using namespace game;
 
-    if (category->id == ownResource.category.id) {
-        auto text = game::gameFunctions().getInterfaceText(&ownResource.description);
+    const auto& conditions = customEventConditions();
+    const auto id = category->id;
+    const CMidgardID* descriptionId{nullptr};
 
-        game::StringApi::get().initFromStringN(description, text, std::strlen(text));
+    if (id == conditions.ownResource.category.id) {
+        descriptionId = &conditions.ownResource.description;
+    } else if (id == conditions.gameMode.category.id) {
+        descriptionId = &conditions.gameMode.description;
+    }
+
+    if (descriptionId) {
+        auto text = gameFunctions().getInterfaceText(descriptionId);
+
+        StringApi::get().initFromStringN(description, text, std::strlen(text));
         return;
     }
 
@@ -69,12 +93,22 @@ void __stdcall eventConditionGetDescriptionHooked(game::String* description,
 void __stdcall eventConditionGetBriefHooked(game::String* brief,
                                             const game::LEventCondCategory* category)
 {
-    const auto& ownResource = customEventConditions().ownResource;
+    using namespace game;
 
-    if (category->id == ownResource.category.id) {
-        auto text = game::gameFunctions().getInterfaceText(&ownResource.brief);
+    const auto& conditions = customEventConditions();
+    const auto id = category->id;
+    const CMidgardID* briefId{nullptr};
 
-        game::StringApi::get().initFromStringN(brief, text, std::strlen(text));
+    if (id == conditions.ownResource.category.id) {
+        briefId = &conditions.ownResource.brief;
+    } else if (id == conditions.gameMode.category.id) {
+        briefId = &conditions.gameMode.brief;
+    }
+
+    if (briefId) {
+        auto text = gameFunctions().getInterfaceText(briefId);
+
+        StringApi::get().initFromStringN(brief, text, std::strlen(text));
         return;
     }
 
