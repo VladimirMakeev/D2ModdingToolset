@@ -20,18 +20,27 @@
 #ifndef MIDEVENTHOOKS_H
 #define MIDEVENTHOOKS_H
 
+#include <vector>
+
 namespace game {
 struct CDialogInterf;
 struct IMidgardObjectMap;
 struct CMidgardID;
+struct CMidEvent;
+struct LEventCondCategory;
+struct CMidEvCondition;
 } // namespace game
 
 namespace hooks {
+
+void getConditionsOfType(const game::CMidEvent* event,
+                         const game::LEventCondCategory* category,
+                         std::vector<const game::CMidEvCondition*>& conditions);
 
 bool __stdcall checkEventValidHooked(game::CDialogInterf* dialog,
                                      const game::IMidgardObjectMap* objectMap,
                                      const game::CMidgardID* eventId);
 
-}
+} // namespace hooks
 
 #endif // MIDEVENTHOOKS_H

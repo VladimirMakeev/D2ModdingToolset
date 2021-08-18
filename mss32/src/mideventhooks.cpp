@@ -20,9 +20,25 @@
 #include "mideventhooks.h"
 #include "eventconditioncathooks.h"
 #include "midcondownresource.h"
+#include "midevent.h"
 #include "originalfunctions.h"
 
 namespace hooks {
+
+void getConditionsOfType(const game::CMidEvent* event,
+                         const game::LEventCondCategory* category,
+                         std::vector<const game::CMidEvCondition*>& conditions)
+{
+    const int conditionsTotal = event->conditions.end - event->conditions.bgn;
+
+    for (int i = 0; i < conditionsTotal; ++i) {
+        const auto condition = event->conditions.bgn[i];
+
+        if (condition->category.id == category->id) {
+            conditions.push_back(condition);
+        }
+    }
+}
 
 bool __stdcall checkEventValidHooked(game::CDialogInterf* dialog,
                                      const game::IMidgardObjectMap* objectMap,

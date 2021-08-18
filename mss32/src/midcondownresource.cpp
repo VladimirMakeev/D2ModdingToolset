@@ -31,6 +31,7 @@
 #include "mempool.h"
 #include "midevcondition.h"
 #include "midevent.h"
+#include "mideventhooks.h"
 #include "midgard.h"
 #include "midgardobjectmap.h"
 #include "midgardstream.h"
@@ -477,39 +478,6 @@ game::ITestCondition* createTestOwnResource(game::CMidEvCondition* eventConditio
     thisptr->vftable = &testOwnResourceVftable;
 
     return thisptr;
-}
-
-static int countConditionsOfType(const game::CMidEvent* event,
-                                 const game::LEventCondCategory* category)
-{
-    using namespace game;
-
-    const int conditionsTotal = event->conditions.end - event->conditions.bgn;
-
-    int count = 0;
-    for (int i = 0; i < conditionsTotal; ++i) {
-        auto condition = event->conditions.bgn[i];
-        if (condition->category.id == category->id) {
-            count++;
-        }
-    }
-
-    return count;
-}
-
-static void getConditionsOfType(const game::CMidEvent* event,
-                                const game::LEventCondCategory* category,
-                                std::vector<const game::CMidEvCondition*>& conditions)
-{
-    const int conditionsTotal = event->conditions.end - event->conditions.bgn;
-
-    for (int i = 0; i < conditionsTotal; ++i) {
-        const auto condition = event->conditions.bgn[i];
-
-        if (condition->category.id == category->id) {
-            conditions.push_back(condition);
-        }
-    }
 }
 
 bool checkOwnResourceConditionsValid(game::CDialogInterf*,
