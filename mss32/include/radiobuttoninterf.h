@@ -27,6 +27,8 @@
 namespace game {
 
 struct CToggleButton;
+struct CDialogInterf;
+struct Functor;
 
 struct CRadioButtonInterfData
 {
@@ -69,6 +71,13 @@ struct Api
     /** Sets toggle button with specified index checked. */
     using SetCheckedButton = void(__thiscall*)(CRadioButtonInterf* thisptr, int buttonIndex);
     SetCheckedButton setCheckedButton;
+
+    /** Assigns callback that is called when one of the radio buttons is pressed. */
+    using SetOnButtonPressed = CRadioButtonInterf*(__stdcall*)(CDialogInterf* dialog,
+                                                               const char* buttonName,
+                                                               const char* dialogName,
+                                                               Functor* functor);
+    SetOnButtonPressed setOnButtonPressed;
 };
 
 Api& get();

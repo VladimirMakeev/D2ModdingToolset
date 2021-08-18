@@ -30,24 +30,28 @@ static std::array<Api, 4> functions = {{
         (Api::SetEnabled)0,
         (Api::SetButtonEnabled)0,
         (Api::SetCheckedButton)0,
+        (Api::SetOnButtonPressed)0,
     },
     // Russobit
     Api{
         (Api::SetEnabled)0,
         (Api::SetButtonEnabled)0,
         (Api::SetCheckedButton)0,
+        (Api::SetOnButtonPressed)0,
     },
     // Gog
     Api{
         (Api::SetEnabled)0,
         (Api::SetButtonEnabled)0,
         (Api::SetCheckedButton)0,
+        (Api::SetOnButtonPressed)0,
     },
     // Scenario Editor
     Api{
         (Api::SetEnabled)0x48ee1e,
         (Api::SetButtonEnabled)0x48ee30,
         (Api::SetCheckedButton)0x48ede5,
+        (Api::SetOnButtonPressed)0x4d102e,
     },
 }};
 // clang-format on
