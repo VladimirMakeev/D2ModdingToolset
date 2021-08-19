@@ -25,14 +25,46 @@
 
 namespace game {
 
+struct CMidEvEffectVftable;
+struct IMidgardObjectMap;
+struct IMidgardStream;
+struct IMidgardStreamEnv;
+
 /** Base class for all event effects. */
 struct CMidEvEffect
 {
-    void* vftable;
+    CMidEvEffectVftable* vftable;
     CMidgardID eventId;
     int sequenceNumber; /**< Determines effects apply order. */
     LEventEffectCategory category;
 };
+
+struct CMidEvEffectVftable
+{
+    using Destructor = void(__thiscall*)(CMidEvEffect* thisptr, char flags);
+    Destructor destructor;
+
+    /** Returns true if id used by event effect equals to the objectId specified. */
+    using IsIdsEqual = bool(__thiscall*)(const CMidEvEffect* thisptr, const CMidgardID* objectId);
+    IsIdsEqual isIdsEqual;
+
+    /** Returns true if effect is valid: refers to existing scenario objects. */
+    using IsValid = bool(__thiscall*)(const CMidEvEffect* thisptr,
+                                      const IMidgardObjectMap* objectMap);
+    IsValid isValid;
+
+    using Method3 = bool(__thiscall*)(const CMidEvEffect* thisptr, int a2);
+    Method3 method3;
+
+    /** Serializes event effect. */
+    using Stream = void(__thiscall*)(CMidEvEffect* thisptr,
+                                     IMidgardStreamEnv* streamEnv,
+                                     IMidgardStream** stream);
+    Stream stream;
+};
+
+static_assert(sizeof(CMidEvEffectVftable) == 5 * sizeof(void*),
+              "CMidEvEffect vftable must have exactly 5 methods");
 
 } // namespace game
 
