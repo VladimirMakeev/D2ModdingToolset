@@ -24,9 +24,37 @@
 
 namespace game {
 
+struct IMidScenarioObjectVftable;
+struct IMidgardStreamEnv;
+struct IMidgardObjectMap;
+
 /** Base class for all objects in scenario. */
-struct IMidScenarioObject : public IMidObject
+struct IMidScenarioObject : public IMidObjectT<IMidScenarioObjectVftable>
 { };
+
+struct IMidScenarioObjectVftable : public IMidObjectVftable
+{
+    /** Serializes object to/from .sg file, .dbf file or network. */
+    using Stream = void(__thiscall*)(IMidScenarioObject* thisptr,
+                                     const IMidgardObjectMap* objectMap,
+                                     IMidgardStreamEnv* streamEnv);
+    Stream stream;
+
+    /**
+     * Returns true if object has correct data.
+     * For example, called when Scenario Editor checks scenario for inconsistencies.
+     */
+    using IsValid = bool(__thiscall*)(const IMidScenarioObject* thisptr,
+                                      const IMidgardObjectMap* objectMap);
+    IsValid isValid;
+
+    /** Meaning and usage cases unknown. */
+    using Method3 = bool(__thiscall*)(const IMidScenarioObject* thisptr, int a2);
+    Method3 method3;
+};
+
+static_assert(sizeof(IMidScenarioObjectVftable) == 4 * sizeof(void*),
+              "IMidScenarioObject vftable must have exactly 4 methods");
 
 } // namespace game
 

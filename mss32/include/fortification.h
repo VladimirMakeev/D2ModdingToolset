@@ -66,19 +66,8 @@ static_assert(offsetof(CFortification, group) == 60,
 static_assert(offsetof(CFortification, inventory) == 112,
               "CFortification::inventory offset must be 112 bytes");
 
-struct CFortificationVftable : public IMidObjectVftable
+struct CFortificationVftable : public IMidScenarioObjectVftable
 {
-    /** Serializes data to or from stream. */
-    using Stream = void*(__thiscall*)(CFortification* thisptr, int a2, int a3);
-    Stream stream;
-
-    /** Returns true if object has correct data. */
-    using IsCorrect = bool(__thiscall*)(CFortification* thisptr, IMidgardObjectMap* objectMap);
-    IsCorrect isCorrect;
-
-    using Method3 = char(__thiscall*)(CFortification* thisptr);
-    Method3 method3;
-
     using GetCategory = const LFortCategory*(__thiscall*)(CFortification* thisptr);
     GetCategory getCategory;
 
