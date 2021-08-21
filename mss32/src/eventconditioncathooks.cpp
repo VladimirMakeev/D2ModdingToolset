@@ -30,6 +30,7 @@ namespace hooks {
 
 static const char* ownResourceCategoryName{"L_OWN_RESOURCE"};
 static const char* gameModeCategoryName{"L_GAME_MODE"};
+static const char* playerTypeCategoryName{"L_PLAYER_TYPE"};
 
 CustomEventConditions& customEventConditions()
 {
@@ -89,6 +90,9 @@ static bool readCustomConditions(const std::filesystem::path& dbfFilePath)
         } else if (gameModeCategoryName == categoryName) {
             readCustomCondition(record, customEventConditions().gameMode);
             customConditions = true;
+        } else if (playerTypeCategoryName == categoryName) {
+            readCustomCondition(record, customEventConditions().playerType);
+            customConditions = true;
         }
     }
 
@@ -141,6 +145,8 @@ game::LEventCondCategoryTable* __fastcall eventCondCategoryTableCtorHooked(
                            ownResourceCategoryName, dbfFileName);
         table.readCategory(&customEventConditions().gameMode.category, thisptr,
                            gameModeCategoryName, dbfFileName);
+        table.readCategory(&customEventConditions().playerType.category, thisptr,
+                           playerTypeCategoryName, dbfFileName);
     }
 
     table.initDone(thisptr);
