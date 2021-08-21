@@ -249,6 +249,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\draganddropinterf.cpp" />
     <ClCompile Include="src\midcondgamemode.cpp" />
     <ClCompile Include="src\midcondownresource.cpp" />
+    <ClCompile Include="src\midcondplayertype.cpp" />
     <ClCompile Include="src\midevcondition.cpp" />
     <ClCompile Include="src\midevconditionhooks.cpp" />
     <ClCompile Include="src\midevent.cpp" />
@@ -549,6 +550,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midcommandqueue2.h" />
     <ClInclude Include="include\midcondgamemode.h" />
     <ClInclude Include="include\midcondownresource.h" />
+    <ClInclude Include="include\midcondplayertype.h" />
     <ClInclude Include="include\middatacache.h" />
     <ClInclude Include="include\middragdropinterf.h" />
     <ClInclude Include="include\middropmanager.h" />

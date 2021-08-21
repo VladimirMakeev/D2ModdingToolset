@@ -23,6 +23,7 @@
 #include "game.h"
 #include "midcondgamemode.h"
 #include "midcondownresource.h"
+#include "midcondplayertype.h"
 #include "originalfunctions.h"
 #include <fmt/format.h>
 
@@ -40,6 +41,10 @@ game::CMidEvCondition* __stdcall createEventConditionFromCategoryHooked(
 
     if (id == conditions.gameMode.category.id) {
         return createMidCondGameMode();
+    }
+
+    if (id == conditions.playerType.category.id) {
+        return createMidCondPlayerType();
     }
 
     return getOriginalFunctions().createEventConditionFromCategory(category);
@@ -62,6 +67,11 @@ void __stdcall eventConditionGetInfoStringHooked(game::String* info,
         return;
     }
 
+    if (id == conditions.playerType.category.id) {
+        midCondPlayerTypeGetInfoString(info, objectMap, eventCondition);
+        return;
+    }
+
     getOriginalFunctions().eventConditionGetInfoString(info, objectMap, eventCondition);
 }
 
@@ -78,6 +88,8 @@ void __stdcall eventConditionGetDescriptionHooked(game::String* description,
         descriptionId = &conditions.ownResource.description;
     } else if (id == conditions.gameMode.category.id) {
         descriptionId = &conditions.gameMode.description;
+    } else if (id == conditions.playerType.category.id) {
+        descriptionId = &conditions.playerType.description;
     }
 
     if (descriptionId) {
@@ -103,6 +115,8 @@ void __stdcall eventConditionGetBriefHooked(game::String* brief,
         briefId = &conditions.ownResource.brief;
     } else if (id == conditions.gameMode.category.id) {
         briefId = &conditions.gameMode.brief;
+    } else if (id == conditions.playerType.category.id) {
+        briefId = &conditions.playerType.brief;
     }
 
     if (briefId) {
