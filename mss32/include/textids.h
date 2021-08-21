@@ -52,6 +52,13 @@ struct TextIds
             std::string online;
         } gameMode;
 
+        struct PlayerType
+        {
+            std::string tooMany;
+            std::string human;
+            std::string ai;
+        } playerType;
+
     } interf;
 };
 

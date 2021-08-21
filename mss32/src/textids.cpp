@@ -40,6 +40,13 @@ void readGameModeTextIds(const sol::table& table, TextIds::Interf::GameMode& val
     value.online = table.get_or("online", std::string());
 }
 
+void readPlayerTypeTextIds(const sol::table& table, TextIds::Interf::PlayerType& value)
+{
+    value.tooMany = table.get_or("tooMany", std::string());
+    value.human = table.get_or("human", std::string());
+    value.ai = table.get_or("ai", std::string());
+}
+
 void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
 {
     auto interf = table.get<sol::optional<sol::table>>("interf");
@@ -64,6 +71,11 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     auto gameMode = interf.value().get<sol::optional<sol::table>>("gameMode");
     if (gameMode.has_value()) {
         readGameModeTextIds(gameMode.value(), value.gameMode);
+    }
+
+    auto playerType = interf.value().get<sol::optional<sol::table>>("playerType");
+    if (playerType.has_value()) {
+        readPlayerTypeTextIds(playerType.value(), value.playerType);
     }
 }
 
