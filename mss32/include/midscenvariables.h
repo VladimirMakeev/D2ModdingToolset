@@ -69,6 +69,14 @@ struct Api
     using Advance = void(__stdcall*)(ScenarioVariablesListNode** current,
                                      ScenarioVariablesListNode* end);
     Advance advance;
+
+    /**
+     * Returns scenario variable data by its id.
+     * @returns pointer to empty scenario variable data in case of wrong id.
+     */
+    using GetData = ScenarioVariableData*(__thiscall*)(const CMidScenVariables* thisptr,
+                                                       int variableId);
+    GetData getData;
 };
 
 Api& get();
