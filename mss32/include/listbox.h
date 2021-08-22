@@ -148,6 +148,9 @@ struct Api
      */
     using SelectedIndex = int(__thiscall*)(CListBoxInterf* thisptr);
     SelectedIndex selectedIndex;
+
+    using SetSelectedIndex = void(__thiscall*)(CListBoxInterf* thisptr, int selectedIndex);
+    SetSelectedIndex setSelectedIndex;
 };
 
 Api& get();
