@@ -22,6 +22,7 @@
 #include "midcondgamemode.h"
 #include "midcondownresource.h"
 #include "midcondplayertype.h"
+#include "midcondvarcmp.h"
 #include "originalfunctions.h"
 
 namespace hooks {
@@ -45,6 +46,10 @@ game::editor::CCondInterf* __stdcall createCondInterfFromCategoryHooked(
 
     if (id == conditions.playerType.category.id) {
         return createCondPlayerTypeInterf(task, a2, eventId);
+    }
+
+    if (id == conditions.variableCmp.category.id) {
+        return createCondVarCmpInterf(task, a2, eventId);
     }
 
     return getOriginalFunctions().createCondInterfFromCategory(task, a2, eventId, category);

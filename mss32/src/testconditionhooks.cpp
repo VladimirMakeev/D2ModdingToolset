@@ -22,6 +22,7 @@
 #include "midcondgamemode.h"
 #include "midcondownresource.h"
 #include "midcondplayertype.h"
+#include "midcondvarcmp.h"
 #include "originalfunctions.h"
 
 namespace hooks {
@@ -43,6 +44,10 @@ game::ITestCondition* __stdcall createTestConditionHooked(game::CMidEvCondition*
 
     if (id == conditions.playerType.category.id) {
         return createTestPlayerType(eventCondition);
+    }
+
+    if (id == conditions.variableCmp.category.id) {
+        return createTestVarCmp(eventCondition);
     }
 
     return getOriginalFunctions().createTestCondition(eventCondition, samePlayer, triggererStackId);

@@ -714,6 +714,9 @@
     <ClCompile Include="src\midcondplayertype.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\midcondvarcmp.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -1811,6 +1814,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\midcondplayertype.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midcondvarcmp.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
