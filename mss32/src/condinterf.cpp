@@ -29,6 +29,7 @@ Api& get()
         (Api::CreateFromCategory)0x45be8e,
         (Api::CreateButtonFunctor)0x41e6ac,
         (Api::CreateRadioButtonFunctor)0x425307,
+        (Api::CreateListBoxDisplayFunctor)0x427199,
         (Api::GetObjectMap)0x403c23,
     };
     // clang-format on

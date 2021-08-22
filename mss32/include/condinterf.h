@@ -29,6 +29,7 @@ struct CMidgardID;
 struct LEventCondCategory;
 struct Functor;
 struct IMidgardObjectMap;
+struct String;
 
 namespace editor {
 
@@ -106,6 +107,23 @@ struct Api
                                                           CCondInterf* condInterf,
                                                           RadioButtonCallback* callback);
     CreateRadioButtonFunctor createRadioButtonFunctor;
+
+    struct ListBoxDisplayCallback
+    {
+        using Callback = void(__thiscall*)(CCondInterf* thisptr,
+                                           String* string,
+                                           bool,
+                                           int selectedIndex);
+        Callback callback;
+        int unknown;
+    };
+
+    // Reuse logic from CCondVarInRangeInterf
+    using CreateListBoxDisplayFunctor = Functor*(__stdcall*)(Functor* functor,
+                                                             int a2,
+                                                             CCondInterf* condInterf,
+                                                             ListBoxDisplayCallback* callback);
+    CreateListBoxDisplayFunctor createListBoxDisplayFunctor;
 
     using GetObjectMap = IMidgardObjectMap*(__thiscall*)(void* thisptr);
     GetObjectMap getObjectMap;
