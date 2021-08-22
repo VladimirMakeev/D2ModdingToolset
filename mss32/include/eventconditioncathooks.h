@@ -38,6 +38,7 @@ struct CustomEventConditions
     CustomEventCondition ownResource{};
     CustomEventCondition gameMode{};
     CustomEventCondition playerType{};
+    CustomEventCondition variableCmp{};
 };
 
 CustomEventConditions& customEventConditions();

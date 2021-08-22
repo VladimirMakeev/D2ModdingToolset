@@ -31,6 +31,7 @@ namespace hooks {
 static const char* ownResourceCategoryName{"L_OWN_RESOURCE"};
 static const char* gameModeCategoryName{"L_GAME_MODE"};
 static const char* playerTypeCategoryName{"L_PLAYER_TYPE"};
+static const char* variableCmpCategoryName{"L_VARIABLE_CMP"};
 
 CustomEventConditions& customEventConditions()
 {
@@ -93,6 +94,9 @@ static bool readCustomConditions(const std::filesystem::path& dbfFilePath)
         } else if (playerTypeCategoryName == categoryName) {
             readCustomCondition(record, customEventConditions().playerType);
             customConditions = true;
+        } else if (variableCmpCategoryName == categoryName) {
+            readCustomCondition(record, customEventConditions().variableCmp);
+            customConditions = true;
         }
     }
 
@@ -147,6 +151,8 @@ game::LEventCondCategoryTable* __fastcall eventCondCategoryTableCtorHooked(
                            gameModeCategoryName, dbfFileName);
         table.readCategory(&customEventConditions().playerType.category, thisptr,
                            playerTypeCategoryName, dbfFileName);
+        table.readCategory(&customEventConditions().variableCmp.category, thisptr,
+                           variableCmpCategoryName, dbfFileName);
     }
 
     table.initDone(thisptr);
