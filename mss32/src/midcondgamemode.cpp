@@ -288,27 +288,6 @@ void __fastcall condGameModeInterfOkButtonHandler(CCondGameModeInterf* thisptr, 
     }
 }
 
-void __fastcall condGameModeInterfOnRadioPressed(CCondGameModeInterf* thisptr,
-                                                 int /*%edx*/,
-                                                 int selectedButton)
-{
-    using namespace game;
-
-    auto dialog = thisptr->popupData->dialog;
-    const auto& dialogApi = CDialogInterfApi::get();
-
-    auto radioButton = dialogApi.findRadioButton(dialog, "RAD_GAME_MODE");
-    if (radioButton) {
-        CRadioButtonInterfApi::get().setCheckedButton(radioButton, selectedButton);
-    }
-
-    if (!thisptr->gameModeCondition) {
-        return;
-    }
-
-    thisptr->gameModeCondition->gameMode = static_cast<GameMode>(selectedButton);
-}
-
 game::editor::CCondInterf* createCondGameModeInterf(game::ITask* task,
                                                     void* a2,
                                                     const game::CMidgardID* eventId)
@@ -373,22 +352,6 @@ game::editor::CCondInterf* createCondGameModeInterf(game::ITask* task,
         const auto& button = CButtonInterfApi::get();
         button.assignFunctor(dialog, "BTN_CANCEL", dialogName, &functor, 0);
         FunctorApi::get().createOrFree(&functor, nullptr);
-    }
-
-    auto radioButton = dialogApi.findRadioButton(dialog, "RAD_GAME_MODE");
-    if (radioButton) {
-        using RadioCallback = CCondInterfApi::Api::RadioButtonCallback;
-        RadioCallback callback{};
-        Functor functor{};
-
-        callback.callback = (RadioCallback::Callback)condGameModeInterfOnRadioPressed;
-        CCondInterfApi::get().createRadioButtonFunctor(&functor, 0, thisptr, &callback);
-
-        const auto& radio = CRadioButtonInterfApi::get();
-        radio.setOnButtonPressed(dialog, "RAD_GAME_MODE", dialogName, &functor);
-        FunctorApi::get().createOrFree(&functor, nullptr);
-
-        CRadioButtonInterfApi::get().setCheckedButton(radioButton, 0);
     }
 
     return thisptr;
