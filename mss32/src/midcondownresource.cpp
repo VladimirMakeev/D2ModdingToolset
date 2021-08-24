@@ -497,9 +497,11 @@ bool checkOwnResourceConditionsValid(game::CDialogInterf*,
     std::vector<const CMidEvCondition*> conditions{};
     getConditionsOfType(event, &category, conditions);
 
+    const auto& ownResourceTextIds = textIds().events.conditions.ownResource;
+
     // At most 2 own resource conditions allowed
     if (conditions.size() > 2) {
-        auto message = getTranslatedText(textIds().interf.ownResource.tooMany.c_str());
+        auto message = getTranslatedText(ownResourceTextIds.tooMany.c_str());
         if (message.empty()) {
             message = "At most two conditions of type \"Own resource\" is allowed per event.";
         }
@@ -534,7 +536,7 @@ bool checkOwnResourceConditionsValid(game::CDialogInterf*,
     }
 
     if (mutuallyExclusive) {
-        auto message = getTranslatedText(textIds().interf.ownResource.mutuallyExclusive.c_str());
+        auto message = getTranslatedText(ownResourceTextIds.mutuallyExclusive.c_str());
         if (message.empty()) {
             message = "Conditions of type \"Own resource\" are mutually exclusive.";
         }

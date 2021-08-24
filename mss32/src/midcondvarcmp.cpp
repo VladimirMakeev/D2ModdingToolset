@@ -200,26 +200,46 @@ void __stdcall midCondVarCmpGetInfoString(game::String* info,
 
     auto data1 = getData(variables, condition->variableId1);
     auto data2 = getData(variables, condition->variableId2);
-    const char* comparison{nullptr};
+    std::string comparison;
+
+    const auto& varCmpTextIds = textIds().events.conditions.variableCmp;
 
     switch (condition->compareType) {
     case CompareType::Equal:
-        comparison = "==";
+        comparison = getTranslatedText(varCmpTextIds.equal.c_str());
+        if (comparison.empty()) {
+            comparison = "is equal to";
+        }
         break;
     case CompareType::NotEqual:
-        comparison = "!=";
+        comparison = getTranslatedText(varCmpTextIds.notEqual.c_str());
+        if (comparison.empty()) {
+            comparison = "is not equal to";
+        }
         break;
     case CompareType::Greater:
-        comparison = ">";
+        comparison = getTranslatedText(varCmpTextIds.greater.c_str());
+        if (comparison.empty()) {
+            comparison = "is greater than";
+        }
         break;
     case CompareType::GreaterEqual:
-        comparison = ">=";
+        comparison = getTranslatedText(varCmpTextIds.greaterEqual.c_str());
+        if (comparison.empty()) {
+            comparison = "is greater or equal to";
+        }
         break;
     case CompareType::Less:
-        comparison = "<";
+        comparison = getTranslatedText(varCmpTextIds.less.c_str());
+        if (comparison.empty()) {
+            comparison = "is less than";
+        }
         break;
     case CompareType::LessEqual:
-        comparison = "<=";
+        comparison = getTranslatedText(varCmpTextIds.lessEqual.c_str());
+        if (comparison.empty()) {
+            comparison = "is less or equal to";
+        }
         break;
     }
 

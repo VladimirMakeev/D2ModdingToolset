@@ -133,21 +133,23 @@ void __stdcall midCondGameModeGetInfoString(game::String* info,
     const auto gameMode = static_cast<const CMidCondGameMode*>(eventCondition)->gameMode;
     std::string modeName;
 
+    const auto& gameModeTextIds = textIds().events.conditions.gameMode;
+
     switch (gameMode) {
     case GameMode::Single:
-        modeName = getTranslatedText(textIds().interf.gameMode.single.c_str());
+        modeName = getTranslatedText(gameModeTextIds.single.c_str());
         if (modeName.empty()) {
             modeName = "single player";
         }
         break;
     case GameMode::Hotseat:
-        modeName = getTranslatedText(textIds().interf.gameMode.hotseat.c_str());
+        modeName = getTranslatedText(gameModeTextIds.hotseat.c_str());
         if (modeName.empty()) {
             modeName = "hotseat";
         }
         break;
     case GameMode::Online:
-        modeName = getTranslatedText(textIds().interf.gameMode.online.c_str());
+        modeName = getTranslatedText(gameModeTextIds.online.c_str());
         if (modeName.empty()) {
             modeName = "online";
         }
@@ -423,7 +425,7 @@ bool checkGameModeConditionValid(game::CDialogInterf*,
     getConditionsOfType(event, &category, conditions);
 
     if (conditions.size() > 1) {
-        auto message = getTranslatedText(textIds().interf.gameMode.tooMany.c_str());
+        auto message = getTranslatedText(textIds().events.conditions.gameMode.tooMany.c_str());
         if (message.empty()) {
             message = "Only one condition of type \"Game mode\" is allowed per event.";
         }

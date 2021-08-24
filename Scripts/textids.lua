@@ -44,15 +44,68 @@ textids = {
 		-- The text must contain keyword "%DMG%".
 		-- Fallback text is "%DMG%, split between targets".
 		splitDamage = "",
-
-		-- Text ids for L_OWN_RESOURCE event condition
-		ownResource = {
-			-- Message to show when there are more than two conditions of type
-			-- Fallback text is "At most two conditions of type "Own resource" is allowed per event."
-			tooMany = "",
-			-- Message to show when two conditions are mutually exclusive
-			-- Fallback text is "Conditions of type "Own resource" are mutually exclusive."
-			mutuallyExclusive = "",
-		},
 	}
+
+	-- Text ids related to events logic
+	events = {
+		-- Text ids related to event conditions
+		conditions = {
+			-- Text ids for L_OWN_RESOURCE event condition
+			ownResource = {
+				-- Message to show when there are more than two conditions of type
+				-- Fallback text is "At most two conditions of type "Own resource" is allowed per event."
+				tooMany = "",
+				-- Message to show when two conditions are mutually exclusive
+				-- Fallback text is "Conditions of type "Own resource" are mutually exclusive."
+				mutuallyExclusive = "",
+			},
+	
+			-- Text ids for L_GAME_MODE event condition
+			gameMode = {
+				-- Message to show when there are more than one condition of type
+				-- Fallback text "Only one condition of type "Game mode" is allowed per event."
+				tooMany = "",
+				-- Text id for single player game mode
+				-- Fallback text "single player"
+				single = "",
+				-- Text id for hotseat game mode
+				-- Fallback text "hotseat"
+				hotseat = "",
+				-- Text id for online game mode
+				-- Fallback text "online"
+				online = "",
+			},
+	
+			-- Text ids for L_PLAYER_TYPE event condition
+			playerType = {
+				-- Message to show when there are more than one condition of type
+				-- Fallback text "Only one condition of type "Player type" is allowed per event."
+				tooMany = "",
+				-- Text id for human player type
+				-- Fallback text "human"
+				human = "",
+				-- Text id for AI player type
+				-- Fallback text "AI"
+				ai = "",
+			},
+
+			-- Text ids for L_VARIABLE_CMP event condition
+			variableCmp = {
+				-- Text id for equality comparison
+				-- Fallback text "is equal to"
+				equal = "",
+				-- Text id for difference comparison
+				-- Fallback text "is not equal to"
+				notEqual = "",
+				-- Fallback text "is greater than"
+				greater = "",
+				-- Fallback text "is greater or equal to"
+				greaterEqual = "",
+				-- Fallback text "is less than"
+				less = "",
+				-- Fallback text "is less or equal to"
+				lessEqual = "",
+			},
+		},
+	},
 }

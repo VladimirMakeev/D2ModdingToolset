@@ -37,29 +37,44 @@ struct TextIds
         std::string ratedDamageEqual;
         std::string ratedDamageSeparator;
         std::string splitDamage;
-
-        struct OwnResource
-        {
-            std::string tooMany;
-            std::string mutuallyExclusive;
-        } ownResource;
-
-        struct GameMode
-        {
-            std::string tooMany;
-            std::string single;
-            std::string hotseat;
-            std::string online;
-        } gameMode;
-
-        struct PlayerType
-        {
-            std::string tooMany;
-            std::string human;
-            std::string ai;
-        } playerType;
-
     } interf;
+
+    struct Events
+    {
+        struct Conditions
+        {
+            struct OwnResource
+            {
+                std::string tooMany;
+                std::string mutuallyExclusive;
+            } ownResource;
+
+            struct GameMode
+            {
+                std::string tooMany;
+                std::string single;
+                std::string hotseat;
+                std::string online;
+            } gameMode;
+
+            struct PlayerType
+            {
+                std::string tooMany;
+                std::string human;
+                std::string ai;
+            } playerType;
+
+            struct VariableCmp
+            {
+                std::string equal;
+                std::string notEqual;
+                std::string greater;
+                std::string greaterEqual;
+                std::string less;
+                std::string lessEqual;
+            } variableCmp;
+        } conditions;
+    } events;
 };
 
 const TextIds& textIds();

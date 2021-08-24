@@ -124,13 +124,15 @@ void __stdcall midCondPlayerTypeGetInfoString(game::String* info,
     const auto ai = static_cast<const CMidCondPlayerType*>(eventCondition)->playerTypeAi;
     std::string type;
 
+    const auto& playerTypeTextIds = textIds().events.conditions.playerType;
+
     if (ai) {
-        type = getTranslatedText(textIds().interf.playerType.ai.c_str());
+        type = getTranslatedText(playerTypeTextIds.ai.c_str());
         if (type.empty()) {
             type = "AI";
         }
     } else {
-        type = getTranslatedText(textIds().interf.playerType.human.c_str());
+        type = getTranslatedText(playerTypeTextIds.human.c_str());
         if (type.empty()) {
             type = "human";
         }
@@ -405,7 +407,7 @@ bool checkPlayerTypeConditionValid(game::CDialogInterf* dialog,
     getConditionsOfType(event, &category, conditions);
 
     if (conditions.size() > 1) {
-        auto message = getTranslatedText(textIds().interf.playerType.tooMany.c_str());
+        auto message = getTranslatedText(textIds().events.conditions.playerType.tooMany.c_str());
         if (message.empty()) {
             message = "Only one condition of type \"Player type\" is allowed per event.";
         }
