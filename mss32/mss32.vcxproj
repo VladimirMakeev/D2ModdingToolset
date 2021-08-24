@@ -211,6 +211,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\enclayoutspell.cpp" />
     <ClCompile Include="src\eventconditioncat.cpp" />
     <ClCompile Include="src\eventconditioncathooks.cpp" />
+    <ClCompile Include="src\eventeffectcat.cpp" />
     <ClCompile Include="src\exchangeinterf.cpp" />
     <ClCompile Include="src\fortcategory.cpp" />
     <ClCompile Include="src\functor.cpp" />

@@ -30,6 +30,54 @@ struct LEventEffectCategoryTable : public CEnumConstantTable<EventEffectId>
 struct LEventEffectCategory : public Category<EventEffectId>
 { };
 
+namespace EventEffectCategories {
+
+struct Categories
+{
+    LEventEffectCategory* win;
+    LEventEffectCategory* createStack;
+    LEventEffectCategory* castSpell;
+    LEventEffectCategory* castSpellMap;
+    LEventEffectCategory* changeOwner;
+    LEventEffectCategory* changeOrder;
+    LEventEffectCategory* moveBeside;
+    LEventEffectCategory* battle;
+    LEventEffectCategory* enableEvent;
+    LEventEffectCategory* giveSpell;
+    LEventEffectCategory* giveItem;
+    LEventEffectCategory* moveStack;
+    LEventEffectCategory* ally;
+    LEventEffectCategory* diplomacy;
+    LEventEffectCategory* unfog;
+    LEventEffectCategory* removeMountain;
+    LEventEffectCategory* removeLmark;
+    LEventEffectCategory* changeObjective;
+    LEventEffectCategory* popup;
+    LEventEffectCategory* destroyItem;
+    LEventEffectCategory* removeStack;
+    LEventEffectCategory* changeLandmark;
+    LEventEffectCategory* changeTerrain;
+    LEventEffectCategory* modifyVariable;
+};
+
+Categories& get();
+
+/** Returns address of LEventEffectCategory::vftable used in game. */
+const void* vftable();
+
+} // namespace EventEffectCategories
+
+namespace LEventEffectCategoryTableApi {
+
+using Api = CategoryTableApi::Api<LEventEffectCategoryTable, LEventEffectCategoryTable>;
+
+Api& get();
+
+/** Returns address of LEventEffectCategoryTable::vftable used in game. */
+const void* vftable();
+
+} // namespace LEventEffectCategoryTableApi
+
 } // namespace game
 
 #endif // EVENTEFFECTCAT_H

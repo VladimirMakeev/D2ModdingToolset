@@ -711,6 +711,9 @@
     <ClCompile Include="src\effectinterf.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\eventeffectcat.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\midcondplayertype.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
