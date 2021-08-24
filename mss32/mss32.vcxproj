@@ -456,6 +456,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\editor.h" />
     <ClInclude Include="include\effectinterf.h" />
     <ClInclude Include="include\effectinterfhandler.h" />
+    <ClInclude Include="include\effectresult.h" />
     <ClInclude Include="include\enclayoutspell.h" />
     <ClInclude Include="include\encparam.h" />
     <ClInclude Include="include\encparambase.h" />
