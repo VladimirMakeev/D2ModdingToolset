@@ -27,7 +27,7 @@ namespace hooks {
 
 struct CustomEventCondition
 {
-    game::LEventCondCategory category{};
+    game::LEventCondCategory category{nullptr, nullptr, game::EventConditionId{-1}};
     game::CMidgardID infoText{};
     game::CMidgardID brief{};
     game::CMidgardID description{};
