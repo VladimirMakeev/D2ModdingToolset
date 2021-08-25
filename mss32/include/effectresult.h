@@ -55,9 +55,8 @@ struct IEffectResultVftable
      * @param[in] playerId affected player id.
      * @param[in] triggererId id of stack that triggered event.
      * @param[in] playingStackId id of stack currently playing. Assumption: not used and empty.
-     * @returns true if IEventEffect objects were created successfully.
      */
-    using Apply = bool(__thiscall*)(const IEffectResult* thisptr,
+    using Apply = void(__thiscall*)(const IEffectResult* thisptr,
                                     String* str,
                                     IMidgardObjectMap* objectMap,
                                     LinkedList<IEventEffect*>* effects,
