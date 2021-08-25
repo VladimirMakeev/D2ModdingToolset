@@ -464,6 +464,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\eventconditioncat.h" />
     <ClInclude Include="include\eventconditioncathooks.h" />
     <ClInclude Include="include\eventconditions.h" />
+    <ClInclude Include="include\eventeffect.h" />
     <ClInclude Include="include\eventeffectcat.h" />
     <ClInclude Include="include\eventeffects.h" />
     <ClInclude Include="include\exchangeinterf.h" />
