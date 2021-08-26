@@ -25,6 +25,73 @@
 
 namespace game {
 
+/** Network command messages identifiers. */
+enum class CommandMsgId : int
+{
+    EraseObject = 0,
+    UpdateObject = 1,
+    MoveStack = 2,
+    StackVisit = 3,
+    StackDestroyed = 4,
+    StackAppear = 5,
+    StackIllusion = 6,
+    StackAction = 7,
+    BattleStart = 8,
+    BattleChooseAction = 9,
+    BattleResult = 10,
+    BattleEnd = 11,
+    NobleAction = 12,
+    NobleActionCancel = 13,
+    NobleResult = 14,
+    ProposeTrade = 15,
+    TradeAccept = 16,
+    ProposeAlliance = 17,
+    AcceptAlliance = 18,
+    BreakAlliance = 19,
+    GiveGold = 20,
+    BeginTurn = 21,
+    TurnInfo = 22,
+    EndTurn = 23,
+    BreakRod = 24,
+    DropRod = 25,
+    CastSpell = 26,
+    TerrainChange = 27,
+    MapChange = 28,
+    RemoveLandmark = 29,
+    OccupyCity = 30,
+    CityGrow = 31,
+    LootRuin = 32,
+    PickupBag = 33,
+    OpenBag = 34,
+    CloseBag = 35,
+    DiscoverSpy = 36,
+    GameSaved = 37,
+    ScenarioEnd = 38,
+    // 39 ?
+    CreateStack = 40,
+    ChangeOwner = 41,
+    ChangeOrder = 42,
+    GiveSpell = 43,
+    GiveItem = 44,
+    ChangeObjective = 45,
+    ChangeFog = 46,
+    ChatMessage = 47,
+    Popup = 48,
+    RemoveRiot = 49,
+    UpgradeLeader = 50,
+    // 51 ?
+    CaptureCapital = 52,
+    CaptureResources = 53,
+    QueueCommands = 54,
+    UnpauseAi = 55,
+    Eem = 56,
+    TurnSummary = 57,
+    ExportLeader = 58,
+    ChangeLandmark = 59,
+    ProposeExchangeMap = 60,
+    AcceptExchangeMap = 61,
+};
+
 struct CCommandMsgVftable;
 
 struct CCommandMsg : public CNetMsgT<CCommandMsgVftable>
@@ -35,14 +102,6 @@ struct CCommandMsg : public CNetMsgT<CCommandMsgVftable>
 };
 
 static_assert(sizeof(CCommandMsg) == 16, "Size of CCommandMsg structure must be exactly 16 bytes");
-
-enum class CommandMsgId : int
-{
-    BattleStart = 8,
-    BattleChooseAction = 9,
-    BattleResult = 10,
-    BattleEnd = 11,
-};
 
 enum class CommandMsgParam : int
 {
