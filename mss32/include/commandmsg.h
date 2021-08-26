@@ -55,14 +55,8 @@ template <CommandMsgId ID, CommandMsgParam P>
 struct CCommandMsgTempl : public CCommandMsg
 { };
 
-struct CCommandMsgVftable
+struct CCommandMsgVftable : public CNetMsgVftable
 {
-    using Destructor = void(__thiscall*)(CCommandMsg* thisptr, char flags);
-    Destructor destructor;
-
-    using Serialize = void(__thiscall*)(CCommandMsg* thisptr, CMqStream* stream);
-    Serialize serialize;
-
     using GetId = CommandMsgId(__thiscall*)(CCommandMsg* thisptr);
     GetId getId;
 
