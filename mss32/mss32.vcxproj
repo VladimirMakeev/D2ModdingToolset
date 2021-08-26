@@ -254,6 +254,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\midcondvarcmp.cpp" />
     <ClCompile Include="src\midevcondition.cpp" />
     <ClCompile Include="src\midevconditionhooks.cpp" />
+    <ClCompile Include="src\mideveffect.cpp" />
     <ClCompile Include="src\midevent.cpp" />
     <ClCompile Include="src\mideventhooks.cpp" />
     <ClCompile Include="src\midgard.cpp" />

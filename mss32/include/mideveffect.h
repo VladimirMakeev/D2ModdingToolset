@@ -29,6 +29,7 @@ struct CMidEvEffectVftable;
 struct IMidgardObjectMap;
 struct IMidgardStream;
 struct IMidgardStreamEnv;
+struct String;
 
 /** Base class for all event effects. */
 struct CMidEvEffect
@@ -65,6 +66,44 @@ struct CMidEvEffectVftable
 
 static_assert(sizeof(CMidEvEffectVftable) == 5 * sizeof(void*),
               "CMidEvEffect vftable must have exactly 5 methods");
+
+namespace CMidEvEffectApi {
+
+struct Api
+{
+
+    using CreateFromCategory = CMidEvEffect*(__stdcall*)(const CMidgardID* eventId,
+                                                         const LEventEffectCategory* category);
+    CreateFromCategory createFromCategory;
+
+    /**
+     * Returns string with current effect settings to show in effects list box.
+     * Used in Scenario Editor only.
+     */
+    using GetInfoString = void(__stdcall*)(String* info,
+                                           const IMidgardObjectMap* objectMap,
+                                           const CMidEvEffect* eventEffect);
+    GetInfoString getInfoString;
+
+    using GetDescription = void(__stdcall*)(String* description,
+                                            const LEventEffectCategory* category);
+
+    /**
+     * Returns brief effect description by specified category
+     * Used in Scenario Editor only.
+     */
+    GetDescription getBrief;
+
+    /**
+     * Returns full effect description by specified category
+     * Used in Scenario Editor only.
+     */
+    GetDescription getDescription;
+};
+
+Api& get();
+
+} // namespace CMidEvEffectApi
 
 } // namespace game
 
