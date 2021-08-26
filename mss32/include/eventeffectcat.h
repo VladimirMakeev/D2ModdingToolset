@@ -69,7 +69,7 @@ const void* vftable();
 
 namespace LEventEffectCategoryTableApi {
 
-using Api = CategoryTableApi::Api<LEventEffectCategoryTable, LEventEffectCategoryTable>;
+using Api = CategoryTableApi::Api<LEventEffectCategoryTable, LEventEffectCategory>;
 
 Api& get();
 
