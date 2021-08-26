@@ -53,6 +53,7 @@ struct CMidEvConditionVftable
 
     /**
      * Adds id used by event to the list.
+     * If event leads to player win or defeat, added ids are used to highlight scenario objectives.
      * Used by CMidCondLocation, CMidCondEnterCity, CMidCondKillStack, CMidCondOwnItem etc.
      */
     using AddToList = void(__thiscall*)(const CMidEvCondition* thisptr,
