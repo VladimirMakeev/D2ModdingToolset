@@ -78,6 +78,17 @@ struct Api
     AddCondition addCondition;
 
     /**
+     * Adds event effect to the event.
+     * Used in Scenario Editor only.
+     * @param[in] visitor not used by the function and can be null.
+     * @returns true if effect was successfully added.
+     */
+    using AddEffect = bool(__thiscall*)(CMidEvent* thisptr,
+                                        CScenarioVisitor* visitor,
+                                        CMidEvEffect* effect);
+    AddEffect addEffect;
+
+    /**
      * Checks correctness of event conditions and effects.
      * Used in Scenario Editor only.
      */
