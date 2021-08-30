@@ -28,6 +28,8 @@ struct CMidEvEffect;
 struct CMidgardID;
 struct LEventEffectCategory;
 struct IMidgardObjectMap;
+struct String;
+struct Functor;
 
 namespace editor {
 
@@ -78,6 +80,36 @@ struct Api
 
     using GetObjectMap = IMidgardObjectMap*(__thiscall*)(void* thisptr);
     GetObjectMap getObjectMap;
+
+    struct ButtonCallback
+    {
+        using Callback = void(__thiscall*)(CEffectInterf* thisptr);
+
+        Callback callback;
+        int unknown;
+    };
+
+    using CreateButtonFunctor = Functor*(__stdcall*)(Functor* functor,
+                                                     int a2,
+                                                     CEffectInterf* effectInterf,
+                                                     ButtonCallback* callback);
+    CreateButtonFunctor createButtonFunctor;
+
+    struct ListBoxDisplayCallback
+    {
+        using Callback = void(__thiscall*)(CEffectInterf* thisptr,
+                                           String* string,
+                                           bool,
+                                           int selectedIndex);
+        Callback callback;
+        int unknown;
+    };
+
+    using CreateListBoxDisplayFunctor = Functor*(__stdcall*)(Functor* functor,
+                                                             int a2,
+                                                             CEffectInterf* effectInterf,
+                                                             ListBoxDisplayCallback* callback);
+    CreateListBoxDisplayFunctor createListBoxDisplayFunctor;
 };
 
 Api& get();
