@@ -357,6 +357,15 @@ enum class EventEffectId : int
     ModifyVariable,
 };
 
+/** Landmark ids from LLMCat.dbf. */
+enum class LandmarkId : int
+{
+    Misc,
+    Building,
+    Structure,
+    Terrain,
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H

@@ -528,6 +528,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\itemwand.h" />
     <ClInclude Include="include\itemweapon.h" />
     <ClInclude Include="include\iterators.h" />
+    <ClInclude Include="include\landmarkcat.h" />
     <ClInclude Include="include\leaderabilitycat.h" />
     <ClInclude Include="include\linkedlist.h" />
     <ClInclude Include="include\listbox.h" />
