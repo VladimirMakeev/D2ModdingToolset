@@ -577,6 +577,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midgardstream.h" />
     <ClInclude Include="include\midinventory.h" />
     <ClInclude Include="include\miditem.h" />
+    <ClInclude Include="include\midlandmark.h" />
     <ClInclude Include="include\midlocation.h" />
     <ClInclude Include="include\midmsgboxbuttonhandler.h" />
     <ClInclude Include="include\midmsgboxbuttonhandlerstd.h" />
