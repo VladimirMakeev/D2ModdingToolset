@@ -29,6 +29,7 @@ struct String;
 struct IMidgardObjectMap;
 struct IEventEffect;
 struct CMidgardID;
+struct CMidEvEffect;
 
 /**
  * Event effect results interface.
@@ -75,6 +76,18 @@ struct IEffectResultVftable
 
 static_assert(sizeof(IEffectResultVftable) == 3 * sizeof(void*),
               "IEffectResult vftable must have exactly 3 methods");
+
+namespace IEffectResultApi {
+
+struct Api
+{
+    using Create = IEffectResult*(__stdcall*)(const CMidEvEffect* eventEffect);
+    Create create;
+};
+
+Api& get();
+
+} // namespace IEffectResultApi
 
 } // namespace game
 
