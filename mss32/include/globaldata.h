@@ -123,7 +123,7 @@ struct GlobalData
     Map<Pair<CMidgardID, TUsUnitImpl*>>* units;
     Map<Pair<CMidgardID, TUnitModifier*>>* modifiers;
     Map<Pair<CMidgardID, CAttackImpl*>>* attacks;
-    Map<Pair<CMidgardID, TLandmark*>>* landmarks;
+    Map<Pair<CMidgardID, TLandmark*>>** landmarks;
     TItemTypeList* itemTypes;
     int* actions;
     int* transf;
