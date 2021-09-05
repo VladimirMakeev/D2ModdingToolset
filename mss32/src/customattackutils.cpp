@@ -364,6 +364,7 @@ UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* 
     using namespace game;
 
     const auto& fn = gameFunctions();
+    const auto& id = CMidgardIDApi::get();
     const auto& groupApi = CMidUnitGroupApi::get();
 
     void* tmp{};
@@ -376,6 +377,9 @@ UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* 
 
     auto target = fn.findUnitById(objectMap, targetUnitId);
     int targetPosition = groupApi.getUnitPosition(targetGroup, targetUnitId);
+    if (targetPosition == -1) {
+        targetPosition = id.summonUnitIdToPosition(targetUnitId);
+    }
     bindings::UnitSlotView selected(target, targetPosition, targetGroupId);
 
     auto targets = getTargets(objectMap, battleMsgData, batAttack, targetGroupId);
@@ -487,6 +491,9 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
         int targetPosition = *listApi.dereference(&it);
 
         auto unitId = getTargetUnitId(targetPosition, targetGroup, unitGroup);
+        if (unitId == emptyId)
+            continue;
+
         if (fn.isUnitImmuneToAttack(objectMap, battleMsgData, &unitId, attack, true)) {
             listApi.erase(value, &targetPosition);
         }
