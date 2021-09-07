@@ -23,6 +23,7 @@
 #include "attackimpl.h"
 #include "attackutils.h"
 #include "batattack.h"
+#include "batattacktransformself.h"
 #include "battlemsgdata.h"
 #include "customattacks.h"
 #include "dbffile.h"
@@ -199,24 +200,43 @@ UnitSlots getTargetsToSelectOrAttack(const std::string& scriptFile,
 UnitSlots getTargets(const game::IMidgardObjectMap* objectMap,
                      const game::BattleMsgData* battleMsgData,
                      const game::IBatAttack* batAttack,
-                     const game::CMidgardID* targetGroupId)
+                     const game::CMidgardID* targetGroupId,
+                     const game::CMidgardID* unitId,
+                     const game::CMidgardID* selectedUnitId)
 {
     using namespace game;
 
     const auto& fn = gameFunctions();
     const auto& battle = BattleMsgDataApi::get();
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
 
     void* tmp{};
     auto targetGroup = fn.getStackFortRuinGroup(tmp, objectMap, targetGroupId);
 
+    auto transformSelfAttack = (CBatAttackTransformSelf*)
+        dynamicCast(batAttack, 0, rtti.IBatAttackType, rtti.CBatAttackTransformSelfType, 0);
+
     UnitSlots value;
     bool isSummonAttack = batAttack->vftable->method17(batAttack, battleMsgData);
+    bool isAltAttack = transformSelfAttack != nullptr && *unitId != *selectedUnitId;
     for (size_t i = 0; i < std::size(targetGroup->positions); ++i) {
         CMidgardID targetUnitId = targetGroup->positions[i];
         if (targetUnitId != emptyId) {
             auto targetUnit = fn.findUnitById(objectMap, &targetUnitId);
             if (i % 2 && !isUnitSmall(targetUnit))
                 continue;
+
+            // Explicitly check if alt attack can be performed on self, because
+            // canPerformAttackOnUnitWithStatusCheck always succeeds in case of transform-self
+            // attack regardless of whether transform or alt-attack is going to be performed
+            if (isAltAttack && targetUnitId == *unitId) {
+                auto altAttack = transformSelfAttack->altAttack;
+                if (altAttack != nullptr
+                    && !altAttack->vftable->canPerform(altAttack, objectMap, battleMsgData,
+                                                       &targetUnitId))
+                    continue;
+            }
 
             if (battle.canPerformAttackOnUnitWithStatusCheck(objectMap, battleMsgData, batAttack,
                                                              &targetUnitId)) {
@@ -291,7 +311,7 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
 
     bindings::UnitSlotView selected(nullptr, -1, &emptyId);
 
-    auto targets = getTargets(objectMap, battleMsgData, batAttack, targetGroupId);
+    auto targets = getTargets(objectMap, battleMsgData, batAttack, targetGroupId, unitId, &emptyId);
     auto allies = getAllies(objectMap, battleMsgData, unitGroupId, unitId);
 
     auto targetsToSelect = getTargetsToSelectOrAttack(attackReach.selectionScript, attacker,
@@ -382,7 +402,8 @@ UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* 
     }
     bindings::UnitSlotView selected(target, targetPosition, targetGroupId);
 
-    auto targets = getTargets(objectMap, battleMsgData, batAttack, targetGroupId);
+    auto targets = getTargets(objectMap, battleMsgData, batAttack, targetGroupId, unitId,
+                              targetUnitId);
     auto allies = getAllies(objectMap, battleMsgData, unitGroupId, unitId);
 
     return getTargetsToSelectOrAttack(attackReach.attackScript, attacker, selected, allies, targets,

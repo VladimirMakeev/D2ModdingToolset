@@ -47,9 +47,9 @@ struct IBatAttackVftable
 
     /** Returns true if unit with specified id can be attacked with this attack. */
     using CanPerform = bool(__thiscall*)(IBatAttack* thisptr,
-                                         IMidgardObjectMap* objectMap,
-                                         BattleMsgData* battleMsgData,
-                                         CMidgardID* targetUnitId);
+                                         const IMidgardObjectMap* objectMap,
+                                         const BattleMsgData* battleMsgData,
+                                         const CMidgardID* targetUnitId);
     CanPerform canPerform;
 
     /** Returns id of group the attack can target: allies or enemies. */
