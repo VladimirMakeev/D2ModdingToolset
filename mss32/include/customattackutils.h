@@ -56,7 +56,9 @@ UnitSlots getTargetsToSelectOrAttack(const std::string& scriptFile,
 UnitSlots getTargets(const game::IMidgardObjectMap* objectMap,
                      const game::BattleMsgData* battleMsgData,
                      const game::IBatAttack* batAttack,
-                     const game::CMidgardID* targetGroupId);
+                     const game::CMidgardID* targetGroupId,
+                     const game::CMidgardID* unitId,
+                     const game::CMidgardID* selectedUnitId);
 
 UnitSlots getAllies(const game::IMidgardObjectMap* objectMap,
                     const game::BattleMsgData* battleMsgData,
