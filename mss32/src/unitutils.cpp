@@ -21,6 +21,7 @@
 #include "attack.h"
 #include "attacksourcecat.h"
 #include "attacksourcelist.h"
+#include "battlemsgdata.h"
 #include "customattacks.h"
 #include "dynamiccast.h"
 #include "game.h"
@@ -29,6 +30,7 @@
 #include "log.h"
 #include "midgardid.h"
 #include "midunit.h"
+#include "settings.h"
 #include "ummodifier.h"
 #include "unitgenerator.h"
 #include "ussoldier.h"
@@ -187,6 +189,64 @@ game::IAttack* getAttack(const game::IUsSoldier* soldier, bool primary, bool che
     soldierImpl->data->attackId = attackId;
 
     return attack;
+}
+
+int getArmor(const game::CMidgardID* unitId,
+             const game::IUsSoldier* soldier,
+             const game::BattleMsgData* battleMsgData,
+             bool includeShattered,
+             bool includeFortification)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+
+    int armor;
+    soldier->vftable->getArmor(soldier, &armor);
+
+    if (!includeShattered)
+        armor -= battle.getUnitShatteredArmor(battleMsgData, unitId);
+    if (!includeFortification)
+        armor -= battle.getUnitFortificationArmor(battleMsgData, unitId);
+
+    return armor > 0 ? armor : 0;
+}
+
+int computeUnitEffectiveHp(const game::CMidUnit* unit, int armor)
+{
+    if (!unit || unit->currentHp < 0)
+        return 0;
+
+    if (armor > 99)
+        return std::numeric_limits<int>::max();
+
+    double factor = 1 - (double)armor / 100;
+    return lround((double)unit->currentHp / factor);
+}
+
+int computeShatterDamage(const game::CMidgardID* unitId,
+                         const game::IUsSoldier* soldier,
+                         const game::BattleMsgData* battleMsgData,
+                         const game::IAttack* attack)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+
+    int armor = getArmor(unitId, soldier, battleMsgData, false, false);
+
+    int limit = userSettings().shatteredArmorMax
+                - battle.getUnitShatteredArmor(battleMsgData, unitId);
+
+    int result = attack->vftable->getQtyDamage(attack);
+    if (result > armor)
+        result = armor;
+    if (result > limit)
+        result = limit;
+    if (result > userSettings().shatterDamageMax)
+        result = userSettings().shatterDamageMax;
+
+    return result;
 }
 
 } // namespace hooks

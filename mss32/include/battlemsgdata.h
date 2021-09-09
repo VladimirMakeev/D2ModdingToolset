@@ -438,14 +438,20 @@ struct Api
                                               const CMidUnitGroup* targetGroup,
                                               const TargetsList* targets,
                                               const BattleMsgData* battleMsgData,
-                                              CMidgardID* targetUnitId);
+                                              CMidgardID* value);
     FindAttackTarget findAttackTarget;
+
+    /** Used by AI to determine attack target for L_ALL attack reach. */
+    using FindAttackTargetWithAllReach = bool(__stdcall*)(CMidgardID* value,
+                                                          const CMidUnitGroup* targetGroup,
+                                                          const TargetsList* targets);
+    FindAttackTargetWithAllReach findAttackTargetWithAllReach;
 
     using FindSpecificAttackTarget = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                       const BattleMsgData* battleMsgData,
                                                       const CMidUnitGroup* targetGroup,
                                                       const TargetsList* targets,
-                                                      CMidgardID* targetUnitId);
+                                                      CMidgardID* value);
     /** Used by AI to determine boost attack target. */
     FindSpecificAttackTarget findBoostAttackTarget;
     /** Used by AI to determine fear attack target. */
@@ -456,7 +462,7 @@ struct Api
                                                           const BattleMsgData* battleMsgData,
                                                           const CMidUnitGroup* targetGroup,
                                                           const TargetsList* targets,
-                                                          CMidgardID* targetUnitId);
+                                                          CMidgardID* value);
     /** Used by AI to determine doppelganger attack target. */
     FindDoppelgangerAttackTarget findDoppelgangerAttackTarget;
 
@@ -467,7 +473,7 @@ struct Api
                          const CMidUnitGroup* targetGroup,
                          const TargetsList* targets,
                          const BattleMsgData* battleMsgData,
-                         CMidgardID* targetUnitId);
+                         CMidgardID* value);
     /** Used by AI to determine damage attack target with non-all reach. */
     FindDamageAttackTargetWithNonAllReach findDamageAttackTargetWithNonAllReach;
 
@@ -479,12 +485,12 @@ struct Api
                                                                 const LAttackClass* attackClass,
                                                                 const LAttackSource* attackSource,
                                                                 const BattleStatus* filterByStatus,
-                                                                CMidgardID* targetUnitId);
+                                                                CMidgardID* value);
     /** Used by AI to determine damage attack target with any reach. */
     FindDamageAttackTargetWithAnyReach findDamageAttackTargetWithAnyReach;
 
     using FindDamageAttackTargetWithAdjacentReach =
-        CMidgardID*(__stdcall*)(CMidgardID* targetUnitId,
+        CMidgardID*(__stdcall*)(CMidgardID* value,
                                 const IMidgardObjectMap* objectMap,
                                 const CMidUnitGroup* targetGroup,
                                 const TargetsList* targets,

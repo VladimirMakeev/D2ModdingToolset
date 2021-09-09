@@ -203,6 +203,7 @@ static Hooks getGameHooks()
         // Allow any attack with QTY_HEAL > 0 to heal units when battle ends (just like ordinary heal does)
         {fn.getUnitHealAttackNumber, getUnitHealAttackNumberHooked},
         // Fix AI not being able to find target for lower damage/ini attack
+        // Fix incorrect AI prioritization of shatter attack targets
         {battle.findAttackTarget, findAttackTargetHooked, (void**)&orig.findAttackTarget},
         // Support custom attack sources
         {fn.getUnitAttackSourceImmunities, getUnitAttackSourceImmunitiesHooked},
@@ -1505,16 +1506,13 @@ int __stdcall computeUnitEffectiveHpHooked(const game::IMidgardObjectMap* object
 
     const auto& fn = gameFunctions();
 
-    if (!unit || unit->currentHp < 0)
+    if (!unit)
         return 0;
 
     int armor;
     fn.computeArmor(&armor, objectMap, battleMsgData, &unit->unitId);
-    if (armor > 99)
-        return std::numeric_limits<int>::max();
 
-    double factor = 1 - (double)armor / 100;
-    return lround((double)unit->currentHp / factor);
+    return computeUnitEffectiveHp(unit, armor);
 }
 
 void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImplId,

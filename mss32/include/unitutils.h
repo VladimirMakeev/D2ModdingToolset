@@ -32,6 +32,7 @@ struct TUsSoldierImpl;
 struct LImmuneCat;
 struct LAttackSource;
 struct IAttack;
+struct BattleMsgData;
 } // namespace game
 
 namespace hooks {
@@ -46,6 +47,16 @@ game::CMidgardID getGlobalUnitImplId(const game::CMidUnit* unit);
 game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidUnit* unit);
 game::TUsSoldierImpl* getSoldierImpl(const game::IUsSoldier* soldier);
 game::IAttack* getAttack(const game::IUsSoldier* soldier, bool primary, bool checkAltAttack);
+int getArmor(const game::CMidgardID* unitId,
+             const game::IUsSoldier* soldier,
+             const game::BattleMsgData* battleMsgData,
+             bool includeShattered,
+             bool includeFortification);
+int computeUnitEffectiveHp(const game::CMidUnit* unit, int armor);
+int computeShatterDamage(const game::CMidgardID* unitId,
+                         const game::IUsSoldier* soldier,
+                         const game::BattleMsgData* battleMsgData,
+                         const game::IAttack* attack);
 
 } // namespace hooks
 

@@ -165,14 +165,14 @@ bool __stdcall findAttackTargetHooked(const game::IMidgardObjectMap* objectMap,
                                       const game::CMidUnitGroup* targetGroup,
                                       const game::TargetsList* targets,
                                       const game::BattleMsgData* battleMsgData,
-                                      game::CMidgardID* targetUnitId);
+                                      game::CMidgardID* value);
 
 bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap* objectMap,
                                                   const game::CMidgardID* unitId,
                                                   const game::BattleMsgData* battleMsgData,
                                                   const game::CMidUnitGroup* targetGroup,
                                                   const game::TargetsList* targets,
-                                                  game::CMidgardID* targetUnitId);
+                                                  game::CMidgardID* value);
 
 bool __stdcall findDamageAttackTargetWithNonAllReachHooked(const game::IMidgardObjectMap* objectMap,
                                                            const game::IAttack* attack,
@@ -180,7 +180,7 @@ bool __stdcall findDamageAttackTargetWithNonAllReachHooked(const game::IMidgardO
                                                            const game::CMidUnitGroup* targetGroup,
                                                            const game::TargetsList* targets,
                                                            const game::BattleMsgData* battleMsgData,
-                                                           game::CMidgardID* targetUnitId);
+                                                           game::CMidgardID* value);
 
 bool __stdcall isAttackBetterThanItemUsageHooked(const game::IItem* item,
                                                  const game::IUsSoldier* soldier,
