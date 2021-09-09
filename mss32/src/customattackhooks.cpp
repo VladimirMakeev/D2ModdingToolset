@@ -1087,7 +1087,7 @@ bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap*
                                                   const game::BattleMsgData* battleMsgData,
                                                   const game::CMidUnitGroup* targetGroup,
                                                   const game::TargetsList* targets,
-                                                  game::CMidgardID* targetUnitId)
+                                                  game::CMidgardID* value)
 {
     using namespace game;
 
@@ -1133,10 +1133,10 @@ bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap*
     }
 
     if (primaryTarget) {
-        *targetUnitId = primaryTarget->unitId;
+        *value = primaryTarget->unitId;
         return true;
     } else if (secondaryTarget) {
-        *targetUnitId = secondaryTarget->unitId;
+        *value = secondaryTarget->unitId;
         return true;
     }
 
