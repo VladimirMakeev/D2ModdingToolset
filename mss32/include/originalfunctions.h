@@ -43,7 +43,6 @@ namespace hooks {
 struct OriginalFunctions
 {
     game::ComputeDamage computeDamage;
-    game::ComputeUnitEffectiveHp computeUnitEffectiveHp;
     game::ComputePlayerDailyIncome computePlayerDailyIncome;
     game::CreateBatAttack createBatAttack;
     game::GetAttackClassWardFlagPosition getAttackClassWardFlagPosition;

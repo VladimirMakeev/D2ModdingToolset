@@ -220,6 +220,20 @@ using ComputeDamage = int(__stdcall*)(const IMidgardObjectMap* objectMap,
                                       int* criticalHitDamage);
 
 /**
+ * Computes unit armor with respect to buffs / debuffs, defend / fortification bonus and shattered
+ * armor.
+ * @param[out] armor the resulting value.
+ * @param[in] objectMap map to search for units.
+ * @param[in] battleMsgData battle information to check for buffs and debuffs.
+ * @param[in] unitId id of a unit to compute armor for.
+ * @returns pointer to the resulting value.
+ */
+using ComputeArmor = int*(__stdcall*)(int* armor,
+                                      const IMidgardObjectMap* objectMap,
+                                      const BattleMsgData* battleMsgData,
+                                      const CMidgardID* unitId);
+
+/**
  * Used for pathfinding.
  * Causes memory corruption (that leads to crash) on 144x144 maps if the position is out of map
  * bounds.
@@ -565,6 +579,7 @@ struct Functions
     GetInterfaceText getInterfaceText;
     ComputePlayerDailyIncome computePlayerDailyIncome;
     ComputeDamage computeDamage;
+    ComputeArmor computeArmor;
     MarkMapPosition markMapPosition;
     GetUnitLevelByImplId getUnitLevelByImplId;
     GetAttackPower getAttackPower;

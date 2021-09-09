@@ -171,7 +171,8 @@ static Hooks getGameHooks()
         {fn.getAttackPower, getAttackPowerHooked},
         // Fix game crash when AI controlled unit with transform self attack
         // uses alternative attack with 'adjacent' attack range
-        {fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked, (void**)&orig.computeUnitEffectiveHp},
+        // Fix incorrect calculation of effective HP used by AI for target prioritization
+        {fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked},
         // Fix bestow wards becoming permanent on warded unit transformation
         // Support custom attack damage ratios
         {battle.beforeAttack, beforeAttackHooked},
@@ -1500,11 +1501,20 @@ int __stdcall computeUnitEffectiveHpHooked(const game::IMidgardObjectMap* object
                                            const game::CMidUnit* unit,
                                            const game::BattleMsgData* battleMsgData)
 {
-    if (!unit) {
-        return 0;
-    }
+    using namespace game;
 
-    return getOriginalFunctions().computeUnitEffectiveHp(objectMap, unit, battleMsgData);
+    const auto& fn = gameFunctions();
+
+    if (!unit || unit->currentHp < 0)
+        return 0;
+
+    int armor;
+    fn.computeArmor(&armor, objectMap, battleMsgData, &unit->unitId);
+    if (armor > 99)
+        return std::numeric_limits<int>::max();
+
+    double factor = 1 - (double)armor / 100;
+    return lround((double)unit->currentHp / factor);
 }
 
 void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImplId,
