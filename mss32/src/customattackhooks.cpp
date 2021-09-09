@@ -1149,7 +1149,7 @@ bool __stdcall findDamageAttackTargetWithNonAllReachHooked(const game::IMidgardO
                                                            const game::CMidUnitGroup* targetGroup,
                                                            const game::TargetsList* targets,
                                                            const game::BattleMsgData* battleMsgData,
-                                                           game::CMidgardID* targetUnitId)
+                                                           game::CMidgardID* value)
 {
     using namespace game;
 
@@ -1158,15 +1158,14 @@ bool __stdcall findDamageAttackTargetWithNonAllReachHooked(const game::IMidgardO
     auto attackSource = attack->vftable->getAttackSource(attack);
     auto attackClass = attack->vftable->getAttackClass(attack);
     if (isMeleeAttack(attack)) {
-        auto id = battle.findDamageAttackTargetWithAdjacentReach(targetUnitId, objectMap,
-                                                                 targetGroup, targets,
-                                                                 battleMsgData, attackSource,
-                                                                 attackClass);
+        auto id = battle.findDamageAttackTargetWithAdjacentReach(value, objectMap, targetGroup,
+                                                                 targets, battleMsgData,
+                                                                 attackSource, attackClass);
         return *id != emptyId;
     } else {
         return battle.findDamageAttackTargetWithAnyReach(objectMap, targetGroup, targets, damage,
                                                          battleMsgData, attackClass, attackSource,
-                                                         0, targetUnitId);
+                                                         0, value);
     }
 }
 
