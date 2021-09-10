@@ -92,9 +92,25 @@ struct Api
 
     /**
      * Searches for scroll bar ui element with specific name, returns nullptr if not found.
-     * CScrollBarInterf used only in Scenario Editor.
+     * This function exists only in Scenario Editor.
      */
     FindUiElement<CScrollBarInterf> findScrollBar;
+
+    /**
+     * Shows hidden ui element with specified name.
+     * @returns false if ui element was not found or could not be shown
+     */
+    using ShowControl = bool(__stdcall*)(CDialogInterf* dialog,
+                                         const char* dialogName,
+                                         const char* controlName);
+    ShowControl showControl;
+
+    /**
+     * Hides ui element with specified name.
+     * @returns false in case ui element could not be hidden.
+     */
+    using HideControl = bool(__thiscall*)(CDialogInterf* thisptr, const char* controlName);
+    HideControl hideControl;
 };
 
 Api& get();

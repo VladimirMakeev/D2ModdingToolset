@@ -37,6 +37,8 @@ static std::array<Api, 4> functions = {{
         (Api::FindUiElement<CSpinButtonInterf>)0x50baff,
         (Api::FindUiElement<CEditBoxInterf>)0x50babf,
         (Api::FindUiElement<CScrollBarInterf>)nullptr,
+        (Api::ShowControl)0x5c9d95,
+        (Api::HideControl)0x50c291,
     },
     // Russobit
     Api{
@@ -50,6 +52,8 @@ static std::array<Api, 4> functions = {{
         (Api::FindUiElement<CSpinButtonInterf>)0x50baff,
         (Api::FindUiElement<CEditBoxInterf>)0x50babf,
         (Api::FindUiElement<CScrollBarInterf>)nullptr,
+        (Api::ShowControl)0x5c9d95,
+        (Api::HideControl)0x50c291,
     },
     // Gog
     Api{
@@ -63,6 +67,8 @@ static std::array<Api, 4> functions = {{
         (Api::FindUiElement<CSpinButtonInterf>)0x50b003,
         (Api::FindUiElement<CEditBoxInterf>)0x50afc3,
         (Api::FindUiElement<CScrollBarInterf>)nullptr,
+        (Api::ShowControl)0x5c8d63,
+        (Api::HideControl)0x50b795,
     },
     // Scenario Editor
     Api{
@@ -76,6 +82,8 @@ static std::array<Api, 4> functions = {{
         (Api::FindUiElement<CSpinButtonInterf>)0x4a3561,
         (Api::FindUiElement<CEditBoxInterf>)0x4a3511,
         (Api::FindUiElement<CScrollBarInterf>)0x4a3551,
+        (Api::ShowControl)0x4d19c7,
+        (Api::HideControl)0x4a3da0,
     },
 }};
 // clang-format on
