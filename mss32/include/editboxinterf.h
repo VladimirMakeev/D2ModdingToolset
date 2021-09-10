@@ -104,6 +104,13 @@ struct Api
 
     using SetString = void(__thiscall*)(CEditBoxInterf* thisptr, const char* string);
     SetString setString;
+
+    using Update = void(__thiscall*)(CEditBoxInterf* thisptr);
+    Update update;
+
+    /** Meaning and name are assumed*/
+    using UpdateFocus = void(__thiscall*)(CEditBoxFocus* thisptr);
+    UpdateFocus updateFocus;
 };
 
 Api& get();
