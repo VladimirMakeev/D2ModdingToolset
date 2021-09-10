@@ -537,6 +537,8 @@ using GetItemAttack = IAttack*(__stdcall*)(const IMidgardObjectMap* objectMap,
                                            const CMidgardID* unitId,
                                            int itemNumber);
 
+using IsUnitUseAdditionalAnimation = bool(__stdcall*)(const CMidgardID* unitId);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -630,6 +632,7 @@ struct Functions
     IsSupportAttackClass isSupportAttackClass;
     GetUnitAttacks getUnitAttacks;
     GetItemAttack getItemAttack;
+    IsUnitUseAdditionalAnimation isUnitUseAdditionalAnimation;
 };
 
 /** Global variables used in game. */

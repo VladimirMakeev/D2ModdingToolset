@@ -220,6 +220,8 @@ void __stdcall getUnitAttacksHooked(const game::IMidgardObjectMap* objectMap,
                                     game::AttackTypePairVector* value,
                                     bool checkAltAttack);
 
+bool __stdcall isUnitUseAdditionalAnimationHooked(const game::CMidgardID* unitId);
+
 } // namespace hooks
 
 #endif // HOOKS_H

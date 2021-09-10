@@ -464,6 +464,10 @@ Hooks getHooks()
                                 createEventConditionFromCategoryHooked,
                                 (void**)&orig.createEventConditionFromCategory});
 
+    // Allow every leader use additional animations on strategic map
+    hooks.emplace_back(
+        HookInfo{fn.isUnitUseAdditionalAnimation, isUnitUseAdditionalAnimationHooked});
+
     return hooks;
 }
 
@@ -1602,6 +1606,11 @@ void __stdcall getUnitAttacksHooked(const game::IMidgardObjectMap* objectMap,
         AttackTypePair pair{item2Attack, AttackType::Item};
         vectorApi.pushBack(value, &pair);
     }
+}
+
+bool __stdcall isUnitUseAdditionalAnimationHooked(const game::CMidgardID*)
+{
+    return true;
 }
 
 } // namespace hooks
