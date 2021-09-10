@@ -31,6 +31,7 @@ EditorFunctions editorFunctions{
     (GetSubRaceByRace)0x50b1a6,
     (IsRaceCategoryPlayable)0x419193,
     (ChangeCapitalTerrain)0x50afb4,
+    (GetObjectNamePos)0x45797c,
 };
 // clang-format on
 

@@ -30,6 +30,7 @@ struct LSubRaceCategory;
 struct TRaceType;
 struct CCapital;
 struct CVisitorAddPlayer;
+struct String;
 
 /**
  * Returns player id depending on RAD_CASTER radio button selection in DLG_EFFECT_CASTMAP dialog.
@@ -59,6 +60,14 @@ using ChangeCapitalTerrain = bool(__stdcall*)(const TRaceType* raceType,
                                               IMidgardObjectMap* objectMap,
                                               CVisitorAddPlayer* visitor);
 
+/**
+ * Returns object name and position description string by id.
+ * Used to describe objects used by event effects.
+ */
+using GetObjectNamePos = String*(__stdcall*)(String* description,
+                                             const IMidgardObjectMap* objectMap,
+                                             const CMidgardID* objectId);
+
 /** Scenario Editor functions that can be hooked. */
 struct EditorFunctions
 {
@@ -70,6 +79,7 @@ struct EditorFunctions
     GetSubRaceByRace getSubRaceByRace;
     IsRaceCategoryPlayable isRaceCategoryPlayable;
     ChangeCapitalTerrain changeCapitalTerrain;
+    GetObjectNamePos getObjectNamePos;
 };
 
 extern EditorFunctions editorFunctions;
