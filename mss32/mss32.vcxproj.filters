@@ -726,6 +726,9 @@
     <ClCompile Include="src\effectresult.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\scenarioview.cpp">
+      <Filter>Исходные файлы\bindings</Filter>
+    </ClCompile>
     <ClCompile Include="src\bindings\point.cpp">
       <Filter>Исходные файлы\bindings</Filter>
     </ClCompile>
@@ -1854,6 +1857,9 @@
     </ClInclude>
     <ClInclude Include="include\midlandmark.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\scenarioview.h">
+      <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\locationview.h">
       <Filter>Файлы заголовков\bindings</Filter>

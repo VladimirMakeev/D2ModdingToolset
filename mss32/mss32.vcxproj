@@ -172,6 +172,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\bindings\idview.cpp" />
     <ClCompile Include="src\bindings\locationview.cpp" />
     <ClCompile Include="src\bindings\point.cpp" />
+    <ClCompile Include="src\bindings\scenarioview.cpp" />
     <ClCompile Include="src\bindings\unitimplview.cpp" />
     <ClCompile Include="src\bindings\unitslotview.cpp" />
     <ClCompile Include="src\bindings\unitview.cpp" />
@@ -411,6 +412,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\bindings\idview.h" />
     <ClInclude Include="include\bindings\locationview.h" />
     <ClInclude Include="include\bindings\point.h" />
+    <ClInclude Include="include\bindings\scenarioview.h" />
     <ClInclude Include="include\bindings\unitimplview.h" />
     <ClInclude Include="include\bindings\unitslotview.h" />
     <ClInclude Include="include\bindings\unitview.h" />
