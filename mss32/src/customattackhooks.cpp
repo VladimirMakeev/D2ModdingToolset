@@ -794,31 +794,289 @@ bool __stdcall isUnitSuitableForAiNobleDuelHooked(const game::IMidgardObjectMap*
     return false;
 }
 
+bool __stdcall findDamageAndShatterAttackTargetWithMeleeReach(
+    const game::IMidgardObjectMap* objectMap,
+    const game::CMidgardID* unitId,
+    const game::IAttack* attack,
+    const game::IAttack* damageAttack,
+    int attackDamage,
+    const game::CMidUnitGroup* targetGroup,
+    const game::TargetsList* targets,
+    const game::BattleMsgData* battleMsgData,
+    game::CMidgardID* value)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& battle = BattleMsgDataApi::get();
+    const auto& listApi = TargetsListApi::get();
+    const auto& groupApi = CMidUnitGroupApi::get();
+    const auto& immunities = ImmuneCategories::get();
+
+    int primaryEffectiveHp = std::numeric_limits<int>::max();
+    int secondaryEffectiveHp = std::numeric_limits<int>::max();
+    CMidUnit* primaryTarget = nullptr;
+    CMidUnit* secondaryTarget = nullptr;
+    TargetsListIterator it, end;
+    for (listApi.begin(targets, &it), listApi.end(targets, &end); !listApi.equals(&it, &end);
+         listApi.preinc(&it)) {
+        int targetPosition = *listApi.dereference(&it);
+        auto targetUnitId = *groupApi.getUnitIdByPosition(targetGroup, targetPosition);
+
+        bool isSecondary = battle.getUnitStatus(battleMsgData, &targetUnitId, BattleStatus::Summon);
+        if (primaryTarget && isSecondary)
+            continue;
+
+        auto targetUnit = static_cast<CMidUnit*>(
+            objectMap->vftable->findScenarioObjectById(objectMap, &targetUnitId));
+
+        auto targetSoldier = fn.castUnitImplToSoldier(targetUnit->unitImpl);
+
+        int targetArmorShattered;
+        fn.computeArmor(&targetArmorShattered, objectMap, battleMsgData, &targetUnitId);
+        targetArmorShattered -= computeShatterDamage(&targetUnitId, targetSoldier, battleMsgData,
+                                                     attack);
+
+        // Assume effective hp as if target's armor is already shattered - thus adding shatter
+        // damage to priority evaluation.
+        int targetEffectiveHp = computeUnitEffectiveHp(targetUnit, targetArmorShattered);
+        if (!isGreaterPickRandomIfEqual(primaryEffectiveHp, targetEffectiveHp))
+            continue;
+        if (isSecondary && !isGreaterPickRandomIfEqual(secondaryEffectiveHp, targetEffectiveHp))
+            continue;
+
+        auto attackSource = damageAttack->vftable->getAttackSource(damageAttack);
+        if (targetSoldier->vftable->getImmuneByAttackSource(targetSoldier, attackSource)->id
+            == immunities.always->id)
+            continue;
+
+        auto attackClass = damageAttack->vftable->getAttackClass(damageAttack);
+        if (targetSoldier->vftable->getImmuneByAttackClass(targetSoldier, attackClass)->id
+            == immunities.always->id)
+            continue;
+
+        if (isSecondary) {
+            secondaryEffectiveHp = targetEffectiveHp;
+            secondaryTarget = targetUnit;
+        } else {
+            primaryEffectiveHp = targetEffectiveHp;
+            primaryTarget = targetUnit;
+        }
+    }
+
+    if (primaryTarget) {
+        *value = primaryTarget->unitId;
+        return true;
+    } else if (secondaryTarget) {
+        *value = secondaryTarget->unitId;
+        return true;
+    }
+
+    return false;
+}
+
+bool __stdcall findDamageAndShatterAttackTargetWithNonMeleeReach(
+    const game::IMidgardObjectMap* objectMap,
+    const game::CMidgardID* unitId,
+    const game::IAttack* attack,
+    const game::IAttack* damageAttack,
+    int attackDamage,
+    const game::CMidUnitGroup* targetGroup,
+    const game::TargetsList* targets,
+    const game::BattleMsgData* battleMsgData,
+    game::CMidgardID* value)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& battle = BattleMsgDataApi::get();
+    const auto& listApi = TargetsListApi::get();
+    const auto& groupApi = CMidUnitGroupApi::get();
+    const auto& immunities = ImmuneCategories::get();
+
+    int resultPriority = 0;
+    CMidUnit* result = nullptr;
+    TargetsListIterator it, end;
+    for (listApi.begin(targets, &it), listApi.end(targets, &end); !listApi.equals(&it, &end);
+         listApi.preinc(&it)) {
+        int targetPosition = *listApi.dereference(&it);
+        auto targetUnitId = *groupApi.getUnitIdByPosition(targetGroup, targetPosition);
+
+        auto targetUnit = static_cast<CMidUnit*>(
+            objectMap->vftable->findScenarioObjectById(objectMap, &targetUnitId));
+
+        auto targetSoldier = fn.castUnitImplToSoldier(targetUnit->unitImpl);
+
+        // Include shatter damage into target priority evaluation.
+        int targetPriority = fn.computeTargetUnitAiPriority(objectMap, &targetUnitId, battleMsgData,
+                                                            attackDamage);
+        int shatterDamage = computeShatterDamage(&targetUnitId, targetSoldier, battleMsgData,
+                                                 attack);
+        targetPriority += shatterDamage * 10;
+
+        auto attackSource = damageAttack->vftable->getAttackSource(damageAttack);
+        auto attackSourceImmunity = targetSoldier->vftable->getImmuneByAttackSource(targetSoldier,
+                                                                                    attackSource);
+        if (attackSourceImmunity->id == immunities.always->id)
+            continue;
+
+        auto attackClass = damageAttack->vftable->getAttackClass(damageAttack);
+        auto attackClassImmunity = targetSoldier->vftable->getImmuneByAttackClass(targetSoldier,
+                                                                                  attackClass);
+        if (attackClassImmunity->id == immunities.always->id)
+            continue;
+
+        bool hasSourceWard = attackSourceImmunity->id == immunities.once->id
+                             && !battle.isUnitAttackSourceWardRemoved((BattleMsgData*)battleMsgData,
+                                                                      unitId, attackSource);
+        bool hasClassWard = attackClassImmunity->id == immunities.once->id
+                            && !battle.isUnitAttackClassWardRemoved((BattleMsgData*)battleMsgData,
+                                                                    unitId, attackClass);
+        if (hasSourceWard || hasClassWard) {
+            targetPriority = lround(0.7 * targetPriority);
+        }
+
+        if (isGreaterPickRandomIfEqual(targetPriority, resultPriority)) {
+            resultPriority = targetPriority;
+            result = targetUnit;
+        }
+    }
+
+    if (result) {
+        *value = result->unitId;
+        return true;
+    }
+
+    return false;
+}
+
+bool __stdcall findShatterOnlyAttackTarget(const game::IMidgardObjectMap* objectMap,
+                                           const game::CMidgardID* unitId,
+                                           const game::IAttack* attack,
+                                           const game::CMidUnitGroup* targetGroup,
+                                           const game::TargetsList* targets,
+                                           const game::BattleMsgData* battleMsgData,
+                                           game::CMidgardID* value)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& battle = BattleMsgDataApi::get();
+    const auto& listApi = TargetsListApi::get();
+    const auto& groupApi = CMidUnitGroupApi::get();
+
+    int resultPriority = 0;
+    CMidUnit* result = nullptr;
+    TargetsListIterator it, end;
+    for (listApi.begin(targets, &it), listApi.end(targets, &end); !listApi.equals(&it, &end);
+         listApi.preinc(&it)) {
+        int targetPosition = *listApi.dereference(&it);
+
+        auto targetUnitId = *groupApi.getUnitIdByPosition(targetGroup, targetPosition);
+        if (battle.getUnitStatus(battleMsgData, &targetUnitId, BattleStatus::Retreat))
+            continue;
+
+        auto targetUnit = static_cast<CMidUnit*>(
+            objectMap->vftable->findScenarioObjectById(objectMap, &targetUnitId));
+
+        auto targetSoldier = fn.castUnitImplToSoldier(targetUnit->unitImpl);
+
+        int shatterDamage = computeShatterDamage(&targetUnitId, targetSoldier, battleMsgData,
+                                                 attack);
+        if (shatterDamage == 0)
+            continue;
+
+        // Include shatter damage into target priority evaluation.
+        int targetPriority = fn.computeTargetUnitAiPriority(objectMap, &targetUnitId, battleMsgData,
+                                                            0);
+        targetPriority += shatterDamage * 10;
+
+        if (isGreaterPickRandomIfEqual(targetPriority, resultPriority)) {
+            resultPriority = targetPriority;
+            result = targetUnit;
+        }
+    }
+
+    if (result) {
+        *value = result->unitId;
+        return true;
+    }
+
+    return false;
+}
+
+bool __stdcall findShatterAttackTarget(const game::IMidgardObjectMap* objectMap,
+                                       const game::CMidgardID* unitId,
+                                       const game::IAttack* attack,
+                                       const game::CMidUnitGroup* targetGroup,
+                                       const game::TargetsList* targets,
+                                       const game::BattleMsgData* battleMsgData,
+                                       game::CMidgardID* value)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& battle = BattleMsgDataApi::get();
+    const auto& attackReaches = AttackReachCategories::get();
+
+    auto unit = static_cast<CMidUnit*>(
+        objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+
+    auto attackDamage = fn.computeAttackDamageCheckTransformed(soldier, &unit->unitImpl->unitId,
+                                                               battleMsgData, unitId);
+    if (attackDamage > 0) {
+        IAttack* primaryAttack = fn.getAttackById(objectMap, unitId, 1, true);
+        LAttackReach* attackReach = attack->vftable->getAttackReach(primaryAttack);
+        if (attackReach->id == attackReaches.all->id) {
+            return battle.findAttackTargetWithAllReach(value, targetGroup, targets);
+        } else if (isMeleeAttack(attack)) {
+            return findDamageAndShatterAttackTargetWithMeleeReach(objectMap, unitId, attack,
+                                                                  primaryAttack, attackDamage,
+                                                                  targetGroup, targets,
+                                                                  battleMsgData, value);
+        } else {
+            return findDamageAndShatterAttackTargetWithNonMeleeReach(objectMap, unitId, attack,
+                                                                     primaryAttack, attackDamage,
+                                                                     targetGroup, targets,
+                                                                     battleMsgData, value);
+        }
+    }
+
+    return findShatterOnlyAttackTarget(objectMap, unitId, attack, targetGroup, targets,
+                                       battleMsgData, value);
+}
+
 bool __stdcall findAttackTargetHooked(const game::IMidgardObjectMap* objectMap,
                                       const game::CMidgardID* unitId,
                                       const game::IAttack* attack,
                                       const game::CMidUnitGroup* targetGroup,
                                       const game::TargetsList* targets,
                                       const game::BattleMsgData* battleMsgData,
-                                      game::CMidgardID* targetUnitId)
+                                      game::CMidgardID* value)
 {
     using namespace game;
 
+    const auto& battle = BattleMsgDataApi::get();
+    const auto& attackCategories = AttackClassCategories::get();
+
+    auto attackClass = attack->vftable->getAttackClass(attack);
+    if (attackClass->id == attackCategories.shatter->id) {
+        if (findShatterAttackTarget(objectMap, unitId, attack, targetGroup, targets, battleMsgData,
+                                    value))
+            return true;
+    }
+
     if (getOriginalFunctions().findAttackTarget(objectMap, unitId, attack, targetGroup, targets,
-                                                battleMsgData, targetUnitId)) {
+                                                battleMsgData, value)) {
         return true;
     }
 
-    const auto& battle = BattleMsgDataApi::get();
-
-    auto attackClass = attack->vftable->getAttackClass(attack);
-    const auto& attackCategories = AttackClassCategories::get();
     if (attackClass->id == attackCategories.lowerDamage->id) {
-        return battle.findBoostAttackTarget(objectMap, battleMsgData, targetGroup, targets,
-                                            targetUnitId);
+        return battle.findBoostAttackTarget(objectMap, battleMsgData, targetGroup, targets, value);
     } else if (attackClass->id == attackCategories.lowerInitiative->id) {
-        return battle.findFearAttackTarget(objectMap, battleMsgData, targetGroup, targets,
-                                           targetUnitId);
+        return battle.findFearAttackTarget(objectMap, battleMsgData, targetGroup, targets, value);
     }
 
     return false;
@@ -829,7 +1087,7 @@ bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap*
                                                   const game::BattleMsgData* battleMsgData,
                                                   const game::CMidUnitGroup* targetGroup,
                                                   const game::TargetsList* targets,
-                                                  game::CMidgardID* targetUnitId)
+                                                  game::CMidgardID* value)
 {
     using namespace game;
 
@@ -846,13 +1104,13 @@ bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap*
     CMidUnit* primaryTarget = nullptr;
     CMidUnit* secondaryTarget = nullptr;
     TargetsListIterator it, end;
-    listApi.end(targets, &end);
-    for (listApi.begin(targets, &it); !listApi.equals(&it, &end); listApi.preinc(&it)) {
+    for (listApi.begin(targets, &it), listApi.end(targets, &end); !listApi.equals(&it, &end);
+         listApi.preinc(&it)) {
         int targetPosition = *listApi.dereference(&it);
 
-        auto targetId = getTargetUnitId(targetPosition, targetGroup, enemyGroup);
+        auto targetUnitId = getTargetUnitId(targetPosition, targetGroup, enemyGroup);
         auto targetUnit = static_cast<CMidUnit*>(
-            objectMap->vftable->findScenarioObjectById(objectMap, &targetId));
+            objectMap->vftable->findScenarioObjectById(objectMap, &targetUnitId));
 
         auto soldier = fn.castUnitImplToSoldier(getGlobalUnitImpl(targetUnit));
 
@@ -874,13 +1132,15 @@ bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap*
         }
     }
 
-    if (primaryTarget == nullptr)
-        primaryTarget = secondaryTarget;
-    if (primaryTarget == nullptr)
-        return false;
+    if (primaryTarget) {
+        *value = primaryTarget->unitId;
+        return true;
+    } else if (secondaryTarget) {
+        *value = secondaryTarget->unitId;
+        return true;
+    }
 
-    *targetUnitId = primaryTarget->unitId;
-    return true;
+    return false;
 }
 
 bool __stdcall findDamageAttackTargetWithNonAllReachHooked(const game::IMidgardObjectMap* objectMap,
@@ -889,7 +1149,7 @@ bool __stdcall findDamageAttackTargetWithNonAllReachHooked(const game::IMidgardO
                                                            const game::CMidUnitGroup* targetGroup,
                                                            const game::TargetsList* targets,
                                                            const game::BattleMsgData* battleMsgData,
-                                                           game::CMidgardID* targetUnitId)
+                                                           game::CMidgardID* value)
 {
     using namespace game;
 
@@ -898,15 +1158,14 @@ bool __stdcall findDamageAttackTargetWithNonAllReachHooked(const game::IMidgardO
     auto attackSource = attack->vftable->getAttackSource(attack);
     auto attackClass = attack->vftable->getAttackClass(attack);
     if (isMeleeAttack(attack)) {
-        auto id = battle.findDamageAttackTargetWithAdjacentReach(targetUnitId, objectMap,
-                                                                 targetGroup, targets,
-                                                                 battleMsgData, attackSource,
-                                                                 attackClass);
+        auto id = battle.findDamageAttackTargetWithAdjacentReach(value, objectMap, targetGroup,
+                                                                 targets, battleMsgData,
+                                                                 attackSource, attackClass);
         return *id != emptyId;
     } else {
         return battle.findDamageAttackTargetWithAnyReach(objectMap, targetGroup, targets, damage,
                                                          battleMsgData, attackClass, attackSource,
-                                                         0, targetUnitId);
+                                                         0, value);
     }
 }
 
