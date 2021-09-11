@@ -30,29 +30,49 @@ static std::array<Api, 4> functions = {{
         (Api::CreateIterator)0,
         (Api::CreateIterator)0,
         (Api::CreateIterator)0x419d24,
-        (Api::CreateIterator)0x419dca
+        (Api::CreateIterator)0x419dca,
+        (Api::CreateIterator)0,
+        (Api::CreateIterator)0,
+        (Api::CreateIterator)0,
+        (Api::CreateIterator)0,
     },
     // Russobit
     Api{
         (Api::CreateIterator)0,
         (Api::CreateIterator)0,
         (Api::CreateIterator)0x419d24,
-        (Api::CreateIterator)0x419dca
+        (Api::CreateIterator)0x419dca,
+        (Api::CreateIterator)0,
+        (Api::CreateIterator)0,
+        (Api::CreateIterator)0,
+        (Api::CreateIterator)0,
     },
     // Gog
     Api{
         (Api::CreateIterator)0,
         (Api::CreateIterator)0,
         (Api::CreateIterator)0x41983f,
-        (Api::CreateIterator)0x4198e5
+        (Api::CreateIterator)0x4198e5,
+        (Api::CreateIterator)0,
+        (Api::CreateIterator)0,
+        (Api::CreateIterator)0,
+        (Api::CreateIterator)0,
     },
     // Scenario Editor
     Api{
         (Api::CreateIterator)0x41a62a,
         (Api::CreateIterator)0x41a6d0,
-        (Api::CreateIterator)0,
-        (Api::CreateIterator)0
-    }
+        (Api::CreateIterator)0x41de25,
+        (Api::CreateIterator)0x41decb,
+        (Api::CreateIterator)0x4051fc,
+        (Api::CreateIterator)0x4052a2,
+        (Api::CreateIterator)0x41ff4a,
+        (Api::CreateIterator)0x41fff0,
+        (Api::CreateIterator)0x41ef16,
+        (Api::CreateIterator)0x41efbc,
+        (Api::CreateIterator)0x405341,
+        (Api::CreateIterator)0x4053e7,
+    },
 }};
 // clang-format on
 

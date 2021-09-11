@@ -45,6 +45,18 @@ struct Api
     // Traverse CFortification objects
     CreateIterator createFortificationsIterator;
     CreateIterator createFortificationsEndIterator;
+    // Traverse CMidStack objects
+    CreateIterator createStacksIterator;
+    CreateIterator createStacksEndIterator;
+    // Traverse CMidLocation objects
+    CreateIterator createLocationsIterator;
+    CreateIterator createLocationsEndIterator;
+    // Traverse CMidRuin objects
+    CreateIterator createRuinsIterator;
+    CreateIterator createRuinsEndIterator;
+    // Traverse CMidBag objects
+    CreateIterator createBagsIterator;
+    CreateIterator createBagsEndIterator;
 };
 
 Api& get();
