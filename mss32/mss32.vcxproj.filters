@@ -726,6 +726,9 @@
     <ClCompile Include="src\effectresult.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\point.cpp">
+      <Filter>Исходные файлы\bindings</Filter>
+    </ClCompile>
     <ClCompile Include="src\bindings\idview.cpp">
       <Filter>Исходные файлы\bindings</Filter>
     </ClCompile>
@@ -1850,6 +1853,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\idview.h">
+      <Filter>Файлы заголовков\bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\point.h">
       <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
   </ItemGroup>
