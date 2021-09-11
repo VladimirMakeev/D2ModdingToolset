@@ -55,6 +55,14 @@ int getRandomNumber(int min, int max);
 
 std::string readFile(const std::filesystem::path& file);
 
+/**
+ * Shows file open dialog in specified directory and reads selected file.
+ * @returns false in case of error or when selection is canceled by user.
+ */
+bool readUserSelectedFile(std::string& contents,
+                          const char* filter,
+                          const char* directory = nullptr);
+
 /** Shows native in-game message box with specified text. */
 void showMessageBox(const std::string& message,
                     game::CMidMsgBoxButtonHandler* buttonHandler = nullptr,

@@ -25,7 +25,6 @@
 #include "midgardid.h"
 #include "midgardmsgbox.h"
 #include "midmsgboxbuttonhandlerstd.h"
-#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <fstream>
 #include <random>
@@ -130,6 +129,34 @@ std::string readFile(const std::filesystem::path& file)
 
     stream.read(&contents[0], size);
     return contents;
+}
+
+bool readUserSelectedFile(std::string& contents, const char* filter, const char* directory)
+{
+    OPENFILENAME ofn;
+    ZeroMemory(&ofn, sizeof(ofn));
+
+    char file[MAX_PATH];
+    ZeroMemory(file, sizeof(file));
+
+    ofn.lStructSize = sizeof(ofn);
+    ofn.lpstrFile = file;
+    ofn.lpstrFile[0] = 0;
+    ofn.nMaxFile = sizeof(file);
+    ofn.lpstrFilter = filter;
+    ofn.nFilterIndex = 1;
+    ofn.lpstrInitialDir = directory;
+    ofn.lpstrFileTitle = NULL;
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+    ofn.hwndOwner = FindWindowEx(nullptr, nullptr, "MQ_UIManager", nullptr);
+
+    if (!GetOpenFileName(&ofn)) {
+        return false;
+    }
+
+    contents = readFile(std::filesystem::path{file});
+    return true;
 }
 
 void showMessageBox(const std::string& message,
