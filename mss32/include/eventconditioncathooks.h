@@ -39,6 +39,7 @@ struct CustomEventConditions
     CustomEventCondition gameMode{};
     CustomEventCondition playerType{};
     CustomEventCondition variableCmp{};
+    CustomEventCondition script{};
 };
 
 CustomEventConditions& customEventConditions();

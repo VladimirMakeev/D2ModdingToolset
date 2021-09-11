@@ -32,6 +32,7 @@ static const char* ownResourceCategoryName{"L_OWN_RESOURCE"};
 static const char* gameModeCategoryName{"L_GAME_MODE"};
 static const char* playerTypeCategoryName{"L_PLAYER_TYPE"};
 static const char* variableCmpCategoryName{"L_VARIABLE_CMP"};
+static const char* scriptCategoryName{"L_SCRIPT"};
 
 CustomEventConditions& customEventConditions()
 {
@@ -97,6 +98,9 @@ static bool readCustomConditions(const std::filesystem::path& dbfFilePath)
         } else if (variableCmpCategoryName == categoryName) {
             readCustomCondition(record, customEventConditions().variableCmp);
             customConditions = true;
+        } else if (scriptCategoryName == categoryName) {
+            readCustomCondition(record, customEventConditions().script);
+            customConditions = true;
         }
     }
 
@@ -153,6 +157,8 @@ game::LEventCondCategoryTable* __fastcall eventCondCategoryTableCtorHooked(
                            playerTypeCategoryName, dbfFileName);
         table.readCategory(&customEventConditions().variableCmp.category, thisptr,
                            variableCmpCategoryName, dbfFileName);
+        table.readCategory(&customEventConditions().script.category, thisptr, scriptCategoryName,
+                           dbfFileName);
     }
 
     table.initDone(thisptr);

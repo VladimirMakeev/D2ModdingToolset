@@ -24,6 +24,7 @@
 #include "midcondgamemode.h"
 #include "midcondownresource.h"
 #include "midcondplayertype.h"
+#include "midcondscript.h"
 #include "midcondvarcmp.h"
 #include "originalfunctions.h"
 #include <fmt/format.h>
@@ -50,6 +51,10 @@ game::CMidEvCondition* __stdcall createEventConditionFromCategoryHooked(
 
     if (id == conditions.variableCmp.category.id) {
         return createMidCondVarCmp();
+    }
+
+    if (id == conditions.script.category.id) {
+        return createMidCondScript();
     }
 
     return getOriginalFunctions().createEventConditionFromCategory(category);
@@ -82,6 +87,11 @@ void __stdcall eventConditionGetInfoStringHooked(game::String* info,
         return;
     }
 
+    if (id == conditions.script.category.id) {
+        midCondScriptGetInfoString(info, objectMap, eventCondition);
+        return;
+    }
+
     getOriginalFunctions().eventConditionGetInfoString(info, objectMap, eventCondition);
 }
 
@@ -102,6 +112,8 @@ void __stdcall eventConditionGetDescriptionHooked(game::String* description,
         descriptionId = &conditions.playerType.description;
     } else if (id == conditions.variableCmp.category.id) {
         descriptionId = &conditions.variableCmp.description;
+    } else if (id == conditions.script.category.id) {
+        descriptionId = &conditions.script.description;
     }
 
     if (descriptionId) {
@@ -131,6 +143,8 @@ void __stdcall eventConditionGetBriefHooked(game::String* brief,
         briefId = &conditions.playerType.brief;
     } else if (id == conditions.variableCmp.category.id) {
         briefId = &conditions.variableCmp.brief;
+    } else if (id == conditions.script.category.id) {
+        briefId = &conditions.script.brief;
     }
 
     if (briefId) {

@@ -22,6 +22,7 @@
 #include "midcondgamemode.h"
 #include "midcondownresource.h"
 #include "midcondplayertype.h"
+#include "midcondscript.h"
 #include "midcondvarcmp.h"
 #include "originalfunctions.h"
 
@@ -50,6 +51,10 @@ game::editor::CCondInterf* __stdcall createCondInterfFromCategoryHooked(
 
     if (id == conditions.variableCmp.category.id) {
         return createCondVarCmpInterf(task, a2, eventId);
+    }
+
+    if (id == conditions.script.category.id) {
+        return createCondScriptInterf(task, a2, eventId);
     }
 
     return getOriginalFunctions().createCondInterfFromCategory(task, a2, eventId, category);

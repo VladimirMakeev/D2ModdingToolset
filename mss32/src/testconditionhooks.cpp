@@ -22,6 +22,7 @@
 #include "midcondgamemode.h"
 #include "midcondownresource.h"
 #include "midcondplayertype.h"
+#include "midcondscript.h"
 #include "midcondvarcmp.h"
 #include "originalfunctions.h"
 
@@ -48,6 +49,10 @@ game::ITestCondition* __stdcall createTestConditionHooked(game::CMidEvCondition*
 
     if (id == conditions.variableCmp.category.id) {
         return createTestVarCmp(eventCondition);
+    }
+
+    if (id == conditions.script.category.id) {
+        return createTestScript(eventCondition);
     }
 
     return getOriginalFunctions().createTestCondition(eventCondition, samePlayer, triggererStackId);
