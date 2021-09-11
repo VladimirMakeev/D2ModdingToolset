@@ -77,6 +77,9 @@ std::optional<sol::state> loadScriptFile(const std::filesystem::path& path,
                                          bool alwaysExists = false,
                                          bool bindApi = false);
 
+/** Returns lua state wrapper with optionally bound api. */
+sol::state createLuaState(bool bindApi = false);
+
 } // namespace hooks
 
 #endif // SCRIPTS_H

@@ -20,7 +20,11 @@
 #include "scripts.h"
 #include "categoryids.h"
 #include "dynupgradeview.h"
+#include "idview.h"
+#include "locationview.h"
 #include "log.h"
+#include "point.h"
+#include "scenarioview.h"
 #include "unitimplview.h"
 #include "unitslotview.h"
 #include "unitview.h"
@@ -64,6 +68,10 @@ static void doBindApi(sol::state& lua)
     bindings::UnitImplView::bind(lua);
     bindings::UnitSlotView::bind(lua);
     bindings::DynUpgradeView::bind(lua);
+    bindings::ScenarioView::bind(lua);
+    bindings::LocationView::bind(lua);
+    bindings::Point::bind(lua);
+    bindings::IdView::bind(lua);
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }
 
@@ -108,6 +116,19 @@ std::optional<sol::state> loadScriptFile(const std::filesystem::path& path,
     }
 
     return {std::move(lua)};
+}
+
+sol::state createLuaState(bool bindApi)
+{
+    sol::state lua;
+    lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::table,
+                       sol::lib::os);
+
+    if (bindApi) {
+        doBindApi(lua);
+    }
+
+    return std::move(lua);
 }
 
 } // namespace hooks
