@@ -1512,9 +1512,11 @@ void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
 
 void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)
 {
-    showErrorMessageBox(fmt::format("Caught exception '{:s}'.\n"
-                                    "The {:s} will probably crash now.",
-                                    thisptr->message, executableIsGame() ? "game" : "editor"));
+    if (thisptr && thisptr->message) {
+        showErrorMessageBox(fmt::format("Caught exception '{:s}'.\n"
+                                        "The {:s} will probably crash now.",
+                                        thisptr->message, executableIsGame() ? "game" : "editor"));
+    }
 
     getOriginalFunctions().throwException(thisptr, throwInfo);
 }
