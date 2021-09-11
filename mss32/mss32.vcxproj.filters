@@ -726,6 +726,9 @@
     <ClCompile Include="src\effectresult.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\idview.cpp">
+      <Filter>Исходные файлы\bindings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -1845,6 +1848,9 @@
     </ClInclude>
     <ClInclude Include="include\midlandmark.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\idview.h">
+      <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
