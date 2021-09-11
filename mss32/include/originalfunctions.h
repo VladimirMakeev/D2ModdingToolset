@@ -27,10 +27,13 @@
 #include "condinterf.h"
 #include "d2osexception.h"
 #include "ddcarryoveritems.h"
+#include "effectinterf.h"
+#include "effectresult.h"
 #include "enclayoutspell.h"
 #include "exchangeinterf.h"
 #include "game.h"
 #include "midevcondition.h"
+#include "mideveffect.h"
 #include "midevent.h"
 #include "midunit.h"
 #include "netmsg.h"
@@ -80,6 +83,14 @@ struct OriginalFunctions
     game::editor::CCondInterfApi::Api::CreateFromCategory createCondInterfFromCategory;
     game::ITestConditionApi::Api::Create createTestCondition;
     game::CMidEventApi::Api::CheckValid checkEventValid;
+
+    game::CMidEvEffectApi::Api::CreateFromCategory createEventEffectFromCategory;
+    game::CMidEvEffectApi::Api::GetInfoString eventEffectGetInfoString;
+    game::CMidEvEffectApi::Api::GetDescription eventEffectGetDescription;
+    game::CMidEvEffectApi::Api::GetDescription eventEffectGetBrief;
+    game::editor::CEffectInterfApi::Api::CreateFromCategory createEffectInterfFromCategory;
+
+    game::IEffectResultApi::Api::Create createEffectResult;
 };
 
 OriginalFunctions& getOriginalFunctions();

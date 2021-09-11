@@ -212,11 +212,14 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\editboxinterf.cpp" />
     <ClCompile Include="src\editor.cpp" />
     <ClCompile Include="src\effectinterf.cpp" />
+    <ClCompile Include="src\effectinterfhooks.cpp" />
     <ClCompile Include="src\effectresult.cpp" />
+    <ClCompile Include="src\effectresulthooks.cpp" />
     <ClCompile Include="src\enclayoutspell.cpp" />
     <ClCompile Include="src\eventconditioncat.cpp" />
     <ClCompile Include="src\eventconditioncathooks.cpp" />
     <ClCompile Include="src\eventeffectcat.cpp" />
+    <ClCompile Include="src\eventeffectcathooks.cpp" />
     <ClCompile Include="src\exchangeinterf.cpp" />
     <ClCompile Include="src\fortcategory.cpp" />
     <ClCompile Include="src\functor.cpp" />
@@ -261,6 +264,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\midevcondition.cpp" />
     <ClCompile Include="src\midevconditionhooks.cpp" />
     <ClCompile Include="src\mideveffect.cpp" />
+    <ClCompile Include="src\mideveffecthooks.cpp" />
     <ClCompile Include="src\midevent.cpp" />
     <ClCompile Include="src\mideventhooks.cpp" />
     <ClCompile Include="src\midgard.cpp" />
@@ -467,7 +471,9 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\editor.h" />
     <ClInclude Include="include\effectinterf.h" />
     <ClInclude Include="include\effectinterfhandler.h" />
+    <ClInclude Include="include\effectinterfhooks.h" />
     <ClInclude Include="include\effectresult.h" />
+    <ClInclude Include="include\effectresulthooks.h" />
     <ClInclude Include="include\enclayoutspell.h" />
     <ClInclude Include="include\encparam.h" />
     <ClInclude Include="include\encparambase.h" />
@@ -477,6 +483,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\eventconditions.h" />
     <ClInclude Include="include\eventeffect.h" />
     <ClInclude Include="include\eventeffectcat.h" />
+    <ClInclude Include="include\eventeffectcathooks.h" />
     <ClInclude Include="include\eventeffects.h" />
     <ClInclude Include="include\exchangeinterf.h" />
     <ClInclude Include="include\factoryimageanim.h" />
@@ -576,6 +583,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midevcondition.h" />
     <ClInclude Include="include\midevconditionhooks.h" />
     <ClInclude Include="include\mideveffect.h" />
+    <ClInclude Include="include\mideveffecthooks.h" />
     <ClInclude Include="include\midevent.h" />
     <ClInclude Include="include\mideventhooks.h" />
     <ClInclude Include="include\midgard.h" />

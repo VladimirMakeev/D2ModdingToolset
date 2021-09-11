@@ -58,8 +58,11 @@
 #include "dynamiccast.h"
 #include "dynupgrade.h"
 #include "editor.h"
+#include "effectinterfhooks.h"
+#include "effectresulthooks.h"
 #include "encparambase.h"
 #include "eventconditioncathooks.h"
+#include "eventeffectcathooks.h"
 #include "fortification.h"
 #include "functor.h"
 #include "globaldata.h"
@@ -76,6 +79,7 @@
 #include "menunewskirmishsingle.h"
 #include "middatacache.h"
 #include "midevconditionhooks.h"
+#include "mideveffecthooks.h"
 #include "mideventhooks.h"
 #include "midgardid.h"
 #include "midgardmsgbox.h"
@@ -243,6 +247,8 @@ static Hooks getGameHooks()
         {fn.getUnitAttacks, getUnitAttacksHooked},
         // Support custom event conditions
         {ITestConditionApi::get().create, createTestConditionHooked, (void**)&orig.createTestCondition},
+        // Support custom event effects
+        //{IEffectResultApi::get().create, createEffectResultHooked, (void**)&orig.createEffectResult},
     };
     // clang-format on
 
@@ -361,6 +367,11 @@ static Hooks getScenarioEditorHooks()
         {CMidEvConditionApi::get().getBrief, eventConditionGetBriefHooked, (void**)&orig.eventConditionGetBrief},
         {editor::CCondInterfApi::get().createFromCategory, createCondInterfFromCategoryHooked, (void**)&orig.createCondInterfFromCategory},
         {CMidEventApi::get().checkValid, checkEventValidHooked, (void**)&orig.checkEventValid},
+        // Support custom event effects
+        //{CMidEvEffectApi::get().getInfoString, eventEffectGetInfoStringHooked, (void**)&orig.eventEffectGetInfoString},
+        //{CMidEvEffectApi::get().getDescription, eventEffectGetDescriptionHooked, (void**)&orig.eventEffectGetDescription},
+        //{CMidEvEffectApi::get().getBrief, eventEffectGetBriefHooked, (void**)&orig.eventEffectGetBrief},
+        //{editor::CEffectInterfApi::get().createFromCategory, createEffectInterfFromCategoryHooked, (void**)&orig.createEffectInterfFromCategory},
     };
     // clang-format on
 
@@ -463,6 +474,14 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{CMidEvConditionApi::get().createFromCategory,
                                 createEventConditionFromCategoryHooked,
                                 (void**)&orig.createEventConditionFromCategory});
+
+    // Support custom event effects
+    // hooks.emplace_back(HookInfo{LEventEffectCategoryTableApi::get().constructor,
+    //                            eventEffectCategoryTableCtorHooked});
+
+    // hooks.emplace_back(HookInfo{CMidEvEffectApi::get().createFromCategory,
+    //                            createEventEffectFromCategoryHooked,
+    //                            (void**)&orig.createEventEffectFromCategory});
 
     // Allow every leader use additional animations on strategic map
     hooks.emplace_back(
