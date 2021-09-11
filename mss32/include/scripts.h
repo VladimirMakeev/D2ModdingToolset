@@ -29,16 +29,9 @@
 
 namespace hooks {
 
-/**
- * Returns script function with specified name to call from c++.
- * @tparam T expected script function signature.
- * @param[in] lua fully initialized and loaded lua state wrapper where to search.
- * @param[in] name function name in lua script.
- */
 template <typename T>
-static inline std::optional<T> getScriptFunction(const sol::state& lua, const char* name)
+static inline std::optional<T> getFunction(const sol::object object, const char* name)
 {
-    const sol::object object = lua[name];
     const sol::type objectType = object.get_type();
 
     if (objectType != sol::type::function) {
@@ -53,6 +46,30 @@ static inline std::optional<T> getScriptFunction(const sol::state& lua, const ch
     }
 
     return static_cast<T>(object.as<sol::function>());
+}
+
+/**
+ * Returns script function with specified name to call from c++.
+ * @tparam T expected script function signature.
+ * @param[in] lua fully initialized and loaded lua state wrapper where to search.
+ * @param[in] name function name in lua script.
+ */
+template <typename T>
+static inline std::optional<T> getScriptFunction(const sol::state& lua, const char* name)
+{
+    return getFunction<T>(lua[name], name);
+}
+
+/**
+ * Returns function with specified name from lua environment to call from c++.
+ * @tparam T expected script function signature.
+ * @param[in] env lua environment where to search.
+ * @param[in] name function name in lua script.
+ */
+template <typename T>
+static inline std::optional<T> getScriptFunction(const sol::environment& env, const char* name)
+{
+    return getFunction<T>(env[name], name);
 }
 
 /** Returns lua state wrapper with specified script loaded in it and api bound. */
