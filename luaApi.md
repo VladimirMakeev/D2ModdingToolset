@@ -29,6 +29,8 @@ Scripts folder itself should be placed in the game folder.
 log('Unit current level:' .. unit.impl.level)
 ```
 
+---
+
 #### Enumerations
 ```lua
 Race = { Human, Undead, Heretic, Dwarf, Neutral, Elf }
@@ -37,6 +39,45 @@ Race = { Human, Undead, Heretic, Dwarf, Neutral, Elf }
 Subrace = { Custom, Human, Undead, Heretic, Dwarf, Neutral, NeutralHuman, NeutralElf, NeutralGreenSkin,
             NeutralDragon, NeutralMarsh, NeutralWater, NeutralBarbarian, NeutralWolf, Elf }
 ```
+
+---
+
+#### Point
+Represents point in 2D space.
+
+Methods:
+```lua
+-- Creates point with both coordinates set to 0.
+Point.new()
+-- Creates point with specified coordinates.
+-- For example: x = 1, y = 3
+Point.new(1, 3)
+-- Converts point to string '(x, y)'
+tostring(point)
+-- Access x coordinate for reading and writing
+local x = point.x
+point.x = x + 1
+-- Access y coordinate for reading and writing
+local y = point.y
+point.y = y + 1
+```
+
+---
+
+#### Id
+Represents object identifier. Identifiers used to search scenario objects.
+
+Methods:
+```lua
+-- Creates Id from string
+Id.new('S143KC0001')
+-- Returns empty identifier
+Id.emptyId()
+-- Converts Id to string
+tostring(id)
+```
+
+---
 
 #### Unit
 Represents game unit that participates in a battle, takes damage and performs attacks.
@@ -57,6 +98,8 @@ unit.impl
 -- Base implementation is a record in GUnits.dbf that describes unit basic stats.
 unit.baseImpl
 ```
+
+---
 
 #### Unit implementation
 Represents unit template. Records in GUnits.dbf are unit implementations.
@@ -93,6 +136,8 @@ impl.dynUpg1
 impl.dynUpg2
 ```
 
+---
+
 #### Unit slot
 Represents one of the twelve unit slots on battlefield.
 Unit positions on a battlefield are mirrored.
@@ -121,6 +166,8 @@ slot.backline
 slot.distance(otherSlot)
 ```
 
+---
+
 #### Dynamic upgrade
 Represents rules that applied when unit makes its progress gaining levels. Records in GDynUpgr.dbf are dynamic upgrades.
 
@@ -129,6 +176,45 @@ Methods:
 -- Returns number of experience points added with each dynamic upgrade. XP_NEXT value from GDynUpgr.dbf.
 dynUpgrade.xpNext
 ```
+
+---
+
+#### Location
+Represents location object in scenario.
+
+Methods:
+##### id
+Returns location [identifier](luaApi.md#id).
+```lua
+location.id
+```
+##### position
+Returns copy of location position as a [point](luaApi.md#point).
+```lua
+location.position
+```
+##### radius
+Returns radius of location
+```lua
+location.radius
+```
+
+---
+
+#### Scenario
+Represents scenario map with all its objects and state.
+
+Methods:
+##### getLocation
+Searches for [Location](luaApi.md#location) by id string or [Id](luaApi.md#id), returns nil if not found.
+```lua
+local location = scenario:getLocation('S143LO0001')
+if (location == nil) then
+  return
+end
+```
+
+---
 
 ### Examples
 
@@ -179,6 +265,8 @@ end
 ```
 
 See [Scripts](Scripts) directory for additional examples.
+
+---
 
 ### Targeting scripts (custom attack reaches, specified via Globals\LAttR.dbf)
 Targeting scripts are used to specify either selection or attack targets of custom attack reach:
