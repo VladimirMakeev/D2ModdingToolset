@@ -48,9 +48,9 @@ struct CMidgardData
     char unknown2[24];
     CMidClient* client;
     CMidServer* server;
-    bool multiplayerGame;
-    bool hotseatGame;
-    char unknown3;
+    bool multiplayerGame; /**< It can be network or hotseat game. Check hotseat flag to be sure. */
+    bool hotseatGame;     /**< Multiplayer game on the same computer. */
+    bool host;            /**< True if computer hosts the game, server. */
     bool lobbySessionExists;
     char padding[3];
     CMenuPhase* menuPhase;
