@@ -38,6 +38,7 @@ struct CAutoDialog;
 struct CUIManager;
 struct CInterfManagerImpl;
 struct CMqFps;
+struct CInterface;
 
 struct CMidgardData
 {
@@ -45,14 +46,20 @@ struct CMidgardData
     IMqNetService* netService;
     IMqNetSession* netSession;
     void* directPlayLobbySession;
-    char unknown2[24];
+    int unknown6;
+    int unknown7;
+    int unknown8;
+    int unknown9;
+
+    int unknown10;
+    int unknown11;
     CMidClient* client;
     CMidServer* server;
     bool multiplayerGame; /**< It can be network or hotseat game. Check hotseat flag to be sure. */
     bool hotseatGame;     /**< Multiplayer game on the same computer. */
     bool host;            /**< True if computer hosts the game, server. */
     bool lobbySessionExists;
-    char padding[3];
+    void* midStart;
     CMenuPhase* menuPhase;
     GameSettings** settings;
     void* interfImages;
@@ -60,11 +67,15 @@ struct CMidgardData
     void* menuAnimations;
     void* menuImages;
     SmartPtr<CUIManager> uiManager;
-    char unknown4[32];
+    char unknown12[4];
+    std::uint32_t startMessageId;
+    char unknown14[24];
     std::uint32_t netMessageId;
-    char unknown5[24];
+    char unknown13[24];
     SmartPtr<CInterfManagerImpl> interfManager;
-    char unknown6[88];
+    char unknown15[32];
+    CInterface* waitInterface;
+    char unknown16[52];
     CMqFps* fps;
     bool showFullSystemInfo;
     char padding2[3];
@@ -75,8 +86,12 @@ static_assert(sizeof(CMidgardData) == 252,
 
 static_assert(offsetof(CMidgardData, client) == 40, "CMidgardData::client offset must be 40 bytes");
 
+static_assert(offsetof(CMidgardData, host) == 50, "CMidgardData::host offset must be 50 bytes");
+
 static_assert(offsetof(CMidgardData, settings) == 60,
               "CMidgardData::settings offset must be 60 bytes");
+
+static_assert(offsetof(CMidgardData, fps) == 244, "CMidgardData::fps offset must be 244 bytes");
 
 struct CMidgard
     : public IMqNetTraffic
