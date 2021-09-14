@@ -20,6 +20,8 @@
 #ifndef MIDGARD_H
 #define MIDGARD_H
 
+#include "linkedlist.h"
+#include "midgardid.h"
 #include "mqanimation.h"
 #include "mqnettraffic.h"
 #include "smartptr.h"
@@ -39,6 +41,14 @@ struct CUIManager;
 struct CInterfManagerImpl;
 struct CMqFps;
 struct CInterface;
+struct IMqNetPlayerClient;
+
+struct PlayerClientNode
+{
+    std::uint32_t netId; /**< Some kind of client identifier, not related to CMidgardID. */
+    SmartPtr<IMqNetPlayerClient> client;
+    CMidgardID playerId;
+};
 
 struct CMidgardData
 {
@@ -46,11 +56,7 @@ struct CMidgardData
     IMqNetService* netService;
     IMqNetSession* netSession;
     void* directPlayLobbySession;
-    int unknown6;
-    int unknown7;
-    int unknown8;
-    int unknown9;
-
+    LinkedList<PlayerClientNode> clients;
     int unknown10;
     int unknown11;
     CMidClient* client;
