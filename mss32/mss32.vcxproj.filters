@@ -1900,6 +1900,9 @@
     <ClInclude Include="include\bindings\point.h">
       <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
+    <ClInclude Include="include\mqnetplayer.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
