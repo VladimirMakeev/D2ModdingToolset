@@ -57,7 +57,7 @@ struct CMidgardData
     IMqNetSession* netSession;
     void* directPlayLobbySession;
     LinkedList<PlayerClientNode> clients;
-    int unknown10;
+    SmartPtr<IMqNetPlayerClient>* netPlayerClientPtr;
     int unknown11;
     CMidClient* client;
     CMidServer* server;
