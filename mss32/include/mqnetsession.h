@@ -41,14 +41,17 @@ struct IMqNetSessionVftable
     using Destructor = void(__thiscall*)(IMqNetSession* thisptr, char flags);
     Destructor destructor;
 
-    using Method1 = String*(__thiscall*)(IMqNetSession* thisptr, String* string);
-    Method1 method1;
+    /** Returns session name. */
+    using GetName = String*(__thiscall*)(IMqNetSession* thisptr, String* sessionName);
+    GetName getName;
 
-    using Method2 = int(__thiscall*)(IMqNetSession* thisptr);
-    Method2 method2;
+    /** Returns current number of clients in a session. */
+    using GetClientsCount = int(__thiscall*)(IMqNetSession* thisptr);
+    GetClientsCount getClientsCount;
 
-    using Method3 = bool(__thiscall*)(IMqNetSession* thisptr);
-    Method3 method3;
+    /** Returns the maximum allowed number of clients in a session. */
+    using GetMaxClients = int(__thiscall*)(IMqNetSession* thisptr);
+    GetMaxClients getMaxClients;
 
     using GetPlayers = void(__thiscall*)(IMqNetSession* thisptr,
                                          LinkedList<IMqNetPlayerEnum*>* players);
