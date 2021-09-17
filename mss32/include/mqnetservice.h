@@ -22,10 +22,48 @@
 
 namespace game {
 
+struct GUID;
+struct IMqNetSession;
+struct IMqNetSessEnum;
+struct IMqNetServiceVftable;
+
 struct IMqNetService
 {
-    void* vftable;
+    IMqNetServiceVftable* vftable;
 };
+
+struct IMqNetServiceVftable
+{
+    using Destructor = void(__thiscall*)(IMqNetService* thisptr, char flags);
+    Destructor destructor;
+
+    using HasSessions = bool(__thiscall*)(IMqNetService* thisptr);
+    HasSessions hasSessions;
+
+    using GetSessions = void(__thiscall*)(IMqNetService* thisptr,
+                                          int a1,
+                                          const GUID* appGuid,
+                                          const char* ipAddress,
+                                          bool a5,
+                                          bool a6);
+    GetSessions getSessions;
+
+    using CreateSession = void(__thiscall*)(IMqNetService* thisptr,
+                                            IMqNetSession** netSession,
+                                            const GUID* appGuid,
+                                            const char* sessionName,
+                                            const char* password);
+    CreateSession createSession;
+
+    using JoinSession = void(__thiscall*)(IMqNetService* thisptr,
+                                          IMqNetSession** netSession,
+                                          IMqNetSessEnum* netSessionEnum,
+                                          int a4);
+    JoinSession joinSession;
+};
+
+static_assert(sizeof(IMqNetServiceVftable) == 5 * sizeof(void*),
+              "IMqNetService vftable must have exactly 5 methods");
 
 } // namespace game
 
