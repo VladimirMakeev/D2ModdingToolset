@@ -20,17 +20,26 @@
 #ifndef NETDPLAYSESSION_H
 #define NETDPLAYSESSION_H
 
+#include "linkedlist.h"
 #include "mqnetsession.h"
+#include <guiddef.h>
 
 namespace game {
 
 struct CNetDPlayService;
+struct CNetDPlayPlayerServer;
+struct CNetDPlayPlayerClient;
 
 /** DirectPlay implementation of net session. */
 struct CNetDPlaySession : public IMqNetSession
 {
-    CNetDPlayService* directPlayService;
-    char unknown[56];
+    CNetDPlayService* service;
+    GUID sessionGuid;
+    GUID appGuid;
+    CNetDPlayPlayerServer* server;
+    LinkedList<CNetDPlayPlayerClient*> clients;
+    bool host;
+    char padding[3];
 };
 
 static_assert(sizeof(CNetDPlaySession) == 64,
