@@ -201,6 +201,34 @@ location.radius
 
 ---
 
+#### ScenarioVariable
+Represents scenario variable used by events.
+
+Methods:
+```lua
+-- Returns variable name
+variable.name
+-- Returns variable value
+variable.value
+```
+
+---
+
+#### ScenarioVariables
+Stores scenario variables, allows searching them by name.
+
+Methods:
+##### getVariable
+Searches for [ScenarioVariable](luaApi.md#scenariovariable) by its name, reeturns nil if not found.
+```lua
+local variable = variables:getVariable('VAR1')
+if (variable == nil) then
+  return
+end
+```
+
+---
+
 #### Scenario
 Represents scenario map with all its objects and state.
 
@@ -210,6 +238,14 @@ Searches for [Location](luaApi.md#location) by id string or [Id](luaApi.md#id), 
 ```lua
 local location = scenario:getLocation('S143LO0001')
 if (location == nil) then
+  return
+end
+```
+##### variables
+Returns [ScenarioVariables](luaApi.md#scenariovariables). If scenario has no variables defined, returns nil.
+```lua
+local variables = scenario.variables
+if (variables == nil) then
   return
 end
 ```
