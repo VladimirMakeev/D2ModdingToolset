@@ -45,20 +45,6 @@
 
 namespace hooks {
 
-static game::CMidgardID createScenarioVariablesId(const game::IMidgardObjectMap* objectMap)
-{
-    using namespace game;
-
-    const auto& id = CMidgardIDApi::get();
-    auto scenarioId = objectMap->vftable->getId(objectMap);
-
-    CMidgardID variablesId{};
-    id.fromParts(&variablesId, id.getCategory(scenarioId), id.getCategoryIndex(scenarioId),
-                 IdType::ScenarioVariable, 0);
-
-    return variablesId;
-}
-
 static const game::CMidScenVariables* getScenarioVariables(const game::IMidgardObjectMap* objectMap)
 {
     const auto variablesId = createScenarioVariablesId(objectMap);

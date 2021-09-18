@@ -22,9 +22,10 @@
 #include "interfmanager.h"
 #include "log.h"
 #include "mempool.h"
-#include "midgardid.h"
 #include "midgardmsgbox.h"
+#include "midgardobjectmap.h"
 #include "midmsgboxbuttonhandlerstd.h"
+#include "midscenvariables.h"
 #include <Windows.h>
 #include <fstream>
 #include <random>
@@ -186,6 +187,51 @@ void showErrorMessageBox(const std::string& message)
 {
     logError("mssProxyError.log", message);
     MessageBox(NULL, message.c_str(), "mss32.dll proxy", MB_OK);
+}
+
+game::CMidgardID createScenarioVariablesId(const game::IMidgardObjectMap* objectMap)
+{
+    using namespace game;
+
+    const auto& id = CMidgardIDApi::get();
+    auto scenarioId = objectMap->vftable->getId(objectMap);
+
+    CMidgardID variablesId{};
+    id.fromParts(&variablesId, id.getCategory(scenarioId), id.getCategoryIndex(scenarioId),
+                 IdType::ScenarioVariable, 0);
+
+    return variablesId;
+}
+
+void forEachScenarioVariable(const game::CMidScenVariables* variables,
+                             std::function<void(const game::ScenarioVariable*, std::uint32_t)> f)
+{
+    using namespace game;
+
+    if (!variables->variables.length) {
+        return;
+    }
+
+    auto begin = variables->variables.begin;
+    auto end = variables->variables.end;
+    auto current = begin->less;
+
+    ScenarioVariablesListIterator listIterator{};
+    listIterator.node = current;
+    listIterator.node2 = end;
+
+    std::uint32_t listIndex{};
+    while (listIndex++ < variables->variables.length) {
+        const bool done = (current != begin || listIterator.node2 != end) ? false : true;
+        if (done) {
+            break;
+        }
+
+        f(&current->value, listIndex);
+
+        CMidScenVariablesApi::get().advance(&listIterator.node, listIterator.node2);
+        current = listIterator.node;
+    }
 }
 
 } // namespace hooks

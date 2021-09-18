@@ -39,20 +39,6 @@
 
 namespace hooks {
 
-static game::CMidgardID createScenarioVariablesId(const game::IMidgardObjectMap* objectMap)
-{
-    using namespace game;
-
-    const auto& id = CMidgardIDApi::get();
-    auto scenarioId = objectMap->vftable->getId(objectMap);
-
-    CMidgardID variablesId{};
-    id.fromParts(&variablesId, id.getCategory(scenarioId), id.getCategoryIndex(scenarioId),
-                 IdType::ScenarioVariable, 0);
-
-    return variablesId;
-}
-
 game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
                                                      game::IMidgardObjectMap* objectMap,
                                                      const game::CMidgardID* playerId)
@@ -108,26 +94,15 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
     }
 
     std::array<int, 6> cityIncome = {0, 0, 0, 0, 0, 0};
-    auto begin = variables->variables.begin;
-    auto end = variables->variables.end;
-    auto current = begin->less;
-
-    ScenarioVariablesListIterator listIterator{};
-    listIterator.node = current;
-    listIterator.node2 = end;
 
     logDebug("cityIncome.log",
              fmt::format("Loop through {:d} scenario variables", variables->variables.length));
 
     std::uint32_t listIndex{};
-    while (listIndex++ < variables->variables.length) {
-        const bool done = (current != begin || listIterator.node2 != end) ? false : true;
-        if (done) {
-            break;
-        }
-
-        const auto& variable = current->value;
-        const auto& name = variable.data.name;
+    forEachScenarioVariable(variables, [racePrefix, &cityIncome,
+                                        &listIndex](const game::ScenarioVariable* variable,
+                                                    std::uint32_t) {
+        const auto& name = variable->data.name;
 
         // Additional income for specific race
         if (!strncmp(name, racePrefix, std::strlen(racePrefix))) {
@@ -135,7 +110,7 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
                 const auto expectedName{fmt::format("{:s}TIER_{:d}_CITY_INCOME", racePrefix, i)};
 
                 if (!strncmp(name, expectedName.c_str(), sizeof(name))) {
-                    cityIncome[i] += variable.data.value;
+                    cityIncome[i] += variable->data.value;
                     break;
                 }
             }
@@ -147,15 +122,14 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
                 const auto expectedName{fmt::format("TIER_{:d}_CITY_INCOME", i)};
 
                 if (!strncmp(name, expectedName.c_str(), sizeof(name))) {
-                    cityIncome[i] += variable.data.value;
+                    cityIncome[i] += variable->data.value;
                     break;
                 }
             }
         }
 
-        CMidScenVariablesApi::get().advance(&listIterator.node, listIterator.node2);
-        current = listIterator.node;
-    }
+        listIndex++;
+    });
 
     logDebug("cityIncome.log", fmt::format("Loop done in {:d} iterations", listIndex));
 
