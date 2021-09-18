@@ -35,6 +35,7 @@ namespace bindings {
 
 struct IdView;
 class LocationView;
+class ScenVariablesView;
 
 class ScenarioView
 {
@@ -47,6 +48,8 @@ public:
     std::optional<LocationView> getLocation(const std::string& id) const;
     /** Searches for location by id. */
     std::optional<LocationView> getLocationById(const IdView& id) const;
+
+    std::optional<ScenVariablesView> getScenVariables() const;
 
 private:
     const game::IMidgardObjectMap* objectMap;

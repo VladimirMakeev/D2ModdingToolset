@@ -21,6 +21,9 @@
 #include "dynamiccast.h"
 #include "locationview.h"
 #include "midgardobjectmap.h"
+#include "midscenvariables.h"
+#include "scenvariablesview.h"
+#include "utils.h"
 #include <sol/sol.hpp>
 
 namespace bindings {
@@ -34,6 +37,7 @@ void ScenarioView::bind(sol::state& lua)
     auto scenario = lua.new_usertype<ScenarioView>("Scenario");
     scenario["getLocation"] = sol::overload<>(&ScenarioView::getLocation,
                                               &ScenarioView::getLocationById);
+    scenario["variables"] = sol::property(&ScenarioView::getScenVariables);
 }
 
 std::optional<LocationView> ScenarioView::getLocation(const std::string& id) const
@@ -60,6 +64,19 @@ std::optional<LocationView> ScenarioView::getLocationById(const IdView& id) cons
     }
 
     return LocationView{location};
+}
+
+std::optional<ScenVariablesView> ScenarioView::getScenVariables() const
+{
+    const auto variablesId{hooks::createScenarioVariablesId(objectMap)};
+    auto variablesObj = objectMap->vftable->findScenarioObjectById(objectMap, &variablesId);
+
+    auto variables = static_cast<const game::CMidScenVariables*>(variablesObj);
+    if (!variables) {
+        return std::nullopt;
+    }
+
+    return ScenVariablesView{variables};
 }
 
 } // namespace bindings
