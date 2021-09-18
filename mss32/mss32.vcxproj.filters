@@ -753,6 +753,9 @@
     <ClCompile Include="src\bindings\idview.cpp">
       <Filter>Исходные файлы\bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\scenvariablesview.cpp">
+      <Filter>Исходные файлы\bindings</Filter>
+    </ClCompile>
     <ClCompile Include="src\bindings\scenariovariableview.cpp">
       <Filter>Исходные файлы\bindings</Filter>
     </ClCompile>
@@ -1908,6 +1911,9 @@
     </ClInclude>
     <ClInclude Include="include\mqnetplayerclient.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\scenvariablesview.h">
+      <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\scenariovariableview.h">
       <Filter>Файлы заголовков\bindings</Filter>
