@@ -85,8 +85,11 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
 
     if (!getCustomAttacks().transformSelf.targetSelf) {
         auto altAttack = thisptr->altAttack;
-        altAttack->vftable->onHit(altAttack, objectMap, battleMsgData, targetUnitId, attackInfo);
-        return;
+        if (altAttack) {
+            altAttack->vftable->onHit(altAttack, objectMap, battleMsgData, targetUnitId,
+                                      attackInfo);
+            return;
+        }
     }
 
     auto attack = fn.getAttackById(objectMap, &thisptr->id2, thisptr->attackNumber, false);
