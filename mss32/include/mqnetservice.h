@@ -48,6 +48,10 @@ struct IMqNetServiceVftable
                                           bool a6);
     GetSessions getSessions;
 
+    /**
+     * Creates session with specified guid, name and password.
+     * CNetDPlayService calls IDirectPlay4::Open with DPOPEN_CREATE here.
+     */
     using CreateSession = void(__thiscall*)(IMqNetService* thisptr,
                                             IMqNetSession** netSession,
                                             const GUID* appGuid,
@@ -55,10 +59,14 @@ struct IMqNetServiceVftable
                                             const char* password);
     CreateSession createSession;
 
+    /**
+     * Joins session specified by netSessionEnum.
+     * CNetDPlayService calls IDirectPlay4::Open with DPOPEN_JOIN here.
+     */
     using JoinSession = void(__thiscall*)(IMqNetService* thisptr,
                                           IMqNetSession** netSession,
                                           IMqNetSessEnum* netSessionEnum,
-                                          int a4);
+                                          const char* password);
     JoinSession joinSession;
 };
 

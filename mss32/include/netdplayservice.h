@@ -23,17 +23,24 @@
 #include "mqnetservice.h"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#include <cstdint>
+
+struct IDirectPlay4;
 
 namespace game {
+
+struct CLogFile;
 
 /** DirectPlay implementation of net service. */
 struct CNetDPlayService : public IMqNetService
 {
-    int unknown;
+    IDirectPlay4* directPlay;
     int unknown2;
-    int unknown3;
+    CLogFile* log;
     LPCRITICAL_SECTION criticalSection;
-    char unknown[44];
+    char unknown4[36];
+    std::uint32_t sessionCount;
+    int unknown5;
 };
 
 static_assert(sizeof(CNetDPlayService) == 64,
