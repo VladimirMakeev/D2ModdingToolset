@@ -1918,6 +1918,9 @@
     <ClInclude Include="include\bindings\scenariovariableview.h">
       <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
+    <ClInclude Include="include\netdplayplayer.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
