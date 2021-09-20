@@ -29,6 +29,7 @@ struct IMqNetPlayerEnum;
 struct IMqNetPlayerClient;
 struct IMqNetPlayerServer;
 struct IMqNetReception;
+struct IMqNetSystem;
 struct IMqNetSessionVftable;
 
 struct IMqNetSession
@@ -57,17 +58,25 @@ struct IMqNetSessionVftable
                                          LinkedList<IMqNetPlayerEnum*>* players);
     GetPlayers getPlayers;
 
+    /**
+     * Creates client player.
+     * CNetDPlaySession calls IDirectPlay4::CreatePlayer with dwFlags = 0 here.
+     */
     using CreateClient = void(__thiscall*)(IMqNetSession* thisptr,
                                            IMqNetPlayerClient** client,
-                                           int a3,
+                                           IMqNetSystem* netSystem,
                                            IMqNetReception* reception,
                                            const char* clientName);
     CreateClient createClient;
 
+    /**
+     * Creates server player.
+     * CNetDPlaySession calls IDirectPlay4::CreatePlayer with DPPLAYER_SERVERPLAYER here.
+     */
     using CreateServer = void(__thiscall*)(IMqNetSession* thisptr,
                                            IMqNetPlayerServer** server,
-                                           int a3,
-                                           int a4);
+                                           IMqNetSystem* netSystem,
+                                           IMqNetReception* reception);
     CreateServer createServer;
 };
 
