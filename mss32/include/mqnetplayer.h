@@ -23,6 +23,9 @@
 namespace game {
 
 struct String;
+struct IMqNetSession;
+struct IMqNetSystem;
+struct NetMessageHeader;
 struct IMqNetPlayerVftable;
 
 template <typename T = IMqNetPlayerVftable>
@@ -44,26 +47,49 @@ struct IMqNetPlayerVftable
     using Destructor = void(__thiscall*)(IMqNetPlayer* thisptr, char flags);
     Destructor destructor;
 
+    /** Returns player name. */
     using GetName = String*(__thiscall*)(IMqNetPlayer* thisptr, String* string);
     GetName getName;
 
+    /** Returns player network id. */
     using GetNetId = int(__thiscall*)(IMqNetPlayer* thisptr);
     GetNetId getNetId;
 
-    using Method3 = int(__thiscall*)(IMqNetPlayer* thisptr);
-    Method3 method3;
+    /** Returns the session the player is currently in. */
+    using GetSession = IMqNetSession*(__thiscall*)(IMqNetPlayer* thisptr);
+    GetSession getSession;
 
-    using Method4 = int(__thiscall*)(IMqNetPlayer* thisptr);
-    Method4 method4;
+    /**
+     * Returns number of network messages in queue for player.
+     * CNetDPlayPlayer calls IDirectPlay4::GetMessageCount here.
+     */
+    using GetMessageCount = int(__thiscall*)(IMqNetPlayer* thisptr);
+    GetMessageCount getMessageCount;
 
-    using Method5 = int(__thiscall*)(IMqNetPlayer* thisptr, int a2, int a3);
-    Method5 method5;
+    /**
+     * Sends network message to player with specified id.
+     * CNetDPlayPlayer calls IDirectPlay4::SendEx here.
+     * @returns true if the message was sent successfully.
+     */
+    using SendMessage = bool(__thiscall*)(IMqNetPlayer* thisptr,
+                                          int idTo,
+                                          const NetMessageHeader* message);
+    SendMessage sendMessage;
 
-    using Method6 = int(__thiscall*)(IMqNetPlayer* thisptr, int a2, int a3);
-    Method6 method6;
+    /**
+     * Receives network messages addressed to this player.
+     * CNetDPlayPlayer calls IDirectPlay4::Receive with DPRECEIVE_TOPLAYER | DPRECEIVE_ALL here.
+     * @param[inout] idFrom pointer to store network id of messages sender.
+     * @param[inout] buffer buffer to receive messages. Must be at least 512Kb.
+     */
+    using ReceiveMessage = int(__thiscall*)(IMqNetPlayer* thisptr,
+                                            int* idFrom,
+                                            NetMessageHeader* buffer);
+    ReceiveMessage receiveMessage;
 
-    using Method7 = int(__thiscall*)(IMqNetPlayer* thisptr, int a2);
-    Method7 method7;
+    /** Sets netSystem proxy for this player. */
+    using SetNetSystem = void(__thiscall*)(IMqNetPlayer* thisptr, IMqNetSystem* netSystem);
+    SetNetSystem setNetSystem;
 
     using Method8 = int(__thiscall*)(IMqNetPlayer* thisptr, int a2);
     Method8 method8;
