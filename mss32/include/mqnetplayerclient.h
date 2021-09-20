@@ -32,11 +32,16 @@ struct IMqNetPlayerClient : public IMqNetPlayerT<IMqNetPlayerClientVftable>
 
 struct IMqNetPlayerClientVftable : public IMqNetPlayerVftable
 {
-    using Method9 = bool(__thiscall*)(IMqNetPlayerClient* thisptr, int a2);
-    Method9 method9;
+    /**
+     * Sets client player name.
+     * CNetDPlayPlayerClient calls IDirectPlay4::SetPlayerName here.
+     */
+    using SetName = bool(__thiscall*)(IMqNetPlayerClient* thisptr, const char* name);
+    SetName setName;
 
-    using Method10 = bool(__thiscall*)(IMqNetPlayerClient* thisptr, const char* string);
-    Method10 method10;
+    /** Returns true if this client player hosts the game. */
+    using IsHost = bool(__thiscall*)(IMqNetPlayerClient* thisptr);
+    IsHost isHost;
 };
 
 static_assert(sizeof(IMqNetPlayerClientVftable) == 11 * sizeof(void*),
