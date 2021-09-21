@@ -249,6 +249,7 @@
     X005TA1007 All units in the target column
     X005TA1008 All units in 2x2 area
     X005TA1009 Randomly bounces to 2 additional targets
+    X005TA1010 The target and one random unit
     ```
 
     **Note** that the REACH column is limited to 1 digit in GAttacks.dbf.<br />
