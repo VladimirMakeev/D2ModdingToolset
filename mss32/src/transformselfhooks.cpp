@@ -111,7 +111,7 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
         return;
     }
 
-    if (userSettings().leveledTransformSelfAttack != baseSettings().leveledTransformSelfAttack) {
+    if (userSettings().leveledTransformSelfAttack) {
         const auto& global = GlobalDataApi::get();
         auto globalData = *global.getGlobalData();
 
@@ -136,8 +136,7 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
 
     const auto& battle = BattleMsgDataApi::get();
 
-    if (targetSelf
-        && userSettings().freeTransformSelfAttack != baseSettings().freeTransformSelfAttack) {
+    if (targetSelf && userSettings().freeTransformSelfAttack) {
         auto& customTransformSelf = getCustomAttacks().transformSelf;
         if (customTransformSelf.freeAttackUnitId != targetUnit->unitId) {
             customTransformSelf.freeAttackUnitId = targetUnit->unitId;
