@@ -73,7 +73,6 @@ struct CustomAttacks
     struct
     {
         game::CMidgardID freeAttackUnitId;
-        bool targetSelf;
     } transformSelf;
 };
 
