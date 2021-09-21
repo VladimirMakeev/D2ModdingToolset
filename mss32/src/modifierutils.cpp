@@ -238,7 +238,7 @@ game::ModifiedUnitInfo* getModifiedUnits(game::UnitInfo* unitInfo, game::Modifie
     using namespace game;
 
     auto& units = unitInfo->modifiedUnits;
-    if (userSettings().unrestrictedBestowWards != baseSettings().unrestrictedBestowWards) {
+    if (userSettings().unrestrictedBestowWards) {
         *end = units.patched + ModifiedUnitCountPatched;
         return units.patched;
     } else {

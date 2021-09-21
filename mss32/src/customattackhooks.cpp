@@ -579,16 +579,13 @@ bool __stdcall getTargetsToAttackForAllOrCustomReach(game::IdList* value,
     auto transformSelfAttack = (CBatAttackTransformSelf*)
         dynamicCast(batAttack, 0, rtti.IBatAttackType, rtti.CBatAttackTransformSelfType, 0);
 
+    if (transformSelfAttack && transformSelfAttack->unitId == *targetUnitId)
+        return false;
+
     // HACK: every attack in the game except CBatAttackTransformSelf has its unitId as a first
     // field, but its not a part of CBatAttackBase.
-    CMidgardID* unitId = (CMidgardID*)(batAttack + 1);
-    if (transformSelfAttack)
-        unitId = &transformSelfAttack->unitId;
-
-    auto& customTransformSelf = getCustomAttacks().transformSelf;
-    customTransformSelf.targetSelf = transformSelfAttack && *unitId == *targetUnitId;
-    if (customTransformSelf.targetSelf)
-        return false;
+    CMidgardID* unitId = transformSelfAttack ? &transformSelfAttack->unitId
+                                             : (CMidgardID*)(batAttack + 1);
 
     CMidgardID targetGroupId{};
     batAttack->vftable->getTargetGroupId(batAttack, &targetGroupId, battleMsgData);
