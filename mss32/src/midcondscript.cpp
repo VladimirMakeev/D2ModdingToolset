@@ -669,6 +669,9 @@ game::editor::CCondInterf* createCondScriptInterf(game::ITask* task,
 
         radioApi.setOnButtonPressed(dialog, "RAD_FILTER", dialogName, &functor);
         FunctorApi::get().createOrFree(&functor, nullptr);
+
+        // Disable button since 'other' list is not implemented yet
+        radioApi.setButtonEnabled(radioButton, (int)ObjectFilter::Other, false);
     }
 
     const auto& listApi = CListBoxInterfApi::get();
@@ -694,6 +697,31 @@ game::editor::CCondInterf* createCondScriptInterf(game::ITask* task,
 
     CEditBoxInterfApi::get().setFilterAndLength(dialog, "EDIT_CODE", dialogName,
                                                 EditFilter::NoFilter, 4096);
+
+    // Disable buttons that are not implemented yet
+    auto objectives = dialogApi.findButton(dialog, "BTN_OBJECTIVES");
+    if (objectives) {
+        auto setEnabled = static_cast<CButtonInterfApi::Vftable*>(objectives->vftable)->setEnabled;
+        setEnabled(objectives, false);
+    }
+
+    auto buttonCheck = dialogApi.findButton(dialog, "BTN_CHECK");
+    if (buttonCheck) {
+        auto setEnabled = static_cast<CButtonInterfApi::Vftable*>(buttonCheck->vftable)->setEnabled;
+        setEnabled(buttonCheck, false);
+    }
+
+    auto codeUp = dialogApi.findButton(dialog, "BTN_CODE_UP");
+    if (codeUp) {
+        auto setEnabled = static_cast<CButtonInterfApi::Vftable*>(codeUp->vftable)->setEnabled;
+        setEnabled(codeUp, false);
+    }
+
+    auto codeDown = dialogApi.findButton(dialog, "BTN_CODE_DOWN");
+    if (codeDown) {
+        auto setEnabled = static_cast<CButtonInterfApi::Vftable*>(codeDown->vftable)->setEnabled;
+        setEnabled(codeDown, false);
+    }
 
     return thisptr;
 }
