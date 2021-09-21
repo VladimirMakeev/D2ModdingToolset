@@ -274,9 +274,26 @@
 
     **Note** that damage ratio representation in unit encyclopedia can be customized. Check [textids.lua](Scripts/textids.lua).
   </details>
+- <details>
+    <summary>Adds new event conditions;</summary>
 
+    - Replace LEvCond.dbf in globals folder with the file from [Examples](Examples/LEvCond.dbf).
+    - Add contents of [ScenEdit.dlg](Examples/ScenEdit.dlg) to interf\ScenEdit.dlg.
+    - Translate menus and buttons if needed. Also, add translated text ids to [textids.lua](Scripts/textids.lua).
+    - Add translations for brief (BRIEF) and full (DESCR) event condition descriptions to interf\TAppEdit.dbf.
+    - Set ids of these translations to corresponding columns in LEvCond.dbf.
+    - Text strings in INFO column must contain predefined keys for game to show actual game data.
+
+    Examples:
+    - L_OWN\_RESOURCE: ```"Own %COND% %GOLD% gold, %INFERNAL% infernal, %LIFE% life, %DEATH% death, %RUNIC% runic, %GROVE% grove."```
+    - L_GAME_MODE: ```"Game mode: %MODE%"```
+    - L_PLAYER_TYPE: ```"Player is controlled by %TYPE%"```
+    - L_SCRIPT: ```"Script: %DESC%"```
+    - L_VARIABLE_CMP does not use text id from INFO column, so it can be set as 'g0000000000'.   
+  </details>
+    
 ### Settings:
-The following settings can be changed in 'Scripts\\settings.lua':
+The following settings can be changed in [settings.lua](Scripts/settings.lua):
 <details>
   <summary>User Interface</summary>
 
