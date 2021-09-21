@@ -19,6 +19,7 @@ Scripts folder itself should be placed in the game folder.
 - getSelectedColumnTargets.lua - contains attack targeting logic for column attack reach
 - getSelectedArea2x2Targets.lua - contains attack targeting logic for 2x2 area splash attack reach
 - getSelectedTargetAndTwoChainedRandom.lua - contains attack targeting logic for random chain attack reach
+- getSelectedTargetAndOneRandom.lua - contains attack targeting logic for additional random target
 - getWoundedFemaleGreenskinTargets.lua - contains targeting logic that only allows to reach wounded female greenskins
 
 ### API reference

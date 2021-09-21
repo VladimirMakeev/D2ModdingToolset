@@ -16,7 +16,7 @@ function getTargets(attacker, selected, allies, targets, targetsAreAllies)
 	local result = {selected}
 	for i = 1, #targets do
 		local target = targets[i]
-		if target ~= selected and target.line == selected.line then
+		if target ~= selected and (target.line == selected.line or (target.unit and not target.unit.impl.small)) then
 			table.insert(result, target)
 		end
 	end

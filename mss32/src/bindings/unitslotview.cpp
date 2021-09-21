@@ -53,7 +53,10 @@ void UnitSlotView::bind(sol::state& lua)
 
 std::optional<UnitView> UnitSlotView::getUnitView() const
 {
-    return {UnitView(unit)};
+    if (unit)
+        return {UnitView(unit)};
+
+    return std::nullopt;
 }
 
 int UnitSlotView::getPosition() const

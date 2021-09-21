@@ -44,7 +44,7 @@ textids = {
 		-- The text must contain keyword "%DMG%".
 		-- Fallback text is "%DMG%, split between targets".
 		splitDamage = "",
-	}
+	},
 
 	-- Text ids related to events logic
 	events = {
