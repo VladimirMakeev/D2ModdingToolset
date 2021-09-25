@@ -24,6 +24,8 @@
 
 namespace game {
 
+struct CToggleButtonVftable;
+
 struct CToggleButtonData
 {
     int buttonChildIndex;
@@ -40,7 +42,7 @@ static_assert(sizeof(CToggleButtonData) == 72,
  * Toggle button ui element.
  * Represents TOGGLE from Interf.dlg or ScenEdit.dlg files.
  */
-struct CToggleButton : public CInterface
+struct CToggleButton : public CInterfaceT<CToggleButtonVftable>
 {
     CToggleButtonData* data;
 };

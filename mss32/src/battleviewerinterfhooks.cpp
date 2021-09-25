@@ -591,8 +591,10 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
         return;
     }
 
-    auto button = dialogApi.findToggleButton(dialog, "TOG_RIGHTUNITS");
-    ((CToggleButtonVftable*)button->vftable)->setEnabled(button, true);
+    auto toggleRightUnits = dialogApi.findToggleButton(dialog, "TOG_RIGHTUNITS");
+    if (toggleRightUnits) {
+        toggleRightUnits->vftable->setEnabled(toggleRightUnits, true);
+    }
 
     viewer->data2->normalAttack = false;
     bool canUseItem = false;
