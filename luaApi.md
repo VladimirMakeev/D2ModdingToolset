@@ -33,12 +33,23 @@ log('Unit current level:' .. unit.impl.level)
 ---
 
 #### Enumerations
+##### Race
 ```lua
 Race = { Human, Undead, Heretic, Dwarf, Neutral, Elf }
 ```
+##### Subrace
 ```lua
 Subrace = { Custom, Human, Undead, Heretic, Dwarf, Neutral, NeutralHuman, NeutralElf, NeutralGreenSkin,
             NeutralDragon, NeutralMarsh, NeutralWater, NeutralBarbarian, NeutralWolf, Elf }
+```
+##### Terrain
+```lua
+Terrain = { Human, Dwarf, Heretic, Undead, Neutral, Elf }
+```
+
+##### Ground
+```lua
+Ground = { Plain, Forest, Water, Mountain }
 ```
 
 ---
@@ -224,8 +235,25 @@ Searches for [ScenarioVariable](luaApi.md#scenariovariable) by its name, reeturn
 ```lua
 local variable = variables:getVariable('VAR1')
 if (variable == nil) then
-  return
+    return
 end
+```
+
+---
+
+#### Tile
+Represents map tile.
+
+Methods:
+##### terrain
+Returns tile [terrain](luaApi.md#terrain) type.
+```lua
+tile.terrain
+```
+##### ground
+Returns tile [ground](luaApi.md#ground) type.
+```lua
+tile.ground
 ```
 
 ---
@@ -239,7 +267,7 @@ Searches for [Location](luaApi.md#location) by id string or [Id](luaApi.md#id), 
 ```lua
 local location = scenario:getLocation('S143LO0001')
 if (location == nil) then
-  return
+    return
 end
 ```
 ##### variables
@@ -247,8 +275,26 @@ Returns [ScenarioVariables](luaApi.md#scenariovariables). If scenario has no var
 ```lua
 local variables = scenario.variables
 if (variables == nil) then
-  return
+    return
 end
+```
+##### getTile
+Searches for [Tile](luaApi.md#tile) by pair of coordinates or [Point](luaApi.md#point), returns nil if not found.
+```lua
+local tile = scenario:getTile(3, 5)
+if (tile == nil) then
+    return
+end
+```
+##### day
+Returns number of current day in game.
+```lua
+scenario.day
+```
+##### size
+Returns scenario map size.
+```lua
+scenario.size
 ```
 
 ---
@@ -335,4 +381,48 @@ function getTargets(attacker, selected, allies, targets, targetsAreAllies)
 	end
 	return result
 end
+```
+
+---
+
+### Event condition examples
+#### Check if all tiles in location have the same terrain (Human)
+```lua
+-- You can use lambda functions freely
+local forEachTile = function (location, f)
+    local pos = location.position
+    -- Use integers for tile coordinates
+    local halfR = math.floor(location.radius / 2)
+    local startX = pos.x - halfR
+    local startY = pos.y - halfR
+    local endX = pos.x + halfR
+    local endY = pos.y + halfR
+    
+    for x = startX,endX,1 do
+        for y = startY,endY,1 do
+	    f(x, y)
+        end
+    end
+end
+
+local location = scenario:getLocation('S143LO0000')
+if (location == nil) then
+    return false
+end
+
+local tilesTotal = location.radius * location.radius
+local count = 0
+
+forEachTile(location, function (x, y)
+    local tile = scenario:getTile(x, y)
+    if (tile == nil) then
+        return false
+    end
+    
+    if (tile.terrain == Terrain.Human) then
+        count = count + 1
+    end
+end)
+
+return tilesTotal == count
 ```
