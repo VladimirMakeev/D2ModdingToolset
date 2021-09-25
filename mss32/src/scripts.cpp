@@ -27,6 +27,7 @@
 #include "scenariovariableview.h"
 #include "scenarioview.h"
 #include "scenvariablesview.h"
+#include "tileview.h"
 #include "unitimplview.h"
 #include "unitslotview.h"
 #include "unitview.h"
@@ -47,6 +48,7 @@ static void doBindApi(sol::state& lua)
         "Neutral", RaceId::Neutral,
         "Elf", RaceId::Elf
     );
+
     lua.new_enum("Subrace",
         "Custom", SubRaceId::Custom,
         "Human", SubRaceId::Human,
@@ -64,6 +66,22 @@ static void doBindApi(sol::state& lua)
         "NeutralWolf", SubRaceId::NeutralWolf,
         "Elf", SubRaceId::Elf
     );
+
+    lua.new_enum("Terrain",
+        "Human", TerrainId::Human,
+        "Dwarf", TerrainId::Dwarf,
+        "Heretic", TerrainId::Heretic,
+        "Undead", TerrainId::Undead,
+        "Neutral", TerrainId::Neutral,
+        "Elf", TerrainId::Elf
+    );
+
+    lua.new_enum("Ground",
+        "Plain", GroundId::Plain,
+        "Forest", GroundId::Forest,
+        "Water", GroundId::Water,
+        "Mountain", GroundId::Mountain
+    );
     // clang-format on
 
     bindings::UnitView::bind(lua);
@@ -76,6 +94,7 @@ static void doBindApi(sol::state& lua)
     bindings::IdView::bind(lua);
     bindings::ScenVariablesView::bind(lua);
     bindings::ScenarioVariableView::bind(lua);
+    bindings::TileView::bind(lua);
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }
 
