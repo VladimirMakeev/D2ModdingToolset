@@ -29,13 +29,16 @@ class state;
 
 namespace game {
 struct IMidgardObjectMap;
-}
+struct CScenarioInfo;
+} // namespace game
 
 namespace bindings {
 
 struct IdView;
+struct Point;
 class LocationView;
 class ScenVariablesView;
+class TileView;
 
 class ScenarioView
 {
@@ -48,10 +51,20 @@ public:
     std::optional<LocationView> getLocation(const std::string& id) const;
     /** Searches for location by id. */
     std::optional<LocationView> getLocationById(const IdView& id) const;
-
+    /** Returns scenario variables, if present. */
     std::optional<ScenVariablesView> getScenVariables() const;
 
+    /** Returns tile by coordinate pair. */
+    std::optional<TileView> getTile(int x, int y) const;
+    /** Returns tile by specified point. */
+    std::optional<TileView> getTileByPoint(const Point& p) const;
+
+    int getCurrentDay() const;
+    int getSize() const;
+
 private:
+    const game::CScenarioInfo* getScenarioInfo() const;
+
     const game::IMidgardObjectMap* objectMap;
 };
 

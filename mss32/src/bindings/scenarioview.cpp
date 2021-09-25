@@ -20,9 +20,12 @@
 #include "scenarioview.h"
 #include "dynamiccast.h"
 #include "locationview.h"
+#include "midgardmapblock.h"
 #include "midgardobjectmap.h"
 #include "midscenvariables.h"
+#include "scenarioinfo.h"
 #include "scenvariablesview.h"
+#include "tileview.h"
 #include "utils.h"
 #include <sol/sol.hpp>
 
@@ -38,6 +41,9 @@ void ScenarioView::bind(sol::state& lua)
     scenario["getLocation"] = sol::overload<>(&ScenarioView::getLocation,
                                               &ScenarioView::getLocationById);
     scenario["variables"] = sol::property(&ScenarioView::getScenVariables);
+    scenario["getTile"] = sol::overload<>(&ScenarioView::getTile, &ScenarioView::getTileByPoint);
+    scenario["day"] = sol::property(&ScenarioView::getCurrentDay);
+    scenario["size"] = sol::property(&ScenarioView::getSize);
 }
 
 std::optional<LocationView> ScenarioView::getLocation(const std::string& id) const
@@ -77,6 +83,83 @@ std::optional<ScenVariablesView> ScenarioView::getScenVariables() const
     }
 
     return ScenVariablesView{variables};
+}
+
+std::optional<TileView> ScenarioView::getTile(int x, int y) const
+{
+    auto info = getScenarioInfo();
+    if (!info) {
+        return std::nullopt;
+    }
+
+    if (x < 0 || x >= info->mapSize || y < 0 || y >= info->mapSize) {
+        // Outside of map
+        return std::nullopt;
+    }
+
+    using namespace game;
+
+    const auto& id = CMidgardIDApi::get();
+    CMidgardID blockId{};
+    const std::uint32_t blockX = x / 8 * 8;
+    const std::uint32_t blockY = y / 4 * 4;
+    id.fromParts(&blockId, IdCategory::Scenario, id.getCategoryIndex(&info->infoId),
+                 IdType::MapBlock, blockX | (blockY << 8));
+
+    auto blockObj = objectMap->vftable->findScenarioObjectById(objectMap, &blockId);
+    if (!blockObj) {
+        return std::nullopt;
+    }
+
+    auto block = static_cast<const CMidgardMapBlock*>(blockObj);
+    const auto& blockPos = block->position;
+    if (x < blockPos.x || x >= blockPos.x + 8 || y < blockPos.y || y >= blockPos.y + 4) {
+        // Outside of map block
+        return std::nullopt;
+    }
+
+    const auto index = x + 8 * (y - blockPos.y) - blockPos.x;
+    if (index < 0 || index >= 32) {
+        return std::nullopt;
+    }
+
+    return TileView{block->tiles[index]};
+}
+
+std::optional<TileView> ScenarioView::getTileByPoint(const Point& p) const
+{
+    return getTile(p.x, p.y);
+}
+
+int ScenarioView::getCurrentDay() const
+{
+    auto info = getScenarioInfo();
+    return info ? info->currentTurn : 0;
+}
+
+int ScenarioView::getSize() const
+{
+    auto info = getScenarioInfo();
+    return info ? info->mapSize : 0;
+}
+
+const game::CScenarioInfo* ScenarioView::getScenarioInfo() const
+{
+    using namespace game;
+
+    const auto& id = CMidgardIDApi::get();
+    auto scenarioId = objectMap->vftable->getId(objectMap);
+
+    CMidgardID infoId{};
+    id.fromParts(&infoId, id.getCategory(scenarioId), id.getCategoryIndex(scenarioId),
+                 IdType::ScenarioInfo, 0);
+
+    auto infoObj = objectMap->vftable->findScenarioObjectById(objectMap, &infoId);
+    if (!infoObj) {
+        return nullptr;
+    }
+
+    return static_cast<const CScenarioInfo*>(infoObj);
 }
 
 } // namespace bindings
