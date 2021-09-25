@@ -701,26 +701,22 @@ game::editor::CCondInterf* createCondScriptInterf(game::ITask* task,
     // Disable buttons that are not implemented yet
     auto objectives = dialogApi.findButton(dialog, "BTN_OBJECTIVES");
     if (objectives) {
-        auto setEnabled = static_cast<CButtonInterfApi::Vftable*>(objectives->vftable)->setEnabled;
-        setEnabled(objectives, false);
+        objectives->vftable->setEnabled(objectives, false);
     }
 
     auto buttonCheck = dialogApi.findButton(dialog, "BTN_CHECK");
     if (buttonCheck) {
-        auto setEnabled = static_cast<CButtonInterfApi::Vftable*>(buttonCheck->vftable)->setEnabled;
-        setEnabled(buttonCheck, false);
+        buttonCheck->vftable->setEnabled(buttonCheck, false);
     }
 
     auto codeUp = dialogApi.findButton(dialog, "BTN_CODE_UP");
     if (codeUp) {
-        auto setEnabled = static_cast<CButtonInterfApi::Vftable*>(codeUp->vftable)->setEnabled;
-        setEnabled(codeUp, false);
+        codeUp->vftable->setEnabled(codeUp, false);
     }
 
     auto codeDown = dialogApi.findButton(dialog, "BTN_CODE_DOWN");
     if (codeDown) {
-        auto setEnabled = static_cast<CButtonInterfApi::Vftable*>(codeDown->vftable)->setEnabled;
-        setEnabled(codeDown, false);
+        codeDown->vftable->setEnabled(codeDown, false);
     }
 
     return thisptr;

@@ -42,25 +42,11 @@ static std::array<Api, 4> functions = {{
         (Api::AssignFunctor)0x4d0ee8,
     },
 }};
-
-static std::array<Vftable*, 3> vftables = {{
-    // Akella
-    (Vftable*)0x6e3294,
-    // Russobit
-    (Vftable*)0x6e3294,
-    // Gog
-    (Vftable*)0x6e1234
-}};
 // clang-format on
 
 Api& get()
 {
     return functions[static_cast<int>(hooks::gameVersion())];
-}
-
-Vftable* vftable()
-{
-    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::CButtonInterfApi

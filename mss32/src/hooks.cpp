@@ -752,7 +752,7 @@ static void menuNewSkirmishCtor(game::CMenuNewSkirmish* thisptr, int a1, const c
     const size_t scenariosTotal = getScenariosTotal(scenarios->data);
     if (!scenariosTotal) {
         // Nothing to load
-        CButtonInterfApi::vftable()->setEnabled(loadButton, false);
+        loadButton->vftable->setEnabled(loadButton, false);
         return;
     }
 

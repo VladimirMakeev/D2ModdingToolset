@@ -53,14 +53,16 @@ static_assert(sizeof(CInterfaceData) == 64,
 static_assert(offsetof(CInterfaceData, childs) == 28,
               "CInterfaceData::childs offset must be 28 bytes");
 
-/**
- * Base class for all ui elements.
- */
-struct CInterface
+template <typename T>
+struct CInterfaceT
 {
-    CInterfaceVftable* vftable;
+    T* vftable;
     CInterfaceData* interfaceData;
 };
+
+/** Base class for all ui elements. */
+struct CInterface : public CInterfaceT<CInterfaceVftable>
+{ };
 
 struct CInterfaceVftable
 {

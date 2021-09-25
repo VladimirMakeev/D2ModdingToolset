@@ -26,10 +26,36 @@ namespace game {
 
 struct CDialogInterf;
 struct Functor;
+struct CButtonInterfVftable;
 
 /** Button ui element. */
-struct CButtonInterf : public CInterface
+struct CButtonInterf : public CInterfaceT<CButtonInterfVftable>
 { };
+
+struct CButtonInterfVftable : public CInterfaceVftable
+{
+    void* method34;
+    void* method35;
+    void* method36;
+    void* method37;
+    void* method38;
+    void* method39;
+
+    /** Enables or disables the button. */
+    using SetEnabled = void(__thiscall*)(CButtonInterf* thisptr, bool value);
+    SetEnabled setEnabled;
+
+    void* method41;
+    void* method42;
+    void* method43;
+    void* method44;
+};
+
+static_assert(sizeof(CButtonInterfVftable) == 45 * sizeof(void*),
+              "CButtonInterf vftable must have exactly 45 methods");
+
+static_assert(offsetof(CButtonInterfVftable, setEnabled) == 160,
+              "CButtonInterfVftable::setEnabled offset must be 160 bytes");
 
 namespace CButtonInterfApi {
 
@@ -54,33 +80,6 @@ struct Api
 };
 
 Api& get();
-
-struct Vftable : public CInterfaceVftable
-{
-    void* method34;
-    void* method35;
-    void* method36;
-    void* method37;
-    void* method38;
-    void* method39;
-
-    /** Enables or disables the button. */
-    using SetEnabled = void(__thiscall*)(CButtonInterf* thisptr, bool value);
-    SetEnabled setEnabled;
-
-    void* method41;
-    void* method42;
-    void* method43;
-    void* method44;
-};
-
-static_assert(sizeof(Vftable) == 45 * sizeof(void*),
-              "CButtonInterf vftable must have exactly 45 methods");
-
-static_assert(offsetof(Vftable, setEnabled) == 160,
-              "CButtonInterfVftable::setEnabled offset must be 160 bytes");
-
-Vftable* vftable();
 
 } // namespace CButtonInterfApi
 

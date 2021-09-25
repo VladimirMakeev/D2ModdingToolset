@@ -606,17 +606,17 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
             break;
         case BattleAction::Retreat: {
             auto button = dialogApi.findButton(dialog, "BTN_RETREAT");
-            ((CButtonInterfApi::Vftable*)button->vftable)->setEnabled(button, true);
+            button->vftable->setEnabled(button, true);
             break;
         }
         case BattleAction::Wait: {
             auto button = dialogApi.findButton(dialog, "BTN_WAIT");
-            ((CButtonInterfApi::Vftable*)button->vftable)->setEnabled(button, true);
+            button->vftable->setEnabled(button, true);
             break;
         }
         case BattleAction::Defend: {
             auto button = dialogApi.findButton(dialog, "BTN_DEFEND");
-            ((CButtonInterfApi::Vftable*)button->vftable)->setEnabled(button, true);
+            button->vftable->setEnabled(button, true);
             break;
         }
         case BattleAction::UseItem:
@@ -624,6 +624,7 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
             break;
         }
     }
+
     viewer->data2->unknown3 = 0;
 
     auto bigFace2 = viewerApi.getBigFace2(viewer);
