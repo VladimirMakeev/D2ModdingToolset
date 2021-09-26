@@ -1945,6 +1945,9 @@
     <ClInclude Include="include\usleader.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\usleaderimpl.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\leadercategory.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
