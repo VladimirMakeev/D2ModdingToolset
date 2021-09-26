@@ -366,6 +366,16 @@ enum class LandmarkId : int
     Terrain,
 };
 
+/** Leader ids from LLeadC.dbf. */
+enum class LeaderId : int
+{
+    Fighter = 1,
+    Explorer,
+    Mage,
+    Rod,
+    Noble,
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
