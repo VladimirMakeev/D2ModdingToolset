@@ -1936,6 +1936,9 @@
     <ClInclude Include="include\bindings\tileview.h">
       <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
+    <ClInclude Include="include\usracialsoldier.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\usglobal.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>

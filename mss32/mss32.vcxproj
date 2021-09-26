@@ -731,6 +731,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\unitsforhire.h" />
     <ClInclude Include="include\unitutils.h" />
     <ClInclude Include="include\usglobal.h" />
+    <ClInclude Include="include\usracialsoldier.h" />
     <ClInclude Include="include\ussoldier.h" />
     <ClInclude Include="include\ussoldierimpl.h" />
     <ClInclude Include="include\umattackhooks.h" />
