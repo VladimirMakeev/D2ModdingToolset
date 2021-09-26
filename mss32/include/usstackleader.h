@@ -24,21 +24,55 @@
 
 namespace game {
 
+struct LGroundCategory;
+struct LLeaderAbility;
+struct GlobalData;
 struct IUsStackLeaderVftable;
 
+/** Stack leader interface. */
 struct IUsStackLeader : public IUsUnitExtensionT<IUsStackLeaderVftable>
 { };
 
 struct IUsStackLeaderVftable : public IUsUnitExtensionVftable
 {
-    using GetMovement = int(__thiscall*)(IUsStackLeader* thisptr);
-    GetMovement getMovement;
+    using GetInt = int(__thiscall*)(const IUsStackLeader* thisptr);
 
-    void* methods[8];
+    /** Returns maximum movement points stack leader can have. */
+    GetInt getMovement;
+
+    /** Returns leader ability name. */
+    using GetAbilityName = const char*(__thiscall*)(const IUsStackLeader* thisptr);
+    GetAbilityName getAbilityName;
+
+    /** Returns true if leader has movement bonus on specified ground. */
+    using HasMovementBonus = bool(__thiscall*)(const IUsStackLeader* thisptr,
+                                               const LGroundCategory* ground);
+    HasMovementBonus hasMovementBonus;
+
+    /** Returns scouting range. */
+    GetInt getScount;
+
+    GetInt getLeadership;
+
+    GetInt getNegotiate;
+
+    /** Returns true if leader has specified ability. */
+    using HasAbility = bool(__thiscall*)(const IUsStackLeader* thisptr,
+                                         const LLeaderAbility* ability);
+    HasAbility hasAbility;
+
+    using GetUnknown = bool(__thiscall*)(const IUsStackLeader* thisptr);
+    GetUnknown getUnknown;
+
+    GetInt getLowerCost;
+
+    /** Checks that stack leader data is correct. */
+    using Link = void(__thiscall*)(const IUsStackLeader* thisptr, const GlobalData** globalData);
+    Link link;
 };
 
-static_assert(sizeof(IUsStackLeaderVftable) == 10 * sizeof(void*),
-              "IUsStackLeader vftable must have exactly 10 methods");
+static_assert(sizeof(IUsStackLeaderVftable) == 11 * sizeof(void*),
+              "IUsStackLeader vftable must have exactly 11 methods");
 
 } // namespace game
 
