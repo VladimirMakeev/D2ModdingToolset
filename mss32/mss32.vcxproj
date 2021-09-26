@@ -734,7 +734,9 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\usglobal.h" />
     <ClInclude Include="include\usleader.h" />
     <ClInclude Include="include\usleaderimpl.h" />
+    <ClInclude Include="include\usnoble.h" />
     <ClInclude Include="include\usracialleader.h" />
+    <ClInclude Include="include\usracialnoble.h" />
     <ClInclude Include="include\usracialsoldier.h" />
     <ClInclude Include="include\ussoldier.h" />
     <ClInclude Include="include\ussoldierimpl.h" />
