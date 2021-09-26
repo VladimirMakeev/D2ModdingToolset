@@ -44,7 +44,9 @@ static_assert(sizeof(TUsRacialSoldierData) == 16,
               "Size of TUsRacialSoldierData structure must be exactly 16 bytes");
 
 /**
- * Represents soldier unit.
+ * Represents soldier unit template.
+ * Soldier unit in scenario is represented by CMidUnit
+ * which accesses soldier template data via CMidUnit::unitImpl pointer.
  * Soldier units are hired in cities and can be upgraded depending on buildings in capital.
  * They are ordinary units in groups.
  */
