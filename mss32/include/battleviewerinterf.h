@@ -142,7 +142,7 @@ static_assert(sizeof(CUnitRectAndId) == 20,
 struct CBattleViewerTargetUnitData : CUnitRectAndId
 {
     int position;
-    bool unknown;
+    bool isAttacker; /**< Meaning assumed. */
     bool isRetreating;
     bool isBig;
     bool isTargetForSummonOrAttackTargetsBothGroups;
