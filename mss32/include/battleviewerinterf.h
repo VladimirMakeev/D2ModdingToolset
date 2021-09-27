@@ -380,7 +380,7 @@ struct Api
     using AddTargetUnitData = void(__thiscall*)(CBattleViewerInterf* thisptr,
                                                 int targetPosition,
                                                 const CMidgardID* targetUnitId,
-                                                bool a4,
+                                                bool isAttacker, /**< Meaning assumed. */
                                                 bool isTargetForSummonOrAttackTargetsBothGroups,
                                                 bool isTargetForSummon,
                                                 bool canPerformAttackOnTargetOrAllAttackReach);
