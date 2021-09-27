@@ -130,6 +130,30 @@ static_assert(sizeof(CBattleViewerUnknownUnitData) == 12,
 
 using CUnknownUnitDataList = SortedList<Pair<CMidgardID, CBattleViewerUnknownUnitData>>;
 
+struct CUnitRectAndId
+{
+    CMqRect rect;
+    CMidgardID id;
+};
+
+static_assert(sizeof(CUnitRectAndId) == 20,
+              "Size of CUnitRectAndId structure must be exactly 20 bytes");
+
+struct CBattleViewerTargetUnitData : CUnitRectAndId
+{
+    int position;
+    bool unknown;
+    bool isRetreating;
+    bool isBig;
+    bool isTargetForSummonOrAttackTargetsBothGroups;
+    bool isTargetForSummon;
+    bool canPerformAttackOnTargetOrAllAttackReach;
+    char padding[2];
+};
+
+static_assert(sizeof(CBattleViewerTargetUnitData) == 32,
+              "Size of CBattleViewerTargetUnitData structure must be exactly 32 bytes");
+
 struct CBattleViewerInterfData
 {
     CAvoidFlickerImage avoidFlickerImage;
@@ -141,7 +165,7 @@ struct CBattleViewerInterfData
     BattleAttackInfo** attackInfo;
     char unknown3[4];
     CMidgardID itemId;
-    Vector<void*> unknownVector; /**< Each element contains 32 bytes of data. */
+    Vector<CBattleViewerTargetUnitData> targetUnitData;
     CBatViewer2DEngine* batViewer2dEngine;
     CMqRect dialogInterfArea;
     CBatImagesLoader* imagesLoader;
@@ -345,7 +369,7 @@ struct Api
                                                      ButtonCallback* callback);
     CreateButtonFunctor createButtonFunctor;
 
-    using UnknownMethod4 = void(__thiscall*)(Vector<void*>* thisptr);
+    using UnknownMethod4 = void(__thiscall*)(Vector<CBattleViewerTargetUnitData>* thisptr);
     UnknownMethod4 unknownMethod4;
 
     using FillTargetPositions = void(__stdcall*)(bool a1,
@@ -353,14 +377,14 @@ struct Api
                                                  UnitPositionLinkedList* value);
     FillTargetPositions fillTargetPositions;
 
-    using UnknownMethod5 = void(__thiscall*)(CBattleViewerInterf* thisptr,
-                                             int targetPosition,
-                                             const CMidgardID* targetUnitId,
-                                             bool a4,
-                                             bool a5,
-                                             bool positionForSummon,
-                                             bool a7);
-    UnknownMethod5 unknownMethod5;
+    using AddTargetUnitData = void(__thiscall*)(CBattleViewerInterf* thisptr,
+                                                int targetPosition,
+                                                const CMidgardID* targetUnitId,
+                                                bool a4,
+                                                bool isTargetForSummonOrAttackTargetsBothGroups,
+                                                bool isTargetForSummon,
+                                                bool canPerformAttackOnTargetOrAllAttackReach);
+    AddTargetUnitData addTargetUnitData;
 
     using SetCheckedForRightUnitsToggleButton = void(__stdcall*)(CBattleViewerInterf* thisptr,
                                                                  bool checked);
