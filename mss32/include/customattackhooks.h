@@ -143,7 +143,7 @@ void __stdcall fillTargetsListHooked(const game::IMidgardObjectMap* objectMap,
                                      const game::CMidgardID* attackUnitOrItemId,
                                      bool targetAllies,
                                      game::TargetsList* value,
-                                     bool checkTransformed);
+                                     bool checkAltAttack);
 
 void __stdcall fillEmptyTargetsListHooked(const game::IMidgardObjectMap* objectMap,
                                           const game::BattleMsgData* battleMsgData,

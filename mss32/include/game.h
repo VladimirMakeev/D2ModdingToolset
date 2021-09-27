@@ -163,7 +163,7 @@ using CreateBatAttack = IBatAttack*(__stdcall*)(const IMidgardObjectMap* objectM
 using GetAttackById = IAttack*(__stdcall*)(const IMidgardObjectMap* objectMap,
                                            const CMidgardID* id,
                                            int attackNumber,
-                                           bool checkTransformed);
+                                           bool checkAltAttack);
 
 using IsUnitImmuneToAttack = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
                                               const BattleMsgData* battleMsgData,
@@ -479,10 +479,10 @@ using IsAttackBetterThanItemUsage = bool(__stdcall*)(const IItem* item,
                                                      const IUsSoldier* soldier,
                                                      const CMidgardID* unitImplId);
 
-using ComputeAttackDamageCheckTransformed = int(__stdcall*)(const IUsSoldier* soldier,
-                                                            const CMidgardID* unitImplId,
-                                                            const BattleMsgData* battleMsgData,
-                                                            const CMidgardID* unitId);
+using ComputeAttackDamageCheckAltAttack = int(__stdcall*)(const IUsSoldier* soldier,
+                                                          const CMidgardID* unitImplId,
+                                                          const BattleMsgData* battleMsgData,
+                                                          const CMidgardID* unitId);
 
 using FillAttackTransformIdList = void(__thiscall*)(const void* thisptr,
                                                     IdList* value,
@@ -637,7 +637,7 @@ struct Functions
     IsUnitSuitableForAiNobleDuel isUnitSuitableForAiNobleDuel;
     IsAttackEffectiveAgainstGroup isAttackEffectiveAgainstGroup;
     IsAttackBetterThanItemUsage isAttackBetterThanItemUsage;
-    ComputeAttackDamageCheckTransformed computeAttackDamageCheckTransformed;
+    ComputeAttackDamageCheckAltAttack computeAttackDamageCheckAltAttack;
     FillAttackTransformIdList fillAttackTransformIdList;
     IsSmallMeleeFighter isSmallMeleeFighter;
     CAiHireUnitEval cAiHireUnitEval;

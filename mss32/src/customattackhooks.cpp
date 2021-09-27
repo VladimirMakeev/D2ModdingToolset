@@ -640,7 +640,7 @@ void __stdcall fillTargetsListHooked(const game::IMidgardObjectMap* objectMap,
                                      const game::CMidgardID* attackUnitOrItemId,
                                      bool targetAllies,
                                      game::TargetsList* value,
-                                     bool checkTransformed)
+                                     bool checkAltAttack)
 {
     using namespace game;
 
@@ -654,7 +654,7 @@ void __stdcall fillTargetsListHooked(const game::IMidgardObjectMap* objectMap,
     CMidgardID targetGroupId{};
     fn.getAllyOrEnemyGroupId(&targetGroupId, battleMsgData, unitId, targetAllies);
 
-    IAttack* attack = fn.getAttackById(objectMap, attackUnitOrItemId, 1, checkTransformed);
+    IAttack* attack = fn.getAttackById(objectMap, attackUnitOrItemId, 1, checkAltAttack);
     LAttackReach* attackReach = attack->vftable->getAttackReach(attack);
     if (attackReach->id == reaches.all->id) {
         battle.fillTargetsListForAllAttackReach(objectMap, battleMsgData, batAttack, &targetGroupId,
@@ -1021,8 +1021,8 @@ bool __stdcall findShatterAttackTarget(const game::IMidgardObjectMap* objectMap,
 
     auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
 
-    auto attackDamage = fn.computeAttackDamageCheckTransformed(soldier, &unit->unitImpl->unitId,
-                                                               battleMsgData, unitId);
+    auto attackDamage = fn.computeAttackDamageCheckAltAttack(soldier, &unit->unitImpl->unitId,
+                                                             battleMsgData, unitId);
     if (attackDamage > 0) {
         IAttack* primaryAttack = fn.getAttackById(objectMap, unitId, 1, true);
         LAttackReach* attackReach = attack->vftable->getAttackReach(primaryAttack);
@@ -1190,8 +1190,8 @@ bool __stdcall isAttackBetterThanItemUsageHooked(const game::IItem* item,
     auto itemDamage = computeAverageTotalDamage(itemAttack,
                                                 itemAttack->vftable->getQtyDamage(itemAttack));
 
-    auto soldierDamage = fn.computeAttackDamageCheckTransformed(soldier, unitImplId, nullptr,
-                                                                &emptyId);
+    auto soldierDamage = fn.computeAttackDamageCheckAltAttack(soldier, unitImplId, nullptr,
+                                                              &emptyId);
     soldierDamage = computeAverageTotalDamage(soldier->vftable->getAttackById(soldier),
                                               soldierDamage);
 
