@@ -244,6 +244,7 @@ static Hooks getGameHooks()
         // Fix bug where transform-self attack is unable to target self if alt attack is targeting allies
         {CBatAttackTransformSelfApi::vftable()->onHit, transformSelfAttackOnHitHooked},
         // Fix inability to target self for transformation in case of transform-self + summon attack
+        // Remove persistent marking of all target units in case of transform-self attack
         {BattleViewerInterfApi::vftable()->update, battleViewerInterfUpdateHooked},
         // Fix missing modifiers of alternative attacks
         {fn.getUnitAttacks, getUnitAttacksHooked},

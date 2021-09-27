@@ -481,6 +481,14 @@ void updateForNormalAttack(game::CBattleViewerInterf* viewer)
         }
 
         bool isTargetForSummonOrAttackTargetsBothGroups = hasNegativePosition;
+        if (isTargetForSummonOrAttackTargetsBothGroups) {
+            auto nonAltAttack = fn.getAttackById(viewer->data->objectMap, &viewer->data->unitId, 1,
+                                                 false);
+            auto nonAltAttackClass = nonAltAttack->vftable->getAttackClass(nonAltAttack);
+            isTargetForSummonOrAttackTargetsBothGroups = nonAltAttackClass->id
+                                                         != attackClasses.transformSelf->id;
+        }
+
         bool isTargetForSummon = targetUnitId != viewer->data->unitId
                                  && (targetUnitId == emptyId
                                      || attackClass->id == attackClasses.summon->id);
