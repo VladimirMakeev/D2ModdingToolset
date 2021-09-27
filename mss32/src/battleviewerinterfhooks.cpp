@@ -429,7 +429,7 @@ void updateForNormalAttack(game::CBattleViewerInterf* viewer)
     }
 
     bool unknown = viewer->data->targetData.attack.unknown == false;
-    viewerApi.unknownMethod4(&viewer->data->unknownVector);
+    viewerApi.unknownMethod4(&viewer->data->targetUnitData);
 
     void* tmp{};
     auto targetGroup = fn.getStackFortRuinGroup(tmp, viewer->data->objectMap,
@@ -480,14 +480,22 @@ void updateForNormalAttack(game::CBattleViewerInterf* viewer)
             targetUnitId = *groupApi.getUnitIdByPosition(otherGroup, absolutePosition);
         }
 
-        bool unknown3 = hasNegativePosition;
-        bool positionForSummon = targetUnitId != viewer->data->unitId
+        bool isTargetForSummonOrAttackTargetsBothGroups = hasNegativePosition;
+        if (isTargetForSummonOrAttackTargetsBothGroups) {
+            auto nonAltAttack = fn.getAttackById(viewer->data->objectMap, &viewer->data->unitId, 1,
+                                                 false);
+            auto nonAltAttackClass = nonAltAttack->vftable->getAttackClass(nonAltAttack);
+            isTargetForSummonOrAttackTargetsBothGroups = nonAltAttackClass->id
+                                                         != attackClasses.transformSelf->id;
+        }
+
+        bool isTargetForSummon = targetUnitId != viewer->data->unitId
                                  && (targetUnitId == emptyId
                                      || attackClass->id == attackClasses.summon->id);
-        if (positionForSummon) {
+        if (isTargetForSummon) {
             targetUnitId = emptyId;
             id.summonUnitIdFromPosition(&targetUnitId, absolutePosition);
-            unknown3 = true;
+            isTargetForSummonOrAttackTargetsBothGroups = true;
 
             if (!targetPosition->second)
                 continue;
@@ -509,9 +517,12 @@ void updateForNormalAttack(game::CBattleViewerInterf* viewer)
                                      &targetUnitId, isSupportAttack);
         }
 
-        bool unknown4 = targetPosition->second || (targetPosition->first >= 0 && isAllAttackReach);
-        viewerApi.unknownMethod5(viewer, targetPosition->first, &targetUnitId, unknown2, unknown3,
-                                 positionForSummon, unknown4);
+        bool canPerformAttackOnTargetOrAllAttackReach = targetPosition->second
+                                                        || (targetPosition->first >= 0
+                                                            && isAllAttackReach);
+        viewerApi.addTargetUnitData(viewer, targetPosition->first, &targetUnitId, unknown2,
+                                    isTargetForSummonOrAttackTargetsBothGroups, isTargetForSummon,
+                                    canPerformAttackOnTargetOrAllAttackReach);
     }
 
     if (viewerApi.isFlipped(viewer) != viewer->data->targetData.attack.unknown)

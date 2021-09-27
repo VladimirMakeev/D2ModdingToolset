@@ -559,8 +559,7 @@ struct Api
      * @param[in] attackUnitOrItemId unit or item id performing the attack.
      * @param targetAllies specifies whether the attack should target allies or not.
      * @param[inout] targetsList list to fill.
-     * @param checkTransformed specifies whether the attack should check units transformations or
-     * not.
+     * @param[in] checkAltAttack specifies whether alt-attack should be checked to fill targets for.
      */
     using FillTargetsList = void(__stdcall*)(const IMidgardObjectMap* objectMap,
                                              const BattleMsgData* battleMsgData,
@@ -569,7 +568,7 @@ struct Api
                                              const CMidgardID* attackUnitOrItemId,
                                              bool targetAllies,
                                              TargetsList* value,
-                                             bool checkTransformed);
+                                             bool checkAltAttack);
     FillTargetsList fillTargetsList;
 
     using FillTargetsListForAllAnyAttackReach = void(__stdcall*)(const IMidgardObjectMap* objectMap,
