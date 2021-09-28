@@ -647,6 +647,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\musichooks.h" />
     <ClInclude Include="include\netdplayplayer.h" />
     <ClInclude Include="include\netdplayplayerclient.h" />
+    <ClInclude Include="include\netdplayplayerenum.h" />
     <ClInclude Include="include\netdplayplayerserver.h" />
     <ClInclude Include="include\netdplayservice.h" />
     <ClInclude Include="include\netdplaysession.h" />
