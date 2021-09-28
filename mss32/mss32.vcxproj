@@ -633,6 +633,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mqimage2.h" />
     <ClInclude Include="include\mqimage2surface16.h" />
     <ClInclude Include="include\mqnetplayer.h" />
+    <ClInclude Include="include\mqnetplayerenum.h" />
     <ClInclude Include="include\mqnetplayerserver.h" />
     <ClInclude Include="include\mqnetservice.h" />
     <ClInclude Include="include\mqnetsession.h" />
