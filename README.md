@@ -49,7 +49,11 @@
 - Fixes game crash on 144x144 maps that occurs if there is a party standing on a lower-left or lower-right edge of the map;
 - Fixes AI unit placement logic for melee units with vampiric attacks;
 - Fixes AI targeting for single lower-damage and lower-initiative attacks;
+- Fixes AI targeting for shatter attacks where it tends to pick a most armored target ignoring general prioritization;
+- Fixes AI targeting for shatter attacks where it assumes that armored targets always stay armored, even if their armor is already shattered;
+- Fixes AI targeting where it incorrectly calculates effective HP of armored targets, getting significantly lower values than intended;
 - Fixes incorrect function of transform-self attack in cases where its alternative attack targets allies (heal, summon, etc.);
+- Removes persistent target highlighting for transform-self attack (circle animations for all possible targets on the ground), so it no longer interferes with highlighting for targets that are actually going to be affected by the attack;
 - Fixes missing modifiers of alternative attacks (![demo video](https://user-images.githubusercontent.com/5180699/125460215-144ef648-5497-4674-b9d6-ac7d2fa95125.mp4));
 - Fixes Scenario Editor bug with elves race as a caster in "Cast spell on location" event effect;
 - <details>
