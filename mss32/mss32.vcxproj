@@ -636,6 +636,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mqnetplayerenum.h" />
     <ClInclude Include="include\mqnetplayerserver.h" />
     <ClInclude Include="include\mqnetservice.h" />
+    <ClInclude Include="include\mqnetsessenum.h" />
     <ClInclude Include="include\mqnetsession.h" />
     <ClInclude Include="include\mqnetsystem.h" />
     <ClInclude Include="include\mqnettraffic.h" />
@@ -650,6 +651,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\netdplayplayerenum.h" />
     <ClInclude Include="include\netdplayplayerserver.h" />
     <ClInclude Include="include\netdplayservice.h" />
+    <ClInclude Include="include\netdplaysessenum.h" />
     <ClInclude Include="include\netdplaysession.h" />
     <ClInclude Include="include\netmessages.h" />
     <ClInclude Include="include\netmsg.h" />
