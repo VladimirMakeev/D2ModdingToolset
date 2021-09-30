@@ -25,6 +25,10 @@ namespace game {
 struct String;
 struct IMqNetPlayerEnumVftable;
 
+/**
+ * Interface for thin wrappers that stores player info in session.
+ * Used to show in UI.
+ */
 struct IMqNetPlayerEnum
 {
     IMqNetPlayerEnumVftable* vftable;

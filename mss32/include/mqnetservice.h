@@ -20,6 +20,8 @@
 #ifndef MQNETSERVICE_H
 #define MQNETSERVICE_H
 
+#include "linkedlist.h"
+
 namespace game {
 
 struct GUID;
@@ -40,12 +42,18 @@ struct IMqNetServiceVftable
     using HasSessions = bool(__thiscall*)(IMqNetService* thisptr);
     HasSessions hasSessions;
 
+    /**
+     * Returns list of sessions.
+     * CNetDPlayService calls IDirectPlay4::EnumSessions here.
+     * @param allSessions if set adds all found sessions to the list, otherwise available only.
+     * DPENUMSESSIONS_ALL or DPENUMSESSIONS_AVAILABLE in case of CNetDPlayService.
+     */
     using GetSessions = void(__thiscall*)(IMqNetService* thisptr,
-                                          int a1,
+                                          LinkedList<IMqNetSessEnum*>* sessions,
                                           const GUID* appGuid,
                                           const char* ipAddress,
-                                          bool a5,
-                                          bool a6);
+                                          bool allSessions,
+                                          bool requirePassword);
     GetSessions getSessions;
 
     /**

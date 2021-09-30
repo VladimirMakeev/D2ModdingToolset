@@ -25,6 +25,7 @@
 
 namespace game {
 
+/** Thin wrapper of player data for Direct Play. */
 struct CNetDPlayPlayerEnum : public IMqNetPlayerEnum
 {
     int playerNetId;
