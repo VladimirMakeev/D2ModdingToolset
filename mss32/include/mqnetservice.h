@@ -21,10 +21,10 @@
 #define MQNETSERVICE_H
 
 #include "linkedlist.h"
+#include <guiddef.h>
 
 namespace game {
 
-struct GUID;
 struct IMqNetSession;
 struct IMqNetSessEnum;
 struct IMqNetServiceVftable;
