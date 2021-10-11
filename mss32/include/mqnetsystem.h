@@ -22,10 +22,28 @@
 
 namespace game {
 
+struct IMqNetSystemVftable;
+
 struct IMqNetSystem
 {
-    void* vftable;
+    IMqNetSystemVftable* vftable;
 };
+
+struct IMqNetSystemVftable
+{
+    using Destructor = void(__thiscall*)(IMqNetSystem* thisptr, char flags);
+    Destructor destructor;
+
+    using OnConnectionChanged = void(__thiscall*)(IMqNetSystem* thisptr, int netPlayerId);
+
+    /** Called from IMqNetPlayer::ReceiveMessage to notify about player connection. */
+    OnConnectionChanged onPlayerConnected;
+    /** Called from IMqNetPlayer::ReceiveMessage to notify about player lost connection. */
+    OnConnectionChanged onPlayerDisconnected;
+};
+
+static_assert(sizeof(IMqNetSystemVftable) == 3 * sizeof(void*),
+              "IMqNetSystem vftable must have exactly 3 methods");
 
 } // namespace game
 
