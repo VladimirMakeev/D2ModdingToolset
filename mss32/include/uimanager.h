@@ -29,6 +29,7 @@ struct CUIManagerData;
 struct CUIManagerUnknownData;
 struct Functor;
 struct CMqPoint;
+struct CMqUIKernelSimple;
 
 struct CUIManager
 {
@@ -41,7 +42,7 @@ static_assert(sizeof(CUIManager) == 8, "Size of CUIManager structure must be exa
 struct CUIManagerData
 {
     void* uiController;
-    void* uiKernel;
+    CMqUIKernelSimple* uiKernel;
 };
 
 static_assert(sizeof(CUIManagerData) == 8,
