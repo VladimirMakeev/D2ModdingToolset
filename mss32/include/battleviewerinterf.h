@@ -32,7 +32,7 @@
 #include "midgardid.h"
 #include "mqrect.h"
 #include "sortedlist.h"
-#include "uimanager.h"
+#include "uievent.h"
 #include "unitpositionlinkedlist.h"
 #include "unitpositionlist.h"
 #include <cstddef>
@@ -233,7 +233,7 @@ struct CBattleViewerInterfData2
     bool unknown4;
     char unknown5;
     char unknown51;
-    CUIManagerUnknownData uiManagerUnknownData;
+    UiEvent autobattleTimerEvent;
     bool unknown6;
     bool unknown7;
     bool unknown8;

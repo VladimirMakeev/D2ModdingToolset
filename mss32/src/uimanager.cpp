@@ -28,27 +28,42 @@ static std::array<Api, 3> functions = {{
     // Akella
     Api{
         (Api::Get)0x561afc,
-        (Api::CreateUnknownData)0x561f57,
-        (Api::UnknownDataCopy)0x562081,
-        (Api::UnknownDataDestructor)0x562050,
+        (Api::CreateTimerEvent)0x561f57,
+        (Api::CreateUiEvent)0x561d0d,
+        (Api::CreateUiEvent)0x561d58,
+        (Api::CreateUiEvent)0x561d92,
+        (Api::CreateUiEvent)0x561dcc,
+        (Api::CreateUiEvent)0x561e06,
+        (Api::CreateUiEvent)0x561e40,
+        (Api::CreateMessageEvent)0x561ccb,
         (Api::GetMousePosition)0x561c4f,
     },
     // Russobit
     Api{
         (Api::Get)0x561afc,
-        (Api::CreateUnknownData)0x561f57,
-        (Api::UnknownDataCopy)0x562081,
-        (Api::UnknownDataDestructor)0x562050,
+        (Api::CreateTimerEvent)0x561f57,
+        (Api::CreateUiEvent)0x561d0d,
+        (Api::CreateUiEvent)0x561d58,
+        (Api::CreateUiEvent)0x561d92,
+        (Api::CreateUiEvent)0x561dcc,
+        (Api::CreateUiEvent)0x561e06,
+        (Api::CreateUiEvent)0x561e40,
+        (Api::CreateMessageEvent)0x561ccb,
         (Api::GetMousePosition)0x561c4f,
     },
     // Gog
     Api{
         (Api::Get)0x561299,
-        (Api::CreateUnknownData)0x5616f4,
-        (Api::UnknownDataCopy)0x56181e,
-        (Api::UnknownDataDestructor)0x5617ed,
+        (Api::CreateTimerEvent)0x5616f4,
+        (Api::CreateUiEvent)0x5614aa,
+        (Api::CreateUiEvent)0x5614f5,
+        (Api::CreateUiEvent)0x56152f,
+        (Api::CreateUiEvent)0x561569,
+        (Api::CreateUiEvent)0x5615a3,
+        (Api::CreateUiEvent)0x5615dd,
+        (Api::CreateMessageEvent)0x561468,
         (Api::GetMousePosition)0x5613ec,
-    }
+    },
 }};
 // clang-format on
 

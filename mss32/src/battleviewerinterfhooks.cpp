@@ -32,6 +32,7 @@
 #include "middragdropinterf.h"
 #include "midunitgroup.h"
 #include "togglebutton.h"
+#include "uievent.h"
 #include "uimanager.h"
 #include "unitinfolist.h"
 #include "unitpositionlist.h"
@@ -380,30 +381,27 @@ bool __fastcall markAttackTargetsHooked(game::CBattleViewerInterf* thisptr,
     return result;
 }
 
-void setUIManagerUnknownData(game::CBattleViewerInterf* viewer,
-                             game::BattleViewerInterfApi::Api::Callback callback)
+void setTimerEvent(game::CBattleViewerInterf* viewer,
+                   game::BattleViewerInterfApi::Api::Callback callback)
 {
     using namespace game;
 
-    const auto& viewerApi = BattleViewerInterfApi::get();
-    const auto& uiManagerApi = CUIManagerApi::get();
-    const auto& smartPtrApi = SmartPointerApi::get();
-    const auto functorApi = FunctorApi::get();
-
     Functor functor;
     BattleViewerInterfApi::Api::ButtonCallback buttonCallback{callback};
-    viewerApi.createButtonFunctor(&functor, 0, viewer, &buttonCallback);
+    BattleViewerInterfApi::get().createButtonFunctor(&functor, 0, viewer, &buttonCallback);
 
+    const auto& uiManagerApi = CUIManagerApi::get();
     UIManagerPtr uiManager;
     uiManagerApi.get(&uiManager);
 
-    CUIManagerUnknownData uiManagerUnknownData;
-    uiManagerApi.createUnknownData(uiManager.data, &uiManagerUnknownData, &functor, 5);
-    uiManagerApi.unknownDataCopy(&viewer->data2->uiManagerUnknownData, &uiManagerUnknownData);
+    const auto& eventApi = UiEventApi::get();
+    UiEvent timerEvent;
+    uiManagerApi.createTimerEvent(uiManager.data, &timerEvent, &functor, 5);
+    eventApi.copy(&viewer->data2->autobattleTimerEvent, &timerEvent);
+    eventApi.destructor(&timerEvent);
 
-    uiManagerApi.unknownDataDtor(&uiManagerUnknownData);
-    smartPtrApi.createOrFree((SmartPointer*)&uiManager, nullptr);
-    functorApi.createOrFree(&functor, nullptr);
+    SmartPointerApi::get().createOrFree((SmartPointer*)&uiManager, nullptr);
+    FunctorApi::get().createOrFree(&functor, nullptr);
 }
 
 void updateForNormalAttack(game::CBattleViewerInterf* viewer)
@@ -593,12 +591,12 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
     }
 
     if (autoBattle) {
-        setUIManagerUnknownData(viewer, viewerApi.autoBattleCallback);
+        setTimerEvent(viewer, viewerApi.autoBattleCallback);
         return;
     }
 
     if (viewer->data2->unknown10) {
-        setUIManagerUnknownData(viewer, viewerApi.disableAutoBattleAndResolveCallback);
+        setTimerEvent(viewer, viewerApi.disableAutoBattleAndResolveCallback);
         return;
     }
 

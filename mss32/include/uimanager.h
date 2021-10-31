@@ -21,23 +21,14 @@
 #define UIMANAGER_H
 
 #include "smartptr.h"
+#include <cstdint>
 
 namespace game {
 
-struct CUIManager;
-struct CUIManagerData;
-struct CUIManagerUnknownData;
 struct Functor;
 struct CMqPoint;
 struct CMqUIKernelSimple;
-
-struct CUIManager
-{
-    const void* vftable;
-    CUIManagerData* data;
-};
-
-static_assert(sizeof(CUIManager) == 8, "Size of CUIManager structure must be exactly 8 bytes");
+struct UiEvent;
 
 struct CUIManagerData
 {
@@ -48,19 +39,15 @@ struct CUIManagerData
 static_assert(sizeof(CUIManagerData) == 8,
               "Size of CUIManagerData structure must be exactly 8 bytes");
 
-using UIManagerPtr = SmartPtr<CUIManager>;
-
-struct CUIManagerUnknownData
+struct CUIManager
 {
-    UIManagerPtr uiManager;
-    int unknown;
-    int unknown2;
-    int unknown3;
-    int unknown4;
+    const void* vftable;
+    CUIManagerData* data;
 };
 
-static_assert(sizeof(CUIManagerUnknownData) == 24,
-              "Size of CUIManagerUnknownData structure must be exactly 24 bytes");
+static_assert(sizeof(CUIManager) == 8, "Size of CUIManager structure must be exactly 8 bytes");
+
+using UIManagerPtr = SmartPtr<CUIManager>;
 
 namespace CUIManagerApi {
 
@@ -69,18 +56,107 @@ struct Api
     using Get = UIManagerPtr*(__stdcall*)(UIManagerPtr* managerPtr);
     Get get;
 
-    using CreateUnknownData = CUIManagerUnknownData*(__thiscall*)(CUIManager* thisptr,
-                                                                  CUIManagerUnknownData* value,
-                                                                  Functor* functor,
-                                                                  int a4);
-    CreateUnknownData createUnknownData;
+    /**
+     * Creates event with user specified callback to be called periodically.
+     * Creates uiEvent with type UiEventType::Timer.
+     * @param[inout] uiEvent event structure to store result. Caller is responsible to call
+     * destructor.
+     * @param[in] functor callback associated with event. Actual type SmartPtr<CBFunctorDispatch0>.
+     * @param timeoutMs event triggering rate, in milliseconds.
+     * @returns pointer to uiEvent.
+     */
+    using CreateTimerEvent = UiEvent*(__thiscall*)(CUIManager* thisptr,
+                                                   UiEvent* uiEvent,
+                                                   Functor* functor,
+                                                   std::uint32_t timeoutMs);
+    CreateTimerEvent createTimerEvent;
 
-    using UnknownDataCopy = CUIManagerUnknownData*(__thiscall*)(CUIManagerUnknownData* thisptr,
-                                                                const CUIManagerUnknownData* src);
-    UnknownDataCopy unknownDataCopy;
+    using CreateUiEvent = UiEvent*(__thiscall*)(CUIManager* thisptr,
+                                                UiEvent* uiEvent,
+                                                Functor* functor);
 
-    using UnknownDataDestructor = void(__thiscall*)(CUIManagerUnknownData* thisptr);
-    UnknownDataDestructor unknownDataDtor;
+    /**
+     * Creates event with constant updates, callback is called from game message processing loop.
+     * Creates uiEvent with type UiEventType::Update.
+     * @param[inout] uiEvent event structure to store result. Caller is responsible to call
+     * destructor.
+     * @param[in] functor callback associated with event.
+     * Actual type SmartPtr<CBFunctorDispatch0wRet<bool>>.
+     * @returns pointer to uiEvent.
+     */
+    CreateUiEvent createUpdateEvent;
+
+    /**
+     * Creates event with user callback that is called when window loses or receives focus.
+     * Creates uiEvent with type UiEventType::VisibilityChange.
+     * @param[inout] uiEvent event structure to store result. Caller is responsible to call
+     * destructor.
+     * @param[in] functor callback associated with event.
+     * Actual type SmartPtr<CBFunctorDispatch1<bool>>.
+     * @returns pointer to uiEvent.
+     */
+    CreateUiEvent createVisibilityChangeEvent;
+
+    /**
+     * Creates event with user callback that is called when keyboard key is pressed.
+     * Creates uiEvent with type UiEventType::KeyPress.
+     * @param[inout] uiEvent event structure to store result. Caller is responsible to call
+     * destructor.
+     * @param[in] functor callback associated with event.
+     * Actual type SmartPtr<CBFunctorDispatch3<unsigned int, unsigned int, unsigned int>>.
+     * @returns pointer to uiEvent.
+     */
+    CreateUiEvent createKeypressEvent;
+
+    /**
+     * Creates event with user callback that is called when mouse key is pressed.
+     * Creates uiEvent with type UiEventType::MousePress.
+     * @param[inout] uiEvent event structure to store result. Caller is responsible to call
+     * destructor.
+     * @param[in] functor callback associated with event.
+     * Actual type SmartPtr<CBFunctorDispatch3<unsigned short, unsigned short, const tagPOINT &>>.
+     * @returns pointer to uiEvent.
+     */
+    CreateUiEvent createMousePressEvent;
+
+    /**
+     * Creates event with user callback that is called when mouse changes position.
+     * Creates uiEvent with type UiEventType::MouseButtonPress.
+     * @param[inout] uiEvent event structure to store result. Caller is responsible to call
+     * destructor.
+     * @param[in] functor callback associated with event.
+     * Actual type SmartPtr<CBFunctorDispatch2<unsigned short, const tagPOINT &>>.
+     * @returns pointer to uiEvent.
+     */
+    CreateUiEvent createMouseMoveEvent;
+
+    /**
+     * Creates event with user callback that is called when player attempts to close game window.
+     * Creates uiEvent with type UiEventType::Close.
+     * @param[inout] uiEvent event structure to store result. Caller is responsible to call
+     * destructor.
+     * @param[in] functor callback associated with event.
+     * Actual type SmartPtr<CBFunctorDispatch0wRet<bool>>.
+     * @returns pointer to uiEvent.
+     */
+    CreateUiEvent createCloseEvent;
+
+    /**
+     * Creates event with user callback that is called when message previously created by
+     * RegisterWindowMessage is received.
+     * Creates uiEvent with type UiEventType::Message.
+     * @param[inout] uiEvent event structure to store result. Caller is responsible to call
+     * destructor.
+     * @param[in] functor callback associated with event.
+     * Actual type SmartPtr<CBFunctorDispatch2<unsigned int, long>>.
+     * @param messageId message identifier from RegisterWindowMessage.
+     * @returns pointer to uiEvent.
+     */
+    using CreateMessageEvent = UiEvent*(__thiscall*)(CUIManager* thisptr,
+                                                     UiEvent* uiEvent,
+                                                     Functor* functor,
+                                                     std::uint32_t messageId);
+    CreateMessageEvent createMessageEvent;
 
     using GetMousePosition = CMqPoint*(__thiscall*)(const CUIManager* thisptr, CMqPoint* value);
     GetMousePosition getMousePosition;
