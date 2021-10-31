@@ -762,6 +762,9 @@
     <ClCompile Include="src\bindings\tileview.cpp">
       <Filter>Исходные файлы\bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\uievent.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -1979,6 +1982,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\mquikernelsimple.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\uievent.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
