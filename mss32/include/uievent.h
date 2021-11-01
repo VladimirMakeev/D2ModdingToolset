@@ -69,7 +69,6 @@ enum class UiEventType : int
 /**
  * Used for managing various ui related events in game.
  * Identifiers are created and used solely by CUIManager.
- * SmartPtrAndUnknown in IDA.
  */
 struct UiEvent
 {

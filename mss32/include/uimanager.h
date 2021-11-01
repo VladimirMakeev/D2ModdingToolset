@@ -27,12 +27,13 @@ namespace game {
 
 struct Functor;
 struct CMqPoint;
+struct CMqUIControllerSimple;
 struct CMqUIKernelSimple;
 struct UiEvent;
 
 struct CUIManagerData
 {
-    void* uiController;
+    CMqUIControllerSimple* uiController;
     CMqUIKernelSimple* uiKernel;
 };
 
