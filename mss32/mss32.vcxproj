@@ -499,6 +499,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\freetask.h" />
     <ClInclude Include="include\fullscreeninterf.h" />
     <ClInclude Include="include\functor.h" />
+    <ClInclude Include="include\functordispatch0.h" />
     <ClInclude Include="include\functordispatch1.h" />
     <ClInclude Include="include\functordispatch2.h" />
     <ClInclude Include="include\functordispatch3.h" />
