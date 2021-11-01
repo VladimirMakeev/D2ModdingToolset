@@ -1987,6 +1987,9 @@
     <ClInclude Include="include\uievent.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\mquicontroller.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\functordispatch0.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
