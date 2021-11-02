@@ -75,8 +75,9 @@ struct CInterfaceVftable
                                    IMqRenderer2* renderer);
     Draw draw;
 
-    using Method2 = int(__thiscall*)(CInterface* thisptr, int a2);
-    Method2 method2;
+    /** Handles mouse position changes. */
+    using OnMouseMove = int(__thiscall*)(CInterface* thisptr, const CMqPoint* mousePosition);
+    OnMouseMove onMouseMove;
 
     /**
      * Handles mouse buttons events.
