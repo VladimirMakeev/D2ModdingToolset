@@ -28,39 +28,33 @@ static std::array<Api, 3> functions = {{
     // Akella
     Api{
         (Api::Constructor)0x4e9697,
-        (Api::ButtonCallback)0x4dcf9e,
-        (Api::ButtonCallback)0x4e9d2a,
-        (Api::CreateButtonFunctor)0x4ea842,
+        (CMenuBaseApi::Api::ButtonCallback)0x4e9d2a,
         (Api::ListBoxCallback)0x4e9cb3,
         (Api::CreateListBoxFunctor)0x4ea8da,
         (Api::ListBoxDisplayTextCallback)0x4e9c1a,
         (Api::CreateListBoxDisplayTextFunctor)0x4ea88e,
-        (Api::UpdateScenarioUi)0x4e987c
+        (Api::UpdateScenarioUi)0x4e987c,
     },
     // Russobit
     Api{
         (Api::Constructor)0x4e9697,
-        (Api::ButtonCallback)0x4dcf9e,
-        (Api::ButtonCallback)0x4e9d2a,
-        (Api::CreateButtonFunctor)0x4ea842,
+        (CMenuBaseApi::Api::ButtonCallback)0x4e9d2a,
         (Api::ListBoxCallback)0x4e9cb3,
         (Api::CreateListBoxFunctor)0x4ea8da,
         (Api::ListBoxDisplayTextCallback)0x4e9c1a,
         (Api::CreateListBoxDisplayTextFunctor)0x4ea88e,
-        (Api::UpdateScenarioUi)0x4e987c
+        (Api::UpdateScenarioUi)0x4e987c,
     },
     // Gog
     Api{
         (Api::Constructor)0x4e8b32,
-        (Api::ButtonCallback)0x4dbeae,
-        (Api::ButtonCallback)0x4e91c5,
-        (Api::CreateButtonFunctor)0x4e9cdd,
+        (CMenuBaseApi::Api::ButtonCallback)0x4e91c5,
         (Api::ListBoxCallback)0x4e914e,
         (Api::CreateListBoxFunctor)0x4e9d75,
         (Api::ListBoxDisplayTextCallback)0x4e90b5,
         (Api::CreateListBoxDisplayTextFunctor)0x4e9d29,
-        (Api::UpdateScenarioUi)0x4e8d17
-    }
+        (Api::UpdateScenarioUi)0x4e8d17,
+    },
 }};
 
 static std::array<Vftable*, 3> vftables = {{
@@ -69,7 +63,7 @@ static std::array<Vftable*, 3> vftables = {{
     // Russobit
     (Vftable*)0x6dec9c,
     // Gog
-    (Vftable*)0x6dcc44
+    (Vftable*)0x6dcc44,
 }};
 // clang-format on
 

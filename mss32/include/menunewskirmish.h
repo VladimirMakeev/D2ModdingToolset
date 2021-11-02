@@ -48,24 +48,7 @@ struct Api
                                                        const char* dialogName);
     Constructor constructor;
 
-    /** Callback function signature used for CMenuNewSkirmish buttons. */
-    using ButtonCallback = void(__thiscall*)(CMenuNewSkirmish* thisptr);
-    ButtonCallback buttonBackCallback;
-    ButtonCallback loadScenarioCallback;
-
-    /**
-     * Creates functor for CMenuNewSkirmish buttons.
-     * @param[in] functor pointer to existing functor to initialize.
-     * @param a2 meaning unknown.
-     * @param[in] menu
-     * @param[in] pointer to button callback.
-     * @returns initialized functor.
-     */
-    using CreateButtonFunctor = Functor*(__stdcall*)(Functor* functor,
-                                                     int a2,
-                                                     CMenuNewSkirmish* menu,
-                                                     const ButtonCallback* callback);
-    CreateButtonFunctor createButtonFunctor;
+    CMenuBaseApi::Api::ButtonCallback loadScenarioCallback;
 
     /** Callback function signature used for CMenuNewSkirmish list box. */
     using ListBoxCallback = void(__thiscall*)(CMenuNewSkirmish* thisptr, int selectedIndex);

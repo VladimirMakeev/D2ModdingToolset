@@ -26,11 +26,17 @@
 namespace game {
 
 struct CDialogInterf;
+struct CMenuPhase;
+struct Functor;
 
 struct CMenuBaseData
 {
-    char unknown[48];
+    CMenuPhase* menuPhase;
+    char unknown[44];
 };
+
+static_assert(sizeof(CMenuBaseData) == 48,
+              "Size of CMenuBaseData structure must be exactly 48 bytes");
 
 /** Base class for all menus. */
 struct CMenuBase : public CInterfFullScreen
@@ -53,7 +59,7 @@ struct Api
      * @param a1 meaning unknown.
      * @returns thisptr.
      */
-    using Constructor = CMenuBase*(__thiscall*)(CMenuBase* thisptr, int a1);
+    using Constructor = CMenuBase*(__thiscall*)(CMenuBase* thisptr, CMenuPhase* menuPhase);
     Constructor constructor;
 
     /** Creates ui elements of specified dialog to be used in menu. */
@@ -63,6 +69,20 @@ struct Api
     /** Returns CDialogInterf object. */
     using GetDialogInterface = CDialogInterf*(__thiscall*)(CMenuBase* thisptr);
     GetDialogInterface getDialogInterface;
+
+    /** Returns back to main menu and clears network logic. */
+    using ButtonCallback = void(__thiscall*)(CMenuBase* thisptr);
+    ButtonCallback buttonBackCallback;
+
+    /**
+     * Creates functor for buttons of CMenuBase and its childs.
+     * Reused from CMenuNewSkirmish.
+     */
+    using CreateButtonFunctor = Functor*(__stdcall*)(Functor* functor,
+                                                     int a2,
+                                                     CMenuBase* menu,
+                                                     const ButtonCallback* callback);
+    CreateButtonFunctor createButtonFunctor;
 };
 
 Api& get();

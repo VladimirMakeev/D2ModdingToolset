@@ -709,12 +709,14 @@ static void __fastcall buttonGenerateMapCallback(game::CMenuNewSkirmish* thisptr
     }
 }
 
-static void menuNewSkirmishCtor(game::CMenuNewSkirmish* thisptr, int a1, const char* dialogName)
+static void menuNewSkirmishCtor(game::CMenuNewSkirmish* thisptr,
+                                game::CMenuPhase* menuPhase,
+                                const char* dialogName)
 {
     using namespace game;
 
     const auto& menuBase = CMenuBaseApi::get();
-    menuBase.constructor(thisptr, a1);
+    menuBase.constructor(thisptr, menuPhase);
     thisptr->vftable = (game::CInterfaceVftable*)CMenuNewSkirmishApi::vftable();
     menuBase.createMenu(thisptr, dialogName);
 
@@ -724,17 +726,17 @@ static void menuNewSkirmishCtor(game::CMenuNewSkirmish* thisptr, int a1, const c
     const auto freeFunctor = FunctorApi::get().createOrFree;
     Functor functor;
 
-    menu.createButtonFunctor(&functor, 0, thisptr, &menu.buttonBackCallback);
+    menuBase.createButtonFunctor(&functor, 0, thisptr, &menuBase.buttonBackCallback);
     button.assignFunctor(dialog, "BTN_BACK", dialogName, &functor, 0);
     freeFunctor(&functor, nullptr);
 
-    menu.createButtonFunctor(&functor, 0, thisptr, &menu.loadScenarioCallback);
+    menuBase.createButtonFunctor(&functor, 0, thisptr, &menu.loadScenarioCallback);
     CButtonInterf* loadButton = button.assignFunctor(dialog, "BTN_LOAD", dialogName, &functor, 0);
     freeFunctor(&functor, nullptr);
 
     void* callback = buttonGenerateMapCallback;
-    menu.createButtonFunctor(&functor, 0, thisptr,
-                             (CMenuNewSkirmishApi::Api::ButtonCallback*)&callback);
+    menuBase.createButtonFunctor(&functor, 0, thisptr,
+                                 (CMenuBaseApi::Api::ButtonCallback*)&callback);
     button.assignFunctor(dialog, "BINKW_PROXY_BTN_GEN_MAP", dialogName, &functor, 0);
     freeFunctor(&functor, nullptr);
 
@@ -765,9 +767,9 @@ static void menuNewSkirmishCtor(game::CMenuNewSkirmish* thisptr, int a1, const c
 game::CMenuNewSkirmishSingle* __fastcall menuNewSkirmishSingleCtorHooked(
     game::CMenuNewSkirmishSingle* thisptr,
     int /*%edx*/,
-    int a1)
+    game::CMenuPhase* menuPhase)
 {
-    menuNewSkirmishCtor(thisptr, a1, "DLG_CHOOSE_SKIRMISH");
+    menuNewSkirmishCtor(thisptr, menuPhase, "DLG_CHOOSE_SKIRMISH");
     thisptr->vftable = (game::CInterfaceVftable*)game::CMenuNewSkirmishSingleApi::vftable();
 
     return thisptr;
