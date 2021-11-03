@@ -42,6 +42,7 @@ struct CInterfManagerImpl;
 struct CMqFps;
 struct CInterface;
 struct IMqNetPlayerClient;
+struct IMqNetSystem;
 
 struct PlayerClientNode
 {
@@ -122,6 +123,17 @@ struct Api
 {
     using Instance = CMidgard*(__cdecl*)();
     Instance instance;
+
+    /** Sets specified net system to all local instances of net player clients. */
+    using SetClientsNetProxy = void(__thiscall*)(CMidgard* thisptr, IMqNetSystem* netSystem);
+    SetClientsNetProxy setClientsNetProxy;
+
+    /** Sets specified net service. */
+    using SetNetService = void(__thiscall*)(CMidgard* thisptr,
+                                            IMqNetService* service,
+                                            bool multiplayer,
+                                            bool hotseat);
+    SetNetService setNetService;
 };
 
 Api& get();

@@ -27,16 +27,22 @@ namespace game::CMidgardApi {
 static std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (Api::Instance)0x401d35
+        (Api::Instance)0x401d35,
+        (Api::SetClientsNetProxy)0x4030c5,
+        (Api::SetNetService)0x403089,
     },
     // Russobit
     Api{
-        (Api::Instance)0x401d35
+        (Api::Instance)0x401d35,
+        (Api::SetClientsNetProxy)0x4030c5,
+        (Api::SetNetService)0x403089,
     },
     // Gog
     Api{
-        (Api::Instance)0x401a7b
-    }
+        (Api::Instance)0x401a7b,
+        (Api::SetClientsNetProxy)0x402e0b,
+        (Api::SetNetService)0x402dcf,
+    },
 }};
 // clang-format on
 
