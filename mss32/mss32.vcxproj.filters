@@ -762,6 +762,9 @@
     <ClCompile Include="src\bindings\tileview.cpp">
       <Filter>Исходные файлы\bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\menuprotocol.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\uievent.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -1976,6 +1979,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\netdplaysessenum.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menuprotocol.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\mquikernel.h">

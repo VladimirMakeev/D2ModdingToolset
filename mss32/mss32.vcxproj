@@ -257,6 +257,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\menunewmap.cpp" />
     <ClCompile Include="src\menunewskirmish.cpp" />
     <ClCompile Include="src\menunewskirmishsingle.cpp" />
+    <ClCompile Include="src\menuprotocol.cpp" />
     <ClCompile Include="src\menurace.cpp" />
     <ClCompile Include="src\draganddropinterf.cpp" />
     <ClCompile Include="src\midcondgamemode.cpp" />
@@ -575,6 +576,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\menunewskirmish.h" />
     <ClInclude Include="include\menunewskirmishsingle.h" />
     <ClInclude Include="include\menuphase.h" />
+    <ClInclude Include="include\menuprotocol.h" />
     <ClInclude Include="include\menurace.h" />
     <ClInclude Include="include\midbag.h" />
     <ClInclude Include="include\midcampaign.h" />
