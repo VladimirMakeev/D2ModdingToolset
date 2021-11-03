@@ -55,6 +55,7 @@ struct os_exception;
 struct CMidUnit;
 struct CMidUnitGroup;
 struct CUnitGenerator;
+struct CMenuPhase;
 }; // namespace game
 
 namespace hooks {
@@ -86,7 +87,7 @@ game::AutoDialogData* __fastcall loadScriptFileHooked(game::AutoDialogData* this
 game::CMenuNewSkirmishSingle* __fastcall menuNewSkirmishSingleCtorHooked(
     game::CMenuNewSkirmishSingle* thisptr,
     int /*%edx*/,
-    int a1);
+    game::CMenuPhase* menuPhase);
 
 bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
                                               const game::CMidgardID* playerId,
