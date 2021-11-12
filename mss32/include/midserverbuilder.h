@@ -24,10 +24,42 @@
 
 namespace game {
 
+struct IMidServerBuilderVftable;
+struct CMidServerLogic;
+struct CMidServer;
+
 struct IMidServerBuilder
 {
-    void* vftable;
+    IMidServerBuilderVftable* vftable;
 };
+
+struct IMidServerBuilderVftable
+{
+    using Destructor = void(__thiscall*)(IMidServerBuilder* thisptr, char flags);
+    Destructor destructor;
+
+    using CreateServerLogic = CMidServerLogic*(__thiscall*)(IMidServerBuilder* thisptr,
+                                                            CMidServer* server);
+    CreateServerLogic createServerLogic;
+
+    using LoadScenario = void(__thiscall*)(IMidServerBuilder* thisptr,
+                                           CMidServer* midServer,
+                                           CMidServerLogic* serverLogic);
+    LoadScenario loadScenario;
+
+    using IsMultiplayerGame = bool(__thiscall*)(const IMidServerBuilder* thisptr);
+    IsMultiplayerGame isMultiplayerGame;
+
+    /**
+     * Assumption: returns number of players in loaded scenario.
+     * @returns CMidServerBuilderFull::unknown.
+     */
+    using GetPlayerCount = int(__thiscall*)(IMidServerBuilder* thisptr);
+    GetPlayerCount getPlayerCount;
+};
+
+static_assert(sizeof(IMidServerBuilderVftable) == 5 * sizeof(void*),
+              "Size of IMidServerBuilder vftable must have exactly 5 methods");
 
 struct CMidServerBuilderFull : public IMidServerBuilder
 {
