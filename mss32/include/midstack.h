@@ -110,6 +110,10 @@ struct Api
                                        const CMidgardID* ownerId,
                                        const CMidgardID* subraceId);
     SetOwner setOwner;
+    
+    using GetMaxMovepoints = int(__thiscall*)(const CMidStack* const thisptr,
+                                              const IMidgardObjectMap* objectMap);
+    GetMaxMovepoints getMaxMovepoints;
 };
 
 Api& get();
