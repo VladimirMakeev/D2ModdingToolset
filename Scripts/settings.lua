@@ -86,6 +86,8 @@ settings = {
 	movementCost = {
 		-- Show stacks movement cost
 		show = true,
+		-- Show accurate stacks movement cost
+		realMovementCost = false,
 		-- Color components are all in range [0 : 255]
 		textColor = {
 			red = 200, green = 200, blue = 200
