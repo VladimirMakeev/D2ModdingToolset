@@ -29,16 +29,19 @@ static std::array<Api, 4> functions = {{
     Api{
         (Api::SetPosition)0x5edc57,
         (Api::SetOwner)0x5ee191,
+        (Api::GetMaxMovepoints)0x5ee375
     },
     // Russobit
     Api{
         (Api::SetPosition)0x5edc57,
         (Api::SetOwner)0x5ee191,
+        (Api::GetMaxMovepoints)0x5ee375
     },
     // Gog
     Api{
         (Api::SetPosition)0x5ec917,
         (Api::SetOwner)0x5ece51,
+        (Api::GetMaxMovepoints)0x5ed035
     },
     // Scenario Editor
     Api{

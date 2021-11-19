@@ -107,6 +107,7 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
     imagesApi.getGameImages(&imagesPtr);
     auto images = *imagesPtr.data;
 
+    const int maxMovepoints = game::CMidStackApi::get().getMaxMovepoints(stack, objectMap);
     const auto& memAlloc = Memory::get().allocate;
 
     auto gameSettings = *CMidgardApi::get().instance()->data->settings;
@@ -127,13 +128,14 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
     bool v61 = *positionPtr != stackPosition;
 
     int turnNumber{};
+    int realMoveCost = 0;
+    int realTurnCost = 0;
     bool manyTurnsToTravel{};
 
     std::uint32_t index{};
     for (auto node = pathInfo.head->next; node != pathInfo.head;
          node = node->next, firstNode = false, ++index) {
         const auto& currentPosition = node->data.position;
-
         if (!fn.stackCanMoveToPosition(objectMap, &currentPosition, stack, plan)) {
             continue;
         }
@@ -161,7 +163,7 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
             if (pathLeadsToAction) {
                 // Red flag with a scroll, noble actions
                 imageName = "MOVENEGO";
-
+                realMoveCost = realMoveCost + 1 + (maxMovepoints - 1) / 2;
                 if (!noble) {
                     // Red flag with a sword, battle
                     imageName = "MOVEBATTLE";
@@ -182,25 +184,37 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
         const auto imagesCount{flagImage->vftable->getImagesCount(flagImage)};
         flagImage->vftable->setImageIndex(flagImage, index % imagesCount);
 
+        const auto prev = node->prev;
+        const auto prevTurnsToReach{prev->data.turnsToReach};
+        const auto currTurnsToReach{node->data.turnsToReach};
+        bool differ{prevTurnsToReach != currTurnsToReach};
+
         CImage2Text* turnNumberImage{};
+        bool drawTurnNumber{};
 
+        // custom movecost calculation algorithm
         if (displayPathTurn && !firstNode) {
-            bool drawTurnNumber{};
             turnNumber = 0;
-
-            const auto prev = node->prev;
-            const auto prevTurnsToReach{prev->data.turnsToReach};
-            const auto currTurnsToReach{node->data.turnsToReach};
-            const bool differ{prevTurnsToReach != currTurnsToReach};
-
-            // Check previous node, draw turn number only if number of turns to reach is different
-            // and previous one is not 0
+            differ = false;
+            realMoveCost = realMoveCost
+                           + (node->data.moveCostTotal - node->prev->data.moveCostTotal);
+            if (realMoveCost >= ((maxMovepoints * realTurnCost)
+                                 // that uses stack vftable, current movepoints
+                                 + stack->movement)) {
+                // and max movepoints of the stack
+                realMoveCost = (maxMovepoints * realTurnCost) + stack->movement;
+                realTurnCost++;
+                differ = true;
+            }
             if (differ) {
                 manyTurnsToTravel = true;
 
-                if (prevTurnsToReach != 0) {
+                if (prevTurnsToReach != 0 && stack->movement != 0) {
                     drawTurnNumber = true;
-                    turnNumber = prevTurnsToReach;
+                    turnNumber = currTurnsToReach;
+                }
+                if (realMoveCost == 0 && stack->movement == 0) {
+                    realMoveCost = node->data.moveCostTotal;
                 }
             }
 
@@ -211,8 +225,8 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
                 drawTurnNumber = true;
 
                 // Special case: end of the path is the first node of a new travel turn
-                // (previous node has different turns to reach), we draw _previous_ day turn number.
-                // Exception: do not draw 0 as turn number
+                // (previous node has different turns to reach), we draw _previous_ day turn
+                // number. Exception: do not draw 0 as turn number
                 if (!differ || prev->data.turnsToReach == 0) {
                     turnNumber = currTurnsToReach;
                 } else {
@@ -230,6 +244,12 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
             }
         }
 
+        int moveCost;
+        if (userSettings().movementCost.realMovementCost) {
+            moveCost = realMoveCost;
+        } else {
+            moveCost = node->data.moveCostTotal;
+        }
         CImage2Text* moveCostImage{};
 
         if (pathAllowed && !turnNumberImage) {
@@ -239,8 +259,7 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
             const auto moveCostString{fmt::format(
                 "\\fmedium;\\hC;\\vT;\\c{:03d};{:03d};{:03d};\\o{:03d};{:03d};{:03d};{:d}",
                 (int)moveCostColor.r, (int)moveCostColor.g, (int)moveCostColor.b,
-                (int)moveCostOutline.r, (int)moveCostOutline.g, (int)moveCostOutline.b,
-                node->data.moveCostTotal)};
+                (int)moveCostOutline.r, (int)moveCostOutline.g, (int)moveCostOutline.b, moveCost)};
 
             CImage2TextApi::get().setText(moveCostImage, moveCostString.c_str());
         }

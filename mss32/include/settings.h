@@ -77,6 +77,7 @@ struct Settings
         Color textColor{};
         Color outlineColor{};
         bool show{};
+        bool realMovementCost{};
     } movementCost;
 
     bool debugMode;

@@ -74,6 +74,7 @@ static void readMovementCostSettings(const sol::table& table, Settings::Movement
     const auto& defOutlineColor = defaultSettings().movementCost.outlineColor;
 
     value.show = defaultSettings().movementCost.show;
+    value.realMovementCost = defaultSettings().movementCost.realMovementCost;
     value.textColor = defTextColor;
     value.outlineColor = defOutlineColor;
 
@@ -83,6 +84,8 @@ static void readMovementCostSettings(const sol::table& table, Settings::Movement
     }
 
     value.show = readSetting(moveCost.value(), "show", defaultSettings().movementCost.show);
+    value.realMovementCost = readSetting(moveCost.value(), "realMovementCost",
+                                         defaultSettings().movementCost.realMovementCost);
 
     auto textColor = moveCost.value().get<sol::optional<sol::table>>("textColor");
     if (textColor.has_value()) {
@@ -172,6 +175,7 @@ const Settings& baseSettings()
         settings.detailedAttackDescription = false;
         settings.movementCost.textColor = Color{200, 200, 200};
         settings.movementCost.show = false;
+        settings.movementCost.realMovementCost = false;
         settings.debugMode = false;
 
         initialized = true;
@@ -190,6 +194,7 @@ const Settings& defaultSettings()
         settings.showBanners = true;
         settings.showResources = true;
         settings.movementCost.show = true;
+        settings.movementCost.realMovementCost = false;
         settings.detailedAttackDescription = true;
 
         initialized = true;
