@@ -300,6 +300,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\pickupdropinterf.cpp" />
     <ClCompile Include="src\pictureinterf.cpp" />
     <ClCompile Include="src\playerincomehooks.cpp" />
+    <ClCompile Include="src\popupdialoginterf.cpp" />
     <ClCompile Include="src\racecategory.cpp" />
     <ClCompile Include="src\racelist.cpp" />
     <ClCompile Include="src\radiobuttoninterf.cpp" />

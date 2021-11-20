@@ -34,6 +34,20 @@ struct CPopupDialogInterf : public CInterfDialog
 static_assert(offsetof(CPopupDialogInterf, dialog) == 12,
               "CPopupDialogInterf::dialog offset must be 12 bytes");
 
+namespace CPopupDialogInterfApi {
+
+struct Api
+{
+    using Constructor = CPopupDialogInterf*(__thiscall*)(CPopupDialogInterf* thisptr,
+                                                         const char* dialogName,
+                                                         CMqRect* area);
+    Constructor constructor;
+};
+
+Api& get();
+
+} // namespace CPopupDialogInterfApi
+
 } // namespace game
 
 #endif // POPUPDIALOGINTERF_H
