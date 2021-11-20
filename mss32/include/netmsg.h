@@ -20,10 +20,40 @@
 #ifndef NETMSG_H
 #define NETMSG_H
 
+#include <cstdint>
+
 namespace game {
 
 struct CNetMsgVftable;
 struct CMqStream;
+
+/**
+ * Network messages common header part.
+ * Each ingame message that is being sent or received over network starts with it.
+ * CNetMsg fills and checks header in its serialize method.
+ */
+struct NetMessageHeader
+{
+    /** Equals to netMessageNormalType for game specific messages. */
+    std::uint32_t messageType;
+    /** Length of message in bytes, including header. */
+    std::uint32_t length;
+    /**
+     * Raw name of CNetMsg or its derived class.
+     * Obtained as @code{.cpp}typeid(msg).raw_name();@endcode which is Windows specific.
+     * @see https://docs.microsoft.com/en-us/cpp/cpp/type-info-class for additional info.
+     */
+    char messageClassName[36];
+};
+
+static_assert(sizeof(NetMessageHeader) == 44,
+              "Size of NetMessageHeader structure must be exactly 44 bytes");
+
+/** Game specific messages treated as normal in DirectPlay terms. */
+static constexpr std::uint32_t netMessageNormalType{0xffff};
+
+/** Maximum allowed net message length in bytes. */
+static constexpr std::uint32_t netMessageMaxLength{0x80000};
 
 template <typename T = CNetMsgVftable>
 struct CNetMsgT
