@@ -71,10 +71,10 @@ struct IMqNetPlayerVftable
      * CNetDPlayPlayer calls IDirectPlay4::SendEx here.
      * @returns true if the message was sent successfully.
      */
-    using SendMessage = bool(__thiscall*)(IMqNetPlayer* thisptr,
-                                          int idTo,
-                                          const NetMessageHeader* message);
-    SendMessage sendMessage;
+    using SendNetMessage = bool(__thiscall*)(IMqNetPlayer* thisptr,
+                                             int idTo,
+                                             const NetMessageHeader* message);
+    SendNetMessage sendMessage;
 
     /**
      * Receives network messages addressed to this player.
