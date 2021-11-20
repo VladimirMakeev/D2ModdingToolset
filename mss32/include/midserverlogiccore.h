@@ -20,10 +20,13 @@
 #ifndef MIDSERVERLOGICCORE_H
 #define MIDSERVERLOGICCORE_H
 
+#include "d2pair.h"
+#include "d2string.h"
 #include "d2vector.h"
 #include "linkedlist.h"
 #include "midgardid.h"
 #include "mqnettraffic.h"
+#include "sortedlist.h"
 #include <cstddef>
 #include <cstdint>
 
@@ -50,7 +53,7 @@ struct CMidServerLogicCoreData
     std::uint32_t playerNetId;
     Vector<NetPlayerInfo>* players;
     int unknown6;
-    int unknown7;
+    SortedList<Pair<std::uint32_t /* netId */, String /* playerName */>>* sessionPlayers;
     int startingGold;
     int startingMana;
     char unknown8[4];
