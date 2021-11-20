@@ -31,9 +31,11 @@ namespace game {
 /** Holds information about network or local game player. */
 struct NetPlayerInfo
 {
-    std::uint32_t playerNetId; /**< Meaning assumed. */
+    std::uint32_t playerNetId;
     CMidgardID playerId;
-    int unknown2;
+    /** Assumption: true if player has already completed its game turn. */
+    bool turnFinished;
+    char padding[3];
     int face;
     LRaceCategory raceCategory;
     LLordCategory lordCategory;

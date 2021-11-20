@@ -41,7 +41,7 @@ struct CNetDPlayPlayer : public IMqNetPlayer
     void* unknown2;
     IMqNetReception* netReception;
     HANDLE eventHandle;
-    bool unknown4;
+    bool stopThread;
     char padding[3];
     int directPlayId;
     String name;
