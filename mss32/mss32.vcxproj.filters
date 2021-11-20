@@ -762,6 +762,9 @@
     <ClCompile Include="src\bindings\tileview.cpp">
       <Filter>Исходные файлы\bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\menuphase.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\menuprotocol.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
