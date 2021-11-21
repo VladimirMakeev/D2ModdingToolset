@@ -774,6 +774,9 @@
     <ClCompile Include="src\popupdialoginterf.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\imagepointlist.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\image2outline.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -2012,6 +2015,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\mquicontrollersimple.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imagepointlist.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\image2outline.h">

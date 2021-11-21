@@ -237,6 +237,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\image2fill.cpp" />
     <ClCompile Include="src\image2outline.cpp" />
     <ClCompile Include="src\image2text.cpp" />
+    <ClCompile Include="src\imagepointlist.cpp" />
     <ClCompile Include="src\immunecat.cpp" />
     <ClCompile Include="src\interfmanager.cpp" />
     <ClCompile Include="src\interftexthooks.cpp" />
@@ -522,6 +523,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\image2fill.h" />
     <ClInclude Include="include\image2outline.h" />
     <ClInclude Include="include\image2text.h" />
+    <ClInclude Include="include\imagepointlist.h" />
     <ClInclude Include="include\imgfactory.h" />
     <ClInclude Include="include\immunecat.h" />
     <ClInclude Include="include\interface.h" />
