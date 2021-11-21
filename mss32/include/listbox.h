@@ -134,6 +134,22 @@ struct Api
     AssignDisplayTextFunctor assignDisplayTextFunctor;
 
     /**
+     * Assigns functor with callback to a list box display surface element.
+     * Searches for list box element by its and dialog names.
+     * Callback will be called each time when list box selection changes.
+     * @param[in] dialog used for list box search.
+     * @param[in] buttonName list box to assign functor to.
+     * @param[in] dialogName dialog (menu) where to search for list box.
+     * @param[in] functor pointer to existing functor initialized with callback.
+     * @returns list box found with callback set or nullptr if not found.
+     */
+    using AssignDisplaySurfaceFunctor = CListBoxInterf*(__stdcall*)(CDialogInterf* dialog,
+                                                                    const char* listBoxName,
+                                                                    const char* dialogName,
+                                                                    Functor* functor);
+    AssignDisplaySurfaceFunctor assignDisplaySurfaceFunctor;
+
+    /**
      * Initializes list box with specified number of elements.
      * @param[in] thisptr list box to initialize.
      * @param elementsTotal max number of elements to show in list box.

@@ -29,6 +29,7 @@ static std::array<Api, 4> functions = {{
     Api{
         (Api::AssignFunctor)0x5c9b66,
         (Api::AssignDisplayTextFunctor)0x5c9982,
+        (Api::AssignDisplaySurfaceFunctor)0x5c9ab0,
         (Api::SetElementsTotal)0x536047,
         (Api::SelectedIndex)0x5838db,
         (Api::SetSelectedIndex)0x536026,
@@ -37,6 +38,7 @@ static std::array<Api, 4> functions = {{
     Api{
         (Api::AssignFunctor)0x5c9b66,
         (Api::AssignDisplayTextFunctor)0x5c9982,
+        (Api::AssignDisplaySurfaceFunctor)0x5c9ab0,
         (Api::SetElementsTotal)0x536047,
         (Api::SelectedIndex)0x5838db,
         (Api::SetSelectedIndex)0x536026,
@@ -45,6 +47,7 @@ static std::array<Api, 4> functions = {{
     Api{
         (Api::AssignFunctor)0x5c8b34,
         (Api::AssignDisplayTextFunctor)0x5c8950,
+        (Api::AssignDisplaySurfaceFunctor)0x5c8a7e,
         (Api::SetElementsTotal)0x535665,
         (Api::SelectedIndex)0x535361,
         (Api::SetSelectedIndex)0x535644,
@@ -53,6 +56,7 @@ static std::array<Api, 4> functions = {{
     Api{
         (Api::AssignFunctor)0,
         (Api::AssignDisplayTextFunctor)0x4d1524,
+        (Api::AssignDisplaySurfaceFunctor)0,
         (Api::SetElementsTotal)0x48d410,
         (Api::SelectedIndex)0x48d127,
         (Api::SetSelectedIndex)0x48d3ef,
