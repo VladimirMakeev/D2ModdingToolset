@@ -74,7 +74,13 @@ struct CMidUnitGroupVftable
                                       const IMidgardObjectMap* objectMap);
     AddUnit addUnit;
 
-    void* methods2[3];
+    using RemoveUnit = bool(__thiscall*)(CMidUnitGroup* thisptr,
+                                         CVisitorAddUnitToGroup* visitor,
+                                         const CMidgardID* unitId,
+                                         const IMidgardObjectMap* objectMap);
+    RemoveUnit removeUnit;
+
+    void* methods2[2];
 };
 
 static_assert(sizeof(CMidUnitGroupVftable) == 10 * sizeof(void*),
