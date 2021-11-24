@@ -2017,6 +2017,9 @@
     <ClInclude Include="include\mquicontrollersimple.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\mqnetreception.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\imagepointlist.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
