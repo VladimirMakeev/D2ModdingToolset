@@ -25,6 +25,7 @@
 #include "mqanimation.h"
 #include "mqnettraffic.h"
 #include "smartptr.h"
+#include "uievent.h"
 #include <cstddef>
 #include <cstdint>
 
@@ -43,6 +44,7 @@ struct CMqFps;
 struct CInterface;
 struct IMqNetPlayerClient;
 struct IMqNetSystem;
+struct CMidgardMsgBox;
 
 struct PlayerClientNode
 {
@@ -75,12 +77,15 @@ struct CMidgardData
     void* menuImages;
     SmartPtr<CUIManager> uiManager;
     char unknown12[4];
-    std::uint32_t startMessageId;
-    char unknown14[24];
+    std::uint32_t startMenuMessageId;
+    UiEvent startMenuEvent;
     std::uint32_t netMessageId;
-    char unknown13[24];
+    UiEvent netMessageEvent;
     SmartPtr<CInterfManagerImpl> interfManager;
-    char unknown15[32];
+    UiEvent closeEvent;
+    bool gameIsRunning; // Meaning assumed
+    char padding[3];
+    CMidgardMsgBox* closeGameMsgBox;
     CInterface* waitInterface;
     char unknown16[52];
     CMqFps* fps;
@@ -97,6 +102,9 @@ static_assert(offsetof(CMidgardData, host) == 50, "CMidgardData::host offset mus
 
 static_assert(offsetof(CMidgardData, settings) == 60,
               "CMidgardData::settings offset must be 60 bytes");
+
+static_assert(offsetof(CMidgardData, closeEvent) == 156,
+              "CMidgardData::closeEvent offset must be 156 bytes");
 
 static_assert(offsetof(CMidgardData, fps) == 244, "CMidgardData::fps offset must be 244 bytes");
 
