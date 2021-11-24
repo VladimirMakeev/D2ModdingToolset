@@ -24,6 +24,7 @@
 #include "midclientcore.h"
 #include "midcommandqueue2.h"
 #include "midgardid.h"
+#include "uievent.h"
 
 namespace game {
 
@@ -44,7 +45,9 @@ struct CMidClientData
     int unknown8;
     int unknown9;
     int unknown10;
-    char unknown11[48];
+    UiEvent notificationFadeEvent; /**< Restores window notify state. */
+    /** Flashes game window each second to notify player, for example when battle starts. */
+    UiEvent notificationShowEvent;
 };
 
 static_assert(sizeof(CMidClientData) == 136,
