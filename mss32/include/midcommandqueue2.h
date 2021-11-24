@@ -20,7 +20,14 @@
 #ifndef MIDCOMMANDQUEUE2_H
 #define MIDCOMMANDQUEUE2_H
 
+#include "idlist.h"
+#include "uievent.h"
+
 namespace game {
+
+struct CoreCommandUpdate;
+struct CCommandCanIgnore;
+struct NetMsgEntryData;
 
 struct CMidCommandQueue2
 {
@@ -29,8 +36,32 @@ struct CMidCommandQueue2
         void* vftable;
     };
 
-    void* vftable;
+    /** Net message map. */
+    struct CNMMap
+    {
+        CMidCommandQueue2* commandQueue;
+        NetMsgEntryData** netMsgEntryData;
+    };
+
+    CoreCommandUpdate* commandUpdate;
+    CCommandCanIgnore* commandCanIgnore;
+    CNMMap* netMessageMap;
+    IdList list;
+    int unknown6;
+    IdList list2;
+    int unknown11;
+    int unknown12;
+    int unknown13;
+    int unknown14;
+    unsigned int commandQueueMsgId;
+    UiEvent commandQueueEvent;
 };
+
+static_assert(sizeof(CMidCommandQueue2) == 92,
+              "Size of CMidCommandQueue2 structure must be exactly 92 bytes");
+
+static_assert(sizeof(CMidCommandQueue2::CNMMap) == 8,
+              "Size of CMidCommandQueue2::CNMMap structure must be exactly 8 bytes");
 
 } // namespace game
 

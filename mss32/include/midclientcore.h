@@ -26,7 +26,7 @@ namespace game {
 
 struct CMidgard;
 struct IMidgardObjectMap;
-struct MidClientCoreCommandQueueData;
+struct CMidCommandQueue2;
 struct CoreCommandUpdate;
 struct CCommandCanIgnore;
 struct CMidHotseatManager;
@@ -37,7 +37,7 @@ struct CMidClientCoreData
     int unknown;
     IMidgardObjectMap* objectMap;
     int unknown3;
-    MidClientCoreCommandQueueData* commandQueueData;
+    CMidCommandQueue2* commandQueue;
     CoreCommandUpdate* coreCommandUpdate;
     CCommandCanIgnore* commandCanIgnore;
     CMidHotseatManager* hotseatManager;
