@@ -674,6 +674,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\netmessages.h" />
     <ClInclude Include="include\netmsg.h" />
     <ClInclude Include="include\netmsghooks.h" />
+    <ClInclude Include="include\netmsgmapentry.h" />
     <ClInclude Include="include\netmsgutils.h" />
     <ClInclude Include="include\mqnetplayerclient.h" />
     <ClInclude Include="include\netplayerinfo.h" />
