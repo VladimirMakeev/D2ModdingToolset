@@ -45,6 +45,7 @@ struct CInterface;
 struct IMqNetPlayerClient;
 struct IMqNetSystem;
 struct CMidgardMsgBox;
+struct NetMsgCallbacks;
 
 struct PlayerClientNode
 {
@@ -61,7 +62,7 @@ struct CMidgardData
     void* directPlayLobbySession;
     LinkedList<PlayerClientNode> clients;
     SmartPtr<IMqNetPlayerClient>* netPlayerClientPtr;
-    int unknown11;
+    NetMsgCallbacks* netCallbacks;
     CMidClient* client;
     CMidServer* server;
     bool multiplayerGame; /**< It can be network or hotseat game. Check hotseat flag to be sure. */
