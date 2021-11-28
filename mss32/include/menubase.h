@@ -20,6 +20,7 @@
 #ifndef MENUBASE_H
 #define MENUBASE_H
 
+#include "imagepointlist.h"
 #include "interffullscreen.h"
 #include <cstddef>
 
@@ -83,6 +84,18 @@ struct Api
                                                      CMenuBase* menu,
                                                      const ButtonCallback* callback);
     CreateButtonFunctor createButtonFunctor;
+
+    using ListBoxDisplayCallback = void(__thiscall*)(CMenuBase* thisptr,
+                                                     ImagePointList* contents,
+                                                     const CMqRect* lineArea,
+                                                     int index,
+                                                     bool selected);
+
+    using CreateListBoxDisplayFunctor = Functor*(__stdcall*)(Functor* functor,
+                                                             int a2,
+                                                             CMenuBase* menu,
+                                                             ListBoxDisplayCallback* callback);
+    CreateListBoxDisplayFunctor createListBoxDisplayFunctor;
 };
 
 Api& get();
