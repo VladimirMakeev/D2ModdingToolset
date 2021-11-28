@@ -30,6 +30,7 @@ struct CMidMsgBoxButtonHandler;
 struct IMidgardObjectMap;
 struct CMidScenVariables;
 struct ScenarioVariable;
+struct UiEvent;
 } // namespace game
 
 namespace hooks {
@@ -80,6 +81,11 @@ game::CMidgardID createScenarioVariablesId(const game::IMidgardObjectMap* object
 /** Calls specified function on each scenario variable. */
 void forEachScenarioVariable(const game::CMidScenVariables* variables,
                              std::function<void(const game::ScenarioVariable*, std::uint32_t)> f);
+
+void createTimerEvent(game::UiEvent* timerEvent,
+                      void* userData,
+                      void* callback,
+                      std::uint32_t timeoutMs);
 
 } // namespace hooks
 

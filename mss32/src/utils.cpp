@@ -18,6 +18,7 @@
  */
 
 #include "utils.h"
+#include "functor.h"
 #include "game.h"
 #include "interfmanager.h"
 #include "log.h"
@@ -26,6 +27,8 @@
 #include "midgardobjectmap.h"
 #include "midmsgboxbuttonhandlerstd.h"
 #include "midscenvariables.h"
+#include "smartptr.h"
+#include "uimanager.h"
 #include <Windows.h>
 #include <fstream>
 #include <random>
@@ -232,6 +235,33 @@ void forEachScenarioVariable(const game::CMidScenVariables* variables,
         CMidScenVariablesApi::get().advance(&listIterator.node, listIterator.node2);
         current = listIterator.node;
     }
+}
+
+void createTimerEvent(game::UiEvent* timerEvent,
+                      void* userData,
+                      void* callback,
+                      std::uint32_t timeoutMs)
+{
+    using namespace game;
+
+    const auto freeFunctor = FunctorApi::get().createOrFree;
+    const auto& uiManagerApi = CUIManagerApi::get();
+
+    using TimerCallback = CUIManagerApi::Api::TimerEventCallback;
+
+    TimerCallback timerCallback{};
+    timerCallback.callback = (TimerCallback::Callback)callback;
+
+    Functor functor;
+    uiManagerApi.createTimerEventFunctor(&functor, 0, userData, &timerCallback);
+
+    UIManagerPtr uiManager;
+    uiManagerApi.get(&uiManager);
+
+    uiManagerApi.createTimerEvent(uiManager.data, timerEvent, &functor, timeoutMs);
+
+    freeFunctor(&functor, nullptr);
+    SmartPointerApi::get().createOrFree((SmartPointer*)&uiManager, nullptr);
 }
 
 } // namespace hooks
