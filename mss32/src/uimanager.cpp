@@ -28,7 +28,9 @@ static std::array<Api, 3> functions = {{
     // Akella
     Api{
         (Api::Get)0x561afc,
+        (Api::CreateTimerEventFunctor)0x643370,
         (Api::CreateTimerEvent)0x561f57,
+        (Api::CreateUpdateEventFunctor)0x4EF49D,
         (Api::CreateUiEvent)0x561d0d,
         (Api::CreateUiEvent)0x561d58,
         (Api::CreateUiEvent)0x561d92,
@@ -41,7 +43,9 @@ static std::array<Api, 3> functions = {{
     // Russobit
     Api{
         (Api::Get)0x561afc,
+        (Api::CreateTimerEventFunctor)0x643370,
         (Api::CreateTimerEvent)0x561f57,
+        (Api::CreateUpdateEventFunctor)0x4EF49D,
         (Api::CreateUiEvent)0x561d0d,
         (Api::CreateUiEvent)0x561d58,
         (Api::CreateUiEvent)0x561d92,
@@ -54,7 +58,9 @@ static std::array<Api, 3> functions = {{
     // Gog
     Api{
         (Api::Get)0x561299,
+        (Api::CreateTimerEventFunctor)0x641bd0,
         (Api::CreateTimerEvent)0x5616f4,
+        (Api::CreateUpdateEventFunctor)0x4EE943,
         (Api::CreateUiEvent)0x5614aa,
         (Api::CreateUiEvent)0x5614f5,
         (Api::CreateUiEvent)0x56152f,

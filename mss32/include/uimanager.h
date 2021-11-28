@@ -57,6 +57,24 @@ struct Api
     using Get = UIManagerPtr*(__stdcall*)(UIManagerPtr* managerPtr);
     Get get;
 
+    struct TimerEventCallback
+    {
+        using Callback = void(__thiscall*)(void* thisptr);
+        Callback callback;
+        int unknown;
+    };
+
+    /**
+     * Creates functor to be used in timer event.
+     * All functor creating functions here are reused since they implement the same logic.
+     * The only difference is the template arguments that were used in the original game code.
+     */
+    using CreateTimerEventFunctor = Functor*(__stdcall*)(Functor* functor,
+                                                         int zero,
+                                                         void* userData,
+                                                         TimerEventCallback* callback);
+    CreateTimerEventFunctor createTimerEventFunctor;
+
     /**
      * Creates event with user specified callback to be called periodically.
      * Creates uiEvent with type UiEventType::Timer.
@@ -71,6 +89,19 @@ struct Api
                                                    Functor* functor,
                                                    std::uint32_t timeoutMs);
     CreateTimerEvent createTimerEvent;
+
+    struct UpdateEventCallback
+    {
+        using Callback = bool(__thiscall*)(void* thisptr);
+        Callback callback;
+    };
+
+    /** Creates functor to be used in update event. */
+    using CreateUpdateEventFunctor = Functor*(__stdcall*)(Functor* functor,
+                                                          int zero,
+                                                          void* userData,
+                                                          UpdateEventCallback* callback);
+    CreateUpdateEventFunctor createUpdateEventFunctor;
 
     using CreateUiEvent = UiEvent*(__thiscall*)(CUIManager* thisptr,
                                                 UiEvent* uiEvent,
