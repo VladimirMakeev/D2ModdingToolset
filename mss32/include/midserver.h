@@ -31,12 +31,15 @@ struct IMqNetSession;
 struct IMqNetPlayerServer;
 struct CMidServerBuilderFull;
 struct CMidServerLogic;
+struct NetMsgCallbacks;
+struct NetMsgEntryData;
 
 struct CMidServerData
 {
     IMqNetSession* netSession;
     IMqNetPlayerServer* netPlayerServer;
-    char unknown[8];
+    NetMsgCallbacks** netCallbacks;
+    NetMsgEntryData** netMsgEntryData;
     std::uint32_t serverMessageId;
     int unknown2;
     CMidServerBuilderFull* serverBuilder;
