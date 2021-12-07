@@ -296,6 +296,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\musichooks.cpp" />
     <ClCompile Include="src\netmessages.cpp" />
     <ClCompile Include="src\netmsg.cpp" />
+    <ClCompile Include="src\netmsgcallbacks.cpp" />
     <ClCompile Include="src\netmsghooks.cpp" />
     <ClCompile Include="src\netmsgutils.cpp" />
     <ClCompile Include="src\ordercat.cpp" />

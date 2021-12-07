@@ -783,6 +783,9 @@
     <ClCompile Include="src\image2fill.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\netmsgcallbacks.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\menuflashwait.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>

@@ -28,6 +28,7 @@ namespace game {
 
 struct CNetMsgMapEntry;
 struct NetMsgCallbacks;
+struct CMenuPhase;
 
 struct NetMsgEntryNode
 {
@@ -57,6 +58,24 @@ struct NetMsgCallbacks
 
 static_assert(sizeof(NetMsgCallbacks) == 28,
               "Size of NetMsgCallbacks structure must be exactly 28 bytes");
+
+namespace NetMsgApi {
+
+struct Api
+{
+    using AllocateEntryData = bool(__thiscall*)(CMenuPhase* thisptr, NetMsgEntryData*** data);
+    AllocateEntryData allocateEntryData;
+
+    using FreeEntryData = void(__stdcall*)(NetMsgEntryData** data);
+    FreeEntryData freeEntryData;
+
+    using AddEntry = void(__thiscall*)(NetMsgEntryData** thisptr, CNetMsgMapEntry* entry);
+    AddEntry addEntry;
+};
+
+Api& get();
+
+} // namespace NetMsgApi
 
 } // namespace game
 
