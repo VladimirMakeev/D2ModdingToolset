@@ -27,6 +27,8 @@ namespace game {
 struct NetMessageHeader;
 struct CNetMsg;
 struct CNetMsgMapEntryVftable;
+struct CMenusAnsInfoMsg;
+struct CGameVersionMsg;
 
 template <typename T>
 struct CNetMsgMapEntryT
@@ -113,6 +115,27 @@ struct CNetMsgMapEntryWReceiver_memberVftable : public CNetMsgMapEntryVftable
                                           std::uint32_t playerNetId);
     RunCallback runCallback;
 };
+
+namespace CNetMsgMapEntryApi {
+
+struct Api
+{
+    template <typename T>
+    using EntryCallback = bool(__thiscall*)(void* thisptr, const T* message, std::uint32_t idFrom);
+
+    using MenusAnsInfoCallback = EntryCallback<CMenusAnsInfoMsg>;
+    using GameVersionCallback = EntryCallback<CGameVersionMsg>;
+
+    template <typename T>
+    using AllocateEntry = CNetMsgMapEntry*(__stdcall*)(void* userData, T callback);
+
+    AllocateEntry<MenusAnsInfoCallback> allocateMenusAnsInfoEntry;
+    AllocateEntry<GameVersionCallback> allocateGameVersionEntry;
+};
+
+Api& get();
+
+} // namespace CNetMsgMapEntryApi
 
 } // namespace game
 
