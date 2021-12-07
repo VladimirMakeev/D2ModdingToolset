@@ -22,10 +22,9 @@
 
 #include "catalogvalidate.h"
 #include "difficultylevel.h"
-#include "linkedlist.h"
 #include "midgardid.h"
 #include "mqnetsystem.h"
-#include "racecategory.h"
+#include "racelist.h"
 #include "smartptr.h"
 #include <cstddef>
 #define WIN32_LEAN_AND_MEAN
@@ -49,8 +48,11 @@ struct CMenuPhaseData
     ScenarioDataArrayWrapped* scenarios;
     SmartPtr<IMqImage2> transitionAnimation;
     int maxPlayers;
-    int unknown6;
-    LinkedList<LRaceCategory> races;
+    bool loadScenario;
+    bool host;
+    bool useGameSpy;
+    char padding2;
+    RaceCategoryList races;
     LRaceCategory race;
     LDifficultyLevel difficultyLevel;
     char* scenarioFilePath;
@@ -58,8 +60,9 @@ struct CMenuPhaseData
     CMidgardID campaignId;
     char* scenarioName;
     char* scenarioDescription;
-    int unknown7;
-    int unknown8;
+    int suggestedLevel;
+    bool unknown8;
+    char padding[3];
     HANDLE scenarioFileHandle;
     int unknown10;
 };
