@@ -31,6 +31,7 @@ struct IMidgardObjectMap;
 struct CMidScenVariables;
 struct ScenarioVariable;
 struct UiEvent;
+struct CInterface;
 } // namespace game
 
 namespace hooks {
@@ -67,6 +68,9 @@ std::string readFile(const std::filesystem::path& file);
 bool readUserSelectedFile(std::string& contents,
                           const char* filter,
                           const char* directory = nullptr);
+
+void showInterface(game::CInterface* interf);
+void hideInterface(game::CInterface* interf);
 
 /** Shows native in-game message box with specified text. */
 void showMessageBox(const std::string& message,

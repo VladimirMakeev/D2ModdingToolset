@@ -163,6 +163,28 @@ bool readUserSelectedFile(std::string& contents, const char* filter, const char*
     return true;
 }
 
+void showInterface(game::CInterface* interf)
+{
+    using namespace game;
+
+    InterfManagerImplPtr ptr;
+    CInterfManagerImplApi::get().get(&ptr);
+
+    ptr.data->CInterfManagerImpl::CInterfManager::vftable->showInterface(ptr.data, interf);
+    SmartPointerApi::get().createOrFree((SmartPointer*)&ptr, nullptr);
+}
+
+void hideInterface(game::CInterface* interf)
+{
+    using namespace game;
+
+    InterfManagerImplPtr ptr;
+    CInterfManagerImplApi::get().get(&ptr);
+
+    ptr.data->CInterfManagerImpl::CInterfManager::vftable->hideInterface(ptr.data, interf);
+    SmartPointerApi::get().createOrFree((SmartPointer*)&ptr, nullptr);
+}
+
 void showMessageBox(const std::string& message,
                     game::CMidMsgBoxButtonHandler* buttonHandler,
                     bool showCancel)
@@ -179,11 +201,7 @@ void showMessageBox(const std::string& message,
     CMidgardMsgBoxApi::get().constructor(msgBox, message.c_str(), showCancel, buttonHandler, 0,
                                          nullptr);
 
-    InterfManagerImplPtr ptr;
-    CInterfManagerImplApi::get().get(&ptr);
-
-    ptr.data->CInterfManagerImpl::CInterfManager::vftable->showInterface(ptr.data, msgBox);
-    SmartPointerApi::get().createOrFree((SmartPointer*)&ptr, nullptr);
+    showInterface(msgBox);
 }
 
 void showErrorMessageBox(const std::string& message)
