@@ -783,6 +783,9 @@
     <ClCompile Include="src\image2fill.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\menuflashwait.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -2036,6 +2039,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\netmsgcallbacks.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menuflashwait.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
