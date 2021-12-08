@@ -20,10 +20,56 @@
 #ifndef NETMESSAGES_H
 #define NETMESSAGES_H
 
+#include "categoryids.h"
+#include "linkedlist.h"
+#include "netmsg.h"
+
 namespace game {
 
 struct CPhaseGame;
 struct CMidgardID;
+
+/** Send by client from game menu to check game version of a server. */
+struct CMenusReqVersionMsg : public CNetMsg
+{ };
+
+static_assert(sizeof(CMenusReqVersionMsg) == 4,
+              "Size of CMenusReqVersionMsg structure must be exactly 4 bytes");
+
+/** Send by server to clients in response to CMenusReqVersionMsg. */
+struct CGameVersionMsg : public CNetMsg
+{
+    int gameVersion; /**< Initialized with CMidServerLogicCoreData::gameVersion value. */
+};
+
+static_assert(sizeof(CGameVersionMsg) == 8,
+              "Size of CGameVersionMsg structure must be exactly 8 bytes");
+
+/** Send by client from game menu to get scenario information from server. */
+struct CMenusReqInfoMsg : public CNetMsg
+{ };
+
+static_assert(sizeof(CMenusReqInfoMsg) == 4,
+              "Size of CMenusReqInfoMsg structure must be exactly 4 bytes");
+
+/** Send by server to clients in response to CMenusReqInfoMsg. */
+struct CMenusAnsInfoMsg : public CNetMsg
+{
+    char* scenarioName;
+    char* scenarioDescription;
+    DifficultyLevelId difficultyLevel;
+    int suggestedLevel;
+    LinkedList<RaceId> raceIds;
+    int startingGold;
+    int startingMana;
+    int gameTurn;
+    int maxPlayers;
+    bool unknown5;
+    char padding[3];
+};
+
+static_assert(sizeof(CMenusAnsInfoMsg) == 56,
+              "Size of CMenusAnsInfoMsg structure must be exactly 56 bytes");
 
 namespace NetMessagesApi {
 
@@ -61,6 +107,9 @@ struct Api
 };
 
 Api& get();
+
+CNetMsgVftable* getMenusReqVersionVftable();
+CNetMsgVftable* getMenusReqInfoVftable();
 
 } // namespace NetMessagesApi
 

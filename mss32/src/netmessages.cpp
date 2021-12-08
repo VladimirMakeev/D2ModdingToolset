@@ -48,4 +48,32 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
+CNetMsgVftable* getMenusReqVersionVftable()
+{
+    static std::array<CNetMsgVftable*, 3> vftables = {{
+        // Akella
+        (CNetMsgVftable*)0x6d083c,
+        // Russobit
+        (CNetMsgVftable*)0x6d083c,
+        // Gog
+        (CNetMsgVftable*)0x6ce7dc,
+    }};
+
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
+
+CNetMsgVftable* getMenusReqInfoVftable()
+{
+    static std::array<CNetMsgVftable*, 3> vftables = {{
+        // Akella
+        (CNetMsgVftable*)0x6d080c,
+        // Russobit
+        (CNetMsgVftable*)0x6d080c,
+        // Gog
+        (CNetMsgVftable*)0x6ce7ac,
+    }};
+
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
+
 } // namespace game::NetMessagesApi
