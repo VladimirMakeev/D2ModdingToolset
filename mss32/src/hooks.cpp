@@ -77,6 +77,8 @@
 #include "mapgen.h"
 #include "mempool.h"
 #include "menunewskirmishsingle.h"
+#include "menuphasehooks.h"
+#include "menuprotocolhooks.h"
 #include "middatacache.h"
 #include "midevconditionhooks.h"
 #include "mideveffecthooks.h"
@@ -252,6 +254,12 @@ static Hooks getGameHooks()
         {ITestConditionApi::get().create, createTestConditionHooked, (void**)&orig.createTestCondition},
         // Support custom event effects
         //{IEffectResultApi::get().create, createEffectResultHooked, (void**)&orig.createEffectResult},
+        // Support new menu windows
+        {CMenuPhaseApi::get().setTransition, menuPhaseSetTransitionHooked, (void**)&orig.menuPhaseSetTransition},
+        // Custom lobby server test
+        {CMenuProtocolApi::get().constructor, menuProtocolCtorHooked, (void**)&orig.menuProtocolCtor},
+        {CMenuProtocolApi::get().continueHandler, menuProtocolContinueHandlerHooked, (void**)&orig.menuProtocolContinueHandler},
+        {CMenuProtocolApi::get().displayCallback, menuProtocolDisplayCallbackHooked, (void**)&orig.menuProtocolDisplayCallback},
     };
     // clang-format on
 

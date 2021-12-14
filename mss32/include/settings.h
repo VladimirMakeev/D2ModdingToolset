@@ -79,6 +79,7 @@ struct Settings
         bool show{};
     } movementCost;
 
+    std::uint16_t clientPort{60001};
     bool debugMode;
 };
 

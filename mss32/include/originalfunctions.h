@@ -32,6 +32,8 @@
 #include "enclayoutspell.h"
 #include "exchangeinterf.h"
 #include "game.h"
+#include "menuphase.h"
+#include "menuprotocol.h"
 #include "midevcondition.h"
 #include "mideveffect.h"
 #include "midevent.h"
@@ -90,6 +92,11 @@ struct OriginalFunctions
     game::editor::CEffectInterfApi::Api::CreateFromCategory createEffectInterfFromCategory;
 
     game::IEffectResultApi::Api::Create createEffectResult;
+
+    game::CMenuPhaseApi::Api::SetTransition menuPhaseSetTransition;
+    game::CMenuProtocolApi::Api::Constructor menuProtocolCtor;
+    game::CMenuProtocolApi::Api::DisplayCallback menuProtocolDisplayCallback;
+    game::CMenuProtocolApi::Api::ButtonHandler menuProtocolContinueHandler;
 };
 
 OriginalFunctions& getOriginalFunctions();

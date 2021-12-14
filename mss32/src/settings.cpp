@@ -125,6 +125,7 @@ static void readSettings(const sol::table& table, Settings& settings)
     settings.unrestrictedBestowWards = readSetting(table, "unrestrictedBestowWards", defaultSettings().unrestrictedBestowWards);
     settings.freeTransformSelfAttack = readSetting(table, "freeTransformSelfAttack", defaultSettings().freeTransformSelfAttack);
     settings.detailedAttackDescription = readSetting(table, "detailedAttackDescription", defaultSettings().detailedAttackDescription);
+    settings.clientPort = readSetting(table, "clientPort", defaultSettings().clientPort);
     settings.debugMode = readSetting(table, "debugHooks", defaultSettings().debugMode);
     // clang-format on
 
@@ -172,6 +173,7 @@ const Settings& baseSettings()
         settings.detailedAttackDescription = false;
         settings.movementCost.textColor = Color{200, 200, 200};
         settings.movementCost.show = false;
+        settings.clientPort = 60001;
         settings.debugMode = false;
 
         initialized = true;

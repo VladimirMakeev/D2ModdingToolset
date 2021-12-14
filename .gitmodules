@@ -10,3 +10,7 @@
 [submodule "sol2"]
 	path = sol2
 	url = https://github.com/ThePhD/sol2.git
+[submodule "SLikeNet"]
+	path = SLikeNet
+	url = https://github.com/SLikeSoft/SLikeNet.git
+	branch = master
