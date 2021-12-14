@@ -20,6 +20,7 @@
 #ifndef MIDGARD_H
 #define MIDGARD_H
 
+#include "d2pair.h"
 #include "linkedlist.h"
 #include "midgardid.h"
 #include "mqanimation.h"
@@ -47,11 +48,12 @@ struct IMqNetSystem;
 struct CMidgardMsgBox;
 struct NetMsgCallbacks;
 
+using NetClientPtrIdPair = Pair<SmartPtr<IMqNetPlayerClient>, CMidgardID>;
+
 struct PlayerClientNode
 {
-    std::uint32_t netId; /**< Some kind of client identifier, not related to CMidgardID. */
-    SmartPtr<IMqNetPlayerClient> client;
-    CMidgardID playerId;
+    std::uint32_t netId; /**< Client network identifier, not related to CMidgardID. */
+    NetClientPtrIdPair clientIdPair;
 };
 
 struct CMidgardData
@@ -61,7 +63,7 @@ struct CMidgardData
     IMqNetSession* netSession;
     void* directPlayLobbySession;
     LinkedList<PlayerClientNode> clients;
-    SmartPtr<IMqNetPlayerClient>* netPlayerClientPtr;
+    NetClientPtrIdPair* netPlayerClientPtr; /**< Points inside of the node from clients list. */
     NetMsgCallbacks* netCallbacks;
     CMidClient* client;
     CMidServer* server;
