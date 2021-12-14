@@ -47,6 +47,7 @@ struct IMqNetPlayerClient;
 struct IMqNetSystem;
 struct CMidgardMsgBox;
 struct NetMsgCallbacks;
+struct CNetMsg;
 
 using NetClientPtrIdPair = Pair<SmartPtr<IMqNetPlayerClient>, CMidgardID>;
 
@@ -145,6 +146,24 @@ struct Api
                                             bool multiplayer,
                                             bool hotseat);
     SetNetService setNetService;
+
+    /**
+     * Creates IMqNetPlayerClient with specified name.
+     * Created player is added to CMidgardData::clients list.
+     * @returns netId of created player.
+     */
+    using CreateNetClient = std::uint32_t(__thiscall*)(CMidgard* thisptr,
+                                                       const char* playerName,
+                                                       bool updateIniFile);
+    CreateNetClient createNetClient;
+
+    /**
+     * Sends game specific net message to server.
+     * Uses CMidgardData::netPlayerClientPtr to send message;
+     * @returns true if message was successfully sent.
+     */
+    using SendNetMsgToServer = bool(__thiscall*)(CMidgard* thisptr, const CNetMsg* message);
+    SendNetMsgToServer sendNetMsgToServer;
 };
 
 Api& get();
