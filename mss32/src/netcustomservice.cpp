@@ -202,7 +202,8 @@ bool createCustomNetService(game::IMqNetService** service)
     logDebug("lobby.log", "Get peer instance");
     auto lobbyPeer = SLNet::RakPeerInterface::GetInstance();
 
-    const std::uint16_t clientPort = userSettings().clientPort - defaultSettings().clientPort;
+    const auto& lobbySettings = userSettings().lobby;
+    const auto& clientPort = lobbySettings.client.port;
     SLNet::SocketDescriptor socket{clientPort, nullptr};
 
     logDebug("lobby.log", fmt::format("Start lobby peer on port {:d}", clientPort));
@@ -213,10 +214,14 @@ bool createCustomNetService(game::IMqNetService** service)
         return false;
     }
 
-    static const char serverIp[]{"127.0.0.1"};
-    const std::uint16_t serverPort{61111};
+    const auto& serverIp = lobbySettings.server.ip;
+    const auto& serverPort = lobbySettings.server.port;
 
-    if (lobbyPeer->Connect(serverIp, serverPort, nullptr, 0) != SLNet::CONNECTION_ATTEMPT_STARTED) {
+    logDebug("lobby.log", fmt::format("Connecting to lobby server with ip '{:s}', port {:d}",
+                                      serverIp, serverPort));
+
+    if (lobbyPeer->Connect(serverIp.c_str(), serverPort, nullptr, 0)
+        != SLNet::CONNECTION_ATTEMPT_STARTED) {
         logError("lobby.log", "Failed to connect to lobby server");
         SLNet::RakPeerInterface::DestroyInstance(lobbyPeer);
         return false;

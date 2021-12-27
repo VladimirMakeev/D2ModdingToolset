@@ -327,9 +327,9 @@ game::IMqNetPlayerClient* createCustomPlayerClient(CNetCustomSession* session,
 {
     using namespace game;
 
-    auto clientPort{userSettings().clientPort};
-
-    SLNet::SocketDescriptor descriptor{/*CNetCustomPlayer::clientPort*/ clientPort, nullptr};
+    const std::uint16_t clientPort = CNetCustomPlayer::clientPort
+                                     + userSettings().lobby.client.port;
+    SLNet::SocketDescriptor descriptor{clientPort, nullptr};
     auto peer{SLNet::RakPeerInterface::GetInstance()};
 
     const auto result{peer->Startup(1, &descriptor, 1)};
@@ -396,26 +396,6 @@ game::IMqNetPlayerClient* createCustomPlayerClient(CNetCustomSession* session,
     playerLog(fmt::format("CNetCustomPlayerClient has netId 0x{:x}, "
                           "expects server with netId 0x{:x}",
                           netId, serverId));
-
-    // Works on the first player client as expected. Only on first, the host one.
-#if 0
-    {
-        CMenusReqVersionMsg requestVersion;
-        requestVersion.vftable = NetMessagesApi::getMenusReqVersionVftable();
-
-        using SendTmpMsg = bool(__stdcall*)(const CNetMsg* netMessage,
-                                            IMqNetPlayerClient* playerClient);
-        SendTmpMsg sendTmpMsg = (SendTmpMsg)0x403c91;
-
-        playerLog("TMP debug: Send version request message to server");
-        // 8. send message to server
-        // if not ok, hide wait, show error, enable join
-        if (!sendTmpMsg(&requestVersion, client)) {
-            // customLobbyProcessJoinError(menu, "Could not request game version from server");
-            playerLog("Failed to send version request message");
-        }
-    }
-#endif
 
     return client;
 }
