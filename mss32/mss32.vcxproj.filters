@@ -876,6 +876,9 @@
     <ClCompile Include="src\lobbyclient.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\networkpeer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -2204,6 +2207,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\loginaccountinterf.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\networkpeer.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

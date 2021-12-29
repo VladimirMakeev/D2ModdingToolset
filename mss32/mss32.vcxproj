@@ -324,6 +324,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\netmsghooks.cpp" />
     <ClCompile Include="src\netmsgmapentry.cpp" />
     <ClCompile Include="src\netmsgutils.cpp" />
+    <ClCompile Include="src\networkpeer.cpp" />
     <ClCompile Include="src\ordercat.cpp" />
     <ClCompile Include="src\originalfunctions.cpp" />
     <ClCompile Include="src\pathinfolist.cpp" />
@@ -731,6 +732,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\netmsgutils.h" />
     <ClInclude Include="include\mqnetplayerclient.h" />
     <ClInclude Include="include\netplayerinfo.h" />
+    <ClInclude Include="include\networkpeer.h" />
     <ClInclude Include="include\ordercat.h" />
     <ClInclude Include="include\originalfunctions.h" />
     <ClInclude Include="include\pathinfolist.h" />
