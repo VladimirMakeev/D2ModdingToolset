@@ -22,8 +22,8 @@
 
 #include "lobbycallbacks.h"
 #include "mqnetservice.h"
+#include "networkpeer.h"
 #include "roomscallback.h"
-#include "uievent.h"
 #include <Lobby2Client.h>
 #include <Lobby2Message.h>
 #include <RakPeerInterface.h>
@@ -35,6 +35,24 @@ namespace hooks {
 
 class LoggingCallbacks;
 class RoomsLoggingCallback;
+struct CNetCustomService;
+
+class LobbyPeerCallbacks : public NetworkPeerCallbacks
+{
+public:
+    LobbyPeerCallbacks(CNetCustomService* netService)
+        : netService{netService}
+    { }
+
+    virtual ~LobbyPeerCallbacks() = default;
+
+    void onPacketReceived(DefaultMessageIDTypes type,
+                          SLNet::RakPeerInterface* peer,
+                          const SLNet::Packet* packet) override;
+
+private:
+    CNetCustomService* netService;
+};
 
 struct CNetCustomService : public game::IMqNetService
 {
@@ -43,7 +61,7 @@ struct CNetCustomService : public game::IMqNetService
                       std::unique_ptr<LoggingCallbacks>&& logCallbacks,
                       std::unique_ptr<SLNet::RoomsPlugin>&& roomsClient,
                       std::unique_ptr<RoomsLoggingCallback>&& roomsCallback,
-                      SLNet::RakPeerInterface* peer);
+                      NetworkPeer::PeerPtr&& peer);
 
     std::string loggedAccount;
     SLNet::SystemAddress roomOwnerAddress;
@@ -58,9 +76,8 @@ struct CNetCustomService : public game::IMqNetService
     std::unique_ptr<SLNet::RoomsPlugin> roomsClient;
     std::unique_ptr<RoomsLoggingCallback> roomsLogCallback;
     /** Connection with lobby server. */
-    SLNet::RakPeerInterface* lobbyPeer;
-    /** Processes network packets from lobby server. */
-    game::UiEvent lobbyPacketEvent;
+    NetworkPeer lobbyPeer;
+    LobbyPeerCallbacks callbacks;
 };
 
 CNetCustomService* getNetService();

@@ -340,7 +340,7 @@ game::IMqNetPlayerClient* createCustomPlayerClient(CNetCustomSession* session,
     }
 
     auto service = session->service;
-    auto serverAddress{lobbyAddressToServerPlayer(service->lobbyPeer->GetMyBoundAddress())};
+    auto serverAddress{lobbyAddressToServerPlayer(service->lobbyPeer.peer->GetMyBoundAddress())};
 
     auto serverIp{serverAddress.ToString(false)};
     playerLog(fmt::format("Client tries to connect to server at '{:s}'", serverIp));
