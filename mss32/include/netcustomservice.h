@@ -33,8 +33,6 @@
 
 namespace hooks {
 
-class LoggingCallbacks;
-class RoomsLoggingCallback;
 struct CNetCustomService;
 
 class LobbyPeerCallbacks : public NetworkPeerCallbacks
@@ -56,25 +54,21 @@ private:
 
 struct CNetCustomService : public game::IMqNetService
 {
-    CNetCustomService(std::unique_ptr<SLNet::Lobby2Client>&& lobbyClient,
-                      std::unique_ptr<SLNet::Lobby2MessageFactory>&& msgFactory,
-                      std::unique_ptr<LoggingCallbacks>&& logCallbacks,
-                      std::unique_ptr<SLNet::RoomsPlugin>&& roomsClient,
-                      std::unique_ptr<RoomsLoggingCallback>&& roomsCallback,
-                      NetworkPeer::PeerPtr&& peer);
+    CNetCustomService(NetworkPeer::PeerPtr&& peer);
+    ~CNetCustomService() = default;
 
     std::string loggedAccount;
     SLNet::SystemAddress roomOwnerAddress;
 
     /** Interacts with lobby server. */
-    std::unique_ptr<SLNet::Lobby2Client> lobbyClient;
+    SLNet::Lobby2Client lobbyClient;
     /** Creates network messages. */
-    std::unique_ptr<SLNet::Lobby2MessageFactory> lobbyMsgFactory;
+    SLNet::Lobby2MessageFactory lobbyMsgFactory;
     /** Callbacks only for debug logging. */
-    std::unique_ptr<LoggingCallbacks> loggingCallbacks;
+    LoggingCallbacks loggingCallbacks;
     /** Interacts with lobby server rooms. */
-    std::unique_ptr<SLNet::RoomsPlugin> roomsClient;
-    std::unique_ptr<RoomsLoggingCallback> roomsLogCallback;
+    SLNet::RoomsPlugin roomsClient;
+    RoomsLoggingCallback roomsLogCallback;
     /** Connection with lobby server. */
     NetworkPeer lobbyPeer;
     LobbyPeerCallbacks callbacks;

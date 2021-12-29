@@ -65,7 +65,7 @@ bool tryCreateAccount(const char* accountName,
         return false;
     }
 
-    auto msg{netService->lobbyMsgFactory->Alloc(SLNet::L2MID_Client_RegisterAccount)};
+    auto msg{netService->lobbyMsgFactory.Alloc(SLNet::L2MID_Client_RegisterAccount)};
     auto account{static_cast<SLNet::Client_RegisterAccount*>(msg)};
     if (!account) {
         logDebug("lobby.log", "Can not allocate account message");
@@ -86,11 +86,11 @@ bool tryCreateAccount(const char* accountName,
     if (!result) {
         logDebug("lobby.log", "Wrong account registration data");
     } else {
-        netService->lobbyClient->SendMsg(account);
+        netService->lobbyClient.SendMsg(account);
         logDebug("lobby.log", "Account registration sent");
     }
 
-    netService->lobbyMsgFactory->Dealloc(account);
+    netService->lobbyMsgFactory.Dealloc(account);
     return result;
 }
 
@@ -110,7 +110,7 @@ bool tryLoginAccount(const char* accountName, const char* password)
         return false;
     }
 
-    auto msg{netService->lobbyMsgFactory->Alloc(SLNet::L2MID_Client_Login)};
+    auto msg{netService->lobbyMsgFactory.Alloc(SLNet::L2MID_Client_Login)};
     auto login{static_cast<SLNet::Client_Login*>(msg)};
     if (!login) {
         logDebug("lobby.log", "Can not allocate login message");
@@ -127,11 +127,11 @@ bool tryLoginAccount(const char* accountName, const char* password)
     if (!result) {
         logDebug("lobby.log", "Wrong account data");
     } else {
-        netService->lobbyClient->SendMsg(login);
+        netService->lobbyClient.SendMsg(login);
         logDebug("lobby.log", "Trying to login");
     }
 
-    netService->lobbyMsgFactory->Dealloc(login);
+    netService->lobbyMsgFactory.Dealloc(login);
     return result;
 }
 
@@ -143,15 +143,15 @@ void logoutAccount()
         return;
     }
 
-    auto msg{netService->lobbyMsgFactory->Alloc(SLNet::L2MID_Client_Logoff)};
+    auto msg{netService->lobbyMsgFactory.Alloc(SLNet::L2MID_Client_Logoff)};
     auto logoff{static_cast<SLNet::Client_Logoff*>(msg)};
     if (!logoff) {
         logDebug("lobby.log", "Can not allocate logoff message");
         return;
     }
 
-    netService->lobbyClient->SendMsg(logoff);
-    netService->lobbyMsgFactory->Dealloc(logoff);
+    netService->lobbyClient.SendMsg(logoff);
+    netService->lobbyMsgFactory.Dealloc(logoff);
 }
 
 void setCurrentLobbyPlayer(const char* accountName)
@@ -196,7 +196,7 @@ bool tryCreateRoom(const char* roomName)
 
     logDebug("lobby.log", fmt::format("Account {:s} is trying to create and enter a room {:s}",
                                       room.userName.C_String(), params.roomName.C_String()));
-    netService->roomsClient->ExecuteFunc(&room);
+    netService->roomsClient.ExecuteFunc(&room);
     return true;
 }
 
@@ -215,7 +215,7 @@ bool trySearchRooms(const char* accountName)
     logDebug("lobby.log",
              fmt::format("Account {:s} is trying to search rooms", search.userName.C_String()));
 
-    netService->roomsClient->ExecuteFunc(&search);
+    netService->roomsClient.ExecuteFunc(&search);
     return true;
 }
 
@@ -242,7 +242,7 @@ bool tryJoinRoom(const char* roomName)
     logDebug("lobby.log", fmt::format("Account {:s} is trying to join room {:s}",
                                       join.userName.C_String(), roomName));
 
-    netService->roomsClient->ExecuteFunc(&join);
+    netService->roomsClient.ExecuteFunc(&join);
     return true;
 }
 

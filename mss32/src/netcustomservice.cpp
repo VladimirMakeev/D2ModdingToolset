@@ -36,7 +36,7 @@ void LobbyPeerCallbacks::onPacketReceived(DefaultMessageIDTypes type,
                                           SLNet::RakPeerInterface* peer,
                                           const SLNet::Packet* packet)
 {
-    if (!netService->lobbyPeer.peer || !netService->lobbyClient || !netService->lobbyMsgFactory) {
+    if (!netService->lobbyPeer.peer) {
         return;
     }
 
@@ -59,8 +59,8 @@ void LobbyPeerCallbacks::onPacketReceived(DefaultMessageIDTypes type,
     case ID_CONNECTION_REQUEST_ACCEPTED: {
         logDebug("lobby.log", "Connection request accepted, set server address");
         // Make sure plugins know about the server
-        netService->lobbyClient->SetServerAddress(packet->systemAddress);
-        netService->roomsClient->SetServerAddress(packet->systemAddress);
+        netService->lobbyClient.SetServerAddress(packet->systemAddress);
+        netService->roomsClient.SetServerAddress(packet->systemAddress);
         break;
     }
     case ID_LOBBY2_SERVER_ERROR:
@@ -72,21 +72,23 @@ void LobbyPeerCallbacks::onPacketReceived(DefaultMessageIDTypes type,
     }
 }
 
-CNetCustomService::CNetCustomService(std::unique_ptr<SLNet::Lobby2Client>&& lobbyClient,
-                                     std::unique_ptr<SLNet::Lobby2MessageFactory>&& msgFactory,
-                                     std::unique_ptr<LoggingCallbacks>&& logCallbacks,
-                                     std::unique_ptr<SLNet::RoomsPlugin>&& roomsClient,
-                                     std::unique_ptr<RoomsLoggingCallback>&& roomsCallback,
-                                     NetworkPeer::PeerPtr&& peer)
-    : lobbyClient(std::move(lobbyClient))
-    , lobbyMsgFactory(std::move(msgFactory))
-    , loggingCallbacks(std::move(logCallbacks))
-    , roomsClient(std::move(roomsClient))
-    , roomsLogCallback(std::move(roomsCallback))
-    , lobbyPeer(std::move(peer))
+CNetCustomService::CNetCustomService(NetworkPeer::PeerPtr&& peer)
+    : lobbyPeer(std::move(peer))
     , callbacks(this)
 {
     lobbyPeer.addCallback(&callbacks);
+
+    logDebug("lobby.log", "Set msg factory");
+    lobbyClient.SetMessageFactory(&lobbyMsgFactory);
+
+    logDebug("lobby.log", "Create callbacks");
+    lobbyClient.SetCallbackInterface(&loggingCallbacks);
+
+    logDebug("lobby.log", "Attach lobby client as a plugin");
+    lobbyPeer.peer->AttachPlugin(&lobbyClient);
+
+    lobbyPeer.peer->AttachPlugin(&roomsClient);
+    roomsClient.SetRoomsCallback(&roomsLogCallback);
 }
 
 CNetCustomService* getNetService()
@@ -106,17 +108,7 @@ CNetCustomService* getNetService()
 void __fastcall netCustomServiceDtor(CNetCustomService* thisptr, int /*%edx*/, char flags)
 {
     logDebug("lobby.log", "CNetCustomService d-tor called");
-
-    thisptr->callbacks.~LobbyPeerCallbacks();
-    thisptr->lobbyPeer.~NetworkPeer();
-
-    logDebug("lobby.log", "Destroy lobby instances");
-    thisptr->roomsLogCallback.reset(nullptr);
-    thisptr->roomsClient.reset(nullptr);
-    thisptr->loggingCallbacks.reset(nullptr);
-    thisptr->lobbyMsgFactory.reset(nullptr);
-    thisptr->lobbyClient.reset(nullptr);
-    thisptr->loggedAccount.~basic_string();
+    thisptr->~CNetCustomService();
 
     if (flags & 1) {
         logDebug("lobby.log", "CNetCustomService d-tor frees memory");
@@ -212,36 +204,11 @@ bool createCustomNetService(game::IMqNetService** service)
         return false;
     }
 
-    logDebug("lobby.log", "Create client");
-    auto lobbyClient = std::make_unique<SLNet::Lobby2Client>();
-
-    logDebug("lobby.log", "Create msg factory");
-    auto lobbyMsgFactory = std::make_unique<SLNet::Lobby2MessageFactory>();
-
-    logDebug("lobby.log", "Set msg factory");
-    lobbyClient->SetMessageFactory(lobbyMsgFactory.get());
-
-    logDebug("lobby.log", "Create callbacks");
-    auto callbacks = std::make_unique<LoggingCallbacks>();
-    lobbyClient->SetCallbackInterface(callbacks.get());
-
-    logDebug("lobby.log", "Attach lobby client as a plugin");
-    lobbyPeer->AttachPlugin(lobbyClient.get());
-
-    auto roomsClient = std::make_unique<SLNet::RoomsPlugin>();
-    lobbyPeer->AttachPlugin(roomsClient.get());
-
-    auto roomsCallback = std::make_unique<RoomsLoggingCallback>();
-    roomsClient->SetRoomsCallback(roomsCallback.get());
-
     logDebug("lobby.log", "Allocate CNetCustomService");
     auto netService = (CNetCustomService*)game::Memory::get().allocate(sizeof(CNetCustomService));
 
     logDebug("lobby.log", "Call placement new");
-
-    new (netService)
-        CNetCustomService(std::move(lobbyClient), std::move(lobbyMsgFactory), std::move(callbacks),
-                          std::move(roomsClient), std::move(roomsCallback), std::move(lobbyPeer));
+    new (netService) CNetCustomService(std::move(lobbyPeer));
 
     logDebug("lobby.log", "Assign vftable");
     netService->vftable = &netCustomServiceVftable;
@@ -258,7 +225,7 @@ void addLobbyCallbacks(SLNet::Lobby2Callbacks* callbacks)
         return;
     }
 
-    netService->lobbyClient->AddCallbackInterface(callbacks);
+    netService->lobbyClient.AddCallbackInterface(callbacks);
 }
 
 void removeLobbyCallbacks(SLNet::Lobby2Callbacks* callbacks)
@@ -268,7 +235,7 @@ void removeLobbyCallbacks(SLNet::Lobby2Callbacks* callbacks)
         return;
     }
 
-    netService->lobbyClient->RemoveCallbackInterface(callbacks);
+    netService->lobbyClient.RemoveCallbackInterface(callbacks);
 }
 
 void addRoomsCallback(SLNet::RoomsCallback* callback)
@@ -279,7 +246,7 @@ void addRoomsCallback(SLNet::RoomsCallback* callback)
     }
 
     logDebug("lobby.log", fmt::format("Adding room callback {:p}", (void*)callback));
-    netService->roomsClient->AddRoomsCallback(callback);
+    netService->roomsClient.AddRoomsCallback(callback);
 }
 
 void removeRoomsCallback(SLNet::RoomsCallback* callback)
@@ -290,7 +257,7 @@ void removeRoomsCallback(SLNet::RoomsCallback* callback)
     }
 
     logDebug("lobby.log", fmt::format("Removing room callback {:p}", (void*)callback));
-    netService->roomsClient->RemoveRoomsCallback(callback);
+    netService->roomsClient.RemoveRoomsCallback(callback);
 }
 
 } // namespace hooks
