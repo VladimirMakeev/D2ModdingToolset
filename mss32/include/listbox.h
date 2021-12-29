@@ -69,7 +69,7 @@ struct CListBoxInterfData
     int unknown13[10];
     Vector<int> childIndices;
     SmartPtr<CBFunctorDispatch1<int>> onSelectionConfirmed;
-    SmartPtr<CBFunctorDispatch1<int>> ptr4;
+    SmartPtr<CBFunctorDispatch1<int>> onRightMouseButtonPressed;
     SmartPointer ptr5;
     CImage2TextBackground* image2TextBgnd;
     CMqPoint bgndImagePos;
