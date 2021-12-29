@@ -20,6 +20,8 @@
 #ifndef DYNAMICCAST_H
 #define DYNAMICCAST_H
 
+#include <cstdint>
+
 namespace game {
 
 /**
@@ -35,6 +37,39 @@ struct alignas(8) TypeDescriptor
 // Nonstandard extension: zero-sized array in struct/union
 #pragma warning(suppress : 4200)
     char name[0]; /**< Mangled type name. */
+};
+
+struct BaseClassDescriptor;
+
+struct BaseClassArray
+{
+// Nonstandard extension: zero-sized array in struct/union
+#pragma warning(suppress : 4200)
+    BaseClassDescriptor* baseClasses[];
+};
+
+/** Describes inheritance hierarchy of a class. */
+struct ClassHierarchyDescriptor
+{
+    std::uint32_t signature;
+    std::uint32_t attributes;
+    std::uint32_t numBaseClasses; /**< Number of elements in baseClassArray. */
+    BaseClassArray* baseClassArray;
+};
+
+/**
+ * RTTI complete object locator structure used in game.
+ * Allows compiler to find the location of the complete object from a specific vftable pointer.
+ * Pointer to this structure can be found in memory just before class vftable.
+ * @see http://www.openrce.org/articles/full_view/23 for additional info.
+ */
+struct CompleteObjectLocator
+{
+    std::uint32_t signature;
+    std::uint32_t offset;                      /**< Offset of this vftable in complete class. */
+    std::uint32_t cdOffset;                    /**< Constructor displacement offset. */
+    TypeDescriptor* typeDescriptor;            /**< type_info* of the complete class. */
+    ClassHierarchyDescriptor* classDescriptor; /**< Describes inheritance hierarchy. */
 };
 
 namespace RttiApi {
