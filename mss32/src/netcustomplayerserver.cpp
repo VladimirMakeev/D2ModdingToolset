@@ -35,127 +35,117 @@ namespace hooks {
 
 static std::mutex netMessagesMutex;
 
-void __fastcall playerServerPacketCallback(CNetCustomPlayerServer* thisptr, int /*%edx*/)
+void PlayerServerCallbacks::onPacketReceived(DefaultMessageIDTypes type,
+                                             SLNet::RakPeerInterface* peer,
+                                             const SLNet::Packet* packet)
 {
-    auto peer{thisptr->player->peer};
-    if (!peer) {
-        return;
-    }
+    auto netSystem{playerServer->player.netSystem};
 
-    auto netSystem{thisptr->player->netSystem};
+    switch (type) {
+    case ID_REMOTE_DISCONNECTION_NOTIFICATION: {
+        logDebug("playerServer.log", "Client disconnected");
 
-    static std::mutex packetMutex;
-    std::lock_guard<std::mutex> guard(packetMutex);
-
-    for (auto packet = peer->Receive(); packet != nullptr;
-         peer->DeallocatePacket(packet), packet = peer->Receive()) {
-
-        switch (packet->data[0]) {
-        case ID_REMOTE_DISCONNECTION_NOTIFICATION: {
-            logDebug("playerServer.log", "Client disconnected");
-
-            if (netSystem) {
-                auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
-                auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
-
-                netSystem->vftable->onPlayerDisconnected(netSystem, (int)guidInt);
-            }
-
-            break;
-        }
-        case ID_REMOTE_CONNECTION_LOST: {
-            logDebug("playerServer.log", "Client lost connection");
-
-            if (netSystem) {
-                auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
-                auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
-
-                netSystem->vftable->onPlayerDisconnected(netSystem, (int)guidInt);
-            }
-
-            break;
-        }
-        case ID_REMOTE_NEW_INCOMING_CONNECTION:
-            logDebug("playerServer.log", "Client connected");
-            break;
-        case ID_CONNECTION_REQUEST_ACCEPTED:
-            // This should never happen on server ?
-            logDebug("playerServer.log", "Connection request to the server was accepted");
-            break;
-        case ID_NEW_INCOMING_CONNECTION: {
-            logDebug("playerServer.log", "Incoming connection");
-
-            if (netSystem) {
-                auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
-                auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
-
-                netSystem->vftable->onPlayerConnected(netSystem, (int)guidInt);
-            }
-
-            break;
-        }
-        case ID_NO_FREE_INCOMING_CONNECTIONS:
-            // This should never happen on server ?
-            logDebug("playerServer.log", "Server is full");
-            break;
-        case ID_DISCONNECTION_NOTIFICATION: {
-            logDebug("playerServer.log", "Client has disconnected from server");
-
-            if (netSystem) {
-                auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
-                auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
-
-                netSystem->vftable->onPlayerDisconnected(netSystem, (int)guidInt);
-            }
-
-            break;
-        }
-        case ID_CONNECTION_LOST: {
-            logDebug("playerServer.log", "Client has lost connection");
-
-            if (netSystem) {
-                auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
-                auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
-
-                netSystem->vftable->onPlayerDisconnected(netSystem, (int)guidInt);
-            }
-
-            break;
-        }
-        case 0xff: {
-            // Game message received
-            auto message = reinterpret_cast<const game::NetMessageHeader*>(packet->data);
-
+        if (netSystem) {
             auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
             auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
 
-            /*logDebug("playerServer.log", fmt::format("Game message '{:s}' from {:x}",
-                                                     message->messageClassName, guidInt));*/
-
-            // logDebug("playerServer.log", "Allocate net message");
-
-            auto msg = std::make_unique<unsigned char[]>(message->length);
-            // logDebug("playerServer.log", "Copy net message");
-            std::memcpy(msg.get(), message, message->length);
-
-            {
-                std::lock_guard<std::mutex> messageGuard(netMessagesMutex);
-                thisptr->messages.push_back(
-                    CNetCustomPlayerServer::IdMessagePair{std::uint32_t{guidInt}, std::move(msg)});
-            }
-
-            auto reception = thisptr->player->netReception;
-            if (reception) {
-                reception->vftable->notify(reception);
-            }
-
-            break;
+            netSystem->vftable->onPlayerDisconnected(netSystem, (int)guidInt);
         }
-        default:
-            logDebug("playerServer.log",
-                     fmt::format("Packet type {:d}", static_cast<int>(packet->data[0])));
-            break;
+
+        break;
+    }
+    case ID_REMOTE_CONNECTION_LOST: {
+        logDebug("playerServer.log", "Client lost connection");
+
+        if (netSystem) {
+            auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
+            auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
+
+            netSystem->vftable->onPlayerDisconnected(netSystem, (int)guidInt);
         }
+
+        break;
+    }
+    case ID_REMOTE_NEW_INCOMING_CONNECTION:
+        logDebug("playerServer.log", "Client connected");
+        break;
+    case ID_CONNECTION_REQUEST_ACCEPTED:
+        // This should never happen on server ?
+        logDebug("playerServer.log", "Connection request to the server was accepted");
+        break;
+    case ID_NEW_INCOMING_CONNECTION: {
+        logDebug("playerServer.log", "Incoming connection");
+
+        if (netSystem) {
+            auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
+            auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
+
+            netSystem->vftable->onPlayerConnected(netSystem, (int)guidInt);
+        }
+
+        break;
+    }
+    case ID_NO_FREE_INCOMING_CONNECTIONS:
+        // This should never happen on server ?
+        logDebug("playerServer.log", "Server is full");
+        break;
+    case ID_DISCONNECTION_NOTIFICATION: {
+        logDebug("playerServer.log", "Client has disconnected from server");
+
+        if (netSystem) {
+            auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
+            auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
+
+            netSystem->vftable->onPlayerDisconnected(netSystem, (int)guidInt);
+        }
+
+        break;
+    }
+    case ID_CONNECTION_LOST: {
+        logDebug("playerServer.log", "Client has lost connection");
+
+        if (netSystem) {
+            auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
+            auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
+
+            netSystem->vftable->onPlayerDisconnected(netSystem, (int)guidInt);
+        }
+
+        break;
+    }
+    case 0xff: {
+        // Game message received
+        auto message = reinterpret_cast<const game::NetMessageHeader*>(packet->data);
+
+        auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
+        auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
+
+        /*logDebug("playerServer.log", fmt::format("Game message '{:s}' from {:x}",
+                                                 message->messageClassName, guidInt));*/
+
+        // logDebug("playerServer.log", "Allocate net message");
+
+        auto msg = std::make_unique<unsigned char[]>(message->length);
+        // logDebug("playerServer.log", "Copy net message");
+        std::memcpy(msg.get(), message, message->length);
+
+        {
+            std::lock_guard<std::mutex> messageGuard(netMessagesMutex);
+            playerServer->messages.push_back(
+                CNetCustomPlayerServer::IdMessagePair{std::uint32_t{guidInt}, std::move(msg)});
+        }
+
+        auto reception = playerServer->player.netReception;
+        if (reception) {
+            reception->vftable->notify(reception);
+        }
+
+        break;
+    }
+    default:
+        logDebug("playerServer.log",
+                 fmt::format("Packet type {:d}", static_cast<int>(packet->data[0])));
+        break;
     }
 }
 
@@ -163,17 +153,7 @@ static void __fastcall playerServerDtor(CNetCustomPlayerServer* thisptr, int /*%
 {
     playerLog("CNetCustomPlayerServer d-tor");
 
-    playerLog("Remove packet processing event");
-    game::UiEventApi::get().destructor(&thisptr->packetEvent);
-
-    thisptr->player->vftable->destructor(thisptr->player, flags);
-
-    if (thisptr->messages.size()) {
-        playerLog("Remove net message that was not handled!");
-    }
-
-    playerLog("Destroy net messages list");
-    thisptr->messages.~list();
+    thisptr->~CNetCustomPlayerServer();
 
     if (flags & 1) {
         playerLog("CNetCustomPlayerServer d-tor frees memory");
@@ -186,21 +166,21 @@ static game::String* __fastcall playerServerGetName(CNetCustomPlayerServer* this
                                                     game::String* string)
 {
     playerLog("CNetCustomPlayerServer getName");
-    thisptr->player->vftable->getName(thisptr->player, string);
+    thisptr->player.vftable->getName(&thisptr->player, string);
     return string;
 }
 
 static int __fastcall playerServerGetNetId(CNetCustomPlayerServer* thisptr, int /*%edx*/)
 {
     playerLog("CNetCustomPlayerServer getNetId");
-    return thisptr->player->vftable->getNetId(thisptr->player);
+    return thisptr->player.vftable->getNetId(&thisptr->player);
 }
 
 static game::IMqNetSession* __fastcall playerServerGetSession(CNetCustomPlayerServer* thisptr,
                                                               int /*%edx*/)
 {
     playerLog("CNetCustomPlayerServer getSession");
-    return thisptr->player->vftable->getSession(thisptr->player);
+    return thisptr->player.vftable->getSession(&thisptr->player);
 }
 
 static int __fastcall playerServerGetMessageCount(CNetCustomPlayerServer* thisptr, int /*%edx*/)
@@ -217,7 +197,7 @@ static bool __fastcall playerServerSendMessage(CNetCustomPlayerServer* thisptr,
                                                int idTo,
                                                const game::NetMessageHeader* message)
 {
-    auto peer{thisptr->player->peer};
+    auto peer{thisptr->getPeer()};
 
     if (!peer) {
         playerLog("CNetCustomPlayerServer could not send message, peer is nullptr");
@@ -305,13 +285,13 @@ static void __fastcall playerServerSetNetSystem(CNetCustomPlayerServer* thisptr,
                                                 game::IMqNetSystem* netSystem)
 {
     playerLog("CNetCustomPlayerServer setNetSystem");
-    thisptr->player->vftable->setNetSystem(thisptr->player, netSystem);
+    thisptr->player.vftable->setNetSystem(&thisptr->player, netSystem);
 }
 
 static int __fastcall playerServerMethod8(CNetCustomPlayerServer* thisptr, int /*%edx*/, int a2)
 {
     playerLog("CNetCustomPlayerServer method8");
-    return thisptr->player->vftable->method8(thisptr->player, a2);
+    return thisptr->player.vftable->method8(&thisptr->player, a2);
 }
 
 static bool __fastcall playerServerDestroyPlayer(CNetCustomPlayerServer* thisptr,
@@ -353,6 +333,18 @@ static game::IMqNetPlayerServerVftable playerServerVftable{
     (game::IMqNetPlayerServerVftable::SetAllowJoin)playerServerSetAllowJoin,
 };
 
+CNetCustomPlayerServer::CNetCustomPlayerServer(CNetCustomSession* session,
+                                               game::IMqNetSystem* netSystem,
+                                               game::IMqNetReception* netReception,
+                                               NetworkPeer::PeerPtr&& peer)
+    // 1 is a server netId hardcoded in game and was also used in DirectPlay.
+    : player{session, netSystem, netReception, "SERVER", std::move(peer), 1}
+    , callbacks{this}
+{
+    vftable = &playerServerVftable;
+    player.netPeer.addCallback(&callbacks);
+}
+
 game::IMqNetPlayerServer* createCustomPlayerServer(CNetCustomSession* session,
                                                    game::IMqNetSystem* netSystem,
                                                    game::IMqNetReception* netReception)
@@ -361,7 +353,7 @@ game::IMqNetPlayerServer* createCustomPlayerServer(CNetCustomSession* session,
 
     playerLog("Creating player server peer");
     SLNet::SocketDescriptor descriptor{CNetCustomPlayer::serverPort, nullptr};
-    auto peer{SLNet::RakPeerInterface::GetInstance()};
+    auto peer{NetworkPeer::PeerPtr(SLNet::RakPeerInterface::GetInstance())};
 
     constexpr std::uint16_t maxConnections{4};
     peer->SetMaximumIncomingConnections(maxConnections);
@@ -369,27 +361,16 @@ game::IMqNetPlayerServer* createCustomPlayerServer(CNetCustomSession* session,
     const auto result{peer->Startup(maxConnections, &descriptor, 1)};
     if (result != SLNet::StartupResult::RAKNET_STARTED) {
         playerLog("Failed to start peer for CNetCustomPlayerServer");
-        SLNet::RakPeerInterface::DestroyInstance(peer);
         return nullptr;
     }
 
-    playerLog("Creating player 'server'");
-    // 1 is a server netId hardcoded in game and was also used in DirectPlay.
-    auto player{createCustomNetPlayer(session, netSystem, netReception, "SERVER", 1)};
-
     playerLog("Creating CNetCustomPlayerServer");
     auto server = (CNetCustomPlayerServer*)Memory::get().allocate(sizeof(CNetCustomPlayerServer));
-    new (server) CNetCustomPlayerServer(player);
-
-    server->player->peer = peer;
-    server->vftable = &playerServerVftable;
-
-    playerLog("Creating player server packet event");
-    createTimerEvent(&server->packetEvent, server, playerServerPacketCallback, 100);
+    new (server) CNetCustomPlayerServer(session, netSystem, netReception, std::move(peer));
 
     playerLog("Player server created");
 
-    auto netId = SLNet::RakNetGUID::ToUint32(peer->GetMyGUID());
+    auto netId = SLNet::RakNetGUID::ToUint32(server->getPeer()->GetMyGUID());
     playerLog(fmt::format("CNetCustomPlayerServer has netId 0x{:x}, ", netId));
 
     return server;

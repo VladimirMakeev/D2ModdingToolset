@@ -21,29 +21,47 @@
 #define NETCUSTOMPLAYERSERVER_H
 
 #include "mqnetplayerserver.h"
-#include "uievent.h"
+#include "netcustomplayer.h"
 #include <list>
-#include <memory>
 #include <utility>
-
-namespace game {
-struct IMqNetReception;
-} // namespace game
 
 namespace hooks {
 
-struct CNetCustomPlayer;
-struct CNetCustomSession;
+struct CNetCustomPlayerServer;
+
+class PlayerServerCallbacks : public NetworkPeerCallbacks
+{
+public:
+    PlayerServerCallbacks(CNetCustomPlayerServer* playerServer)
+        : playerServer{playerServer}
+    { }
+
+    virtual ~PlayerServerCallbacks() = default;
+
+    void onPacketReceived(DefaultMessageIDTypes type,
+                          SLNet::RakPeerInterface* peer,
+                          const SLNet::Packet* packet) override;
+
+private:
+    CNetCustomPlayerServer* playerServer;
+};
 
 struct CNetCustomPlayerServer : public game::IMqNetPlayerServer
 {
-    CNetCustomPlayerServer(CNetCustomPlayer* player)
-        : player{player}
-    { }
+    CNetCustomPlayerServer(CNetCustomSession* session,
+                           game::IMqNetSystem* netSystem,
+                           game::IMqNetReception* netReception,
+                           NetworkPeer::PeerPtr&& peer);
 
-    CNetCustomPlayer* player;
-    /** Processes network packets from player clients. */
-    game::UiEvent packetEvent;
+    ~CNetCustomPlayerServer() = default;
+
+    auto getPeer()
+    {
+        return player.getPeer();
+    }
+
+    CNetCustomPlayer player;
+    PlayerServerCallbacks callbacks;
 
     using NetMessagePtr = std::unique_ptr<unsigned char[]>;
     using IdMessagePair = std::pair<std::uint32_t, NetMessagePtr>;
