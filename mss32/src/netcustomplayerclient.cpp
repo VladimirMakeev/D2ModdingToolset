@@ -40,98 +40,87 @@ namespace hooks {
 
 static std::mutex netMessagesMutex;
 
-void __fastcall playerClientPacketCallback(CNetCustomPlayerClient* thisptr, int /*%edx*/)
+void PlayerClientCallbacks::onPacketReceived(DefaultMessageIDTypes type,
+                                             SLNet::RakPeerInterface* peer,
+                                             const SLNet::Packet* packet)
 {
-    auto peer{thisptr->player->peer};
-    if (!peer) {
-        return;
-    }
+    auto netSystem{playerClient->player.netSystem};
 
-    auto netSystem{thisptr->player->netSystem};
+    switch (type) {
+    case ID_REMOTE_DISCONNECTION_NOTIFICATION:
+        logDebug("playerClient.log", "Client disconnected");
+        break;
+    case ID_REMOTE_CONNECTION_LOST:
+        logDebug("playerClient.log", "Client lost connection");
+        break;
+    case ID_REMOTE_NEW_INCOMING_CONNECTION:
+        logDebug("playerClient.log", "Client connected");
+        break;
+    case ID_CONNECTION_REQUEST_ACCEPTED: {
+        logDebug("playerClient.log", "Connection request to the server was accepted");
 
-    static std::mutex packetMutex;
-    std::lock_guard<std::mutex> guard(packetMutex);
-
-    for (auto packet = peer->Receive(); packet != nullptr;
-         peer->DeallocatePacket(packet), packet = peer->Receive()) {
-
-        switch (packet->data[0]) {
-        case ID_REMOTE_DISCONNECTION_NOTIFICATION:
-            logDebug("playerClient.log", "Client disconnected");
-            break;
-        case ID_REMOTE_CONNECTION_LOST:
-            logDebug("playerClient.log", "Client lost connection");
-            break;
-        case ID_REMOTE_NEW_INCOMING_CONNECTION:
-            logDebug("playerClient.log", "Client connected");
-            break;
-        case ID_CONNECTION_REQUEST_ACCEPTED: {
-            logDebug("playerClient.log", "Connection request to the server was accepted");
-
-            if (netSystem) {
-                auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
-                auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
-
-                netSystem->vftable->onPlayerConnected(netSystem, (int)guidInt);
-            }
-
-            break;
-        }
-        case ID_NEW_INCOMING_CONNECTION:
-            logDebug("playerClient.log", "Incoming connection");
-            break;
-        case ID_NO_FREE_INCOMING_CONNECTIONS:
-            logDebug("playerClient.log", "Server is full");
-            break;
-        case ID_DISCONNECTION_NOTIFICATION: {
-            logDebug("playerClient.log", "Server was shut down");
-
-            if (netSystem) {
-                netSystem->vftable->onPlayerDisconnected(netSystem, 1);
-            }
-
-            break;
-        }
-        case ID_CONNECTION_LOST: {
-            logDebug("playerClient.log", "Connection with server is lost");
-
-            if (netSystem) {
-                netSystem->vftable->onPlayerDisconnected(netSystem, 1);
-            }
-
-            break;
-        }
-        case 0xff: {
-            // Game message received
-            auto message = reinterpret_cast<const game::NetMessageHeader*>(packet->data);
-
+        if (netSystem) {
             auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
             auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
 
-            logDebug("playerClient.log", fmt::format("Game message '{:s}' from {:x}",
-                                                     message->messageClassName, guidInt));
-
-            auto msg = std::make_unique<unsigned char[]>(message->length);
-            std::memcpy(msg.get(), message, message->length);
-
-            {
-                std::lock_guard<std::mutex> messageGuard(netMessagesMutex);
-                thisptr->messages.push_back(
-                    CNetCustomPlayerClient::IdMessagePair{std::uint32_t{guidInt}, std::move(msg)});
-            }
-
-            auto reception = thisptr->player->netReception;
-            if (reception) {
-                reception->vftable->notify(reception);
-            }
-
-            break;
+            netSystem->vftable->onPlayerConnected(netSystem, (int)guidInt);
         }
-        default:
-            logDebug("playerClient.log",
-                     fmt::format("Packet type {:d}", static_cast<int>(packet->data[0])));
-            break;
+
+        break;
+    }
+    case ID_NEW_INCOMING_CONNECTION:
+        logDebug("playerClient.log", "Incoming connection");
+        break;
+    case ID_NO_FREE_INCOMING_CONNECTIONS:
+        logDebug("playerClient.log", "Server is full");
+        break;
+    case ID_DISCONNECTION_NOTIFICATION: {
+        logDebug("playerClient.log", "Server was shut down");
+
+        if (netSystem) {
+            netSystem->vftable->onPlayerDisconnected(netSystem, 1);
         }
+
+        break;
+    }
+    case ID_CONNECTION_LOST: {
+        logDebug("playerClient.log", "Connection with server is lost");
+
+        if (netSystem) {
+            netSystem->vftable->onPlayerDisconnected(netSystem, 1);
+        }
+
+        break;
+    }
+    case 0xff: {
+        // Game message received
+        auto message = reinterpret_cast<const game::NetMessageHeader*>(packet->data);
+
+        auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
+        auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
+
+        logDebug("playerClient.log",
+                 fmt::format("Game message '{:s}' from {:x}", message->messageClassName, guidInt));
+
+        auto msg = std::make_unique<unsigned char[]>(message->length);
+        std::memcpy(msg.get(), message, message->length);
+
+        {
+            std::lock_guard<std::mutex> messageGuard(netMessagesMutex);
+            playerClient->messages.push_back(
+                CNetCustomPlayerClient::IdMessagePair{std::uint32_t{guidInt}, std::move(msg)});
+        }
+
+        auto reception = playerClient->player.netReception;
+        if (reception) {
+            reception->vftable->notify(reception);
+        }
+
+        break;
+    }
+    default:
+        logDebug("playerClient.log", fmt::format("Packet type {:d}", static_cast<int>(type)));
+        break;
     }
 }
 
@@ -139,17 +128,7 @@ void __fastcall playerClientDtor(CNetCustomPlayerClient* thisptr, int /*%edx*/, 
 {
     playerLog("CNetCustomPlayerClient d-tor");
 
-    playerLog("Remove packet processing event");
-    game::UiEventApi::get().destructor(&thisptr->packetEvent);
-
-    thisptr->player->vftable->destructor(thisptr->player, flags);
-
-    if (thisptr->messages.size()) {
-        playerLog("Remove net message that was not handled!");
-    }
-
-    playerLog("Destroy net messages list");
-    thisptr->messages.~list();
+    thisptr->~CNetCustomPlayerClient();
 
     if (flags & 1) {
         playerLog("CNetCustomPlayerClient d-tor frees memory");
@@ -162,21 +141,21 @@ game::String* __fastcall playerClientGetName(CNetCustomPlayerClient* thisptr,
                                              game::String* string)
 {
     playerLog("CNetCustomPlayerClient getName");
-    thisptr->player->vftable->getName(thisptr->player, string);
+    thisptr->player.vftable->getName(&thisptr->player, string);
     return string;
 }
 
 int __fastcall playerClientGetNetId(CNetCustomPlayerClient* thisptr, int /*%edx*/)
 {
     playerLog("CNetCustomPlayerClient getNetId");
-    return thisptr->player->vftable->getNetId(thisptr->player);
+    return thisptr->player.vftable->getNetId(&thisptr->player);
 }
 
 game::IMqNetSession* __fastcall playerClientGetSession(CNetCustomPlayerClient* thisptr,
                                                        int /*%edx*/)
 {
     playerLog("CNetCustomPlayerClient getSession");
-    return thisptr->player->vftable->getSession(thisptr->player);
+    return thisptr->player.vftable->getSession(&thisptr->player);
 }
 
 int __fastcall playerClientGetMessageCount(CNetCustomPlayerClient* thisptr, int /*%edx*/)
@@ -193,17 +172,18 @@ bool __fastcall playerClientSendMessage(CNetCustomPlayerClient* thisptr,
                                         int idTo,
                                         const game::NetMessageHeader* message)
 {
-    if (!thisptr->player->peer) {
+    auto peer = thisptr->getPeer();
+    if (!peer) {
         playerLog("CNetCustomPlayerClient could not send message, peer is nullptr");
         return false;
     }
 
-    auto serverGuid = thisptr->player->peer->GetGuidFromSystemAddress(thisptr->serverAddress);
+    auto serverGuid = peer->GetGuidFromSystemAddress(thisptr->serverAddress);
     auto serverId = SLNet::RakNetGUID::ToUint32(serverGuid);
 
     playerLog(
         fmt::format("CNetCustomPlayerClient {:s} sendMessage '{:s}' to {:x}, server guid 0x{:x}",
-                    thisptr->player->name, message->messageClassName, std::uint32_t(idTo),
+                    thisptr->player.name, message->messageClassName, std::uint32_t(idTo),
                     serverId));
 
     if (idTo != 1) {
@@ -214,12 +194,11 @@ bool __fastcall playerClientSendMessage(CNetCustomPlayerClient* thisptr,
 
     SLNet::BitStream stream((unsigned char*)message, message->length, false);
 
-    if (thisptr->player->peer->Send(&stream, PacketPriority::HIGH_PRIORITY,
-                                    PacketReliability::RELIABLE_ORDERED, 0, thisptr->serverAddress,
-                                    false)
+    if (peer->Send(&stream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0,
+                   thisptr->serverAddress, false)
         == 0) {
         playerLog(fmt::format("CNetCustomPlayerClient {:s} Send returned bad input",
-                              thisptr->player->name));
+                              thisptr->player.name));
     }
 
     return true;
@@ -279,13 +258,13 @@ void __fastcall playerClientSetNetSystem(CNetCustomPlayerClient* thisptr,
                                          game::IMqNetSystem* netSystem)
 {
     playerLog("CNetCustomPlayerClient setNetSystem");
-    thisptr->player->vftable->setNetSystem(thisptr->player, netSystem);
+    thisptr->player.vftable->setNetSystem(&thisptr->player, netSystem);
 }
 
 int __fastcall playerClientMethod8(CNetCustomPlayerClient* thisptr, int /*%edx*/, int a2)
 {
     playerLog("CNetCustomPlayerClient method8");
-    return thisptr->player->vftable->method8(thisptr->player, a2);
+    return thisptr->player.vftable->method8(&thisptr->player, a2);
 }
 
 static bool __fastcall playerClientSetName(CNetCustomPlayerClient* thisptr,
@@ -293,13 +272,13 @@ static bool __fastcall playerClientSetName(CNetCustomPlayerClient* thisptr,
                                            const char* name)
 {
     playerLog("CNetCustomPlayerClient setName");
-    thisptr->player->name = name;
+    thisptr->player.name = name;
     return true;
 }
 
 static bool __fastcall playerClientIsHost(CNetCustomPlayerClient* thisptr, int /*%edx*/)
 {
-    const auto host{thisptr->player->session->host};
+    const auto host{thisptr->player.session->host};
     playerLog(fmt::format("CNetCustomPlayerClient isHost {:d}", host));
     return host;
 }
@@ -318,6 +297,25 @@ static game::IMqNetPlayerClientVftable playerClientVftable{
     (game::IMqNetPlayerClientVftable::IsHost)playerClientIsHost,
 };
 
+CNetCustomPlayerClient::CNetCustomPlayerClient(CNetCustomSession* session,
+                                               game::IMqNetSystem* netSystem,
+                                               game::IMqNetReception* netReception,
+                                               const char* name,
+                                               NetworkPeer::PeerPtr&& peer,
+                                               std::uint32_t netId,
+                                               const SLNet::SystemAddress& serverAddress,
+                                               std::uint32_t serverId)
+    : player{session, netSystem, netReception, name, std::move(peer), netId}
+    , callbacks(this)
+    , serverAddress{serverAddress}
+    , serverId{serverId}
+{
+    vftable = &playerClientVftable;
+
+    playerLog("Setup player client packet callbacks");
+    player.netPeer.addCallback(&callbacks);
+}
+
 SLNet::SystemAddress lobbyAddressToServerPlayer(const SLNet::SystemAddress& lobbyAddress);
 
 game::IMqNetPlayerClient* createCustomPlayerClient(CNetCustomSession* session,
@@ -330,12 +328,11 @@ game::IMqNetPlayerClient* createCustomPlayerClient(CNetCustomSession* session,
     const std::uint16_t clientPort = CNetCustomPlayer::clientPort
                                      + userSettings().lobby.client.port;
     SLNet::SocketDescriptor descriptor{clientPort, nullptr};
-    auto peer{SLNet::RakPeerInterface::GetInstance()};
+    auto peer{NetworkPeer::PeerPtr(SLNet::RakPeerInterface::GetInstance())};
 
     const auto result{peer->Startup(1, &descriptor, 1)};
     if (result != SLNet::StartupResult::RAKNET_STARTED) {
         playerLog("Failed to start peer for CNetCustomPlayerClient");
-        SLNet::RakPeerInterface::DestroyInstance(peer);
         return nullptr;
     }
 
@@ -350,8 +347,6 @@ game::IMqNetPlayerClient* createCustomPlayerClient(CNetCustomSession* session,
     if (connectResult != SLNet::ConnectionAttemptResult::CONNECTION_ATTEMPT_STARTED) {
         playerLog(fmt::format("Failed to start CNetCustomPlayerClient connection. Error: {:d}",
                               (int)connectResult));
-        peer->Shutdown(1000);
-        SLNet::RakPeerInterface::DestroyInstance(peer);
         return nullptr;
     }
 
@@ -372,24 +367,15 @@ game::IMqNetPlayerClient* createCustomPlayerClient(CNetCustomSession* session,
     auto netId = SLNet::RakNetGUID::ToUint32(peer->GetMyGUID());
 
     playerLog(fmt::format("Creating player client on port {:d}", clientPort));
-    auto player{createCustomNetPlayer(session, netSystem, netReception, name, netId)};
-
-    playerLog("Creating CNetCustomPlayerClient");
-    auto client = (CNetCustomPlayerClient*)Memory::get().allocate(sizeof(CNetCustomPlayerClient));
-    new (client) CNetCustomPlayerClient(player);
-
-    client->player->peer = peer;
-    client->serverAddress = serverAddress;
 
     auto serverGuid = peer->GetGuidFromSystemAddress(
         SLNet::SystemAddress(serverIp, CNetCustomPlayer::serverPort));
     auto serverId = SLNet::RakNetGUID::ToUint32(serverGuid);
 
-    client->serverId = serverId;
-    client->vftable = &playerClientVftable;
-
-    playerLog("Creating player client packet event");
-    createTimerEvent(&client->packetEvent, client, playerClientPacketCallback, 100);
+    playerLog("Creating CNetCustomPlayerClient");
+    auto client = (CNetCustomPlayerClient*)Memory::get().allocate(sizeof(CNetCustomPlayerClient));
+    new (client) CNetCustomPlayerClient(session, netSystem, netReception, name, std::move(peer),
+                                        netId, serverAddress, serverId);
 
     playerLog("Player client created");
 

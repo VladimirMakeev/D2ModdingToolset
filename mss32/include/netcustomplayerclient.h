@@ -21,37 +21,58 @@
 #define NETCUSTOMPLAYERCLIENT_H
 
 #include "mqnetplayerclient.h"
-#include "uievent.h"
+#include "netcustomplayer.h"
 #include <list>
-#include <memory>
 #include <slikenet/types.h>
 #include <utility>
 
-namespace game {
-struct IMqNetReception;
-}
-
 namespace hooks {
 
-struct CNetCustomPlayer;
-struct CNetCustomSession;
+struct CNetCustomPlayerClient;
+
+class PlayerClientCallbacks : public NetworkPeerCallbacks
+{
+public:
+    PlayerClientCallbacks(CNetCustomPlayerClient* playerClient)
+        : playerClient{playerClient}
+    { }
+
+    virtual ~PlayerClientCallbacks() = default;
+
+    void onPacketReceived(DefaultMessageIDTypes type,
+                          SLNet::RakPeerInterface* peer,
+                          const SLNet::Packet* packet) override;
+
+private:
+    CNetCustomPlayerClient* playerClient;
+};
 
 struct CNetCustomPlayerClient : public game::IMqNetPlayerClient
 {
-    CNetCustomPlayerClient(CNetCustomPlayer* player)
-        : player{player}
-    { }
+    CNetCustomPlayerClient(CNetCustomSession* session,
+                           game::IMqNetSystem* netSystem,
+                           game::IMqNetReception* netReception,
+                           const char* name,
+                           NetworkPeer::PeerPtr&& peer,
+                           std::uint32_t netId,
+                           const SLNet::SystemAddress& serverAddress,
+                           std::uint32_t serverId);
 
-    CNetCustomPlayer* player;
-    /** Processes network packets from player server. */
-    game::UiEvent packetEvent;
-    SLNet::SystemAddress serverAddress;
-    std::uint32_t serverId;
+    ~CNetCustomPlayerClient() = default;
+
+    auto getPeer()
+    {
+        return player.getPeer();
+    }
 
     using NetMessagePtr = std::unique_ptr<unsigned char[]>;
     using IdMessagePair = std::pair<std::uint32_t, NetMessagePtr>;
 
     std::list<IdMessagePair> messages;
+    CNetCustomPlayer player;
+    PlayerClientCallbacks callbacks;
+    SLNet::SystemAddress serverAddress;
+    std::uint32_t serverId;
 };
 
 game::IMqNetPlayerClient* createCustomPlayerClient(CNetCustomSession* session,
