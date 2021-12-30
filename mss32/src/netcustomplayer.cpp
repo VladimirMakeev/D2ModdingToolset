@@ -44,23 +44,7 @@ static void __fastcall netCustomPlayerDtor(CNetCustomPlayer* thisptr, int /*%edx
 {
     playerLog("CNetCustomPlayer d-tor called");
 
-    if (thisptr->netSystem) {
-        playerLog("CNetCustomPlayer delete netSystem");
-        thisptr->netSystem->vftable->destructor(thisptr->netSystem, 1);
-    }
-
-    if (thisptr->netReception) {
-        playerLog("CNetCustomPlayer delete netReception");
-        thisptr->netReception->vftable->destructor(thisptr->netReception, 1);
-    }
-
-    thisptr->name.~basic_string();
-
-    if (thisptr->peer) {
-        playerLog("CNetCustomPlayer shutdown and destroy peer");
-        thisptr->peer->Shutdown(1000);
-        SLNet::RakPeerInterface::DestroyInstance(thisptr->peer);
-    }
+    thisptr->~CNetCustomPlayer();
 
     if (flags & 1) {
         playerLog("CNetCustomPlayer free memory");
@@ -146,21 +130,33 @@ static game::IMqNetPlayerVftable netCustomPlayerVftable{
     (game::IMqNetPlayerVftable::Method8)netCustomPlayerMethod8,
 };
 
-CNetCustomPlayer* createCustomNetPlayer(CNetCustomSession* session,
-                                        game::IMqNetSystem* netSystem,
-                                        game::IMqNetReception* netReception,
-                                        const char* name,
-                                        std::uint32_t netId)
+CNetCustomPlayer::CNetCustomPlayer(CNetCustomSession* session,
+                                   game::IMqNetSystem* netSystem,
+                                   game::IMqNetReception* netReception,
+                                   const char* name,
+                                   NetworkPeer::PeerPtr&& peer,
+                                   std::uint32_t netId)
+    : name{name}
+    , netPeer{std::move(peer)}
+    , session{session}
+    , netSystem{netSystem}
+    , netReception{netReception}
+    , netId{netId}
 {
-    using namespace game;
+    vftable = &netCustomPlayerVftable;
+}
 
-    auto player = (CNetCustomPlayer*)Memory::get().allocate(sizeof(CNetCustomPlayer));
-    std::memset(player, 0, sizeof(CNetCustomPlayer));
+CNetCustomPlayer::~CNetCustomPlayer()
+{
+    if (netSystem) {
+        playerLog("CNetCustomPlayer delete netSystem");
+        netSystem->vftable->destructor(netSystem, 1);
+    }
 
-    new (player) CNetCustomPlayer(session, netSystem, netReception, name, netId);
-
-    player->vftable = &netCustomPlayerVftable;
-    return player;
+    if (netReception) {
+        playerLog("CNetCustomPlayer delete netReception");
+        netReception->vftable->destructor(netReception, 1);
+    }
 }
 
 } // namespace hooks

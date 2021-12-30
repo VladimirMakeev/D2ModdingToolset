@@ -21,7 +21,7 @@
 #define NETCUSTOMPLAYER_H
 
 #include "mqnetplayer.h"
-#include <RakPeerInterface.h>
+#include "networkpeer.h"
 #include <cstdint>
 #include <string>
 
@@ -44,28 +44,23 @@ struct CNetCustomPlayer : public game::IMqNetPlayer
                      game::IMqNetSystem* netSystem,
                      game::IMqNetReception* netReception,
                      const char* name,
-                     std::uint32_t netId)
-        : name{name}
-        , session{session}
-        , netSystem{netSystem}
-        , netReception{netReception}
-        , peer{nullptr}
-        , netId{netId}
-    { }
+                     NetworkPeer::PeerPtr&& peer,
+                     std::uint32_t netId);
+
+    ~CNetCustomPlayer();
+
+    auto getPeer()
+    {
+        return netPeer.peer.get();
+    }
 
     std::string name;
+    NetworkPeer netPeer;
     CNetCustomSession* session;
     game::IMqNetSystem* netSystem;
     game::IMqNetReception* netReception;
-    SLNet::RakPeerInterface* peer;
     std::uint32_t netId;
 };
-
-CNetCustomPlayer* createCustomNetPlayer(CNetCustomSession* session,
-                                        game::IMqNetSystem* netSystem,
-                                        game::IMqNetReception* netReception,
-                                        const char* name,
-                                        std::uint32_t netId);
 
 void playerLog(const std::string& message);
 
