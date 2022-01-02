@@ -119,6 +119,9 @@ static std::array<Functions, 4> functions = {{
         (GetUnitAttacks)0x645fe5,
         (GetItemAttack)0x646182,
         (IsUnitUseAdditionalAnimation)0x5c4f1a,
+        (CheckUnitForHire)0x4b53e6,
+        (CheckUnitForHire)0x4b58d2,
+        (CastUnitImplToRacialSoldier)0x4482f6,
     },
     // Russobit
     Functions{
@@ -214,6 +217,9 @@ static std::array<Functions, 4> functions = {{
         (GetUnitAttacks)0x645fe5,
         (GetItemAttack)0x646182,
         (IsUnitUseAdditionalAnimation)0x5c4f1a,
+        (CheckUnitForHire)0x4b53e6,
+        (CheckUnitForHire)0x4b58d2,
+        (CastUnitImplToRacialSoldier)0x4482f6,
     },
     // Gog
     Functions{
@@ -309,6 +315,9 @@ static std::array<Functions, 4> functions = {{
         (GetUnitAttacks)0x644815,
         (GetItemAttack)0x6449b2,
         (IsUnitUseAdditionalAnimation)0x5c3f03,
+        (CheckUnitForHire)0x4b4a7f,
+        (CheckUnitForHire)0x4b4f6b,
+        (CastUnitImplToRacialSoldier)0x447ee5,
     },
     // Scenario Editor
     Functions{
@@ -404,6 +413,9 @@ static std::array<Functions, 4> functions = {{
         (GetUnitAttacks)nullptr,
         (GetItemAttack)nullptr,
         (IsUnitUseAdditionalAnimation)0x564ae7,
+        (CheckUnitForHire)nullptr,
+        (CheckUnitForHire)nullptr,
+        (CastUnitImplToRacialSoldier)nullptr,
     },
 }};
 

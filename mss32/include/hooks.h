@@ -223,6 +223,14 @@ void __stdcall getUnitAttacksHooked(const game::IMidgardObjectMap* objectMap,
 
 bool __stdcall isUnitUseAdditionalAnimationHooked(const game::CMidgardID* unitId);
 
+bool __stdcall shouldAddUnitToHireHooked(const game::CMidPlayer* player,
+                                         game::CPhaseGame* phaseGame,
+                                         const game::CMidgardID* unitImplId);
+
+bool __stdcall enableUnitInHireListUiHooked(const game::CMidPlayer* player,
+                                            game::CPhaseGame* phaseGame,
+                                            const game::CMidgardID* unitImplId);
+
 } // namespace hooks
 
 #endif // HOOKS_H

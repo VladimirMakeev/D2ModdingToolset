@@ -66,6 +66,8 @@ struct LRaceCategory;
 struct LTerrainCategory;
 struct LGroundCategory;
 struct IItem;
+struct CPhaseGame;
+struct IUsRacialSoldier;
 
 enum class ModifierElementTypeFlag : int;
 
@@ -151,6 +153,7 @@ using FindUnitById = CMidUnit*(__stdcall*)(const IMidgardObjectMap* objectMap,
 using CastUnitImplToSoldier = IUsSoldier*(__stdcall*)(const IUsUnit* unitImpl);
 using CastUnitImplToNoble = IUsNoble*(__stdcall*)(const IUsUnit* unitImpl);
 using CastUnitImplToStackLeader = IUsStackLeader*(__stdcall*)(const IUsUnit* unitImpl);
+using CastUnitImplToRacialSoldier = const IUsRacialSoldier*(__stdcall*)(const IUsUnit* unitImpl);
 
 using CreateBatAttack = IBatAttack*(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                 const BattleMsgData* battleMsgData,
@@ -553,6 +556,10 @@ using GetItemAttack = IAttack*(__stdcall*)(const IMidgardObjectMap* objectMap,
 
 using IsUnitUseAdditionalAnimation = bool(__stdcall*)(const CMidgardID* unitId);
 
+using CheckUnitForHire = bool(__stdcall*)(const CMidPlayer* player,
+                                          CPhaseGame* phaseGame,
+                                          const CMidgardID* unitImplId);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -648,6 +655,9 @@ struct Functions
     GetUnitAttacks getUnitAttacks;
     GetItemAttack getItemAttack;
     IsUnitUseAdditionalAnimation isUnitUseAdditionalAnimation;
+    CheckUnitForHire shouldAddUnitToHire;
+    CheckUnitForHire enableUnitInHireListUi;
+    CastUnitImplToRacialSoldier castUnitImplToRacialSoldier;
 };
 
 /** Global variables used in game. */
