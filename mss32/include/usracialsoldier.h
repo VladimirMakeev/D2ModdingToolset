@@ -28,8 +28,22 @@
 
 namespace game {
 
-struct IUsRacialSoldier : public IUsUnitExtension
+struct IUsRacialSoldierVftable;
+
+struct IUsRacialSoldier : public IUsUnitExtensionT<IUsRacialSoldierVftable>
 { };
+
+struct IUsRacialSoldierVftable : public IUsUnitExtensionVftable
+{
+    using GetId = const CMidgardID*(__thiscall*)(const IUsRacialSoldier* thisptr);
+
+    GetId getPrevUnitId;
+    GetId getUpgradeBuildingId;
+    GetId getEnrollBuildingId;
+};
+
+static_assert(sizeof(IUsRacialSoldierVftable) == 4 * sizeof(void*),
+              "IUsRacialSoldier vftable must have exactly 4 methods");
 
 /** Holds soldier specific data read from GUnits.dbf. */
 struct TUsRacialSoldierData
