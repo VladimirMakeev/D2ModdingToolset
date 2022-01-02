@@ -92,6 +92,7 @@ struct Rtti
     TypeDescriptor* IBatAttackType;
     TypeDescriptor* CBatAttackTransformSelfType;
     TypeDescriptor* CMidLocationType;
+    TypeDescriptor* TUsRacialSoldierType;
 };
 
 const Rtti& rtti();
