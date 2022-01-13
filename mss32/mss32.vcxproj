@@ -417,6 +417,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batattacktransformself.h" />
     <ClInclude Include="include\batattackutils.h" />
     <ClInclude Include="include\batimagesloader.h" />
+    <ClInclude Include="include\batnotify.h" />
     <ClInclude Include="include\battleattackinfo.h" />
     <ClInclude Include="include\battlemsgdata.h" />
     <ClInclude Include="include\battlemsgdatahooks.h" />
