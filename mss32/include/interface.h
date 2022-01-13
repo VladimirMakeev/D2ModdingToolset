@@ -43,7 +43,7 @@ struct CInterfaceData
     CInterface* parent;
     CMqRect area;
     CInterfaceChilds childs;
-    SmartPointer unknown6;
+    SmartPointer cursor;
     TooltipPtr tooltip;
 };
 
@@ -202,13 +202,13 @@ struct CInterfaceVftable
                                                          bool deepCheck);
     GetInterfaceAtPoint getInterfaceAtPoint;
 
-    /** Sets unknown6. */
-    using Method29 = SmartPointer*(__thiscall*)(CInterface* thisptr, SmartPointer* a2);
-    Method29 method29;
+    /** Sets cursor handle. */
+    using SetCursor = SmartPointer*(__thiscall*)(CInterface* thisptr, SmartPointer* cursor);
+    SetCursor setCursor;
 
-    /** Returns unknown6. */
-    using Method30 = SmartPointer*(__thiscall*)(CInterface* thisptr);
-    Method30 method30;
+    /** Returns cursor handle. */
+    using GetCursor = SmartPointer*(__thiscall*)(CInterface* thisptr);
+    GetCursor getCursor;
 
     using SetTooltip = void(__thiscall*)(CInterface* thisptr, TooltipPtr* tooltip);
     SetTooltip setTooltip;
