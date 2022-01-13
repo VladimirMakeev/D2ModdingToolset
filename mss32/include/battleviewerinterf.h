@@ -50,6 +50,7 @@ struct IMidgardObjectMap;
 struct CBatEncyclopediaInterf;
 struct CBatLog;
 struct Functor;
+struct IBatNotify;
 
 struct CBattleViewerGroupAreas
 {
@@ -157,7 +158,7 @@ static_assert(sizeof(CBattleViewerTargetUnitData) == 32,
 struct CBattleViewerInterfData
 {
     CAvoidFlickerImage avoidFlickerImage;
-    char unknown[4];
+    void* sounds;
     BattleMsgData battleMsgData;
     CUnknownUnitDataList unknownUnitData;
     CMidgardID unitId;
@@ -227,7 +228,7 @@ struct CBattleViewerInterfData2
     bool battleAnimations;
     bool battleSpeedInstant;
     char padding[2];
-    CMidgardID unknownId;
+    CMidgardID targetUnitId;
     LAttackClass attackClass;
     bool normalAttack;
     bool unknown4;
@@ -244,7 +245,8 @@ struct CBattleViewerInterfData2
     LinkedList<void*> list; /**< Nodes unknown. */
     LinkedList<void*> list2;
     LinkedList<void*> list3;
-    char unknown2[8];
+    char unknown2[4];
+    IBatNotify* battleNotify;
     CMidgardID selectedUnitId;
     LinkedList<void*> list4; /**< Each node contains 16 bytes of data. */
     char unknown3;
