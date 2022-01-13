@@ -29,9 +29,9 @@ struct CStackBattleActionMsg : public CNetMsg
 {
     int unknown;
     BattleMsgData battleMsgData;
-    int unknown2;
-    CMidgardID unknownId;
-    CMidgardID unknownId2;
+    BattleAction action;
+    CMidgardID targetUnitId;
+    CMidgardID attackerUnitId;
     int unknown3;
 };
 
