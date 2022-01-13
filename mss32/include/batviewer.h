@@ -30,6 +30,7 @@ struct BatViewerTargetData;
 struct BatViewerTargetDataSet;
 struct CMidgardID;
 struct BattleMsgData;
+struct BattleAttackInfo;
 
 enum class BattleAction : int;
 
@@ -43,6 +44,7 @@ struct IBatViewerVftable
     using Destructor = void(__thiscall*)(IBatViewer* thisptr, bool freeMemory);
     Destructor destructor;
 
+    /** Called on receiving CCmdBattleChooseActionMsg to show battle actions. */
     using Update = void(__thiscall*)(IBatViewer* thisptr,
                                      const BattleMsgData* battleMsgData,
                                      const CMidgardID* unitId,
@@ -50,7 +52,18 @@ struct IBatViewerVftable
                                      const BatViewerTargetDataSet* targetData);
     Update update;
 
-    void* methods[2];
+    /** Called on receiving CCmdBattleResultMsg to show results of attack in battle. */
+    using ShowAttackEffect = void(__thiscall*)(IBatViewer* thisptr,
+                                               const BattleMsgData* battleMsgData,
+                                               const BattleAttackInfo** attackInfo,
+                                               const LAttackClass* attackClass);
+    ShowAttackEffect showAttackEffect;
+
+    /** Called on receiving CCmdBattleEndMsg to hide battle window. */
+    using BattleEnd = void(__thiscall*)(IBatViewer* thisptr,
+                                        const BattleMsgData* battleMsgData,
+                                        const CMidgardID* a3);
+    BattleEnd battleEnd;
 };
 
 static_assert(sizeof(IBatViewerVftable) == 4 * sizeof(void*),
