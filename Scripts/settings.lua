@@ -102,6 +102,11 @@ settings = {
 	-- Fix missing attack information in unit encyclopedia
 	detailedAttackDescription = true,
 
+	-- Fix effective unit hp computation
+	-- Original formula: (hp * armor / 100) + hp
+	-- Fixed formula: hp / (1 - (armor / 100))
+	fixEffectiveHpFormula = true,
+
 	-- Create mss32 proxy dll log files with debug info
 	debugHooks = false,
 }

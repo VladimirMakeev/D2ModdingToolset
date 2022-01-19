@@ -217,6 +217,10 @@ int computeUnitEffectiveHp(const game::CMidUnit* unit, int armor)
     if (!unit || unit->currentHp < 0)
         return 0;
 
+    if (!userSettings().fixEffectiveHpFormula) {
+        return unit->currentHp * armor / 100 + unit->currentHp;
+    }
+
     if (armor > 99)
         return std::numeric_limits<int>::max();
 

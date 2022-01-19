@@ -71,6 +71,7 @@ struct Settings
     bool unrestrictedBestowWards;
     bool freeTransformSelfAttack;
     bool detailedAttackDescription;
+    bool fixEffectiveHpFormula;
 
     struct MovementCost
     {

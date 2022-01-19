@@ -125,6 +125,7 @@ static void readSettings(const sol::table& table, Settings& settings)
     settings.unrestrictedBestowWards = readSetting(table, "unrestrictedBestowWards", defaultSettings().unrestrictedBestowWards);
     settings.freeTransformSelfAttack = readSetting(table, "freeTransformSelfAttack", defaultSettings().freeTransformSelfAttack);
     settings.detailedAttackDescription = readSetting(table, "detailedAttackDescription", defaultSettings().detailedAttackDescription);
+    settings.fixEffectiveHpFormula = readSetting(table, "fixEffectiveHpFormula", defaultSettings().fixEffectiveHpFormula);
     settings.debugMode = readSetting(table, "debugHooks", defaultSettings().debugMode);
     // clang-format on
 
@@ -170,6 +171,7 @@ const Settings& baseSettings()
         settings.unrestrictedBestowWards = false;
         settings.freeTransformSelfAttack = false;
         settings.detailedAttackDescription = false;
+        settings.fixEffectiveHpFormula = false;
         settings.movementCost.textColor = Color{200, 200, 200};
         settings.movementCost.show = false;
         settings.debugMode = false;
