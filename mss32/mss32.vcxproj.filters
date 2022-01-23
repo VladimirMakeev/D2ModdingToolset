@@ -879,6 +879,9 @@
     <ClCompile Include="src\networkpeer.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\menunewskirmishmulti.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -2210,6 +2213,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\networkpeer.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menunewskirmishmulti.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
