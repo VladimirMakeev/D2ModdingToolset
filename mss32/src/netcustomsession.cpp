@@ -21,6 +21,7 @@
 #include "d2string.h"
 #include "log.h"
 #include "mempool.h"
+#include "mqnetsystem.h"
 #include "netcustomplayerclient.h"
 #include "netcustomplayerserver.h"
 #include "netcustomservice.h"
@@ -84,11 +85,14 @@ void __fastcall netCustomSessionCreateClient(CNetCustomSession* thisptr,
 {
     logDebug("lobby.log", fmt::format("CNetCustomSession createClient '{:s}' called", clientName));
 
-    // TODO: we should already have a room, get server address from its custom data
-    // TODO: check if client is not nullptr
-    auto playerClient = createCustomPlayerClient(thisptr, netSystem, reception, clientName);
-    thisptr->players.push_back((CNetCustomPlayerClient*)playerClient);
-    *client = playerClient;
+    auto customClient = thisptr->players.front();
+    // Finalize player setup here when we know all the settings
+    auto& player = customClient->player;
+    player.name = clientName;
+    player.netSystem = netSystem;
+    player.netReception = reception;
+
+    *client = customClient;
 }
 
 void __fastcall netCustomSessionCreateServer(CNetCustomSession* thisptr,
@@ -98,9 +102,18 @@ void __fastcall netCustomSessionCreateServer(CNetCustomSession* thisptr,
                                              game::IMqNetReception* reception)
 {
     logDebug("lobby.log", "CNetCustomSession createServer called");
-    auto playerServer = createCustomPlayerServer(thisptr, netSystem, reception);
-    thisptr->server = (CNetCustomPlayerServer*)playerServer;
-    *server = playerServer;
+
+    *server = nullptr;
+    if (!thisptr->server) {
+        logDebug("lobby.log", "Player server is null !!!");
+        return;
+    }
+
+    auto& serverPlayer = thisptr->server->player;
+    serverPlayer.netSystem = netSystem;
+    serverPlayer.netReception = reception;
+
+    *server = thisptr->server;
 }
 
 static game::IMqNetSessionVftable netCustomSessionVftable{
