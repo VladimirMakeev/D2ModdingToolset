@@ -311,7 +311,10 @@ CNetCustomPlayerClient::CNetCustomPlayerClient(CNetCustomSession* session,
     , serverId{serverId}
 {
     vftable = &playerClientVftable;
+}
 
+void CNetCustomPlayerClient::setupPacketCallbacks()
+{
     playerLog("Setup player client packet callbacks");
     player.netPeer.addCallback(&callbacks);
 }
@@ -383,6 +386,48 @@ game::IMqNetPlayerClient* createCustomPlayerClient(CNetCustomSession* session,
                           "expects server with netId 0x{:x}",
                           netId, serverId));
 
+    return client;
+}
+
+CNetCustomPlayerClient* createCustomHostPlayerClient(CNetCustomSession* session, const char* name)
+{
+    using namespace game;
+
+    const std::uint16_t clientPort = CNetCustomPlayer::clientPort
+                                     + userSettings().lobby.client.port;
+    SLNet::SocketDescriptor descriptor{clientPort, nullptr};
+    auto peer{NetworkPeer::PeerPtr(SLNet::RakPeerInterface::GetInstance())};
+
+    const auto result{peer->Startup(1, &descriptor, 1)};
+    if (result != SLNet::StartupResult::RAKNET_STARTED) {
+        playerLog("Failed to start peer for CNetCustomPlayerClient (host)");
+        return nullptr;
+    }
+
+    auto service = session->service;
+    // Create player server address from our local address
+    // since host player client is on the same machine as player server
+    auto serverAddress{lobbyAddressToServerPlayer(service->lobbyPeer.peer->GetMyBoundAddress())};
+
+    auto serverIp{serverAddress.ToString(false)};
+    playerLog(fmt::format("Host client tries to connect to server at '{:s}', port {:d}", serverIp,
+                          CNetCustomPlayer::serverPort));
+
+    // Connect to server
+    const auto connectResult{peer->Connect(serverIp, CNetCustomPlayer::serverPort, nullptr, 0)};
+    if (connectResult != SLNet::ConnectionAttemptResult::CONNECTION_ATTEMPT_STARTED) {
+        playerLog(fmt::format("Failed to start CNetCustomPlayerClient connection. Error: {:d}",
+                              (int)connectResult));
+        return nullptr;
+    }
+
+    playerLog("Creating CNetCustomPlayerClient (host)");
+    auto client = (CNetCustomPlayerClient*)Memory::get().allocate(sizeof(CNetCustomPlayerClient));
+    // Empty fields will be initialized later
+    new (client) CNetCustomPlayerClient(session, nullptr, nullptr, name, std::move(peer), 0,
+                                        serverAddress, 0);
+
+    playerLog("Host player client created");
     return client;
 }
 

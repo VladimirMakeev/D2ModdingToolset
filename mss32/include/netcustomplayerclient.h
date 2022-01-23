@@ -65,6 +65,8 @@ struct CNetCustomPlayerClient : public game::IMqNetPlayerClient
         return player.getPeer();
     }
 
+    void setupPacketCallbacks();
+
     using NetMessagePtr = std::unique_ptr<unsigned char[]>;
     using IdMessagePair = std::pair<std::uint32_t, NetMessagePtr>;
 
@@ -79,6 +81,8 @@ game::IMqNetPlayerClient* createCustomPlayerClient(CNetCustomSession* session,
                                                    game::IMqNetSystem* netSystem,
                                                    game::IMqNetReception* netReception,
                                                    const char* name);
+
+CNetCustomPlayerClient* createCustomHostPlayerClient(CNetCustomSession* session, const char* name);
 
 } // namespace hooks
 
