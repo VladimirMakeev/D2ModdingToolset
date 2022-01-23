@@ -27,7 +27,7 @@
 #include "utils.h"
 #include <BitStream.h>
 #include <MessageIdentifiers.h>
-#include <array>
+#include <algorithm>
 #include <fmt/format.h>
 #include <mutex>
 
@@ -43,7 +43,7 @@ void PlayerServerCallbacks::onPacketReceived(DefaultMessageIDTypes type,
 
     switch (type) {
     case ID_REMOTE_DISCONNECTION_NOTIFICATION: {
-        logDebug("playerServer.log", "Client disconnected");
+        logDebug("lobby.log", "PlayerServer: Client disconnected");
 
         if (netSystem) {
             auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
@@ -55,42 +55,51 @@ void PlayerServerCallbacks::onPacketReceived(DefaultMessageIDTypes type,
         break;
     }
     case ID_REMOTE_CONNECTION_LOST: {
-        logDebug("playerServer.log", "Client lost connection");
+        logDebug("lobby.log", "PlayerServer: Client lost connection");
+
+        auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
+
+        auto& ids = playerServer->connectedIds;
+        ids.erase(std::remove(ids.begin(), ids.end(), guid), ids.end());
 
         if (netSystem) {
-            auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
             auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
-
             netSystem->vftable->onPlayerDisconnected(netSystem, (int)guidInt);
         }
 
         break;
     }
     case ID_REMOTE_NEW_INCOMING_CONNECTION:
-        logDebug("playerServer.log", "Client connected");
+        logDebug("lobby.log", "PlayerServer: Client connected");
         break;
     case ID_CONNECTION_REQUEST_ACCEPTED:
         // This should never happen on server ?
-        logDebug("playerServer.log", "Connection request to the server was accepted");
+        logDebug("lobby.log", "PlayerServer: Connection request to the server was accepted");
         break;
     case ID_NEW_INCOMING_CONNECTION: {
-        logDebug("playerServer.log", "Incoming connection");
+        auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
+        auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
+
+        logDebug("lobby.log", fmt::format("PlayerServer: Incoming connection, id 0x{:x}", guidInt));
+
+        playerServer->connectedIds.push_back(guid);
 
         if (netSystem) {
-            auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
-            auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
-
+            logDebug("lobby.log", "PlayerServer: Call netSystem onPlayerConnected");
             netSystem->vftable->onPlayerConnected(netSystem, (int)guidInt);
+        } else {
+            logDebug("lobby.log",
+                     "PlayerServer: no netSystem is set, skip onPlayerConnected notification");
         }
 
         break;
     }
     case ID_NO_FREE_INCOMING_CONNECTIONS:
         // This should never happen on server ?
-        logDebug("playerServer.log", "Server is full");
+        logDebug("lobby.log", "PlayerServer: Server is full");
         break;
     case ID_DISCONNECTION_NOTIFICATION: {
-        logDebug("playerServer.log", "Client has disconnected from server");
+        logDebug("lobby.log", "PlayerServer: Client has disconnected from server");
 
         if (netSystem) {
             auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
@@ -102,7 +111,7 @@ void PlayerServerCallbacks::onPacketReceived(DefaultMessageIDTypes type,
         break;
     }
     case ID_CONNECTION_LOST: {
-        logDebug("playerServer.log", "Client has lost connection");
+        logDebug("lobby.log", "PlayerServer: Client has lost connection");
 
         if (netSystem) {
             auto guid = peer->GetGuidFromSystemAddress(packet->systemAddress);
@@ -143,8 +152,8 @@ void PlayerServerCallbacks::onPacketReceived(DefaultMessageIDTypes type,
         break;
     }
     default:
-        logDebug("playerServer.log",
-                 fmt::format("Packet type {:d}", static_cast<int>(packet->data[0])));
+        logDebug("lobby.log",
+                 fmt::format("PlayerServer: Packet type {:d}", static_cast<int>(packet->data[0])));
         break;
     }
 }
@@ -204,34 +213,35 @@ static bool __fastcall playerServerSendMessage(CNetCustomPlayerServer* thisptr,
         return false;
     }
 
+    const auto& connectedIds{thisptr->connectedIds};
     SLNet::BitStream stream((unsigned char*)message, message->length, false);
 
     // if idTo == 0, send broadcast message.
     if (idTo == 0) {
         playerLog("CNetCustomPlayerServer sendMessage broadcast");
 
-        peer->Send(&stream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0,
-                   SLNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+        // Do not use broadcast Send() because player server is also connected to lobby server
+        // and we do not want to send him game messages
+        for (const auto& guid : connectedIds) {
+            peer->Send(&stream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED,
+                       0, guid, false);
+        }
+
         return true;
     }
 
-    // TODO: remember who is connected to us, their netIds and system addresses
-    // For now, just find out who is this id owner
-    std::array<SLNet::SystemAddress, 4> connections;
-    std::uint16_t connected{static_cast<std::uint16_t>(connections.size())};
+    auto it = std::find_if(connectedIds.begin(), connectedIds.end(), [idTo](const auto& guid) {
+        return static_cast<int>(SLNet::RakNetGUID::ToUint32(guid)) == idTo;
+    });
 
-    peer->GetConnectionList(&connections[0], &connected);
-    for (std::uint16_t i = 0; i < connected; ++i) {
-        auto guid = peer->GetGuidFromSystemAddress(connections[i]);
-        auto guidInt = SLNet::RakNetGUID::ToUint32(guid);
+    if (it != connectedIds.end()) {
+        const auto& guid = *it;
+        playerLog(fmt::format("CNetCustomPlayerServer sendMessage to 0x{:x}",
+                              std::uint32_t{SLNet::RakNetGUID::ToUint32(guid)}));
 
-        if (static_cast<std::uint32_t>(idTo) == guidInt) {
-            // Found, send
-            playerLog(fmt::format("CNetCustomPlayerServer sendMessage to 0x{:x}", guidInt));
-            peer->Send(&stream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED,
-                       0, connections[i], false);
-            return true;
-        }
+        peer->Send(&stream, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED, 0,
+                   guid, false);
+        return true;
     }
 
     playerLog(fmt::format("CNetCustomPlayerServer could not send message. No client with id 0x{:x}",
@@ -343,6 +353,25 @@ CNetCustomPlayerServer::CNetCustomPlayerServer(CNetCustomSession* session,
 {
     vftable = &playerServerVftable;
     player.netPeer.addCallback(&callbacks);
+}
+
+bool CNetCustomPlayerServer::notifyHostClientConnected()
+{
+    if (!player.netSystem) {
+        playerLog("PlayerServer: no netSystem in notifyHostClientConnected()");
+        return false;
+    }
+
+    if (connectedIds.empty()) {
+        playerLog("PlayerServer: host client is not connected");
+        return false;
+    }
+
+    const std::uint32_t hostClientNetId{SLNet::RakNetGUID::ToUint32(connectedIds[0])};
+    playerLog(fmt::format("PlayerServer: onPlayerConnected 0x{:x}", hostClientNetId));
+
+    player.netSystem->vftable->onPlayerConnected(player.netSystem, (int)hostClientNetId);
+    return true;
 }
 
 game::IMqNetPlayerServer* createCustomPlayerServer(CNetCustomSession* session,

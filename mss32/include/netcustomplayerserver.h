@@ -22,8 +22,10 @@
 
 #include "mqnetplayerserver.h"
 #include "netcustomplayer.h"
+#include <NatPunchthroughClient.h>
 #include <list>
 #include <utility>
+#include <vector>
 
 namespace hooks {
 
@@ -60,13 +62,17 @@ struct CNetCustomPlayerServer : public game::IMqNetPlayerServer
         return player.getPeer();
     }
 
+    bool notifyHostClientConnected();
+
     CNetCustomPlayer player;
     PlayerServerCallbacks callbacks;
+    SLNet::NatPunchthroughClient natClient;
 
     using NetMessagePtr = std::unique_ptr<unsigned char[]>;
     using IdMessagePair = std::pair<std::uint32_t, NetMessagePtr>;
 
     std::list<IdMessagePair> messages;
+    std::vector<SLNet::RakNetGUID> connectedIds;
 };
 
 game::IMqNetPlayerServer* createCustomPlayerServer(CNetCustomSession* session,
