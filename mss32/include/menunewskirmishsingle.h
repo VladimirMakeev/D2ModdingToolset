@@ -24,9 +24,15 @@
 
 namespace game {
 
-/** Single player skirmish menu. */
+/**
+ * Single player skirmish menu.
+ * Represents DLG_CHOOSE_SKIRMISH from Interf.dlg.
+ */
 struct CMenuNewSkirmishSingle : public CMenuNewSkirmish
 { };
+
+static_assert(sizeof(CMenuNewSkirmishSingle) == 12,
+              "Size of CMenuNewSkirmishSingle structure must be exactly 12 bytes");
 
 namespace CMenuNewSkirmishSingleApi {
 
