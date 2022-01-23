@@ -32,6 +32,8 @@
 #include "enclayoutspell.h"
 #include "exchangeinterf.h"
 #include "game.h"
+#include "menubase.h"
+#include "menunewskirmishmulti.h"
 #include "menuphase.h"
 #include "menuprotocol.h"
 #include "midevcondition.h"
@@ -97,6 +99,9 @@ struct OriginalFunctions
     game::CMenuProtocolApi::Api::Constructor menuProtocolCtor;
     game::CMenuProtocolApi::Api::DisplayCallback menuProtocolDisplayCallback;
     game::CMenuProtocolApi::Api::ButtonHandler menuProtocolContinueHandler;
+
+    game::CMenuBaseApi::Api::ButtonCallback menuNewSkirmishLoadScenario;
+    game::CMenuNewSkirmishMultiApi::Api::CreateServer menuNewSkirmishMultiCreateServer;
 };
 
 OriginalFunctions& getOriginalFunctions();

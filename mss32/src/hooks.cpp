@@ -76,6 +76,7 @@
 #include "lordtype.h"
 #include "mapgen.h"
 #include "mempool.h"
+#include "menunewskirmishhooks.h"
 #include "menunewskirmishsingle.h"
 #include "menuphasehooks.h"
 #include "menuprotocolhooks.h"
@@ -260,6 +261,8 @@ static Hooks getGameHooks()
         {CMenuProtocolApi::get().constructor, menuProtocolCtorHooked, (void**)&orig.menuProtocolCtor},
         {CMenuProtocolApi::get().continueHandler, menuProtocolContinueHandlerHooked, (void**)&orig.menuProtocolContinueHandler},
         {CMenuProtocolApi::get().displayCallback, menuProtocolDisplayCallbackHooked, (void**)&orig.menuProtocolDisplayCallback},
+        {CMenuNewSkirmishApi::get().loadScenarioCallback, menuNewSkirmishLoadScenarioCallbackHooked, (void**)&orig.menuNewSkirmishLoadScenario},
+        {CMenuNewSkirmishMultiApi::get().createServer, menuNewSkirmishMultiCreateServerHooked, (void**)&orig.menuNewSkirmishMultiCreateServer},
     };
     // clang-format on
 

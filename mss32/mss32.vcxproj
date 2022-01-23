@@ -277,6 +277,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\menulord.cpp" />
     <ClCompile Include="src\menunewmap.cpp" />
     <ClCompile Include="src\menunewskirmish.cpp" />
+    <ClCompile Include="src\menunewskirmishhooks.cpp" />
     <ClCompile Include="src\menunewskirmishmulti.cpp" />
     <ClCompile Include="src\menunewskirmishsingle.cpp" />
     <ClCompile Include="src\menuphase.cpp" />
@@ -340,6 +341,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\registeraccountinterf.cpp" />
     <ClCompile Include="src\restrictions.cpp" />
     <ClCompile Include="src\roomscallback.cpp" />
+    <ClCompile Include="src\roomservercreation.cpp" />
     <ClCompile Include="src\scenariodata.cpp" />
     <ClCompile Include="src\scenariodataarray.cpp" />
     <ClCompile Include="src\scenarioheader.cpp" />
@@ -630,6 +632,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\menulord.h" />
     <ClInclude Include="include\menunewmap.h" />
     <ClInclude Include="include\menunewskirmish.h" />
+    <ClInclude Include="include\menunewskirmishhooks.h" />
     <ClInclude Include="include\menunewskirmishmulti.h" />
     <ClInclude Include="include\menunewskirmishsingle.h" />
     <ClInclude Include="include\menuphase.h" />
@@ -756,6 +759,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\resetstackext.h" />
     <ClInclude Include="include\restrictions.h" />
     <ClInclude Include="include\roomscallback.h" />
+    <ClInclude Include="include\roomservercreation.h" />
     <ClInclude Include="include\scenariodata.h" />
     <ClInclude Include="include\scenariodataarray.h" />
     <ClInclude Include="include\scenarioheader.h" />

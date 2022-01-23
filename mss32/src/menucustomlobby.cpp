@@ -171,10 +171,6 @@ static void __fastcall menuRoomsListSearchHandler(CMenuCustomLobby*, int /*%edx*
 
 static void __fastcall menuCreateRoomBtnHandler(CMenuCustomLobby* thisptr, int /*%edx*/)
 {
-    // TODO: Hook CMenuMultyHost button handler that creates session,
-    // send request to lobby server there.
-    // Wait for answer and then proceed further.
-
     auto menuPhase = thisptr->menuBaseData->menuPhase;
     // Pretend we are in CMenuMulti, transition to CMenuMultyHost
     menuPhase->data->transitionNumber = 4;
