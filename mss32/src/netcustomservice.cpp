@@ -75,6 +75,7 @@ void LobbyPeerCallbacks::onPacketReceived(DefaultMessageIDTypes type,
 CNetCustomService::CNetCustomService(NetworkPeer::PeerPtr&& peer)
     : lobbyPeer(std::move(peer))
     , callbacks(this)
+    , session{nullptr}
 {
     lobbyPeer.addCallback(&callbacks);
 
@@ -91,14 +92,16 @@ CNetCustomService::CNetCustomService(NetworkPeer::PeerPtr&& peer)
     roomsClient.SetRoomsCallback(&roomsLogCallback);
 }
 
+static game::IMqNetService* getNetServiceInterface()
+{
+    auto midgard = game::CMidgardApi::get().instance();
+    return midgard->data->netService;
+}
+
 CNetCustomService* getNetService()
 {
-    using namespace game;
-
-    auto midgard = CMidgardApi::get().instance();
-    auto service = midgard->data->netService;
-    if (!service) {
-
+    auto service = getNetServiceInterface();
+    if (!isNetServiceCustom(service)) {
         return nullptr;
     }
 
@@ -145,12 +148,8 @@ void __fastcall netCustomServiceCreateSession(CNetCustomService* thisptr,
     logDebug("lobby.log",
              fmt::format("CNetCustomService createSession called. Name '{:s}'", sessionName));
 
-    *netSession = nullptr;
-
-    if (tryCreateRoom(sessionName)) {
-        // Host is the one who creates the session. DirectPlay implementation does the same.
-        *netSession = createCustomNetSession(thisptr, sessionName, true);
-    }
+    // We already created a session, just return it
+    *netSession = thisptr->session;
 }
 
 void __fastcall netCustomServiceJoinSession(CNetCustomService* thisptr,
@@ -159,7 +158,7 @@ void __fastcall netCustomServiceJoinSession(CNetCustomService* thisptr,
                                             game::IMqNetSessEnum* netSessionEnum,
                                             const char* password)
 {
-    // This method used by vanilla interface.
+    // This method is used by vanilla interface.
     // Since we are using our custom one, we can join session directly and ignore this method.
     logDebug("lobby.log", "CNetCustomService joinSession called");
 }
@@ -258,6 +257,16 @@ void removeRoomsCallback(SLNet::RoomsCallback* callback)
 
     logDebug("lobby.log", fmt::format("Removing room callback {:p}", (void*)callback));
     netService->roomsClient.RemoveRoomsCallback(callback);
+}
+
+bool isNetServiceCustom()
+{
+    return isNetServiceCustom(getNetServiceInterface());
+}
+
+bool isNetServiceCustom(const game::IMqNetService* service)
+{
+    return service && (service->vftable == &netCustomServiceVftable);
 }
 
 } // namespace hooks

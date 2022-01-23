@@ -34,6 +34,7 @@
 namespace hooks {
 
 struct CNetCustomService;
+struct CNetCustomSession;
 
 class LobbyPeerCallbacks : public NetworkPeerCallbacks
 {
@@ -72,8 +73,10 @@ struct CNetCustomService : public game::IMqNetService
     /** Connection with lobby server. */
     NetworkPeer lobbyPeer;
     LobbyPeerCallbacks callbacks;
+    CNetCustomSession* session;
 };
 
+/** Returns net service if it is present and has type CNetCustomService. */
 CNetCustomService* getNetService();
 
 bool createCustomNetService(game::IMqNetService** service);
@@ -83,6 +86,12 @@ void removeLobbyCallbacks(SLNet::Lobby2Callbacks* callbacks);
 
 void addRoomsCallback(SLNet::RoomsCallback* callback);
 void removeRoomsCallback(SLNet::RoomsCallback* callback);
+
+/** Returns true if current netService in CMidgard exists and has type CNetCustomService. */
+bool isNetServiceCustom();
+
+/** Checks if specified net service is custom. */
+bool isNetServiceCustom(const game::IMqNetService* service);
 
 } // namespace hooks
 
