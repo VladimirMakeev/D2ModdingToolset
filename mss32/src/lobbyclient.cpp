@@ -170,7 +170,7 @@ void setCurrentLobbyPlayer(const char* accountName)
     }
 }
 
-bool tryCreateRoom(const char* roomName)
+bool tryCreateRoom(const char* roomName, const char* customColumn, const char* customData)
 {
     if (!roomName) {
         logDebug("lobby.log", "Could not create a room: no room name provided");
@@ -193,6 +193,29 @@ bool tryCreateRoom(const char* roomName)
     params.slots.publicSlots = 4;
     params.slots.reservedSlots = 0;
     params.slots.spectatorSlots = 0;
+
+    if (customColumn && customData) {
+        logDebug("lobby.log", fmt::format("Account {:s} is trying to create and enter a room "
+                                          "with custom column {:s}, data {:s}",
+                                          room.userName.C_String(), customColumn, customData));
+
+        auto& properties = room.initialRoomProperties;
+
+        const auto columnIndex{properties.AddColumn(customColumn, DataStructures::Table::STRING)};
+        if (columnIndex == std::numeric_limits<unsigned int>::max()) {
+            logDebug("lobby.log",
+                     fmt::format("Could not add column {:s} to properties table", customColumn));
+            return false;
+        }
+
+        auto row = properties.AddRow(0);
+        if (!row) {
+            logDebug("lobby.log", "Could not add row to room properties table");
+            return false;
+        }
+
+        row->UpdateCell(columnIndex, customData);
+    }
 
     logDebug("lobby.log", fmt::format("Account {:s} is trying to create and enter a room {:s}",
                                       room.userName.C_String(), params.roomName.C_String()));

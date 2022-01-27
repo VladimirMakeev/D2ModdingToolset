@@ -44,7 +44,9 @@ void logoutAccount();
 void setCurrentLobbyPlayer(const char* accountName);
 
 /** Tries to create and enter a new room. */
-bool tryCreateRoom(const char* roomName);
+bool tryCreateRoom(const char* roomName,
+                   const char* customColumn = nullptr,
+                   const char* customData = nullptr);
 
 /** Requests a list of rooms for specified account. */
 bool trySearchRooms(const char* accountName = nullptr);
