@@ -36,6 +36,18 @@ void __fastcall packetEventCallback(NetworkPeer* netPeer, int /*%edx*/)
             callback->onPacketReceived(type, peer, packet);
         }
     }
+
+    auto& toRemove{netPeer->removeCallbacks};
+    if (!toRemove.empty()) {
+        auto& callbacks{netPeer->callbacks};
+
+        for (auto& callback : toRemove) {
+            callbacks.erase(std::remove(callbacks.begin(), callbacks.end(), callback),
+                            callbacks.end());
+        }
+
+        toRemove.clear();
+    }
 }
 
 NetworkPeer::NetworkPeer(PeerPtr&& peer)
@@ -58,7 +70,10 @@ void NetworkPeer::addCallback(NetworkPeerCallbacks* callback)
 
 void NetworkPeer::removeCallback(NetworkPeerCallbacks* callback)
 {
-    callbacks.erase(std::remove(callbacks.begin(), callbacks.end(), callback), callbacks.end());
+    if (std::find(removeCallbacks.begin(), removeCallbacks.end(), callback)
+        == removeCallbacks.end()) {
+        removeCallbacks.push_back(callback);
+    }
 }
 
 } // namespace hooks

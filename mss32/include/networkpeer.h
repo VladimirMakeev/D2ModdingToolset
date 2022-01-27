@@ -63,6 +63,7 @@ struct NetworkPeer
 
     game::UiEvent packetEvent{};
     std::vector<NetworkPeerCallbacks*> callbacks;
+    std::vector<NetworkPeerCallbacks*> removeCallbacks;
     PeerPtr peer;
 };
 
