@@ -128,8 +128,42 @@ static void createHostPlayer()
 }
 
 /**
+ * Handles response to room creation request.
+ * Creates host player.
+ */
+class RoomsCreateServerCallback : public SLNet::RoomsCallback
+{
+public:
+    RoomsCreateServerCallback() = default;
+    ~RoomsCreateServerCallback() override = default;
+
+    void CreateRoom_Callback(const SLNet::SystemAddress& senderAddress,
+                             SLNet::CreateRoom_Func* callResult) override
+    {
+        logDebug("lobby.log", "Room creation response received");
+
+        // Unsubscribe from callbacks
+        removeRoomsCallback(this);
+
+        if (callResult->resultCode != SLNet::REC_SUCCESS) {
+            auto result{SLNet::RoomsErrorCodeDescription::ToEnglish(callResult->resultCode)};
+            const auto msg{fmt::format("Could not create a room.\nReason: {:s}", result)};
+
+            logDebug("lobby.log", msg);
+            serverCreationError(msg);
+            return;
+        }
+
+        logDebug("lobby.log", "Player server connected to lobby server, nat client attached");
+        createHostPlayer();
+    }
+};
+
+static RoomsCreateServerCallback roomServerCallback;
+
+/**
  * Handles player server connection to lobby server.
- * Attaches NAT client and creates host player on successfull connection.
+ * Attaches NAT client and requests lobby server to create a room on successfull connection.
  */
 class ServerConnectCallbacks : public NetworkPeerCallbacks
 {
@@ -158,11 +192,19 @@ public:
         // Unsubscribe from callbacks
         playerServer->player.netPeer.removeCallback(this);
 
+        addRoomsCallback(&roomServerCallback);
+
+        // Request room creation and wait for lobby server response
+        if (!tryCreateRoom(service->session->name.c_str(), "ServerGuid",
+                           peer->GetMyGUID().ToString())) {
+            serverCreationError("Failed to request room creation");
+            return;
+        }
+
+        logDebug("lobby.log", "Waiting for room creation response");
+
         peer->AttachPlugin(&playerServer->natClient);
         playerServer->natClient.FindRouterPortStride(packet->systemAddress);
-
-        logDebug("lobby.log", "Player server connected to lobby server, nat client attached");
-        createHostPlayer();
     }
 };
 
@@ -202,42 +244,6 @@ static void createSessionAndServer(const char* sessionName)
     playerServer->player.netPeer.addCallback(&serverConnectCallbacks);
 }
 
-/** Handles response to room creation request. */
-class RoomsCreateServerCallback : public SLNet::RoomsCallback
-{
-public:
-    RoomsCreateServerCallback() = default;
-    ~RoomsCreateServerCallback() override = default;
-
-    void CreateRoom_Callback(const SLNet::SystemAddress& senderAddress,
-                             SLNet::CreateRoom_Func* callResult) override
-    {
-        logDebug("lobby.log", "Room creation response received");
-
-        // Unsubscribe from callbacks
-        removeRoomsCallback(this);
-
-        if (callResult->resultCode != SLNet::REC_SUCCESS) {
-            auto result{SLNet::RoomsErrorCodeDescription::ToEnglish(callResult->resultCode)};
-            const auto msg{fmt::format("Could not create a room.\nReason: {:s}", result)};
-
-            logDebug("lobby.log", msg);
-            serverCreationError(msg);
-            return;
-        }
-
-        // Lobby server successfully created a room.
-        // Create session object and player server.
-        auto cell{callResult->roomDescriptor.GetProperty(DefaultRoomColumns::TC_ROOM_NAME)};
-        const char* roomName = cell ? cell->c : "Unknown room";
-
-        logDebug("roomServer.log", "Create session and server");
-        createSessionAndServer(roomName);
-    }
-};
-
-static RoomsCreateServerCallback roomServerCallback;
-
 void startRoomAndServerCreation(game::CMenuBase* menu)
 {
     using namespace game;
@@ -253,16 +259,9 @@ void startRoomAndServerCreation(game::CMenuBase* menu)
     auto dialog = menuApi.getDialogInterface(menu);
     auto editGame = dialogApi.findEditBox(dialog, "EDIT_GAME");
 
-    // Request room creation and wait for lobby server response
-    if (!tryCreateRoom(editGame->data->editBoxData.inputString.string)) {
-        serverCreationError("Failed to request room creation");
-        return;
-    }
-
-    logDebug("lobby.log", "Waiting for room creation response");
-
+    logDebug("lobby.log", "Create session and player server");
     menuBase = menu;
-    addRoomsCallback(&roomServerCallback);
+    createSessionAndServer(editGame->data->editBoxData.inputString.string);
 }
 
 } // namespace hooks
