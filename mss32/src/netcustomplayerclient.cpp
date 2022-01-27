@@ -321,6 +321,35 @@ void CNetCustomPlayerClient::setupPacketCallbacks()
 
 SLNet::SystemAddress lobbyAddressToServerPlayer(const SLNet::SystemAddress& lobbyAddress);
 
+CNetCustomPlayerClient* createCustomPlayerClient(CNetCustomSession* session, const char* name)
+{
+    // Create peer
+    using namespace game;
+
+    const std::uint16_t clientPort = CNetCustomPlayer::clientPort
+                                     + userSettings().lobby.client.port;
+    SLNet::SocketDescriptor descriptor{clientPort, nullptr};
+    auto peer{NetworkPeer::PeerPtr(SLNet::RakPeerInterface::GetInstance())};
+
+    // Non-host client players have two connections:
+    // with lobby server for NAT traversal and with player server
+    const auto result{peer->Startup(2, &descriptor, 1)};
+    if (result != SLNet::StartupResult::RAKNET_STARTED) {
+        playerLog("Failed to start peer for CNetCustomPlayerClient");
+        return nullptr;
+    }
+
+    playerLog("Creating CNetCustomPlayerClient");
+
+    auto client = (CNetCustomPlayerClient*)Memory::get().allocate(sizeof(CNetCustomPlayerClient));
+    // Empty fields will be initialized later
+    new (client) CNetCustomPlayerClient(session, nullptr, nullptr, name, std::move(peer), 0,
+                                        SLNet::UNASSIGNED_SYSTEM_ADDRESS, 0);
+
+    playerLog("Player client created");
+    return client;
+}
+
 game::IMqNetPlayerClient* createCustomPlayerClient(CNetCustomSession* session,
                                                    game::IMqNetSystem* netSystem,
                                                    game::IMqNetReception* netReception,

@@ -22,6 +22,7 @@
 
 #include "mqnetplayerclient.h"
 #include "netcustomplayer.h"
+#include <NatPunchthroughClient.h>
 #include <list>
 #include <slikenet/types.h>
 #include <utility>
@@ -73,9 +74,12 @@ struct CNetCustomPlayerClient : public game::IMqNetPlayerClient
     std::list<IdMessagePair> messages;
     CNetCustomPlayer player;
     PlayerClientCallbacks callbacks;
+    SLNet::NatPunchthroughClient natClient;
     SLNet::SystemAddress serverAddress;
     std::uint32_t serverId;
 };
+
+CNetCustomPlayerClient* createCustomPlayerClient(CNetCustomSession* session, const char* name);
 
 game::IMqNetPlayerClient* createCustomPlayerClient(CNetCustomSession* session,
                                                    game::IMqNetSystem* netSystem,
