@@ -27,15 +27,14 @@
 #include "image2outline.h"
 #include "image2text.h"
 #include "listbox.h"
-#include "lobbycallbacks.h"
 #include "lobbyclient.h"
 #include "log.h"
 #include "loginaccountinterf.h"
 #include "mempool.h"
-#include "menubase.h"
 #include "menuflashwait.h"
 #include "menuphase.h"
 #include "midgard.h"
+#include "netcustomplayerclient.h"
 #include "netcustomservice.h"
 #include "netcustomsession.h"
 #include "netmessages.h"
@@ -44,26 +43,13 @@
 #include "racelist.h"
 #include "registeraccountinterf.h"
 #include "textboxinterf.h"
-#include "uievent.h"
 #include "uimanager.h"
 #include "utils.h"
 #include <chrono>
 #include <fmt/chrono.h>
-#include <memory>
 #include <thread>
 
 namespace hooks {
-
-struct CMenuCustomLobby : public game::CMenuBase
-{
-    game::UiEvent roomsListEvent;
-    std::vector<RoomInfo> rooms; // cached data
-    std::unique_ptr<UiUpdateCallbacks> uiCallbacks;
-    std::unique_ptr<RoomsListCallbacks> roomsCallbacks;
-    game::NetMsgEntryData** netMsgEntryData;
-    game::CMenuFlashWait* waitMenu;
-    bool loggedIn;
-};
 
 static void menuDeleteWaitMenu(CMenuCustomLobby* menu)
 {
@@ -327,7 +313,7 @@ static void __fastcall menuListBoxDisplayHandler(CMenuCustomLobby* thisptr,
         size.x = width;
         size.y = height;
 
-        Color color{};
+        game::Color color{};
         // 0x0 - transparent, 0xff - opaque
         std::uint32_t opacity{0xff};
         CImage2OutlineApi::get().constructor(outline, &size, &color, opacity);
@@ -680,88 +666,6 @@ void customLobbySetRoomsInfo(CMenuCustomLobby* menu, std::vector<RoomInfo>&& roo
 
     listBoxApi.setElementsTotal(listBox, (int)rooms.size());
     menu->rooms = std::move(rooms);
-}
-
-void customLobbyProcessJoin(CMenuCustomLobby* menu, const char* roomName)
-{
-    using namespace game;
-
-    // Create session ourselves
-    logDebug("roomJoin.log", fmt::format("Process join to {:s}", roomName));
-
-    auto netService = getNetService();
-    logDebug("roomJoin.log", fmt::format("Get netService {:p}", (void*)netService));
-
-    if (!netService) {
-        customLobbyProcessJoinError(menu, "Net service is null");
-        return;
-    }
-
-    auto netSession = createCustomNetSession(netService, roomName, false);
-
-    logDebug("roomJoin.log", fmt::format("Created netSession {:p}", (void*)netSession));
-
-    // If failed, hide wait message and show error, enable join
-    if (!netSession) {
-        customLobbyProcessJoinError(menu, "Could not create net session");
-        return;
-    }
-
-    // Set net session to midgard
-    auto& midgardApi = CMidgardApi::get();
-
-    auto midgard = midgardApi.instance();
-    auto currentSession{midgard->data->netSession};
-    if (currentSession) {
-        currentSession->vftable->destructor(currentSession, 1);
-    }
-
-    logDebug("roomJoin.log", "Set netSession to midgard");
-    midgard->data->netSession = netSession;
-
-    logDebug("roomJoin.log", "Mark self as client");
-    // Mark self as client
-    midgard->data->host = false;
-
-    // Create player using session
-    logDebug("roomJoin.log", "Try create net client");
-    auto playerId = midgardApi.createNetClient(midgard, netService->loggedAccount.c_str(), false);
-    logDebug("roomJoin.log", "Net client created, I hope");
-
-    logDebug("roomJoin.log", fmt::format("Check net client id 0x{:x}", playerId));
-    if (playerId == 0) {
-        // Network id of zero is invalid
-        logDebug("roomJoin.log", "Net client has zero id");
-        customLobbyProcessJoinError(menu, "Created net client has net id 0");
-        return;
-    }
-
-    logDebug("roomJoin.log", "Set menu phase as a net client proxy");
-
-    auto menuPhase = menu->menuBaseData->menuPhase;
-    // Set menu phase as net proxy
-    midgardApi.setClientsNetProxy(midgard, menuPhase);
-
-    // Get max players from session
-    auto maxPlayers = netSession->vftable->getMaxClients(netSession);
-
-    logDebug("roomJoin.log", fmt::format("Get max number of players in session: {:d}", maxPlayers));
-
-    menuPhase->data->maxPlayers = maxPlayers;
-
-    CMenusReqVersionMsg requestVersion;
-    requestVersion.vftable = NetMessagesApi::getMenusReqVersionVftable();
-
-    logDebug("roomJoin.log", "Send version request message to server");
-    // Send CMenusReqVersionMsg to server
-    // If failed, hide wait message and show error, enable join
-    if (!midgardApi.sendNetMsgToServer(midgard, &requestVersion)) {
-        customLobbyProcessJoinError(menu, "Could not request game version from server");
-        return;
-    }
-
-    // The rest will be in req version callback
-    logDebug("roomJoin.log", "Request sent, wait for callback");
 }
 
 void customLobbyProcessJoinError(CMenuCustomLobby* menu, const char* message)

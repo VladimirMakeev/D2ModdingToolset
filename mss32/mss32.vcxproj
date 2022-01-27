@@ -340,6 +340,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\radiobuttoninterf.cpp" />
     <ClCompile Include="src\registeraccountinterf.cpp" />
     <ClCompile Include="src\restrictions.cpp" />
+    <ClCompile Include="src\roomclientjoin.cpp" />
     <ClCompile Include="src\roomscallback.cpp" />
     <ClCompile Include="src\roomservercreation.cpp" />
     <ClCompile Include="src\scenariodata.cpp" />
@@ -758,6 +759,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\registeraccountinterf.h" />
     <ClInclude Include="include\resetstackext.h" />
     <ClInclude Include="include\restrictions.h" />
+    <ClInclude Include="include\roomclientjoin.h" />
     <ClInclude Include="include\roomscallback.h" />
     <ClInclude Include="include\roomservercreation.h" />
     <ClInclude Include="include\scenariodata.h" />

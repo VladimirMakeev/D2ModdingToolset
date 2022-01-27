@@ -20,8 +20,6 @@
 #ifndef LOBBYCALLBACKS_H
 #define LOBBYCALLBACKS_H
 
-#include "menucustomlobby.h"
-
 #ifdef __INTEGRATE_LOBBY2_WITH_ROOMS_PLUGIN
 #include <RoomsPlugin.h>
 #endif
@@ -29,6 +27,8 @@
 #include <Lobby2Message.h>
 
 namespace hooks {
+
+struct CMenuCustomLobby;
 
 class LoggingCallbacks : public SLNet::Lobby2Callbacks
 {

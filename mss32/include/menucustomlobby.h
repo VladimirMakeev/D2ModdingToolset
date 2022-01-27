@@ -20,17 +20,19 @@
 #ifndef MENUCUSTOMLOBBY_H
 #define MENUCUSTOMLOBBY_H
 
+#include "lobbycallbacks.h"
+#include "menubase.h"
+#include "uievent.h"
+#include <memory>
 #include <string>
 #include <vector>
 
 namespace game {
-struct CMenuBase;
-struct CMenuPhase;
+struct NetMsgEntryData;
+struct CMenuFlashWait;
 } // namespace game
 
 namespace hooks {
-
-struct CMenuCustomLobby;
 
 struct RoomInfo
 {
@@ -38,6 +40,17 @@ struct RoomInfo
     std::string hostName;
     int publicSlots;
     int remainingSlots;
+};
+
+struct CMenuCustomLobby : public game::CMenuBase
+{
+    game::UiEvent roomsListEvent;
+    std::vector<RoomInfo> rooms; // cached data
+    std::unique_ptr<UiUpdateCallbacks> uiCallbacks;
+    std::unique_ptr<RoomsListCallbacks> roomsCallbacks;
+    game::NetMsgEntryData** netMsgEntryData;
+    game::CMenuFlashWait* waitMenu;
+    bool loggedIn;
 };
 
 game::CMenuBase* __stdcall createCustomLobbyMenu(game::CMenuPhase* menuPhase);
@@ -49,8 +62,6 @@ void customLobbyProcessLogin(CMenuCustomLobby* menu, const char* accountName);
 void customLobbyProcessLogout(CMenuCustomLobby* menu);
 
 void customLobbySetRoomsInfo(CMenuCustomLobby* menu, std::vector<RoomInfo>&& rooms);
-
-void customLobbyProcessJoin(CMenuCustomLobby* menu, const char* roomName);
 
 void customLobbyProcessJoinError(CMenuCustomLobby* menu, const char* message);
 

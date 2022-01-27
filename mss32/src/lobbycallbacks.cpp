@@ -19,6 +19,8 @@
 
 #include "lobbycallbacks.h"
 #include "log.h"
+#include "menucustomlobby.h"
+#include "roomclientjoin.h"
 #include <fmt/format.h>
 
 namespace hooks {
@@ -78,7 +80,24 @@ void RoomsListCallbacks::JoinByFilter_Callback(const SLNet::SystemAddress&,
                  fmt::format("{:s} joined room",
                              callResult->joinedRoomResult.joiningMemberName.C_String()));
 
-        customLobbyProcessJoin(menuLobby, roomName);
+        const char* guidString{nullptr};
+
+        auto& table = room.roomProperties;
+        auto index = table.ColumnIndex("ServerGuid");
+        if (index != std::numeric_limits<unsigned int>::max()) {
+            auto row = table.GetRowByIndex(0, nullptr);
+            if (row) {
+                guidString = row->cells[index]->c;
+            }
+        }
+
+        SLNet::RakNetGUID serverGuid{};
+        if (!serverGuid.FromString(guidString)) {
+            customLobbyProcessJoinError(menuLobby, "Could not get player server GUID");
+            return;
+        }
+
+        customLobbyProcessJoin(menuLobby, roomName, serverGuid);
         return;
     }
 
