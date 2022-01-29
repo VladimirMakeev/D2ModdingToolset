@@ -20,30 +20,123 @@
 #include "menuprotocolhooks.h"
 #include "dialoginterf.h"
 #include "listbox.h"
+#include "mempool.h"
+#include "menuflashwait.h"
 #include "menuphase.h"
 #include "menuphasehooks.h"
 #include "midgard.h"
 #include "netcustomservice.h"
+#include "networkpeer.h"
 #include "originalfunctions.h"
+#include "uievent.h"
+#include "utils.h"
 
 namespace hooks {
 
-game::CMenuProtocol* __fastcall menuProtocolCtorHooked(game::CMenuProtocol* thisptr,
-                                                       int /*%edx*/,
-                                                       game::CMenuPhase* menuPhase)
+struct CMenuCustomProtocol;
+
+class LobbyServerConnectionCallback : public NetworkPeerCallbacks
+{
+public:
+    LobbyServerConnectionCallback(CMenuCustomProtocol* menu)
+        : menuProtocol{menu}
+    { }
+
+    ~LobbyServerConnectionCallback() override = default;
+
+    void onPacketReceived(DefaultMessageIDTypes type,
+                          SLNet::RakPeerInterface* peer,
+                          const SLNet::Packet* packet) override;
+
+private:
+    CMenuCustomProtocol* menuProtocol;
+};
+
+struct CMenuCustomProtocol : public game::CMenuProtocol
+{
+    CMenuCustomProtocol(game::CMenuPhase* menuPhase)
+        : menuWait{nullptr}
+        , callback{this}
+    {
+        using namespace game;
+
+        CMenuProtocolApi::get().constructor(this, menuPhase);
+
+        auto dialog = CMenuBaseApi::get().getDialogInterface(this);
+        auto listBox = CDialogInterfApi::get().findListBox(dialog, "TLBOX_PROTOCOL");
+        if (listBox) {
+            // One more entry for our custom protocol
+            CListBoxInterfApi::get().setElementsTotal(listBox,
+                                                      listBox->listBoxData->elementsTotal + 1);
+        }
+    }
+
+    game::UiEvent timeoutEvent{};
+    game::CMenuFlashWait* menuWait;
+    LobbyServerConnectionCallback callback;
+};
+
+static void stopWaitingConnection(CMenuCustomProtocol* menu)
 {
     using namespace game;
 
-    getOriginalFunctions().menuProtocolCtor(thisptr, menuPhase);
+    UiEventApi::get().destructor(&menu->timeoutEvent);
 
-    auto dialog = CMenuBaseApi::get().getDialogInterface(thisptr);
-    auto listBox = CDialogInterfApi::get().findListBox(dialog, "TLBOX_PROTOCOL");
-    if (listBox) {
-        // One more entry for our custom protocol
-        CListBoxInterfApi::get().setElementsTotal(listBox, listBox->listBoxData->elementsTotal + 1);
+    auto menuWait{menu->menuWait};
+    if (menuWait) {
+        hideInterface(menuWait);
+        menuWait->vftable->destructor(menuWait, 1);
+        menu->menuWait = nullptr;
     }
 
-    return thisptr;
+    auto netService{getNetService()};
+    if (!netService) {
+        return;
+    }
+
+    netService->lobbyPeer.removeCallback(&menu->callback);
+}
+
+static void showConnectionError(CMenuCustomProtocol* menu, const char* errorMessage)
+{
+    stopWaitingConnection(menu);
+    showMessageBox(errorMessage);
+}
+
+void LobbyServerConnectionCallback::onPacketReceived(DefaultMessageIDTypes type,
+                                                     SLNet::RakPeerInterface* peer,
+                                                     const SLNet::Packet* packet)
+{
+    const char* error{nullptr};
+
+    switch (type) {
+    case ID_CONNECTION_ATTEMPT_FAILED:
+        error = "Connection attempt failed";
+        break;
+    case ID_NO_FREE_INCOMING_CONNECTIONS:
+        error = "Lobby server is full";
+        break;
+    case ID_ALREADY_CONNECTED:
+        error = "Already connected.\nThis should never happen";
+        break;
+
+    case ID_CONNECTION_REQUEST_ACCEPTED:
+        stopWaitingConnection(menuProtocol);
+        // Switch to custom lobby window
+        menuPhaseSetTransitionHooked(menuProtocol->menuBaseData->menuPhase, 0, 2);
+        return;
+    default:
+        return;
+    }
+
+    if (error) {
+        showConnectionError(menuProtocol, error);
+    }
+}
+
+static void __fastcall menuProtocolTimeoutHandler(CMenuCustomProtocol* menu, int /*%edx*/)
+{
+    showConnectionError(menu, "Failed to connect.\nLobby server not responding");
 }
 
 void __fastcall menuProtocolDisplayCallbackHooked(game::CMenuProtocol* thisptr,
@@ -63,14 +156,14 @@ void __fastcall menuProtocolDisplayCallbackHooked(game::CMenuProtocol* thisptr,
     }
 
     if (selectedIndex == lastIndex) {
-        StringApi::get().initFromString(string, "disciples-2.com");
+        StringApi::get().initFromString(string, "Lobby server");
         return;
     }
 
     getOriginalFunctions().menuProtocolDisplayCallback(thisptr, string, a3, selectedIndex);
 }
 
-void __fastcall menuProtocolContinueHandlerHooked(game::CMenuProtocol* thisptr, int /*%edx*/)
+void __fastcall menuProtocolContinueHandlerHooked(CMenuCustomProtocol* thisptr, int /*%edx*/)
 {
     using namespace game;
 
@@ -86,17 +179,39 @@ void __fastcall menuProtocolContinueHandlerHooked(game::CMenuProtocol* thisptr, 
         return;
     }
 
+    auto& midgardApi = CMidgardApi::get();
+    auto midgard = midgardApi.instance();
+    // Delete old net service
+    midgardApi.setNetService(midgard, nullptr, true, false);
+
     IMqNetService* service{nullptr};
     if (!createCustomNetService(&service)) {
         return;
     }
 
-    auto& midgardApi = CMidgardApi::get();
-    auto midgard = midgardApi.instance();
     midgardApi.setNetService(midgard, service, true, false);
 
-    // Switch to new window
-    menuPhaseSetTransitionHooked(thisptr->menuBaseData->menuPhase, 0, 2);
+    auto menuWait = (CMenuFlashWait*)Memory::get().allocate(sizeof(CMenuFlashWait));
+    CMenuFlashWaitApi::get().constructor(menuWait);
+
+    thisptr->menuWait = menuWait;
+    showInterface(menuWait);
+
+    auto netService{static_cast<CNetCustomService*>(service)};
+    netService->lobbyPeer.addCallback(&thisptr->callback);
+
+    // Stop attempting to connect after 10 seconds
+    createTimerEvent(&thisptr->timeoutEvent, thisptr, menuProtocolTimeoutHandler, 10000);
+}
+
+game::CMenuProtocol* __stdcall menuProtocolCreateMenuHooked(game::CMenuPhase* menuPhase)
+{
+    using namespace game;
+
+    auto menu = (CMenuCustomProtocol*)Memory::get().allocate(sizeof(CMenuCustomProtocol));
+    new (menu) CMenuCustomProtocol(menuPhase);
+
+    return menu;
 }
 
 } // namespace hooks

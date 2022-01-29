@@ -28,9 +28,7 @@ struct String;
 
 namespace hooks {
 
-game::CMenuProtocol* __fastcall menuProtocolCtorHooked(game::CMenuProtocol* thisptr,
-                                                       int /*%edx*/,
-                                                       game::CMenuPhase* menuPhase);
+struct CMenuCustomProtocol;
 
 void __fastcall menuProtocolDisplayCallbackHooked(game::CMenuProtocol* thisptr,
                                                   int /*%edx*/,
@@ -38,7 +36,9 @@ void __fastcall menuProtocolDisplayCallbackHooked(game::CMenuProtocol* thisptr,
                                                   bool a3,
                                                   int selectedIndex);
 
-void __fastcall menuProtocolContinueHandlerHooked(game::CMenuProtocol* thisptr, int /*%edx*/);
+void __fastcall menuProtocolContinueHandlerHooked(CMenuCustomProtocol* thisptr, int /*%edx*/);
+
+game::CMenuProtocol* __stdcall menuProtocolCreateMenuHooked(game::CMenuPhase* menuPhase);
 
 } // namespace hooks
 

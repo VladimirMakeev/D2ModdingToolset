@@ -257,8 +257,8 @@ static Hooks getGameHooks()
         //{IEffectResultApi::get().create, createEffectResultHooked, (void**)&orig.createEffectResult},
         // Support new menu windows
         {CMenuPhaseApi::get().setTransition, menuPhaseSetTransitionHooked, (void**)&orig.menuPhaseSetTransition},
-        // Custom lobby server test
-        {CMenuProtocolApi::get().constructor, menuProtocolCtorHooked, (void**)&orig.menuProtocolCtor},
+        // Support custom lobby server
+        {CMenuProtocolApi::get().createMenu, menuProtocolCreateMenuHooked},
         {CMenuProtocolApi::get().continueHandler, menuProtocolContinueHandlerHooked, (void**)&orig.menuProtocolContinueHandler},
         {CMenuProtocolApi::get().displayCallback, menuProtocolDisplayCallbackHooked, (void**)&orig.menuProtocolDisplayCallback},
         {CMenuNewSkirmishApi::get().loadScenarioCallback, menuNewSkirmishLoadScenarioCallbackHooked, (void**)&orig.menuNewSkirmishLoadScenario},

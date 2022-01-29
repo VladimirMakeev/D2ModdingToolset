@@ -96,7 +96,6 @@ struct OriginalFunctions
     game::IEffectResultApi::Api::Create createEffectResult;
 
     game::CMenuPhaseApi::Api::SetTransition menuPhaseSetTransition;
-    game::CMenuProtocolApi::Api::Constructor menuProtocolCtor;
     game::CMenuProtocolApi::Api::DisplayCallback menuProtocolDisplayCallback;
     game::CMenuProtocolApi::Api::ButtonHandler menuProtocolContinueHandler;
 
