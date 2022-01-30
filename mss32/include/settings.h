@@ -90,7 +90,7 @@ struct Settings
 
         struct Client
         {
-            std::uint16_t port{};
+            std::uint16_t port{1};
         } client;
     } lobby;
 

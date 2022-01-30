@@ -255,14 +255,6 @@ static Hooks getGameHooks()
         {ITestConditionApi::get().create, createTestConditionHooked, (void**)&orig.createTestCondition},
         // Support custom event effects
         //{IEffectResultApi::get().create, createEffectResultHooked, (void**)&orig.createEffectResult},
-        // Support new menu windows
-        {CMenuPhaseApi::get().setTransition, menuPhaseSetTransitionHooked, (void**)&orig.menuPhaseSetTransition},
-        // Support custom lobby server
-        {CMenuProtocolApi::get().createMenu, menuProtocolCreateMenuHooked},
-        {CMenuProtocolApi::get().continueHandler, menuProtocolContinueHandlerHooked, (void**)&orig.menuProtocolContinueHandler},
-        {CMenuProtocolApi::get().displayCallback, menuProtocolDisplayCallbackHooked, (void**)&orig.menuProtocolDisplayCallback},
-        {CMenuNewSkirmishApi::get().loadScenarioCallback, menuNewSkirmishLoadScenarioCallbackHooked, (void**)&orig.menuNewSkirmishLoadScenario},
-        {CMenuNewSkirmishMultiApi::get().createServer, menuNewSkirmishMultiCreateServerHooked, (void**)&orig.menuNewSkirmishMultiCreateServer},
     };
     // clang-format on
 
@@ -353,6 +345,19 @@ static Hooks getGameHooks()
     if (userSettings().movementCost.show) {
         // Show movement cost
         hooks.emplace_back(HookInfo{fn.showMovementPath, showMovementPathHooked});
+    }
+
+    if (isLobbySupported()) {
+        // clang-format off
+        // Support new menu windows
+        hooks.emplace_back(HookInfo{CMenuPhaseApi::get().setTransition, menuPhaseSetTransitionHooked, (void**)&orig.menuPhaseSetTransition});
+        // Support custom lobby server
+        hooks.emplace_back(HookInfo{CMenuProtocolApi::get().createMenu, menuProtocolCreateMenuHooked});
+        hooks.emplace_back(HookInfo{CMenuProtocolApi::get().continueHandler, menuProtocolContinueHandlerHooked, (void**)&orig.menuProtocolContinueHandler});
+        hooks.emplace_back(HookInfo{CMenuProtocolApi::get().displayCallback, menuProtocolDisplayCallbackHooked, (void**)&orig.menuProtocolDisplayCallback});
+        hooks.emplace_back(HookInfo{CMenuNewSkirmishApi::get().loadScenarioCallback, menuNewSkirmishLoadScenarioCallbackHooked, (void**)&orig.menuNewSkirmishLoadScenario});
+        hooks.emplace_back(HookInfo{CMenuNewSkirmishMultiApi::get().createServer, menuNewSkirmishMultiCreateServerHooked, (void**)&orig.menuNewSkirmishMultiCreateServer});
+        // clang-format on
     }
 
     return hooks;

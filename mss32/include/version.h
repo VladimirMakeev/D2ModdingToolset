@@ -40,6 +40,9 @@ GameVersion gameVersion();
 /** Returns true if dll loaded from game executable. */
 bool executableIsGame();
 
+/** Returns true if custom lobby is supported. */
+bool isLobbySupported();
+
 std::error_code determineGameVersion(const std::filesystem::path& exeFilePath);
 
 } // namespace hooks

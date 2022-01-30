@@ -25,8 +25,13 @@
 namespace hooks {
 
 // Hardcoded in client and server
+#if 0
 static const char titleName[]{"Test Title Name"};
 static const char titleSecretKey[]{"Test secret key"};
+#else
+static const char titleName[]{"Disciples2 Motlin"};
+static const char titleSecretKey[]{"Disciples2 Key"};
+#endif
 
 bool tryCreateAccount(const char* accountName,
                       const char* nickname,
