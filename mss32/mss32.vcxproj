@@ -274,6 +274,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\menubase.cpp" />
     <ClCompile Include="src\menucustomlobby.cpp" />
     <ClCompile Include="src\menuflashwait.cpp" />
+    <ClCompile Include="src\menuload.cpp" />
     <ClCompile Include="src\menulord.cpp" />
     <ClCompile Include="src\menunewmap.cpp" />
     <ClCompile Include="src\menunewskirmish.cpp" />
@@ -630,6 +631,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\menubaseeditor.h" />
     <ClInclude Include="include\menucustomlobby.h" />
     <ClInclude Include="include\menuflashwait.h" />
+    <ClInclude Include="include\menuload.h" />
     <ClInclude Include="include\menulord.h" />
     <ClInclude Include="include\menunewmap.h" />
     <ClInclude Include="include\menunewskirmish.h" />
