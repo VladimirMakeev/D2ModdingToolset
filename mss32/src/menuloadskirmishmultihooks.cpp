@@ -17,10 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "menunewskirmishhooks.h"
+#include "menuloadskirmishmultihooks.h"
 #include "dialoginterf.h"
 #include "editboxinterf.h"
-#include "lobbyclient.h"
 #include "log.h"
 #include "netcustomplayerserver.h"
 #include "netcustomservice.h"
@@ -28,7 +27,6 @@
 #include "originalfunctions.h"
 #include "roomservercreation.h"
 #include "utils.h"
-#include <fmt/format.h>
 
 namespace hooks {
 
@@ -53,16 +51,14 @@ static bool isRoomAndPlayerNamesValid(game::CMenuBase* menu)
     return true;
 }
 
-void __fastcall menuNewSkirmishLoadScenarioCallbackHooked(game::CMenuBase* thisptr, int /*%edx*/)
+void __fastcall menuLoadSkirmishMultiLoadScenarioHooked(game::CMenuLoad* thisptr, int /*%edx*/)
 {
     auto service = getNetService();
     if (!service) {
         // Current net service is not custom lobby, use default game logic
-        getOriginalFunctions().menuNewSkirmishLoadScenario(thisptr);
+        getOriginalFunctions().menuLoadSkirmishMultiLoadScenario(thisptr);
         return;
     }
-
-    logDebug("lobby.log", "Custom lobby net service!");
 
     if (!isRoomAndPlayerNamesValid(thisptr)) {
         // Please enter valid game and player names
@@ -70,43 +66,35 @@ void __fastcall menuNewSkirmishLoadScenarioCallbackHooked(game::CMenuBase* thisp
         return;
     }
 
-    startRoomAndServerCreation(thisptr, false);
+    logDebug("lobby.log", "Custom lobby net service in CMenuLoad!");
+
+    startRoomAndServerCreation(thisptr, true);
 }
 
-bool __fastcall menuNewSkirmishMultiCreateServerHooked(game::CMenuNewSkirmishMulti* thisptr,
-                                                       int /*%edx*/)
+void __fastcall menuLoadSkirmishMultiCreateHostPlayerHooked(game::CMenuLoad* thisptr, int /*%edx*/)
 {
-    logDebug("lobby.log", "CMenuNewSkirmishMulti::CreateServer");
+    auto service = getNetService();
+    if (service) {
+        auto session{service->session};
+        if (!session) {
+            logDebug("lobby.log", "Session is null");
+            return;
+        }
 
-    const auto result{getOriginalFunctions().menuNewSkirmishMultiCreateServer(thisptr)};
-    if (!result) {
-        // Game failed to initialize session, server or host client
-        logDebug("lobby.log", "Failed to create server");
-        return false;
+        auto playerServer{session->server};
+        if (!playerServer) {
+            logDebug("lobby.log", "Player server is null");
+            return;
+        }
+
+        logDebug("lobby.log", "Notify player server about host client connection in CMenuLoad");
+        // Notify server about host player client connection.
+        // The other clients that connect later will be handled in a usual way using net peer
+        // callbacks
+        playerServer->notifyHostClientConnected();
     }
 
-    auto service{getNetService()};
-    if (!service) {
-        // Current net service is not custom lobby, use default game logic
-        return result;
-    }
-
-    auto session{service->session};
-    if (!session) {
-        logDebug("lobby.log", "Session is null");
-        return false;
-    }
-
-    auto playerServer{session->server};
-    if (!playerServer) {
-        logDebug("lobby.log", "Player server is null");
-        return false;
-    }
-
-    logDebug("lobby.log", "Notify player server about host client connection");
-    // Notify server about host player client connection.
-    // The other clients that connect later will be handled in a usual way using net peer callbacks
-    return playerServer->notifyHostClientConnected();
+    getOriginalFunctions().menuLoadSkirmishMultiCreateHostPlayer(thisptr);
 }
 
 } // namespace hooks

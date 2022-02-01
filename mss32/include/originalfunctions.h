@@ -33,6 +33,7 @@
 #include "exchangeinterf.h"
 #include "game.h"
 #include "menubase.h"
+#include "menuload.h"
 #include "menunewskirmishmulti.h"
 #include "menuphase.h"
 #include "menuprotocol.h"
@@ -101,6 +102,9 @@ struct OriginalFunctions
 
     game::CMenuBaseApi::Api::ButtonCallback menuNewSkirmishLoadScenario;
     game::CMenuNewSkirmishMultiApi::Api::CreateServer menuNewSkirmishMultiCreateServer;
+
+    game::CMenuLoadApi::Api::ButtonCallback menuLoadSkirmishMultiLoadScenario;
+    game::CMenuLoadApi::Api::CreateHostPlayer menuLoadSkirmishMultiCreateHostPlayer;
 };
 
 OriginalFunctions& getOriginalFunctions();

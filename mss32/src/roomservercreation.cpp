@@ -39,6 +39,7 @@ namespace hooks {
 
 game::CMenuFlashWait* menuWaitServer{nullptr};
 game::CMenuBase* menuBase{nullptr};
+static bool loadingScenario{false};
 
 static void hideWaitMenu()
 {
@@ -101,8 +102,15 @@ public:
                              player.netId, hostPlayer->serverId));
 
         if (menuBase) {
-            logDebug("lobby.log", "Proceed to next screen");
-            getOriginalFunctions().menuNewSkirmishLoadScenario(menuBase);
+            const auto& fn = getOriginalFunctions();
+
+            if (loadingScenario) {
+                logDebug("lobby.log", "Proceed to next screen as CMenuLoadSkirmishMulti");
+                fn.menuLoadSkirmishMultiLoadScenario((game::CMenuLoad*)menuBase);
+            } else {
+                logDebug("lobby.log", "Proceed to next screen as CMenuNewSkirmishMulti");
+                fn.menuNewSkirmishLoadScenario(menuBase);
+            }
         } else {
             logDebug("lobby.log", "MenuBase is null somehow!");
         }
@@ -244,7 +252,7 @@ static void createSessionAndServer(const char* sessionName)
     playerServer->player.netPeer.addCallback(&serverConnectCallbacks);
 }
 
-void startRoomAndServerCreation(game::CMenuBase* menu)
+void startRoomAndServerCreation(game::CMenuBase* menu, bool loadScenario)
 {
     using namespace game;
 
@@ -261,6 +269,7 @@ void startRoomAndServerCreation(game::CMenuBase* menu)
 
     logDebug("lobby.log", "Create session and player server");
     menuBase = menu;
+    loadingScenario = loadScenario;
     createSessionAndServer(editGame->data->editBoxData.inputString.string);
 }
 

@@ -99,7 +99,7 @@ static void menuUpdateButtons(CMenuCustomLobby* menu)
     createButton->vftable->setEnabled(createButton, loggedIn);
 
     auto loadButton = dialogApi.findButton(dialog, "BTN_LOAD");
-    loadButton->vftable->setEnabled(loadButton, /*loggedIn*/ false);
+    loadButton->vftable->setEnabled(loadButton, loggedIn);
 
     auto joinButton = dialogApi.findButton(dialog, "BTN_JOIN");
     joinButton->vftable->setEnabled(joinButton, loggedIn);

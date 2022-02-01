@@ -17,17 +17,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ROOMSERVERCREATION_H
-#define ROOMSERVERCREATION_H
+#ifndef MENULOADSKIRMISHMULTIHOOKS_H
+#define MENULOADSKIRMISHMULTIHOOKS_H
 
 namespace game {
-struct CMenuBase;
+struct CMenuLoad;
 }
 
 namespace hooks {
 
-void startRoomAndServerCreation(game::CMenuBase* menu, bool loadScenario);
+void __fastcall menuLoadSkirmishMultiLoadScenarioHooked(game::CMenuLoad* thisptr, int /*%edx*/);
 
-}
+void __fastcall menuLoadSkirmishMultiCreateHostPlayerHooked(game::CMenuLoad* thisptr, int /*%edx*/);
 
-#endif // ROOMSERVERCREATION_H
+} // namespace hooks
+
+#endif // MENULOADSKIRMISHMULTIHOOKS_H
