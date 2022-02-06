@@ -23,6 +23,7 @@
 #include "mqnetreception.h"
 #include "mqnetsystem.h"
 #include "netcustomplayer.h"
+#include "netcustomsession.h"
 #include "netmsg.h"
 #include "utils.h"
 #include <BitStream.h>
@@ -317,13 +318,14 @@ static bool __fastcall playerServerSetMaxPlayers(CNetCustomPlayerServer* thisptr
                                                  int maxPlayers)
 {
     playerLog(fmt::format("CNetCustomPlayerServer setMaxPlayers {:d}", maxPlayers));
-    return true;
+    return thisptr->player.session->setMaxPlayers(maxPlayers);
 }
 
 static bool __fastcall playerServerSetAllowJoin(CNetCustomPlayerServer* thisptr,
                                                 int /*%edx*/,
                                                 bool allowJoin)
 {
+    // Ignore this since its only called during server creation and eventually being allowed
     playerLog(fmt::format("CNetCustomPlayerServer setAllowJoin {:d}", (int)allowJoin));
     return true;
 }

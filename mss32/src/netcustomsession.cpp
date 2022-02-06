@@ -19,6 +19,7 @@
 
 #include "netcustomsession.h"
 #include "d2string.h"
+#include "lobbyclient.h"
 #include "log.h"
 #include "mempool.h"
 #include "mqnetsystem.h"
@@ -33,6 +34,21 @@
 namespace hooks {
 
 extern std::atomic_bool hostAddressSet;
+
+bool CNetCustomSession::setMaxPlayers(int maxPlayers)
+{
+    if (maxPlayers < 1 || maxPlayers > 4) {
+        return false;
+    }
+
+    // -1 because room already have moderator.
+    const auto result{tryChangeRoomPublicSlots(maxPlayers - 1)};
+    if (result) {
+        this->maxPlayers = maxPlayers;
+    }
+
+    return result;
+}
 
 void __fastcall netCustomSessionDtor(CNetCustomSession* thisptr, int /*%edx*/, char flags)
 {
@@ -65,8 +81,9 @@ int __fastcall netCustomSessionGetClientsCount(CNetCustomSession* thisptr, int /
 
 int __fastcall netCustomSessionGetMaxClients(CNetCustomSession* thisptr, int /*%edx*/)
 {
-    logDebug("lobby.log", "CNetCustomSession getMaxClients called");
-    return 4;
+    logDebug("lobby.log", fmt::format("CNetCustomSession getMaxClients called. Max clients: {:d}",
+                                      thisptr->maxPlayers));
+    return thisptr->maxPlayers;
 }
 
 void __fastcall netCustomSessionGetPlayers(CNetCustomSession* thisptr,

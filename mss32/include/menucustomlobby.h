@@ -38,8 +38,8 @@ struct RoomInfo
 {
     std::string name;
     std::string hostName;
-    int publicSlots;
-    int remainingSlots;
+    int totalSlots;
+    int usedSlots;
 };
 
 struct CMenuCustomLobby : public game::CMenuBase

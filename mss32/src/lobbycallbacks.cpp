@@ -136,12 +136,12 @@ void RoomsListCallbacks::SearchByFilter_Callback(const SLNet::SystemAddress&,
         }
 
         auto totalSlots = (int)room->GetProperty(DefaultRoomColumns::TC_TOTAL_PUBLIC_SLOTS)->i;
-        auto remainingSlots = (int)room->GetProperty(DefaultRoomColumns::TC_REMAINING_PUBLIC_SLOTS)
-                                  ->i;
+        auto usedSlots = (int)room->GetProperty(DefaultRoomColumns::TC_USED_PUBLIC_SLOTS)->i;
 
+        // Add 1 to used and total slots because they are not counting room moderator
         roomsInfo.push_back(RoomInfo{std::string(name),
-                                     std::string{hostName ? hostName : "Unknown"}, totalSlots,
-                                     remainingSlots});
+                                     std::string{hostName ? hostName : "Unknown"}, totalSlots + 1,
+                                     usedSlots + 1});
     }
 
     customLobbySetRoomsInfo(menuLobby, std::move(roomsInfo));

@@ -198,6 +198,13 @@ static void __fastcall menuJoinRoomBtnHandler(CMenuCustomLobby* thisptr, int /*%
 
     const auto& room = thisptr->rooms[index];
 
+    // Do fast check if room can be joined
+    if (room.usedSlots >= room.totalSlots) {
+        // Could not join game. Host did not report any available race.
+        showMessageBox(getTranslatedText("X005TA0886"));
+        return;
+    }
+
     if (tryJoinRoom(room.name.c_str())) {
         // Rooms callback will notify us when its time to send game messages to server,
         // requesting version and info.
@@ -292,9 +299,9 @@ static void __fastcall menuListBoxDisplayHandler(CMenuCustomLobby* thisptr,
     {
         auto playerCount = (CImage2Text*)Memory::get().allocate(sizeof(CImage2Text));
         imageApi.constructor(playerCount, playerCountWidth, height);
-        imageApi.setText(playerCount,
-                         fmt::format("\\vC;\\hC;{:d}/{:d}", room.publicSlots, room.remainingSlots)
-                             .c_str());
+        imageApi
+            .setText(playerCount,
+                     fmt::format("\\vC;\\hC;{:d}/{:d}", room.usedSlots, room.totalSlots).c_str());
 
         ImagePtrPointPair pair{};
         createFreePtr((SmartPointer*)&pair.first, playerCount);

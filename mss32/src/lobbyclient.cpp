@@ -195,7 +195,7 @@ bool tryCreateRoom(const char* roomName, const char* customColumn, const char* c
 
     auto& params = room.networkedRoomCreationParameters;
     params.roomName = roomName;
-    params.slots.publicSlots = 4;
+    params.slots.publicSlots = 1;
     params.slots.reservedSlots = 0;
     params.slots.spectatorSlots = 0;
 
@@ -271,6 +271,30 @@ bool tryJoinRoom(const char* roomName)
                                       join.userName.C_String(), roomName));
 
     netService->roomsClient.ExecuteFunc(&join);
+    return true;
+}
+
+bool tryChangeRoomPublicSlots(unsigned int publicSlots)
+{
+    if (publicSlots < 1) {
+        logDebug("lobby.log", "Could not set number of room public slots lesser than 1");
+        return false;
+    }
+
+    auto netService{getNetService()};
+    if (!netService) {
+        logDebug("lobby.log", "No net service in midgard");
+        return false;
+    }
+
+    SLNet::ChangeSlotCounts_Func slotCounts;
+    slotCounts.userName = netService->loggedAccount.c_str();
+    slotCounts.slots.publicSlots = publicSlots;
+
+    logDebug("lobby.log", fmt::format("Account {:s} is trying to change room public slots to {:d}",
+                                      slotCounts.userName.C_String(), publicSlots));
+
+    netService->roomsClient.ExecuteFunc(&slotCounts);
     return true;
 }
 

@@ -54,6 +54,9 @@ bool trySearchRooms(const char* accountName = nullptr);
 /** Tries to join existing room by its name. */
 bool tryJoinRoom(const char* roomName);
 
+/** Tries to change number of public slots in current room. */
+bool tryChangeRoomPublicSlots(unsigned int publicSlots);
+
 } // namespace hooks
 
 #endif // LOBBYCLIENT_H

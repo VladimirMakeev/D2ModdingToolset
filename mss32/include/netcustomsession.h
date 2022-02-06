@@ -40,13 +40,17 @@ struct CNetCustomSession : public game::IMqNetSession
         : name{name}
         , service{service}
         , server{nullptr}
+        , maxPlayers{2}
         , host{host}
     { }
+
+    bool setMaxPlayers(int maxPlayers);
 
     std::string name;
     std::vector<CNetCustomPlayerClient*> players;
     CNetCustomPlayerServer* server;
     CNetCustomService* service;
+    int maxPlayers;
     bool host;
 };
 
