@@ -298,4 +298,29 @@ bool tryChangeRoomPublicSlots(unsigned int publicSlots)
     return true;
 }
 
+bool tryCheckFilesIntegrity(const char* hash)
+{
+    if (!hash || !std::strlen(hash)) {
+        logDebug("lobby.log", "Could not check client integrity with empty hash");
+        return false;
+    }
+
+    auto netService{getNetService()};
+    if (!netService) {
+        logDebug("lobby.log", "No net service in midgard");
+        return false;
+    }
+
+    SLNet::BitStream stream;
+    stream.Write(static_cast<SLNet::MessageID>(ID_CHECK_FILES_INTEGRITY));
+    stream.Write(hash);
+
+    const auto serverAddress{netService->lobbyClient.GetServerAddress()};
+    const auto result{netService->lobbyPeer.peer->Send(&stream, PacketPriority::HIGH_PRIORITY,
+                                                       PacketReliability::RELIABLE_ORDERED, 0,
+                                                       serverAddress, false)};
+
+    return result != 0;
+}
+
 } // namespace hooks

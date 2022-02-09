@@ -20,7 +20,15 @@
 #ifndef LOBBYCLIENT_H
 #define LOBBYCLIENT_H
 
+#include <MessageIdentifiers.h>
+
 namespace hooks {
+
+enum ClientMessages
+{
+    ID_CHECK_FILES_INTEGRITY = ID_USER_PACKET_ENUM + 1,
+    ID_FILES_INTEGRITY_RESULT,
+};
 
 /**
  * Tries to register new account using credentials provided.
@@ -56,6 +64,9 @@ bool tryJoinRoom(const char* roomName);
 
 /** Tries to change number of public slots in current room. */
 bool tryChangeRoomPublicSlots(unsigned int publicSlots);
+
+/** Tries to request files integrity check from the server. */
+bool tryCheckFilesIntegrity(const char* hash);
 
 } // namespace hooks
 

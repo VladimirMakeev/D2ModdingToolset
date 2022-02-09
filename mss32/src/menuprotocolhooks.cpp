@@ -20,6 +20,7 @@
 #include "menuprotocolhooks.h"
 #include "dialoginterf.h"
 #include "listbox.h"
+#include "lobbyclient.h"
 #include "mempool.h"
 #include "menuflashwait.h"
 #include "menuphase.h"
@@ -107,30 +108,53 @@ void LobbyServerConnectionCallback::onPacketReceived(DefaultMessageIDTypes type,
                                                      SLNet::RakPeerInterface* peer,
                                                      const SLNet::Packet* packet)
 {
-    const char* error{nullptr};
-
     switch (type) {
     case ID_CONNECTION_ATTEMPT_FAILED:
-        error = "Connection attempt failed";
-        break;
-    case ID_NO_FREE_INCOMING_CONNECTIONS:
-        error = "Lobby server is full";
-        break;
-    case ID_ALREADY_CONNECTED:
-        error = "Already connected.\nThis should never happen";
-        break;
-
-    case ID_CONNECTION_REQUEST_ACCEPTED:
-        stopWaitingConnection(menuProtocol);
-        // Switch to custom lobby window
-        menuPhaseSetTransitionHooked(menuProtocol->menuBaseData->menuPhase, 0, 2);
+        showConnectionError(menuProtocol, "Connection attempt failed");
         return;
-    default:
+    case ID_NO_FREE_INCOMING_CONNECTIONS:
+        showConnectionError(menuProtocol, "Lobby server is full");
+        return;
+    case ID_ALREADY_CONNECTED:
+        showConnectionError(menuProtocol, "Already connected.\nThis should never happen");
+        return;
+
+    case ID_CONNECTION_REQUEST_ACCEPTED: {
+        std::string hash;
+        if (!computeHash(gameFolder() / "Globals", hash)) {
+            showConnectionError(menuProtocol, "Could not compute hash");
+            return;
+        }
+
+        if (!tryCheckFilesIntegrity(hash.c_str())) {
+            showConnectionError(menuProtocol, "Could not request game integrity check");
+            return;
+        }
+
         return;
     }
 
-    if (error) {
-        showConnectionError(menuProtocol, error);
+    case ID_FILES_INTEGRITY_RESULT: {
+        stopWaitingConnection(menuProtocol);
+
+        SLNet::BitStream input{packet->data, packet->length, false};
+        input.IgnoreBytes(sizeof(SLNet::MessageID));
+
+        bool checkPassed{false};
+        input.Read(checkPassed);
+
+        if (checkPassed) {
+            // Switch to custom lobby window
+            menuPhaseSetTransitionHooked(menuProtocol->menuBaseData->menuPhase, 0, 2);
+            return;
+        }
+
+        showConnectionError(menuProtocol, "Game integrity check failed");
+        return;
+    }
+
+    default:
+        return;
     }
 }
 
