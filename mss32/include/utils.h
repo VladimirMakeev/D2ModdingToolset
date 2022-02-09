@@ -91,6 +91,9 @@ void createTimerEvent(game::UiEvent* timerEvent,
                       void* callback,
                       std::uint32_t timeoutMs);
 
+/** Computes MD5 hash of files in specified folder. */
+bool computeHash(const std::filesystem::path& folder, std::string& hash);
+
 } // namespace hooks
 
 #endif // UTILS_H

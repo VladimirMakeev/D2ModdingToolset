@@ -30,8 +30,10 @@
 #include "smartptr.h"
 #include "uimanager.h"
 #include <Windows.h>
+#include <fmt/format.h>
 #include <fstream>
 #include <random>
+#include <wincrypt.h>
 
 namespace hooks {
 
@@ -280,6 +282,84 @@ void createTimerEvent(game::UiEvent* timerEvent,
 
     freeFunctor(&functor, nullptr);
     SmartPointerApi::get().createOrFree((SmartPointer*)&uiManager, nullptr);
+}
+
+bool computeHash(const std::filesystem::path& folder, std::string& hash)
+{
+    struct HashGuard
+    {
+        HashGuard() = default;
+        ~HashGuard()
+        {
+            CryptDestroyHash(hash);
+            CryptReleaseContext(provider, 0);
+        }
+
+        HCRYPTPROV provider{};
+        HCRYPTHASH hash{};
+    };
+
+    std::vector<std::filesystem::path> filenames;
+    for (const auto& entry : std::filesystem::directory_iterator(folder)) {
+        filenames.push_back(entry.path());
+    }
+
+    std::sort(filenames.begin(), filenames.end());
+
+    HashGuard guard;
+    if (!CryptAcquireContext(&guard.provider, nullptr, nullptr, PROV_RSA_FULL,
+                             CRYPT_VERIFYCONTEXT)) {
+        logError("mssProxyError.log",
+                 fmt::format("Could not acquire context, reason {:d}", GetLastError()));
+        return false;
+    }
+
+    if (!CryptCreateHash(guard.provider, CALG_MD5, 0, 0, &guard.hash)) {
+        logError("mssProxyError.log",
+                 fmt::format("Could not create hash, reason {:d}", GetLastError()));
+        return false;
+    }
+
+    for (const auto& file : filenames) {
+        std::ifstream stream{file, std::ios_base::binary};
+        if (!stream) {
+            logError("mssProxyError.log",
+                     fmt::format("Could not open file '{:s}'", file.filename().string()));
+            return false;
+        }
+
+        const auto size = static_cast<size_t>(std::filesystem::file_size(file));
+        std::vector<unsigned char> contents(size);
+
+        stream.read(reinterpret_cast<char*>(contents.data()), size);
+        stream.close();
+
+        if (!CryptHashData(guard.hash, contents.data(), size, 0)) {
+            logError("mssProxyError.log",
+                     fmt::format("Compute hash failed, reason {:d}", GetLastError()));
+            return false;
+        }
+    }
+
+    constexpr size_t md5Length{16};
+    DWORD length{md5Length};
+    unsigned char md5Hash[md5Length] = {0};
+
+    if (!CryptGetHashParam(guard.hash, HP_HASHVAL, md5Hash, &length, 0)) {
+        logError("mssProxyError.log",
+                 fmt::format("Could not get hash value, reason {:d}", GetLastError()));
+        return false;
+    }
+
+    hash.clear();
+
+    static const char hexDigits[] = "0123456789abcdef";
+    for (DWORD i = 0; i < length; ++i) {
+        hash += hexDigits[md5Hash[i] >> 4];
+        hash += hexDigits[md5Hash[i] & 0xf];
+    }
+
+    return true;
 }
 
 } // namespace hooks
