@@ -192,6 +192,7 @@ const Settings& defaultSettings()
         settings.showBanners = true;
         settings.showResources = true;
         settings.movementCost.show = true;
+        settings.unrestrictedBestowWards = true;
         settings.detailedAttackDescription = true;
 
         initialized = true;

@@ -56,7 +56,7 @@ settings = {
 	doppelgangerRespectsAllyImmunity = false,
 
 	-- Increases total wards limit per caster from 8 to 48
-	unrestrictedBestowWards = false,
+	unrestrictedBestowWards = true,
 
 	-- Allows transform-self attack to not consume a unit turn for transformation (once per turn)
 	freeTransformSelfAttack = false,
