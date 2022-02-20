@@ -39,6 +39,12 @@ settings = {
 	-- Percentage chance of critical hit [0 : 100]
 	criticalHitChance = 100,
 
+	-- Multiplies total damage dealt by split damage (DAM_SPLIT) [1 : 6]
+	-- Split damage is introduced by "custom attack damage ratio"
+	-- This multiplier allows split damage to scale for late game as default maximum of 300 total damage is miserable
+	-- For example, multiplier of 6 allows for 300 * 6 = 1800 total damage that corresponds to maximum damage of any mage
+	splitDamageMultiplier = 1,
+
 	-- Percentage of L_DRAIN attacks damage used as heal [INT_MIN : INT_MAX]
 	drainAttackHeal = 50,
 	-- Percentage of L_DRAIN_OVERFLOW attacks damage used as heal [INT_MIN : INT_MAX]

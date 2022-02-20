@@ -246,22 +246,32 @@ std::string getAttackDamageModifiableText(const game::IAttack* attack,
 
     int damage = getAttackQtyDamageOrHealHooked(attack, damageMax);
 
+    int damageMultiplier = 1;
+    if (getCustomAttacks().damageRatio.enabled) {
+        auto attackImpl = getAttackImpl(attack);
+        if (attackImpl && attackImpl->data->damageSplit) {
+            damageMultiplier = userSettings().splitDamageMultiplier;
+        }
+    }
+
     const auto& fn = gameFunctions();
     int damageModified = fn.applyPercentModifiers(damage, modifiers,
                                                   ModifierElementTypeFlag::QtyDamage);
     if (damageModified > damageMax)
         damageModified = damageMax;
+    damageModified *= damageMultiplier;
 
     int damageTotalBoosted = damageTotal;
     damageTotalBoosted += damageTotal * getBoostDamage(boostDamageLevel) / 100;
     damageTotalBoosted -= damageTotal * getLowerDamage(lowerDamageLevel) / 100;
     if (damageTotalBoosted > damageMax)
         damageTotalBoosted = damageMax;
+    damageTotalBoosted *= damageMultiplier;
 
     auto damagePlusBonus = appendColoredBonus(fmt::format("{:d}", damageModified),
                                               damageTotalBoosted - damageModified);
 
-    auto damagePlusBonusPlusMax = damageTotalBoosted < damageMax
+    auto damagePlusBonusPlusMax = (damageTotalBoosted / damageMultiplier) < damageMax
                                       ? damagePlusBonus
                                       : getAttackDamageMaxText(damagePlusBonus);
 
