@@ -34,7 +34,7 @@ struct Api
 {
     using Constructor = CEncLayoutSpell*(__thiscall*)(CEncLayoutSpell* thisptr,
                                                       IMidgardObjectMap* objectMap,
-                                                      CInterface* interface,
+                                                      CInterface* interf,
                                                       void* a2,
                                                       CMidgardID* spellId,
                                                       CEncParamBase* encParam,

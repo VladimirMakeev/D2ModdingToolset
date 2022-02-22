@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,34 +17,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VERSION_H
-#define VERSION_H
+#ifndef MENUPROTOCOLHOOKS_H
+#define MENUPROTOCOLHOOKS_H
 
-#include <filesystem>
-#include <system_error>
+namespace game {
+struct CMenuProtocol;
+struct CMenuPhase;
+struct String;
+} // namespace game
 
 namespace hooks {
 
-enum class GameVersion
-{
-    Unknown = -1,
-    Akella,
-    Russobit,
-    Gog,
-    ScenarioEditor
-};
+struct CMenuCustomProtocol;
 
-/** Returns determined game version. */
-GameVersion gameVersion();
+void __fastcall menuProtocolDisplayCallbackHooked(game::CMenuProtocol* thisptr,
+                                                  int /*%edx*/,
+                                                  game::String* string,
+                                                  bool a3,
+                                                  int selectedIndex);
 
-/** Returns true if dll loaded from game executable. */
-bool executableIsGame();
+void __fastcall menuProtocolContinueHandlerHooked(CMenuCustomProtocol* thisptr, int /*%edx*/);
 
-/** Returns true if custom lobby is supported. */
-bool isLobbySupported();
-
-std::error_code determineGameVersion(const std::filesystem::path& exeFilePath);
+game::CMenuProtocol* __stdcall menuProtocolCreateMenuHooked(game::CMenuPhase* menuPhase);
 
 } // namespace hooks
 
-#endif // VERSION_H
+#endif // MENUPROTOCOLHOOKS_H

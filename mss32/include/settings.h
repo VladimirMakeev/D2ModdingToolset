@@ -22,6 +22,7 @@
 
 #include <cstdint>
 #include <filesystem>
+#include <string>
 
 namespace hooks {
 
@@ -79,6 +80,20 @@ struct Settings
         Color outlineColor{};
         bool show{};
     } movementCost;
+
+    struct Lobby
+    {
+        struct Server
+        {
+            std::string ip{"127.0.0.1"};
+            std::uint16_t port{61111};
+        } server;
+
+        struct Client
+        {
+            std::uint16_t port{1};
+        } client;
+    } lobby;
 
     bool debugMode;
 };

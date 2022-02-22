@@ -95,6 +95,19 @@ settings = {
 		}
 	},
 
+	lobby = {
+		-- Lobby server public IP and port
+		server = {
+			ip = "68.183.215.87",
+			port = 61111
+		},
+
+		client = {
+			-- Lobby client port
+			port = 0
+		}
+	},
+
 	-- If true, switches attacks miss check to a single random value roll
 	-- instead of check against arithmetic mean of two random numbers
 	missChanceSingleRoll = false,

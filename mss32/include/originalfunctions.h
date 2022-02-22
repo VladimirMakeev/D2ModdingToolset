@@ -32,6 +32,11 @@
 #include "enclayoutspell.h"
 #include "exchangeinterf.h"
 #include "game.h"
+#include "menubase.h"
+#include "menuload.h"
+#include "menunewskirmishmulti.h"
+#include "menuphase.h"
+#include "menuprotocol.h"
 #include "midevcondition.h"
 #include "mideveffect.h"
 #include "midevent.h"
@@ -90,6 +95,16 @@ struct OriginalFunctions
     game::editor::CEffectInterfApi::Api::CreateFromCategory createEffectInterfFromCategory;
 
     game::IEffectResultApi::Api::Create createEffectResult;
+
+    game::CMenuPhaseApi::Api::SetTransition menuPhaseSetTransition;
+    game::CMenuProtocolApi::Api::DisplayCallback menuProtocolDisplayCallback;
+    game::CMenuProtocolApi::Api::ButtonHandler menuProtocolContinueHandler;
+
+    game::CMenuBaseApi::Api::ButtonCallback menuNewSkirmishLoadScenario;
+    game::CMenuNewSkirmishMultiApi::Api::CreateServer menuNewSkirmishMultiCreateServer;
+
+    game::CMenuLoadApi::Api::ButtonCallback menuLoadSkirmishMultiLoadScenario;
+    game::CMenuLoadApi::Api::CreateHostPlayer menuLoadSkirmishMultiCreateHostPlayer;
 };
 
 OriginalFunctions& getOriginalFunctions();

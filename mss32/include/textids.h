@@ -75,6 +75,18 @@ struct TextIds
             } variableCmp;
         } conditions;
     } events;
+
+    struct Lobby
+    {
+        std::string serverName;
+        std::string serverNotResponding;
+        std::string connectAttemptFailed;
+        std::string serverIsFull;
+        std::string computeHashFailed;
+        std::string requestHashCheckFailed;
+        std::string wrongHash;
+        std::string wrongRoomPassword;
+    } lobby;
 };
 
 const TextIds& textIds();

@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2022 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,34 +17,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VERSION_H
-#define VERSION_H
+#ifndef MENUNEWSKIRMISHMULTI_H
+#define MENUNEWSKIRMISHMULTI_H
 
-#include <filesystem>
-#include <system_error>
+#include "menunewskirmish.h"
 
-namespace hooks {
+namespace game {
 
-enum class GameVersion
+/**
+ * Multiplayer skirmish menu.
+ * Represents DLG_HOST from Interf.dlg.
+ */
+struct CMenuNewSkirmishMulti : public CMenuNewSkirmish
+{ };
+
+static_assert(sizeof(CMenuNewSkirmishMulti) == 12,
+              "Size of CMenuNewSkirmishMulti structure must be exactly 12 bytes");
+
+namespace CMenuNewSkirmishMultiApi {
+
+struct Api
 {
-    Unknown = -1,
-    Akella,
-    Russobit,
-    Gog,
-    ScenarioEditor
+    using CreateServer = bool(__thiscall*)(CMenuNewSkirmishMulti* thisptr);
+    CreateServer createServer;
 };
 
-/** Returns determined game version. */
-GameVersion gameVersion();
+Api& get();
 
-/** Returns true if dll loaded from game executable. */
-bool executableIsGame();
+} // namespace CMenuNewSkirmishMultiApi
 
-/** Returns true if custom lobby is supported. */
-bool isLobbySupported();
+} // namespace game
 
-std::error_code determineGameVersion(const std::filesystem::path& exeFilePath);
-
-} // namespace hooks
-
-#endif // VERSION_H
+#endif // MENUNEWSKIRMISHMULTI_H

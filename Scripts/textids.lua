@@ -108,4 +108,32 @@ textids = {
 			},
 		},
 	},
+
+	-- Text ids related to custom lobby
+	lobby = {
+		-- Server name shown in network protocols list
+		-- Fallback text "Lobby server"
+		serverName = "",
+		-- Shown when client could not connect due to server being unresponsive
+		-- Fallback text "Failed to connect.\nLobby server not responding"
+		serverNotResponding = "",
+		-- Client's connection attemt failed
+		-- Fallback text "Connection attempt failed"
+		connectAttemptFailed = "",
+		-- Client could not connect due to server being full
+		-- Fallback text "Lobby server is full"
+		serverIsFull = "",
+		-- Game files hash failed to compute
+		-- Fallback text "Could not compute hash"
+		computeHashFailed = "",
+		-- Client could not request hash check from server
+		-- Fallback text "Could not request game integrity check"
+		requestHashCheckFailed = "",
+		-- Client hash is wrong
+		-- Fallback text "Game integrity check failed"
+		wrongHash = "",
+		-- Player entered wrong room password
+		-- Fallback text "Wrong room password"
+		wrongRoomPassword = "",
+	},
 }

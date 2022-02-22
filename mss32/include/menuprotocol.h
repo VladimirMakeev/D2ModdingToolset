@@ -77,6 +77,10 @@ struct Api
     /** Creates IMqNetService depending on player choice and advances to a next menu screen. */
     using ButtonHandler = void(__thiscall*)(CMenuProtocol* thisptr);
     ButtonHandler continueHandler;
+
+    /** Allocates memory and calls CMenuProtocol constructor. */
+    using CreateMenu = CMenuProtocol*(__stdcall*)(CMenuPhase* menuPhase);
+    CreateMenu createMenu;
 };
 
 Api& get();

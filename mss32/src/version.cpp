@@ -22,6 +22,7 @@
 namespace hooks {
 
 static GameVersion version{GameVersion::Unknown};
+static bool lobbySupported{false};
 
 GameVersion gameVersion()
 {
@@ -31,6 +32,11 @@ GameVersion gameVersion()
 bool executableIsGame()
 {
     return version != GameVersion::Unknown && version != GameVersion::ScenarioEditor;
+}
+
+bool isLobbySupported()
+{
+    return lobbySupported;
 }
 
 std::error_code determineGameVersion(const std::filesystem::path& exeFilePath)
@@ -49,6 +55,7 @@ std::error_code determineGameVersion(const std::filesystem::path& exeFilePath)
 
     // Mortling's mod, exe with custom icon
     case 4214272:
+        lobbySupported = true;
         [[fallthrough]];
     case 4187648:
         version = GameVersion::Russobit;

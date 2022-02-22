@@ -55,11 +55,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;MSS32_EXPORTS;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;MSS32_EXPORTS;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;NOMINMAX;__INTEGRATE_LOBBY2_WITH_ROOMS_PLUGIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\Detours\src;$(ProjectDir)..\GSL\include;$(ProjectDir)..\fmt\include;$(ProjectDir)include;$(ProjectDir)include\dbf;$(ProjectDir)..\lua;$(ProjectDir)..\sol2\single\include;$(ProjectDir)include\bindings;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Detours\src;$(ProjectDir)..\GSL\include;$(ProjectDir)..\fmt\include;$(ProjectDir)include;$(ProjectDir)include\dbf;$(ProjectDir)..\lua;$(ProjectDir)..\sol2\single\include;$(ProjectDir)include\bindings;$(ProjectDir)..\SLikeNet\Source;$(ProjectDir)..\SLikeNet\DependentExtensions\Lobby2;$(ProjectDir)..\SLikeNet\DependentExtensions\Lobby2\Rooms;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -67,6 +67,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <ModuleDefinitionFile>module.def</ModuleDefinitionFile>
+      <AdditionalDependencies>$(SolutionDir)Lib\SLikeNet_LibStatic_Debug_Win32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>if not exist detours.lib (
@@ -82,12 +83,12 @@ call ..\buildDetours.bat ..\Detours
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;MSS32_EXPORTS;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;MSS32_EXPORTS;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;NOMINMAX;__INTEGRATE_LOBBY2_WITH_ROOMS_PLUGIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\Detours\src;$(ProjectDir)..\GSL\include;$(ProjectDir)..\fmt\include;$(ProjectDir)include;$(ProjectDir)include\dbf;$(ProjectDir)..\lua;$(ProjectDir)..\sol2\single\include;$(ProjectDir)include\bindings;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Detours\src;$(ProjectDir)..\GSL\include;$(ProjectDir)..\fmt\include;$(ProjectDir)include;$(ProjectDir)include\dbf;$(ProjectDir)..\lua;$(ProjectDir)..\sol2\single\include;$(ProjectDir)include\bindings;$(ProjectDir)..\SLikeNet\Source;$(ProjectDir)..\SLikeNet\DependentExtensions\Lobby2;$(ProjectDir)..\SLikeNet\DependentExtensions\Lobby2\Rooms;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -97,6 +98,7 @@ call ..\buildDetours.bat ..\Detours
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <ModuleDefinitionFile>module.def</ModuleDefinitionFile>
+      <AdditionalDependencies>$(SolutionDir)Lib\SLikeNet_LibStatic_Release_Win32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>if not exist detours.lib (
@@ -140,6 +142,17 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="..\lua\lutf8lib.c" />
     <ClCompile Include="..\lua\lvm.c" />
     <ClCompile Include="..\lua\lzio.c" />
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Client.cpp" />
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Message.cpp" />
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Plugin.cpp" />
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Presence.cpp" />
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2ResultCode.cpp" />
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\IntervalTimer.cpp" />
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\ProfanityFilter.cpp" />
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsContainer.cpp" />
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsErrorCodes.cpp" />
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsPlugin.cpp" />
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomTypes.cpp" />
     <ClCompile Include="src\attack.cpp" />
     <ClCompile Include="src\attackclasscat.cpp" />
     <ClCompile Include="src\attackimpl.cpp" />
@@ -248,7 +261,10 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\leaderabilitycat.cpp" />
     <ClCompile Include="src\listbox.cpp" />
     <ClCompile Include="src\idlistutils.cpp" />
+    <ClCompile Include="src\lobbycallbacks.cpp" />
+    <ClCompile Include="src\lobbyclient.cpp" />
     <ClCompile Include="src\log.cpp" />
+    <ClCompile Include="src\loginaccountinterf.cpp" />
     <ClCompile Include="src\lordtype.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mapgen.cpp" />
@@ -256,13 +272,20 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\mapinterf.cpp" />
     <ClCompile Include="src\mempool.cpp" />
     <ClCompile Include="src\menubase.cpp" />
+    <ClCompile Include="src\menucustomlobby.cpp" />
     <ClCompile Include="src\menuflashwait.cpp" />
+    <ClCompile Include="src\menuload.cpp" />
+    <ClCompile Include="src\menuloadskirmishmultihooks.cpp" />
     <ClCompile Include="src\menulord.cpp" />
     <ClCompile Include="src\menunewmap.cpp" />
     <ClCompile Include="src\menunewskirmish.cpp" />
+    <ClCompile Include="src\menunewskirmishhooks.cpp" />
+    <ClCompile Include="src\menunewskirmishmulti.cpp" />
     <ClCompile Include="src\menunewskirmishsingle.cpp" />
     <ClCompile Include="src\menuphase.cpp" />
+    <ClCompile Include="src\menuphasehooks.cpp" />
     <ClCompile Include="src\menuprotocol.cpp" />
+    <ClCompile Include="src\menuprotocolhooks.cpp" />
     <ClCompile Include="src\menurace.cpp" />
     <ClCompile Include="src\draganddropinterf.cpp" />
     <ClCompile Include="src\midcondgamemode.cpp" />
@@ -294,12 +317,18 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\mqrect.cpp" />
     <ClCompile Include="src\multilayerimg.cpp" />
     <ClCompile Include="src\musichooks.cpp" />
+    <ClCompile Include="src\netcustomplayer.cpp" />
+    <ClCompile Include="src\netcustomplayerclient.cpp" />
+    <ClCompile Include="src\netcustomplayerserver.cpp" />
+    <ClCompile Include="src\netcustomservice.cpp" />
+    <ClCompile Include="src\netcustomsession.cpp" />
     <ClCompile Include="src\netmessages.cpp" />
     <ClCompile Include="src\netmsg.cpp" />
     <ClCompile Include="src\netmsgcallbacks.cpp" />
     <ClCompile Include="src\netmsghooks.cpp" />
     <ClCompile Include="src\netmsgmapentry.cpp" />
     <ClCompile Include="src\netmsgutils.cpp" />
+    <ClCompile Include="src\networkpeer.cpp" />
     <ClCompile Include="src\ordercat.cpp" />
     <ClCompile Include="src\originalfunctions.cpp" />
     <ClCompile Include="src\pathinfolist.cpp" />
@@ -311,7 +340,12 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\racecategory.cpp" />
     <ClCompile Include="src\racelist.cpp" />
     <ClCompile Include="src\radiobuttoninterf.cpp" />
+    <ClCompile Include="src\registeraccountinterf.cpp" />
     <ClCompile Include="src\restrictions.cpp" />
+    <ClCompile Include="src\roomclientjoin.cpp" />
+    <ClCompile Include="src\roompasswordinterf.cpp" />
+    <ClCompile Include="src\roomscallback.cpp" />
+    <ClCompile Include="src\roomservercreation.cpp" />
     <ClCompile Include="src\scenariodata.cpp" />
     <ClCompile Include="src\scenariodataarray.cpp" />
     <ClCompile Include="src\scenarioheader.cpp" />
@@ -390,6 +424,17 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="..\lua\lundump.h" />
     <ClInclude Include="..\lua\lvm.h" />
     <ClInclude Include="..\lua\lzio.h" />
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Client.h" />
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Message.h" />
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Plugin.h" />
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Presence.h" />
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2ResultCode.h" />
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\IntervalTimer.h" />
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\ProfanityFilter.h" />
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsContainer.h" />
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsErrorCodes.h" />
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsPlugin.h" />
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomTypes.h" />
     <ClInclude Include="include\2dengine.h" />
     <ClInclude Include="include\2denginemap.h" />
     <ClInclude Include="include\2denginemapimpl.h" />
@@ -574,7 +619,10 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\linkedlist.h" />
     <ClInclude Include="include\listbox.h" />
     <ClInclude Include="include\idlistutils.h" />
+    <ClInclude Include="include\lobbycallbacks.h" />
+    <ClInclude Include="include\lobbyclient.h" />
     <ClInclude Include="include\log.h" />
+    <ClInclude Include="include\loginaccountinterf.h" />
     <ClInclude Include="include\lordcat.h" />
     <ClInclude Include="include\lordtype.h" />
     <ClInclude Include="include\mapelement.h" />
@@ -584,13 +632,20 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mempool.h" />
     <ClInclude Include="include\menubase.h" />
     <ClInclude Include="include\menubaseeditor.h" />
+    <ClInclude Include="include\menucustomlobby.h" />
     <ClInclude Include="include\menuflashwait.h" />
+    <ClInclude Include="include\menuload.h" />
+    <ClInclude Include="include\menuloadskirmishmultihooks.h" />
     <ClInclude Include="include\menulord.h" />
     <ClInclude Include="include\menunewmap.h" />
     <ClInclude Include="include\menunewskirmish.h" />
+    <ClInclude Include="include\menunewskirmishhooks.h" />
+    <ClInclude Include="include\menunewskirmishmulti.h" />
     <ClInclude Include="include\menunewskirmishsingle.h" />
     <ClInclude Include="include\menuphase.h" />
+    <ClInclude Include="include\menuphasehooks.h" />
     <ClInclude Include="include\menuprotocol.h" />
+    <ClInclude Include="include\menuprotocolhooks.h" />
     <ClInclude Include="include\menurace.h" />
     <ClInclude Include="include\midbag.h" />
     <ClInclude Include="include\midcampaign.h" />
@@ -669,6 +724,11 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mquikernelsimple.h" />
     <ClInclude Include="include\multilayerimg.h" />
     <ClInclude Include="include\musichooks.h" />
+    <ClInclude Include="include\netcustomplayer.h" />
+    <ClInclude Include="include\netcustomplayerclient.h" />
+    <ClInclude Include="include\netcustomplayerserver.h" />
+    <ClInclude Include="include\netcustomservice.h" />
+    <ClInclude Include="include\netcustomsession.h" />
     <ClInclude Include="include\netdplayplayer.h" />
     <ClInclude Include="include\netdplayplayerclient.h" />
     <ClInclude Include="include\netdplayplayerenum.h" />
@@ -684,6 +744,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\netmsgutils.h" />
     <ClInclude Include="include\mqnetplayerclient.h" />
     <ClInclude Include="include\netplayerinfo.h" />
+    <ClInclude Include="include\networkpeer.h" />
     <ClInclude Include="include\ordercat.h" />
     <ClInclude Include="include\originalfunctions.h" />
     <ClInclude Include="include\pathinfolist.h" />
@@ -701,8 +762,13 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\racelist.h" />
     <ClInclude Include="include\racetype.h" />
     <ClInclude Include="include\radiobuttoninterf.h" />
+    <ClInclude Include="include\registeraccountinterf.h" />
     <ClInclude Include="include\resetstackext.h" />
     <ClInclude Include="include\restrictions.h" />
+    <ClInclude Include="include\roomclientjoin.h" />
+    <ClInclude Include="include\roompasswordinterf.h" />
+    <ClInclude Include="include\roomscallback.h" />
+    <ClInclude Include="include\roomservercreation.h" />
     <ClInclude Include="include\scenariodata.h" />
     <ClInclude Include="include\scenariodataarray.h" />
     <ClInclude Include="include\scenarioheader.h" />

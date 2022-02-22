@@ -34,6 +34,18 @@
     <Filter Include="Исходные файлы\bindings">
       <UniqueIdentifier>{2fc2b2fb-2a4b-4e72-a1aa-be670ba853b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\lobby">
+      <UniqueIdentifier>{f6359498-b4ad-43ad-8eba-5a8dce9de745}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\lobby\rooms">
+      <UniqueIdentifier>{30703c2c-8175-41dd-9242-e81842359a9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\lobby">
+      <UniqueIdentifier>{57588601-49f9-43e8-816c-795cd4aa7929}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\lobby\rooms">
+      <UniqueIdentifier>{ac7d47b5-40ed-4064-81bf-8f3836ae162b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\fmt\src\format.cc">
@@ -768,10 +780,79 @@
     <ClCompile Include="src\menuprotocol.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\menuprotocolhooks.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\menucustomlobby.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\netcustomservice.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\netcustomsession.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\netcustomplayer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\uievent.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Client.cpp">
+      <Filter>Исходные файлы\lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Message.cpp">
+      <Filter>Исходные файлы\lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Plugin.cpp">
+      <Filter>Исходные файлы\lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Presence.cpp">
+      <Filter>Исходные файлы\lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2ResultCode.cpp">
+      <Filter>Исходные файлы\lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\IntervalTimer.cpp">
+      <Filter>Исходные файлы\lobby\rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\ProfanityFilter.cpp">
+      <Filter>Исходные файлы\lobby\rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsContainer.cpp">
+      <Filter>Исходные файлы\lobby\rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsErrorCodes.cpp">
+      <Filter>Исходные файлы\lobby\rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsPlugin.cpp">
+      <Filter>Исходные файлы\lobby\rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomTypes.cpp">
+      <Filter>Исходные файлы\lobby\rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="src\registeraccountinterf.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="src\popupdialoginterf.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loginaccountinterf.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lobbycallbacks.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\netcustomplayerclient.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\netcustomplayerserver.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\roomscallback.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\menuphasehooks.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\imagepointlist.cpp">
@@ -790,6 +871,33 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\menuflashwait.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lobbyclient.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\networkpeer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\menunewskirmishhooks.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\roomservercreation.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\menunewskirmishmulti.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\roomclientjoin.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\menuload.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\menuloadskirmishmultihooks.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\roompasswordinterf.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2008,6 +2116,21 @@
     <ClInclude Include="include\menuprotocol.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\menuprotocolhooks.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menucustomlobby.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\netcustomservice.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\netcustomsession.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\netcustomplayer.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\mquikernel.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -2026,7 +2149,58 @@
     <ClInclude Include="include\mquicontrollersimple.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Client.h">
+      <Filter>Файлы заголовков\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Message.h">
+      <Filter>Файлы заголовков\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Plugin.h">
+      <Filter>Файлы заголовков\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Presence.h">
+      <Filter>Файлы заголовков\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2ResultCode.h">
+      <Filter>Файлы заголовков\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\IntervalTimer.h">
+      <Filter>Файлы заголовков\lobby\rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\ProfanityFilter.h">
+      <Filter>Файлы заголовков\lobby\rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsContainer.h">
+      <Filter>Файлы заголовков\lobby\rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsErrorCodes.h">
+      <Filter>Файлы заголовков\lobby\rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsPlugin.h">
+      <Filter>Файлы заголовков\lobby\rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomTypes.h">
+      <Filter>Файлы заголовков\lobby\rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="include\registeraccountinterf.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lobbycallbacks.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\netcustomplayerclient.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\mqnetreception.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\netcustomplayerserver.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\roomscallback.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menuphasehooks.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\imagepointlist.h">
@@ -2048,6 +2222,36 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\menuflashwait.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lobbyclient.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\loginaccountinterf.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\networkpeer.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menunewskirmishhooks.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\roomservercreation.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menunewskirmishmulti.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\roomclientjoin.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menuload.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menuloadskirmishmultihooks.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\roompasswordinterf.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\batnotify.h">

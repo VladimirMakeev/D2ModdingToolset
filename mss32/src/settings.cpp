@@ -41,6 +41,11 @@ static T readSetting(const sol::table& table,
     return std::clamp<T>(table.get_or(name, def), min, max);
 }
 
+static std::string readSetting(const sol::table& table, const char* name, const std::string& def)
+{
+    return table.get_or(name, def);
+}
+
 static void readAiAttackPowerSettings(const sol::table& table, Settings::AiAttackPowerBonus& value)
 {
     const auto& def = defaultSettings().aiAttackPowerBonus;
@@ -95,6 +100,31 @@ static void readMovementCostSettings(const sol::table& table, Settings::Movement
     }
 }
 
+static void readLobbySettings(const sol::table& table, Settings::Lobby& value)
+{
+    const auto& settings = defaultSettings().lobby;
+
+    value.server.ip = settings.server.ip;
+    value.server.port = settings.server.port;
+    value.client.port = settings.client.port;
+
+    auto lobby = table.get<sol::optional<sol::table>>("lobby");
+    if (!lobby.has_value()) {
+        return;
+    }
+
+    auto server = lobby.value().get<sol::optional<sol::table>>("server");
+    if (server.has_value()) {
+        value.server.ip = readSetting(server.value(), "ip", settings.server.ip);
+        value.server.port = readSetting(server.value(), "port", settings.server.port);
+    }
+
+    auto client = lobby.value().get<sol::optional<sol::table>>("client");
+    if (client.has_value()) {
+        value.client.port = readSetting(client.value(), "port", settings.client.port);
+    }
+}
+
 static void readSettings(const sol::table& table, Settings& settings)
 {
     // clang-format off
@@ -131,6 +161,7 @@ static void readSettings(const sol::table& table, Settings& settings)
 
     readAiAttackPowerSettings(table, settings.aiAttackPowerBonus);
     readMovementCostSettings(table, settings.movementCost);
+    readLobbySettings(table, settings.lobby);
 }
 
 const Settings& baseSettings()

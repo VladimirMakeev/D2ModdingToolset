@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2022 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,34 +17,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VERSION_H
-#define VERSION_H
+#ifndef ROOMSERVERCREATION_H
+#define ROOMSERVERCREATION_H
 
-#include <filesystem>
-#include <system_error>
+namespace game {
+struct CMenuBase;
+}
 
 namespace hooks {
 
-enum class GameVersion
-{
-    Unknown = -1,
-    Akella,
-    Russobit,
-    Gog,
-    ScenarioEditor
-};
+void startRoomAndServerCreation(game::CMenuBase* menu, bool loadScenario);
 
-/** Returns determined game version. */
-GameVersion gameVersion();
+}
 
-/** Returns true if dll loaded from game executable. */
-bool executableIsGame();
-
-/** Returns true if custom lobby is supported. */
-bool isLobbySupported();
-
-std::error_code determineGameVersion(const std::filesystem::path& exeFilePath);
-
-} // namespace hooks
-
-#endif // VERSION_H
+#endif // ROOMSERVERCREATION_H

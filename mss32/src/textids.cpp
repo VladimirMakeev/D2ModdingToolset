@@ -95,6 +95,23 @@ void readEventsTextIds(const sol::table& table, TextIds::Events& value)
     readConditionsTextIds(events.value(), value.conditions);
 }
 
+void readLobbyTextIds(const sol::table& table, TextIds::Lobby& value)
+{
+    auto lobbyTable = table.get<sol::optional<sol::table>>("lobby");
+    if (!lobbyTable.has_value())
+        return;
+
+    auto& lobby = lobbyTable.value();
+    value.serverName = lobby.get_or("serverName", std::string());
+    value.serverNotResponding = lobby.get_or("serverNotResponding", std::string());
+    value.connectAttemptFailed = lobby.get_or("connectAttemptFailed", std::string());
+    value.serverIsFull = lobby.get_or("serverIsFull", std::string());
+    value.computeHashFailed = lobby.get_or("computeHashFailed", std::string());
+    value.requestHashCheckFailed = lobby.get_or("requestHashCheckFailed", std::string());
+    value.wrongHash = lobby.get_or("wrongHash", std::string());
+    value.wrongRoomPassword = lobby.get_or("wrongRoomPassword", std::string());
+}
+
 void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
 {
     auto interf = table.get<sol::optional<sol::table>>("interf");
@@ -123,6 +140,7 @@ void initialize(TextIds& value)
         const sol::table& table = (*lua)["textids"];
         readInterfTextIds(table, value.interf);
         readEventsTextIds(table, value.events);
+        readLobbyTextIds(table, value.lobby);
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to read script '{:s}'.\n"
                                         "Reason: '{:s}'",
