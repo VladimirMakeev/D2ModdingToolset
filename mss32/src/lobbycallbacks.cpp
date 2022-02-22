@@ -18,6 +18,7 @@
  */
 
 #include "lobbycallbacks.h"
+#include "lobbyclient.h"
 #include "log.h"
 #include "menucustomlobby.h"
 #include "roomclientjoin.h"
@@ -83,7 +84,7 @@ void RoomsListCallbacks::JoinByFilter_Callback(const SLNet::SystemAddress&,
         const char* guidString{nullptr};
 
         auto& table = room.roomProperties;
-        auto index = table.ColumnIndex("ServerGuid");
+        auto index = table.ColumnIndex(serverGuidColumnName);
         if (index != std::numeric_limits<unsigned int>::max()) {
             auto row = table.GetRowByIndex(0, nullptr);
             if (row) {
@@ -138,10 +139,22 @@ void RoomsListCallbacks::SearchByFilter_Callback(const SLNet::SystemAddress&,
         auto totalSlots = (int)room->GetProperty(DefaultRoomColumns::TC_TOTAL_PUBLIC_SLOTS)->i;
         auto usedSlots = (int)room->GetProperty(DefaultRoomColumns::TC_USED_PUBLIC_SLOTS)->i;
 
+        const char* password{nullptr};
+
+        auto& table = room->roomProperties;
+        auto index = table.ColumnIndex(passwordColumnName);
+        if (index != std::numeric_limits<unsigned int>::max()) {
+            auto row = table.GetRowByIndex(0, nullptr);
+            if (row) {
+                password = row->cells[index]->c;
+            }
+        }
+
         // Add 1 to used and total slots because they are not counting room moderator
         roomsInfo.push_back(RoomInfo{std::string(name),
-                                     std::string{hostName ? hostName : "Unknown"}, totalSlots + 1,
-                                     usedSlots + 1});
+                                     std::string{hostName ? hostName : "Unknown"},
+                                     password ? std::string{password} : std::string{},
+                                     totalSlots + 1, usedSlots + 1});
     }
 
     customLobbySetRoomsInfo(menuLobby, std::move(roomsInfo));

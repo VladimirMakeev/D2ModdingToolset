@@ -24,6 +24,9 @@
 
 namespace hooks {
 
+extern const char* serverGuidColumnName;
+extern const char* passwordColumnName;
+
 enum ClientMessages
 {
     ID_CHECK_FILES_INTEGRITY = ID_USER_PACKET_ENUM + 1,
@@ -52,9 +55,7 @@ void logoutAccount();
 void setCurrentLobbyPlayer(const char* accountName);
 
 /** Tries to create and enter a new room. */
-bool tryCreateRoom(const char* roomName,
-                   const char* customColumn = nullptr,
-                   const char* customData = nullptr);
+bool tryCreateRoom(const char* roomName, const char* serverGuid, const char* password = nullptr);
 
 /** Requests a list of rooms for specified account. */
 bool trySearchRooms(const char* accountName = nullptr);

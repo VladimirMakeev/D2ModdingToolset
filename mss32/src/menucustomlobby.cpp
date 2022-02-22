@@ -18,6 +18,7 @@
  */
 
 #include "menucustomlobby.h"
+#include "autodialog.h"
 #include "button.h"
 #include "dialoginterf.h"
 #include "dynamiccast.h"
@@ -42,6 +43,7 @@
 #include "netmsgmapentry.h"
 #include "racelist.h"
 #include "registeraccountinterf.h"
+#include "roompasswordinterf.h"
 #include "textboxinterf.h"
 #include "uimanager.h"
 #include "utils.h"
@@ -178,20 +180,74 @@ static void __fastcall menuLoadBtnHandler(CMenuCustomLobby* thisptr, int /*%edx*
     game::CMenuPhaseApi::get().setTransition(menuPhase, 2);
 }
 
+static int menuGetCurrentRoomIndex(CMenuCustomLobby* menuLobby)
+{
+    using namespace game;
+
+    auto dialog = CMenuBaseApi::get().getDialogInterface(menuLobby);
+    auto listBox = CDialogInterfApi::get().findListBox(dialog, "LBOX_ROOMS");
+
+    return CListBoxInterfApi::get().selectedIndex(listBox);
+}
+
+static void menuTryJoinRoom(CMenuCustomLobby* menuLobby, const char* roomName)
+{
+    using namespace game;
+
+    if (!tryJoinRoom(roomName)) {
+        logDebug("transitions.log", "Failed to request room join");
+    }
+
+    // Rooms callback will notify us when its time to send game messages to server,
+    // requesting version and info.
+    auto& menuBase = CMenuBaseApi::get();
+    auto& dialogApi = CDialogInterfApi::get();
+    auto dialog = menuBase.getDialogInterface(menuLobby);
+
+    // For now, disable join button
+    auto buttonJoin = dialogApi.findButton(dialog, "BTN_JOIN");
+    if (buttonJoin) {
+        buttonJoin->vftable->setEnabled(buttonJoin, false);
+    }
+
+    menuDeleteWaitMenu(menuLobby);
+
+    auto flashWait = (CMenuFlashWait*)Memory::get().allocate(sizeof(CMenuFlashWait));
+    CMenuFlashWaitApi::get().constructor(flashWait);
+
+    showInterface(flashWait);
+    menuLobby->waitMenu = flashWait;
+}
+
+static void menuOnRoomPasswordCorrect(CMenuCustomLobby* menuLobby)
+{
+    logDebug("transitions.log", "Room password correct, trying to join a room");
+
+    // Get current room name, try to join
+    using namespace game;
+
+    auto index = menuGetCurrentRoomIndex(menuLobby);
+    if (index < 0 || index >= (int)menuLobby->rooms.size()) {
+        return;
+    }
+
+    const auto& room = menuLobby->rooms[index];
+    menuTryJoinRoom(menuLobby, room.name.c_str());
+}
+
+static void menuOnRoomPasswordCancel(CMenuCustomLobby* menuLobby)
+{
+    // Create rooms list event once again
+    createTimerEvent(&menuLobby->roomsListEvent, menuLobby, menuRoomsListSearchHandler, 5000);
+}
+
 static void __fastcall menuJoinRoomBtnHandler(CMenuCustomLobby* thisptr, int /*%edx*/)
 {
     using namespace game;
 
-    logDebug("transitions.log", "Joining room");
+    logDebug("transitions.log", "Join room button pressed");
 
-    auto& menuBase = CMenuBaseApi::get();
-    auto& dialogApi = CDialogInterfApi::get();
-    auto dialog = menuBase.getDialogInterface(thisptr);
-
-    auto listBox = dialogApi.findListBox(dialog, "LBOX_ROOMS");
-    auto& listBoxApi = CListBoxInterfApi::get();
-
-    auto index = listBoxApi.selectedIndex(listBox);
+    auto index = menuGetCurrentRoomIndex(thisptr);
     if (index < 0 || index >= (int)thisptr->rooms.size()) {
         return;
     }
@@ -205,27 +261,15 @@ static void __fastcall menuJoinRoomBtnHandler(CMenuCustomLobby* thisptr, int /*%
         return;
     }
 
-    if (tryJoinRoom(room.name.c_str())) {
-        // Rooms callback will notify us when its time to send game messages to server,
-        // requesting version and info.
-
-        // For now, disable join button
-        auto buttonJoin = dialogApi.findButton(dialog, "BTN_JOIN");
-        if (buttonJoin) {
-            buttonJoin->vftable->setEnabled(buttonJoin, false);
-        }
-
-        menuDeleteWaitMenu(thisptr);
-
-        auto flashWait = (CMenuFlashWait*)Memory::get().allocate(sizeof(CMenuFlashWait));
-        CMenuFlashWaitApi::get().constructor(flashWait);
-
-        showInterface(flashWait);
-        thisptr->waitMenu = flashWait;
+    // Check if room protected with password, ask user to input
+    if (!room.password.empty()) {
+        // Remove rooms list callback so we don't mess with the list
+        UiEventApi::get().destructor(&thisptr->roomsListEvent);
+        showRoomPasswordDialog(thisptr, menuOnRoomPasswordCorrect, menuOnRoomPasswordCancel);
         return;
     }
 
-    logDebug("transitions.log", "Failed to request room join");
+    menuTryJoinRoom(thisptr, room.name.c_str());
 }
 
 static void __fastcall menuListBoxDisplayHandler(CMenuCustomLobby* thisptr,
@@ -307,6 +351,21 @@ static void __fastcall menuListBoxDisplayHandler(CMenuCustomLobby* thisptr,
         createFreePtr((SmartPointer*)&pair.first, playerCount);
         pair.second.x = offset;
         pair.second.y = 0;
+
+        ImagePointListApi::get().add(contents, &pair);
+        createFreePtr((SmartPointer*)&pair.first, nullptr);
+
+        offset += playerCountWidth + columnBorderWidth;
+    }
+
+    // Password protection status
+    if (!room.password.empty()) {
+        auto lockImage{AutoDialogApi::get().loadImage("ROOM_PROTECTED")};
+        ImagePtrPointPair pair{};
+        createFreePtr((SmartPointer*)&pair.first, lockImage);
+        // Adjust lock image position to match with lock image in column header
+        pair.second.x = offset + 3;
+        pair.second.y = 1;
 
         ImagePointListApi::get().add(contents, &pair);
         createFreePtr((SmartPointer*)&pair.first, nullptr);
@@ -693,6 +752,19 @@ void customLobbyProcessJoinError(CMenuCustomLobby* menu, const char* message)
     }
 
     customLobbyShowError(message);
+}
+
+bool customLobbyCheckRoomPassword(CMenuCustomLobby* menu, const char* password)
+{
+    using namespace game;
+
+    auto index = menuGetCurrentRoomIndex(menu);
+    if (index < 0 || index >= (int)menu->rooms.size()) {
+        return false;
+    }
+
+    const auto& room = menu->rooms[index];
+    return room.password == password;
 }
 
 } // namespace hooks

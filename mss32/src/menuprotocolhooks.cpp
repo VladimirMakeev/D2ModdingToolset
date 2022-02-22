@@ -29,6 +29,7 @@
 #include "netcustomservice.h"
 #include "networkpeer.h"
 #include "originalfunctions.h"
+#include "textids.h"
 #include "uievent.h"
 #include "utils.h"
 
@@ -109,12 +110,24 @@ void LobbyServerConnectionCallback::onPacketReceived(DefaultMessageIDTypes type,
                                                      const SLNet::Packet* packet)
 {
     switch (type) {
-    case ID_CONNECTION_ATTEMPT_FAILED:
-        showConnectionError(menuProtocol, "Connection attempt failed");
+    case ID_CONNECTION_ATTEMPT_FAILED: {
+        auto message{getTranslatedText(textIds().lobby.connectAttemptFailed.c_str())};
+        if (message.empty()) {
+            message = "Connection attempt failed";
+        }
+
+        showConnectionError(menuProtocol, message.c_str());
         return;
-    case ID_NO_FREE_INCOMING_CONNECTIONS:
-        showConnectionError(menuProtocol, "Lobby server is full");
+    }
+    case ID_NO_FREE_INCOMING_CONNECTIONS: {
+        auto message{getTranslatedText(textIds().lobby.serverIsFull.c_str())};
+        if (message.empty()) {
+            message = "Lobby server is full";
+        }
+
+        showConnectionError(menuProtocol, message.c_str());
         return;
+    }
     case ID_ALREADY_CONNECTED:
         showConnectionError(menuProtocol, "Already connected.\nThis should never happen");
         return;
@@ -122,12 +135,22 @@ void LobbyServerConnectionCallback::onPacketReceived(DefaultMessageIDTypes type,
     case ID_CONNECTION_REQUEST_ACCEPTED: {
         std::string hash;
         if (!computeHash(gameFolder() / "Globals", hash)) {
-            showConnectionError(menuProtocol, "Could not compute hash");
+            auto message{getTranslatedText(textIds().lobby.computeHashFailed.c_str())};
+            if (message.empty()) {
+                message = "Could not compute hash";
+            }
+
+            showConnectionError(menuProtocol, message.c_str());
             return;
         }
 
         if (!tryCheckFilesIntegrity(hash.c_str())) {
-            showConnectionError(menuProtocol, "Could not request game integrity check");
+            auto message{getTranslatedText(textIds().lobby.requestHashCheckFailed.c_str())};
+            if (message.empty()) {
+                message = "Could not request game integrity check";
+            }
+
+            showConnectionError(menuProtocol, message.c_str());
             return;
         }
 
@@ -149,7 +172,12 @@ void LobbyServerConnectionCallback::onPacketReceived(DefaultMessageIDTypes type,
             return;
         }
 
-        showConnectionError(menuProtocol, "Game integrity check failed");
+        auto message{getTranslatedText(textIds().lobby.wrongHash.c_str())};
+        if (message.empty()) {
+            message = "Game integrity check failed";
+        }
+
+        showConnectionError(menuProtocol, message.c_str());
         return;
     }
 
@@ -160,7 +188,12 @@ void LobbyServerConnectionCallback::onPacketReceived(DefaultMessageIDTypes type,
 
 static void __fastcall menuProtocolTimeoutHandler(CMenuCustomProtocol* menu, int /*%edx*/)
 {
-    showConnectionError(menu, "Failed to connect.\nLobby server not responding");
+    auto message{getTranslatedText(textIds().lobby.serverNotResponding.c_str())};
+    if (message.empty()) {
+        message = "Failed to connect.\nLobby server not responding";
+    }
+
+    showConnectionError(menu, message.c_str());
 }
 
 void __fastcall menuProtocolDisplayCallbackHooked(game::CMenuProtocol* thisptr,
@@ -180,7 +213,12 @@ void __fastcall menuProtocolDisplayCallbackHooked(game::CMenuProtocol* thisptr,
     }
 
     if (selectedIndex == lastIndex) {
-        StringApi::get().initFromString(string, "Lobby server");
+        auto serverName{getTranslatedText(textIds().lobby.serverName.c_str())};
+        if (serverName.empty()) {
+            serverName = "Lobby server";
+        }
+
+        StringApi::get().initFromString(string, serverName.c_str());
         return;
     }
 

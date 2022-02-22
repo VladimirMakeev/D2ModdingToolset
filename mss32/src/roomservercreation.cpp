@@ -40,6 +40,7 @@ namespace hooks {
 game::CMenuFlashWait* menuWaitServer{nullptr};
 game::CMenuBase* menuBase{nullptr};
 static bool loadingScenario{false};
+static std::string roomPassword{};
 
 static void hideWaitMenu()
 {
@@ -202,9 +203,11 @@ public:
 
         addRoomsCallback(&roomServerCallback);
 
+        const char* password{roomPassword.empty() ? nullptr : roomPassword.c_str()};
+
         // Request room creation and wait for lobby server response
-        if (!tryCreateRoom(service->session->name.c_str(), "ServerGuid",
-                           peer->GetMyGUID().ToString())) {
+        if (!tryCreateRoom(service->session->name.c_str(), peer->GetMyGUID().ToString(),
+                           password)) {
             serverCreationError("Failed to request room creation");
             return;
         }
@@ -261,15 +264,23 @@ void startRoomAndServerCreation(game::CMenuBase* menu, bool loadScenario)
 
     showInterface(menuWaitServer);
 
-    auto& menuApi = CMenuBaseApi::get();
-    auto& dialogApi = CDialogInterfApi::get();
-
-    auto dialog = menuApi.getDialogInterface(menu);
-    auto editGame = dialogApi.findEditBox(dialog, "EDIT_GAME");
-
     logDebug("lobby.log", "Create session and player server");
     menuBase = menu;
     loadingScenario = loadScenario;
+
+    auto& menuApi = CMenuBaseApi::get();
+    auto& dialogApi = CDialogInterfApi::get();
+    auto dialog = menuApi.getDialogInterface(menu);
+    auto password = dialogApi.findEditBox(dialog, "EDIT_PASSWORD");
+
+    const auto& passwordString{password->data->editBoxData.inputString};
+    if (!passwordString.length) {
+        roomPassword.clear();
+    } else {
+        roomPassword = passwordString.string;
+    }
+
+    auto editGame = dialogApi.findEditBox(dialog, "EDIT_GAME");
     createSessionAndServer(editGame->data->editBoxData.inputString.string);
 }
 

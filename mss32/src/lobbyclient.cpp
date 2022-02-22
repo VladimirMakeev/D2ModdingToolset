@@ -33,6 +33,9 @@ static const char titleName[]{"Disciples2 Motlin"};
 static const char titleSecretKey[]{"Disciples2 Key"};
 #endif
 
+const char* serverGuidColumnName{"ServerGuid"};
+const char* passwordColumnName{"Password"};
+
 bool tryCreateAccount(const char* accountName,
                       const char* nickname,
                       const char* password,
@@ -175,10 +178,15 @@ void setCurrentLobbyPlayer(const char* accountName)
     }
 }
 
-bool tryCreateRoom(const char* roomName, const char* customColumn, const char* customData)
+bool tryCreateRoom(const char* roomName, const char* serverGuid, const char* password)
 {
     if (!roomName) {
         logDebug("lobby.log", "Could not create a room: no room name provided");
+        return false;
+    }
+
+    if (!serverGuid) {
+        logDebug("lobby.log", "Could not create a room: empty server guid");
         return false;
     }
 
@@ -199,27 +207,42 @@ bool tryCreateRoom(const char* roomName, const char* customColumn, const char* c
     params.slots.reservedSlots = 0;
     params.slots.spectatorSlots = 0;
 
-    if (customColumn && customData) {
-        logDebug("lobby.log", fmt::format("Account {:s} is trying to create and enter a room "
-                                          "with custom column {:s}, data {:s}",
-                                          room.userName.C_String(), customColumn, customData));
+    logDebug("lobby.log",
+             fmt::format("Account {:s} is trying to create and enter a room "
+                         "with serverGuid {:s}, password {:s}",
+                         room.userName.C_String(), serverGuid, (password ? password : "")));
 
-        auto& properties = room.initialRoomProperties;
+    auto& properties = room.initialRoomProperties;
 
-        const auto columnIndex{properties.AddColumn(customColumn, DataStructures::Table::STRING)};
-        if (columnIndex == std::numeric_limits<unsigned int>::max()) {
+    const auto guidColumn{
+        properties.AddColumn(serverGuidColumnName, DataStructures::Table::STRING)};
+
+    constexpr auto invalidColumn{std::numeric_limits<unsigned int>::max()};
+    if (guidColumn == invalidColumn) {
+        logDebug("lobby.log",
+                 fmt::format("Could not add server guid column to room properties table"));
+        return false;
+    }
+
+    unsigned int passwordColumn{invalidColumn};
+    if (password) {
+        passwordColumn = properties.AddColumn(passwordColumnName, DataStructures::Table::STRING);
+        if (passwordColumn == invalidColumn) {
             logDebug("lobby.log",
-                     fmt::format("Could not add column {:s} to properties table", customColumn));
+                     fmt::format("Could not add password column to room properties table"));
             return false;
         }
+    }
 
-        auto row = properties.AddRow(0);
-        if (!row) {
-            logDebug("lobby.log", "Could not add row to room properties table");
-            return false;
-        }
+    auto row = properties.AddRow(0);
+    if (!row) {
+        logDebug("lobby.log", "Could not add row to room properties table");
+        return false;
+    }
 
-        row->UpdateCell(columnIndex, customData);
+    row->UpdateCell(guidColumn, serverGuid);
+    if (password) {
+        row->UpdateCell(passwordColumn, password);
     }
 
     logDebug("lobby.log", fmt::format("Account {:s} is trying to create and enter a room {:s}",

@@ -38,6 +38,7 @@ struct RoomInfo
 {
     std::string name;
     std::string hostName;
+    std::string password;
     int totalSlots;
     int usedSlots;
 };
@@ -64,6 +65,8 @@ void customLobbyProcessLogout(CMenuCustomLobby* menu);
 void customLobbySetRoomsInfo(CMenuCustomLobby* menu, std::vector<RoomInfo>&& rooms);
 
 void customLobbyProcessJoinError(CMenuCustomLobby* menu, const char* message);
+
+bool customLobbyCheckRoomPassword(CMenuCustomLobby* menu, const char* password);
 
 } // namespace hooks
 
