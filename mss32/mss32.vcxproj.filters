@@ -897,6 +897,9 @@
     <ClCompile Include="src\menuloadskirmishmultihooks.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\roompasswordinterf.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -2246,6 +2249,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\menuloadskirmishmultihooks.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\roompasswordinterf.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
