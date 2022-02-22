@@ -2,6 +2,7 @@
 
 ### Features:
 - Can be used on vanilla version or with other mods installed;
+- Allows players to search and create PvP matches without external software using custom lobby server. Currently only for [Motlin's mod](https://dis2modding.fandom.com/ru/wiki/Мод_Мотлина).
 - <details>
     <summary>Adds new custom building category for unit hire;</summary>
 
