@@ -440,6 +440,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\2denginemap.h" />
     <ClInclude Include="include\2denginemapimpl.h" />
     <ClInclude Include="include\aipriority.h" />
+    <ClInclude Include="include\aispellcat.h" />
     <ClInclude Include="include\attack.h" />
     <ClInclude Include="include\attackclasscat.h" />
     <ClInclude Include="include\attackimpl.h" />

@@ -393,6 +393,17 @@ enum class SpellId : int
     GiveWards,
 };
 
+/** AI spell ids from LAiSpell.dbf. */
+enum class AiSpellId : int
+{
+    All = 1,
+    None,
+    Human,
+    Undead,
+    Heretic,
+    Dwarf,
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
