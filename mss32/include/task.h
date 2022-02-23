@@ -20,12 +20,52 @@
 #ifndef TASK_H
 #define TASK_H
 
+#include "smartptr.h"
+#include <cstdint>
+
 namespace game {
+
+struct ITaskVftable;
+struct CMqPoint;
+struct CursorHandle;
+struct CTaskManager;
 
 struct ITask
 {
-    void* vftable;
+    ITaskVftable* vftable;
 };
+
+struct ITaskVftable
+{
+    using Destructor = void(__thiscall*)(ITask* thisptr, char flags);
+    Destructor destructor;
+
+    /** Called from CFullScreenInterf::onMouseMove. */
+    using OnMouseMove = bool(__thiscall*)(ITask* thisptr, const CMqPoint* mousePosition);
+    OnMouseMove onMouseMove;
+
+    /** Called from CFullScreenInterf::handleMouse. */
+    using HandleMouse = bool(__thiscall*)(ITask* thisptr,
+                                          std::uint32_t mouseButton,
+                                          const CMqPoint* mousePosition);
+    HandleMouse handleMouse;
+
+    /** Called from CFullScreenInterf::handleKeyboard. */
+    using HandleKeyboard = bool(__thiscall*)(ITask* thisptr, int key, int a3);
+    HandleKeyboard handleKeyboard;
+
+    /** Called from CFullScreenInterf::getCursorAtPoint. */
+    using GetCursorAtPoint = void(__thiscall*)(ITask* thisptr,
+                                               SmartPtr<CursorHandle>* cursorPtr,
+                                               const CMqPoint* point);
+    GetCursorAtPoint getCursorAtPoint;
+
+    using GetTaskManager = CTaskManager*(__thiscall*)(const ITask* thisptr);
+    GetTaskManager getTaskManager;
+};
+
+static_assert(sizeof(ITaskVftable) == 6 * sizeof(void*),
+              "ITask vftable must have exactly 6 methods");
 
 } // namespace game
 
