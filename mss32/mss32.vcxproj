@@ -577,6 +577,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\immunecat.h" />
     <ClInclude Include="include\interface.h" />
     <ClInclude Include="include\interfacechilds.h" />
+    <ClInclude Include="include\interfcursor.h" />
     <ClInclude Include="include\interfdialog.h" />
     <ClInclude Include="include\interffullscreen.h" />
     <ClInclude Include="include\interfmanager.h" />
