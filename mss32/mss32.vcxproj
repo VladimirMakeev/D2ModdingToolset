@@ -792,6 +792,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\movepathhooks.h" />
     <ClInclude Include="include\sortedpointlist.h" />
     <ClInclude Include="include\sortedracelist.h" />
+    <ClInclude Include="include\spellcat.h" />
     <ClInclude Include="include\spinbuttoninterf.h" />
     <ClInclude Include="include\stackbattleactionmsg.h" />
     <ClInclude Include="include\stringandid.h" />

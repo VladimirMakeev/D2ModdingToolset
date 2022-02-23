@@ -376,6 +376,23 @@ enum class LeaderId : int
     Noble,
 };
 
+/** Spell ids from LSpell.dbf. */
+enum class SpellId : int
+{
+    Attack,
+    Lower,
+    Heal,
+    Boost,
+    Summon,
+    Fog = 6,
+    Unfog,
+    RestoreMove,
+    Invisibility,
+    RemoveRod,
+    ChangeTerrain,
+    GiveWards,
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
