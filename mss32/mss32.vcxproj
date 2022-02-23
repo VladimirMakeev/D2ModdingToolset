@@ -808,6 +808,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\taskmanager.h" />
     <ClInclude Include="include\taskmanagerholder.h" />
     <ClInclude Include="include\taskmapchange.h" />
+    <ClInclude Include="include\tasktilehighlight.h" />
     <ClInclude Include="include\terraincat.h" />
     <ClInclude Include="include\terraincountlist.h" />
     <ClInclude Include="include\terrainnamelist.h" />
