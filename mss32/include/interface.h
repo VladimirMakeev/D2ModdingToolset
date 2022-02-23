@@ -34,7 +34,9 @@ struct CInterface;
 struct IMqRenderer2;
 struct CMqPoint;
 struct Tooltip;
+struct CursorHandle;
 
+using CursorHandlePtr = SmartPtr<CursorHandle>;
 using TooltipPtr = SmartPtr<Tooltip>;
 
 struct CInterfaceData
@@ -43,7 +45,7 @@ struct CInterfaceData
     CInterface* parent;
     CMqRect area;
     CInterfaceChilds childs;
-    SmartPointer cursor;
+    CursorHandlePtr cursor;
     TooltipPtr tooltip;
 };
 
@@ -99,11 +101,11 @@ struct CInterfaceVftable
     using OnVisibilityChanged = void(__thiscall*)(CInterface* thisptr, int a2, int a3);
     OnVisibilityChanged onVisibilityChanged;
 
-    /** Calls method30 to get the pointer. */
-    using Method6 = SmartPointer*(__thiscall*)(CInterface* thisptr,
-                                               SmartPointer* ptr,
-                                               const CMqPoint* point);
-    Method6 method6;
+    /** Returns cursor handle of the interface element under the point. */
+    using GetCursorAtPoint = CursorHandlePtr*(__thiscall*)(CInterface* thisptr,
+                                                           CursorHandlePtr* ptr,
+                                                           const CMqPoint* point);
+    GetCursorAtPoint getCursorAtPoint;
 
     /** Returns tooltip of the interface element under the point. */
     using GetTooltipAtPoint = TooltipPtr*(__thiscall*)(CInterface* thisptr,
@@ -203,11 +205,11 @@ struct CInterfaceVftable
     GetInterfaceAtPoint getInterfaceAtPoint;
 
     /** Sets cursor handle. */
-    using SetCursor = SmartPointer*(__thiscall*)(CInterface* thisptr, SmartPointer* cursor);
+    using SetCursor = CursorHandlePtr*(__thiscall*)(CInterface* thisptr, CursorHandlePtr* cursor);
     SetCursor setCursor;
 
     /** Returns cursor handle. */
-    using GetCursor = SmartPointer*(__thiscall*)(CInterface* thisptr);
+    using GetCursor = CursorHandlePtr*(__thiscall*)(CInterface* thisptr);
     GetCursor getCursor;
 
     using SetTooltip = void(__thiscall*)(CInterface* thisptr, TooltipPtr* tooltip);
