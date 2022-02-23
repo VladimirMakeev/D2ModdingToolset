@@ -489,6 +489,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />
     <ClInclude Include="include\button.h" />
+    <ClInclude Include="include\canselect.h" />
     <ClInclude Include="include\capital.h" />
     <ClInclude Include="include\capitaldata.h" />
     <ClInclude Include="include\capitaldatlist.h" />
