@@ -900,6 +900,9 @@
     <ClCompile Include="src\roompasswordinterf.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\cursorhandle.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -2261,6 +2264,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\interfaddon.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cursorhandle.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

@@ -209,6 +209,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\condinterf.cpp" />
     <ClCompile Include="src\condinterfhooks.cpp" />
     <ClCompile Include="src\currency.cpp" />
+    <ClCompile Include="src\cursorhandle.cpp" />
     <ClCompile Include="src\customattack.cpp" />
     <ClCompile Include="src\customattackhooks.cpp" />
     <ClCompile Include="src\customattacks.cpp" />
@@ -505,6 +506,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\condinterfhandler.h" />
     <ClInclude Include="include\condinterfhooks.h" />
     <ClInclude Include="include\currency.h" />
+    <ClInclude Include="include\cursorhandle.h" />
     <ClInclude Include="include\customattack.h" />
     <ClInclude Include="include\customattackhooks.h" />
     <ClInclude Include="include\customattacks.h" />
