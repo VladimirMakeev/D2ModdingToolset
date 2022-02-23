@@ -507,6 +507,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\condinterfhooks.h" />
     <ClInclude Include="include\currency.h" />
     <ClInclude Include="include\cursorhandle.h" />
+    <ClInclude Include="include\cursorimpl.h" />
     <ClInclude Include="include\customattack.h" />
     <ClInclude Include="include\customattackhooks.h" />
     <ClInclude Include="include\customattacks.h" />

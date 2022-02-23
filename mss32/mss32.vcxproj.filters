@@ -2260,6 +2260,9 @@
     <ClInclude Include="include\batnotify.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\cursorimpl.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\interfcursor.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
