@@ -673,6 +673,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mideveffecthooks.h" />
     <ClInclude Include="include\midevent.h" />
     <ClInclude Include="include\mideventhooks.h" />
+    <ClInclude Include="include\midfreetask.h" />
     <ClInclude Include="include\midgard.h" />
     <ClInclude Include="include\midgardid.h" />
     <ClInclude Include="include\midgardmap.h" />
@@ -702,6 +703,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midstack.h" />
     <ClInclude Include="include\midstacktemplate.h" />
     <ClInclude Include="include\midsubrace.h" />
+    <ClInclude Include="include\midtask.h" />
     <ClInclude Include="include\midunit.h" />
     <ClInclude Include="include\midunitdescriptor.h" />
     <ClInclude Include="include\midunitdescriptorhooks.h" />

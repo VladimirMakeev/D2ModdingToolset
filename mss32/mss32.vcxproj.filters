@@ -2272,6 +2272,12 @@
     <ClInclude Include="include\cursorhandle.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\midfreetask.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midtask.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="include\canselect.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
