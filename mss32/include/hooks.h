@@ -56,6 +56,7 @@ struct CMidUnit;
 struct CMidUnitGroup;
 struct CUnitGenerator;
 struct CMenuPhase;
+struct NetPlayerInfo;
 }; // namespace game
 
 namespace hooks {
@@ -150,8 +151,9 @@ bool __fastcall shatterCanMissHooked(game::CBatAttackShatter* thisptr,
                                      game::BattleMsgData* battleMsgData,
                                      game::CMidgardID* id);
 
-int __stdcall deletePlayerBuildingsHooked(game::IMidgardObjectMap* objectMap,
-                                          game::CMidPlayer* player);
+bool __stdcall buildLordSpecificBuildingsHooked(game::IMidgardObjectMap* objectMap,
+                                                const game::NetPlayerInfo* playerInfo,
+                                                int);
 
 game::CEncLayoutSpell* __fastcall encLayoutSpellCtorHooked(game::CEncLayoutSpell* thisptr,
                                                            int /*%edx*/,

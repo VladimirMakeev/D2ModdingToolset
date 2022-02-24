@@ -10,6 +10,8 @@ settings = {
 
 	-- Allow scenarios with prebuilt capital cities
 	preserveCapitalBuildings = false,
+	-- Start with pre built temple in capital for warrior lord
+	buildTempleForWarriorLord = false,
 	-- Maximum number of items the player is allowed to transfer
 	-- between campaign scenarios [0 : INT_MAX]
 	carryOverItemsMax = 5,

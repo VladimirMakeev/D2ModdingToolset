@@ -145,6 +145,7 @@ static void readSettings(const sol::table& table, Settings& settings)
     settings.showResources = readSetting(table, "showResources", defaultSettings().showResources);
     settings.showLandConverted = readSetting(table, "showLandConverted", defaultSettings().showLandConverted);
     settings.preserveCapitalBuildings = readSetting(table, "preserveCapitalBuildings", defaultSettings().preserveCapitalBuildings);
+    settings.buildTempleForWarriorLord = readSetting(table, "buildTempleForWarriorLord", defaultSettings().buildTempleForWarriorLord);
     settings.allowShatterAttackToMiss = readSetting(table, "allowShatterAttackToMiss", defaultSettings().allowShatterAttackToMiss);
     settings.doppelgangerRespectsEnemyImmunity = readSetting(table, "doppelgangerRespectsEnemyImmunity", defaultSettings().doppelgangerRespectsEnemyImmunity);
     settings.doppelgangerRespectsAllyImmunity = readSetting(table, "doppelgangerRespectsAllyImmunity", defaultSettings().doppelgangerRespectsAllyImmunity);
@@ -192,6 +193,7 @@ const Settings& baseSettings()
         settings.showResources = false;
         settings.showLandConverted = false;
         settings.preserveCapitalBuildings = false;
+        settings.buildTempleForWarriorLord = false;
         settings.allowShatterAttackToMiss = false;
         settings.doppelgangerRespectsEnemyImmunity = false;
         settings.doppelgangerRespectsAllyImmunity = false;

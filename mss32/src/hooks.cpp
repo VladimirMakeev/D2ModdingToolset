@@ -98,6 +98,7 @@
 #include "movepathhooks.h"
 #include "musichooks.h"
 #include "netmsghooks.h"
+#include "netplayerinfo.h"
 #include "originalfunctions.h"
 #include "phasegame.h"
 #include "playerbuildings.h"
@@ -262,6 +263,9 @@ static Hooks getGameHooks()
         {fn.addPlayerUnitsToHireList, addPlayerUnitsToHireListHooked},
         {fn.shouldAddUnitToHire, shouldAddUnitToHireHooked},
         {fn.enableUnitInHireListUi, enableUnitInHireListUiHooked},
+        // Allow scenarios with prebuilt buildings in capitals
+        // Start with prebuilt temple in capital for warrior lord depending on user setting
+        {fn.buildLordSpecificBuildings, buildLordSpecificBuildingsHooked},
     };
     // clang-format on
 
@@ -286,11 +290,6 @@ static Hooks getGameHooks()
         || userSettings().showLandConverted != baseSettings().showLandConverted) {
         // Allow users to show resources panel by default
         hooks.emplace_back(HookInfo{fn.respopupInit, respopupInitHooked});
-    }
-
-    if (userSettings().preserveCapitalBuildings != baseSettings().preserveCapitalBuildings) {
-        // Allow scenarios with prebuilt buildings in capitals
-        hooks.emplace_back(HookInfo{fn.deletePlayerBuildings, deletePlayerBuildingsHooked});
     }
 
     if (userSettings().carryOverItemsMax != baseSettings().carryOverItemsMax) {
@@ -1358,9 +1357,43 @@ bool __fastcall shatterCanMissHooked(game::CBatAttackShatter* thisptr,
     return true;
 }
 
-int __stdcall deletePlayerBuildingsHooked(game::IMidgardObjectMap*, game::CMidPlayer*)
+bool __stdcall buildLordSpecificBuildingsHooked(game::IMidgardObjectMap* objectMap,
+                                                const game::NetPlayerInfo* playerInfo,
+                                                int)
 {
-    return 0;
+    using namespace game;
+
+    auto playerObj = objectMap->vftable->findScenarioObjectById(objectMap, &playerInfo->playerId);
+
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+    auto player = (const CMidPlayer*)dynamicCast(playerObj, 0, rtti.IMidScenarioObjectType,
+                                                 rtti.CMidPlayerType, 0);
+
+    auto& fn = gameFunctions();
+    if (!userSettings().preserveCapitalBuildings) {
+        fn.deletePlayerBuildings(objectMap, player);
+    }
+
+    auto lordType = fn.getLordByPlayer(player);
+    const auto lordCategoryId{lordType->data->lordCategory.id};
+
+    const auto& lordCategories = LordCategories::get();
+    const auto& buildingCategories = BuildingCategories::get();
+
+    if (lordCategoryId == lordCategories.diplomat->id) {
+        return fn.addCapitalBuilding(objectMap, player, buildingCategories.guild);
+    }
+
+    if (lordCategoryId == lordCategories.mage->id) {
+        return fn.addCapitalBuilding(objectMap, player, buildingCategories.magic);
+    }
+
+    if (userSettings().buildTempleForWarriorLord && lordCategoryId == lordCategories.warrior->id) {
+        return fn.addCapitalBuilding(objectMap, player, buildingCategories.heal);
+    }
+
+    return true;
 }
 
 game::CEncLayoutSpell* __fastcall encLayoutSpellCtorHooked(game::CEncLayoutSpell* thisptr,

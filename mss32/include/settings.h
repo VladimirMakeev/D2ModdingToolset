@@ -62,6 +62,7 @@ struct Settings
     bool showResources;
     bool showLandConverted;
     bool preserveCapitalBuildings;
+    bool buildTempleForWarriorLord;
     bool allowShatterAttackToMiss;
     bool doppelgangerRespectsEnemyImmunity;
     bool doppelgangerRespectsAllyImmunity;

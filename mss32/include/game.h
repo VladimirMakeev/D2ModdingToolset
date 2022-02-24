@@ -68,6 +68,8 @@ struct LGroundCategory;
 struct IItem;
 struct CPhaseGame;
 struct IUsRacialSoldier;
+struct NetPlayerInfo;
+struct LBuildingCategory;
 
 enum class ModifierElementTypeFlag : int;
 
@@ -190,7 +192,19 @@ using GetStackFortRuinGroup = CMidUnitGroup*(__thiscall*)(void* thisptr,
                                                           const IMidgardObjectMap* objectMap,
                                                           const CMidgardID* objectId);
 
-using DeletePlayerBuildings = int(__stdcall*)(IMidgardObjectMap* objectMap, CMidPlayer* player);
+/** Deletes all building in capital of specified player. */
+using DeletePlayerBuildings = int(__stdcall*)(IMidgardObjectMap* objectMap,
+                                              const CMidPlayer* player);
+
+/** Builds lord-specific buildings in capital of player described by NetPlayerInfo. */
+using BuildLordSpecificBuildings = bool(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                    const NetPlayerInfo* playerInfo,
+                                                    int);
+
+/** Adds building of specified category to capital of specified player. */
+using AddCapitalBuilding = bool(__stdcall*)(IMidgardObjectMap* objectMap,
+                                            const CMidPlayer* player,
+                                            const LBuildingCategory* building);
 
 using GetInterfaceText = const char*(__stdcall*)(const CMidgardID* textId);
 
@@ -658,6 +672,8 @@ struct Functions
     CheckUnitForHire shouldAddUnitToHire;
     CheckUnitForHire enableUnitInHireListUi;
     CastUnitImplToRacialSoldier castUnitImplToRacialSoldier;
+    BuildLordSpecificBuildings buildLordSpecificBuildings;
+    AddCapitalBuilding addCapitalBuilding;
 };
 
 /** Global variables used in game. */
