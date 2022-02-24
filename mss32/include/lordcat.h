@@ -30,6 +30,19 @@ struct LLordCategoryTable : public CEnumConstantTable<LordId>
 struct LLordCategory : public Category<LordId>
 { };
 
+namespace LordCategories {
+
+struct Categories
+{
+    LLordCategory* mage;
+    LLordCategory* warrior;
+    LLordCategory* diplomat;
+};
+
+Categories& get();
+
+} // namespace LordCategories
+
 } // namespace game
 
 #endif // LORDCAT_H

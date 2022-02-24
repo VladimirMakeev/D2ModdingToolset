@@ -266,6 +266,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\lobbyclient.cpp" />
     <ClCompile Include="src\log.cpp" />
     <ClCompile Include="src\loginaccountinterf.cpp" />
+    <ClCompile Include="src\lordcat.cpp" />
     <ClCompile Include="src\lordtype.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mapgen.cpp" />
