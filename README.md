@@ -284,7 +284,7 @@
     - Add DAM_RATIO (Numeric, size 3), DR_REPEAT (Logical) and DAM_SPLIT (Logical) columns to Gattacks.dbf;
     - DAM_RATIO specifies a portion of the attack damage received by additional targets (0-255%). 100 or empty is the vanilla behavior;
     - DR_REPEAT specifies whether the DAM_RATIO should be applied for every consequent target. For instance, if QTY_DAM = 50 and DAM_RATIO = 20, then the first target receives 50, second - 10 (50 * 0,2), third - 2 (10 * 0,2) and so on.
-    - DAM_SPLIT specifies whether the attack damage (QTY_DAM) is split between all the affected targets.<br />
+    - DAM_SPLIT specifies whether the attack damage (QTY_DAM) is split between all the affected targets. Total damage is multiplied by 'splitDamageMultiplier' setting for better late-game scaling (default of 300 max damage split among 6 targets is miserable).<br />
     For instance, if QTY_DAM = 100 and there are 3 affected targets, then every target will receive 33 damage.<br />
     DAM_RATIO and DR_REPEAT also apply, but determine a ratio between additional and first target damage.<br />
     For instance, if QTY_DAM = 100, DAM_RATIO = 25 and there are 3 affected targets then the damage distribution will be 67-17-17 (67 * 0,25 ~ 17; 67 + 17 + 17 ~ 100).
@@ -342,6 +342,7 @@ The following settings can be changed in [settings.lua](Scripts/settings.lua):
   - "allowShatterAttackToMiss=(true/false)" changes whether shatter attacks can miss or not;
   - "criticalHitDamage=\[0 : 255\]" changes the percentage damage of critical hit;
   - "criticalHitChance=\[0 : 100\]" changes the percentage chance of critical hit;
+  - "splitDamageMultiplier=\[1 : 6\]" multiplies total damage dealt by split damage (DAM_SPLIT). See 'custom attack damage ratio' under Features section;
   - "drainAttackHeal=\[-(2^31 - 1) : (2^31 - 1)\]" changes percentage of L\_DRAIN attacks damage used as heal;
   - "drainOverflowHeal=\[-(2^31 - 1) : (2^31 - 1)\]" changes percentage of L\_DRAIN\_OVERFLOW attacks damage used as heal;
   - "doppelgangerRespectsEnemyImmunity=(true/false)" sets whether doppelganger attack checks for enemy ward/immunity to the attack class and source;

@@ -141,6 +141,7 @@ static void readSettings(const sol::table& table, Settings& settings)
     settings.mageLeaderAttackPowerReduction = readSetting(table, "mageLeaderAccuracyReduction", defaultSettings().mageLeaderAttackPowerReduction);
     settings.disableAllowedRoundMax = readSetting(table, "disableAllowedRoundMax", defaultSettings().disableAllowedRoundMax, (uint8_t)1);
     settings.shatterDamageUpgradeRatio = readSetting(table, "shatterDamageUpgradeRatio", defaultSettings().shatterDamageUpgradeRatio);
+    settings.splitDamageMultiplier = readSetting(table, "splitDamageMultiplier", defaultSettings().splitDamageMultiplier, (uint8_t)1, (uint8_t)6);
     settings.showBanners = readSetting(table, "showBanners", defaultSettings().showBanners);
     settings.showResources = readSetting(table, "showResources", defaultSettings().showResources);
     settings.showLandConverted = readSetting(table, "showLandConverted", defaultSettings().showLandConverted);
@@ -189,6 +190,7 @@ const Settings& baseSettings()
         settings.aiAttackPowerBonus.veryHard = 10;
         settings.disableAllowedRoundMax = 40;
         settings.shatterDamageUpgradeRatio = 100;
+        settings.splitDamageMultiplier = 1;
         settings.showBanners = false;
         settings.showResources = false;
         settings.showLandConverted = false;

@@ -37,6 +37,7 @@
 #include "midunit.h"
 #include "midunitgroup.h"
 #include "scripts.h"
+#include "settings.h"
 #include "targetslistutils.h"
 #include "unitslotview.h"
 #include "unitutils.h"
@@ -550,9 +551,6 @@ std::vector<double> computeAttackDamageRatio(const game::IAttack* attack, int ta
 {
     std::vector<double> result;
 
-    if (targetCount < 2)
-        return result;
-
     auto attackImpl = getAttackImpl(attack);
     if (!attackImpl)
         return result;
@@ -574,7 +572,7 @@ std::vector<double> computeAttackDamageRatio(const game::IAttack* attack, int ta
 
     if (attackImpl->data->damageSplit) {
         for (auto it = result.begin(); it != result.end(); ++it) {
-            *it = *it / totalRatio;
+            *it = *it / totalRatio * userSettings().splitDamageMultiplier;
         }
     }
 
@@ -592,7 +590,7 @@ double computeTotalDamageRatio(const game::IAttack* attack, int targetCount)
 
     auto damageRatio = attackImpl->data->damageRatio;
     if (attackImpl->data->damageSplit) {
-        return 1.0;
+        return 1.0 * userSettings().splitDamageMultiplier;
     } else if (damageRatio != 100) {
         double ratio = (double)damageRatio / 100;
 

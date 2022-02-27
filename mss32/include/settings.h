@@ -48,6 +48,7 @@ struct Settings
     std::uint8_t mageLeaderAttackPowerReduction;
     std::uint8_t disableAllowedRoundMax;
     std::uint8_t shatterDamageUpgradeRatio;
+    std::uint8_t splitDamageMultiplier;
 
     struct AiAttackPowerBonus
     {
