@@ -50,7 +50,7 @@ struct IUsStackLeaderVftable : public IUsUnitExtensionVftable
     HasMovementBonus hasMovementBonus;
 
     /** Returns scouting range. */
-    GetInt getScount;
+    GetInt getScout;
 
     GetInt getLeadership;
 
