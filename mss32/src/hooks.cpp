@@ -65,6 +65,7 @@
 #include "eventeffectcathooks.h"
 #include "fortification.h"
 #include "functor.h"
+#include "gameutils.h"
 #include "globaldata.h"
 #include "idlist.h"
 #include "interfmanager.h"
@@ -1489,19 +1490,8 @@ void __stdcall getAttackPowerHooked(int* power,
     const auto& fn = gameFunctions();
 
     if (!fn.isGroupOwnerPlayerHuman(objectMap, groupId)) {
-        const auto& id = CMidgardIDApi::get();
-
-        CMidgardID scenarioInfoId{};
-        auto scenarioId = objectMap->vftable->getId(objectMap);
-
-        id.fromParts(&scenarioInfoId, id.getCategory(scenarioId), id.getCategoryIndex(scenarioId),
-                     IdType::ScenarioInfo, 0);
-
-        auto scenarioInfo = static_cast<const CScenarioInfo*>(
-            objectMap->vftable->findScenarioObjectById(objectMap, &scenarioInfoId));
-
         const auto& difficulties = DifficultyLevelCategories::get();
-        const auto difficultyId = scenarioInfo->gameDifficulty.id;
+        const auto difficultyId = getScenarioInfo(objectMap)->gameDifficulty.id;
 
         const auto& aiAttackPower = userSettings().aiAttackPowerBonus;
         const std::int8_t* bonus = &aiAttackPower.easy;
