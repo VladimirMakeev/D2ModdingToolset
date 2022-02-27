@@ -25,6 +25,8 @@ struct CMidgardID;
 struct CMidUnitGroup;
 struct IMidgardObjectMap;
 struct BattleMsgData;
+struct CScenarioInfo;
+struct CMidPlayer;
 } // namespace game
 
 namespace hooks {
@@ -34,6 +36,9 @@ game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMa
                                          const game::BattleMsgData* battleMsgData,
                                          const game::CMidgardID* unitId,
                                          bool ally);
+game::CScenarioInfo* getScenarioInfo(const game::IMidgardObjectMap* objectMap);
+game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
+                            const game::CMidgardID* playerId);
 
 } // namespace hooks
 
