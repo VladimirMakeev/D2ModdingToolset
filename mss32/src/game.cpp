@@ -126,6 +126,7 @@ static std::array<Functions, 4> functions = {{
         (CastUnitImplToRacialSoldier)0x4482f6,
         (BuildLordSpecificBuildings)0x422411,
         (AddCapitalBuilding)0x4224ec,
+        (CastUnitImplToLeader)0x424a87,
     },
     // Russobit
     Functions{
@@ -228,6 +229,7 @@ static std::array<Functions, 4> functions = {{
         (CastUnitImplToRacialSoldier)0x4482f6,
         (BuildLordSpecificBuildings)0x422411,
         (AddCapitalBuilding)0x4224ec,
+        (CastUnitImplToLeader)0x424a87,
     },
     // Gog
     Functions{
@@ -330,6 +332,7 @@ static std::array<Functions, 4> functions = {{
         (CastUnitImplToRacialSoldier)0x447ee5,
         (BuildLordSpecificBuildings)0x421f2f,
         (AddCapitalBuilding)0x42200a,
+        (CastUnitImplToLeader)0x424565,
     },
     // Scenario Editor
     Functions{
@@ -432,6 +435,7 @@ static std::array<Functions, 4> functions = {{
         (CastUnitImplToRacialSoldier)nullptr,
         (BuildLordSpecificBuildings)nullptr,
         (AddCapitalBuilding)nullptr,
+        (CastUnitImplToLeader)nullptr,
     },
 }};
 

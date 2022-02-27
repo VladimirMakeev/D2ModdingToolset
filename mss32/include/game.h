@@ -70,6 +70,7 @@ struct CPhaseGame;
 struct IUsRacialSoldier;
 struct NetPlayerInfo;
 struct LBuildingCategory;
+struct IUsLeader;
 
 enum class ModifierElementTypeFlag : int;
 
@@ -155,6 +156,7 @@ using FindUnitById = CMidUnit*(__stdcall*)(const IMidgardObjectMap* objectMap,
 using CastUnitImplToSoldier = IUsSoldier*(__stdcall*)(const IUsUnit* unitImpl);
 using CastUnitImplToNoble = IUsNoble*(__stdcall*)(const IUsUnit* unitImpl);
 using CastUnitImplToStackLeader = IUsStackLeader*(__stdcall*)(const IUsUnit* unitImpl);
+using CastUnitImplToLeader = IUsLeader*(__stdcall*)(const IUsUnit* unitImpl);
 using CastUnitImplToRacialSoldier = const IUsRacialSoldier*(__stdcall*)(const IUsUnit* unitImpl);
 
 using CreateBatAttack = IBatAttack*(__stdcall*)(const IMidgardObjectMap* objectMap,
@@ -686,6 +688,7 @@ struct Functions
     CastUnitImplToRacialSoldier castUnitImplToRacialSoldier;
     BuildLordSpecificBuildings buildLordSpecificBuildings;
     AddCapitalBuilding addCapitalBuilding;
+    CastUnitImplToLeader castUnitImplToLeader;
 };
 
 /** Global variables used in game. */
