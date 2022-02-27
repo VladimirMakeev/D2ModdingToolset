@@ -27,7 +27,20 @@
 - Allows to display movement cost for each individual step of parties;
 - Allows to specify a maximum allowed scout range for parties; 
 - Allows to set maximum unit damage and armor;
-- Allows to set critical hit damage and chance;
+- <details>
+    <summary>Allows to set critical hit damage and chance;</summary>
+
+    There are global settings criticalHitDamage / criticalHitChance (see Settings section for details).<br />
+    Aside from that, these numbers can be customized for each particular attack:
+    - Add CRIT_DAM (Numeric, size 3) and CRIT_POWER (Numeric, size 3) columns to Gattacks.dbf;
+    - Check CRIT_HIT column to enable critical hit for attacks that you wish to customize;
+    - CRIT_DAM specifies a critical hit damage (0-255%). Falls back to the global setting (criticalHitDamage) if empty;
+    - CRIT_POWER specifies a critical hit chance (0-100%). Falls back to the global setting (criticalHitChance) if empty.
+
+    ![image](https://user-images.githubusercontent.com/5180699/155902276-44d843ab-b799-4997-ad3c-886bf657107f.png)
+
+    **Note** that critical hit representation in unit encyclopedia can be customized. Check [textids.lua](Scripts/textids.lua).
+  </details>
 - Allows to set accuracy bonuses for different game difficulty modes;
 - Allows to set accuracy reduction for mage leaders per each additional target;
 - Allows to set a number of battle round after which paralyze and petrify attacks will constantly miss;
