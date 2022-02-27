@@ -18,7 +18,11 @@
  */
 
 #include "gameutils.h"
+#include "dynamiccast.h"
 #include "game.h"
+#include "midgardobjectmap.h"
+#include "midplayer.h"
+#include "scenarioinfo.h"
 
 namespace hooks {
 
@@ -45,6 +49,37 @@ game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMa
 
     void* tmp{};
     return fn.getStackFortRuinGroup(tmp, objectMap, &groupId);
+}
+
+game::CScenarioInfo* getScenarioInfo(const game::IMidgardObjectMap* objectMap)
+{
+    using namespace game;
+
+    const auto& id = CMidgardIDApi::get();
+    auto scenarioId = objectMap->vftable->getId(objectMap);
+
+    CMidgardID infoId{};
+    id.fromParts(&infoId, id.getCategory(scenarioId), id.getCategoryIndex(scenarioId),
+                 IdType::ScenarioInfo, 0);
+
+    auto infoObj = objectMap->vftable->findScenarioObjectById(objectMap, &infoId);
+    if (!infoObj) {
+        return nullptr;
+    }
+
+    return static_cast<CScenarioInfo*>(infoObj);
+}
+
+game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
+                            const game::CMidgardID* playerId)
+{
+    using namespace game;
+
+    auto playerObj = objectMap->vftable->findScenarioObjectById(objectMap, playerId);
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    return (CMidPlayer*)dynamicCast(playerObj, 0, rtti.IMidScenarioObjectType, rtti.CMidPlayerType,
+                                    0);
 }
 
 } // namespace hooks

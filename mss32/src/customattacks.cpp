@@ -18,8 +18,30 @@
  */
 
 #include "customattacks.h"
+#include "dbffile.h"
+#include "log.h"
+#include "utils.h"
+#include <fmt/format.h>
 
 namespace hooks {
+
+void initializeCustomAttacks()
+{
+    utils::DbfFile dbf;
+    const std::filesystem::path dbfFilePath{gameFolder() / "globals" / "Gattacks.dbf"};
+    if (!dbf.open(dbfFilePath)) {
+        logError("mssProxyError.log",
+                 fmt::format("Could not open {:s}", dbfFilePath.filename().string()));
+        return;
+    }
+
+    getCustomAttacks().damageRatios.enabled = dbf.column(damageRatioColumnName)
+                                              && dbf.column(damageRatioPerTargetColumnName)
+                                              && dbf.column(damageSplitColumnName);
+
+    getCustomAttacks().perAttackCritSettings = dbf.column(critDamageColumnName)
+                                               && dbf.column(critPowerColumnName);
+}
 
 CustomAttacks& getCustomAttacks()
 {

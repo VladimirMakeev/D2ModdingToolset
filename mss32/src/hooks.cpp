@@ -65,12 +65,14 @@
 #include "eventeffectcathooks.h"
 #include "fortification.h"
 #include "functor.h"
+#include "gameutils.h"
 #include "globaldata.h"
 #include "idlist.h"
 #include "interfmanager.h"
 #include "interftexthooks.h"
 #include "itemtransferhooks.h"
 #include "iterators.h"
+#include "leaderabilitycat.h"
 #include "listbox.h"
 #include "log.h"
 #include "lordtype.h"
@@ -122,6 +124,7 @@
 #include "unitutils.h"
 #include "usracialsoldier.h"
 #include "ussoldier.h"
+#include "usstackleader.h"
 #include "usunitimpl.h"
 #include "utils.h"
 #include "version.h"
@@ -241,7 +244,7 @@ static Hooks getGameHooks()
         {fn.computeTargetUnitAiPriority, computeTargetUnitAiPriorityHooked},
         // Allow users to specify critical hit chance
         // Support custom attack damage ratios
-        {fn.computeDamage, computeDamageHooked, (void**)&orig.computeDamage},
+        {fn.computeDamage, computeDamageHooked},
         // Fix occasional crash with incorrect removal of summoned unit info
         // Fix persistent crash with summons when unrestrictedBestowWards is enabled
         {battle.removeUnitInfo, removeUnitInfoHooked},
@@ -422,6 +425,7 @@ Hooks getHooks()
         HookInfo{LAttackClassTableApi::get().constructor, attackClassTableCtorHooked});
     // Support custom attack class in CAttackImpl constructor
     // Support custom attack damage ratios
+    // Support per-attack crit settings
     hooks.emplace_back(HookInfo{CAttackImplApi::get().constructor, attackImplCtorHooked});
     hooks.emplace_back(HookInfo{CAttackImplApi::get().constructor2, attackImplCtor2Hooked,
                                 (void**)&orig.attackImplCtor2});
@@ -1463,23 +1467,57 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
                                   int* attackDamage,
                                   int* criticalHitDamage)
 {
-    int damage;
-    int critDamage;
-    getOriginalFunctions().computeDamage(objectMap, battleMsgData, attack, attackerUnitId,
-                                         targetUnitId, computeCriticalHit, &damage, &critDamage);
+    using namespace game;
 
-    if (userSettings().criticalHitChance != baseSettings().criticalHitChance) {
-        if (critDamage != 0) {
-            int critChance = userSettings().criticalHitChance;
-            if (game::gameFunctions().attackShouldMiss(&critChance))
-                critDamage = 0;
+    int armor;
+    const auto& fn = gameFunctions();
+    fn.computeArmor(&armor, objectMap, battleMsgData, targetUnitId);
+
+    const auto& battle = BattleMsgDataApi::get();
+    CMidgardID playerId = battle.isUnitAttacker(battleMsgData, attackerUnitId)
+                              ? battleMsgData->attackerPlayerId
+                              : battleMsgData->defenderPlayerId;
+
+    bool isEasyDifficulty = false;
+    auto player = getPlayer(objectMap, &playerId);
+    if (player && player->isHuman) {
+        const auto& difficulties = DifficultyLevelCategories::get();
+        isEasyDifficulty = getScenarioInfo(objectMap)->gameDifficulty.id == difficulties.easy->id;
+    }
+
+    int damageMax = fn.computeDamageMax(objectMap, attackerUnitId);
+    int damageWithBuffs = fn.computeDamageWithBuffs(attack, damageMax, battleMsgData,
+                                                    attackerUnitId, true, isEasyDifficulty);
+    int damage = damageWithBuffs * (100 - armor) / 100;
+
+    int critDamage = 0;
+    if (computeCriticalHit) {
+        bool critHit = attack->vftable->getCritHit(attack);
+        if (!critHit) {
+            auto unit = fn.findUnitById(objectMap, attackerUnitId);
+            auto stackLeader = fn.castUnitImplToStackLeader(unit->unitImpl);
+
+            const auto& abilities = LeaderAbilityCategories::get();
+            critHit = stackLeader
+                      && stackLeader->vftable->hasAbility(stackLeader, abilities.criticalHit);
+        }
+
+        if (critHit) {
+            auto attackImpl = getAttackImpl(attack);
+            int critPower = attackImpl ? attackImpl->data->critPower
+                                       : userSettings().criticalHitChance;
+            if (!fn.attackShouldMiss(&critPower)) {
+                int critDamageRate = attackImpl ? attackImpl->data->critDamage
+                                                : userSettings().criticalHitDamage;
+                critDamage = damageWithBuffs * critDamageRate / 100;
+            }
         }
     }
 
-    auto& customDamageRatio = getCustomAttacks().damageRatio;
-    if (customDamageRatio.enabled) {
-        auto ratio = customDamageRatio.ratios.find(*targetUnitId);
-        if (ratio != customDamageRatio.ratios.end()) {
+    auto& customDamageRatios = getCustomAttacks().damageRatios;
+    if (customDamageRatios.enabled) {
+        auto ratio = customDamageRatios.value.find(*targetUnitId);
+        if (ratio != customDamageRatios.value.end()) {
             damage = applyAttackDamageRatio(damage, ratio->second);
             critDamage = applyAttackDamageRatio(critDamage, ratio->second);
         }
@@ -1522,19 +1560,8 @@ void __stdcall getAttackPowerHooked(int* power,
     const auto& fn = gameFunctions();
 
     if (!fn.isGroupOwnerPlayerHuman(objectMap, groupId)) {
-        const auto& id = CMidgardIDApi::get();
-
-        CMidgardID scenarioInfoId{};
-        auto scenarioId = objectMap->vftable->getId(objectMap);
-
-        id.fromParts(&scenarioInfoId, id.getCategory(scenarioId), id.getCategoryIndex(scenarioId),
-                     IdType::ScenarioInfo, 0);
-
-        auto scenarioInfo = static_cast<const CScenarioInfo*>(
-            objectMap->vftable->findScenarioObjectById(objectMap, &scenarioInfoId));
-
         const auto& difficulties = DifficultyLevelCategories::get();
-        const auto difficultyId = scenarioInfo->gameDifficulty.id;
+        const auto difficultyId = getScenarioInfo(objectMap)->gameDifficulty.id;
 
         const auto& aiAttackPower = userSettings().aiAttackPowerBonus;
         const std::int8_t* bonus = &aiAttackPower.easy;
@@ -1646,9 +1673,9 @@ void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
 
     battle.setAttackPowerReduction(battleMsgData, unitId, 0);
 
-    auto& customDamageRatio = getCustomAttacks().damageRatio;
-    if (customDamageRatio.enabled)
-        customDamageRatio.ratios.clear();
+    auto& customDamageRatios = getCustomAttacks().damageRatios;
+    if (customDamageRatios.enabled)
+        customDamageRatios.value.clear();
 
     auto& customTransformSelf = getCustomAttacks().transformSelf;
     if (customTransformSelf.freeAttackUnitId != *unitId)

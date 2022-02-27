@@ -63,8 +63,6 @@ public:
     int getSize() const;
 
 private:
-    const game::CScenarioInfo* getScenarioInfo() const;
-
     const game::IMidgardObjectMap* objectMap;
 };
 

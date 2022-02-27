@@ -44,9 +44,6 @@ struct CAttackImplData
     int level;
     CMidgardID altAttack;
     bool infinite;
-    char padding[3];
-    IdVector wards;
-    bool critHit;
     union
     {
         struct
@@ -54,6 +51,17 @@ struct CAttackImplData
             std::uint8_t damageRatio;
             bool damageRatioPerTarget;
             bool damageSplit;
+        };
+        char padding[3];
+    };
+    IdVector wards;
+    bool critHit;
+    union
+    {
+        struct
+        {
+            std::uint8_t critDamage;
+            std::uint8_t critPower;
         };
         char padding2[3];
     };

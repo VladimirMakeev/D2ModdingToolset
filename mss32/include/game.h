@@ -236,6 +236,16 @@ using ComputeDamage = int(__stdcall*)(const IMidgardObjectMap* objectMap,
                                       int* attackDamage,
                                       int* criticalHitDamage);
 
+using ComputeDamageMax = int(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                         const CMidgardID* unitId);
+
+using ComputeDamageWithBuffs = int(__stdcall*)(const IAttack* attack,
+                                               int damageMax,
+                                               const BattleMsgData* battleMsgData,
+                                               const CMidgardID* unitId,
+                                               bool addRandomDamage,
+                                               bool easyDifficulty);
+
 /**
  * Computes unit armor with respect to buffs / debuffs, defend / fortification bonus and shattered
  * armor.
@@ -602,6 +612,8 @@ struct Functions
     GetInterfaceText getInterfaceText;
     ComputePlayerDailyIncome computePlayerDailyIncome;
     ComputeDamage computeDamage;
+    ComputeDamageMax computeDamageMax;
+    ComputeDamageWithBuffs computeDamageWithBuffs;
     ComputeArmor computeArmor;
     MarkMapPosition markMapPosition;
     GetUnitLevelByImplId getUnitLevelByImplId;

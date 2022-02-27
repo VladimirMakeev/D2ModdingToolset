@@ -19,6 +19,7 @@
 
 #include "scenarioview.h"
 #include "dynamiccast.h"
+#include "gameutils.h"
 #include "locationview.h"
 #include "midgardmapblock.h"
 #include "midgardobjectmap.h"
@@ -87,7 +88,7 @@ std::optional<ScenVariablesView> ScenarioView::getScenVariables() const
 
 std::optional<TileView> ScenarioView::getTile(int x, int y) const
 {
-    auto info = getScenarioInfo();
+    auto info = hooks::getScenarioInfo(objectMap);
     if (!info) {
         return std::nullopt;
     }
@@ -133,33 +134,14 @@ std::optional<TileView> ScenarioView::getTileByPoint(const Point& p) const
 
 int ScenarioView::getCurrentDay() const
 {
-    auto info = getScenarioInfo();
+    auto info = hooks::getScenarioInfo(objectMap);
     return info ? info->currentTurn : 0;
 }
 
 int ScenarioView::getSize() const
 {
-    auto info = getScenarioInfo();
+    auto info = hooks::getScenarioInfo(objectMap);
     return info ? info->mapSize : 0;
-}
-
-const game::CScenarioInfo* ScenarioView::getScenarioInfo() const
-{
-    using namespace game;
-
-    const auto& id = CMidgardIDApi::get();
-    auto scenarioId = objectMap->vftable->getId(objectMap);
-
-    CMidgardID infoId{};
-    id.fromParts(&infoId, id.getCategory(scenarioId), id.getCategoryIndex(scenarioId),
-                 IdType::ScenarioInfo, 0);
-
-    auto infoObj = objectMap->vftable->findScenarioObjectById(objectMap, &infoId);
-    if (!infoObj) {
-        return nullptr;
-    }
-
-    return static_cast<const CScenarioInfo*>(infoObj);
 }
 
 } // namespace bindings

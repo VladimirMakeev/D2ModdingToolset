@@ -29,6 +29,7 @@
 #include "dbffile.h"
 #include "dynamiccast.h"
 #include "game.h"
+#include "gameutils.h"
 #include "idlistutils.h"
 #include "log.h"
 #include "midgardobjectmap.h"
@@ -469,7 +470,6 @@ bool shouldExcludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
     using namespace game;
 
     const auto& id = CMidgardIDApi::get();
-    const auto& rtti = RttiApi::rtti();
     const auto& battle = BattleMsgDataApi::get();
 
     if (battle.isAutoBattle(battleMsgData))
@@ -482,11 +482,7 @@ bool shouldExcludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
     if (playerId == emptyId)
         return true;
 
-    auto playerObj = objectMap->vftable->findScenarioObjectById(objectMap, &playerId);
-    const auto dynamicCast = RttiApi::get().dynamicCast;
-    CMidPlayer* player = (CMidPlayer*)dynamicCast(playerObj, 0, rtti.IMidScenarioObjectType,
-                                                  rtti.CMidPlayerType, 0);
-
+    auto player = getPlayer(objectMap, &playerId);
     return !player || !player->isHuman;
 }
 
@@ -521,21 +517,6 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
     }
 }
 
-void initializeAttackDamageRatio()
-{
-    utils::DbfFile dbf;
-    const std::filesystem::path dbfFilePath{gameFolder() / "globals" / "Gattacks.dbf"};
-    if (!dbf.open(dbfFilePath)) {
-        logError("mssProxyError.log",
-                 fmt::format("Could not open {:s}", dbfFilePath.filename().string()));
-        return;
-    }
-
-    getCustomAttacks().damageRatio.enabled = dbf.column(damageRatioColumnName)
-                                             && dbf.column(damageRatioPerTargetColumnName)
-                                             && dbf.column(damageSplitColumnName);
-}
-
 void fillCustomDamageRatios(const game::IAttack* attack, const game::IdList* targets)
 {
     using namespace game;
@@ -546,7 +527,7 @@ void fillCustomDamageRatios(const game::IAttack* attack, const game::IdList* tar
     if (ratios.empty())
         return;
 
-    auto& customRatios = getCustomAttacks().damageRatio.ratios;
+    auto& customRatios = getCustomAttacks().damageRatios.value;
     auto ratioIt = ratios.begin();
     IdListIterator it, end;
     for (listApi.begin(targets, &it), listApi.end(targets, &end); !listApi.equals(&it, &end);
@@ -602,7 +583,7 @@ std::vector<double> computeAttackDamageRatio(const game::IAttack* attack, int ta
 
 double computeTotalDamageRatio(const game::IAttack* attack, int targetCount)
 {
-    if (!getCustomAttacks().damageRatio.enabled)
+    if (!getCustomAttacks().damageRatios.enabled)
         return targetCount;
 
     auto attackImpl = getAttackImpl(attack);

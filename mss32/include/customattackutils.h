@@ -122,8 +122,6 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
                           const game::CMidgardID* targetGroupId,
                           game::TargetsList* value);
 
-void initializeAttackDamageRatio();
-
 void fillCustomDamageRatios(const game::IAttack* attack, const game::IdList* targets);
 
 int applyAttackDamageRatio(int damage, double ratio);
