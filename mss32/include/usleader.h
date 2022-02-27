@@ -34,7 +34,7 @@ struct IUsLeaderVftable;
 struct IUsLeader : public IUsUnitExtensionT<IUsLeaderVftable>
 { };
 
-struct IUsLeaderVftable
+struct IUsLeaderVftable : public IUsUnitExtensionVftable
 {
     using GetCategory = const LLeaderCategory*(__thiscall*)(const IUsLeader* thisptr);
     GetCategory getCategory;
@@ -50,8 +50,8 @@ struct IUsLeaderVftable
     Link link;
 };
 
-static_assert(sizeof(IUsLeaderVftable) == 4 * sizeof(void*),
-              "IUsLeader vftable must have exactly 4 methods");
+static_assert(sizeof(IUsLeaderVftable) == 5 * sizeof(void*),
+              "IUsLeader vftable must have exactly 5 methods");
 
 } // namespace game
 
