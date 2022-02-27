@@ -32,6 +32,8 @@ namespace hooks {
 static const char damageRatioColumnName[] = "DAM_RATIO";
 static const char damageRatioPerTargetColumnName[] = "DR_REPEAT";
 static const char damageSplitColumnName[] = "DAM_SPLIT";
+static const char critDamageColumnName[] = "CRIT_DAM";
+static const char critPowerColumnName[] = "CRIT_POWER";
 
 struct CustomAttackSource
 {
@@ -59,23 +61,25 @@ struct CustomAttackReach
 
 using CustomAttackReaches = std::vector<CustomAttackReach>;
 
-struct CustomDamageRatio
+struct CustomDamageRatios
 {
     bool enabled;
-    std::map<game::CMidgardID, double> ratios;
+    std::map<game::CMidgardID, double> value;
 };
 
 struct CustomAttacks
 {
     CustomAttackSources sources;
     CustomAttackReaches reaches;
-    CustomDamageRatio damageRatio;
+    CustomDamageRatios damageRatios;
     struct
     {
         game::CMidgardID freeAttackUnitId;
     } transformSelf;
+    bool perAttackCritSettings;
 };
 
+void initializeCustomAttacks();
 CustomAttacks& getCustomAttacks();
 
 } // namespace hooks

@@ -40,6 +40,7 @@
 #include "midunitgroup.h"
 #include "originalfunctions.h"
 #include "scripts.h"
+#include "settings.h"
 #include "targetslistutils.h"
 #include "unitutils.h"
 #include "ussoldier.h"
@@ -296,7 +297,21 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
         data->critHit = false;
     }
 
-    if (getCustomAttacks().damageRatio.enabled) {
+    data->critDamage = userSettings().criticalHitDamage;
+    data->critPower = userSettings().criticalHitChance;
+    if (getCustomAttacks().perAttackCritSettings) {
+        int critDamage;
+        db.readIntWithBoundsCheck(&critDamage, dbTable, critDamageColumnName, 0, 255);
+        if (critDamage != 0)
+            data->critDamage = (std::uint8_t)critDamage;
+
+        int critPower;
+        db.readIntWithBoundsCheck(&critPower, dbTable, critPowerColumnName, 0, 100);
+        if (critPower != 0)
+            data->critPower = (std::uint8_t)critPower;
+    }
+
+    if (getCustomAttacks().damageRatios.enabled) {
         int damageRatio;
         db.readIntWithBoundsCheck(&damageRatio, dbTable, damageRatioColumnName, 0, 255);
         if (damageRatio == 0)
@@ -319,6 +334,9 @@ game::CAttackImpl* __fastcall attackImplCtor2Hooked(game::CAttackImpl* thisptr,
 {
     auto result = getOriginalFunctions().attackImplCtor2(thisptr, data);
 
+    thisptr->data->critDamage = data->critDamage;
+    thisptr->data->critPower = data->critPower;
+
     thisptr->data->damageRatio = data->damageRatio;
     thisptr->data->damageRatioPerTarget = data->damageRatioPerTarget;
     thisptr->data->damageSplit = data->damageSplit;
@@ -331,6 +349,9 @@ void __fastcall attackImplGetDataHooked(game::CAttackImpl* thisptr,
                                         game::CAttackData* value)
 {
     getOriginalFunctions().attackImplGetData(thisptr, value);
+
+    value->critDamage = thisptr->data->critDamage;
+    value->critPower = thisptr->data->critPower;
 
     value->damageRatio = thisptr->data->damageRatio;
     value->damageRatioPerTarget = thisptr->data->damageRatioPerTarget;
@@ -629,7 +650,7 @@ void __stdcall getTargetsToAttackHooked(game::IdList* value,
         listApi.pushBack(value, targetUnitId);
     }
 
-    if (getCustomAttacks().damageRatio.enabled)
+    if (getCustomAttacks().damageRatios.enabled)
         fillCustomDamageRatios(attack, value);
 }
 

@@ -111,10 +111,14 @@ std::string getAttackPowerText(game::IAttack* attack,
     } else
         result = "100%";
 
-    if (userSettings().criticalHitChance != 100 && attack->vftable->getCritHit(attack)) {
-        return fmt::format("{:s} ({:d}%)", result.c_str(), userSettings().criticalHitChance);
-    } else
-        return result;
+    if (attack->vftable->getCritHit(attack)) {
+        auto attackImpl = getAttackImpl(attack);
+        int critPower = attackImpl ? attackImpl->data->critPower : userSettings().criticalHitChance;
+        if (critPower != 100)
+            return fmt::format("{:s} ({:d}%)", result.c_str(), critPower);
+    }
+
+    return result;
 }
 
 std::string getAttackDamageMaxText(const std::string& damage)
@@ -267,11 +271,14 @@ std::string getAttackDamageModifiableText(const game::IAttack* attack,
 
     int critDamage = 0;
     if (attack->vftable->getCritHit(attack)) {
-        critDamage = damageTotalBoosted * userSettings().criticalHitDamage / 100;
+        auto attackImpl = getAttackImpl(attack);
+        auto critDamageRate = attackImpl ? attackImpl->data->critDamage
+                                         : userSettings().criticalHitDamage;
+        critDamage = damageTotalBoosted * critDamageRate / 100;
         damagePlusBonusPlusMax = getAttackPlusCritDamageText(damagePlusBonusPlusMax, critDamage);
     }
 
-    if (getCustomAttacks().damageRatio.enabled) {
+    if (getCustomAttacks().damageRatios.enabled) {
         damagePlusBonusPlusMax = getRatedOrSplitAttackDamageText(attack, damagePlusBonusPlusMax,
                                                                  damageTotalBoosted, critDamage);
     }
