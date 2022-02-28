@@ -21,6 +21,7 @@
 #include "dynamiccast.h"
 #include "game.h"
 #include "midgardobjectmap.h"
+#include "midgardplan.h"
 #include "midplayer.h"
 #include "midscenvariables.h"
 #include "scenarioinfo.h"
@@ -101,6 +102,18 @@ const game::CMidScenVariables* getScenarioVariables(const game::IMidgardObjectMa
     }
 
     return static_cast<const game::CMidScenVariables*>(obj);
+}
+
+const game::CMidgardPlan* getMidgardPlan(const game::IMidgardObjectMap* objectMap)
+{
+    const auto id{createIdWithType(objectMap, game::IdType::Plan)};
+
+    auto obj{objectMap->vftable->findScenarioObjectById(objectMap, &id)};
+    if (!obj) {
+        return nullptr;
+    }
+
+    return static_cast<const game::CMidgardPlan*>(obj);
 }
 
 } // namespace hooks
