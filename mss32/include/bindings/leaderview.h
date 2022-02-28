@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2022 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,44 +17,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UNITVIEW_H
-#define UNITVIEW_H
+#ifndef LEADERVIEW_H
+#define LEADERVIEW_H
 
-#include <optional>
-
-namespace sol {
-class state;
-}
-
-namespace game {
-struct CMidUnit;
-}
+#include "unitview.h"
 
 namespace bindings {
 
-class UnitImplView;
-
-class UnitView
+class LeaderView : public UnitView
 {
 public:
-    UnitView(const game::CMidUnit* unit);
+    LeaderView(const game::CMidUnit* unit);
 
     static void bind(sol::state& lua);
 
-    /** Returns unit current implementation. */
-    std::optional<UnitImplView> getImpl() const;
-    /** Returns unit base implementation. */
-    std::optional<UnitImplView> getBaseImpl() const;
-
-    /** Returns unit's current experience points. */
-    int getXp() const;
-    int getHp() const;
-    int getHpMax() const;
-
-protected:
-    const game::CMidUnit* unit;
+    /** Returns leader category id. */
+    int getCategory() const;
+    /** Returns leader maximum movement points. */
+    int getMovement() const;
+    /** Returns leader scouting range. */
+    int getScout() const;
+    /** Returns current leadership value. */
+    int getLeadership() const;
+    /** Returns true if leader has LLeaderAbility with specified id. */
+    bool hasAbility(int abilityId) const;
+    /** Returns true if leader has movement bonus on LGroundCategory with specified id. */
+    bool hasMoveBonus(int groundId) const;
 };
 
 } // namespace bindings
 
-#endif // UNITVIEW_H
+#endif // LEADERVIEW_H

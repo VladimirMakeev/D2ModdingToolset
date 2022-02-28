@@ -21,6 +21,7 @@
 #include "categoryids.h"
 #include "dynupgradeview.h"
 #include "idview.h"
+#include "leaderview.h"
 #include "locationview.h"
 #include "log.h"
 #include "point.h"
@@ -95,6 +96,7 @@ static void doBindApi(sol::state& lua)
     bindings::ScenVariablesView::bind(lua);
     bindings::ScenarioVariableView::bind(lua);
     bindings::TileView::bind(lua);
+    bindings::LeaderView::bind(lua);
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }
 

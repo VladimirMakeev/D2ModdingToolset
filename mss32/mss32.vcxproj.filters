@@ -906,6 +906,9 @@
     <ClCompile Include="src\lordcat.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\leaderview.cpp">
+      <Filter>Исходные файлы\bindings</Filter>
+    </ClCompile>
     <ClCompile Include="src\midgardplan.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -2307,6 +2310,9 @@
     </ClInclude>
     <ClInclude Include="include\strategicspell.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\leaderview.h">
+      <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\midgardplan.h">
       <Filter>Файлы заголовков</Filter>
