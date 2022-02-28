@@ -23,11 +23,12 @@
 #include "locationview.h"
 #include "midgardmapblock.h"
 #include "midgardobjectmap.h"
+#include "midgardplan.h"
 #include "midscenvariables.h"
 #include "scenarioinfo.h"
 #include "scenvariablesview.h"
+#include "stackview.h"
 #include "tileview.h"
-#include "utils.h"
 #include <sol/sol.hpp>
 
 namespace bindings {
@@ -43,6 +44,9 @@ void ScenarioView::bind(sol::state& lua)
                                               &ScenarioView::getLocationById);
     scenario["variables"] = sol::property(&ScenarioView::getScenVariables);
     scenario["getTile"] = sol::overload<>(&ScenarioView::getTile, &ScenarioView::getTileByPoint);
+    scenario["getStack"] = sol::overload<>(&ScenarioView::getStack, &ScenarioView::getStackById,
+                                           &ScenarioView::getStackByCoordinates,
+                                           &ScenarioView::getStackByPoint);
     scenario["day"] = sol::property(&ScenarioView::getCurrentDay);
     scenario["size"] = sol::property(&ScenarioView::getSize);
 }
@@ -127,6 +131,57 @@ std::optional<TileView> ScenarioView::getTile(int x, int y) const
 std::optional<TileView> ScenarioView::getTileByPoint(const Point& p) const
 {
     return getTile(p.x, p.y);
+}
+
+std::optional<StackView> ScenarioView::getStack(const std::string& id) const
+{
+    return getStackById(IdView{id});
+}
+
+std::optional<StackView> ScenarioView::getStackById(const IdView& id) const
+{
+    using namespace game;
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, &id.id);
+    if (!obj) {
+        return std::nullopt;
+    }
+
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+
+    auto stack = (const CMidStack*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType,
+                                               rtti.CMidStackType, 0);
+    if (!stack) {
+        return std::nullopt;
+    }
+
+    return StackView{stack, objectMap};
+}
+
+std::optional<StackView> ScenarioView::getStackByCoordinates(int x, int y) const
+{
+    using namespace game;
+
+    auto plan{hooks::getMidgardPlan(objectMap)};
+    if (!plan) {
+        return std::nullopt;
+    }
+
+    const CMqPoint position{x, y};
+    const IdType objectType{IdType::Stack};
+
+    auto stackId{CMidgardPlanApi::get().getObjectId(plan, &position, &objectType)};
+    if (!stackId) {
+        return std::nullopt;
+    }
+
+    return getStackById(IdView{stackId});
+}
+
+std::optional<StackView> ScenarioView::getStackByPoint(const Point& p) const
+{
+    return getStackByCoordinates(p.x, p.y);
 }
 
 int ScenarioView::getCurrentDay() const

@@ -29,7 +29,6 @@ class state;
 
 namespace game {
 struct IMidgardObjectMap;
-struct CScenarioInfo;
 } // namespace game
 
 namespace bindings {
@@ -39,6 +38,7 @@ struct Point;
 class LocationView;
 class ScenVariablesView;
 class TileView;
+class StackView;
 
 class ScenarioView
 {
@@ -58,6 +58,15 @@ public:
     std::optional<TileView> getTile(int x, int y) const;
     /** Returns tile by specified point. */
     std::optional<TileView> getTileByPoint(const Point& p) const;
+
+    /** Searches for stack by id string. */
+    std::optional<StackView> getStack(const std::string& id) const;
+    /** Searches for stack by id. */
+    std::optional<StackView> getStackById(const IdView& id) const;
+    /** Searches for stack by coordinate pair. */
+    std::optional<StackView> getStackByCoordinates(int x, int y) const;
+    /** Searches for stack at specified point. */
+    std::optional<StackView> getStackByPoint(const Point& p) const;
 
     int getCurrentDay() const;
     int getSize() const;
