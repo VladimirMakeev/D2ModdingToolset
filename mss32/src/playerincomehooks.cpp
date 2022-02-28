@@ -22,6 +22,7 @@
 #include "fortcategory.h"
 #include "fortification.h"
 #include "game.h"
+#include "gameutils.h"
 #include "iterators.h"
 #include "log.h"
 #include "midgardid.h"
@@ -61,10 +62,7 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
         return income;
     }
 
-    const auto variablesId = createScenarioVariablesId(objectMap);
-    auto variablesObj = objectMap->vftable->findScenarioObjectById(objectMap, &variablesId);
-
-    auto variables = static_cast<const CMidScenVariables*>(variablesObj);
+    auto variables{getScenarioVariables(objectMap)};
     if (!variables || !variables->variables.length) {
         // No variables defined, skip
         return income;

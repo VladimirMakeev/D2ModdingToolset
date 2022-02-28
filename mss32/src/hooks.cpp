@@ -880,10 +880,7 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
         return true;
     }
 
-    const auto variablesId = createScenarioVariablesId(dataCache);
-    auto variablesObj = dataCache->vftable->findScenarioObjectById(dataCache, &variablesId);
-
-    auto variables = static_cast<const CMidScenVariables*>(variablesObj);
+    auto variables{getScenarioVariables(dataCache)};
     if (!variables || !variables->variables.length) {
         return true;
     }

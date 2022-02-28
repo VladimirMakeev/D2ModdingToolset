@@ -26,6 +26,7 @@
 #include "eventconditioncathooks.h"
 #include "functor.h"
 #include "game.h"
+#include "gameutils.h"
 #include "interfmanager.h"
 #include "listbox.h"
 #include "mempool.h"
@@ -44,14 +45,6 @@
 #include <vector>
 
 namespace hooks {
-
-static const game::CMidScenVariables* getScenarioVariables(const game::IMidgardObjectMap* objectMap)
-{
-    const auto variablesId = createScenarioVariablesId(objectMap);
-    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, &variablesId);
-
-    return static_cast<const game::CMidScenVariables*>(obj);
-}
 
 static void forEachVariable(const game::IMidgardObjectMap* objectMap,
                             std::function<void(const game::ScenarioVariable*)> function)

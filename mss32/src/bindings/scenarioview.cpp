@@ -75,10 +75,7 @@ std::optional<LocationView> ScenarioView::getLocationById(const IdView& id) cons
 
 std::optional<ScenVariablesView> ScenarioView::getScenVariables() const
 {
-    const auto variablesId{hooks::createScenarioVariablesId(objectMap)};
-    auto variablesObj = objectMap->vftable->findScenarioObjectById(objectMap, &variablesId);
-
-    auto variables = static_cast<const game::CMidScenVariables*>(variablesObj);
+    auto variables{hooks::getScenarioVariables(objectMap)};
     if (!variables) {
         return std::nullopt;
     }

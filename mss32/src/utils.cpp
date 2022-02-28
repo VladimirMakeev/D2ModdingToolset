@@ -212,20 +212,6 @@ void showErrorMessageBox(const std::string& message)
     MessageBox(NULL, message.c_str(), "mss32.dll proxy", MB_OK);
 }
 
-game::CMidgardID createScenarioVariablesId(const game::IMidgardObjectMap* objectMap)
-{
-    using namespace game;
-
-    const auto& id = CMidgardIDApi::get();
-    auto scenarioId = objectMap->vftable->getId(objectMap);
-
-    CMidgardID variablesId{};
-    id.fromParts(&variablesId, id.getCategory(scenarioId), id.getCategoryIndex(scenarioId),
-                 IdType::ScenarioVariable, 0);
-
-    return variablesId;
-}
-
 void forEachScenarioVariable(const game::CMidScenVariables* variables,
                              std::function<void(const game::ScenarioVariable*, std::uint32_t)> f)
 {

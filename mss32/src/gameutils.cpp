@@ -22,9 +22,25 @@
 #include "game.h"
 #include "midgardobjectmap.h"
 #include "midplayer.h"
+#include "midscenvariables.h"
 #include "scenarioinfo.h"
 
 namespace hooks {
+
+static game::CMidgardID createIdWithType(const game::IMidgardObjectMap* objectMap,
+                                         game::IdType idType)
+{
+    using namespace game;
+
+    const auto& idApi{CMidgardIDApi::get()};
+    auto scenarioId{objectMap->vftable->getId(objectMap)};
+
+    CMidgardID id{};
+    idApi.fromParts(&id, idApi.getCategory(scenarioId), idApi.getCategoryIndex(scenarioId), idType,
+                    0);
+
+    return id;
+}
 
 bool isGreaterPickRandomIfEqual(int first, int second)
 {
@@ -53,21 +69,14 @@ game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMa
 
 const game::CScenarioInfo* getScenarioInfo(const game::IMidgardObjectMap* objectMap)
 {
-    using namespace game;
+    const auto id{createIdWithType(objectMap, game::IdType::ScenarioInfo)};
 
-    const auto& id = CMidgardIDApi::get();
-    auto scenarioId = objectMap->vftable->getId(objectMap);
-
-    CMidgardID infoId{};
-    id.fromParts(&infoId, id.getCategory(scenarioId), id.getCategoryIndex(scenarioId),
-                 IdType::ScenarioInfo, 0);
-
-    auto infoObj = objectMap->vftable->findScenarioObjectById(objectMap, &infoId);
-    if (!infoObj) {
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, &id);
+    if (!obj) {
         return nullptr;
     }
 
-    return static_cast<const CScenarioInfo*>(infoObj);
+    return static_cast<const game::CScenarioInfo*>(obj);
 }
 
 const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
@@ -80,6 +89,18 @@ const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
     const auto dynamicCast = RttiApi::get().dynamicCast;
     return (const CMidPlayer*)dynamicCast(playerObj, 0, rtti.IMidScenarioObjectType,
                                           rtti.CMidPlayerType, 0);
+}
+
+const game::CMidScenVariables* getScenarioVariables(const game::IMidgardObjectMap* objectMap)
+{
+    const auto id{createIdWithType(objectMap, game::IdType::ScenarioVariable)};
+
+    auto obj{objectMap->vftable->findScenarioObjectById(objectMap, &id)};
+    if (!obj) {
+        return nullptr;
+    }
+
+    return static_cast<const game::CMidScenVariables*>(obj);
 }
 
 } // namespace hooks

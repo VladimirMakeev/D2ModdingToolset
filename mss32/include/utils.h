@@ -80,8 +80,6 @@ void showMessageBox(const std::string& message,
 /** Shows windows style message box that does not depend on game rendering and resources. */
 void showErrorMessageBox(const std::string& message);
 
-game::CMidgardID createScenarioVariablesId(const game::IMidgardObjectMap* objectMap);
-
 /** Calls specified function on each scenario variable. */
 void forEachScenarioVariable(const game::CMidScenVariables* variables,
                              std::function<void(const game::ScenarioVariable*, std::uint32_t)> f);
