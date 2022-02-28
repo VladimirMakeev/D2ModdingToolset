@@ -28,6 +28,7 @@
 #include "scenariovariableview.h"
 #include "scenarioview.h"
 #include "scenvariablesview.h"
+#include "stackview.h"
 #include "tileview.h"
 #include "unitimplview.h"
 #include "unitslotview.h"
@@ -118,6 +119,7 @@ static void doBindApi(sol::state& lua)
     bindings::ScenVariablesView::bind(lua);
     bindings::ScenarioVariableView::bind(lua);
     bindings::TileView::bind(lua);
+    bindings::StackView::bind(lua);
     bindings::LeaderView::bind(lua);
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }
