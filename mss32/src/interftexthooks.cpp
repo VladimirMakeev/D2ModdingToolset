@@ -251,7 +251,7 @@ std::string getAttackDamageModifiableText(const game::IAttack* attack,
     int damage = getAttackQtyDamageOrHealHooked(attack, damageMax);
 
     int damageMultiplier = 1;
-    if (getCustomAttacks().damageRatio.enabled) {
+    if (getCustomAttacks().damageRatios.enabled) {
         auto attackImpl = getAttackImpl(attack);
         if (attackImpl && attackImpl->data->damageSplit) {
             damageMultiplier = userSettings().splitDamageMultiplier;
