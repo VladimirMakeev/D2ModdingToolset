@@ -83,6 +83,28 @@ static void doBindApi(sol::state& lua)
         "Water", GroundId::Water,
         "Mountain", GroundId::Mountain
     );
+
+    lua.new_enum("LeaderType",
+        "Fighter", LeaderId::Fighter,
+        "Explorer", LeaderId::Explorer,
+        "Mage", LeaderId::Mage,
+        "Rod", LeaderId::Rod,
+        "Noble", LeaderId::Noble
+    );
+
+    lua.new_enum("LeaderAbility",
+        "Incorruptible", LeaderAbilityId::Incorruptible,
+        "WeaponMaster", LeaderAbilityId::WeaponMaster,
+        "WandScrollUse", LeaderAbilityId::WandScrollUse,
+        "WeaponArmorUse", LeaderAbilityId::WeaponArmorUse,
+        "BannerUse", LeaderAbilityId::BannerUse,
+        "JewelryUse", LeaderAbilityId::JewelryUse,
+        "Rod", LeaderAbilityId::Rod,
+        "OrbUse", LeaderAbilityId::OrbUse,
+        "TalismanUse", LeaderAbilityId::TalismanUse,
+        "TravelItemUse", LeaderAbilityId::TravelItemUse,
+        "CriticalHit", LeaderAbilityId::CriticalHit
+    );
     // clang-format on
 
     bindings::UnitView::bind(lua);
