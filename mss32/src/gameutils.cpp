@@ -51,7 +51,7 @@ game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMa
     return fn.getStackFortRuinGroup(tmp, objectMap, &groupId);
 }
 
-game::CScenarioInfo* getScenarioInfo(const game::IMidgardObjectMap* objectMap)
+const game::CScenarioInfo* getScenarioInfo(const game::IMidgardObjectMap* objectMap)
 {
     using namespace game;
 
@@ -67,19 +67,19 @@ game::CScenarioInfo* getScenarioInfo(const game::IMidgardObjectMap* objectMap)
         return nullptr;
     }
 
-    return static_cast<CScenarioInfo*>(infoObj);
+    return static_cast<const CScenarioInfo*>(infoObj);
 }
 
-game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
-                            const game::CMidgardID* playerId)
+const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
+                                  const game::CMidgardID* playerId)
 {
     using namespace game;
 
     auto playerObj = objectMap->vftable->findScenarioObjectById(objectMap, playerId);
     const auto& rtti = RttiApi::rtti();
     const auto dynamicCast = RttiApi::get().dynamicCast;
-    return (CMidPlayer*)dynamicCast(playerObj, 0, rtti.IMidScenarioObjectType, rtti.CMidPlayerType,
-                                    0);
+    return (const CMidPlayer*)dynamicCast(playerObj, 0, rtti.IMidScenarioObjectType,
+                                          rtti.CMidPlayerType, 0);
 }
 
 } // namespace hooks

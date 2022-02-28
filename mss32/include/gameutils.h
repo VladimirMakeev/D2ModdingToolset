@@ -32,13 +32,16 @@ struct CMidPlayer;
 namespace hooks {
 
 bool isGreaterPickRandomIfEqual(int first, int second);
+
 game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMap,
                                          const game::BattleMsgData* battleMsgData,
                                          const game::CMidgardID* unitId,
                                          bool ally);
-game::CScenarioInfo* getScenarioInfo(const game::IMidgardObjectMap* objectMap);
-game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
-                            const game::CMidgardID* playerId);
+
+const game::CScenarioInfo* getScenarioInfo(const game::IMidgardObjectMap* objectMap);
+
+const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
+                                  const game::CMidgardID* playerId);
 
 } // namespace hooks
 
