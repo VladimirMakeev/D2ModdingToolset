@@ -18,6 +18,7 @@
  */
 
 #include "scripts.h"
+#include "attackview.h"
 #include "categoryids.h"
 #include "dynupgradeview.h"
 #include "idview.h"
@@ -164,6 +165,7 @@ static void doBindApi(sol::state& lua)
     bindings::TileView::bind(lua);
     bindings::StackView::bind(lua);
     bindings::LeaderView::bind(lua);
+    bindings::AttackView::bind(lua);
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }
 

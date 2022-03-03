@@ -33,6 +33,7 @@ struct IUsUnit;
 namespace bindings {
 
 class DynUpgradeView;
+class AttackView;
 
 class UnitImplView
 {
@@ -61,6 +62,10 @@ public:
     std::optional<DynUpgradeView> getDynUpgrade1() const;
     /** Returns dynamic upgrade 2. */
     std::optional<DynUpgradeView> getDynUpgrade2() const;
+    /** Returns primary attack. */
+    std::optional<AttackView> getAttack() const;
+    /** Returns secondary attack. */
+    std::optional<AttackView> getAttack2() const;
 
 protected:
     std::optional<DynUpgradeView> getDynUpgrade(int upgradeNumber) const;

@@ -18,6 +18,7 @@
  */
 
 #include "unitimplview.h"
+#include "attackview.h"
 #include "dynupgradeview.h"
 #include "game.h"
 #include "globaldata.h"
@@ -55,6 +56,8 @@ void UnitImplView::bind(sol::state& lua)
     impl["dynUpgLvl"] = sol::property(&UnitImplView::getDynUpgLevel);
     impl["dynUpg1"] = sol::property(&UnitImplView::getDynUpgrade1);
     impl["dynUpg2"] = sol::property(&UnitImplView::getDynUpgrade2);
+    impl["attack1"] = sol::property(&UnitImplView::getAttack);
+    impl["attack2"] = sol::property(&UnitImplView::getAttack2);
 }
 
 int UnitImplView::getLevel() const
@@ -151,6 +154,36 @@ std::optional<DynUpgradeView> UnitImplView::getDynUpgrade1() const
 std::optional<DynUpgradeView> UnitImplView::getDynUpgrade2() const
 {
     return getDynUpgrade(2);
+}
+
+std::optional<AttackView> UnitImplView::getAttack() const
+{
+    auto soldier{hooks::castUnitImplToSoldierWithLogging(impl)};
+    if (!soldier) {
+        return std::nullopt;
+    }
+
+    auto attack{soldier->vftable->getAttackById(soldier)};
+    if (!attack) {
+        return std::nullopt;
+    }
+
+    return AttackView{attack};
+}
+
+std::optional<AttackView> UnitImplView::getAttack2() const
+{
+    auto soldier{hooks::castUnitImplToSoldierWithLogging(impl)};
+    if (!soldier) {
+        return std::nullopt;
+    }
+
+    auto secondaryAttack{soldier->vftable->getSecondAttackById(soldier)};
+    if (!secondaryAttack) {
+        return std::nullopt;
+    }
+
+    return AttackView{secondaryAttack};
 }
 
 std::optional<DynUpgradeView> UnitImplView::getDynUpgrade(int upgradeNumber) const
