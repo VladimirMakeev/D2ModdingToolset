@@ -106,6 +106,49 @@ static void doBindApi(sol::state& lua)
         "TravelItemUse", LeaderAbilityId::TravelItemUse,
         "CriticalHit", LeaderAbilityId::CriticalHit
     );
+
+    lua.new_enum("Attack",
+        "Damage", AttackClassId::Damage,
+        "Drain", AttackClassId::Drain,
+        "Paralyze", AttackClassId::Paralyze,
+        "Heal", AttackClassId::Heal,
+        "Fear", AttackClassId::Fear,
+        "BoostDamage", AttackClassId::BoostDamage,
+        "Petrify", AttackClassId::Petrify,
+        "LowerDamage", AttackClassId::LowerDamage,
+        "LowerInitiative", AttackClassId::LowerInitiative,
+        "Poison", AttackClassId::Poison,
+        "Frostbite", AttackClassId::Frostbite,
+        "Revive", AttackClassId::Revive,
+        "DrainOverflow", AttackClassId::DrainOverflow,
+        "Cure", AttackClassId::Cure,
+        "Summon", AttackClassId::Summon,
+        "DrainLevel", AttackClassId::DrainLevel,
+        "GiveAttack", AttackClassId::GiveAttack,
+        "Doppelganger", AttackClassId::Doppelganger,
+        "TransformSelf", AttackClassId::TransformSelf,
+        "TransformOther", AttackClassId::TransformOther,
+        "Blister", AttackClassId::Blister,
+        "BestowWards", AttackClassId::BestowWards,
+        "Shatter", AttackClassId::Shatter
+    );
+
+    lua.new_enum("Source",
+        "Weapon", AttackSourceId::Weapon,
+        "Mind", AttackSourceId::Mind,
+        "Life", AttackSourceId::Life,
+        "Death", AttackSourceId::Death,
+        "Fire", AttackSourceId::Fire,
+        "Water", AttackSourceId::Water,
+        "Earth", AttackSourceId::Earth,
+        "Air", AttackSourceId::Air
+    );
+
+    lua.new_enum("Reach",
+        "All", AttackReachId::All,
+        "Any", AttackReachId::Any,
+        "Adjacent", AttackReachId::Adjacent
+    );
     // clang-format on
 
     bindings::UnitView::bind(lua);
