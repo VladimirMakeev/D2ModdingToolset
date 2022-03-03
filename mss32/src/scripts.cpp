@@ -165,6 +165,7 @@ static void doBindApi(sol::state& lua)
     bindings::TileView::bind(lua);
     bindings::StackView::bind(lua);
     bindings::LeaderView::bind(lua);
+    bindings::GroupView::bind(lua);
     bindings::AttackView::bind(lua);
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }

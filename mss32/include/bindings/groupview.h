@@ -17,45 +17,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef STACKVIEW_H
-#define STACKVIEW_H
+#ifndef GROUPVIEW_H
+#define GROUPVIEW_H
 
-#include "groupview.h"
+#include "unitslotview.h"
+#include <vector>
+
+namespace sol {
+class state;
+}
 
 namespace game {
-struct CMidStack;
+struct CMidUnitGroup;
 struct IMidgardObjectMap;
 } // namespace game
 
 namespace bindings {
 
-class LeaderView;
+class UnitSlotView;
 
-class StackView
+class GroupView
 {
 public:
-    StackView(const game::CMidStack* stack, const game::IMidgardObjectMap* objectMap);
+    using GroupSlots = std::vector<UnitSlotView>;
+
+    GroupView(const game::CMidUnitGroup* group,
+              const game::IMidgardObjectMap* objectMap,
+              const game::CMidgardID* groupId);
 
     static void bind(sol::state& lua);
 
-    /** Returns stack units as a group. */
-    GroupView getGroup() const;
-    /** Returns stack leader. */
-    std::optional<LeaderView> getLeader() const;
-    /** Returns stack current movement points. */
-    int getMovement() const;
-    /** Returns stack subrace category id. */
-    int getSubrace() const;
+    /** Returns group as array of 6 unit slots. */
+    GroupSlots getSlots() const;
 
-    bool isInside() const;
-
-    bool isInvisible() const;
-
-private:
-    const game::CMidStack* stack;
+protected:
+    const game::CMidUnitGroup* group;
     const game::IMidgardObjectMap* objectMap;
+    game::CMidgardID groupId;
 };
 
 } // namespace bindings
 
-#endif // STACKVIEW_H
+#endif // GROUPVIEW_H

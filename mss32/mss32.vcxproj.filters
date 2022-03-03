@@ -915,6 +915,9 @@
     <ClCompile Include="src\midgardplan.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\groupview.cpp">
+      <Filter>Исходные файлы\bindings</Filter>
+    </ClCompile>
     <ClCompile Include="src\bindings\attackview.cpp">
       <Filter>Исходные файлы\bindings</Filter>
     </ClCompile>
@@ -2325,6 +2328,9 @@
     </ClInclude>
     <ClInclude Include="include\midgardplan.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\groupview.h">
+      <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\attackview.h">
       <Filter>Файлы заголовков\bindings</Filter>

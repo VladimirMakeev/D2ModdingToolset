@@ -183,6 +183,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\batviewer2dengine.cpp" />
     <ClCompile Include="src\bindings\attackview.cpp" />
     <ClCompile Include="src\bindings\dynupgradeview.cpp" />
+    <ClCompile Include="src\bindings\groupview.cpp" />
     <ClCompile Include="src\bindings\idview.cpp" />
     <ClCompile Include="src\bindings\leaderview.cpp" />
     <ClCompile Include="src\bindings\locationview.cpp" />
@@ -481,6 +482,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batviewerutils.h" />
     <ClInclude Include="include\bindings\attackview.h" />
     <ClInclude Include="include\bindings\dynupgradeview.h" />
+    <ClInclude Include="include\bindings\groupview.h" />
     <ClInclude Include="include\bindings\idview.h" />
     <ClInclude Include="include\bindings\leaderview.h" />
     <ClInclude Include="include\bindings\locationview.h" />

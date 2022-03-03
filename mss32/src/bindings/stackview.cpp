@@ -35,7 +35,7 @@ StackView::StackView(const game::CMidStack* stack, const game::IMidgardObjectMap
 void StackView::bind(sol::state& lua)
 {
     auto stackView = lua.new_usertype<StackView>("StackView");
-    // stackView["group"] = sol::property(&StackView::getGroup);
+    stackView["group"] = sol::property(&StackView::getGroup);
     stackView["leader"] = sol::property(&StackView::getLeader);
     stackView["movement"] = sol::property(&StackView::getMovement);
     stackView["subrace"] = sol::property(&StackView::getSubrace);
@@ -43,10 +43,10 @@ void StackView::bind(sol::state& lua)
     stackView["invisible"] = sol::property(&StackView::isInvisible);
 }
 
-/*std::optional<GroupView> StackView::getGroup() const
+GroupView StackView::getGroup() const
 {
-    return std::nullopt;
-}*/
+    return GroupView{&stack->group, objectMap, &stack->stackId};
+}
 
 std::optional<LeaderView> StackView::getLeader() const
 {
