@@ -1470,13 +1470,8 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
     const auto& fn = gameFunctions();
     fn.computeArmor(&armor, objectMap, battleMsgData, targetUnitId);
 
-    const auto& battle = BattleMsgDataApi::get();
-    CMidgardID playerId = battle.isUnitAttacker(battleMsgData, attackerUnitId)
-                              ? battleMsgData->attackerPlayerId
-                              : battleMsgData->defenderPlayerId;
-
     bool isEasyDifficulty = false;
-    auto player = getPlayer(objectMap, &playerId);
+    auto player = getPlayer(objectMap, battleMsgData, attackerUnitId);
     if (player && player->isHuman) {
         const auto& difficulties = DifficultyLevelCategories::get();
         isEasyDifficulty = getScenarioInfo(objectMap)->gameDifficulty.id == difficulties.easy->id;
