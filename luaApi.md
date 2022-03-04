@@ -52,6 +52,34 @@ Terrain = { Human, Dwarf, Heretic, Undead, Neutral, Elf }
 Ground = { Plain, Forest, Water, Mountain }
 ```
 
+##### Leader
+```
+Leader = { Fighter, Explorer, Mage, Rod, Noble }
+```
+
+##### Ability
+```
+Ability = { Incorruptible, WeaponMaster, WandScrollUse, WeaponArmorUse, BannerUse, JewelryUse,
+            Rod, OrbUse, TalismanUse, TravelItemUse, CriticalHit }
+```
+
+##### Attack
+```
+Attack = { Damage, Drain, Paralyze, Heal, Fear, BoostDamage, Petrify, LowerDamage, LowerInitiative,
+           Poison, Frostbite, Revive, DrainOverflow, Cure, Summon, DrainLevel, GiveAttack,
+           Doppelganger, TransformSelf, TransformOther, Blister, BestowWards, Shatter }
+```
+
+##### Source
+```
+Source = { Weapon, Mind, Life, Death, Fire, Water, Earth, Air }
+```
+
+##### Reach
+```
+Reach = { All, Any, Adjacent }
+```
+
 ---
 
 #### Point
@@ -113,6 +141,36 @@ unit.baseImpl
 
 ---
 
+#### Leader
+Represents leader unit. Leaders are main units in stacks. Leader has all methods of [units](luaApi.md#unit).
+
+Methods:
+##### type
+Returns leader [type](luaApi.md#leader).
+```lua
+leader.type
+```
+##### hasAbility
+Returns true if leader has specified [ability](luaApi.md#ability).
+```lua
+leader:hasAbility(Ability.TalismanUse)
+```
+##### hasMoveBonus
+Returns true if leader has movement bonus on specified [ground](luaApi.md#ground).
+```lua
+leader:hasMoveBonus(Ground.Water)
+```
+```lua
+-- Returns leader maximum movement points.
+leader.movement
+-- Returns leader scouting range.
+leader.scout
+-- Returns current leadership value.
+leader.leadership
+```
+
+---
+
 #### Unit implementation
 Represents unit template. Records in GUnits.dbf are unit implementations.
 
@@ -146,6 +204,10 @@ impl.dynUpgLvl
 impl.dynUpg1
 -- Returns dynamic upgrade 2.
 impl.dynUpg2
+--- Returns primary attack or nil if no primary attack used.
+impl.attack1
+--- Returns secondary attack or nil if no secondary attack used.
+impl.attack2
 ```
 
 ---
@@ -176,6 +238,48 @@ slot.frontline
 slot.backline
 -- Returns a distance between two slots (used for adjacent slot calculations).
 slot.distance(otherSlot)
+```
+
+---
+
+#### Group
+Represents 6 unit slots.
+
+Methods:
+##### slots
+Returns group as array of 6 [unit slots](luaApi.md#unit-slot).
+```lua
+group.slots
+```
+
+---
+
+#### Stack
+Represents [group](luaApi.md#group) of 6 [units](luaApi.md#unit-slot) on a map. One of the units is a [leader](luaApi.md#leader-1).
+
+Methods:
+##### group
+Returns stack units as a [group](luaApi.md#group).
+```lua
+stack.group
+```
+##### leader
+Returns stack [leader](luaApi.md#leader-1).
+```lua
+stack.leader
+```
+##### subrace
+Returns stack [subrace](luaApi.md#subrace).
+```lua
+stack.subrace
+```
+```lua
+--- Returns stack current movement points.
+stack.movement
+--- Returns true if stack is inside a city.
+stack.inside
+--- Returns true if stack is invisible.
+stack.invisible
 ```
 
 ---
@@ -286,6 +390,14 @@ if (tile == nil) then
     return
 end
 ```
+##### getStack
+Searches for [Stack](luaApi.md#stack) by id string, [Id](luaApi.md#id), pair of coordinates or [Point](luaApi.md#point), returns nil if not found.
+```lua
+local stack = scenario:getStack(10, 15)
+if (stack == nil) then
+    return
+end
+```
 ##### day
 Returns number of current day in game.
 ```lua
@@ -295,6 +407,42 @@ scenario.day
 Returns scenario map size.
 ```lua
 scenario.size
+```
+
+---
+
+#### Attack
+Represents attack of [Unit Implementation](luaApi.md#unit-implementation).
+
+Methods:
+##### type
+Returns attack [type](luaApi.md#attack).
+```lua
+attack.type
+```
+##### source
+Returns attack [source](luaApi.md#source).
+```lua
+attack.source
+```
+##### reach
+Returns attack [reach](luaApi.md#reach).
+```lua
+attack.reach
+```
+```lua
+--- Returns attack initiative value.
+attack.initiative
+--- Returns attack power (accuracy).
+attack.power
+--- Returns damage the attack can inflict. Damage depends on attack type.
+attack.damage
+--- Returns healing the attack can apply. Healing depends on attack type.
+attack.heal
+--- Returns true if attack has long effect duration. Effect depends on attack type.
+attack.infinite
+--- Returns true if attack can inflict critical damage.
+attack.crit
 ```
 
 ---
