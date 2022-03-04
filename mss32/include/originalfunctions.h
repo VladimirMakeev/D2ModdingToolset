@@ -63,8 +63,6 @@ struct OriginalFunctions
     game::CEncLayoutSpellApi::Api::Constructor encLayoutSpellCtor;
     game::os_exceptionApi::Api::ThrowException throwException;
     game::CMidUnitApi::Api::AddRemoveModifier removeModifier;
-    game::BattleMsgDataApi::Api::SetUnknown9Bit1AndClearBoostLowerDamage
-        setUnknown9Bit1AndClearBoostLowerDamage;
     game::BattleMsgDataApi::Api::FindAttackTarget findAttackTarget;
     game::BattleMsgDataApi::Api::Constructor battleMsgDataCtor;
     game::GetSoldierImmunityAiRating getSoldierImmunityAiRating;

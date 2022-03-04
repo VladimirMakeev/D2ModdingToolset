@@ -45,6 +45,10 @@ const game::CScenarioInfo* getScenarioInfo(const game::IMidgardObjectMap* object
 const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
                                   const game::CMidgardID* playerId);
 
+const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
+                                  const game::BattleMsgData* battleMsgData,
+                                  const game::CMidgardID* unitId);
+
 const game::CMidScenVariables* getScenarioVariables(const game::IMidgardObjectMap* objectMap);
 
 const game::CMidgardPlan* getMidgardPlan(const game::IMidgardObjectMap* objectMap);

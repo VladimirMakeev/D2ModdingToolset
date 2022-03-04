@@ -125,7 +125,7 @@ struct BattleTurn
     /** Id of unit performing the turn. */
     CMidgardID unitId;
     /** Number of attacks unit can make in a single turn. 2 for units with double attack. */
-    char attacksCount;
+    char attackCount;
     char padding[3];
 };
 
@@ -401,21 +401,20 @@ struct Api
                                               const CMidgardID* unitId);
     UnitCanBeRevived unitCanBeRevived;
 
-    /** Called at the end of battle turn to cleanup temporary unit statuses. */
-    using SetUnknown9Bit1AndClearBoostLowerDamage =
-        void(__stdcall*)(const BattleMsgData* battleMsgData,
-                         const CMidgardID* unitId,
-                         CMidgardID* nextAttackUnitId);
-    SetUnknown9Bit1AndClearBoostLowerDamage setUnknown9Bit1AndClearBoostLowerDamage;
+    /** Called at the end of battle turn to update battle data for the current unit. */
+    using AfterBattleTurn = void(__stdcall*)(const BattleMsgData* battleMsgData,
+                                             const CMidgardID* unitId,
+                                             const CMidgardID* nextUnitId);
+    AfterBattleTurn afterBattleTurn;
 
-    /** Called at the end of battle turn of a previous unit before a unit attacks. */
-    using BeforeAttack = void(__stdcall*)(const BattleMsgData* battleMsgData,
-                                          const IMidgardObjectMap* objectMap,
-                                          const CMidgardID* unitId);
-    BeforeAttack beforeAttack;
+    /** Called at the end of battle turn to update battle data for the next unit. */
+    using BeforeBattleTurn = void(__stdcall*)(const BattleMsgData* battleMsgData,
+                                              const IMidgardObjectMap* objectMap,
+                                              const CMidgardID* unitId);
+    BeforeBattleTurn beforeBattleTurn;
 
     /**
-     * Resets info about units modified by this unit. Called in BeforeAttack after corresponding
+     * Resets info about units modified by this unit. Called in BeforeBattleTurn after corresponding
      * modifiers are removed.
      */
     using ResetModifiedUnitsInfo = void(__thiscall*)(BattleMsgData* thisptr,
@@ -423,8 +422,8 @@ struct Api
     ResetModifiedUnitsInfo resetModifiedUnitsInfo;
 
     /**
-     * Resets info about a modifier applied to this unit. Called in BeforeAttack after the modifier
-     * is removed.
+     * Resets info about a modifier applied to this unit. Called in BeforeBattleTurn after the
+     * modifier is removed.
      */
     using ResetUnitModifierInfo = void(__thiscall*)(BattleMsgData* thisptr,
                                                     const CMidgardID* modifiedUnitId,
@@ -618,9 +617,13 @@ struct Api
 
     using GiveAttack = void(__thiscall*)(BattleMsgData* thistr,
                                          const CMidgardID* unitId,
-                                         char attacksCount,
+                                         char attackCount,
                                          int lastIndex);
     GiveAttack giveAttack;
+
+    using RemoveFiniteBoostLowerDamage = void(__stdcall*)(BattleMsgData* battleMsgData,
+                                                          const CMidgardID* unitId);
+    RemoveFiniteBoostLowerDamage removeFiniteBoostLowerDamage;
 };
 
 Api& get();

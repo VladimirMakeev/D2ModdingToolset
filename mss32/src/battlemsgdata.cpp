@@ -53,8 +53,8 @@ static std::array<Api, 3> functions = {{
         (Api::UnitCanBeHealed)0x65e938,
         (Api::UnitCanBeCured)0x65d890,
         (Api::UnitCanBeRevived)0x65d927,
-        (Api::SetUnknown9Bit1AndClearBoostLowerDamage)0x627ac9,
-        (Api::BeforeAttack)0x627bff,
+        (Api::AfterBattleTurn)0x627ac9,
+        (Api::BeforeBattleTurn)0x627bff,
         (Api::ResetModifiedUnitsInfo)0x62326e,
         (Api::ResetUnitModifierInfo)0x6231d4,
         (Api::FindAttackTarget)0x5d163a,
@@ -88,6 +88,7 @@ static std::array<Api, 3> functions = {{
         (Api::IsAutoBattle)0x6243c8,
         (Api::AlliesNotPreventingAdjacentAttack)0x65c19c,
         (Api::GiveAttack)0x623ade,
+        (Api::RemoveFiniteBoostLowerDamage)0x627b07,
     },
     // Russobit
     Api{
@@ -117,8 +118,8 @@ static std::array<Api, 3> functions = {{
         (Api::UnitCanBeHealed)0x65e938,
         (Api::UnitCanBeCured)0x65d890,
         (Api::UnitCanBeRevived)0x65d927,
-        (Api::SetUnknown9Bit1AndClearBoostLowerDamage)0x627ac9,
-        (Api::BeforeAttack)0x627bff,
+        (Api::AfterBattleTurn)0x627ac9,
+        (Api::BeforeBattleTurn)0x627bff,
         (Api::ResetModifiedUnitsInfo)0x62326e,
         (Api::ResetUnitModifierInfo)0x6231d4,
         (Api::FindAttackTarget)0x5d163a,
@@ -152,6 +153,7 @@ static std::array<Api, 3> functions = {{
         (Api::IsAutoBattle)0x6243c8,
         (Api::AlliesNotPreventingAdjacentAttack)0x65c19c,
         (Api::GiveAttack)0x623ade,
+        (Api::RemoveFiniteBoostLowerDamage)0x627b07,
     },
     // Gog
     Api{
@@ -181,8 +183,8 @@ static std::array<Api, 3> functions = {{
         (Api::UnitCanBeHealed)0x65d3b8,
         (Api::UnitCanBeCured)0x65c310,
         (Api::UnitCanBeRevived)0x65c3a7,
-        (Api::SetUnknown9Bit1AndClearBoostLowerDamage)0x626609,
-        (Api::BeforeAttack)0x62673f,
+        (Api::AfterBattleTurn)0x626609,
+        (Api::BeforeBattleTurn)0x62673f,
         (Api::ResetModifiedUnitsInfo)0x621dfe,
         (Api::ResetUnitModifierInfo)0x621d64,
         (Api::FindAttackTarget)0x5d056b,
@@ -216,6 +218,7 @@ static std::array<Api, 3> functions = {{
         (Api::IsAutoBattle)0x622f58,
         (Api::AlliesNotPreventingAdjacentAttack)0x65ac1c,
         (Api::GiveAttack)0x62266e,
+        (Api::RemoveFiniteBoostLowerDamage)0x626647,
     },
 }};
 // clang-format on

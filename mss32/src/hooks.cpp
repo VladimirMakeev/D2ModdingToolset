@@ -189,7 +189,7 @@ static Hooks getGameHooks()
         {fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked},
         // Fix bestow wards becoming permanent on warded unit transformation
         // Support custom attack damage ratios
-        {battle.beforeAttack, beforeAttackHooked},
+        {battle.beforeBattleTurn, beforeBattleTurnHooked},
         /**
          * Allows bestow wards to:
          * 1) Grant modifiers even if there are no source wards among them
@@ -208,12 +208,8 @@ static Hooks getGameHooks()
          * 3) Incorrectly resetting attack source ward if its modifier also contains hp, regen or armor element
          */
         {CBatAttackBestowWardsApi::get().onHit, bestowWardsAttackOnHitHooked},
-        /**
-         * Fix bestow wards with double attack where modifiers granted by first attack are
-         * getting removed. The function is used as a backdoor to erase the next attack unit id
-         * if it equals current unit id, so modifiers granted by first attack are not removed.
-         */
-        {battle.setUnknown9Bit1AndClearBoostLowerDamage, setUnknown9Bit1AndClearBoostLowerDamageHooked, (void**)&orig.setUnknown9Bit1AndClearBoostLowerDamage},
+        // Fix bestow wards with double attack where modifiers granted by first attack are removed
+        {battle.afterBattleTurn, afterBattleTurnHooked},
         // Allow any attack with QTY_HEAL > 0 to heal units when battle ends (just like ordinary heal does)
         {fn.getUnitHealAttackNumber, getUnitHealAttackNumberHooked},
         // Fix AI not being able to find target for lower damage/ini attack
@@ -1470,13 +1466,8 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
     const auto& fn = gameFunctions();
     fn.computeArmor(&armor, objectMap, battleMsgData, targetUnitId);
 
-    const auto& battle = BattleMsgDataApi::get();
-    CMidgardID playerId = battle.isUnitAttacker(battleMsgData, attackerUnitId)
-                              ? battleMsgData->attackerPlayerId
-                              : battleMsgData->defenderPlayerId;
-
     bool isEasyDifficulty = false;
-    auto player = getPlayer(objectMap, &playerId);
+    auto player = getPlayer(objectMap, battleMsgData, attackerUnitId);
     if (player && player->isHuman) {
         const auto& difficulties = DifficultyLevelCategories::get();
         isEasyDifficulty = getScenarioInfo(objectMap)->gameDifficulty.id == difficulties.easy->id;
@@ -1634,39 +1625,38 @@ int __stdcall getAttackQtyDamageOrHealHooked(const game::IAttack* attack, int da
     return qtyDamage;
 }
 
-void __stdcall setUnknown9Bit1AndClearBoostLowerDamageHooked(game::BattleMsgData* battleMsgData,
-                                                             const game::CMidgardID* unitId,
-                                                             game::CMidgardID* nextAttackUnitId)
+static game::CMidgardID currUnitId = game::emptyId;
+void __stdcall afterBattleTurnHooked(game::BattleMsgData* battleMsgData,
+                                     const game::CMidgardID* unitId,
+                                     const game::CMidgardID* nextUnitId)
 {
     using namespace game;
 
-    getOriginalFunctions().setUnknown9Bit1AndClearBoostLowerDamage(battleMsgData, unitId,
-                                                                   nextAttackUnitId);
-
-    if (nextAttackUnitId->value == unitId->value) {
-        nextAttackUnitId->value = emptyId.value;
-
-        const auto& battle = BattleMsgDataApi::get();
-        battle.setUnitStatus(battleMsgData, unitId, BattleStatus::Defend, false);
-        battle.setAttackPowerReduction(battleMsgData, unitId, 0);
+    if (*unitId != *nextUnitId) {
+        battleMsgData->unknown9 |= 2;
+        BattleMsgDataApi::get().removeFiniteBoostLowerDamage(battleMsgData, unitId);
     }
+
+    currUnitId = *unitId;
 }
 
-void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
-                                  game::IMidgardObjectMap* objectMap,
-                                  const game::CMidgardID* unitId)
+void __stdcall beforeBattleTurnHooked(game::BattleMsgData* battleMsgData,
+                                      game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* unitId)
 {
     using namespace game;
 
     const auto& battle = BattleMsgDataApi::get();
     battle.setUnitStatus(battleMsgData, unitId, BattleStatus::Defend, false);
 
-    auto unitInfo = battle.getUnitInfoById(battleMsgData, unitId);
-
-    auto modifiedUnitIds = getModifiedUnitIds(unitInfo);
-    for (auto it = modifiedUnitIds.begin(); it != modifiedUnitIds.end(); it++)
-        removeModifiers(battleMsgData, objectMap, unitInfo, &(*it));
-    resetModifiedUnitsInfo(unitInfo);
+    // Fix bestow wards with double attack where modifiers granted by first attack are removed
+    if (*unitId != currUnitId) {
+        auto unitInfo = battle.getUnitInfoById(battleMsgData, unitId);
+        auto modifiedUnitIds = getModifiedUnitIds(unitInfo);
+        for (auto it = modifiedUnitIds.begin(); it != modifiedUnitIds.end(); it++)
+            removeModifiers(battleMsgData, objectMap, unitInfo, &(*it));
+        resetModifiedUnitsInfo(unitInfo);
+    }
 
     battle.setAttackPowerReduction(battleMsgData, unitId, 0);
 
@@ -1674,9 +1664,8 @@ void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
     if (customDamageRatios.enabled)
         customDamageRatios.value.clear();
 
-    auto& customTransformSelf = getCustomAttacks().transformSelf;
-    if (customTransformSelf.freeAttackUnitId != *unitId)
-        customTransformSelf.freeAttackUnitId = emptyId;
+    if (getCustomAttacks().freeTransformSelfUnitId != *unitId)
+        getCustomAttacks().freeTransformSelfUnitId = emptyId;
 }
 
 void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)

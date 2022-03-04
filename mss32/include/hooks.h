@@ -197,13 +197,13 @@ int __stdcall getUnitHealAttackNumberHooked(const game::IMidgardObjectMap* objec
 
 int __stdcall getAttackQtyDamageOrHealHooked(const game::IAttack* attack, int damageMax);
 
-void __stdcall setUnknown9Bit1AndClearBoostLowerDamageHooked(game::BattleMsgData* battleMsgData,
-                                                             const game::CMidgardID* unitId,
-                                                             game::CMidgardID* nextAttackUnitId);
+void __stdcall afterBattleTurnHooked(game::BattleMsgData* battleMsgData,
+                                     const game::CMidgardID* unitId,
+                                     const game::CMidgardID* nextUnitId);
 
-void __stdcall beforeAttackHooked(game::BattleMsgData* battleMsgData,
-                                  game::IMidgardObjectMap* objectMap,
-                                  const game::CMidgardID* unitId);
+void __stdcall beforeBattleTurnHooked(game::BattleMsgData* battleMsgData,
+                                      game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* unitId);
 
 void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const void* throwInfo);
 

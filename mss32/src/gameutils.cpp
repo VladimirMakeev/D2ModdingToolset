@@ -18,6 +18,7 @@
  */
 
 #include "gameutils.h"
+#include "battlemsgdata.h"
 #include "dynamiccast.h"
 #include "game.h"
 #include "midgardobjectmap.h"
@@ -90,6 +91,20 @@ const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
     const auto dynamicCast = RttiApi::get().dynamicCast;
     return (const CMidPlayer*)dynamicCast(playerObj, 0, rtti.IMidScenarioObjectType,
                                           rtti.CMidPlayerType, 0);
+}
+
+const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
+                                  const game::BattleMsgData* battleMsgData,
+                                  const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+    CMidgardID playerId = battle.isUnitAttacker(battleMsgData, unitId)
+                              ? battleMsgData->attackerPlayerId
+                              : battleMsgData->defenderPlayerId;
+
+    return getPlayer(objectMap, &playerId);
 }
 
 const game::CMidScenVariables* getScenarioVariables(const game::IMidgardObjectMap* objectMap)

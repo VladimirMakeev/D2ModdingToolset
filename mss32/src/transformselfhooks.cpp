@@ -72,6 +72,41 @@ static int getTransformSelfLevel(const game::CMidUnit* unit, game::TUsUnitImpl* 
     }
 }
 
+void giveFreeTransformSelfAttack(game::IMidgardObjectMap* objectMap,
+                                 game::BattleMsgData* battleMsgData,
+                                 const game::CMidUnit* targetUnit,
+                                 bool prevAttackTwice)
+{
+    using namespace game;
+
+    if (getCustomAttacks().freeTransformSelfUnitId == targetUnit->unitId)
+        return;
+    getCustomAttacks().freeTransformSelfUnitId = targetUnit->unitId;
+
+    const auto transformedSoldier = gameFunctions().castUnitImplToSoldier(targetUnit->unitImpl);
+    bool currAttackTwice = transformedSoldier
+                           && transformedSoldier->vftable->getAttackTwice(transformedSoldier);
+
+    int attackCount = 1;
+    for (auto turn : battleMsgData->turnsOrder) {
+        if (turn.unitId == targetUnit->unitId) {
+            attackCount = turn.attackCount;
+            break;
+        }
+    }
+
+    const auto& battle = BattleMsgDataApi::get();
+    if (!prevAttackTwice && currAttackTwice) {
+        // Give 2 extra attacks if transforming from single to double attack
+        battle.giveAttack(battleMsgData, &targetUnit->unitId, 2, 1);
+    } else if (prevAttackTwice && !currAttackTwice && attackCount > 1) {
+        // Give nothing if transforming from double to single attack with 2 attacks left
+    } else {
+        // Give 1 extra attack to compensate transformation
+        battle.giveAttack(battleMsgData, &targetUnit->unitId, 1, 1);
+    }
+}
+
 void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* thisptr,
                                                int /*%edx*/,
                                                game::IMidgardObjectMap* objectMap,
@@ -131,27 +166,21 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
         transformImplId = leveledImplId;
     }
 
+    const auto targetSoldier = fn.castUnitImplToSoldier(targetUnit->unitImpl);
+    bool prevAttackTwice = targetSoldier && targetSoldier->vftable->getAttackTwice(targetSoldier);
+
     const auto& visitors = VisitorApi::get();
     visitors.transformUnit(targetUnitId, &transformImplId, false, objectMap, 1);
 
-    const auto& battle = BattleMsgDataApi::get();
-
-    if (targetSelf && userSettings().freeTransformSelfAttack) {
-        auto& customTransformSelf = getCustomAttacks().transformSelf;
-        if (customTransformSelf.freeAttackUnitId != targetUnit->unitId) {
-            customTransformSelf.freeAttackUnitId = targetUnit->unitId;
-
-            const auto soldier = fn.castUnitImplToSoldier(targetUnit->unitImpl);
-            battle.giveAttack(battleMsgData, &targetUnit->unitId,
-                              soldier->vftable->getAttackTwice(soldier) ? 2 : 1, 1);
-        }
-    }
+    if (targetSelf && userSettings().freeTransformSelfAttack)
+        giveFreeTransformSelfAttack(objectMap, battleMsgData, targetUnit, prevAttackTwice);
 
     BattleAttackUnitInfo info{};
     info.unitId = *targetUnitId;
     info.unitImplId = targetUnitImplId;
     BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
 
+    const auto& battle = BattleMsgDataApi::get();
     battle.removeTransformStatuses(targetUnitId, battleMsgData);
     battle.setUnitStatus(battleMsgData, targetUnitId, BattleStatus::TransformSelf, true);
 
