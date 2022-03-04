@@ -29,6 +29,7 @@
 namespace game {
 
 struct IUsUnit;
+struct CScenarioVisitor;
 
 /** Holds unit related data in scenario file and game. */
 struct CMidUnit : public IMidScenarioObject
@@ -68,6 +69,16 @@ struct Api
 
     using GetHpMax = int(__thiscall*)(const CMidUnit* thisptr);
     GetHpMax getHpMax;
+
+    using Transform = bool(__thiscall*)(CMidUnit* thisptr,
+                                        const CScenarioVisitor* visitor,
+                                        const IMidgardObjectMap* objectMap,
+                                        const CMidgardID* unitImplId,
+                                        bool keepHp);
+    Transform transform;
+
+    using Untransform = bool(__thiscall*)(CMidUnit* thisptr, const CScenarioVisitor* visitor);
+    Untransform untransform;
 };
 
 Api& get();
