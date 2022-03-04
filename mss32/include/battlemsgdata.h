@@ -125,7 +125,7 @@ struct BattleTurn
     /** Id of unit performing the turn. */
     CMidgardID unitId;
     /** Number of attacks unit can make in a single turn. 2 for units with double attack. */
-    char attacksCount;
+    char attackCount;
     char padding[3];
 };
 
@@ -618,7 +618,7 @@ struct Api
 
     using GiveAttack = void(__thiscall*)(BattleMsgData* thistr,
                                          const CMidgardID* unitId,
-                                         char attacksCount,
+                                         char attackCount,
                                          int lastIndex);
     GiveAttack giveAttack;
 };
