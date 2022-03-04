@@ -88,6 +88,7 @@ static std::array<Api, 3> functions = {{
         (Api::IsAutoBattle)0x6243c8,
         (Api::AlliesNotPreventingAdjacentAttack)0x65c19c,
         (Api::GiveAttack)0x623ade,
+        (Api::RemoveFiniteBoostLowerDamage)0x627b07,
     },
     // Russobit
     Api{
@@ -152,6 +153,7 @@ static std::array<Api, 3> functions = {{
         (Api::IsAutoBattle)0x6243c8,
         (Api::AlliesNotPreventingAdjacentAttack)0x65c19c,
         (Api::GiveAttack)0x623ade,
+        (Api::RemoveFiniteBoostLowerDamage)0x627b07,
     },
     // Gog
     Api{
@@ -216,6 +218,7 @@ static std::array<Api, 3> functions = {{
         (Api::IsAutoBattle)0x622f58,
         (Api::AlliesNotPreventingAdjacentAttack)0x65ac1c,
         (Api::GiveAttack)0x62266e,
+        (Api::RemoveFiniteBoostLowerDamage)0x626647,
     },
 }};
 // clang-format on

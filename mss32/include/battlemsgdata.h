@@ -621,6 +621,10 @@ struct Api
                                          char attackCount,
                                          int lastIndex);
     GiveAttack giveAttack;
+
+    using RemoveFiniteBoostLowerDamage = void(__stdcall*)(BattleMsgData* battleMsgData,
+                                                          const CMidgardID* unitId);
+    RemoveFiniteBoostLowerDamage removeFiniteBoostLowerDamage;
 };
 
 Api& get();
