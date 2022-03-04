@@ -96,6 +96,7 @@
 #include "midstack.h"
 #include "midunitdescriptor.h"
 #include "midunitdescriptorhooks.h"
+#include "midunithooks.h"
 #include "modifierutils.h"
 #include "movepathhooks.h"
 #include "musichooks.h"
@@ -558,17 +559,6 @@ void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/)
 
     logDebug("mss32Proxy.log", "Show banners hook finished");
     return thisptr;
-}
-
-bool __fastcall removeModifierHooked(game::CMidUnit* thisptr,
-                                     int /*%edx*/,
-                                     const game::CMidgardID* modifierId)
-{
-    if (!thisptr) {
-        return false;
-    }
-
-    return getOriginalFunctions().removeModifier(thisptr, modifierId);
 }
 
 using ScriptLines = std::vector<std::string>;
