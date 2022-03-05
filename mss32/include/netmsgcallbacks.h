@@ -21,8 +21,8 @@
 #define NETMSGCALLBACKS_H
 
 #include "d2list.h"
+#include "d2set.h"
 #include "smartptr.h"
-#include "sortedlist.h"
 
 namespace game {
 
@@ -37,7 +37,7 @@ struct NetMsgEntryNode
     SmartPtr<CNetMsgMapEntry> ptr;
 };
 
-using NetMsgEntryList = SortedList<NetMsgEntryNode>;
+using NetMsgEntryList = Set<NetMsgEntryNode>;
 
 struct NetMsgEntryData
 {

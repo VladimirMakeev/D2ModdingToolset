@@ -21,8 +21,8 @@
 #define MQUICONTROLLERSIMPLE_H
 
 #include "d2list.h"
+#include "d2set.h"
 #include "mquicontroller.h"
-#include "sortedlist.h"
 
 namespace game {
 
@@ -60,15 +60,15 @@ static_assert(sizeof(CallbackPointerPair) == 12,
 struct CMqUIControllerSimpleData
 {
     int freeEventId;
-    SortedList<UiEventData<UiTimerCallback>> timerCallbacks;
+    Set<UiEventData<UiTimerCallback>> timerCallbacks;
     List<UiEventData<UiUpdateCallback>> updateCallbacks;
-    SortedList<UiEventData<UiPaintCallback>> paintCallbacks;
-    SortedList<UiEventData<UiVisibilityCallback>> visibilityCallbacks;
-    SortedList<UiEventData<UiKeypressCallback>> keypressCallbacks;
-    SortedList<UiEventData<UiMousePressCallback>> mousePressCallbacks;
-    SortedList<UiEventData<UiMouseMoveCallback>> mouseMoveCallbacks;
-    SortedList<UiEventData<UiCloseCallback>> closeCallbacks;
-    SortedList<UiMessageEventData> messageCallbacks;
+    Set<UiEventData<UiPaintCallback>> paintCallbacks;
+    Set<UiEventData<UiVisibilityCallback>> visibilityCallbacks;
+    Set<UiEventData<UiKeypressCallback>> keypressCallbacks;
+    Set<UiEventData<UiMousePressCallback>> mousePressCallbacks;
+    Set<UiEventData<UiMouseMoveCallback>> mouseMoveCallbacks;
+    Set<UiEventData<UiCloseCallback>> closeCallbacks;
+    Set<UiMessageEventData> messageCallbacks;
     CallbackPointerPair unknown;
     CallbackPointerPair unknown2;
     CallbackPointerPair unknown3;

@@ -21,14 +21,14 @@
 #define UNITPOSITIONLIST_H
 
 #include "d2pair.h"
-#include "sortedlist.h"
+#include "d2set.h"
 #include "unitpositionpair.h"
 
 namespace game {
 
-using UnitPositionList = SortedList<UnitPositionPair>;
-using UnitPositionListNode = SortedListNode<UnitPositionPair>;
-using UnitPositionListIterator = SortedListIterator<UnitPositionPair>;
+using UnitPositionList = Set<UnitPositionPair>;
+using UnitPositionListNode = SetNode<UnitPositionPair>;
+using UnitPositionListIterator = SetIterator<UnitPositionPair>;
 
 namespace UnitPositionListApi {
 

@@ -21,7 +21,7 @@
 #define TARGETSLIST_H
 
 #include "d2pair.h"
-#include "sortedlist.h"
+#include "d2set.h"
 
 namespace game {
 
@@ -36,10 +36,10 @@ struct CMidgardID;
  * Position values are positive for target group and negative for other group.
  * Negative position computed as -(unitPosition + 1).
  */
-using TargetsList = SortedList<int>;
+using TargetsList = Set<int>;
 
-using TargetsListNode = SortedListNode<int>;
-using TargetsListIterator = SortedListIterator<int>;
+using TargetsListNode = SetNode<int>;
+using TargetsListIterator = SetIterator<int>;
 
 namespace TargetsListApi {
 

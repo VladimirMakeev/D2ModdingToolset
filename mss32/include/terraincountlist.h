@@ -20,7 +20,7 @@
 #ifndef TERRAINCOUNTLIST_H
 #define TERRAINCOUNTLIST_H
 
-#include "sortedlist.h"
+#include "d2set.h"
 #include "terraincat.h"
 
 namespace game {
@@ -34,7 +34,7 @@ struct TerrainCount
 static_assert(sizeof(TerrainCount) == 16,
               "Size of TerrainCount structure must be exactly 16 bytes");
 
-using TerrainCountList = SortedList<TerrainCount>;
+using TerrainCountList = Set<TerrainCount>;
 
 namespace TerrainCountListApi {
 

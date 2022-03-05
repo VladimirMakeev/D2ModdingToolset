@@ -21,7 +21,7 @@
 #define TERRAINNAMELIST_H
 
 #include "d2pair.h"
-#include "sortedlist.h"
+#include "d2set.h"
 #include "terraincat.h"
 
 namespace game {
@@ -29,8 +29,8 @@ namespace game {
 using TerrainNamePair = Pair<LTerrainCategory, char[3]>;
 
 /** Holds terrain categories and their abbreviations. */
-using TerrainNameList = SortedList<TerrainNamePair>;
-using TerrainNameListNode = SortedListNode<TerrainNamePair>;
+using TerrainNameList = Set<TerrainNamePair>;
+using TerrainNameListNode = SetNode<TerrainNamePair>;
 
 static_assert(sizeof(TerrainNameListNode) == 32,
               "Size of TerrainNameListNode structure must be exactly 32 bytes");

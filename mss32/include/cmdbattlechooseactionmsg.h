@@ -22,7 +22,7 @@
 
 #include "battlemsgdata.h"
 #include "commandmsg.h"
-#include "sortedlist.h"
+#include "d2set.h"
 
 namespace game {
 
@@ -31,13 +31,13 @@ struct CCmdBattleChooseActionMsg
 {
     BattleMsgData battleMsgData;
     CMidgardID id;
-    SortedList<int> list;
+    Set<int> list;
     CMidgardID id2;
-    SortedList<int> list2;
+    Set<int> list2;
     CMidgardID id3;
-    SortedList<int> list3;
+    Set<int> list3;
     CMidgardID id4;
-    SortedList<int> list4;
+    Set<int> list4;
 };
 
 static_assert(sizeof(CCmdBattleChooseActionMsg) == 4064,

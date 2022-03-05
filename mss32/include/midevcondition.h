@@ -20,9 +20,9 @@
 #ifndef MIDEVCONDITION_H
 #define MIDEVCONDITION_H
 
+#include "d2set.h"
 #include "eventconditioncat.h"
 #include "midgardid.h"
-#include "sortedlist.h"
 
 namespace game {
 
@@ -56,8 +56,7 @@ struct CMidEvConditionVftable
      * If event leads to player win or defeat, added ids are used to highlight scenario objectives.
      * Used by CMidCondLocation, CMidCondEnterCity, CMidCondKillStack, CMidCondOwnItem etc.
      */
-    using AddToList = void(__thiscall*)(const CMidEvCondition* thisptr,
-                                        SortedList<CMidgardID>* list);
+    using AddToList = void(__thiscall*)(const CMidEvCondition* thisptr, Set<CMidgardID>* list);
     AddToList addToList;
 
     /** Returns true if condition is valid: refers to existing scenario objects. */

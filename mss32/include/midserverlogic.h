@@ -20,9 +20,9 @@
 #ifndef MIDSERVERLOGIC_H
 #define MIDSERVERLOGIC_H
 
+#include "d2set.h"
 #include "midmsgsender.h"
 #include "midserverlogiccore.h"
-#include "sortedlist.h"
 
 namespace game {
 
@@ -46,8 +46,8 @@ struct CMidServerLogicData2
     Vector<void*> array4;
     Vector<void*> array5;
     Vector<void*> array6;
-    SortedList<CMidgardID> list;
-    SortedList<void> list2;
+    Set<CMidgardID> list;
+    Set<void> list2;
 };
 
 static_assert(sizeof(CMidServerLogicData2) == 164,

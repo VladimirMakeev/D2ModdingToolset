@@ -550,7 +550,7 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
                                                int /*%edx*/,
                                                const game::BattleMsgData* battleMsgData,
                                                const game::CMidgardID* unitId,
-                                               const game::SortedList<game::BattleAction>* actions,
+                                               const game::Set<game::BattleAction>* actions,
                                                const game::BatViewerTargetDataSet* targetData)
 {
     using namespace game;

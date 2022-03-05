@@ -20,8 +20,8 @@
 #ifndef MIDGARDSCENARIOMAP_H
 #define MIDGARDSCENARIOMAP_H
 
+#include "d2set.h"
 #include "midgardobjectmap.h"
-#include "sortedlist.h"
 #include <cstdint>
 
 namespace game {
@@ -65,9 +65,9 @@ struct CMidgardScenarioMap : public IMidgardObjectMap
     CMidgardScenarioMapData data;
     /** Used to keep track of last free CMidgardID type index for each IdType. */
     int freeIdTypeIndices[59];
-    SortedList<CMidgardID> addedObjects;
-    SortedList<CMidgardID> changedObjects;
-    SortedList<CMidgardID> objectsToErase;
+    Set<CMidgardID> addedObjects;
+    Set<CMidgardID> changedObjects;
+    Set<CMidgardID> objectsToErase;
 };
 
 static_assert(sizeof(CMidgardScenarioMap) == 368,

@@ -21,8 +21,8 @@
 #define SORTEDCAPITALRACELIST_H
 
 #include "capitaldatlist.h"
+#include "d2set.h"
 #include "racecategory.h"
-#include "sortedlist.h"
 
 namespace game {
 
@@ -35,7 +35,7 @@ struct CapitalRaceRecord
 static_assert(sizeof(CapitalRaceRecord) == 16,
               "Size of CapitalRaceRecord structure must be exactly 16 bytes");
 
-using SortedCapitalRaceList = SortedList<CapitalRaceRecord>;
+using SortedCapitalRaceList = Set<CapitalRaceRecord>;
 
 struct SortedCapitalRaceListIterator
 {

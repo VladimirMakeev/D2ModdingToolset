@@ -20,12 +20,12 @@
 #ifndef SORTEDRACELIST_H
 #define SORTEDRACELIST_H
 
+#include "d2set.h"
 #include "racecategory.h"
-#include "sortedlist.h"
 
 namespace game {
 
-using SortedRaceList = SortedList<LRaceCategory>;
+using SortedRaceList = Set<LRaceCategory>;
 
 struct SortedRaceListIterator
 {

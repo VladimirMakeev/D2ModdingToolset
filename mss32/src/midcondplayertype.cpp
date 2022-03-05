@@ -63,7 +63,7 @@ bool __fastcall condPlayerTypeIsIdsEqual(const CMidCondPlayerType*,
 
 void __fastcall condPlayerTypeAddToList(const CMidCondPlayerType*,
                                         int /*%edx*/,
-                                        game::SortedList<game::CMidgardID>*)
+                                        game::Set<game::CMidgardID>*)
 { }
 
 bool __fastcall condPlayerTypeIsValid(const CMidCondPlayerType* thisptr,

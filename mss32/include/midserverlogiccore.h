@@ -22,11 +22,11 @@
 
 #include "d2list.h"
 #include "d2pair.h"
+#include "d2set.h"
 #include "d2string.h"
 #include "d2vector.h"
 #include "midgardid.h"
 #include "mqnettraffic.h"
-#include "sortedlist.h"
 #include <cstddef>
 #include <cstdint>
 
@@ -53,7 +53,7 @@ struct CMidServerLogicCoreData
     std::uint32_t playerNetId;
     Vector<NetPlayerInfo>* players;
     int unknown6;
-    SortedList<Pair<std::uint32_t /* netId */, String /* playerName */>>* sessionPlayers;
+    Set<Pair<std::uint32_t /* netId */, String /* playerName */>>* sessionPlayers;
     int startingGold;
     int startingMana;
     char unknown8[4];

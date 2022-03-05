@@ -21,9 +21,9 @@
 #define BUILDINGBRANCH_H
 
 #include "d2pair.h"
+#include "d2set.h"
 #include "d2string.h"
 #include "racecategory.h"
-#include "sortedlist.h"
 
 namespace game {
 
@@ -36,7 +36,7 @@ struct CPhaseGame;
  * First element in pair is a id type index of TBuildingType::buildingId.
  * Second element in pair is a id type index of TBuildingTypeData::requiredId.
  */
-using BuildingBranchList = SortedList<Pair<int, int>>;
+using BuildingBranchList = Set<Pair<int, int>>;
 
 struct CBuildingBranchData
 {

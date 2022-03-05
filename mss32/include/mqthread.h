@@ -21,9 +21,9 @@
 #define MQTHREAD_H
 
 #include "d2pair.h"
+#include "d2set.h"
 #include "functordispatch0.h"
 #include "smartptr.h"
-#include "sortedlist.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
@@ -35,7 +35,7 @@ namespace game {
 struct CMqThreadData
 {
     HANDLE windowHandle;
-    SortedList<Pair<std::uint32_t /* timerId */, SmartPtr<CBFunctorDispatch0>>> callbacks;
+    Set<Pair<std::uint32_t /* timerId */, SmartPtr<CBFunctorDispatch0>>> callbacks;
     std::uint32_t freeTimerId;
     char unknown[44];
     HANDLE threadHandle;

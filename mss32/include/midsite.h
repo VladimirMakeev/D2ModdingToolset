@@ -21,11 +21,11 @@
 #define MIDSITE_H
 
 #include "aipriority.h"
+#include "d2set.h"
 #include "mapelement.h"
 #include "midgardid.h"
 #include "midscenarioobject.h"
 #include "sitecategories.h"
-#include "sortedlist.h"
 #include "stringandid.h"
 #include <cstddef>
 
@@ -43,7 +43,7 @@ struct CMidSite : public IMidScenarioObject
     StringAndId title;
     StringAndId description;
     CMidgardID unknownId;
-    SortedList<CMidgardID> visitors;
+    Set<CMidgardID> visitors;
     LSiteCategory siteCategory;
 };
 
