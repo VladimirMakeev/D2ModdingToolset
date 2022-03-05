@@ -20,8 +20,8 @@
 #ifndef MIDGARD_H
 #define MIDGARD_H
 
+#include "d2list.h"
 #include "d2pair.h"
-#include "linkedlist.h"
 #include "midgardid.h"
 #include "mqanimation.h"
 #include "mqnettraffic.h"
@@ -63,7 +63,7 @@ struct CMidgardData
     IMqNetService* netService;
     IMqNetSession* netSession;
     void* directPlayLobbySession;
-    LinkedList<PlayerClientNode> clients;
+    List<PlayerClientNode> clients;
     NetClientPtrIdPair* netPlayerClientPtr; /**< Points inside of the node from clients list. */
     NetMsgCallbacks* netCallbacks;
     CMidClient* client;

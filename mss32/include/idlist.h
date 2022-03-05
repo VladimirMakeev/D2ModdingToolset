@@ -20,14 +20,14 @@
 #ifndef IDLIST_H
 #define IDLIST_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 #include "midgardid.h"
 
 namespace game {
 
-using IdList = LinkedList<CMidgardID>;
-using IdListNode = LinkedListNode<CMidgardID>;
-using IdListIterator = LinkedListIterator<CMidgardID>;
+using IdList = List<CMidgardID>;
+using IdListNode = ListNode<CMidgardID>;
+using IdListIterator = ListIterator<CMidgardID>;
 
 namespace IdListApi {
 

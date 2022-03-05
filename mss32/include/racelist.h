@@ -20,13 +20,13 @@
 #ifndef RACELIST_H
 #define RACELIST_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 #include "racecategory.h"
 
 namespace game {
 
-using RaceCategoryList = LinkedList<LRaceCategory>;
-using RaceCategoryListNode = LinkedListNode<LRaceCategory>;
+using RaceCategoryList = List<LRaceCategory>;
+using RaceCategoryListNode = ListNode<LRaceCategory>;
 
 namespace RaceCategoryListApi {
 

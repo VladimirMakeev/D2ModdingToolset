@@ -20,8 +20,8 @@
 #ifndef INTERFMANAGER_H
 #define INTERFMANAGER_H
 
+#include "d2list.h"
 #include "functordispatch2.h"
-#include "linkedlist.h"
 #include "presentation.h"
 #include "smartptr.h"
 #include <cstddef>
@@ -112,7 +112,7 @@ struct CInterfManagerImplData
     SmartPtr<CTooltipImpl> tooltipImpl;
     SmartPtr<CCursorImpl> cursorImpl;
     /** Topmost interface is always first in the list. */
-    LinkedList<CInterface*> interfaces;
+    List<CInterface*> interfaces;
     char unknown2[100];
     /**
      * Called before processing handleKeyboard() of topmost interface.

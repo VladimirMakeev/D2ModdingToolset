@@ -20,7 +20,7 @@
 #ifndef MULTILAYERIMG_H
 #define MULTILAYERIMG_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 #include "mqimage2.h"
 #include "mqpoint.h"
 #include "smartptr.h"
@@ -42,7 +42,7 @@ static_assert(sizeof(MultiLayerImgInfo) == 20,
 
 struct CMultiLayerImgData
 {
-    LinkedList<MultiLayerImgInfo> images;
+    List<MultiLayerImgInfo> images;
     CMqPoint size;
     std::uint32_t imagesCount;
 };

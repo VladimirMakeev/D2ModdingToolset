@@ -21,7 +21,7 @@
 #define NETMESSAGES_H
 
 #include "categoryids.h"
-#include "linkedlist.h"
+#include "d2list.h"
 #include "netmsg.h"
 
 namespace game {
@@ -59,7 +59,7 @@ struct CMenusAnsInfoMsg : public CNetMsg
     char* scenarioDescription;
     DifficultyLevelId difficultyLevel;
     int suggestedLevel;
-    LinkedList<RaceId> raceIds;
+    List<RaceId> raceIds;
     int startingGold;
     int startingMana;
     int gameTurn;

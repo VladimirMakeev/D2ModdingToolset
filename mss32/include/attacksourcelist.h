@@ -21,12 +21,12 @@
 #define ATTACKSOURCELIST_H
 
 #include "attacksourcecat.h"
-#include "linkedlist.h"
+#include "d2list.h"
 
 namespace game {
 
-using AttackSourceList = LinkedList<LAttackSource>;
-using AttackSourceListNode = LinkedListNode<LAttackSource>;
+using AttackSourceList = List<LAttackSource>;
+using AttackSourceListNode = ListNode<LAttackSource>;
 
 namespace AttackSourceListApi {
 

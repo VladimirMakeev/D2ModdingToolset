@@ -22,8 +22,8 @@
 
 #include "battlemsgdata.h"
 #include "batviewerutils.h"
+#include "d2list.h"
 #include "d2string.h"
-#include "linkedlist.h"
 #include "midgardid.h"
 #include "mqanimation.h"
 #include "mqrect.h"
@@ -77,7 +77,7 @@ struct CBatUnitAnimData
     bool battleSpeedInstant;
     char padding2[2];
     String string1;
-    LinkedList<void*>* list; /**< Points to CBattleViewerInterfData2::list4. */
+    List<void*>* list; /**< Points to CBattleViewerInterfData2::list4. */
     String string2;
     char unknown10[12];
 };

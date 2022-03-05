@@ -20,15 +20,15 @@
 #ifndef UNITPOSITIONLINKEDLIST_H
 #define UNITPOSITIONLINKEDLIST_H
 
+#include "d2list.h"
 #include "d2pair.h"
-#include "linkedlist.h"
 #include "unitpositionpair.h"
 
 namespace game {
 
-using UnitPositionLinkedList = LinkedList<UnitPositionPair>;
-using UnitPositionLinkedListNode = LinkedListNode<UnitPositionPair>;
-using UnitPositionLinkedListIterator = LinkedListIterator<UnitPositionPair>;
+using UnitPositionLinkedList = List<UnitPositionPair>;
+using UnitPositionLinkedListNode = ListNode<UnitPositionPair>;
+using UnitPositionLinkedListIterator = ListIterator<UnitPositionPair>;
 
 namespace UnitPositionLinkedListApi {
 

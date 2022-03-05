@@ -1036,9 +1036,6 @@
     <ClInclude Include="include\interfmanager.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="include\linkedlist.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="include\listbox.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -2334,6 +2331,9 @@
     </ClInclude>
     <ClInclude Include="include\bindings\attackview.h">
       <Filter>Файлы заголовков\bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d2list.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

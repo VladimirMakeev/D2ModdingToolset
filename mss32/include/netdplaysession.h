@@ -20,7 +20,7 @@
 #ifndef NETDPLAYSESSION_H
 #define NETDPLAYSESSION_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 #include "mqnetsession.h"
 #include <guiddef.h>
 
@@ -37,7 +37,7 @@ struct CNetDPlaySession : public IMqNetSession
     GUID sessionGuid;
     GUID appGuid;
     CNetDPlayPlayerServer* server;
-    LinkedList<CNetDPlayPlayerClient*> clients;
+    List<CNetDPlayPlayerClient*> clients;
     bool host;
     char padding[3];
 };

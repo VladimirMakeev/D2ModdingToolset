@@ -20,7 +20,7 @@
 #ifndef NETMSGCALLBACKS_H
 #define NETMSGCALLBACKS_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 #include "smartptr.h"
 #include "sortedlist.h"
 
@@ -45,7 +45,7 @@ struct NetMsgEntryData
     NetMsgEntryList entryList;
 };
 
-using NetMsgEntryDataList = LinkedList<NetMsgEntryData**>;
+using NetMsgEntryDataList = List<NetMsgEntryData**>;
 
 struct NetMsgCallbacks
 {

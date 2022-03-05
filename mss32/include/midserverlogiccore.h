@@ -20,10 +20,10 @@
 #ifndef MIDSERVERLOGICCORE_H
 #define MIDSERVERLOGICCORE_H
 
+#include "d2list.h"
 #include "d2pair.h"
 #include "d2string.h"
 #include "d2vector.h"
-#include "linkedlist.h"
 #include "midgardid.h"
 #include "mqnettraffic.h"
 #include "sortedlist.h"
@@ -48,7 +48,7 @@ struct CMidServerLogicCoreData
     int gameVersion;
     NetMsgEntryData** netMsgEntryData;
     IMidgardObjectMap* objectMap;
-    LinkedList<void*> list;
+    List<void*> list;
     int unknown4;
     std::uint32_t playerNetId;
     Vector<NetPlayerInfo>* players;

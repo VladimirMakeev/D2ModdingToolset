@@ -20,7 +20,7 @@
 #ifndef CAPITALDATLIST_H
 #define CAPITALDATLIST_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 #include "midgardid.h"
 
 namespace game {
@@ -29,13 +29,13 @@ struct CapitalDatRecord
 {
     CMidgardID buildingId;
     CMidgardID unknownId;
-    LinkedList<void*> list;
+    List<void*> list;
 };
 
 static_assert(sizeof(CapitalDatRecord) == 24,
               "Size of CapitalDatRecord structure must be exactly 24 bytes");
 
-using CapitalDatList = LinkedList<CapitalDatRecord**>;
+using CapitalDatList = List<CapitalDatRecord**>;
 
 namespace CapitalDatListApi {
 

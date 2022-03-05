@@ -20,9 +20,9 @@
 #ifndef MENUPROTOCOL_H
 #define MENUPROTOCOL_H
 
+#include "d2list.h"
 #include "d2pair.h"
 #include "d2string.h"
-#include "linkedlist.h"
 #include "menubase.h"
 #include <guiddef.h>
 
@@ -42,7 +42,7 @@ static_assert(sizeof(ProtocolInfo) == 44,
 
 struct CMenuProtocolData
 {
-    LinkedList<ProtocolInfo> protocols;
+    List<ProtocolInfo> protocols;
 };
 
 static_assert(sizeof(CMenuProtocolData) == 16,

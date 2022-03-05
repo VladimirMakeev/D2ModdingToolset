@@ -127,7 +127,7 @@ bool __fastcall netCustomServiceHasSessions(CNetCustomService* thisptr, int /*%e
 
 void __fastcall netCustomServiceGetSessions(CNetCustomService* thisptr,
                                             int /*%edx*/,
-                                            game::LinkedList<game::IMqNetSessEnum*>* sessions,
+                                            game::List<game::IMqNetSessEnum*>* sessions,
                                             const GUID* appGuid,
                                             const char* ipAddress,
                                             bool allSessions,

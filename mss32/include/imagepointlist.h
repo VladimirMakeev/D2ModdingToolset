@@ -20,8 +20,8 @@
 #ifndef IMAGEPOINTLIST_H
 #define IMAGEPOINTLIST_H
 
+#include "d2list.h"
 #include "d2pair.h"
-#include "linkedlist.h"
 #include "mqpoint.h"
 #include "smartptr.h"
 
@@ -31,7 +31,7 @@ struct IMqImage2;
 
 using ImagePtr = SmartPtr<IMqImage2>;
 using ImagePtrPointPair = Pair<ImagePtr, CMqPoint>;
-using ImagePointList = LinkedList<ImagePtrPointPair>;
+using ImagePointList = List<ImagePtrPointPair>;
 
 namespace ImagePointListApi {
 

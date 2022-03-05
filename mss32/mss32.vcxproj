@@ -634,7 +634,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\landmarkcat.h" />
     <ClInclude Include="include\leaderabilitycat.h" />
     <ClInclude Include="include\leadercategory.h" />
-    <ClInclude Include="include\linkedlist.h" />
+    <ClInclude Include="include\d2list.h" />
     <ClInclude Include="include\listbox.h" />
     <ClInclude Include="include\idlistutils.h" />
     <ClInclude Include="include\lobbycallbacks.h" />

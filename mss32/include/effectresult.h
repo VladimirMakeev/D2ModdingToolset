@@ -20,7 +20,7 @@
 #ifndef EFFECTRESULT_H
 #define EFFECTRESULT_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 
 namespace game {
 
@@ -60,7 +60,7 @@ struct IEffectResultVftable
     using Apply = void(__thiscall*)(const IEffectResult* thisptr,
                                     String* str,
                                     IMidgardObjectMap* objectMap,
-                                    LinkedList<IEventEffect*>* effects,
+                                    List<IEventEffect*>* effects,
                                     const CMidgardID* playerId,
                                     const CMidgardID* triggererId,
                                     const CMidgardID* playingStackId);

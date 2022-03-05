@@ -20,7 +20,7 @@
 #ifndef CURSORHANDLE_H
 #define CURSORHANDLE_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 #include "mqrect.h"
 #include "smartptr.h"
 
@@ -41,7 +41,7 @@ static_assert(sizeof(CursorHandleNodeData) == 36,
 
 struct CursorHandleData
 {
-    LinkedList<CursorHandleNodeData> list;
+    List<CursorHandleNodeData> list;
     CMqRect area;
 };
 

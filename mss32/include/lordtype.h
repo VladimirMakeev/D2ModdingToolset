@@ -20,7 +20,7 @@
 #ifndef LORDTYPE_H
 #define LORDTYPE_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 #include "lordcat.h"
 #include "midgardid.h"
 #include "midobject.h"
@@ -80,7 +80,7 @@ struct CLordLeaderUpg
 {
     void* vftable;
     CMidgardID lordId;
-    LinkedList<LeaderUpgData> upgrades;
+    List<LeaderUpgData> upgrades;
 };
 
 static_assert(sizeof(CLordLeaderUpg) == 24,

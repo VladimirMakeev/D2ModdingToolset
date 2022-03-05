@@ -20,7 +20,7 @@
 #ifndef MAPGRAPHICS_H
 #define MAPGRAPHICS_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 #include "smartptr.h"
 #include <cstddef>
 
@@ -35,7 +35,7 @@ struct MapGraphics
     char unknown[54];
     CIsoEngineGround* isoEngineGround;
     char unknown2[8];
-    LinkedList<void*> list;
+    List<void*> list;
     int unknown3;
     SmartPointer ptr;
 };

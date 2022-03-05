@@ -20,7 +20,7 @@
 #ifndef MQUICONTROLLERSIMPLE_H
 #define MQUICONTROLLERSIMPLE_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 #include "mquicontroller.h"
 #include "sortedlist.h"
 
@@ -61,7 +61,7 @@ struct CMqUIControllerSimpleData
 {
     int freeEventId;
     SortedList<UiEventData<UiTimerCallback>> timerCallbacks;
-    LinkedList<UiEventData<UiUpdateCallback>> updateCallbacks;
+    List<UiEventData<UiUpdateCallback>> updateCallbacks;
     SortedList<UiEventData<UiPaintCallback>> paintCallbacks;
     SortedList<UiEventData<UiVisibilityCallback>> visibilityCallbacks;
     SortedList<UiEventData<UiKeypressCallback>> keypressCallbacks;

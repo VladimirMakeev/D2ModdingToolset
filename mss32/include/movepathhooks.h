@@ -20,7 +20,7 @@
 #ifndef MOVEPATHHOOKS_H
 #define MOVEPATHHOOKS_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 #include "mqpoint.h"
 
 namespace game {
@@ -32,7 +32,7 @@ namespace hooks {
 
 void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
                                       const game::CMidgardID* stackId,
-                                      game::LinkedList<game::CMqPoint>* path,
+                                      game::List<game::CMqPoint>* path,
                                       const game::CMqPoint* lastReachablePoint,
                                       const game::CMqPoint* pathEnd,
                                       bool a6);
