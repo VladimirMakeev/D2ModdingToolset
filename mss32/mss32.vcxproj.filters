@@ -9,50 +9,35 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Файлы ресурсов">
+    <Filter Include="resources">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Исходные файлы\fmt">
+    <Filter Include="fmt">
       <UniqueIdentifier>{8433cced-befe-4ae3-8f77-57effea18e04}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы заголовков\dbf">
+    <Filter Include="dbf">
       <UniqueIdentifier>{253b7b33-d275-40f1-9a46-61f294d2bc8f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Исходные файлы\dbf">
-      <UniqueIdentifier>{a12a712d-b3bc-47c4-9100-caed32b985e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Исходные файлы\lua">
+    <Filter Include="lua">
       <UniqueIdentifier>{4b310306-d035-4cfe-9046-c964d8647a6d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы заголовков\lua">
-      <UniqueIdentifier>{eb0db09a-a4e9-4782-a6f4-3b75296449dc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы заголовков\bindings">
+    <Filter Include="bindings">
       <UniqueIdentifier>{ff59d289-ab38-48d8-9ce2-fc67d9b0d635}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Исходные файлы\bindings">
-      <UniqueIdentifier>{2fc2b2fb-2a4b-4e72-a1aa-be670ba853b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Исходные файлы\lobby">
+    <Filter Include="lobby">
       <UniqueIdentifier>{f6359498-b4ad-43ad-8eba-5a8dce9de745}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Исходные файлы\lobby\rooms">
+    <Filter Include="lobby\rooms">
       <UniqueIdentifier>{30703c2c-8175-41dd-9242-e81842359a9d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы заголовков\lobby">
-      <UniqueIdentifier>{57588601-49f9-43e8-816c-795cd4aa7929}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы заголовков\lobby\rooms">
-      <UniqueIdentifier>{ac7d47b5-40ed-4064-81bf-8f3836ae162b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\fmt\src\format.cc">
-      <Filter>Исходные файлы\fmt</Filter>
+      <Filter>fmt</Filter>
     </ClCompile>
     <ClCompile Include="..\fmt\src\os.cc">
-      <Filter>Исходные файлы\fmt</Filter>
+      <Filter>fmt</Filter>
     </ClCompile>
     <ClCompile Include="src\attackclasscat.cpp">
       <Filter>Исходные файлы</Filter>
@@ -181,10 +166,10 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\dbf\dbffile.cpp">
-      <Filter>Исходные файлы\dbf</Filter>
+      <Filter>dbf</Filter>
     </ClCompile>
     <ClCompile Include="src\dbf\dbfrecord.cpp">
-      <Filter>Исходные файлы\dbf</Filter>
+      <Filter>dbf</Filter>
     </ClCompile>
     <ClCompile Include="src\editor.cpp">
       <Filter>Исходные файлы</Filter>
@@ -295,103 +280,103 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lapi.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lauxlib.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lbaselib.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lcode.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lcorolib.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lctype.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\ldblib.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\ldebug.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\ldo.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\ldump.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lfunc.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lgc.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\linit.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\liolib.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\llex.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lmathlib.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lmem.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\loadlib.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lobject.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lopcodes.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\loslib.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lparser.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lstate.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lstring.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lstrlib.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\ltable.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\ltablib.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\ltm.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\luac.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lundump.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lutf8lib.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lvm.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lzio.c">
-      <Filter>Исходные файлы\lua</Filter>
+      <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="src\doppelgangerhooks.cpp">
       <Filter>Исходные файлы</Filter>
@@ -400,7 +385,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\unitview.cpp">
-      <Filter>Исходные файлы\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\groundcat.cpp">
       <Filter>Исходные файлы</Filter>
@@ -409,10 +394,10 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\unitimplview.cpp">
-      <Filter>Исходные файлы\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\dynupgradeview.cpp">
-      <Filter>Исходные файлы\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\batattacktransformself.cpp">
       <Filter>Исходные файлы</Filter>
@@ -592,7 +577,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\unitslotview.cpp">
-      <Filter>Исходные файлы\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\customattackutils.cpp">
       <Filter>Исходные файлы</Filter>
@@ -754,25 +739,25 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\scenarioview.cpp">
-      <Filter>Исходные файлы\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\point.cpp">
-      <Filter>Исходные файлы\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\locationview.cpp">
-      <Filter>Исходные файлы\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\idview.cpp">
-      <Filter>Исходные файлы\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\scenvariablesview.cpp">
-      <Filter>Исходные файлы\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\scenariovariableview.cpp">
-      <Filter>Исходные файлы\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\tileview.cpp">
-      <Filter>Исходные файлы\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\menuphase.cpp">
       <Filter>Исходные файлы</Filter>
@@ -799,37 +784,37 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Client.cpp">
-      <Filter>Исходные файлы\lobby</Filter>
+      <Filter>lobby</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Message.cpp">
-      <Filter>Исходные файлы\lobby</Filter>
+      <Filter>lobby</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Plugin.cpp">
-      <Filter>Исходные файлы\lobby</Filter>
+      <Filter>lobby</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Presence.cpp">
-      <Filter>Исходные файлы\lobby</Filter>
+      <Filter>lobby</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2ResultCode.cpp">
-      <Filter>Исходные файлы\lobby</Filter>
+      <Filter>lobby</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\IntervalTimer.cpp">
-      <Filter>Исходные файлы\lobby\rooms</Filter>
+      <Filter>lobby\rooms</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\ProfanityFilter.cpp">
-      <Filter>Исходные файлы\lobby\rooms</Filter>
+      <Filter>lobby\rooms</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsContainer.cpp">
-      <Filter>Исходные файлы\lobby\rooms</Filter>
+      <Filter>lobby\rooms</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsErrorCodes.cpp">
-      <Filter>Исходные файлы\lobby\rooms</Filter>
+      <Filter>lobby\rooms</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsPlugin.cpp">
-      <Filter>Исходные файлы\lobby\rooms</Filter>
+      <Filter>lobby\rooms</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomTypes.cpp">
-      <Filter>Исходные файлы\lobby\rooms</Filter>
+      <Filter>lobby\rooms</Filter>
     </ClCompile>
     <ClCompile Include="src\registeraccountinterf.cpp">
       <Filter>Исходные файлы</Filter>
@@ -907,19 +892,19 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\stackview.cpp">
-      <Filter>Исходные файлы\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\leaderview.cpp">
-      <Filter>Исходные файлы\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\midgardplan.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\groupview.cpp">
-      <Filter>Исходные файлы\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\attackview.cpp">
-      <Filter>Исходные файлы\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\midunithooks.cpp">
       <Filter>Исходные файлы</Filter>
@@ -1226,16 +1211,16 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\dbf\dbfcolumn.h">
-      <Filter>Файлы заголовков\dbf</Filter>
+      <Filter>dbf</Filter>
     </ClInclude>
     <ClInclude Include="include\dbf\dbffile.h">
-      <Filter>Файлы заголовков\dbf</Filter>
+      <Filter>dbf</Filter>
     </ClInclude>
     <ClInclude Include="include\dbf\dbfheader.h">
-      <Filter>Файлы заголовков\dbf</Filter>
+      <Filter>dbf</Filter>
     </ClInclude>
     <ClInclude Include="include\dbf\dbfrecord.h">
-      <Filter>Файлы заголовков\dbf</Filter>
+      <Filter>dbf</Filter>
     </ClInclude>
     <ClInclude Include="include\racecategory.h">
       <Filter>Файлы заголовков</Filter>
@@ -1469,88 +1454,88 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lzio.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lvm.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lundump.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lualib.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\luaconf.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lua.hpp">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lua.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\ltm.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\ltable.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lstring.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lstate.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lprefix.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lparser.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lopnames.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lopcodes.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lobject.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lmem.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\llimits.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\llex.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\ljumptab.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lgc.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lfunc.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\ldo.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\ldebug.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lctype.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lcode.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lauxlib.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lapi.h">
-      <Filter>Файлы заголовков\lua</Filter>
+      <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="include\midsite.h">
       <Filter>Файлы заголовков</Filter>
@@ -1598,13 +1583,13 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\unitview.h">
-      <Filter>Файлы заголовков\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\unitimplview.h">
-      <Filter>Файлы заголовков\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\dynupgradeview.h">
-      <Filter>Файлы заголовков\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\batattacktransformself.h">
       <Filter>Файлы заголовков</Filter>
@@ -1832,7 +1817,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\unitslotview.h">
-      <Filter>Файлы заголовков\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\customattackutils.h">
       <Filter>Файлы заголовков</Filter>
@@ -2057,16 +2042,16 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\scenarioview.h">
-      <Filter>Файлы заголовков\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\locationview.h">
-      <Filter>Файлы заголовков\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\idview.h">
-      <Filter>Файлы заголовков\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\point.h">
-      <Filter>Файлы заголовков\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\mqnetplayer.h">
       <Filter>Файлы заголовков</Filter>
@@ -2075,10 +2060,10 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\scenvariablesview.h">
-      <Filter>Файлы заголовков\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\scenariovariableview.h">
-      <Filter>Файлы заголовков\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\netdplayplayer.h">
       <Filter>Файлы заголовков</Filter>
@@ -2093,7 +2078,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\tileview.h">
-      <Filter>Файлы заголовков\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\usracialsoldier.h">
       <Filter>Файлы заголовков</Filter>
@@ -2171,37 +2156,37 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Client.h">
-      <Filter>Файлы заголовков\lobby</Filter>
+      <Filter>lobby</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Message.h">
-      <Filter>Файлы заголовков\lobby</Filter>
+      <Filter>lobby</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Plugin.h">
-      <Filter>Файлы заголовков\lobby</Filter>
+      <Filter>lobby</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Presence.h">
-      <Filter>Файлы заголовков\lobby</Filter>
+      <Filter>lobby</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2ResultCode.h">
-      <Filter>Файлы заголовков\lobby</Filter>
+      <Filter>lobby</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\IntervalTimer.h">
-      <Filter>Файлы заголовков\lobby\rooms</Filter>
+      <Filter>lobby\rooms</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\ProfanityFilter.h">
-      <Filter>Файлы заголовков\lobby\rooms</Filter>
+      <Filter>lobby\rooms</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsContainer.h">
-      <Filter>Файлы заголовков\lobby\rooms</Filter>
+      <Filter>lobby\rooms</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsErrorCodes.h">
-      <Filter>Файлы заголовков\lobby\rooms</Filter>
+      <Filter>lobby\rooms</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsPlugin.h">
-      <Filter>Файлы заголовков\lobby\rooms</Filter>
+      <Filter>lobby\rooms</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomTypes.h">
-      <Filter>Файлы заголовков\lobby\rooms</Filter>
+      <Filter>lobby\rooms</Filter>
     </ClInclude>
     <ClInclude Include="include\registeraccountinterf.h">
       <Filter>Файлы заголовков</Filter>
@@ -2321,22 +2306,22 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\stackview.h">
-      <Filter>Файлы заголовков\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\leaderview.h">
-      <Filter>Файлы заголовков\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\midgardplan.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\groupview.h">
-      <Filter>Файлы заголовков\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\attackview.h">
-      <Filter>Файлы заголовков\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\midunithooks.h">
-      <Filter>Файлы заголовков\bindings</Filter>
+      <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\d2list.h">
       <Filter>Файлы заголовков</Filter>
