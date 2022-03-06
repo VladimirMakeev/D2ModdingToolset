@@ -76,7 +76,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\dbfaccess.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>dbf</Filter>
     </ClCompile>
     <ClCompile Include="src\dbtable.cpp">
       <Filter>Исходные файлы</Filter>
@@ -975,7 +975,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\dbfaccess.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>dbf</Filter>
     </ClInclude>
     <ClInclude Include="include\dbtable.h">
       <Filter>Файлы заголовков</Filter>
