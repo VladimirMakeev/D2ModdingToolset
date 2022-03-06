@@ -366,6 +366,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\sortedpointlist.cpp" />
     <ClCompile Include="src\sortedracelist.cpp" />
     <ClCompile Include="src\stackbattleactionmsg.cpp" />
+    <ClCompile Include="src\stringandid.cpp" />
     <ClCompile Include="src\stringarray.cpp" />
     <ClCompile Include="src\subracecat.cpp" />
     <ClCompile Include="src\summonhooks.cpp" />
