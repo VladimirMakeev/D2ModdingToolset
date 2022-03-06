@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Исходные файлы">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Файлы заголовков">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="resources">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -43,6 +35,9 @@
     <Filter Include="features\lobby">
       <UniqueIdentifier>{556d5df8-4618-48de-b1c6-f35c088963eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="game">
+      <UniqueIdentifier>{84de1827-4ca5-4a1c-aca9-fe09d3ec9278}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\fmt\src\format.cc">
@@ -52,120 +47,120 @@
       <Filter>fmt</Filter>
     </ClCompile>
     <ClCompile Include="src\attackclasscat.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\attackreachcat.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\attacksourcecat.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\autodialog.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\buildingbranch.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\buildingcat.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\buildingtype.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\button.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\currency.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\d2string.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\dbfaccess.cpp">
       <Filter>dbf</Filter>
     </ClCompile>
     <ClCompile Include="src\dbtable.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\dialoginterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\dynamiccast.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\functor.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\game.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\globaldata.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\hooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\idlist.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\interfmanager.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\listbox.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\log.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\lordtype.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mapgen.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\mempool.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\menubase.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\menunewskirmish.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\menunewskirmishsingle.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\midgardid.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\midgardmsgbox.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\midmsgboxbuttonhandlerstd.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\scenariodata.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\scenariodataarray.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\scenarioheader.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\settings.cpp" />
     <ClCompile Include="src\smartptr.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\stringarray.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\unitbranchcat.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\unitcat.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\unitsforhire.cpp">
       <Filter>features</Filter>
@@ -178,112 +173,112 @@
       <Filter>dbf</Filter>
     </ClCompile>
     <ClCompile Include="src\editor.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\racecategory.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\restrictions.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\batattackgiveattack.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\batattackshatter.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\battlemsgdata.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\targetslist.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\utils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\attackimpl.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\idvector.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\customattack.cpp">
       <Filter>features</Filter>
     </ClCompile>
     <ClCompile Include="src\visitors.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\battleattackinfo.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\citystackinterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\phase.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\netmessages.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\exchangeinterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\pickupdropinterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\itemcategory.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\itemtransferhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\sitemerchantinterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\miditem.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\enclayoutspell.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\iterators.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\fortcategory.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\midscenvariables.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\playerincomehooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\batattackdrain.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\drainattackhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\batattackdrainoverflow.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\ddcarryoveritems.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\midmusic.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\musichooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\midgard.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\batattackdoppelganger.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\difficultylevel.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lapi.c">
       <Filter>lua</Filter>
@@ -388,16 +383,16 @@
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\batattackbestowwards.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\unitview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\groundcat.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\leaderabilitycat.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\unitimplview.cpp">
       <Filter>bindings</Filter>
@@ -406,58 +401,58 @@
       <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\batattacktransformself.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\transformselfhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\attack.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\scripts.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\batattacksummon.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\summonhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\midunitgroup.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\immunecat.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\bestowwardshooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\autoptr.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\midunit.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\terraincat.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\d2osexception.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\image2text.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\multilayerimg.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\pathinfolist.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\gameimages.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\isolayers.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\movepathhooks.cpp">
       <Filter>hooks</Filter>
@@ -481,67 +476,67 @@
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\textboxinterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\textids.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\subracecat.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\menurace.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\pictureinterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\racelist.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\customattacks.cpp">
       <Filter>features</Filter>
     </ClCompile>
     <ClCompile Include="src\sortedracelist.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\capitaldatlist.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\sortedcapitalracelist.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\capitaldata.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\tilevariation.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\attacksourcelist.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\midgardmapblock.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\terraincountlist.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\netmsg.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\stackbattleactionmsg.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\cmdbattlestartmsg.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\cmdbattleresultmsg.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\cmdbattleendmsg.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\cmdbattlechooseactionmsg.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\battlemsgdatahooks.cpp">
       <Filter>hooks</Filter>
@@ -553,7 +548,7 @@
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\commandmsg.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\netmsgutils.cpp">
       <Filter>utils</Filter>
@@ -565,22 +560,22 @@
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\battleviewerinterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\unitpositionlist.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\unitinfolist.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\mqrect.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\batimagesloader.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\batviewer2dengine.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\unitslotview.cpp">
       <Filter>bindings</Filter>
@@ -598,97 +593,97 @@
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\midstack.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\ordercat.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\terrainnamelist.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\tileindices.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\mapgraphics.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\menulord.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\taskchangecolor.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\mapinterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\menunewmap.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\sortedpointlist.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\midgardmap.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\batunitanim.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\togglebutton.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\draganddropinterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\uimanager.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\unitpositionlinkedlist.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\attackmodified.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\ussoldierimpl.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\umattack.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\umattackhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\attacktypepairvector.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\midunitdescriptor.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\midunitdescriptorhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\unitpickerinterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\radiobuttoninterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\eventconditioncat.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\midevcondition.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\condinterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\editboxinterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\midevent.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\testcondition.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\eventconditioncathooks.cpp">
       <Filter>hooks</Filter>
@@ -703,28 +698,28 @@
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\midcondownresource.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\mideventhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\midcondgamemode.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\effectinterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\eventeffectcat.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\midcondplayertype.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\midcondvarcmp.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\mideveffect.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\eventeffectcathooks.cpp">
       <Filter>hooks</Filter>
@@ -736,13 +731,13 @@
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\effectresult.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\effectresulthooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\midcondscript.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\scenarioview.cpp">
       <Filter>bindings</Filter>
@@ -766,10 +761,10 @@
       <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\menuphase.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\menuprotocol.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\menuprotocolhooks.cpp">
       <Filter>hooks</Filter>
@@ -787,7 +782,7 @@
       <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\uievent.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Client.cpp">
       <Filter>lobby</Filter>
@@ -826,7 +821,7 @@
       <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\popupdialoginterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\loginaccountinterf.cpp">
       <Filter>features\lobby</Filter>
@@ -847,22 +842,22 @@
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\imagepointlist.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\image2outline.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\image2fill.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\netmsgcallbacks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\netmsgmapentry.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\menuflashwait.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\lobbyclient.cpp">
       <Filter>features\lobby</Filter>
@@ -877,13 +872,13 @@
       <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\menunewskirmishmulti.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\roomclientjoin.cpp">
       <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\menuload.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\menuloadskirmishmultihooks.cpp">
       <Filter>hooks</Filter>
@@ -892,10 +887,10 @@
       <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\cursorhandle.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\lordcat.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\stackview.cpp">
       <Filter>bindings</Filter>
@@ -904,7 +899,7 @@
       <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\midgardplan.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\groupview.cpp">
       <Filter>bindings</Filter>
@@ -916,295 +911,295 @@
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\stringandid.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\attackclasscat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\attackimpl.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\attackreachcat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\attacksourcecat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\autodialog.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\buildingbranch.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\buildingcat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\buildingtype.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\button.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\capital.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\categories.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\categoryids.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\currency.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\d2map.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\d2pair.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\d2string.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\d2vector.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\dbfaccess.h">
       <Filter>dbf</Filter>
     </ClInclude>
     <ClInclude Include="include\dbtable.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\deathanimcat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\dialoginterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\difficultylevel.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\dynamiccast.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\fortification.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\functor.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\game.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\gamesettings.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\globaldata.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\hooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\idlist.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\immunecat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\interface.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\interfdialog.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\interffullscreen.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\interfmanager.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\listbox.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\log.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\lordcat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\lordtype.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mapelement.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mapgen.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mempool.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\menubase.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\menunewskirmish.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\menunewskirmishsingle.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\middatacache.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midgard.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midgardid.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midgardmsgbox.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midgardobjectmap.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midgardscenariomap.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midinventory.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midmsgboxbuttonhandler.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midmsgboxbuttonhandlerstd.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midobject.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midplayer.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midruin.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midscenarioobject.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midserver.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midserverbuilder.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midstack.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midunit.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midunitgroup.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midvillage.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqanimation.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqnetservice.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqnetsession.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqnetsystem.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqnettraffic.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqthread.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\netdplayservice.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\netdplaysession.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\ordercat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\playerbuildings.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\popupdialoginterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\presentation.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\racetype.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\scenariodata.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\scenariodataarray.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\scenarioheader.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\scenarioinfo.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\settings.h" />
     <ClInclude Include="include\smartptr.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\stringandid.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\stringarray.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\subracecat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\textandid.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\unitbranchcat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\unitcat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\unitsforhire.h">
       <Filter>features</Filter>
     </ClInclude>
     <ClInclude Include="include\ussoldier.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\ussoldierimpl.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\usunit.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\usunitextension.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\usunitimpl.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\version.h" />
     <ClInclude Include="include\dbf\dbfcolumn.h">
@@ -1220,232 +1215,232 @@
       <Filter>dbf</Filter>
     </ClInclude>
     <ClInclude Include="include\racecategory.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\editor.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\attack.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\battlemsgdata.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\globalvariables.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\restrictions.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\batattack.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\batattackgiveattack.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\batattackshatter.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\targetslist.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\utils.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\idvector.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\customattack.h">
       <Filter>features</Filter>
     </ClInclude>
     <ClInclude Include="include\visitors.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\battleattackinfo.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\unitgenerator.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\citystackinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\phase.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\phasegame.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midcommandqueue2.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midclient.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midclientcore.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\resetstackext.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\middragdropinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\draganddropinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\middropmanager.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\fullscreeninterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\taskmanagerholder.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\interfacechilds.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\netmessages.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\exchangeinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midbag.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\pickupdropinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\item.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemcategory.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itembase.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemvaluable.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemspecial.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemequipment.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemexequipment.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemarmor.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemweapon.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemjewelry.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itembanner.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemtravelitem.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itembattle.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemorb.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemtalisman.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemspell.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemexspell.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemscroll.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemwand.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemexpotionboost.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itempotionboost.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itempotionboostperm.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itempotionboosttemp.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemexpotionheal.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itempotionheal.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itempotionrevive.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\miditem.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemtransferhooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\sitemerchantinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\encparam.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\encparambase.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\enclayoutspell.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\iterators.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\fortcategory.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midscenvariables.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\playerincomehooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\batattackdrain.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\drainattackhooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\batattackdrainoverflow.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\ddcarryoveritems.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midmusic.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\musichooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\batattackdoppelganger.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lzio.h">
       <Filter>lua</Filter>
@@ -1532,49 +1527,49 @@
       <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="include\midsite.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\sitecategories.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midcampaign.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\doppelgangerhooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\dynupgrade.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\batattackbestowwards.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\unitmodifier.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\modifgroup.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\ummodifier.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\umstack.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\umattack.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\umunit.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\attackmodified.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\groundcat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\leaderabilitycat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\unitview.h">
       <Filter>bindings</Filter>
@@ -1586,7 +1581,7 @@
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\batattacktransformself.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\transformselfhooks.h">
       <Filter>hooks</Filter>
@@ -1595,7 +1590,7 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\batattacksummon.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\summonhooks.h">
       <Filter>hooks</Filter>
@@ -1604,70 +1599,70 @@
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\autoptr.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqpoint.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqrect.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\battleviewerinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\batviewer.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\avoidflickerimage.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqimage2surface16.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqimage2.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqtexture.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\batviewerutils.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\midstacktemplate.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\batunitanim.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\tilevariation.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\terraincat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\d2osexception.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\imgfactory.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\factoryimageanim.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\image2text.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\multilayerimg.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\pathinfolist.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\gameimages.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\isolayers.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\movepathhooks.h">
       <Filter>hooks</Filter>
@@ -1688,100 +1683,100 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\encunitdescriptor.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\interftexthooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\textboxinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\textids.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\unitutils.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\midmsgsender.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midsubrace.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midserverlogiccore.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\netplayerinfo.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midserverlogic.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\menuphase.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\catalogvalidate.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\menurace.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\pictureinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\racelist.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\customattacks.h">
       <Filter>features</Filter>
     </ClInclude>
     <ClInclude Include="include\sortedracelist.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\capitaldata.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\capitaldatlist.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\sortedcapitalracelist.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\attacksourcelist.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midgardmapblock.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midgardstream.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\terraincountlist.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\netmsg.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqstream.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\commandmsg.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\stackbattleactionmsg.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\cmdbattlestartmsg.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\cmdbattlechooseactionmsg.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\cmdbattleresultmsg.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\cmdbattleendmsg.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\battlemsgdatahooks.h">
       <Filter>hooks</Filter>
@@ -1799,16 +1794,16 @@
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\unitpositionlist.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\unitinfolist.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\batimagesloader.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\batviewer2dengine.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\unitslotview.h">
       <Filter>bindings</Filter>
@@ -1826,148 +1821,148 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\usstackleader.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\terrainnamelist.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\tileindices.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\2denginemap.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\2denginemapimpl.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\2dengine.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\isoengineground.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mapgraphics.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\menulord.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\taskmanager.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\task.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\freetask.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\taskbase.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\taskmapchange.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\taskchangecolor.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\isoview.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mapinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\radiobuttoninterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\functordispatch1.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\spinbuttoninterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\editboxinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\togglebutton.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\menunewmap.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\menubaseeditor.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\sortedpointlist.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midgardmap.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\tooltip.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\functordispatch2.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\uimanager.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\unitpositionlinkedlist.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\unitpositionpair.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\umattackhooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\attacktypepairvector.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midunitdescriptor.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midunitdescriptorhooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\popupinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\unitpickerinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\functordispatch3.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midevent.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midevcondition.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\eventconditions.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mideveffect.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\eventconditioncat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\eventeffectcat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\eventeffects.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\condinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\testcondition.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\condinterfhandler.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\eventconditioncathooks.h">
       <Filter>hooks</Filter>
@@ -1982,31 +1977,31 @@
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\midcondownresource.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mideventhooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\midcondgamemode.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\effectinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\effectinterfhandler.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midcondplayertype.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midcondvarcmp.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\effectresult.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\eventeffect.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\eventeffectcathooks.h">
       <Filter>hooks</Filter>
@@ -2018,22 +2013,22 @@
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\midlocation.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\effectresulthooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\landmarkcat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\landmark.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midlandmark.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midcondscript.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\scenarioview.h">
       <Filter>bindings</Filter>
@@ -2048,10 +2043,10 @@
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\mqnetplayer.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqnetplayerclient.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\scenvariablesview.h">
       <Filter>bindings</Filter>
@@ -2060,61 +2055,61 @@
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\netdplayplayer.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\netdplayplayerclient.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqnetplayerserver.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\netdplayplayerserver.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\tileview.h">
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\usracialsoldier.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\usglobal.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\usracialleader.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\usstackleaderimpl.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\usleader.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\usleaderimpl.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\leadercategory.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\usnoble.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\usracialnoble.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqnetplayerenum.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\netdplayplayerenum.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqnetsessenum.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\netdplaysessenum.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\menuprotocol.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\menuprotocolhooks.h">
       <Filter>hooks</Filter>
@@ -2132,22 +2127,22 @@
       <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\mquikernel.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mquikernelsimple.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\uievent.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mquicontroller.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\functordispatch0.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mquicontrollersimple.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Client.h">
       <Filter>lobby</Filter>
@@ -2192,7 +2187,7 @@
       <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\mqnetreception.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\netcustomplayerserver.h">
       <Filter>features\lobby</Filter>
@@ -2204,25 +2199,25 @@
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\imagepointlist.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\image2outline.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\image2fill.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\d2color.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\netmsgmapentry.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\netmsgcallbacks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\menuflashwait.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\lobbyclient.h">
       <Filter>features\lobby</Filter>
@@ -2240,13 +2235,13 @@
       <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\menunewskirmishmulti.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\roomclientjoin.h">
       <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\menuload.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\menuloadskirmishmultihooks.h">
       <Filter>hooks</Filter>
@@ -2255,49 +2250,49 @@
       <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\batnotify.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\cursorimpl.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\interfcursor.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\interfaddon.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\cursorhandle.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\taskspell.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\tasktilehighlight.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midfreetask.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midtask.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\canselect.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\isocbscroll.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\spellcat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\objectselection.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\aispellcat.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\strategicspell.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\stackview.h">
       <Filter>bindings</Filter>
@@ -2306,7 +2301,7 @@
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\midgardplan.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\groupview.h">
       <Filter>bindings</Filter>
@@ -2318,10 +2313,10 @@
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\d2list.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\d2set.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>resources</Filter>
