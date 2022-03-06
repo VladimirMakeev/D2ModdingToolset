@@ -37,6 +37,12 @@
     <Filter Include="utils">
       <UniqueIdentifier>{ecd77fa7-ae5c-4b68-955a-70e05ea2a664}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features">
+      <UniqueIdentifier>{5a3b099e-dea8-4130-a5ec-c5def53175b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\lobby">
+      <UniqueIdentifier>{556d5df8-4618-48de-b1c6-f35c088963eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\fmt\src\format.cc">
@@ -109,14 +115,12 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\log.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\lordtype.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
+    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mapgen.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -150,9 +154,7 @@
     <ClCompile Include="src\scenarioheader.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\settings.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
+    <ClCompile Include="src\settings.cpp" />
     <ClCompile Include="src\smartptr.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -166,11 +168,9 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\unitsforhire.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features</Filter>
     </ClCompile>
-    <ClCompile Include="src\version.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
+    <ClCompile Include="src\version.cpp" />
     <ClCompile Include="src\dbf\dbffile.cpp">
       <Filter>dbf</Filter>
     </ClCompile>
@@ -208,7 +208,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\customattack.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features</Filter>
     </ClCompile>
     <ClCompile Include="src\visitors.cpp">
       <Filter>Исходные файлы</Filter>
@@ -415,7 +415,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\scripts.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\batattacksummon.cpp">
       <Filter>Исходные файлы</Filter>
@@ -463,7 +463,7 @@
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\originalfunctions.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\customattackhooks.cpp">
       <Filter>hooks</Filter>
@@ -499,7 +499,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\customattacks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features</Filter>
     </ClCompile>
     <ClCompile Include="src\sortedracelist.cpp">
       <Filter>Исходные файлы</Filter>
@@ -775,16 +775,16 @@
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\menucustomlobby.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\netcustomservice.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\netcustomsession.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\netcustomplayer.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\uievent.cpp">
       <Filter>Исходные файлы</Filter>
@@ -823,25 +823,25 @@
       <Filter>lobby\rooms</Filter>
     </ClCompile>
     <ClCompile Include="src\registeraccountinterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\popupdialoginterf.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\loginaccountinterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\lobbycallbacks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\netcustomplayerclient.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\netcustomplayerserver.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\roomscallback.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\menuphasehooks.cpp">
       <Filter>hooks</Filter>
@@ -865,22 +865,22 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\lobbyclient.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\networkpeer.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\menunewskirmishhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\roomservercreation.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\menunewskirmishmulti.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\roomclientjoin.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\menuload.cpp">
       <Filter>Исходные файлы</Filter>
@@ -889,7 +889,7 @@
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\roompasswordinterf.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\cursorhandle.cpp">
       <Filter>Исходные файлы</Filter>
@@ -1032,7 +1032,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\log.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\lordcat.h">
       <Filter>Файлы заголовков</Filter>
@@ -1166,9 +1166,7 @@
     <ClInclude Include="include\scenarioinfo.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="include\settings.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
+    <ClInclude Include="include\settings.h" />
     <ClInclude Include="include\smartptr.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -1191,7 +1189,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\unitsforhire.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features</Filter>
     </ClInclude>
     <ClInclude Include="include\ussoldier.h">
       <Filter>Файлы заголовков</Filter>
@@ -1208,9 +1206,7 @@
     <ClInclude Include="include\usunitimpl.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="include\version.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
+    <ClInclude Include="include\version.h" />
     <ClInclude Include="include\dbf\dbfcolumn.h">
       <Filter>dbf</Filter>
     </ClInclude>
@@ -1260,7 +1256,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\customattack.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features</Filter>
     </ClInclude>
     <ClInclude Include="include\visitors.h">
       <Filter>Файлы заголовков</Filter>
@@ -1596,7 +1592,7 @@
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\scripts.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\batattacksummon.h">
       <Filter>Файлы заголовков</Filter>
@@ -1677,7 +1673,7 @@
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\originalfunctions.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\customattackhooks.h">
       <Filter>hooks</Filter>
@@ -1737,7 +1733,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\customattacks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features</Filter>
     </ClInclude>
     <ClInclude Include="include\sortedracelist.h">
       <Filter>Файлы заголовков</Filter>
@@ -2124,16 +2120,16 @@
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\menucustomlobby.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\netcustomservice.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\netcustomsession.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\netcustomplayer.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\mquikernel.h">
       <Filter>Файлы заголовков</Filter>
@@ -2187,22 +2183,22 @@
       <Filter>lobby\rooms</Filter>
     </ClInclude>
     <ClInclude Include="include\registeraccountinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\lobbycallbacks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\netcustomplayerclient.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\mqnetreception.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\netcustomplayerserver.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\roomscallback.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\menuphasehooks.h">
       <Filter>hooks</Filter>
@@ -2229,25 +2225,25 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\lobbyclient.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\loginaccountinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\networkpeer.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\menunewskirmishhooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\roomservercreation.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\menunewskirmishmulti.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\roomclientjoin.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\menuload.h">
       <Filter>Файлы заголовков</Filter>
@@ -2256,7 +2252,7 @@
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\roompasswordinterf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features\lobby</Filter>
     </ClInclude>
     <ClInclude Include="include\batnotify.h">
       <Filter>Файлы заголовков</Filter>
@@ -2343,8 +2339,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="module.def">
-      <Filter>Исходные файлы</Filter>
-    </None>
+    <None Include="module.def" />
   </ItemGroup>
 </Project>
