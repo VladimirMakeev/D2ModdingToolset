@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,32 +17,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef STRINGANDID_H
-#define STRINGANDID_H
+#include "stringandid.h"
+#include "version.h"
+#include <array>
 
-#include <cstdint>
+namespace game::StringAndIdApi {
 
-namespace game {
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::SetString)0x60778a,
+    },
+    // Russobit
+    Api{
+        (Api::SetString)0x60778a,
+    },
+    // Gog
+    Api{
+        (Api::SetString)0x60627b,
+    },
+    // Scenario Editor
+    Api{
+        (Api::SetString)0x4fc04b,
+    },
+}};
+// clang-format on
 
-struct StringAndId
+Api& get()
 {
-    int id;
-    std::uint32_t length;
-    char* string;
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-namespace StringAndIdApi {
-
-struct Api
-{
-    using SetString = StringAndId*(__thiscall*)(StringAndId* thisptr, const char* src);
-    SetString setString;
-};
-
-Api& get();
-
-} // namespace StringAndIdApi
-
-} // namespace game
-
-#endif // STRINGANDID_H
+} // namespace game::StringAndIdApi

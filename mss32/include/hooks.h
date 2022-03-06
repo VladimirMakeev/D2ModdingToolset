@@ -76,10 +76,6 @@ Hooks getVftableHooks();
 void respopupInitHooked(void);
 void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/);
 
-bool __fastcall removeModifierHooked(game::CMidUnit* thisptr,
-                                     int /*%edx*/,
-                                     const game::CMidgardID* modifierId);
-
 game::AutoDialogData* __fastcall loadScriptFileHooked(game::AutoDialogData* thisptr,
                                                       int /*%edx*/,
                                                       const char* filePath,

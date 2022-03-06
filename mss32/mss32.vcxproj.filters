@@ -921,6 +921,12 @@
     <ClCompile Include="src\bindings\attackview.cpp">
       <Filter>Исходные файлы\bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\midunithooks.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stringandid.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def">
@@ -2327,6 +2333,9 @@
       <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\attackview.h">
+      <Filter>Файлы заголовков\bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midunithooks.h">
       <Filter>Файлы заголовков\bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\d2list.h">

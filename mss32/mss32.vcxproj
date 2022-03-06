@@ -320,6 +320,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\midunitdescriptorhooks.cpp" />
     <ClCompile Include="src\midunitgroup.cpp" />
     <ClCompile Include="src\midunit.cpp" />
+    <ClCompile Include="src\midunithooks.cpp" />
     <ClCompile Include="src\modifierutils.cpp" />
     <ClCompile Include="src\mqrect.cpp" />
     <ClCompile Include="src\multilayerimg.cpp" />
@@ -365,6 +366,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\sortedpointlist.cpp" />
     <ClCompile Include="src\sortedracelist.cpp" />
     <ClCompile Include="src\stackbattleactionmsg.cpp" />
+    <ClCompile Include="src\stringandid.cpp" />
     <ClCompile Include="src\stringarray.cpp" />
     <ClCompile Include="src\subracecat.cpp" />
     <ClCompile Include="src\summonhooks.cpp" />
@@ -720,6 +722,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midunitdescriptor.h" />
     <ClInclude Include="include\midunitdescriptorhooks.h" />
     <ClInclude Include="include\midunitgroup.h" />
+    <ClInclude Include="include\midunithooks.h" />
     <ClInclude Include="include\midvillage.h" />
     <ClInclude Include="include\modifgroup.h" />
     <ClInclude Include="include\modifierutils.h" />

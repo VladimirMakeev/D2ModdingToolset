@@ -29,25 +29,49 @@ static std::array<Api, 4> functions = {{
     Api{
         (Api::AddRemoveModifier)0x5eabff,
         (Api::AddRemoveModifier)0x5eac81,
+        (Api::GetModifiers)0x5eabb3,
         (Api::GetHpMax)0x5eab79,
+        (Api::Transform)0x5eb559,
+        (Api::Untransform)0x5eb6ba,
+        (Api::AddModifiers)0x5eb1df,
+        (Api::RemoveModifiers)0x5ea9ea,
+        (Api::ReplaceImpl)0x5eb4fc,
     },
     // Russobit
     Api{
         (Api::AddRemoveModifier)0x5eabff,
         (Api::AddRemoveModifier)0x5eac81,
+        (Api::GetModifiers)0x5eabb3,
         (Api::GetHpMax)0x5eab79,
+        (Api::Transform)0x5eb559,
+        (Api::Untransform)0x5eb6ba,
+        (Api::AddModifiers)0x5eb1df,
+        (Api::RemoveModifiers)0x5ea9ea,
+        (Api::ReplaceImpl)0x5eb4fc,
     },
     // Gog
     Api{
         (Api::AddRemoveModifier)0x5e9902,
         (Api::AddRemoveModifier)0x5e9984,
+        (Api::GetModifiers)0x5e98b6,
         (Api::GetHpMax)0x5e987c,
+        (Api::Transform)0x5ea25c,
+        (Api::Untransform)0x5ea3bd,
+        (Api::AddModifiers)0x5e9ee2,
+        (Api::RemoveModifiers)0x5e96e9,
+        (Api::ReplaceImpl)0x5ea1ff,
     },
     // Scenario Editor
     Api{
         (Api::AddRemoveModifier)0x4ed994,
         (Api::AddRemoveModifier)0x4eda16,
+        (Api::GetModifiers)0x4ed948,
         (Api::GetHpMax)0x4ed90e,
+        (Api::Transform)nullptr,
+        (Api::Untransform)nullptr,
+        (Api::AddModifiers)nullptr,
+        (Api::RemoveModifiers)0x4ed77b,
+        (Api::ReplaceImpl)nullptr,
     },
 }};
 // clang-format on

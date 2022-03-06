@@ -96,6 +96,7 @@
 #include "midstack.h"
 #include "midunitdescriptor.h"
 #include "midunitdescriptorhooks.h"
+#include "midunithooks.h"
 #include "modifierutils.h"
 #include "movepathhooks.h"
 #include "musichooks.h"
@@ -151,6 +152,8 @@ static Hooks getGameHooks()
     Hooks hooks{
         // Fix game crash in battles with summoners
         {CMidUnitApi::get().removeModifier, removeModifierHooked, (void**)&orig.removeModifier},
+        // Fix unit transformation to include hp mods into current hp recalculation
+        {CMidUnitApi::get().transform, transformHooked},
         // Show buildings with custom branch category on the 'other buildings' tab
         {CBuildingBranchApi::get().constructor, buildingBranchCtorHooked},
         // Allow alchemists to buff retreating units
@@ -558,17 +561,6 @@ void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/)
 
     logDebug("mss32Proxy.log", "Show banners hook finished");
     return thisptr;
-}
-
-bool __fastcall removeModifierHooked(game::CMidUnit* thisptr,
-                                     int /*%edx*/,
-                                     const game::CMidgardID* modifierId)
-{
-    if (!thisptr) {
-        return false;
-    }
-
-    return getOriginalFunctions().removeModifier(thisptr, modifierId);
 }
 
 using ScriptLines = std::vector<std::string>;
