@@ -5,29 +5,17 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="fmt">
-      <UniqueIdentifier>{8433cced-befe-4ae3-8f77-57effea18e04}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dbf">
-      <UniqueIdentifier>{253b7b33-d275-40f1-9a46-61f294d2bc8f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="lua">
-      <UniqueIdentifier>{4b310306-d035-4cfe-9046-c964d8647a6d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="bindings">
       <UniqueIdentifier>{ff59d289-ab38-48d8-9ce2-fc67d9b0d635}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="lobby">
-      <UniqueIdentifier>{f6359498-b4ad-43ad-8eba-5a8dce9de745}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="lobby\rooms">
-      <UniqueIdentifier>{30703c2c-8175-41dd-9242-e81842359a9d}</UniqueIdentifier>
     </Filter>
     <Filter Include="hooks">
       <UniqueIdentifier>{1dfeccc9-ab24-443a-bbc7-032bee84c4f4}</UniqueIdentifier>
     </Filter>
     <Filter Include="utils">
       <UniqueIdentifier>{ecd77fa7-ae5c-4b68-955a-70e05ea2a664}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils\dbf">
+      <UniqueIdentifier>{253b7b33-d275-40f1-9a46-61f294d2bc8f}</UniqueIdentifier>
     </Filter>
     <Filter Include="features">
       <UniqueIdentifier>{5a3b099e-dea8-4130-a5ec-c5def53175b9}</UniqueIdentifier>
@@ -38,13 +26,28 @@
     <Filter Include="game">
       <UniqueIdentifier>{84de1827-4ca5-4a1c-aca9-fe09d3ec9278}</UniqueIdentifier>
     </Filter>
+    <Filter Include="modules">
+      <UniqueIdentifier>{500a939b-9f81-40cc-ab99-24bb10cc9126}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\fmt">
+      <UniqueIdentifier>{8433cced-befe-4ae3-8f77-57effea18e04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\lua">
+      <UniqueIdentifier>{4b310306-d035-4cfe-9046-c964d8647a6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\slikenet">
+      <UniqueIdentifier>{f6359498-b4ad-43ad-8eba-5a8dce9de745}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\slikenet\rooms">
+      <UniqueIdentifier>{30703c2c-8175-41dd-9242-e81842359a9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\fmt\src\format.cc">
-      <Filter>fmt</Filter>
+      <Filter>modules\fmt</Filter>
     </ClCompile>
     <ClCompile Include="..\fmt\src\os.cc">
-      <Filter>fmt</Filter>
+      <Filter>modules\fmt</Filter>
     </ClCompile>
     <ClCompile Include="src\attackclasscat.cpp">
       <Filter>game</Filter>
@@ -77,7 +80,7 @@
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\dbfaccess.cpp">
-      <Filter>dbf</Filter>
+      <Filter>utils\dbf</Filter>
     </ClCompile>
     <ClCompile Include="src\dbtable.cpp">
       <Filter>game</Filter>
@@ -167,10 +170,10 @@
     </ClCompile>
     <ClCompile Include="src\version.cpp" />
     <ClCompile Include="src\dbf\dbffile.cpp">
-      <Filter>dbf</Filter>
+      <Filter>utils\dbf</Filter>
     </ClCompile>
     <ClCompile Include="src\dbf\dbfrecord.cpp">
-      <Filter>dbf</Filter>
+      <Filter>utils\dbf</Filter>
     </ClCompile>
     <ClCompile Include="src\editor.cpp">
       <Filter>game</Filter>
@@ -281,103 +284,103 @@
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lapi.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lauxlib.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lbaselib.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lcode.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lcorolib.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lctype.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\ldblib.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\ldebug.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\ldo.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\ldump.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lfunc.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lgc.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\linit.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\liolib.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\llex.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lmathlib.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lmem.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\loadlib.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lobject.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lopcodes.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\loslib.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lparser.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lstate.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lstring.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lstrlib.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\ltable.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\ltablib.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\ltm.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\luac.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lundump.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lutf8lib.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lvm.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="..\lua\lzio.c">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClCompile>
     <ClCompile Include="src\doppelgangerhooks.cpp">
       <Filter>hooks</Filter>
@@ -785,37 +788,37 @@
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Client.cpp">
-      <Filter>lobby</Filter>
+      <Filter>modules\slikenet</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Message.cpp">
-      <Filter>lobby</Filter>
+      <Filter>modules\slikenet</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Plugin.cpp">
-      <Filter>lobby</Filter>
+      <Filter>modules\slikenet</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Presence.cpp">
-      <Filter>lobby</Filter>
+      <Filter>modules\slikenet</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2ResultCode.cpp">
-      <Filter>lobby</Filter>
+      <Filter>modules\slikenet</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\IntervalTimer.cpp">
-      <Filter>lobby\rooms</Filter>
+      <Filter>modules\slikenet\rooms</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\ProfanityFilter.cpp">
-      <Filter>lobby\rooms</Filter>
+      <Filter>modules\slikenet\rooms</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsContainer.cpp">
-      <Filter>lobby\rooms</Filter>
+      <Filter>modules\slikenet\rooms</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsErrorCodes.cpp">
-      <Filter>lobby\rooms</Filter>
+      <Filter>modules\slikenet\rooms</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsPlugin.cpp">
-      <Filter>lobby\rooms</Filter>
+      <Filter>modules\slikenet\rooms</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomTypes.cpp">
-      <Filter>lobby\rooms</Filter>
+      <Filter>modules\slikenet\rooms</Filter>
     </ClCompile>
     <ClCompile Include="src\registeraccountinterf.cpp">
       <Filter>features\lobby</Filter>
@@ -970,7 +973,7 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\dbfaccess.h">
-      <Filter>dbf</Filter>
+      <Filter>utils\dbf</Filter>
     </ClInclude>
     <ClInclude Include="include\dbtable.h">
       <Filter>game</Filter>
@@ -1203,16 +1206,16 @@
     </ClInclude>
     <ClInclude Include="include\version.h" />
     <ClInclude Include="include\dbf\dbfcolumn.h">
-      <Filter>dbf</Filter>
+      <Filter>utils\dbf</Filter>
     </ClInclude>
     <ClInclude Include="include\dbf\dbffile.h">
-      <Filter>dbf</Filter>
+      <Filter>utils\dbf</Filter>
     </ClInclude>
     <ClInclude Include="include\dbf\dbfheader.h">
-      <Filter>dbf</Filter>
+      <Filter>utils\dbf</Filter>
     </ClInclude>
     <ClInclude Include="include\dbf\dbfrecord.h">
-      <Filter>dbf</Filter>
+      <Filter>utils\dbf</Filter>
     </ClInclude>
     <ClInclude Include="include\racecategory.h">
       <Filter>game</Filter>
@@ -1443,88 +1446,88 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lzio.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lvm.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lundump.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lualib.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\luaconf.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lua.hpp">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lua.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\ltm.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\ltable.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lstring.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lstate.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lprefix.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lparser.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lopnames.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lopcodes.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lobject.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lmem.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\llimits.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\llex.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\ljumptab.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lgc.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lfunc.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\ldo.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\ldebug.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lctype.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lcode.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lauxlib.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="..\lua\lapi.h">
-      <Filter>lua</Filter>
+      <Filter>modules\lua</Filter>
     </ClInclude>
     <ClInclude Include="include\midsite.h">
       <Filter>game</Filter>
@@ -2145,37 +2148,37 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Client.h">
-      <Filter>lobby</Filter>
+      <Filter>modules\slikenet</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Message.h">
-      <Filter>lobby</Filter>
+      <Filter>modules\slikenet</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Plugin.h">
-      <Filter>lobby</Filter>
+      <Filter>modules\slikenet</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Presence.h">
-      <Filter>lobby</Filter>
+      <Filter>modules\slikenet</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2ResultCode.h">
-      <Filter>lobby</Filter>
+      <Filter>modules\slikenet</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\IntervalTimer.h">
-      <Filter>lobby\rooms</Filter>
+      <Filter>modules\slikenet\rooms</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\ProfanityFilter.h">
-      <Filter>lobby\rooms</Filter>
+      <Filter>modules\slikenet\rooms</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsContainer.h">
-      <Filter>lobby\rooms</Filter>
+      <Filter>modules\slikenet\rooms</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsErrorCodes.h">
-      <Filter>lobby\rooms</Filter>
+      <Filter>modules\slikenet\rooms</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsPlugin.h">
-      <Filter>lobby\rooms</Filter>
+      <Filter>modules\slikenet\rooms</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomTypes.h">
-      <Filter>lobby\rooms</Filter>
+      <Filter>modules\slikenet\rooms</Filter>
     </ClInclude>
     <ClInclude Include="include\registeraccountinterf.h">
       <Filter>features\lobby</Filter>
@@ -2322,10 +2325,10 @@
       <Filter>resources</Filter>
     </ClInclude>
     <ClInclude Include="..\fmt\include\fmt\format.h">
-      <Filter>fmt</Filter>
+      <Filter>modules\fmt</Filter>
     </ClInclude>
     <ClInclude Include="..\fmt\include\fmt\os.h">
-      <Filter>fmt</Filter>
+      <Filter>modules\fmt</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
