@@ -35,7 +35,7 @@ struct SetNode
 };
 
 /** Implementation of std::set<T> used in game. */
-template <typename T>
+template <typename T, typename Allocator = void*>
 struct Set
 {
     char unknown;
@@ -43,9 +43,9 @@ struct Set
     std::uint32_t length; /**< Number of nodes in set. */
     char unknown2[4];
     SetNode<T>* begin; /**< Points to the first node with minimal value. */
-    int unknown3;
+    Allocator allocator;
     SetNode<T>* end; /**< Points to the end node used as stop element. */
-    void* allocator;
+    Allocator allocator2;
 };
 
 template <typename T>

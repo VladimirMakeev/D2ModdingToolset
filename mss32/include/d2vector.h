@@ -23,13 +23,13 @@
 namespace game {
 
 /** Implementation of std::vector<T> in game. */
-template <typename T>
+template <typename T, typename Allocator = void*>
 struct Vector
 {
     T* bgn;
     T* end;
     T* allocatedMemEnd;
-    void* allocator;
+    Allocator allocator;
 };
 
 } // namespace game
