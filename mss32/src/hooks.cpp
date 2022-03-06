@@ -152,6 +152,8 @@ static Hooks getGameHooks()
     Hooks hooks{
         // Fix game crash in battles with summoners
         {CMidUnitApi::get().removeModifier, removeModifierHooked, (void**)&orig.removeModifier},
+        // Fix unit transformation to include hp mods into current hp recalculation
+        {CMidUnitApi::get().transform, transformHooked},
         // Show buildings with custom branch category on the 'other buildings' tab
         {CBuildingBranchApi::get().constructor, buildingBranchCtorHooked},
         // Allow alchemists to buff retreating units

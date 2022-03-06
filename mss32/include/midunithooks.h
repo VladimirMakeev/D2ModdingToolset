@@ -33,6 +33,13 @@ bool __fastcall removeModifierHooked(game::CMidUnit* thisptr,
                                      int /*%edx*/,
                                      const game::CMidgardID* modifierId);
 
+bool __fastcall transformHooked(game::CMidUnit* thisptr,
+                                int /*%edx*/,
+                                const game::CScenarioVisitor* visitor,
+                                const game::IMidgardObjectMap* objectMap,
+                                const game::CMidgardID* transformImplId,
+                                bool keepHp);
+
 } // namespace hooks
 
 #endif // MIDUNITHOOKS_H

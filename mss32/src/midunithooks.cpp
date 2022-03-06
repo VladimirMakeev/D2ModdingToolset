@@ -19,6 +19,10 @@
 
 #include "midunithooks.h"
 #include "originalfunctions.h"
+#include "stringandid.h"
+#include "ussoldier.h"
+#include "usunit.h"
+#include "usunitimpl.h"
 
 namespace hooks {
 
@@ -31,6 +35,68 @@ bool __fastcall removeModifierHooked(game::CMidUnit* thisptr,
     }
 
     return getOriginalFunctions().removeModifier(thisptr, modifierId);
+}
+
+bool __fastcall transformHooked(game::CMidUnit* thisptr,
+                                int /*%edx*/,
+                                const game::CScenarioVisitor* visitor,
+                                const game::IMidgardObjectMap* objectMap,
+                                const game::CMidgardID* transformImplId,
+                                bool keepHp)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& unitApi = CMidUnitApi::get();
+    const auto& global = GlobalDataApi::get();
+
+    if (thisptr->transformed && !unitApi.untransform(thisptr, visitor))
+        return false;
+
+    if (thisptr->origTypeId == emptyId) {
+        auto soldier = fn.castUnitImplToSoldier(thisptr->unitImpl);
+
+        thisptr->transformed = true;
+        thisptr->origTypeId = thisptr->unitImpl->unitId;
+        thisptr->keepHp = keepHp;
+        thisptr->hpBefore = thisptr->currentHp;
+        thisptr->hpBefMax = soldier->vftable->getHitPoints(soldier);
+        thisptr->origXp = thisptr->currentXp;
+        unitApi.getModifiers(thisptr, &thisptr->origModifiers);
+    }
+
+    auto globalData = *global.getGlobalData();
+    auto globalUnitImpl = static_cast<TUsUnitImpl*>(
+        global.findById(globalData->units, &thisptr->unitImpl->unitId));
+
+    auto globalTransformImpl = static_cast<TUsUnitImpl*>(
+        global.findById(globalData->units, transformImplId));
+
+    if (!fn.castUnitImplToStackLeader(globalUnitImpl)
+        && fn.castUnitImplToStackLeader(globalTransformImpl)) {
+        auto globalTransformSoldier = fn.castUnitImplToSoldier(globalTransformImpl);
+        auto transformName = globalTransformSoldier->vftable->getName(globalTransformSoldier);
+        StringAndIdApi::get().setString(&thisptr->name, transformName);
+    }
+
+    thisptr->currentXp = 0;
+
+    if (!unitApi.removeModifiers(&thisptr->unitImpl)
+        || !unitApi.replaceImpl(&thisptr->unitImpl, globalTransformImpl)
+        || !unitApi.addModifiers(&thisptr->origModifiers, thisptr, nullptr, true)) {
+        return false;
+    }
+
+    if (!keepHp) {
+        // Fix unit transformation to include hp mods into current hp recalculation
+        auto transformedSoldier = fn.castUnitImplToSoldier(thisptr->unitImpl);
+        int transformedHp = transformedSoldier->vftable->getHitPoints(transformedSoldier);
+        thisptr->currentHp = transformedHp * thisptr->hpBefore / thisptr->hpBefMax;
+        if (thisptr->currentHp == 0)
+            thisptr->currentHp = 1;
+    }
+
+    return true;
 }
 
 } // namespace hooks
