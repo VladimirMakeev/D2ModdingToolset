@@ -20,7 +20,7 @@
 #ifndef PATHINFOLIST_H
 #define PATHINFOLIST_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 #include "mqpoint.h"
 
 namespace game {
@@ -37,8 +37,8 @@ struct PathInfo
 };
 
 /** Used to show movement path hints to the player in strategic view. */
-using PathInfoList = LinkedList<PathInfo>;
-using PathInfoListNode = LinkedListNode<PathInfo>;
+using PathInfoList = List<PathInfo>;
+using PathInfoListNode = ListNode<PathInfo>;
 
 namespace PathInfoListApi {
 
@@ -58,7 +58,7 @@ struct Api
      */
     using PopulateFromPath = void(__stdcall*)(const IMidgardObjectMap* objectMap,
                                               const CMidStack* stack,
-                                              const LinkedList<CMqPoint>* path,
+                                              const List<CMqPoint>* path,
                                               const CMqPoint* lastReachablePoint,
                                               bool waterOnly,
                                               PathInfoList* pathInfo);

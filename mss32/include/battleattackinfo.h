@@ -20,7 +20,7 @@
 #ifndef BATTLEATTACKINFO_H
 #define BATTLEATTACKINFO_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 #include "midgardid.h"
 #include <cstddef>
 
@@ -68,7 +68,7 @@ struct BattleAttackUnitInfo
 static_assert(sizeof(BattleAttackUnitInfo) == 20,
               "Size of BattleAttackUnitInfo structure must be exactly 20 bytes");
 
-using AttackUnitInfoList = LinkedList<BattleAttackUnitInfo>;
+using AttackUnitInfoList = List<BattleAttackUnitInfo>;
 
 /**
  * Holds information about performed attack.

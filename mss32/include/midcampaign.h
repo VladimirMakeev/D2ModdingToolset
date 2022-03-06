@@ -20,7 +20,7 @@
 #ifndef MIDCAMPAIGN_H
 #define MIDCAMPAIGN_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 #include "midgardid.h"
 #include "midobject.h"
 #include "racecategory.h"
@@ -55,7 +55,7 @@ struct CMidCampaignData
 {
     LRaceCategory playableRace;
     char conclusion[9];
-    LinkedList<CMidCampaignScenario> scenarios;
+    List<CMidCampaignScenario> scenarios;
     TextAndId name;
     TextAndId description;
     bool canImport;

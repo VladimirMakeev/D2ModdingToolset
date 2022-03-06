@@ -86,7 +86,7 @@ static void doBindApi(sol::state& lua)
         "Mountain", GroundId::Mountain
     );
 
-    lua.new_enum("LeaderType",
+    lua.new_enum("Leader",
         "Fighter", LeaderId::Fighter,
         "Explorer", LeaderId::Explorer,
         "Mage", LeaderId::Mage,
@@ -94,7 +94,7 @@ static void doBindApi(sol::state& lua)
         "Noble", LeaderId::Noble
     );
 
-    lua.new_enum("LeaderAbility",
+    lua.new_enum("Ability",
         "Incorruptible", LeaderAbilityId::Incorruptible,
         "WeaponMaster", LeaderAbilityId::WeaponMaster,
         "WandScrollUse", LeaderAbilityId::WandScrollUse,

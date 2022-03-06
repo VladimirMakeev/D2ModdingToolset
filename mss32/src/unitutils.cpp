@@ -72,7 +72,7 @@ game::IUsSoldier* castUnitImplToSoldierWithLogging(const game::IUsUnit* unitImpl
 
 void getSoldierAttackSourceImmunities(const game::LImmuneCat* immuneCat,
                                       const game::IUsSoldier* soldier,
-                                      game::LinkedList<game::LAttackSource>* value)
+                                      game::List<game::LAttackSource>* value)
 {
     using namespace game;
 

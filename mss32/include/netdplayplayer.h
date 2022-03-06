@@ -20,8 +20,8 @@
 #ifndef NETDPLAYPLAYER_H
 #define NETDPLAYPLAYER_H
 
+#include "d2list.h"
 #include "d2string.h"
-#include "linkedlist.h"
 #include "mqnetplayer.h"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
@@ -45,7 +45,7 @@ struct CNetDPlayPlayer : public IMqNetPlayer
     char padding[3];
     int directPlayId;
     String name;
-    LinkedList<void*> messages;
+    List<void*> messages;
 };
 
 static_assert(sizeof(CNetDPlayPlayer) == 68,

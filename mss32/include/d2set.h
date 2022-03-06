@@ -17,46 +17,46 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SORTEDLIST_H
-#define SORTEDLIST_H
+#ifndef D2SET_H
+#define D2SET_H
 
 #include <cstdint>
 
 namespace game {
 
 template <typename T>
-struct SortedListNode
+struct SetNode
 {
-    int unknown;                /**< Can be zero or one. */
-    SortedListNode<T>* next;    /**< Next node to search. */
-    SortedListNode<T>* less;    /**< Node with lesser value. */
-    SortedListNode<T>* greater; /**< Node with greater value. */
+    int unknown;         /**< Can be zero or one. */
+    SetNode<T>* next;    /**< Next node to search. */
+    SetNode<T>* less;    /**< Node with lesser value. */
+    SetNode<T>* greater; /**< Node with greater value. */
     T value;
 };
 
 /** Implementation of std::set<T> used in game. */
 template <typename T>
-struct SortedList
+struct Set
 {
     char unknown;
     char padding[3];
-    std::uint32_t length; /**< Number of nodes in list. */
+    std::uint32_t length; /**< Number of nodes in set. */
     char unknown2[4];
-    SortedListNode<T>* begin; /**< Points to the first node with minimal value. */
+    SetNode<T>* begin; /**< Points to the first node with minimal value. */
     int unknown3;
-    SortedListNode<T>* end; /**< Points to the end node used as stop element. */
+    SetNode<T>* end; /**< Points to the end node used as stop element. */
     void* allocator;
 };
 
 template <typename T>
-struct SortedListIterator
+struct SetIterator
 {
     char unknown;
     char padding[3];
-    SortedListNode<T>* node;
-    SortedListNode<T>* node2;
+    SetNode<T>* node;
+    SetNode<T>* node2;
 };
 
 } // namespace game
 
-#endif // SORTEDLIST_H
+#endif // D2SET_H

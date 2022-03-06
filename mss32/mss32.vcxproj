@@ -636,7 +636,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\landmarkcat.h" />
     <ClInclude Include="include\leaderabilitycat.h" />
     <ClInclude Include="include\leadercategory.h" />
-    <ClInclude Include="include\linkedlist.h" />
+    <ClInclude Include="include\d2list.h" />
     <ClInclude Include="include\listbox.h" />
     <ClInclude Include="include\idlistutils.h" />
     <ClInclude Include="include\lobbycallbacks.h" />
@@ -804,7 +804,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\sitemerchantinterf.h" />
     <ClInclude Include="include\smartptr.h" />
     <ClInclude Include="include\sortedcapitalracelist.h" />
-    <ClInclude Include="include\sortedlist.h" />
+    <ClInclude Include="include\d2set.h" />
     <ClInclude Include="include\movepathhooks.h" />
     <ClInclude Include="include\sortedpointlist.h" />
     <ClInclude Include="include\sortedracelist.h" />

@@ -20,29 +20,29 @@
 #ifndef LORDTYPE_H
 #define LORDTYPE_H
 
-#include "linkedlist.h"
+#include "d2list.h"
+#include "d2set.h"
 #include "lordcat.h"
 #include "midgardid.h"
 #include "midobject.h"
-#include "sortedlist.h"
 #include "textandid.h"
 #include <cstddef>
 #include <cstdint>
 
 namespace game {
 
-using BuildListDataNode = SortedListNode<CMidgardID>;
+using BuildListDataNode = SetNode<CMidgardID>;
 
 static_assert(sizeof(BuildListDataNode) == 20,
               "Size of BuildListDataNode structure must be exactly 20 bytes");
 
-using BuildListData = SortedList<CMidgardID>;
+using BuildListData = Set<CMidgardID>;
 
 static_assert(sizeof(BuildListData) == 28,
               "Size of BuildListData structure must be exactly 28 bytes");
 
 /** Name and meaning were assumed. */
-using BuildListIterator = SortedListIterator<CMidgardID>;
+using BuildListIterator = SetIterator<CMidgardID>;
 
 static_assert(sizeof(BuildListIterator) == 12,
               "Size of BuildListIterator structure must be exactly 12 bytes");
@@ -80,7 +80,7 @@ struct CLordLeaderUpg
 {
     void* vftable;
     CMidgardID lordId;
-    LinkedList<LeaderUpgData> upgrades;
+    List<LeaderUpgData> upgrades;
 };
 
 static_assert(sizeof(CLordLeaderUpg) == 24,

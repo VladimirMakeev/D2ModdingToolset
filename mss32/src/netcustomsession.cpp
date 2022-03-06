@@ -88,7 +88,7 @@ int __fastcall netCustomSessionGetMaxClients(CNetCustomSession* thisptr, int /*%
 
 void __fastcall netCustomSessionGetPlayers(CNetCustomSession* thisptr,
                                            int /*%edx*/,
-                                           game::LinkedList<game::IMqNetPlayerEnum*>* players)
+                                           game::List<game::IMqNetPlayerEnum*>* players)
 {
     logDebug("lobby.log", "CNetCustomSession getPlayers called");
 }

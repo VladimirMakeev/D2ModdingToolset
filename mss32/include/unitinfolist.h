@@ -20,15 +20,15 @@
 #ifndef UNITINFOLIST_H
 #define UNITINFOLIST_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 
 namespace game {
 
 struct UnitInfo;
 
-using UnitInfoList = LinkedList<UnitInfo>;
-using UnitInfoListNode = LinkedListNode<UnitInfo>;
-using UnitInfoListIterator = LinkedListIterator<UnitInfo>;
+using UnitInfoList = List<UnitInfo>;
+using UnitInfoListNode = ListNode<UnitInfo>;
+using UnitInfoListIterator = ListIterator<UnitInfo>;
 
 namespace UnitInfoListApi {
 

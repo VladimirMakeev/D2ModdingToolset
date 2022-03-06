@@ -20,8 +20,8 @@
 #ifndef MQUIKERNELSIMPLE_H
 #define MQUIKERNELSIMPLE_H
 
+#include "d2list.h"
 #include "d2pair.h"
-#include "linkedlist.h"
 #include "mqrect.h"
 #include "mquikernel.h"
 
@@ -47,7 +47,7 @@ struct CMqUIKernelSimpleData
     bool hasFocus;
     bool minimized;
     char padding[2];
-    LinkedList<TimerData> timers;
+    List<TimerData> timers;
     std::uint32_t lastTimerId;
     int systemTime;
     CMqPoint mousePosClient;

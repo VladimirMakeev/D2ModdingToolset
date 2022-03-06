@@ -21,7 +21,6 @@
 #define UNITPOSITIONPAIR_H
 
 #include "d2pair.h"
-#include "linkedlist.h"
 
 namespace game {
 

@@ -71,7 +71,7 @@ bool __fastcall condGameModeIsIdsEqual(const CMidCondGameMode*,
 
 void __fastcall condGameModeAddToList(const CMidCondGameMode*,
                                       int /*%edx*/,
-                                      game::SortedList<game::CMidgardID>*)
+                                      game::Set<game::CMidgardID>*)
 { }
 
 bool __fastcall condGameModeIsValid(const CMidCondGameMode* thisptr,

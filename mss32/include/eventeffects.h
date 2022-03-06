@@ -20,9 +20,9 @@
 #ifndef EVENTEFFECTS_H
 #define EVENTEFFECTS_H
 
+#include "d2set.h"
 #include "mideveffect.h"
 #include "ordercat.h"
-#include "sortedlist.h"
 #include "stringandid.h"
 #include "terraincat.h"
 
@@ -222,7 +222,7 @@ enum class UnfogRadius : int
 /** Unfog or fog an area of the map. */
 struct CMidEffectUnfog : public CMidEvEffect
 {
-    SortedList<CMidgardID> players;
+    Set<CMidgardID> players;
     CMidgardID locationId;
     bool unfog;
     char padding[3];

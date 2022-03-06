@@ -111,7 +111,7 @@ bool __fastcall condVarCmpIsIdsEqual(const CMidCondVarCmp*, int /*%edx*/, const 
 
 void __fastcall condVarCmpAddToList(const CMidCondVarCmp*,
                                     int /*%edx*/,
-                                    game::SortedList<game::CMidgardID>*)
+                                    game::Set<game::CMidgardID>*)
 { }
 
 bool __fastcall condVarCmpIsValid(const CMidCondVarCmp* thisptr,

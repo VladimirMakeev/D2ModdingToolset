@@ -20,7 +20,7 @@
 #ifndef MQNETSERVICE_H
 #define MQNETSERVICE_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 #include <guiddef.h>
 
 namespace game {
@@ -49,7 +49,7 @@ struct IMqNetServiceVftable
      * DPENUMSESSIONS_ALL or DPENUMSESSIONS_AVAILABLE in case of CNetDPlayService.
      */
     using GetSessions = void(__thiscall*)(IMqNetService* thisptr,
-                                          LinkedList<IMqNetSessEnum*>* sessions,
+                                          List<IMqNetSessEnum*>* sessions,
                                           const GUID* appGuid,
                                           const char* ipAddress,
                                           bool allSessions,

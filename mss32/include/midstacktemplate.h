@@ -20,8 +20,8 @@
 #ifndef MIDSTACKTEMPLATE_H
 #define MIDSTACKTEMPLATE_H
 
+#include "d2list.h"
 #include "idvector.h"
-#include "linkedlist.h"
 #include "midgardid.h"
 #include "midscenarioobject.h"
 #include "ordercat.h"
@@ -61,7 +61,7 @@ struct CMidStackTemplate : public IMidScenarioObject
     bool useFacing;
     Facing facing;
     char padding[2];
-    LinkedList<StackTemplateListNode> modifiers;
+    List<StackTemplateListNode> modifiers;
     int aiPriority;
 };
 

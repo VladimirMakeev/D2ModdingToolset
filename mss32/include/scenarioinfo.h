@@ -20,8 +20,8 @@
 #ifndef SCENARIOINFO_H
 #define SCENARIOINFO_H
 
+#include "d2list.h"
 #include "difficultylevel.h"
-#include "linkedlist.h"
 #include "midgardid.h"
 #include "midscenarioobject.h"
 #include "racecategory.h"
@@ -48,7 +48,7 @@ struct CScenarioInfo : public IMidScenarioObject
     int qtyCities;
     LDifficultyLevel scenarioDifficulty;
     LDifficultyLevel gameDifficulty;
-    LinkedList<LRaceCategory> races;
+    List<LRaceCategory> races;
     CMidgardID campaignId;
     int spellMaxTier;
     int unitMaxTier;

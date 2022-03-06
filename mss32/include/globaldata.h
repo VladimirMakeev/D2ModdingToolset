@@ -20,9 +20,9 @@
 #ifndef GLOBALDATA_H
 #define GLOBALDATA_H
 
+#include "d2list.h"
 #include "d2map.h"
 #include "d2pair.h"
-#include "linkedlist.h"
 #include "midgardid.h"
 #include "smartptr.h"
 #include <cstddef>
@@ -78,7 +78,7 @@ struct CDynUpgrade;
 struct CTileVariation;
 
 using RacesMap = Map<Pair<CMidgardID, TRaceType*>>;
-using DynUpgradeList = LinkedList<SmartPtr<CDynUpgrade>>;
+using DynUpgradeList = List<SmartPtr<CDynUpgrade>>;
 
 /** Holds global game information. */
 struct GlobalData

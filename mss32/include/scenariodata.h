@@ -20,16 +20,16 @@
 #ifndef SCENARIODATA_H
 #define SCENARIODATA_H
 
+#include "d2list.h"
 #include "d2string.h"
 #include "difficultylevel.h"
-#include "linkedlist.h"
 #include "midgardid.h"
 #include "racecategory.h"
 #include <cstddef>
 
 namespace game {
 
-using RaceCategoryList = LinkedList<LRaceCategory>;
+using RaceCategoryList = List<LRaceCategory>;
 
 /**
  * Holds brief information about scenario file registered in game.

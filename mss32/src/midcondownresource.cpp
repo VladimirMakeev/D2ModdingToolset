@@ -72,7 +72,7 @@ bool __fastcall condOwnResourceIsIdsEqual(const CMidCondOwnResource*,
 
 void __fastcall condOwnResourceAddToList(const CMidCondOwnResource*,
                                          int /*%edx*/,
-                                         game::SortedList<game::CMidgardID>*)
+                                         game::Set<game::CMidgardID>*)
 { }
 
 bool __fastcall condOwnResourceIsValid(const CMidCondOwnResource* thisptr,

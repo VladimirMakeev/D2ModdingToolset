@@ -96,11 +96,11 @@ const char* __stdcall attackClassToStringHooked(const game::LAttackClass* attack
 
 void __stdcall getUnitAttackSourceImmunitiesHooked(const game::LImmuneCat* immuneCat,
                                                    const game::CMidUnit* unit,
-                                                   game::LinkedList<game::LAttackSource>* value);
+                                                   game::List<game::LAttackSource>* value);
 
 void __stdcall getSoldierAttackSourceImmunitiesHooked(const game::IUsSoldier* soldier,
                                                       bool alwaysImmune,
-                                                      game::LinkedList<game::LAttackSource>* value);
+                                                      game::List<game::LAttackSource>* value);
 
 double __stdcall getSoldierImmunityAiRatingHooked(const game::IUsSoldier* soldier);
 

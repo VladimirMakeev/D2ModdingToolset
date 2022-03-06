@@ -376,7 +376,7 @@ using ComputeUnitDynUpgrade = void(__stdcall*)(const CMidgardID* unitImplId,
 
 using ShowMovementPath = void(__stdcall*)(const IMidgardObjectMap* objectMap,
                                           const CMidgardID* stackId,
-                                          LinkedList<CMqPoint>* path,
+                                          List<CMqPoint>* path,
                                           const CMqPoint* lastReachablePoint,
                                           const CMqPoint* pathEnd,
                                           bool a6);
@@ -470,12 +470,12 @@ using CheckRaceExist = void(__stdcall*)(RacesMap** races,
 /** Gets a list of sources to which the unit has the specified immunity. */
 using GetUnitAttackSourceImmunities = void(__stdcall*)(const LImmuneCat* immuneCat,
                                                        const CMidUnit* unit,
-                                                       LinkedList<LAttackSource>* value);
+                                                       List<LAttackSource>* value);
 
 /** Gets a list of sources to which the soldier has the specified immunity. */
 using GetSoldierAttackSourceImmunities = void(__stdcall*)(const IUsSoldier* soldier,
                                                           bool alwaysImmune,
-                                                          LinkedList<LAttackSource>* value);
+                                                          List<LAttackSource>* value);
 
 /** Gets immunity rating to be used by AI for overall soldier rating calculation. */
 using GetSoldierImmunityAiRating = double(__stdcall*)(const IUsSoldier* soldier);

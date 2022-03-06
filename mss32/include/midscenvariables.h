@@ -20,10 +20,10 @@
 #ifndef MIDSCENVARIABLES_H
 #define MIDSCENVARIABLES_H
 
+#include "d2set.h"
 #include "d2vector.h"
 #include "midgardid.h"
 #include "midscenarioobject.h"
-#include "sortedlist.h"
 
 namespace game {
 
@@ -53,14 +53,14 @@ struct CMidScenVariables : public IMidScenarioObject
 {
     CMidgardID variablesId;
     int unknown;
-    SortedList<ScenarioVariable> variables;
+    Set<ScenarioVariable> variables;
 };
 
 static_assert(sizeof(CMidScenVariables) == 40,
               "Size of CMidScenVariables structure must be exactly 40 bytes");
 
-using ScenarioVariablesListNode = SortedListNode<ScenarioVariable>;
-using ScenarioVariablesListIterator = SortedListIterator<ScenarioVariable>;
+using ScenarioVariablesListNode = SetNode<ScenarioVariable>;
+using ScenarioVariablesListIterator = SetIterator<ScenarioVariable>;
 
 namespace CMidScenVariablesApi {
 

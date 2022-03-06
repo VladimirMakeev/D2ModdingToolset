@@ -20,9 +20,9 @@
 #ifndef MIDSERVERLOGIC_H
 #define MIDSERVERLOGIC_H
 
+#include "d2set.h"
 #include "midmsgsender.h"
 #include "midserverlogiccore.h"
-#include "sortedlist.h"
 
 namespace game {
 
@@ -46,8 +46,8 @@ struct CMidServerLogicData2
     Vector<void*> array4;
     Vector<void*> array5;
     Vector<void*> array6;
-    SortedList<CMidgardID> list;
-    SortedList<void> list2;
+    Set<CMidgardID> list;
+    Set<void> list2;
 };
 
 static_assert(sizeof(CMidServerLogicData2) == 164,
@@ -87,7 +87,7 @@ struct CMidServerLogic
     CMidServerLogicData data;
     Vector<void*> array;
     int unknown5;
-    LinkedList<CMidgardID> playersIdList;
+    List<CMidgardID> playersIdList;
     int unknown6;
     int unknown7;
     CMidServerLogicData2 data2;
@@ -95,7 +95,7 @@ struct CMidServerLogic
     int unknown9;
     bool turnNumberIsZero;
     char padding[3];
-    LinkedList<void*> list;
+    List<void*> list;
     int unknown11;
     int unknown12;
     std::uint32_t aiMessageId;
@@ -104,7 +104,7 @@ struct CMidServerLogic
     char padding2[3];
     int unknown16;
     CMidgardID winnerPlayerId;
-    LinkedList<void*> list2;
+    List<void*> list2;
     char unknown17;
     char padding3[3];
     BattleMsgData* battleMsgData;

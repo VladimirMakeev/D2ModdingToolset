@@ -20,7 +20,7 @@
 #ifndef MQNETSESSENUM_H
 #define MQNETSESSENUM_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 
 namespace game {
 
@@ -60,7 +60,7 @@ struct IMqNetSessEnumVftable
 
     /** Returns list of players in a session. */
     using GetPlayers = void(__thiscall*)(const IMqNetSessEnum* thisptr,
-                                         LinkedList<IMqNetPlayerEnum*>* players);
+                                         List<IMqNetPlayerEnum*>* players);
     GetPlayers getPlayers;
 };
 

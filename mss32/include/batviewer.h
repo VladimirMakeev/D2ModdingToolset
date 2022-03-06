@@ -48,7 +48,7 @@ struct IBatViewerVftable
     using Update = void(__thiscall*)(IBatViewer* thisptr,
                                      const BattleMsgData* battleMsgData,
                                      const CMidgardID* unitId,
-                                     const SortedList<BattleAction>* actions,
+                                     const Set<BattleAction>* actions,
                                      const BatViewerTargetDataSet* targetData);
     Update update;
 

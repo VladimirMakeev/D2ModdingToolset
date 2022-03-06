@@ -17,40 +17,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LINKEDLIST_H
-#define LINKEDLIST_H
+#ifndef D2LIST_H
+#define D2LIST_H
 
 #include <cstdint>
 
 namespace game {
 
 template <typename T>
-struct LinkedListNode
+struct ListNode
 {
-    LinkedListNode<T>* next;
-    LinkedListNode<T>* prev;
+    ListNode<T>* next;
+    ListNode<T>* prev;
     T data;
 };
 
 /** Implementation of std::list<T> used in game. */
 template <typename T>
-struct LinkedList
+struct List
 {
     std::uint32_t length;
-    LinkedListNode<T>* head;
+    ListNode<T>* head;
     int unknown;
     void* allocator;
 };
 
 template <typename T>
-struct LinkedListIterator
+struct ListIterator
 {
     char unknown;
     char padding[3];
-    LinkedListNode<T>* node;
-    LinkedListNode<T>* node2;
+    ListNode<T>* node;
+    ListNode<T>* node2;
 };
 
 } // namespace game
 
-#endif // LINKEDLIST_H
+#endif // D2LIST_H

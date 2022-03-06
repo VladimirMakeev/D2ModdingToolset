@@ -20,7 +20,7 @@
 #ifndef MQNETSESSION_H
 #define MQNETSESSION_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 
 namespace game {
 
@@ -54,8 +54,7 @@ struct IMqNetSessionVftable
     using GetMaxClients = int(__thiscall*)(IMqNetSession* thisptr);
     GetMaxClients getMaxClients;
 
-    using GetPlayers = void(__thiscall*)(IMqNetSession* thisptr,
-                                         LinkedList<IMqNetPlayerEnum*>* players);
+    using GetPlayers = void(__thiscall*)(IMqNetSession* thisptr, List<IMqNetPlayerEnum*>* players);
     GetPlayers getPlayers;
 
     /**

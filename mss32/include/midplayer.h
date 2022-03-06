@@ -22,9 +22,9 @@
 
 #include "categories.h"
 #include "currency.h"
+#include "d2set.h"
 #include "midgardid.h"
 #include "midscenarioobject.h"
-#include "sortedlist.h"
 #include "stringandid.h"
 
 namespace game {
@@ -48,7 +48,7 @@ struct CMidPlayer : public IMidScenarioObject
     CMidgardID buildingsId;
     int researchTurn;
     int constructionTurn;
-    SortedList<CMidgardID> spyData;
+    Set<CMidgardID> spyData;
     Bank bank;
     Bank spellBank;
     bool isHuman;
@@ -56,7 +56,7 @@ struct CMidPlayer : public IMidScenarioObject
     CMidgardID capturedById;
     bool alwaysAi;
     char padding2[3];
-    SortedList<std::uint64_t> exmapData; // Each node contains 8 bytes of data
+    Set<std::uint64_t> exmapData; // Each node contains 8 bytes of data
 };
 
 static_assert(sizeof(CMidPlayer) == 176, "Size of CMidPlayer structure must be exactly 176 bytes");

@@ -20,7 +20,7 @@
 #ifndef BATTLEVIEWERINTERFHOOKS_H
 #define BATTLEVIEWERINTERFHOOKS_H
 
-#include "sortedlist.h"
+#include "d2set.h"
 
 namespace game {
 struct CBattleViewerInterf;
@@ -44,7 +44,7 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
                                                int /*%edx*/,
                                                const game::BattleMsgData* battleMsgData,
                                                const game::CMidgardID* unitId,
-                                               const game::SortedList<game::BattleAction>* actions,
+                                               const game::Set<game::BattleAction>* actions,
                                                const game::BatViewerTargetDataSet* targetData);
 
 } // namespace hooks

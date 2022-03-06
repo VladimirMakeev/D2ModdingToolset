@@ -20,7 +20,7 @@
 #ifndef MIDCLIENT_H
 #define MIDCLIENT_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 #include "midclientcore.h"
 #include "midcommandqueue2.h"
 #include "midgardid.h"
@@ -38,9 +38,9 @@ struct CMidClientData
     int unknown4;
     int unknown5;
     int unknown6;
-    LinkedList<CMidgardID> list;
-    LinkedList<CMidgardID> list2;
-    LinkedList<CMidgardID> list3;
+    List<CMidgardID> list;
+    List<CMidgardID> list2;
+    List<CMidgardID> list3;
     int unknown7;
     int unknown8;
     int unknown9;

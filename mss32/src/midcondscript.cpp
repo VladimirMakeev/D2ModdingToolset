@@ -75,7 +75,7 @@ bool __fastcall condScriptIsIdsEqual(const CMidCondScript*, int /*%edx*/, const 
 
 void __fastcall condScriptAddToList(const CMidCondScript*,
                                     int /*%edx*/,
-                                    game::SortedList<game::CMidgardID>*)
+                                    game::Set<game::CMidgardID>*)
 { }
 
 bool __fastcall condScriptIsValid(const CMidCondScript* thisptr,

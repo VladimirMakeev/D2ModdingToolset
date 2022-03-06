@@ -20,12 +20,12 @@
 #ifndef SORTEDPOINTLIST_H
 #define SORTEDPOINTLIST_H
 
+#include "d2set.h"
 #include "mqpoint.h"
-#include "sortedlist.h"
 
 namespace game {
 
-using SortedPointList = SortedList<CMqPoint>;
+using SortedPointList = Set<CMqPoint>;
 
 struct SortedPointListIterator
 {

@@ -25,13 +25,13 @@
 #include "battlemsgdata.h"
 #include "batviewer.h"
 #include "batviewerutils.h"
+#include "d2list.h"
+#include "d2set.h"
 #include "d2string.h"
 #include "d2vector.h"
 #include "draganddropinterf.h"
-#include "linkedlist.h"
 #include "midgardid.h"
 #include "mqrect.h"
-#include "sortedlist.h"
 #include "uievent.h"
 #include "unitpositionlinkedlist.h"
 #include "unitpositionlist.h"
@@ -86,7 +86,7 @@ struct CBattleViewerUnknown
     CBattleViewerUnknownData data2[6];
     CBattleViewerUnknownData data3[6];
     String string;
-    SortedList<void> list; /** < Each node contains 16 bytes of data. */
+    Set<void> list; /** < Each node contains 16 bytes of data. */
 };
 
 static_assert(offsetof(CBattleViewerUnknown, data3) == 112,
@@ -129,7 +129,7 @@ struct CBattleViewerUnknownUnitData
 static_assert(sizeof(CBattleViewerUnknownUnitData) == 12,
               "Size of CBattleViewerUnknownUnitData structure must be exactly 12 bytes");
 
-using CUnknownUnitDataList = SortedList<Pair<CMidgardID, CBattleViewerUnknownUnitData>>;
+using CUnknownUnitDataList = Set<Pair<CMidgardID, CBattleViewerUnknownUnitData>>;
 
 struct CUnitRectAndId
 {
@@ -242,13 +242,13 @@ struct CBattleViewerInterfData2
     CBatEncyclopediaInterf* encyclopedia;
     char unknown1[48];
     CBatLog* log;
-    LinkedList<void*> list; /**< Nodes unknown. */
-    LinkedList<void*> list2;
-    LinkedList<void*> list3;
+    List<void*> list; /**< Nodes unknown. */
+    List<void*> list2;
+    List<void*> list3;
     char unknown2[4];
     IBatNotify* battleNotify;
     CMidgardID selectedUnitId;
-    LinkedList<void*> list4; /**< Each node contains 16 bytes of data. */
+    List<void*> list4; /**< Each node contains 16 bytes of data. */
     char unknown3;
     bool unknown10;
     char unknown11;

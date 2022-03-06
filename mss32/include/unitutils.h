@@ -20,7 +20,7 @@
 #ifndef UNITUTILS_H
 #define UNITUTILS_H
 
-#include "linkedlist.h"
+#include "d2list.h"
 
 namespace game {
 struct CMidgardID;
@@ -41,7 +41,7 @@ void generateUnitImplByAttackId(const game::CMidgardID* attackId);
 game::IUsSoldier* castUnitImplToSoldierWithLogging(const game::IUsUnit* unitImpl);
 void getSoldierAttackSourceImmunities(const game::LImmuneCat* immuneCat,
                                       const game::IUsSoldier* soldier,
-                                      game::LinkedList<game::LAttackSource>* value);
+                                      game::List<game::LAttackSource>* value);
 bool isUnitSmall(const game::CMidUnit* unit);
 game::CMidgardID getGlobalUnitImplId(const game::CMidUnit* unit);
 game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidUnit* unit);
