@@ -21,12 +21,68 @@
 #define C2DENGINEMAPIMPL_H
 
 #include "2denginemap.h"
+#include "d2pair.h"
+#include "d2set.h"
+#include "d2vector.h"
+#include "mqpoint.h"
+#include "smartptr.h"
 
 namespace game {
 
+struct C2DEngine;
+struct CUIManager;
+
+using ElementIndexHashSet = Set<Pair<int /* elementIndex */, int /* isoLayerPositionHash*/>,
+                                SmartPointer>;
+
+static_assert(sizeof(ElementIndexHashSet) == 36,
+              "Size of ElementIndexHashSet structure must be exactly 36 bytes");
+
+struct EngineMapImageElementData
+{
+    IMqImage2* image;
+    CMqPoint position;
+    CMqPoint imageSize;
+    int elementIndex;
+};
+
+static_assert(sizeof(EngineMapImageElementData) == 24,
+              "Size of EngineMapImageElementData structure must be exactly 24 bytes");
+
+using ElementDataArray = Vector<EngineMapImageElementData, SmartPointer>;
+
+static_assert(sizeof(ElementDataArray) == 20,
+              "Size of ElementDataArray structure must be exactly 20 bytes");
+
+struct EngineMapImageElement
+{
+    ElementDataArray dataElements;
+    /**
+     * Hash value computed as:
+     * @code{.cpp}isoLayer + ((position->x + position->y + (isoLayer >> 9 << 8)) << 9);@endcode
+     */
+    int isoLayerPositionHash;
+    int unknown2;
+    int unknown3;
+    int unknown4;
+    int unknown5;
+    bool dirty; /**< Meaning assumed. */
+    char padding[3];
+};
+
+static_assert(sizeof(EngineMapImageElement) == 44,
+              "Size of EngineMapImageElement structure must be exactly 44 bytes");
+
 struct C2DEngineMapImplData
 {
-    char unknown[120];
+    C2DEngine* engine2d;
+    SmartPtr<CUIManager> uiManagerPtr;
+    Pair<ElementIndexHashSet, int /* freeElementIndex */> elementHashSetFreeIndexPair;
+    Vector<EngineMapImageElement, SmartPointer> imageElements;
+    Pair<Vector<char[16]>, int> unknownData;
+    bool dirty; /**< Meaning assumed. */
+    char padding[3];
+    char unknown[24];
 };
 
 static_assert(sizeof(C2DEngineMapImplData) == 120,
