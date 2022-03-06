@@ -1656,8 +1656,13 @@ void __stdcall beforeBattleTurnHooked(game::BattleMsgData* battleMsgData,
     if (customDamageRatios.enabled)
         customDamageRatios.value.clear();
 
-    if (getCustomAttacks().freeTransformSelfUnitId != *unitId)
-        getCustomAttacks().freeTransformSelfUnitId = emptyId;
+    auto& freeTransformSelf = getCustomAttacks().freeTransformSelf;
+    if (freeTransformSelf.unitId != *unitId) {
+        freeTransformSelf.unitId = *unitId;
+        freeTransformSelf.turnCount = 0;
+        freeTransformSelf.used = false;
+    }
+    freeTransformSelf.turnCount++;
 }
 
 void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)

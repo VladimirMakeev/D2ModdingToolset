@@ -24,9 +24,11 @@
 #include "battlemsgdata.h"
 #include "customattacks.h"
 #include "game.h"
+#include "gameutils.h"
 #include "globaldata.h"
 #include "log.h"
 #include "midgardobjectmap.h"
+#include "midplayer.h"
 #include "midunit.h"
 #include "scripts.h"
 #include "settings.h"
@@ -79,9 +81,16 @@ void giveFreeTransformSelfAttack(game::IMidgardObjectMap* objectMap,
 {
     using namespace game;
 
-    if (getCustomAttacks().freeTransformSelfUnitId == targetUnit->unitId)
-        return;
-    getCustomAttacks().freeTransformSelfUnitId = targetUnit->unitId;
+    auto& freeTransformSelf = getCustomAttacks().freeTransformSelf;
+    freeTransformSelf.turnCount--; // Not counting transform action as a turn
+
+    if (freeTransformSelf.used) {
+        // Prevents AI from falling into infinite transforming in case of targeting malfunction
+        auto player = getPlayer(objectMap, battleMsgData, &targetUnit->unitId);
+        if (player && !player->isHuman)
+            return;
+    }
+    freeTransformSelf.used = true;
 
     const auto transformedSoldier = gameFunctions().castUnitImplToSoldier(targetUnit->unitImpl);
     bool currAttackTwice = transformedSoldier
@@ -96,8 +105,11 @@ void giveFreeTransformSelfAttack(game::IMidgardObjectMap* objectMap,
     }
 
     const auto& battle = BattleMsgDataApi::get();
-    if (!prevAttackTwice && currAttackTwice) {
-        // Give 2 extra attacks if transforming from single to double attack
+    if (!prevAttackTwice && currAttackTwice && freeTransformSelf.turnCount == 0) {
+        // Give 2 extra attacks if transforming from single to double attack.
+        // turnCount prevents infinite abuse of 2 extra attacks:
+        // do normal attack -> transform to single-attack -> transform back to double-attack ->
+        // do normal attack -> ...
         battle.giveAttack(battleMsgData, &targetUnit->unitId, 2, 1);
     } else if (prevAttackTwice && !currAttackTwice && attackCount > 1) {
         // Give nothing if transforming from double to single attack with 2 attacks left
