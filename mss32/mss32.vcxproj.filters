@@ -31,6 +31,9 @@
     <Filter Include="lobby\rooms">
       <UniqueIdentifier>{30703c2c-8175-41dd-9242-e81842359a9d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="hooks">
+      <UniqueIdentifier>{1dfeccc9-ab24-443a-bbc7-032bee84c4f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\fmt\src\format.cc">
@@ -91,7 +94,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\hooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\idlist.cpp">
       <Filter>Исходные файлы</Filter>
@@ -229,7 +232,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\itemtransferhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\sitemerchantinterf.cpp">
       <Filter>Исходные файлы</Filter>
@@ -250,13 +253,13 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\playerincomehooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\batattackdrain.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\drainattackhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\batattackdrainoverflow.cpp">
       <Filter>Исходные файлы</Filter>
@@ -268,7 +271,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\musichooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\midgard.cpp">
       <Filter>Исходные файлы</Filter>
@@ -379,7 +382,7 @@
       <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="src\doppelgangerhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\batattackbestowwards.cpp">
       <Filter>Исходные файлы</Filter>
@@ -403,7 +406,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\transformselfhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\attack.cpp">
       <Filter>Исходные файлы</Filter>
@@ -415,7 +418,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\summonhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\midunitgroup.cpp">
       <Filter>Исходные файлы</Filter>
@@ -424,7 +427,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\bestowwardshooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\autoptr.cpp">
       <Filter>Исходные файлы</Filter>
@@ -454,13 +457,13 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\movepathhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\originalfunctions.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\customattackhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\batattackutils.cpp">
       <Filter>Исходные файлы</Filter>
@@ -472,7 +475,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\interftexthooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\textboxinterf.cpp">
       <Filter>Исходные файлы</Filter>
@@ -538,13 +541,13 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\battlemsgdatahooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\commandmsghooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\netmsghooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\commandmsg.cpp">
       <Filter>Исходные файлы</Filter>
@@ -556,7 +559,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\battleviewerinterfhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\battleviewerinterf.cpp">
       <Filter>Исходные файлы</Filter>
@@ -649,7 +652,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\umattackhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\attacktypepairvector.cpp">
       <Filter>Исходные файлы</Filter>
@@ -658,7 +661,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\midunitdescriptorhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\unitpickerinterf.cpp">
       <Filter>Исходные файлы</Filter>
@@ -685,22 +688,22 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\eventconditioncathooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\midevconditionhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\condinterfhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\testconditionhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\midcondownresource.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\mideventhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\midcondgamemode.cpp">
       <Filter>Исходные файлы</Filter>
@@ -721,19 +724,19 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\eventeffectcathooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\mideveffecthooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\effectinterfhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\effectresult.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\effectresulthooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\midcondscript.cpp">
       <Filter>Исходные файлы</Filter>
@@ -766,7 +769,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\menuprotocolhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\menucustomlobby.cpp">
       <Filter>Исходные файлы</Filter>
@@ -838,7 +841,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\menuphasehooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\imagepointlist.cpp">
       <Filter>Исходные файлы</Filter>
@@ -865,7 +868,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\menunewskirmishhooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\roomservercreation.cpp">
       <Filter>Исходные файлы</Filter>
@@ -880,7 +883,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\menuloadskirmishmultihooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\roompasswordinterf.cpp">
       <Filter>Исходные файлы</Filter>
@@ -907,16 +910,11 @@
       <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\midunithooks.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\stringandid.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="module.def">
-      <Filter>Файлы ресурсов</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -1007,7 +1005,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\hooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\idlist.h">
       <Filter>Файлы заголовков</Filter>
@@ -1406,7 +1404,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\itemtransferhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\sitemerchantinterf.h">
       <Filter>Файлы заголовков</Filter>
@@ -1430,13 +1428,13 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\playerincomehooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\batattackdrain.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\drainattackhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\batattackdrainoverflow.h">
       <Filter>Файлы заголовков</Filter>
@@ -1448,7 +1446,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\musichooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\batattackdoppelganger.h">
       <Filter>Файлы заголовков</Filter>
@@ -1547,7 +1545,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\doppelgangerhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\dynupgrade.h">
       <Filter>Файлы заголовков</Filter>
@@ -1595,7 +1593,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\transformselfhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\scripts.h">
       <Filter>Файлы заголовков</Filter>
@@ -1604,10 +1602,10 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\summonhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\bestowwardshooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\autoptr.h">
       <Filter>Файлы заголовков</Filter>
@@ -1676,13 +1674,13 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\movepathhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\originalfunctions.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\customattackhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\batattackutils.h">
       <Filter>Файлы заголовков</Filter>
@@ -1697,7 +1695,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\interftexthooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\textboxinterf.h">
       <Filter>Файлы заголовков</Filter>
@@ -1790,19 +1788,19 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\battlemsgdatahooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\commandmsghooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\netmsghooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\netmsgutils.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\battleviewerinterfhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\unitpositionlist.h">
       <Filter>Файлы заголовков</Filter>
@@ -1925,7 +1923,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\umattackhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\attacktypepairvector.h">
       <Filter>Файлы заголовков</Filter>
@@ -1934,7 +1932,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\midunitdescriptorhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\popupinterf.h">
       <Filter>Файлы заголовков</Filter>
@@ -1976,22 +1974,22 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\eventconditioncathooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\midevconditionhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\condinterfhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\testconditionhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\midcondownresource.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\mideventhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\midcondgamemode.h">
       <Filter>Файлы заголовков</Filter>
@@ -2015,19 +2013,19 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\eventeffectcathooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\mideveffecthooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\effectinterfhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\midlocation.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\effectresulthooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\landmarkcat.h">
       <Filter>Файлы заголовков</Filter>
@@ -2123,7 +2121,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\menuprotocolhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\menucustomlobby.h">
       <Filter>Файлы заголовков</Filter>
@@ -2207,7 +2205,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\menuphasehooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\imagepointlist.h">
       <Filter>Файлы заголовков</Filter>
@@ -2240,7 +2238,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\menunewskirmishhooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\roomservercreation.h">
       <Filter>Файлы заголовков</Filter>
@@ -2255,7 +2253,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\menuloadskirmishmultihooks.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\roompasswordinterf.h">
       <Filter>Файлы заголовков</Filter>
@@ -2332,7 +2330,12 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
-      <Filter>Файлы ресурсов</Filter>
+      <Filter>resources</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="module.def">
+      <Filter>Исходные файлы</Filter>
+    </None>
   </ItemGroup>
 </Project>
