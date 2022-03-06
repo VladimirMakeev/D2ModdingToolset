@@ -565,7 +565,7 @@
     <ClCompile Include="src\battleviewerinterf.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="src\unitpositionlist.cpp">
+    <ClCompile Include="src\unitpositionset.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\unitinfolist.cpp">
@@ -640,7 +640,7 @@
     <ClCompile Include="src\uimanager.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="src\unitpositionlinkedlist.cpp">
+    <ClCompile Include="src\unitpositionlist.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\attackmodified.cpp">
@@ -1796,7 +1796,7 @@
     <ClInclude Include="include\battleviewerinterfhooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
-    <ClInclude Include="include\unitpositionlist.h">
+    <ClInclude Include="include\unitpositionset.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\unitinfolist.h">
@@ -1910,7 +1910,7 @@
     <ClInclude Include="include\uimanager.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="include\unitpositionlinkedlist.h">
+    <ClInclude Include="include\unitpositionlist.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\unitpositionpair.h">

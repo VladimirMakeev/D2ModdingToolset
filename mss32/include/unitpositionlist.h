@@ -20,15 +20,15 @@
 #ifndef UNITPOSITIONLIST_H
 #define UNITPOSITIONLIST_H
 
+#include "d2list.h"
 #include "d2pair.h"
-#include "d2set.h"
 #include "unitpositionpair.h"
 
 namespace game {
 
-using UnitPositionList = Set<UnitPositionPair>;
-using UnitPositionListNode = SetNode<UnitPositionPair>;
-using UnitPositionListIterator = SetIterator<UnitPositionPair>;
+using UnitPositionList = List<UnitPositionPair>;
+using UnitPositionListNode = ListNode<UnitPositionPair>;
+using UnitPositionListIterator = ListIterator<UnitPositionPair>;
 
 namespace UnitPositionListApi {
 
@@ -39,14 +39,6 @@ struct Api
 
     using Destructor = void(__thiscall*)(UnitPositionList* thisptr);
     Destructor destructor;
-
-    using CopyConstructor = UnitPositionList*(__thiscall*)(UnitPositionList* thisptr,
-                                                           const UnitPositionList* src);
-    CopyConstructor copyConstructor;
-
-    using CopyAssignment = UnitPositionList*(__thiscall*)(UnitPositionList* thisptr,
-                                                          const UnitPositionList* src);
-    CopyAssignment copyAssignment;
 
     using GetIterator = UnitPositionListIterator*(__thiscall*)(UnitPositionList* thisptr,
                                                                UnitPositionListIterator* iterator);
@@ -62,14 +54,6 @@ struct Api
 
     using Preincrement = UnitPositionListIterator*(__thiscall*)(UnitPositionListIterator* thisptr);
     Preincrement preinc;
-
-    using FindByPosition = UnitPositionPair*(__stdcall*)(UnitPositionPair* value,
-                                                         const UnitPositionList* list,
-                                                         int unitPosition);
-    FindByPosition findByPosition;
-
-    using HasNegativePosition = bool(__stdcall*)(const UnitPositionList* thisptr);
-    HasNegativePosition hasNegativePosition;
 };
 
 Api& get();
