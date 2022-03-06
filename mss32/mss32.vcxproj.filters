@@ -1226,9 +1226,6 @@
     <ClInclude Include="include\racecategory.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="include\editor.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -2329,6 +2326,9 @@
     </ClInclude>
     <ClInclude Include="include\d2set.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>resources</Filter>
     </ClInclude>
     <ClInclude Include="..\fmt\include\fmt\format.h">
       <Filter>fmt</Filter>
