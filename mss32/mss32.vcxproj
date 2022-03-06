@@ -405,6 +405,8 @@ call ..\buildDetours.bat ..\Detours
     <None Include="module.def" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\fmt\include\fmt\format.h" />
+    <ClInclude Include="..\fmt\include\fmt\os.h" />
     <ClInclude Include="..\lua\lapi.h" />
     <ClInclude Include="..\lua\lauxlib.h" />
     <ClInclude Include="..\lua\lcode.h" />
