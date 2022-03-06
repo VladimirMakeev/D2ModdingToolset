@@ -28,15 +28,21 @@ namespace game {
 
 struct C2DEngine;
 struct CIsoEngineGround;
+struct IIsoCBScroll;
 
 struct MapGraphics
 {
     C2DEngine* engine2d;
-    char unknown[54];
+    char unknown[16];
+    int mapSize;
+    char unknown2[34];
     CIsoEngineGround* isoEngineGround;
-    char unknown2[8];
-    List<void*> list;
-    int unknown3;
+    int scrollSpeed;
+    bool unknown3;
+    char padding[3];
+    List<IIsoCBScroll*> isoScrollList;
+    bool unknown4;
+    char padding2[3];
     SmartPointer ptr;
 };
 
@@ -46,7 +52,8 @@ static_assert(sizeof(MapGraphics) == 100,
 static_assert(offsetof(MapGraphics, isoEngineGround) == 60,
               "MapGraphics::isoEngineGround offset must be 60 bytes");
 
-static_assert(offsetof(MapGraphics, list) == 72, "MapGraphics::list offset must be 72 bytes");
+static_assert(offsetof(MapGraphics, isoScrollList) == 72,
+              "MapGraphics::isoScrollList offset must be 72 bytes");
 
 static_assert(offsetof(MapGraphics, ptr) == 92, "MapGraphics::ptr offset must be 92 bytes");
 
