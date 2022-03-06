@@ -20,8 +20,8 @@
 #ifndef CAPITALDATA_H
 #define CAPITALDATA_H
 
+#include "capitalraceset.h"
 #include "smartptr.h"
-#include "sortedcapitalracelist.h"
 
 namespace game {
 
@@ -33,7 +33,7 @@ struct CapitalData
     CapitalDatList dwarf;
     CapitalDatList undead;
     CapitalDatList elf;
-    SortedCapitalRaceList races;
+    CapitalRaceSet races;
 };
 
 static_assert(sizeof(CapitalData) == 108,

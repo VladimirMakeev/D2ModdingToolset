@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SORTEDCAPITALRACELIST_H
-#define SORTEDCAPITALRACELIST_H
+#ifndef CAPITALRACESET_H
+#define CAPITALRACESET_H
 
 #include "capitaldatlist.h"
 #include "d2set.h"
@@ -35,31 +35,31 @@ struct CapitalRaceRecord
 static_assert(sizeof(CapitalRaceRecord) == 16,
               "Size of CapitalRaceRecord structure must be exactly 16 bytes");
 
-using SortedCapitalRaceList = Set<CapitalRaceRecord>;
+using CapitalRaceSet = Set<CapitalRaceRecord>;
 
-struct SortedCapitalRaceListIterator
+struct CapitalRaceSetIterator
 {
     char unknown[16];
 };
 
-namespace SortedCapitalRaceListApi {
+namespace CapitalRaceSetApi {
 
 struct Api
 {
-    using Constructor = SortedCapitalRaceList*(__thiscall*)(SortedCapitalRaceList* thisptr);
+    using Constructor = CapitalRaceSet*(__thiscall*)(CapitalRaceSet* thisptr);
     Constructor constructor;
 
-    using Add = SortedCapitalRaceListIterator*(__thiscall*)(SortedCapitalRaceListIterator* thisptr,
-                                                            SortedCapitalRaceListIterator* iterator,
-                                                            const LRaceCategory* race,
-                                                            CapitalDatList** list);
+    using Add = CapitalRaceSetIterator*(__thiscall*)(CapitalRaceSetIterator* thisptr,
+                                                     CapitalRaceSetIterator* iterator,
+                                                     const LRaceCategory* race,
+                                                     CapitalDatList** list);
     Add add;
 };
 
 Api& get();
 
-} // namespace SortedCapitalRaceListApi
+} // namespace CapitalRaceSetApi
 
 } // namespace game
 
-#endif // SORTEDCAPITALRACELIST_H
+#endif // CAPITALRACESET_H

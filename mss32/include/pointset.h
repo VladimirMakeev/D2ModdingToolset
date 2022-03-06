@@ -17,38 +17,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SORTEDRACELIST_H
-#define SORTEDRACELIST_H
+#ifndef POINTSET_H
+#define POINTSET_H
 
 #include "d2set.h"
-#include "racecategory.h"
+#include "mqpoint.h"
 
 namespace game {
 
-using SortedRaceList = Set<LRaceCategory>;
+using PointSet = Set<CMqPoint>;
 
-struct SortedRaceListIterator
+struct PointSetIterator
 {
     char unknown[16];
 };
 
-namespace SortedRaceListApi {
+namespace PointSetApi {
 
 struct Api
 {
-    using Clear = void(__thiscall*)(SortedRaceList* thisptr);
-    Clear clear;
+    using Constructor = PointSet*(__thiscall*)(PointSet* thisptr, bool* a2, void* a3, bool a4);
+    Constructor constructor;
 
-    using Add = SortedRaceListIterator*(__thiscall*)(SortedRaceList* thisptr,
-                                                     SortedRaceListIterator* iterator,
-                                                     LRaceCategory* raceCategory);
+    using Destructor = void(__thiscall*)(PointSet* thisptr);
+    Destructor destructor;
+
+    using Add = PointSetIterator*(__thiscall*)(PointSet* thisptr,
+                                               PointSetIterator* iterator,
+                                               const CMqPoint* point);
     Add add;
 };
 
 Api& get();
 
-} // namespace SortedRaceListApi
+} // namespace PointSetApi
 
 } // namespace game
 
-#endif // SORTEDRACELIST_H
+#endif // POINTSET_H

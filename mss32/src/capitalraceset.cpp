@@ -17,28 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sortedracelist.h"
+#include "capitalraceset.h"
 #include "version.h"
 #include <array>
 
-namespace game::SortedRaceListApi {
+namespace game::CapitalRaceSetApi {
 
 // clang-format off
 static std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (Api::Clear)0x424879,
-        (Api::Add)0x4246d4,
+        (Api::Constructor)0x56b1ca,
+        (Api::Add)0x56b228,
     },
     // Russobit
     Api{
-        (Api::Clear)0x424879,
-        (Api::Add)0x4246d4,
+        (Api::Constructor)0x56b1ca,
+        (Api::Add)0x56b228,
     },
     // Gog
     Api{
-        (Api::Clear)0x42434a,
-        (Api::Add)0x4241e7,
+        (Api::Constructor)0x56a87a,
+        (Api::Add)0x56a8d8,
     }
 }};
 // clang-format on
@@ -48,4 +48,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::SortedRaceListApi
+} // namespace game::CapitalRaceSetApi

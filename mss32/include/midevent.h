@@ -23,7 +23,7 @@
 #include "d2vector.h"
 #include "midgardid.h"
 #include "midscenarioobject.h"
-#include "sortedracelist.h"
+#include "raceset.h"
 #include "stringandid.h"
 #include <cstddef>
 
@@ -40,9 +40,9 @@ struct CMidEvent : public IMidScenarioObject
 {
     CMidgardID eventId;
     StringAndId name;
-    SortedRaceList affectedRaces; /**< Races to which conditions and effects can apply. */
+    RaceSet affectedRaces; /**< Races to which conditions and effects can apply. */
     /** Races that can trigger event. 'Verified races' in game terms. */
-    SortedRaceList racesCanTrigger;
+    RaceSet racesCanTrigger;
     bool enabled;
     bool occurOnce;
     char padding[2];

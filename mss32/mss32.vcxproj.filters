@@ -499,13 +499,13 @@
     <ClCompile Include="src\customattacks.cpp">
       <Filter>features</Filter>
     </ClCompile>
-    <ClCompile Include="src\sortedracelist.cpp">
+    <ClCompile Include="src\raceset.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\capitaldatlist.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="src\sortedcapitalracelist.cpp">
+    <ClCompile Include="src\capitalraceset.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\capitaldata.cpp">
@@ -622,7 +622,7 @@
     <ClCompile Include="src\menunewmap.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="src\sortedpointlist.cpp">
+    <ClCompile Include="src\pointset.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\midgardmap.cpp">
@@ -1733,7 +1733,7 @@
     <ClInclude Include="include\customattacks.h">
       <Filter>features</Filter>
     </ClInclude>
-    <ClInclude Include="include\sortedracelist.h">
+    <ClInclude Include="include\raceset.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\capitaldata.h">
@@ -1742,7 +1742,7 @@
     <ClInclude Include="include\capitaldatlist.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="include\sortedcapitalracelist.h">
+    <ClInclude Include="include\capitalraceset.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\attacksourcelist.h">
@@ -1895,7 +1895,7 @@
     <ClInclude Include="include\menubaseeditor.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="include\sortedpointlist.h">
+    <ClInclude Include="include\pointset.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midgardmap.h">
