@@ -34,6 +34,9 @@
     <Filter Include="hooks">
       <UniqueIdentifier>{1dfeccc9-ab24-443a-bbc7-032bee84c4f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{ecd77fa7-ae5c-4b68-955a-70e05ea2a664}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\fmt\src\format.cc">
@@ -196,7 +199,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\utils.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\attackimpl.cpp">
       <Filter>Исходные файлы</Filter>
@@ -466,13 +469,13 @@
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\batattackutils.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\attackutils.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\modifierutils.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\interftexthooks.cpp">
       <Filter>hooks</Filter>
@@ -553,10 +556,10 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\netmsgutils.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\unitutils.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\battleviewerinterfhooks.cpp">
       <Filter>hooks</Filter>
@@ -583,16 +586,16 @@
       <Filter>bindings</Filter>
     </ClCompile>
     <ClCompile Include="src\customattackutils.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\idlistutils.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\targetslistutils.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\gameutils.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\midstack.cpp">
       <Filter>Исходные файлы</Filter>
@@ -1254,7 +1257,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\utils.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\idvector.h">
       <Filter>Файлы заголовков</Filter>
@@ -1635,7 +1638,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\batviewerutils.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\midstacktemplate.h">
       <Filter>Файлы заголовков</Filter>
@@ -1683,13 +1686,13 @@
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\batattackutils.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\attackutils.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\modifierutils.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\encunitdescriptor.h">
       <Filter>Файлы заголовков</Filter>
@@ -1704,7 +1707,7 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\unitutils.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\midmsgsender.h">
       <Filter>Файлы заголовков</Filter>
@@ -1797,7 +1800,7 @@
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\netmsgutils.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\battleviewerinterfhooks.h">
       <Filter>hooks</Filter>
@@ -1818,16 +1821,16 @@
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\customattackutils.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\idlistutils.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\targetslistutils.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\gameutils.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\usstackleader.h">
       <Filter>Файлы заголовков</Filter>
