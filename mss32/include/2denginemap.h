@@ -22,10 +22,67 @@
 
 namespace game {
 
+struct C2DEngineMapVftable;
+struct IMqImage2;
+struct CMqPoint;
+
 struct C2DEngineMap
 {
-    void* vftable;
+    C2DEngineMapVftable* vftable;
 };
+
+struct C2DEngineMapVftable
+{
+    using Destructor = void(__thiscall*)(C2DEngineMap* thisptr, char flags);
+    Destructor destructor;
+
+    /** Returns image by specified element index or nullptr if no image found. */
+    using GetImage = IMqImage2*(__thiscall*)(C2DEngineMap* thisptr, int elementIndex);
+    GetImage getImage;
+
+    /**
+     * Adds specified image with selected position as map element.
+     * @param isoLayerPositionHash hash value computed as:
+     * @code{.cpp}isoLayer + ((position->x + position->y + (isoLayer >> 9 << 8)) << 9);@endcode
+     * @returns element index corresponding to the added element or -1 if element was not added.
+     */
+    using AddMapElement = int(__thiscall*)(C2DEngineMap* thisptr,
+                                           const CMqPoint* position,
+                                           int isoLayerPositionHash,
+                                           IMqImage2* image);
+    AddMapElement addMapElement;
+
+    /**
+     * Removes map element with specified element index.
+     * @returns true if element was found and removed.
+     */
+    using RemoveMapElement = bool(__thiscall*)(C2DEngineMap* thisptr, int elementIndex);
+    RemoveMapElement removeMapElement;
+
+    /**
+     * Changes map element with specified element index by replacing its hash and position.
+     * @returns true if element was changed.
+     */
+    using ChangeMapElement = bool(__thiscall*)(C2DEngineMap* thisptr,
+                                               int elementIndex,
+                                               int isoLayerPositionHash,
+                                               const CMqPoint* position);
+    ChangeMapElement changeMapElement;
+
+    /**
+     * Removes all map elements with specified hash value.
+     * Calls RemoveMapElement on each found element.
+     */
+    using RemoveElements = void(__thiscall*)(C2DEngineMap* thisptr, int isoLayerPositionHash);
+    RemoveElements removeElements;
+
+    /** Clears all map elements. */
+    using Clear = void(__thiscall*)(C2DEngineMap* thisptr);
+    Clear clear;
+};
+
+static_assert(sizeof(C2DEngineMapVftable) == 7 * sizeof(void*),
+              "C2DEngineMap vftable must have exactly 7 methods");
 
 } // namespace game
 
