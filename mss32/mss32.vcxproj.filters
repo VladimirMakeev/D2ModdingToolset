@@ -38,7 +38,10 @@
     <Filter Include="modules\slikenet">
       <UniqueIdentifier>{f6359498-b4ad-43ad-8eba-5a8dce9de745}</UniqueIdentifier>
     </Filter>
-    <Filter Include="modules\slikenet\rooms">
+    <Filter Include="modules\slikenet\lobby2">
+      <UniqueIdentifier>{cc06aea4-7860-45bd-9251-589d2c8e7e76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\slikenet\lobby2\rooms">
       <UniqueIdentifier>{30703c2c-8175-41dd-9242-e81842359a9d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -788,37 +791,37 @@
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Client.cpp">
-      <Filter>modules\slikenet</Filter>
+      <Filter>modules\slikenet\lobby2</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Message.cpp">
-      <Filter>modules\slikenet</Filter>
+      <Filter>modules\slikenet\lobby2</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Plugin.cpp">
-      <Filter>modules\slikenet</Filter>
+      <Filter>modules\slikenet\lobby2</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Presence.cpp">
-      <Filter>modules\slikenet</Filter>
+      <Filter>modules\slikenet\lobby2</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2ResultCode.cpp">
-      <Filter>modules\slikenet</Filter>
+      <Filter>modules\slikenet\lobby2</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\IntervalTimer.cpp">
-      <Filter>modules\slikenet\rooms</Filter>
+      <Filter>modules\slikenet\lobby2\rooms</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\ProfanityFilter.cpp">
-      <Filter>modules\slikenet\rooms</Filter>
+      <Filter>modules\slikenet\lobby2\rooms</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsContainer.cpp">
-      <Filter>modules\slikenet\rooms</Filter>
+      <Filter>modules\slikenet\lobby2\rooms</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsErrorCodes.cpp">
-      <Filter>modules\slikenet\rooms</Filter>
+      <Filter>modules\slikenet\lobby2\rooms</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsPlugin.cpp">
-      <Filter>modules\slikenet\rooms</Filter>
+      <Filter>modules\slikenet\lobby2\rooms</Filter>
     </ClCompile>
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomTypes.cpp">
-      <Filter>modules\slikenet\rooms</Filter>
+      <Filter>modules\slikenet\lobby2\rooms</Filter>
     </ClCompile>
     <ClCompile Include="src\registeraccountinterf.cpp">
       <Filter>features\lobby</Filter>
@@ -2148,37 +2151,37 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Client.h">
-      <Filter>modules\slikenet</Filter>
+      <Filter>modules\slikenet\lobby2</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Message.h">
-      <Filter>modules\slikenet</Filter>
+      <Filter>modules\slikenet\lobby2</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Plugin.h">
-      <Filter>modules\slikenet</Filter>
+      <Filter>modules\slikenet\lobby2</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2Presence.h">
-      <Filter>modules\slikenet</Filter>
+      <Filter>modules\slikenet\lobby2</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Lobby2ResultCode.h">
-      <Filter>modules\slikenet</Filter>
+      <Filter>modules\slikenet\lobby2</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\IntervalTimer.h">
-      <Filter>modules\slikenet\rooms</Filter>
+      <Filter>modules\slikenet\lobby2\rooms</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\ProfanityFilter.h">
-      <Filter>modules\slikenet\rooms</Filter>
+      <Filter>modules\slikenet\lobby2\rooms</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsContainer.h">
-      <Filter>modules\slikenet\rooms</Filter>
+      <Filter>modules\slikenet\lobby2\rooms</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsErrorCodes.h">
-      <Filter>modules\slikenet\rooms</Filter>
+      <Filter>modules\slikenet\lobby2\rooms</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsPlugin.h">
-      <Filter>modules\slikenet\rooms</Filter>
+      <Filter>modules\slikenet\lobby2\rooms</Filter>
     </ClInclude>
     <ClInclude Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomTypes.h">
-      <Filter>modules\slikenet\rooms</Filter>
+      <Filter>modules\slikenet\lobby2\rooms</Filter>
     </ClInclude>
     <ClInclude Include="include\registeraccountinterf.h">
       <Filter>features\lobby</Filter>
