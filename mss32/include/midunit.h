@@ -67,18 +67,33 @@ struct Api
     AddRemoveModifier addModifier;
     AddRemoveModifier removeModifier;
 
+    using GetModifiers = bool(__thiscall*)(CMidUnit* thisptr, game::IdList* value);
+    GetModifiers getModifiers;
+
     using GetHpMax = int(__thiscall*)(const CMidUnit* thisptr);
     GetHpMax getHpMax;
 
     using Transform = bool(__thiscall*)(CMidUnit* thisptr,
                                         const CScenarioVisitor* visitor,
                                         const IMidgardObjectMap* objectMap,
-                                        const CMidgardID* unitImplId,
+                                        const CMidgardID* transformImplId,
                                         bool keepHp);
     Transform transform;
 
     using Untransform = bool(__thiscall*)(CMidUnit* thisptr, const CScenarioVisitor* visitor);
     Untransform untransform;
+
+    using AddModifiers = bool(__stdcall*)(const game::IdList* value,
+                                          CMidUnit* unit,
+                                          char* errorBuffer,
+                                          bool checkApplicable);
+    AddModifiers addModifiers;
+
+    using RemoveModifiers = bool(__stdcall*)(IUsUnit** unitImpl);
+    RemoveModifiers removeModifiers;
+
+    using ReplaceImpl = bool(__stdcall*)(IUsUnit** unitImpl, IUsUnit* value);
+    ReplaceImpl replaceImpl;
 };
 
 Api& get();
