@@ -22,7 +22,7 @@
 
 #include "midgardid.h"
 #include "midscenarioobject.h"
-#include "sortedpointlist.h"
+#include "pointset.h"
 
 namespace game {
 
@@ -45,8 +45,8 @@ struct Api
     using ChangeTerrain = bool(__thiscall*)(CMidgardMap* thisptr,
                                             CVisitorAddPlayer* visitor,
                                             const LTerrainCategory* terrain,
-                                            SortedPointList* tiles,
-                                            SortedPointList* unknown,
+                                            PointSet* tiles,
+                                            PointSet* unknown,
                                             IMidgardObjectMap* objectMap);
     ChangeTerrain changeTerrain;
 };

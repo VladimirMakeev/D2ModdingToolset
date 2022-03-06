@@ -33,8 +33,8 @@
 #include "midgardid.h"
 #include "mqrect.h"
 #include "uievent.h"
-#include "unitpositionlinkedlist.h"
 #include "unitpositionlist.h"
+#include "unitpositionset.h"
 #include <cstddef>
 
 namespace game {
@@ -101,7 +101,7 @@ struct CBattleViewerTargetData
     bool unknown;
     char padding[2];
     CMidgardID targetGroupId;
-    UnitPositionList targetPositions;
+    UnitPositionSet targetPositions;
 };
 
 static_assert(sizeof(CBattleViewerTargetData) == 36,
@@ -375,8 +375,8 @@ struct Api
     UnknownMethod4 unknownMethod4;
 
     using FillTargetPositions = void(__stdcall*)(bool a1,
-                                                 UnitPositionList* positions,
-                                                 UnitPositionLinkedList* value);
+                                                 UnitPositionSet* positions,
+                                                 UnitPositionList* value);
     FillTargetPositions fillTargetPositions;
 
     using AddTargetUnitData = void(__thiscall*)(CBattleViewerInterf* thisptr,

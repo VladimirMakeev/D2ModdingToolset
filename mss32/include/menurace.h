@@ -22,7 +22,7 @@
 
 #include "menubase.h"
 #include "racelist.h"
-#include "sortedracelist.h"
+#include "raceset.h"
 
 namespace game {
 
@@ -31,7 +31,7 @@ struct IMqImage2;
 struct CMenuRaceData
 {
     int unknown;
-    SortedRaceList racesToSkip;
+    RaceSet racesToSkip;
     char unknown2[24];
     int screenIndex;
     SmartPtr<IMqImage2> backgroundImage;
@@ -94,7 +94,7 @@ struct Api
      * Fills list with races that are not present on selected scenario map
      * and will be skipped during race selection.
      */
-    using SetRacesToSkip = void(__stdcall*)(SortedRaceList* racesToSkip,
+    using SetRacesToSkip = void(__stdcall*)(RaceSet* racesToSkip,
                                             const RaceCategoryList* scenarioRaces);
     SetRacesToSkip setRacesToSkip;
 };

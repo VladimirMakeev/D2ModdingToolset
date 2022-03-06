@@ -17,35 +17,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sortedcapitalracelist.h"
-#include "version.h"
-#include <array>
+#ifndef POINTSET_H
+#define POINTSET_H
 
-namespace game::SortedCapitalRaceListApi {
+#include "d2set.h"
+#include "mqpoint.h"
 
-// clang-format off
-static std::array<Api, 3> functions = {{
-    // Akella
-    Api{
-        (Api::Constructor)0x56b1ca,
-        (Api::Add)0x56b228,
-    },
-    // Russobit
-    Api{
-        (Api::Constructor)0x56b1ca,
-        (Api::Add)0x56b228,
-    },
-    // Gog
-    Api{
-        (Api::Constructor)0x56a87a,
-        (Api::Add)0x56a8d8,
-    }
-}};
-// clang-format on
+namespace game {
 
-Api& get()
+using PointSet = Set<CMqPoint>;
+
+struct PointSetIterator
 {
-    return functions[static_cast<int>(hooks::gameVersion())];
-}
+    char unknown[16];
+};
 
-} // namespace game::SortedCapitalRaceListApi
+namespace PointSetApi {
+
+struct Api
+{
+    using Constructor = PointSet*(__thiscall*)(PointSet* thisptr, bool* a2, void* a3, bool a4);
+    Constructor constructor;
+
+    using Destructor = void(__thiscall*)(PointSet* thisptr);
+    Destructor destructor;
+
+    using Add = PointSetIterator*(__thiscall*)(PointSet* thisptr,
+                                               PointSetIterator* iterator,
+                                               const CMqPoint* point);
+    Add add;
+};
+
+Api& get();
+
+} // namespace PointSetApi
+
+} // namespace game
+
+#endif // POINTSET_H

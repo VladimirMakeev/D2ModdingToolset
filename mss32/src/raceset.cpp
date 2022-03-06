@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Stanislav Egorov.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,44 +17,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "unitpositionlinkedlist.h"
+#include "raceset.h"
 #include "version.h"
 #include <array>
 
-namespace game::UnitPositionLinkedListApi {
+namespace game::RaceSetApi {
 
 // clang-format off
 static std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (Api::Constructor)0x640620,
-        (Api::Destructor)0x6406b0,
-        (Api::GetIterator)0x640720,
-        (Api::GetIterator)0x62b930,
-        (Api::Dereference)0x62d280,
-        (Api::Equals)0x669930,
-        (Api::Preincrement)0x640780,
+        (Api::Clear)0x424879,
+        (Api::Add)0x4246d4,
     },
     // Russobit
     Api{
-        (Api::Constructor)0x640620,
-        (Api::Destructor)0x6406b0,
-        (Api::GetIterator)0x640720,
-        (Api::GetIterator)0x62b930,
-        (Api::Dereference)0x62d280,
-        (Api::Equals)0x669930,
-        (Api::Preincrement)0x640780,
+        (Api::Clear)0x424879,
+        (Api::Add)0x4246d4,
     },
     // Gog
     Api{
-        (Api::Constructor)0x63eef0,
-        (Api::Destructor)0x63ef80,
-        (Api::GetIterator)0x63f830,
-        (Api::GetIterator)0x667720,
-        (Api::Dereference)0x62c8e0,
-        (Api::Equals)0x642ed0,
-        (Api::Preincrement)0x6681f0,
-    },
+        (Api::Clear)0x42434a,
+        (Api::Add)0x4241e7,
+    }
 }};
 // clang-format on
 
@@ -63,4 +48,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::UnitPositionLinkedListApi
+} // namespace game::RaceSetApi

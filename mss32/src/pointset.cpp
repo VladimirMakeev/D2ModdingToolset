@@ -17,38 +17,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SORTEDRACELIST_H
-#define SORTEDRACELIST_H
+#include "pointset.h"
+#include "version.h"
+#include <array>
 
-#include "d2set.h"
-#include "racecategory.h"
+namespace game::PointSetApi {
 
-namespace game {
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)nullptr,
+        (Api::Destructor)nullptr,
+        (Api::Add)nullptr,
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)nullptr,
+        (Api::Destructor)nullptr,
+        (Api::Add)nullptr,
+    },
+    // Gog
+    Api{
+        (Api::Constructor)nullptr,
+        (Api::Destructor)nullptr,
+        (Api::Add)nullptr,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x405ed2,
+        (Api::Destructor)0x405f31,
+        (Api::Add)0x405e6f,
+    },
+}};
+// clang-format on
 
-using SortedRaceList = Set<LRaceCategory>;
-
-struct SortedRaceListIterator
+Api& get()
 {
-    char unknown[16];
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-namespace SortedRaceListApi {
-
-struct Api
-{
-    using Clear = void(__thiscall*)(SortedRaceList* thisptr);
-    Clear clear;
-
-    using Add = SortedRaceListIterator*(__thiscall*)(SortedRaceList* thisptr,
-                                                     SortedRaceListIterator* iterator,
-                                                     LRaceCategory* raceCategory);
-    Add add;
-};
-
-Api& get();
-
-} // namespace SortedRaceListApi
-
-} // namespace game
-
-#endif // SORTEDRACELIST_H
+} // namespace game::PointSetApi
