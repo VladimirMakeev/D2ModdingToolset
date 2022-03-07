@@ -42,6 +42,25 @@ struct CBFunctorDispatch1Vftable
 static_assert(sizeof(CBFunctorDispatch1Vftable<void*>) == 1 * sizeof(void*),
               "CBFunctorDispatch1 vftable must have exactly 1 method");
 
+template <typename T, typename U>
+struct CBFunctorDispatch1wRetVftable;
+
+template <typename T, typename U>
+struct CBFunctorDispatch1wRet
+{
+    CBFunctorDispatch1wRetVftable<T, U>* vftable;
+};
+
+template <typename T, typename U>
+struct CBFunctorDispatch1wRetVftable
+{
+    /**
+     * Calls functor-specific callback function that returns U, passing it T as a single parameter.
+     */
+    using RunCallback = U(__thiscall*)(CBFunctorDispatch1wRet<T, U>* thisptr, T value);
+    RunCallback runCallback;
+};
+
 } // namespace game
 
 #endif // FUNCTORDISPATCH1_H
