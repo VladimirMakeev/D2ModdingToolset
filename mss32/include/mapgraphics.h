@@ -33,6 +33,8 @@ struct C2DEngine;
 struct CIsoEngineGround;
 struct IIsoCBScroll;
 struct CMqPoint;
+struct IMqImage2;
+struct CIsoLayer;
 
 /**
  * Maps iso layer and map tile positions to 2d engine element indices.
@@ -102,6 +104,17 @@ struct Api
 
     using StoreBlackTiles = int(__thiscall*)(MapGraphics** thisptr, int blackTilesIndex);
     StoreBlackTiles storeBlackTiles;
+
+    /**
+     * Shows specified image on selected layer.
+     * Image is placed according to mapPosition.
+     */
+    using ShowImageOnMap = void(__stdcall*)(const CMqPoint* mapPosition,
+                                            const CIsoLayer* layer,
+                                            const IMqImage2* image,
+                                            int a4,
+                                            int a5);
+    ShowImageOnMap showImageOnMap;
 };
 
 Api& get();

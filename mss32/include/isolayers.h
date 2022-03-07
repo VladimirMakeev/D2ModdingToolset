@@ -20,12 +20,19 @@
 #ifndef ISOLAYER_H
 #define ISOLAYER_H
 
+#include <cstdint>
+
 namespace game {
 
-/** Addresses of layer numbers read from IIsoLay.dbf. */
+struct CIsoLayer
+{
+    std::uint32_t value;
+};
+
+/** Addresses of iso layer values read from IIsoLay.dbf. */
 struct IsoLayers
 {
-    int* symMovePath;
+    CIsoLayer* symMovePath; /**< SYM_MOVE_PATH */
 };
 
 IsoLayers& isoLayers();

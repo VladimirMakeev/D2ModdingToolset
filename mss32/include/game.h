@@ -407,9 +407,6 @@ using GetFortOrRuinEntrance = bool(__stdcall*)(const IMidgardObjectMap* objectMa
                                                const CMqPoint* position,
                                                CMqPoint* entrance);
 
-using ShowImageOnGround =
-    void(__stdcall*)(const CMqPoint* position, int* layer, const IMqImage2* image, int a4, int a5);
-
 /**
  * Returns true if stack can move to specified position on a map.
  * @param[in] objectMap map to search objects.
@@ -638,7 +635,6 @@ struct Functions
     CastUnitImplToNoble castUnitImplToNoble;
     GetBlockingPathNearbyStackId getBlockingPathNearbyStackId;
     GetFortOrRuinEntrance getFortOrRuinEntrance;
-    ShowImageOnGround showImageOnGround;
     StackCanMoveToPosition stackCanMoveToPosition;
     IsWaterTileSurroundedByWater isWaterTileSurroundedByWater;
     GetStackPositionById getStackPositionById;

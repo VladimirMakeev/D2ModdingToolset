@@ -27,15 +27,15 @@ namespace game {
 static std::array<IsoLayers, 3> layers = {{
     // Akella
     IsoLayers{
-        (int*)0x83a600,
+        (CIsoLayer*)0x83a600,
     },
     // Russobit
     IsoLayers{
-        (int*)0x83a600,
+        (CIsoLayer*)0x83a600,
     },
     // Gog
     IsoLayers{
-        (int*)0x838590,
+        (CIsoLayer*)0x838590,
     }
 }};
 // clang-format on

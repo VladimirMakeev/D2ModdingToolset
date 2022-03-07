@@ -31,6 +31,7 @@ static std::array<Api, 4> functions = {{
         (Api::SetMapGraphics)0x407f37,
         (Api::GetTileIndex)0x541e15,
         (Api::StoreBlackTiles)0x541e65,
+        (Api::ShowImageOnMap)0x5adf66,
     },
     // Russobit
     Api{
@@ -38,6 +39,7 @@ static std::array<Api, 4> functions = {{
         (Api::SetMapGraphics)0x407f37,
         (Api::GetTileIndex)0x541e15,
         (Api::StoreBlackTiles)0x541e65,
+        (Api::ShowImageOnMap)0x5adf66,
     },
     // Gog
     Api{
@@ -45,6 +47,7 @@ static std::array<Api, 4> functions = {{
         (Api::SetMapGraphics)0x407be5,
         (Api::GetTileIndex)0x5414c5,
         (Api::StoreBlackTiles)0x541515,
+        (Api::ShowImageOnMap)0x5ad1ee,
     },
     // Scenario Editor
     Api{
@@ -52,7 +55,8 @@ static std::array<Api, 4> functions = {{
         (Api::SetMapGraphics)0x4044be,
         (Api::GetTileIndex)0x49ba3f,
         (Api::StoreBlackTiles)0x49ba8f,
-    }
+        (Api::ShowImageOnMap)nullptr,
+    },
 }};
 // clang-format on
 

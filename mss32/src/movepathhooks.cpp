@@ -25,6 +25,7 @@
 #include "image2text.h"
 #include "isolayers.h"
 #include "log.h"
+#include "mapgraphics.h"
 #include "mempool.h"
 #include "midgard.h"
 #include "midgardobjectmap.h"
@@ -261,7 +262,7 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
         CMqPoint pos;
         pos.x = currentPosition.x;
         pos.y = currentPosition.y;
-        fn.showImageOnGround(&pos, isoLayers().symMovePath, multilayerImg, 0, 0);
+        MapGraphicsApi::get().showImageOnMap(&pos, isoLayers().symMovePath, multilayerImg, 0, 0);
     }
 
     imagesApi.createOrFreeGameImages(&imagesPtr, nullptr);
