@@ -32,7 +32,7 @@ namespace game {
 struct C2DEngine;
 struct CUIManager;
 
-using ElementIndexHashSet = Set<Pair<int /* elementIndex */, int /* isoLayerPositionHash*/>,
+using ElementIndexHashSet = Set<Pair<int /* elementIndex */, int /* isoLayerPositionHash */>,
                                 SmartPointer>;
 
 static_assert(sizeof(ElementIndexHashSet) == 36,

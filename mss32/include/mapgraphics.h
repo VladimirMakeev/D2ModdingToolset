@@ -21,6 +21,9 @@
 #define MAPGRAPHICS_H
 
 #include "d2list.h"
+#include "d2pair.h"
+#include "d2set.h"
+#include "functordispatch1.h"
 #include "smartptr.h"
 #include <cstddef>
 
@@ -29,21 +32,45 @@ namespace game {
 struct C2DEngine;
 struct CIsoEngineGround;
 struct IIsoCBScroll;
+struct CMqPoint;
+
+/**
+ * Maps iso layer and map tile positions to 2d engine element indices.
+ * Hash value computed as:
+ * @code{.cpp}
+ * (layerNumber << 20)
+ *         | ((mapPosX & 0xFFF003FF | ((mapPosX & 0x3FF) << 10))
+ *            ^ (mapPosY ^ (mapPosX & 0xFFF003FF | ((mapPosX & 0x3FF) << 10))) & 0x3FF)
+ *               & 0xFFFFF;
+ * @endcode
+ * Element indices are used by C2DEngineMapImpl to add, remove and change map elements images.
+ */
+using HashElementIndexSet = Set<Pair<int /* hash */, int /* elementIndex */>, SmartPointer>;
+
+static_assert(sizeof(HashElementIndexSet) == 36,
+              "Size of HashElementIndexSet structure must be exactly 36 bytes");
 
 struct MapGraphics
 {
     C2DEngine* engine2d;
-    char unknown[16];
+    int unknown;
+    int unknown2;
+    int unknown3;
+    int unknown4;
     int mapSize;
-    char unknown2[34];
+    HashElementIndexSet hashElementIndexSet;
     CIsoEngineGround* isoEngineGround;
     int scrollSpeed;
-    bool unknown3;
+    bool unknown5;
     char padding[3];
     List<IIsoCBScroll*> isoScrollList;
-    bool unknown4;
+    bool unknown6;
     char padding2[3];
-    SmartPointer ptr;
+    /**
+     * Callback that returns true if mouse coordinates can be converted to tile coordinates.
+     * Set by CStratInterf in its c-tor.
+     */
+    SmartPtr<CBFunctorDispatch1wRet<const CMqPoint*, bool>> canConvertMouse;
 };
 
 static_assert(sizeof(MapGraphics) == 100,
@@ -55,7 +82,8 @@ static_assert(offsetof(MapGraphics, isoEngineGround) == 60,
 static_assert(offsetof(MapGraphics, isoScrollList) == 72,
               "MapGraphics::isoScrollList offset must be 72 bytes");
 
-static_assert(offsetof(MapGraphics, ptr) == 92, "MapGraphics::ptr offset must be 92 bytes");
+static_assert(offsetof(MapGraphics, canConvertMouse) == 92,
+              "MapGraphics::canConvertMouse offset must be 92 bytes");
 
 using MapGraphicsPtr = SmartPtr<MapGraphics*>;
 
