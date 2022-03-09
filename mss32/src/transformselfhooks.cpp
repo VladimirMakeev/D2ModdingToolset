@@ -76,7 +76,7 @@ static int getTransformSelfLevel(const game::CMidUnit* unit, game::TUsUnitImpl* 
 
 void giveFreeTransformSelfAttack(game::IMidgardObjectMap* objectMap,
                                  game::BattleMsgData* battleMsgData,
-                                 const game::CMidUnit* targetUnit,
+                                 const game::CMidUnit* unit,
                                  bool prevAttackTwice)
 {
     using namespace game;
@@ -86,36 +86,31 @@ void giveFreeTransformSelfAttack(game::IMidgardObjectMap* objectMap,
 
     if (freeTransformSelf.used) {
         // Prevents AI from falling into infinite transforming in case of targeting malfunction
-        auto player = getPlayer(objectMap, battleMsgData, &targetUnit->unitId);
+        auto player = getPlayer(objectMap, battleMsgData, &unit->unitId);
         if (player && !player->isHuman)
             return;
     }
     freeTransformSelf.used = true;
 
-    const auto transformedSoldier = gameFunctions().castUnitImplToSoldier(targetUnit->unitImpl);
-    bool currAttackTwice = transformedSoldier
-                           && transformedSoldier->vftable->getAttackTwice(transformedSoldier);
+    const auto soldier = gameFunctions().castUnitImplToSoldier(unit->unitImpl);
+    bool attackTwice = soldier && soldier->vftable->getAttackTwice(soldier);
 
-    int attackCount = 1;
-    for (auto turn : battleMsgData->turnsOrder) {
-        if (turn.unitId == targetUnit->unitId) {
-            attackCount = turn.attackCount;
+    for (auto& turn : battleMsgData->turnsOrder) {
+        if (turn.unitId == unit->unitId) {
+            if (!prevAttackTwice && attackTwice && freeTransformSelf.turnCount == 0) {
+                // Give 2 extra attacks if transforming from single to double attack.
+                // turnCount prevents infinite abuse of 2 extra attacks:
+                // do normal attack -> transform to single-attack -> transform back to double-attack
+                // -> do normal attack -> ...
+                turn.attackCount += 2;
+            } else if (prevAttackTwice && !attackTwice && turn.attackCount > 1) {
+                // Give nothing if transforming from double to single attack with 2 attacks left
+            } else {
+                // Give 1 extra attack to compensate transformation
+                turn.attackCount++;
+            }
             break;
         }
-    }
-
-    const auto& battle = BattleMsgDataApi::get();
-    if (!prevAttackTwice && currAttackTwice && freeTransformSelf.turnCount == 0) {
-        // Give 2 extra attacks if transforming from single to double attack.
-        // turnCount prevents infinite abuse of 2 extra attacks:
-        // do normal attack -> transform to single-attack -> transform back to double-attack ->
-        // do normal attack -> ...
-        battle.giveAttack(battleMsgData, &targetUnit->unitId, 2, 1);
-    } else if (prevAttackTwice && !currAttackTwice && attackCount > 1) {
-        // Give nothing if transforming from double to single attack with 2 attacks left
-    } else {
-        // Give 1 extra attack to compensate transformation
-        battle.giveAttack(battleMsgData, &targetUnit->unitId, 1, 1);
     }
 }
 
