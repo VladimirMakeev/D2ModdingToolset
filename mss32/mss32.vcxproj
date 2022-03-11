@@ -251,6 +251,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\groundcat.cpp" />
     <ClCompile Include="src\hooks.cpp" />
     <ClCompile Include="src\idlist.cpp" />
+    <ClCompile Include="src\idset.cpp" />
     <ClCompile Include="src\idvector.cpp" />
     <ClCompile Include="src\image2fill.cpp" />
     <ClCompile Include="src\image2outline.cpp" />
@@ -587,6 +588,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\groundcat.h" />
     <ClInclude Include="include\hooks.h" />
     <ClInclude Include="include\idlist.h" />
+    <ClInclude Include="include\idset.h" />
     <ClInclude Include="include\idvector.h" />
     <ClInclude Include="include\image2fill.h" />
     <ClInclude Include="include\image2outline.h" />

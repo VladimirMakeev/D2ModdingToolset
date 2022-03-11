@@ -919,6 +919,9 @@
     <ClCompile Include="src\stringandid.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\idset.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2332,6 +2335,9 @@
     </ClInclude>
     <ClInclude Include="..\fmt\include\fmt\os.h">
       <Filter>modules\fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\idset.h">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
