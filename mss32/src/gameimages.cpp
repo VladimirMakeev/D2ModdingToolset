@@ -24,7 +24,7 @@
 namespace game::GameImagesApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::GetGameImages)0x5ae7bc,
@@ -32,6 +32,11 @@ static std::array<Api, 3> functions = {{
         (Api::CreateOrFreeGameImages)0x4080e4,
         (Api::GetImageNames)0x5c817c,
         (Api::GetRaceLogoImageName)0x5c649b,
+        (Api::GetFlagImage)0x5c138e,
+        (Api::GetObjectiveImage)0x5b3c04,
+        (Api::GetRiotImage)0x5b9616,
+        (Api::GetCityImageNames)0x5c8252,
+        (Api::GetVillageImage)0x5b93e7,
     },
     // Russobit
     Api{
@@ -40,6 +45,11 @@ static std::array<Api, 3> functions = {{
         (Api::CreateOrFreeGameImages)0x4080e4,
         (Api::GetImageNames)0x5c817c,
         (Api::GetRaceLogoImageName)0x5c649b,
+        (Api::GetFlagImage)0x5c138e,
+        (Api::GetObjectiveImage)0x5b3c04,
+        (Api::GetRiotImage)0x5b9616,
+        (Api::GetCityImageNames)0x5c8252,
+        (Api::GetVillageImage)0x5b93e7,
     },
     // Gog
     Api{
@@ -48,7 +58,25 @@ static std::array<Api, 3> functions = {{
         (Api::CreateOrFreeGameImages)0x407d6f,
         (Api::GetImageNames)0x5c7165,
         (Api::GetRaceLogoImageName)0x5c5484,
-    }
+        (Api::GetFlagImage)0x5c0328,
+        (Api::GetObjectiveImage)0x5b2eca,
+        (Api::GetRiotImage)0x5b85b1,
+        (Api::GetCityImageNames)0x5c723b,
+        (Api::GetVillageImage)0x5b8382,
+    },
+    // Scenario Editor
+    Api{
+        (Api::GetGameImages)0x5581c3,
+        (Api::GetImage)0x558806,
+        (Api::CreateOrFreeGameImages)0x43724a,
+        (Api::GetImageNames)0x566a05,
+        (Api::GetRaceLogoImageName)nullptr,
+        (Api::GetFlagImage)0x562de2,
+        (Api::GetObjectiveImage)0x554c7a,
+        (Api::GetRiotImage)0x55571e,
+        (Api::GetCityImageNames)0x566adb,
+        (Api::GetVillageImage)0x5554ef,
+    },
 }};
 // clang-format on
 

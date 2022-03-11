@@ -20,9 +20,8 @@
 #ifndef GAMEIMAGES_H
 #define GAMEIMAGES_H
 
-#include "d2list.h"
-#include "d2string.h"
 #include "smartptr.h"
+#include "stringintlist.h"
 
 namespace game {
 
@@ -92,6 +91,31 @@ struct Api
                                                   void* storage,
                                                   const LRaceCategory* race);
     GetRaceLogoImageName getRaceLogoImageName;
+
+    /** Returns race flag image to show near village entry when its controlled by specified race. */
+    using GetFlagImage = IMqImage2*(__stdcall*)(const LRaceCategory* race);
+    GetFlagImage getFlagImage;
+
+    /** Returns objective circle image with specified size. */
+    using GetObjectiveImage = IMqImage2*(__stdcall*)(int objectSize);
+    GetObjectiveImage getObjectiveImage;
+
+    /** Returns village riot image. */
+    using GetRiotImage = IMqImage2*(__cdecl*)();
+    GetRiotImage getRiotImage;
+
+    /** Populates list with city image names and animation flag pairs. */
+    using GetCityImageNames = void(__stdcall*)(StringIntList* list,
+                                               const void* isoCmon,
+                                               const void* isoImg,
+                                               const char* cityImageName,
+                                               size_t nameLength,
+                                               size_t nameLength2);
+    GetCityImageNames getCityImageNames;
+
+    /** Returns village image depending on tier, shadow and animation settings. */
+    using GetVillageImage = IMqImage2*(__stdcall*)(char villageTier, bool animatedIso, bool shadow);
+    GetVillageImage getVillageImage;
 };
 
 Api& get();
