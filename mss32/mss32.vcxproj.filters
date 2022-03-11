@@ -925,6 +925,9 @@
     <ClCompile Include="src\displayhandlers.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\displayhandlerhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
     <ClCompile Include="src\idset.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -2350,6 +2353,9 @@
     </ClInclude>
     <ClInclude Include="include\imagelayerlist.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\displayhandlershooks.h">
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\idset.h">
       <Filter>game</Filter>

@@ -53,6 +53,7 @@
 #include "dbtable.h"
 #include "dialoginterf.h"
 #include "difficultylevel.h"
+#include "displayhandlershooks.h"
 #include "doppelgangerhooks.h"
 #include "drainattackhooks.h"
 #include "dynamiccast.h"
@@ -512,6 +513,10 @@ Hooks getHooks()
     // Allow every leader use additional animations on strategic map
     hooks.emplace_back(
         HookInfo{fn.isUnitUseAdditionalAnimation, isUnitUseAdditionalAnimationHooked});
+
+    // Support race-specific village graphics
+    hooks.emplace_back(
+        HookInfo{DisplayHandlersApi::get().villageHandler, displayHandlerVillageHooked});
 
     return hooks;
 }
