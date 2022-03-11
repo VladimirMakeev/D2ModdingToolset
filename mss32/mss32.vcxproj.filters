@@ -922,6 +922,9 @@
     <ClCompile Include="src\imagelayerlist.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\displayhandlers.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
     <ClCompile Include="src\idset.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -2341,6 +2344,9 @@
     </ClInclude>
     <ClInclude Include="..\fmt\include\fmt\os.h">
       <Filter>modules\fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\displayhandlers.h">
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\imagelayerlist.h">
       <Filter>game</Filter>

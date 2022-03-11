@@ -227,6 +227,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\ddcarryoveritems.cpp" />
     <ClCompile Include="src\dialoginterf.cpp" />
     <ClCompile Include="src\difficultylevel.cpp" />
+    <ClCompile Include="src\displayhandlers.cpp" />
     <ClCompile Include="src\doppelgangerhooks.cpp" />
     <ClCompile Include="src\drainattackhooks.cpp" />
     <ClCompile Include="src\dynamiccast.cpp" />
@@ -547,6 +548,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\deathanimcat.h" />
     <ClInclude Include="include\dialoginterf.h" />
     <ClInclude Include="include\difficultylevel.h" />
+    <ClInclude Include="include\displayhandlers.h" />
     <ClInclude Include="include\doppelgangerhooks.h" />
     <ClInclude Include="include\draganddropinterf.h" />
     <ClInclude Include="include\drainattackhooks.h" />
