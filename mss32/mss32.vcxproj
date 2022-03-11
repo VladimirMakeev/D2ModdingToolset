@@ -370,6 +370,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\stackbattleactionmsg.cpp" />
     <ClCompile Include="src\stringandid.cpp" />
     <ClCompile Include="src\stringarray.cpp" />
+    <ClCompile Include="src\stringintlist.cpp" />
     <ClCompile Include="src\subracecat.cpp" />
     <ClCompile Include="src\summonhooks.cpp" />
     <ClCompile Include="src\targetslist.cpp" />
@@ -820,6 +821,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\strategicspell.h" />
     <ClInclude Include="include\stringandid.h" />
     <ClInclude Include="include\stringarray.h" />
+    <ClInclude Include="include\stringintlist.h" />
     <ClInclude Include="include\subracecat.h" />
     <ClInclude Include="include\summonhooks.h" />
     <ClInclude Include="include\targetslist.h" />

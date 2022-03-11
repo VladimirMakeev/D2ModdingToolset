@@ -925,6 +925,9 @@
     <ClCompile Include="src\idset.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\stringintlist.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2343,6 +2346,9 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\idset.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stringintlist.h">
       <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
