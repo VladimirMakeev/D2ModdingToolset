@@ -2334,7 +2334,7 @@
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\midunithooks.h">
-      <Filter>bindings</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\d2list.h">
       <Filter>game</Filter>
