@@ -151,6 +151,24 @@ static void doBindApi(sol::state& lua)
         "Any", AttackReachId::Any,
         "Adjacent", AttackReachId::Adjacent
     );
+
+    lua.new_enum("ItemCategory",
+        "Armor", ItemId::Armor,
+        "Jewel", ItemId::Jewel,
+        "Weapon", ItemId::Weapon,
+        "Banner", ItemId::Banner,
+        "PotionBoost", ItemId::PotionBoost,
+        "PotionHeal", ItemId::PotionHeal,
+        "PotionRevive", ItemId::PotionRevive,
+        "PotionPermanent", ItemId::PotionPermanent,
+        "Scroll", ItemId::Scroll,
+        "Wand", ItemId::Wand,
+        "Valuable", ItemId::Valuable,
+        "Orb", ItemId::Orb,
+        "Talisman", ItemId::Talisman,
+        "TravelItem", ItemId::TravelItem,
+        "Special", ItemId::Special
+    );
     // clang-format on
 
     bindings::UnitView::bind(lua);
