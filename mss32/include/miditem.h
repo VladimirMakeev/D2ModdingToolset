@@ -46,7 +46,7 @@ struct Api
      * Takes into account sell ratio from GVars.dbf and talisman charges count.
      */
     using GetSellingPrice = Bank*(__stdcall*)(Bank* sellingPrice,
-                                              IMidgardObjectMap* objectMap,
+                                              const IMidgardObjectMap* objectMap,
                                               const CMidgardID* itemId);
     GetSellingPrice getSellingPrice;
 };
