@@ -45,28 +45,25 @@ void ItemBaseView::bind(sol::state& lua)
 
 int ItemBaseView::getCategory() const
 {
-    auto category = item ? item->vftable->getCategory(item) : nullptr;
+    auto category = item->vftable->getCategory(item);
     return category ? (int)category->id : -1;
 }
 
 std::string ItemBaseView::getName() const
 {
-    return item ? item->vftable->getName(item) : "";
+    return item->vftable->getName(item);
 }
 
 std::string ItemBaseView::getDescription() const
 {
-    return item ? item->vftable->getDescription(item) : "";
+    return item->vftable->getDescription(item);
 }
 
 CurrencyView ItemBaseView::getValue() const
 {
     using namespace game;
 
-    Bank bank{};
-    if (item)
-        bank = *item->vftable->getValue(item);
-
+    Bank bank = *item->vftable->getValue(item);
     return CurrencyView{bank};
 }
 
@@ -74,7 +71,7 @@ std::optional<UnitImplView> ItemBaseView::getUnitImpl() const
 {
     using namespace game;
 
-    auto unitImplId = item ? item->data->unitId : emptyId;
+    auto unitImplId = item->data->unitId;
     if (unitImplId == emptyId)
         return std::nullopt;
 
@@ -82,7 +79,7 @@ std::optional<UnitImplView> ItemBaseView::getUnitImpl() const
     if (!globalUnitImpl)
         return std::nullopt;
 
-    return {UnitImplView(globalUnitImpl)};
+    return UnitImplView(globalUnitImpl);
 }
 
 } // namespace bindings

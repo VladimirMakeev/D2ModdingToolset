@@ -18,7 +18,6 @@
  */
 
 #include "itemview.h"
-#include "currencyview.h"
 #include "itembaseview.h"
 #include "itemutils.h"
 #include "miditem.h"
@@ -38,6 +37,15 @@ void ItemView::bind(sol::state& lua)
     view["sellValue"] = sol::property(&getSellValue);
 }
 
+std::optional<ItemBaseView> ItemView::getBase() const
+{
+    auto item = hooks::getGlobalItemById(objectMap, &itemId);
+    if (!item)
+        return std::nullopt;
+
+    return ItemBaseView{item, objectMap};
+}
+
 CurrencyView ItemView::getSellValue() const
 {
     using namespace game;
@@ -46,11 +54,6 @@ CurrencyView ItemView::getSellValue() const
     CMidItemApi::get().getSellingPrice(&bank, objectMap, &itemId);
 
     return CurrencyView{bank};
-}
-
-ItemBaseView ItemView::getBase() const
-{
-    return ItemBaseView{hooks::getGlobalItemById(objectMap, &itemId), objectMap};
 }
 
 } // namespace bindings

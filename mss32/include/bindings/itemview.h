@@ -20,8 +20,9 @@
 #ifndef ITEMVIEW_H
 #define ITEMVIEW_H
 
-#include "itembaseview.h"
+#include "currencyview.h"
 #include "midgardid.h"
+#include <optional>
 
 namespace sol {
 class state;
@@ -33,6 +34,8 @@ struct IMidgardObjectMap;
 
 namespace bindings {
 
+class ItemBaseView;
+
 class ItemView
 {
 public:
@@ -40,7 +43,7 @@ public:
 
     static void bind(sol::state& lua);
 
-    ItemBaseView getBase() const;
+    std::optional<ItemBaseView> getBase() const;
     CurrencyView getSellValue() const;
 
 private:
