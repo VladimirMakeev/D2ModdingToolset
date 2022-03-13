@@ -20,6 +20,7 @@
 #include "scripts.h"
 #include "attackview.h"
 #include "categoryids.h"
+#include "currencyview.h"
 #include "dynupgradeview.h"
 #include "idview.h"
 #include "leaderview.h"
@@ -167,6 +168,7 @@ static void doBindApi(sol::state& lua)
     bindings::LeaderView::bind(lua);
     bindings::GroupView::bind(lua);
     bindings::AttackView::bind(lua);
+    bindings::CurrencyView::bind(lua);
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }
 

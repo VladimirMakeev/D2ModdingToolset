@@ -447,6 +447,41 @@ attack.crit
 
 ---
 
+#### Currency
+Represents game currency, mana and gold united.
+
+Methods:
+##### infernalMana
+Returns amount of infernal mana.
+```lua
+currency.infernalMana
+```
+##### lifeMana
+Returns amount of life mana.
+```lua
+currency.lifeMana
+```
+##### deathMana
+Returns amount of death mana.
+```lua
+currency.deathMana
+```
+##### runicMana
+Returns amount of runic mana.
+```lua
+currency.runicMana
+```
+##### groveMana
+Returns amount of grove mana.
+```lua
+currency.groveMana
+```
+##### gold
+Returns amount of gold.
+```lua
+currency.gold
+```
+
 ### Examples
 
 #### doppelganger.lua
