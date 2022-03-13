@@ -36,7 +36,7 @@ ItemBaseView::ItemBaseView(const game::CItemBase* item, const game::IMidgardObje
 void ItemBaseView::bind(sol::state& lua)
 {
     auto view = lua.new_usertype<ItemBaseView>("ItemBase");
-    view["category"] = sol::property(&getCategory);
+    view["type"] = sol::property(&getCategory);
     view["name"] = sol::property(&getName);
     view["description"] = sol::property(&getDescription);
     view["value"] = sol::property(&getValue);

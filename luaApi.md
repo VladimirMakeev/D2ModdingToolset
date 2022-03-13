@@ -494,10 +494,10 @@ currency.gold
 Represents base item of any type (described in GItem.dbf).
 
 Methods:
-##### category
-Returns item [category](luaApi.md#itemcategory).
+##### type
+Returns item [type](luaApi.md#item).
 ```lua
-base.category
+base.type
 ```
 ##### name
 Returns item name.
