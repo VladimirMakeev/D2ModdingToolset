@@ -85,6 +85,9 @@ void giveFreeTransformSelfAttack(game::IMidgardObjectMap* objectMap,
     freeTransformSelf.turnCount--; // Not counting transform action as a turn
 
     if (freeTransformSelf.used) {
+        if (!userSettings().freeTransformSelfAttackInfinite)
+            return;
+
         // Prevents AI from falling into infinite transforming in case of targeting malfunction
         auto player = getPlayer(objectMap, battleMsgData, &unit->unitId);
         if (player && !player->isHuman)
