@@ -20,8 +20,11 @@
 #include "scripts.h"
 #include "attackview.h"
 #include "categoryids.h"
+#include "currencyview.h"
 #include "dynupgradeview.h"
 #include "idview.h"
+#include "itembaseview.h"
+#include "itemview.h"
 #include "leaderview.h"
 #include "locationview.h"
 #include "log.h"
@@ -150,6 +153,24 @@ static void doBindApi(sol::state& lua)
         "Any", AttackReachId::Any,
         "Adjacent", AttackReachId::Adjacent
     );
+
+    lua.new_enum("Item",
+        "Armor", ItemId::Armor,
+        "Jewel", ItemId::Jewel,
+        "Weapon", ItemId::Weapon,
+        "Banner", ItemId::Banner,
+        "PotionBoost", ItemId::PotionBoost,
+        "PotionHeal", ItemId::PotionHeal,
+        "PotionRevive", ItemId::PotionRevive,
+        "PotionPermanent", ItemId::PotionPermanent,
+        "Scroll", ItemId::Scroll,
+        "Wand", ItemId::Wand,
+        "Valuable", ItemId::Valuable,
+        "Orb", ItemId::Orb,
+        "Talisman", ItemId::Talisman,
+        "TravelItem", ItemId::TravelItem,
+        "Special", ItemId::Special
+    );
     // clang-format on
 
     bindings::UnitView::bind(lua);
@@ -167,6 +188,9 @@ static void doBindApi(sol::state& lua)
     bindings::LeaderView::bind(lua);
     bindings::GroupView::bind(lua);
     bindings::AttackView::bind(lua);
+    bindings::CurrencyView::bind(lua);
+    bindings::ItemBaseView::bind(lua);
+    bindings::ItemView::bind(lua);
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }
 

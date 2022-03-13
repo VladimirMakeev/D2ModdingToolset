@@ -24,6 +24,7 @@
 #include "battlemsgdata.h"
 #include "game.h"
 #include "globaldata.h"
+#include "itemview.h"
 #include "log.h"
 #include "midgardobjectmap.h"
 #include "midunit.h"
@@ -40,15 +41,21 @@
 
 namespace hooks {
 
-static int getSummonLevel(const game::CMidUnit* summoner, game::TUsUnitImpl* summonImpl)
+static int getSummonLevel(const game::CMidUnit* summoner,
+                          game::TUsUnitImpl* summonImpl,
+                          const game::IMidgardObjectMap* objectMap,
+                          const game::CMidgardID* unitOrItemId)
 {
+    using namespace game;
+
     const auto path{scriptsFolder() / "summon.lua"};
     const auto lua{loadScriptFile(path, true, true)};
     if (!lua) {
         return 0;
     }
 
-    using GetLevel = std::function<int(const bindings::UnitView&, const bindings::UnitImplView&)>;
+    using GetLevel = std::function<int(const bindings::UnitView&, const bindings::UnitImplView&,
+                                       const bindings::ItemView*)>;
     auto getLevel = getScriptFunction<GetLevel>(*lua, "getLevel");
     if (!getLevel) {
         showErrorMessageBox(fmt::format("Could not find function 'getLevel' in script '{:s}'.\n"
@@ -61,7 +68,11 @@ static int getSummonLevel(const game::CMidUnit* summoner, game::TUsUnitImpl* sum
         const bindings::UnitView summonerUnit{summoner};
         const bindings::UnitImplView impl{summonImpl};
 
-        return (*getLevel)(summonerUnit, impl);
+        if (CMidgardIDApi::get().getType(unitOrItemId) == IdType::Item) {
+            const bindings::ItemView itemView{unitOrItemId, objectMap};
+            return (*getLevel)(summonerUnit, impl, &itemView);
+        } else
+            return (*getLevel)(summonerUnit, impl, nullptr);
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
                                         "Reason: '{:s}'",
@@ -136,7 +147,8 @@ void __fastcall summonAttackOnHitHooked(game::CBatAttackSummon* thisptr,
 
     auto summoner = fn.findUnitById(objectMap, &thisptr->unitId);
     auto summonImpl = static_cast<TUsUnitImpl*>(global.findById(globalData->units, &summonImplId));
-    const auto summonLevel = getSummonLevel(summoner, summonImpl);
+    const auto summonLevel = getSummonLevel(summoner, summonImpl, objectMap,
+                                            &thisptr->unitOrItemId);
 
     CUnitGenerator* unitGenerator = globalData->unitGenerator;
 

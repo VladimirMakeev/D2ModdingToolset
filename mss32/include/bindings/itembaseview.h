@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,40 +17,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BATATTACKSUMMON_H
-#define BATATTACKSUMMON_H
+#ifndef ITEMBASEVIEW_H
+#define ITEMBASEVIEW_H
 
-#include "batattack.h"
+#include "currencyview.h"
 #include "midgardid.h"
+#include <optional>
+#include <string>
+
+namespace sol {
+class state;
+}
 
 namespace game {
-
-struct IAttack;
-
-/** Represents attacks that summon units. */
-struct CBatAttackSummon : public CBatAttackBase
-{
-    CMidgardID unitId;
-    CMidgardID unitOrItemId;
-    int attackNumber;
-    IAttack* attack;
-    int unknown;
-};
-
-static_assert(sizeof(CBatAttackSummon) == 24,
-              "Size of CBatAttackSummon structure must be exactly 24 bytes");
-
-namespace CBatAttackSummonApi {
-
-struct Api
-{
-    IBatAttackVftable::OnAttack onHit;
-};
-
-Api& get();
-
-} // namespace CBatAttackSummonApi
-
+struct CItemBase;
+struct IMidgardObjectMap;
 } // namespace game
 
-#endif // BATATTACKSUMMON_H
+namespace bindings {
+
+class UnitImplView;
+
+class ItemBaseView
+{
+public:
+    ItemBaseView(const game::CItemBase* item, const game::IMidgardObjectMap* objectMap);
+
+    static void bind(sol::state& lua);
+
+    int getCategory() const;
+    std::string getName() const;
+    std::string getDescription() const;
+    CurrencyView getValue() const;
+    std::optional<UnitImplView> getUnitImpl() const;
+
+private:
+    const game::CItemBase* item;
+    const game::IMidgardObjectMap* objectMap;
+};
+
+} // namespace bindings
+
+#endif // ITEMBASEVIEW_H

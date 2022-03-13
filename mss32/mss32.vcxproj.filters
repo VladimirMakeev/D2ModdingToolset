@@ -934,6 +934,18 @@
     <ClCompile Include="src\stringintlist.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\itemutils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\currencyview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\itemview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\itembaseview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2331,7 +2343,7 @@
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\midunithooks.h">
-      <Filter>bindings</Filter>
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\d2list.h">
       <Filter>game</Filter>
@@ -2362,6 +2374,18 @@
     </ClInclude>
     <ClInclude Include="include\stringintlist.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\itemutils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\currencyview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\itemview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\itembaseview.h">
+      <Filter>bindings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

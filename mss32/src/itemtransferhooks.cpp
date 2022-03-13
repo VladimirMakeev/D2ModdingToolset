@@ -29,6 +29,7 @@
 #include "interfmanager.h"
 #include "itembase.h"
 #include "itemcategory.h"
+#include "itemutils.h"
 #include "log.h"
 #include "mempool.h"
 #include "midbag.h"
@@ -57,26 +58,8 @@ using ItemFilter = std::function<bool(game::IMidgardObjectMap* objectMap,
 static const game::LItemCategory* getItemCategoryById(game::IMidgardObjectMap* objectMap,
                                                       const game::CMidgardID* itemId)
 {
-    using namespace game;
-
-    auto item = static_cast<CMidItem*>(
-        objectMap->vftable->findScenarioObjectById(objectMap, itemId));
-    if (!item) {
-        logError("mssProxyError.log", fmt::format("Could not find item {:s}", idToString(itemId)));
-        return nullptr;
-    }
-
-    auto global = GlobalDataApi::get();
-    auto globalData = *global.getGlobalData();
-
-    auto globalItem = global.findItemById(globalData->itemTypes, &item->globalItemId);
-    if (!globalItem) {
-        logError("mssProxyError.log",
-                 fmt::format("Could not find global item {:s}", idToString(&item->globalItemId)));
-        return nullptr;
-    }
-
-    return globalItem->vftable->getCategory(globalItem);
+    auto globalItem = getGlobalItemById(objectMap, itemId);
+    return globalItem ? globalItem->vftable->getCategory(globalItem) : nullptr;
 }
 
 static bool isPotion(game::IMidgardObjectMap* objectMap, const game::CMidgardID* itemId)

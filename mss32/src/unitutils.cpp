@@ -125,17 +125,21 @@ game::CMidgardID getGlobalUnitImplId(const game::CMidUnit* unit)
 
 game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidUnit* unit)
 {
+    const game::CMidgardID globalImplId{getGlobalUnitImplId(unit)};
+    return getGlobalUnitImpl(&globalImplId);
+}
+
+game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidgardID* globalUnitImplId)
+{
     using namespace game;
 
-    const auto& globalApi = GlobalDataApi::get();
+    const auto& global = GlobalDataApi::get();
 
-    const CMidgardID globalImplId{getGlobalUnitImplId(unit)};
-
-    auto globalData = *globalApi.getGlobalData();
-    auto result = (TUsUnitImpl*)globalApi.findById(globalData->units, &globalImplId);
+    auto globalData = *global.getGlobalData();
+    auto result = (TUsUnitImpl*)global.findById(globalData->units, globalUnitImplId);
     if (!result) {
         logError("mssProxyError.log",
-                 fmt::format("Could not find unit impl {:s}", idToString(&globalImplId)));
+                 fmt::format("Could not find unit impl {:s}", idToString(globalUnitImplId)));
     }
 
     return result;

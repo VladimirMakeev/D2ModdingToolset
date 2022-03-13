@@ -80,6 +80,12 @@ Source = { Weapon, Mind, Life, Death, Fire, Water, Earth, Air }
 Reach = { All, Any, Adjacent }
 ```
 
+##### Item
+```
+Item = { Armor, Jewel, Weapon, Banner, PotionBoost, PotionHeal, PotionRevive,
+         PotionPermanent, Scroll, Wand, Valuable, Orb, Talisman, TravelItem, Special }
+```
+
 ---
 
 #### Point
@@ -447,6 +453,91 @@ attack.crit
 
 ---
 
+#### Currency
+Represents game currency, mana and gold united.
+
+Methods:
+##### infernalMana
+Returns amount of infernal mana.
+```lua
+currency.infernalMana
+```
+##### lifeMana
+Returns amount of life mana.
+```lua
+currency.lifeMana
+```
+##### deathMana
+Returns amount of death mana.
+```lua
+currency.deathMana
+```
+##### runicMana
+Returns amount of runic mana.
+```lua
+currency.runicMana
+```
+##### groveMana
+Returns amount of grove mana.
+```lua
+currency.groveMana
+```
+##### gold
+Returns amount of gold.
+```lua
+currency.gold
+```
+
+---
+
+#### Item base
+Represents base item of any type (described in GItem.dbf).
+
+Methods:
+##### type
+Returns item [type](luaApi.md#item).
+```lua
+base.type
+```
+##### name
+Returns item name.
+```lua
+base.name
+```
+##### description
+Returns item description.
+```lua
+base.description
+```
+##### value
+Returns item [value](luaApi.md#currency).
+```lua
+base.value
+```
+##### unitImpl
+Returns related [Unit Implementation](luaApi.md#unit-implementation).
+For instance: in case of "Angel Orb", Angel unit implementation is returned.
+```lua
+base.unitImpl
+```
+
+#### Item object
+Represents item object in the current scenario.
+
+Methods:
+##### base
+Returns item [base](luaApi.md#itembase).
+```lua
+item.base
+```
+##### sellValue
+Returns item sell [value](luaApi.md#currency), it accounts global sell ratio and used talisman charges (if applicable).
+```lua
+item.sellValue
+```
+
+---
+
 ### Examples
 
 #### doppelganger.lua
@@ -483,7 +574,12 @@ end
 #### summon.lua
 ```lua
 -- 'summoner' has type Unit, 'summonImpl' is a Unit implementation
-function getLevel(summoner, summonImpl)
+function getLevel(summoner, summonImpl, item)
+    -- Use base level of summon if cheap item is used to summon it
+    if item and item.base.value.gold < 500 then
+        return summonImpl.level
+    end
+
     -- Summon unit with level twice as big as summoner level
     -- or with level of summon implementation, whichever is bigger.
     local impl = summoner.impl
