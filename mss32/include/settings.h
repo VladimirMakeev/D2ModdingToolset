@@ -73,6 +73,7 @@ struct Settings
     bool missChanceSingleRoll;
     bool unrestrictedBestowWards;
     bool freeTransformSelfAttack;
+    bool freeTransformSelfAttackInfinite;
     bool detailedAttackDescription;
     bool fixEffectiveHpFormula;
 

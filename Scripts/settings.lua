@@ -66,8 +66,10 @@ settings = {
 	-- Increases total wards limit per caster from 8 to 48
 	unrestrictedBestowWards = true,
 
-	-- Allows transform-self attack to not consume a unit turn for transformation
+	-- Allows transform-self attack to not consume a unit turn for transformation (once per turn)
 	freeTransformSelfAttack = false,
+	-- Allows free transform-self attack to be used infinite number of times per single turn
+	freeTransformSelfAttackInfinite = false,
 
 	-- Round in battle after which paralyze and petrify attacks
 	-- starts missing targets constantly [1 : INT_MAX]
