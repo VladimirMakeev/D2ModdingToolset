@@ -574,7 +574,12 @@ end
 #### summon.lua
 ```lua
 -- 'summoner' has type Unit, 'summonImpl' is a Unit implementation
-function getLevel(summoner, summonImpl)
+function getLevel(summoner, summonImpl, item)
+    -- Use base level of summon if cheap item is used to summon it
+    if item and item.base.value.gold < 500 then
+        return summonImpl.level
+    end
+
     -- Summon unit with level twice as big as summoner level
     -- or with level of summon implementation, whichever is bigger.
     local impl = summoner.impl
