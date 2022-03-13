@@ -934,6 +934,9 @@
     <ClCompile Include="src\stringintlist.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\itemutils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2362,6 +2365,9 @@
     </ClInclude>
     <ClInclude Include="include\stringintlist.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\itemutils.h">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -266,6 +266,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\isolayers.cpp" />
     <ClCompile Include="src\itemcategory.cpp" />
     <ClCompile Include="src\itemtransferhooks.cpp" />
+    <ClCompile Include="src\itemutils.cpp" />
     <ClCompile Include="src\iterators.cpp" />
     <ClCompile Include="src\leaderabilitycat.cpp" />
     <ClCompile Include="src\listbox.cpp" />
@@ -639,6 +640,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\itemtalisman.h" />
     <ClInclude Include="include\itemtransferhooks.h" />
     <ClInclude Include="include\itemtravelitem.h" />
+    <ClInclude Include="include\itemutils.h" />
     <ClInclude Include="include\itemvaluable.h" />
     <ClInclude Include="include\itemwand.h" />
     <ClInclude Include="include\itemweapon.h" />
