@@ -31,7 +31,7 @@ struct IAttack;
 struct CBatAttackSummon : public CBatAttackBase
 {
     CMidgardID unitId;
-    CMidgardID id2;
+    CMidgardID unitOrItemId;
     int attackNumber;
     IAttack* attack;
     int unknown;
