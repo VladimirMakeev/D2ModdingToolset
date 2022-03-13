@@ -495,7 +495,7 @@ Represents base item of any type (described in GItem.dbf).
 
 Methods:
 ##### category
-Returns item [category](luaApi.md#item-category).
+Returns item [category](luaApi.md#itemcategory).
 ```lua
 base.category
 ```
@@ -515,7 +515,7 @@ Returns item [value](luaApi.md#currency).
 base.value
 ```
 ##### unitImpl
-Returns related [unit Implementation](luaApi.md#unit-implementation).
+Returns related [Unit Implementation](luaApi.md#unit-implementation).
 For instance: in case of "Angel Orb", Angel unit implementation is returned.
 ```lua
 base.unitImpl
@@ -526,7 +526,7 @@ Represents item object in the current scenario.
 
 Methods:
 ##### base
-Returns item [base](luaApi.md#item-base).
+Returns item [base](luaApi.md#itembase).
 ```lua
 item.base
 ```
