@@ -488,6 +488,39 @@ Returns amount of gold.
 currency.gold
 ```
 
+---
+
+#### ItemBase
+Represents base item of any type (described in GItem.dbf).
+
+Methods:
+##### category
+Returns item [category](luaApi.md#item-category).
+```lua
+base.category
+```
+##### name
+Returns item name.
+```lua
+base.name
+```
+##### description
+Returns item description.
+```lua
+base.description
+```
+##### value
+Returns item [value](luaApi.md#currency).
+```lua
+base.value
+```
+##### unitImpl
+Returns related [unit Implementation](luaApi.md#unit-implementation).
+For instance: in case of "Angel Orb", Angel unit implementation is returned.
+```lua
+base.unitImpl
+```
+
 ### Examples
 
 #### doppelganger.lua
