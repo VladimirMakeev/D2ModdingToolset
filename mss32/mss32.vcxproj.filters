@@ -940,6 +940,9 @@
     <ClCompile Include="src\bindings\currencyview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\itemview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
     <ClCompile Include="src\bindings\itembaseview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
@@ -2376,6 +2379,9 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\currencyview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\itemview.h">
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\itembaseview.h">

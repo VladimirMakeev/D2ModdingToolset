@@ -521,6 +521,23 @@ For instance: in case of "Angel Orb", Angel unit implementation is returned.
 base.unitImpl
 ```
 
+#### Item
+Represents item object in the current scenario.
+
+Methods:
+##### base
+Returns item [base](luaApi.md#item-base).
+```lua
+item.base
+```
+##### sellValue
+Returns item sell [value](luaApi.md#currency), it accounts global sell ratio and used talisman charges (if applicable).
+```lua
+item.sellValue
+```
+
+---
+
 ### Examples
 
 #### doppelganger.lua

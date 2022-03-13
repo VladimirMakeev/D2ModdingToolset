@@ -24,6 +24,7 @@
 #include "dynupgradeview.h"
 #include "idview.h"
 #include "itembaseview.h"
+#include "itemview.h"
 #include "leaderview.h"
 #include "locationview.h"
 #include "log.h"
@@ -189,6 +190,7 @@ static void doBindApi(sol::state& lua)
     bindings::AttackView::bind(lua);
     bindings::CurrencyView::bind(lua);
     bindings::ItemBaseView::bind(lua);
+    bindings::ItemView::bind(lua);
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }
 
