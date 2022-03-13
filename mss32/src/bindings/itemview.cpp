@@ -33,7 +33,7 @@ ItemView::ItemView(const game::CMidgardID* itemId, const game::IMidgardObjectMap
 
 void ItemView::bind(sol::state& lua)
 {
-    auto view = lua.new_usertype<ItemView>("Item");
+    auto view = lua.new_usertype<ItemView>("ItemView");
     view["base"] = sol::property(&getBase);
     view["sellValue"] = sol::property(&getSellValue);
 }

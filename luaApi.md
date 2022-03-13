@@ -490,7 +490,7 @@ currency.gold
 
 ---
 
-#### ItemBase
+#### Item base
 Represents base item of any type (described in GItem.dbf).
 
 Methods:
@@ -521,7 +521,7 @@ For instance: in case of "Angel Orb", Angel unit implementation is returned.
 base.unitImpl
 ```
 
-#### Item
+#### Item object
 Represents item object in the current scenario.
 
 Methods:
