@@ -83,7 +83,7 @@ Reach = { All, Any, Adjacent }
 ##### Item
 ```
 Item = { Armor, Jewel, Weapon, Banner, PotionBoost, PotionHeal, PotionRevive,
-           PotionPermanent, Scroll, Wand, Valuable, Orb, Talisman, TravelItem, Special }
+	 PotionPermanent, Scroll, Wand, Valuable, Orb, Talisman, TravelItem, Special }
 ```
 
 ---
