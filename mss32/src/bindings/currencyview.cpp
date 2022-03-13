@@ -43,7 +43,7 @@ bool CurrencyView::operator<=(const CurrencyView& value) const
 
 void CurrencyView::bind(sol::state& lua)
 {
-    auto view = lua.new_usertype<CurrencyView>("Currency", sol::meta_function::equal_to,
+    auto view = lua.new_usertype<CurrencyView>("CurrencyView", sol::meta_function::equal_to,
                                                &operator==, sol::meta_function::less_than,
                                                &operator<,
                                                sol::meta_function::less_than_or_equal_to,
