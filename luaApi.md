@@ -80,9 +80,9 @@ Source = { Weapon, Mind, Life, Death, Fire, Water, Earth, Air }
 Reach = { All, Any, Adjacent }
 ```
 
-##### ItemCategory
+##### Item
 ```
-ItemCategory = { Armor, Jewel, Weapon, Banner, PotionBoost, PotionHeal, PotionRevive,
+Item = { Armor, Jewel, Weapon, Banner, PotionBoost, PotionHeal, PotionRevive,
            PotionPermanent, Scroll, Wand, Valuable, Orb, Talisman, TravelItem, Special }
 ```
 

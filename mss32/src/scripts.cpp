@@ -154,7 +154,7 @@ static void doBindApi(sol::state& lua)
         "Adjacent", AttackReachId::Adjacent
     );
 
-    lua.new_enum("ItemCategory",
+    lua.new_enum("Item",
         "Armor", ItemId::Armor,
         "Jewel", ItemId::Jewel,
         "Weapon", ItemId::Weapon,
