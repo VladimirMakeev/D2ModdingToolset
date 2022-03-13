@@ -20,6 +20,7 @@
 #ifndef ITEMVIEW_H
 #define ITEMVIEW_H
 
+#include "itembaseview.h"
 #include "midgardid.h"
 
 namespace sol {
@@ -31,9 +32,6 @@ struct IMidgardObjectMap;
 } // namespace game
 
 namespace bindings {
-
-class CurrencyView;
-class ItemBaseView;
 
 class ItemView
 {
