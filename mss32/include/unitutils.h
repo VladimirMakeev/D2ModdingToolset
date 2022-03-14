@@ -58,6 +58,9 @@ int computeShatterDamage(const game::CMidgardID* unitId,
                          const game::IUsSoldier* soldier,
                          const game::BattleMsgData* battleMsgData,
                          const game::IAttack* attack);
+void updateAttackCountAfterTransformation(game::BattleMsgData* battleMsgData,
+                                          const game::CMidUnit* unit,
+                                          bool prevAttackTwice);
 
 } // namespace hooks
 

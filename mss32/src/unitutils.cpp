@@ -257,4 +257,25 @@ int computeShatterDamage(const game::CMidgardID* unitId,
     return result;
 }
 
+void updateAttackCountAfterTransformation(game::BattleMsgData* battleMsgData,
+                                          const game::CMidUnit* unit,
+                                          bool prevAttackTwice)
+{
+    using namespace game;
+
+    for (auto& turn : battleMsgData->turnsOrder) {
+        if (turn.unitId == unit->unitId) {
+            const auto soldier = gameFunctions().castUnitImplToSoldier(unit->unitImpl);
+            bool attackTwice = soldier && soldier->vftable->getAttackTwice(soldier);
+
+            if (!prevAttackTwice && attackTwice)
+                turn.attackCount++;
+            else if (prevAttackTwice && !attackTwice && turn.attackCount > 1)
+                turn.attackCount--;
+
+            break;
+        }
+    }
+}
+
 } // namespace hooks
