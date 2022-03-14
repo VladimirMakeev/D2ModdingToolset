@@ -152,6 +152,7 @@ static void readSettings(const sol::table& table, Settings& settings)
     settings.doppelgangerRespectsAllyImmunity = readSetting(table, "doppelgangerRespectsAllyImmunity", defaultSettings().doppelgangerRespectsAllyImmunity);
     settings.leveledDoppelgangerAttack = readSetting(table, "leveledDoppelgangerAttack", defaultSettings().leveledDoppelgangerAttack);
     settings.leveledTransformSelfAttack = readSetting(table, "leveledTransformSelfAttack", defaultSettings().leveledTransformSelfAttack);
+    settings.leveledTransformOtherAttack = readSetting(table, "leveledTransformOtherAttack", defaultSettings().leveledTransformOtherAttack);
     settings.leveledSummonAttack = readSetting(table, "leveledSummonAttack", defaultSettings().leveledSummonAttack);
     settings.missChanceSingleRoll = readSetting(table, "missChanceSingleRoll", defaultSettings().missChanceSingleRoll);
     settings.unrestrictedBestowWards = readSetting(table, "unrestrictedBestowWards", defaultSettings().unrestrictedBestowWards);
@@ -202,6 +203,7 @@ const Settings& baseSettings()
         settings.doppelgangerRespectsAllyImmunity = false;
         settings.leveledDoppelgangerAttack = false;
         settings.leveledTransformSelfAttack = false;
+        settings.leveledTransformOtherAttack = false;
         settings.leveledSummonAttack = false;
         settings.missChanceSingleRoll = false;
         settings.unrestrictedBestowWards = false;

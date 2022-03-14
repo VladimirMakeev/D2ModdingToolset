@@ -8,6 +8,7 @@ Scripts folder itself should be placed in the game folder.
 - settings.lua - mss32 proxy dll settings that changes game rules
 - doppelganger.lua - logic that computes level of doppelganger transform (category L\_DOPPELGANGER)
 - transformSelf.lua - computes unit level for self transform attacks (category L\_TRANSFORM\_SELF)
+- transformOther.lua - computes unit level for transform-other attacks (category L\_TRANSFORM\_OTHER)
 - summon.lua - computes summoned unit level for summon attacks (category L\_SUMMON)
 - textids.lua - contains interface text mapping for custom functionality
 - getAllTargets.lua - contains selection/attack targeting logic for any/all attack reach
@@ -571,9 +572,18 @@ function getLevel(unit, transformImpl)
 end
 ```
 
+#### transformOther.lua
+```lua
+-- 'attacker' and 'target' has type Unit, 'transformImpl' is a Unit implementation, 'item' is Item object
+function getLevel(attacker, target, transformImpl, item)
+    -- transform using target level with a minimum of transform impl level
+    return math.max(target.impl.level, transformImpl.level);
+end
+```
+
 #### summon.lua
 ```lua
--- 'summoner' has type Unit, 'summonImpl' is a Unit implementation
+-- 'summoner' has type Unit, 'summonImpl' is a Unit implementation, 'item' is Item object
 function getLevel(summoner, summonImpl, item)
     -- Use base level of summon if cheap item is used to summon it
     if item and item.base.value.gold < 500 then

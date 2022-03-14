@@ -49,7 +49,7 @@
 - Allows to set vampiric attacks heal ratio;
 - Allows vampiric attacks to deal critical damage;
 - Allows to customize shatter attacks: maximum damage per hit, maximum armor that can be shattered, whether attack can miss or not, and its upgrade ratio;
-- Allows doppelganger, transform and summon attacks to produce leveled versions of units;
+- Allows doppelganger, transform-self, transform-other and summon attacks to produce leveled versions of units;
 - Allows doppelganger attacks to respect enemy and ally wards and immunities to the attack class and source;
 - Allows transform-self attack to not consume a unit turn for transformation (![demo video](https://user-images.githubusercontent.com/5180699/124916545-76550200-dffb-11eb-8b12-3147e40ef04b.mp4));
 - Allows to set a maximum number of items the player is allowed to transfer between campaign scenarios;
@@ -67,6 +67,7 @@
 - Fixes AI targeting for shatter attacks where it assumes that armored targets always stay armored, even if their armor is already shattered;
 - Fixes AI targeting where it incorrectly calculates effective HP of armored targets, getting significantly lower values than intended;
 - Fixes incorrect function of transform-self attack in cases where its alternative attack targets allies (heal, summon, etc.);
+- Fixes an issue with transform-other attack where it selects melee vs ranged transform based on attacker position rather than on target position;
 - Removes persistent target highlighting for transform-self attack (circle animations for all possible targets on the ground), so it no longer interferes with highlighting for targets that are actually going to be affected by the attack;
 - Fixes missing modifiers of alternative attacks (![demo video](https://user-images.githubusercontent.com/5180699/125460215-144ef648-5497-4674-b9d6-ac7d2fa95125.mp4));
 - Fixes unit transformation (doppelganger, lower-level, transform-self/other attacks) to include HP modifiers into current hp recalculation, thus unit is not getting "damaged" upon transforming (![demo video](https://user-images.githubusercontent.com/5180699/156921183-b1f4748d-cb4f-40c8-a9b1-b911e9cc91dd.mp4));
@@ -350,6 +351,7 @@ The following settings can be changed in [settings.lua](Scripts/settings.lua):
   - "doppelgangerRespectsAllyImmunity=(true/false)" sets whether doppelganger attack checks for ally ward/immunity to the attack class and source;
   - "leveledDoppelgangerAttack=(true/false)" changes doppelganger attacks to copy units using with respect to their level using 'Scripts\\doppelganger.lua' script;
   - "leveledTransformSelfAttack=(true/false)" changes transform self attacks to compute transformed unit level using 'Scripts\\transformSelf.lua' script;
+  - "leveledTransformOtherAttack=(true/false)" changes transform other attacks to compute transformed unit level using 'Scripts\\transformOther.lua' script;
   - "leveledSummonAttack=(true/false)" changes summon attacks to compute summoned units levels using 'Scripts\\summon.lua' script;
   - "unrestrictedBestowWards=(true/false)" increases total wards limit per caster from 8 to 48, see more details under Features section;
   - "freeTransformSelfAttack=(true/false)" allows transform-self attack to not consume a unit turn for transformation (once per turn), see more details under Features section;

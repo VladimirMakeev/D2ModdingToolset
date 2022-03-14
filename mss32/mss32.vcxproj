@@ -393,6 +393,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\tileindices.cpp" />
     <ClCompile Include="src\tilevariation.cpp" />
     <ClCompile Include="src\togglebutton.cpp" />
+    <ClCompile Include="src\transformotherhooks.cpp" />
     <ClCompile Include="src\transformselfhooks.cpp" />
     <ClCompile Include="src\uievent.cpp" />
     <ClCompile Include="src\uimanager.cpp" />
@@ -860,6 +861,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\tilevariation.h" />
     <ClInclude Include="include\togglebutton.h" />
     <ClInclude Include="include\tooltip.h" />
+    <ClInclude Include="include\transformotherhooks.h" />
     <ClInclude Include="include\transformselfhooks.h" />
     <ClInclude Include="include\uievent.h" />
     <ClInclude Include="include\uimanager.h" />
