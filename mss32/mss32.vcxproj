@@ -171,6 +171,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\batattackgiveattack.cpp" />
     <ClCompile Include="src\batattackshatter.cpp" />
     <ClCompile Include="src\batattacksummon.cpp" />
+    <ClCompile Include="src\batattacktransformother.cpp" />
     <ClCompile Include="src\batattacktransformself.cpp" />
     <ClCompile Include="src\batattackutils.cpp" />
     <ClCompile Include="src\batimagesloader.cpp" />
@@ -480,6 +481,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batattackgiveattack.h" />
     <ClInclude Include="include\batattackshatter.h" />
     <ClInclude Include="include\batattacksummon.h" />
+    <ClInclude Include="include\batattacktransformother.h" />
     <ClInclude Include="include\batattacktransformself.h" />
     <ClInclude Include="include\batattackutils.h" />
     <ClInclude Include="include\batimagesloader.h" />
