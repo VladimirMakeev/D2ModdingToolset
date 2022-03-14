@@ -56,6 +56,8 @@ settings = {
 	leveledDoppelgangerAttack = false,
 	-- Change transform self attacks to compute transformed unit level using 'transformSelf.lua' script
 	leveledTransformSelfAttack = false,
+	-- Change transform other attacks to compute transformed unit level using 'transformOther.lua' script
+	leveledTransformOtherAttack = false,
 	-- Change summon attacks to compute summoned units levels using 'summon.lua' script
 	leveledSummonAttack = false,
 

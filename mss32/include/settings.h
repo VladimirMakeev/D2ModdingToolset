@@ -69,6 +69,7 @@ struct Settings
     bool doppelgangerRespectsAllyImmunity;
     bool leveledDoppelgangerAttack;
     bool leveledTransformSelfAttack;
+    bool leveledTransformOtherAttack;
     bool leveledSummonAttack;
     bool missChanceSingleRoll;
     bool unrestrictedBestowWards;

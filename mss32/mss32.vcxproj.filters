@@ -946,6 +946,12 @@
     <ClCompile Include="src\bindings\itembaseview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\batattacktransformother.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\transformotherhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2386,6 +2392,12 @@
     </ClInclude>
     <ClInclude Include="include\bindings\itembaseview.h">
       <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\batattacktransformother.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\transformotherhooks.h">
+      <Filter>hooks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -29,6 +29,7 @@
 #include "batattackgiveattack.h"
 #include "batattackshatter.h"
 #include "batattacksummon.h"
+#include "batattacktransformother.h"
 #include "batattacktransformself.h"
 #include "battleattackinfo.h"
 #include "battlemsgdatahooks.h"
@@ -117,6 +118,7 @@
 #include "stackbattleactionmsg.h"
 #include "summonhooks.h"
 #include "testconditionhooks.h"
+#include "transformotherhooks.h"
 #include "transformselfhooks.h"
 #include "umattack.h"
 #include "umattackhooks.h"
@@ -253,6 +255,9 @@ static Hooks getGameHooks()
         // Allow transform self into leveled units using script logic
         // Fix bug where transform-self attack is unable to target self if alt attack is targeting allies
         {CBatAttackTransformSelfApi::vftable()->onHit, transformSelfAttackOnHitHooked},
+        // Allow transform other into leveled units using script logic
+        // Fix bug where transform-other attack selects melee vs ranged transform based on attacker position rather than target position
+        {CBatAttackTransformOtherApi::vftable()->onHit, transformOtherAttackOnHitHooked},
         // Fix inability to target self for transformation in case of transform-self + summon attack
         // Remove persistent marking of all target units in case of transform-self attack
         {BattleViewerInterfApi::vftable()->update, battleViewerInterfUpdateHooked},
