@@ -38,7 +38,7 @@ struct CBatAttackTransformOther : public CBatAttackBase
 };
 
 static_assert(sizeof(CBatAttackTransformOther) == 52,
-              "Size of CBatAttackTransformOther structure must be exactly 24 bytes");
+              "Size of CBatAttackTransformOther structure must be exactly 52 bytes");
 
 namespace CBatAttackTransformOtherApi {
 
