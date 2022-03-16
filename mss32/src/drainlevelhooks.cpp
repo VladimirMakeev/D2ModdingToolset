@@ -109,9 +109,6 @@ void __fastcall drainLevelAttackOnHitHooked(game::CBatAttackDrainLevel* thisptr,
 
     int drainLevel = targetLevel - 1;
     if (userSettings().leveledDrainLevelAttack) {
-        const auto& global = GlobalDataApi::get();
-        auto globalData = *global.getGlobalData();
-
         const CMidUnit* unit = fn.findUnitById(objectMap, &thisptr->unitId);
         drainLevel = getDrainLevel(unit, targetUnit, objectMap, &thisptr->unitOrItemId);
     }
