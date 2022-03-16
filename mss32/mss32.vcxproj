@@ -167,6 +167,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\batattackbestowwards.cpp" />
     <ClCompile Include="src\batattackdoppelganger.cpp" />
     <ClCompile Include="src\batattackdrain.cpp" />
+    <ClCompile Include="src\batattackdrainlevel.cpp" />
     <ClCompile Include="src\batattackdrainoverflow.cpp" />
     <ClCompile Include="src\batattackgiveattack.cpp" />
     <ClCompile Include="src\batattackshatter.cpp" />
@@ -478,6 +479,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batattackbestowwards.h" />
     <ClInclude Include="include\batattackdoppelganger.h" />
     <ClInclude Include="include\batattackdrain.h" />
+    <ClInclude Include="include\batattackdrainlevel.h" />
     <ClInclude Include="include\batattackdrainoverflow.h" />
     <ClInclude Include="include\batattackgiveattack.h" />
     <ClInclude Include="include\batattackshatter.h" />
