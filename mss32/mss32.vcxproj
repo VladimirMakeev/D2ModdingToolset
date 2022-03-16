@@ -236,6 +236,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\displayhandlers.cpp" />
     <ClCompile Include="src\doppelgangerhooks.cpp" />
     <ClCompile Include="src\drainattackhooks.cpp" />
+    <ClCompile Include="src\drainlevelhooks.cpp" />
     <ClCompile Include="src\dynamiccast.cpp" />
     <ClCompile Include="src\editboxinterf.cpp" />
     <ClCompile Include="src\editor.cpp" />
@@ -566,6 +567,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\doppelgangerhooks.h" />
     <ClInclude Include="include\draganddropinterf.h" />
     <ClInclude Include="include\drainattackhooks.h" />
+    <ClInclude Include="include\drainlevelhooks.h" />
     <ClInclude Include="include\dynamiccast.h" />
     <ClInclude Include="include\dynupgrade.h" />
     <ClInclude Include="include\editboxinterf.h" />

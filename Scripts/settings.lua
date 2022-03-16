@@ -58,6 +58,8 @@ settings = {
 	leveledTransformSelfAttack = false,
 	-- Change transform other attacks to compute transformed unit level using 'transformOther.lua' script
 	leveledTransformOtherAttack = false,
+	-- Change drain level attacks to compute transformed unit level using 'drainLevel.lua' script
+	leveledDrainLevelAttack = false,
 	-- Change summon attacks to compute summoned units levels using 'summon.lua' script
 	leveledSummonAttack = false,
 

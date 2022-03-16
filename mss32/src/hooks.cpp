@@ -25,6 +25,7 @@
 #include "batattackbestowwards.h"
 #include "batattackdoppelganger.h"
 #include "batattackdrain.h"
+#include "batattackdrainlevel.h"
 #include "batattackdrainoverflow.h"
 #include "batattackgiveattack.h"
 #include "batattackshatter.h"
@@ -57,6 +58,7 @@
 #include "displayhandlershooks.h"
 #include "doppelgangerhooks.h"
 #include "drainattackhooks.h"
+#include "drainlevelhooks.h"
 #include "dynamiccast.h"
 #include "dynupgrade.h"
 #include "editor.h"
@@ -258,6 +260,8 @@ static Hooks getGameHooks()
         // Allow transform other into leveled units using script logic
         // Fix bug where transform-other attack selects melee vs ranged transform based on attacker position rather than target position
         {CBatAttackTransformOtherApi::vftable()->onHit, transformOtherAttackOnHitHooked},
+        // Allow to drain different number of levels using script logic
+        {CBatAttackDrainLevelApi::vftable()->onHit, drainLevelAttackOnHitHooked},
         // Fix inability to target self for transformation in case of transform-self + summon attack
         // Remove persistent marking of all target units in case of transform-self attack
         {BattleViewerInterfApi::vftable()->update, battleViewerInterfUpdateHooked},
