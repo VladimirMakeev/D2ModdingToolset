@@ -37,7 +37,7 @@ struct IUsRacialSoldierVftable : public IUsUnitExtensionVftable
 {
     using GetId = const CMidgardID*(__thiscall*)(const IUsRacialSoldier* thisptr);
 
-    GetId getPrevUnitId;
+    GetId getPrevUnitImplId;
     GetId getUpgradeBuildingId;
     GetId getEnrollBuildingId;
 };
@@ -49,7 +49,7 @@ static_assert(sizeof(IUsRacialSoldierVftable) == 4 * sizeof(void*),
 struct TUsRacialSoldierData
 {
     int xpNext;                   /**< XP_NEXT  */
-    CMidgardID prevUnitId;        /**< PREV_ID */
+    CMidgardID prevUnitImplId;    /**< PREV_ID */
     CMidgardID upgradeBuildingId; /**< UPGRADE_B */
     CMidgardID enrollBuildingId;  /**< ENROLL_B */
 };

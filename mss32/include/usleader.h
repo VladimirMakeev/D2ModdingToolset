@@ -39,8 +39,8 @@ struct IUsLeaderVftable : public IUsUnitExtensionVftable
     using GetCategory = const LLeaderCategory*(__thiscall*)(const IUsLeader* thisptr);
     GetCategory getCategory;
 
-    using GetPreviousUnit = const CMidgardID*(__thiscall*)(const IUsLeader* thisptr);
-    GetPreviousUnit getPreviousUnit;
+    using GetPrevUnitImplId = const CMidgardID*(__thiscall*)(const IUsLeader* thisptr);
+    GetPrevUnitImplId getPrevUnitImplId;
 
     using GetEnrollCost = const Bank*(__thiscall*)(const IUsLeader* thisptr);
     GetEnrollCost getEnrollCost;
