@@ -35,7 +35,7 @@
 
 namespace bindings {
 
-UnitImplView::UnitImplView(game::IUsUnit* unitImpl)
+UnitImplView::UnitImplView(const game::IUsUnit* unitImpl)
     : impl(unitImpl)
 { }
 
