@@ -167,6 +167,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\batattackbestowwards.cpp" />
     <ClCompile Include="src\batattackdoppelganger.cpp" />
     <ClCompile Include="src\batattackdrain.cpp" />
+    <ClCompile Include="src\batattackdrainlevel.cpp" />
     <ClCompile Include="src\batattackdrainoverflow.cpp" />
     <ClCompile Include="src\batattackgiveattack.cpp" />
     <ClCompile Include="src\batattackshatter.cpp" />
@@ -235,6 +236,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\displayhandlers.cpp" />
     <ClCompile Include="src\doppelgangerhooks.cpp" />
     <ClCompile Include="src\drainattackhooks.cpp" />
+    <ClCompile Include="src\drainlevelhooks.cpp" />
     <ClCompile Include="src\dynamiccast.cpp" />
     <ClCompile Include="src\editboxinterf.cpp" />
     <ClCompile Include="src\editor.cpp" />
@@ -478,6 +480,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batattackbestowwards.h" />
     <ClInclude Include="include\batattackdoppelganger.h" />
     <ClInclude Include="include\batattackdrain.h" />
+    <ClInclude Include="include\batattackdrainlevel.h" />
     <ClInclude Include="include\batattackdrainoverflow.h" />
     <ClInclude Include="include\batattackgiveattack.h" />
     <ClInclude Include="include\batattackshatter.h" />
@@ -564,6 +567,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\doppelgangerhooks.h" />
     <ClInclude Include="include\draganddropinterf.h" />
     <ClInclude Include="include\drainattackhooks.h" />
+    <ClInclude Include="include\drainlevelhooks.h" />
     <ClInclude Include="include\dynamiccast.h" />
     <ClInclude Include="include\dynupgrade.h" />
     <ClInclude Include="include\editboxinterf.h" />

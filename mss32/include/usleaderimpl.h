@@ -30,7 +30,7 @@ namespace game {
 struct TUsLeaderImplData
 {
     CMidgardID unitId;
-    CMidgardID prevId;
+    CMidgardID prevUnitImplId;
     Bank enrollCost;
     LLeaderCategory category;
 };

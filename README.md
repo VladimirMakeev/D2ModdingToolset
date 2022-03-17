@@ -49,7 +49,7 @@
 - Allows to set vampiric attacks heal ratio;
 - Allows vampiric attacks to deal critical damage;
 - Allows to customize shatter attacks: maximum damage per hit, maximum armor that can be shattered, whether attack can miss or not, and its upgrade ratio;
-- Allows doppelganger, transform-self, transform-other and summon attacks to produce leveled versions of units;
+- Allows doppelganger, transform-self, transform-other, drain-level and summon attacks to produce leveled versions of units (![demo video](https://user-images.githubusercontent.com/5180699/158679921-7b6d82b1-2c48-44bb-91c6-fa1983893eab.mp4));
 - Allows doppelganger attacks to respect enemy and ally wards and immunities to the attack class and source;
 - Allows transform-self attack to not consume a unit turn for transformation (![demo video](https://user-images.githubusercontent.com/5180699/124916545-76550200-dffb-11eb-8b12-3147e40ef04b.mp4));
 - Allows to set a maximum number of items the player is allowed to transfer between campaign scenarios;
@@ -352,6 +352,7 @@ The following settings can be changed in [settings.lua](Scripts/settings.lua):
   - "leveledDoppelgangerAttack=(true/false)" changes doppelganger attacks to copy units using with respect to their level using 'Scripts\\doppelganger.lua' script;
   - "leveledTransformSelfAttack=(true/false)" changes transform self attacks to compute transformed unit level using 'Scripts\\transformSelf.lua' script;
   - "leveledTransformOtherAttack=(true/false)" changes transform other attacks to compute transformed unit level using 'Scripts\\transformOther.lua' script;
+  - "leveledDrainLevelAttack=(true/false)" changes drain level attacks to compute transformed unit level using 'drainLevel.lua' script;
   - "leveledSummonAttack=(true/false)" changes summon attacks to compute summoned units levels using 'Scripts\\summon.lua' script;
   - "unrestrictedBestowWards=(true/false)" increases total wards limit per caster from 8 to 48, see more details under Features section;
   - "freeTransformSelfAttack=(true/false)" allows transform-self attack to not consume a unit turn for transformation (once per turn), see more details under Features section;

@@ -17,35 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BATATTACKTRANSFORMOTHER_H
-#define BATATTACKTRANSFORMOTHER_H
+#include "batattackdrainlevel.h"
+#include "version.h"
+#include <array>
 
-#include "batattack.h"
-#include "idlist.h"
+namespace game::CBatAttackDrainLevelApi {
 
-namespace game {
+// clang-format off
+static std::array<IBatAttackVftable*, 4> vftables = {{
+    // Akella
+    (IBatAttackVftable*)0x6f5584,
+    // Russobit
+    (IBatAttackVftable*)0x6f5584,
+    // Gog
+    (IBatAttackVftable*)0x6f3534,
+    // Scenario Editor
+    (IBatAttackVftable*)nullptr,
+}};
+// clang-format on
 
-struct IAttack;
-
-struct CBatAttackTransformOther : public CBatAttackBase
+IBatAttackVftable* vftable()
 {
-    CMidgardID unitId;
-    CMidgardID unitOrItemId;
-    int attackNumber;
-    IAttack* attack;
-    IdList smallUnits;
-    IdList bigUnits;
-};
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
 
-static_assert(sizeof(CBatAttackTransformOther) == 52,
-              "Size of CBatAttackTransformOther structure must be exactly 52 bytes");
-
-namespace CBatAttackTransformOtherApi {
-
-IBatAttackVftable* vftable();
-
-} // namespace CBatAttackTransformOtherApi
-
-} // namespace game
-
-#endif // BATATTACKTRANSFORMOTHER_H
+} // namespace game::CBatAttackDrainLevelApi

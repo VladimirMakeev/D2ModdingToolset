@@ -17,35 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BATATTACKTRANSFORMOTHER_H
-#define BATATTACKTRANSFORMOTHER_H
-
-#include "batattack.h"
-#include "idlist.h"
+#ifndef DRAINLEVELHOOKS_H
+#define DRAINLEVELHOOKS_H
 
 namespace game {
-
-struct IAttack;
-
-struct CBatAttackTransformOther : public CBatAttackBase
-{
-    CMidgardID unitId;
-    CMidgardID unitOrItemId;
-    int attackNumber;
-    IAttack* attack;
-    IdList smallUnits;
-    IdList bigUnits;
-};
-
-static_assert(sizeof(CBatAttackTransformOther) == 52,
-              "Size of CBatAttackTransformOther structure must be exactly 52 bytes");
-
-namespace CBatAttackTransformOtherApi {
-
-IBatAttackVftable* vftable();
-
-} // namespace CBatAttackTransformOtherApi
-
+struct CBatAttackDrainLevel;
+struct IMidgardObjectMap;
+struct BattleMsgData;
+struct CMidgardID;
+struct BattleAttackInfo;
 } // namespace game
 
-#endif // BATATTACKTRANSFORMOTHER_H
+namespace hooks {
+
+void __fastcall drainLevelAttackOnHitHooked(game::CBatAttackDrainLevel* thisptr,
+                                            int /*%edx*/,
+                                            game::IMidgardObjectMap* objectMap,
+                                            game::BattleMsgData* battleMsgData,
+                                            game::CMidgardID* targetUnitId,
+                                            game::BattleAttackInfo** attackInfo);
+
+} // namespace hooks
+
+#endif // DRAINLEVELHOOKS_H

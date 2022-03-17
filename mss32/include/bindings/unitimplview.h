@@ -38,7 +38,7 @@ class AttackView;
 class UnitImplView
 {
 public:
-    UnitImplView(game::IUsUnit* unitImpl);
+    UnitImplView(const game::IUsUnit* unitImpl);
 
     static void bind(sol::state& lua);
 
@@ -71,7 +71,7 @@ protected:
     std::optional<DynUpgradeView> getDynUpgrade(int upgradeNumber) const;
 
 private:
-    game::IUsUnit* impl;
+    const game::IUsUnit* impl;
 };
 
 } // namespace bindings

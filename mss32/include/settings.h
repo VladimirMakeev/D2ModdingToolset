@@ -70,6 +70,7 @@ struct Settings
     bool leveledDoppelgangerAttack;
     bool leveledTransformSelfAttack;
     bool leveledTransformOtherAttack;
+    bool leveledDrainLevelAttack;
     bool leveledSummonAttack;
     bool missChanceSingleRoll;
     bool unrestrictedBestowWards;

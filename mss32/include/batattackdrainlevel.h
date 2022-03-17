@@ -17,35 +17,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BATATTACKTRANSFORMOTHER_H
-#define BATATTACKTRANSFORMOTHER_H
+#ifndef BATATTACKDRAINLEVEL_H
+#define BATATTACKDRAINLEVEL_H
 
 #include "batattack.h"
-#include "idlist.h"
+#include "midgardid.h"
 
 namespace game {
 
 struct IAttack;
 
-struct CBatAttackTransformOther : public CBatAttackBase
+struct CBatAttackDrainLevel : public CBatAttackBase
 {
     CMidgardID unitId;
     CMidgardID unitOrItemId;
     int attackNumber;
     IAttack* attack;
-    IdList smallUnits;
-    IdList bigUnits;
+    int unknown;
 };
 
-static_assert(sizeof(CBatAttackTransformOther) == 52,
-              "Size of CBatAttackTransformOther structure must be exactly 52 bytes");
+static_assert(sizeof(CBatAttackDrainLevel) == 24,
+              "Size of CBatAttackDrainLevel structure must be exactly 24 bytes");
 
-namespace CBatAttackTransformOtherApi {
+namespace CBatAttackDrainLevelApi {
 
 IBatAttackVftable* vftable();
 
-} // namespace CBatAttackTransformOtherApi
+} // namespace CBatAttackDrainLevelApi
 
 } // namespace game
 
-#endif // BATATTACKTRANSFORMOTHER_H
+#endif // BATATTACKDRAINLEVEL_H
