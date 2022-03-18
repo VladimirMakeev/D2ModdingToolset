@@ -235,6 +235,7 @@ const Settings& defaultSettings()
         settings.movementCost.show = true;
         settings.unrestrictedBestowWards = true;
         settings.detailedAttackDescription = true;
+        settings.fixEffectiveHpFormula = true;
 
         initialized = true;
     }
