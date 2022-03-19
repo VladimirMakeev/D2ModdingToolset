@@ -32,6 +32,7 @@ std::array<Api, 3> functions = {{
         (Api::AddUnitToGroup)0x5e8bf8,
         (Api::ExchangeItem)0x5e86cc,
         (Api::TransformUnit)0x5e968e,
+        (Api::UndoTransformUnit)0x5e96df,
         (Api::ExtractUnitFromGroup)0x5e8d72,
     },
     // Russobit
@@ -41,6 +42,7 @@ std::array<Api, 3> functions = {{
         (Api::AddUnitToGroup)0x5e8bf8,
         (Api::ExchangeItem)0x5e86cc,
         (Api::TransformUnit)0x5e968e,
+        (Api::UndoTransformUnit)0x5e96df,
         (Api::ExtractUnitFromGroup)0x5e8d72,
     },
     // Gog
@@ -50,6 +52,7 @@ std::array<Api, 3> functions = {{
         (Api::AddUnitToGroup)0x5e78f7,
         (Api::ExchangeItem)0x5e73cb,
         (Api::TransformUnit)0x5e838d,
+        (Api::UndoTransformUnit)0x5e83de,
         (Api::ExtractUnitFromGroup)0x5e7a71,
     }
 }};
