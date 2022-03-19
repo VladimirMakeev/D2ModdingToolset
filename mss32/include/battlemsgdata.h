@@ -243,7 +243,8 @@ struct BattleMsgData
     CMidgardID ids3[2];
     /** Ids of items that were used during battle. */
     CMidgardID usedItemIds[4];
-    std::int8_t currentRound; /**< Round counting starts from 1. */
+    /** Round counting usually starts from 1, but there is a special round 0 for Doppelgangers. */
+    std::int8_t currentRound;
     char padding[3];
     int unknown3;
     int unknown4;
