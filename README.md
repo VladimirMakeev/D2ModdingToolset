@@ -70,7 +70,8 @@
 - Fixes an issue with transform-other attack where it selects melee vs ranged transform based on attacker position rather than on target position;
 - Removes persistent target highlighting for transform-self attack (circle animations for all possible targets on the ground), so it no longer interferes with highlighting for targets that are actually going to be affected by the attack;
 - Fixes missing modifiers of alternative attacks (![demo video](https://user-images.githubusercontent.com/5180699/125460215-144ef648-5497-4674-b9d6-ac7d2fa95125.mp4));
-- Fixes unit transformation (doppelganger, lower-level, transform-self/other attacks) to include HP modifiers into current hp recalculation, thus unit is not getting "damaged" upon transforming (![demo video](https://user-images.githubusercontent.com/5180699/156921183-b1f4748d-cb4f-40c8-a9b1-b911e9cc91dd.mp4));
+- Fixes unit transformation (doppelganger, drain-level, transform-self/other attacks) to include HP modifiers into current hp recalculation, thus unit is not getting "damaged" upon transforming (![demo video](https://user-images.githubusercontent.com/5180699/156921183-b1f4748d-cb4f-40c8-a9b1-b911e9cc91dd.mp4));
+- Fixes unit transformation (drain-level, transform-self/other and untransform-effect attacks) to update unit attack count for current battle round (for example, Holy Avenger transformed into Imp before its turn will no longer attack twice);
 - Fixes Scenario Editor bug with elves race as a caster in "Cast spell on location" event effect;
 - <details>
     <summary>Buttons for bulk item transfer: transfer all items, potions, scrolls/wands or valuables between inventories with single click;</summary>

@@ -258,11 +258,14 @@ static Hooks getGameHooks()
         {CBatAttackTransformSelfApi::vftable()->fillTargetsList, transformSelfAttackFillTargetsListHooked},
         // Allow transform self into leveled units using script logic
         // Fix bug where transform-self attack is unable to target self if alt attack is targeting allies
+        // Fix possible attack count mismatch (once vs twice) on unit transformation
         {CBatAttackTransformSelfApi::vftable()->onHit, transformSelfAttackOnHitHooked},
         // Allow transform other into leveled units using script logic
         // Fix bug where transform-other attack selects melee vs ranged transform based on attacker position rather than target position
+        // Fix possible attack count mismatch (once vs twice) on unit transformation
         {CBatAttackTransformOtherApi::vftable()->onHit, transformOtherAttackOnHitHooked},
         // Allow to drain different number of levels using script logic
+        // Fix possible attack count mismatch (once vs twice) on unit transformation
         {CBatAttackDrainLevelApi::vftable()->onHit, drainLevelAttackOnHitHooked},
         // Fix possible attack count mismatch (once vs twice) on unit transformation
         {CBatAttackUntransformEffectApi::vftable()->onHit, untransformEffectAttackOnHitHooked},
