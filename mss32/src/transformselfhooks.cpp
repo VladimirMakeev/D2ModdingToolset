@@ -182,7 +182,9 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
     const auto& visitors = VisitorApi::get();
     visitors.transformUnit(targetUnitId, &transformImplId, false, objectMap, 1);
 
-    if (targetSelf && userSettings().freeTransformSelfAttack)
+    if (!targetSelf)
+        updateAttackCountAfterTransformation(battleMsgData, targetUnit, prevAttackTwice);
+    else if (userSettings().freeTransformSelfAttack)
         giveFreeTransformSelfAttack(objectMap, battleMsgData, targetUnit, prevAttackTwice);
 
     BattleAttackUnitInfo info{};
