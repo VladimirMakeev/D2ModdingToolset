@@ -32,6 +32,7 @@
 #include "batattacksummon.h"
 #include "batattacktransformother.h"
 #include "batattacktransformself.h"
+#include "batattackuntransformeffect.h"
 #include "battleattackinfo.h"
 #include "battlemsgdatahooks.h"
 #include "battleviewerinterf.h"
@@ -128,6 +129,7 @@
 #include "unitgenerator.h"
 #include "unitsforhire.h"
 #include "unitutils.h"
+#include "untransformeffecthooks.h"
 #include "usracialsoldier.h"
 #include "ussoldier.h"
 #include "usstackleader.h"
@@ -262,6 +264,8 @@ static Hooks getGameHooks()
         {CBatAttackTransformOtherApi::vftable()->onHit, transformOtherAttackOnHitHooked},
         // Allow to drain different number of levels using script logic
         {CBatAttackDrainLevelApi::vftable()->onHit, drainLevelAttackOnHitHooked},
+        // Fix possible attack count mismatch (once vs twice) on unit transformation
+        {CBatAttackUntransformEffectApi::vftable()->onHit, untransformEffectAttackOnHitHooked},
         // Fix inability to target self for transformation in case of transform-self + summon attack
         // Remove persistent marking of all target units in case of transform-self attack
         {BattleViewerInterfApi::vftable()->update, battleViewerInterfUpdateHooked},

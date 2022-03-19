@@ -409,6 +409,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\unitpositionset.cpp" />
     <ClCompile Include="src\unitsforhire.cpp" />
     <ClCompile Include="src\unitutils.cpp" />
+    <ClCompile Include="src\untransformeffecthooks.cpp" />
     <ClCompile Include="src\ussoldierimpl.cpp" />
     <ClCompile Include="src\umattackhooks.cpp" />
     <ClCompile Include="src\utils.cpp" />
@@ -886,6 +887,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\unitpositionpair.h" />
     <ClInclude Include="include\unitsforhire.h" />
     <ClInclude Include="include\unitutils.h" />
+    <ClInclude Include="include\untransformeffecthooks.h" />
     <ClInclude Include="include\usglobal.h" />
     <ClInclude Include="include\usleader.h" />
     <ClInclude Include="include\usleaderimpl.h" />
