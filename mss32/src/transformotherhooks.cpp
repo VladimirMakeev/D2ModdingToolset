@@ -35,6 +35,7 @@
 #include "unitimplview.h"
 #include "unitutils.h"
 #include "unitview.h"
+#include "ussoldier.h"
 #include "usunitimpl.h"
 #include "utils.h"
 #include "visitors.h"
@@ -133,8 +134,13 @@ void __fastcall transformOtherAttackOnHitHooked(game::CBatAttackTransformOther* 
         transformImplId = leveledImplId;
     }
 
+    const auto targetSoldier = fn.castUnitImplToSoldier(targetUnit->unitImpl);
+    bool prevAttackTwice = targetSoldier && targetSoldier->vftable->getAttackTwice(targetSoldier);
+
     const auto& visitors = VisitorApi::get();
     visitors.transformUnit(targetUnitId, &transformImplId, true, objectMap, 1);
+
+    updateAttackCountAfterTransformation(battleMsgData, targetUnit, prevAttackTwice);
 
     BattleAttackUnitInfo info{};
     info.unitId = *targetUnitId;
