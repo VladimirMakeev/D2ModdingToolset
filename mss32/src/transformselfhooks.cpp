@@ -95,11 +95,11 @@ void giveFreeTransformSelfAttack(game::IMidgardObjectMap* objectMap,
     }
     freeTransformSelf.used = true;
 
-    const auto soldier = gameFunctions().castUnitImplToSoldier(unit->unitImpl);
-    bool attackTwice = soldier && soldier->vftable->getAttackTwice(soldier);
-
     for (auto& turn : battleMsgData->turnsOrder) {
         if (turn.unitId == unit->unitId) {
+            const auto soldier = gameFunctions().castUnitImplToSoldier(unit->unitImpl);
+            bool attackTwice = soldier && soldier->vftable->getAttackTwice(soldier);
+
             if (!prevAttackTwice && attackTwice && freeTransformSelf.turnCount == 0) {
                 // Give 2 extra attacks if transforming from single to double attack.
                 // turnCount prevents infinite abuse of 2 extra attacks:
@@ -112,6 +112,7 @@ void giveFreeTransformSelfAttack(game::IMidgardObjectMap* objectMap,
                 // Give 1 extra attack to compensate transformation
                 turn.attackCount++;
             }
+
             break;
         }
     }
