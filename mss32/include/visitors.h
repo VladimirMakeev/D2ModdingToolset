@@ -147,6 +147,20 @@ struct Api
     TransformUnit transformUnit;
 
     /**
+     * Untransforms a unit.
+     * Uses CVisitorUndoTransformUnit.
+     * @param[in] unitId id of the unit to be untransformed.
+     * @param objectMap interface used for objects search.
+     * @param apply specifies whether unit transformation should be applied.
+     * @returns true if unit was untransformed when apply set to 1. If apply set to 0, returns
+     * whether visitor can be applied.
+     */
+    using UndoTransformUnit = bool(__stdcall*)(CMidgardID* unitId,
+                                               IMidgardObjectMap* objectMap,
+                                               int apply);
+    UndoTransformUnit undoTransformUnit;
+
+    /**
      * Extracts unit from group.
      * Uses CVisitorExtractUnitFromGroup.
      * @param[in] unitId id of unit to extract.

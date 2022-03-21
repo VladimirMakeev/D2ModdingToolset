@@ -32,6 +32,7 @@
 #include "batattacksummon.h"
 #include "batattacktransformother.h"
 #include "batattacktransformself.h"
+#include "batattackuntransformeffect.h"
 #include "battleattackinfo.h"
 #include "battlemsgdatahooks.h"
 #include "battleviewerinterf.h"
@@ -128,6 +129,7 @@
 #include "unitgenerator.h"
 #include "unitsforhire.h"
 #include "unitutils.h"
+#include "untransformeffecthooks.h"
 #include "usracialsoldier.h"
 #include "ussoldier.h"
 #include "usstackleader.h"
@@ -256,12 +258,17 @@ static Hooks getGameHooks()
         {CBatAttackTransformSelfApi::vftable()->fillTargetsList, transformSelfAttackFillTargetsListHooked},
         // Allow transform self into leveled units using script logic
         // Fix bug where transform-self attack is unable to target self if alt attack is targeting allies
+        // Fix possible attack count mismatch (once vs twice) on unit transformation
         {CBatAttackTransformSelfApi::vftable()->onHit, transformSelfAttackOnHitHooked},
         // Allow transform other into leveled units using script logic
         // Fix bug where transform-other attack selects melee vs ranged transform based on attacker position rather than target position
+        // Fix possible attack count mismatch (once vs twice) on unit transformation
         {CBatAttackTransformOtherApi::vftable()->onHit, transformOtherAttackOnHitHooked},
         // Allow to drain different number of levels using script logic
+        // Fix possible attack count mismatch (once vs twice) on unit transformation
         {CBatAttackDrainLevelApi::vftable()->onHit, drainLevelAttackOnHitHooked},
+        // Fix possible attack count mismatch (once vs twice) on unit transformation
+        {CBatAttackUntransformEffectApi::vftable()->onHit, untransformEffectAttackOnHitHooked},
         // Fix inability to target self for transformation in case of transform-self + summon attack
         // Remove persistent marking of all target units in case of transform-self attack
         {BattleViewerInterfApi::vftable()->update, battleViewerInterfUpdateHooked},

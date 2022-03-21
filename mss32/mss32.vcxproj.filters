@@ -958,6 +958,12 @@
     <ClCompile Include="src\batattackdrainlevel.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\batattackuntransformeffect.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\untransformeffecthooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2410,6 +2416,12 @@
     </ClInclude>
     <ClInclude Include="include\batattackdrainlevel.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\batattackuntransformeffect.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\untransformeffecthooks.h">
+      <Filter>hooks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -141,8 +141,12 @@ void __fastcall drainLevelAttackOnHitHooked(game::CBatAttackDrainLevel* thisptr,
         }
     }
 
+    bool prevAttackTwice = targetSoldier && targetSoldier->vftable->getAttackTwice(targetSoldier);
+
     const auto& visitors = VisitorApi::get();
     visitors.transformUnit(targetUnitId, &transformImplId, false, objectMap, 1);
+
+    updateAttackCountAfterTransformation(battleMsgData, targetUnit, prevAttackTwice);
 
     BattleAttackUnitInfo info{};
     info.unitId = *targetUnitId;
