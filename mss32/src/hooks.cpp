@@ -68,6 +68,7 @@
 #include "encparambase.h"
 #include "eventconditioncathooks.h"
 #include "eventeffectcathooks.h"
+#include "fortcategory.h"
 #include "fortification.h"
 #include "functor.h"
 #include "gameutils.h"
@@ -102,6 +103,7 @@
 #include "midunitdescriptor.h"
 #include "midunitdescriptorhooks.h"
 #include "midunithooks.h"
+#include "midvillage.h"
 #include "modifierutils.h"
 #include "movepathhooks.h"
 #include "musichooks.h"
@@ -285,6 +287,9 @@ static Hooks getGameHooks()
         // Allow scenarios with prebuilt buildings in capitals
         // Start with prebuilt temple in capital for warrior lord depending on user setting
         {fn.buildLordSpecificBuildings, buildLordSpecificBuildingsHooked},
+        // Support race-specific village graphics
+        {GameImagesApi::get().getCityPreviewLargeImageNames, getCityPreviewLargeImageNamesHooked, (void**)&orig.getCityPreviewLargeImageNames},
+        {GameImagesApi::get().getCityIconImageNames, getCityIconImageNamesHooked, (void**)&orig.getCityIconImageNames},
     };
     // clang-format on
 
@@ -1896,6 +1901,114 @@ bool __stdcall enableUnitInHireListUiHooked(const game::CMidPlayer* player,
     }
 
     return false;
+}
+
+void __stdcall getCityPreviewLargeImageNamesHooked(game::List<game::String>* imageNames,
+                                                   const void* cityFF,
+                                                   const game::LRaceCategory* race,
+                                                   int cityTier)
+{
+    using namespace game;
+
+    const auto& races{RaceCategories::get()};
+    const auto raceId{race->id};
+
+    if (cityTier == 0 || raceId == races.neutral->id) {
+        getOriginalFunctions().getCityPreviewLargeImageNames(imageNames, cityFF, race, cityTier);
+        return;
+    }
+
+    char raceSuffix{'?'};
+    if (raceId == races.human->id) {
+        raceSuffix = 'H';
+    } else if (raceId == races.undead->id) {
+        raceSuffix = 'U';
+    } else if (raceId == races.heretic->id) {
+        raceSuffix = 'E';
+    } else if (raceId == races.dwarf->id) {
+        raceSuffix = 'D';
+    } else if (raceId == races.elf->id) {
+        raceSuffix = 'F';
+    }
+
+    const auto name{fmt::format("ALN{:c}{:d}", raceSuffix, cityTier)};
+    const auto length{name.length()};
+
+    GameImagesApi::get().getImageNames(imageNames, cityFF, name.c_str(), length, length);
+
+    if (!imageNames->length) {
+        // Fallback to default city image names
+        getOriginalFunctions().getCityPreviewLargeImageNames(imageNames, cityFF, race, cityTier);
+    }
+}
+
+void __stdcall getCityIconImageNamesHooked(game::List<game::String>* imageNames,
+                                           const void* iconsFF,
+                                           const game::CMidgardID* fortificationId,
+                                           const game::IMidgardObjectMap* objectMap)
+{
+    using namespace game;
+
+    auto obj{objectMap->vftable->findScenarioObjectById(objectMap, fortificationId)};
+    if (!obj) {
+        return;
+    }
+
+    auto fortification{static_cast<const CFortification*>(obj)};
+    auto vftable{static_cast<const CFortificationVftable*>(fortification->vftable)};
+
+    auto category{vftable->getCategory(fortification)};
+
+    if (category->id != FortCategories::get().village->id) {
+        getOriginalFunctions().getCityIconImageNames(imageNames, iconsFF, fortificationId,
+                                                     objectMap);
+        return;
+    }
+
+    auto village{static_cast<const CMidVillage*>(fortification)};
+
+    const auto& races{RaceCategories::get()};
+    const auto neutralRace{races.neutral};
+    const LRaceCategory* ownerRace{neutralRace};
+
+    if (village->ownerId != emptyId) {
+        auto player{getPlayer(objectMap, &village->ownerId)};
+        if (player) {
+            ownerRace = &player->raceType->data->raceType;
+        }
+    }
+
+    const auto ownerRaceId{ownerRace->id};
+    if (ownerRaceId == neutralRace->id) {
+        getOriginalFunctions().getCityIconImageNames(imageNames, iconsFF, fortificationId,
+                                                     objectMap);
+        return;
+    }
+
+    const char* raceSuffix{"HU"};
+    if (ownerRaceId == races.human->id) {
+        raceSuffix = "HU";
+    } else if (ownerRaceId == races.heretic->id) {
+        raceSuffix = "HE";
+    } else if (ownerRaceId == races.undead->id) {
+        raceSuffix = "UN";
+    } else if (ownerRaceId == races.dwarf->id) {
+        raceSuffix = "DW";
+    } else if (ownerRaceId == races.elf->id) {
+        raceSuffix = "EL";
+    }
+
+    const char tierLetter{'0' + static_cast<char>(village->tierLevel)};
+    const auto name{fmt::format("CITY{:s}{:c}", raceSuffix, tierLetter)};
+    const auto length{name.length()};
+
+    GameImagesApi::get().getImageNames(imageNames, iconsFF, name.c_str(), length, length);
+
+    if (!imageNames->length) {
+        // Fallback to default city icon image names
+        getOriginalFunctions().getCityIconImageNames(imageNames, iconsFF, fortificationId,
+                                                     objectMap);
+    }
 }
 
 } // namespace hooks

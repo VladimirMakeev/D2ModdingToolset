@@ -22,6 +22,7 @@
 
 #include "attack.h"
 #include "attacktypepairvector.h"
+#include "d2string.h"
 #include "idlist.h"
 #include "targetslist.h"
 #include <string>
@@ -57,6 +58,7 @@ struct CMidUnitGroup;
 struct CUnitGenerator;
 struct CMenuPhase;
 struct NetPlayerInfo;
+struct LRaceCategory;
 }; // namespace game
 
 namespace hooks {
@@ -228,6 +230,16 @@ bool __stdcall shouldAddUnitToHireHooked(const game::CMidPlayer* player,
 bool __stdcall enableUnitInHireListUiHooked(const game::CMidPlayer* player,
                                             game::CPhaseGame* phaseGame,
                                             const game::CMidgardID* unitImplId);
+
+void __stdcall getCityPreviewLargeImageNamesHooked(game::List<game::String>* imageNames,
+                                                   const void* cityFF,
+                                                   const game::LRaceCategory* race,
+                                                   int cityTier);
+
+void __stdcall getCityIconImageNamesHooked(game::List<game::String>* imageNames,
+                                           const void* iconsFF,
+                                           const game::CMidgardID* fortificationId,
+                                           const game::IMidgardObjectMap* objectMap);
 
 } // namespace hooks
 
