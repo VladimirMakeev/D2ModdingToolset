@@ -840,6 +840,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\spellcat.h" />
     <ClInclude Include="include\spinbuttoninterf.h" />
     <ClInclude Include="include\stackbattleactionmsg.h" />
+    <ClInclude Include="include\stdfileimpl.h" />
     <ClInclude Include="include\strategicspell.h" />
     <ClInclude Include="include\stringandid.h" />
     <ClInclude Include="include\stringarray.h" />
