@@ -2429,6 +2429,9 @@
     <ClInclude Include="include\midstreamenvfile.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\midstreamfile.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\stdfileimpl.h">
       <Filter>game</Filter>
     </ClInclude>

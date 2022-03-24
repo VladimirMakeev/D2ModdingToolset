@@ -747,6 +747,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midstack.h" />
     <ClInclude Include="include\midstacktemplate.h" />
     <ClInclude Include="include\midstreamenvfile.h" />
+    <ClInclude Include="include\midstreamfile.h" />
     <ClInclude Include="include\midsubrace.h" />
     <ClInclude Include="include\midtask.h" />
     <ClInclude Include="include\midunit.h" />
