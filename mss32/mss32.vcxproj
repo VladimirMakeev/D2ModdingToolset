@@ -725,6 +725,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midgardplan.h" />
     <ClInclude Include="include\midgardscenariomap.h" />
     <ClInclude Include="include\midgardstream.h" />
+    <ClInclude Include="include\midgardstreamenv.h" />
     <ClInclude Include="include\midinventory.h" />
     <ClInclude Include="include\miditem.h" />
     <ClInclude Include="include\midlandmark.h" />

@@ -2423,6 +2423,9 @@
     <ClInclude Include="include\untransformeffecthooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
+    <ClInclude Include="include\midgardstreamenv.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\stdfileimpl.h">
       <Filter>game</Filter>
     </ClInclude>
