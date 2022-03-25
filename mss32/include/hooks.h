@@ -30,7 +30,7 @@
 #include <vector>
 
 namespace game {
-struct AutoDialogData;
+struct DialogScriptData;
 struct CMenuNewSkirmishSingle;
 struct CMidDataCache2;
 struct GlobalData;
@@ -78,10 +78,10 @@ Hooks getVftableHooks();
 void respopupInitHooked(void);
 void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/);
 
-game::AutoDialogData* __fastcall loadScriptFileHooked(game::AutoDialogData* thisptr,
-                                                      int /*%edx*/,
-                                                      const char* filePath,
-                                                      int /*unknown*/);
+game::DialogScriptData* __fastcall loadScriptFileHooked(game::DialogScriptData* thisptr,
+                                                        int /*%edx*/,
+                                                        const char* filePath,
+                                                        int /*unknown*/);
 
 game::CMenuNewSkirmishSingle* __fastcall menuNewSkirmishSingleCtorHooked(
     game::CMenuNewSkirmishSingle* thisptr,

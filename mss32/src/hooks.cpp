@@ -659,10 +659,10 @@ void changeHireDialogUi(ScriptLines& script)
     }
 }
 
-game::AutoDialogData* __fastcall loadScriptFileHooked(game::AutoDialogData* thisptr,
-                                                      int /*%edx*/,
-                                                      const char* filePath,
-                                                      int /*unknown*/)
+game::DialogScriptData* __fastcall loadScriptFileHooked(game::DialogScriptData* thisptr,
+                                                        int /*%edx*/,
+                                                        const char* filePath,
+                                                        int /*unknown*/)
 {
     const auto& stringApi = game::StringApi::get();
 

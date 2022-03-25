@@ -20,17 +20,22 @@
 #ifndef AUTODIALOG_H
 #define AUTODIALOG_H
 
+#include "d2set.h"
 #include "d2string.h"
+#include "smartptr.h"
 #include "stringarray.h"
 
 namespace game {
 
 struct IMqImage2;
+struct CMidAutoDlgImages;
+struct CMidAutoDlgLog;
+struct CMidAutoDlgTextLoader;
 
 /**
  * Stores AutoDialog script (.dlg) information.
  */
-struct AutoDialogData
+struct DialogScriptData
 {
     bool initialized;
     char padding[3];
@@ -38,6 +43,26 @@ struct AutoDialogData
     StringArray lines; /**< Script file text lines. */
     String scriptPath; /**< Full path to script (.dlg) file. */
 };
+
+struct CAutoDialogData
+{
+    SmartPtr<CMidAutoDlgImages> images;
+    SmartPtr<CMidAutoDlgLog> log;
+    SmartPtr<CMidAutoDlgTextLoader> textLoader;
+    SmartPointer memPool;
+    Set<char[52]> dialogSet;
+};
+
+static_assert(sizeof(CAutoDialogData) == 60,
+              "Size of CAutoDialogData structure must be exactly 60 bytes");
+
+/** Holds necessary data to create CInterface objects from .dlg files. */
+struct CAutoDialog
+{
+    CAutoDialogData* data;
+};
+
+static_assert(sizeof(CAutoDialog) == 4, "Size of CAutoDialog structure must be exactly 4 bytes");
 
 namespace AutoDialogApi {
 
@@ -50,9 +75,9 @@ struct Api
      * @param unknown
      * @returns thisptr.
      */
-    using LoadScriptFile = AutoDialogData*(__thiscall*)(AutoDialogData* thisptr,
-                                                        const char* filePath,
-                                                        int /*unknown*/);
+    using LoadScriptFile = DialogScriptData*(__thiscall*)(DialogScriptData* thisptr,
+                                                          const char* filePath,
+                                                          int /*unknown*/);
     LoadScriptFile loadScriptFile;
 
     using LoadImage = IMqImage2*(__stdcall*)(const char* imageName);
