@@ -911,6 +911,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\utils.h" />
     <ClInclude Include="include\version.h" />
     <ClInclude Include="include\visitors.h" />
+    <ClInclude Include="include\widgetinterf.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
