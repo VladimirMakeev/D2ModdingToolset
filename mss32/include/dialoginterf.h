@@ -20,6 +20,8 @@
 #ifndef DIALOGINTERFACE_H
 #define DIALOGINTERFACE_H
 
+#include "d2pair.h"
+#include "d2set.h"
 #include "interface.h"
 #include <cstddef>
 
@@ -34,25 +36,34 @@ struct CToggleButton;
 struct CSpinButtonInterf;
 struct CEditBoxInterf;
 struct CScrollBarInterf;
+struct CMidAutoDlgLog;
+struct IMqImage2;
 
-/** Must be 104 bytes according to CDialogInterf constructor. */
 struct CDialogInterfData
 {
-    char unknown[104];
+    char dialogName[48];
+    SmartPtr<CMidAutoDlgLog> log;
+    Set<Pair<char[48] /* control name */, int /* child index */>> childControls;
+    IMqImage2* background;
+    CMqRect area;
 };
 
+static_assert(sizeof(CDialogInterfData) == 104,
+              "Size of CDialogInterfData structure must be exactly 104 bytes");
+
 /**
- * Assumption: holds ui elements prototypes created from AutoDialog script.
+ * Holds ui elements created from AutoDialog script.
+ * Represents DIALOG from Interf.dlg or ScenEdit.dlg files.
  */
 struct CDialogInterf : public CInterface
 {
-    CDialogInterfData* dialogInterfData;
+    CDialogInterfData* data;
 };
 
 static_assert(sizeof(CDialogInterf) == 12,
               "Size of CDialogInterf structure must be exactly 12 bytes");
 
-static_assert(offsetof(CDialogInterf, dialogInterfData) == 8,
+static_assert(offsetof(CDialogInterf, data) == 8,
               "CDialogInterf::dialogInterfData offset must be 8 bytes");
 
 namespace CDialogInterfApi {
