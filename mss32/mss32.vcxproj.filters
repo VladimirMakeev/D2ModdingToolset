@@ -2462,6 +2462,9 @@
     <ClInclude Include="include\mqrasterizer.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\surfacedecompressdata.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\displaysettings.h">
       <Filter>game</Filter>
     </ClInclude>

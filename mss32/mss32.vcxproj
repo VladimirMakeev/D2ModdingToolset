@@ -859,6 +859,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\stringintlist.h" />
     <ClInclude Include="include\subracecat.h" />
     <ClInclude Include="include\summonhooks.h" />
+    <ClInclude Include="include\surfacedecompressdata.h" />
     <ClInclude Include="include\targetslist.h" />
     <ClInclude Include="include\targetslistutils.h" />
     <ClInclude Include="include\task.h" />
