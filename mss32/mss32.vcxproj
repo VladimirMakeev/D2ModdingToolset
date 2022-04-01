@@ -774,6 +774,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mqnetsession.h" />
     <ClInclude Include="include\mqnetsystem.h" />
     <ClInclude Include="include\mqnettraffic.h" />
+    <ClInclude Include="include\mqrasterizer.h" />
     <ClInclude Include="include\mqrect.h" />
     <ClInclude Include="include\mqrenderer2.h" />
     <ClInclude Include="include\mqstream.h" />
