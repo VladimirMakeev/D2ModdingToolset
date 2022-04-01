@@ -25,7 +25,7 @@ namespace game {
 struct IMqRenderer2Vftable;
 struct CMqPoint;
 struct CMqRect;
-struct RenderData16;
+struct TextureHandle;
 
 /** Statistics are shown in CMqFps window. */
 struct RenderStatistics
@@ -75,7 +75,7 @@ struct IMqRenderer2Vftable
     Method3 method3;
 
     using Method4 = int(__thiscall*)(IMqRenderer2* thisptr,
-                                     RenderData16* data16,
+                                     TextureHandle* textureHandle,
                                      CMqPoint* start,
                                      CMqPoint* offset,
                                      CMqPoint* size,

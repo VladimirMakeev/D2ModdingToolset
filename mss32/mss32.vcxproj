@@ -878,6 +878,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\textandid.h" />
     <ClInclude Include="include\textboxinterf.h" />
     <ClInclude Include="include\textids.h" />
+    <ClInclude Include="include\texturehandle.h" />
     <ClInclude Include="include\tileindices.h" />
     <ClInclude Include="include\tilevariation.h" />
     <ClInclude Include="include\togglebutton.h" />

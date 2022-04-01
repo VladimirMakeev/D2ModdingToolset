@@ -26,7 +26,7 @@
 namespace game {
 
 struct IMqTexturer2Vftable;
-struct RenderData16;
+struct TextureHandle;
 struct IMqTexture;
 struct CMqPoint;
 
@@ -65,32 +65,32 @@ struct IMqTexturer2Vftable
      * Meaning assumed.
      * Adds texture handle and checks there is no palette entries associated with specified key.
      */
-    using AddTextureCheckPalette = RenderData16*(__thiscall*)(IMqTexturer2* thisptr,
-                                                              RenderData16* data16,
-                                                              IMqTexture* texture,
-                                                              CMqPoint* size,
-                                                              std::uint32_t key,
-                                                              int type,
-                                                              std::uint16_t opacity);
+    using AddTextureCheckPalette = TextureHandle*(__thiscall*)(IMqTexturer2* thisptr,
+                                                               TextureHandle* textureHandle,
+                                                               IMqTexture* texture,
+                                                               CMqPoint* size,
+                                                               std::uint32_t key,
+                                                               int type,
+                                                               std::uint16_t opacity);
     AddTextureCheckPalette addTextureCheckPalette;
 
     /**
      * Meaning assumed.
      * Adds texture handle. Called from constructor of CMqImage2Surface16, for example.
      */
-    using AddTexture = RenderData16*(__thiscall*)(IMqTexturer2* thisptr,
-                                                  RenderData16* data16,
-                                                  IMqTexture* texture,
-                                                  const CMqPoint* size,
-                                                  int type,
-                                                  std::uint16_t opacity);
+    using AddTexture = TextureHandle*(__thiscall*)(IMqTexturer2* thisptr,
+                                                   TextureHandle* textureHandle,
+                                                   IMqTexture* texture,
+                                                   const CMqPoint* size,
+                                                   int type,
+                                                   std::uint16_t opacity);
     AddTexture addTexture;
 
     /**
      * Meaning assumed.
      * Removes texture handle. Called from destructor of CMqImage2Surface16, for example.
      */
-    using RemoveTexture = void(__thiscall*)(IMqTexturer2* thisptr, RenderData16* data16);
+    using RemoveTexture = void(__thiscall*)(IMqTexturer2* thisptr, TextureHandle* textureHandle);
     RemoveTexture removeTexture;
 
     /** Returns texture by specified handle. */

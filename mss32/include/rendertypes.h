@@ -22,7 +22,7 @@
 
 #include "d2pair.h"
 #include "d2set.h"
-#include "mqpoint.h"
+#include "texturehandle.h"
 #include <cstdint>
 #include <windows.h>
 
@@ -31,17 +31,6 @@ namespace game {
 struct IMqTexture;
 struct IDirectDrawSurface7;
 struct IDirectDrawPalette;
-
-/** Assumption: texture handle. */
-struct RenderData16
-{
-    CMqPoint textureSize;
-    int* indexPtr;
-    int* refCount;
-};
-
-static_assert(sizeof(RenderData16) == 16,
-              "Size of RenderData16 structure must be exactly 16 bytes");
 
 struct RenderData22
 {
@@ -59,7 +48,7 @@ static_assert(sizeof(RenderData22) == 24,
 
 struct RenderData40
 {
-    RenderData16 data16;
+    TextureHandle textureHandle;
     RenderData22 data22;
 };
 

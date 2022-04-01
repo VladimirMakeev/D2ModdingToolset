@@ -2468,6 +2468,9 @@
     <ClInclude Include="include\displaysettings.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\texturehandle.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
