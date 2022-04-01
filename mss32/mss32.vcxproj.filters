@@ -2441,6 +2441,9 @@
     <ClInclude Include="include\functordispatch4.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\mqrenderer2.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
