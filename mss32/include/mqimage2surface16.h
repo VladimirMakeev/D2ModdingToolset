@@ -21,24 +21,23 @@
 #define MQIMAGE2SURFACE16_H
 
 #include "mqimage2.h"
-#include "mqpoint.h"
 #include "mqtexture.h"
 #include "smartptr.h"
+#include "texturehandle.h"
 #include <cstddef>
 
 namespace game {
+
+struct CMqPresentationManager;
 
 struct CMqImage2Surface16
     : public IMqImage2
     , public IMqTexture
 {
-    SmartPointer ptr;
-    int unknown;
-    int unknown2;
-    int unknown3;
-    int unknown4;
+    SmartPtr<CMqPresentationManager> presentationMgr;
+    TextureHandle textureHandle;
     CMqPoint size;
-    bool unknown5;
+    bool dirty;
     char padding[3];
 };
 
