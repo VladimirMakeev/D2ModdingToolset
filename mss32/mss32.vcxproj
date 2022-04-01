@@ -567,6 +567,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\difficultylevel.h" />
     <ClInclude Include="include\displayhandlers.h" />
     <ClInclude Include="include\displayhandlershooks.h" />
+    <ClInclude Include="include\displaysettings.h" />
     <ClInclude Include="include\doppelgangerhooks.h" />
     <ClInclude Include="include\draganddropinterf.h" />
     <ClInclude Include="include\drainattackhooks.h" />

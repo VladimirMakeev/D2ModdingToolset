@@ -24,16 +24,7 @@ namespace game {
 
 struct IMqDisplay2Vftable;
 struct CMqPoint;
-
-struct DisplaySettings
-{
-    int height;
-    int width;
-    int bitsPerPixel;
-};
-
-static_assert(sizeof(DisplaySettings) == 12,
-              "Size of DisplaySettings structure must be exactly 12 bytes");
+struct DisplaySettings;
 
 template <typename T>
 struct IMqDisplay2T
