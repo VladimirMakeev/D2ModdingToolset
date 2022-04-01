@@ -26,7 +26,7 @@ namespace game {
 
 struct IMqImage2Vftable;
 struct CMqPoint;
-struct IMqRenderer;
+struct IMqRenderer2;
 
 /** Assumption: base class for all images. */
 struct IMqImage2
@@ -62,7 +62,7 @@ struct IMqImage2Vftable
 
     /** Assumtion: renders image in CMqRect(start + offset, size) area. */
     using Render = void(__thiscall*)(const IMqImage2* thisptr,
-                                     IMqRenderer* renderer,
+                                     IMqRenderer2* renderer,
                                      const CMqPoint* start,
                                      const CMqPoint* offset,
                                      const CMqPoint* size,

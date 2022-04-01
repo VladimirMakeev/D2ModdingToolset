@@ -825,6 +825,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\racetype.h" />
     <ClInclude Include="include\radiobuttoninterf.h" />
     <ClInclude Include="include\registeraccountinterf.h" />
+    <ClInclude Include="include\rendererimpl.h" />
     <ClInclude Include="include\rendertypes.h" />
     <ClInclude Include="include\resetstackext.h" />
     <ClInclude Include="include\restrictions.h" />
