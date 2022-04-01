@@ -2450,6 +2450,9 @@
     <ClInclude Include="include\mqtexturer2.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\mqanimator2.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
