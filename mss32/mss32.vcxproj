@@ -775,6 +775,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mqrenderer2.h" />
     <ClInclude Include="include\mqstream.h" />
     <ClInclude Include="include\mqtexture.h" />
+    <ClInclude Include="include\mqtexturer2.h" />
     <ClInclude Include="include\mqthread.h" />
     <ClInclude Include="include\mquicontroller.h" />
     <ClInclude Include="include\mquicontrollersimple.h" />
