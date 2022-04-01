@@ -2444,6 +2444,9 @@
     <ClInclude Include="include\mqrenderer2.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\mqdisplay2.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\mqtexturer2.h">
       <Filter>game</Filter>
     </ClInclude>

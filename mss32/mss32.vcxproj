@@ -760,6 +760,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\modifgroup.h" />
     <ClInclude Include="include\modifierutils.h" />
     <ClInclude Include="include\mqanimation.h" />
+    <ClInclude Include="include\mqdisplay2.h" />
     <ClInclude Include="include\mqimage2.h" />
     <ClInclude Include="include\mqimage2surface16.h" />
     <ClInclude Include="include\mqnetplayer.h" />
