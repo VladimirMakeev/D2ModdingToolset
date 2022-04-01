@@ -41,7 +41,7 @@ enum class WidgetMouseState : std::uint32_t
     MouseBtnPressed = 8,
 };
 
-struct CWidgetInterfState
+struct WidgetState
 {
     CMqPoint mousePosition;
     WidgetMouseState mouseState;
@@ -50,8 +50,7 @@ struct CWidgetInterfState
     char padding[2];
 };
 
-static_assert(sizeof(CWidgetInterfState) == 16,
-              "Size of CWidgetInterfState structure must be exactly 16 bytes");
+static_assert(sizeof(WidgetState) == 16, "Size of WidgetState structure must be exactly 16 bytes");
 
 struct WidgetImage
 {
@@ -92,7 +91,7 @@ struct CWidgetInterfData
     std::uint32_t mouseLeftUpMsgId;
     std::uint32_t mouseRightUpMsgId;
     std::uint32_t mouseDblClickMsgId;
-    CWidgetInterfState* state;
+    WidgetState* state;
 };
 
 static_assert(sizeof(CWidgetInterfData) == 244,
@@ -104,7 +103,7 @@ struct CWidgetInterf : public CInterface
 };
 
 static_assert(sizeof(CWidgetInterf) == 12,
-              "Size of CPictureInterf structure must be exactly 12 bytes");
+              "Size of CWidgetInterf structure must be exactly 12 bytes");
 
 } // namespace game
 
