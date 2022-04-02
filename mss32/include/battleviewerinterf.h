@@ -95,22 +95,34 @@ static_assert(offsetof(CBattleViewerUnknown, data3) == 112,
 static_assert(offsetof(CBattleViewerUnknown, string) == 208,
               "CBattleViewerUnknown::string offset must be 208 bytes");
 
-struct CBattleViewerTargetData
+struct CBattleViewerAttackTargetData
 {
     bool isBattleGoing;
     bool unknown;
     char padding[2];
-    CMidgardID targetGroupId;
-    UnitPositionSet targetPositions;
+    CMidgardID groupId;
+    UnitPositionSet unitPositions;
 };
 
-static_assert(sizeof(CBattleViewerTargetData) == 36,
-              "Size of CBattleViewerTargetData structure must be exactly 36 bytes");
+static_assert(sizeof(CBattleViewerAttackTargetData) == 36,
+              "Size of CBattleViewerAttackTargetData structure must be exactly 36 bytes");
+
+struct CBattleViewerItemTargetData
+{
+    bool isAttacker;
+    bool unknown;
+    char padding[2];
+    CMidgardID groupId;
+    UnitPositionSet unitPositions;
+};
+
+static_assert(sizeof(CBattleViewerItemTargetData) == 36,
+              "Size of CBattleViewerItemTargetData structure must be exactly 36 bytes");
 
 struct CBattleViewerTargetDataSet
 {
-    CBattleViewerTargetData attack;
-    CBattleViewerTargetData items[2];
+    CBattleViewerAttackTargetData attack;
+    CBattleViewerItemTargetData items[2];
 };
 
 static_assert(sizeof(CBattleViewerTargetDataSet) == 108,
