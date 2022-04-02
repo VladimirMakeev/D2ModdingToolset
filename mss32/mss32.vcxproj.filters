@@ -964,6 +964,9 @@
     <ClCompile Include="src\untransformeffecthooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="src\musicfader.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2422,6 +2425,9 @@
     </ClInclude>
     <ClInclude Include="include\untransformeffecthooks.h">
       <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\musicfader.h">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
