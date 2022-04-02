@@ -541,6 +541,13 @@ struct Api
                                                 const CMidgardID* targetUnitId);
     GetTargetsToAttack getTargetsToAttack;
 
+    /** Values is a pointer to CMidgardID itemIds[2]. */
+    using GetLeaderEquippedBattleItemIds = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                            const CMidgardID* unitId,
+                                                            const BattleMsgData* battleMsgData,
+                                                            CMidgardID* values);
+    GetLeaderEquippedBattleItemIds getLeaderEquippedBattleItemIds;
+
     using GetLeaderEquippedBattleItemIndex = int(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                              const CMidgardID* unitId,
                                                              const BattleMsgData* battleMsgData,
