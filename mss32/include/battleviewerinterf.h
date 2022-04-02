@@ -345,7 +345,9 @@ struct Api
 
     using UpdateUnknown = void(__thiscall*)(CBattleViewerInterf* thisptr, bool a2);
     UpdateUnknown updateUnknown;
-    UpdateUnknown updateUnknown2;
+
+    using UpdateBattleItems = void(__thiscall*)(CBattleViewerInterf* thisptr, bool canUseItem);
+    UpdateBattleItems updateBattleItems;
 
     using CBattleViewerTargetDataSetConstructor = CBattleViewerTargetDataSet*(
         __thiscall*)(CBattleViewerTargetDataSet* thisptr, const BatViewerTargetDataSet* src);

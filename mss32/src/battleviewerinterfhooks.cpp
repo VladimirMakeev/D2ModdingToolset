@@ -641,7 +641,7 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
     auto bigFace2 = viewerApi.getBigFace2(viewer);
     viewerApi.setUnknown(bigFace2, false);
 
-    viewerApi.updateUnknown2(viewer, canUseItem);
+    viewerApi.updateBattleItems(viewer, canUseItem);
 
     for (auto group : {viewer->data->batUnitGroup1, viewer->data->batUnitGroup3,
                        viewer->data->batUnitGroup2, viewer->data->batUnitGroup4}) {
