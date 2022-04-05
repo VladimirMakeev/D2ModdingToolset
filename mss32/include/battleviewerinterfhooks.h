@@ -47,6 +47,10 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
                                                const game::Set<game::BattleAction>* actions,
                                                const game::BatViewerTargetDataSet* targetData);
 
+void __fastcall battleViewerInterfUpdateBattleItemsHooked(game::CBattleViewerInterf* thisptr,
+                                                          int /*%edx*/,
+                                                          bool canUseItem);
+
 } // namespace hooks
 
 #endif // BATTLEVIEWERINTERFHOOKS_H

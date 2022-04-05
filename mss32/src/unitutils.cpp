@@ -278,4 +278,23 @@ void updateAttackCountAfterTransformation(game::BattleMsgData* battleMsgData,
     }
 }
 
+bool isStackLeaderAndAllowedToUseBattleItems(const game::IMidgardObjectMap* objectMap,
+                                             const game::CMidgardID* unitId,
+                                             const game::BattleMsgData* battleMsgData)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    auto unit = fn.findUnitById(objectMap, unitId);
+    if (!unit)
+        return false;
+
+    // TODO: Fix missing battle items on transformed leaders
+    if (unit->transformed)
+        return false;
+
+    return fn.castUnitImplToStackLeader(unit->unitImpl) != nullptr;
+}
+
 } // namespace hooks

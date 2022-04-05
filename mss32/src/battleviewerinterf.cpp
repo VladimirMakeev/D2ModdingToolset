@@ -59,6 +59,10 @@ static std::array<Api, 3> functions = {{
         (Api::UnknownMethod6)0x639858,
         (Api::UnknownMethod7)0x638f65,
         (Api::UnknownMethod8)0x634fdf,
+        (Api::UnknownMethod9)0x63adda,
+        (Api::UnknownMethod10)0x639be9,
+        (Api::UnknownMethod11)0x639e1e,
+        (Api::UnknownMethod12)0x63a6df,
     },
     // Russobit
     Api{
@@ -94,6 +98,10 @@ static std::array<Api, 3> functions = {{
         (Api::UnknownMethod6)0x639858,
         (Api::UnknownMethod7)0x638f65,
         (Api::UnknownMethod8)0x634fdf,
+        (Api::UnknownMethod9)0x63adda,
+        (Api::UnknownMethod10)0x639be9,
+        (Api::UnknownMethod11)0x639e1e,
+        (Api::UnknownMethod12)0x63a6df,
     },
     // Gog
     Api{
@@ -129,6 +137,10 @@ static std::array<Api, 3> functions = {{
         (Api::UnknownMethod6)0x638298,
         (Api::UnknownMethod7)0x6379a5,
         (Api::UnknownMethod8)0x633a1f,
+        (Api::UnknownMethod9)0x63981a,
+        (Api::UnknownMethod10)0x638629,
+        (Api::UnknownMethod11)0x63885e,
+        (Api::UnknownMethod12)0x63911f,
     },
 }};
 

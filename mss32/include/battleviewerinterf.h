@@ -415,6 +415,27 @@ struct Api
     using UnknownMethod8 = bool(__thiscall*)(CBattleViewerInterf* thisptr,
                                              const CMqPoint* mousePosition);
     UnknownMethod8 unknownMethod8;
+
+    using UnknownMethod9 = void(__thiscall*)(CBattleViewerInterf* thisptr);
+    UnknownMethod9 unknownMethod9;
+
+    using UnknownMethod10 = void(__thiscall*)(CBattleViewerInterf* thisptr,
+                                              const CMidgardID* battleItemId,
+                                              int battleItemIndex,
+                                              const List<void*>* a4);
+    UnknownMethod10 unknownMethod10;
+
+    using UnknownMethod11 = void(__thiscall*)(CBattleViewerInterf* thisptr,
+                                              const CMidgardID* id,
+                                              const CMidgardID* targetGroupId,
+                                              const UnitPositionSet* targetPositions,
+                                              const CBattleViewerGroupAreas* groupAreas,
+                                              bool a6,
+                                              const List<void*>* a7);
+    UnknownMethod11 unknownMethod11;
+
+    using UnknownMethod12 = void(__thiscall*)(CBattleViewerInterf* thisptr);
+    UnknownMethod12 unknownMethod12;
 };
 
 Api& get();

@@ -31,12 +31,14 @@
 #include "game.h"
 #include "middragdropinterf.h"
 #include "midunitgroup.h"
+#include "musicfader.h"
 #include "togglebutton.h"
 #include "uievent.h"
 #include "uimanager.h"
 #include "unitinfolist.h"
 #include "unitpositionlist.h"
 #include "unitslotview.h"
+#include "unitutils.h"
 
 namespace hooks {
 
@@ -634,6 +636,58 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
 
     viewerApi.markAttackTargets(viewer, &mousePosition, false);
     viewerApi.unknownMethod8(viewer, &mousePosition);
+}
+
+void __fastcall battleViewerInterfUpdateBattleItemsHooked(game::CBattleViewerInterf* thisptr,
+                                                          int /*%edx*/,
+                                                          bool canUseItem)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+    const auto& faderApi = CMusicFaderApi::get();
+    const auto& viewerApi = BattleViewerInterfApi::get();
+
+    auto fader = faderApi.get();
+    if (faderApi.hasEventId(fader))
+        faderApi.callback(fader);
+
+    viewerApi.unknownMethod9(thisptr);
+
+    if (!thisptr->data->targetData.attack.isBattleGoing || thisptr->data->unitId == emptyId)
+        return;
+
+    if (!isStackLeaderAndAllowedToUseBattleItems(thisptr->data->objectMap, &thisptr->data->unitId,
+                                                 &thisptr->data->battleMsgData))
+        return;
+
+    CMidgardID itemIds[2];
+    battle.getLeaderEquippedBattleItemIds(thisptr->data->objectMap, &thisptr->data->unitId,
+                                          &thisptr->data->battleMsgData, itemIds);
+
+    for (int i = 0; i < 2; ++i) {
+        if (faderApi.hasEventId(fader))
+            faderApi.callback(fader);
+
+        if (itemIds[i] == emptyId)
+            continue;
+
+        viewerApi.unknownMethod10(thisptr, &itemIds[i], i, &thisptr->data2->list);
+
+        if (canUseItem) {
+            const auto& targetData = thisptr->data->targetData.items[i];
+            bool isUnitOnTheLeft = viewerApi.isUnitOnTheLeft(thisptr, targetData.isAttacker);
+
+            viewerApi.unknownMethod11(thisptr, &itemIds[i], &targetData.groupId,
+                                      &targetData.unitPositions,
+                                      isUnitOnTheLeft ? &thisptr->data->groupAreas2
+                                                      : &thisptr->data->groupAreas1,
+                                      false, &thisptr->data2->list2);
+        }
+    }
+
+    if (canUseItem)
+        viewerApi.unknownMethod12(thisptr);
 }
 
 } // namespace hooks
