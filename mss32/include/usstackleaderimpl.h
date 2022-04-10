@@ -20,10 +20,10 @@
 #ifndef USSTACKLEADERIMPL_H
 #define USSTACKLEADERIMPL_H
 
-#include "d2map.h"
 #include "groundcat.h"
 #include "leaderabilitycat.h"
 #include "midgardid.h"
+#include "mq_c_s.h"
 #include "textandid.h"
 #include "usstackleader.h"
 
@@ -40,8 +40,8 @@ struct TUsStackLeaderImplData
     bool unknown;
     char padding[3];
     TextAndId abilityText; /**< ABIL_TXT */
-    Map<LGroundCategory> moveBonuses;
-    Map<LLeaderAbility> abililies;
+    mq_c_s<LGroundCategory> moveBonuses;
+    mq_c_s<LLeaderAbility> abililies;
 };
 
 static_assert(sizeof(TUsStackLeaderImplData) == 72,

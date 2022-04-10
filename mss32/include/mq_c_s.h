@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef D2MAP_H
-#define D2MAP_H
+#ifndef MQ_C_S_H
+#define MQ_C_S_H
 
 #include "d2vector.h"
 
@@ -26,7 +26,7 @@ namespace game {
 
 /** Structure with fast element lookup used in game. */
 template <typename T>
-struct Map
+struct mq_c_s
 {
     const void* vftable;
     Vector<T> data;
@@ -34,4 +34,4 @@ struct Map
 
 } // namespace game
 
-#endif // D2MAP_H
+#endif // MQ_C_S_H

@@ -20,14 +20,14 @@
 #ifndef TEXTANDID_H
 #define TEXTANDID_H
 
-#include "d2map.h"
 #include "d2pair.h"
+#include "mq_c_s.h"
 
 namespace game {
 
 struct TextAndId
 {
-    Map<Pair<CMidgardID, char*>>* text;
+    mq_c_s<Pair<CMidgardID, char*>>* text;
     CMidgardID id;
 };
 

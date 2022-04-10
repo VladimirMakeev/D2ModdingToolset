@@ -20,18 +20,11 @@
 #ifndef MIDVILLAGE_H
 #define MIDVILLAGE_H
 
-#include "d2vector.h"
 #include "fortification.h"
+#include "mq_c_s.h"
 #include "racecategory.h"
 
 namespace game {
-
-/** Named as mq_c_s in game code. */
-struct CMidVillageRaceData
-{
-    const void* vftable;
-    Vector<LRaceCategory> raceCategories;
-};
 
 /** Holds city related data in scenario file and game. */
 struct CMidVillage : public CFortification
@@ -41,7 +34,7 @@ struct CMidVillage : public CFortification
     int riotTurn;
     int regeneration;
     CMidgardID protectionId;
-    CMidVillageRaceData raceData;
+    mq_c_s<LRaceCategory> raceData;
 };
 
 static_assert(sizeof(CMidVillage) == 184,
@@ -50,8 +43,8 @@ static_assert(sizeof(CMidVillage) == 184,
 static_assert(offsetof(CMidVillage, tierLevel) == 144,
               "CMidVillage::tierLevel offset must be 144 bytes");
 
-static_assert(offsetof(CMidVillage, raceData.raceCategories) == 168,
-              "CMidVillage::raceData.raceCategories offset must be 168 bytes");
+static_assert(offsetof(CMidVillage, raceData.data) == 168,
+              "CMidVillage::raceData.data offset must be 168 bytes");
 
 } // namespace game
 
