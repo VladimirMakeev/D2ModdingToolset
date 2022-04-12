@@ -176,6 +176,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\batattacktransformself.cpp" />
     <ClCompile Include="src\batattackuntransformeffect.cpp" />
     <ClCompile Include="src\batattackutils.cpp" />
+    <ClCompile Include="src\batbigface.cpp" />
     <ClCompile Include="src\batimagesloader.cpp" />
     <ClCompile Include="src\battleattackinfo.cpp" />
     <ClCompile Include="src\battlemsgdata.cpp" />
@@ -492,6 +493,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batattacktransformself.h" />
     <ClInclude Include="include\batattackuntransformeffect.h" />
     <ClInclude Include="include\batattackutils.h" />
+    <ClInclude Include="include\batbigface.h" />
     <ClInclude Include="include\batimagesloader.h" />
     <ClInclude Include="include\batnotify.h" />
     <ClInclude Include="include\battleattackinfo.h" />

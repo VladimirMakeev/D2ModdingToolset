@@ -19,6 +19,7 @@
 
 #include "battleviewerinterfhooks.h"
 #include "attack.h"
+#include "batbigface.h"
 #include "batimagesloader.h"
 #include "battleviewerinterf.h"
 #include "batunitanim.h"
@@ -234,10 +235,11 @@ void markAttackTargets(game::CBattleViewerInterf* viewer,
     const auto& fn = gameFunctions();
     const auto& viewerApi = BattleViewerInterfApi::get();
     const auto& engineApi = BatViewer2DEngineApi::get();
+    const auto& bigFaceApi = BatBigFaceApi::get();
 
     if (setBigFace) {
         CBatBigFace* bigFace = viewerApi.getBigFace(viewer);
-        viewerApi.setUnitId(bigFace, selectedUnitId);
+        bigFaceApi.setUnitId(bigFace, selectedUnitId);
     }
 
     if (viewer->data2->selectedUnitId == *selectedUnitId)
@@ -297,6 +299,7 @@ bool unmarkAttackTargets(game::CBattleViewerInterf* viewer,
 
     const auto& viewerApi = BattleViewerInterfApi::get();
     const auto& engineApi = BatViewer2DEngineApi::get();
+    const auto& bigFaceApi = BatBigFaceApi::get();
 
     engineApi.clearTargetMarks(viewer->data->batViewer2dEngine);
     viewer->data2->selectedUnitId = emptyId;
@@ -310,7 +313,7 @@ bool unmarkAttackTargets(game::CBattleViewerInterf* viewer,
 
     if (setBigFace) {
         CBatBigFace* bigFace = viewerApi.getBigFace(viewer);
-        viewerApi.setUnitId(bigFace, &selectedUnitId);
+        bigFaceApi.setUnitId(bigFace, &selectedUnitId);
     }
 
     return true;
@@ -537,6 +540,7 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
     const auto& dialogApi = CDialogInterfApi::get();
     const auto& toggleButtonApi = CToggleButtonApi::get();
     const auto& listApi = TargetsListApi::get();
+    const auto& bigFaceApi = BatBigFaceApi::get();
 
     auto viewer = castBatViewerToBattleViewerInterf(thisptr);
     viewer->data->unknown6 = false;
@@ -613,7 +617,7 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
     viewer->data2->unknown3 = 0;
 
     auto bigFace2 = viewerApi.getBigFace2(viewer);
-    viewerApi.setUnknown(bigFace2, false);
+    bigFaceApi.setUnknown(bigFace2, false);
 
     viewerApi.updateBattleItems(viewer, canUseItem);
 
@@ -626,7 +630,7 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
         updateForNormalAttack(viewer);
 
     viewerApi.unknownMethod6(viewer, false);
-    viewerApi.setUnitId(bigFace2, &viewer->data->unitId);
+    bigFaceApi.setUnitId(bigFace2, &viewer->data->unitId);
     viewerApi.unknownMethod7(viewer);
 
     CMqPoint mousePosition;

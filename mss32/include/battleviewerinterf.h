@@ -322,12 +322,6 @@ struct Api
     GetBoolById isUnitRetreating;
     GetBoolById getUnknown2;
 
-    using SetUnitId = void(__thiscall*)(CBatBigFace* thisptr, const CMidgardID* unitId);
-    SetUnitId setUnitId;
-
-    using SetUnknown = void(__thiscall*)(CBatBigFace* thisptr, bool a2);
-    SetUnknown setUnknown;
-
     using GetSelectedUnitId = CMidgardID*(__thiscall*)(const CBatUnitGroup2* thisptr,
                                                        CMidgardID* value,
                                                        const CMqPoint* mousePosition);

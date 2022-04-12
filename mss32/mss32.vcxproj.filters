@@ -967,6 +967,9 @@
     <ClCompile Include="src\musicfader.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\batbigface.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2427,6 +2430,9 @@
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\musicfader.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\batbigface.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\d2tree.h">
