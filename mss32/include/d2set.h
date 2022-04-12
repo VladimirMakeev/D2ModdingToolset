@@ -20,42 +20,22 @@
 #ifndef D2SET_H
 #define D2SET_H
 
-#include <cstdint>
+#include "d2tree.h"
 
 namespace game {
 
 template <typename T>
-struct SetNode
-{
-    int unknown;         /**< Can be zero or one. */
-    SetNode<T>* next;    /**< Next node to search. */
-    SetNode<T>* less;    /**< Node with lesser value. */
-    SetNode<T>* greater; /**< Node with greater value. */
-    T value;
-};
+struct SetNode : public TreeNode<T, SetNode<T>>
+{ };
 
 /** Implementation of std::set<T> used in game. */
 template <typename T, typename Allocator = void*>
-struct Set
-{
-    char unknown;
-    char padding[3];
-    std::uint32_t length; /**< Number of nodes in set. */
-    char unknown2[4];
-    SetNode<T>* begin; /**< Points to the first node with minimal value. */
-    Allocator allocator;
-    SetNode<T>* end; /**< Points to the end node used as stop element. */
-    Allocator allocator2;
-};
+struct Set : public Tree<T, SetNode<T>, Allocator>
+{ };
 
 template <typename T>
-struct SetIterator
-{
-    char unknown;
-    char padding[3];
-    SetNode<T>* node;
-    SetNode<T>* node2;
-};
+struct SetIterator : public TreeIterator<T, SetNode<T>>
+{ };
 
 } // namespace game
 
