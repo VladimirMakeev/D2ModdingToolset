@@ -2429,6 +2429,9 @@
     <ClInclude Include="include\musicfader.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\d2tree.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
