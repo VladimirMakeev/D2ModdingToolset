@@ -2432,6 +2432,9 @@
     <ClInclude Include="include\d2tree.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\d2map.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
