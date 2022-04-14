@@ -60,9 +60,9 @@ struct IBatAttackVftable
 
     /** Fills attack targets list with positions of units in groups. */
     using FillTargetsList = void(__thiscall*)(IBatAttack* thisptr,
-                                              IMidgardObjectMap* objectMap,
-                                              BattleMsgData* battleMsgData,
-                                              TargetsList* targetsList);
+                                              const IMidgardObjectMap* objectMap,
+                                              const BattleMsgData* battleMsgData,
+                                              TargetsList* value);
     FillTargetsList fillTargetsList;
     FillTargetsList fillAltTargetsList;
 
