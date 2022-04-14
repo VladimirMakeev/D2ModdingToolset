@@ -222,6 +222,8 @@ static_assert(offsetof(UnitInfo, modifiedUnits) == 60,
 static_assert(offsetof(UnitInfo, shatteredArmor) == 156,
               "UnitInfo::shatteredArmor offset must be 156 bytes");
 
+using GroupIdTargetsPair = Pair<CMidgardID, TargetsList>;
+
 /**
  * Common part of the network messages that is being sent during battle.
  */
@@ -643,6 +645,22 @@ struct Api
                                                            const CMidgardID* unitId,
                                                            const BattleMsgData* battleMsgData);
     GenerateBigFaceDescription generateBigFaceDescription;
+
+    using UpdateBattleActions = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                 const BattleMsgData* battleMsgData,
+                                                 const CMidgardID* unitId,
+                                                 Set<BattleAction>* actions,
+                                                 GroupIdTargetsPair* attackTargets,
+                                                 GroupIdTargetsPair* item1Targets,
+                                                 GroupIdTargetsPair* item2Targets);
+    UpdateBattleActions updateBattleActions;
+
+    using GetItemAttackTargets = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                  const BattleMsgData* battleMsgData,
+                                                  const CMidgardID* unitId,
+                                                  const CMidgardID* itemId,
+                                                  GroupIdTargetsPair* value);
+    GetItemAttackTargets getItemAttackTargets;
 };
 
 Api& get();
