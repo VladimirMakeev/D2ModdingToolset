@@ -28,14 +28,20 @@ static std::array<Api, 3> functions = {{
     // Akella
     Api{
         (Api::LoadMarkImage)0x648fff,
+        (Api::LoadUnitFaceImage)0x649678,
+        (Api::LoadItemImage)0x64955f,
     },
     // Russobit
     Api{
         (Api::LoadMarkImage)0x648fff,
+        (Api::LoadUnitFaceImage)0x649678,
+        (Api::LoadItemImage)0x64955f,
     },
     // Gog
     Api{
         (Api::LoadMarkImage)0x64787f,
+        (Api::LoadUnitFaceImage)0x647ef8,
+        (Api::LoadItemImage)0x647ddf,
     },
 }};
 // clang-format on
