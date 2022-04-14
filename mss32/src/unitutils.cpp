@@ -25,10 +25,12 @@
 #include "customattacks.h"
 #include "dynamiccast.h"
 #include "game.h"
+#include "gameutils.h"
 #include "globaldata.h"
 #include "immunecat.h"
 #include "log.h"
 #include "midgardid.h"
+#include "midstack.h"
 #include "midunit.h"
 #include "settings.h"
 #include "ummodifier.h"
@@ -294,7 +296,8 @@ bool isStackLeaderAndAllowedToUseBattleItems(const game::IMidgardObjectMap* obje
     if (unit->transformed)
         return false;
 
-    return fn.castUnitImplToStackLeader(unit->unitImpl) != nullptr;
+    auto stack = getStack(objectMap, battleMsgData, unitId);
+    return stack && stack->leaderId == *unitId;
 }
 
 } // namespace hooks
