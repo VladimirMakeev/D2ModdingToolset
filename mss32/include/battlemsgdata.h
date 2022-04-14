@@ -139,8 +139,9 @@ union UnitFlags
     {
         std::uint8_t indexInGroup : 3;
         bool attacker : 1;
-        std::uint8_t flag4 : 1;
-        std::uint8_t unknown : 1;
+        std::uint8_t waited : 1;
+        /** Performed first attack while attacking twice. */
+        std::uint8_t attackedOnceOfTwice : 1;
         bool revived : 1;
         /**
          * Indicates that unit waited and then started retreating.
