@@ -57,6 +57,31 @@ struct TreeIterator
     Node* node2;
 };
 
+using TreeT = Tree<void, void, void*>;
+using TreeIt = TreeIterator<void, void>;
+
+namespace TreeApi {
+
+struct Api
+{
+    using GetIterator = TreeIt*(__thiscall*)(const TreeT* thisptr, TreeIt* value);
+    GetIterator begin;
+    GetIterator end;
+
+    using Dereference = void*(__thiscall*)(const TreeIt* thisptr);
+    Dereference deref;
+
+    using Equals = bool(__thiscall*)(const TreeIt* thisptr, const TreeIt* value);
+    Equals equals;
+
+    using Preincrement = TreeIt*(__thiscall*)(TreeIt* thisptr);
+    Preincrement preinc;
+};
+
+Api& get();
+
+} // namespace TreeApi
+
 } // namespace game
 
 #endif // D2TREE_H

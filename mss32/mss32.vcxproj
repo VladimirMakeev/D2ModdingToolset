@@ -225,6 +225,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\customattackhooks.cpp" />
     <ClCompile Include="src\customattacks.cpp" />
     <ClCompile Include="src\customattackutils.cpp" />
+    <ClCompile Include="src\d2tree.cpp" />
     <ClCompile Include="src\d2osexception.cpp" />
     <ClCompile Include="src\d2string.cpp" />
     <ClCompile Include="src\dbfaccess.cpp" />
