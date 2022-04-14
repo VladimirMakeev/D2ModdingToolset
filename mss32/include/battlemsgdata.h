@@ -35,6 +35,7 @@ struct LAttackSource;
 struct LAttackClass;
 struct LAttackReach;
 struct CMidUnitGroup;
+struct String;
 
 /** Unit statuses in battle. */
 enum class BattleStatus : int
@@ -554,7 +555,9 @@ struct Api
                                                              const CMidgardID* itemId);
     GetLeaderEquippedBattleItemIndex getLeaderEquippedBattleItemIndex;
 
-    using GetUnitInfos = void(__thiscall*)(BattleMsgData* thisptr, UnitInfoList* value, bool a3);
+    using GetUnitInfos = void(__thiscall*)(const BattleMsgData* thisptr,
+                                           UnitInfoList* value,
+                                           bool a3);
     GetUnitInfos getUnitInfos;
 
     /**
@@ -632,6 +635,13 @@ struct Api
     using RemoveFiniteBoostLowerDamage = void(__stdcall*)(BattleMsgData* battleMsgData,
                                                           const CMidgardID* unitId);
     RemoveFiniteBoostLowerDamage removeFiniteBoostLowerDamage;
+
+    /** Creates a formatted description of unit's big face during battle. */
+    using GenerateBigFaceDescription = String*(__stdcall*)(String* value,
+                                                           const IMidgardObjectMap* objectMap,
+                                                           const CMidgardID* unitId,
+                                                           const BattleMsgData* battleMsgData);
+    GenerateBigFaceDescription generateBigFaceDescription;
 };
 
 Api& get();
