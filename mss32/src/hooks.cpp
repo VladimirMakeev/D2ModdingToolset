@@ -289,6 +289,7 @@ static Hooks getGameHooks()
         // TODO: Fix missing battle items on transformed leaders
         {BattleViewerInterfApi::get().updateBattleItems, battleViewerInterfUpdateBattleItemsHooked},
         {BatBigFaceApi::get().update, batBigFaceUpdateHooked},
+        {battle.updateBattleActions, updateBattleActionsHooked},
     };
     // clang-format on
 

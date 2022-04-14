@@ -18,9 +18,13 @@
  */
 
 #include "battlemsgdatahooks.h"
+#include "batattack.h"
+#include "gameutils.h"
 #include "log.h"
+#include "midstack.h"
 #include "modifierutils.h"
 #include "originalfunctions.h"
+#include "unitutils.h"
 #include <atomic>
 #include <fmt/format.h>
 
@@ -190,6 +194,181 @@ void __fastcall removeUnitInfoHooked(game::BattleMsgData* thisptr,
 
     while (battle.decreaseUnitAttacks(thisptr, unitId))
         ;
+}
+
+void updateDefendBattleAction(const game::UnitInfo* unitInfo,
+                              game::Set<game::BattleAction>* actions)
+{
+    using namespace game;
+
+    const auto& targetsListApi = TargetsListApi::get();
+
+    if (unitInfo->unitFlags.parts.attackedOnceOfTwice)
+        return;
+
+    BattleAction defend = BattleAction::Defend;
+    Pair<TargetsListIterator, bool> tmp{};
+    targetsListApi.insert((TargetsList*)actions, &tmp, (int*)&defend);
+}
+
+void updateWaitBattleAction(const game::BattleMsgData* battleMsgData,
+                            const game::UnitInfo* unitInfo,
+                            game::Set<game::BattleAction>* actions)
+{
+    using namespace game;
+
+    const auto& targetsListApi = TargetsListApi::get();
+
+    if (battleMsgData->currentRound < 1)
+        return;
+
+    if (unitInfo->unitFlags.parts.waited || unitInfo->unitFlags.parts.attackedOnceOfTwice)
+        return;
+
+    BattleAction wait = BattleAction::Wait;
+    Pair<TargetsListIterator, bool> tmp{};
+    targetsListApi.insert((TargetsList*)actions, &tmp, (int*)&wait);
+}
+
+void updateUseItemBattleAction(const game::IMidgardObjectMap* objectMap,
+                               const game::BattleMsgData* battleMsgData,
+                               const game::UnitInfo* unitInfo,
+                               game::Set<game::BattleAction>* actions,
+                               game::GroupIdTargetsPair* item1Targets,
+                               game::GroupIdTargetsPair* item2Targets)
+{
+    using namespace game;
+
+    const auto& idApi = CMidgardIDApi::get();
+    const auto& battleApi = BattleMsgDataApi::get();
+    const auto& targetsListApi = TargetsListApi::get();
+
+    if (battleMsgData->currentRound < 1)
+        return;
+
+    auto groupId = unitInfo->unitFlags.parts.attacker ? &battleMsgData->attackerGroupId
+                                                      : &battleMsgData->defenderGroupId;
+    if (idApi.getType(groupId) != IdType::Stack)
+        return;
+
+    if (!isStackLeaderAndAllowedToUseBattleItems(objectMap, &unitInfo->unitId1, battleMsgData))
+        return;
+
+    auto stack = getStack(objectMap, groupId);
+
+    GroupIdTargetsPair* itemTargets[] = {item1Targets, item2Targets};
+    for (int i = 0; i < 2; ++i) {
+        // Battle items are at indices 2 and 3
+        auto itemId = stack->leaderEquppedItems.bgn[i + 2];
+        if (itemId == emptyId)
+            continue;
+
+        auto& inventory = stack->inventory;
+        if (inventory.vftable->getItemIndex(&inventory, &itemId) == -1)
+            continue;
+
+        for (auto usedItemId : battleMsgData->usedItemIds) {
+            if (usedItemId == itemId)
+                continue;
+        }
+
+        battleApi.getItemAttackTargets(objectMap, battleMsgData, &unitInfo->unitId1, &itemId,
+                                       itemTargets[i]);
+    }
+
+    for (auto targets : itemTargets) {
+        if (targets->second.length > 0) {
+            BattleAction useItem = BattleAction::UseItem;
+            Pair<TargetsListIterator, bool> tmp{};
+            targetsListApi.insert((TargetsList*)actions, &tmp, (int*)&useItem);
+            break;
+        }
+    }
+}
+
+void updateRetreatBattleAction(const game::IMidgardObjectMap* objectMap,
+                               const game::BattleMsgData* battleMsgData,
+                               const game::UnitInfo* unitInfo,
+                               game::Set<game::BattleAction>* actions)
+{
+    using namespace game;
+
+    const auto& idApi = CMidgardIDApi::get();
+    const auto& battleApi = BattleMsgDataApi::get();
+    const auto& targetsListApi = TargetsListApi::get();
+
+    if (battleMsgData->currentRound < 1)
+        return;
+
+    if (unitInfo->unitFlags.parts.attackedOnceOfTwice)
+        return;
+
+    auto groupId = unitInfo->unitFlags.parts.attacker ? &battleMsgData->attackerGroupId
+                                                      : &battleMsgData->defenderGroupId;
+    if (idApi.getType(groupId) != IdType::Stack)
+        return;
+
+    if (!unitInfo->unitFlags.parts.attacker) {
+        auto stack = getStack(objectMap, groupId);
+        if (stack && stack->insideId != emptyId)
+            return;
+    }
+
+    BattleAction retreat = BattleAction::Retreat;
+    Pair<TargetsListIterator, bool> tmp{};
+    targetsListApi.insert((TargetsList*)actions, &tmp, (int*)&retreat);
+}
+
+void updateAttackBattleAction(const game::IMidgardObjectMap* objectMap,
+                              const game::BattleMsgData* battleMsgData,
+                              const game::UnitInfo* unitInfo,
+                              game::Set<game::BattleAction>* actions,
+                              game::GroupIdTargetsPair* attackTargets)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& targetsListApi = TargetsListApi::get();
+
+    const auto attack = fn.getAttackById(objectMap, &unitInfo->unitId1, 1, false);
+    const auto attackClass = attack->vftable->getAttackClass(attack);
+    const auto batAttack = fn.createBatAttack(objectMap, battleMsgData, &unitInfo->unitId1,
+                                              &unitInfo->unitId1, 1, attackClass, false);
+    batAttack->vftable->getTargetGroupId(batAttack, &attackTargets->first, battleMsgData);
+    batAttack->vftable->fillTargetsList(batAttack, objectMap, battleMsgData,
+                                        &attackTargets->second);
+    batAttack->vftable->destructor(batAttack, true);
+
+    if (attackTargets->second.length > 0) {
+        BattleAction attack = BattleAction::Attack;
+        Pair<TargetsListIterator, bool> tmp{};
+        targetsListApi.insert((TargetsList*)actions, &tmp, (int*)&attack);
+    }
+}
+
+void __stdcall updateBattleActionsHooked(const game::IMidgardObjectMap* objectMap,
+                                         const game::BattleMsgData* battleMsgData,
+                                         const game::CMidgardID* unitId,
+                                         game::Set<game::BattleAction>* actions,
+                                         game::GroupIdTargetsPair* attackTargets,
+                                         game::GroupIdTargetsPair* item1Targets,
+                                         game::GroupIdTargetsPair* item2Targets)
+{
+    using namespace game;
+
+    const auto& battleApi = BattleMsgDataApi::get();
+    const auto& targetsListApi = TargetsListApi::get();
+
+    targetsListApi.clear((TargetsList*)actions);
+
+    auto unitInfo = battleApi.getUnitInfoById(battleMsgData, unitId);
+
+    updateDefendBattleAction(unitInfo, actions);
+    updateWaitBattleAction(battleMsgData, unitInfo, actions);
+    updateUseItemBattleAction(objectMap, battleMsgData, unitInfo, actions, item1Targets,
+                              item2Targets);
+    updateRetreatBattleAction(objectMap, battleMsgData, unitInfo, actions);
+    updateAttackBattleAction(objectMap, battleMsgData, unitInfo, actions, attackTargets);
 }
 
 } // namespace hooks

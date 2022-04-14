@@ -20,9 +20,18 @@
 #ifndef BATTLEMSGDATAHOOKS_H
 #define BATTLEMSGDATAHOOKS_H
 
+#include "d2pair.h"
+#include "d2set.h"
+
 namespace game {
 struct CMidgardID;
 struct BattleMsgData;
+struct IMidgardObjectMap;
+
+using TargetsList = Set<int>;
+using GroupIdTargetsPair = Pair<CMidgardID, TargetsList>;
+
+enum class BattleAction : int;
 } // namespace game
 
 namespace hooks {
@@ -46,6 +55,14 @@ void __fastcall battleMsgDataDtorHooked(game::BattleMsgData* thisptr, int /*%edx
 void __fastcall removeUnitInfoHooked(game::BattleMsgData* thisptr,
                                      int /*%edx*/,
                                      const game::CMidgardID* unitId);
+
+void __stdcall updateBattleActionsHooked(const game::IMidgardObjectMap* objectMap,
+                                         const game::BattleMsgData* battleMsgData,
+                                         const game::CMidgardID* unitId,
+                                         game::Set<game::BattleAction>* actions,
+                                         game::GroupIdTargetsPair* attackTargets,
+                                         game::GroupIdTargetsPair* item1Targets,
+                                         game::GroupIdTargetsPair* item2Targets);
 
 } // namespace hooks
 
