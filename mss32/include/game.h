@@ -583,6 +583,11 @@ using CheckUnitForHire = bool(__stdcall*)(const CMidPlayer* player,
                                           CPhaseGame* phaseGame,
                                           const CMidgardID* unitImplId);
 
+using GetBaseUnitImplId = CMidgardID*(__stdcall*)(CMidgardID* value,
+                                                  const IMidgardObjectMap* objectMap,
+                                                  const CMidgardID* unitId,
+                                                  bool original);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -685,6 +690,7 @@ struct Functions
     BuildLordSpecificBuildings buildLordSpecificBuildings;
     AddCapitalBuilding addCapitalBuilding;
     CastUnitImplToLeader castUnitImplToLeader;
+    GetBaseUnitImplId getBaseUnitImplId;
 };
 
 /** Global variables used in game. */

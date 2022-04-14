@@ -65,7 +65,7 @@ struct IUsSoldierVftable : public IUsUnitExtensionVftable
     using GetArmor = int*(__thiscall*)(const IUsSoldier* thisptr, int* armor);
     GetArmor getArmor;
 
-    GetId getBaseUnitId;
+    GetId getBaseUnitImplId;
 
     using GetDeathAnim = const LDeathAnimCategory*(__thiscall*)(const IUsSoldier* thisptr);
     GetDeathAnim getDeathAnim;

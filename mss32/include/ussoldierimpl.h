@@ -44,7 +44,7 @@ struct TUsSoldierImplData
     int level;
     int hitPoints;
     int armor;
-    CMidgardID baseUnitId;
+    CMidgardID baseUnitImplId;
     LDeathAnimCategory deathAnimation;
     int xpNext;
     int xpKilled;
