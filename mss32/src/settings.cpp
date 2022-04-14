@@ -161,6 +161,10 @@ static void readSettings(const sol::table& table, Settings& settings)
     settings.freeTransformSelfAttackInfinite = readSetting(table, "freeTransformSelfAttackInfinite", defaultSettings().freeTransformSelfAttackInfinite);
     settings.detailedAttackDescription = readSetting(table, "detailedAttackDescription", defaultSettings().detailedAttackDescription);
     settings.fixEffectiveHpFormula = readSetting(table, "fixEffectiveHpFormula", defaultSettings().fixEffectiveHpFormula);
+    settings.allowBattleItemsIfTransformedByEnemy = readSetting(table, "allowBattleItemsIfTransformedByEnemy", defaultSettings().allowBattleItemsIfTransformedByEnemy);
+    settings.allowBattleItemsIfTransformedByAlly = readSetting(table, "allowBattleItemsIfTransformedByAlly", defaultSettings().allowBattleItemsIfTransformedByAlly);
+    settings.allowBattleItemsIfLevelDrained = readSetting(table, "allowBattleItemsIfLevelDrained", defaultSettings().allowBattleItemsIfLevelDrained);
+    settings.allowBattleItemsIfDoppelganger = readSetting(table, "allowBattleItemsIfDoppelganger", defaultSettings().allowBattleItemsIfDoppelganger);
     settings.debugMode = readSetting(table, "debugHooks", defaultSettings().debugMode);
     // clang-format on
 
@@ -213,6 +217,10 @@ const Settings& baseSettings()
         settings.freeTransformSelfAttackInfinite = false;
         settings.detailedAttackDescription = false;
         settings.fixEffectiveHpFormula = false;
+        settings.allowBattleItemsIfTransformedByEnemy = false;
+        settings.allowBattleItemsIfTransformedByAlly = false;
+        settings.allowBattleItemsIfLevelDrained = false;
+        settings.allowBattleItemsIfDoppelganger = false;
         settings.movementCost.textColor = Color{200, 200, 200};
         settings.movementCost.show = false;
         settings.debugMode = false;

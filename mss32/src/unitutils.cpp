@@ -286,18 +286,22 @@ bool isStackLeaderAndAllowedToUseBattleItems(const game::IMidgardObjectMap* obje
 {
     using namespace game;
 
-    const auto& fn = gameFunctions();
-
-    auto unit = fn.findUnitById(objectMap, unitId);
-    if (!unit)
-        return false;
-
-    // TODO: Fix missing battle items on transformed leaders
-    if (unit->transformed)
-        return false;
+    const auto& battleApi = BattleMsgDataApi::get();
 
     auto stack = getStack(objectMap, battleMsgData, unitId);
-    return stack && stack->leaderId == *unitId;
+    if (!stack || stack->leaderId != *unitId)
+        return false;
+
+    if (battleApi.getUnitStatus(battleMsgData, unitId, BattleStatus::Transform))
+        return userSettings().allowBattleItemsIfTransformedByEnemy;
+    else if (battleApi.getUnitStatus(battleMsgData, unitId, BattleStatus::TransformSelf))
+        return userSettings().allowBattleItemsIfTransformedByAlly;
+    else if (battleApi.getUnitStatus(battleMsgData, unitId, BattleStatus::TransformDrainLevel))
+        return userSettings().allowBattleItemsIfLevelDrained;
+    else if (battleApi.getUnitStatus(battleMsgData, unitId, BattleStatus::TransformDoppelganger))
+        return userSettings().allowBattleItemsIfDoppelganger;
+
+    return true;
 }
 
 } // namespace hooks

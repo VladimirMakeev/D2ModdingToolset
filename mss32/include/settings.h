@@ -78,6 +78,10 @@ struct Settings
     bool freeTransformSelfAttackInfinite;
     bool detailedAttackDescription;
     bool fixEffectiveHpFormula;
+    bool allowBattleItemsIfTransformedByEnemy;
+    bool allowBattleItemsIfTransformedByAlly;
+    bool allowBattleItemsIfLevelDrained;
+    bool allowBattleItemsIfDoppelganger;
 
     struct MovementCost
     {

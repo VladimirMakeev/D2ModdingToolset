@@ -134,6 +134,13 @@ settings = {
 	-- Fixed formula: hp / (1 - (armor / 100))
 	fixEffectiveHpFormula = true,
 
+	-- Fix leader transformation (doppelganger, drain-level, transform-self/other attacks)
+	-- to allow usage of battle items (potions, orbs and talismans)
+	allowBattleItemsIfTransformedByEnemy = false,
+	allowBattleItemsIfTransformedByAlly = false,
+	allowBattleItemsIfLevelDrained = false,
+	allowBattleItemsIfDoppelganger = false,
+
 	-- Create mss32 proxy dll log files with debug info
 	debugHooks = false,
 }

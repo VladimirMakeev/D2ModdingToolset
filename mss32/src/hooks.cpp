@@ -286,7 +286,8 @@ static Hooks getGameHooks()
         // Allow scenarios with prebuilt buildings in capitals
         // Start with prebuilt temple in capital for warrior lord depending on user setting
         {fn.buildLordSpecificBuildings, buildLordSpecificBuildingsHooked},
-        // TODO: Fix missing battle items on transformed leaders
+        // Fix leader transformation (doppelganger, drain-level, transform-self/other attacks)
+        // to allow usage of battle items (potions, orbs and talismans)
         {BattleViewerInterfApi::get().updateBattleItems, battleViewerInterfUpdateBattleItemsHooked},
         {BatBigFaceApi::get().update, batBigFaceUpdateHooked},
         {battle.updateBattleActions, updateBattleActionsHooked},
