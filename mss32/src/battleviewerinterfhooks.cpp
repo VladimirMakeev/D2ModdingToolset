@@ -27,10 +27,14 @@
 #include "button.h"
 #include "customattacks.h"
 #include "customattackutils.h"
+#include "d2string.h"
 #include "dialoginterf.h"
 #include "functor.h"
 #include "game.h"
+#include "mempool.h"
 #include "middragdropinterf.h"
+#include "midgardobjectmap.h"
+#include "miditem.h"
 #include "midunitgroup.h"
 #include "musicfader.h"
 #include "togglebutton.h"
@@ -692,6 +696,174 @@ void __fastcall battleViewerInterfUpdateBattleItemsHooked(game::CBattleViewerInt
 
     if (canUseItem)
         viewerApi.unknownMethod12(thisptr);
+}
+
+void batBigFaceCleanUnitData(game::CBatBigFace* thisptr, const game::UnitInfoList& unitInfos)
+{
+    using namespace game;
+
+    const auto& idApi = CMidgardIDApi::get();
+    const auto& treeApi = TreeApi::get();
+    const auto& battleApi = BattleMsgDataApi::get();
+    const auto& bigFaceApi = BatBigFaceApi::get();
+
+    MapIterator<CMidgardID, CBatBigFaceUnitData> it, end;
+    treeApi.end((TreeT*)&thisptr->data->unitData, (TreeIt*)&end);
+    for (treeApi.begin((TreeT*)&thisptr->data->unitData, (TreeIt*)&it);
+         !treeApi.equals((TreeIt*)&it, (TreeIt*)&end); treeApi.preinc((TreeIt*)&it)) {
+
+        auto oldUnitId = ((Pair<CMidgardID, CBatBigFaceUnitData>*)treeApi.deref((TreeIt*)&it))
+                             ->first;
+
+        bool unitFound = false;
+        for (auto node = unitInfos.head->next; node != unitInfos.head; node = node->next) {
+            CMidgardID unitId;
+            idApi.validateId(&unitId, node->data.unitId1);
+
+            if (battleApi.getUnitStatus(&thisptr->data->battleMsgData, &unitId,
+                                        BattleStatus::Unsummoned)
+                || battleApi.getUnitStatus(&thisptr->data->battleMsgData, &unitId,
+                                           BattleStatus::Retreated)
+                || battleApi.getUnitStatus(&thisptr->data->battleMsgData, &unitId,
+                                           BattleStatus::Hidden)) {
+                continue;
+            }
+
+            if (unitId == oldUnitId) {
+                unitFound = true;
+                break;
+            }
+        }
+
+        if (!unitFound) {
+            if (thisptr->data->unitId == oldUnitId)
+                thisptr->data->unitId = emptyId;
+            bigFaceApi.unitDataMapErase(&thisptr->data->unitData, it);
+        }
+    }
+}
+
+void batBigFaceUpdateUnitImplData(game::CBatBigFace* thisptr, game::CBatBigFaceUnitData* unitData)
+{
+    using namespace game;
+
+    const auto& bigFaceApi = BatBigFaceApi::get();
+    const auto& smartPtrApi = SmartPointerApi::get();
+    const auto& imagesLoaderApi = BatImagesLoaderApi::get();
+
+    auto unitImplData = bigFaceApi.unitImplDataMapAccess(&thisptr->data->unitImplData,
+                                                         &unitData->unitImplId);
+
+    if (unitImplData->faceImage.data == nullptr) {
+        auto faceImage = imagesLoaderApi.loadUnitFaceImage(thisptr->data->imagesLoader,
+                                                           &unitData->unitImplId,
+                                                           !thisptr->data->flippedBattle, true);
+        smartPtrApi.createOrFree((SmartPointer*)&unitImplData->faceImage, faceImage);
+    }
+}
+
+void batBigFaceUpdateItemData(game::CBatBigFace* thisptr,
+                              game::CBatBigFaceUnitData* unitData,
+                              const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& battleApi = BattleMsgDataApi::get();
+    const auto& bigFaceApi = BatBigFaceApi::get();
+    const auto& smartPtrApi = SmartPointerApi::get();
+    const auto& imagesLoaderApi = BatImagesLoaderApi::get();
+
+    unitData->showItems = isStackLeaderAndAllowedToUseBattleItems(thisptr->data->objectMap, unitId,
+                                                                  &thisptr->data->battleMsgData);
+    if (!unitData->showItems) {
+        for (auto& itemId : unitData->itemIds) {
+            itemId = emptyId;
+        }
+        return;
+    }
+
+    battleApi.getLeaderEquippedBattleItemIds(thisptr->data->objectMap, unitId,
+                                             &thisptr->data->battleMsgData, unitData->itemIds);
+    for (const auto& itemId : unitData->itemIds) {
+        if (itemId == emptyId)
+            continue;
+
+        auto item = static_cast<CMidItem*>(
+            thisptr->data->objectMap->vftable->findScenarioObjectById(thisptr->data->objectMap,
+                                                                      &itemId));
+
+        auto itemImage = imagesLoaderApi.loadItemImage(thisptr->data->imagesLoader,
+                                                       &item->globalItemId,
+                                                       thisptr->data->flippedBattle);
+
+        auto itemData = bigFaceApi.itemDataMapAccess(&thisptr->data->itemData, &itemId);
+        smartPtrApi.createOrFree((SmartPointer*)&itemData->itemImage, itemImage);
+    }
+}
+
+void batBigFaceUpdateUnitData(game::CBatBigFace* thisptr, const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& battleApi = BattleMsgDataApi::get();
+    const auto& bigFaceApi = BatBigFaceApi::get();
+    const auto& image2TextApi = CImage2TextApi::get();
+    const auto& stringApi = StringApi::get();
+    const auto& smartPtrApi = SmartPointerApi::get();
+
+    auto unitData = bigFaceApi.unitDataMapAccess(&thisptr->data->unitData, unitId);
+
+    if (unitData->textImage.data == nullptr) {
+        auto textImage = (CImage2Text*)Memory::get().allocate(sizeof(CImage2Text));
+        const auto& textArea = thisptr->data->bigFaceTextArea;
+        image2TextApi.constructor(textImage, textArea.p2.x - textArea.p1.x,
+                                  textArea.p2.y - textArea.p1.y);
+        smartPtrApi.createOrFree((SmartPointer*)&unitData->textImage, textImage);
+    }
+
+    String description{};
+    battleApi.generateBigFaceDescription(&description, thisptr->data->objectMap, unitId,
+                                         &thisptr->data->battleMsgData);
+
+    const auto desc = stringApi.cStr(&description);
+    if (strcmp(desc, stringApi.cStr(&unitData->textImage.data->text)) != 0)
+        image2TextApi.setText(unitData->textImage.data, desc);
+    stringApi.free(&description);
+
+    fn.getBaseUnitImplId(&unitData->unitImplId, thisptr->data->objectMap, unitId, false);
+
+    batBigFaceUpdateUnitImplData(thisptr, unitData);
+
+    batBigFaceUpdateItemData(thisptr, unitData, unitId);
+}
+
+void __fastcall batBigFaceUpdateHooked(game::CBatBigFace* thisptr,
+                                       int /*%edx*/,
+                                       const game::BattleMsgData* battleMsgData)
+{
+    using namespace game;
+
+    const auto& idApi = CMidgardIDApi::get();
+    const auto& battleApi = BattleMsgDataApi::get();
+    const auto& unitInfoListApi = UnitInfoListApi::get();
+
+    battleApi.copyAssignment(&thisptr->data->battleMsgData, battleMsgData);
+
+    UnitInfoList unitInfos{};
+    unitInfoListApi.constructor(&unitInfos);
+    battleApi.getUnitInfos(battleMsgData, &unitInfos, true);
+
+    batBigFaceCleanUnitData(thisptr, unitInfos);
+
+    for (auto node = unitInfos.head->next; node != unitInfos.head; node = node->next) {
+        CMidgardID unitId;
+        idApi.validateId(&unitId, node->data.unitId1);
+
+        batBigFaceUpdateUnitData(thisptr, &unitId);
+    }
+
+    unitInfoListApi.destructor(&unitInfos);
 }
 
 } // namespace hooks

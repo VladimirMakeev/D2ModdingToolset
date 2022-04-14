@@ -29,6 +29,7 @@ struct IBatViewer;
 struct BattleMsgData;
 struct CMidgardID;
 struct BatViewerTargetDataSet;
+struct CBatBigFace;
 
 enum class BattleAction : int;
 } // namespace game
@@ -50,6 +51,10 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
 void __fastcall battleViewerInterfUpdateBattleItemsHooked(game::CBattleViewerInterf* thisptr,
                                                           int /*%edx*/,
                                                           bool canUseItem);
+
+void __fastcall batBigFaceUpdateHooked(game::CBatBigFace* thisptr,
+                                       int /*%edx*/,
+                                       const game::BattleMsgData* battleMsgData);
 
 } // namespace hooks
 

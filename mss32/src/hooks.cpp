@@ -33,6 +33,7 @@
 #include "batattacktransformother.h"
 #include "batattacktransformself.h"
 #include "batattackuntransformeffect.h"
+#include "batbigface.h"
 #include "battleattackinfo.h"
 #include "battlemsgdatahooks.h"
 #include "battleviewerinterf.h"
@@ -287,6 +288,7 @@ static Hooks getGameHooks()
         {fn.buildLordSpecificBuildings, buildLordSpecificBuildingsHooked},
         // TODO: Fix missing battle items on transformed leaders
         {BattleViewerInterfApi::get().updateBattleItems, battleViewerInterfUpdateBattleItemsHooked},
+        {BatBigFaceApi::get().update, batBigFaceUpdateHooked},
     };
     // clang-format on
 
