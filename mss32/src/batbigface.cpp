@@ -29,16 +29,31 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::SetUnitId)0x650809,
         (Api::SetUnknown)0x651124,
+        (Api::Update)0x650884,
+        (Api::UnitDataMapErase)0x651520,
+        (Api::UnitDataMapAccess)0x6513e0,
+        (Api::UnitImplDataMapAccess)0x651680,
+        (Api::ItemDataMapAccess)0x4ae89b,
     },
     // Russobit
     Api{
         (Api::SetUnitId)0x650809,
         (Api::SetUnknown)0x651124,
+        (Api::Update)0x650884,
+        (Api::UnitDataMapErase)0x651520,
+        (Api::UnitDataMapAccess)0x6513e0,
+        (Api::UnitImplDataMapAccess)0x651680,
+        (Api::ItemDataMapAccess)0x4ae89b,
     },
     // Gog
     Api{
         (Api::SetUnitId)0x64f149,
         (Api::SetUnknown)0x64fa64,
+        (Api::Update)0x64f1c4,
+        (Api::UnitDataMapErase)0x64fe60,
+        (Api::UnitDataMapAccess)0x64fd20,
+        (Api::UnitImplDataMapAccess)0x64ff50,
+        (Api::ItemDataMapAccess)0x4adf16,
     },
 }};
 // clang-format on

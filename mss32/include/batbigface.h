@@ -95,6 +95,25 @@ struct Api
 
     using SetUnknown = void(__thiscall*)(CBatBigFace* thisptr, bool a2);
     SetUnknown setUnknown;
+
+    using Update = void(__thiscall*)(CBatBigFace* thisptr, const BattleMsgData* battleMsgData);
+    Update update;
+
+    using UnitDataMapErase = void(__thiscall*)(Map<CMidgardID, CBatBigFaceUnitData>* thisptr,
+                                               MapIterator<CMidgardID, CBatBigFaceUnitData> pos);
+    UnitDataMapErase unitDataMapErase;
+
+    using UnitDataMapAccess = CBatBigFaceUnitData*(
+        __thiscall*)(Map<CMidgardID, CBatBigFaceUnitData>* thisptr, const CMidgardID* key);
+    UnitDataMapAccess unitDataMapAccess;
+
+    using UnitImplDataMapAccess = CBatBigFaceUnitImplData*(
+        __thiscall*)(Map<CMidgardID, CBatBigFaceUnitImplData>* thisptr, const CMidgardID* key);
+    UnitImplDataMapAccess unitImplDataMapAccess;
+
+    using ItemDataMapAccess = CBatBigFaceItemData*(
+        __thiscall*)(Map<CMidgardID, CBatBigFaceItemData>* thisptr, const CMidgardID* key);
+    ItemDataMapAccess itemDataMapAccess;
 };
 
 Api& get();
