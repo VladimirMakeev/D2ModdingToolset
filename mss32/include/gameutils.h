@@ -29,6 +29,7 @@ struct CScenarioInfo;
 struct CMidPlayer;
 struct CMidScenVariables;
 struct CMidgardPlan;
+struct CMidStack;
 } // namespace game
 
 namespace hooks {
@@ -52,6 +53,13 @@ const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
 const game::CMidScenVariables* getScenarioVariables(const game::IMidgardObjectMap* objectMap);
 
 const game::CMidgardPlan* getMidgardPlan(const game::IMidgardObjectMap* objectMap);
+
+game::CMidStack* getStack(const game::IMidgardObjectMap* objectMap,
+                          const game::CMidgardID* stackId);
+
+game::CMidStack* getStack(const game::IMidgardObjectMap* objectMap,
+                          const game::BattleMsgData* battleMsgData,
+                          const game::CMidgardID* unitId);
 
 } // namespace hooks
 

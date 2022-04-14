@@ -131,4 +131,33 @@ const game::CMidgardPlan* getMidgardPlan(const game::IMidgardObjectMap* objectMa
     return static_cast<const game::CMidgardPlan*>(obj);
 }
 
+game::CMidStack* getStack(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* stackId)
+{
+    using namespace game;
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, stackId);
+    if (!obj) {
+        return nullptr;
+    }
+
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+
+    return (CMidStack*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType, rtti.CMidStackType, 0);
+}
+
+game::CMidStack* getStack(const game::IMidgardObjectMap* objectMap,
+                          const game::BattleMsgData* battleMsgData,
+                          const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+    CMidgardID groupId = battle.isUnitAttacker(battleMsgData, unitId)
+                             ? battleMsgData->attackerGroupId
+                             : battleMsgData->defenderGroupId;
+
+    return getStack(objectMap, &groupId);
+}
+
 } // namespace hooks
