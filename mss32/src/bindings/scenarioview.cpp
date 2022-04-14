@@ -140,18 +140,7 @@ std::optional<StackView> ScenarioView::getStack(const std::string& id) const
 
 std::optional<StackView> ScenarioView::getStackById(const IdView& id) const
 {
-    using namespace game;
-
-    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, &id.id);
-    if (!obj) {
-        return std::nullopt;
-    }
-
-    const auto dynamicCast = RttiApi::get().dynamicCast;
-    const auto& rtti = RttiApi::rtti();
-
-    auto stack = (const CMidStack*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType,
-                                               rtti.CMidStackType, 0);
+    auto stack = hooks::getStack(objectMap, &id.id);
     if (!stack) {
         return std::nullopt;
     }
