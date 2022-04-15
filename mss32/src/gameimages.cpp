@@ -37,6 +37,8 @@ static std::array<Api, 4> functions = {{
         (Api::GetRiotImage)0x5b9616,
         (Api::GetCityImageNames)0x5c8252,
         (Api::GetVillageImage)0x5b93e7,
+        (Api::GetCityPreviewLargeImageNames)0x5c66b8,
+        (Api::GetCityIconImageNames)0x5c7046,
     },
     // Russobit
     Api{
@@ -50,6 +52,8 @@ static std::array<Api, 4> functions = {{
         (Api::GetRiotImage)0x5b9616,
         (Api::GetCityImageNames)0x5c8252,
         (Api::GetVillageImage)0x5b93e7,
+        (Api::GetCityPreviewLargeImageNames)0x5c66b8,
+        (Api::GetCityIconImageNames)0x5c7046,
     },
     // Gog
     Api{
@@ -63,6 +67,8 @@ static std::array<Api, 4> functions = {{
         (Api::GetRiotImage)0x5b85b1,
         (Api::GetCityImageNames)0x5c723b,
         (Api::GetVillageImage)0x5b8382,
+        (Api::GetCityPreviewLargeImageNames)0x5c56a1,
+        (Api::GetCityIconImageNames)0x5c602f,
     },
     // Scenario Editor
     Api{
@@ -76,6 +82,8 @@ static std::array<Api, 4> functions = {{
         (Api::GetRiotImage)0x55571e,
         (Api::GetCityImageNames)0x566adb,
         (Api::GetVillageImage)0x5554ef,
+        (Api::GetCityPreviewLargeImageNames)nullptr,
+        (Api::GetCityIconImageNames)nullptr,
     },
 }};
 // clang-format on

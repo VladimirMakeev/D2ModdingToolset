@@ -68,7 +68,7 @@ static_assert(offsetof(CFortification, inventory) == 112,
 
 struct CFortificationVftable : public IMidScenarioObjectVftable
 {
-    using GetCategory = const LFortCategory*(__thiscall*)(CFortification* thisptr);
+    using GetCategory = const LFortCategory*(__thiscall*)(const CFortification* thisptr);
     GetCategory getCategory;
 
     using GetCString = const char*(__thiscall*)(CFortification* thisptr);

@@ -21,6 +21,7 @@
 #define MIDCLIENT_H
 
 #include "d2list.h"
+#include "d2vector.h"
 #include "midclientcore.h"
 #include "midcommandqueue2.h"
 #include "midgardid.h"
@@ -29,15 +30,22 @@
 namespace game {
 
 struct CPhase;
+struct LRaceCategory;
+
+struct TextMessage
+{
+    const LRaceCategory* race;
+    const char* message;
+    int time;
+};
+
+static_assert(sizeof(TextMessage) == 12, "Size of TextMessage structure must be exactly 12 bytes");
 
 struct CMidClientData
 {
     CPhase* phase;
     int unknown2;
-    int unknown3;
-    int unknown4;
-    int unknown5;
-    int unknown6;
+    Vector<TextMessage> messages;
     List<CMidgardID> list;
     List<CMidgardID> list2;
     List<CMidgardID> list3;

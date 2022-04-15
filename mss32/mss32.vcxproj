@@ -573,6 +573,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\difficultylevel.h" />
     <ClInclude Include="include\displayhandlers.h" />
     <ClInclude Include="include\displayhandlershooks.h" />
+    <ClInclude Include="include\displaysettings.h" />
     <ClInclude Include="include\doppelgangerhooks.h" />
     <ClInclude Include="include\draganddropinterf.h" />
     <ClInclude Include="include\drainattackhooks.h" />
@@ -608,6 +609,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\functordispatch1.h" />
     <ClInclude Include="include\functordispatch2.h" />
     <ClInclude Include="include\functordispatch3.h" />
+    <ClInclude Include="include\functordispatch4.h" />
     <ClInclude Include="include\game.h" />
     <ClInclude Include="include\gameimages.h" />
     <ClInclude Include="include\gamesettings.h" />
@@ -731,6 +733,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midgardplan.h" />
     <ClInclude Include="include\midgardscenariomap.h" />
     <ClInclude Include="include\midgardstream.h" />
+    <ClInclude Include="include\midgardstreamenv.h" />
     <ClInclude Include="include\midinventory.h" />
     <ClInclude Include="include\miditem.h" />
     <ClInclude Include="include\midlandmark.h" />
@@ -751,6 +754,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midsite.h" />
     <ClInclude Include="include\midstack.h" />
     <ClInclude Include="include\midstacktemplate.h" />
+    <ClInclude Include="include\midstreamenvfile.h" />
+    <ClInclude Include="include\midstreamfile.h" />
     <ClInclude Include="include\midsubrace.h" />
     <ClInclude Include="include\midtask.h" />
     <ClInclude Include="include\midunit.h" />
@@ -762,6 +767,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\modifgroup.h" />
     <ClInclude Include="include\modifierutils.h" />
     <ClInclude Include="include\mqanimation.h" />
+    <ClInclude Include="include\mqanimator2.h" />
+    <ClInclude Include="include\mqdisplay2.h" />
     <ClInclude Include="include\mqimage2.h" />
     <ClInclude Include="include\mqimage2surface16.h" />
     <ClInclude Include="include\mqnetplayer.h" />
@@ -773,9 +780,12 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mqnetsession.h" />
     <ClInclude Include="include\mqnetsystem.h" />
     <ClInclude Include="include\mqnettraffic.h" />
+    <ClInclude Include="include\mqrasterizer.h" />
     <ClInclude Include="include\mqrect.h" />
+    <ClInclude Include="include\mqrenderer2.h" />
     <ClInclude Include="include\mqstream.h" />
     <ClInclude Include="include\mqtexture.h" />
+    <ClInclude Include="include\mqtexturer2.h" />
     <ClInclude Include="include\mqthread.h" />
     <ClInclude Include="include\mquicontroller.h" />
     <ClInclude Include="include\mquicontrollersimple.h" />
@@ -824,6 +834,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\racetype.h" />
     <ClInclude Include="include\radiobuttoninterf.h" />
     <ClInclude Include="include\registeraccountinterf.h" />
+    <ClInclude Include="include\rendererimpl.h" />
+    <ClInclude Include="include\rendertypes.h" />
     <ClInclude Include="include\resetstackext.h" />
     <ClInclude Include="include\restrictions.h" />
     <ClInclude Include="include\roomclientjoin.h" />
@@ -847,12 +859,14 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\spellcat.h" />
     <ClInclude Include="include\spinbuttoninterf.h" />
     <ClInclude Include="include\stackbattleactionmsg.h" />
+    <ClInclude Include="include\stdfileimpl.h" />
     <ClInclude Include="include\strategicspell.h" />
     <ClInclude Include="include\stringandid.h" />
     <ClInclude Include="include\stringarray.h" />
     <ClInclude Include="include\stringintlist.h" />
     <ClInclude Include="include\subracecat.h" />
     <ClInclude Include="include\summonhooks.h" />
+    <ClInclude Include="include\surfacedecompressdata.h" />
     <ClInclude Include="include\targetslist.h" />
     <ClInclude Include="include\targetslistutils.h" />
     <ClInclude Include="include\task.h" />
@@ -871,6 +885,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\textandid.h" />
     <ClInclude Include="include\textboxinterf.h" />
     <ClInclude Include="include\textids.h" />
+    <ClInclude Include="include\texturehandle.h" />
     <ClInclude Include="include\tileindices.h" />
     <ClInclude Include="include\tilevariation.h" />
     <ClInclude Include="include\togglebutton.h" />
@@ -913,6 +928,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\utils.h" />
     <ClInclude Include="include\version.h" />
     <ClInclude Include="include\visitors.h" />
+    <ClInclude Include="include\widgetinterf.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

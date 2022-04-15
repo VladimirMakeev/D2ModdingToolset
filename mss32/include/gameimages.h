@@ -28,6 +28,8 @@ namespace game {
 struct CLogFile;
 struct IMqImage2;
 struct LRaceCategory;
+struct CMidgardID;
+struct IMidgardObjectMap;
 
 /** Stores game images information read from .ff files. */
 struct GameImages
@@ -71,7 +73,7 @@ struct Api
     using GetGameImages = GameImagesPtr*(__stdcall*)(GameImagesPtr* images);
     GetGameImages getGameImages;
 
-    using GetImage = IMqImage2*(__stdcall*)(void* storage,
+    using GetImage = IMqImage2*(__stdcall*)(const void* storage,
                                             const char* imageName,
                                             int a3,
                                             bool randomStartingFrame,
@@ -82,8 +84,11 @@ struct Api
     CreateOrFreeGameImages createOrFreeGameImages;
 
     /** Searches storage for specific image names and stores them in list. */
-    using GetImageNames = void(
-        __stdcall*)(List<String>* imageNames, void* storage, const char* imageName, int a4, int a5);
+    using GetImageNames = void(__stdcall*)(List<String>* imageNames,
+                                           const void* storage,
+                                           const char* imageName,
+                                           int a4,
+                                           int a5);
     GetImageNames getImageNames;
 
     /** Returns race logo image name(s) for specified race category. */
@@ -116,6 +121,26 @@ struct Api
     /** Returns village image depending on tier, shadow and animation settings. */
     using GetVillageImage = IMqImage2*(__stdcall*)(char villageTier, bool animatedIso, bool shadow);
     GetVillageImage getVillageImage;
+
+    /**
+     * Returns city lagre preview image names.
+     * Large preview images are used in CCityStackInterf.
+     */
+    using GetCityPreviewLargeImageNames = void(__stdcall*)(List<String>* imageNames,
+                                                           const void* cityFF,
+                                                           const LRaceCategory* race,
+                                                           int cityTier);
+    GetCityPreviewLargeImageNames getCityPreviewLargeImageNames;
+
+    /**
+     * Returns city icon image names.
+     * City icon images are shown in CStratInterf when selecting a city.
+     */
+    using GetCityIconImageNames = void(__stdcall*)(List<String>* imageNames,
+                                                   const void* iconsFF,
+                                                   const CMidgardID* fortificationId,
+                                                   const IMidgardObjectMap* objectMap);
+    GetCityIconImageNames getCityIconImageNames;
 };
 
 Api& get();

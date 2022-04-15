@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2022 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MQIMAGE2SURFACE16_H
-#define MQIMAGE2SURFACE16_H
-
-#include "mqimage2.h"
-#include "mqtexture.h"
-#include "smartptr.h"
-#include "texturehandle.h"
-#include <cstddef>
+#ifndef DISPLAYSETTINGS_H
+#define DISPLAYSETTINGS_H
 
 namespace game {
 
-struct CMqPresentationManager;
-
-struct CMqImage2Surface16
-    : public IMqImage2
-    , public IMqTexture
+struct DisplaySettings
 {
-    SmartPtr<CMqPresentationManager> presentationMgr;
-    TextureHandle textureHandle;
-    CMqPoint size;
-    bool dirty;
-    char padding[3];
+    int height;
+    int width;
+    int bitsPerPixel;
 };
 
-static_assert(sizeof(CMqImage2Surface16) == 44,
-              "Size of CMqImage2Surface16 structure must be exactly 44 bytes");
-
-static_assert(offsetof(CMqImage2Surface16, size) == 32,
-              "CMqImage2Surface16::size offset must be 32 bytes");
+static_assert(sizeof(DisplaySettings) == 12,
+              "Size of DisplaySettings structure must be exactly 12 bytes");
 
 } // namespace game
 
-#endif // MQIMAGE2SURFACE16_H
+#endif // DISPLAYSETTINGS_H

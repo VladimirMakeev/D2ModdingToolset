@@ -2444,6 +2444,54 @@
     <ClInclude Include="include\d2map.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\midgardstreamenv.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midstreamenvfile.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midstreamfile.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdfileimpl.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\widgetinterf.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\functordispatch4.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\mqrenderer2.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\mqdisplay2.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\mqtexturer2.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\mqanimator2.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendererimpl.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendertypes.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\mqrasterizer.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\surfacedecompressdata.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\displaysettings.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\texturehandle.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">

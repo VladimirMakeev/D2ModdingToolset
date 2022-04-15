@@ -22,6 +22,7 @@
 
 #include "attack.h"
 #include "attacktypepairvector.h"
+#include "d2string.h"
 #include "idlist.h"
 #include "targetslist.h"
 #include <string>
@@ -29,7 +30,7 @@
 #include <vector>
 
 namespace game {
-struct AutoDialogData;
+struct DialogScriptData;
 struct CMenuNewSkirmishSingle;
 struct CMidDataCache2;
 struct GlobalData;
@@ -57,6 +58,7 @@ struct CMidUnitGroup;
 struct CUnitGenerator;
 struct CMenuPhase;
 struct NetPlayerInfo;
+struct LRaceCategory;
 }; // namespace game
 
 namespace hooks {
@@ -76,10 +78,10 @@ Hooks getVftableHooks();
 void respopupInitHooked(void);
 void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/);
 
-game::AutoDialogData* __fastcall loadScriptFileHooked(game::AutoDialogData* thisptr,
-                                                      int /*%edx*/,
-                                                      const char* filePath,
-                                                      int /*unknown*/);
+game::DialogScriptData* __fastcall loadScriptFileHooked(game::DialogScriptData* thisptr,
+                                                        int /*%edx*/,
+                                                        const char* filePath,
+                                                        int /*unknown*/);
 
 game::CMenuNewSkirmishSingle* __fastcall menuNewSkirmishSingleCtorHooked(
     game::CMenuNewSkirmishSingle* thisptr,
@@ -228,6 +230,16 @@ bool __stdcall shouldAddUnitToHireHooked(const game::CMidPlayer* player,
 bool __stdcall enableUnitInHireListUiHooked(const game::CMidPlayer* player,
                                             game::CPhaseGame* phaseGame,
                                             const game::CMidgardID* unitImplId);
+
+void __stdcall getCityPreviewLargeImageNamesHooked(game::List<game::String>* imageNames,
+                                                   const void* cityFF,
+                                                   const game::LRaceCategory* race,
+                                                   int cityTier);
+
+void __stdcall getCityIconImageNamesHooked(game::List<game::String>* imageNames,
+                                           const void* iconsFF,
+                                           const game::CMidgardID* fortificationId,
+                                           const game::IMidgardObjectMap* objectMap);
 
 } // namespace hooks
 

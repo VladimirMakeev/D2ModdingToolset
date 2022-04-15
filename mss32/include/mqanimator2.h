@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2022 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MQIMAGE2SURFACE16_H
-#define MQIMAGE2SURFACE16_H
-
-#include "mqimage2.h"
-#include "mqtexture.h"
-#include "smartptr.h"
-#include "texturehandle.h"
-#include <cstddef>
+#ifndef MQANIMATOR2_H
+#define MQANIMATOR2_H
 
 namespace game {
 
-struct CMqPresentationManager;
+struct IMqAnimator2Vftable;
+struct IMqAnimation;
 
-struct CMqImage2Surface16
-    : public IMqImage2
-    , public IMqTexture
+struct IMqAnimator2
 {
-    SmartPtr<CMqPresentationManager> presentationMgr;
-    TextureHandle textureHandle;
-    CMqPoint size;
-    bool dirty;
-    char padding[3];
+    IMqAnimator2Vftable* vftable;
 };
 
-static_assert(sizeof(CMqImage2Surface16) == 44,
-              "Size of CMqImage2Surface16 structure must be exactly 44 bytes");
+// Virtual table does not contain destructor
+struct IMqAnimator2Vftable
+{
+    using HandleAnimation = bool(__thiscall*)(IMqAnimator2* thisptr, IMqAnimation* animation);
 
-static_assert(offsetof(CMqImage2Surface16, size) == 32,
-              "CMqImage2Surface16::size offset must be 32 bytes");
+    HandleAnimation addAnimation;
+    HandleAnimation addAnimation2;
+    HandleAnimation removeAnimation;
+    HandleAnimation removeAnimation2;
+};
+
+static_assert(sizeof(IMqAnimator2Vftable) == 4 * sizeof(void*),
+              "IMqAnimator2 vftable must have exactly 4 methods");
 
 } // namespace game
 
-#endif // MQIMAGE2SURFACE16_H
+#endif // MQANIMATOR2_H

@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2022 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MQIMAGE2SURFACE16_H
-#define MQIMAGE2SURFACE16_H
+#ifndef TEXTUREHANDLE_H
+#define TEXTUREHANDLE_H
 
-#include "mqimage2.h"
-#include "mqtexture.h"
-#include "smartptr.h"
-#include "texturehandle.h"
-#include <cstddef>
+#include "mqpoint.h"
 
 namespace game {
 
-struct CMqPresentationManager;
-
-struct CMqImage2Surface16
-    : public IMqImage2
-    , public IMqTexture
+/** Assumption: texture handle. */
+struct TextureHandle
 {
-    SmartPtr<CMqPresentationManager> presentationMgr;
-    TextureHandle textureHandle;
-    CMqPoint size;
-    bool dirty;
-    char padding[3];
+    CMqPoint textureSize;
+    int* indexPtr;
+    int* refCount;
 };
 
-static_assert(sizeof(CMqImage2Surface16) == 44,
-              "Size of CMqImage2Surface16 structure must be exactly 44 bytes");
-
-static_assert(offsetof(CMqImage2Surface16, size) == 32,
-              "CMqImage2Surface16::size offset must be 32 bytes");
+static_assert(sizeof(TextureHandle) == 16,
+              "Size of TextureHandle structure must be exactly 16 bytes");
 
 } // namespace game
 
-#endif // MQIMAGE2SURFACE16_H
+#endif // TEXTUREHANDLE_H

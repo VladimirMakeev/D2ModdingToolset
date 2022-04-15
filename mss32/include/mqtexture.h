@@ -22,10 +22,36 @@
 
 namespace game {
 
+struct IMqTextureVftable;
+struct SurfaceDecompressData;
+
 struct IMqTexture
 {
-    void* vftable;
+    IMqTextureVftable* vftable;
 };
+
+struct IMqTextureVftable
+{
+    using Destructor = void(__thiscall*)(IMqTexture* thisptr, char flags);
+    Destructor destructor;
+
+    /**
+     * Draws texture into decompressed surface memory.
+     * Actual method signature unknown.
+     */
+    using Draw = void(__stdcall*)(IMqTexture* thisptr, SurfaceDecompressData* decompressData);
+    Draw draw;
+
+    /**
+     * Returns true if surface contains changes and needs to be redrawn.
+     * Actual method signature unknown.
+     */
+    using IsDirty = bool(__stdcall*)(const IMqTexture* thisptr);
+    IsDirty isDirty;
+};
+
+static_assert(sizeof(IMqTextureVftable) == 3 * sizeof(void*),
+              "IMqTexture vftable must have exactly 3 methods");
 
 } // namespace game
 

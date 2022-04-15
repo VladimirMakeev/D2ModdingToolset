@@ -32,6 +32,7 @@
 #include "enclayoutspell.h"
 #include "exchangeinterf.h"
 #include "game.h"
+#include "gameimages.h"
 #include "menubase.h"
 #include "menuload.h"
 #include "menunewskirmishmulti.h"
@@ -102,6 +103,9 @@ struct OriginalFunctions
 
     game::CMenuLoadApi::Api::ButtonCallback menuLoadSkirmishMultiLoadScenario;
     game::CMenuLoadApi::Api::CreateHostPlayer menuLoadSkirmishMultiCreateHostPlayer;
+
+    game::GameImagesApi::Api::GetCityPreviewLargeImageNames getCityPreviewLargeImageNames;
+    game::GameImagesApi::Api::GetCityIconImageNames getCityIconImageNames;
 };
 
 OriginalFunctions& getOriginalFunctions();
