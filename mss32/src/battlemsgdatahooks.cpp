@@ -259,7 +259,7 @@ void updateUseItemBattleAction(const game::IMidgardObjectMap* objectMap,
     GroupIdTargetsPair* itemTargets[] = {item1Targets, item2Targets};
     EquippedItemIdx itemIndices[] = {EquippedItemIdx::Battle1, EquippedItemIdx::Battle2};
     for (int i = 0; i < 2; ++i) {
-        auto itemId = stack->leaderEquppedItems.bgn[itemIndices[i]];
+        auto itemId = stack->leaderEquippedItems.bgn[itemIndices[i]];
         if (itemId == emptyId)
             continue;
 
