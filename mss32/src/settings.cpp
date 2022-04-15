@@ -63,6 +63,23 @@ static void readAiAttackPowerSettings(const sol::table& table, Settings::AiAttac
     value.veryHard = readSetting(bonuses.value(), "veryHard", def.veryHard);
 }
 
+static void readAllowBattleItemsSettings(const sol::table& table, Settings::AllowBattleItems& value)
+{
+    const auto& def = defaultSettings().allowBattleItems;
+
+    auto category = table.get<sol::optional<sol::table>>("allowBattleItems");
+    if (!category.has_value()) {
+        value = def;
+        return;
+    }
+
+    value.onTransformOther = readSetting(category.value(), "onTransformOther",
+                                         def.onTransformOther);
+    value.onTransformSelf = readSetting(category.value(), "onTransformSelf", def.onTransformSelf);
+    value.onDrainLevel = readSetting(category.value(), "onDrainLevel", def.onDrainLevel);
+    value.onDoppelganger = readSetting(category.value(), "onDoppelganger", def.onDoppelganger);
+}
+
 static Color readColor(const sol::table& table, const Color& def)
 {
     Color color{};
@@ -165,6 +182,7 @@ static void readSettings(const sol::table& table, Settings& settings)
     // clang-format on
 
     readAiAttackPowerSettings(table, settings.aiAttackPowerBonus);
+    readAllowBattleItemsSettings(table, settings.allowBattleItems);
     readMovementCostSettings(table, settings.movementCost);
     readLobbySettings(table, settings.lobby);
 }
@@ -213,6 +231,10 @@ const Settings& baseSettings()
         settings.freeTransformSelfAttackInfinite = false;
         settings.detailedAttackDescription = false;
         settings.fixEffectiveHpFormula = false;
+        settings.allowBattleItems.onTransformOther = false;
+        settings.allowBattleItems.onTransformSelf = false;
+        settings.allowBattleItems.onDrainLevel = false;
+        settings.allowBattleItems.onDoppelganger = false;
         settings.movementCost.textColor = Color{200, 200, 200};
         settings.movementCost.show = false;
         settings.debugMode = false;

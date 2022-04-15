@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,20 +17,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTANDID_H
-#define TEXTANDID_H
+#include "musicfader.h"
+#include "version.h"
+#include <array>
 
-#include "d2pair.h"
-#include "mq_c_s.h"
+namespace game::CMusicFaderApi {
 
-namespace game {
+// clang-format off
+static std::array<Api, 3> functions = {{
+    // Akella
+    Api{
+        (Api::Get)0x5b065e,
+        (Api::HasEventId)0x5b0c33,
+        (Api::Callback)0x5b0b6d,
+    },
+    // Russobit
+    Api{
+        (Api::Get)0x5b065e,
+        (Api::HasEventId)0x5b0c33,
+        (Api::Callback)0x5b0b6d,
+    },
+    // Gog
+    Api{
+        (Api::Get)0x5af952,
+        (Api::HasEventId)0x5aff27,
+        (Api::Callback)0x5afe61,
+    }
+}};
+// clang-format on
 
-struct TextAndId
+Api& get()
 {
-    mq_c_s<Pair<CMidgardID, char*>>* text;
-    CMidgardID id;
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-} // namespace game
-
-#endif // TEXTANDID_H
+} // namespace game::CMusicFaderApi

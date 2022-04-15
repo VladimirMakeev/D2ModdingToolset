@@ -21,10 +21,10 @@
 #define USSOLDIERIMPL_H
 
 #include "currency.h"
-#include "d2map.h"
 #include "d2pair.h"
 #include "deathanimcat.h"
 #include "midgardid.h"
+#include "mq_c_s.h"
 #include "subracecat.h"
 #include "textandid.h"
 #include "unitbranchcat.h"
@@ -33,8 +33,8 @@
 
 namespace game {
 
-using AttackSourceImmuneMap = Map<Pair<LAttackSource, LImmuneCat>>;
-using AttackClassImmuneMap = Map<Pair<LAttackClass, LImmuneCat>>;
+using AttackSourceImmuneMap = mq_c_s<Pair<LAttackSource, LImmuneCat>>;
+using AttackClassImmuneMap = mq_c_s<Pair<LAttackClass, LImmuneCat>>;
 
 struct TUsSoldierImplData
 {
@@ -44,7 +44,7 @@ struct TUsSoldierImplData
     int level;
     int hitPoints;
     int armor;
-    CMidgardID baseUnitId;
+    CMidgardID baseUnitImplId;
     LDeathAnimCategory deathAnimation;
     int xpNext;
     int xpKilled;

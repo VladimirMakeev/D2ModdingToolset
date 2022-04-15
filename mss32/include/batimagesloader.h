@@ -22,6 +22,7 @@
 
 namespace game {
 
+struct CMidgardID;
 struct CBatImagesLoader;
 struct IMqImage2;
 
@@ -31,6 +32,17 @@ struct Api
 {
     using LoadMarkImage = IMqImage2*(__thiscall*)(CBatImagesLoader* thisptr, bool large);
     LoadMarkImage loadMarkImage;
+
+    using LoadUnitFaceImage = IMqImage2*(__thiscall*)(CBatImagesLoader* thisptr,
+                                                      const CMidgardID* unitImplId,
+                                                      bool left,
+                                                      bool big);
+    LoadUnitFaceImage loadUnitFaceImage;
+
+    using LoadItemImage = IMqImage2*(__thiscall*)(CBatImagesLoader* thisptr,
+                                                  const CMidgardID* globalItemId,
+                                                  bool right);
+    LoadItemImage loadItemImage;
 };
 
 Api& get();

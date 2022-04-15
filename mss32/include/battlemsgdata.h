@@ -35,6 +35,7 @@ struct LAttackSource;
 struct LAttackClass;
 struct LAttackReach;
 struct CMidUnitGroup;
+struct String;
 
 /** Unit statuses in battle. */
 enum class BattleStatus : int
@@ -138,8 +139,9 @@ union UnitFlags
     {
         std::uint8_t indexInGroup : 3;
         bool attacker : 1;
-        std::uint8_t flag4 : 1;
-        std::uint8_t unknown : 1;
+        std::uint8_t waited : 1;
+        /** Performed first attack while attacking twice. */
+        std::uint8_t attackedOnceOfTwice : 1;
         bool revived : 1;
         /**
          * Indicates that unit waited and then started retreating.
@@ -219,6 +221,8 @@ static_assert(offsetof(UnitInfo, modifiedUnits) == 60,
 
 static_assert(offsetof(UnitInfo, shatteredArmor) == 156,
               "UnitInfo::shatteredArmor offset must be 156 bytes");
+
+using GroupIdTargetsPair = Pair<CMidgardID, TargetsList>;
 
 /**
  * Common part of the network messages that is being sent during battle.
@@ -541,13 +545,22 @@ struct Api
                                                 const CMidgardID* targetUnitId);
     GetTargetsToAttack getTargetsToAttack;
 
+    /** Values is a pointer to CMidgardID itemIds[2]. */
+    using GetLeaderEquippedBattleItemIds = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                            const CMidgardID* unitId,
+                                                            const BattleMsgData* battleMsgData,
+                                                            CMidgardID* values);
+    GetLeaderEquippedBattleItemIds getLeaderEquippedBattleItemIds;
+
     using GetLeaderEquippedBattleItemIndex = int(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                              const CMidgardID* unitId,
                                                              const BattleMsgData* battleMsgData,
                                                              const CMidgardID* itemId);
     GetLeaderEquippedBattleItemIndex getLeaderEquippedBattleItemIndex;
 
-    using GetUnitInfos = void(__thiscall*)(BattleMsgData* thisptr, UnitInfoList* value, bool a3);
+    using GetUnitInfos = void(__thiscall*)(const BattleMsgData* thisptr,
+                                           UnitInfoList* value,
+                                           bool a3);
     GetUnitInfos getUnitInfos;
 
     /**
@@ -625,6 +638,29 @@ struct Api
     using RemoveFiniteBoostLowerDamage = void(__stdcall*)(BattleMsgData* battleMsgData,
                                                           const CMidgardID* unitId);
     RemoveFiniteBoostLowerDamage removeFiniteBoostLowerDamage;
+
+    /** Creates a formatted description of unit's big face during battle. */
+    using GenerateBigFaceDescription = String*(__stdcall*)(String* value,
+                                                           const IMidgardObjectMap* objectMap,
+                                                           const CMidgardID* unitId,
+                                                           const BattleMsgData* battleMsgData);
+    GenerateBigFaceDescription generateBigFaceDescription;
+
+    using UpdateBattleActions = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                 const BattleMsgData* battleMsgData,
+                                                 const CMidgardID* unitId,
+                                                 Set<BattleAction>* actions,
+                                                 GroupIdTargetsPair* attackTargets,
+                                                 GroupIdTargetsPair* item1Targets,
+                                                 GroupIdTargetsPair* item2Targets);
+    UpdateBattleActions updateBattleActions;
+
+    using GetItemAttackTargets = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                  const BattleMsgData* battleMsgData,
+                                                  const CMidgardID* unitId,
+                                                  const CMidgardID* itemId,
+                                                  GroupIdTargetsPair* value);
+    GetItemAttackTargets getItemAttackTargets;
 };
 
 Api& get();

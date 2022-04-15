@@ -241,7 +241,7 @@ static void transferStackToCity(game::CPhaseGame* phaseGame,
     const int itemsTotal = inventory.vftable->getItemsCount(&inventory);
     for (int i = 0; i < itemsTotal; i++) {
         auto item = inventory.vftable->getItem(&inventory, i);
-        if (isItemEquipped(stack->leaderEquppedItems, item)) {
+        if (isItemEquipped(stack->leaderEquippedItems, item)) {
             continue;
         }
 
@@ -389,7 +389,7 @@ static void transferStackToStack(game::CPhaseGame* phaseGame,
     const int itemsTotal = inventory.vftable->getItemsCount(&inventory);
     for (int i = 0; i < itemsTotal; i++) {
         auto item = inventory.vftable->getItem(&inventory, i);
-        if (isItemEquipped(srcStack->leaderEquppedItems, item)) {
+        if (isItemEquipped(srcStack->leaderEquippedItems, item)) {
             continue;
         }
 
@@ -617,7 +617,7 @@ static void transferStackToBag(game::CPhaseGame* phaseGame,
     const int itemsTotal = inventory.vftable->getItemsCount(&inventory);
     for (int i = 0; i < itemsTotal; i++) {
         auto item = inventory.vftable->getItem(&inventory, i);
-        if (isItemEquipped(stack->leaderEquppedItems, item)) {
+        if (isItemEquipped(stack->leaderEquippedItems, item)) {
             continue;
         }
 

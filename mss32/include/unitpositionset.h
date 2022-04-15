@@ -64,7 +64,7 @@ struct Api
     Preincrement preinc;
 
     using FindByPosition = UnitPositionPair*(__stdcall*)(UnitPositionPair* value,
-                                                         const UnitPositionSet* list,
+                                                         const UnitPositionSet* set,
                                                          int unitPosition);
     FindByPosition findByPosition;
 

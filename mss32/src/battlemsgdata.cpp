@@ -75,6 +75,7 @@ static std::array<Api, 3> functions = {{
         (Api::RemoveUnitInfo)0x623652,
         (Api::DecreaseUnitAttacks)0x6239b6,
         (Api::GetTargetsToAttack)0x62884b,
+        (Api::GetLeaderEquippedBattleItemIds)0x64aff9,
         (Api::GetLeaderEquippedBattleItemIndex)0x634f1e,
         (Api::GetUnitInfos)0x623531,
         (Api::FillTargetsList)0x65b725,
@@ -89,6 +90,9 @@ static std::array<Api, 3> functions = {{
         (Api::AlliesNotPreventingAdjacentAttack)0x65c19c,
         (Api::GiveAttack)0x623ade,
         (Api::RemoveFiniteBoostLowerDamage)0x627b07,
+        (Api::GenerateBigFaceDescription)0x650ea8,
+        (Api::UpdateBattleActions)0x625253,
+        (Api::GetItemAttackTargets)0x62571b,
     },
     // Russobit
     Api{
@@ -140,6 +144,7 @@ static std::array<Api, 3> functions = {{
         (Api::RemoveUnitInfo)0x623652,
         (Api::DecreaseUnitAttacks)0x6239b6,
         (Api::GetTargetsToAttack)0x62884b,
+        (Api::GetLeaderEquippedBattleItemIds)0x64aff9,
         (Api::GetLeaderEquippedBattleItemIndex)0x634f1e,
         (Api::GetUnitInfos)0x623531,
         (Api::FillTargetsList)0x65b725,
@@ -154,6 +159,9 @@ static std::array<Api, 3> functions = {{
         (Api::AlliesNotPreventingAdjacentAttack)0x65c19c,
         (Api::GiveAttack)0x623ade,
         (Api::RemoveFiniteBoostLowerDamage)0x627b07,
+        (Api::GenerateBigFaceDescription)0x650ea8,
+        (Api::UpdateBattleActions)0x625253,
+        (Api::GetItemAttackTargets)0x62571b,
     },
     // Gog
     Api{
@@ -205,6 +213,7 @@ static std::array<Api, 3> functions = {{
         (Api::RemoveUnitInfo)0x6221e2,
         (Api::DecreaseUnitAttacks)0x622546,
         (Api::GetTargetsToAttack)0x62738b,
+        (Api::GetLeaderEquippedBattleItemIds)0x649939,
         (Api::GetLeaderEquippedBattleItemIndex)0x63395e,
         (Api::GetUnitInfos)0x6220c1,
         (Api::FillTargetsList)0x65a1a5,
@@ -219,6 +228,9 @@ static std::array<Api, 3> functions = {{
         (Api::AlliesNotPreventingAdjacentAttack)0x65ac1c,
         (Api::GiveAttack)0x62266e,
         (Api::RemoveFiniteBoostLowerDamage)0x626647,
+        (Api::GenerateBigFaceDescription)0x64f7e8,
+        (Api::UpdateBattleActions)0x623d93,
+        (Api::GetItemAttackTargets)0x62425b,
     },
 }};
 // clang-format on

@@ -176,6 +176,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\batattacktransformself.cpp" />
     <ClCompile Include="src\batattackuntransformeffect.cpp" />
     <ClCompile Include="src\batattackutils.cpp" />
+    <ClCompile Include="src\batbigface.cpp" />
     <ClCompile Include="src\batimagesloader.cpp" />
     <ClCompile Include="src\battleattackinfo.cpp" />
     <ClCompile Include="src\battlemsgdata.cpp" />
@@ -224,6 +225,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\customattackhooks.cpp" />
     <ClCompile Include="src\customattacks.cpp" />
     <ClCompile Include="src\customattackutils.cpp" />
+    <ClCompile Include="src\d2tree.cpp" />
     <ClCompile Include="src\d2osexception.cpp" />
     <ClCompile Include="src\d2string.cpp" />
     <ClCompile Include="src\dbfaccess.cpp" />
@@ -336,6 +338,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\modifierutils.cpp" />
     <ClCompile Include="src\mqrect.cpp" />
     <ClCompile Include="src\multilayerimg.cpp" />
+    <ClCompile Include="src\musicfader.cpp" />
     <ClCompile Include="src\musichooks.cpp" />
     <ClCompile Include="src\netcustomplayer.cpp" />
     <ClCompile Include="src\netcustomplayerclient.cpp" />
@@ -491,6 +494,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batattacktransformself.h" />
     <ClInclude Include="include\batattackuntransformeffect.h" />
     <ClInclude Include="include\batattackutils.h" />
+    <ClInclude Include="include\batbigface.h" />
     <ClInclude Include="include\batimagesloader.h" />
     <ClInclude Include="include\batnotify.h" />
     <ClInclude Include="include\battleattackinfo.h" />
@@ -551,6 +555,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\customattackutils.h" />
     <ClInclude Include="include\d2color.h" />
     <ClInclude Include="include\d2map.h" />
+    <ClInclude Include="include\d2tree.h" />
+    <ClInclude Include="include\mq_c_s.h" />
     <ClInclude Include="include\d2osexception.h" />
     <ClInclude Include="include\d2pair.h" />
     <ClInclude Include="include\d2string.h" />
@@ -786,6 +792,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mquikernel.h" />
     <ClInclude Include="include\mquikernelsimple.h" />
     <ClInclude Include="include\multilayerimg.h" />
+    <ClInclude Include="include\musicfader.h" />
     <ClInclude Include="include\musichooks.h" />
     <ClInclude Include="include\netcustomplayer.h" />
     <ClInclude Include="include\netcustomplayerclient.h" />

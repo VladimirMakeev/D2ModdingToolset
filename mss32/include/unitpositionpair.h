@@ -27,7 +27,7 @@ namespace game {
 /**
  * Unit position (0-5) to mark during single battle turn.
  * The second component determines if the position is in attack's target list
- * (IBatAttack::FillTargetList; position has frame highlight on group panel).
+ * (IBatAttack::FillTargetsList; position has frame highlight on group panel).
  */
 using UnitPositionPair = Pair<int, bool>;
 

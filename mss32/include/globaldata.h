@@ -21,9 +21,9 @@
 #define GLOBALDATA_H
 
 #include "d2list.h"
-#include "d2map.h"
 #include "d2pair.h"
 #include "midgardid.h"
+#include "mq_c_s.h"
 #include "smartptr.h"
 #include <cstddef>
 
@@ -77,13 +77,13 @@ struct CItemBase;
 struct CDynUpgrade;
 struct CTileVariation;
 
-using RacesMap = Map<Pair<CMidgardID, TRaceType*>>;
+using RacesMap = mq_c_s<Pair<CMidgardID, TRaceType*>>;
 using DynUpgradeList = List<SmartPtr<CDynUpgrade>>;
 
 /** Holds global game information. */
 struct GlobalData
 {
-    Map<Pair<CMidgardID, char*>>* text;
+    mq_c_s<Pair<CMidgardID, char*>>* text;
     LAttackClassTable* attackClasses;
     LAttackSourceTable* attackSources;
     LAttackReachTable* attackReach;
@@ -115,15 +115,15 @@ struct GlobalData
     LEventEffectCategoryTable* eventEffectCategories;
     LLandmarkCategoryTable* landmarkCategories;
     LDeathAnimCategoryTable* deathAnimCategories;
-    Map<Pair<CMidgardID, TBuildingType*>>* buildings;
+    mq_c_s<Pair<CMidgardID, TBuildingType*>>* buildings;
     RacesMap** races;
-    Map<Pair<CMidgardID, TSubRaceType*>>* subRaces;
-    Map<Pair<CMidgardID, TLordType*>>* lords;
-    Map<Pair<CMidgardID, TStrategicSpell*>>* spells;
-    Map<Pair<CMidgardID, TUsUnitImpl*>>** units;
-    Map<Pair<CMidgardID, TUnitModifier*>>* modifiers;
-    Map<Pair<CMidgardID, CAttackImpl*>>* attacks;
-    Map<Pair<CMidgardID, TLandmark*>>** landmarks;
+    mq_c_s<Pair<CMidgardID, TSubRaceType*>>* subRaces;
+    mq_c_s<Pair<CMidgardID, TLordType*>>* lords;
+    mq_c_s<Pair<CMidgardID, TStrategicSpell*>>* spells;
+    mq_c_s<Pair<CMidgardID, TUsUnitImpl*>>** units;
+    mq_c_s<Pair<CMidgardID, TUnitModifier*>>* modifiers;
+    mq_c_s<Pair<CMidgardID, CAttackImpl*>>* attacks;
+    mq_c_s<Pair<CMidgardID, TLandmark*>>** landmarks;
     TItemTypeList* itemTypes;
     int* actions;
     int* transf;

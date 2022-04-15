@@ -72,6 +72,7 @@
 - Fixes missing modifiers of alternative attacks (![demo video](https://user-images.githubusercontent.com/5180699/125460215-144ef648-5497-4674-b9d6-ac7d2fa95125.mp4));
 - Fixes unit transformation (doppelganger, drain-level, transform-self/other attacks) to include HP modifiers into current hp recalculation, thus unit is not getting "damaged" upon transforming (![demo video](https://user-images.githubusercontent.com/5180699/156921183-b1f4748d-cb4f-40c8-a9b1-b911e9cc91dd.mp4));
 - Fixes unit transformation (drain-level, transform-self/other and untransform-effect attacks) to update unit attack count for current battle round (for example, Holy Avenger transformed into Imp before its turn will no longer attack twice);
+- Fixes leader transformation (doppelganger, drain-level, transform-self/other attacks) to allow usage of battle items (potions, orbs and talismans);
 - Fixes Scenario Editor bug with elves race as a caster in "Cast spell on location" event effect;
 - <details>
     <summary>Buttons for bulk item transfer: transfer all items, potions, scrolls/wands or valuables between inventories with single click;</summary>
@@ -367,6 +368,11 @@ The following settings can be changed in [settings.lua](Scripts/settings.lua):
     - "hard=\[-127 : 127\]";
     - "veryHard=\[-127 : 127\]";
     - "absolute=(true/false)" determines how accuracy bonuses are treated - as absolute or percentage values;
+  - "allowBattleItems" allows transformed leaders to use battle items:
+    - "onTransformOther=(true/false)" if leader is transformed by TransformOther attack (Witch, orb/talisman, artifact effect, etc.);
+    - "onTransformSelf=(true/false)" if leader is transformed by TransformSelf attack (Wolf Lord, orb/talisman, artifact effect, etc.);
+    - "onDrainLevel=(true/false)" if leader's level is drained by DrainLevel attack (Wight, orb/talisman, artifact effect, etc.);
+    - "onDoppelganger=(true/false)" if leader transformed himself by Doppelganger attack;
 </details>
 <details>
   <summary>Misc</summary>

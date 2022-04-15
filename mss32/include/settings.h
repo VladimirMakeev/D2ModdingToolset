@@ -79,6 +79,14 @@ struct Settings
     bool detailedAttackDescription;
     bool fixEffectiveHpFormula;
 
+    struct AllowBattleItems
+    {
+        bool onTransformOther;
+        bool onTransformSelf;
+        bool onDrainLevel;
+        bool onDoppelganger;
+    } allowBattleItems;
+
     struct MovementCost
     {
         Color textColor{};

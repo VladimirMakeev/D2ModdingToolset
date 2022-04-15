@@ -24,6 +24,7 @@
 
 namespace game {
 
+/** Implementation of std::string used in game. */
 struct String
 {
     std::uint32_t length;
@@ -84,6 +85,11 @@ struct Api
      */
     using AppendChar = char*(__thiscall*)(String* thisptr, char ch, std::uint32_t count);
     AppendChar appendChar;
+
+    /** Returns a pointer to a null-terminated character array with data equivalent to those stored
+     * in the string. */
+    using CStr = const char*(__thiscall*)(const String* thisptr);
+    CStr cStr;
 };
 
 /** Returns String functions according to determined version of the game. */

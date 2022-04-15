@@ -964,6 +964,15 @@
     <ClCompile Include="src\untransformeffecthooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="src\musicfader.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\batbigface.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d2tree.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -1008,7 +1017,7 @@
     <ClInclude Include="include\currency.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="include\d2map.h">
+    <ClInclude Include="include\mq_c_s.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\d2pair.h">
@@ -2422,6 +2431,18 @@
     </ClInclude>
     <ClInclude Include="include\untransformeffecthooks.h">
       <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\musicfader.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\batbigface.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d2tree.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d2map.h">
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midgardstreamenv.h">
       <Filter>game</Filter>

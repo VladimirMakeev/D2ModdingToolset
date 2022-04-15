@@ -43,7 +43,7 @@ struct CBatUnitAnimData
     SmartPtr<CMqPresentationManager> presentationMgr;
     IMidgardObjectMap* objectMap;
     CMidgardID unitId;
-    CMidgardID baseUnitId;
+    CMidgardID baseUnitImplId;
     LRaceCategory raceCategory;
     bool retreated;  /**< Set according to BattleStatus::Retreated. */
     bool retreating; /**< Set according to BattleStatus::Retreat. */

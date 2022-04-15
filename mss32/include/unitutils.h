@@ -32,6 +32,7 @@ struct TUsSoldierImpl;
 struct LImmuneCat;
 struct LAttackSource;
 struct IAttack;
+struct IMidgardObjectMap;
 struct BattleMsgData;
 } // namespace game
 
@@ -61,6 +62,9 @@ int computeShatterDamage(const game::CMidgardID* unitId,
 void updateAttackCountAfterTransformation(game::BattleMsgData* battleMsgData,
                                           const game::CMidUnit* unit,
                                           bool prevAttackTwice);
+bool isStackLeaderAndAllowedToUseBattleItems(const game::IMidgardObjectMap* objectMap,
+                                             const game::CMidgardID* unitId,
+                                             const game::BattleMsgData* battleMsgData);
 
 } // namespace hooks
 

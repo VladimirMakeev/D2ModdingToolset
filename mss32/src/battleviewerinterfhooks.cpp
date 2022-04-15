@@ -19,6 +19,7 @@
 
 #include "battleviewerinterfhooks.h"
 #include "attack.h"
+#include "batbigface.h"
 #include "batimagesloader.h"
 #include "battleviewerinterf.h"
 #include "batunitanim.h"
@@ -26,17 +27,23 @@
 #include "button.h"
 #include "customattacks.h"
 #include "customattackutils.h"
+#include "d2string.h"
 #include "dialoginterf.h"
 #include "functor.h"
 #include "game.h"
+#include "mempool.h"
 #include "middragdropinterf.h"
+#include "midgardobjectmap.h"
+#include "miditem.h"
 #include "midunitgroup.h"
+#include "musicfader.h"
 #include "togglebutton.h"
 #include "uievent.h"
 #include "uimanager.h"
 #include "unitinfolist.h"
 #include "unitpositionlist.h"
 #include "unitslotview.h"
+#include "unitutils.h"
 
 namespace hooks {
 
@@ -83,17 +90,18 @@ void markAttackTarget(game::CBattleViewerInterf* viewer,
 void markAllAttackTargets(game::CBattleViewerInterf* viewer,
                           const game::CMidUnitGroup* targetGroup,
                           const game::UnitInfo* targetInfo,
-                          game::UnitPositionSet* targetPositions)
+                          const game::UnitPositionSet* targetPositions)
 {
     using namespace game;
 
-    const auto& listApi = UnitPositionSetApi::get();
+    const auto& setApi = UnitPositionSetApi::get();
     const auto& groupApi = CMidUnitGroupApi::get();
 
     UnitPositionSetIterator it, end;
-    listApi.end(targetPositions, &end);
-    for (listApi.begin(targetPositions, &it); !listApi.equals(&it, &end); listApi.preinc(&it)) {
-        int targetPosition = listApi.dereference(&it)->first;
+    setApi.end((UnitPositionSet*)targetPositions, &end);
+    for (setApi.begin((UnitPositionSet*)targetPositions, &it); !setApi.equals(&it, &end);
+         setApi.preinc(&it)) {
+        int targetPosition = setApi.dereference(&it)->first;
         if (targetPosition >= 0) {
             const CMidgardID* targetId = groupApi.getUnitIdByPosition(targetGroup, targetPosition);
             markAttackTarget(viewer, targetId, targetInfo->unitFlags.parts.attacker,
@@ -172,12 +180,12 @@ bool markAttackTargetsForAllOrCustomAttackReach(game::CBattleViewerInterf* viewe
                                                 const game::IAttack* attack,
                                                 bool isBattleGoing,
                                                 bool isItemAttack,
-                                                game::UnitPositionSet* targetPositions)
+                                                const game::UnitPositionSet* targetPositions)
 {
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& listApi = UnitPositionSetApi::get();
+    const auto& setApi = UnitPositionSetApi::get();
     const auto& groupApi = CMidUnitGroupApi::get();
     const auto& reaches = AttackReachCategories::get();
 
@@ -193,8 +201,7 @@ bool markAttackTargetsForAllOrCustomAttackReach(game::CBattleViewerInterf* viewe
         return false;
 
     UnitPositionPair positionPair;
-    listApi.findByPosition(&positionPair, targetPositions,
-                           targetInfo->unitFlags.parts.indexInGroup);
+    setApi.findByPosition(&positionPair, targetPositions, targetInfo->unitFlags.parts.indexInGroup);
     if (!positionPair.second)
         return false;
 
@@ -225,17 +232,18 @@ void markAttackTargets(game::CBattleViewerInterf* viewer,
                        const game::IAttack* attack,
                        bool isBattleGoing,
                        bool isItemAttack,
-                       game::UnitPositionSet* targetPositions)
+                       const game::UnitPositionSet* targetPositions)
 {
     using namespace game;
 
     const auto& fn = gameFunctions();
     const auto& viewerApi = BattleViewerInterfApi::get();
     const auto& engineApi = BatViewer2DEngineApi::get();
+    const auto& bigFaceApi = BatBigFaceApi::get();
 
     if (setBigFace) {
         CBatBigFace* bigFace = viewerApi.getBigFace(viewer);
-        viewerApi.setUnitId(bigFace, selectedUnitId);
+        bigFaceApi.setUnitId(bigFace, selectedUnitId);
     }
 
     if (viewer->data2->selectedUnitId == *selectedUnitId)
@@ -258,7 +266,7 @@ bool markAttackTargetsIfUnitSelected(game::CBattleViewerInterf* viewer,
                                      bool isBattleGoing,
                                      bool isItemAttack,
                                      const game::CMidgardID* targetGroupId,
-                                     game::UnitPositionSet* targetPositions)
+                                     const game::UnitPositionSet* targetPositions)
 {
     using namespace game;
 
@@ -295,6 +303,7 @@ bool unmarkAttackTargets(game::CBattleViewerInterf* viewer,
 
     const auto& viewerApi = BattleViewerInterfApi::get();
     const auto& engineApi = BatViewer2DEngineApi::get();
+    const auto& bigFaceApi = BatBigFaceApi::get();
 
     engineApi.clearTargetMarks(viewer->data->batViewer2dEngine);
     viewer->data2->selectedUnitId = emptyId;
@@ -308,41 +317,7 @@ bool unmarkAttackTargets(game::CBattleViewerInterf* viewer,
 
     if (setBigFace) {
         CBatBigFace* bigFace = viewerApi.getBigFace(viewer);
-        viewerApi.setUnitId(bigFace, &selectedUnitId);
-    }
-
-    return true;
-}
-
-bool getTargetData(game::CBattleViewerInterf* viewer,
-                   const game::IAttack** attack,
-                   const game::CBattleViewerTargetData** targetData,
-                   bool* isBattleGoing,
-                   bool* isItemAttack)
-{
-    using namespace game;
-
-    const auto& fn = gameFunctions();
-    const auto& battle = BattleMsgDataApi::get();
-
-    if (viewer->dropManager.vftable->method1(&viewer->dropManager) > 0) {
-        if (viewer->data->itemId == emptyId)
-            return false;
-
-        int itemIndex = battle.getLeaderEquippedBattleItemIndex(viewer->data->objectMap,
-                                                                &viewer->data->unitId,
-                                                                &viewer->data->battleMsgData,
-                                                                &viewer->data->itemId);
-
-        *attack = fn.getAttackById(viewer->data->objectMap, &viewer->data->itemId, 1, true);
-        *targetData = &viewer->data->targetData.items[itemIndex];
-        *isBattleGoing = true;
-        *isItemAttack = true;
-    } else {
-        *attack = fn.getAttackById(viewer->data->objectMap, &viewer->data->unitId, 1, true);
-        *targetData = &viewer->data->targetData.attack;
-        *isBattleGoing = (*targetData)->isBattleGoing;
-        *isItemAttack = false;
+        bigFaceApi.setUnitId(bigFace, &selectedUnitId);
     }
 
     return true;
@@ -355,30 +330,38 @@ bool __fastcall markAttackTargetsHooked(game::CBattleViewerInterf* thisptr,
 {
     using namespace game;
 
-    const auto& listApi = UnitPositionSetApi::get();
+    const auto& fn = gameFunctions();
+    const auto& battle = BattleMsgDataApi::get();
 
     if (thisptr->data->unitId == emptyId)
         return false;
 
-    const IAttack* attack = nullptr;
-    const CBattleViewerTargetData* targetData = nullptr;
-    bool isBattleGoing = false;
-    bool isItemAttack = false;
-    if (!getTargetData(thisptr, &attack, &targetData, &isBattleGoing, &isItemAttack))
-        return false;
+    if (thisptr->dropManager.vftable->method1(&thisptr->dropManager) > 0) {
+        if (thisptr->data->itemId == emptyId)
+            return false;
 
-    UnitPositionSet targetPositions{};
-    listApi.constructor(&targetPositions);
-    listApi.copyAssignment(&targetPositions, &targetData->targetPositions);
+        int itemIndex = battle.getLeaderEquippedBattleItemIndex(thisptr->data->objectMap,
+                                                                &thisptr->data->unitId,
+                                                                &thisptr->data->battleMsgData,
+                                                                &thisptr->data->itemId);
 
-    bool result = markAttackTargetsIfUnitSelected(thisptr, mousePosition, setBigFace, attack,
-                                                  isBattleGoing, isItemAttack,
-                                                  &targetData->targetGroupId, &targetPositions);
-    if (!result)
-        result = unmarkAttackTargets(thisptr, mousePosition, setBigFace);
+        auto attack = fn.getAttackById(thisptr->data->objectMap, &thisptr->data->itemId, 1, true);
+        const auto& targetData = thisptr->data->targetData.items[itemIndex];
 
-    listApi.destructor(&targetPositions);
-    return result;
+        if (markAttackTargetsIfUnitSelected(thisptr, mousePosition, setBigFace, attack, true, true,
+                                            &targetData.groupId, &targetData.unitPositions))
+            return true;
+    } else {
+        auto attack = fn.getAttackById(thisptr->data->objectMap, &thisptr->data->unitId, 1, true);
+        const auto& targetData = thisptr->data->targetData.attack;
+
+        if (markAttackTargetsIfUnitSelected(thisptr, mousePosition, setBigFace, attack,
+                                            targetData.isBattleGoing, false, &targetData.groupId,
+                                            &targetData.unitPositions))
+            return true;
+    }
+
+    return unmarkAttackTargets(thisptr, mousePosition, setBigFace);
 }
 
 void setTimerEvent(game::CBattleViewerInterf* viewer,
@@ -420,7 +403,7 @@ void updateForNormalAttack(game::CBattleViewerInterf* viewer)
     CMidgardID otherGroupId = invalidId;
     CMidgardID attackerGroupId{};
     id.validateId(&attackerGroupId, viewer->data->battleMsgData.attackerGroupId);
-    if (viewer->data->targetData.attack.targetGroupId == attackerGroupId) {
+    if (viewer->data->targetData.attack.groupId == attackerGroupId) {
         id.validateId(&otherGroupId, viewer->data->battleMsgData.defenderGroupId);
     } else {
         otherGroupId = attackerGroupId;
@@ -431,11 +414,11 @@ void updateForNormalAttack(game::CBattleViewerInterf* viewer)
 
     void* tmp{};
     auto targetGroup = fn.getStackFortRuinGroup(tmp, viewer->data->objectMap,
-                                                &viewer->data->targetData.attack.targetGroupId);
+                                                &viewer->data->targetData.attack.groupId);
     auto otherGroup = fn.getStackFortRuinGroup(tmp, viewer->data->objectMap, &otherGroupId);
 
     UnitPositionSet targetPositions{};
-    setApi.copyConstructor(&targetPositions, &viewer->data->targetData.attack.targetPositions);
+    setApi.copyConstructor(&targetPositions, &viewer->data->targetData.attack.unitPositions);
 
     bool hasNegativePosition = setApi.hasNegativePosition(&targetPositions);
     groupApi.unknownFunction(targetGroup, otherGroup, &targetPositions);
@@ -455,7 +438,7 @@ void updateForNormalAttack(game::CBattleViewerInterf* viewer)
     if (isAllAttackReach) {
         for (auto group : {viewer->data->batUnitGroup1, viewer->data->batUnitGroup3,
                            viewer->data->batUnitGroup2, viewer->data->batUnitGroup4}) {
-            viewerApi.highlightGroupFrame(group, &viewer->data->targetData.attack.targetGroupId,
+            viewerApi.highlightGroupFrame(group, &viewer->data->targetData.attack.groupId,
                                           isSupportAttack);
         }
     }
@@ -500,12 +483,10 @@ void updateForNormalAttack(game::CBattleViewerInterf* viewer)
 
             viewerApi.unknownMethod3(unknown2 ? viewer->data->batUnitGroup1
                                               : viewer->data->batUnitGroup2,
-                                     &viewer->data->targetData.attack.targetGroupId,
-                                     absolutePosition);
+                                     &viewer->data->targetData.attack.groupId, absolutePosition);
             viewerApi.unknownMethod3(unknown2 ? viewer->data->batUnitGroup3
                                               : viewer->data->batUnitGroup4,
-                                     &viewer->data->targetData.attack.targetGroupId,
-                                     absolutePosition);
+                                     &viewer->data->targetData.attack.groupId, absolutePosition);
         } else if (targetPosition->second) {
             viewerApi.unknownMethod2(unknown2 ? viewer->data->batUnitGroup1
                                               : viewer->data->batUnitGroup2,
@@ -563,6 +544,7 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
     const auto& dialogApi = CDialogInterfApi::get();
     const auto& toggleButtonApi = CToggleButtonApi::get();
     const auto& listApi = TargetsListApi::get();
+    const auto& bigFaceApi = BatBigFaceApi::get();
 
     auto viewer = castBatViewerToBattleViewerInterf(thisptr);
     viewer->data->unknown6 = false;
@@ -639,9 +621,9 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
     viewer->data2->unknown3 = 0;
 
     auto bigFace2 = viewerApi.getBigFace2(viewer);
-    viewerApi.setUnknown(bigFace2, false);
+    bigFaceApi.setUnknown(bigFace2, false);
 
-    viewerApi.updateUnknown2(viewer, canUseItem);
+    viewerApi.updateBattleItems(viewer, canUseItem);
 
     for (auto group : {viewer->data->batUnitGroup1, viewer->data->batUnitGroup3,
                        viewer->data->batUnitGroup2, viewer->data->batUnitGroup4}) {
@@ -652,7 +634,7 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
         updateForNormalAttack(viewer);
 
     viewerApi.unknownMethod6(viewer, false);
-    viewerApi.setUnitId(bigFace2, &viewer->data->unitId);
+    bigFaceApi.setUnitId(bigFace2, &viewer->data->unitId);
     viewerApi.unknownMethod7(viewer);
 
     CMqPoint mousePosition;
@@ -662,6 +644,226 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
 
     viewerApi.markAttackTargets(viewer, &mousePosition, false);
     viewerApi.unknownMethod8(viewer, &mousePosition);
+}
+
+void __fastcall battleViewerInterfUpdateBattleItemsHooked(game::CBattleViewerInterf* thisptr,
+                                                          int /*%edx*/,
+                                                          bool canUseItem)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+    const auto& faderApi = CMusicFaderApi::get();
+    const auto& viewerApi = BattleViewerInterfApi::get();
+
+    auto fader = faderApi.get();
+    if (faderApi.hasEventId(fader))
+        faderApi.callback(fader);
+
+    viewerApi.unknownMethod9(thisptr);
+
+    if (!thisptr->data->targetData.attack.isBattleGoing || thisptr->data->unitId == emptyId)
+        return;
+
+    if (!isStackLeaderAndAllowedToUseBattleItems(thisptr->data->objectMap, &thisptr->data->unitId,
+                                                 &thisptr->data->battleMsgData))
+        return;
+
+    CMidgardID itemIds[2];
+    battle.getLeaderEquippedBattleItemIds(thisptr->data->objectMap, &thisptr->data->unitId,
+                                          &thisptr->data->battleMsgData, itemIds);
+
+    for (int i = 0; i < 2; ++i) {
+        if (faderApi.hasEventId(fader))
+            faderApi.callback(fader);
+
+        if (itemIds[i] == emptyId)
+            continue;
+
+        viewerApi.unknownMethod10(thisptr, &itemIds[i], i, &thisptr->data2->list);
+
+        if (canUseItem) {
+            const auto& targetData = thisptr->data->targetData.items[i];
+            bool isUnitOnTheLeft = viewerApi.isUnitOnTheLeft(thisptr, targetData.isAttacker);
+
+            viewerApi.unknownMethod11(thisptr, &itemIds[i], &targetData.groupId,
+                                      &targetData.unitPositions,
+                                      isUnitOnTheLeft ? &thisptr->data->groupAreas2
+                                                      : &thisptr->data->groupAreas1,
+                                      false, &thisptr->data2->list2);
+        }
+    }
+
+    if (canUseItem)
+        viewerApi.unknownMethod12(thisptr);
+}
+
+void batBigFaceCleanUnitData(game::CBatBigFace* thisptr, const game::UnitInfoList& unitInfos)
+{
+    using namespace game;
+
+    const auto& idApi = CMidgardIDApi::get();
+    const auto& treeApi = TreeApi::get();
+    const auto& battleApi = BattleMsgDataApi::get();
+    const auto& bigFaceApi = BatBigFaceApi::get();
+
+    MapIterator<CMidgardID, CBatBigFaceUnitData> it, end;
+    treeApi.end((TreeT*)&thisptr->data->unitData, (TreeIt*)&end);
+    for (treeApi.begin((TreeT*)&thisptr->data->unitData, (TreeIt*)&it);
+         !treeApi.equals((TreeIt*)&it, (TreeIt*)&end); treeApi.preinc((TreeIt*)&it)) {
+
+        auto oldUnitId = ((Pair<CMidgardID, CBatBigFaceUnitData>*)treeApi.deref((TreeIt*)&it))
+                             ->first;
+
+        bool unitFound = false;
+        for (auto node = unitInfos.head->next; node != unitInfos.head; node = node->next) {
+            CMidgardID unitId;
+            idApi.validateId(&unitId, node->data.unitId1);
+
+            if (battleApi.getUnitStatus(&thisptr->data->battleMsgData, &unitId,
+                                        BattleStatus::Unsummoned)
+                || battleApi.getUnitStatus(&thisptr->data->battleMsgData, &unitId,
+                                           BattleStatus::Retreated)
+                || battleApi.getUnitStatus(&thisptr->data->battleMsgData, &unitId,
+                                           BattleStatus::Hidden)) {
+                continue;
+            }
+
+            if (unitId == oldUnitId) {
+                unitFound = true;
+                break;
+            }
+        }
+
+        if (!unitFound) {
+            if (thisptr->data->unitId == oldUnitId)
+                thisptr->data->unitId = emptyId;
+            bigFaceApi.unitDataMapErase(&thisptr->data->unitData, it);
+        }
+    }
+}
+
+void batBigFaceUpdateUnitImplData(game::CBatBigFace* thisptr, game::CBatBigFaceUnitData* unitData)
+{
+    using namespace game;
+
+    const auto& bigFaceApi = BatBigFaceApi::get();
+    const auto& smartPtrApi = SmartPointerApi::get();
+    const auto& imagesLoaderApi = BatImagesLoaderApi::get();
+
+    auto unitImplData = bigFaceApi.unitImplDataMapAccess(&thisptr->data->unitImplData,
+                                                         &unitData->unitImplId);
+
+    if (unitImplData->faceImage.data == nullptr) {
+        auto faceImage = imagesLoaderApi.loadUnitFaceImage(thisptr->data->imagesLoader,
+                                                           &unitData->unitImplId,
+                                                           !thisptr->data->flippedBattle, true);
+        smartPtrApi.createOrFree((SmartPointer*)&unitImplData->faceImage, faceImage);
+    }
+}
+
+void batBigFaceUpdateItemData(game::CBatBigFace* thisptr,
+                              game::CBatBigFaceUnitData* unitData,
+                              const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& battleApi = BattleMsgDataApi::get();
+    const auto& bigFaceApi = BatBigFaceApi::get();
+    const auto& smartPtrApi = SmartPointerApi::get();
+    const auto& imagesLoaderApi = BatImagesLoaderApi::get();
+
+    unitData->showItems = isStackLeaderAndAllowedToUseBattleItems(thisptr->data->objectMap, unitId,
+                                                                  &thisptr->data->battleMsgData);
+    if (!unitData->showItems) {
+        for (auto& itemId : unitData->itemIds) {
+            itemId = emptyId;
+        }
+        return;
+    }
+
+    battleApi.getLeaderEquippedBattleItemIds(thisptr->data->objectMap, unitId,
+                                             &thisptr->data->battleMsgData, unitData->itemIds);
+    for (const auto& itemId : unitData->itemIds) {
+        if (itemId == emptyId)
+            continue;
+
+        auto item = static_cast<CMidItem*>(
+            thisptr->data->objectMap->vftable->findScenarioObjectById(thisptr->data->objectMap,
+                                                                      &itemId));
+
+        auto itemImage = imagesLoaderApi.loadItemImage(thisptr->data->imagesLoader,
+                                                       &item->globalItemId,
+                                                       thisptr->data->flippedBattle);
+
+        auto itemData = bigFaceApi.itemDataMapAccess(&thisptr->data->itemData, &itemId);
+        smartPtrApi.createOrFree((SmartPointer*)&itemData->itemImage, itemImage);
+    }
+}
+
+void batBigFaceUpdateUnitData(game::CBatBigFace* thisptr, const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& battleApi = BattleMsgDataApi::get();
+    const auto& bigFaceApi = BatBigFaceApi::get();
+    const auto& image2TextApi = CImage2TextApi::get();
+    const auto& stringApi = StringApi::get();
+    const auto& smartPtrApi = SmartPointerApi::get();
+
+    auto unitData = bigFaceApi.unitDataMapAccess(&thisptr->data->unitData, unitId);
+
+    if (unitData->textImage.data == nullptr) {
+        auto textImage = (CImage2Text*)Memory::get().allocate(sizeof(CImage2Text));
+        const auto& textArea = thisptr->data->bigFaceTextArea;
+        image2TextApi.constructor(textImage, textArea.p2.x - textArea.p1.x,
+                                  textArea.p2.y - textArea.p1.y);
+        smartPtrApi.createOrFree((SmartPointer*)&unitData->textImage, textImage);
+    }
+
+    String description{};
+    battleApi.generateBigFaceDescription(&description, thisptr->data->objectMap, unitId,
+                                         &thisptr->data->battleMsgData);
+
+    const auto desc = stringApi.cStr(&description);
+    if (strcmp(desc, stringApi.cStr(&unitData->textImage.data->text)) != 0)
+        image2TextApi.setText(unitData->textImage.data, desc);
+    stringApi.free(&description);
+
+    fn.getBaseUnitImplId(&unitData->unitImplId, thisptr->data->objectMap, unitId, false);
+
+    batBigFaceUpdateUnitImplData(thisptr, unitData);
+
+    batBigFaceUpdateItemData(thisptr, unitData, unitId);
+}
+
+void __fastcall batBigFaceUpdateHooked(game::CBatBigFace* thisptr,
+                                       int /*%edx*/,
+                                       const game::BattleMsgData* battleMsgData)
+{
+    using namespace game;
+
+    const auto& idApi = CMidgardIDApi::get();
+    const auto& battleApi = BattleMsgDataApi::get();
+    const auto& unitInfoListApi = UnitInfoListApi::get();
+
+    battleApi.copyAssignment(&thisptr->data->battleMsgData, battleMsgData);
+
+    UnitInfoList unitInfos{};
+    unitInfoListApi.constructor(&unitInfos);
+    battleApi.getUnitInfos(battleMsgData, &unitInfos, true);
+
+    batBigFaceCleanUnitData(thisptr, unitInfos);
+
+    for (auto node = unitInfos.head->next; node != unitInfos.head; node = node->next) {
+        CMidgardID unitId;
+        idApi.validateId(&unitId, node->data.unitId1);
+
+        batBigFaceUpdateUnitData(thisptr, &unitId);
+    }
+
+    unitInfoListApi.destructor(&unitInfos);
 }
 
 } // namespace hooks

@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,17 +20,23 @@
 #ifndef D2MAP_H
 #define D2MAP_H
 
-#include "d2vector.h"
+#include "d2pair.h"
+#include "d2tree.h"
 
 namespace game {
 
-/** Structure with fast element lookup used in game. */
-template <typename T>
-struct Map
-{
-    const void* vftable;
-    Vector<T> data;
-};
+template <typename K, typename T>
+struct MapNode : public TreeNode<Pair<K, T>, MapNode<K, T>>
+{ };
+
+/** Implementation of std::map<K, T> used in game. */
+template <typename K, typename T, typename Allocator = void*>
+struct Map : public Tree<Pair<K, T>, MapNode<K, T>, Allocator>
+{ };
+
+template <typename K, typename T>
+struct MapIterator : public TreeIterator<Pair<K, T>, MapNode<K, T>>
+{ };
 
 } // namespace game
 

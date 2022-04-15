@@ -17,20 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTANDID_H
-#define TEXTANDID_H
+#ifndef MQ_C_S_H
+#define MQ_C_S_H
 
-#include "d2pair.h"
-#include "mq_c_s.h"
+#include "d2vector.h"
 
 namespace game {
 
-struct TextAndId
+/** Structure with fast element lookup used in game. */
+template <typename T>
+struct mq_c_s
 {
-    mq_c_s<Pair<CMidgardID, char*>>* text;
-    CMidgardID id;
+    const void* vftable;
+    Vector<T> data;
 };
 
 } // namespace game
 
-#endif // TEXTANDID_H
+#endif // MQ_C_S_H

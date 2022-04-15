@@ -25,10 +25,12 @@
 #include "customattacks.h"
 #include "dynamiccast.h"
 #include "game.h"
+#include "gameutils.h"
 #include "globaldata.h"
 #include "immunecat.h"
 #include "log.h"
 #include "midgardid.h"
+#include "midstack.h"
 #include "midunit.h"
 #include "settings.h"
 #include "ummodifier.h"
@@ -276,6 +278,30 @@ void updateAttackCountAfterTransformation(game::BattleMsgData* battleMsgData,
             break;
         }
     }
+}
+
+bool isStackLeaderAndAllowedToUseBattleItems(const game::IMidgardObjectMap* objectMap,
+                                             const game::CMidgardID* unitId,
+                                             const game::BattleMsgData* battleMsgData)
+{
+    using namespace game;
+
+    const auto& battleApi = BattleMsgDataApi::get();
+
+    auto stack = getStack(objectMap, battleMsgData, unitId);
+    if (!stack || stack->leaderId != *unitId)
+        return false;
+
+    if (battleApi.getUnitStatus(battleMsgData, unitId, BattleStatus::Transform))
+        return userSettings().allowBattleItems.onTransformOther;
+    else if (battleApi.getUnitStatus(battleMsgData, unitId, BattleStatus::TransformSelf))
+        return userSettings().allowBattleItems.onTransformSelf;
+    else if (battleApi.getUnitStatus(battleMsgData, unitId, BattleStatus::TransformDrainLevel))
+        return userSettings().allowBattleItems.onDrainLevel;
+    else if (battleApi.getUnitStatus(battleMsgData, unitId, BattleStatus::TransformDoppelganger))
+        return userSettings().allowBattleItems.onDoppelganger;
+
+    return true;
 }
 
 } // namespace hooks

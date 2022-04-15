@@ -95,22 +95,34 @@ static_assert(offsetof(CBattleViewerUnknown, data3) == 112,
 static_assert(offsetof(CBattleViewerUnknown, string) == 208,
               "CBattleViewerUnknown::string offset must be 208 bytes");
 
-struct CBattleViewerTargetData
+struct CBattleViewerAttackTargetData
 {
     bool isBattleGoing;
     bool unknown;
     char padding[2];
-    CMidgardID targetGroupId;
-    UnitPositionSet targetPositions;
+    CMidgardID groupId;
+    UnitPositionSet unitPositions;
 };
 
-static_assert(sizeof(CBattleViewerTargetData) == 36,
-              "Size of CBattleViewerTargetData structure must be exactly 36 bytes");
+static_assert(sizeof(CBattleViewerAttackTargetData) == 36,
+              "Size of CBattleViewerAttackTargetData structure must be exactly 36 bytes");
+
+struct CBattleViewerItemTargetData
+{
+    bool isAttacker;
+    bool unknown;
+    char padding[2];
+    CMidgardID groupId;
+    UnitPositionSet unitPositions;
+};
+
+static_assert(sizeof(CBattleViewerItemTargetData) == 36,
+              "Size of CBattleViewerItemTargetData structure must be exactly 36 bytes");
 
 struct CBattleViewerTargetDataSet
 {
-    CBattleViewerTargetData attack;
-    CBattleViewerTargetData items[2];
+    CBattleViewerAttackTargetData attack;
+    CBattleViewerItemTargetData items[2];
 };
 
 static_assert(sizeof(CBattleViewerTargetDataSet) == 108,
@@ -310,12 +322,6 @@ struct Api
     GetBoolById isUnitRetreating;
     GetBoolById getUnknown2;
 
-    using SetUnitId = void(__thiscall*)(CBatBigFace* thisptr, const CMidgardID* unitId);
-    SetUnitId setUnitId;
-
-    using SetUnknown = void(__thiscall*)(CBatBigFace* thisptr, bool a2);
-    SetUnknown setUnknown;
-
     using GetSelectedUnitId = CMidgardID*(__thiscall*)(const CBatUnitGroup2* thisptr,
                                                        CMidgardID* value,
                                                        const CMqPoint* mousePosition);
@@ -345,7 +351,9 @@ struct Api
 
     using UpdateUnknown = void(__thiscall*)(CBattleViewerInterf* thisptr, bool a2);
     UpdateUnknown updateUnknown;
-    UpdateUnknown updateUnknown2;
+
+    using UpdateBattleItems = void(__thiscall*)(CBattleViewerInterf* thisptr, bool canUseItem);
+    UpdateBattleItems updateBattleItems;
 
     using CBattleViewerTargetDataSetConstructor = CBattleViewerTargetDataSet*(
         __thiscall*)(CBattleViewerTargetDataSet* thisptr, const BatViewerTargetDataSet* src);
@@ -401,6 +409,27 @@ struct Api
     using UnknownMethod8 = bool(__thiscall*)(CBattleViewerInterf* thisptr,
                                              const CMqPoint* mousePosition);
     UnknownMethod8 unknownMethod8;
+
+    using UnknownMethod9 = void(__thiscall*)(CBattleViewerInterf* thisptr);
+    UnknownMethod9 unknownMethod9;
+
+    using UnknownMethod10 = void(__thiscall*)(CBattleViewerInterf* thisptr,
+                                              const CMidgardID* battleItemId,
+                                              int battleItemIndex,
+                                              const List<void*>* a4);
+    UnknownMethod10 unknownMethod10;
+
+    using UnknownMethod11 = void(__thiscall*)(CBattleViewerInterf* thisptr,
+                                              const CMidgardID* id,
+                                              const CMidgardID* targetGroupId,
+                                              const UnitPositionSet* targetPositions,
+                                              const CBattleViewerGroupAreas* groupAreas,
+                                              bool a6,
+                                              const List<void*>* a7);
+    UnknownMethod11 unknownMethod11;
+
+    using UnknownMethod12 = void(__thiscall*)(CBattleViewerInterf* thisptr);
+    UnknownMethod12 unknownMethod12;
 };
 
 Api& get();

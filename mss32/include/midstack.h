@@ -40,6 +40,18 @@ struct CMidInventoryStack : public CMidInventory
     int unknown;
 };
 
+/** Index map for CMidStack::leaderEquippedItems */
+enum EquippedItemIdx
+{
+    Banner = 0,
+    Tome,
+    Battle1,
+    Battle2,
+    Artifact1,
+    Artifact2,
+    Boots,
+};
+
 /**
  * Holds stack related data in scenario file and game.
  * Stack is a group of 6 units, one of which is a leader.
@@ -56,7 +68,7 @@ struct CMidStack
     char padding[3];
     CMidUnitGroupStack group;
     CMidInventoryStack inventory;
-    IdVector leaderEquppedItems;
+    IdVector leaderEquippedItems;
     CMidgardID ownerId;
     CMidgardID subraceId;
     CMidgardID insideId;
@@ -89,8 +101,8 @@ static_assert(offsetof(CMidStack, leaderId) == 40, "CMidStack::leaderId offset m
 static_assert(offsetof(CMidStack, inventory) == 100,
               "CMidStack::inventory offset must be 64 bytes");
 
-static_assert(offsetof(CMidStack, leaderEquppedItems) == 124,
-              "CMidStack::leaderEquppedItems offset must be 124 bytes");
+static_assert(offsetof(CMidStack, leaderEquippedItems) == 124,
+              "CMidStack::leaderEquippedItems offset must be 124 bytes");
 
 static_assert(offsetof(CMidStack, orderTargetId) == 172,
               "CMidStack::orderTargetId offset must be 172 bytes");

@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,49 +17,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "d2string.h"
+#include "d2tree.h"
 #include "version.h"
 #include <array>
 
-namespace game::StringApi {
+namespace game::TreeApi {
 
 // clang-format off
-static std::array<Api, 4> functions = {{
+static std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (Api::InitFromString)0x403d80,
-        (Api::InitFromStringN)0x403f62,
-        (Api::Free)0x401418,
-        (Api::Append)0x401453,
-        (Api::AppendChar)0x4248a4,
-        (Api::CStr)0x403dc6,
+        (Api::GetIterator)0x6403f0,
+        (Api::GetIterator)0x669070,
+        (Api::Dereference)0x62b790,
+        (Api::Equals)0x6402e0,
+        (Api::Preincrement)0x640560,
     },
     // Russobit
     Api{
-        (Api::InitFromString)0x403d80,
-        (Api::InitFromStringN)0x403f62,
-        (Api::Free)0x401418,
-        (Api::Append)0x401453,
-        (Api::AppendChar)0x4248a4,
-        (Api::CStr)0x403dc6,
+        (Api::GetIterator)0x6403f0,
+        (Api::GetIterator)0x669070,
+        (Api::Dereference)0x62b790,
+        (Api::Equals)0x6402e0,
+        (Api::Preincrement)0x640560,
     },
     // Gog
     Api{
-        (Api::InitFromString)0x403ac6,
-        (Api::InitFromStringN)0x403c8b,
-        (Api::Free)0x40106a,
-        (Api::Append)0x4010a5,
-        (Api::AppendChar)0x4243a5,
-        (Api::CStr)0x403b0c,
-    },
-    // Scenario Editor
-    Api{
-        (Api::InitFromString)0x402f6c,
-        (Api::InitFromStringN)0x403079,
-        (Api::Free)0x402fb2,
-        (Api::Append)0x4043ac,
-        (Api::AppendChar)0x472022,
-        (Api::CStr)0x405141,
+        (Api::GetIterator)0x667400,
+        (Api::GetIterator)0x648a30,
+        (Api::Dereference)0x63eeb0,
+        (Api::Equals)0x6678d0,
+        (Api::Preincrement)0x642390,
     },
 }};
 // clang-format on
@@ -69,4 +57,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::StringApi
+} // namespace game::TreeApi

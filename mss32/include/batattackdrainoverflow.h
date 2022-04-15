@@ -21,6 +21,7 @@
 #define BATATTACKDRAINOVERFLOW_H
 
 #include "batattack.h"
+#include "d2map.h"
 #include "midgardid.h"
 
 namespace game {
@@ -40,23 +41,9 @@ struct CBatAttackDrainOverflow : public CBatAttackBase
 static_assert(sizeof(CBatAttackDrainOverflow) == 20,
               "Size of CBatAttackDrainOverflow structure must be exactly 20 bytes");
 
-/** Used to compute heal for each unit in allied stack. */
-struct DrainOverflowHealData
-{
-    char unknown[28];
-};
-
-static_assert(sizeof(DrainOverflowHealData) == 28,
-              "Size of DrainOverflowHealData structure must be exactly 28 bytes");
-
-/** Used to traverse heal data. */
-struct DrainOverflowHealIterator
-{
-    int unknown[3];
-};
-
-static_assert(sizeof(DrainOverflowHealIterator) == 12,
-              "Size of DrainOverflowHealIterator structure must be exactly 12 bytes");
+/** Maps heal ammount to unit id. */
+using DrainOverflowHealData = Map<CMidgardID, int>;
+using DrainOverflowHealIterator = MapIterator<CMidgardID, int>;
 
 namespace CBatAttackDrainOverflowApi {
 
