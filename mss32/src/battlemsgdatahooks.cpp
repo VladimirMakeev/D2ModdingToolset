@@ -267,10 +267,15 @@ void updateUseItemBattleAction(const game::IMidgardObjectMap* objectMap,
         if (inventory.vftable->getItemIndex(&inventory, &itemId) == -1)
             continue;
 
+        bool used = false;
         for (auto usedItemId : battleMsgData->usedItemIds) {
-            if (usedItemId == itemId)
-                continue;
+            if (usedItemId == itemId) {
+                used = true;
+                break;
+            }
         }
+        if (used)
+            continue;
 
         battleApi.getItemAttackTargets(objectMap, battleMsgData, &unitInfo->unitId1, &itemId,
                                        itemTargets[i]);
