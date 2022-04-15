@@ -40,6 +40,18 @@ struct CMidInventoryStack : public CMidInventory
     int unknown;
 };
 
+/** Index map for CMidStack::leaderEquppedItems */
+enum EquippedItemIdx
+{
+    Banner = 0,
+    Tome,
+    Battle1,
+    Battle2,
+    Artifact1,
+    Artifact2,
+    Boots,
+};
+
 /**
  * Holds stack related data in scenario file and game.
  * Stack is a group of 6 units, one of which is a leader.
