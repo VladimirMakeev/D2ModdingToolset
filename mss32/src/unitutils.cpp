@@ -293,13 +293,13 @@ bool isStackLeaderAndAllowedToUseBattleItems(const game::IMidgardObjectMap* obje
         return false;
 
     if (battleApi.getUnitStatus(battleMsgData, unitId, BattleStatus::Transform))
-        return userSettings().allowBattleItemsIfTransformedByEnemy;
+        return userSettings().allowBattleItems.onTransformOther;
     else if (battleApi.getUnitStatus(battleMsgData, unitId, BattleStatus::TransformSelf))
-        return userSettings().allowBattleItemsIfTransformedByAlly;
+        return userSettings().allowBattleItems.onTransformSelf;
     else if (battleApi.getUnitStatus(battleMsgData, unitId, BattleStatus::TransformDrainLevel))
-        return userSettings().allowBattleItemsIfLevelDrained;
+        return userSettings().allowBattleItems.onDrainLevel;
     else if (battleApi.getUnitStatus(battleMsgData, unitId, BattleStatus::TransformDoppelganger))
-        return userSettings().allowBattleItemsIfDoppelganger;
+        return userSettings().allowBattleItems.onDoppelganger;
 
     return true;
 }

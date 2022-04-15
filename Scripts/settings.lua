@@ -136,12 +136,17 @@ settings = {
 
 	-- Fix leader transformation (doppelganger, drain-level, transform-self/other attacks)
 	-- to allow usage of battle items (potions, orbs and talismans)
-	allowBattleItemsIfTransformedByEnemy = false,
-	allowBattleItemsIfTransformedByAlly = false,
-	allowBattleItemsIfLevelDrained = false,
-	allowBattleItemsIfDoppelganger = false,
+	allowBattleItems = {
+		-- If leader is transformed by TransformOther attack (Witch, orb/talisman, artifact effect, etc.)
+		onTransformOther = false,
+		-- If leader is transformed by TransformSelf attack (Wolf Lord, orb/talisman, artifact effect, etc.)
+		onTransformSelf = false,
+		-- If leader's level is drained by DrainLevel attack (Wight, orb/talisman, artifact effect, etc.)
+		onDrainLevel = false,
+		-- If leader transformed himself by Doppelganger attack
+		onDoppelganger = false,
+	},
 
 	-- Create mss32 proxy dll log files with debug info
 	debugHooks = false,
 }
-

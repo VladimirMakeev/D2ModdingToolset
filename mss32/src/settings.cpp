@@ -63,6 +63,23 @@ static void readAiAttackPowerSettings(const sol::table& table, Settings::AiAttac
     value.veryHard = readSetting(bonuses.value(), "veryHard", def.veryHard);
 }
 
+static void readAllowBattleItemsSettings(const sol::table& table, Settings::AllowBattleItems& value)
+{
+    const auto& def = defaultSettings().allowBattleItems;
+
+    auto category = table.get<sol::optional<sol::table>>("allowBattleItems");
+    if (!category.has_value()) {
+        value = def;
+        return;
+    }
+
+    value.onTransformOther = readSetting(category.value(), "onTransformOther",
+                                         def.onTransformOther);
+    value.onTransformSelf = readSetting(category.value(), "onTransformSelf", def.onTransformSelf);
+    value.onDrainLevel = readSetting(category.value(), "onDrainLevel", def.onDrainLevel);
+    value.onDoppelganger = readSetting(category.value(), "onDoppelganger", def.onDoppelganger);
+}
+
 static Color readColor(const sol::table& table, const Color& def)
 {
     Color color{};
@@ -161,14 +178,11 @@ static void readSettings(const sol::table& table, Settings& settings)
     settings.freeTransformSelfAttackInfinite = readSetting(table, "freeTransformSelfAttackInfinite", defaultSettings().freeTransformSelfAttackInfinite);
     settings.detailedAttackDescription = readSetting(table, "detailedAttackDescription", defaultSettings().detailedAttackDescription);
     settings.fixEffectiveHpFormula = readSetting(table, "fixEffectiveHpFormula", defaultSettings().fixEffectiveHpFormula);
-    settings.allowBattleItemsIfTransformedByEnemy = readSetting(table, "allowBattleItemsIfTransformedByEnemy", defaultSettings().allowBattleItemsIfTransformedByEnemy);
-    settings.allowBattleItemsIfTransformedByAlly = readSetting(table, "allowBattleItemsIfTransformedByAlly", defaultSettings().allowBattleItemsIfTransformedByAlly);
-    settings.allowBattleItemsIfLevelDrained = readSetting(table, "allowBattleItemsIfLevelDrained", defaultSettings().allowBattleItemsIfLevelDrained);
-    settings.allowBattleItemsIfDoppelganger = readSetting(table, "allowBattleItemsIfDoppelganger", defaultSettings().allowBattleItemsIfDoppelganger);
     settings.debugMode = readSetting(table, "debugHooks", defaultSettings().debugMode);
     // clang-format on
 
     readAiAttackPowerSettings(table, settings.aiAttackPowerBonus);
+    readAllowBattleItemsSettings(table, settings.allowBattleItems);
     readMovementCostSettings(table, settings.movementCost);
     readLobbySettings(table, settings.lobby);
 }
@@ -217,10 +231,10 @@ const Settings& baseSettings()
         settings.freeTransformSelfAttackInfinite = false;
         settings.detailedAttackDescription = false;
         settings.fixEffectiveHpFormula = false;
-        settings.allowBattleItemsIfTransformedByEnemy = false;
-        settings.allowBattleItemsIfTransformedByAlly = false;
-        settings.allowBattleItemsIfLevelDrained = false;
-        settings.allowBattleItemsIfDoppelganger = false;
+        settings.allowBattleItems.onTransformOther = false;
+        settings.allowBattleItems.onTransformSelf = false;
+        settings.allowBattleItems.onDrainLevel = false;
+        settings.allowBattleItems.onDoppelganger = false;
         settings.movementCost.textColor = Color{200, 200, 200};
         settings.movementCost.show = false;
         settings.debugMode = false;

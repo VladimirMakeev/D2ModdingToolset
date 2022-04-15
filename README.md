@@ -368,10 +368,11 @@ The following settings can be changed in [settings.lua](Scripts/settings.lua):
     - "hard=\[-127 : 127\]";
     - "veryHard=\[-127 : 127\]";
     - "absolute=(true/false)" determines how accuracy bonuses are treated - as absolute or percentage values;
-  - "allowBattleItemsIfTransformedByEnemy=(true/false)" allows leaders transformed by enemy to use battle items;
-  - "allowBattleItemsIfTransformedByAlly=(true/false)" allows leaders transformed by ally (including self) to use battle items;
-  - "allowBattleItemsIfLevelDrained=(true/false)" allows leaders with drained level to use battle items;
-  - "allowBattleItemsIfDoppelganger=(true/false)" allows transformed leaders-doppelgangers to use battle items;
+  - "allowBattleItems" allows transformed leaders to use battle items:
+    - "onTransformOther=(true/false)" if leader is transformed by TransformOther attack (Witch, orb/talisman, artifact effect, etc.);
+    - "onTransformSelf=(true/false)" if leader is transformed by TransformSelf attack (Wolf Lord, orb/talisman, artifact effect, etc.);
+    - "onDrainLevel=(true/false)" if leader's level is drained by DrainLevel attack (Wight, orb/talisman, artifact effect, etc.);
+    - "onDoppelganger=(true/false)" if leader transformed himself by Doppelganger attack;
 </details>
 <details>
   <summary>Misc</summary>
