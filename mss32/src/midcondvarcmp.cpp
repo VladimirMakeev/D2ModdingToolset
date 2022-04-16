@@ -433,8 +433,10 @@ game::editor::CCondInterf* createCondVarCmpInterf(game::ITask* task,
         Variables variables;
 
         auto scenVariables = getScenarioVariables(objectMap);
-        for (const auto& variable : scenVariables->variables) {
-            variables.push_back(&variable);
+        if (scenVariables) {
+            for (const auto& variable : scenVariables->variables) {
+                variables.push_back(&variable);
+            }
         }
 
         variables.swap(thisptr->variables);
