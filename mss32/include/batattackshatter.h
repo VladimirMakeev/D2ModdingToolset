@@ -47,14 +47,6 @@ static_assert(sizeof(CBatAttackShatter) == 32,
 
 namespace CBatAttackShatterApi {
 
-struct Api
-{
-    IBatAttackVftable::CanPerform canPerform;
-    IBatAttackVftable::OnAttack onHit;
-};
-
-Api& get();
-
 IBatAttackVftable* vftable();
 
 } // namespace CBatAttackShatterApi

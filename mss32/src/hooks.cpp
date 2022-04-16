@@ -302,13 +302,13 @@ static Hooks getGameHooks()
     if (userSettings().shatteredArmorMax != baseSettings().shatteredArmorMax) {
         // Allow users to customize total armor shatter damage
         hooks.emplace_back(
-            HookInfo{CBatAttackShatterApi::get().canPerform, shatterCanPerformHooked});
+            HookInfo{CBatAttackShatterApi::vftable()->canPerform, shatterCanPerformHooked});
         hooks.emplace_back(HookInfo{battle.setUnitShatteredArmor, setUnitShatteredArmorHooked});
     }
 
     if (userSettings().shatterDamageMax != baseSettings().shatterDamageMax) {
         // Allow users to customize maximum armor shatter damage per attack
-        hooks.emplace_back(HookInfo{CBatAttackShatterApi::get().onHit, shatterOnHitHooked});
+        hooks.emplace_back(HookInfo{CBatAttackShatterApi::vftable()->onHit, shatterOnHitHooked});
     }
 
     if (userSettings().showBanners != baseSettings().showBanners) {
