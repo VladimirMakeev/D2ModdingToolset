@@ -47,21 +47,6 @@ struct Api
                                                          const UnitPositionMap* src);
     CopyAssignment copyAssignment;
 
-    using GetIterator = UnitPositionMapIterator*(__thiscall*)(UnitPositionMap* thisptr,
-                                                              UnitPositionMapIterator* iterator);
-    GetIterator begin;
-    GetIterator end;
-
-    using Dereference = UnitPositionPair*(__thiscall*)(UnitPositionMapIterator* thisptr);
-    Dereference dereference;
-
-    using Equals = bool(__thiscall*)(UnitPositionMapIterator* thisptr,
-                                     const UnitPositionMapIterator* value);
-    Equals equals;
-
-    using Preincrement = UnitPositionMapIterator*(__thiscall*)(UnitPositionMapIterator* thisptr);
-    Preincrement preinc;
-
     using FindByPosition = UnitPositionPair*(__stdcall*)(UnitPositionPair* value,
                                                          const UnitPositionMap* map,
                                                          int position);

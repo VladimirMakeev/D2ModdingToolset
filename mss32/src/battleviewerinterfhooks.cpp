@@ -94,18 +94,13 @@ void markAllAttackTargets(game::CBattleViewerInterf* viewer,
 {
     using namespace game;
 
-    const auto& mapApi = UnitPositionMapApi::get();
     const auto& groupApi = CMidUnitGroupApi::get();
 
-    UnitPositionMapIterator it, end;
-    mapApi.end((UnitPositionMap*)targetPositions, &end);
-    for (mapApi.begin((UnitPositionMap*)targetPositions, &it); !mapApi.equals(&it, &end);
-         mapApi.preinc(&it)) {
-        int targetPosition = mapApi.dereference(&it)->first;
-        if (targetPosition >= 0) {
-            const CMidgardID* targetId = groupApi.getUnitIdByPosition(targetGroup, targetPosition);
+    for (const auto& position : *targetPositions) {
+        if (position.first >= 0) {
+            const CMidgardID* targetId = groupApi.getUnitIdByPosition(targetGroup, position.first);
             markAttackTarget(viewer, targetId, targetInfo->unitFlags.parts.attacker,
-                             targetPosition);
+                             position.first);
         }
     }
 }
