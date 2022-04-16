@@ -20,8 +20,7 @@
 #ifndef DIALOGINTERFACE_H
 #define DIALOGINTERFACE_H
 
-#include "d2pair.h"
-#include "d2set.h"
+#include "d2map.h"
 #include "interface.h"
 #include <cstddef>
 
@@ -43,7 +42,7 @@ struct CDialogInterfData
 {
     char dialogName[48];
     SmartPtr<CMidAutoDlgLog> log;
-    Set<Pair<char[48] /* control name */, int /* child index */>> childControls;
+    Map<char[48] /* control name */, int /* child index */> childControls;
     IMqImage2* background;
     CMqRect area;
 };
