@@ -26,6 +26,7 @@
 #include "game.h"
 #include "gameutils.h"
 #include "globaldata.h"
+#include "intset.h"
 #include "log.h"
 #include "midgardobjectmap.h"
 #include "midplayer.h"
@@ -209,7 +210,7 @@ void __fastcall transformSelfAttackFillTargetsListHooked(game::CBatAttackTransfo
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& targetSetApi = TargetSetApi::get();
+    const auto& intSetApi = IntSetApi::get();
 
     CMidgardID unitGroupId{emptyId};
     fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, &thisptr->unitId, true);
@@ -228,7 +229,7 @@ void __fastcall transformSelfAttackFillTargetsListHooked(game::CBatAttackTransfo
     }
 
     Pair<TargetSetIterator, bool> tmp{};
-    targetSetApi.insert(targetsList, &tmp, &unitPosition);
+    intSetApi.insert(targetsList, &tmp, &unitPosition);
 }
 
 } // namespace hooks

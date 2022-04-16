@@ -20,15 +20,9 @@
 #ifndef TARGETSET_H
 #define TARGETSET_H
 
-#include "d2pair.h"
-#include "d2set.h"
+#include "intset.h"
 
 namespace game {
-
-struct IMidgardObjectMap;
-struct BattleMsgData;
-struct IBatAttack;
-struct CMidgardID;
 
 /**
  * Set of targets to attack during single battle turn.
@@ -36,41 +30,9 @@ struct CMidgardID;
  * Position values are positive for target group and negative for other group.
  * Negative position computed as -(unitPosition + 1).
  */
-using TargetSet = Set<int>;
-using TargetSetNode = SetNode<int>;
-using TargetSetIterator = SetIterator<int>;
-
-namespace TargetSetApi {
-
-struct Api
-{
-    /** Performs targets list initialization. */
-    using Constructor = TargetSet*(__thiscall*)(TargetSet* thisptr);
-    Constructor constructor;
-
-    /** Frees memory allocated for list. */
-    using Destructor = void(__thiscall*)(TargetSet* thisptr);
-    Destructor destructor;
-
-    /** Clears list contents. */
-    using Clear = void(__thiscall*)(TargetSet* thisptr);
-    Clear clear;
-
-    /** Inserts new element to the list. */
-    using Insert =
-        Pair<TargetSetIterator, bool>*(__thiscall*)(TargetSet* thisptr,
-                                                    Pair<TargetSetIterator, bool>* iterator,
-                                                    const int* unitPosition);
-    Insert insert;
-
-    /** Removes existing element from list. */
-    using Erase = void(__thiscall*)(TargetSet* thisptr, const int* unitPosition);
-    Erase erase;
-};
-
-Api& get();
-
-} // namespace TargetSetApi
+using TargetSet = IntSet;
+using TargetSetNode = IntSetNode;
+using TargetSetIterator = IntSetIterator;
 
 } // namespace game
 
