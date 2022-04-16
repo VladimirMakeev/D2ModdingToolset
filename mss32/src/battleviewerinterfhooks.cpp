@@ -438,20 +438,16 @@ void updateForNormalAttack(game::CBattleViewerInterf* viewer)
         }
     }
 
-    UnitPositionListIterator it, end;
-    for (listApi.begin(&targetPositions2, &it), listApi.end(&targetPositions2, &end);
-         !listApi.equals(&it, &end); listApi.preinc(&it)) {
-        UnitPositionPair* targetPosition = listApi.dereference(&it);
-
+    for (const auto& targetPosition : targetPositions2) {
         int absolutePosition;
         bool unknown2;
         CMidgardID targetUnitId = invalidId;
-        if (targetPosition->first >= 0) {
-            absolutePosition = targetPosition->first;
+        if (targetPosition.first >= 0) {
+            absolutePosition = targetPosition.first;
             unknown2 = viewer->data->targetData.attack.unknown;
             targetUnitId = *groupApi.getUnitIdByPosition(targetGroup, absolutePosition);
         } else {
-            absolutePosition = -(targetPosition->first + 1);
+            absolutePosition = -(targetPosition.first + 1);
             unknown2 = unknown;
             targetUnitId = *groupApi.getUnitIdByPosition(otherGroup, absolutePosition);
         }
@@ -473,7 +469,7 @@ void updateForNormalAttack(game::CBattleViewerInterf* viewer)
             id.summonUnitIdFromPosition(&targetUnitId, absolutePosition);
             isTargetForSummonOrAttackTargetsBothGroups = true;
 
-            if (!targetPosition->second)
+            if (!targetPosition.second)
                 continue;
 
             viewerApi.unknownMethod3(unknown2 ? viewer->data->batUnitGroup1
@@ -482,7 +478,7 @@ void updateForNormalAttack(game::CBattleViewerInterf* viewer)
             viewerApi.unknownMethod3(unknown2 ? viewer->data->batUnitGroup3
                                               : viewer->data->batUnitGroup4,
                                      &viewer->data->targetData.attack.groupId, absolutePosition);
-        } else if (targetPosition->second) {
+        } else if (targetPosition.second) {
             viewerApi.unknownMethod2(unknown2 ? viewer->data->batUnitGroup1
                                               : viewer->data->batUnitGroup2,
                                      &targetUnitId, isSupportAttack);
@@ -491,10 +487,10 @@ void updateForNormalAttack(game::CBattleViewerInterf* viewer)
                                      &targetUnitId, isSupportAttack);
         }
 
-        bool canPerformAttackOnTargetOrAllAttackReach = targetPosition->second
-                                                        || (targetPosition->first >= 0
+        bool canPerformAttackOnTargetOrAllAttackReach = targetPosition.second
+                                                        || (targetPosition.first >= 0
                                                             && isAllAttackReach);
-        viewerApi.addTargetUnitData(viewer, targetPosition->first, &targetUnitId, unknown2,
+        viewerApi.addTargetUnitData(viewer, targetPosition.first, &targetUnitId, unknown2,
                                     isTargetForSummonOrAttackTargetsBothGroups, isTargetForSummon,
                                     canPerformAttackOnTargetOrAllAttackReach);
     }
