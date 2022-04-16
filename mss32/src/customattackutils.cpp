@@ -503,7 +503,7 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
     auto unitGroup = fn.getStackFortRuinGroup(tmp, objectMap, unitGroupId);
     auto targetGroup = fn.getStackFortRuinGroup(tmp, objectMap, targetGroupId);
 
-    for (auto targetPosition : *value) {
+    for (const auto& targetPosition : *value) {
         auto unitId = getTargetUnitId(targetPosition, targetGroup, unitGroup);
         if (unitId == emptyId)
             continue;

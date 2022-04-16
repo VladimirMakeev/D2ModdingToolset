@@ -60,11 +60,11 @@ struct Api
     using Insert =
         Pair<TargetSetIterator, bool>*(__thiscall*)(TargetSet* thisptr,
                                                     Pair<TargetSetIterator, bool>* iterator,
-                                                    int* unitPosition);
+                                                    const int* unitPosition);
     Insert insert;
 
     /** Removes existing element from list. */
-    using Erase = void(__thiscall*)(TargetSet* thisptr, int* unitPosition);
+    using Erase = void(__thiscall*)(TargetSet* thisptr, const int* unitPosition);
     Erase erase;
 };
 

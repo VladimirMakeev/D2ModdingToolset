@@ -577,7 +577,7 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
 
     viewer->data2->normalAttack = false;
     bool canUseItem = false;
-    for (auto action : *actions) {
+    for (const auto& action : *actions) {
         switch (action) {
         case BattleAction::Attack:
             viewer->data2->normalAttack = true;

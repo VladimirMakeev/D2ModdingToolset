@@ -834,7 +834,7 @@ bool __stdcall findDamageAndShatterAttackTargetWithMeleeReach(
     int secondaryEffectiveHp = std::numeric_limits<int>::max();
     CMidUnit* primaryTarget = nullptr;
     CMidUnit* secondaryTarget = nullptr;
-    for (auto targetPosition : *targets) {
+    for (const auto& targetPosition : *targets) {
         auto targetUnitId = *groupApi.getUnitIdByPosition(targetGroup, targetPosition);
 
         bool isSecondary = battle.getUnitStatus(battleMsgData, &targetUnitId, BattleStatus::Summon);
@@ -909,7 +909,7 @@ bool __stdcall findDamageAndShatterAttackTargetWithNonMeleeReach(
 
     int resultPriority = 0;
     CMidUnit* result = nullptr;
-    for (auto targetPosition : *targets) {
+    for (const auto& targetPosition : *targets) {
         auto targetUnitId = *groupApi.getUnitIdByPosition(targetGroup, targetPosition);
 
         auto targetUnit = static_cast<CMidUnit*>(
@@ -976,7 +976,7 @@ bool __stdcall findShatterOnlyAttackTarget(const game::IMidgardObjectMap* object
 
     int resultPriority = 0;
     CMidUnit* result = nullptr;
-    for (auto targetPosition : *targets) {
+    for (const auto& targetPosition : *targets) {
         auto targetUnitId = *groupApi.getUnitIdByPosition(targetGroup, targetPosition);
         if (battle.getUnitStatus(battleMsgData, &targetUnitId, BattleStatus::Retreat))
             continue;
@@ -1107,7 +1107,7 @@ bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap*
     int secondaryXpKilled = 0;
     CMidUnit* primaryTarget = nullptr;
     CMidUnit* secondaryTarget = nullptr;
-    for (auto targetPosition : *targets) {
+    for (const auto& targetPosition : *targets) {
         auto targetUnitId = getTargetUnitId(targetPosition, targetGroup, enemyGroup);
         auto targetUnit = static_cast<CMidUnit*>(
             objectMap->vftable->findScenarioObjectById(objectMap, &targetUnitId));

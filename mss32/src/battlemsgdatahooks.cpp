@@ -268,7 +268,7 @@ void updateUseItemBattleAction(const game::IMidgardObjectMap* objectMap,
             continue;
 
         bool used = false;
-        for (auto usedItemId : battleMsgData->usedItemIds) {
+        for (const auto& usedItemId : battleMsgData->usedItemIds) {
             if (usedItemId == itemId) {
                 used = true;
                 break;
@@ -281,7 +281,7 @@ void updateUseItemBattleAction(const game::IMidgardObjectMap* objectMap,
                                        itemTargets[i]);
     }
 
-    for (auto targets : itemTargets) {
+    for (const auto targets : itemTargets) {
         if (targets->second.length > 0) {
             BattleAction useItem = BattleAction::UseItem;
             Pair<TargetSetIterator, bool> tmp{};
