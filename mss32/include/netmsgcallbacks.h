@@ -37,12 +37,12 @@ struct NetMsgEntryNode
     SmartPtr<CNetMsgMapEntry> ptr;
 };
 
-using NetMsgEntryList = Set<NetMsgEntryNode>;
+using NetMsgEntrySet = Set<NetMsgEntryNode>;
 
 struct NetMsgEntryData
 {
     NetMsgCallbacks** callbacks;
-    NetMsgEntryList entryList;
+    NetMsgEntrySet entries;
 };
 
 using NetMsgEntryDataList = List<NetMsgEntryData**>;
