@@ -30,6 +30,7 @@ enum class TreeNodeColor : int
     Black,
 };
 
+/** Implementation of std::_Tree<T>::node used in game. */
 template <typename T>
 struct TreeNode
 {
@@ -40,6 +41,11 @@ struct TreeNode
     T value;
 };
 
+static_assert(sizeof(TreeNode<int>) == 20,
+              "Size of TreeNode<int> structure must be exactly 20 bytes");
+
+/** Implementation of std::_Tree<T>::const_iterator used in game.
+ * Inline methods exactly correspond to in-game implementation. */
 template <typename T>
 struct ConstTreeIterator
 {
@@ -91,6 +97,11 @@ struct ConstTreeIterator
     }
 };
 
+static_assert(sizeof(ConstTreeIterator<int>) == 12,
+              "Size of ConstTreeIterator structure must be exactly 12 bytes");
+
+/** Implementation of std::_Tree<T>::iterator used in game.
+ * Inline methods exactly correspond to in-game implementation. */
 template <typename T>
 struct TreeIterator : public ConstTreeIterator<T>
 {
@@ -120,7 +131,11 @@ struct TreeIterator : public ConstTreeIterator<T>
     }
 };
 
-/** Implementation of std::_Tree<T> (ordered red-black tree) used in game. */
+static_assert(sizeof(TreeIterator<int>) == 12,
+              "Size of TreeIterator structure must be exactly 12 bytes");
+
+/** Implementation of std::_Tree<T> (ordered red-black tree) used in game.
+ * Inline methods exactly correspond to in-game implementation. */
 template <typename T, typename Allocator>
 struct Tree
 {
@@ -153,6 +168,8 @@ struct Tree
         return {0, {}, head, nil};
     }
 };
+
+static_assert(sizeof(Tree<int, void*>) == 28, "Size of Tree structure must be exactly 28 bytes");
 
 } // namespace game
 

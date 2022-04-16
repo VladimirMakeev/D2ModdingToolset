@@ -24,6 +24,7 @@
 
 namespace game {
 
+/** Implementation of std::list<T>::node used in game. */
 template <typename T>
 struct ListNode
 {
@@ -32,6 +33,13 @@ struct ListNode
     T data;
 };
 
+static_assert(sizeof(ListNode<int>) == 12,
+              "Size of ListNode<int> structure must be exactly 12 bytes");
+
+/** Implementation of std::list<T>::const_iterator used in game.
+ * Inline methods exactly correspond to in-game implementation.
+ * T* ptr appear to always be nullptr, but no guarantees.
+ * Bet that this implementation might be shared with vector::iterator. */
 template <typename T>
 struct ConstListIterator
 {
@@ -78,6 +86,11 @@ struct ConstListIterator
     }
 };
 
+static_assert(sizeof(ConstListIterator<int>) == 12,
+              "Size of ConstListIterator structure must be exactly 12 bytes");
+
+/** Implementation of std::list<T>::iterator used in game.
+ * Inline methods exactly correspond to in-game implementation. */
 template <typename T>
 struct ListIterator : public ConstListIterator<T>
 {
@@ -107,7 +120,11 @@ struct ListIterator : public ConstListIterator<T>
     }
 };
 
-/** Implementation of std::list<T> used in game. */
+static_assert(sizeof(ListIterator<int>) == 12,
+              "Size of ListIterator structure must be exactly 12 bytes");
+
+/** Implementation of std::list<T> used in game.
+ * Inline methods exactly correspond to in-game implementation. */
 template <typename T>
 struct List
 {
@@ -136,6 +153,8 @@ struct List
         return {0, {}, head, nullptr};
     }
 };
+
+static_assert(sizeof(List<int>) == 16, "Size of List structure must be exactly 16 bytes");
 
 } // namespace game
 
