@@ -530,10 +530,7 @@ void fillCustomDamageRatios(const game::IAttack* attack, const game::IdList* tar
 
     auto& customRatios = getCustomAttacks().damageRatios.value;
     auto ratioIt = ratios.begin();
-    IdListIterator it, end;
-    for (listApi.begin(targets, &it), listApi.end(targets, &end); !listApi.equals(&it, &end);
-         listApi.preinc(&it)) {
-        CMidgardID unitId = *listApi.dereference(&it);
+    for (const auto& unitId : *targets) {
         customRatios[unitId] = *(ratioIt++);
     }
 }
@@ -571,8 +568,8 @@ std::vector<double> computeAttackDamageRatio(const game::IAttack* attack, int ta
     }
 
     if (attackImpl->data->damageSplit) {
-        for (auto it = result.begin(); it != result.end(); ++it) {
-            *it = *it / totalRatio * userSettings().splitDamageMultiplier;
+        for (auto& value : result) {
+            value /= totalRatio * userSettings().splitDamageMultiplier;
         }
     }
 

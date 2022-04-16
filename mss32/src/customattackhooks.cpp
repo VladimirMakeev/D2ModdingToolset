@@ -1239,40 +1239,31 @@ game::CMidgardID* __stdcall getSummonUnitImplIdByAttackHooked(game::CMidgardID* 
 
     if (summonImplIds.length == 0) {
         *summonImplId = emptyId;
-    } else if (summonImplIds.length == 1) {
-        *summonImplId = *listApi.front(&summonImplIds);
     } else {
-        IdListIterator randomIt;
-        listApi.begin(&summonImplIds, &randomIt);
-
-        int random = fn.generateRandomNumberStd(summonImplIds.length);
-        for (int i = 0; i < random; i++) {
-            listApi.preinc(&randomIt);
+        IdListIterator startIt = summonImplIds.begin();
+        int start = fn.generateRandomNumberStd(summonImplIds.length);
+        for (int i = 0; i < start; i++) {
+            ++startIt;
         }
 
         if (position % 2 == 0) {
-            *summonImplId = *listApi.dereference(&randomIt);
+            *summonImplId = *startIt;
         } else {
-            IdListIterator end;
-            listApi.end(&summonImplIds, &end);
-
-            IdListIterator it = randomIt;
+            IdListIterator it = startIt;
             do {
+                *summonImplId = *it;
+
                 auto unitImpl = static_cast<TUsUnitImpl*>(
-                    global.findById(globalData->units, listApi.dereference(&it)));
+                    global.findById(globalData->units, summonImplId));
 
                 const auto soldier = fn.castUnitImplToSoldier(unitImpl);
                 const auto attack = soldier->vftable->getAttackById(soldier);
                 if (!isMeleeAttack(attack))
                     break;
 
-                listApi.preinc(&it);
-                if (listApi.equals(&it, &end)) {
-                    listApi.begin(&summonImplIds, &it);
-                }
-            } while (!listApi.equals(&it, &randomIt));
-
-            *summonImplId = *listApi.dereference(&it);
+                if (++it == summonImplIds.end())
+                    it = summonImplIds.begin();
+            } while (it != startIt);
         }
     }
 
