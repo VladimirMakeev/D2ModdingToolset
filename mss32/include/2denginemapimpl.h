@@ -21,8 +21,7 @@
 #define C2DENGINEMAPIMPL_H
 
 #include "2denginemap.h"
-#include "d2pair.h"
-#include "d2set.h"
+#include "d2map.h"
 #include "d2vector.h"
 #include "mqpoint.h"
 #include "smartptr.h"
@@ -32,11 +31,12 @@ namespace game {
 struct C2DEngine;
 struct CUIManager;
 
-using ElementIndexHashSet = Set<Pair<int /* elementIndex */, int /* isoLayerPositionHash */>,
+using ElementIndexHashMap = Map<int /* elementIndex */,
+                                int /* isoLayerPositionHash */,
                                 SmartPointer>;
 
-static_assert(sizeof(ElementIndexHashSet) == 36,
-              "Size of ElementIndexHashSet structure must be exactly 36 bytes");
+static_assert(sizeof(ElementIndexHashMap) == 36,
+              "Size of ElementIndexHashMap structure must be exactly 36 bytes");
 
 struct EngineMapImageElementData
 {
@@ -77,7 +77,7 @@ struct C2DEngineMapImplData
 {
     C2DEngine* engine2d;
     SmartPtr<CUIManager> uiManagerPtr;
-    Pair<ElementIndexHashSet, int /* freeElementIndex */> elementHashSetFreeIndexPair;
+    Pair<ElementIndexHashMap, int /* freeElementIndex */> elementHashMapFreeIndexPair;
     Vector<EngineMapImageElement, SmartPointer> imageElements;
     Pair<Vector<char[16]>, int> unknownData;
     bool dirty; /**< Meaning assumed. */
