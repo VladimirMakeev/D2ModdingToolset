@@ -94,6 +94,8 @@ struct ConstTreeIterator
 template <typename T>
 struct TreeIterator : public ConstTreeIterator<T>
 {
+    using Base = ConstTreeIterator<T>;
+
     T& operator*() const
     {
         return node->value;
@@ -106,14 +108,14 @@ struct TreeIterator : public ConstTreeIterator<T>
 
     TreeIterator<T>& operator++()
     {
-        __super::operator++();
+        Base::operator++();
         return *this;
     }
 
     TreeIterator<T> operator++(int)
     {
         auto result = *this;
-        __super::operator++();
+        Base::operator++();
         return result;
     }
 };

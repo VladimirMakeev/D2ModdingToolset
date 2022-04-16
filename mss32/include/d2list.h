@@ -81,6 +81,8 @@ struct ConstListIterator
 template <typename T>
 struct ListIterator : public ConstListIterator<T>
 {
+    using Base = ConstListIterator<T>;
+
     T& operator*() const
     {
         return ptr ? *ptr : node->data;
@@ -93,14 +95,14 @@ struct ListIterator : public ConstListIterator<T>
 
     ListIterator<T>& operator++()
     {
-        __super::operator++();
+        Base::operator++();
         return *this;
     }
 
     ListIterator<T> operator++(int)
     {
         auto result = *this;
-        __super::operator++();
+        Base::operator++();
         return result;
     }
 };
