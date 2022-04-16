@@ -45,14 +45,7 @@ static_assert(sizeof(CBatAttackDoppelganger) == 28,
 
 namespace CBatAttackDoppelgangerApi {
 
-struct Api
-{
-    IBatAttackVftable::CanPerform canPerform;
-    IBatAttackVftable::IsImmune isImmune;
-    IBatAttackVftable::OnAttack onHit;
-};
-
-Api& get();
+IBatAttackVftable* vftable();
 
 } // namespace CBatAttackDoppelgangerApi
 

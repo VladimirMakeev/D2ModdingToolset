@@ -333,16 +333,16 @@ static Hooks getGameHooks()
         || userSettings().doppelgangerRespectsAllyImmunity
                != baseSettings().doppelgangerRespectsAllyImmunity) {
         // Make Doppelganger attack respect target source/class wards and immunities
-        hooks.emplace_back(HookInfo{CBatAttackDoppelgangerApi::get().canPerform,
+        hooks.emplace_back(HookInfo{CBatAttackDoppelgangerApi::vftable()->canPerform,
                                     doppelgangerAttackCanPerformHooked});
-        hooks.emplace_back(
-            HookInfo{CBatAttackDoppelgangerApi::get().isImmune, doppelgangerAttackIsImmuneHooked});
+        hooks.emplace_back(HookInfo{CBatAttackDoppelgangerApi::vftable()->isImmune,
+                                    doppelgangerAttackIsImmuneHooked});
     }
 
     if (userSettings().leveledDoppelgangerAttack != baseSettings().leveledDoppelgangerAttack) {
         // Allow doppelganger to transform into leveled units using script logic
         hooks.emplace_back(
-            HookInfo{CBatAttackDoppelgangerApi::get().onHit, doppelgangerAttackOnHitHooked});
+            HookInfo{CBatAttackDoppelgangerApi::vftable()->onHit, doppelgangerAttackOnHitHooked});
     }
 
     if (userSettings().leveledSummonAttack != baseSettings().leveledSummonAttack) {
