@@ -136,6 +136,15 @@ static const game::LRaceCategory* getVillageOwnerRace(const game::IMidgardObject
     return ownerRace;
 }
 
+static bool villageIsObjective(const game::IdSet* objectives, const game::CMidgardID& villageId)
+{
+    using namespace game;
+
+    IdSetIterator iterator{};
+    IdSetApi::get().find(objectives, &iterator, &villageId);
+    return iterator != objectives->end();
+}
+
 void __stdcall displayHandlerVillageHooked(game::ImageLayerList* list,
                                            const game::CMidVillage* village,
                                            const game::IMidgardObjectMap* objectMap,
@@ -169,15 +178,11 @@ void __stdcall displayHandlerVillageHooked(game::ImageLayerList* list,
         listApi.pushBack(list, &flagPair);
     }
 
-    if (playerId) {
-        IdSetIterator iterator{};
-        IdSetApi::get().find(objectives, &iterator, &village->cityId);
-        if (iterator != objectives->end()) {
-            ImageLayerPair objectivePair{GameImagesApi::get().getObjectiveImage(
-                                             village->mapElement.sizeX),
-                                         isoLayers().symObjective};
-            listApi.pushBack(list, &objectivePair);
-        }
+    if (playerId && villageIsObjective(objectives, village->cityId)) {
+        ImageLayerPair objectivePair{GameImagesApi::get().getObjectiveImage(
+                                         village->mapElement.sizeX),
+                                     isoLayers().symObjective};
+        listApi.pushBack(list, &objectivePair);
     }
 
     if (village->stackId != emptyId) {
