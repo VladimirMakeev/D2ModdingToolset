@@ -188,7 +188,7 @@ static Hooks getGameHooks()
         {fn.computePlayerDailyIncome, computePlayerDailyIncomeHooked, (void**)&orig.computePlayerDailyIncome},
         // Vampiric attacks can deal critical damage
         {CBatAttackDrainApi::get().onHit, drainAttackOnHitHooked},
-        {CBatAttackDrainOverflowApi::get().onHit, drainOverflowAttackOnHitHooked},
+        {CBatAttackDrainOverflowApi::vftable()->onHit, drainOverflowAttackOnHitHooked},
         // Support additional music tracks for battle and capital cities
         {CMidMusicApi::get().playBattleTrack, playBattleTrackHooked},
         {CMidMusicApi::get().playCapitalTrack, playCapitalTrackHooked},

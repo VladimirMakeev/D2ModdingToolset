@@ -27,7 +27,6 @@ namespace game::CBatAttackDrainOverflowApi {
 static std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (IBatAttackVftable::OnAttack)0x660d9b,
         (Api::HealDataConstructor)0x668910,
         (Api::HealDataDestructor)0x668990,
         (Api::HealDataIteratorConstructor)0x6403f0,
@@ -40,7 +39,6 @@ static std::array<Api, 3> functions = {{
     },
     // Russobit
     Api{
-        (IBatAttackVftable::OnAttack)0x660d9b,
         (Api::HealDataConstructor)0x668910,
         (Api::HealDataDestructor)0x668990,
         (Api::HealDataIteratorConstructor)0x6403f0,
@@ -53,7 +51,6 @@ static std::array<Api, 3> functions = {{
     },
     // Gog
     Api{
-        (IBatAttackVftable::OnAttack)0x65f81b,
         (Api::HealDataConstructor)0x667360,
         (Api::HealDataDestructor)0x6673e0,
         (Api::HealDataIteratorConstructor)0x667400,
@@ -65,11 +62,27 @@ static std::array<Api, 3> functions = {{
         (Api::ComputeDrainOverflowGroupHeal)0x65fbb8
     }
 }};
+
+static std::array<IBatAttackVftable*, 4> vftables = {{
+    // Akella
+    (IBatAttackVftable*)0x6f536c,
+    // Russobit
+    (IBatAttackVftable*)0x6f536c,
+    // Gog
+    (IBatAttackVftable*)0x6f331c,
+    // Scenario Editor
+    (IBatAttackVftable*)nullptr,
+}};
 // clang-format on
 
 Api& get()
 {
     return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+IBatAttackVftable* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::CBatAttackDrainOverflowApi

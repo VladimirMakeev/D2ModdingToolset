@@ -49,8 +49,6 @@ namespace CBatAttackDrainOverflowApi {
 
 struct Api
 {
-    IBatAttackVftable::OnAttack onHit;
-
     /** Initializes heal data structure. */
     using HealDataConstructor = DrainOverflowHealData*(__thiscall*)(DrainOverflowHealData* thisptr);
     HealDataConstructor healDataCtor;
@@ -107,6 +105,8 @@ struct Api
 };
 
 Api& get();
+
+IBatAttackVftable* vftable();
 
 } // namespace CBatAttackDrainOverflowApi
 
