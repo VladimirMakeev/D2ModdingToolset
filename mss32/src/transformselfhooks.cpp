@@ -209,7 +209,7 @@ void __fastcall transformSelfAttackFillTargetsListHooked(game::CBatAttackTransfo
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& listApi = TargetSetApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
 
     CMidgardID unitGroupId{emptyId};
     fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, &thisptr->unitId, true);
@@ -228,7 +228,7 @@ void __fastcall transformSelfAttackFillTargetsListHooked(game::CBatAttackTransfo
     }
 
     Pair<TargetSetIterator, bool> tmp{};
-    listApi.insert(targetsList, &tmp, &unitPosition);
+    targetSetApi.insert(targetsList, &tmp, &unitPosition);
 }
 
 } // namespace hooks

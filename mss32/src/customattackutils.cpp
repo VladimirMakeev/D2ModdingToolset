@@ -299,10 +299,10 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& listApi = TargetSetApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
     const auto& groupApi = CMidUnitGroupApi::get();
 
-    listApi.clear(value);
+    targetSetApi.clear(value);
 
     void* tmp{};
     auto unitGroup = fn.getStackFortRuinGroup(tmp, objectMap, unitGroupId);
@@ -324,13 +324,13 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
     for (const auto& target : targetsToSelect) {
         int position = target.getPosition();
         Pair<TargetSetIterator, bool> tmp{};
-        listApi.insert(value, &tmp, &position);
+        targetSetApi.insert(value, &tmp, &position);
 
         if (isSummonAttack && !(position % 2)) {
             auto unit = target.getUnit();
             if (unit && !isUnitSmall(unit)) {
                 int backPosition = position + 1;
-                listApi.insert(value, &tmp, &backPosition);
+                targetSetApi.insert(value, &tmp, &backPosition);
             }
         }
     }
@@ -497,23 +497,19 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& listApi = TargetSetApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
 
     void* tmp{};
     auto unitGroup = fn.getStackFortRuinGroup(tmp, objectMap, unitGroupId);
     auto targetGroup = fn.getStackFortRuinGroup(tmp, objectMap, targetGroupId);
 
-    TargetSetIterator it, end;
-    listApi.end(value, &end);
-    for (listApi.begin(value, &it); !listApi.equals(&it, &end); listApi.preinc(&it)) {
-        int targetPosition = *listApi.dereference(&it);
-
+    for (auto targetPosition : *value) {
         auto unitId = getTargetUnitId(targetPosition, targetGroup, unitGroup);
         if (unitId == emptyId)
             continue;
 
         if (fn.isUnitImmuneToAttack(objectMap, battleMsgData, &unitId, attack, true)) {
-            listApi.erase(value, &targetPosition);
+            targetSetApi.erase(value, &targetPosition);
         }
     }
 }

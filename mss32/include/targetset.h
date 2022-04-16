@@ -56,12 +56,6 @@ struct Api
     using Clear = void(__thiscall*)(TargetSet* thisptr);
     Clear clear;
 
-    /** Returns iterator pointing to the first element in the list. */
-    using GetIterator = TargetSetIterator*(__thiscall*)(const TargetSet* thisptr,
-                                                        TargetSetIterator* iterator);
-    GetIterator begin;
-    GetIterator end;
-
     /** Inserts new element to the list. */
     using Insert =
         Pair<TargetSetIterator, bool>*(__thiscall*)(TargetSet* thisptr,
@@ -72,20 +66,6 @@ struct Api
     /** Removes existing element from list. */
     using Erase = void(__thiscall*)(TargetSet* thisptr, int* unitPosition);
     Erase erase;
-
-    /**
-     * Returns pointer to list node value depending on iterator.
-     * Same as @code{.cpp} thisptr->node.value; @endcode
-     */
-    using Dereference = int*(__thiscall*)(const TargetSetIterator* thisptr);
-    Dereference dereference;
-
-    using Equals = bool(__thiscall*)(const TargetSetIterator* thisptr,
-                                     const TargetSetIterator* value);
-    Equals equals;
-
-    using Preincrement = TargetSetIterator*(__thiscall*)(TargetSetIterator* thisptr);
-    Preincrement preinc;
 };
 
 Api& get();

@@ -827,7 +827,6 @@ bool __stdcall findDamageAndShatterAttackTargetWithMeleeReach(
 
     const auto& fn = gameFunctions();
     const auto& battle = BattleMsgDataApi::get();
-    const auto& listApi = TargetSetApi::get();
     const auto& groupApi = CMidUnitGroupApi::get();
     const auto& immunities = ImmuneCategories::get();
 
@@ -835,10 +834,7 @@ bool __stdcall findDamageAndShatterAttackTargetWithMeleeReach(
     int secondaryEffectiveHp = std::numeric_limits<int>::max();
     CMidUnit* primaryTarget = nullptr;
     CMidUnit* secondaryTarget = nullptr;
-    TargetSetIterator it, end;
-    for (listApi.begin(targets, &it), listApi.end(targets, &end); !listApi.equals(&it, &end);
-         listApi.preinc(&it)) {
-        int targetPosition = *listApi.dereference(&it);
+    for (auto targetPosition : *targets) {
         auto targetUnitId = *groupApi.getUnitIdByPosition(targetGroup, targetPosition);
 
         bool isSecondary = battle.getUnitStatus(battleMsgData, &targetUnitId, BattleStatus::Summon);
@@ -908,16 +904,12 @@ bool __stdcall findDamageAndShatterAttackTargetWithNonMeleeReach(
 
     const auto& fn = gameFunctions();
     const auto& battle = BattleMsgDataApi::get();
-    const auto& listApi = TargetSetApi::get();
     const auto& groupApi = CMidUnitGroupApi::get();
     const auto& immunities = ImmuneCategories::get();
 
     int resultPriority = 0;
     CMidUnit* result = nullptr;
-    TargetSetIterator it, end;
-    for (listApi.begin(targets, &it), listApi.end(targets, &end); !listApi.equals(&it, &end);
-         listApi.preinc(&it)) {
-        int targetPosition = *listApi.dereference(&it);
+    for (auto targetPosition : *targets) {
         auto targetUnitId = *groupApi.getUnitIdByPosition(targetGroup, targetPosition);
 
         auto targetUnit = static_cast<CMidUnit*>(
@@ -980,16 +972,11 @@ bool __stdcall findShatterOnlyAttackTarget(const game::IMidgardObjectMap* object
 
     const auto& fn = gameFunctions();
     const auto& battle = BattleMsgDataApi::get();
-    const auto& listApi = TargetSetApi::get();
     const auto& groupApi = CMidUnitGroupApi::get();
 
     int resultPriority = 0;
     CMidUnit* result = nullptr;
-    TargetSetIterator it, end;
-    for (listApi.begin(targets, &it), listApi.end(targets, &end); !listApi.equals(&it, &end);
-         listApi.preinc(&it)) {
-        int targetPosition = *listApi.dereference(&it);
-
+    for (auto targetPosition : *targets) {
         auto targetUnitId = *groupApi.getUnitIdByPosition(targetGroup, targetPosition);
         if (battle.getUnitStatus(battleMsgData, &targetUnitId, BattleStatus::Retreat))
             continue;
@@ -1111,7 +1098,6 @@ bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap*
 
     const auto& fn = gameFunctions();
     const auto& groupApi = CMidUnitGroupApi::get();
-    const auto& listApi = TargetSetApi::get();
 
     CMidUnitGroup* enemyGroup = getAllyOrEnemyGroup(objectMap, battleMsgData, unitId, false);
 
@@ -1121,11 +1107,7 @@ bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap*
     int secondaryXpKilled = 0;
     CMidUnit* primaryTarget = nullptr;
     CMidUnit* secondaryTarget = nullptr;
-    TargetSetIterator it, end;
-    for (listApi.begin(targets, &it), listApi.end(targets, &end); !listApi.equals(&it, &end);
-         listApi.preinc(&it)) {
-        int targetPosition = *listApi.dereference(&it);
-
+    for (auto targetPosition : *targets) {
         auto targetUnitId = getTargetUnitId(targetPosition, targetGroup, enemyGroup);
         auto targetUnit = static_cast<CMidUnit*>(
             objectMap->vftable->findScenarioObjectById(objectMap, &targetUnitId));
