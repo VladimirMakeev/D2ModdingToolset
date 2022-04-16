@@ -388,7 +388,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\targetslistutils.cpp" />
     <ClCompile Include="src\taskchangecolor.cpp" />
     <ClCompile Include="src\terraincat.cpp" />
-    <ClCompile Include="src\terraincountlist.cpp" />
+    <ClCompile Include="src\terraincountmap.cpp" />
     <ClCompile Include="src\terrainnamelist.cpp" />
     <ClCompile Include="src\testcondition.cpp" />
     <ClCompile Include="src\testconditionhooks.cpp" />
@@ -876,7 +876,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\taskspell.h" />
     <ClInclude Include="include\tasktilehighlight.h" />
     <ClInclude Include="include\terraincat.h" />
-    <ClInclude Include="include\terraincountlist.h" />
+    <ClInclude Include="include\terraincountmap.h" />
     <ClInclude Include="include\terrainnamelist.h" />
     <ClInclude Include="include\testcondition.h" />
     <ClInclude Include="include\testconditionhooks.h" />

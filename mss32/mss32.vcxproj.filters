@@ -520,7 +520,7 @@
     <ClCompile Include="src\midgardmapblock.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="src\terraincountlist.cpp">
+    <ClCompile Include="src\terraincountmap.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\netmsg.cpp">
@@ -1805,7 +1805,7 @@
     <ClInclude Include="include\midgardstream.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="include\terraincountlist.h">
+    <ClInclude Include="include\terraincountmap.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\netmsg.h">

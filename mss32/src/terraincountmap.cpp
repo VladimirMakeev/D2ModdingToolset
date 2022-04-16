@@ -17,29 +17,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "terraincountlist.h"
+#include "terraincountmap.h"
 #include "version.h"
 #include <array>
 
-namespace game::TerrainCountListApi {
+namespace game::TerrainCountMapApi {
 
 // clang-format off
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::GetTilesCount)0x4462f7,
+        (Api::Access)0x4462f7,
     },
     // Russobit
     Api{
-        (Api::GetTilesCount)0x4462f7,
+        (Api::Access)0x4462f7,
     },
     // Gog
     Api{
-        (Api::GetTilesCount)0x445efb,
+        (Api::Access)0x445efb,
     },
     // Scenario Editor
     Api{
-        (Api::GetTilesCount)0x4c90db,
+        (Api::Access)0x4c90db,
     },
 }};
 
@@ -50,4 +50,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::TerrainCountListApi
+} // namespace game::TerrainCountMapApi
