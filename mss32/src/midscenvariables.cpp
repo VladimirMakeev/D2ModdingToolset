@@ -27,23 +27,19 @@ namespace game::CMidScenVariablesApi {
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::Advance)0x560f17,
-        (Api::GetData)0x5fe73d,
+        (Api::FindById)0x5fe73d,
     },
     // Russobit
     Api{
-        (Api::Advance)0x560f17,
-        (Api::GetData)0x5fe73d,
+        (Api::FindById)0x5fe73d,
     },
     // Gog
     Api{
-        (Api::Advance)0x5606b4,
-        (Api::GetData)0x5fd39d,
+        (Api::FindById)0x5fd39d,
     },
     // Scenario Editor
     Api{
-        (Api::Advance)0x4c47b2,
-        (Api::GetData)0x4e677a,
+        (Api::FindById)0x4e677a,
     },
 }};
 // clang-format on

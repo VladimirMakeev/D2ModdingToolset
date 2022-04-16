@@ -143,10 +143,10 @@ void __stdcall midCondVarCmpGetInfoString(game::String* info,
     }
 
     auto* condition = static_cast<const CMidCondVarCmp*>(eventCondition);
-    auto& getData = game::CMidScenVariablesApi::get().getData;
+    auto& findById = game::CMidScenVariablesApi::get().findById;
 
-    auto data1 = getData(variables, condition->variableId1);
-    auto data2 = getData(variables, condition->variableId2);
+    auto data1 = findById(variables, condition->variableId1);
+    auto data2 = findById(variables, condition->variableId2);
     std::string comparison;
 
     const auto& varCmpTextIds = textIds().events.conditions.variableCmp;
@@ -248,7 +248,7 @@ void __fastcall condVarCmpInterfOnVisibilityChanged(CCondVarCmpInterf* thisptr,
 
     const auto& variables = thisptr->variables;
     for (size_t i = 0; i < variables.size(); ++i) {
-        const auto id = variables[i]->variableId;
+        const auto id = variables[i]->first;
         if (variableId1 == id) {
             auto listBox = dialogApi.findListBox(dialog, "TLBOX_VARIABLES1");
             if (listBox) {
@@ -352,8 +352,8 @@ void __fastcall condVarCmpInterfOkButtonHandler(CCondVarCmpInterf* thisptr, int 
         condition->compareType = static_cast<CompareType>(radioButton->data->selectedButton);
     }
 
-    condition->variableId1 = thisptr->variables[index1]->variableId;
-    condition->variableId2 = thisptr->variables[index2]->variableId;
+    condition->variableId1 = thisptr->variables[index1]->first;
+    condition->variableId2 = thisptr->variables[index2]->first;
 
     auto midEvent = (CMidEvent*)objectMap->vftable
                         ->findScenarioObjectByIdForChange(objectMap, &thisptr->eventId);
@@ -384,8 +384,8 @@ void __fastcall condVarCmpInterfListBoxDisplayHandler(CCondVarCmpInterf* thisptr
 
     const auto variable = thisptr->variables[selectedIndex];
 
-    game::StringApi::get().initFromStringN(string, variable->data.name,
-                                           std::strlen(variable->data.name));
+    game::StringApi::get().initFromStringN(string, variable->second.name,
+                                           std::strlen(variable->second.name));
 }
 
 game::editor::CCondInterf* createCondVarCmpInterf(game::ITask* task,
@@ -525,11 +525,11 @@ bool __fastcall testVarCmpDoTest(const CTestVarCmp* thisptr,
         return false;
     }
 
-    const auto& getData = game::CMidScenVariablesApi::get().getData;
+    const auto& findById = game::CMidScenVariablesApi::get().findById;
     const auto* condition = thisptr->condition;
 
-    const auto value1 = getData(variables, condition->variableId1)->value;
-    const auto value2 = getData(variables, condition->variableId2)->value;
+    const auto value1 = findById(variables, condition->variableId1)->value;
+    const auto value2 = findById(variables, condition->variableId2)->value;
 
     switch (condition->compareType) {
     case CompareType::Equal:

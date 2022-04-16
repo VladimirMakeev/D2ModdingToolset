@@ -908,8 +908,8 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
     int hireTierMax{0};
     for (const auto& variable : variables->variables) {
         static const char varName[]{"UNIT_HIRE_TIER_MAX"};
-        if (!strncmp(variable.data.name, varName, sizeof(varName))) {
-            hireTierMax = variable.data.value;
+        if (!strncmp(variable.second.name, varName, sizeof(varName))) {
+            hireTierMax = variable.second.value;
             break;
         }
     }

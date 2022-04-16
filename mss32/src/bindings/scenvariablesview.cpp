@@ -37,7 +37,7 @@ ScenVariablesView::ScenVariablesView(const game::CMidScenVariables* scenVariable
     // This is safe because variables list is created once
     // and there are no additions or deletions of them during the game.
     for (const auto& variable : scenVariables->variables) {
-        variables[variable.data.name] = &variable;
+        variables[variable.second.name] = &variable;
     }
 }
 

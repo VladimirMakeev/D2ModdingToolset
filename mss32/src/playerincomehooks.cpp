@@ -98,7 +98,7 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
 
     std::uint32_t listIndex{};
     for (const auto& variable : variables->variables) {
-        const auto& name = variable.data.name;
+        const auto& name = variable.second.name;
 
         // Additional income for specific race
         if (!strncmp(name, racePrefix, std::strlen(racePrefix))) {
@@ -106,7 +106,7 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
                 const auto expectedName{fmt::format("{:s}TIER_{:d}_CITY_INCOME", racePrefix, i)};
 
                 if (!strncmp(name, expectedName.c_str(), sizeof(name))) {
-                    cityIncome[i] += variable.data.value;
+                    cityIncome[i] += variable.second.value;
                     break;
                 }
             }
@@ -118,7 +118,7 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
                 const auto expectedName{fmt::format("TIER_{:d}_CITY_INCOME", i)};
 
                 if (!strncmp(name, expectedName.c_str(), sizeof(name))) {
-                    cityIncome[i] += variable.data.value;
+                    cityIncome[i] += variable.second.value;
                     break;
                 }
             }
