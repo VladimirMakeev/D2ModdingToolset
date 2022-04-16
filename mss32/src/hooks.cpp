@@ -1124,24 +1124,12 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
     auto lord = fn.getLordByPlayer(player);
     auto buildList = lord->data->buildList;
 
-    const auto& lordTypeApi = TLordTypeApi::get();
-    BuildListIterator iterator;
-    lordTypeApi.getIterator(buildList, &iterator);
-
     const auto globalData = GlobalDataApi::get().getGlobalData();
     auto buildings = (*globalData)->buildings;
 
-    while (true) {
-        BuildListIterator endIterator;
-        lordTypeApi.getEndIterator(buildList, &endIterator);
-
-        if (iterator.node == endIterator.node && iterator.nil == endIterator.nil) {
-            break;
-        }
-
+    for (const auto& id : buildList->data) {
         const auto findById = GlobalDataApi::get().findById;
-        const TBuildingType* buildingType = (const TBuildingType*)findById(buildings,
-                                                                           &iterator.node->value);
+        const TBuildingType* buildingType = (const TBuildingType*)findById(buildings, &id);
 
         const LBuildingCategory* buildingCategory = &buildingType->data->category;
         const auto& buildingCategories = BuildingCategories::get();
@@ -1175,8 +1163,6 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
                    && *branchNumber == 3) {
             buildingBranch.addBuilding(phaseGame, &thisptr->data->list, buildingType);
         }
-
-        lordTypeApi.advanceIterator(&iterator.node, iterator.nil);
     }
 
     logDebug("newBuildingType.log", "Ctor finished");

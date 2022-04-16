@@ -119,43 +119,6 @@ struct TLordType : public IMidObject
 
 static_assert(sizeof(TLordType) == 12, "Size of TLordType structure must be exactly 12 bytes");
 
-namespace TLordTypeApi {
-
-struct Api
-{
-    /**
-     * Assumption: creates build list iterator.
-     * @param[in] list building list to traverse.
-     * @param[in] iterator pointer to iterator structure to initialize.
-     * @returns pointer to iterator.
-     */
-    using GetIterator = BuildListIterator*(__thiscall*)(TLordTypeBuildList* list,
-                                                        BuildListIterator* iterator);
-    GetIterator getIterator;
-
-    /**
-     * Assumption: creates iterator pointing to the end of the list.
-     * @param[in] list building list to traverse.
-     * @param[in] iterator pointer to iterator structure to initialize.
-     * @returns pointer to iterator.
-     */
-    using GetEndIterator = BuildListIterator*(__thiscall*)(TLordTypeBuildList* list,
-                                                           BuildListIterator* iterator);
-    GetEndIterator getEndIterator;
-
-    /**
-     * Assumption: advances iterator.
-     * @param[in] node pointer to BuildListIterator::node.
-     * @param[in] unknown pointer to BuildListIterator::node2->unknown.
-     */
-    using AdvanceIterator = void(__stdcall*)(BuildListDataNode** node, BuildListDataNode* nil);
-    AdvanceIterator advanceIterator;
-};
-
-Api& get();
-
-} // namespace TLordTypeApi
-
 } // namespace game
 
 #endif // LORDTYPE_H

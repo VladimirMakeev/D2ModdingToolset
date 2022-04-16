@@ -118,9 +118,6 @@
     <ClCompile Include="src\log.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\lordtype.cpp">
-      <Filter>game</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mapgen.cpp">
       <Filter>game</Filter>
