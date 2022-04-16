@@ -25,8 +25,7 @@
 #include "battlemsgdata.h"
 #include "batviewer.h"
 #include "batviewerutils.h"
-#include "d2list.h"
-#include "d2set.h"
+#include "d2map.h"
 #include "d2string.h"
 #include "d2vector.h"
 #include "draganddropinterf.h"
@@ -141,7 +140,7 @@ struct CBattleViewerUnknownUnitData
 static_assert(sizeof(CBattleViewerUnknownUnitData) == 12,
               "Size of CBattleViewerUnknownUnitData structure must be exactly 12 bytes");
 
-using CUnknownUnitDataList = Set<Pair<CMidgardID, CBattleViewerUnknownUnitData>>;
+using CUnknownUnitDataMap = Map<CMidgardID, CBattleViewerUnknownUnitData>;
 
 struct CUnitRectAndId
 {
@@ -172,7 +171,7 @@ struct CBattleViewerInterfData
     CAvoidFlickerImage avoidFlickerImage;
     void* sounds;
     BattleMsgData battleMsgData;
-    CUnknownUnitDataList unknownUnitData;
+    CUnknownUnitDataMap unknownUnitData;
     CMidgardID unitId;
     CBattleViewerTargetDataSet targetData;
     BattleAttackInfo** attackInfo;
@@ -317,7 +316,7 @@ struct Api
     GetUnitRect getUnitRect;
     GetUnitRect getUnitRectPlusExtra;
 
-    using GetBoolById = bool(__thiscall*)(CUnknownUnitDataList* thisptr, const CMidgardID* unitId);
+    using GetBoolById = bool(__thiscall*)(CUnknownUnitDataMap* thisptr, const CMidgardID* unitId);
     GetBoolById isUnitBig;
     GetBoolById isUnitRetreating;
     GetBoolById getUnknown2;
