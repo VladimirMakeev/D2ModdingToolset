@@ -167,7 +167,7 @@ static Hooks getGameHooks()
         // Show buildings with custom branch category on the 'other buildings' tab
         {CBuildingBranchApi::get().constructor, buildingBranchCtorHooked},
         // Allow alchemists to buff retreating units
-        {CBatAttackGiveAttackApi::get().canPerform, giveAttackCanPerformHooked},
+        {CBatAttackGiveAttackApi::vftable()->canPerform, giveAttackCanPerformHooked},
         // Random map generation
         //HookInfo{CMenuNewSkirmishSingleApi::get().constructor, menuNewSkirmishSingleCtorHooked},
         // Support custom battle attack objects

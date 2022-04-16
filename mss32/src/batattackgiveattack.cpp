@@ -24,25 +24,21 @@
 namespace game::CBatAttackGiveAttackApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<IBatAttackVftable*, 4> vftables = {{
     // Akella
-    Api{
-        (IBatAttackVftable::CanPerform)0x661803
-    },
+    (IBatAttackVftable*)0x6f540c,
     // Russobit
-    Api{
-        (IBatAttackVftable::CanPerform)0x661803
-    },
+    (IBatAttackVftable*)0x6f540c,
     // Gog
-    Api{
-        (IBatAttackVftable::CanPerform)0x660283
-    }
+    (IBatAttackVftable*)0x6f33bc,
+    // Scenario Editor
+    (IBatAttackVftable*)nullptr,
 }};
 // clang-format on
 
-Api& get()
+IBatAttackVftable* vftable()
 {
-    return functions[static_cast<int>(hooks::gameVersion())];
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::CBatAttackGiveAttackApi
