@@ -32,7 +32,7 @@ static std::array<IBatAttackVftable*, 4> vftables = {{
     // Gog
     (IBatAttackVftable*)0x6f2ffc,
     // Scenario Editor
-    (IBatAttackVftable*)0x000000,
+    (IBatAttackVftable*)nullptr,
 }};
 // clang-format on
 

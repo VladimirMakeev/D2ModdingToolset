@@ -347,7 +347,8 @@ static Hooks getGameHooks()
 
     if (userSettings().leveledSummonAttack != baseSettings().leveledSummonAttack) {
         // Allow summon leveled units using script logic
-        hooks.emplace_back(HookInfo{CBatAttackSummonApi::get().onHit, summonAttackOnHitHooked});
+        hooks.emplace_back(
+            HookInfo{CBatAttackSummonApi::vftable()->onHit, summonAttackOnHitHooked});
     }
 
     if (userSettings().missChanceSingleRoll != baseSettings().missChanceSingleRoll) {
