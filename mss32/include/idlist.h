@@ -51,27 +51,11 @@ struct Api
     using Erase = void(__thiscall*)(IdList* thisptr, IdListIterator pos);
     Erase erase;
 
-    using Front = CMidgardID*(__thiscall*)(const IdList* thisptr);
-    Front front;
-
-    using GetIterator = IdListIterator*(__thiscall*)(const IdList* thisptr, IdListIterator* value);
-    GetIterator begin;
-    GetIterator end;
-
     using Find = IdListIterator*(__stdcall*)(IdListIterator* value,
                                              IdListIterator begin,
                                              IdListIterator end,
                                              const CMidgardID* id);
     Find find;
-
-    using Equals = bool(__thiscall*)(IdListIterator* thisptr, const IdListIterator* value);
-    Equals equals;
-
-    using Dereference = CMidgardID*(__thiscall*)(IdListIterator* thisptr);
-    Dereference dereference;
-
-    using Preincrement = IdListIterator*(__thiscall*)(IdListIterator* thisptr);
-    Preincrement preinc;
 
     using Shuffle = void(__stdcall*)(IdList* list);
     Shuffle shuffle;

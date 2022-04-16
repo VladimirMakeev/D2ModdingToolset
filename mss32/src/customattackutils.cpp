@@ -294,15 +294,15 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
                                          const game::CMidgardID* unitGroupId,
                                          const game::CMidgardID* unitId,
                                          const CustomAttackReach& attackReach,
-                                         game::TargetsList* value)
+                                         game::TargetSet* value)
 {
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& listApi = TargetsListApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
     const auto& groupApi = CMidUnitGroupApi::get();
 
-    listApi.clear(value);
+    targetSetApi.clear(value);
 
     void* tmp{};
     auto unitGroup = fn.getStackFortRuinGroup(tmp, objectMap, unitGroupId);
@@ -323,14 +323,14 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
     bool isSummonAttack = batAttack->vftable->method17(batAttack, battleMsgData);
     for (const auto& target : targetsToSelect) {
         int position = target.getPosition();
-        Pair<TargetsListIterator, bool> tmp{};
-        listApi.insert(value, &tmp, &position);
+        Pair<TargetSetIterator, bool> tmp{};
+        targetSetApi.insert(value, &tmp, &position);
 
         if (isSummonAttack && !(position % 2)) {
             auto unit = target.getUnit();
             if (unit && !isUnitSmall(unit)) {
                 int backPosition = position + 1;
-                listApi.insert(value, &tmp, &backPosition);
+                targetSetApi.insert(value, &tmp, &backPosition);
             }
         }
     }
@@ -492,28 +492,24 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
                           const game::IAttack* attack,
                           const game::CMidgardID* unitGroupId,
                           const game::CMidgardID* targetGroupId,
-                          game::TargetsList* value)
+                          game::TargetSet* value)
 {
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& listApi = TargetsListApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
 
     void* tmp{};
     auto unitGroup = fn.getStackFortRuinGroup(tmp, objectMap, unitGroupId);
     auto targetGroup = fn.getStackFortRuinGroup(tmp, objectMap, targetGroupId);
 
-    TargetsListIterator it, end;
-    listApi.end(value, &end);
-    for (listApi.begin(value, &it); !listApi.equals(&it, &end); listApi.preinc(&it)) {
-        int targetPosition = *listApi.dereference(&it);
-
+    for (const auto& targetPosition : *value) {
         auto unitId = getTargetUnitId(targetPosition, targetGroup, unitGroup);
         if (unitId == emptyId)
             continue;
 
         if (fn.isUnitImmuneToAttack(objectMap, battleMsgData, &unitId, attack, true)) {
-            listApi.erase(value, &targetPosition);
+            targetSetApi.erase(value, &targetPosition);
         }
     }
 }
@@ -530,10 +526,7 @@ void fillCustomDamageRatios(const game::IAttack* attack, const game::IdList* tar
 
     auto& customRatios = getCustomAttacks().damageRatios.value;
     auto ratioIt = ratios.begin();
-    IdListIterator it, end;
-    for (listApi.begin(targets, &it), listApi.end(targets, &end); !listApi.equals(&it, &end);
-         listApi.preinc(&it)) {
-        CMidgardID unitId = *listApi.dereference(&it);
+    for (const auto& unitId : *targets) {
         customRatios[unitId] = *(ratioIt++);
     }
 }
@@ -571,8 +564,8 @@ std::vector<double> computeAttackDamageRatio(const game::IAttack* attack, int ta
     }
 
     if (attackImpl->data->damageSplit) {
-        for (auto it = result.begin(); it != result.end(); ++it) {
-            *it = *it / totalRatio * userSettings().splitDamageMultiplier;
+        for (auto& value : result) {
+            value /= totalRatio * userSettings().splitDamageMultiplier;
         }
     }
 

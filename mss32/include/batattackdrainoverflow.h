@@ -49,8 +49,6 @@ namespace CBatAttackDrainOverflowApi {
 
 struct Api
 {
-    IBatAttackVftable::OnAttack onHit;
-
     /** Initializes heal data structure. */
     using HealDataConstructor = DrainOverflowHealData*(__thiscall*)(DrainOverflowHealData* thisptr);
     HealDataConstructor healDataCtor;
@@ -58,35 +56,6 @@ struct Api
     /** Cleans up heal data structure. */
     using HealDataDestructor = void(__thiscall*)(DrainOverflowHealData* thisptr);
     HealDataDestructor healDataDtor;
-
-    /** Creates iterator. */
-    using HealDataIteratorConstructor = DrainOverflowHealIterator*(
-        __thiscall*)(DrainOverflowHealData* thisptr, DrainOverflowHealIterator* iterator);
-    HealDataIteratorConstructor healDataIteratorCtor;
-
-    /** Creates end iterator. */
-    using HealDataEndIteratorConstructor = DrainOverflowHealIterator*(
-        __thiscall*)(DrainOverflowHealData* thisptr, DrainOverflowHealIterator* endIterator);
-    HealDataEndIteratorConstructor healDataEndIteratorCtor;
-
-    /** Creates iterator from 'other'. */
-    using HealDataIteratorCopyConstructor = DrainOverflowHealIterator*(
-        __thiscall*)(DrainOverflowHealIterator* thisptr, const DrainOverflowHealIterator* other);
-    HealDataIteratorCopyConstructor healDataIteratorCopyCtor;
-
-    /** Returns true if iterator reached end. */
-    using IsHealDataIteratorAtEnd = bool(__thiscall*)(const DrainOverflowHealIterator* thisptr,
-                                                      const DrainOverflowHealIterator* endIterator);
-    IsHealDataIteratorAtEnd isHealDataIteratorAtEnd;
-
-    /** Advances iterator towards end. */
-    using HealDataIteratorAdvance = DrainOverflowHealIterator*(
-        __thiscall*)(DrainOverflowHealIterator* thisptr, DrainOverflowHealIterator* tmp, int a3);
-    HealDataIteratorAdvance healDataIteratorAdvance;
-
-    /** Used to access data the iterator currently pointing at. */
-    using HealDataIteratorGetData = void*(__thiscall*)(const DrainOverflowHealIterator* thisptr);
-    HealDataIteratorGetData healDataIteratorGetData;
 
     /**
      * Computes heal for units in specified group from drain overflow.
@@ -107,6 +76,8 @@ struct Api
 };
 
 Api& get();
+
+IBatAttackVftable* vftable();
 
 } // namespace CBatAttackDrainOverflowApi
 

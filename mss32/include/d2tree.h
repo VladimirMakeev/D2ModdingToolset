@@ -24,63 +24,152 @@
 
 namespace game {
 
-template <typename T, typename Node>
+enum class TreeNodeColor : int
+{
+    Red = 0,
+    Black,
+};
+
+/** Implementation of std::_Tree<T>::node used in game. */
+template <typename T>
 struct TreeNode
 {
-    int unknown;   /**< Can be zero or one. */
-    Node* next;    /**< Next node to search. */
-    Node* less;    /**< Node with lesser value. */
-    Node* greater; /**< Node with greater value. */
+    TreeNodeColor color; /**< Red or Black, Black if head. */
+    TreeNode<T>* parent; /**< parent, or root of tree if head. */
+    TreeNode<T>* left;   /**< left subtree, or smallest element if head. */
+    TreeNode<T>* right;  /**< right subtree, or largest element if head. */
     T value;
 };
 
-/** Implementation of std::_Tree<T> (ordered red-black tree) used in game. */
-template <typename T, typename Node, typename Allocator>
+static_assert(sizeof(TreeNode<int>) == 20,
+              "Size of TreeNode<int> structure must be exactly 20 bytes");
+
+/** Implementation of std::_Tree<T>::const_iterator used in game.
+ * Inline methods exactly correspond to in-game implementation. */
+template <typename T>
+struct ConstTreeIterator
+{
+    char unknown;
+    char padding[3];
+    TreeNode<T>* node;
+    TreeNode<T>* nil;
+
+    bool operator==(const ConstTreeIterator<T>& value) const
+    {
+        return node == value.node && nil == value.nil;
+    }
+
+    bool operator!=(const ConstTreeIterator<T>& value) const
+    {
+        return !(*this == value);
+    }
+
+    const T& operator*() const
+    {
+        return node->value;
+    }
+
+    const T* operator->() const
+    {
+        return &node->value;
+    }
+
+    ConstTreeIterator<T>& operator++()
+    {
+        if (node->right == nil) {
+            for (; node == node->parent->right; node = node->parent)
+                ;
+            if (node->right != node->parent)
+                node = node->parent;
+        } else {
+            for (node = node->right; node->left != nil; node = node->left)
+                ;
+        }
+
+        return *this;
+    }
+
+    ConstTreeIterator<T> operator++(int)
+    {
+        auto result = *this;
+        ++*this;
+        return result;
+    }
+};
+
+static_assert(sizeof(ConstTreeIterator<int>) == 12,
+              "Size of ConstTreeIterator structure must be exactly 12 bytes");
+
+/** Implementation of std::_Tree<T>::iterator used in game.
+ * Inline methods exactly correspond to in-game implementation. */
+template <typename T>
+struct TreeIterator : public ConstTreeIterator<T>
+{
+    using Base = ConstTreeIterator<T>;
+
+    T& operator*() const
+    {
+        return node->value;
+    }
+
+    T* operator->() const
+    {
+        return &node->value;
+    }
+
+    TreeIterator<T>& operator++()
+    {
+        Base::operator++();
+        return *this;
+    }
+
+    TreeIterator<T> operator++(int)
+    {
+        auto result = *this;
+        Base::operator++();
+        return result;
+    }
+};
+
+static_assert(sizeof(TreeIterator<int>) == 12,
+              "Size of TreeIterator structure must be exactly 12 bytes");
+
+/** Implementation of std::_Tree<T> (ordered red-black tree) used in game.
+ * Inline methods exactly correspond to in-game implementation. */
+template <typename T, typename Allocator>
 struct Tree
 {
     char unknown;
     char padding[3];
     std::uint32_t length; /**< Number of nodes. */
     char unknown2[4];
-    Node* begin; /**< Points to the first node with minimal value. */
+    TreeNode<T>* head; /**< Special node that is not a part of the tree. */
     Allocator allocator;
-    Node* end; /**< Points to the end node used as stop element. */
+    TreeNode<T>* nil; /**< All NIL leaves point to this node. */
     Allocator allocator2;
+
+    TreeIterator<T> begin()
+    {
+        return {0, {}, head->left, nil};
+    }
+
+    ConstTreeIterator<T> begin() const
+    {
+        return {0, {}, head->left, nil};
+    }
+
+    TreeIterator<T> end()
+    {
+        return {0, {}, head, nil};
+    }
+
+    ConstTreeIterator<T> end() const
+    {
+        return {0, {}, head, nil};
+    }
 };
 
-template <typename T, typename Node>
-struct TreeIterator
-{
-    char unknown;
-    char padding[3];
-    Node* node;
-    Node* node2;
-};
-
-using TreeT = Tree<void, void, void*>;
-using TreeIt = TreeIterator<void, void>;
-
-namespace TreeApi {
-
-struct Api
-{
-    using GetIterator = TreeIt*(__thiscall*)(const TreeT* thisptr, TreeIt* value);
-    GetIterator begin;
-    GetIterator end;
-
-    using Dereference = void*(__thiscall*)(const TreeIt* thisptr);
-    Dereference deref;
-
-    using Equals = bool(__thiscall*)(const TreeIt* thisptr, const TreeIt* value);
-    Equals equals;
-
-    using Preincrement = TreeIt*(__thiscall*)(TreeIt* thisptr);
-    Preincrement preinc;
-};
-
-Api& get();
-
-} // namespace TreeApi
+static_assert(sizeof(Tree<int, void*>) == 28, "Size of Tree structure must be exactly 28 bytes");
 
 } // namespace game
 

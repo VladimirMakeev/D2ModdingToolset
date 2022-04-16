@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2020 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,34 +17,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "terrainnamelist.h"
+#include "targetset.h"
 #include "version.h"
 #include <array>
 
-namespace game::TerrainNameListApi {
+namespace game::TargetSetApi {
 
 // clang-format off
-static std::array<Api, 4> functions = {{
+static std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (Api::GetTerrainNameList)0x5a6d29,
-        (Api::Add)0x5a728e,
+        (Api::Constructor)0x42904e,
+        (Api::Destructor)0x416331,
+        (Api::Clear)0x668710,
+        (Api::Insert)0x477d8a,
+        (Api::Erase)0x6686f0,
     },
     // Russobit
     Api{
-        (Api::GetTerrainNameList)0x5a6d29,
-        (Api::Add)0x5a728e,
+        (Api::Constructor)0x42904e,
+        (Api::Destructor)0x416331,
+        (Api::Clear)0x668710,
+        (Api::Insert)0x477d8a,
+        (Api::Erase)0x6686f0,
     },
     // Gog
     Api{
-        (Api::GetTerrainNameList)0x5a5f8a,
-        (Api::Add)0x5a64ef,
-    },
-    // Scenario Editor
-    Api{
-        (Api::GetTerrainNameList)0x53a351,
-        (Api::Add)0x53a8b6,
-    },
+        (Api::Constructor)0x428ada,
+        (Api::Destructor)0x415fdc,
+        (Api::Clear)0x667190,
+        (Api::Insert)0x477985,
+        (Api::Erase)0x667170,
+    }
 }};
 // clang-format on
 
@@ -53,4 +57,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::TerrainNameListApi
+} // namespace game::TargetSetApi

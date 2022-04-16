@@ -27,11 +27,9 @@ bool removeIdFromList(game::IdList& list, const game::CMidgardID* id)
 
     const auto& listApi = IdListApi::get();
 
-    IdListIterator it, begin, end;
-    listApi.begin(&list, &begin);
-    listApi.end(&list, &end);
-    listApi.find(&it, begin, end, id);
-    if (!listApi.equals(&it, &end)) {
+    IdListIterator it;
+    listApi.find(&it, list.begin(), list.end(), id);
+    if (it != list.end()) {
         listApi.erase(&list, it);
         return true;
     }
@@ -45,11 +43,9 @@ bool addUniqueIdToList(game::IdList& list, const game::CMidgardID* id)
 
     const auto& listApi = IdListApi::get();
 
-    IdListIterator it, begin, end;
-    listApi.begin(&list, &begin);
-    listApi.end(&list, &end);
-    listApi.find(&it, begin, end, id);
-    if (listApi.equals(&it, &end)) {
+    IdListIterator it;
+    listApi.find(&it, list.begin(), list.end(), id);
+    if (it == list.end()) {
         listApi.pushBack(&list, id);
         return true;
     }

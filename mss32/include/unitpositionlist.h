@@ -21,7 +21,6 @@
 #define UNITPOSITIONLIST_H
 
 #include "d2list.h"
-#include "d2pair.h"
 #include "unitpositionpair.h"
 
 namespace game {
@@ -39,21 +38,6 @@ struct Api
 
     using Destructor = void(__thiscall*)(UnitPositionList* thisptr);
     Destructor destructor;
-
-    using GetIterator = UnitPositionListIterator*(__thiscall*)(UnitPositionList* thisptr,
-                                                               UnitPositionListIterator* iterator);
-    GetIterator begin;
-    GetIterator end;
-
-    using Dereference = UnitPositionPair*(__thiscall*)(UnitPositionListIterator* thisptr);
-    Dereference dereference;
-
-    using Equals = bool(__thiscall*)(UnitPositionListIterator* thisptr,
-                                     const UnitPositionListIterator* value);
-    Equals equals;
-
-    using Preincrement = UnitPositionListIterator*(__thiscall*)(UnitPositionListIterator* thisptr);
-    Preincrement preinc;
 };
 
 Api& get();

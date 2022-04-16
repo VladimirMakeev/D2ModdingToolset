@@ -17,39 +17,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERRAINCOUNTLIST_H
-#define TERRAINCOUNTLIST_H
+#ifndef TERRAINCOUNTMAP_H
+#define TERRAINCOUNTMAP_H
 
-#include "d2set.h"
+#include "d2map.h"
 #include "terraincat.h"
 
 namespace game {
 
-struct TerrainCount
-{
-    LTerrainCategory terrain;
-    int tilesCount;
-};
+/** Maps tile count to terrain category. */
+using TerrainCountMap = Map<LTerrainCategory, int>;
 
-static_assert(sizeof(TerrainCount) == 16,
-              "Size of TerrainCount structure must be exactly 16 bytes");
-
-using TerrainCountList = Set<TerrainCount>;
-
-namespace TerrainCountListApi {
+namespace TerrainCountMapApi {
 
 struct Api
 {
-    /** Returns pointer to TerrainCount::tilesCount found by specified terrain category. */
-    using GetTilesCount = int*(__thiscall*)(TerrainCountList* thisptr,
-                                            const LTerrainCategory* terrain);
-    GetTilesCount getTilesCount;
+    /** Map access operator. */
+    using Access = int*(__thiscall*)(TerrainCountMap* thisptr, const LTerrainCategory* key);
+    Access access;
 };
 
 Api& get();
 
-} // namespace TerrainCountListApi
+} // namespace TerrainCountMapApi
 
 } // namespace game
 
-#endif // TERRAINCOUNTLIST_H
+#endif // TERRAINCOUNTMAP_H

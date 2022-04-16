@@ -212,37 +212,6 @@ void showErrorMessageBox(const std::string& message)
     MessageBox(NULL, message.c_str(), "mss32.dll proxy", MB_OK);
 }
 
-void forEachScenarioVariable(const game::CMidScenVariables* variables,
-                             std::function<void(const game::ScenarioVariable*, std::uint32_t)> f)
-{
-    using namespace game;
-
-    if (!variables->variables.length) {
-        return;
-    }
-
-    auto begin = variables->variables.begin;
-    auto end = variables->variables.end;
-    auto current = begin->less;
-
-    ScenarioVariablesListIterator listIterator{};
-    listIterator.node = current;
-    listIterator.node2 = end;
-
-    std::uint32_t listIndex{};
-    while (listIndex++ < variables->variables.length) {
-        const bool done = (current != begin || listIterator.node2 != end) ? false : true;
-        if (done) {
-            break;
-        }
-
-        f(&current->value, listIndex);
-
-        CMidScenVariablesApi::get().advance(&listIterator.node, listIterator.node2);
-        current = listIterator.node;
-    }
-}
-
 void createTimerEvent(game::UiEvent* timerEvent,
                       void* userData,
                       void* callback,

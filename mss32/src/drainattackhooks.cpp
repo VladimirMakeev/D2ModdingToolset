@@ -157,38 +157,20 @@ void __fastcall drainOverflowAttackOnHitHooked(game::CBatAttackDrainOverflow* th
     attack.computeDrainOverflowGroupHeal(&healData, objectMap, &unitGroupId, &thisptr->unitId,
                                          drainOverflow);
 
-    DrainOverflowHealIterator tmpIterator{};
-    attack.healDataIteratorCtor(&healData, &tmpIterator);
-
-    DrainOverflowHealIterator iterator{};
-    attack.healDataIteratorCopyCtor(&iterator, &tmpIterator);
-
-    DrainOverflowHealIterator tmpEndIterator{};
-    attack.healDataEndIteratorCtor(&healData, &tmpEndIterator);
-
-    DrainOverflowHealIterator endIterator{};
-    attack.healDataIteratorCopyCtor(&endIterator, &tmpEndIterator);
-
     const auto& visitors = VisitorApi::get();
     const auto& battle = BattleMsgDataApi::get();
 
     DrainOverflowHealIterator tmp{};
-    while (attack.isHealDataIteratorAtEnd(&iterator, &endIterator)) {
-        const void* data = attack.healDataIteratorGetData(&iterator);
-
-        auto healingUnitId = static_cast<const CMidgardID*>(data);
-        const auto unitHeal = *(static_cast<const int*>(data) + 1);
+    for (const auto& data : healData) {
         auto unit = static_cast<const CMidUnit*>(
-            objectMap->vftable->findScenarioObjectById(objectMap, healingUnitId));
+            objectMap->vftable->findScenarioObjectById(objectMap, &data.first));
 
         const auto unitInitialHp = unit->currentHp;
-        visitors.changeUnitHp(healingUnitId, unitHeal, objectMap, 1);
+        visitors.changeUnitHp(&data.first, data.second, objectMap, 1);
         const auto unitResultingHp = unit->currentHp;
 
         addBattleAttackInfo(*attackInfo, unit, unitResultingHp - unitInitialHp);
-        battle.setUnitHp(battleMsgData, healingUnitId, unitResultingHp);
-
-        attack.healDataIteratorAdvance(&iterator, &tmp, 0);
+        battle.setUnitHp(battleMsgData, &data.first, unitResultingHp);
     }
 
     attack.healDataDtor(&healData);

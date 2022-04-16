@@ -20,8 +20,7 @@
 #ifndef MIDSCENVARIABLES_H
 #define MIDSCENVARIABLES_H
 
-#include "d2set.h"
-#include "d2vector.h"
+#include "d2map.h"
 #include "midgardid.h"
 #include "midscenarioobject.h"
 
@@ -36,15 +35,6 @@ struct ScenarioVariableData
 static_assert(sizeof(ScenarioVariableData) == 40,
               "Size of ScenarioVariableData structure must be exactly 40 bytes");
 
-struct ScenarioVariable
-{
-    int variableId;
-    ScenarioVariableData data;
-};
-
-static_assert(sizeof(ScenarioVariable) == 44,
-              "Size of ScenarioVariable structure must be exactly 44 bytes");
-
 /**
  * Holds variables information in scenario file and game.
  * Scenario variables used in events logic.
@@ -53,30 +43,25 @@ struct CMidScenVariables : public IMidScenarioObject
 {
     CMidgardID variablesId;
     int unknown;
-    Set<ScenarioVariable> variables;
+    Map<int, ScenarioVariableData> variables;
 };
 
 static_assert(sizeof(CMidScenVariables) == 40,
               "Size of CMidScenVariables structure must be exactly 40 bytes");
 
-using ScenarioVariablesListNode = SetNode<ScenarioVariable>;
-using ScenarioVariablesListIterator = SetIterator<ScenarioVariable>;
+using ScenarioVariable = Pair<int, ScenarioVariableData>;
 
 namespace CMidScenVariablesApi {
 
 struct Api
 {
-    using Advance = void(__stdcall*)(ScenarioVariablesListNode** current,
-                                     ScenarioVariablesListNode* end);
-    Advance advance;
-
     /**
      * Returns scenario variable data by its id.
      * @returns pointer to empty scenario variable data in case of wrong id.
      */
-    using GetData = ScenarioVariableData*(__thiscall*)(const CMidScenVariables* thisptr,
-                                                       int variableId);
-    GetData getData;
+    using FindById = ScenarioVariableData*(__thiscall*)(const CMidScenVariables* thisptr,
+                                                        int variableId);
+    FindById findById;
 };
 
 Api& get();

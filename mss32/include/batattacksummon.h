@@ -42,12 +42,7 @@ static_assert(sizeof(CBatAttackSummon) == 24,
 
 namespace CBatAttackSummonApi {
 
-struct Api
-{
-    IBatAttackVftable::OnAttack onHit;
-};
-
-Api& get();
+IBatAttackVftable* vftable();
 
 } // namespace CBatAttackSummonApi
 

@@ -42,21 +42,6 @@ struct Api
 
     using Sort = void(__thiscall*)(UnitInfoList* thisptr);
     Sort sort;
-
-    using GetIterator = UnitInfoListIterator*(__thiscall*)(UnitInfoList* thisptr,
-                                                           UnitInfoListIterator* iterator);
-    GetIterator begin;
-    GetIterator end;
-
-    using Dereference = UnitInfo*(__thiscall*)(UnitInfoListIterator* thisptr);
-    Dereference dereference;
-
-    using Equals = bool(__thiscall*)(UnitInfoListIterator* thisptr,
-                                     const UnitInfoListIterator* value);
-    Equals equals;
-
-    using Preincrement = UnitInfoListIterator*(__thiscall*)(UnitInfoListIterator* thisptr);
-    Preincrement preinc;
 };
 
 Api& get();

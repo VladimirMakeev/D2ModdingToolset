@@ -41,12 +41,7 @@ static_assert(sizeof(CBatAttackGiveAttack) == 16,
 
 namespace CBatAttackGiveAttackApi {
 
-struct Api
-{
-    IBatAttackVftable::CanPerform canPerform;
-};
-
-Api& get();
+IBatAttackVftable* vftable();
 
 } // namespace CBatAttackGiveAttackApi
 

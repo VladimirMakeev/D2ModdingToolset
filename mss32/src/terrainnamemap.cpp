@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Stanislav Egorov.
+ * Copyright (C) 2021 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,37 +17,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "d2tree.h"
+#include "terrainnamemap.h"
 #include "version.h"
 #include <array>
 
-namespace game::TreeApi {
+namespace game::TerrainNameMapApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::GetIterator)0x6403f0,
-        (Api::GetIterator)0x669070,
-        (Api::Dereference)0x62b790,
-        (Api::Equals)0x6402e0,
-        (Api::Preincrement)0x640560,
+        (Api::Get)0x5a6d29,
+        (Api::Add)0x5a728e,
     },
     // Russobit
     Api{
-        (Api::GetIterator)0x6403f0,
-        (Api::GetIterator)0x669070,
-        (Api::Dereference)0x62b790,
-        (Api::Equals)0x6402e0,
-        (Api::Preincrement)0x640560,
+        (Api::Get)0x5a6d29,
+        (Api::Add)0x5a728e,
     },
     // Gog
     Api{
-        (Api::GetIterator)0x667400,
-        (Api::GetIterator)0x648a30,
-        (Api::Dereference)0x63eeb0,
-        (Api::Equals)0x6678d0,
-        (Api::Preincrement)0x642390,
+        (Api::Get)0x5a5f8a,
+        (Api::Add)0x5a64ef,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Get)0x53a351,
+        (Api::Add)0x53a8b6,
     },
 }};
 // clang-format on
@@ -57,4 +53,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::TreeApi
+} // namespace game::TerrainNameMapApi

@@ -20,8 +20,7 @@
 #ifndef MQTHREAD_H
 #define MQTHREAD_H
 
-#include "d2pair.h"
-#include "d2set.h"
+#include "d2map.h"
 #include "functordispatch0.h"
 #include "smartptr.h"
 
@@ -35,7 +34,7 @@ namespace game {
 struct CMqThreadData
 {
     HANDLE windowHandle;
-    Set<Pair<std::uint32_t /* timerId */, SmartPtr<CBFunctorDispatch0>>> callbacks;
+    Map<std::uint32_t /* timerId */, SmartPtr<CBFunctorDispatch0>> callbacks;
     std::uint32_t freeTimerId;
     char unknown[44];
     HANDLE threadHandle;

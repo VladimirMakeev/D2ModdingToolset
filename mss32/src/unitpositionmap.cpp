@@ -17,11 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "unitpositionset.h"
+#include "unitpositionmap.h"
 #include "version.h"
 #include <array>
 
-namespace game::UnitPositionSetApi {
+namespace game::UnitPositionMapApi {
 
 // clang-format off
 static std::array<Api, 3> functions = {{
@@ -31,11 +31,6 @@ static std::array<Api, 3> functions = {{
         (Api::Destructor)0x6401a0,
         (Api::CopyConstructor)0x640180,
         (Api::CopyAssignment)0x6401c0,
-        (Api::GetIterator)0x6403f0,
-        (Api::GetIterator)0x6401e0,
-        (Api::Dereference)0x62b790,
-        (Api::Equals)0x6402e0,
-        (Api::Preincrement)0x640560,
         (Api::FindByPosition)0x634eaf,
         (Api::HasNegativePosition)0x631bfb,
     },
@@ -45,11 +40,6 @@ static std::array<Api, 3> functions = {{
         (Api::Destructor)0x6401a0,
         (Api::CopyConstructor)0x640180,
         (Api::CopyAssignment)0x6401c0,
-        (Api::GetIterator)0x6403f0,
-        (Api::GetIterator)0x6401e0,
-        (Api::Dereference)0x62b790,
-        (Api::Equals)0x6402e0,
-        (Api::Preincrement)0x640560,
         (Api::FindByPosition)0x634eaf,
         (Api::HasNegativePosition)0x631bfb,
     },
@@ -59,11 +49,6 @@ static std::array<Api, 3> functions = {{
         (Api::Destructor)0x63eba0,
         (Api::CopyConstructor)0x63eb80,
         (Api::CopyAssignment)0x63ebc0,
-        (Api::GetIterator)0x667400,
-        (Api::GetIterator)0x63ebe0,
-        (Api::Dereference)0x63eeb0,
-        (Api::Equals)0x6678d0,
-        (Api::Preincrement)0x642390,
         (Api::FindByPosition)0x6338ef,
         (Api::HasNegativePosition)0x63063b,
     },
@@ -75,4 +60,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::UnitPositionSetApi
+} // namespace game::UnitPositionMapApi

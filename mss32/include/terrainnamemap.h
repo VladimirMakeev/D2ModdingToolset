@@ -17,52 +17,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERRAINNAMELIST_H
-#define TERRAINNAMELIST_H
+#ifndef TERRAINNAMEMAP_H
+#define TERRAINNAMEMAP_H
 
-#include "d2pair.h"
-#include "d2set.h"
+#include "d2map.h"
 #include "terraincat.h"
 
 namespace game {
 
-using TerrainNamePair = Pair<LTerrainCategory, char[3]>;
-
 /** Holds terrain categories and their abbreviations. */
-using TerrainNameList = Set<TerrainNamePair>;
-using TerrainNameListNode = SetNode<TerrainNamePair>;
+using TerrainNameMap = Map<LTerrainCategory, char[3]>;
+using TerrainNameMapNode = MapNode<LTerrainCategory, char[3]>;
+using TerrainNameMapIterator = MapIterator<LTerrainCategory, char[3]>;
 
-static_assert(sizeof(TerrainNameListNode) == 32,
-              "Size of TerrainNameListNode structure must be exactly 32 bytes");
+static_assert(sizeof(TerrainNameMapNode) == 32,
+              "Size of TerrainNameMapNode structure must be exactly 32 bytes");
 
-struct TerrainNameListIterator
-{
-    char unknown[16];
-};
-
-namespace TerrainNameListApi {
+namespace TerrainNameMapApi {
 
 struct Api
 {
     /**
-     * Returns terrain name list.
+     * Returns terrain name map.
      * Initializes list on the first access.
      */
-    using GetTerrainNameList = TerrainNameList* (*)();
-    GetTerrainNameList getTerrainNameList;
+    using Get = TerrainNameMap* (*)();
+    Get get;
 
     /** Adds new node to the list with specified terrain and abbreviation. */
-    using Add = TerrainNameListIterator*(__thiscall*)(TerrainNameList* thisptr,
-                                                      TerrainNameListIterator* iterator,
-                                                      const LTerrainCategory* terrain,
-                                                      const char* abbreviation);
+    using Add = TerrainNameMapIterator*(__thiscall*)(TerrainNameMap* thisptr,
+                                                     TerrainNameMapIterator* iterator,
+                                                     const LTerrainCategory* terrain,
+                                                     const char* abbreviation);
     Add add;
 };
 
 Api& get();
 
-} // namespace TerrainNameListApi
+} // namespace TerrainNameMapApi
 
 } // namespace game
 
-#endif // TERRAINNAMELIST_H
+#endif // TERRAINNAMEMAP_H

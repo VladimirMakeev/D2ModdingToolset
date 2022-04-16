@@ -20,15 +20,12 @@
 #ifndef SCENARIOVARIABLEVIEW_H
 #define SCENARIOVARIABLEVIEW_H
 
+#include "midscenvariables.h"
 #include <string>
 
 namespace sol {
 class state;
 }
-
-namespace game {
-struct ScenarioVariable;
-} // namespace game
 
 namespace bindings {
 

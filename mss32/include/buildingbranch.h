@@ -20,8 +20,7 @@
 #ifndef BUILDINGBRANCH_H
 #define BUILDINGBRANCH_H
 
-#include "d2pair.h"
-#include "d2set.h"
+#include "d2map.h"
 #include "d2string.h"
 #include "racecategory.h"
 
@@ -36,11 +35,11 @@ struct CPhaseGame;
  * First element in pair is a id type index of TBuildingType::buildingId.
  * Second element in pair is a id type index of TBuildingTypeData::requiredId.
  */
-using BuildingBranchList = Set<Pair<int, int>>;
+using BuildingBranchMap = Map<int, int>;
 
 struct CBuildingBranchData
 {
-    BuildingBranchList list;
+    BuildingBranchMap map;
     int branchNumber;
     LRaceCategory raceCategory;
     String branchDialogName;
@@ -69,15 +68,15 @@ struct Api
     using InitData = CBuildingBranchData*(__thiscall*)(CBuildingBranchData* thisptr);
     InitData initData;
 
-    using InitBranchList = void*(__thiscall*)(BuildingBranchList* list);
-    InitBranchList initBranchList;
+    using InitBranchMap = void*(__thiscall*)(BuildingBranchMap* map);
+    InitBranchMap initBranchMap;
 
     /**
      * Adds sideshow unit building to building branch.
      * @param[in] unknown pointer to CBuildingBranch::data->unk1.
      * @param[in] building sideshow unit building to add.
      */
-    using AddSideshowUnitBuilding = void(__stdcall*)(BuildingBranchList* list,
+    using AddSideshowUnitBuilding = void(__stdcall*)(BuildingBranchMap* map,
                                                      const TBuildingUnitUpgType* building);
     AddSideshowUnitBuilding addSideshowUnitBuilding;
 
@@ -88,7 +87,7 @@ struct Api
      * @param[in] building unit building to add.
      */
     using AddUnitBuilding = void(__stdcall*)(CPhaseGame* phaseGame,
-                                             BuildingBranchList* list,
+                                             BuildingBranchMap* map,
                                              const TBuildingUnitUpgType* building);
     AddUnitBuilding addUnitBuilding;
 
@@ -99,7 +98,7 @@ struct Api
      * @param[in] building building to add.
      */
     using AddBuilding = void(__stdcall*)(CPhaseGame* phaseGame,
-                                         BuildingBranchList* list,
+                                         BuildingBranchMap* map,
                                          const TBuildingType* building);
     AddBuilding addBuilding;
 

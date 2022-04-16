@@ -201,14 +201,14 @@ void updateDefendBattleAction(const game::UnitInfo* unitInfo,
 {
     using namespace game;
 
-    const auto& targetsListApi = TargetsListApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
 
     if (unitInfo->unitFlags.parts.attackedOnceOfTwice)
         return;
 
     BattleAction defend = BattleAction::Defend;
-    Pair<TargetsListIterator, bool> tmp{};
-    targetsListApi.insert((TargetsList*)actions, &tmp, (int*)&defend);
+    Pair<TargetSetIterator, bool> tmp{};
+    targetSetApi.insert((TargetSet*)actions, &tmp, (int*)&defend);
 }
 
 void updateWaitBattleAction(const game::BattleMsgData* battleMsgData,
@@ -217,7 +217,7 @@ void updateWaitBattleAction(const game::BattleMsgData* battleMsgData,
 {
     using namespace game;
 
-    const auto& targetsListApi = TargetsListApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
 
     if (battleMsgData->currentRound < 1)
         return;
@@ -226,8 +226,8 @@ void updateWaitBattleAction(const game::BattleMsgData* battleMsgData,
         return;
 
     BattleAction wait = BattleAction::Wait;
-    Pair<TargetsListIterator, bool> tmp{};
-    targetsListApi.insert((TargetsList*)actions, &tmp, (int*)&wait);
+    Pair<TargetSetIterator, bool> tmp{};
+    targetSetApi.insert((TargetSet*)actions, &tmp, (int*)&wait);
 }
 
 void updateUseItemBattleAction(const game::IMidgardObjectMap* objectMap,
@@ -241,7 +241,7 @@ void updateUseItemBattleAction(const game::IMidgardObjectMap* objectMap,
 
     const auto& idApi = CMidgardIDApi::get();
     const auto& battleApi = BattleMsgDataApi::get();
-    const auto& targetsListApi = TargetsListApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
 
     if (battleMsgData->currentRound < 1)
         return;
@@ -268,7 +268,7 @@ void updateUseItemBattleAction(const game::IMidgardObjectMap* objectMap,
             continue;
 
         bool used = false;
-        for (auto usedItemId : battleMsgData->usedItemIds) {
+        for (const auto& usedItemId : battleMsgData->usedItemIds) {
             if (usedItemId == itemId) {
                 used = true;
                 break;
@@ -281,11 +281,11 @@ void updateUseItemBattleAction(const game::IMidgardObjectMap* objectMap,
                                        itemTargets[i]);
     }
 
-    for (auto targets : itemTargets) {
+    for (const auto targets : itemTargets) {
         if (targets->second.length > 0) {
             BattleAction useItem = BattleAction::UseItem;
-            Pair<TargetsListIterator, bool> tmp{};
-            targetsListApi.insert((TargetsList*)actions, &tmp, (int*)&useItem);
+            Pair<TargetSetIterator, bool> tmp{};
+            targetSetApi.insert((TargetSet*)actions, &tmp, (int*)&useItem);
             break;
         }
     }
@@ -300,7 +300,7 @@ void updateRetreatBattleAction(const game::IMidgardObjectMap* objectMap,
 
     const auto& idApi = CMidgardIDApi::get();
     const auto& battleApi = BattleMsgDataApi::get();
-    const auto& targetsListApi = TargetsListApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
 
     if (battleMsgData->currentRound < 1)
         return;
@@ -320,8 +320,8 @@ void updateRetreatBattleAction(const game::IMidgardObjectMap* objectMap,
     }
 
     BattleAction retreat = BattleAction::Retreat;
-    Pair<TargetsListIterator, bool> tmp{};
-    targetsListApi.insert((TargetsList*)actions, &tmp, (int*)&retreat);
+    Pair<TargetSetIterator, bool> tmp{};
+    targetSetApi.insert((TargetSet*)actions, &tmp, (int*)&retreat);
 }
 
 void updateAttackBattleAction(const game::IMidgardObjectMap* objectMap,
@@ -333,7 +333,7 @@ void updateAttackBattleAction(const game::IMidgardObjectMap* objectMap,
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& targetsListApi = TargetsListApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
 
     const auto attack = fn.getAttackById(objectMap, &unitInfo->unitId1, 1, false);
     const auto attackClass = attack->vftable->getAttackClass(attack);
@@ -346,8 +346,8 @@ void updateAttackBattleAction(const game::IMidgardObjectMap* objectMap,
 
     if (attackTargets->second.length > 0) {
         BattleAction attack = BattleAction::Attack;
-        Pair<TargetsListIterator, bool> tmp{};
-        targetsListApi.insert((TargetsList*)actions, &tmp, (int*)&attack);
+        Pair<TargetSetIterator, bool> tmp{};
+        targetSetApi.insert((TargetSet*)actions, &tmp, (int*)&attack);
     }
 }
 
@@ -362,9 +362,9 @@ void __stdcall updateBattleActionsHooked(const game::IMidgardObjectMap* objectMa
     using namespace game;
 
     const auto& battleApi = BattleMsgDataApi::get();
-    const auto& targetsListApi = TargetsListApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
 
-    targetsListApi.clear((TargetsList*)actions);
+    targetSetApi.clear((TargetSet*)actions);
 
     auto unitInfo = battleApi.getUnitInfoById(battleMsgData, unitId);
 

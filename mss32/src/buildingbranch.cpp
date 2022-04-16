@@ -29,7 +29,7 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::Constructor)0x4aaa69,
         (Api::InitData)0x4aaee5,
-        (Api::InitBranchList)0x4ab326,
+        (Api::InitBranchMap)0x4ab326,
         (Api::AddSideshowUnitBuilding)0x4aae31,
         (Api::AddUnitBuilding)0x4aad34,
         (Api::AddBuilding)0x4aadbf,
@@ -39,7 +39,7 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::Constructor)0x4aaa69,
         (Api::InitData)0x4aaee5,
-        (Api::InitBranchList)0x4ab326,
+        (Api::InitBranchMap)0x4ab326,
         (Api::AddSideshowUnitBuilding)0x4aae31,
         (Api::AddUnitBuilding)0x4aad34,
         (Api::AddBuilding)0x4aadbf,
@@ -49,7 +49,7 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::Constructor)0x4aa283,
         (Api::InitData)0x4aa6ff,
-        (Api::InitBranchList)0x4aab40,
+        (Api::InitBranchMap)0x4aab40,
         (Api::AddSideshowUnitBuilding)0x4aa64b,
         (Api::AddUnitBuilding)0x4aa54e,
         (Api::AddBuilding)0x4aa5d9,

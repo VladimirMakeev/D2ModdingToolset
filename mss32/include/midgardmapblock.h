@@ -24,7 +24,7 @@
 #include "midgardid.h"
 #include "midscenarioobject.h"
 #include "mqpoint.h"
-#include "terraincountlist.h"
+#include "terraincountmap.h"
 #include <cstdint>
 
 namespace game {
@@ -70,7 +70,7 @@ struct Api
 
     /** Counts number of tiles with plain ground and their terrain coverage for each race. */
     using CountTerrainCoverage = bool(__thiscall*)(const CMidgardMapBlock* thisptr,
-                                                   TerrainCountList* terrainCoverage,
+                                                   TerrainCountMap* terrainCoverage,
                                                    int* plainTiles);
     CountTerrainCoverage countTerrainCoverage;
 };

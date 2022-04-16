@@ -28,8 +28,8 @@ struct CMidgardID;
 struct BattleMsgData;
 struct IMidgardObjectMap;
 
-using TargetsList = Set<int>;
-using GroupIdTargetsPair = Pair<CMidgardID, TargetsList>;
+using TargetSet = Set<int>;
+using GroupIdTargetsPair = Pair<CMidgardID, TargetSet>;
 
 enum class BattleAction : int;
 } // namespace game

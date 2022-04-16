@@ -21,6 +21,7 @@
 #define UTILS_H
 
 #include "midgardid.h"
+#include "midscenvariables.h"
 #include <filesystem>
 #include <functional>
 #include <string>
@@ -28,8 +29,6 @@
 namespace game {
 struct CMidMsgBoxButtonHandler;
 struct IMidgardObjectMap;
-struct CMidScenVariables;
-struct ScenarioVariable;
 struct UiEvent;
 struct CInterface;
 } // namespace game
@@ -79,10 +78,6 @@ void showMessageBox(const std::string& message,
 
 /** Shows windows style message box that does not depend on game rendering and resources. */
 void showErrorMessageBox(const std::string& message);
-
-/** Calls specified function on each scenario variable. */
-void forEachScenarioVariable(const game::CMidScenVariables* variables,
-                             std::function<void(const game::ScenarioVariable*, std::uint32_t)> f);
 
 void createTimerEvent(game::UiEvent* timerEvent,
                       void* userData,

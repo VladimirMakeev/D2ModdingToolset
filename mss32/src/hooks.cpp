@@ -167,7 +167,7 @@ static Hooks getGameHooks()
         // Show buildings with custom branch category on the 'other buildings' tab
         {CBuildingBranchApi::get().constructor, buildingBranchCtorHooked},
         // Allow alchemists to buff retreating units
-        {CBatAttackGiveAttackApi::get().canPerform, giveAttackCanPerformHooked},
+        {CBatAttackGiveAttackApi::vftable()->canPerform, giveAttackCanPerformHooked},
         // Random map generation
         //HookInfo{CMenuNewSkirmishSingleApi::get().constructor, menuNewSkirmishSingleCtorHooked},
         // Support custom battle attack objects
@@ -187,8 +187,8 @@ static Hooks getGameHooks()
         // Cities can generate daily income depending on scenario variable settings
         {fn.computePlayerDailyIncome, computePlayerDailyIncomeHooked, (void**)&orig.computePlayerDailyIncome},
         // Vampiric attacks can deal critical damage
-        {CBatAttackDrainApi::get().onHit, drainAttackOnHitHooked},
-        {CBatAttackDrainOverflowApi::get().onHit, drainOverflowAttackOnHitHooked},
+        {CBatAttackDrainApi::vftable()->onHit, drainAttackOnHitHooked},
+        {CBatAttackDrainOverflowApi::vftable()->onHit, drainOverflowAttackOnHitHooked},
         // Support additional music tracks for battle and capital cities
         {CMidMusicApi::get().playBattleTrack, playBattleTrackHooked},
         {CMidMusicApi::get().playCapitalTrack, playCapitalTrackHooked},
@@ -213,14 +213,14 @@ static Hooks getGameHooks()
          * applied to this unit
          * 6) Treat modifiers with complete immunity correctly
          */
-        {CBatAttackBestowWardsApi::get().canPerform, bestowWardsAttackCanPerformHooked},
+        {CBatAttackBestowWardsApi::vftable()->canPerform, bestowWardsAttackCanPerformHooked},
         /**
          * Fix bestow wards:
          * 1) Becoming permanent when more than 8 modifiers are applied at once
          * 2) Not resetting attack class wards (when reapplied)
          * 3) Incorrectly resetting attack source ward if its modifier also contains hp, regen or armor element
          */
-        {CBatAttackBestowWardsApi::get().onHit, bestowWardsAttackOnHitHooked},
+        {CBatAttackBestowWardsApi::vftable()->onHit, bestowWardsAttackOnHitHooked},
         // Fix bestow wards with double attack where modifiers granted by first attack are removed
         {battle.afterBattleTurn, afterBattleTurnHooked},
         // Allow any attack with QTY_HEAL > 0 to heal units when battle ends (just like ordinary heal does)
@@ -302,13 +302,13 @@ static Hooks getGameHooks()
     if (userSettings().shatteredArmorMax != baseSettings().shatteredArmorMax) {
         // Allow users to customize total armor shatter damage
         hooks.emplace_back(
-            HookInfo{CBatAttackShatterApi::get().canPerform, shatterCanPerformHooked});
+            HookInfo{CBatAttackShatterApi::vftable()->canPerform, shatterCanPerformHooked});
         hooks.emplace_back(HookInfo{battle.setUnitShatteredArmor, setUnitShatteredArmorHooked});
     }
 
     if (userSettings().shatterDamageMax != baseSettings().shatterDamageMax) {
         // Allow users to customize maximum armor shatter damage per attack
-        hooks.emplace_back(HookInfo{CBatAttackShatterApi::get().onHit, shatterOnHitHooked});
+        hooks.emplace_back(HookInfo{CBatAttackShatterApi::vftable()->onHit, shatterOnHitHooked});
     }
 
     if (userSettings().showBanners != baseSettings().showBanners) {
@@ -333,21 +333,22 @@ static Hooks getGameHooks()
         || userSettings().doppelgangerRespectsAllyImmunity
                != baseSettings().doppelgangerRespectsAllyImmunity) {
         // Make Doppelganger attack respect target source/class wards and immunities
-        hooks.emplace_back(HookInfo{CBatAttackDoppelgangerApi::get().canPerform,
+        hooks.emplace_back(HookInfo{CBatAttackDoppelgangerApi::vftable()->canPerform,
                                     doppelgangerAttackCanPerformHooked});
-        hooks.emplace_back(
-            HookInfo{CBatAttackDoppelgangerApi::get().isImmune, doppelgangerAttackIsImmuneHooked});
+        hooks.emplace_back(HookInfo{CBatAttackDoppelgangerApi::vftable()->isImmune,
+                                    doppelgangerAttackIsImmuneHooked});
     }
 
     if (userSettings().leveledDoppelgangerAttack != baseSettings().leveledDoppelgangerAttack) {
         // Allow doppelganger to transform into leveled units using script logic
         hooks.emplace_back(
-            HookInfo{CBatAttackDoppelgangerApi::get().onHit, doppelgangerAttackOnHitHooked});
+            HookInfo{CBatAttackDoppelgangerApi::vftable()->onHit, doppelgangerAttackOnHitHooked});
     }
 
     if (userSettings().leveledSummonAttack != baseSettings().leveledSummonAttack) {
         // Allow summon leveled units using script logic
-        hooks.emplace_back(HookInfo{CBatAttackSummonApi::get().onHit, summonAttackOnHitHooked});
+        hooks.emplace_back(
+            HookInfo{CBatAttackSummonApi::vftable()->onHit, summonAttackOnHitHooked});
     }
 
     if (userSettings().missChanceSingleRoll != baseSettings().missChanceSingleRoll) {
@@ -906,15 +907,13 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
     }
 
     int hireTierMax{0};
-    forEachScenarioVariable(variables,
-                            [&hireTierMax](const game::ScenarioVariable* variable, std::uint32_t) {
-                                static const char varName[]{"UNIT_HIRE_TIER_MAX"};
-                                const auto& name = variable->data.name;
-
-                                if (!strncmp(name, varName, sizeof(varName))) {
-                                    hireTierMax = variable->data.value;
-                                }
-                            });
+    for (const auto& variable : variables->variables) {
+        static const char varName[]{"UNIT_HIRE_TIER_MAX"};
+        if (!strncmp(variable.second.name, varName, sizeof(varName))) {
+            hireTierMax = variable.second.value;
+            break;
+        }
+    }
 
     if (hireTierMax <= 1) {
         // No variable defined or high tier hire is disabled, skip.
@@ -1094,7 +1093,7 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
     thisptr->data = data;
     thisptr->vftable = CBuildingBranchApi::vftable();
 
-    buildingBranch.initBranchList(&thisptr->data->list);
+    buildingBranch.initBranchMap(&thisptr->data->map);
     thisptr->data->branchNumber = *branchNumber;
 
     auto* dialogName = &thisptr->data->branchDialogName;
@@ -1124,24 +1123,12 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
     auto lord = fn.getLordByPlayer(player);
     auto buildList = lord->data->buildList;
 
-    const auto& lordTypeApi = TLordTypeApi::get();
-    BuildListIterator iterator;
-    lordTypeApi.getIterator(buildList, &iterator);
-
     const auto globalData = GlobalDataApi::get().getGlobalData();
     auto buildings = (*globalData)->buildings;
 
-    while (true) {
-        BuildListIterator endIterator;
-        lordTypeApi.getEndIterator(buildList, &endIterator);
-
-        if (iterator.node == endIterator.node && iterator.node2 == endIterator.node2) {
-            break;
-        }
-
+    for (const auto& id : buildList->data) {
         const auto findById = GlobalDataApi::get().findById;
-        const TBuildingType* buildingType = (const TBuildingType*)findById(buildings,
-                                                                           &iterator.node->value);
+        const TBuildingType* buildingType = (const TBuildingType*)findById(buildings, &id);
 
         const LBuildingCategory* buildingCategory = &buildingType->data->category;
         const auto& buildingCategories = BuildingCategories::get();
@@ -1160,12 +1147,12 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
             const int num = *branchNumber;
 
             if (unitBranch.id == unitBranchCategories.sideshow->id) {
-                buildingBranch.addSideshowUnitBuilding(&thisptr->data->list, unitUpg);
+                buildingBranch.addSideshowUnitBuilding(&thisptr->data->map, unitUpg);
             } else if (unitBranch.id == unitBranchCategories.fighter->id && num == 0
                        || unitBranch.id == unitBranchCategories.mage->id && num == 1
                        || unitBranch.id == unitBranchCategories.archer->id && num == 2
                        || unitBranch.id == unitBranchCategories.special->id && num == 4) {
-                buildingBranch.addUnitBuilding(phaseGame, &thisptr->data->list, unitUpg);
+                buildingBranch.addUnitBuilding(phaseGame, &thisptr->data->map, unitUpg);
             }
 
         } else if ((buildingCategory->id == buildingCategories.guild->id
@@ -1173,10 +1160,8 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
                     || buildingCategory->id == buildingCategories.magic->id
                     || (customCategoryExists && (buildingCategory->id == custom.id)))
                    && *branchNumber == 3) {
-            buildingBranch.addBuilding(phaseGame, &thisptr->data->list, buildingType);
+            buildingBranch.addBuilding(phaseGame, &thisptr->data->map, buildingType);
         }
-
-        lordTypeApi.advanceIterator(&iterator.node, &iterator.node2->unknown);
     }
 
     logDebug("newBuildingType.log", "Ctor finished");

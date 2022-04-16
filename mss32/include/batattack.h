@@ -20,7 +20,7 @@
 #ifndef BATATTACK_H
 #define BATATTACK_H
 
-#include "targetslist.h"
+#include "targetset.h"
 
 namespace game {
 
@@ -62,7 +62,7 @@ struct IBatAttackVftable
     using FillTargetsList = void(__thiscall*)(IBatAttack* thisptr,
                                               const IMidgardObjectMap* objectMap,
                                               const BattleMsgData* battleMsgData,
-                                              TargetsList* value);
+                                              TargetSet* value);
     FillTargetsList fillTargetsList;
     FillTargetsList fillAltTargetsList;
 

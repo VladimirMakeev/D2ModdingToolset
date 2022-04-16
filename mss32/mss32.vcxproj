@@ -225,7 +225,6 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\customattackhooks.cpp" />
     <ClCompile Include="src\customattacks.cpp" />
     <ClCompile Include="src\customattackutils.cpp" />
-    <ClCompile Include="src\d2tree.cpp" />
     <ClCompile Include="src\d2osexception.cpp" />
     <ClCompile Include="src\d2string.cpp" />
     <ClCompile Include="src\dbfaccess.cpp" />
@@ -285,7 +284,6 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\log.cpp" />
     <ClCompile Include="src\loginaccountinterf.cpp" />
     <ClCompile Include="src\lordcat.cpp" />
-    <ClCompile Include="src\lordtype.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mapgen.cpp" />
     <ClCompile Include="src\mapgraphics.cpp" />
@@ -386,12 +384,12 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\stringintlist.cpp" />
     <ClCompile Include="src\subracecat.cpp" />
     <ClCompile Include="src\summonhooks.cpp" />
-    <ClCompile Include="src\targetslist.cpp" />
+    <ClCompile Include="src\targetset.cpp" />
     <ClCompile Include="src\targetslistutils.cpp" />
     <ClCompile Include="src\taskchangecolor.cpp" />
     <ClCompile Include="src\terraincat.cpp" />
-    <ClCompile Include="src\terraincountlist.cpp" />
-    <ClCompile Include="src\terrainnamelist.cpp" />
+    <ClCompile Include="src\terraincountmap.cpp" />
+    <ClCompile Include="src\terrainnamemap.cpp" />
     <ClCompile Include="src\testcondition.cpp" />
     <ClCompile Include="src\testconditionhooks.cpp" />
     <ClCompile Include="src\textboxinterf.cpp" />
@@ -409,7 +407,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\unitinfolist.cpp" />
     <ClCompile Include="src\unitpickerinterf.cpp" />
     <ClCompile Include="src\unitpositionlist.cpp" />
-    <ClCompile Include="src\unitpositionset.cpp" />
+    <ClCompile Include="src\unitpositionmap.cpp" />
     <ClCompile Include="src\unitsforhire.cpp" />
     <ClCompile Include="src\unitutils.cpp" />
     <ClCompile Include="src\untransformeffecthooks.cpp" />
@@ -868,7 +866,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\subracecat.h" />
     <ClInclude Include="include\summonhooks.h" />
     <ClInclude Include="include\surfacedecompressdata.h" />
-    <ClInclude Include="include\targetslist.h" />
+    <ClInclude Include="include\targetset.h" />
     <ClInclude Include="include\targetslistutils.h" />
     <ClInclude Include="include\task.h" />
     <ClInclude Include="include\taskbase.h" />
@@ -879,8 +877,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\taskspell.h" />
     <ClInclude Include="include\tasktilehighlight.h" />
     <ClInclude Include="include\terraincat.h" />
-    <ClInclude Include="include\terraincountlist.h" />
-    <ClInclude Include="include\terrainnamelist.h" />
+    <ClInclude Include="include\terraincountmap.h" />
+    <ClInclude Include="include\terrainnamemap.h" />
     <ClInclude Include="include\testcondition.h" />
     <ClInclude Include="include\testconditionhooks.h" />
     <ClInclude Include="include\textandid.h" />
@@ -906,7 +904,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\unitmodifier.h" />
     <ClInclude Include="include\unitpickerinterf.h" />
     <ClInclude Include="include\unitpositionlist.h" />
-    <ClInclude Include="include\unitpositionset.h" />
+    <ClInclude Include="include\unitpositionmap.h" />
     <ClInclude Include="include\unitpositionpair.h" />
     <ClInclude Include="include\unitsforhire.h" />
     <ClInclude Include="include\unitutils.h" />

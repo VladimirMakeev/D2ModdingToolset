@@ -36,12 +36,12 @@ void ScenarioVariableView::bind(sol::state& lua)
 
 std::string ScenarioVariableView::getName() const
 {
-    return {variable->data.name};
+    return {variable->second.name};
 }
 
 int ScenarioVariableView::getValue() const
 {
-    return variable->data.value;
+    return variable->second.value;
 }
 
 } // namespace bindings

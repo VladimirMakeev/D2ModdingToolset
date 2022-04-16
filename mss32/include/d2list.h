@@ -24,6 +24,7 @@
 
 namespace game {
 
+/** Implementation of std::list<T>::node used in game. */
 template <typename T>
 struct ListNode
 {
@@ -32,7 +33,98 @@ struct ListNode
     T data;
 };
 
-/** Implementation of std::list<T> used in game. */
+static_assert(sizeof(ListNode<int>) == 12,
+              "Size of ListNode<int> structure must be exactly 12 bytes");
+
+/** Implementation of std::list<T>::const_iterator used in game.
+ * Inline methods exactly correspond to in-game implementation.
+ * T* ptr appear to always be nullptr, but no guarantees.
+ * Bet that this implementation might be shared with vector::iterator. */
+template <typename T>
+struct ConstListIterator
+{
+    char unknown;
+    char padding[3];
+    ListNode<T>* node;
+    T* ptr;
+
+    bool operator==(const ConstListIterator<T>& value) const
+    {
+        return ptr ? ptr == value.ptr : node == value.node;
+    }
+
+    bool operator!=(const ConstListIterator<T>& value) const
+    {
+        return !(*this == value);
+    }
+
+    const T& operator*() const
+    {
+        return ptr ? *ptr : node->data;
+    }
+
+    const T* operator->() const
+    {
+        return ptr ? ptr : &node->data;
+    }
+
+    ConstListIterator<T>& operator++()
+    {
+        if (ptr)
+            ptr++;
+        else
+            node = node->next;
+
+        return *this;
+    }
+
+    ConstListIterator<T> operator++(int)
+    {
+        auto result = *this;
+        ++*this;
+        return result;
+    }
+};
+
+static_assert(sizeof(ConstListIterator<int>) == 12,
+              "Size of ConstListIterator structure must be exactly 12 bytes");
+
+/** Implementation of std::list<T>::iterator used in game.
+ * Inline methods exactly correspond to in-game implementation. */
+template <typename T>
+struct ListIterator : public ConstListIterator<T>
+{
+    using Base = ConstListIterator<T>;
+
+    T& operator*() const
+    {
+        return ptr ? *ptr : node->data;
+    }
+
+    T* operator->() const
+    {
+        return ptr ? ptr : &node->data;
+    }
+
+    ListIterator<T>& operator++()
+    {
+        Base::operator++();
+        return *this;
+    }
+
+    ListIterator<T> operator++(int)
+    {
+        auto result = *this;
+        Base::operator++();
+        return result;
+    }
+};
+
+static_assert(sizeof(ListIterator<int>) == 12,
+              "Size of ListIterator structure must be exactly 12 bytes");
+
+/** Implementation of std::list<T> used in game.
+ * Inline methods exactly correspond to in-game implementation. */
 template <typename T>
 struct List
 {
@@ -40,16 +132,29 @@ struct List
     ListNode<T>* head;
     int unknown;
     void* allocator;
+
+    ListIterator<T> begin()
+    {
+        return {0, {}, head->next, nullptr};
+    }
+
+    ConstListIterator<T> begin() const
+    {
+        return {0, {}, head->next, nullptr};
+    }
+
+    ListIterator<T> end()
+    {
+        return {0, {}, head, nullptr};
+    }
+
+    ConstListIterator<T> end() const
+    {
+        return {0, {}, head, nullptr};
+    }
 };
 
-template <typename T>
-struct ListIterator
-{
-    char unknown;
-    char padding[3];
-    ListNode<T>* node;
-    ListNode<T>* node2;
-};
+static_assert(sizeof(List<int>) == 16, "Size of List structure must be exactly 16 bytes");
 
 } // namespace game
 

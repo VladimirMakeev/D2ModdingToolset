@@ -24,24 +24,6 @@
 namespace game::CBatAttackShatterApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
-    // Akella
-    Api{
-        (IBatAttackVftable::CanPerform)0x65ecc1,
-        (IBatAttackVftable::OnAttack)0x65ee5c
-    },
-    // Russobit
-    Api{
-        (IBatAttackVftable::CanPerform)0x65ecc1,
-        (IBatAttackVftable::OnAttack)0x65ee5c
-    },
-    // Gog
-    Api{
-        (IBatAttackVftable::CanPerform)0x65d741,
-        (IBatAttackVftable::OnAttack)0x65d8dc
-    }
-}};
-
 static std::array<IBatAttackVftable*, 4> vftables = {{
     // Akella
     (IBatAttackVftable*)0x6f504c,
@@ -50,14 +32,9 @@ static std::array<IBatAttackVftable*, 4> vftables = {{
     // Gog
     (IBatAttackVftable*)0x6f2ffc,
     // Scenario Editor
-    (IBatAttackVftable*)0x000000,
+    (IBatAttackVftable*)nullptr,
 }};
 // clang-format on
-
-Api& get()
-{
-    return functions[static_cast<int>(hooks::gameVersion())];
-}
 
 IBatAttackVftable* vftable()
 {

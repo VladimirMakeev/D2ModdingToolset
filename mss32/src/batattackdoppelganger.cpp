@@ -24,31 +24,21 @@
 namespace game::CBatAttackDoppelgangerApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<IBatAttackVftable*, 4> vftables = {{
     // Akella
-    Api{
-        (IBatAttackVftable::CanPerform)0x6633f3,
-        (IBatAttackVftable::IsImmune)0x66360b,
-        (IBatAttackVftable::OnAttack)0x66374d,
-    },
+    (IBatAttackVftable*)0x6f54fc,
     // Russobit
-    Api{
-        (IBatAttackVftable::CanPerform)0x6633f3,
-        (IBatAttackVftable::IsImmune)0x66360b,
-        (IBatAttackVftable::OnAttack)0x66374d,
-    },
+    (IBatAttackVftable*)0x6f54fc,
     // Gog
-    Api{
-        (IBatAttackVftable::CanPerform)0x661e73,
-        (IBatAttackVftable::IsImmune)0x66208b,
-        (IBatAttackVftable::OnAttack)0x6621cd,
-    }
+    (IBatAttackVftable*)0x6f34ac,
+    // Scenario Editor
+    (IBatAttackVftable*)nullptr,
 }};
 // clang-format on
 
-Api& get()
+IBatAttackVftable* vftable()
 {
-    return functions[static_cast<int>(hooks::gameVersion())];
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::CBatAttackDoppelgangerApi

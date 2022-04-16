@@ -41,12 +41,7 @@ static_assert(sizeof(CBatAttackDrain) == 20,
 
 namespace CBatAttackDrainApi {
 
-struct Api
-{
-    IBatAttackVftable::OnAttack onHit;
-};
-
-Api& get();
+IBatAttackVftable* vftable();
 
 } // namespace CBatAttackDrainApi
 

@@ -27,49 +27,44 @@ namespace game::CBatAttackDrainOverflowApi {
 static std::array<Api, 3> functions = {{
     // Akella
     Api{
-        (IBatAttackVftable::OnAttack)0x660d9b,
         (Api::HealDataConstructor)0x668910,
         (Api::HealDataDestructor)0x668990,
-        (Api::HealDataIteratorConstructor)0x6403f0,
-        (Api::HealDataEndIteratorConstructor)0x6689b0,
-        (Api::HealDataIteratorCopyConstructor)0x651af0,
-        (Api::IsHealDataIteratorAtEnd)0x668c60,
-        (Api::HealDataIteratorAdvance)0x668c20,
-        (Api::HealDataIteratorGetData)0x62b790,
         (Api::ComputeDrainOverflowGroupHeal)0x661138
     },
     // Russobit
     Api{
-        (IBatAttackVftable::OnAttack)0x660d9b,
         (Api::HealDataConstructor)0x668910,
         (Api::HealDataDestructor)0x668990,
-        (Api::HealDataIteratorConstructor)0x6403f0,
-        (Api::HealDataEndIteratorConstructor)0x6689b0,
-        (Api::HealDataIteratorCopyConstructor)0x651af0,
-        (Api::IsHealDataIteratorAtEnd)0x668c60,
-        (Api::HealDataIteratorAdvance)0x668c20,
-        (Api::HealDataIteratorGetData)0x62b790,
         (Api::ComputeDrainOverflowGroupHeal)0x661138
     },
     // Gog
     Api{
-        (IBatAttackVftable::OnAttack)0x65f81b,
         (Api::HealDataConstructor)0x667360,
         (Api::HealDataDestructor)0x6673e0,
-        (Api::HealDataIteratorConstructor)0x667400,
-        (Api::HealDataEndIteratorConstructor)0x667420,
-        (Api::HealDataIteratorCopyConstructor)0x63f650,
-        (Api::IsHealDataIteratorAtEnd)0x6676d0,
-        (Api::HealDataIteratorAdvance)0x667690,
-        (Api::HealDataIteratorGetData)0x63eeb0,
         (Api::ComputeDrainOverflowGroupHeal)0x65fbb8
     }
+}};
+
+static std::array<IBatAttackVftable*, 4> vftables = {{
+    // Akella
+    (IBatAttackVftable*)0x6f536c,
+    // Russobit
+    (IBatAttackVftable*)0x6f536c,
+    // Gog
+    (IBatAttackVftable*)0x6f331c,
+    // Scenario Editor
+    (IBatAttackVftable*)nullptr,
 }};
 // clang-format on
 
 Api& get()
 {
     return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+IBatAttackVftable* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::CBatAttackDrainOverflowApi

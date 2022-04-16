@@ -46,38 +46,6 @@
 
 namespace hooks {
 
-static void forEachVariable(const game::IMidgardObjectMap* objectMap,
-                            std::function<void(const game::ScenarioVariable*)> function)
-{
-    using namespace game;
-
-    auto variables = getScenarioVariables(objectMap);
-    if (!variables || !variables->variables.length) {
-        return;
-    }
-
-    auto begin = variables->variables.begin;
-    auto end = variables->variables.end;
-    auto current = begin->less;
-
-    ScenarioVariablesListIterator listIterator{};
-    listIterator.node = current;
-    listIterator.node2 = end;
-
-    const auto total = variables->variables.length;
-    for (std::uint32_t i = 0; i < total; ++i) {
-        const bool done = (current != begin || listIterator.node2 != end) ? false : true;
-        if (done) {
-            break;
-        }
-
-        function(&current->value);
-
-        CMidScenVariablesApi::get().advance(&listIterator.node, listIterator.node2);
-        current = listIterator.node;
-    }
-}
-
 /** Same as RAD_OPERATOR button indices in DLG_COND_VAR_CMP from ScenEdit.dlg */
 enum class CompareType : int
 {
@@ -175,10 +143,10 @@ void __stdcall midCondVarCmpGetInfoString(game::String* info,
     }
 
     auto* condition = static_cast<const CMidCondVarCmp*>(eventCondition);
-    auto& getData = game::CMidScenVariablesApi::get().getData;
+    auto& findById = game::CMidScenVariablesApi::get().findById;
 
-    auto data1 = getData(variables, condition->variableId1);
-    auto data2 = getData(variables, condition->variableId2);
+    auto data1 = findById(variables, condition->variableId1);
+    auto data2 = findById(variables, condition->variableId2);
     std::string comparison;
 
     const auto& varCmpTextIds = textIds().events.conditions.variableCmp;
@@ -280,7 +248,7 @@ void __fastcall condVarCmpInterfOnVisibilityChanged(CCondVarCmpInterf* thisptr,
 
     const auto& variables = thisptr->variables;
     for (size_t i = 0; i < variables.size(); ++i) {
-        const auto id = variables[i]->variableId;
+        const auto id = variables[i]->first;
         if (variableId1 == id) {
             auto listBox = dialogApi.findListBox(dialog, "TLBOX_VARIABLES1");
             if (listBox) {
@@ -384,8 +352,8 @@ void __fastcall condVarCmpInterfOkButtonHandler(CCondVarCmpInterf* thisptr, int 
         condition->compareType = static_cast<CompareType>(radioButton->data->selectedButton);
     }
 
-    condition->variableId1 = thisptr->variables[index1]->variableId;
-    condition->variableId2 = thisptr->variables[index2]->variableId;
+    condition->variableId1 = thisptr->variables[index1]->first;
+    condition->variableId2 = thisptr->variables[index2]->first;
 
     auto midEvent = (CMidEvent*)objectMap->vftable
                         ->findScenarioObjectByIdForChange(objectMap, &thisptr->eventId);
@@ -416,8 +384,8 @@ void __fastcall condVarCmpInterfListBoxDisplayHandler(CCondVarCmpInterf* thisptr
 
     const auto variable = thisptr->variables[selectedIndex];
 
-    game::StringApi::get().initFromStringN(string, variable->data.name,
-                                           std::strlen(variable->data.name));
+    game::StringApi::get().initFromStringN(string, variable->second.name,
+                                           std::strlen(variable->second.name));
 }
 
 game::editor::CCondInterf* createCondVarCmpInterf(game::ITask* task,
@@ -464,9 +432,12 @@ game::editor::CCondInterf* createCondVarCmpInterf(game::ITask* task,
         auto objectMap = CCondInterfApi::get().getObjectMap(thisptr->unknown);
         Variables variables;
 
-        forEachVariable(objectMap, [&variables](const game::ScenarioVariable* var) {
-            variables.push_back(var);
-        });
+        auto scenVariables = getScenarioVariables(objectMap);
+        if (scenVariables) {
+            for (const auto& variable : scenVariables->variables) {
+                variables.push_back(&variable);
+            }
+        }
 
         variables.swap(thisptr->variables);
     }
@@ -556,11 +527,11 @@ bool __fastcall testVarCmpDoTest(const CTestVarCmp* thisptr,
         return false;
     }
 
-    const auto& getData = game::CMidScenVariablesApi::get().getData;
+    const auto& findById = game::CMidScenVariablesApi::get().findById;
     const auto* condition = thisptr->condition;
 
-    const auto value1 = getData(variables, condition->variableId1)->value;
-    const auto value2 = getData(variables, condition->variableId2)->value;
+    const auto value1 = findById(variables, condition->variableId1)->value;
+    const auto value2 = findById(variables, condition->variableId2)->value;
 
     switch (condition->compareType) {
     case CompareType::Equal:

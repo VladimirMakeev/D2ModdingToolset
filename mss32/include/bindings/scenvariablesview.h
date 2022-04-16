@@ -20,6 +20,7 @@
 #ifndef SCENVARIABLESVIEW_H
 #define SCENVARIABLESVIEW_H
 
+#include "midscenvariables.h"
 #include <optional>
 #include <string>
 #include <unordered_map>
@@ -27,11 +28,6 @@
 namespace sol {
 class state;
 }
-
-namespace game {
-struct CMidScenVariables;
-struct ScenarioVariable;
-} // namespace game
 
 namespace bindings {
 

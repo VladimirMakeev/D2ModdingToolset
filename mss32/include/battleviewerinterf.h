@@ -25,8 +25,7 @@
 #include "battlemsgdata.h"
 #include "batviewer.h"
 #include "batviewerutils.h"
-#include "d2list.h"
-#include "d2set.h"
+#include "d2map.h"
 #include "d2string.h"
 #include "d2vector.h"
 #include "draganddropinterf.h"
@@ -34,7 +33,7 @@
 #include "mqrect.h"
 #include "uievent.h"
 #include "unitpositionlist.h"
-#include "unitpositionset.h"
+#include "unitpositionmap.h"
 #include <cstddef>
 
 namespace game {
@@ -101,7 +100,7 @@ struct CBattleViewerAttackTargetData
     bool unknown;
     char padding[2];
     CMidgardID groupId;
-    UnitPositionSet unitPositions;
+    UnitPositionMap unitPositions;
 };
 
 static_assert(sizeof(CBattleViewerAttackTargetData) == 36,
@@ -113,7 +112,7 @@ struct CBattleViewerItemTargetData
     bool unknown;
     char padding[2];
     CMidgardID groupId;
-    UnitPositionSet unitPositions;
+    UnitPositionMap unitPositions;
 };
 
 static_assert(sizeof(CBattleViewerItemTargetData) == 36,
@@ -141,7 +140,7 @@ struct CBattleViewerUnknownUnitData
 static_assert(sizeof(CBattleViewerUnknownUnitData) == 12,
               "Size of CBattleViewerUnknownUnitData structure must be exactly 12 bytes");
 
-using CUnknownUnitDataList = Set<Pair<CMidgardID, CBattleViewerUnknownUnitData>>;
+using CUnknownUnitDataMap = Map<CMidgardID, CBattleViewerUnknownUnitData>;
 
 struct CUnitRectAndId
 {
@@ -172,7 +171,7 @@ struct CBattleViewerInterfData
     CAvoidFlickerImage avoidFlickerImage;
     void* sounds;
     BattleMsgData battleMsgData;
-    CUnknownUnitDataList unknownUnitData;
+    CUnknownUnitDataMap unknownUnitData;
     CMidgardID unitId;
     CBattleViewerTargetDataSet targetData;
     BattleAttackInfo** attackInfo;
@@ -317,7 +316,7 @@ struct Api
     GetUnitRect getUnitRect;
     GetUnitRect getUnitRectPlusExtra;
 
-    using GetBoolById = bool(__thiscall*)(CUnknownUnitDataList* thisptr, const CMidgardID* unitId);
+    using GetBoolById = bool(__thiscall*)(CUnknownUnitDataMap* thisptr, const CMidgardID* unitId);
     GetBoolById isUnitBig;
     GetBoolById isUnitRetreating;
     GetBoolById getUnknown2;
@@ -383,7 +382,7 @@ struct Api
     UnknownMethod4 unknownMethod4;
 
     using FillTargetPositions = void(__stdcall*)(bool a1,
-                                                 UnitPositionSet* positions,
+                                                 UnitPositionMap* positions,
                                                  UnitPositionList* value);
     FillTargetPositions fillTargetPositions;
 
@@ -422,7 +421,7 @@ struct Api
     using UnknownMethod11 = void(__thiscall*)(CBattleViewerInterf* thisptr,
                                               const CMidgardID* id,
                                               const CMidgardID* targetGroupId,
-                                              const UnitPositionSet* targetPositions,
+                                              const UnitPositionMap* targetPositions,
                                               const CBattleViewerGroupAreas* groupAreas,
                                               bool a6,
                                               const List<void*>* a7);

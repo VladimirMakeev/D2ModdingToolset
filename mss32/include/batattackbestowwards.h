@@ -48,14 +48,6 @@ static_assert(sizeof(CBatAttackBestowWards) == 32,
 
 namespace CBatAttackBestowWardsApi {
 
-struct Api
-{
-    IBatAttackVftable::CanPerform canPerform;
-    IBatAttackVftable::OnAttack onHit;
-};
-
-Api& get();
-
 IBatAttackVftable* vftable();
 
 } // namespace CBatAttackBestowWardsApi
