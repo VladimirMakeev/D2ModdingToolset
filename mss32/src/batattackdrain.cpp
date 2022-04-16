@@ -24,25 +24,21 @@
 namespace game::CBatAttackDrainApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<IBatAttackVftable*, 4> vftables = {{
     // Akella
-    Api{
-        (IBatAttackVftable::OnAttack)0x65d2e5
-    },
+    (IBatAttackVftable*)0x6f4ebc,
     // Russobit
-    Api{
-        (IBatAttackVftable::OnAttack)0x65d2e5
-    },
+    (IBatAttackVftable*)0x6f4ebc,
     // Gog
-    Api{
-        (IBatAttackVftable::OnAttack)0x65bd65
-    }
+    (IBatAttackVftable*)0x6f2e6c,
+    // Scenario Editor
+    (IBatAttackVftable*)nullptr,
 }};
 // clang-format on
 
-Api& get()
+IBatAttackVftable* vftable()
 {
-    return functions[static_cast<int>(hooks::gameVersion())];
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::CBatAttackDrainApi

@@ -187,7 +187,7 @@ static Hooks getGameHooks()
         // Cities can generate daily income depending on scenario variable settings
         {fn.computePlayerDailyIncome, computePlayerDailyIncomeHooked, (void**)&orig.computePlayerDailyIncome},
         // Vampiric attacks can deal critical damage
-        {CBatAttackDrainApi::get().onHit, drainAttackOnHitHooked},
+        {CBatAttackDrainApi::vftable()->onHit, drainAttackOnHitHooked},
         {CBatAttackDrainOverflowApi::vftable()->onHit, drainOverflowAttackOnHitHooked},
         // Support additional music tracks for battle and capital cities
         {CMidMusicApi::get().playBattleTrack, playBattleTrackHooked},
