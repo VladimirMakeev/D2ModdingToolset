@@ -265,23 +265,21 @@ bool markAttackTargetsIfUnitSelected(game::CBattleViewerInterf* viewer,
 {
     using namespace game;
 
-    const auto& battle = BattleMsgDataApi::get();
+    const auto& battleApi = BattleMsgDataApi::get();
     const auto& listApi = UnitInfoListApi::get();
 
     UnitInfoList targetInfos{};
     listApi.constructor(&targetInfos);
-    battle.getUnitInfos(&viewer->data->battleMsgData, &targetInfos, true);
+    battleApi.getUnitInfos(&viewer->data->battleMsgData, &targetInfos, true);
     listApi.sort(&targetInfos);
 
     bool result = false;
-    UnitInfoListIterator it, end;
-    listApi.end(&targetInfos, &end);
-    for (listApi.begin(&targetInfos, &it); !listApi.equals(&it, &end); listApi.preinc(&it)) {
+    for (const auto& unitInfo : targetInfos) {
         CMidgardID selectedUnitId{};
-        result = isUnitSelected(viewer, mousePosition, listApi.dereference(&it), &selectedUnitId);
+        result = isUnitSelected(viewer, mousePosition, &unitInfo, &selectedUnitId);
         if (result) {
-            markAttackTargets(viewer, targetGroupId, &selectedUnitId, listApi.dereference(&it),
-                              setBigFace, attack, isBattleGoing, isItemAttack, targetPositions);
+            markAttackTargets(viewer, targetGroupId, &selectedUnitId, &unitInfo, setBigFace, attack,
+                              isBattleGoing, isItemAttack, targetPositions);
             break;
         }
     }
@@ -839,9 +837,9 @@ void __fastcall batBigFaceUpdateHooked(game::CBatBigFace* thisptr,
 
     batBigFaceCleanUnitData(thisptr, unitInfos);
 
-    for (auto node = unitInfos.head->next; node != unitInfos.head; node = node->next) {
+    for (const auto& unitInfo : unitInfos) {
         CMidgardID unitId;
-        idApi.validateId(&unitId, node->data.unitId1);
+        idApi.validateId(&unitId, unitInfo.unitId1);
 
         batBigFaceUpdateUnitData(thisptr, &unitId);
     }
