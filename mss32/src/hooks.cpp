@@ -213,14 +213,14 @@ static Hooks getGameHooks()
          * applied to this unit
          * 6) Treat modifiers with complete immunity correctly
          */
-        {CBatAttackBestowWardsApi::get().canPerform, bestowWardsAttackCanPerformHooked},
+        {CBatAttackBestowWardsApi::vftable()->canPerform, bestowWardsAttackCanPerformHooked},
         /**
          * Fix bestow wards:
          * 1) Becoming permanent when more than 8 modifiers are applied at once
          * 2) Not resetting attack class wards (when reapplied)
          * 3) Incorrectly resetting attack source ward if its modifier also contains hp, regen or armor element
          */
-        {CBatAttackBestowWardsApi::get().onHit, bestowWardsAttackOnHitHooked},
+        {CBatAttackBestowWardsApi::vftable()->onHit, bestowWardsAttackOnHitHooked},
         // Fix bestow wards with double attack where modifiers granted by first attack are removed
         {battle.afterBattleTurn, afterBattleTurnHooked},
         // Allow any attack with QTY_HEAL > 0 to heal units when battle ends (just like ordinary heal does)
