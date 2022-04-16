@@ -201,14 +201,14 @@ void updateDefendBattleAction(const game::UnitInfo* unitInfo,
 {
     using namespace game;
 
-    const auto& TargetSetApi = TargetSetApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
 
     if (unitInfo->unitFlags.parts.attackedOnceOfTwice)
         return;
 
     BattleAction defend = BattleAction::Defend;
     Pair<TargetSetIterator, bool> tmp{};
-    TargetSetApi.insert((TargetSet*)actions, &tmp, (int*)&defend);
+    targetSetApi.insert((TargetSet*)actions, &tmp, (int*)&defend);
 }
 
 void updateWaitBattleAction(const game::BattleMsgData* battleMsgData,
@@ -217,7 +217,7 @@ void updateWaitBattleAction(const game::BattleMsgData* battleMsgData,
 {
     using namespace game;
 
-    const auto& TargetSetApi = TargetSetApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
 
     if (battleMsgData->currentRound < 1)
         return;
@@ -227,7 +227,7 @@ void updateWaitBattleAction(const game::BattleMsgData* battleMsgData,
 
     BattleAction wait = BattleAction::Wait;
     Pair<TargetSetIterator, bool> tmp{};
-    TargetSetApi.insert((TargetSet*)actions, &tmp, (int*)&wait);
+    targetSetApi.insert((TargetSet*)actions, &tmp, (int*)&wait);
 }
 
 void updateUseItemBattleAction(const game::IMidgardObjectMap* objectMap,
@@ -241,7 +241,7 @@ void updateUseItemBattleAction(const game::IMidgardObjectMap* objectMap,
 
     const auto& idApi = CMidgardIDApi::get();
     const auto& battleApi = BattleMsgDataApi::get();
-    const auto& TargetSetApi = TargetSetApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
 
     if (battleMsgData->currentRound < 1)
         return;
@@ -285,7 +285,7 @@ void updateUseItemBattleAction(const game::IMidgardObjectMap* objectMap,
         if (targets->second.length > 0) {
             BattleAction useItem = BattleAction::UseItem;
             Pair<TargetSetIterator, bool> tmp{};
-            TargetSetApi.insert((TargetSet*)actions, &tmp, (int*)&useItem);
+            targetSetApi.insert((TargetSet*)actions, &tmp, (int*)&useItem);
             break;
         }
     }
@@ -300,7 +300,7 @@ void updateRetreatBattleAction(const game::IMidgardObjectMap* objectMap,
 
     const auto& idApi = CMidgardIDApi::get();
     const auto& battleApi = BattleMsgDataApi::get();
-    const auto& TargetSetApi = TargetSetApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
 
     if (battleMsgData->currentRound < 1)
         return;
@@ -321,7 +321,7 @@ void updateRetreatBattleAction(const game::IMidgardObjectMap* objectMap,
 
     BattleAction retreat = BattleAction::Retreat;
     Pair<TargetSetIterator, bool> tmp{};
-    TargetSetApi.insert((TargetSet*)actions, &tmp, (int*)&retreat);
+    targetSetApi.insert((TargetSet*)actions, &tmp, (int*)&retreat);
 }
 
 void updateAttackBattleAction(const game::IMidgardObjectMap* objectMap,
@@ -333,7 +333,7 @@ void updateAttackBattleAction(const game::IMidgardObjectMap* objectMap,
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& TargetSetApi = TargetSetApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
 
     const auto attack = fn.getAttackById(objectMap, &unitInfo->unitId1, 1, false);
     const auto attackClass = attack->vftable->getAttackClass(attack);
@@ -347,7 +347,7 @@ void updateAttackBattleAction(const game::IMidgardObjectMap* objectMap,
     if (attackTargets->second.length > 0) {
         BattleAction attack = BattleAction::Attack;
         Pair<TargetSetIterator, bool> tmp{};
-        TargetSetApi.insert((TargetSet*)actions, &tmp, (int*)&attack);
+        targetSetApi.insert((TargetSet*)actions, &tmp, (int*)&attack);
     }
 }
 
@@ -362,9 +362,9 @@ void __stdcall updateBattleActionsHooked(const game::IMidgardObjectMap* objectMa
     using namespace game;
 
     const auto& battleApi = BattleMsgDataApi::get();
-    const auto& TargetSetApi = TargetSetApi::get();
+    const auto& targetSetApi = TargetSetApi::get();
 
-    TargetSetApi.clear((TargetSet*)actions);
+    targetSetApi.clear((TargetSet*)actions);
 
     auto unitInfo = battleApi.getUnitInfoById(battleMsgData, unitId);
 
