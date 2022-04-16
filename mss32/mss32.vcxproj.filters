@@ -601,7 +601,7 @@
     <ClCompile Include="src\ordercat.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="src\terrainnamelist.cpp">
+    <ClCompile Include="src\terrainnamemap.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\tileindices.cpp">
@@ -1877,7 +1877,7 @@
     <ClInclude Include="include\usstackleader.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="include\terrainnamelist.h">
+    <ClInclude Include="include\terrainnamemap.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\tileindices.h">

@@ -17,32 +17,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "terrainnamelist.h"
+#include "terrainnamemap.h"
 #include "version.h"
 #include <array>
 
-namespace game::TerrainNameListApi {
+namespace game::TerrainNameMapApi {
 
 // clang-format off
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::GetTerrainNameList)0x5a6d29,
+        (Api::Get)0x5a6d29,
         (Api::Add)0x5a728e,
     },
     // Russobit
     Api{
-        (Api::GetTerrainNameList)0x5a6d29,
+        (Api::Get)0x5a6d29,
         (Api::Add)0x5a728e,
     },
     // Gog
     Api{
-        (Api::GetTerrainNameList)0x5a5f8a,
+        (Api::Get)0x5a5f8a,
         (Api::Add)0x5a64ef,
     },
     // Scenario Editor
     Api{
-        (Api::GetTerrainNameList)0x53a351,
+        (Api::Get)0x53a351,
         (Api::Add)0x53a8b6,
     },
 }};
@@ -53,4 +53,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::TerrainNameListApi
+} // namespace game::TerrainNameMapApi
