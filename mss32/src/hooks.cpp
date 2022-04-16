@@ -1093,7 +1093,7 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
     thisptr->data = data;
     thisptr->vftable = CBuildingBranchApi::vftable();
 
-    buildingBranch.initBranchList(&thisptr->data->list);
+    buildingBranch.initBranchMap(&thisptr->data->map);
     thisptr->data->branchNumber = *branchNumber;
 
     auto* dialogName = &thisptr->data->branchDialogName;
@@ -1147,12 +1147,12 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
             const int num = *branchNumber;
 
             if (unitBranch.id == unitBranchCategories.sideshow->id) {
-                buildingBranch.addSideshowUnitBuilding(&thisptr->data->list, unitUpg);
+                buildingBranch.addSideshowUnitBuilding(&thisptr->data->map, unitUpg);
             } else if (unitBranch.id == unitBranchCategories.fighter->id && num == 0
                        || unitBranch.id == unitBranchCategories.mage->id && num == 1
                        || unitBranch.id == unitBranchCategories.archer->id && num == 2
                        || unitBranch.id == unitBranchCategories.special->id && num == 4) {
-                buildingBranch.addUnitBuilding(phaseGame, &thisptr->data->list, unitUpg);
+                buildingBranch.addUnitBuilding(phaseGame, &thisptr->data->map, unitUpg);
             }
 
         } else if ((buildingCategory->id == buildingCategories.guild->id
@@ -1160,7 +1160,7 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
                     || buildingCategory->id == buildingCategories.magic->id
                     || (customCategoryExists && (buildingCategory->id == custom.id)))
                    && *branchNumber == 3) {
-            buildingBranch.addBuilding(phaseGame, &thisptr->data->list, buildingType);
+            buildingBranch.addBuilding(phaseGame, &thisptr->data->map, buildingType);
         }
     }
 
