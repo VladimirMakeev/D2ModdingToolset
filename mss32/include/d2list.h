@@ -32,6 +32,79 @@ struct ListNode
     T data;
 };
 
+template <typename T>
+struct ConstListIterator
+{
+    char unknown;
+    char padding[3];
+    ListNode<T>* node;
+    T* ptr;
+
+    bool operator==(const ConstListIterator<T>& value) const
+    {
+        return ptr ? ptr == value.ptr : node == value.node;
+    }
+
+    bool operator!=(const ConstListIterator<T>& value) const
+    {
+        return !(*this == value);
+    }
+
+    const T& operator*() const
+    {
+        return ptr ? *ptr : node->data;
+    }
+
+    const T* operator->() const
+    {
+        return ptr ? ptr : &node->data;
+    }
+
+    ConstListIterator<T>& operator++()
+    {
+        if (ptr)
+            ptr++;
+        else
+            node = node->next;
+
+        return *this;
+    }
+
+    ConstListIterator<T> operator++(int)
+    {
+        auto result = *this;
+        ++*this;
+        return result;
+    }
+};
+
+template <typename T>
+struct ListIterator : public ConstListIterator<T>
+{
+    T& operator*() const
+    {
+        return ptr ? *ptr : node->data;
+    }
+
+    T* operator->() const
+    {
+        return ptr ? ptr : &node->data;
+    }
+
+    ListIterator<T>& operator++()
+    {
+        __super::operator++();
+        return *this;
+    }
+
+    ListIterator<T> operator++(int)
+    {
+        auto result = *this;
+        __super::operator++();
+        return result;
+    }
+};
+
 /** Implementation of std::list<T> used in game. */
 template <typename T>
 struct List
@@ -40,15 +113,26 @@ struct List
     ListNode<T>* head;
     int unknown;
     void* allocator;
-};
 
-template <typename T>
-struct ListIterator
-{
-    char unknown;
-    char padding[3];
-    ListNode<T>* node;
-    ListNode<T>* node2;
+    ListIterator<T> begin()
+    {
+        return {0, {}, head->next, nullptr};
+    }
+
+    ConstListIterator<T> begin() const
+    {
+        return {0, {}, head->next, nullptr};
+    }
+
+    ListIterator<T> end()
+    {
+        return {0, {}, head, nullptr};
+    }
+
+    ConstListIterator<T> end() const
+    {
+        return {0, {}, head, nullptr};
+    }
 };
 
 } // namespace game
