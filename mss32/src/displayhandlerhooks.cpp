@@ -140,13 +140,13 @@ static bool villageIsObjective(const game::IdSet* objectives, const game::CMidga
 {
     using namespace game;
 
-    auto begin{objectives->begin};
-    auto end{objectives->end};
+    auto head{objectives->head};
+    auto nil{objectives->nil};
 
     IdSetIterator iterator{};
     IdSetApi::get().find(objectives, &iterator, &villageId);
 
-    return iterator.node != begin || iterator.node2 != end;
+    return iterator.node != head || iterator.nil != nil;
 }
 
 void __stdcall displayHandlerVillageHooked(game::ImageLayerList* list,

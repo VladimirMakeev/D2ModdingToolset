@@ -1135,7 +1135,7 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
         BuildListIterator endIterator;
         lordTypeApi.getEndIterator(buildList, &endIterator);
 
-        if (iterator.node == endIterator.node && iterator.node2 == endIterator.node2) {
+        if (iterator.node == endIterator.node && iterator.nil == endIterator.nil) {
             break;
         }
 
@@ -1176,7 +1176,7 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
             buildingBranch.addBuilding(phaseGame, &thisptr->data->list, buildingType);
         }
 
-        lordTypeApi.advanceIterator(&iterator.node, &iterator.node2->unknown);
+        lordTypeApi.advanceIterator(&iterator.node, iterator.nil);
     }
 
     logDebug("newBuildingType.log", "Ctor finished");

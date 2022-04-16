@@ -703,18 +703,10 @@ void batBigFaceCleanUnitData(game::CBatBigFace* thisptr, const game::UnitInfoLis
     using namespace game;
 
     const auto& idApi = CMidgardIDApi::get();
-    const auto& treeApi = TreeApi::get();
     const auto& battleApi = BattleMsgDataApi::get();
     const auto& bigFaceApi = BatBigFaceApi::get();
 
-    MapIterator<CMidgardID, CBatBigFaceUnitData> it, end;
-    treeApi.end((TreeT*)&thisptr->data->unitData, (TreeIt*)&end);
-    for (treeApi.begin((TreeT*)&thisptr->data->unitData, (TreeIt*)&it);
-         !treeApi.equals((TreeIt*)&it, (TreeIt*)&end); treeApi.preinc((TreeIt*)&it)) {
-
-        auto oldUnitId = ((Pair<CMidgardID, CBatBigFaceUnitData>*)treeApi.deref((TreeIt*)&it))
-                             ->first;
-
+    for (auto it = thisptr->data->unitData.begin(); it != thisptr->data->unitData.end(); ++it) {
         bool unitFound = false;
         for (auto node = unitInfos.head->next; node != unitInfos.head; node = node->next) {
             CMidgardID unitId;
@@ -729,14 +721,14 @@ void batBigFaceCleanUnitData(game::CBatBigFace* thisptr, const game::UnitInfoLis
                 continue;
             }
 
-            if (unitId == oldUnitId) {
+            if (unitId == it->first) {
                 unitFound = true;
                 break;
             }
         }
 
         if (!unitFound) {
-            if (thisptr->data->unitId == oldUnitId)
+            if (thisptr->data->unitId == it->first)
                 thisptr->data->unitId = emptyId;
             bigFaceApi.unitDataMapErase(&thisptr->data->unitData, it);
         }

@@ -970,9 +970,6 @@
     <ClCompile Include="src\batbigface.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="src\d2tree.cpp">
-      <Filter>game</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">

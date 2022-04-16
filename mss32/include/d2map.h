@@ -25,18 +25,15 @@
 
 namespace game {
 
-template <typename K, typename T>
-struct MapNode : public TreeNode<Pair<K, T>, MapNode<K, T>>
-{ };
-
 /** Implementation of std::map<K, T> used in game. */
 template <typename K, typename T, typename Allocator = void*>
-struct Map : public Tree<Pair<K, T>, MapNode<K, T>, Allocator>
-{ };
+using Map = Tree<Pair<K, T>, Allocator>;
 
 template <typename K, typename T>
-struct MapIterator : public TreeIterator<Pair<K, T>, MapNode<K, T>>
-{ };
+using MapNode = TreeNode<Pair<K, T>>;
+
+template <typename K, typename T>
+using MapIterator = TreeIterator<Pair<K, T>>;
 
 } // namespace game
 

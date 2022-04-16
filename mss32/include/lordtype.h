@@ -148,7 +148,7 @@ struct Api
      * @param[in] node pointer to BuildListIterator::node.
      * @param[in] unknown pointer to BuildListIterator::node2->unknown.
      */
-    using AdvanceIterator = void(__stdcall*)(BuildListDataNode** node, int* unknown);
+    using AdvanceIterator = void(__stdcall*)(BuildListDataNode** node, BuildListDataNode* nil);
     AdvanceIterator advanceIterator;
 };
 

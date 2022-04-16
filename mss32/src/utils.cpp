@@ -221,24 +221,24 @@ void forEachScenarioVariable(const game::CMidScenVariables* variables,
         return;
     }
 
-    auto begin = variables->variables.begin;
-    auto end = variables->variables.end;
-    auto current = begin->less;
+    auto head = variables->variables.head;
+    auto nil = variables->variables.nil;
+    auto current = head->left;
 
     ScenarioVariablesListIterator listIterator{};
     listIterator.node = current;
-    listIterator.node2 = end;
+    listIterator.nil = nil;
 
     std::uint32_t listIndex{};
     while (listIndex++ < variables->variables.length) {
-        const bool done = (current != begin || listIterator.node2 != end) ? false : true;
+        const bool done = (current != head || listIterator.nil != nil) ? false : true;
         if (done) {
             break;
         }
 
         f(&current->value, listIndex);
 
-        CMidScenVariablesApi::get().advance(&listIterator.node, listIterator.node2);
+        CMidScenVariablesApi::get().advance(&listIterator.node, listIterator.nil);
         current = listIterator.node;
     }
 }

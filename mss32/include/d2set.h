@@ -24,18 +24,15 @@
 
 namespace game {
 
-template <typename T>
-struct SetNode : public TreeNode<T, SetNode<T>>
-{ };
-
 /** Implementation of std::set<T> used in game. */
 template <typename T, typename Allocator = void*>
-struct Set : public Tree<T, SetNode<T>, Allocator>
-{ };
+using Set = Tree<T, Allocator>;
 
 template <typename T>
-struct SetIterator : public TreeIterator<T, SetNode<T>>
-{ };
+using SetNode = TreeNode<T>;
+
+template <typename T>
+using SetIterator = TreeIterator<T>;
 
 } // namespace game
 
