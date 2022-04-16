@@ -22,7 +22,7 @@
 
 #include "idlist.h"
 #include "idvector.h"
-#include "unitpositionset.h"
+#include "unitpositionmap.h"
 
 namespace game {
 
@@ -110,7 +110,7 @@ struct Api
 
     using UnknownFunction = void(__stdcall*)(CMidUnitGroup* group1,
                                              CMidUnitGroup* group2,
-                                             UnitPositionSet* positions);
+                                             UnitPositionMap* positions);
     UnknownFunction unknownFunction;
 };
 

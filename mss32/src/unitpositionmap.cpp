@@ -17,11 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "unitpositionset.h"
+#include "unitpositionmap.h"
 #include "version.h"
 #include <array>
 
-namespace game::UnitPositionSetApi {
+namespace game::UnitPositionMapApi {
 
 // clang-format off
 static std::array<Api, 3> functions = {{
@@ -75,4 +75,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::UnitPositionSetApi
+} // namespace game::UnitPositionMapApi

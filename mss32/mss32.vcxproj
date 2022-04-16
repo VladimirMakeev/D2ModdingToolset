@@ -407,7 +407,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\unitinfolist.cpp" />
     <ClCompile Include="src\unitpickerinterf.cpp" />
     <ClCompile Include="src\unitpositionlist.cpp" />
-    <ClCompile Include="src\unitpositionset.cpp" />
+    <ClCompile Include="src\unitpositionmap.cpp" />
     <ClCompile Include="src\unitsforhire.cpp" />
     <ClCompile Include="src\unitutils.cpp" />
     <ClCompile Include="src\untransformeffecthooks.cpp" />
@@ -903,7 +903,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\unitmodifier.h" />
     <ClInclude Include="include\unitpickerinterf.h" />
     <ClInclude Include="include\unitpositionlist.h" />
-    <ClInclude Include="include\unitpositionset.h" />
+    <ClInclude Include="include\unitpositionmap.h" />
     <ClInclude Include="include\unitpositionpair.h" />
     <ClInclude Include="include\unitsforhire.h" />
     <ClInclude Include="include\unitutils.h" />

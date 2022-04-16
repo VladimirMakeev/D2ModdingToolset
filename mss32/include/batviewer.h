@@ -20,7 +20,7 @@
 #ifndef BATVIEWER_H
 #define BATVIEWER_H
 
-#include "unitpositionset.h"
+#include "unitpositionmap.h"
 
 namespace game {
 
@@ -72,7 +72,7 @@ static_assert(sizeof(IBatViewerVftable) == 4 * sizeof(void*),
 struct BatViewerTargetData
 {
     CMidgardID targetGroupId;
-    UnitPositionSet targetPositions;
+    UnitPositionMap targetPositions;
 };
 
 static_assert(sizeof(BatViewerTargetData) == 32,

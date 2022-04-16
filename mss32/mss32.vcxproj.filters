@@ -565,7 +565,7 @@
     <ClCompile Include="src\battleviewerinterf.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="src\unitpositionset.cpp">
+    <ClCompile Include="src\unitpositionmap.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\unitinfolist.cpp">
@@ -1847,7 +1847,7 @@
     <ClInclude Include="include\battleviewerinterfhooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
-    <ClInclude Include="include\unitpositionset.h">
+    <ClInclude Include="include\unitpositionmap.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\unitinfolist.h">

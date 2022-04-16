@@ -21,7 +21,6 @@
 #define UNITPOSITIONLIST_H
 
 #include "d2list.h"
-#include "d2pair.h"
 #include "unitpositionpair.h"
 
 namespace game {
