@@ -21,8 +21,7 @@
 #define MAPGRAPHICS_H
 
 #include "d2list.h"
-#include "d2pair.h"
-#include "d2set.h"
+#include "d2map.h"
 #include "functordispatch1.h"
 #include "smartptr.h"
 #include <cstddef>
@@ -47,10 +46,10 @@ struct CIsoLayer;
  * @endcode
  * Element indices are used by C2DEngineMapImpl to add, remove and change map elements images.
  */
-using HashElementIndexSet = Set<Pair<int /* hash */, int /* elementIndex */>, SmartPointer>;
+using HashElementIndexMap = Map<int /* hash */, int /* elementIndex */, SmartPointer>;
 
-static_assert(sizeof(HashElementIndexSet) == 36,
-              "Size of HashElementIndexSet structure must be exactly 36 bytes");
+static_assert(sizeof(HashElementIndexMap) == 36,
+              "Size of HashElementIndexMap structure must be exactly 36 bytes");
 
 struct MapGraphics
 {
@@ -60,7 +59,7 @@ struct MapGraphics
     int unknown3;
     int unknown4;
     int mapSize;
-    HashElementIndexSet hashElementIndexSet;
+    HashElementIndexMap hashElementIndexMap;
     CIsoEngineGround* isoEngineGround;
     int scrollSpeed;
     bool unknown5;
