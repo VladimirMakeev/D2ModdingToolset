@@ -36,10 +36,9 @@ ScenVariablesView::ScenVariablesView(const game::CMidScenVariables* scenVariable
     // Cache scenario variables for our own fast search by name.
     // This is safe because variables list is created once
     // and there are no additions or deletions of them during the game.
-    hooks::forEachScenarioVariable(scenVariables,
-                                   [this](const game::ScenarioVariable* variable, std::uint32_t) {
-                                       variables[variable->data.name] = variable;
-                                   });
+    for (const auto& variable : scenVariables->variables) {
+        variables[variable.data.name] = &variable;
+    }
 }
 
 void ScenVariablesView::bind(sol::state& lua)

@@ -46,38 +46,6 @@
 
 namespace hooks {
 
-static void forEachVariable(const game::IMidgardObjectMap* objectMap,
-                            std::function<void(const game::ScenarioVariable*)> function)
-{
-    using namespace game;
-
-    auto variables = getScenarioVariables(objectMap);
-    if (!variables || !variables->variables.length) {
-        return;
-    }
-
-    auto head = variables->variables.head;
-    auto nil = variables->variables.nil;
-    auto current = head->left;
-
-    ScenarioVariablesListIterator listIterator{};
-    listIterator.node = current;
-    listIterator.nil = nil;
-
-    const auto total = variables->variables.length;
-    for (std::uint32_t i = 0; i < total; ++i) {
-        const bool done = (current != head || listIterator.nil != nil) ? false : true;
-        if (done) {
-            break;
-        }
-
-        function(&current->value);
-
-        CMidScenVariablesApi::get().advance(&listIterator.node, listIterator.nil);
-        current = listIterator.node;
-    }
-}
-
 /** Same as RAD_OPERATOR button indices in DLG_COND_VAR_CMP from ScenEdit.dlg */
 enum class CompareType : int
 {
@@ -464,9 +432,10 @@ game::editor::CCondInterf* createCondVarCmpInterf(game::ITask* task,
         auto objectMap = CCondInterfApi::get().getObjectMap(thisptr->unknown);
         Variables variables;
 
-        forEachVariable(objectMap, [&variables](const game::ScenarioVariable* var) {
-            variables.push_back(var);
-        });
+        auto scenVariables = getScenarioVariables(objectMap);
+        for (const auto& variable : scenVariables->variables) {
+            variables.push_back(&variable);
+        }
 
         variables.swap(thisptr->variables);
     }

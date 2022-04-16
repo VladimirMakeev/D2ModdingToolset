@@ -906,15 +906,13 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
     }
 
     int hireTierMax{0};
-    forEachScenarioVariable(variables,
-                            [&hireTierMax](const game::ScenarioVariable* variable, std::uint32_t) {
-                                static const char varName[]{"UNIT_HIRE_TIER_MAX"};
-                                const auto& name = variable->data.name;
-
-                                if (!strncmp(name, varName, sizeof(varName))) {
-                                    hireTierMax = variable->data.value;
-                                }
-                            });
+    for (const auto& variable : variables->variables) {
+        static const char varName[]{"UNIT_HIRE_TIER_MAX"};
+        if (!strncmp(variable.data.name, varName, sizeof(varName))) {
+            hireTierMax = variable.data.value;
+            break;
+        }
+    }
 
     if (hireTierMax <= 1) {
         // No variable defined or high tier hire is disabled, skip.
