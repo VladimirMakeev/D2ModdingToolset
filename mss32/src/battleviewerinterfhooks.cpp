@@ -532,7 +532,7 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
     const auto& dragDropApi = CDragAndDropInterfApi::get();
     const auto& dialogApi = CDialogInterfApi::get();
     const auto& toggleButtonApi = CToggleButtonApi::get();
-    const auto& listApi = TargetsListApi::get();
+    const auto& listApi = TargetSetApi::get();
     const auto& bigFaceApi = BatBigFaceApi::get();
 
     auto viewer = castBatViewerToBattleViewerInterf(thisptr);
@@ -578,8 +578,8 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
 
     viewer->data2->normalAttack = false;
     bool canUseItem = false;
-    TargetsListIterator it, end;
-    for (listApi.begin((TargetsList*)actions, &it), listApi.end((TargetsList*)actions, &end);
+    TargetSetIterator it, end;
+    for (listApi.begin((TargetSet*)actions, &it), listApi.end((TargetSet*)actions, &end);
          !listApi.equals(&it, &end); listApi.preinc(&it)) {
         BattleAction action = (BattleAction)*listApi.dereference(&it);
         switch (action) {

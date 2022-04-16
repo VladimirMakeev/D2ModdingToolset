@@ -17,11 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "targetslist.h"
+#include "targetset.h"
 #include "version.h"
 #include <array>
 
-namespace game::TargetsListApi {
+namespace game::TargetSetApi {
 
 // clang-format off
 static std::array<Api, 3> functions = {{
@@ -72,4 +72,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::TargetsListApi
+} // namespace game::TargetSetApi

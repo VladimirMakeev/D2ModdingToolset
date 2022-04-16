@@ -21,7 +21,7 @@
 #define CUSTOMATTACKHOOKS_H
 
 #include "idlist.h"
-#include "targetslist.h"
+#include "targetset.h"
 
 namespace game {
 struct LAttackClass;
@@ -142,7 +142,7 @@ void __stdcall fillTargetsListHooked(const game::IMidgardObjectMap* objectMap,
                                      const game::CMidgardID* unitId,
                                      const game::CMidgardID* attackUnitOrItemId,
                                      bool targetAllies,
-                                     game::TargetsList* value,
+                                     game::TargetSet* value,
                                      bool checkAltAttack);
 
 void __stdcall fillEmptyTargetsListHooked(const game::IMidgardObjectMap* objectMap,
@@ -151,7 +151,7 @@ void __stdcall fillEmptyTargetsListHooked(const game::IMidgardObjectMap* objectM
                                           const game::CMidgardID* unitId,
                                           const game::CMidgardID* attackUnitOrItemId,
                                           bool targetAllies,
-                                          game::TargetsList* value);
+                                          game::TargetSet* value);
 
 bool __stdcall isGroupSuitableForAiNobleMisfitHooked(const game::IMidgardObjectMap* objectMap,
                                                      const game::CMidUnitGroup* group);
@@ -163,7 +163,7 @@ bool __stdcall findAttackTargetHooked(const game::IMidgardObjectMap* objectMap,
                                       const game::CMidgardID* unitId,
                                       const game::IAttack* attack,
                                       const game::CMidUnitGroup* targetGroup,
-                                      const game::TargetsList* targets,
+                                      const game::TargetSet* targets,
                                       const game::BattleMsgData* battleMsgData,
                                       game::CMidgardID* value);
 
@@ -171,14 +171,14 @@ bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap*
                                                   const game::CMidgardID* unitId,
                                                   const game::BattleMsgData* battleMsgData,
                                                   const game::CMidUnitGroup* targetGroup,
-                                                  const game::TargetsList* targets,
+                                                  const game::TargetSet* targets,
                                                   game::CMidgardID* value);
 
 bool __stdcall findDamageAttackTargetWithNonAllReachHooked(const game::IMidgardObjectMap* objectMap,
                                                            const game::IAttack* attack,
                                                            int damage,
                                                            const game::CMidUnitGroup* targetGroup,
-                                                           const game::TargetsList* targets,
+                                                           const game::TargetSet* targets,
                                                            const game::BattleMsgData* battleMsgData,
                                                            game::CMidgardID* value);
 

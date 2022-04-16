@@ -24,7 +24,7 @@
 #include "attacktypepairvector.h"
 #include "d2string.h"
 #include "idlist.h"
-#include "targetslist.h"
+#include "targetset.h"
 #include <string>
 #include <utility>
 #include <vector>

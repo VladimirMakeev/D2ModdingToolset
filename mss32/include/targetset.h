@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TARGETSLIST_H
-#define TARGETSLIST_H
+#ifndef TARGETSET_H
+#define TARGETSET_H
 
 #include "d2pair.h"
 #include "d2set.h"
@@ -31,68 +31,67 @@ struct IBatAttack;
 struct CMidgardID;
 
 /**
- * List of targets to attack during single battle turn.
+ * Set of targets to attack during single battle turn.
  * Contains units positions in groups.
  * Position values are positive for target group and negative for other group.
  * Negative position computed as -(unitPosition + 1).
  */
-using TargetsList = Set<int>;
+using TargetSet = Set<int>;
+using TargetSetNode = SetNode<int>;
+using TargetSetIterator = SetIterator<int>;
 
-using TargetsListNode = SetNode<int>;
-using TargetsListIterator = SetIterator<int>;
-
-namespace TargetsListApi {
+namespace TargetSetApi {
 
 struct Api
 {
     /** Performs targets list initialization. */
-    using Constructor = TargetsList*(__thiscall*)(TargetsList* thisptr);
+    using Constructor = TargetSet*(__thiscall*)(TargetSet* thisptr);
     Constructor constructor;
 
     /** Frees memory allocated for list. */
-    using Destructor = void(__thiscall*)(TargetsList* thisptr);
+    using Destructor = void(__thiscall*)(TargetSet* thisptr);
     Destructor destructor;
 
     /** Clears list contents. */
-    using Clear = void(__thiscall*)(TargetsList* thisptr);
+    using Clear = void(__thiscall*)(TargetSet* thisptr);
     Clear clear;
 
     /** Returns iterator pointing to the first element in the list. */
-    using GetIterator = TargetsListIterator*(__thiscall*)(const TargetsList* thisptr,
-                                                          TargetsListIterator* iterator);
+    using GetIterator = TargetSetIterator*(__thiscall*)(const TargetSet* thisptr,
+                                                        TargetSetIterator* iterator);
     GetIterator begin;
     GetIterator end;
 
     /** Inserts new element to the list. */
     using Insert =
-        Pair<TargetsListIterator, bool>*(__thiscall*)(TargetsList* thisptr,
-                                                      Pair<TargetsListIterator, bool>* iterator,
-                                                      int* unitPosition);
+        Pair<TargetSetIterator, bool>*(__thiscall*)(TargetSet* thisptr,
+                                                    Pair<TargetSetIterator, bool>* iterator,
+                                                    int* unitPosition);
     Insert insert;
 
     /** Removes existing element from list. */
-    using Erase = void(__thiscall*)(TargetsList* thisptr, int* unitPosition);
+    using Erase = void(__thiscall*)(TargetSet* thisptr, int* unitPosition);
     Erase erase;
 
     /**
      * Returns pointer to list node value depending on iterator.
      * Same as @code{.cpp} thisptr->node.value; @endcode
      */
-    using Dereference = int*(__thiscall*)(const TargetsListIterator* thisptr);
+    using Dereference = int*(__thiscall*)(const TargetSetIterator* thisptr);
     Dereference dereference;
 
-    using Equals = bool(__thiscall*)(const TargetsListIterator* thisptr,
-                                     const TargetsListIterator* value);
+    using Equals = bool(__thiscall*)(const TargetSetIterator* thisptr,
+                                     const TargetSetIterator* value);
     Equals equals;
 
-    using Preincrement = TargetsListIterator*(__thiscall*)(TargetsListIterator* thisptr);
+    using Preincrement = TargetSetIterator*(__thiscall*)(TargetSetIterator* thisptr);
     Preincrement preinc;
 };
 
 Api& get();
 
-} // namespace TargetsListApi
+} // namespace TargetSetApi
 
 } // namespace game
 
-#endif // TARGETSLIST_H
+#endif // TARGETSET_H

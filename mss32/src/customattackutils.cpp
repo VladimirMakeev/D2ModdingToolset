@@ -294,12 +294,12 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
                                          const game::CMidgardID* unitGroupId,
                                          const game::CMidgardID* unitId,
                                          const CustomAttackReach& attackReach,
-                                         game::TargetsList* value)
+                                         game::TargetSet* value)
 {
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& listApi = TargetsListApi::get();
+    const auto& listApi = TargetSetApi::get();
     const auto& groupApi = CMidUnitGroupApi::get();
 
     listApi.clear(value);
@@ -323,7 +323,7 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
     bool isSummonAttack = batAttack->vftable->method17(batAttack, battleMsgData);
     for (const auto& target : targetsToSelect) {
         int position = target.getPosition();
-        Pair<TargetsListIterator, bool> tmp{};
+        Pair<TargetSetIterator, bool> tmp{};
         listApi.insert(value, &tmp, &position);
 
         if (isSummonAttack && !(position % 2)) {
@@ -492,18 +492,18 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
                           const game::IAttack* attack,
                           const game::CMidgardID* unitGroupId,
                           const game::CMidgardID* targetGroupId,
-                          game::TargetsList* value)
+                          game::TargetSet* value)
 {
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& listApi = TargetsListApi::get();
+    const auto& listApi = TargetSetApi::get();
 
     void* tmp{};
     auto unitGroup = fn.getStackFortRuinGroup(tmp, objectMap, unitGroupId);
     auto targetGroup = fn.getStackFortRuinGroup(tmp, objectMap, targetGroupId);
 
-    TargetsListIterator it, end;
+    TargetSetIterator it, end;
     listApi.end(value, &end);
     for (listApi.begin(value, &it); !listApi.equals(&it, &end); listApi.preinc(&it)) {
         int targetPosition = *listApi.dereference(&it);

@@ -59,7 +59,7 @@ void __fastcall customAttackFillTargetsList(CustomAttack* thisptr,
                                             int /*%edx*/,
                                             game::IMidgardObjectMap* objectMap,
                                             game::BattleMsgData* battleMsgData,
-                                            game::TargetsList* targetsList)
+                                            game::TargetSet* targetsList)
 {
     logDebug("newAttackType.log", "CustomAttack fillTargetsList");
     game::BattleMsgDataApi::get().fillTargetsList(objectMap, battleMsgData, thisptr, &thisptr->id1,
@@ -70,7 +70,7 @@ void __fastcall customAttackFillAltTargetsList(CustomAttack* thisptr,
                                                int /*%edx*/,
                                                game::IMidgardObjectMap* objectMap,
                                                game::BattleMsgData* battleMsgData,
-                                               game::TargetsList* targetsList)
+                                               game::TargetSet* targetsList)
 {
     logDebug("newAttackType.log", "CustomAttack fillAltTargetsList");
     // do nothing

@@ -20,7 +20,7 @@
 #ifndef TRANSFORMSELFHOOKS_H
 #define TRANSFORMSELFHOOKS_H
 
-#include "targetslist.h"
+#include "targetset.h"
 
 namespace game {
 struct CBatAttackTransformSelf;
@@ -43,7 +43,7 @@ void __fastcall transformSelfAttackFillTargetsListHooked(game::CBatAttackTransfo
                                                          int /*%edx*/,
                                                          game::IMidgardObjectMap* objectMap,
                                                          game::BattleMsgData* battleMsgData,
-                                                         game::TargetsList* targetsList);
+                                                         game::TargetSet* targetsList);
 
 } // namespace hooks
 

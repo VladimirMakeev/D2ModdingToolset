@@ -193,7 +193,7 @@
     <ClCompile Include="src\battlemsgdata.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="src\targetslist.cpp">
+    <ClCompile Include="src\targetset.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\utils.cpp">
@@ -1295,7 +1295,7 @@
     <ClInclude Include="include\batattackshatter.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="include\targetslist.h">
+    <ClInclude Include="include\targetset.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\utils.h">

@@ -21,7 +21,7 @@
 #define CUSTOMATTACKUTILS_H
 
 #include "idlist.h"
-#include "targetslist.h"
+#include "targetset.h"
 #include <filesystem>
 
 namespace game {
@@ -72,7 +72,7 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
                                          const game::CMidgardID* unitGroupId,
                                          const game::CMidgardID* unitId,
                                          const CustomAttackReach& attackReach,
-                                         game::TargetsList* value);
+                                         game::TargetSet* value);
 
 void getTargetsToAttackForAllAttackReach(const game::IMidgardObjectMap* objectMap,
                                          const game::BattleMsgData* battleMsgData,
@@ -120,7 +120,7 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
                           const game::IAttack* attack,
                           const game::CMidgardID* unitGroupId,
                           const game::CMidgardID* targetGroupId,
-                          game::TargetsList* value);
+                          game::TargetSet* value);
 
 void fillCustomDamageRatios(const game::IAttack* attack, const game::IdList* targets);
 

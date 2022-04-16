@@ -21,7 +21,7 @@
 #define BATTLEMSGDATA_H
 
 #include "idlist.h"
-#include "targetslist.h"
+#include "targetset.h"
 #include "unitinfolist.h"
 #include <cstddef>
 #include <cstdint>
@@ -222,7 +222,7 @@ static_assert(offsetof(UnitInfo, modifiedUnits) == 60,
 static_assert(offsetof(UnitInfo, shatteredArmor) == 156,
               "UnitInfo::shatteredArmor offset must be 156 bytes");
 
-using GroupIdTargetsPair = Pair<CMidgardID, TargetsList>;
+using GroupIdTargetsPair = Pair<CMidgardID, TargetSet>;
 
 /**
  * Common part of the network messages that is being sent during battle.
@@ -440,7 +440,7 @@ struct Api
                                               const CMidgardID* unitId,
                                               const IAttack* attack,
                                               const CMidUnitGroup* targetGroup,
-                                              const TargetsList* targets,
+                                              const TargetSet* targets,
                                               const BattleMsgData* battleMsgData,
                                               CMidgardID* value);
     FindAttackTarget findAttackTarget;
@@ -448,13 +448,13 @@ struct Api
     /** Used by AI to determine attack target for L_ALL attack reach. */
     using FindAttackTargetWithAllReach = bool(__stdcall*)(CMidgardID* value,
                                                           const CMidUnitGroup* targetGroup,
-                                                          const TargetsList* targets);
+                                                          const TargetSet* targets);
     FindAttackTargetWithAllReach findAttackTargetWithAllReach;
 
     using FindSpecificAttackTarget = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                       const BattleMsgData* battleMsgData,
                                                       const CMidUnitGroup* targetGroup,
-                                                      const TargetsList* targets,
+                                                      const TargetSet* targets,
                                                       CMidgardID* value);
     /** Used by AI to determine boost attack target. */
     FindSpecificAttackTarget findBoostAttackTarget;
@@ -465,7 +465,7 @@ struct Api
                                                           const CMidgardID* unitId,
                                                           const BattleMsgData* battleMsgData,
                                                           const CMidUnitGroup* targetGroup,
-                                                          const TargetsList* targets,
+                                                          const TargetSet* targets,
                                                           CMidgardID* value);
     /** Used by AI to determine doppelganger attack target. */
     FindDoppelgangerAttackTarget findDoppelgangerAttackTarget;
@@ -475,7 +475,7 @@ struct Api
                          const IAttack* attack,
                          int damage,
                          const CMidUnitGroup* targetGroup,
-                         const TargetsList* targets,
+                         const TargetSet* targets,
                          const BattleMsgData* battleMsgData,
                          CMidgardID* value);
     /** Used by AI to determine damage attack target with non-all reach. */
@@ -483,7 +483,7 @@ struct Api
 
     using FindDamageAttackTargetWithAnyReach = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                                 const CMidUnitGroup* targetGroup,
-                                                                const TargetsList* targets,
+                                                                const TargetSet* targets,
                                                                 int damage,
                                                                 const BattleMsgData* battleMsgData,
                                                                 const LAttackClass* attackClass,
@@ -497,7 +497,7 @@ struct Api
         CMidgardID*(__stdcall*)(CMidgardID* value,
                                 const IMidgardObjectMap* objectMap,
                                 const CMidUnitGroup* targetGroup,
-                                const TargetsList* targets,
+                                const TargetSet* targets,
                                 const BattleMsgData* battleMsgData,
                                 const LAttackSource* attackSource,
                                 const LAttackClass* attackClass);
@@ -580,7 +580,7 @@ struct Api
                                              const CMidgardID* unitId,
                                              const CMidgardID* attackUnitOrItemId,
                                              bool targetAllies,
-                                             TargetsList* value,
+                                             TargetSet* value,
                                              bool checkAltAttack);
     FillTargetsList fillTargetsList;
 
@@ -588,7 +588,7 @@ struct Api
                                                                  const BattleMsgData* battleMsgData,
                                                                  const IBatAttack* batAttack,
                                                                  const CMidgardID* targetGroupId,
-                                                                 TargetsList* value);
+                                                                 TargetSet* value);
     FillTargetsListForAllAnyAttackReach fillTargetsListForAllAttackReach;
     FillTargetsListForAllAnyAttackReach fillTargetsListForAnyAttackReach;
 
@@ -599,7 +599,7 @@ struct Api
                          const CMidgardID* targetGroupId,
                          const CMidgardID* unitGroupId,
                          const CMidgardID* unitId,
-                         TargetsList* value);
+                         TargetSet* value);
     FillTargetsListForAdjacentAttackReach fillTargetsListForAdjacentAttackReach;
 
     using FillEmptyTargetsList = void(__stdcall*)(const IMidgardObjectMap* objectMap,
@@ -608,13 +608,13 @@ struct Api
                                                   const CMidgardID* unitId,
                                                   const CMidgardID* attackUnitOrItemId,
                                                   bool targetAllies,
-                                                  TargetsList* value);
+                                                  TargetSet* value);
     FillEmptyTargetsList fillEmptyTargetsList;
 
     using FillEmptyTargetsListForAllAnyAttackReach =
         void(__stdcall*)(const IMidgardObjectMap* objectMap,
                          const CMidgardID* targetGroupId,
-                         TargetsList* value);
+                         TargetSet* value);
     FillEmptyTargetsListForAllAnyAttackReach fillEmptyTargetsListForAllAttackReach;
     FillEmptyTargetsListForAllAnyAttackReach fillEmptyTargetsListForAnyAttackReach;
 
