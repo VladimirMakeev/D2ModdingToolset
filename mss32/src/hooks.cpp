@@ -1682,6 +1682,11 @@ void __stdcall beforeBattleTurnHooked(game::BattleMsgData* battleMsgData,
         freeTransformSelf.unitId = *unitId;
         freeTransformSelf.turnCount = 0;
         freeTransformSelf.used = false;
+    } else if (freeTransformSelf.used) {
+        // Fix free transform-self to disable Wait/Defend/Retreat
+        auto unitInfo = battle.getUnitInfoById(battleMsgData, unitId);
+        if (unitInfo)
+            unitInfo->unitFlags.parts.attackedOnceOfTwice = 1;
     }
     freeTransformSelf.turnCount++;
 }
