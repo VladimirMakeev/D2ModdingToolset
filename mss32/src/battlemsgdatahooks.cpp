@@ -19,6 +19,7 @@
 
 #include "battlemsgdatahooks.h"
 #include "batattack.h"
+#include "customattacks.h"
 #include "gameutils.h"
 #include "intset.h"
 #include "log.h"
@@ -375,6 +376,20 @@ void __stdcall updateBattleActionsHooked(const game::IMidgardObjectMap* objectMa
                               item2Targets);
     updateRetreatBattleAction(objectMap, battleMsgData, unitInfo, actions);
     updateAttackBattleAction(objectMap, battleMsgData, unitInfo, actions, attackTargets);
+}
+
+void __fastcall beforeBattleRoundHooked(game::BattleMsgData* thisptr, int /*%edx*/)
+{
+    using namespace game;
+
+    getOriginalFunctions().beforeBattleRound(thisptr);
+
+    // Fix free transform-self to properly reset if the same unit has consequent turns in consequent
+    // battles
+    auto& freeTransformSelf = getCustomAttacks().freeTransformSelf;
+    freeTransformSelf.unitId = emptyId;
+    freeTransformSelf.turnCount = 0;
+    freeTransformSelf.used = false;
 }
 
 } // namespace hooks
