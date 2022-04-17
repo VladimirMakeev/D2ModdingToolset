@@ -203,6 +203,8 @@ static Hooks getGameHooks()
         // Fix bestow wards becoming permanent on warded unit transformation
         // Support custom attack damage ratios
         {battle.beforeBattleTurn, beforeBattleTurnHooked},
+        // Fix free transform-self to properly reset if the same unit has consequent turns in consequent battles
+        {battle.beforeBattleRound, beforeBattleRoundHooked, (void**)&orig.beforeBattleRound},
         /**
          * Allows bestow wards to:
          * 1) Grant modifiers even if there are no source wards among them

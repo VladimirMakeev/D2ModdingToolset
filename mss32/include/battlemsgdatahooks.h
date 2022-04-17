@@ -64,6 +64,8 @@ void __stdcall updateBattleActionsHooked(const game::IMidgardObjectMap* objectMa
                                          game::GroupIdTargetsPair* item1Targets,
                                          game::GroupIdTargetsPair* item2Targets);
 
+void __fastcall beforeBattleRoundHooked(game::BattleMsgData* thisptr, int /*%edx*/);
+
 } // namespace hooks
 
 #endif // BATTLEMSGDATAHOOKS_H
