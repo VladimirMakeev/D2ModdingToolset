@@ -47,12 +47,12 @@ struct Api
 
     /** Inserts new element to the list. */
     using Insert = Pair<IntSetIterator, bool>*(__thiscall*)(IntSet* thisptr,
-                                                            Pair<IntSetIterator, bool>* iterator,
-                                                            const int* unitPosition);
+                                                            Pair<IntSetIterator, bool>* result,
+                                                            const int* value);
     Insert insert;
 
     /** Removes existing element from list. */
-    using Erase = void(__thiscall*)(IntSet* thisptr, const int* unitPosition);
+    using Erase = void(__thiscall*)(IntSet* thisptr, const int* value);
     Erase erase;
 };
 
