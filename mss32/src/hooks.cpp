@@ -200,6 +200,7 @@ static Hooks getGameHooks()
         // uses alternative attack with 'adjacent' attack range
         // Fix incorrect calculation of effective HP used by AI for target prioritization
         {fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked},
+        // Allow transform-self attack to not consume a unit turn for transformation
         // Fix bestow wards becoming permanent on warded unit transformation
         // Support custom attack damage ratios
         {battle.beforeBattleTurn, beforeBattleTurnHooked},
@@ -262,6 +263,7 @@ static Hooks getGameHooks()
         // Fix bug where transform-self attack is unable to target self if alt attack is targeting allies
         {CBatAttackTransformSelfApi::vftable()->fillTargetsList, transformSelfAttackFillTargetsListHooked},
         // Allow transform self into leveled units using script logic
+        // Allow transform-self attack to not consume a unit turn for transformation
         // Fix bug where transform-self attack is unable to target self if alt attack is targeting allies
         // Fix possible attack count mismatch (once vs twice) on unit transformation
         {CBatAttackTransformSelfApi::vftable()->onHit, transformSelfAttackOnHitHooked},
