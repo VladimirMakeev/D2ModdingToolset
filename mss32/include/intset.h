@@ -33,7 +33,7 @@ namespace IntSetApi {
 
 struct Api
 {
-    /** Performs targets list initialization. */
+    /** Performs list initialization. */
     using Constructor = IntSet*(__thiscall*)(IntSet* thisptr);
     Constructor constructor;
 
