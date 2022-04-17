@@ -384,7 +384,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\stringintlist.cpp" />
     <ClCompile Include="src\subracecat.cpp" />
     <ClCompile Include="src\summonhooks.cpp" />
-    <ClCompile Include="src\targetset.cpp" />
+    <ClCompile Include="src\intset.cpp" />
     <ClCompile Include="src\targetslistutils.cpp" />
     <ClCompile Include="src\taskchangecolor.cpp" />
     <ClCompile Include="src\terraincat.cpp" />
@@ -866,6 +866,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\subracecat.h" />
     <ClInclude Include="include\summonhooks.h" />
     <ClInclude Include="include\surfacedecompressdata.h" />
+    <ClInclude Include="include\intset.h" />
     <ClInclude Include="include\targetset.h" />
     <ClInclude Include="include\targetslistutils.h" />
     <ClInclude Include="include\task.h" />

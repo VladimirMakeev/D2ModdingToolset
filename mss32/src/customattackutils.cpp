@@ -31,6 +31,7 @@
 #include "game.h"
 #include "gameutils.h"
 #include "idlistutils.h"
+#include "intset.h"
 #include "log.h"
 #include "midgardobjectmap.h"
 #include "midplayer.h"
@@ -299,10 +300,10 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& targetSetApi = TargetSetApi::get();
+    const auto& intSetApi = IntSetApi::get();
     const auto& groupApi = CMidUnitGroupApi::get();
 
-    targetSetApi.clear(value);
+    intSetApi.clear(value);
 
     void* tmp{};
     auto unitGroup = fn.getStackFortRuinGroup(tmp, objectMap, unitGroupId);
@@ -324,13 +325,13 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
     for (const auto& target : targetsToSelect) {
         int position = target.getPosition();
         Pair<TargetSetIterator, bool> tmp{};
-        targetSetApi.insert(value, &tmp, &position);
+        intSetApi.insert(value, &tmp, &position);
 
         if (isSummonAttack && !(position % 2)) {
             auto unit = target.getUnit();
             if (unit && !isUnitSmall(unit)) {
                 int backPosition = position + 1;
-                targetSetApi.insert(value, &tmp, &backPosition);
+                intSetApi.insert(value, &tmp, &backPosition);
             }
         }
     }
@@ -497,7 +498,7 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& targetSetApi = TargetSetApi::get();
+    const auto& intSetApi = IntSetApi::get();
 
     void* tmp{};
     auto unitGroup = fn.getStackFortRuinGroup(tmp, objectMap, unitGroupId);
@@ -509,7 +510,7 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
             continue;
 
         if (fn.isUnitImmuneToAttack(objectMap, battleMsgData, &unitId, attack, true)) {
-            targetSetApi.erase(value, &targetPosition);
+            intSetApi.erase(value, &targetPosition);
         }
     }
 }

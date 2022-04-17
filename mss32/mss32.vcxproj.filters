@@ -193,7 +193,7 @@
     <ClCompile Include="src\battlemsgdata.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="src\targetset.cpp">
+    <ClCompile Include="src\intset.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\utils.cpp">
@@ -1295,7 +1295,7 @@
     <ClInclude Include="include\batattackshatter.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="include\targetset.h">
+    <ClInclude Include="include\intset.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\utils.h">
@@ -2487,6 +2487,9 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mainview2.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\targetset.h">
       <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
