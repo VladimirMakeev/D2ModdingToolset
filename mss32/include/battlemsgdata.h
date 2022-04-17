@@ -661,6 +661,9 @@ struct Api
                                                   const CMidgardID* itemId,
                                                   GroupIdTargetsPair* value);
     GetItemAttackTargets getItemAttackTargets;
+
+    using BeforeBattleRound = void(__thiscall*)(BattleMsgData* thisptr);
+    BeforeBattleRound beforeBattleRound;
 };
 
 Api& get();
