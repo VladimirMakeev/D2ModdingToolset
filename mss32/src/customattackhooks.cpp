@@ -1033,10 +1033,10 @@ bool __stdcall findShatterAttackTarget(const game::IMidgardObjectMap* objectMap,
                                                              battleMsgData, unitId);
     if (attackDamage > 0) {
         IAttack* primaryAttack = fn.getAttackById(objectMap, unitId, 1, true);
-        LAttackReach* attackReach = attack->vftable->getAttackReach(primaryAttack);
+        LAttackReach* attackReach = primaryAttack->vftable->getAttackReach(primaryAttack);
         if (attackReach->id == attackReaches.all->id) {
             return battle.findAttackTargetWithAllReach(value, targetGroup, targets);
-        } else if (isMeleeAttack(attack)) {
+        } else if (isMeleeAttack(primaryAttack)) {
             return findDamageAndShatterAttackTargetWithMeleeReach(objectMap, unitId, attack,
                                                                   primaryAttack, attackDamage,
                                                                   targetGroup, targets,
