@@ -29,6 +29,8 @@ struct CPhaseGame;
 struct CZoomInterface;
 struct CDialogInterf;
 struct IMqImage2;
+struct Functor;
+struct CToggleButton;
 
 struct CMainView2
     : public CFullScreenInterf
@@ -65,6 +67,40 @@ struct CMainView2
 };
 
 static_assert(sizeof(CMainView2) == 188, "Size of CMainView2 structure must be exactly 188 bytes");
+
+namespace CMainView2Api {
+
+struct Api
+{
+    using ShowIsoDialog = void(__thiscall*)(CMainView2* thisptr);
+    ShowIsoDialog showIsoDialog;
+
+    /**
+     * Creates and shows dialog on minimap and options buttons area.
+     * When dialogName is nullptr, shows DLG_ISO_LAND or DLG_ISO_PAL.
+     * @param[in] dialogName name of the dialog to show instead of minimap or land capture.
+     */
+    using ShowDialog = void(__thiscall*)(CMainView2* thisptr, const char* dialogName);
+    ShowDialog showDialog;
+
+    struct ToggleButtonCallback
+    {
+        using Callback = void(__thiscall*)(CMainView2* thisptr, bool, CToggleButton*);
+
+        Callback callback;
+        int unknown;
+    };
+
+    using CreateToggleButtonFunctor = Functor*(__stdcall*)(Functor* functor,
+                                                           int a2,
+                                                           CMainView2* mainView,
+                                                           ToggleButtonCallback* callback);
+    CreateToggleButtonFunctor createToggleButtonFunctor;
+};
+
+Api& get();
+
+} // namespace CMainView2Api
 
 } // namespace game
 

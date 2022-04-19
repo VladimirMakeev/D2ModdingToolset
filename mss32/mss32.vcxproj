@@ -285,6 +285,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\loginaccountinterf.cpp" />
     <ClCompile Include="src\lordcat.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\mainview2.cpp" />
     <ClCompile Include="src\mapgen.cpp" />
     <ClCompile Include="src\mapgraphics.cpp" />
     <ClCompile Include="src\mapinterf.cpp" />
