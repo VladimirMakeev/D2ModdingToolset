@@ -83,6 +83,8 @@
 #include "listbox.h"
 #include "log.h"
 #include "lordtype.h"
+#include "mainview2.h"
+#include "mainview2hooks.h"
 #include "mapgen.h"
 #include "mempool.h"
 #include "menuloadskirmishmultihooks.h"
@@ -300,6 +302,8 @@ static Hooks getGameHooks()
         // Support race-specific village graphics
         {GameImagesApi::get().getCityPreviewLargeImageNames, getCityPreviewLargeImageNamesHooked, (void**)&orig.getCityPreviewLargeImageNames},
         {GameImagesApi::get().getCityIconImageNames, getCityIconImageNamesHooked, (void**)&orig.getCityIconImageNames},
+        // Support grid toggle button
+        {CMainView2Api::get().showIsoDialog, mainView2ShowIsoDialogHooked},
     };
     // clang-format on
 
