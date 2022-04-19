@@ -114,6 +114,10 @@ struct Api
                                             int a4,
                                             int a5);
     ShowImageOnMap showImageOnMap;
+
+    /** Hides all images on selected layer. */
+    using HideLayerImages = void(__stdcall*)(const CIsoLayer* layer);
+    HideLayerImages hideLayerImages;
 };
 
 Api& get();
