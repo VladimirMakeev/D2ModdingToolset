@@ -25,6 +25,8 @@
 namespace game {
 
 struct CToggleButtonVftable;
+struct CDialogInterf;
+struct Functor;
 
 struct CToggleButtonData
 {
@@ -73,6 +75,13 @@ struct Api
 {
     using SetChecked = void(__thiscall*)(CToggleButton* thisptr, bool checked);
     SetChecked setChecked;
+
+    using AssignFunctor = CToggleButton*(__stdcall*)(CDialogInterf* dialog,
+                                                     const char* buttonName,
+                                                     const char* dialogName,
+                                                     Functor* functor,
+                                                     int hotkey);
+    AssignFunctor assignFunctor;
 };
 
 Api& get();
