@@ -373,6 +373,7 @@ The following settings can be changed in [settings.lua](Scripts/settings.lua):
     - "onTransformSelf=(true/false)" if leader is transformed by TransformSelf attack (Wolf Lord, orb/talisman, artifact effect, etc.);
     - "onDrainLevel=(true/false)" if leader's level is drained by DrainLevel attack (Wight, orb/talisman, artifact effect, etc.);
     - "onDoppelganger=(true/false)" if leader transformed himself by Doppelganger attack;
+  - "fixEffectiveHpFormula=(true/false)" enables correct formula of unit effective HP for AI targeting calculations;
 </details>
 <details>
   <summary>Misc</summary>
