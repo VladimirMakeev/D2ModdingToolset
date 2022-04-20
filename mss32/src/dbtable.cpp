@@ -30,6 +30,7 @@ static std::array<Api, 4> functions = {{
         (Api::FindBuildingCategory)0x58c041,
         (Api::FindUnitBranchCategory)0x58c0bf,
         (Api::ReadUnitLevel)0x58be7c,
+        (Api::MissingValueException)0x5965ac,
         (Api::DuplicateRecordException)0x59d474,
         (Api::ReadId)0x596935,
         (Api::ReadText)0x596b67,
@@ -43,13 +44,17 @@ static std::array<Api, 4> functions = {{
         (Api::ReadAttackLevel)0x5a657f,
         (Api::ReadBoolValue)0x5a6624,
         (Api::ReadIntWithBoundsCheck)0x5968cc,
-        (Api::ReadBoolValue)0x596911
+        (Api::ReadBoolValue)0x596911,
+        (Api::GetName)0x515760,
+        (Api::Eof)0x5157ec,
+        (Api::Next)0x51580e,
     },
     // Russobit
     Api{
         (Api::FindBuildingCategory)0x58c041,
         (Api::FindUnitBranchCategory)0x58c0bf,
         (Api::ReadUnitLevel)0x58be7c,
+        (Api::MissingValueException)0x5965ac,
         (Api::DuplicateRecordException)0x59d474,
         (Api::ReadId)0x596935,
         (Api::ReadText)0x596b67,
@@ -63,13 +68,17 @@ static std::array<Api, 4> functions = {{
         (Api::ReadAttackLevel)0x5a657f,
         (Api::ReadBoolValue)0x5a6624,
         (Api::ReadIntWithBoundsCheck)0x5968cc,
-        (Api::ReadBoolValue)0x596911
+        (Api::ReadBoolValue)0x596911,
+        (Api::GetName)0x515760,
+        (Api::Eof)0x5157ec,
+        (Api::Next)0x51580e,
     },
     // Gog
     Api{
         (Api::FindBuildingCategory)0x58b1cf,
         (Api::FindUnitBranchCategory)0x58b24d,
         (Api::ReadUnitLevel)0x58afd7,
+        (Api::MissingValueException)0x5956d1,
         (Api::DuplicateRecordException)0x59c710,
         (Api::ReadId)0x595a5a,
         (Api::ReadText)0x595c8c,
@@ -83,13 +92,17 @@ static std::array<Api, 4> functions = {{
         (Api::ReadAttackLevel)0x5a57cb,
         (Api::ReadBoolValue)0x5a5870,
         (Api::ReadIntWithBoundsCheck)0x5959f1,
-        (Api::ReadBoolValue)0x595a36
+        (Api::ReadBoolValue)0x595a36,
+        (Api::GetName)0x514c59,
+        (Api::Eof)0x514ce5,
+        (Api::Next)0x514d07,
     },
     // Scenario Editor
     Api{
         (Api::FindBuildingCategory)0x538bf7,
         (Api::FindUnitBranchCategory)0x538c75,
         (Api::ReadUnitLevel)0x538a1b,
+        (Api::MissingValueException)0x536b7e,
         (Api::DuplicateRecordException)0x53f9b2,
         (Api::ReadId)0x536f07,
         (Api::ReadText)0x537139,
@@ -103,8 +116,11 @@ static std::array<Api, 4> functions = {{
         (Api::ReadAttackLevel)0x54e7ad,
         (Api::ReadBoolValue)0x54e852,
         (Api::ReadIntWithBoundsCheck)0x536e9e,
-        (Api::ReadBoolValue)0x536ee3
-    }
+        (Api::ReadBoolValue)0x536ee3,
+        (Api::GetName)0x4ac3a3,
+        (Api::Eof)0x4ac42f,
+        (Api::Next)0x4ac451,
+    },
 }};
 // clang-format on
 
