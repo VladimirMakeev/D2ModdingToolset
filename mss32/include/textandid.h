@@ -21,6 +21,7 @@
 #define TEXTANDID_H
 
 #include "d2pair.h"
+#include "midgardid.h"
 #include "mq_c_s.h"
 
 namespace game {
@@ -30,6 +31,8 @@ struct TextAndId
     mq_c_s<Pair<CMidgardID, char*>>* text;
     CMidgardID id;
 };
+
+static_assert(sizeof(TextAndId) == 8, "Size of TextAndId structure must be exactly 8 bytes");
 
 } // namespace game
 
