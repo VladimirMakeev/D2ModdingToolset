@@ -30,6 +30,8 @@
 namespace game {
 
 struct CUmUnitData;
+struct GlobalData;
+struct CDBTable;
 
 struct CUmUnit
 {
@@ -64,7 +66,40 @@ static inline CUmUnit* castSoldierToUmUnit(const IUsSoldier* soldier)
 
 namespace CUmUnitApi {
 
-const IUsSoldierVftable* vftable();
+struct Api
+{
+    using Constructor = CUmUnit*(__thiscall*)(CUmUnit* thisptr,
+                                              const CMidgardID* modifierId,
+                                              CDBTable* dbTable,
+                                              const GlobalData** globalData);
+    Constructor constructor;
+
+    using CopyConstructor = CUmUnit*(__thiscall*)(CUmUnit* thisptr, const CUmUnit* src);
+    CopyConstructor copyConstructor;
+
+    using DataConstructor = CUmUnitData*(__thiscall*)(CUmUnitData* thisptr);
+    DataConstructor dataConstructor;
+
+    using DataCopyConstructor = CUmUnitData*(__thiscall*)(CUmUnitData* thisptr,
+                                                          const CUmUnitData* src);
+    DataCopyConstructor dataCopyConstructor;
+
+    using ReadData = void(__stdcall*)(CDBTable* dbTable,
+                                      CUmUnitData* value,
+                                      const GlobalData** globalData);
+    ReadData readData;
+};
+
+Api& get();
+
+struct Vftable
+{
+    const IUsUnitVftable* usUnit;
+    const IUsSoldierVftable* usSoldier;
+    const CUmModifierVftable* umModifier;
+};
+
+Vftable& vftable();
 
 } // namespace CUmUnitApi
 

@@ -24,19 +24,75 @@
 namespace game::CUmUnitApi {
 
 // clang-format off
-static std::array<IUsSoldierVftable*, 4> vftables = {{
+static std::array<Api, 4> functions = {{
     // Akella
-    (IUsSoldierVftable*)0x6ecdfc,
+    Api{
+        (Api::Constructor)0x5a49b0,
+        (Api::CopyConstructor)0x5a4d0a,
+        (Api::DataConstructor)0x5a4c3a,
+        (Api::DataCopyConstructor)0x5a4d9f,
+        (Api::ReadData)0x5a4a8a,
+    },
     // Russobit
-    (IUsSoldierVftable*)0x6ecdfc,
+    Api{
+        (Api::Constructor)0x5a49b0,
+        (Api::CopyConstructor)0x5a4d0a,
+        (Api::DataConstructor)0x5a4c3a,
+        (Api::DataCopyConstructor)0x5a4d9f,
+        (Api::ReadData)0x5a4a8a,
+    },
     // Gog
-    (IUsSoldierVftable*)0x6ead9c,
+    Api{
+        (Api::Constructor)0x5a3c39,
+        (Api::CopyConstructor)0x5a3f93,
+        (Api::DataConstructor)0x5a3ec3,
+        (Api::DataCopyConstructor)0x5a4028,
+        (Api::ReadData)0x5a3d13,
+    },
     // Scenario Editor
-    (IUsSoldierVftable*)0x5e0fbc,
+    Api{
+        (Api::Constructor)0x54cc1b,
+        (Api::CopyConstructor)0x54cf75,
+        (Api::DataConstructor)0x54cea5,
+        (Api::DataCopyConstructor)0x54d00a,
+        (Api::ReadData)0x54ccf5,
+    },
+}};
+
+static std::array<Vftable, 4> vftables = {{
+    // Akella
+    Vftable{
+        (IUsUnitVftable*)0x6ece74,
+        (IUsSoldierVftable*)0x6ecdfc,
+        (CUmModifierVftable*)0x6ecdcc,
+    },
+    // Russobit
+    Vftable{
+        (IUsUnitVftable*)0x6ece74,
+        (IUsSoldierVftable*)0x6ecdfc,
+        (CUmModifierVftable*)0x6ecdcc,
+    },
+    // Gog
+    Vftable{
+        (IUsUnitVftable*)0x6eae14,
+        (IUsSoldierVftable*)0x6ead9c,
+        (CUmModifierVftable*)0x6ead6c,
+    },
+    // Scenario Editor
+    Vftable{
+        (IUsUnitVftable*)0x5e1034,
+        (IUsSoldierVftable*)0x5e0fbc,
+        (CUmModifierVftable*)0x5e0f8c,
+    },
 }};
 // clang-format on
 
-const IUsSoldierVftable* vftable()
+Api& get()
+{
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+Vftable& vftable()
 {
     return vftables[static_cast<int>(hooks::gameVersion())];
 }
