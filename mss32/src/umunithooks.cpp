@@ -88,17 +88,18 @@ int* __fastcall umUnitGetRegenHooked(const game::IUsSoldier* thisptr, int /*%edx
 
     auto umunit = castSoldierToUmUnit(thisptr);
     auto data = (CUmUnitDataPatched*)umunit->data;
-    auto& stacked = data->regenerationStacked;
 
     auto unitImpl = umunit->umModifier.data->underlying;
     auto soldier = fn.castUnitImplToSoldier(unitImpl);
 
-    stacked = *soldier->vftable->getRegen(soldier);
+    int stacked = *soldier->vftable->getRegen(soldier);
     stacked += data->regeneration.value;
     if (stacked > 100)
         stacked = 100;
 
-    return &stacked;
+    // The value can be potentially accessed by parallel thread, store only final result here
+    data->regenerationStacked = stacked;
+    return &data->regenerationStacked;
 }
 
 } // namespace hooks
