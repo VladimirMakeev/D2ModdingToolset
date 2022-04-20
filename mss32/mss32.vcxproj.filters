@@ -976,6 +976,9 @@
     <ClCompile Include="src\umunit.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\umunithooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
     <ClCompile Include="src\ummodifier.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -2505,6 +2508,9 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mainview2hooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\umunithooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
   </ItemGroup>

@@ -314,7 +314,8 @@
     - L_SCRIPT: ```"Script: %DESC%"```
     - L_VARIABLE_CMP does not use text id from INFO column, so it can be set as 'g0000000000'.   
   </details>
-    
+- Allows unit regeneration modifiers to stack. By default, the game picks single highest value, then sums it with lord, terrain and city bonuses;
+
 ### Settings:
 The following settings can be changed in [settings.lua](Scripts/settings.lua):
 <details>
@@ -374,6 +375,7 @@ The following settings can be changed in [settings.lua](Scripts/settings.lua):
     - "onDrainLevel=(true/false)" if leader's level is drained by DrainLevel attack (Wight, orb/talisman, artifact effect, etc.);
     - "onDoppelganger=(true/false)" if leader transformed himself by Doppelganger attack;
   - "fixEffectiveHpFormula=(true/false)" enables correct formula of unit effective HP for AI targeting calculations;
+  - "stackUnitRegenerationModifiers=(true/false)" allows unit regeneration modifiers to stack;
 </details>
 <details>
   <summary>Misc</summary>

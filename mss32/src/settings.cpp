@@ -178,6 +178,7 @@ static void readSettings(const sol::table& table, Settings& settings)
     settings.freeTransformSelfAttackInfinite = readSetting(table, "freeTransformSelfAttackInfinite", defaultSettings().freeTransformSelfAttackInfinite);
     settings.detailedAttackDescription = readSetting(table, "detailedAttackDescription", defaultSettings().detailedAttackDescription);
     settings.fixEffectiveHpFormula = readSetting(table, "fixEffectiveHpFormula", defaultSettings().fixEffectiveHpFormula);
+    settings.stackUnitRegenerationModifiers = readSetting(table, "stackUnitRegenerationModifiers", defaultSettings().stackUnitRegenerationModifiers);
     settings.debugMode = readSetting(table, "debugHooks", defaultSettings().debugMode);
     // clang-format on
 
@@ -231,6 +232,7 @@ const Settings& baseSettings()
         settings.freeTransformSelfAttackInfinite = false;
         settings.detailedAttackDescription = false;
         settings.fixEffectiveHpFormula = false;
+        settings.stackUnitRegenerationModifiers = false;
         settings.allowBattleItems.onTransformOther = false;
         settings.allowBattleItems.onTransformSelf = false;
         settings.allowBattleItems.onDrainLevel = false;
