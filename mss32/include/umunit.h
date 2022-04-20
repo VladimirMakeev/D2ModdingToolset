@@ -34,7 +34,7 @@ struct CUmUnitData;
 struct CUmUnit
 {
     IUsUnit usUnit;
-    IUsSoldier* usSoldier;
+    IUsSoldier usSoldier;
     CUmModifier umModifier;
     CUmUnitData* data;
 };

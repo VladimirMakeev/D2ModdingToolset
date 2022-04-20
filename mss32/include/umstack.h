@@ -25,17 +25,17 @@
 #include "smartptr.h"
 #include "textandid.h"
 #include "ummodifier.h"
+#include "usstackleader.h"
 #include "usunit.h"
 
 namespace game {
 
 struct CUmStackData;
-struct IUsStackLeader;
 
 struct CUmStack
 {
     IUsUnit usUnit;
-    IUsStackLeader* usStackLeader;
+    IUsStackLeader usStackLeader;
     CUmModifier umModifier;
     CUmStackData* data;
 };
