@@ -43,6 +43,9 @@ struct ModifierValue
     int value;
 };
 
+static_assert(sizeof(ModifierValue) == 8,
+              "Size of ModifierValue structure must be exactly 8 bytes");
+
 /** Modifier element types (bitflags), corresponds to ModifierElementType enum (values are not
  * identical). */
 // clang-format off
