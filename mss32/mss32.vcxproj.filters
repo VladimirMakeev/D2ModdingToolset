@@ -973,6 +973,9 @@
     <ClCompile Include="src\mainview2.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\umunit.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
