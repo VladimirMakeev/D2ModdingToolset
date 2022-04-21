@@ -76,6 +76,7 @@ struct Settings
     bool unrestrictedBestowWards;
     bool freeTransformSelfAttack;
     bool freeTransformSelfAttackInfinite;
+    bool freeTransformSelfAttackUntilAction;
     bool detailedAttackDescription;
     bool fixEffectiveHpFormula;
 

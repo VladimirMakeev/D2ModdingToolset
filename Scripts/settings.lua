@@ -74,6 +74,8 @@ settings = {
 	freeTransformSelfAttack = false,
 	-- Allows free transform-self attack to be used infinite number of times per single turn
 	freeTransformSelfAttackInfinite = false,
+	-- Restricts transform-self attack to be free only until other action is performed (normal attack or item usage)
+	freeTransformSelfAttackUntilAction = false,
 
 	-- Round in battle after which paralyze and petrify attacks
 	-- starts missing targets constantly [1 : INT_MAX]

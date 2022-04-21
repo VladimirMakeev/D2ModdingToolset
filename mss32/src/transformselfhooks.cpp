@@ -86,6 +86,9 @@ void giveFreeTransformSelfAttack(game::IMidgardObjectMap* objectMap,
     if (freeTransformSelf.turnCount > 0) // Can be 0 if this is the very first turn in battle
         freeTransformSelf.turnCount--;   // Not counting transform action as a turn
 
+    if (freeTransformSelf.turnCount > 0 && userSettings().freeTransformSelfAttackUntilAction)
+        return;
+
     if (freeTransformSelf.used) {
         if (!userSettings().freeTransformSelfAttackInfinite)
             return;

@@ -176,6 +176,7 @@ static void readSettings(const sol::table& table, Settings& settings)
     settings.unrestrictedBestowWards = readSetting(table, "unrestrictedBestowWards", defaultSettings().unrestrictedBestowWards);
     settings.freeTransformSelfAttack = readSetting(table, "freeTransformSelfAttack", defaultSettings().freeTransformSelfAttack);
     settings.freeTransformSelfAttackInfinite = readSetting(table, "freeTransformSelfAttackInfinite", defaultSettings().freeTransformSelfAttackInfinite);
+    settings.freeTransformSelfAttackUntilAction = readSetting(table, "freeTransformSelfAttackUntilAction", defaultSettings().freeTransformSelfAttackUntilAction);
     settings.detailedAttackDescription = readSetting(table, "detailedAttackDescription", defaultSettings().detailedAttackDescription);
     settings.fixEffectiveHpFormula = readSetting(table, "fixEffectiveHpFormula", defaultSettings().fixEffectiveHpFormula);
     settings.debugMode = readSetting(table, "debugHooks", defaultSettings().debugMode);
@@ -229,6 +230,7 @@ const Settings& baseSettings()
         settings.unrestrictedBestowWards = false;
         settings.freeTransformSelfAttack = false;
         settings.freeTransformSelfAttackInfinite = false;
+        settings.freeTransformSelfAttackUntilAction = false;
         settings.detailedAttackDescription = false;
         settings.fixEffectiveHpFormula = false;
         settings.allowBattleItems.onTransformOther = false;
