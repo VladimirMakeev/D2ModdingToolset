@@ -52,7 +52,7 @@
 - Allows doppelganger, transform-self, transform-other, drain-level and summon attacks to produce leveled versions of units (![demo video](https://user-images.githubusercontent.com/5180699/158679921-7b6d82b1-2c48-44bb-91c6-fa1983893eab.mp4));
 - Allows doppelganger attacks to respect enemy and ally wards and immunities to the attack class and source;
 - <details>
-    <summary>Allows transform-self attack to not consume a unit turn for transformation (![demo video](https://user-images.githubusercontent.com/5180699/124916545-76550200-dffb-11eb-8b12-3147e40ef04b.mp4));</summary>
+    <summary>Allows transform-self attack to not consume a unit turn for transformation (<a href="https://user-images.githubusercontent.com/5180699/124916545-76550200-dffb-11eb-8b12-3147e40ef04b.mp4" target="_blank">demo video</a>);</summary>
 
     - Free attack can be granted once per turn or infinitely, depending on dedicated settings.
     - Logic can be customized using ```getFreeAttackNumber``` function in [transformSelf.lua](Scripts/transformSelf.lua).
