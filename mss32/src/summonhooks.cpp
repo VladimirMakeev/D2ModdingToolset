@@ -48,19 +48,12 @@ static int getSummonLevel(const game::CMidUnit* summoner,
 {
     using namespace game;
 
+    std::optional<sol::state> lua;
     const auto path{scriptsFolder() / "summon.lua"};
-    const auto lua{loadScriptFile(path, true, true)};
-    if (!lua) {
-        return 0;
-    }
-
     using GetLevel = std::function<int(const bindings::UnitView&, const bindings::UnitImplView&,
                                        const bindings::ItemView*)>;
-    auto getLevel = getScriptFunction<GetLevel>(*lua, "getLevel");
+    auto getLevel = getScriptFunction<GetLevel>(path, "getLevel", lua, true, true);
     if (!getLevel) {
-        showErrorMessageBox(fmt::format("Could not find function 'getLevel' in script '{:s}'.\n"
-                                        "Make sure function exists and has correct signature.",
-                                        path.string()));
         return 0;
     }
 

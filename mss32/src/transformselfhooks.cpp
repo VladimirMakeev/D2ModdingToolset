@@ -47,18 +47,11 @@ namespace hooks {
 
 static int getTransformSelfLevel(const game::CMidUnit* unit, game::TUsUnitImpl* transformImpl)
 {
+    std::optional<sol::state> lua;
     const auto path{scriptsFolder() / "transformSelf.lua"};
-    const auto lua{loadScriptFile(path, true, true)};
-    if (!lua) {
-        return 0;
-    }
-
     using GetLevel = std::function<int(const bindings::UnitView&, const bindings::UnitImplView&)>;
-    auto getLevel = getScriptFunction<GetLevel>(*lua, "getLevel");
+    auto getLevel = getScriptFunction<GetLevel>(path, "getLevel", lua, true, true);
     if (!getLevel) {
-        showErrorMessageBox(fmt::format("Could not find function 'getLevel' in script '{:s}'.\n"
-                                        "Make sure function exists and has correct signature.",
-                                        path.string()));
         return 0;
     }
 
