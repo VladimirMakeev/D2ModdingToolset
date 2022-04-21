@@ -375,7 +375,8 @@ The following settings can be changed in [settings.lua](Scripts/settings.lua):
     - "onDrainLevel=(true/false)" if leader's level is drained by DrainLevel attack (Wight, orb/talisman, artifact effect, etc.);
     - "onDoppelganger=(true/false)" if leader transformed himself by Doppelganger attack;
   - "fixEffectiveHpFormula=(true/false)" enables correct formula of unit effective HP for AI targeting calculations;
-  - "stackUnitRegenerationModifiers=(true/false)" allows unit regeneration modifiers to stack;
+  - "modifiers" contains settings specific to modifiers:
+    - "cumulativeUnitRegeneration=(true/false)" allows unit regeneration modifiers to stack;
 </details>
 <details>
   <summary>Misc</summary>

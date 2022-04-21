@@ -556,7 +556,7 @@ Hooks getHooks()
     hooks.emplace_back(
         HookInfo{DisplayHandlersApi::get().villageHandler, displayHandlerVillageHooked});
 
-    if (userSettings().stackUnitRegenerationModifiers) {
+    if (userSettings().modifiers.cumulativeUnitRegeneration) {
         // Allow unit regeneration modifiers to stack
         hooks.emplace_back(HookInfo{CUmUnitApi::get().constructor, umUnitCtorHooked});
         hooks.emplace_back(HookInfo{CUmUnitApi::get().copyConstructor, umUnitCopyCtorHooked});

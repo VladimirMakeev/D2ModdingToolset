@@ -147,9 +147,11 @@ settings = {
 		onDoppelganger = false,
 	},
 
-	-- Allow unit regeneration modifiers to stack.
-	-- By default, the game picks single highest value, then sums it with lord, terrain and city bonuses.
-	stackUnitRegenerationModifiers = false,
+	modifiers = {
+		-- Allow unit regeneration modifiers to stack.
+		-- By default, the game picks single highest value, then sums it with lord, terrain and city bonuses.
+		cumulativeUnitRegeneration = false,
+	},
 
 	-- Create mss32 proxy dll log files with debug info
 	debugHooks = false,

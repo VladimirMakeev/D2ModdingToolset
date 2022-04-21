@@ -78,7 +78,11 @@ struct Settings
     bool freeTransformSelfAttackInfinite;
     bool detailedAttackDescription;
     bool fixEffectiveHpFormula;
-    bool stackUnitRegenerationModifiers;
+
+    struct Modifiers
+    {
+        bool cumulativeUnitRegeneration;
+    } modifiers;
 
     struct AllowBattleItems
     {
