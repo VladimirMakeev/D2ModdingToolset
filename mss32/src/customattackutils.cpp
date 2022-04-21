@@ -173,20 +173,13 @@ UnitSlots getTargetsToSelectOrAttack(const std::string& scriptFile,
                                      const UnitSlots& targets,
                                      bool targetsAreAllies)
 {
+    std::optional<sol::state> lua;
     const auto path{scriptsFolder() / scriptFile};
-    const auto lua{loadScriptFile(path, true, true)};
-    if (!lua) {
-        return UnitSlots();
-    }
-
     using GetTargets = std::function<sol::table(const bindings::UnitSlotView&,
                                                 const bindings::UnitSlotView&, const UnitSlots&,
                                                 const UnitSlots&, bool)>;
-    auto getTargets = getScriptFunction<GetTargets>(*lua, "getTargets");
+    auto getTargets = getScriptFunction<GetTargets>(path, "getTargets", lua, true, true);
     if (!getTargets) {
-        showErrorMessageBox(fmt::format("Could not find function 'getTargets' in script '{:s}'.\n"
-                                        "Make sure function exists and has correct signature.",
-                                        path.string()));
         return UnitSlots();
     }
 
