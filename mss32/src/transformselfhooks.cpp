@@ -75,6 +75,49 @@ static int getTransformSelfLevel(const game::CMidUnit* unit, game::TUsUnitImpl* 
     }
 }
 
+static int getTransformSelfFreeAttackNumberDefault(int attacksDone,
+                                                   int attacksRemain,
+                                                   bool hadDoubleAttack,
+                                                   bool hasDoubleAttack)
+{
+    if (!hadDoubleAttack && hasDoubleAttack && attacksDone == 0) {
+        // Give 2 extra attacks if transforming from single to double attack.
+        // attacksDone prevents infinite abuse of 2 extra attacks:
+        // do normal attack -> transform to single-attack -> transform back to double-attack
+        // -> do normal attack -> ...
+        return 2;
+    } else if (hadDoubleAttack && !hasDoubleAttack && attacksRemain > 0) {
+        // Give nothing if transforming from double to single attack with attacks remain
+        return 0;
+    } else {
+        // Give 1 extra attack to compensate transformation
+        return 1;
+    }
+}
+
+static int getTransformSelfFreeAttackNumber(int attacksDone,
+                                            int attacksRemain,
+                                            bool hadDoubleAttack,
+                                            bool hasDoubleAttack)
+{
+    std::optional<sol::state> lua;
+    using GetFreeAttackNumber = std::function<int(int, int, bool, bool)>;
+    auto f = getScriptFunction<GetFreeAttackNumber>(scriptsFolder() / "transformSelf.lua",
+                                                    "getFreeAttackNumber", lua);
+    if (!f)
+        return getTransformSelfFreeAttackNumberDefault(attacksDone, attacksRemain, hadDoubleAttack,
+                                                       hasDoubleAttack);
+
+    try {
+        return (*f)(attacksDone, attacksRemain, hadDoubleAttack, hasDoubleAttack);
+    } catch (const std::exception& e) {
+        showErrorMessageBox(fmt::format("Failed to run 'getFreeAttackNumber' script.\n"
+                                        "Reason: '{:s}'",
+                                        e.what()));
+        return 0;
+    }
+}
+
 void giveFreeTransformSelfAttack(game::IMidgardObjectMap* objectMap,
                                  game::BattleMsgData* battleMsgData,
                                  const game::CMidUnit* unit,
@@ -83,7 +126,8 @@ void giveFreeTransformSelfAttack(game::IMidgardObjectMap* objectMap,
     using namespace game;
 
     auto& freeTransformSelf = getCustomAttacks().freeTransformSelf;
-    freeTransformSelf.turnCount--; // Not counting transform action as a turn
+    if (freeTransformSelf.turnCount > 0) // Can be 0 if this is the very first turn in battle
+        freeTransformSelf.turnCount--;   // Not counting transform action as a turn
 
     if (freeTransformSelf.used) {
         if (!userSettings().freeTransformSelfAttackInfinite)
@@ -100,20 +144,9 @@ void giveFreeTransformSelfAttack(game::IMidgardObjectMap* objectMap,
         if (turn.unitId == unit->unitId) {
             const auto soldier = gameFunctions().castUnitImplToSoldier(unit->unitImpl);
             bool attackTwice = soldier && soldier->vftable->getAttackTwice(soldier);
-
-            if (!prevAttackTwice && attackTwice && freeTransformSelf.turnCount == 0) {
-                // Give 2 extra attacks if transforming from single to double attack.
-                // turnCount prevents infinite abuse of 2 extra attacks:
-                // do normal attack -> transform to single-attack -> transform back to double-attack
-                // -> do normal attack -> ...
-                turn.attackCount += 2;
-            } else if (prevAttackTwice && !attackTwice && turn.attackCount > 1) {
-                // Give nothing if transforming from double to single attack with 2 attacks left
-            } else {
-                // Give 1 extra attack to compensate transformation
-                turn.attackCount++;
-            }
-
+            turn.attackCount += getTransformSelfFreeAttackNumber(freeTransformSelf.turnCount,
+                                                                 turn.attackCount - 1,
+                                                                 prevAttackTwice, attackTwice);
             break;
         }
     }

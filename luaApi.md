@@ -7,7 +7,7 @@ Scripts folder itself should be placed in the game folder.
 ### Currently used scripts and their meanings:
 - settings.lua - mss32 proxy dll settings that changes game rules
 - doppelganger.lua - logic that computes level of doppelganger transform (category L\_DOPPELGANGER)
-- transformSelf.lua - computes unit level for self transform attacks (category L\_TRANSFORM\_SELF)
+- transformSelf.lua - computes unit level and determines free attacks to give for transform-self attacks (category L\_TRANSFORM\_SELF)
 - transformOther.lua - computes unit level for transform-other attacks (category L\_TRANSFORM\_OTHER)
 - summon.lua - computes summoned unit level for summon attacks (category L\_SUMMON)
 - textids.lua - contains interface text mapping for custom functionality

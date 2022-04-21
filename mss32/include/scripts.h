@@ -72,6 +72,35 @@ static inline std::optional<T> getScriptFunction(const sol::environment& env, co
     return getFunction<T>(env[name], name);
 }
 
+/**
+ * Returns script function with specified name from specified file to call from c++.
+ * @tparam T expected script function signature.
+ * @param[in] name function name in lua script.
+ * @param[out] lua returns lua state where the function executes.
+ * @param[inout] alwaysExists true to show error message if the function does not exist.
+ * @param[inout] bindApi true to bind additional apis like 'math' or 'table'.
+ */
+template <typename T>
+static inline std::optional<T> getScriptFunction(const std::filesystem::path& path,
+                                                 const char* name,
+                                                 std::optional<sol::state>& lua,
+                                                 bool alwaysExists = false,
+                                                 bool bindApi = false)
+{
+    lua = loadScriptFile(path, alwaysExists, bindApi);
+    if (!lua)
+        return std::nullopt;
+
+    auto function = getFunction<T>((*lua)[name], name);
+    if (!function && alwaysExists) {
+        showErrorMessageBox(fmt::format("Could not find function '{:s}' in script '{:s}'.\n"
+                                        "Make sure function exists and has correct signature.",
+                                        name, path.string()));
+    }
+
+    return function;
+}
+
 /** Returns lua state wrapper with specified script loaded in it and api bound. */
 std::optional<sol::state> loadScriptFile(const std::filesystem::path& path,
                                          bool alwaysExists = false,
