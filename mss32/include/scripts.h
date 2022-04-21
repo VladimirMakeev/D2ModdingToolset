@@ -75,8 +75,10 @@ static inline std::optional<T> getScriptFunction(const sol::environment& env, co
 /**
  * Returns script function with specified name from specified file to call from c++.
  * @tparam T expected script function signature.
- * @param[in] lua fully initialized and loaded lua state wrapper where to search.
  * @param[in] name function name in lua script.
+ * @param[out] lua returns lua state where the function executes.
+ * @param[inout] alwaysExists true to show error message if the function does not exist.
+ * @param[inout] bindApi true to bind additional apis like 'math' or 'table'.
  */
 template <typename T>
 static inline std::optional<T> getScriptFunction(const std::filesystem::path& path,
