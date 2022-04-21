@@ -130,6 +130,8 @@
 #include "transformselfhooks.h"
 #include "umattack.h"
 #include "umattackhooks.h"
+#include "umunit.h"
+#include "umunithooks.h"
 #include "unitbranchcat.h"
 #include "unitgenerator.h"
 #include "unitsforhire.h"
@@ -553,6 +555,14 @@ Hooks getHooks()
     // Support race-specific village graphics
     hooks.emplace_back(
         HookInfo{DisplayHandlersApi::get().villageHandler, displayHandlerVillageHooked});
+
+    if (userSettings().modifiers.cumulativeUnitRegeneration) {
+        // Allow unit regeneration modifiers to stack
+        hooks.emplace_back(HookInfo{CUmUnitApi::get().constructor, umUnitCtorHooked});
+        hooks.emplace_back(HookInfo{CUmUnitApi::get().copyConstructor, umUnitCopyCtorHooked});
+        hooks.emplace_back(
+            HookInfo{CUmUnitApi::vftable().usSoldier->getRegen, umUnitGetRegenHooked});
+    }
 
     return hooks;
 }

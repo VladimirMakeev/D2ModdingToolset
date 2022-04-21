@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,23 +17,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTANDID_H
-#define TEXTANDID_H
+#include "ummodifier.h"
+#include "version.h"
+#include <array>
 
-#include "d2pair.h"
-#include "midgardid.h"
-#include "mq_c_s.h"
+namespace game::CUmModifierApi {
 
-namespace game {
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)0x5a9dd4,
+        (Api::CopyConstructor)0x5a9e37,
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)0x5a9dd4,
+        (Api::CopyConstructor)0x5a9e37,
+    },
+    // Gog
+    Api{
+        (Api::Constructor)0x5a906a,
+        (Api::CopyConstructor)0x5a90cd,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x53ec7e,
+        (Api::CopyConstructor)0x53ece1,
+    }
+}};
+// clang-format on
 
-struct TextAndId
+Api& get()
 {
-    mq_c_s<Pair<CMidgardID, char*>>* text;
-    CMidgardID id;
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-static_assert(sizeof(TextAndId) == 8, "Size of TextAndId structure must be exactly 8 bytes");
-
-} // namespace game
-
-#endif // TEXTANDID_H
+} // namespace game::CUmModifierApi

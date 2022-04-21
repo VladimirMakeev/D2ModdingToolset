@@ -80,6 +80,20 @@ static void readAllowBattleItemsSettings(const sol::table& table, Settings::Allo
     value.onDoppelganger = readSetting(category.value(), "onDoppelganger", def.onDoppelganger);
 }
 
+static void readModifierSettings(const sol::table& table, Settings::Modifiers& value)
+{
+    const auto& def = defaultSettings().modifiers;
+
+    auto category = table.get<sol::optional<sol::table>>("modifiers");
+    if (!category.has_value()) {
+        value = def;
+        return;
+    }
+
+    value.cumulativeUnitRegeneration = readSetting(category.value(), "cumulativeUnitRegeneration",
+                                                   def.cumulativeUnitRegeneration);
+}
+
 static Color readColor(const sol::table& table, const Color& def)
 {
     Color color{};
@@ -183,6 +197,7 @@ static void readSettings(const sol::table& table, Settings& settings)
 
     readAiAttackPowerSettings(table, settings.aiAttackPowerBonus);
     readAllowBattleItemsSettings(table, settings.allowBattleItems);
+    readModifierSettings(table, settings.modifiers);
     readMovementCostSettings(table, settings.movementCost);
     readLobbySettings(table, settings.lobby);
 }
@@ -231,6 +246,7 @@ const Settings& baseSettings()
         settings.freeTransformSelfAttackInfinite = false;
         settings.detailedAttackDescription = false;
         settings.fixEffectiveHpFormula = false;
+        settings.modifiers.cumulativeUnitRegeneration = false;
         settings.allowBattleItems.onTransformOther = false;
         settings.allowBattleItems.onTransformSelf = false;
         settings.allowBattleItems.onDrainLevel = false;

@@ -25,15 +25,18 @@
 #include "ummodifier.h"
 #include "ussoldier.h"
 #include "usunit.h"
+#include <cstddef>
 
 namespace game {
 
 struct CUmUnitData;
+struct GlobalData;
+struct CDBTable;
 
 struct CUmUnit
 {
     IUsUnit usUnit;
-    IUsSoldier* usSoldier;
+    IUsSoldier usSoldier;
     CUmModifier umModifier;
     CUmUnitData* data;
 };
@@ -55,6 +58,55 @@ struct CUmUnitData
 };
 
 static_assert(sizeof(CUmUnitData) == 68, "Size of CUmUnitData structure must be exactly 68 bytes");
+
+struct CUmUnitDataPatched : CUmUnitData
+{
+    int regenerationStacked;
+};
+
+static inline CUmUnit* castSoldierToUmUnit(const IUsSoldier* soldier)
+{
+    return reinterpret_cast<CUmUnit*>((uintptr_t)soldier - offsetof(CUmUnit, usSoldier));
+}
+
+namespace CUmUnitApi {
+
+struct Api
+{
+    using Constructor = CUmUnit*(__thiscall*)(CUmUnit* thisptr,
+                                              const CMidgardID* modifierId,
+                                              CDBTable* dbTable,
+                                              const GlobalData** globalData);
+    Constructor constructor;
+
+    using CopyConstructor = CUmUnit*(__thiscall*)(CUmUnit* thisptr, const CUmUnit* src);
+    CopyConstructor copyConstructor;
+
+    using DataConstructor = CUmUnitData*(__thiscall*)(CUmUnitData* thisptr);
+    DataConstructor dataConstructor;
+
+    using DataCopyConstructor = CUmUnitData*(__thiscall*)(CUmUnitData* thisptr,
+                                                          const CUmUnitData* src);
+    DataCopyConstructor dataCopyConstructor;
+
+    using ReadData = void(__stdcall*)(CDBTable* dbTable,
+                                      CUmUnitData* value,
+                                      const GlobalData** globalData);
+    ReadData readData;
+};
+
+Api& get();
+
+struct Vftable
+{
+    const IUsUnitVftable* usUnit;
+    const IUsSoldierVftable* usSoldier;
+    const CUmModifierVftable* umModifier;
+};
+
+Vftable& vftable();
+
+} // namespace CUmUnitApi
 
 } // namespace game
 

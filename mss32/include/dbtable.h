@@ -87,6 +87,14 @@ struct Api
     ReadUnitLevel readUnitLevel;
 
     /**
+     * Throws exception related to missing value in dbf table.
+     * @param[in] tableName name of the table that misses value.
+     * @param[in] value string representation of missing entity.
+     */
+    using MissingValueException = void(__stdcall*)(const char* tableName, const char* value);
+    MissingValueException missingValueException;
+
+    /**
      * Throws exception related to duplicate records in dbf table.
      * @param[in] dbTable table object containing duplicates.
      * @param[in] id id of duplicate entity related to table record.
@@ -164,6 +172,15 @@ struct Api
     ReadIntWithBoundsCheck readIntWithBoundsCheck;
 
     ReadBoolValue readBool;
+
+    using GetName = const char*(__thiscall*)(const CDBTable* thisptr);
+    GetName getName;
+
+    using Eof = bool(__thiscall*)(const CDBTable* thisptr);
+    Eof eof;
+
+    using Next = bool(__thiscall*)(CDBTable* thisptr);
+    Next next;
 };
 
 Api& get();

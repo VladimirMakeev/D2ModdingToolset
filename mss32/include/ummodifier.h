@@ -27,6 +27,7 @@ namespace game {
 struct CUmModifierVftable;
 struct CUmModifierData;
 struct ModifierValue;
+struct GlobalData;
 
 struct CUmModifier
 {
@@ -42,6 +43,9 @@ struct ModifierValue
     char padding[3];
     int value;
 };
+
+static_assert(sizeof(ModifierValue) == 8,
+              "Size of ModifierValue structure must be exactly 8 bytes");
 
 /** Modifier element types (bitflags), corresponds to ModifierElementType enum (values are not
  * identical). */
@@ -116,6 +120,23 @@ struct CUmModifierData
 
 static_assert(sizeof(CUmModifierData) == 12,
               "Size of CUmModifierData structure must be exactly 12 bytes");
+
+namespace CUmModifierApi {
+
+struct Api
+{
+    using Constructor = CUmModifier*(__thiscall*)(CUmModifier* thisptr,
+                                                  const CMidgardID* modifierId,
+                                                  const GlobalData** globalData);
+    Constructor constructor;
+
+    using CopyConstructor = CUmModifier*(__thiscall*)(CUmModifier* thisptr, const CUmModifier* src);
+    CopyConstructor copyConstructor;
+};
+
+Api& get();
+
+} // namespace CUmModifierApi
 
 } // namespace game
 

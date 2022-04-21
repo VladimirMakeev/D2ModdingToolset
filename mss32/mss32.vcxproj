@@ -404,6 +404,9 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\uievent.cpp" />
     <ClCompile Include="src\uimanager.cpp" />
     <ClCompile Include="src\umattack.cpp" />
+    <ClCompile Include="src\ummodifier.cpp" />
+    <ClCompile Include="src\umunit.cpp" />
+    <ClCompile Include="src\umunithooks.cpp" />
     <ClCompile Include="src\unitbranchcat.cpp" />
     <ClCompile Include="src\unitcat.cpp" />
     <ClCompile Include="src\unitinfolist.cpp" />
@@ -901,6 +904,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\ummodifier.h" />
     <ClInclude Include="include\umstack.h" />
     <ClInclude Include="include\umunit.h" />
+    <ClInclude Include="include\umunithooks.h" />
     <ClInclude Include="include\unitbranchcat.h" />
     <ClInclude Include="include\unitcat.h" />
     <ClInclude Include="include\unitgenerator.h" />

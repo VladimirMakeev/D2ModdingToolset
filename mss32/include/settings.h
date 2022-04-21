@@ -79,6 +79,11 @@ struct Settings
     bool detailedAttackDescription;
     bool fixEffectiveHpFormula;
 
+    struct Modifiers
+    {
+        bool cumulativeUnitRegeneration;
+    } modifiers;
+
     struct AllowBattleItems
     {
         bool onTransformOther;
