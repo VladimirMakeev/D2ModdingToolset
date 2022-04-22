@@ -312,6 +312,10 @@ bool applyModifier(const game::CMidgardID* unitId,
 
     CMidUnitApi::get().addModifier(targetUnit, modifierId);
 
+    // Fixes modifiers getting lost after modified unit is untransformed
+    if (targetUnit->transformed)
+        addUniqueIdToList(targetUnit->origModifiers, modifierId);
+
     CUmModifier* modifier = getModifier(modifierId);
 
     CUmUnit* umUnit = castUmModifierToUmUnit(modifier);

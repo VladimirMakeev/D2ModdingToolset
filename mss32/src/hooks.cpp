@@ -227,6 +227,7 @@ static Hooks getGameHooks()
          * 2) Not resetting attack class wards (when reapplied)
          * 3) Incorrectly resetting attack source ward if its modifier also contains hp, regen or armor element
          */
+        // Fixes modifiers getting lost after modified unit is untransformed
         {CBatAttackBestowWardsApi::vftable()->onHit, bestowWardsAttackOnHitHooked},
         // Fix bestow wards with double attack where modifiers granted by first attack are removed
         {battle.afterBattleTurn, afterBattleTurnHooked},
