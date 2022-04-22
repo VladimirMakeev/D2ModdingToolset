@@ -430,7 +430,7 @@
     - Fixes incorrect handling of existing unit immunities;
     - Allows to apply modifiers even if there are no attack source wards among them;
     - Allows to target unit with a secondary attack even if there are no modifiers that can be applied;
-    - Allows to heal and apply modifiers at once. Set QTY\_HEAL > 0 in GAttacks.dbf and HEAL in GDynUpgr.dbf:
+    - Allows to heal and apply modifiers at once. Set `QTY_HEAL` > 0 in `GAttacks.dbf` and `HEAL` in `GDynUpgr.dbf`:
       - Allows to heal retreating allies by primary or secondary attack;
       - Allows to heal allies when battle ends, same as ordinary heal;
     - Allows to use revive as a secondary attack.
