@@ -67,7 +67,7 @@ settings = {
 	doppelgangerRespectsEnemyImmunity = false,
 	doppelgangerRespectsAllyImmunity = false,
 
-	-- Increases total wards limit per caster from 8 to 48
+	-- Increases total ward limit for bestow-wards attack from 8 to 48
 	unrestrictedBestowWards = true,
 
 	-- Allows transform-self attack to not consume a unit turn for transformation (once per turn)
@@ -126,7 +126,7 @@ settings = {
 	-- instead of check against arithmetic mean of two random numbers
 	missChanceSingleRoll = false,
 
-	-- Fix missing attack information in unit encyclopedia
+	-- Adds missing attack information in unit encyclopedia
 	detailedAttackDescription = true,
 
 	-- Fix effective unit hp computation
@@ -134,8 +134,7 @@ settings = {
 	-- Fixed formula: hp / (1 - (armor / 100))
 	fixEffectiveHpFormula = true,
 
-	-- Fix leader transformation (doppelganger, drain-level, transform-self/other attacks)
-	-- to allow usage of battle items (potions, orbs and talismans)
+	-- Allows transformed leaders (doppelganger, drain-level, transform-self/other attacks) to use battle items (potions, orbs and talismans)
 	allowBattleItems = {
 		-- If leader is transformed by TransformOther attack (Witch, orb/talisman, artifact effect, etc.)
 		onTransformOther = false,

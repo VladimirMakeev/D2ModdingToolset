@@ -296,8 +296,7 @@ static Hooks getGameHooks()
         // Allow scenarios with prebuilt buildings in capitals
         // Start with prebuilt temple in capital for warrior lord depending on user setting
         {fn.buildLordSpecificBuildings, buildLordSpecificBuildingsHooked},
-        // Fix leader transformation (doppelganger, drain-level, transform-self/other attacks)
-        // to allow usage of battle items (potions, orbs and talismans)
+        // Allows transformed leaders (doppelganger, drain-level, transform-self/other attacks) to use battle items (potions, orbs and talismans)
         {BattleViewerInterfApi::get().updateBattleItems, battleViewerInterfUpdateBattleItemsHooked},
         {BatBigFaceApi::get().update, batBigFaceUpdateHooked},
         {battle.updateBattleActions, updateBattleActionsHooked},
@@ -367,7 +366,7 @@ static Hooks getGameHooks()
     }
 
     if (userSettings().unrestrictedBestowWards != baseSettings().unrestrictedBestowWards) {
-        // Support extended modifier count for bestow wards
+        // Increases total ward limit for bestow-wards attack from 8 to 48
         // clang-format off
         hooks.emplace_back(HookInfo{battle.constructor, battleMsgDataCtorHooked, (void**)&orig.battleMsgDataCtor});
         hooks.emplace_back(HookInfo{battle.copyConstructor, battleMsgDataCopyCtorHooked});
@@ -518,7 +517,7 @@ Hooks getHooks()
 
     if (userSettings().detailedAttackDescription != baseSettings().detailedAttackDescription) {
         /**
-         * Fix missing attack information in unit encyclopedia:
+         * Adds missing attack information in unit encyclopedia:
          * 1) Damage of secondary attack if its not either poison, blister or frostbite
          * 2) Power (if applicable), source and reach of alternative attack
          * 3) Value of boost/lower damage if its secondary attack
