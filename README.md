@@ -1,8 +1,13 @@
 # Modding toolset for Disciples 2 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ### Features:
+
+#### General
 - Can be used on vanilla version or with other mods installed;
 - Allows players to search and create PvP matches without external software using custom lobby server. Currently only for [Motlin's mod](https://dis2modding.fandom.com/ru/wiki/Мод_Мотлина).
+- Increases maximum game turn to 9999;
+- Allows to load and create scenarios with no magic (maximum spell level set to 0);
+- Buildings up to tier 10 are supported in editor and game;
 - <details>
     <summary>Adds new custom building category for unit hire;</summary>
 
@@ -25,6 +30,30 @@
     - Restart the scenario.
   </details>
 - <details>
+    <summary>Allows to set a maximum number of items the player is allowed to transfer between campaign scenarios;</summary>
+
+    Specify `carryOverItemsMax` in [settings.lua](Scripts/settings.lua).
+  </details>
+- <details>
+    <summary>Allows to add new music tracks for battle and capital cities;</summary>
+
+    New music tracks name format follows original game naming convention.    
+    WAV tracks in Music folder containing 'battle' as part of their names will be played during battle.    
+    WAV tracks in Music folder containing '<humn/dwrf/unde/here/elf>trk' as part of their names will be played in capital city window with accordance to race.
+
+    Examples:
+    - battle10.wav - new music track for battle
+    - humntrk4.wav - new music track for Empire
+    - heretrk15.wav - new music track for Legions of the Damned    
+  </details>
+- <details>
+    <summary>Provides debug log files to help mod makers;</summary>
+
+    Enable `debugHooks` in [settings.lua](Scripts/settings.lua). **Don't forget to turn it off in release package of your mod to avoid cluttering and improve performance.**
+  </details>
+
+#### User interface
+- <details>
     <summary>Allows banners, resources panel and converted land percentage to be displayed by default;</summary>
 
     Use the following settings in [settings.lua](Scripts/settings.lua):
@@ -32,6 +61,87 @@
     - `showResources`
     - `showLandConverted`
   </details>
+- <details>
+    <summary>Buttons for bulk item transfer: transfer all items, potions, scrolls/wands or valuables between inventories with single click;</summary>
+
+    Add buttons with predefined names to `DLG_CITY_STACK`, `DLG_EXCHANGE` or `DLG_PICKUP_DROP` dialogs in Interf.dlg file.<br />
+    Every button is optional and can be ignored.<br />
+    Buttons and their meaning:
+    - Transfer all items to the left inventory: `BTN_TRANSF_L_ALL`;
+    - Transfer all items to the right inventory: `BTN_TRANSF_R_ALL`;
+    - Transfer all potions to the left: `BTN_TRANSF_L_POTIONS`;
+    - Transfer all potions to the right: `BTN_TRANSF_R_POTIONS`;
+    - Transfer all scrolls and wands to the left: `BTN_TRANSF_L_SPELLS`;
+    - Transfer all scrolls and wands to the right: `BTN_TRANSF_R_SPELLS`;
+    - Transfer all valuables to the left: `BTN_TRANSF_L_VALUABLES`;
+    - Transfer all valuables to the right: `BTN_TRANSF_R_VALUABLES`;
+
+    Example of button description in `Interf.dlg`:
+    ```
+    BUTTON    BTN_TRANSF_L_ALL,342,424,385,459,DLG_EXCHANGE_RETURN_D,DLG_EXCHANGE_RETURN_H,DLG_EXCHANGE_RETURN_C,DLG_EXCHANGE_RETURN_D,"Transfer all items to left",0
+    ```
+  </details>
+- <details>
+    <summary>Button to sell all valuables with a single click;</summary>
+
+    - Add sell confirmation text to `TApp.dbf`. The text must contain `%PRICE%` keyword in it;
+    - Specify id of the text in `sellAllValuables` field inside [textids.lua](Scripts/textids.lua) (default id is X015TA0001);
+    - Add button with name `BTN_SELL_ALL_VALUABLES` to `DLG_MERCHANT` in `Interf.dlg` file.
+
+    In case of missing text, the following default message will be shown:
+    ```
+    Do you want to sell all valuables? Revenue will be:\n%PRICE%
+    ```
+
+    Example of button description in Interf.dlg:
+    ```
+    BUTTON	BTN_SELL_ALL_VALUABLES,417,425,460,460,DLG_CITY_STACK_RETURN_D,DLG_CITY_STACK_RETURN_H,DLG_CITY_STACK_RETURN_C,DLG_CITY_STACK_RETURN_D,"Sell all valuables",0
+    ```
+  </details>
+- <details>
+    <summary>Button to sell all items with a single click;</summary>
+
+    - Add sell confirmation text to `TApp.dbf`. The text must contain `%PRICE%` keyword in it;
+    - Specify id of the text in `sellAllItems` field inside [textids.lua](Scripts/textids.lua).
+    - Add button with name `BTN_SELL_ALL` to `DLG_MERCHANT` in `Interf.dlg` file.
+
+    In case of missing text, the following default message will be shown:
+    ```
+    Do you want to sell all items? Revenue will be:\n%PRICE%
+    ```
+
+    Example of button description in Interf.dlg:
+    ```
+    BUTTON	BTN_SELL_ALL,417,425,460,460,DLG_CITY_STACK_RETURN_D,DLG_CITY_STACK_RETURN_H,DLG_CITY_STACK_RETURN_C,DLG_CITY_STACK_RETURN_D,"Sell all items",0
+    ```
+  </details>
+- <details>
+    <summary>Adds missing attack information in unit encyclopedia;</summary>
+
+    - Enable `detailedAttackDescription` in [settings.lua](Scripts/settings.lua);
+    - Add interface text for the following entries in `TApp.dbf` and `TAppEdit.dbf`:
+        - `infiniteAttack`
+        - `critHitAttack`
+        - `critHitDamage`
+        - `ratedDamage`
+        - `ratedDamageEqual`
+        - `ratedDamageSeparator`
+        - `splitDamage`
+    - Specify corresponding text ids in [textids.lua](Scripts/textids.lua).
+    
+    The following information is added:
+    - Damage of secondary attack if its not either poison, blister or frostbite;
+    - Power (if applicable), source and reach of alternative attack;
+    - Value of boost/lower damage if its secondary attack;
+    - Value of lower initiative;
+    - Critical hit indication;
+    - Infinite effect indication;
+    - Custom attack sources;
+    - Custom attack reaches;
+    - Custom attack damage ratios.
+  </details>
+
+#### Strategic map
 - <details>
     <summary>Allows to display movement cost for each individual step of parties;</summary>
 
@@ -45,6 +155,52 @@
     
     Specify `stackMaxScoutRange` in [settings.lua](Scripts/settings.lua).
   </details>
+- <details>
+    <summary>Allows unit regeneration modifiers to stack;</summary>
+
+    Enable `cumulativeUnitRegeneration` under `modifiers` category in [settings.lua](Scripts/settings.lua).<br />
+    By default, the game picks single highest value, then sums it with lord, terrain and city bonuses;
+  </details>
+- <details>
+    <summary>Adds new event conditions;</summary>
+
+    - Replace `LEvCond.dbf` with [LEvCond.dbf](Examples/LEvCond.dbf);
+    - Add contents of [ScenEdit.dlg](Examples/ScenEdit.dlg) to `ScenEdit.dlg`;
+    - Translate menus and buttons if needed. Also, add translated text ids to [textids.lua](Scripts/textids.lua);
+    - Add translations for brief (`BRIEF`) and full (`DESCR`) event condition descriptions to `TAppEdit.dbf`;
+    - Set ids of these translations to corresponding columns in `LEvCond.dbf`;
+    - Text strings in `INFO` column must contain predefined keys for game to show actual game data.
+
+    Examples:
+    - L_OWN\_RESOURCE: ```"Own %COND% %GOLD% gold, %INFERNAL% infernal, %LIFE% life, %DEATH% death, %RUNIC% runic, %GROVE% grove."```
+    - L_GAME_MODE: ```"Game mode: %MODE%"```
+    - L_PLAYER_TYPE: ```"Player is controlled by %TYPE%"```
+    - L_SCRIPT: ```"Script: %DESC%"```
+    - L_VARIABLE_CMP does not use text id from INFO column, so it can be set as 'g0000000000'.   
+  </details>
+- <details>
+    <summary>Cities can generate daily income depending on scenario variables with predefined names;</summary>
+
+    Scenario variables with predefined names are checked each turn and affect income, excluding neutrals race.
+    Variables can be changed by events as any others.
+
+    Variables that affect all races:
+
+      - TIER_0_CITY_INCOME - income from capital city;
+      - TIER_N_CITY_INCOME - income from tier N city, N = [1 : 5];
+    Variables that affect specific race:
+
+      - EMPIRE_TIER_0_CITY_INCOME - income from capital city for Empire only;
+      - EMPIRE_TIER_N_CITY_INCOME - income from tier N city for Empire only, N = [1 : 5];
+      - LEGIONS .. - income for Legions of the Damned only;
+      - CLANS .. - Mountain Clans;
+      - HORDES .. - Undead Hordes;
+      - ELVES .. - Elven Alliance;
+  </details>
+- Allows Scenario Editor to place merchants, mages, trainers and mercenaries on water tiles;
+- Allows Scenario Editor to place more than 200 stacks on a map;
+
+#### Battle mechanics
 - <details>
     <summary>Allows to set maximum unit damage and armor;</summary>
     
@@ -130,16 +286,6 @@
     - Logic can be customized using `getFreeAttackNumber` function in [transformSelf.lua](Scripts/transformSelf.lua).
   </details>
 - <details>
-    <summary>Allows to set a maximum number of items the player is allowed to transfer between campaign scenarios;</summary>
-
-    Specify `carryOverItemsMax` in [settings.lua](Scripts/settings.lua).
-  </details>
-- Allows to load and create scenarios with no magic (maximum spell level set to 0);
-- Allows Scenario Editor to place merchants, mages, trainers and mercenaries on water tiles;
-- Allows Scenario Editor to place more than 200 stacks on a map;
-- Buildings up to tier 10 are supported in editor and game;
-- Maximum game turn increased to 9999;
-- <details>
     <summary>Allows transformed leaders (doppelganger, drain-level, transform-self/other attacks) to use battle items (potions, orbs and talismans);</summary>
 
     See `allowBattleItems` category in [settings.lua](Scripts/settings.lua):
@@ -147,96 +293,6 @@
     - `onTransformSelf`
     - `onDrainLevel`
     - `onDoppelganger`
-  </details>
-- <details>
-    <summary>Allows unit regeneration modifiers to stack. By default, the game picks single highest value, then sums it with lord, terrain and city bonuses;</summary>
-
-    Enable `cumulativeUnitRegeneration` under `modifiers` category in [settings.lua](Scripts/settings.lua).
-  </details>
-- <details>
-    <summary>Buttons for bulk item transfer: transfer all items, potions, scrolls/wands or valuables between inventories with single click;</summary>
-
-    Add buttons with predefined names to `DLG_CITY_STACK`, `DLG_EXCHANGE` or `DLG_PICKUP_DROP` dialogs in Interf.dlg file.<br />
-    Every button is optional and can be ignored.<br />
-    Buttons and their meaning:
-    - Transfer all items to the left inventory: `BTN_TRANSF_L_ALL`;
-    - Transfer all items to the right inventory: `BTN_TRANSF_R_ALL`;
-    - Transfer all potions to the left: `BTN_TRANSF_L_POTIONS`;
-    - Transfer all potions to the right: `BTN_TRANSF_R_POTIONS`;
-    - Transfer all scrolls and wands to the left: `BTN_TRANSF_L_SPELLS`;
-    - Transfer all scrolls and wands to the right: `BTN_TRANSF_R_SPELLS`;
-    - Transfer all valuables to the left: `BTN_TRANSF_L_VALUABLES`;
-    - Transfer all valuables to the right: `BTN_TRANSF_R_VALUABLES`;
-
-    Example of button description in `Interf.dlg`:
-    ```
-    BUTTON    BTN_TRANSF_L_ALL,342,424,385,459,DLG_EXCHANGE_RETURN_D,DLG_EXCHANGE_RETURN_H,DLG_EXCHANGE_RETURN_C,DLG_EXCHANGE_RETURN_D,"Transfer all items to left",0
-    ```
-  </details>
-- <details>
-    <summary>Button to sell all valuables with a single click;</summary>
-
-    - Add sell confirmation text to `TApp.dbf`. The text must contain `%PRICE%` keyword in it;
-    - Specify id of the text in `sellAllValuables` field inside [textids.lua](Scripts/textids.lua) (default id is X015TA0001);
-    - Add button with name `BTN_SELL_ALL_VALUABLES` to `DLG_MERCHANT` in `Interf.dlg` file.
-
-    In case of missing text, the following default message will be shown:
-    ```
-    Do you want to sell all valuables? Revenue will be:\n%PRICE%
-    ```
-
-    Example of button description in Interf.dlg:
-    ```
-    BUTTON	BTN_SELL_ALL_VALUABLES,417,425,460,460,DLG_CITY_STACK_RETURN_D,DLG_CITY_STACK_RETURN_H,DLG_CITY_STACK_RETURN_C,DLG_CITY_STACK_RETURN_D,"Sell all valuables",0
-    ```
-  </details>
-- <details>
-    <summary>Button to sell all items with a single click;</summary>
-
-    - Add sell confirmation text to `TApp.dbf`. The text must contain `%PRICE%` keyword in it;
-    - Specify id of the text in `sellAllItems` field inside [textids.lua](Scripts/textids.lua).
-    - Add button with name `BTN_SELL_ALL` to `DLG_MERCHANT` in `Interf.dlg` file.
-
-    In case of missing text, the following default message will be shown:
-    ```
-    Do you want to sell all items? Revenue will be:\n%PRICE%
-    ```
-
-    Example of button description in Interf.dlg:
-    ```
-    BUTTON	BTN_SELL_ALL,417,425,460,460,DLG_CITY_STACK_RETURN_D,DLG_CITY_STACK_RETURN_H,DLG_CITY_STACK_RETURN_C,DLG_CITY_STACK_RETURN_D,"Sell all items",0
-    ```
-  </details>
-- <details>
-    <summary>Allows to add new music tracks for battle and capital cities;</summary>
-
-    New music tracks name format follows original game naming convention.    
-    WAV tracks in Music folder containing 'battle' as part of their names will be played during battle.    
-    WAV tracks in Music folder containing '<humn/dwrf/unde/here/elf>trk' as part of their names will be played in capital city window with accordance to race.
-
-    Examples:
-    - battle10.wav - new music track for battle
-    - humntrk4.wav - new music track for Empire
-    - heretrk15.wav - new music track for Legions of the Damned    
-  </details>
-- <details>
-    <summary>Cities can generate daily income depending on scenario variables with predefined names;</summary>
-
-    Scenario variables with predefined names are checked each turn and affect income, excluding neutrals race.
-    Variables can be changed by events as any others.
-
-    Variables that affect all races:
-
-      - TIER_0_CITY_INCOME - income from capital city;
-      - TIER_N_CITY_INCOME - income from tier N city, N = [1 : 5];
-    Variables that affect specific race:
-
-      - EMPIRE_TIER_0_CITY_INCOME - income from capital city for Empire only;
-      - EMPIRE_TIER_N_CITY_INCOME - income from tier N city for Empire only, N = [1 : 5];
-      - LEGIONS .. - income for Legions of the Damned only;
-      - CLANS .. - Mountain Clans;
-      - HORDES .. - Undead Hordes;
-      - ELVES .. - Elven Alliance;
   </details>
 - <details>
     <summary>Increases total ward limit for bestow-wards attack from 8 to 48;</summary>
@@ -256,31 +312,6 @@
     - Add a new record with `TYPE` 14, and fill the columns accordingly to attack class and immunity.
     
     Note that this also works in pure vanilla version.
-  </details>
-- <details>
-    <summary>Adds missing attack information in unit encyclopedia;</summary>
-
-    - Enable `detailedAttackDescription` in [settings.lua](Scripts/settings.lua);
-    - Add interface text for the following entries in `TApp.dbf` and `TAppEdit.dbf`:
-        - `infiniteAttack`
-        - `critHitAttack`
-        - `critHitDamage`
-        - `ratedDamage`
-        - `ratedDamageEqual`
-        - `ratedDamageSeparator`
-        - `splitDamage`
-    - Specify corresponding text ids in [textids.lua](Scripts/textids.lua).
-    
-    The following information is added:
-    - Damage of secondary attack if its not either poison, blister or frostbite;
-    - Power (if applicable), source and reach of alternative attack;
-    - Value of boost/lower damage if its secondary attack;
-    - Value of lower initiative;
-    - Critical hit indication;
-    - Infinite effect indication;
-    - Custom attack sources;
-    - Custom attack reaches;
-    - Custom attack damage ratios.
   </details>
 - <details>
     <summary>Supports custom attack sources;</summary>
@@ -338,7 +369,7 @@
     ![image](https://user-images.githubusercontent.com/5180699/124194675-af5c1680-dad1-11eb-97d3-a59637594b37.png)
   </details>
 - <details>
-    <summary>Supports custom attack damage ratio for additional targets;</summary>
+    <summary>Supports custom attack damage ratios for additional targets;</summary>
 
     The main purpose is to complement custom attack reaches.<br />
     Allows to reduce or increase incoming damage for additional attack targets:
@@ -368,28 +399,6 @@
     - Take the multiplier into account when picking base values for `QTY_DAM` in `Gattacks.dbf` along with `DAMAGE` in `GDynUpgr.dbf`;
     - The multiplied damage is correctly displayed in unit encyclopedia.
   </details>
-- <details>
-    <summary>Adds new event conditions;</summary>
-
-    - Replace `LEvCond.dbf` with [LEvCond.dbf](Examples/LEvCond.dbf);
-    - Add contents of [ScenEdit.dlg](Examples/ScenEdit.dlg) to `ScenEdit.dlg`;
-    - Translate menus and buttons if needed. Also, add translated text ids to [textids.lua](Scripts/textids.lua);
-    - Add translations for brief (`BRIEF`) and full (`DESCR`) event condition descriptions to `TAppEdit.dbf`;
-    - Set ids of these translations to corresponding columns in `LEvCond.dbf`;
-    - Text strings in `INFO` column must contain predefined keys for game to show actual game data.
-
-    Examples:
-    - L_OWN\_RESOURCE: ```"Own %COND% %GOLD% gold, %INFERNAL% infernal, %LIFE% life, %DEATH% death, %RUNIC% runic, %GROVE% grove."```
-    - L_GAME_MODE: ```"Game mode: %MODE%"```
-    - L_PLAYER_TYPE: ```"Player is controlled by %TYPE%"```
-    - L_SCRIPT: ```"Script: %DESC%"```
-    - L_VARIABLE_CMP does not use text id from INFO column, so it can be set as 'g0000000000'.   
-  </details>
-- <details>
-    <summary>Provides debug log files to help mod makers;</summary>
-
-    Enable `debugHooks` in [settings.lua](Scripts/settings.lua). **Don't forget to turn it off in release package of your mod to avoid cluttering and improve performance.**
-  </details>
 
 ### Bug fixes:
 - Fixes game crash in battles with summoners involved;
@@ -410,22 +419,6 @@
 - Fixes missing modifiers of alternative attacks (![demo video](https://user-images.githubusercontent.com/5180699/125460215-144ef648-5497-4674-b9d6-ac7d2fa95125.mp4));
 - Fixes unit transformation (doppelganger, drain-level, transform-self/other attacks) to include HP modifiers into current hp recalculation, thus unit is not getting "damaged" upon transforming (![demo video](https://user-images.githubusercontent.com/5180699/156921183-b1f4748d-cb4f-40c8-a9b1-b911e9cc91dd.mp4));
 - Fixes unit transformation (drain-level, transform-self/other and untransform-effect attacks) to update unit attack count for current battle round (for example, Holy Avenger transformed into Imp before its turn will no longer attack twice);
-- Fixes Scenario Editor bug with elves race as a caster in "Cast spell on location" event effect;
-- <details>
-    <summary>Fixes Scenario Editor to show spell cost information;</summary>
-
-    Make sure the corresponding lines of `DLG_R_C_SPELL` in `ScenEdit.dlg` are changed as described below.
-
-    Add 'X160TA0005' to fix elven mana name tooltip:
-    ```
-    IMAGE	IMG_BLUE,303,257,343,291,_RESOURCES_GREENM_B,"X160TA0005"
-    ```
-    Change resource names between IMG\_JAUNE and IMG\_ORANGE:
-    ```
-    IMAGE	IMG_JAUNE,163,257,203,291,_RESOURCES_BLACKM_B,"X100TA0098"
-    IMAGE	IMG_ORANGE,28,257,68,291,_RESOURCES_BLUEM_B,"X100TA0096"
-    ```
-  </details>
 - <details>
     <summary>Fixes bestow-wards attack bugs and restrictions;</summary>
 
@@ -441,6 +434,22 @@
       - Allows to heal retreating allies by primary or secondary attack;
       - Allows to heal allies when battle ends, same as ordinary heal;
     - Allows to use revive as a secondary attack.
+  </details>
+- Fixes Scenario Editor bug with elves race as a caster in "Cast spell on location" event effect;
+- <details>
+    <summary>Fixes Scenario Editor to show spell cost information;</summary>
+
+    Make sure the corresponding lines of `DLG_R_C_SPELL` in `ScenEdit.dlg` are changed as described below.
+
+    Add 'X160TA0005' to fix elven mana name tooltip:
+    ```
+    IMAGE	IMG_BLUE,303,257,343,291,_RESOURCES_GREENM_B,"X160TA0005"
+    ```
+    Change resource names between IMG\_JAUNE and IMG\_ORANGE:
+    ```
+    IMAGE	IMG_JAUNE,163,257,203,291,_RESOURCES_BLACKM_B,"X100TA0098"
+    IMAGE	IMG_ORANGE,28,257,68,291,_RESOURCES_BLUEM_B,"X100TA0096"
+    ```
   </details>
 
 ### Scripting:
