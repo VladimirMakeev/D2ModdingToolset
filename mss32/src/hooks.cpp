@@ -205,7 +205,7 @@ static Hooks getGameHooks()
         // Fix incorrect calculation of effective HP used by AI for target prioritization
         {fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked},
         // Allow transform-self attack to not consume a unit turn for transformation
-        // Fix bestow wards becoming permanent on warded unit transformation
+        // Fixes modifiers becoming permanent after modified unit is transformed
         // Support custom attack damage ratios
         {battle.beforeBattleTurn, beforeBattleTurnHooked},
         // Fix free transform-self to properly reset if the same unit has consequent turns in consequent battles
@@ -227,6 +227,7 @@ static Hooks getGameHooks()
          * 2) Not resetting attack class wards (when reapplied)
          * 3) Incorrectly resetting attack source ward if its modifier also contains hp, regen or armor element
          */
+        // Fixes modifiers getting lost after modified unit is untransformed
         {CBatAttackBestowWardsApi::vftable()->onHit, bestowWardsAttackOnHitHooked},
         // Fix bestow wards with double attack where modifiers granted by first attack are removed
         {battle.afterBattleTurn, afterBattleTurnHooked},

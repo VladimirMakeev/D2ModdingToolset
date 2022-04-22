@@ -425,6 +425,7 @@
 
     - Fixes wards (hereafter called "modifiers") becoming permanent when more than 8 of them are applied simultaneously;
     - Fixes modifiers becoming permanent after modified unit is transformed;
+    - Fixes modifiers getting lost after modified unit is untransformed;
     - Fixes disappearing of modifiers applied on first attack of double attack;
     - Fixes attack source wards being reset incorrectly if its modifier also contains hp, regen or armor element;
     - Fixes attack class wards not being reset preventing it from being reapplied during battle;
