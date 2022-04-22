@@ -205,7 +205,7 @@ static Hooks getGameHooks()
         // Fix incorrect calculation of effective HP used by AI for target prioritization
         {fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked},
         // Allow transform-self attack to not consume a unit turn for transformation
-        // Fix bestow wards becoming permanent on warded unit transformation
+        // Fixes modifiers becoming permanent after modified unit is transformed
         // Support custom attack damage ratios
         {battle.beforeBattleTurn, beforeBattleTurnHooked},
         // Fix free transform-self to properly reset if the same unit has consequent turns in consequent battles

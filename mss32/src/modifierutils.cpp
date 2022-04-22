@@ -337,6 +337,7 @@ void removeModifier(game::BattleMsgData* battleMsgData,
 
     CMidUnitApi::get().removeModifier(unit, modifierId);
 
+    // Fixes modifiers becoming permanent after modified unit is transformed
     removeIdFromList(unit->origModifiers, modifierId);
 
     BattleMsgDataApi::get().resetUnitModifierInfo(battleMsgData, &unit->unitId, modifierId);
