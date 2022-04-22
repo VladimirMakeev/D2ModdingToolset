@@ -26,7 +26,7 @@
     - Start a scenario;
     - Build desired buildings in a capital;
     - Save the scenario;
-    - Move the saved game from *SaveGame* folder to *Exports*;
+    - Move the saved game from 'SaveGame' folder to 'Exports';
     - Restart the scenario.
   </details>
 - <details>
@@ -49,7 +49,8 @@
 - <details>
     <summary>Provides debug log files to help mod makers;</summary>
 
-    Enable `debugHooks` in [settings.lua](Scripts/settings.lua). **Don't forget to turn it off in release package of your mod to avoid cluttering and improve performance.**
+    Enable `debugHooks` in [settings.lua](Scripts/settings.lua).<br />
+    **Don't forget to turn it off in release package of your mod to avoid cluttering and improve performance.**
   </details>
 
 #### User interface
@@ -172,11 +173,11 @@
     - Text strings in `INFO` column must contain predefined keys for game to show actual game data.
 
     Examples:
-    - L_OWN\_RESOURCE: ```"Own %COND% %GOLD% gold, %INFERNAL% infernal, %LIFE% life, %DEATH% death, %RUNIC% runic, %GROVE% grove."```
-    - L_GAME_MODE: ```"Game mode: %MODE%"```
-    - L_PLAYER_TYPE: ```"Player is controlled by %TYPE%"```
-    - L_SCRIPT: ```"Script: %DESC%"```
-    - L_VARIABLE_CMP does not use text id from INFO column, so it can be set as 'g0000000000'.   
+    - `TEXT` is `L_OWN_RESOURCE`, `INFO` refers to `Own %COND% %GOLD% gold, %INFERNAL% infernal, %LIFE% life, %DEATH% death, %RUNIC% runic, %GROVE% grove`;
+    - `TEXT` is `L_GAME_MODE`, `INFO` refers to `Game mode: %MODE%`;
+    - `TEXT` is `L_PLAYER_TYPE`, `INFO` refers to `Player is controlled by %TYPE%`;
+    - `TEXT` is `L_SCRIPT`, `INFO` refers to `Script: %DESC%`;
+    - `TEXT` is `L_VARIABLE_CMP` does not use text id from `INFO` column, so it can be set as 'g0000000000'.   
   </details>
 - <details>
     <summary>Cities can generate daily income depending on scenario variables with predefined names;</summary>
@@ -375,8 +376,8 @@
     Allows to reduce or increase incoming damage for additional attack targets:
     - Add `DAM_RATIO` (Numeric, size 3), `DR_REPEAT` (Logical) and `DAM_SPLIT` (Logical) columns to `Gattacks.dbf`;
     - `DAM_RATIO` specifies a portion of the attack damage received by additional targets (0-255%). 100 or empty is the vanilla behavior;
-    - `DR_REPEAT` specifies whether the DAM_RATIO should be applied for every consequent target;
-    - `DAM_SPLIT` specifies whether the attack damage (QTY_DAM) is split between all the affected targets;
+    - `DR_REPEAT` specifies whether the `DAM_RATIO` should be applied for every consequent target;
+    - `DAM_SPLIT` specifies whether the attack damage (`QTY_DAM`) is split between all the affected targets;
     - `splitDamageMultiplier` in [settings.lua](Scripts/settings.lua) specifies multiplier for `DAM_SPLIT` damage for better late-game scaling (default of 300 max damage split among 6 targets is miserable);
     - Add interface text for the following entries in `TApp.dbf` and `TAppEdit.dbf`:
         - `ratedDamage`
