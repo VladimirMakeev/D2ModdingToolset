@@ -23,11 +23,13 @@
 #include "gameimages.h"
 #include "gameutils.h"
 #include "isolayers.h"
+#include "log.h"
 #include "mainview2.h"
 #include "mapgraphics.h"
 #include "phasegame.h"
 #include "scenarioinfo.h"
 #include "togglebutton.h"
+#include <fmt/format.h>
 
 namespace hooks {
 
@@ -92,10 +94,20 @@ void __fastcall mainView2ShowIsoDialogHooked(game::CMainView2* thisptr, int /*%e
     mainViewApi.showDialog(thisptr, nullptr);
 
     static const char buttonName[]{"TOG_GRID"};
+
+    const auto& dialogApi{CDialogInterfApi::get()};
     auto dialog{thisptr->dialogInterf};
 
-    auto toggleButton{CDialogInterfApi::get().findToggleButton(dialog, buttonName)};
+    if (!dialogApi.findControl(dialog, buttonName)) {
+        // Grid button was not added to Interf.dlg, skip
+        return;
+    }
+
+    auto toggleButton{dialogApi.findToggleButton(dialog, buttonName)};
     if (!toggleButton) {
+        // Control was found, but it is not CToggleButton
+        logError("mssProxyError.log", fmt::format("{:s} in {:s} must be a toggle button",
+                                                  buttonName, dialog->data->dialogName));
         return;
     }
 
@@ -107,13 +119,11 @@ void __fastcall mainView2ShowIsoDialogHooked(game::CMainView2* thisptr, int /*%e
     Functor functor;
     mainViewApi.createToggleButtonFunctor(&functor, 0, thisptr, &callback);
 
-    CToggleButtonApi::get().assignFunctor(dialog, buttonName, dialog->data->dialogName, &functor,
-                                          0);
+    const auto& buttonApi{CToggleButtonApi::get()};
+    buttonApi.assignFunctor(dialog, buttonName, dialog->data->dialogName, &functor, 0);
     FunctorApi::get().createOrFree(&functor, nullptr);
 
-    if (toggleButton) {
-        CToggleButtonApi::get().setChecked(toggleButton, gridVisible);
-    }
+    buttonApi.setChecked(toggleButton, gridVisible);
 }
 
 } // namespace hooks
