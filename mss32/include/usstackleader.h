@@ -30,7 +30,13 @@ struct GlobalData;
 struct IUsStackLeaderVftable;
 
 /** Stack leader interface. */
-struct IUsStackLeader : public IUsUnitExtensionT<IUsStackLeaderVftable>
+template <typename T = IUsStackLeaderVftable>
+struct IUsStackLeaderT
+{
+    const T* vftable;
+};
+
+struct IUsStackLeader : public IUsStackLeaderT<>
 { };
 
 struct IUsStackLeaderVftable : public IUsUnitExtensionVftable
@@ -40,7 +46,7 @@ struct IUsStackLeaderVftable : public IUsUnitExtensionVftable
     /** Returns maximum movement points stack leader can have. */
     GetInt getMovement;
 
-    /** Returns leader ability name. */
+    /** Returns leader ability name (ABIL_TXT in Gunits.dbf). */
     using GetAbilityName = const char*(__thiscall*)(const IUsStackLeader* thisptr);
     GetAbilityName getAbilityName;
 
@@ -61,18 +67,14 @@ struct IUsStackLeaderVftable : public IUsUnitExtensionVftable
                                          const LLeaderAbility* ability);
     HasAbility hasAbility;
 
-    using GetUnknown = bool(__thiscall*)(const IUsStackLeader* thisptr);
-    GetUnknown getUnknown;
+    using GetFastRetreat = bool(__thiscall*)(const IUsStackLeader* thisptr);
+    GetFastRetreat getFastRetreat;
 
     GetInt getLowerCost;
-
-    /** Checks that stack leader data is correct. */
-    using Link = void(__thiscall*)(const IUsStackLeader* thisptr, const GlobalData** globalData);
-    Link link;
 };
 
-static_assert(sizeof(IUsStackLeaderVftable) == 11 * sizeof(void*),
-              "IUsStackLeader vftable must have exactly 11 methods");
+static_assert(sizeof(IUsStackLeaderVftable) == 10 * sizeof(void*),
+              "IUsStackLeader vftable must have exactly 10 methods");
 
 } // namespace game
 

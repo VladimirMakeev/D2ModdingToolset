@@ -47,8 +47,18 @@ struct TUsStackLeaderImplData
 static_assert(sizeof(TUsStackLeaderImplData) == 72,
               "Size of TUsStackLeaderImplData structure must be exactly 72 bytes");
 
+struct TUsStackLeaderImplVftable : public IUsStackLeaderVftable
+{
+    /** Checks that stack leader data is correct. */
+    using Link = void(__thiscall*)(const IUsStackLeader* thisptr, const GlobalData** globalData);
+    Link link;
+};
+
+static_assert(sizeof(TUsStackLeaderImplVftable) == 11 * sizeof(void*),
+              "TUsStackLeaderImpl vftable must have exactly 11 methods");
+
 /** Implementation of stack leader interface. */
-struct TUsStackLeaderImpl : public IUsStackLeader
+struct TUsStackLeaderImpl : public IUsStackLeaderT<TUsStackLeaderImplVftable>
 {
     TUsStackLeaderImplData* data;
 };
