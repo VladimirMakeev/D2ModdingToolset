@@ -20,6 +20,9 @@
 #ifndef DBTABLE_H
 #define DBTABLE_H
 
+#include "d2pair.h"
+#include "mq_c_s.h"
+
 namespace game {
 
 struct String;
@@ -155,7 +158,7 @@ struct Api
     using ReadText = void(__stdcall*)(TextAndId* text,
                                       const CDBTable* dbTable,
                                       const char* fieldName,
-                                      const void* texts);
+                                      const mq_c_s<Pair<CMidgardID, char*>>* texts);
     ReadText readText;
 
     using FindAttackClass = LAttackClass*(__stdcall*)(LAttackClass* attackClass,
