@@ -83,10 +83,10 @@ using DynUpgradeList = List<SmartPtr<CDynUpgrade>>;
 /** Holds global game information. */
 struct GlobalData
 {
-    mq_c_s<Pair<CMidgardID, char*>>* text;
+    mq_c_s<Pair<CMidgardID, char*>>* texts;
     LAttackClassTable* attackClasses;
     LAttackSourceTable* attackSources;
-    LAttackReachTable* attackReach;
+    LAttackReachTable* attackReaches;
     LUnitBranchTable* unitBranches;
     LUnitCategoryTable* unitCategories;
     LBuildingCategoryTable* buildingCategories;

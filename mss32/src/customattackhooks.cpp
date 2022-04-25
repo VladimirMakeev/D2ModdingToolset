@@ -223,11 +223,11 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
 
     auto gData = *globalData;
     auto data = thisptr->data;
-    db.readText(&data->name, dbTable, "NAME_TXT", gData->text);
-    db.readText(&data->description, dbTable, "DESC_TXT", gData->text);
+    db.readText(&data->name, dbTable, "NAME_TXT", gData->texts);
+    db.readText(&data->description, dbTable, "DESC_TXT", gData->texts);
     db.findAttackClass(&data->attackClass, dbTable, "CLASS", gData->attackClasses);
     db.findAttackSource(&data->attackSource, dbTable, "SOURCE", gData->attackSources);
-    db.findAttackReach(&data->attackReach, dbTable, "REACH", gData->attackReach);
+    db.findAttackReach(&data->attackReach, dbTable, "REACH", gData->attackReaches);
     db.readInitiative(&data->initiative, dbTable, "INITIATIVE", &thisptr->attackId);
 
     const auto& categories = AttackClassCategories::get();
