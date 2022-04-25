@@ -22,12 +22,17 @@
 
 namespace game {
 
+struct String;
+struct CMidgardID;
+struct TextAndId;
+struct GlobalData;
+struct CUmModifier;
 struct LBuildingCategory;
 struct LBuildingCategoryTable;
 struct LUnitBranch;
 struct LUnitBranchTable;
-struct CMidgardID;
-struct TextAndId;
+struct LModifGroup;
+struct LModifGroupTable;
 struct LAttackClass;
 struct LAttackClassTable;
 struct LAttackSource;
@@ -72,6 +77,41 @@ struct Api
                                                             const char* fieldName,
                                                             const LUnitBranchTable* table);
     FindUnitBranchCategory findUnitBranchCategory;
+
+    /**
+     * Finds LModifGroup by id in dbf table field.
+     * Populates category fields when found. Throws exception if category could not be found.
+     * @param[inout] category category to store search result.
+     * @param[in] dbTable table object to search.
+     * @param[in] fieldName table field to read category id for search from.
+     * @param[in] table table where to search category by id.
+     * @returns pointer to category.
+     */
+    using FindModifGroupCategory = LModifGroup*(__stdcall*)(LModifGroup* category,
+                                                            const CDBTable* dbTable,
+                                                            const char* fieldName,
+                                                            const LModifGroupTable* table);
+    FindModifGroupCategory findModifGroupCategory;
+
+    /**
+     * Read string from dbf table field (max length is 256 including null terminator).
+     * Throws exception if failed.
+     * @param[inout] value string to store result.
+     * @param[in] dbTable table object to read from.
+     * @param[in] fieldName table field to read from.
+     */
+    using ReadString = void(__stdcall*)(String* value,
+                                        const CDBTable* thisptr,
+                                        const char* fieldName);
+    ReadString readString;
+
+    using ReadModifier = void(__stdcall*)(CUmModifier** value,
+                                          const CMidgardID* modifierId,
+                                          const LModifGroup* group,
+                                          const char* globalsFolderPath,
+                                          void* codeBaseEnvProxy,
+                                          const GlobalData** globalData);
+    ReadModifier readModifier;
 
     /**
      * Reads unit level from dbf table field.
