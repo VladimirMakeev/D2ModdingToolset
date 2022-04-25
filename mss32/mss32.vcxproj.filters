@@ -985,6 +985,9 @@
     <ClCompile Include="src\unitmodifier.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\modifgroup.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">

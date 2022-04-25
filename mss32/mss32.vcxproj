@@ -335,6 +335,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\midunitgroup.cpp" />
     <ClCompile Include="src\midunit.cpp" />
     <ClCompile Include="src\midunithooks.cpp" />
+    <ClCompile Include="src\modifgroup.cpp" />
     <ClCompile Include="src\modifierutils.cpp" />
     <ClCompile Include="src\mqrect.cpp" />
     <ClCompile Include="src\multilayerimg.cpp" />

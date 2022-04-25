@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,31 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MODIFGROUP_H
-#define MODIFGROUP_H
+#include "modifgroup.h"
+#include "version.h"
+#include <array>
 
-#include "ummodifier.h"
+namespace game::LModifGroupApi {
 
-namespace game {
+// clang-format off
+static std::array<LModifGroupVftable*, 4> vftables = {{
+    // Akella
+    (LModifGroupVftable*)0x6ea68c,
+    // Russobit
+    (LModifGroupVftable*)0x6ea68c,
+    // Gog
+    (LModifGroupVftable*)0x6e862c,
+    // Scenario Editor
+    (LModifGroupVftable*)0x5defa4,
+}};
+// clang-format on
 
-struct LModifGroupVftable;
-
-struct LModifGroupTable : public CEnumConstantTable<ModifierSourceId>
-{ };
-
-struct LModifGroup : public Category<ModifierSourceId>
+const LModifGroupVftable* vftable()
 {
-    CUmModifier* modifier;
-};
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
 
-static_assert(sizeof(LModifGroup) == 16, "Size of LModifGroup structure must be exactly 16 bytes");
-
-namespace LModifGroupApi {
-
-const LModifGroupVftable* vftable();
-
-} // namespace LModifGroupApi
-
-} // namespace game
-
-#endif // MODIFGROUP_H
+} // namespace game::LModifGroupApi
