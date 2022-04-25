@@ -20,12 +20,14 @@
 #ifndef UNITMODIFIER_H
 #define UNITMODIFIER_H
 
-#include "usunitimpl.h"
 #include "modifgroup.h"
+#include "usunitimpl.h"
 
 namespace game {
 
 struct TUnitModifierVftable;
+struct GlobalData;
+struct CDBTable;
 
 struct TUnitModifier
 {
@@ -54,6 +56,24 @@ struct TUnitModifierVftable
 
 static_assert(sizeof(TUnitModifier) == 12,
               "Size of TUnitModifier structure must be exactly 12 bytes");
+
+namespace TUnitModifierApi {
+
+struct Api
+{
+    using Constructor = TUnitModifier*(__thiscall*)(TUnitModifier* thisptr,
+                                                    const CDBTable* dbTable,
+                                                    const char* globalsPath,
+                                                    void* codeBaseEnvProxy,
+                                                    const GlobalData** globalData);
+    Constructor constructor;
+};
+
+Api& get();
+
+const TUnitModifierVftable* vftable();
+
+} // namespace TUnitModifierApi
 
 } // namespace game
 

@@ -410,6 +410,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\unitbranchcat.cpp" />
     <ClCompile Include="src\unitcat.cpp" />
     <ClCompile Include="src\unitinfolist.cpp" />
+    <ClCompile Include="src\unitmodifier.cpp" />
     <ClCompile Include="src\unitpickerinterf.cpp" />
     <ClCompile Include="src\unitpositionlist.cpp" />
     <ClCompile Include="src\unitpositionmap.cpp" />
