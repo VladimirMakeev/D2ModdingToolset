@@ -988,6 +988,9 @@
     <ClCompile Include="src\modifgroup.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\custommodifiers.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2539,6 +2542,9 @@
     </ClInclude>
     <ClInclude Include="include\isoborder.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\custommodifiers.h">
+      <Filter>features</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
