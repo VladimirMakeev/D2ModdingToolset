@@ -20,7 +20,7 @@
 #ifndef UMMODIFIER_H
 #define UMMODIFIER_H
 
-#include "usunitimpl.h"
+#include "midgardid.h"
 
 namespace game {
 
@@ -28,6 +28,8 @@ struct CUmModifierVftable;
 struct CUmModifierData;
 struct ModifierValue;
 struct GlobalData;
+struct IUsUnit;
+struct TUsUnitImpl;
 
 struct CUmModifier
 {

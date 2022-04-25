@@ -20,6 +20,7 @@
 #ifndef MODIFGROUP_H
 #define MODIFGROUP_H
 
+#include "categories.h"
 #include "ummodifier.h"
 
 namespace game {
