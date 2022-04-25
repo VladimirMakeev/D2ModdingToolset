@@ -63,7 +63,7 @@ struct Api
 {
     using Constructor = TUnitModifier*(__thiscall*)(TUnitModifier* thisptr,
                                                     const CDBTable* dbTable,
-                                                    const char* globalsPath,
+                                                    const char* globalsFolderPath,
                                                     void* codeBaseEnvProxy,
                                                     const GlobalData** globalData);
     Constructor constructor;
