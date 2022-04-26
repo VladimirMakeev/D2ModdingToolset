@@ -34,8 +34,8 @@ struct IUsUnit : public IMidObjectT<IUsUnitVftable>
 
 struct IUsUnitVftable : public IMidObjectVftable
 {
-    using Method1 = int(__thiscall*)(const IUsUnit* thisptr, const char* a2);
-    Method1 method1;
+    using Cast = void*(__thiscall*)(const IUsUnit* thisptr, const char* rawTypeName);
+    Cast cast;
 
     using GetCategory = const LUnitCategory*(__thiscall*)(const IUsUnit* thisptr);
     GetCategory getCategory;
