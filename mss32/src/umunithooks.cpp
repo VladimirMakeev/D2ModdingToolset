@@ -89,7 +89,7 @@ int* __fastcall umUnitGetRegenHooked(const game::IUsSoldier* thisptr, int /*%edx
     auto umunit = castSoldierToUmUnit(thisptr);
     auto data = (CUmUnitDataPatched*)umunit->data;
 
-    auto unitImpl = umunit->umModifier.data->underlying;
+    auto unitImpl = umunit->umModifier.data->prev;
     auto soldier = fn.castUnitImplToSoldier(unitImpl);
 
     int stacked = *soldier->vftable->getRegen(soldier);

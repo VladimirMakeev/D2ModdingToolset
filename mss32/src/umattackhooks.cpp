@@ -32,7 +32,7 @@ game::IAttack* __fastcall umAttackGetAttackByIdHooked(const game::IUsSoldier* th
 
     auto umattack = castSoldierToUmAttack(thisptr);
 
-    auto unitImpl = umattack->umModifier.data->underlying;
+    auto unitImpl = umattack->umModifier.data->prev;
     auto soldier = fn.castUnitImplToSoldier(unitImpl);
 
     auto attack = soldier->vftable->getAttackById(soldier);

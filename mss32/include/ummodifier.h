@@ -115,8 +115,8 @@ struct CUmModifierVftable
 
 struct CUmModifierData
 {
-    int unknown;
-    IUsUnit* underlying;
+    CUmModifier* next;
+    IUsUnit* prev;
     CMidgardID modifierId;
 };
 

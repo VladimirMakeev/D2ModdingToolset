@@ -164,7 +164,7 @@ game::TUsSoldierImpl* getSoldierImpl(const game::IUsSoldier* soldier)
 
         auto modifier = (CUmModifier*)dynamicCast(current, 0, rtti.IUsSoldierType,
                                                   rtti.CUmModifierType, 0);
-        current = modifier ? fn.castUnitImplToSoldier(modifier->data->underlying) : nullptr;
+        current = modifier ? fn.castUnitImplToSoldier(modifier->data->prev) : nullptr;
     }
 
     return nullptr;
