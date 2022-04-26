@@ -52,11 +52,11 @@ static int getDrainLevel(const game::CMidUnit* unit,
 {
     using namespace game;
 
-    std::optional<sol::state> lua;
+    std::optional<sol::environment> env;
     const auto path{scriptsFolder() / "drainLevel.lua"};
     using GetLevel = std::function<int(const bindings::UnitView&, const bindings::UnitView&,
                                        const bindings::ItemView*)>;
-    auto getLevel = getScriptFunction<GetLevel>(path, "getLevel", lua, true, true);
+    auto getLevel = getScriptFunction<GetLevel>(path, "getLevel", env, true);
     if (!getLevel) {
         return 0;
     }

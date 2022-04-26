@@ -24,9 +24,6 @@
 #include <algorithm>
 #include <fmt/format.h>
 #include <limits>
-#include <lua.hpp>
-#include <optional>
-#include <sol/sol.hpp>
 #include <string>
 
 namespace hooks {
@@ -287,11 +284,11 @@ void initializeUserSettings(Settings& value)
 
     const auto path{scriptsFolder() / "settings.lua"};
     try {
-        const auto lua{loadScriptFile(path)};
-        if (!lua)
+        const auto env{executeScriptFile(path)};
+        if (!env)
             return;
 
-        const sol::table& table = (*lua)["settings"];
+        const sol::table& table = (*env)["settings"];
         readSettings(table, value);
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to read script '{:s}'.\n"

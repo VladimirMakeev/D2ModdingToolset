@@ -173,12 +173,12 @@ UnitSlots getTargetsToSelectOrAttack(const std::string& scriptFile,
                                      const UnitSlots& targets,
                                      bool targetsAreAllies)
 {
-    std::optional<sol::state> lua;
+    std::optional<sol::environment> env;
     const auto path{scriptsFolder() / scriptFile};
     using GetTargets = std::function<sol::table(const bindings::UnitSlotView&,
                                                 const bindings::UnitSlotView&, const UnitSlots&,
                                                 const UnitSlots&, bool)>;
-    auto getTargets = getScriptFunction<GetTargets>(path, "getTargets", lua, true, true);
+    auto getTargets = getScriptFunction<GetTargets>(path, "getTargets", env, true);
     if (!getTargets) {
         return UnitSlots();
     }

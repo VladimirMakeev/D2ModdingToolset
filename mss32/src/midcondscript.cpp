@@ -745,17 +745,9 @@ bool __fastcall testScriptDoTest(const CTestScript* thisptr,
         return false;
     }
 
-    static sol::state lua{createLuaState(true)};
     const auto code{fmt::format("{:s}\n{:s}\nend\n", scriptSignature, body)};
-
-    // Environment prevents cluttering of global namespace by scripts
-    // making each script run isolated from others.
-    sol::environment env{lua, sol::create, lua.globals()};
-
-    auto result = lua.safe_script(code, env, [](lua_State*, sol::protected_function_result pfr) {
-        return pfr;
-    });
-
+    sol::protected_function_result result;
+    auto env = executeScript(code, result);
     if (!result.valid()) {
         const sol::error err = result;
         logError("mssProxyError.log",
@@ -771,10 +763,8 @@ bool __fastcall testScriptDoTest(const CTestScript* thisptr,
 
     using CheckCondition = std::function<bool(const bindings::ScenarioView&)>;
 
-    auto checkCondition = getScriptFunction<CheckCondition>(env, "checkEventCondition");
-    if (!checkCondition) {
-        // Sanity check, this should never happen
-        logError("mssProxyError.log", "Failed to get event condition script function");
+    auto checkCondition = getScriptFunction<CheckCondition>(env, "checkEventCondition", true);
+    if (!checkCondition) { // Sanity check, this should never happen
         return false;
     }
 

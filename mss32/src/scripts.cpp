@@ -38,10 +38,13 @@
 #include "unitslotview.h"
 #include "unitview.h"
 #include "utils.h"
+#include <map>
+#include <mutex>
+#include <thread>
 
 namespace hooks {
 
-static void doBindApi(sol::state& lua)
+static void bindApi(sol::state& lua)
 {
     using namespace game;
 
@@ -191,63 +194,84 @@ static void doBindApi(sol::state& lua)
     bindings::CurrencyView::bind(lua);
     bindings::ItemBaseView::bind(lua);
     bindings::ItemView::bind(lua);
+
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }
 
-std::optional<sol::state> loadScriptFile(const std::filesystem::path& path,
-                                         bool alwaysExists,
-                                         bool bindApi)
+// https://sol2.readthedocs.io/en/latest/threading.html
+// Lua has no thread safety. sol does not force thread safety bottlenecks anywhere.
+// Treat access and object handling like you were dealing with a raw int reference (int&).
+sol::state& getLua()
+{
+    static std::map<std::thread::id, sol::state> states;
+    static std::mutex statesMutex;
+
+    const std::lock_guard<std::mutex> lock(statesMutex);
+
+    auto key = std::this_thread::get_id();
+    auto it = states.find(key);
+    if (it != states.end())
+        return it->second;
+
+    auto& lua = states[key];
+    lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::table,
+                       sol::lib::os);
+    bindApi(lua);
+    return lua;
+}
+
+std::string getSource(const std::filesystem::path& path)
+{
+    static std::unordered_map<std::string, std::string> sources;
+    static std::mutex sourcesMutex;
+
+    const std::lock_guard<std::mutex> lock(sourcesMutex);
+
+    auto key = path.string();
+    auto it = sources.find(key);
+    if (it != sources.end())
+        return it->second;
+
+    auto& source = sources[key];
+    source = readFile(path);
+    return source;
+}
+
+sol::environment executeScript(const std::string& source, sol::protected_function_result& result)
+{
+    auto& lua = getLua();
+
+    // Environment prevents cluttering of global namespace by scripts
+    // making each script run isolated from others.
+    sol::environment env{lua, sol::create, lua.globals()};
+    result = lua.safe_script(source, env,
+                             [](lua_State*, sol::protected_function_result pfr) { return pfr; });
+    return env;
+}
+
+std::optional<sol::environment> executeScriptFile(const std::filesystem::path& path,
+                                                  bool alwaysExists)
 {
     if (!alwaysExists && !std::filesystem::exists(path))
         return std::nullopt;
 
-    sol::state lua;
-    sol::protected_function_result result;
-    std::string pathString = path.string();
-    if (bindApi) {
-        static std::unordered_map<std::string, std::string> sources;
-        if (sources.find(pathString) == sources.end())
-            sources[pathString] = readFile(path);
-
-        if (sources[pathString].empty()) {
-            showErrorMessageBox(fmt::format("Failed to read '{:s}' script file", pathString));
-            return std::nullopt;
-        }
-
-        lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::table,
-                           sol::lib::os);
-        doBindApi(lua);
-
-        result = lua.safe_script(sources[pathString].c_str(),
-                                 [](lua_State*, sol::protected_function_result pfr) {
-                                     return pfr;
-                                 });
-    } else {
-        result = lua.load_file(pathString)();
-    }
-
-    if (!result.valid()) {
-        const sol::error err = result;
-        showErrorMessageBox(fmt::format("Failed to load script '{:s}'.\n"
-                                        "Reason: '{:s}'",
-                                        pathString, err.what()));
+    auto source = getSource(path);
+    if (source.empty()) {
+        showErrorMessageBox(fmt::format("Failed to read '{:s}' script file.", path.string()));
         return std::nullopt;
     }
 
-    return {std::move(lua)};
-}
-
-sol::state createLuaState(bool bindApi)
-{
-    sol::state lua;
-    lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::table,
-                       sol::lib::os);
-
-    if (bindApi) {
-        doBindApi(lua);
+    sol::protected_function_result result;
+    auto env = executeScript(source, result);
+    if (!result.valid()) {
+        const sol::error err = result;
+        showErrorMessageBox(fmt::format("Failed to execute script '{:s}'.\n"
+                                        "Reason: '{:s}'",
+                                        path.string(), err.what()));
+        return std::nullopt;
     }
 
-    return std::move(lua);
+    return {std::move(env)};
 }
 
 } // namespace hooks
