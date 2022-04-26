@@ -37,7 +37,7 @@ static_assert(sizeof(CAttackModified) == 12,
 
 struct CAttackModifiedData
 {
-    IAttack* underlying;
+    IAttack* prev;
     int initiative;
     int power;
     int qtyDamage;

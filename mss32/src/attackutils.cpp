@@ -61,7 +61,7 @@ game::CAttackImpl* getAttackImpl(const game::IAttack* attack)
 
         auto attackModified = (CAttackModified*)dynamicCast(current, 0, rtti.IAttackType,
                                                             rtti.CAttackModifiedType, 0);
-        current = attackModified ? attackModified->data->underlying : nullptr;
+        current = attackModified ? attackModified->data->prev : nullptr;
     }
 
     return nullptr;
