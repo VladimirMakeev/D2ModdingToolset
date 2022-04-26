@@ -124,17 +124,13 @@ int getRandomNumber(int min, int max)
 
 std::string readFile(const std::filesystem::path& file)
 {
+    // Do not resize resulting string to match file size because ifstream replaces \r\n with \n.
+    // Otherwise the string is padded with 0 chars and its size() returns incorrect value.
+    // Resulting string_view causes failures in Lua functions without explicit call to c_str.
+    // Either use binary mode to get exact contents or use iterator approach.
+    // While iterators are slower than plain read, Lua transforms \r\n to \n by itself anyway.
     std::ifstream stream(file);
-    if (!stream) {
-        return {};
-    }
-
-    const auto size = static_cast<size_t>(std::filesystem::file_size(file));
-    std::string contents;
-    contents.resize(size);
-
-    stream.read(&contents[0], size);
-    return contents;
+    return std::string(std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>());
 }
 
 bool readUserSelectedFile(std::string& contents, const char* filter, const char* directory)
