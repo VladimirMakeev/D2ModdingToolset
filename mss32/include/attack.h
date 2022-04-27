@@ -35,15 +35,11 @@ struct IAttackVftable;
 struct CAttackData;
 
 /** Base class for units attacks. */
-struct IAttack
-{
-    const IAttackVftable* vftable;
-};
+struct IAttack : IMidObjectT<IAttackVftable>
+{ };
 
-struct IAttackVftable
+struct IAttackVftable : IMidObjectVftable
 {
-    void* destructor;
-
     using GetCStr = const char*(__thiscall*)(const IAttack* thisptr);
     GetCStr getName;
     GetCStr getDescription;
