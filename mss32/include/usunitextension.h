@@ -22,10 +22,7 @@
 
 namespace game {
 
-struct IUsUnitExtensionVftable
-{
-    void* destructor;
-};
+struct IUsUnitExtensionVftable;
 
 template <typename T = IUsUnitExtensionVftable>
 struct IUsUnitExtensionT
@@ -35,6 +32,12 @@ struct IUsUnitExtensionT
 
 struct IUsUnitExtension : public IUsUnitExtensionT<>
 { };
+
+struct IUsUnitExtensionVftable
+{
+    using Destructor = void(__thiscall*)(IUsUnitExtension* thisptr, char flags);
+    Destructor destructor;
+};
 
 } // namespace game
 
