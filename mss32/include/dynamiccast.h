@@ -72,6 +72,13 @@ struct CompleteObjectLocator
     ClassHierarchyDescriptor* classDescriptor; /**< Describes inheritance hierarchy. */
 };
 
+template <typename T>
+struct RttiInfo
+{
+    const CompleteObjectLocator* locator;
+    T vftable;
+};
+
 namespace RttiApi {
 
 struct Api

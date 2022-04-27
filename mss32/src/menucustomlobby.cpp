@@ -492,13 +492,7 @@ static bool __fastcall menuGameVersionMsgHandler(CMenuCustomLobby* menu,
     return true;
 }
 
-struct CMenuCustomLobbyRttiInfo
-{
-    const game::CompleteObjectLocator* objectLocator;
-    game::CInterfaceVftable menuVftable;
-};
-
-static CMenuCustomLobbyRttiInfo menuLobbyRttiInfo;
+static game::RttiInfo<game::CInterfaceVftable> menuLobbyRttiInfo;
 
 void menuCustomLobbyCtor(CMenuCustomLobby* menu, game::CMenuPhase* menuPhase)
 {
@@ -511,7 +505,7 @@ void menuCustomLobbyCtor(CMenuCustomLobby* menu, game::CMenuPhase* menuPhase)
     logDebug("transitions.log", "Call CMenuBase c-tor for CMenuCustomLobby");
     menuBase.constructor(menu, menuPhase);
 
-    auto vftable = &menuLobbyRttiInfo.menuVftable;
+    auto vftable = &menuLobbyRttiInfo.vftable;
 
     static bool firstTime{true};
     if (firstTime) {
@@ -521,10 +515,8 @@ void menuCustomLobbyCtor(CMenuCustomLobby* menu, game::CMenuPhase* menuPhase)
         // We only need it for dynamic_cast<CAnimInterf>() to work properly without exceptions
         // when the game exits main loop and checks for current CInterface.
         // See DestroyAnimInterface() in IDA.
-        menuLobbyRttiInfo.objectLocator = *reinterpret_cast<const CompleteObjectLocator**>(
-            reinterpret_cast<std::uintptr_t>(menu->vftable) - sizeof(CompleteObjectLocator*));
+        replaceRttiInfo(menuLobbyRttiInfo, menu->vftable);
 
-        std::memcpy(vftable, menu->vftable, sizeof(game::CInterfaceVftable));
         vftable->destructor = (game::CInterfaceVftable::Destructor)&menuDestructor;
     }
 

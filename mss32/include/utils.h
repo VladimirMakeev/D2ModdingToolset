@@ -20,6 +20,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include "dynamiccast.h"
 #include "midgardid.h"
 #include "midscenvariables.h"
 #include <filesystem>
@@ -86,6 +87,14 @@ void createTimerEvent(game::UiEvent* timerEvent,
 
 /** Computes MD5 hash of files in specified folder. */
 bool computeHash(const std::filesystem::path& folder, std::string& hash);
+
+template <typename T>
+static inline void replaceRttiInfo(game::RttiInfo<T>& dst, const T* src)
+{
+    dst.locator = *reinterpret_cast<const game::CompleteObjectLocator**>(
+        reinterpret_cast<std::uintptr_t>(src) - sizeof(game::CompleteObjectLocator*));
+    std::memcpy(&dst.vftable, src, sizeof(T));
+}
 
 } // namespace hooks
 
