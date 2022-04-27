@@ -20,42 +20,47 @@
 #ifndef UNITMODIFIER_H
 #define UNITMODIFIER_H
 
-#include "modifgroup.h"
-#include "usunitimpl.h"
+#include "midgardid.h"
+#include "midobject.h"
 
 namespace game {
 
 struct TUnitModifierVftable;
 struct GlobalData;
 struct CDBTable;
+struct IUsUnit;
+struct LModifGroup;
+struct LUnitCategory;
+struct CUmModifier;
 
-struct TUnitModifier
+struct TUnitModifier : IMidObjectT<TUnitModifierVftable>
 {
-    const TUnitModifierVftable* vftable;
     CMidgardID id;
     LModifGroup* group;
 };
 
-struct TUnitModifierVftable
-{
-    using Destructor = void(__thiscall*)(TUnitModifier* thisptr, bool freeMemory);
-    Destructor destructor;
-
-    using Method1 = int(__thiscall*)(TUnitModifier* thisptr, int a2);
-    Method1 method1;
-
-    using IsApplicable = bool(__thiscall*)(TUnitModifier* thisptr, TUsUnitImpl* unitImpl);
-    IsApplicable isApplicable;
-
-    using Method3 = int(__thiscall*)(TUnitModifier* thisptr, int a2);
-    Method3 method3;
-
-    using Method4 = int(__thiscall*)(TUnitModifier* thisptr);
-    Method4 method4;
-};
-
 static_assert(sizeof(TUnitModifier) == 12,
               "Size of TUnitModifier structure must be exactly 12 bytes");
+
+struct TUnitModifierVftable : IMidObjectVftable
+{
+    using CanApplyToStackWithLeadership = bool(__thiscall*)(TUnitModifier* thisptr,
+                                                            const int* leadership);
+    CanApplyToStackWithLeadership canApplyToStackWithLeadership;
+
+    using CanApplyToUnit = bool(__thiscall*)(TUnitModifier* thisptr, const IUsUnit* unit);
+    CanApplyToUnit canApplyToUnit;
+
+    using CanApplyToUnitCategory = bool(__thiscall*)(TUnitModifier* thisptr,
+                                                     const LUnitCategory* unitCategory);
+    CanApplyToUnitCategory canApplyToUnitCategory;
+
+    using Copy = CUmModifier*(__thiscall*)(TUnitModifier* thisptr);
+    Copy copy;
+};
+
+static_assert(sizeof(TUnitModifierVftable) == 5 * sizeof(void*),
+              "TUnitModifier vftable must have exactly 5 methods");
 
 namespace TUnitModifierApi {
 

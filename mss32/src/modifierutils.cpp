@@ -26,6 +26,7 @@
 #include "idlistutils.h"
 #include "midgardobjectmap.h"
 #include "midunit.h"
+#include "modifgroup.h"
 #include "settings.h"
 #include "umunit.h"
 #include "unitmodifier.h"
