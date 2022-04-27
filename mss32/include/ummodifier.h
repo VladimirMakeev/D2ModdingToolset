@@ -134,6 +134,9 @@ struct Api
 
     using CopyConstructor = CUmModifier*(__thiscall*)(CUmModifier* thisptr, const CUmModifier* src);
     CopyConstructor copyConstructor;
+
+    using Destructor = void(__thiscall*)(CUmModifier* thisptr);
+    Destructor destructor;
 };
 
 Api& get();
