@@ -90,7 +90,7 @@ void customModifierDtor(CCustomModifier* thisptr, char flags)
 
     thisptr->script.~basic_string();
 
-    thisptr->umModifier.vftable->destructor(&thisptr->umModifier, flags);
+    CUmModifierApi::get().destructor(&thisptr->umModifier);
 
     if (flags & 1) {
         Memory::get().freeNonZero(thisptr);
