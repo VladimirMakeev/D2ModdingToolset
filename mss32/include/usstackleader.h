@@ -31,10 +31,8 @@ struct IUsStackLeaderVftable;
 
 /** Stack leader interface. */
 template <typename T = IUsStackLeaderVftable>
-struct IUsStackLeaderT
-{
-    const T* vftable;
-};
+struct IUsStackLeaderT : public IUsUnitExtensionT<T>
+{ };
 
 struct IUsStackLeader : public IUsStackLeaderT<>
 { };
