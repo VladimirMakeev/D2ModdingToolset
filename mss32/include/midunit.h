@@ -86,7 +86,7 @@ struct Api
     using AddModifiers = bool(__stdcall*)(const game::IdList* value,
                                           CMidUnit* unit,
                                           char* errorBuffer,
-                                          bool checkApplicable);
+                                          bool checkCanApply);
     AddModifiers addModifiers;
 
     using RemoveModifiers = bool(__stdcall*)(IUsUnit** unitImpl);
