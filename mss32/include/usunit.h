@@ -21,6 +21,7 @@
 #define USUNIT_H
 
 #include "midobject.h"
+#include "usunitextension.h"
 
 namespace game {
 
@@ -34,7 +35,7 @@ struct IUsUnit : public IMidObjectT<IUsUnitVftable>
 
 struct IUsUnitVftable : public IMidObjectVftable
 {
-    using Cast = void*(__thiscall*)(const IUsUnit* thisptr, const char* rawTypeName);
+    using Cast = IUsUnitExtension*(__thiscall*)(const IUsUnit* thisptr, const char* rawTypeName);
     Cast cast;
 
     using GetCategory = const LUnitCategory*(__thiscall*)(const IUsUnit* thisptr);
