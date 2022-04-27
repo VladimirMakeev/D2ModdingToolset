@@ -29,7 +29,7 @@ struct CUmModifierData;
 struct ModifierValue;
 struct GlobalData;
 struct IUsUnit;
-struct TUsUnitImpl;
+struct LUnitCategory;
 
 struct CUmModifier
 {
@@ -82,23 +82,25 @@ struct CUmModifierVftable
     using Destructor = void(__thiscall*)(CUmModifier* thisptr, bool freeMemory);
     Destructor destructor;
 
-    using Method1 = int(__thiscall*)(CUmModifier* thisptr);
-    Method1 method1;
+    using Copy = CUmModifier*(__thiscall*)(CUmModifier* thisptr);
+    Copy copy;
 
-    using Method2 = bool(__thiscall*)(CUmModifier* thisptr, int* a2);
-    Method2 method2;
+    using CanApplyToStackWithLeadership = bool(__thiscall*)(CUmModifier* thisptr,
+                                                            const int* leadership);
+    CanApplyToStackWithLeadership canApplyToStackWithLeadership;
 
-    using Method3 = bool(__thiscall*)(CUmModifier* thisptr, TUsUnitImpl* unitImpl);
-    Method3 method3;
+    using CanApplyToUnit = bool(__thiscall*)(CUmModifier* thisptr, const IUsUnit* unit);
+    CanApplyToUnit canApplyToUnit;
 
-    using Method4 = bool(__thiscall*)(CUmModifier* thisptr, int a2);
-    Method4 method4;
+    using CanApplyToUnitCategory = bool(__thiscall*)(CUmModifier* thisptr,
+                                                     const LUnitCategory* unitCategory);
+    CanApplyToUnitCategory canApplyToUnitCategory;
 
-    using Method5 = bool(__thiscall*)(CUmModifier* thisptr);
-    Method5 method5;
+    using IsNegative = bool(__thiscall*)(CUmModifier* thisptr);
+    IsNegative isNegative;
 
-    using Method6 = bool(__thiscall*)(CUmModifier* thisptr);
-    Method6 method6;
+    using IsPositive = bool(__thiscall*)(CUmModifier* thisptr);
+    IsPositive isPositive;
 
     using HasElement = bool(__thiscall*)(CUmModifier* thisptr, ModifierElementTypeFlag type);
     HasElement hasElement;
@@ -106,12 +108,15 @@ struct CUmModifierVftable
     using GetFirstElementValue = int(__thiscall*)(CUmModifier* thisptr);
     GetFirstElementValue getFirstElementValue;
 
-    using GetDesc = const char*(__thiscall*)(CUmModifier* thisptr);
-    GetDesc getDesc;
+    using GetDescription = const char*(__thiscall*)(CUmModifier* thisptr);
+    GetDescription getDescription;
 
-    using Method10 = int(__thiscall*)(CUmModifier* thisptr);
-    Method10 method10;
+    using UpdateUnitImplId = void(__thiscall*)(CUmModifier* thisptr);
+    UpdateUnitImplId updateUnitImplId;
 };
+
+static_assert(sizeof(CUmModifierVftable) == 11 * sizeof(void*),
+              "CUmModifier vftable must have exactly 11 methods");
 
 struct CUmModifierData
 {
