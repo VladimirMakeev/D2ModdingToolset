@@ -985,10 +985,16 @@
     <ClCompile Include="src\unitmodifier.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\unitmodifierhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
     <ClCompile Include="src\modifgroup.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\custommodifiers.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
+    <ClCompile Include="src\custommodifier.cpp">
       <Filter>features</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2543,7 +2549,13 @@
     <ClInclude Include="include\isoborder.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\unitmodifierhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
     <ClInclude Include="include\custommodifiers.h">
+      <Filter>features</Filter>
+    </ClInclude>
+    <ClInclude Include="include\custommodifier.h">
       <Filter>features</Filter>
     </ClInclude>
   </ItemGroup>

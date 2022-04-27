@@ -225,6 +225,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\customattackhooks.cpp" />
     <ClCompile Include="src\customattacks.cpp" />
     <ClCompile Include="src\customattackutils.cpp" />
+    <ClCompile Include="src\custommodifier.cpp" />
     <ClCompile Include="src\custommodifiers.cpp" />
     <ClCompile Include="src\d2osexception.cpp" />
     <ClCompile Include="src\d2string.cpp" />
@@ -413,6 +414,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\unitcat.cpp" />
     <ClCompile Include="src\unitinfolist.cpp" />
     <ClCompile Include="src\unitmodifier.cpp" />
+    <ClCompile Include="src\unitmodifierhooks.cpp" />
     <ClCompile Include="src\unitpickerinterf.cpp" />
     <ClCompile Include="src\unitpositionlist.cpp" />
     <ClCompile Include="src\unitpositionmap.cpp" />
@@ -560,6 +562,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\customattackhooks.h" />
     <ClInclude Include="include\customattacks.h" />
     <ClInclude Include="include\customattackutils.h" />
+    <ClInclude Include="include\custommodifier.h" />
     <ClInclude Include="include\custommodifiers.h" />
     <ClInclude Include="include\d2color.h" />
     <ClInclude Include="include\d2map.h" />
@@ -921,6 +924,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\unitgenerator.h" />
     <ClInclude Include="include\unitinfolist.h" />
     <ClInclude Include="include\unitmodifier.h" />
+    <ClInclude Include="include\unitmodifierhooks.h" />
     <ClInclude Include="include\unitpickerinterf.h" />
     <ClInclude Include="include\unitpositionlist.h" />
     <ClInclude Include="include\unitpositionmap.h" />

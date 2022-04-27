@@ -134,6 +134,8 @@
 #include "umunithooks.h"
 #include "unitbranchcat.h"
 #include "unitgenerator.h"
+#include "unitmodifier.h"
+#include "unitmodifierhooks.h"
 #include "unitsforhire.h"
 #include "unitutils.h"
 #include "untransformeffecthooks.h"
@@ -563,6 +565,9 @@ Hooks getHooks()
         hooks.emplace_back(
             HookInfo{CUmUnitApi::vftable().usSoldier->getRegen, umUnitGetRegenHooked});
     }
+
+    // TODO: Support custom modifiers
+    // hooks.emplace_back(HookInfo{TUnitModifierApi::get().constructor, unitModifierCtorHooked});
 
     return hooks;
 }
