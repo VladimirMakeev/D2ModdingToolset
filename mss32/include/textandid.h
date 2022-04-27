@@ -28,7 +28,7 @@ namespace game {
 
 struct TextAndId
 {
-    mq_c_s<Pair<CMidgardID, char*>>* text;
+    mq_c_s<Pair<CMidgardID, char*>>* texts;
     CMidgardID id;
 };
 
