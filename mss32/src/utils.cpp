@@ -128,7 +128,7 @@ std::string readFile(const std::filesystem::path& file)
     // Otherwise the string is padded with 0 chars and its size() returns incorrect value.
     // Resulting string_view causes failures in Lua functions without explicit call to c_str.
     // Either use binary mode to get exact contents or use iterator approach.
-    // While iterators are slower than plain read, Lua transforms \r\n to \n by itself anyway.
+    // While iterators are slower than binary read, Lua transforms \r\n to \n by itself anyway.
     std::ifstream stream(file);
     return std::string(std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>());
 }
