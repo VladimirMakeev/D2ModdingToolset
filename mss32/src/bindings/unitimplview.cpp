@@ -202,7 +202,7 @@ std::optional<DynUpgradeView> UnitImplView::getDynUpgrade(int upgradeNumber) con
     if (!id) {
         hooks::logError("mssProxyError.log",
                         fmt::format("Dyn upgrade {:d} id is null, unit impl {:s}", upgradeNumber,
-                                    hooks::idToString(&impl->unitId)));
+                                    hooks::idToString(&impl->id)));
         return std::nullopt;
     }
 

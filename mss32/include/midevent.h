@@ -38,7 +38,6 @@ struct CDialogInterf;
 /** Holds event related data in scenario file and game. */
 struct CMidEvent : public IMidScenarioObject
 {
-    CMidgardID eventId;
     StringAndId name;
     RaceSet affectedRaces; /**< Races to which conditions and effects can apply. */
     /** Races that can trigger event. 'Verified races' in game terms. */

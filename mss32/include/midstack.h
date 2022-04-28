@@ -60,7 +60,6 @@ struct CMidStack
     : public IMapElement
     , public IMidScenarioObject
 {
-    CMidgardID stackId;
     IAiPriority aiPriority;
     CMidgardID sourceTemplateId;
     CMidgardID leaderId;
@@ -94,7 +93,7 @@ static_assert(offsetof(CMidStack, CMidStack::IMapElement::vftable) == 0,
 static_assert(offsetof(CMidStack, CMidStack::IMidScenarioObject::vftable) == 20,
               "Vftable offset for IMidScenarioObject in CMidStack structure must be 20 bytes");
 
-static_assert(offsetof(CMidStack, stackId) == 24, "CMidStack::stackId offset must be 24 bytes");
+static_assert(offsetof(CMidStack, id) == 24, "CMidStack::stackId offset must be 24 bytes");
 
 static_assert(offsetof(CMidStack, leaderId) == 40, "CMidStack::leaderId offset must be 40 bytes");
 

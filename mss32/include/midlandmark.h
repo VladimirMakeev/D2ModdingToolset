@@ -30,7 +30,6 @@ namespace game {
 /** Represents landmark in scenario file and game. */
 struct CMidLandmark : public IMidScenarioObject
 {
-    CMidgardID landmarkId;
     IMapElement mapElement;
     CMidgardID landmarkTypeId;
     StringAndId description;

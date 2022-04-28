@@ -41,7 +41,7 @@ void __fastcall untransformEffectAttackOnHitHooked(game::CBatAttackUntransformEf
     const auto& fn = gameFunctions();
 
     const CMidUnit* targetUnit = fn.findUnitById(objectMap, targetUnitId);
-    const CMidgardID targetUnitImplId{targetUnit->unitImpl->unitId};
+    const CMidgardID targetUnitImplId{targetUnit->unitImpl->id};
 
     const auto targetSoldier = fn.castUnitImplToSoldier(targetUnit->unitImpl);
     bool prevAttackTwice = targetSoldier && targetSoldier->vftable->getAttackTwice(targetSoldier);

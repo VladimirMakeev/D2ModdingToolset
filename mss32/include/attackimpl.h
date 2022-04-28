@@ -82,7 +82,6 @@ static_assert(offsetof(CAttackImplData, critHit) == 96,
 /** Holds attack data read from GAttacks.dbf. */
 struct CAttackImpl : public IAttack
 {
-    CMidgardID attackId;
     CAttackImplData* data;
 };
 

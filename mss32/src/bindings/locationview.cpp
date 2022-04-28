@@ -37,7 +37,7 @@ void LocationView::bind(sol::state& lua)
 
 IdView LocationView::getId() const
 {
-    return IdView{location->locationId};
+    return IdView{location->id};
 }
 
 Point LocationView::getPosition() const

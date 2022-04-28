@@ -29,9 +29,7 @@ struct IUsUnitVftable;
 struct LUnitCategory;
 
 struct IUsUnit : public IMidObjectT<IUsUnitVftable>
-{
-    CMidgardID unitId;
-};
+{ };
 
 struct IUsUnitVftable : public IMidObjectVftable
 {

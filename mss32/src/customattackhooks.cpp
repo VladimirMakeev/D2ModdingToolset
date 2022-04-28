@@ -219,7 +219,7 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
     thisptr->vftable = CAttackImplApi::vftable();
 
     const auto& db = CDBTableApi::get();
-    db.readId(&thisptr->attackId, dbTable, "ATT_ID");
+    db.readId(&thisptr->id, dbTable, "ATT_ID");
 
     auto gData = *globalData;
     auto data = thisptr->data;
@@ -228,26 +228,26 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
     db.findAttackClass(&data->attackClass, dbTable, "CLASS", gData->attackClasses);
     db.findAttackSource(&data->attackSource, dbTable, "SOURCE", gData->attackSources);
     db.findAttackReach(&data->attackReach, dbTable, "REACH", gData->attackReaches);
-    db.readInitiative(&data->initiative, dbTable, "INITIATIVE", &thisptr->attackId);
+    db.readInitiative(&data->initiative, dbTable, "INITIATIVE", &thisptr->id);
 
     const auto& categories = AttackClassCategories::get();
     const auto id = thisptr->data->attackClass.id;
 
     if (attackHasPower(&thisptr->data->attackClass)) {
-        db.readPower(&data->power, &data->power, dbTable, "POWER", &thisptr->attackId);
+        db.readPower(&data->power, &data->power, dbTable, "POWER", &thisptr->id);
     }
 
     if (id == categories.damage->id || id == categories.drain->id
         || id == categories.drainOverflow->id || id == categories.poison->id
         || id == categories.frostbite->id || id == categories.blister->id
         || id == categories.shatter->id) {
-        db.readDamage(&data->qtyDamage, dbTable, "QTY_DAM", &thisptr->attackId);
+        db.readDamage(&data->qtyDamage, dbTable, "QTY_DAM", &thisptr->id);
     } else {
         data->qtyDamage = 0;
     }
 
     if (id == categories.heal->id || id == categories.revive->id) {
-        db.readHeal(&data->qtyHeal, dbTable, "QTY_HEAL", &thisptr->attackId);
+        db.readHeal(&data->qtyHeal, dbTable, "QTY_HEAL", &thisptr->id);
     } else if (id == categories.bestowWards->id) {
         data->qtyHeal = 0;
         db.readIntWithBoundsCheck(&data->qtyHeal, dbTable, "QTY_HEAL", 0,
@@ -258,7 +258,7 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
 
     if (id == categories.boostDamage->id || id == categories.lowerDamage->id
         || id == categories.lowerInitiative->id) {
-        db.readAttackLevel(&data->level, dbTable, "LEVEL", &thisptr->attackId, &data->attackClass);
+        db.readAttackLevel(&data->level, dbTable, "LEVEL", &thisptr->id, &data->attackClass);
     } else {
         data->level = -1;
     }
@@ -879,10 +879,10 @@ bool __stdcall findDamageAndShatterAttackTargetWithMeleeReach(
     }
 
     if (primaryTarget) {
-        *value = primaryTarget->unitId;
+        *value = primaryTarget->id;
         return true;
     } else if (secondaryTarget) {
-        *value = secondaryTarget->unitId;
+        *value = secondaryTarget->id;
         return true;
     }
 
@@ -953,7 +953,7 @@ bool __stdcall findDamageAndShatterAttackTargetWithNonMeleeReach(
     }
 
     if (result) {
-        *value = result->unitId;
+        *value = result->id;
         return true;
     }
 
@@ -1003,7 +1003,7 @@ bool __stdcall findShatterOnlyAttackTarget(const game::IMidgardObjectMap* object
     }
 
     if (result) {
-        *value = result->unitId;
+        *value = result->id;
         return true;
     }
 
@@ -1029,7 +1029,7 @@ bool __stdcall findShatterAttackTarget(const game::IMidgardObjectMap* objectMap,
 
     auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
 
-    auto attackDamage = fn.computeAttackDamageCheckAltAttack(soldier, &unit->unitImpl->unitId,
+    auto attackDamage = fn.computeAttackDamageCheckAltAttack(soldier, &unit->unitImpl->id,
                                                              battleMsgData, unitId);
     if (attackDamage > 0) {
         IAttack* primaryAttack = fn.getAttackById(objectMap, unitId, 1, true);
@@ -1133,10 +1133,10 @@ bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap*
     }
 
     if (primaryTarget) {
-        *value = primaryTarget->unitId;
+        *value = primaryTarget->id;
         return true;
     } else if (secondaryTarget) {
-        *value = secondaryTarget->unitId;
+        *value = secondaryTarget->id;
         return true;
     }
 
@@ -1395,7 +1395,7 @@ bool __fastcall midStackInitializeHooked(game::CMidStack* thisptr,
     thisptr->leaderId = *leaderId;
     thisptr->leaderAlive = leader->currentHp > 0;
 
-    if (!thisptr->inventory.vftable->method1(&thisptr->inventory, &thisptr->stackId, objectMap))
+    if (!thisptr->inventory.vftable->method1(&thisptr->inventory, &thisptr->id, objectMap))
         return false;
 
     if (!stackApi.setPosition(thisptr, objectMap, position, false))

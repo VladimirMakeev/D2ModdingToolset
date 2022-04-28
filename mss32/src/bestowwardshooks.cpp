@@ -130,8 +130,8 @@ void __fastcall bestowWardsAttackOnHitHooked(game::CBatAttackBestowWards* thispt
     }
 
     BattleAttackUnitInfo info{};
-    info.unitId = targetUnit->unitId;
-    info.unitImplId = targetUnit->unitImpl->unitId;
+    info.unitId = targetUnit->id;
+    info.unitImplId = targetUnit->unitImpl->id;
     info.damage = qtyHealed;
     BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
 }

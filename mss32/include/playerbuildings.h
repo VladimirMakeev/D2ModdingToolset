@@ -29,7 +29,6 @@ namespace game {
 struct CPlayerBuildings : public IMidScenarioObject
 {
     int unknown;
-    int unknown2;
     IdList buildings;
 };
 

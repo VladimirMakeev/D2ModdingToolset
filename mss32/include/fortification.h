@@ -40,7 +40,6 @@ struct CMidUnitGroupFortification : public CMidUnitGroup
 /** Base class for capitals and villages (cities). */
 struct CFortification : public IMidScenarioObject
 {
-    CMidgardID cityId;
     IMapElement mapElement;
     IAiPriority aiPriority;
     StringAndId name;

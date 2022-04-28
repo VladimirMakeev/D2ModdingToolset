@@ -34,7 +34,6 @@ namespace game {
 /** Base class for site objects. */
 struct CMidSite : public IMidScenarioObject
 {
-    CMidgardID siteId;
     IMapElement mapElement;
     IAiPriority aiPriority;
     int imgIso;

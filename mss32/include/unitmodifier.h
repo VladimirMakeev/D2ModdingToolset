@@ -35,7 +35,6 @@ struct CUmModifier;
 
 struct TUnitModifier : IMidObjectT<TUnitModifierVftable>
 {
-    CMidgardID id;
     LModifGroup* group;
 };
 

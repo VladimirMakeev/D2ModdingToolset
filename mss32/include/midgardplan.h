@@ -42,8 +42,7 @@ using PlanElements = Vector<MidgardPlanElement>;
 
 struct CMidgardPlan : public IMidScenarioObject
 {
-    CMidgardID planId;
-    CMidgardID id;
+    CMidgardID unknownId;
     int mapSize;
     char data[5184]; /**< 144 * 36. Accessed as: 36 * posY + (posX >> 2) */
     PlanElements elements;

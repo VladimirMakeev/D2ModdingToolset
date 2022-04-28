@@ -409,9 +409,6 @@
     <ClCompile Include="src\transformselfhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
-    <ClCompile Include="src\attack.cpp">
-      <Filter>game</Filter>
-    </ClCompile>
     <ClCompile Include="src\scripts.cpp">
       <Filter>utils</Filter>
     </ClCompile>

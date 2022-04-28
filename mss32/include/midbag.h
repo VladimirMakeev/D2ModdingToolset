@@ -32,7 +32,6 @@ namespace game {
 /** Represents treasure chests in scenario file and game. */
 struct CMidBag : public IMidScenarioObject
 {
-    CMidgardID bagId;
     IMapElement mapElement;
     IAiPriority aiPriority;
     CMidInventory inventory;

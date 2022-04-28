@@ -951,7 +951,7 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
             continue;
         }
 
-        if (race->raceId != *soldier->vftable->getRaceId(soldier)) {
+        if (race->id != *soldier->vftable->getRaceId(soldier)) {
             continue;
         }
 
@@ -1041,7 +1041,7 @@ void __stdcall createBuildingTypeHooked(const game::CDBTable* dbTable,
     }
 
     if (!gameFunctions().addObjectAndCheckDuplicates(a2, buildingType)) {
-        db.duplicateRecordException(dbTable, &buildingType->buildingId);
+        db.duplicateRecordException(dbTable, &buildingType->id);
     }
 }
 
@@ -1232,7 +1232,7 @@ game::CMidgardID* __stdcall radioButtonIndexToPlayerIdHooked(game::CMidgardID* p
         break;
     }
 
-    *playerId = player ? player->playerId : emptyId;
+    *playerId = player ? player->id : emptyId;
 
     return playerId;
 }
@@ -1371,7 +1371,7 @@ void __fastcall shatterOnHitHooked(game::CBatAttackShatter* thisptr,
 
     BattleAttackUnitInfo info{};
     info.unitId = *unitId;
-    info.unitImplId = unit->unitImpl->unitId;
+    info.unitImplId = unit->unitImpl->id;
     info.attackMissed = false;
     info.damage = 0;
 
@@ -1733,7 +1733,7 @@ int __stdcall computeUnitEffectiveHpHooked(const game::IMidgardObjectMap* object
         return 0;
 
     int armor;
-    fn.computeArmor(&armor, objectMap, battleMsgData, &unit->unitId);
+    fn.computeArmor(&armor, objectMap, battleMsgData, &unit->id);
 
     return computeUnitEffectiveHp(unit, armor);
 }

@@ -38,7 +38,7 @@ game::CUmUnit* __fastcall umUnitCtorHooked(game::CUmUnit* thisptr,
     const auto& umUnitApi = CUmUnitApi::get();
     const auto& dbApi = CDBTableApi::get();
 
-    thisptr->usUnit.unitId = emptyId;
+    thisptr->usUnit.id = emptyId;
 
     CUmModifierApi::get().constructor(&thisptr->umModifier, modifierId, globalData);
 
@@ -65,7 +65,7 @@ game::CUmUnit* __fastcall umUnitCopyCtorHooked(game::CUmUnit* thisptr,
 {
     using namespace game;
 
-    thisptr->usUnit.unitId = src->usUnit.unitId;
+    thisptr->usUnit.id = src->usUnit.id;
 
     CUmModifierApi::get().copyConstructor(&thisptr->umModifier, &src->umModifier);
 

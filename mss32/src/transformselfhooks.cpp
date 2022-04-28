@@ -127,14 +127,14 @@ void giveFreeTransformSelfAttack(game::IMidgardObjectMap* objectMap,
             return;
 
         // Prevents AI from falling into infinite transforming in case of targeting malfunction
-        auto player = getPlayer(objectMap, battleMsgData, &unit->unitId);
+        auto player = getPlayer(objectMap, battleMsgData, &unit->id);
         if (player && !player->isHuman)
             return;
     }
     freeTransformSelf.used = true;
 
     for (auto& turn : battleMsgData->turnsOrder) {
-        if (turn.unitId == unit->unitId) {
+        if (turn.unitId == unit->id) {
             const auto soldier = gameFunctions().castUnitImplToSoldier(unit->unitImpl);
             bool attackTwice = soldier && soldier->vftable->getAttackTwice(soldier);
             turn.attackCount += getTransformSelfFreeAttackNumber(freeTransformSelf.turnCount,
@@ -167,7 +167,6 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
     }
 
     auto attack = fn.getAttackById(objectMap, &thisptr->id2, thisptr->attackNumber, false);
-    auto attackId = IAttackApi::get().getId(attack);
 
     CMidgardID targetGroupId{emptyId};
     fn.getAllyOrEnemyGroupId(&targetGroupId, battleMsgData, targetUnitId, true);
@@ -175,10 +174,11 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
     const auto position = fn.getUnitPositionInGroup(objectMap, &targetGroupId, targetUnitId);
 
     const CMidUnit* targetUnit = fn.findUnitById(objectMap, targetUnitId);
-    const CMidgardID targetUnitImplId{targetUnit->unitImpl->unitId};
+    const CMidgardID targetUnitImplId{targetUnit->unitImpl->id};
 
     CMidgardID transformImplId{emptyId};
-    fn.getSummonUnitImplIdByAttack(&transformImplId, attackId, position, isUnitSmall(targetUnit));
+    fn.getSummonUnitImplIdByAttack(&transformImplId, &attack->id, position,
+                                   isUnitSmall(targetUnit));
 
     if (transformImplId == emptyId) {
         return;

@@ -66,7 +66,7 @@ game::IUsSoldier* castUnitImplToSoldierWithLogging(const game::IUsUnit* unitImpl
     auto soldier = gameFunctions().castUnitImplToSoldier(unitImpl);
     if (!soldier) {
         hooks::logError("mssProxyError.log", fmt::format("Failed to cast unit impl {:s} to soldier",
-                                                         hooks::idToString(&unitImpl->unitId)));
+                                                         hooks::idToString(&unitImpl->id)));
     }
 
     return soldier;
@@ -119,8 +119,7 @@ game::CMidgardID getGlobalUnitImplId(const game::CMidUnit* unit)
 
     CMidgardID globalImplId{};
     CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
-    unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &globalImplId,
-                                                &unit->unitImpl->unitId);
+    unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &globalImplId, &unit->unitImpl->id);
 
     return globalImplId;
 }
@@ -266,7 +265,7 @@ void updateAttackCountAfterTransformation(game::BattleMsgData* battleMsgData,
     using namespace game;
 
     for (auto& turn : battleMsgData->turnsOrder) {
-        if (turn.unitId == unit->unitId) {
+        if (turn.unitId == unit->id) {
             const auto soldier = gameFunctions().castUnitImplToSoldier(unit->unitImpl);
             bool attackTwice = soldier && soldier->vftable->getAttackTwice(soldier);
 

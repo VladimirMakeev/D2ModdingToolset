@@ -33,7 +33,6 @@ struct CMidLocation
     : public IMapElement
     , public IMidScenarioObject
 {
-    CMidgardID locationId;
     StringAndId name;
     int radius;
 };

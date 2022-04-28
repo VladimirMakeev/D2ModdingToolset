@@ -70,7 +70,7 @@ CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
     // Lazy init makes sure that vftable hooks (if any) are already applied
     initRttiInfo();
 
-    thisptr->usUnit.unitId = emptyId;
+    thisptr->usUnit.id = emptyId;
 
     CUmModifierApi::get().constructor(&thisptr->umModifier, id, globalData);
 

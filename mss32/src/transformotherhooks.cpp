@@ -95,9 +95,9 @@ void __fastcall transformOtherAttackOnHitHooked(game::CBatAttackTransformOther* 
     const auto targetPosition = fn.getUnitPositionInGroup(objectMap, &targetGroupId, targetUnitId);
 
     const CMidUnit* targetUnit = fn.findUnitById(objectMap, targetUnitId);
-    const CMidgardID targetUnitImplId{targetUnit->unitImpl->unitId};
+    const CMidgardID targetUnitImplId{targetUnit->unitImpl->id};
 
-    auto attackId = IAttackApi::get().getId(thisptr->attack);
+    auto attackId = &thisptr->attack->id;
 
     CMidgardID transformImplId{emptyId};
     fn.getSummonUnitImplIdByAttack(&transformImplId, attackId, targetPosition,

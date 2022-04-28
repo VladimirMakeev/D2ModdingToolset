@@ -44,8 +44,8 @@ static void addBattleAttackInfo(game::BattleAttackInfo* attackInfo,
     using namespace game;
 
     BattleAttackUnitInfo info{};
-    info.unitId = unit->unitId;
-    info.unitImplId = unit->unitImpl->unitId;
+    info.unitId = unit->id;
+    info.unitImplId = unit->unitImpl->id;
     info.damage = damage;
     info.criticalDamage = criticalHitDamage;
 

@@ -57,7 +57,7 @@ bool __fastcall transformHooked(game::CMidUnit* thisptr,
         auto soldier = fn.castUnitImplToSoldier(thisptr->unitImpl);
 
         thisptr->transformed = true;
-        thisptr->origTypeId = thisptr->unitImpl->unitId;
+        thisptr->origTypeId = thisptr->unitImpl->id;
         thisptr->keepHp = keepHp;
         thisptr->hpBefore = thisptr->currentHp;
         thisptr->hpBefMax = soldier->vftable->getHitPoints(soldier);
@@ -67,7 +67,7 @@ bool __fastcall transformHooked(game::CMidUnit* thisptr,
 
     auto globalData = *global.getGlobalData();
     auto globalUnitImpl = static_cast<TUsUnitImpl*>(
-        global.findById(globalData->units, &thisptr->unitImpl->unitId));
+        global.findById(globalData->units, &thisptr->unitImpl->id));
 
     auto globalTransformImpl = static_cast<TUsUnitImpl*>(
         global.findById(globalData->units, transformImplId));

@@ -32,7 +32,6 @@ struct IMidgardObjectMap;
 
 struct CMidgardMap : public IMidScenarioObject
 {
-    CMidgardID mapId;
     int mapSize;
 };
 

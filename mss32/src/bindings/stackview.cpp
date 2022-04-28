@@ -45,7 +45,7 @@ void StackView::bind(sol::state& lua)
 
 GroupView StackView::getGroup() const
 {
-    return GroupView{&stack->group, objectMap, &stack->stackId};
+    return GroupView{&stack->group, objectMap, &stack->id};
 }
 
 std::optional<LeaderView> StackView::getLeader() const

@@ -32,7 +32,6 @@ namespace game {
 /** Holds general information about scenario in scenario file and game. */
 struct CScenarioInfo : public IMidScenarioObject
 {
-    CMidgardID infoId;
     char* name;
     char* description;
     char* briefing;

@@ -24,7 +24,6 @@
 #include "attackreachcat.h"
 #include "attacksourcecat.h"
 #include "idvector.h"
-#include "midgardid.h"
 #include "midobject.h"
 #include "textandid.h"
 #include <cstdint>
@@ -126,18 +125,6 @@ struct CAttackData
         char padding2[3];
     };
 };
-
-namespace IAttackApi {
-
-struct Api
-{
-    using GetId = const CMidgardID*(__thiscall*)(const IAttack* thisptr);
-    GetId getId;
-};
-
-Api& get();
-
-} // namespace IAttackApi
 
 } // namespace game
 

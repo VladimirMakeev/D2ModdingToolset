@@ -28,7 +28,6 @@ struct CAttackModifiedData;
 
 struct CAttackModified : public IAttack
 {
-    CMidgardID attackId;
     CAttackModifiedData* data;
 };
 

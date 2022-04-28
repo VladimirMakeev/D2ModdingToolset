@@ -78,7 +78,6 @@ static_assert(sizeof(TRaceTypeData) == 104,
 /** Holds race information read from Grace.dbf. */
 struct TRaceType : public IMidObject
 {
-    CMidgardID raceId;
     TRaceTypeData* data;
 };
 

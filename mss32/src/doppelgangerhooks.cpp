@@ -204,15 +204,15 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
     const auto& fn = gameFunctions();
 
     CMidUnit* targetUnit = fn.findUnitById(objectMap, targetUnitId);
-    CMidgardID targetUnitImplId = targetUnit->unitImpl->unitId;
+    CMidgardID targetUnitImplId = targetUnit->unitImpl->id;
 
     const CMidUnit* unit = fn.findUnitById(objectMap, &thisptr->unitId);
     const auto transformLevel = getDoppelgangerTransformLevel(unit, targetUnit);
 
-    CMidgardID transformUnitImplId{targetUnit->unitImpl->unitId};
+    CMidgardID transformUnitImplId{targetUnit->unitImpl->id};
     CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
     unitGenerator->vftable->generateUnitImplId(unitGenerator, &transformUnitImplId,
-                                               &targetUnit->unitImpl->unitId, transformLevel);
+                                               &targetUnit->unitImpl->id, transformLevel);
 
     unitGenerator->vftable->generateUnitImpl(unitGenerator, &transformUnitImplId);
 
@@ -221,7 +221,7 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
 
     BattleAttackUnitInfo info{};
     info.unitId = thisptr->unitId;
-    info.unitImplId = unit->unitImpl->unitId;
+    info.unitImplId = unit->unitImpl->id;
     BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
 
     battle.removeTransformStatuses(&thisptr->unitId, battleMsgData);

@@ -34,7 +34,6 @@ struct CScenarioVisitor;
 /** Holds unit related data in scenario file and game. */
 struct CMidUnit : public IMidScenarioObject
 {
-    CMidgardID unitId;
     int creation;
     StringAndId name;
     bool dynLevel;

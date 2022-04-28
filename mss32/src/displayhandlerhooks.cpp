@@ -178,7 +178,7 @@ void __stdcall displayHandlerVillageHooked(game::ImageLayerList* list,
         listApi.pushBack(list, &flagPair);
     }
 
-    if (playerId && villageIsObjective(objectives, village->cityId)) {
+    if (playerId && villageIsObjective(objectives, village->id)) {
         ImageLayerPair objectivePair{GameImagesApi::get().getObjectiveImage(
                                          village->mapElement.sizeX),
                                      isoLayers().symObjective};
