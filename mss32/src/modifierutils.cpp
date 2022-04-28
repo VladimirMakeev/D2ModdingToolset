@@ -65,7 +65,7 @@ game::CUmModifier* getModifier(const game::CMidgardID* modifierId)
     const auto modifiers = (*global.getGlobalData())->modifiers;
     const TUnitModifier* unitModifier = (TUnitModifier*)global.findById(modifiers, modifierId);
 
-    return unitModifier->group->modifier;
+    return unitModifier->data->modifier;
 }
 
 void getModifierAttackSource(game::CUmUnit* modifier, game::LAttackSource* value)

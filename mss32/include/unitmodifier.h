@@ -22,6 +22,7 @@
 
 #include "midgardid.h"
 #include "midobject.h"
+#include "modifgroup.h"
 
 namespace game {
 
@@ -29,13 +30,18 @@ struct TUnitModifierVftable;
 struct GlobalData;
 struct CDBTable;
 struct IUsUnit;
-struct LModifGroup;
 struct LUnitCategory;
 struct CUmModifier;
 
+struct TUnitModifierData
+{
+    LModifGroup group;
+    CUmModifier* modifier;
+};
+
 struct TUnitModifier : IMidObjectT<TUnitModifierVftable>
 {
-    LModifGroup* group;
+    TUnitModifierData* data;
 };
 
 static_assert(sizeof(TUnitModifier) == 12,

@@ -21,7 +21,6 @@
 #define MODIFGROUP_H
 
 #include "categories.h"
-#include "ummodifier.h"
 
 namespace game {
 
@@ -31,11 +30,9 @@ struct LModifGroupTable : public CEnumConstantTable<ModifierSourceId>
 { };
 
 struct LModifGroup : public Category<ModifierSourceId>
-{
-    CUmModifier* modifier;
-};
+{ };
 
-static_assert(sizeof(LModifGroup) == 16, "Size of LModifGroup structure must be exactly 16 bytes");
+static_assert(sizeof(LModifGroup) == 12, "Size of LModifGroup structure must be exactly 12 bytes");
 
 namespace LModifGroupApi {
 

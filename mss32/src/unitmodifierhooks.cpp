@@ -45,14 +45,14 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
     thisptr->vftable = TUnitModifierApi::vftable();
     thisptr->id = emptyId;
 
-    auto group = (LModifGroup*)memAlloc(sizeof(LModifGroup));
-    if (group) {
-        group->id = (ModifierSourceId)-1;
-        group->table = nullptr;
-        group->vftable = LModifGroupApi::vftable();
-        group->modifier = nullptr;
+    auto data = (TUnitModifierData*)memAlloc(sizeof(TUnitModifierData));
+    if (data) {
+        data->group.id = (ModifierSourceId)-1;
+        data->group.table = nullptr;
+        data->group.vftable = LModifGroupApi::vftable();
+        data->modifier = nullptr;
     }
-    thisptr->group = group;
+    thisptr->data = data;
 
     dbApi.readId(&thisptr->id, dbTable, "MODIF_ID");
 
@@ -63,10 +63,10 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
     if (script.length) {
         auto customModifier = (CCustomModifier*)memAlloc(sizeof(CCustomModifier));
         customModifierCtor(customModifier, script.string, &thisptr->id, globalData);
-        group->modifier = &customModifier->umModifier;
+        data->modifier = &customModifier->umModifier;
     } else {
-        dbApi.findModifGroupCategory(group, dbTable, "SOURCE", (*globalData)->modifGroups);
-        dbApi.readModifier(&group->modifier, &thisptr->id, group, globalsFolderPath,
+        dbApi.findModifGroupCategory(&data->group, dbTable, "SOURCE", (*globalData)->modifGroups);
+        dbApi.readModifier(&data->modifier, &thisptr->id, &data->group, globalsFolderPath,
                            codeBaseEnvProxy, globalData);
     }
 
