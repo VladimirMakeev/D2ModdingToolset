@@ -139,6 +139,31 @@ void __fastcall unitDtor(game::IUsUnit* thisptr, int /*%edx*/, char flags)
     customModifierDtor(customModifier, flags);
 }
 
+game::IUsUnitExtension* __fastcall unitCast(const game::IUsUnit* thisptr,
+                                            int /*%edx*/,
+                                            const char* rawTypeName)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto& rttiApi = RttiApi::get();
+    auto& typeInfoRawName = *rttiApi.typeInfoRawName;
+
+    auto customModifier = castUnitToCustomModifier(thisptr);
+    auto prev = customModifier->umModifier.data->prev;
+
+    auto todotest = typeInfoRawName(rtti.IUsSoldierType); // TODO: test
+
+    if (!strcmp(rawTypeName, typeInfoRawName(rtti.IUsSoldierType))) {
+        return (IUsUnitExtension*)&customModifier->usSoldier;
+    } else if (!strcmp(rawTypeName, typeInfoRawName(rtti.IUsStackLeaderType))) {
+        auto prevStackLeader = prev->vftable->cast(thisptr, rawTypeName);
+        return prevStackLeader ? (IUsUnitExtension*)&customModifier->usStackLeader : nullptr;
+    }
+
+    return prev->vftable->cast(thisptr, rawTypeName);
+}
+
 void __fastcall soldierDtor(game::IUsSoldier* thisptr, int /*%edx*/, char flags)
 {
     auto customModifier = castSoldierToCustomModifier(thisptr);
@@ -171,7 +196,7 @@ void initUnitRttiInfo()
     replaceRttiInfo(info, CUmUnitApi::vftable().usUnit);
 
     info.vftable.destructor = (IMidObjectVftable::Destructor)&unitDtor;
-    // TODO: replace vftable members
+    info.vftable.cast = (IUsUnitVftable::Cast)&unitCast;
 }
 
 void initSoldierRttiInfo()
