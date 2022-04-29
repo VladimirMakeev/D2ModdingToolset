@@ -19,7 +19,10 @@
 
 #include "dbfaccess.h"
 #include "dbf/dbffile.h"
+#include "log.h"
 #include "midgardid.h"
+#include "utils.h"
+#include <fmt/format.h>
 #include <functional>
 
 namespace utils {
@@ -89,6 +92,37 @@ bool dbRead(int& result, const DbfFile& database, size_t row, const std::string&
     };
 
     return dbRead<int>(result, database, row, columnName, convertInt);
+}
+
+bool dbValueExists(const std::filesystem::path& dbfFilePath,
+                   const std::string& columnName,
+                   const std::string& value)
+{
+    DbfFile dbf;
+    if (!dbf.open(dbfFilePath)) {
+        hooks::logError("mssProxyError.log",
+                        fmt::format("Could not open {:s}", dbfFilePath.filename().string()));
+        return false;
+    }
+
+    for (std::uint32_t i = 0; i < dbf.recordsTotal(); ++i) {
+        DbfRecord record;
+        if (!dbf.record(record, i)) {
+            hooks::logError("mssProxyError.log", fmt::format("Could not read record {:d} from {:s}",
+                                                             i, dbfFilePath.filename().string()));
+            return false;
+        }
+
+        if (record.isDeleted()) {
+            continue;
+        }
+
+        std::string text;
+        if (record.value(text, columnName) && hooks::trimSpaces(text) == value)
+            return true;
+    }
+
+    return false;
 }
 
 } // namespace utils

@@ -25,7 +25,7 @@
 #include "customattack.h"
 #include "customattacks.h"
 #include "customattackutils.h"
-#include "dbf/dbffile.h"
+#include "dbfaccess.h"
 #include "dbtable.h"
 #include "dynamiccast.h"
 #include "game.h"
@@ -53,7 +53,6 @@
 namespace hooks {
 
 game::LAttackClass customAttackClass{};
-static bool customAttackExists{false};
 
 game::LAttackClassTable* __fastcall attackClassTableCtorHooked(game::LAttackClassTable* thisptr,
                                                                int /*%edx*/,
@@ -65,23 +64,10 @@ game::LAttackClassTable* __fastcall attackClassTableCtorHooked(game::LAttackClas
 
     logDebug("newAttackType.log", "LAttackClassTable c-tor hook started");
 
-    {
-        utils::DbfFile dbf;
-        std::filesystem::path globals{globalsFolderPath};
-        if (!dbf.open(globals / dbfFileName)) {
-            logError("mssProxyError.log", fmt::format("Could not open {:s}", dbfFileName));
-        } else {
-            utils::DbfRecord record;
-            if (dbf.recordsTotal() > 26 && dbf.record(record, 26)) {
-                std::string categoryName;
-                if (record.value(categoryName, "TEXT")
-                    && trimSpaces(categoryName) == customCategoryName) {
-                    customAttackExists = true;
-                    logDebug("newAttackType.log", "Found custom attack category");
-                }
-            }
-        }
-    }
+    const auto dbfFilePath{std::filesystem::path(globalsFolderPath) / dbfFileName};
+    bool customAttackExists = utils::dbValueExists(dbfFilePath, "TEXT", customCategoryName);
+    if (customAttackExists)
+        logDebug("newAttackType.log", "Found custom attack category");
 
     using namespace game;
     thisptr->bgn = nullptr;

@@ -53,7 +53,7 @@
 #include "customattacks.h"
 #include "customattackutils.h"
 #include "d2string.h"
-#include "dbf/dbffile.h"
+#include "dbfaccess.h"
 #include "dbtable.h"
 #include "dialoginterf.h"
 #include "difficultylevel.h"
@@ -1055,22 +1055,10 @@ game::LBuildingCategoryTable* __fastcall buildingCategoryTableCtorHooked(
 
     logDebug("newBuildingType.log", "Hook started");
 
-    {
-        utils::DbfFile dbf;
-        std::filesystem::path globals{globalsFolderPath};
-        if (!dbf.open(globals / dbfFileName)) {
-            logError("mssProxyError.log", fmt::format("Could not open {:s}", dbfFileName));
-        } else {
-            utils::DbfRecord record;
-            if (dbf.recordsTotal() > 4 && dbf.record(record, 4)) {
-                std::string categoryName;
-                if (record.value(categoryName, "TEXT") && trimSpaces(categoryName) == "L_CUSTOM") {
-                    customCategoryExists = true;
-                    logDebug("newBuildingType.log", "Found custom building category");
-                }
-            }
-        }
-    }
+    const auto dbfFilePath{std::filesystem::path(globalsFolderPath) / dbfFileName};
+    customCategoryExists = utils::dbValueExists(dbfFilePath, "TEXT", "L_CUSTOM");
+    if (customCategoryExists)
+        logDebug("newBuildingType.log", "Found custom building category");
 
     using namespace game;
     auto& table = LBuildingCategoryTableApi::get();
