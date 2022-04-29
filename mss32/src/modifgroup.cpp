@@ -24,21 +24,115 @@
 namespace game::LModifGroupApi {
 
 // clang-format off
-static std::array<LModifGroupVftable*, 4> vftables = {{
+static std::array<Categories, 4> cats = {{
     // Akella
-    (LModifGroupVftable*)0x6ea68c,
+    Categories{
+        (LModifGroup*)0x83a388,
+        (LModifGroup*)0x83a398,
+        (LModifGroup*)0x83a3a8,
+    },
     // Russobit
-    (LModifGroupVftable*)0x6ea68c,
+    Categories{
+        (LModifGroup*)0x83a388,
+        (LModifGroup*)0x83a398,
+        (LModifGroup*)0x83a3a8,
+    },
     // Gog
-    (LModifGroupVftable*)0x6e862c,
+    Categories{
+        (LModifGroup*)0x838338,
+        (LModifGroup*)0x838348,
+        (LModifGroup*)0x838358,
+    },
     // Scenario Editor
-    (LModifGroupVftable*)0x5defa4,
+    Categories{
+        (LModifGroup*)0x665e70,
+        (LModifGroup*)0x665e80,
+        (LModifGroup*)0x665e90,
+    },
+}};
+
+static std::array<void*, 4> vftables = {{
+    // Akella
+    (void*)0x6ea68c,
+    // Russobit
+    (void*)0x6ea68c,
+    // Gog
+    (void*)0x6e862c,
+    // Scenario Editor
+    (void*)0x5defa4,
 }};
 // clang-format on
 
-const LModifGroupVftable* vftable()
+Categories& categories()
+{
+    return cats[static_cast<int>(hooks::gameVersion())];
+}
+
+void* vftable()
 {
     return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::LModifGroupApi
+
+namespace game::LModifGroupTableApi {
+
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)0x59786a,
+        (Api::Init)0x5979ba,
+        (Api::ReadCategory)0x597a32,
+        (Api::InitDone)0x597975,
+        (Api::FindCategoryById)0x58af3b,
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)0x59786a,
+        (Api::Init)0x5979ba,
+        (Api::ReadCategory)0x597a32,
+        (Api::InitDone)0x597975,
+        (Api::FindCategoryById)0x58af3b,
+    },
+    // Gog
+    Api{
+        (Api::Constructor)0x59698f,
+        (Api::Init)0x596adf,
+        (Api::ReadCategory)0x596b57,
+        (Api::InitDone)0x596a9a,
+        (Api::FindCategoryById)0x58a0a7,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x541029,
+        (Api::Init)0x541179,
+        (Api::ReadCategory)0x5411f1,
+        (Api::InitDone)0x541134,
+        (Api::FindCategoryById)0x535ccb,
+    },
+}};
+
+static std::array<void*, 4> vftables = {{
+    // Akella
+    (void*)0x6eba5c,
+    // Russobit
+    (void*)0x6eba5c,
+    // Gog
+    (void*)0x6e99fc,
+    // Scenario Editor
+    (void*)0x5dfe8c,
+}};
+// clang-format on
+
+Api& get()
+{
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+void* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
+
+} // namespace game::LModifGroupTableApi

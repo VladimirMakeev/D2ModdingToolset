@@ -24,21 +24,36 @@
 
 namespace game {
 
-struct LModifGroupVftable;
+struct LModifGroup : public Category<ModifierSourceId>
+{ };
 
 struct LModifGroupTable : public CEnumConstantTable<ModifierSourceId>
 { };
 
-struct LModifGroup : public Category<ModifierSourceId>
-{ };
-
-static_assert(sizeof(LModifGroup) == 12, "Size of LModifGroup structure must be exactly 12 bytes");
-
 namespace LModifGroupApi {
 
-const LModifGroupVftable* vftable();
+struct Categories
+{
+    LModifGroup* unit;
+    LModifGroup* stack;
+    LModifGroup* attack;
+};
+
+Categories& categories();
+
+void* vftable();
 
 } // namespace LModifGroupApi
+
+namespace LModifGroupTableApi {
+
+using Api = CategoryTableApi::Api<LModifGroupTable, LModifGroup>;
+
+Api& get();
+
+void* vftable();
+
+} // namespace LModifGroupTableApi
 
 } // namespace game
 
