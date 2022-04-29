@@ -21,6 +21,7 @@
 #include "attack.h"
 #include "attackmodified.h"
 #include "customattacks.h"
+#include "custommodifier.h"
 #include "dynamiccast.h"
 #include "globaldata.h"
 #include "globalvariables.h"
@@ -54,6 +55,13 @@ game::CAttackImpl* getAttackImpl(const game::IAttack* attack)
 
     auto current = attack;
     while (current) {
+        // Do this before dynamicCast because CCustomModifier does not support IAttack RTTI.
+        auto customModifier = castAttackToCustomModifier(current);
+        if (customModifier) {
+            current = customModifier->getPrevAttack();
+            continue;
+        }
+
         auto attackImpl = (CAttackImpl*)dynamicCast(current, 0, rtti.IAttackType,
                                                     rtti.CAttackImplType, 0);
         if (attackImpl)

@@ -35,6 +35,8 @@ struct CCustomModifier
     game::IUsStackLeader usStackLeader;
     game::IAttack attack;
     std::string script;
+
+    game::IAttack* getPrevAttack();
 };
 
 static_assert(
@@ -48,6 +50,8 @@ static_assert(
 static_assert(
     offsetof(CCustomModifier, umModifier) == offsetof(game::CUmUnit, umModifier),
     "CustomModifier::umModifier offset should be the same as of CUmUnit as it reuses its rtti info");
+
+CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack);
 
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
                                     const char* script,

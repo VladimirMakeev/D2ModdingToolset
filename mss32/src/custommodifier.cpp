@@ -19,6 +19,7 @@
 
 #include "custommodifier.h"
 #include "dynamiccast.h"
+#include "game.h"
 #include "mempool.h"
 #include "utils.h"
 
@@ -59,10 +60,22 @@ static inline CCustomModifier* castStackLeaderToCustomModifier(
                                               - offsetof(CCustomModifier, usStackLeader));
 }
 
-static inline CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack)
+CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack)
 {
+    if (attack->vftable != &rttiInfo.attack.vftable)
+        return nullptr;
+
     return reinterpret_cast<CCustomModifier*>((uintptr_t)attack
                                               - offsetof(CCustomModifier, attack));
+}
+
+game::IAttack* CCustomModifier::getPrevAttack()
+{
+    using namespace game;
+
+    auto prev = umModifier.data->prev;
+    auto soldier = gameFunctions().castUnitImplToSoldier(prev);
+    return soldier->vftable->getAttackById(soldier);
 }
 
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
