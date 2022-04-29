@@ -179,6 +179,17 @@ void __fastcall modifierDtor(game::CUmModifier* thisptr, int /*%edx*/, char flag
     customModifierDtor(customModifier, flags);
 }
 
+game::CUmModifier* __fastcall modifierCopy(game::CUmModifier* thisptr, int /*%edx*/)
+{
+    using namespace game;
+
+    auto customModifier = castModifierToCustomModifier(thisptr);
+
+    auto copy = (CCustomModifier*)Memory::get().allocate(sizeof(CCustomModifier));
+    customModifierCopyCtor(copy, customModifier);
+    return &copy->umModifier;
+}
+
 void __fastcall stackLeaderDtor(game::IUsStackLeader* thisptr, int /*%edx*/, char flags)
 {
     auto customModifier = castStackLeaderToCustomModifier(thisptr);
@@ -221,6 +232,7 @@ void initModifierRttiInfo()
     replaceRttiInfo(info, CUmUnitApi::vftable().umModifier);
 
     info.vftable.destructor = (CUmModifierVftable::Destructor)&modifierDtor;
+    info.vftable.copy = (CUmModifierVftable::Copy)&modifierCopy;
     // TODO: replace vftable members
 }
 
