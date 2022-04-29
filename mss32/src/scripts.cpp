@@ -44,6 +44,14 @@
 
 namespace hooks {
 
+struct PathHash
+{
+    std::size_t operator()(std::filesystem::path const& p) const noexcept
+    {
+        return std::filesystem::hash_value(p);
+    }
+};
+
 static void bindApi(sol::state& lua)
 {
     using namespace game;
@@ -222,17 +230,16 @@ sol::state& getLua()
 
 std::string getSource(const std::filesystem::path& path)
 {
-    static std::unordered_map<std::string, std::string> sources;
+    static std::unordered_map<std::filesystem::path, std::string, PathHash> sources;
     static std::mutex sourcesMutex;
 
     const std::lock_guard<std::mutex> lock(sourcesMutex);
 
-    auto key = path.string();
-    auto it = sources.find(key);
+    auto it = sources.find(path);
     if (it != sources.end())
         return it->second;
 
-    auto& source = sources[key];
+    auto& source = sources[path];
     source = readFile(path);
     return source;
 }
