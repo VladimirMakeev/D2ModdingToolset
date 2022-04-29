@@ -36,6 +36,7 @@ static struct
 } rttiInfo;
 
 void initRttiInfo();
+void initVftable(CCustomModifier* thisptr);
 
 static inline CCustomModifier* castUnitToCustomModifier(const game::IUsUnit* unit)
 {
@@ -99,23 +100,25 @@ CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
 {
     using namespace game;
 
-    const auto& umUnitApi = CUmUnitApi::get();
-
     // Lazy init makes sure that vftable hooks (if any) are already applied
     initRttiInfo();
 
     thisptr->usUnit.id = emptyId;
-
     CUmModifierApi::get().constructor(&thisptr->umModifier, id, globalData);
-
     new (&thisptr->script) std::string(script);
+    initVftable(thisptr);
 
-    thisptr->usUnit.vftable = &rttiInfo.usUnit.vftable;
-    thisptr->usSoldier.vftable = &rttiInfo.usSoldier.vftable;
-    thisptr->umModifier.vftable = &rttiInfo.umModifier.vftable;
-    thisptr->usStackLeader.vftable = &rttiInfo.usStackLeader.vftable;
-    thisptr->attack.vftable = &rttiInfo.attack.vftable;
-    thisptr->attack2.vftable = &rttiInfo.attack2.vftable;
+    return thisptr;
+}
+
+CCustomModifier* customModifierCopyCtor(CCustomModifier* thisptr, const CCustomModifier* src)
+{
+    using namespace game;
+
+    thisptr->usUnit.id = src->usUnit.id;
+    CUmModifierApi::get().copyConstructor(&thisptr->umModifier, &src->umModifier);
+    new (&thisptr->script) std::string(src->script);
+    initVftable(thisptr);
 
     return thisptr;
 }
@@ -275,6 +278,16 @@ void initRttiInfo()
         initAttack2RttiInfo();
         initialized = true;
     }
+}
+
+void initVftable(CCustomModifier* thisptr)
+{
+    thisptr->usUnit.vftable = &rttiInfo.usUnit.vftable;
+    thisptr->usSoldier.vftable = &rttiInfo.usSoldier.vftable;
+    thisptr->umModifier.vftable = &rttiInfo.umModifier.vftable;
+    thisptr->usStackLeader.vftable = &rttiInfo.usStackLeader.vftable;
+    thisptr->attack.vftable = &rttiInfo.attack.vftable;
+    thisptr->attack2.vftable = &rttiInfo.attack2.vftable;
 }
 
 game::CUmModifier* createCustomModifier(const char* script,
