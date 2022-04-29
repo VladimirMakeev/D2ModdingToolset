@@ -252,4 +252,15 @@ void initRttiInfo()
     }
 }
 
+game::CUmModifier* createCustomModifier(const char* script,
+                                        const game::CMidgardID* id,
+                                        const game::GlobalData** globalData)
+{
+    using namespace game;
+
+    auto customModifier = (CCustomModifier*)Memory::get().allocate(sizeof(CCustomModifier));
+    customModifierCtor(customModifier, script, id, globalData);
+    return &customModifier->umModifier;
+}
+
 } // namespace hooks

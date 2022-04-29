@@ -61,9 +61,7 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
         String script{};
         dbApi.readString(&script, dbTable, "SCRIPT");
 
-        auto customModifier = (CCustomModifier*)memAlloc(sizeof(CCustomModifier));
-        customModifierCtor(customModifier, script.string, &thisptr->id, globalData);
-        data->modifier = &customModifier->umModifier;
+        data->modifier = createCustomModifier(script.string, &thisptr->id, globalData);
 
         stringApi.free(&script);
     } else {

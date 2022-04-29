@@ -54,10 +54,9 @@ static_assert(
 
 CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack);
 
-CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
-                                    const char* script,
-                                    const game::CMidgardID* id,
-                                    const game::GlobalData** globalData);
+game::CUmModifier* createCustomModifier(const char* script,
+                                        const game::CMidgardID* id,
+                                        const game::GlobalData** globalData);
 
 } // namespace hooks
 
