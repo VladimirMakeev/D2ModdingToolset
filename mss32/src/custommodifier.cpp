@@ -30,6 +30,7 @@ static struct
     game::RttiInfo<game::IUsSoldierVftable> usSoldier;
     game::RttiInfo<game::CUmModifierVftable> umModifier;
     game::RttiInfo<game::IUsStackLeaderVftable> usStackLeader;
+    game::RttiInfo<game::IAttackVftable> attack;
 } rttiInfo;
 
 void initRttiInfo();
@@ -58,6 +59,12 @@ static inline CCustomModifier* castStackLeaderToCustomModifier(
                                               - offsetof(CCustomModifier, usStackLeader));
 }
 
+static inline CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack)
+{
+    return reinterpret_cast<CCustomModifier*>((uintptr_t)attack
+                                              - offsetof(CCustomModifier, attack));
+}
+
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
                                     const char* script,
                                     const game::CMidgardID* id,
@@ -80,6 +87,7 @@ CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
     thisptr->usSoldier.vftable = &rttiInfo.usSoldier.vftable;
     thisptr->umModifier.vftable = &rttiInfo.umModifier.vftable;
     thisptr->usStackLeader.vftable = &rttiInfo.usStackLeader.vftable;
+    thisptr->attack.vftable = &rttiInfo.attack.vftable;
 
     return thisptr;
 }
@@ -118,6 +126,12 @@ void __fastcall modifierDtor(game::CUmModifier* thisptr, int /*%edx*/, char flag
 void __fastcall stackLeaderDtor(game::IUsStackLeader* thisptr, int /*%edx*/, char flags)
 {
     auto customModifier = castStackLeaderToCustomModifier(thisptr);
+    customModifierDtor(customModifier, flags);
+}
+
+void __fastcall attackDtor(game::IAttack* thisptr, int /*%edx*/, char flags)
+{
+    auto customModifier = castAttackToCustomModifier(thisptr);
     customModifierDtor(customModifier, flags);
 }
 
@@ -168,6 +182,20 @@ void initStackLeaderRttiInfo()
     // TODO: replace !all! vftable members
 }
 
+void initAttackRttiInfo()
+{
+    using namespace game;
+
+    // None of the existing RTTI can be reused as this class has unique offset.
+    // Lucky for us, the game is not using IAttack for dynamic casts so we should be fine
+    // without RTTI. Otherwise, we would need to either patch dynamicCast or create our own RTTI.
+    auto& info = rttiInfo.attack;
+    info.locator = nullptr;
+
+    info.vftable.destructor = (IMidObjectVftable::Destructor)&attackDtor;
+    // TODO: replace !all! vftable members
+}
+
 void initRttiInfo()
 {
     static bool initialized = false;
@@ -176,6 +204,7 @@ void initRttiInfo()
         initSoldierRttiInfo();
         initModifierRttiInfo();
         initStackLeaderRttiInfo();
+        initAttackRttiInfo();
         initialized = true;
     }
 }

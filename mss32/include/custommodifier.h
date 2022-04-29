@@ -20,6 +20,7 @@
 #ifndef CUSTOMMODIFIER_H
 #define CUSTOMMODIFIER_H
 
+#include "attack.h"
 #include "umunit.h"
 #include "usstackleader.h"
 #include <string>
@@ -32,6 +33,7 @@ struct CCustomModifier
     game::IUsSoldier usSoldier;
     game::CUmModifier umModifier;
     game::IUsStackLeader usStackLeader;
+    game::IAttack attack;
     std::string script;
 };
 
