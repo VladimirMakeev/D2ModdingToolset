@@ -98,6 +98,9 @@ struct Api
                                         const TypeDescriptor* dstType,
                                         int isReference);
     DynamicCast dynamicCast;
+
+    using TypeInfoRawName = const char*(__thiscall*)(const TypeDescriptor* thisptr);
+    TypeInfoRawName* typeInfoRawName;
 };
 
 Api& get();
@@ -135,6 +138,7 @@ struct Rtti
     TypeDescriptor* CBatAttackTransformSelfType;
     TypeDescriptor* CMidLocationType;
     TypeDescriptor* TUsRacialSoldierType;
+    TypeDescriptor* IUsStackLeaderType;
 };
 
 const Rtti& rtti();
