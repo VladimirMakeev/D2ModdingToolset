@@ -994,6 +994,9 @@
     <ClCompile Include="src\custommodifier.cpp">
       <Filter>features</Filter>
     </ClCompile>
+    <ClCompile Include="src\modifgrouphooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2554,6 +2557,9 @@
     </ClInclude>
     <ClInclude Include="include\custommodifier.h">
       <Filter>features</Filter>
+    </ClInclude>
+    <ClInclude Include="include\modifgrouphooks.h">
+      <Filter>hooks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

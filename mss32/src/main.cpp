@@ -20,7 +20,6 @@
 #pragma comment(lib, "detours.lib")
 
 #include "customattacks.h"
-#include "custommodifiers.h"
 #include "hooks.h"
 #include "log.h"
 #include "restrictions.h"
@@ -235,7 +234,6 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
     }
 
     hooks::initializeCustomAttacks();
-    hooks::initializeCustomModifiers();
 
     adjustGameRestrictions();
     setupVftableHooks();

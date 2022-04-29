@@ -25,19 +25,6 @@
 
 namespace hooks {
 
-void initializeCustomModifiers()
-{
-    utils::DbfFile dbf;
-    const std::filesystem::path dbfFilePath{gameFolder() / "globals" / "Gmodif.dbf"};
-    if (!dbf.open(dbfFilePath)) {
-        logError("mssProxyError.log",
-                 fmt::format("Could not open {:s}", dbfFilePath.filename().string()));
-        return;
-    }
-
-    getCustomModifiers().enabled = dbf.column(scriptColumnName) != nullptr;
-}
-
 CustomModifiers& getCustomModifiers()
 {
     static CustomModifiers value{};

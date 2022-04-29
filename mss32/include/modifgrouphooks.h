@@ -17,23 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CUSTOMMODIFIERS_H
-#define CUSTOMMODIFIERS_H
+#ifndef MODIFGROUPHOOKS_H
+#define MODIFGROUPHOOKS_H
 
-#include "modifgroup.h"
+namespace game {
+struct LModifGroupTable;
+} // namespace game
 
 namespace hooks {
 
-static const char customModifGroupName[] = "L_CUSTOM";
-static const char scriptColumnName[] = "SCRIPT";
-
-struct CustomModifiers
-{
-    game::LModifGroup group;
-};
-
-CustomModifiers& getCustomModifiers();
+game::LModifGroupTable* __fastcall modifGroupTableCtorHooked(game::LModifGroupTable* thisptr,
+                                                             int /*%edx*/,
+                                                             const char* globalsFolderPath,
+                                                             void* codeBaseEnvProxy);
 
 } // namespace hooks
 
-#endif // CUSTOMMODIFIERS_H
+#endif // MODIFGROUPHOOKS_H

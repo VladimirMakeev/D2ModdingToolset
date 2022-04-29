@@ -56,21 +56,20 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
 
     dbApi.readId(&thisptr->id, dbTable, "MODIF_ID");
 
-    String script{};
-    if (getCustomModifiers().enabled)
+    dbApi.findModifGroupCategory(&data->group, dbTable, "SOURCE", (*globalData)->modifGroups);
+    if (data->group.id == getCustomModifiers().group.id) {
+        String script{};
         dbApi.readString(&script, dbTable, "SCRIPT");
 
-    if (script.length) {
         auto customModifier = (CCustomModifier*)memAlloc(sizeof(CCustomModifier));
         customModifierCtor(customModifier, script.string, &thisptr->id, globalData);
         data->modifier = &customModifier->umModifier;
+
+        stringApi.free(&script);
     } else {
-        dbApi.findModifGroupCategory(&data->group, dbTable, "SOURCE", (*globalData)->modifGroups);
         dbApi.readModifier(&data->modifier, &thisptr->id, &data->group, globalsFolderPath,
                            codeBaseEnvProxy, globalData);
     }
-
-    stringApi.free(&script);
 
     return thisptr;
 }

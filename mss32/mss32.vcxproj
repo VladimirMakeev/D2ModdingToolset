@@ -337,6 +337,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\midunit.cpp" />
     <ClCompile Include="src\midunithooks.cpp" />
     <ClCompile Include="src\modifgroup.cpp" />
+    <ClCompile Include="src\modifgrouphooks.cpp" />
     <ClCompile Include="src\modifierutils.cpp" />
     <ClCompile Include="src\mqrect.cpp" />
     <ClCompile Include="src\multilayerimg.cpp" />
@@ -573,6 +574,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mainview2.h" />
     <ClInclude Include="include\mainview2hooks.h" />
     <ClInclude Include="include\midisogroundindexer.h" />
+    <ClInclude Include="include\modifgrouphooks.h" />
     <ClInclude Include="include\mq_c_s.h" />
     <ClInclude Include="include\d2osexception.h" />
     <ClInclude Include="include\d2pair.h" />
