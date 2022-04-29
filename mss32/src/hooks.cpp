@@ -107,6 +107,8 @@
 #include "midunitdescriptorhooks.h"
 #include "midunithooks.h"
 #include "midvillage.h"
+#include "modifgroup.h"
+#include "modifgrouphooks.h"
 #include "modifierutils.h"
 #include "movepathhooks.h"
 #include "musichooks.h"
@@ -566,8 +568,9 @@ Hooks getHooks()
             HookInfo{CUmUnitApi::vftable().usSoldier->getRegen, umUnitGetRegenHooked});
     }
 
-    // TODO: Support custom modifiers
-    // hooks.emplace_back(HookInfo{TUnitModifierApi::get().constructor, unitModifierCtorHooked});
+    // Support custom modifiers
+    hooks.emplace_back(HookInfo{LModifGroupTableApi::get().constructor, modifGroupTableCtorHooked});
+    hooks.emplace_back(HookInfo{TUnitModifierApi::get().constructor, unitModifierCtorHooked});
 
     return hooks;
 }
