@@ -34,9 +34,10 @@ struct CCustomModifier
     game::CUmModifier umModifier;
     game::IUsStackLeader usStackLeader;
     game::IAttack attack;
+    game::IAttack attack2;
     std::string script;
 
-    game::IAttack* getPrevAttack();
+    game::IAttack* getPrevAttack(const game::IAttack* current);
 };
 
 static_assert(

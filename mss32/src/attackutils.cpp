@@ -58,7 +58,7 @@ game::CAttackImpl* getAttackImpl(const game::IAttack* attack)
         // Do this before dynamicCast because CCustomModifier does not support IAttack RTTI.
         auto customModifier = castAttackToCustomModifier(current);
         if (customModifier) {
-            current = customModifier->getPrevAttack();
+            current = customModifier->getPrevAttack(current);
             continue;
         }
 

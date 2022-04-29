@@ -32,6 +32,7 @@ static struct
     game::RttiInfo<game::CUmModifierVftable> umModifier;
     game::RttiInfo<game::IUsStackLeaderVftable> usStackLeader;
     game::RttiInfo<game::IAttackVftable> attack;
+    game::RttiInfo<game::IAttackVftable> attack2;
 } rttiInfo;
 
 void initRttiInfo();
@@ -62,20 +63,33 @@ static inline CCustomModifier* castStackLeaderToCustomModifier(
 
 CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack)
 {
-    if (attack->vftable != &rttiInfo.attack.vftable)
-        return nullptr;
+    if (attack->vftable == &rttiInfo.attack.vftable) {
+        return reinterpret_cast<CCustomModifier*>((uintptr_t)attack
+                                                  - offsetof(CCustomModifier, attack));
+    } else if (attack->vftable == &rttiInfo.attack2.vftable) {
+        return reinterpret_cast<CCustomModifier*>((uintptr_t)attack
+                                                  - offsetof(CCustomModifier, attack2));
+    }
 
-    return reinterpret_cast<CCustomModifier*>((uintptr_t)attack
-                                              - offsetof(CCustomModifier, attack));
+    return nullptr;
 }
 
-game::IAttack* CCustomModifier::getPrevAttack()
+game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* current)
 {
     using namespace game;
 
     auto prev = umModifier.data->prev;
     auto soldier = gameFunctions().castUnitImplToSoldier(prev);
-    return soldier->vftable->getAttackById(soldier);
+    if (!soldier)
+        return nullptr;
+
+    if (current == &attack) {
+        return soldier->vftable->getAttackById(soldier);
+    } else if (current == &attack2) {
+        return soldier->vftable->getSecondAttackById(soldier);
+    }
+
+    return nullptr;
 }
 
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
@@ -101,6 +115,7 @@ CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
     thisptr->umModifier.vftable = &rttiInfo.umModifier.vftable;
     thisptr->usStackLeader.vftable = &rttiInfo.usStackLeader.vftable;
     thisptr->attack.vftable = &rttiInfo.attack.vftable;
+    thisptr->attack2.vftable = &rttiInfo.attack2.vftable;
 
     return thisptr;
 }
@@ -209,6 +224,20 @@ void initAttackRttiInfo()
     // TODO: replace !all! vftable members
 }
 
+void initAttack2RttiInfo()
+{
+    using namespace game;
+
+    // None of the existing RTTI can be reused as this class has unique offset.
+    // Lucky for us, the game is not using IAttack for dynamic casts so we should be fine
+    // without RTTI. Otherwise, we would need to either patch dynamicCast or create our own RTTI.
+    auto& info = rttiInfo.attack2;
+    info.locator = nullptr;
+
+    info.vftable.destructor = (IMidObjectVftable::Destructor)&attackDtor;
+    // TODO: replace !all! vftable members
+}
+
 void initRttiInfo()
 {
     static bool initialized = false;
@@ -218,6 +247,7 @@ void initRttiInfo()
         initModifierRttiInfo();
         initStackLeaderRttiInfo();
         initAttackRttiInfo();
+        initAttack2RttiInfo();
         initialized = true;
     }
 }
