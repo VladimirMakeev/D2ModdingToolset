@@ -155,8 +155,6 @@ game::IUsUnitExtension* __fastcall unitCast(const game::IUsUnit* thisptr,
     auto customModifier = castUnitToCustomModifier(thisptr);
     auto prev = customModifier->umModifier.data->prev;
 
-    auto todotest = typeInfoRawName(rtti.IUsSoldierType); // TODO: test
-
     if (!strcmp(rawTypeName, typeInfoRawName(rtti.IUsSoldierType))) {
         return (IUsUnitExtension*)&customModifier->usSoldier;
     } else if (!strcmp(rawTypeName, typeInfoRawName(rtti.IUsStackLeaderType))) {
