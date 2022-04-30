@@ -39,6 +39,7 @@ struct CCustomModifier
 
     game::IUsUnit* getPrev();
     game::IUsSoldier* getPrevSoldier();
+    game::IUsStackLeader* getPrevStackLeader();
     game::IAttack* getPrevAttack(const game::IAttack* current);
 };
 

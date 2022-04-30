@@ -85,6 +85,11 @@ game::IUsSoldier* CCustomModifier::getPrevSoldier()
     return game::gameFunctions().castUnitImplToSoldier(getPrev());
 }
 
+game::IUsStackLeader* CCustomModifier::getPrevStackLeader()
+{
+    return game::gameFunctions().castUnitImplToStackLeader(getPrev());
+}
+
 game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* current)
 {
     auto prev = getPrevSoldier();
