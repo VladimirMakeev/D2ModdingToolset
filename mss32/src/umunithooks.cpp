@@ -36,6 +36,7 @@ game::CUmUnit* __fastcall umUnitCtorHooked(game::CUmUnit* thisptr,
     using namespace game;
 
     const auto& umUnitApi = CUmUnitApi::get();
+    const auto& umUnitVftable = CUmUnitApi::vftable();
     const auto& dbApi = CDBTableApi::get();
 
     thisptr->usUnit.id = emptyId;
@@ -46,9 +47,9 @@ game::CUmUnit* __fastcall umUnitCtorHooked(game::CUmUnit* thisptr,
     if (thisptr->data)
         umUnitApi.dataConstructor(thisptr->data);
 
-    thisptr->usUnit.vftable = CUmUnitApi::vftable().usUnit;
-    thisptr->usSoldier.vftable = CUmUnitApi::vftable().usSoldier;
-    thisptr->umModifier.vftable = CUmUnitApi::vftable().umModifier;
+    thisptr->usUnit.vftable = umUnitVftable.usUnit;
+    thisptr->usSoldier.vftable = umUnitVftable.usSoldier;
+    thisptr->umModifier.vftable = umUnitVftable.umModifier;
 
     if (dbApi.eof(dbTable))
         dbApi.missingValueException(dbApi.getName(dbTable), idToString(modifierId).c_str());
@@ -65,6 +66,8 @@ game::CUmUnit* __fastcall umUnitCopyCtorHooked(game::CUmUnit* thisptr,
 {
     using namespace game;
 
+    const auto& umUnitVftable = CUmUnitApi::vftable();
+
     thisptr->usUnit.id = src->usUnit.id;
 
     CUmModifierApi::get().copyConstructor(&thisptr->umModifier, &src->umModifier);
@@ -73,9 +76,9 @@ game::CUmUnit* __fastcall umUnitCopyCtorHooked(game::CUmUnit* thisptr,
     if (thisptr->data)
         CUmUnitApi::get().dataCopyConstructor(thisptr->data, src->data);
 
-    thisptr->usUnit.vftable = CUmUnitApi::vftable().usUnit;
-    thisptr->usSoldier.vftable = CUmUnitApi::vftable().usSoldier;
-    thisptr->umModifier.vftable = CUmUnitApi::vftable().umModifier;
+    thisptr->usUnit.vftable = umUnitVftable.usUnit;
+    thisptr->usSoldier.vftable = umUnitVftable.usSoldier;
+    thisptr->umModifier.vftable = umUnitVftable.umModifier;
 
     return thisptr;
 }
