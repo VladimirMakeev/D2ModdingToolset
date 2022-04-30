@@ -27,7 +27,18 @@ namespace hooks {
 
 CustomModifiers& getCustomModifiers()
 {
+    using namespace game;
+
     static CustomModifiers value{};
+    static bool initialized = false;
+
+    if (!initialized) {
+        value.group.id = (ModifierSourceId)-1;
+        value.group.table = nullptr;
+        value.group.vftable = LModifGroupApi::vftable();
+
+        initialized = true;
+    }
 
     return value;
 }
