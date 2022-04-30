@@ -21,6 +21,7 @@
 #include "dynamiccast.h"
 #include "game.h"
 #include "mempool.h"
+#include "unitcat.h"
 #include "utils.h"
 
 namespace hooks {
@@ -232,6 +233,22 @@ bool __fastcall modifierCanApplyToUnit(const game::CUmModifier* thisptr, const g
         return fn.castUnitImplToSoldier(unit) != nullptr;
 }
 
+bool __fastcall modifierCanApplyToUnitCategory(const game::CUmModifier* thisptr,
+                                               const game::LUnitCategory* unitCategory)
+{
+    using namespace game;
+
+    const auto& unitCategories = UnitCategories::get();
+
+    auto thiz = castModifierToCustomModifier(thisptr);
+    if (!thiz->isLeaderOnly())
+        return true;
+
+    auto id = unitCategory->id;
+    return id == unitCategories.noble->id || id == unitCategories.leader->id
+           || id == unitCategories.summon->id || id == unitCategories.illusion->id;
+}
+
 void __fastcall stackLeaderDtor(game::IUsStackLeader* thisptr, int /*%edx*/, char flags)
 {
     auto thiz = castStackLeaderToCustomModifier(thisptr);
@@ -282,6 +299,8 @@ void initModifierRttiInfo()
     vftable.canApplyToStackWithLeadership =
         (CUmModifierVftable::CanApplyToStackWithLeadership)&modifierCanApplyToStackWithLeadership;
     vftable.canApplyToUnit = (CUmModifierVftable::CanApplyToUnit)&modifierCanApplyToUnit;
+    vftable.canApplyToUnitCategory = (CUmModifierVftable::
+                                          CanApplyToUnitCategory)&modifierCanApplyToUnitCategory;
     // TODO: replace !all! vftable members, do not copy original vftable
 }
 
