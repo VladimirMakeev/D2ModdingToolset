@@ -232,9 +232,10 @@ void initUnitRttiInfo()
     auto& info = rttiInfo.usUnit;
     replaceRttiInfo(info, CUmUnitApi::vftable().usUnit, false);
 
-    info.vftable.destructor = (IMidObjectVftable::Destructor)&unitDtor;
-    info.vftable.cast = (IUsUnitVftable::Cast)&unitCast;
-    info.vftable.getCategory = (IUsUnitVftable::GetCategory)&unitGetCategory;
+    auto& vftable = info.vftable;
+    vftable.destructor = (IMidObjectVftable::Destructor)&unitDtor;
+    vftable.cast = (IUsUnitVftable::Cast)&unitCast;
+    vftable.getCategory = (IUsUnitVftable::GetCategory)&unitGetCategory;
 }
 
 void initSoldierRttiInfo()
@@ -244,7 +245,8 @@ void initSoldierRttiInfo()
     auto& info = rttiInfo.usSoldier;
     replaceRttiInfo(info, CUmUnitApi::vftable().usSoldier);
 
-    info.vftable.destructor = (IUsUnitExtensionVftable::Destructor)&soldierDtor;
+    auto& vftable = info.vftable;
+    vftable.destructor = (IUsUnitExtensionVftable::Destructor)&soldierDtor;
     // TODO: replace !all! vftable members, do not copy original vftable
 }
 
@@ -255,9 +257,10 @@ void initModifierRttiInfo()
     auto& info = rttiInfo.umModifier;
     replaceRttiInfo(info, CUmUnitApi::vftable().umModifier);
 
-    info.vftable.destructor = (CUmModifierVftable::Destructor)&modifierDtor;
-    info.vftable.copy = (CUmModifierVftable::Copy)&modifierCopy;
-    info.vftable.canApplyToStackWithLeadership =
+    auto& vftable = info.vftable;
+    vftable.destructor = (CUmModifierVftable::Destructor)&modifierDtor;
+    vftable.copy = (CUmModifierVftable::Copy)&modifierCopy;
+    vftable.canApplyToStackWithLeadership =
         (CUmModifierVftable::CanApplyToStackWithLeadership)&modifierCanApplyToStackWithLeadership;
     // TODO: replace !all! vftable members, do not copy original vftable
 }
@@ -272,7 +275,8 @@ void initStackLeaderRttiInfo()
     auto& info = rttiInfo.usStackLeader;
     info.locator = nullptr;
 
-    info.vftable.destructor = (IUsUnitExtensionVftable::Destructor)&stackLeaderDtor;
+    auto& vftable = info.vftable;
+    vftable.destructor = (IUsUnitExtensionVftable::Destructor)&stackLeaderDtor;
     // TODO: replace !all! vftable members
 }
 
@@ -286,7 +290,8 @@ void initAttackRttiInfo()
     auto& info = rttiInfo.attack;
     info.locator = nullptr;
 
-    info.vftable.destructor = (IMidObjectVftable::Destructor)&attackDtor;
+    auto& vftable = info.vftable;
+    vftable.destructor = (IMidObjectVftable::Destructor)&attackDtor;
     // TODO: replace !all! vftable members
 }
 
@@ -300,7 +305,8 @@ void initAttack2RttiInfo()
     auto& info = rttiInfo.attack2;
     info.locator = nullptr;
 
-    info.vftable.destructor = (IMidObjectVftable::Destructor)&attackDtor;
+    auto& vftable = info.vftable;
+    vftable.destructor = (IMidObjectVftable::Destructor)&attackDtor;
     // TODO: replace !all! vftable members
 }
 
