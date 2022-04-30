@@ -38,6 +38,7 @@ struct CCustomModifier
     std::string script;
 
     game::IUsUnit* getPrev();
+    game::IUsSoldier* getPrevSoldier();
     game::IAttack* getPrevAttack(const game::IAttack* current);
 };
 

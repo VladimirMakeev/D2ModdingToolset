@@ -80,18 +80,21 @@ game::IUsUnit* CCustomModifier::getPrev()
     return umModifier.data->prev;
 }
 
+game::IUsSoldier* CCustomModifier::getPrevSoldier()
+{
+    return game::gameFunctions().castUnitImplToSoldier(getPrev());
+}
+
 game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* current)
 {
-    using namespace game;
-
-    auto soldier = gameFunctions().castUnitImplToSoldier(getPrev());
-    if (!soldier)
+    auto prev = getPrevSoldier();
+    if (!prev)
         return nullptr;
 
     if (current == &attack) {
-        return soldier->vftable->getAttackById(soldier);
+        return prev->vftable->getAttackById(prev);
     } else if (current == &attack2) {
-        return soldier->vftable->getSecondAttackById(soldier);
+        return prev->vftable->getSecondAttackById(prev);
     }
 
     return nullptr;
