@@ -150,8 +150,8 @@ void customModifierDtor(CCustomModifier* thisptr, char flags)
 
 void __fastcall unitDtor(game::IUsUnit* thisptr, int /*%edx*/, char flags)
 {
-    auto customModifier = castUnitToCustomModifier(thisptr);
-    customModifierDtor(customModifier, flags);
+    auto thiz = castUnitToCustomModifier(thisptr);
+    customModifierDtor(thiz, flags);
 }
 
 game::IUsUnitExtension* __fastcall unitCast(const game::IUsUnit* thisptr,
@@ -164,14 +164,14 @@ game::IUsUnitExtension* __fastcall unitCast(const game::IUsUnit* thisptr,
     const auto& rttiApi = RttiApi::get();
     auto& typeInfoRawName = *rttiApi.typeInfoRawName;
 
-    auto customModifier = castUnitToCustomModifier(thisptr);
-    auto prev = customModifier->getPrev();
+    auto thiz = castUnitToCustomModifier(thisptr);
+    auto prev = thiz->getPrev();
 
     if (!strcmp(rawTypeName, typeInfoRawName(rtti.IUsSoldierType))) {
-        return (IUsUnitExtension*)&customModifier->usSoldier;
+        return (IUsUnitExtension*)&thiz->usSoldier;
     } else if (!strcmp(rawTypeName, typeInfoRawName(rtti.IUsStackLeaderType))) {
         auto prevStackLeader = prev->vftable->cast(thisptr, rawTypeName);
-        return prevStackLeader ? (IUsUnitExtension*)&customModifier->usStackLeader : nullptr;
+        return prevStackLeader ? (IUsUnitExtension*)&thiz->usStackLeader : nullptr;
     }
 
     return prev->vftable->cast(prev, rawTypeName);
@@ -185,24 +185,24 @@ const game::LUnitCategory* __fastcall unitGetCategory(const game::IUsUnit* thisp
 
 void __fastcall soldierDtor(game::IUsSoldier* thisptr, int /*%edx*/, char flags)
 {
-    auto customModifier = castSoldierToCustomModifier(thisptr);
-    customModifierDtor(customModifier, flags);
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    customModifierDtor(thiz, flags);
 }
 
 void __fastcall modifierDtor(game::CUmModifier* thisptr, int /*%edx*/, char flags)
 {
-    auto customModifier = castModifierToCustomModifier(thisptr);
-    customModifierDtor(customModifier, flags);
+    auto thiz = castModifierToCustomModifier(thisptr);
+    customModifierDtor(thiz, flags);
 }
 
 game::CUmModifier* __fastcall modifierCopy(game::CUmModifier* thisptr, int /*%edx*/)
 {
     using namespace game;
 
-    auto customModifier = castModifierToCustomModifier(thisptr);
+    auto thiz = castModifierToCustomModifier(thisptr);
 
     auto copy = (CCustomModifier*)Memory::get().allocate(sizeof(CCustomModifier));
-    customModifierCopyCtor(copy, customModifier);
+    customModifierCopyCtor(copy, thiz);
     return &copy->umModifier;
 }
 
@@ -215,14 +215,14 @@ bool __fastcall modifierCanApplyToStackWithLeadership(game::CUmModifier* thisptr
 
 void __fastcall stackLeaderDtor(game::IUsStackLeader* thisptr, int /*%edx*/, char flags)
 {
-    auto customModifier = castStackLeaderToCustomModifier(thisptr);
-    customModifierDtor(customModifier, flags);
+    auto thiz = castStackLeaderToCustomModifier(thisptr);
+    customModifierDtor(thiz, flags);
 }
 
 void __fastcall attackDtor(game::IAttack* thisptr, int /*%edx*/, char flags)
 {
-    auto customModifier = castAttackToCustomModifier(thisptr);
-    customModifierDtor(customModifier, flags);
+    auto thiz = castAttackToCustomModifier(thisptr);
+    customModifierDtor(thiz, flags);
 }
 
 void initUnitRttiInfo()
