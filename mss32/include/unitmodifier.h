@@ -39,6 +39,11 @@ struct TUnitModifierData
     CUmModifier* modifier;
 };
 
+/**
+ * Serves as single modifier factory. Id holds an id of modifier that this factory produces.
+ * Reads modifier from DBF, then holds it as global instance and redirects all the calls to it.
+ * Uses CUmModifier::Copy to create new instances.
+ */
 struct TUnitModifier : IMidObjectT<TUnitModifierVftable>
 {
     TUnitModifierData* data;
@@ -60,8 +65,8 @@ struct TUnitModifierVftable : IMidObjectVftable
                                                      const LUnitCategory* unitCategory);
     CanApplyToUnitCategory canApplyToUnitCategory;
 
-    using Copy = CUmModifier*(__thiscall*)(TUnitModifier* thisptr);
-    Copy copy;
+    using CreateModifier = CUmModifier*(__thiscall*)(TUnitModifier* thisptr);
+    CreateModifier createModifier;
 };
 
 static_assert(sizeof(TUnitModifierVftable) == 5 * sizeof(void*),
