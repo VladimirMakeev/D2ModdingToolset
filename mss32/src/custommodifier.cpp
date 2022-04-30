@@ -206,6 +206,13 @@ game::CUmModifier* __fastcall modifierCopy(game::CUmModifier* thisptr, int /*%ed
     return &copy->umModifier;
 }
 
+bool __fastcall modifierCanApplyToStackWithLeadership(game::CUmModifier* thisptr,
+                                                      int /*%edx*/,
+                                                      const int* leadership)
+{
+    return true;
+}
+
 void __fastcall stackLeaderDtor(game::IUsStackLeader* thisptr, int /*%edx*/, char flags)
 {
     auto customModifier = castStackLeaderToCustomModifier(thisptr);
@@ -250,6 +257,8 @@ void initModifierRttiInfo()
 
     info.vftable.destructor = (CUmModifierVftable::Destructor)&modifierDtor;
     info.vftable.copy = (CUmModifierVftable::Copy)&modifierCopy;
+    info.vftable.canApplyToStackWithLeadership =
+        (CUmModifierVftable::CanApplyToStackWithLeadership)&modifierCanApplyToStackWithLeadership;
     // TODO: replace !all! vftable members, do not copy original vftable
 }
 
