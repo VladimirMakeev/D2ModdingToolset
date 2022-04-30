@@ -89,11 +89,14 @@ void createTimerEvent(game::UiEvent* timerEvent,
 bool computeHash(const std::filesystem::path& folder, std::string& hash);
 
 template <typename T>
-static inline void replaceRttiInfo(game::RttiInfo<T>& dst, const T* src)
+static inline void replaceRttiInfo(game::RttiInfo<T>& dst, const T* src, bool copyVftable = true)
 {
     dst.locator = *reinterpret_cast<const game::CompleteObjectLocator**>(
         reinterpret_cast<std::uintptr_t>(src) - sizeof(game::CompleteObjectLocator*));
-    std::memcpy(&dst.vftable, src, sizeof(T));
+
+    if (copyVftable) {
+        std::memcpy(&dst.vftable, src, sizeof(T));
+    }
 }
 
 } // namespace hooks
