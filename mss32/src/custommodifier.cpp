@@ -75,12 +75,16 @@ CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack)
     return nullptr;
 }
 
+game::IUsUnit* CCustomModifier::getPrev()
+{
+    return umModifier.data->prev;
+}
+
 game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* current)
 {
     using namespace game;
 
-    auto prev = umModifier.data->prev;
-    auto soldier = gameFunctions().castUnitImplToSoldier(prev);
+    auto soldier = gameFunctions().castUnitImplToSoldier(getPrev());
     if (!soldier)
         return nullptr;
 
@@ -153,7 +157,7 @@ game::IUsUnitExtension* __fastcall unitCast(const game::IUsUnit* thisptr,
     auto& typeInfoRawName = *rttiApi.typeInfoRawName;
 
     auto customModifier = castUnitToCustomModifier(thisptr);
-    auto prev = customModifier->umModifier.data->prev;
+    auto prev = customModifier->getPrev();
 
     if (!strcmp(rawTypeName, typeInfoRawName(rtti.IUsSoldierType))) {
         return (IUsUnitExtension*)&customModifier->usSoldier;
@@ -163,6 +167,12 @@ game::IUsUnitExtension* __fastcall unitCast(const game::IUsUnit* thisptr,
     }
 
     return prev->vftable->cast(prev, rawTypeName);
+}
+
+const game::LUnitCategory* __fastcall unitGetCategory(const game::IUsUnit* thisptr, int /*%edx*/)
+{
+    auto prev = castUnitToCustomModifier(thisptr)->getPrev();
+    return prev->vftable->getCategory(prev);
 }
 
 void __fastcall soldierDtor(game::IUsSoldier* thisptr, int /*%edx*/, char flags)
@@ -205,10 +215,11 @@ void initUnitRttiInfo()
     using namespace game;
 
     auto& info = rttiInfo.usUnit;
-    replaceRttiInfo(info, CUmUnitApi::vftable().usUnit);
+    replaceRttiInfo(info, CUmUnitApi::vftable().usUnit, false);
 
     info.vftable.destructor = (IMidObjectVftable::Destructor)&unitDtor;
     info.vftable.cast = (IUsUnitVftable::Cast)&unitCast;
+    info.vftable.getCategory = (IUsUnitVftable::GetCategory)&unitGetCategory;
 }
 
 void initSoldierRttiInfo()
