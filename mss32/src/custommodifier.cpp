@@ -105,6 +105,12 @@ game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* current)
     return nullptr;
 }
 
+bool CCustomModifier::isLeaderOnly()
+{
+    // TODO: test script to contain only leader modification functions
+    return false;
+}
+
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
                                     const char* script,
                                     const game::CMidgardID* id,
@@ -215,7 +221,15 @@ bool __fastcall modifierCanApplyToStackWithLeadership(const game::CUmModifier* t
 
 bool __fastcall modifierCanApplyToUnit(const game::CUmModifier* thisptr, const game::IUsUnit* unit)
 {
-    return game::gameFunctions().castUnitImplToSoldier(unit) != nullptr;
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    auto thiz = castModifierToCustomModifier(thisptr);
+    if (thiz->isLeaderOnly())
+        return fn.castUnitImplToStackLeader(unit) != nullptr;
+    else
+        return fn.castUnitImplToSoldier(unit) != nullptr;
 }
 
 void __fastcall stackLeaderDtor(game::IUsStackLeader* thisptr, int /*%edx*/, char flags)
