@@ -162,7 +162,7 @@ game::IUsUnitExtension* __fastcall unitCast(const game::IUsUnit* thisptr,
         return prevStackLeader ? (IUsUnitExtension*)&customModifier->usStackLeader : nullptr;
     }
 
-    return prev->vftable->cast(thisptr, rawTypeName);
+    return prev->vftable->cast(prev, rawTypeName);
 }
 
 void __fastcall soldierDtor(game::IUsSoldier* thisptr, int /*%edx*/, char flags)
