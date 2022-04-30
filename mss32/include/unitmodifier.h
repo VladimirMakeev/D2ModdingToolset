@@ -54,18 +54,18 @@ static_assert(sizeof(TUnitModifier) == 12,
 
 struct TUnitModifierVftable : IMidObjectVftable
 {
-    using CanApplyToStackWithLeadership = bool(__thiscall*)(TUnitModifier* thisptr,
-                                                            const int* leadership);
-    CanApplyToStackWithLeadership canApplyToStackWithLeadership;
+    using CanApplyWithLeadership = bool(__thiscall*)(const TUnitModifier* thisptr,
+                                                     const int* leadership);
+    CanApplyWithLeadership canApplyWithLeadership;
 
-    using CanApplyToUnit = bool(__thiscall*)(TUnitModifier* thisptr, const IUsUnit* unit);
+    using CanApplyToUnit = bool(__thiscall*)(const TUnitModifier* thisptr, const IUsUnit* unit);
     CanApplyToUnit canApplyToUnit;
 
-    using CanApplyToUnitCategory = bool(__thiscall*)(TUnitModifier* thisptr,
+    using CanApplyToUnitCategory = bool(__thiscall*)(const TUnitModifier* thisptr,
                                                      const LUnitCategory* unitCategory);
     CanApplyToUnitCategory canApplyToUnitCategory;
 
-    using CreateModifier = CUmModifier*(__thiscall*)(TUnitModifier* thisptr);
+    using CreateModifier = CUmModifier*(__thiscall*)(const TUnitModifier* thisptr);
     CreateModifier createModifier;
 };
 
