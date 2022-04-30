@@ -213,9 +213,9 @@ game::CUmModifier* __fastcall modifierCopy(const game::CUmModifier* thisptr, int
     return &copy->umModifier;
 }
 
-bool __fastcall modifierCanApplyToStackWithLeadership(const game::CUmModifier* thisptr,
-                                                      int /*%edx*/,
-                                                      const int* leadership)
+bool __fastcall modifierCanApplyWithLeadership(const game::CUmModifier* thisptr,
+                                               int /*%edx*/,
+                                               const int* leadership)
 {
     return true;
 }
@@ -296,8 +296,8 @@ void initModifierRttiInfo()
     auto& vftable = info.vftable;
     vftable.destructor = (CUmModifierVftable::Destructor)&modifierDtor;
     vftable.copy = (CUmModifierVftable::Copy)&modifierCopy;
-    vftable.canApplyToStackWithLeadership =
-        (CUmModifierVftable::CanApplyToStackWithLeadership)&modifierCanApplyToStackWithLeadership;
+    vftable.canApplyWithLeadership = (CUmModifierVftable::
+                                          CanApplyWithLeadership)&modifierCanApplyWithLeadership;
     vftable.canApplyToUnit = (CUmModifierVftable::CanApplyToUnit)&modifierCanApplyToUnit;
     vftable.canApplyToUnitCategory = (CUmModifierVftable::
                                           CanApplyToUnitCategory)&modifierCanApplyToUnitCategory;

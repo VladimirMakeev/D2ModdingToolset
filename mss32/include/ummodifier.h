@@ -31,6 +31,12 @@ struct GlobalData;
 struct IUsUnit;
 struct LUnitCategory;
 
+/**
+ * Stored as global instance by TUnitModifier.
+ * Most of the methods can be called on that instance (which is not applied to unit),
+ * to check it before applying, or for specific needs like providing city armor bonus.
+ * A copy is created every time it needs to be applied to unit.
+ */
 struct CUmModifier
 {
     const CUmModifierVftable* vftable;
@@ -49,8 +55,10 @@ struct ModifierValue
 static_assert(sizeof(ModifierValue) == 8,
               "Size of ModifierValue structure must be exactly 8 bytes");
 
-/** Modifier element types (bitflags), corresponds to ModifierElementType enum (values are not
- * identical). */
+/**
+ * Modifier element types (bitflags).
+ * Correspond to ModifierElementType enum (values are not identical).
+ */
 // clang-format off
 enum class ModifierElementTypeFlag : int
 {
@@ -82,35 +90,44 @@ struct CUmModifierVftable
     using Destructor = void(__thiscall*)(CUmModifier* thisptr, bool freeMemory);
     Destructor destructor;
 
+    /** Called on global instance to create a copy to be applied to a unit. */
     using Copy = CUmModifier*(__thiscall*)(const CUmModifier* thisptr);
     Copy copy;
 
-    using CanApplyToStackWithLeadership = bool(__thiscall*)(const CUmModifier* thisptr,
-                                                            const int* leadership);
-    CanApplyToStackWithLeadership canApplyToStackWithLeadership;
+    /**
+     * Called on global instance to check if can be applied if stack leader has specified
+     * leadership.
+     */
+    using CanApplyWithLeadership = bool(__thiscall*)(const CUmModifier* thisptr,
+                                                     const int* leadership);
+    CanApplyWithLeadership canApplyWithLeadership;
 
+    /** Called on global instance to check if it can be applied to unit. */
     using CanApplyToUnit = bool(__thiscall*)(const CUmModifier* thisptr, const IUsUnit* unit);
     CanApplyToUnit canApplyToUnit;
 
+    /** Called on global instance (for example, to check if banner can have it). */
     using CanApplyToUnitCategory = bool(__thiscall*)(const CUmModifier* thisptr,
                                                      const LUnitCategory* unitCategory);
     CanApplyToUnitCategory canApplyToUnitCategory;
 
-    using IsNegative = bool(__thiscall*)(const CUmModifier* thisptr);
-    IsNegative isNegative;
+    /** Called on global instance (for example, to check if it matches spell category). */
+    using GetBool = bool(__thiscall*)(const CUmModifier* thisptr);
+    GetBool isLower;
+    GetBool isBoost;
 
-    using IsPositive = bool(__thiscall*)(const CUmModifier* thisptr);
-    IsPositive isPositive;
-
+    /** Called on global instance (for example, to add city armor bonus). */
     using HasElement = bool(__thiscall*)(const CUmModifier* thisptr, ModifierElementTypeFlag type);
     HasElement hasElement;
 
+    /** Called on global instance (for example, to add city armor bonus). */
     using GetFirstElementValue = int(__thiscall*)(const CUmModifier* thisptr);
     GetFirstElementValue getFirstElementValue;
 
     using GetDescription = const char*(__thiscall*)(const CUmModifier* thisptr);
     GetDescription getDescription;
 
+    /** Takes unit impl id from previous unit and sets it for self. */
     using UpdateUnitImplId = void(__thiscall*)(CUmModifier* thisptr);
     UpdateUnitImplId updateUnitImplId;
 };
