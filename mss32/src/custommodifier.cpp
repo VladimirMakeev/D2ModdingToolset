@@ -213,6 +213,11 @@ bool __fastcall modifierCanApplyToStackWithLeadership(const game::CUmModifier* t
     return true;
 }
 
+bool __fastcall modifierCanApplyToUnit(const game::CUmModifier* thisptr, const game::IUsUnit* unit)
+{
+    return game::gameFunctions().castUnitImplToSoldier(unit) != nullptr;
+}
+
 void __fastcall stackLeaderDtor(game::IUsStackLeader* thisptr, int /*%edx*/, char flags)
 {
     auto thiz = castStackLeaderToCustomModifier(thisptr);
@@ -262,6 +267,7 @@ void initModifierRttiInfo()
     vftable.copy = (CUmModifierVftable::Copy)&modifierCopy;
     vftable.canApplyToStackWithLeadership =
         (CUmModifierVftable::CanApplyToStackWithLeadership)&modifierCanApplyToStackWithLeadership;
+    vftable.canApplyToUnit = (CUmModifierVftable::CanApplyToUnit)&modifierCanApplyToUnit;
     // TODO: replace !all! vftable members, do not copy original vftable
 }
 
