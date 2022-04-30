@@ -82,33 +82,33 @@ struct CUmModifierVftable
     using Destructor = void(__thiscall*)(CUmModifier* thisptr, bool freeMemory);
     Destructor destructor;
 
-    using Copy = CUmModifier*(__thiscall*)(CUmModifier* thisptr);
+    using Copy = CUmModifier*(__thiscall*)(const CUmModifier* thisptr);
     Copy copy;
 
-    using CanApplyToStackWithLeadership = bool(__thiscall*)(CUmModifier* thisptr,
+    using CanApplyToStackWithLeadership = bool(__thiscall*)(const CUmModifier* thisptr,
                                                             const int* leadership);
     CanApplyToStackWithLeadership canApplyToStackWithLeadership;
 
-    using CanApplyToUnit = bool(__thiscall*)(CUmModifier* thisptr, const IUsUnit* unit);
+    using CanApplyToUnit = bool(__thiscall*)(const CUmModifier* thisptr, const IUsUnit* unit);
     CanApplyToUnit canApplyToUnit;
 
-    using CanApplyToUnitCategory = bool(__thiscall*)(CUmModifier* thisptr,
+    using CanApplyToUnitCategory = bool(__thiscall*)(const CUmModifier* thisptr,
                                                      const LUnitCategory* unitCategory);
     CanApplyToUnitCategory canApplyToUnitCategory;
 
-    using IsNegative = bool(__thiscall*)(CUmModifier* thisptr);
+    using IsNegative = bool(__thiscall*)(const CUmModifier* thisptr);
     IsNegative isNegative;
 
-    using IsPositive = bool(__thiscall*)(CUmModifier* thisptr);
+    using IsPositive = bool(__thiscall*)(const CUmModifier* thisptr);
     IsPositive isPositive;
 
-    using HasElement = bool(__thiscall*)(CUmModifier* thisptr, ModifierElementTypeFlag type);
+    using HasElement = bool(__thiscall*)(const CUmModifier* thisptr, ModifierElementTypeFlag type);
     HasElement hasElement;
 
-    using GetFirstElementValue = int(__thiscall*)(CUmModifier* thisptr);
+    using GetFirstElementValue = int(__thiscall*)(const CUmModifier* thisptr);
     GetFirstElementValue getFirstElementValue;
 
-    using GetDescription = const char*(__thiscall*)(CUmModifier* thisptr);
+    using GetDescription = const char*(__thiscall*)(const CUmModifier* thisptr);
     GetDescription getDescription;
 
     using UpdateUnitImplId = void(__thiscall*)(CUmModifier* thisptr);

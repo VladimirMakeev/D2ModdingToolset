@@ -195,7 +195,7 @@ void __fastcall modifierDtor(game::CUmModifier* thisptr, int /*%edx*/, char flag
     customModifierDtor(thiz, flags);
 }
 
-game::CUmModifier* __fastcall modifierCopy(game::CUmModifier* thisptr, int /*%edx*/)
+game::CUmModifier* __fastcall modifierCopy(const game::CUmModifier* thisptr, int /*%edx*/)
 {
     using namespace game;
 
@@ -206,7 +206,7 @@ game::CUmModifier* __fastcall modifierCopy(game::CUmModifier* thisptr, int /*%ed
     return &copy->umModifier;
 }
 
-bool __fastcall modifierCanApplyToStackWithLeadership(game::CUmModifier* thisptr,
+bool __fastcall modifierCanApplyToStackWithLeadership(const game::CUmModifier* thisptr,
                                                       int /*%edx*/,
                                                       const int* leadership)
 {
