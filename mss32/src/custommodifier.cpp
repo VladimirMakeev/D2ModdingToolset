@@ -230,7 +230,7 @@ void initSoldierRttiInfo()
     replaceRttiInfo(info, CUmUnitApi::vftable().usSoldier);
 
     info.vftable.destructor = (IUsUnitExtensionVftable::Destructor)&soldierDtor;
-    // TODO: replace vftable members
+    // TODO: replace !all! vftable members, do not copy original vftable
 }
 
 void initModifierRttiInfo()
@@ -242,7 +242,7 @@ void initModifierRttiInfo()
 
     info.vftable.destructor = (CUmModifierVftable::Destructor)&modifierDtor;
     info.vftable.copy = (CUmModifierVftable::Copy)&modifierCopy;
-    // TODO: replace vftable members
+    // TODO: replace !all! vftable members, do not copy original vftable
 }
 
 void initStackLeaderRttiInfo()
