@@ -249,6 +249,16 @@ bool __fastcall modifierCanApplyToUnitCategory(const game::CUmModifier* thisptr,
            || id == unitCategories.summon->id || id == unitCategories.illusion->id;
 }
 
+bool __fastcall modifierIsLower(const game::CUmModifier* thisptr, int /*%edx*/)
+{
+    return false; // TODO: script function
+}
+
+bool __fastcall modifierIsBoost(const game::CUmModifier* thisptr, int /*%edx*/)
+{
+    return false; // TODO: script function
+}
+
 void __fastcall stackLeaderDtor(game::IUsStackLeader* thisptr, int /*%edx*/, char flags)
 {
     auto thiz = castStackLeaderToCustomModifier(thisptr);
@@ -301,6 +311,8 @@ void initModifierRttiInfo()
     vftable.canApplyToUnit = (CUmModifierVftable::CanApplyToUnit)&modifierCanApplyToUnit;
     vftable.canApplyToUnitCategory = (CUmModifierVftable::
                                           CanApplyToUnitCategory)&modifierCanApplyToUnitCategory;
+    vftable.isLower = (CUmModifierVftable::GetBool)&modifierIsLower;
+    vftable.isBoost = (CUmModifierVftable::GetBool)&modifierIsBoost;
     // TODO: replace !all! vftable members, do not copy original vftable
 }
 
