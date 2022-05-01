@@ -42,7 +42,9 @@ struct TUnitModifierData
 /**
  * Serves as single modifier factory. Id holds an id of modifier that this factory produces.
  * Reads modifier from DBF, then holds it as global instance and redirects all the calls to it.
- * Uses CUmModifier::Copy to create new instances.
+ * Provides access to the global instance in cases where modifier is used globally (city armor
+ * bonus, some spell effects, etc.) or to check if it can be applied.
+ * Uses CUmModifier::Copy to create new instances to be applied to individual units.
  */
 struct TUnitModifier : IMidObjectT<TUnitModifierVftable>
 {
