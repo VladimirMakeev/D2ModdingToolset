@@ -268,7 +268,7 @@ bool __fastcall modifierHasElement(const game::CUmModifier* thisptr,
 
     auto thiz = castModifierToCustomModifier(thisptr);
 
-    bool result = true; // TODO: check that corresponding script function exists
+    bool result = false; // TODO: check that corresponding script function exists
     thiz->lastElementQuery = result ? type : ModifierElementTypeFlag::None;
     return result;
 }
