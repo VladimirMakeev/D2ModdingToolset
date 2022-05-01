@@ -137,19 +137,19 @@ void __stdcall midCondGameModeGetInfoString(game::String* info,
 
     switch (gameMode) {
     case GameMode::Single:
-        modeName = getTranslatedText(gameModeTextIds.single.c_str());
+        modeName = getInterfaceText(gameModeTextIds.single.c_str());
         if (modeName.empty()) {
             modeName = "single player";
         }
         break;
     case GameMode::Hotseat:
-        modeName = getTranslatedText(gameModeTextIds.hotseat.c_str());
+        modeName = getInterfaceText(gameModeTextIds.hotseat.c_str());
         if (modeName.empty()) {
             modeName = "hotseat";
         }
         break;
     case GameMode::Online:
-        modeName = getTranslatedText(gameModeTextIds.online.c_str());
+        modeName = getInterfaceText(gameModeTextIds.online.c_str());
         if (modeName.empty()) {
             modeName = "online";
         }
@@ -262,7 +262,7 @@ void __fastcall condGameModeInterfOkButtonHandler(CCondGameModeInterf* thisptr, 
         const int conditionsTotal = midEvent->conditions.end - midEvent->conditions.bgn;
         if (conditionsTotal >= 10) {
             // Could not create new condition
-            showMessageBox(getTranslatedText("X100TA0631"));
+            showMessageBox(getInterfaceText("X100TA0631"));
             return;
         }
     }
@@ -425,7 +425,7 @@ bool checkGameModeConditionValid(game::CDialogInterf*,
     getConditionsOfType(event, &category, conditions);
 
     if (conditions.size() > 1) {
-        auto message = getTranslatedText(textIds().events.conditions.gameMode.tooMany.c_str());
+        auto message = getInterfaceText(textIds().events.conditions.gameMode.tooMany.c_str());
         if (message.empty()) {
             message = "Only one condition of type \"Game mode\" is allowed per event.";
         }

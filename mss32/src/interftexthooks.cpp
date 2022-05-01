@@ -80,9 +80,9 @@ std::string appendColoredBonus(const std::string& base, int diff)
     auto text = base;
     // "\c025;090;000; + %NUMBER%"
     // "\c100;000;000; - %NUMBER%"
-    text += getTranslatedText(diff > 0 ? "X005TA0486" : "X005TA0487");
+    text += getInterfaceText(diff > 0 ? "X005TA0486" : "X005TA0487");
     // "\c000;000;000;"
-    text += getTranslatedText("X005TA0488");
+    text += getInterfaceText("X005TA0488");
     replace(text, "%NUMBER%", fmt::format("{:d}", abs(diff)));
 
     return text;
@@ -127,14 +127,14 @@ std::string getAttackPowerText(game::IAttack* attack,
 std::string getAttackDamageMaxText(const std::string& damage)
 {
     // "%DMG% \c000;000;000;(\c128;000;000;Max\c000;000;000;)"
-    auto max = getTranslatedText("X005TA0811");
+    auto max = getInterfaceText("X005TA0811");
     replace(max, "%DMG%", damage);
     return max;
 }
 
 std::string getAttackPlusCritDamageText(const std::string& damage, int critDamage)
 {
-    auto text = getTranslatedText(textIds().interf.critHitDamage.c_str());
+    auto text = getInterfaceText(textIds().interf.critHitDamage.c_str());
     if (text.empty())
         text = "%DMG% (%CRIT%)";
 
@@ -163,7 +163,7 @@ std::string getRatedAttackDamageText(const game::IAttack* attack,
     if (ratios.size() < 2)
         return damageText;
     else if (sameRatio && ratios.size() > 2) {
-        auto result = getTranslatedText(textIds().interf.ratedDamageEqual.c_str());
+        auto result = getInterfaceText(textIds().interf.ratedDamageEqual.c_str());
         if (result.empty())
             result = "%DMG%, (%TARGETS%x) %RATED%";
 
@@ -172,11 +172,11 @@ std::string getRatedAttackDamageText(const game::IAttack* attack,
         replace(result, "%RATED%", getRatedAttackDamageText(damage, critDamage, ratios[1]));
         return result;
     } else {
-        auto result = getTranslatedText(textIds().interf.ratedDamage.c_str());
+        auto result = getInterfaceText(textIds().interf.ratedDamage.c_str());
         if (result.empty())
             result = "%DMG%, %RATED%";
 
-        auto separator = getTranslatedText(textIds().interf.ratedDamageSeparator.c_str());
+        auto separator = getInterfaceText(textIds().interf.ratedDamageSeparator.c_str());
         if (separator.empty())
             separator = ", ";
 
@@ -195,7 +195,7 @@ std::string getRatedAttackDamageText(const game::IAttack* attack,
 
 std::string getSplitAttackDamageText(const std::string& damageText)
 {
-    auto result = getTranslatedText(textIds().interf.splitDamage.c_str());
+    auto result = getInterfaceText(textIds().interf.splitDamage.c_str());
     if (result.empty())
         result = "%DMG%, split between targets";
 
@@ -315,15 +315,15 @@ std::string getAttackDamageText(game::IAttack* attack,
     const auto& attackClasses = AttackClassCategories::get();
     if (id == attackClasses.boostDamage->id) {
         int level = attack->vftable->getLevel(attack);
-        text = getTranslatedText("X005TA0535"); // "+%BOOST%%"
+        text = getInterfaceText("X005TA0535"); // "+%BOOST%%"
         replace(text, "%BOOST%", fmt::format("{:d}", getBoostDamage(level)));
     } else if (id == attackClasses.lowerDamage->id) {
         int level = attack->vftable->getLevel(attack);
-        text = getTranslatedText("X005TA0550"); // "-%LOWER%%"
+        text = getInterfaceText("X005TA0550"); // "-%LOWER%%"
         replace(text, "%LOWER%", fmt::format("{:d}", getLowerDamage(level)));
     } else if (id == attackClasses.lowerInitiative->id) {
         int level = attack->vftable->getLevel(attack);
-        text = getTranslatedText("X005TA0550"); // "-%LOWER%%"
+        text = getInterfaceText("X005TA0550"); // "-%LOWER%%"
         replace(text, "%LOWER%", fmt::format("{:d}", getLowerInitiative(level)));
     } else if (id == attackClasses.damage->id || id == attackClasses.drain->id
                || id == attackClasses.drainOverflow->id) {
@@ -369,31 +369,31 @@ std::string getAttackSourceText(const game::LAttackSource* attackSource)
     using namespace game;
 
     if (attackSource == nullptr)
-        return getTranslatedText("X005TA0473"); // "None"
+        return getInterfaceText("X005TA0473"); // "None"
 
     std::string text;
     AttackSourceId id = attackSource->id;
     const auto& attackSources = AttackSourceCategories::get();
     if (id == attackSources.weapon->id)
-        return getTranslatedText("X005TA0145"); // "Weapon"
+        return getInterfaceText("X005TA0145"); // "Weapon"
     else if (id == attackSources.mind->id)
-        return getTranslatedText("X005TA0146"); // "Mind"
+        return getInterfaceText("X005TA0146"); // "Mind"
     else if (id == attackSources.life->id)
-        return getTranslatedText("X005TA0147"); // "Life"
+        return getInterfaceText("X005TA0147"); // "Life"
     else if (id == attackSources.death->id)
-        return getTranslatedText("X005TA0148"); // "Death"
+        return getInterfaceText("X005TA0148"); // "Death"
     else if (id == attackSources.fire->id)
-        return getTranslatedText("X005TA0149"); // "Fire"
+        return getInterfaceText("X005TA0149"); // "Fire"
     else if (id == attackSources.water->id)
-        return getTranslatedText("X005TA0150"); // "Water"
+        return getInterfaceText("X005TA0150"); // "Water"
     else if (id == attackSources.air->id)
-        return getTranslatedText("X005TA0151"); // "Air"
+        return getInterfaceText("X005TA0151"); // "Air"
     else if (id == attackSources.earth->id)
-        return getTranslatedText("X005TA0152"); // "Earth"
+        return getInterfaceText("X005TA0152"); // "Earth"
     else {
         for (const auto& custom : getCustomAttacks().sources) {
             if (id == custom.source.id)
-                return getTranslatedText(custom.nameId.c_str());
+                return getInterfaceText(custom.nameId.c_str());
         }
     }
 
@@ -413,13 +413,13 @@ std::string getAttackReachText(game::IAttack* attack)
 
     auto reach = attack->vftable->getAttackReach(attack);
     if (reach->id == reaches.adjacent->id)
-        return getTranslatedText("X005TA0201"); // "Adjacent units"
+        return getInterfaceText("X005TA0201"); // "Adjacent units"
     else if (reach->id == reaches.all->id || reach->id == reaches.any->id)
-        return getTranslatedText("X005TA0200"); // "Any unit"
+        return getInterfaceText("X005TA0200"); // "Any unit"
     else {
         for (const auto& custom : getCustomAttacks().reaches) {
             if (reach->id == custom.reach.id) {
-                return getTranslatedText(custom.reachTxt.c_str());
+                return getInterfaceText(custom.reachTxt.c_str());
             }
         }
     }
@@ -435,13 +435,13 @@ std::string getAttackTargetsText(game::IAttack* attack)
 
     auto reach = attack->vftable->getAttackReach(attack);
     if (reach->id == reaches.all->id)
-        return getTranslatedText("X005TA0674"); // "6"
+        return getInterfaceText("X005TA0674"); // "6"
     else if (reach->id == reaches.any->id || reach->id == reaches.adjacent->id)
-        return getTranslatedText("X005TA0675"); // "1"
+        return getInterfaceText("X005TA0675"); // "1"
     else {
         for (const auto& custom : getCustomAttacks().reaches) {
             if (reach->id == custom.reach.id) {
-                return getTranslatedText(custom.targetsTxt.c_str());
+                return getInterfaceText(custom.targetsTxt.c_str());
             }
         }
     }
@@ -453,7 +453,7 @@ std::string getInfiniteText()
 {
     using namespace game;
 
-    auto text = getTranslatedText(textIds().interf.infiniteAttack.c_str());
+    auto text = getInterfaceText(textIds().interf.infiniteAttack.c_str());
     if (text.length())
         return text;
 
@@ -464,11 +464,11 @@ std::string getCritHitText()
 {
     using namespace game;
 
-    auto text = getTranslatedText(textIds().interf.critHitAttack.c_str());
+    auto text = getInterfaceText(textIds().interf.critHitAttack.c_str());
     if (text.length())
         return text;
 
-    return getTranslatedText("X160TA0017"); // "Critical hit"
+    return getInterfaceText("X160TA0017"); // "Critical hit"
 }
 
 std::string getAttackName(game::IAttack* attack)
@@ -491,7 +491,7 @@ std::string addAltAttackTextValue(const std::string& value,
     if (omitDuplicate && value == altValue)
         return value;
 
-    auto result = getTranslatedText("X005TA0829"); // "%ATTACK% or %BLANK%"
+    auto result = getInterfaceText("X005TA0829"); // "%ATTACK% or %BLANK%"
     replace(result, "%ATTACK%", altValue);
     replace(result, "%BLANK%", value);
     return result;
@@ -504,7 +504,7 @@ std::string addAttack2TextValue(const std::string& value,
     if (omitDuplicate && value == value2)
         return value;
 
-    auto result = getTranslatedText("X005TA0785"); // " / %ATTACK%"
+    auto result = getInterfaceText("X005TA0785"); // " / %ATTACK%"
     replace(result, "%ATTACK%", value2);
     result.insert(0, value);
     return result;
@@ -517,17 +517,17 @@ std::string getEffectText(game::IAttack* attack)
     auto id = attack->vftable->getAttackClass(attack)->id;
     const auto& attackClasses = AttackClassCategories::get();
     if (id == attackClasses.heal->id)
-        return getTranslatedText("X005TA0504"); // "Heal"
+        return getInterfaceText("X005TA0504"); // "Heal"
     else if (id == attackClasses.bestowWards->id)
-        return getTranslatedText("X005TA0504"); // "Heal"
+        return getInterfaceText("X005TA0504"); // "Heal"
     else if (id == attackClasses.boostDamage->id)
-        return getTranslatedText("X005TA0534"); // "Boost"
+        return getInterfaceText("X005TA0534"); // "Boost"
     else if (id == attackClasses.lowerDamage->id)
-        return getTranslatedText("X005TA0547"); // "Lower"
+        return getInterfaceText("X005TA0547"); // "Lower"
     else if (id == attackClasses.lowerInitiative->id)
-        return getTranslatedText("X005TA0551"); // "Lower initiative"
+        return getInterfaceText("X005TA0551"); // "Lower initiative"
     else
-        return getTranslatedText("X005TA0503"); // "Damage"
+        return getInterfaceText("X005TA0503"); // "Damage"
 }
 
 std::string getTwiceText(game::IEncUnitDescriptor* descriptor)
@@ -535,7 +535,7 @@ std::string getTwiceText(game::IEncUnitDescriptor* descriptor)
     if (!descriptor->vftable->attacksTwice(descriptor))
         return "";
 
-    auto result = getTranslatedText("X005TA0786"); // "(2x) %BLANK%"
+    auto result = getInterfaceText("X005TA0786"); // "(2x) %BLANK%"
     replace(result, "%BLANK%", "");
     return result;
 }
@@ -545,7 +545,7 @@ std::string getAltAttackText(game::IAttack* altAttack)
     if (altAttack == nullptr)
         return "";
 
-    auto result = getTranslatedText("X005TA0829"); // "%ATTACK% or %BLANK%"
+    auto result = getInterfaceText("X005TA0829"); // "%ATTACK% or %BLANK%"
     replace(result, "%ATTACK%", getAttackName(altAttack));
     replace(result, "%BLANK%", "");
     return result;
@@ -606,7 +606,7 @@ std::string getSecondText(game::IAttack* attack2)
     if (attack2 == nullptr)
         return "";
 
-    auto result = getTranslatedText("X005TA0785"); // " / %ATTACK%"
+    auto result = getInterfaceText("X005TA0785"); // " / %ATTACK%"
     replace(result, "%ATTACK%", getAttackName(attack2));
     return result;
 }
@@ -619,7 +619,7 @@ std::string getHit2Text(game::IEncUnitDescriptor* descriptor, game::IAttack* att
     auto power = getAttackPowerText(attack2, nullptr,
                                     descriptor->vftable->getAttack2Power(descriptor));
 
-    auto result = getTranslatedText("X005TA0881"); // " / %POWER%"
+    auto result = getInterfaceText("X005TA0881"); // " / %POWER%"
     replace(result, "%POWER%", power);
     return result;
 }
@@ -629,7 +629,7 @@ std::string getSource2Text(game::IAttack* attack2)
     if (attack2 == nullptr)
         return "";
 
-    auto result = getTranslatedText("X005TA0816"); // " / %SOURCE%"
+    auto result = getInterfaceText("X005TA0816"); // " / %SOURCE%"
     replace(result, "%SOURCE%", getAttackSourceText(attack2));
     return result;
 }
@@ -693,19 +693,19 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
     auto attack2 = getAttack2(descriptor);
     auto altAttack = getAltAttack(descriptor);
 
-    auto description = getTranslatedText("X005TA0424"); // "%PART1%%PART2%"
+    auto description = getInterfaceText("X005TA0424"); // "%PART1%%PART2%"
 
     // \s110;
     // \fMedBold;Attack:\t\p110;\fNormal;%TWICE%%ALTATTACK%%ATTACK%%SECOND%\p0;\n
     // \fMedBold;Chances to hit:\t\fNormal;%HIT%%HIT2%\n
-    replace(description, "%PART1%", getTranslatedText("X005TA0787"));
+    replace(description, "%PART1%", getInterfaceText("X005TA0787"));
 
     // \fMedBold;%EFFECT%:\t\fNormal;%DAMAGE%\n
     // \fMedBold;Source:\t\fNormal;%SOURCE%%SOURCE2%\n
     // \fMedBold;Initiative:\t\fNormal;%INIT%\n
     // \fMedBold;Reach:\t\fNormal;%REACH%\n
     // \fMedBold;Targets:\t\fNormal;%TARGETS%
-    replace(description, "%PART2%", getTranslatedText("X005TA0788"));
+    replace(description, "%PART2%", getInterfaceText("X005TA0788"));
 
     replace(description, "%TWICE%", getTwiceText(descriptor));
 

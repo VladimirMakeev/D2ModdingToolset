@@ -257,7 +257,7 @@ static void __fastcall menuJoinRoomBtnHandler(CMenuCustomLobby* thisptr, int /*%
     // Do fast check if room can be joined
     if (room.usedSlots >= room.totalSlots) {
         // Could not join game. Host did not report any available race.
-        showMessageBox(getTranslatedText("X005TA0886"));
+        showMessageBox(getInterfaceText("X005TA0886"));
         return;
     }
 
@@ -472,7 +472,7 @@ static bool __fastcall menuGameVersionMsgHandler(CMenuCustomLobby* menu,
     // Check server version
     if (message->gameVersion != 40) {
         // "You are trying to join a game with a newer or an older version of the game."
-        customLobbyProcessJoinError(menu, getTranslatedText("X006ta0008").c_str());
+        customLobbyProcessJoinError(menu, getInterfaceText("X006ta0008").c_str());
         return true;
     }
 

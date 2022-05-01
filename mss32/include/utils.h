@@ -50,8 +50,8 @@ const std::filesystem::path& exePath();
 /** Returns id as string. */
 std::string idToString(const game::CMidgardID* id);
 
-/** Returns translated text by specified id string. */
-std::string getTranslatedText(const char* textIdString);
+/** Returns interface text by specified id string. */
+std::string getInterfaceText(const char* textIdString);
 
 /** Returns global text by specified id string. */
 const char* getGlobalText(const char* textIdString);

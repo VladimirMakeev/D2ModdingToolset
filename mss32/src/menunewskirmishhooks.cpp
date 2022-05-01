@@ -66,7 +66,7 @@ void __fastcall menuNewSkirmishLoadScenarioCallbackHooked(game::CMenuBase* thisp
 
     if (!isRoomAndPlayerNamesValid(thisptr)) {
         // Please enter valid game and player names
-        showMessageBox(getTranslatedText("X005TA0867"));
+        showMessageBox(getInterfaceText("X005TA0867"));
         return;
     }
 

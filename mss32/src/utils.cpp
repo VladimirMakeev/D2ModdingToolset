@@ -89,7 +89,7 @@ std::string idToString(const game::CMidgardID* id)
     return {idString};
 }
 
-std::string getTranslatedText(const char* textIdString)
+std::string getInterfaceText(const char* textIdString)
 {
     using namespace game;
 

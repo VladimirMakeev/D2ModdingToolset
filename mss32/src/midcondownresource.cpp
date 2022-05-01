@@ -304,7 +304,7 @@ void __fastcall condOwnResourcesInterfOkButtonHandler(CCondOwnResourceInterf* th
     // This should never happen since we don't allow to enter resource values outside [0 : 9999].
     if (!BankApi::get().isValid(&resources)) {
         // Could not create new condition
-        showMessageBox(getTranslatedText("X100TA0631"));
+        showMessageBox(getInterfaceText("X100TA0631"));
         return;
     }
 
@@ -322,7 +322,7 @@ void __fastcall condOwnResourcesInterfOkButtonHandler(CCondOwnResourceInterf* th
         const int conditionsTotal = midEvent->conditions.end - midEvent->conditions.bgn;
         if (conditionsTotal >= 10) {
             // Could not create new condition
-            showMessageBox(getTranslatedText("X100TA0631"));
+            showMessageBox(getInterfaceText("X100TA0631"));
             return;
         }
     }
@@ -501,7 +501,7 @@ bool checkOwnResourceConditionsValid(game::CDialogInterf*,
 
     // At most 2 own resource conditions allowed
     if (conditions.size() > 2) {
-        auto message = getTranslatedText(ownResourceTextIds.tooMany.c_str());
+        auto message = getInterfaceText(ownResourceTextIds.tooMany.c_str());
         if (message.empty()) {
             message = "At most two conditions of type \"Own resource\" is allowed per event.";
         }
@@ -536,7 +536,7 @@ bool checkOwnResourceConditionsValid(game::CDialogInterf*,
     }
 
     if (mutuallyExclusive) {
-        auto message = getTranslatedText(ownResourceTextIds.mutuallyExclusive.c_str());
+        auto message = getInterfaceText(ownResourceTextIds.mutuallyExclusive.c_str());
         if (message.empty()) {
             message = "Conditions of type \"Own resource\" are mutually exclusive.";
         }

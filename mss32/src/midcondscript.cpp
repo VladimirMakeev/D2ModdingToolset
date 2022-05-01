@@ -295,7 +295,7 @@ void __fastcall condScriptInterfOkButtonHandler(CCondScriptInterf* thisptr, int 
         const int conditionsTotal = midEvent->conditions.end - midEvent->conditions.bgn;
         if (conditionsTotal >= 10) {
             // Could not create new condition
-            showMessageBox(getTranslatedText("X100TA0631"));
+            showMessageBox(getInterfaceText("X100TA0631"));
             return;
         }
     }
