@@ -197,6 +197,198 @@ void __fastcall soldierDtor(game::IUsSoldier* thisptr, int /*%edx*/, char flags)
     customModifierDtor(thiz, flags);
 }
 
+const char* __fastcall soldierGetName(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getName(prev);
+}
+const char* __fastcall soldierGetDescription(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getDescription(prev);
+}
+
+const game::CMidgardID* __fastcall soldierGetRaceId(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getRaceId(prev);
+}
+
+const game::LSubRaceCategory* __fastcall soldierGetSubrace(const game::IUsSoldier* thisptr,
+                                                           int /*%edx*/)
+{
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getSubrace(prev);
+}
+
+const game::LUnitBranch* __fastcall soldierGetBranch(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getBranch(prev);
+}
+
+bool __fastcall soldierGetSizeSmall(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getSizeSmall(prev);
+}
+
+bool __fastcall soldierGetSexM(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getSexM(prev);
+}
+
+int __fastcall soldierGetLevel(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getLevel(prev);
+}
+
+int __fastcall soldierGetHitPoints(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getHitPoints(prev);
+}
+
+int* __fastcall soldierGetArmor(const game::IUsSoldier* thisptr, int /*%edx*/, int* armor)
+{
+    // TODO: script function
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getArmor(prev, armor);
+}
+
+const game::CMidgardID* __fastcall soldierGetBaseUnitImplId(const game::IUsSoldier* thisptr,
+                                                            int /*%edx*/)
+{
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getBaseUnitImplId(prev);
+}
+
+const game::LDeathAnimCategory* __fastcall soldierGetDeathAnim(const game::IUsSoldier* thisptr,
+                                                               int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getDeathAnim(prev);
+}
+
+int* __fastcall soldierGetRegen(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getRegen(prev);
+}
+
+int __fastcall soldierGetXpNext(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getXpNext(prev);
+}
+
+int __fastcall soldierGetXpKilled(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getXpKilled(prev);
+}
+
+const game::LImmuneCat* __fastcall soldierGetImmuneByAttackClass(
+    const game::IUsSoldier* thisptr,
+    int /*%edx*/,
+    const game::LAttackClass* attackClass)
+{
+    // TODO: script function
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getImmuneByAttackClass(prev, attackClass);
+}
+
+const game::LImmuneCat* __fastcall soldierGetImmuneByAttackSource(
+    const game::IUsSoldier* thisptr,
+    int /*%edx*/,
+    const game::LAttackSource* attackSource)
+{
+    // TODO: script function
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getImmuneByAttackSource(prev, attackSource);
+}
+
+game::IAttack* __fastcall soldierGetAttackById(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    return &thiz->attack;
+}
+
+game::IAttack* __fastcall soldierGetSecondAttackById(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    return &thiz->attack2;
+}
+
+bool __fastcall soldierGetAttackTwice(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getAttackTwice(prev);
+}
+
+const game::Bank* __fastcall soldierGetEnrollCost(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getEnrollCost(prev);
+}
+
+const game::Bank* __fastcall soldierGetReviveCost(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getReviveCost(prev);
+}
+
+const game::Bank* __fastcall soldierGetHealCost(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getHealCost(prev);
+}
+
+const game::Bank* __fastcall soldierGetTrainingCost(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getTrainingCost(prev);
+}
+
+const game::CMidgardID* __fastcall soldierGetDynUpg1(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getDynUpg1(prev);
+}
+
+int __fastcall soldierGetDynUpgLvl(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getDynUpgLvl(prev);
+}
+
+const game::CMidgardID* __fastcall soldierGetDynUpg2(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getDynUpg2(prev);
+}
+
+bool __fastcall soldierGetWaterOnly(const game::IUsSoldier* thisptr, int /*%edx*/)
+{
+    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
+    return prev->vftable->getWaterOnly(prev);
+}
+
 void __fastcall modifierDtor(game::CUmModifier* thisptr, int /*%edx*/, char flags)
 {
     auto thiz = castModifierToCustomModifier(thisptr);
@@ -370,11 +562,40 @@ void initSoldierRttiInfo()
     using namespace game;
 
     auto& info = rttiInfo.usSoldier;
-    replaceRttiInfo(info, CUmUnitApi::vftable().usSoldier);
+    replaceRttiInfo(info, CUmUnitApi::vftable().usSoldier, false);
 
     auto& vftable = info.vftable;
     vftable.destructor = (IUsUnitExtensionVftable::Destructor)&soldierDtor;
-    // TODO: replace !all! vftable members, do not copy original vftable
+    vftable.getName = (IUsSoldierVftable::GetCStr)&soldierGetName;
+    vftable.getDescription = (IUsSoldierVftable::GetCStr)&soldierGetDescription;
+    vftable.getRaceId = (IUsSoldierVftable::GetId)&soldierGetRaceId;
+    vftable.getSubrace = (IUsSoldierVftable::GetSubrace)&soldierGetSubrace;
+    vftable.getBranch = (IUsSoldierVftable::GetBranch)&soldierGetBranch;
+    vftable.getSizeSmall = (IUsSoldierVftable::GetBool)&soldierGetSizeSmall;
+    vftable.getSexM = (IUsSoldierVftable::GetBool)&soldierGetSexM;
+    vftable.getLevel = (IUsSoldierVftable::GetInt)&soldierGetLevel;
+    vftable.getHitPoints = (IUsSoldierVftable::GetInt)&soldierGetHitPoints;
+    vftable.getArmor = (IUsSoldierVftable::GetArmor)&soldierGetArmor;
+    vftable.getBaseUnitImplId = (IUsSoldierVftable::GetId)&soldierGetBaseUnitImplId;
+    vftable.getDeathAnim = (IUsSoldierVftable::GetDeathAnim)&soldierGetDeathAnim;
+    vftable.getRegen = (IUsSoldierVftable::GetRegen)&soldierGetRegen;
+    vftable.getXpNext = (IUsSoldierVftable::GetInt)&soldierGetXpNext;
+    vftable.getXpKilled = (IUsSoldierVftable::GetInt)&soldierGetXpKilled;
+    vftable.getImmuneByAttackClass = (IUsSoldierVftable::
+                                          GetImmuneByAttackClass)&soldierGetImmuneByAttackClass;
+    vftable.getImmuneByAttackSource = (IUsSoldierVftable::
+                                           GetImmuneByAttackSource)&soldierGetImmuneByAttackSource;
+    vftable.getAttackById = (IUsSoldierVftable::GetAttackById)&soldierGetAttackById;
+    vftable.getSecondAttackById = (IUsSoldierVftable::GetAttackById)&soldierGetSecondAttackById;
+    vftable.getAttackTwice = (IUsSoldierVftable::GetBool)&soldierGetAttackTwice;
+    vftable.getEnrollCost = (IUsSoldierVftable::GetBank)&soldierGetEnrollCost;
+    vftable.getReviveCost = (IUsSoldierVftable::GetBank)&soldierGetReviveCost;
+    vftable.getHealCost = (IUsSoldierVftable::GetBank)&soldierGetHealCost;
+    vftable.getTrainingCost = (IUsSoldierVftable::GetBank)&soldierGetTrainingCost;
+    vftable.getDynUpg1 = (IUsSoldierVftable::GetId)&soldierGetDynUpg1;
+    vftable.getDynUpgLvl = (IUsSoldierVftable::GetDynUpgLvl)&soldierGetDynUpgLvl;
+    vftable.getDynUpg2 = (IUsSoldierVftable::GetId)&soldierGetDynUpg2;
+    vftable.getWaterOnly = (IUsSoldierVftable::GetBool)&soldierGetWaterOnly;
 }
 
 void initModifierRttiInfo()
