@@ -436,7 +436,7 @@ using GenerateAttackDescription = void(__stdcall*)(IEncUnitDescriptor* descripto
                                                    int boostDamageLevel,
                                                    int lowerDamageLevel,
                                                    int lowerInitiativeLevel,
-                                                   const IdList* modifiers,
+                                                   const IdList* editorModifiers,
                                                    int damageMax);
 
 using CreateMenuAnimation = SmartPtr<IMqImage2>*(__stdcall*)(SmartPtr<IMqImage2>* animation,

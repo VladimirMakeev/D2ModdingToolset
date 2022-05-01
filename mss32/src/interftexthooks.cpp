@@ -89,7 +89,7 @@ std::string appendColoredBonus(const std::string& base, int diff)
 }
 
 std::string getAttackPowerText(game::IAttack* attack,
-                               const game::IdList* modifiers,
+                               const game::IdList* editorModifiers,
                                int attackPowerTotal)
 {
     using namespace game;
@@ -102,9 +102,9 @@ std::string getAttackPowerText(game::IAttack* attack,
         attack->vftable->getPower(attack, &attackPower);
 
         int attackPowerModified = attackPower;
-        if (modifiers != nullptr) {
+        if (editorModifiers != nullptr) {
             attackPowerModified = std::clamp(
-                gameFunctions().applyPercentModifiers(attackPower, modifiers,
+                gameFunctions().applyPercentModifiers(attackPower, editorModifiers,
                                                       ModifierElementTypeFlag::Power),
                 restrictions.attackPower->min, restrictions.attackPower->max);
         }
@@ -243,7 +243,7 @@ std::string getRatedOrSplitAttackDamageText(const game::IAttack* attack,
 }
 
 std::string getAttackDamageModifiableText(const game::IAttack* attack,
-                                          const game::IdList* modifiers,
+                                          const game::IdList* editorModifiers,
                                           int damageTotal,
                                           int boostDamageLevel,
                                           int lowerDamageLevel,
@@ -262,8 +262,8 @@ std::string getAttackDamageModifiableText(const game::IAttack* attack,
     }
 
     int damageModified = damage;
-    if (modifiers != nullptr) {
-        damageModified = gameFunctions().applyPercentModifiers(damage, modifiers,
+    if (editorModifiers != nullptr) {
+        damageModified = gameFunctions().applyPercentModifiers(damage, editorModifiers,
                                                                ModifierElementTypeFlag::QtyDamage);
     }
     if (damageModified > damageMax)
@@ -302,7 +302,7 @@ std::string getAttackDamageModifiableText(const game::IAttack* attack,
 }
 
 std::string getAttackDamageText(game::IAttack* attack,
-                                const game::IdList* modifiers,
+                                const game::IdList* editorModifiers,
                                 int damageTotal,
                                 int boostDamageLevel,
                                 int lowerDamageLevel,
@@ -327,7 +327,7 @@ std::string getAttackDamageText(game::IAttack* attack,
         replace(text, "%LOWER%", fmt::format("{:d}", getLowerInitiative(level)));
     } else if (id == attackClasses.damage->id || id == attackClasses.drain->id
                || id == attackClasses.drainOverflow->id) {
-        text = getAttackDamageModifiableText(attack, modifiers, damageTotal, boostDamageLevel,
+        text = getAttackDamageModifiableText(attack, editorModifiers, damageTotal, boostDamageLevel,
                                              lowerDamageLevel, damageMax);
     } else {
         int damage = getAttackQtyDamageOrHealHooked(attack, damageMax);
@@ -339,7 +339,7 @@ std::string getAttackDamageText(game::IAttack* attack,
 }
 
 std::string getAttackInitiativeText(game::IAttack* attack,
-                                    const game::IdList* modifiers,
+                                    const game::IdList* editorModifiers,
                                     int initiativeTotal,
                                     int lowerInitiativeLevel)
 {
@@ -350,9 +350,9 @@ std::string getAttackInitiativeText(game::IAttack* attack,
     int initiative = attack->vftable->getInitiative(attack);
 
     int initiativeModified = initiative;
-    if (modifiers != nullptr) {
+    if (editorModifiers != nullptr) {
         initiativeModified = std::clamp(
-            gameFunctions().applyPercentModifiers(initiative, modifiers,
+            gameFunctions().applyPercentModifiers(initiative, editorModifiers,
                                                   ModifierElementTypeFlag::Initiative),
             restrictions.attackInitiative->min, restrictions.attackInitiative->max);
     }
@@ -554,9 +554,9 @@ std::string getAltAttackText(game::IAttack* altAttack)
 std::string getHitText(game::IEncUnitDescriptor* descriptor,
                        game::IAttack* attack,
                        game::IAttack* altAttack,
-                       const game::IdList* modifiers)
+                       const game::IdList* editorModifiers)
 {
-    auto result = getAttackPowerText(attack, modifiers,
+    auto result = getAttackPowerText(attack, editorModifiers,
                                      descriptor->vftable->getAttackPower(descriptor));
 
     if (altAttack != nullptr && attackHasPower(altAttack->vftable->getAttackClass(altAttack))) {
@@ -638,12 +638,12 @@ std::string getDamageText(game::IEncUnitDescriptor* descriptor,
                           game::IAttack* attack,
                           game::IAttack* attack2,
                           game::IAttack* altAttack,
-                          const game::IdList* modifiers,
+                          const game::IdList* editorModifiers,
                           int boostDamageLevel,
                           int lowerDamageLevel,
                           int damageMax)
 {
-    auto result = getAttackDamageText(attack, modifiers,
+    auto result = getAttackDamageText(attack, editorModifiers,
                                       descriptor->vftable->getAttackDamageOrHeal(descriptor),
                                       boostDamageLevel, lowerDamageLevel, damageMax);
 
@@ -658,7 +658,7 @@ std::string getDamageText(game::IEncUnitDescriptor* descriptor,
     }
 
     if (altAttack != nullptr) {
-        auto altDamage = getAttackDamageText(altAttack, modifiers,
+        auto altDamage = getAttackDamageText(altAttack, editorModifiers,
                                              getAttackQtyDamageOrHealHooked(altAttack, damageMax),
                                              boostDamageLevel, lowerDamageLevel, damageMax);
         if (altDamage != "0")
@@ -671,10 +671,10 @@ std::string getDamageText(game::IEncUnitDescriptor* descriptor,
 
 std::string getInitText(game::IEncUnitDescriptor* descriptor,
                         game::IAttack* attack,
-                        const game::IdList* modifiers,
+                        const game::IdList* editorModifiers,
                         int lowerInitiativeLevel)
 {
-    return getAttackInitiativeText(attack, modifiers,
+    return getAttackInitiativeText(attack, editorModifiers,
                                    descriptor->vftable->getAttackInitiative(descriptor),
                                    lowerInitiativeLevel);
 }
@@ -684,7 +684,7 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
                                                int boostDamageLevel,
                                                int lowerDamageLevel,
                                                int lowerInitiativeLevel,
-                                               const game::IdList* modifiers,
+                                               const game::IdList* editorModifiers,
                                                int damageMax)
 {
     using namespace game;
@@ -715,14 +715,14 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
 
     replace(description, "%SECOND%", getSecondText(attack2));
 
-    replace(description, "%HIT%", getHitText(descriptor, attack, altAttack, modifiers));
+    replace(description, "%HIT%", getHitText(descriptor, attack, altAttack, editorModifiers));
 
     replace(description, "%HIT2%", getHit2Text(descriptor, attack2));
 
     replace(description, "%EFFECT%", getEffectText(attack));
 
     replace(description, "%DAMAGE%",
-            getDamageText(descriptor, attack, attack2, altAttack, modifiers, boostDamageLevel,
+            getDamageText(descriptor, attack, attack2, altAttack, editorModifiers, boostDamageLevel,
                           lowerDamageLevel, damageMax));
 
     replace(description, "%SOURCE%", getSourceText(attack, altAttack));
@@ -730,7 +730,7 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
     replace(description, "%SOURCE2%", getSource2Text(attack2));
 
     replace(description, "%INIT%",
-            getInitText(descriptor, attack, modifiers, lowerInitiativeLevel));
+            getInitText(descriptor, attack, editorModifiers, lowerInitiativeLevel));
 
     replace(description, "%REACH%", getReachText(attack, altAttack));
 
