@@ -221,7 +221,9 @@ bool __fastcall modifierCanApplyWithLeadership(const game::CUmModifier* thisptr,
     return true;
 }
 
-bool __fastcall modifierCanApplyToUnit(const game::CUmModifier* thisptr, const game::IUsUnit* unit)
+bool __fastcall modifierCanApplyToUnit(const game::CUmModifier* thisptr,
+                                       int /*%edx*/,
+                                       const game::IUsUnit* unit)
 {
     using namespace game;
 
@@ -235,6 +237,7 @@ bool __fastcall modifierCanApplyToUnit(const game::CUmModifier* thisptr, const g
 }
 
 bool __fastcall modifierCanApplyToUnitCategory(const game::CUmModifier* thisptr,
+                                               int /*%edx*/,
                                                const game::LUnitCategory* unitCategory)
 {
     using namespace game;
