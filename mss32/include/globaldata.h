@@ -79,11 +79,12 @@ struct CTileVariation;
 
 using RacesMap = mq_c_s<Pair<CMidgardID, TRaceType*>>;
 using DynUpgradeList = List<SmartPtr<CDynUpgrade>>;
+using TextMap = mq_c_s<Pair<CMidgardID, char*>>;
 
 /** Holds global game information. */
 struct GlobalData
 {
-    mq_c_s<Pair<CMidgardID, char*>>* texts;
+    TextMap* texts;
     LAttackClassTable* attackClasses;
     LAttackSourceTable* attackSources;
     LAttackReachTable* attackReaches;
@@ -159,6 +160,9 @@ struct Api
     using FindDynUpgradeById = const CDynUpgrade*(__thiscall*)(DynUpgradeList* thisptr,
                                                                const CMidgardID* id);
     FindDynUpgradeById findDynUpgradeById;
+
+    using FindTextById = const char*(__thiscall*)(const TextMap* thisptr, const CMidgardID* id);
+    FindTextById findTextById;
 };
 
 Api& get();
