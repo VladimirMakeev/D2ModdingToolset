@@ -325,6 +325,12 @@ int __fastcall modifierGetFirstElementValue(const game::CUmModifier* thisptr, in
     }
 }
 
+const char* __fastcall modifierGetDescription(const game::CUmModifier* thisptr, int /*%edx*/)
+{
+    std::string textIdString; // TODO: script function
+    return getGlobalText(textIdString.c_str());
+}
+
 void __fastcall stackLeaderDtor(game::IUsStackLeader* thisptr, int /*%edx*/, char flags)
 {
     auto thiz = castStackLeaderToCustomModifier(thisptr);
@@ -382,6 +388,7 @@ void initModifierRttiInfo()
     vftable.hasElement = (CUmModifierVftable::HasElement)&modifierHasElement;
     vftable.getFirstElementValue = (CUmModifierVftable::
                                         GetFirstElementValue)&modifierGetFirstElementValue;
+    vftable.getDescription = (CUmModifierVftable::GetDescription)&modifierGetDescription;
     // TODO: replace !all! vftable members, do not copy original vftable
 }
 
