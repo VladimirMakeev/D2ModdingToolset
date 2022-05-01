@@ -547,6 +547,73 @@ void __fastcall stackLeaderDtor(game::IUsStackLeader* thisptr, int /*%edx*/, cha
     customModifierDtor(thiz, flags);
 }
 
+int __fastcall stackLeaderGetMovement(const game::IUsStackLeader* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
+    return prev->vftable->getMovement(prev);
+}
+
+const char* __fastcall stackLeaderGetAbilityName(const game::IUsStackLeader* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
+    return prev->vftable->getAbilityName(prev);
+}
+
+bool __fastcall stackLeaderHasMovementBonus(const game::IUsStackLeader* thisptr,
+                                            int /*%edx*/,
+                                            const game::LGroundCategory* ground)
+{
+    // TODO: script function
+    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
+    return prev->vftable->hasMovementBonus(prev, ground);
+}
+
+int __fastcall stackLeaderGetScout(const game::IUsStackLeader* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
+    return prev->vftable->getScout(prev);
+}
+
+int __fastcall stackLeaderGetLeadership(const game::IUsStackLeader* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
+    return prev->vftable->getLeadership(prev);
+}
+
+int __fastcall stackLeaderGetNegotiate(const game::IUsStackLeader* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
+    return prev->vftable->getNegotiate(prev);
+}
+
+bool __fastcall stackLeaderHasAbility(const game::IUsStackLeader* thisptr,
+                                      int /*%edx*/,
+                                      const game::LLeaderAbility* ability)
+{
+    // TODO: script function
+    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
+    return prev->vftable->hasAbility(prev, ability);
+}
+
+bool __fastcall stackLeaderGetFastRetreat(const game::IUsStackLeader* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
+    return prev->vftable->getFastRetreat(prev);
+}
+
+int __fastcall stackLeaderGetLowerCost(const game::IUsStackLeader* thisptr, int /*%edx*/)
+{
+    // TODO: script function
+    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
+    return prev->vftable->getLowerCost(prev);
+}
+
 void __fastcall attackDtor(game::IAttack* thisptr, int /*%edx*/, char flags)
 {
     auto thiz = castAttackToCustomModifier(thisptr);
@@ -643,7 +710,16 @@ void initStackLeaderRttiInfo()
 
     auto& vftable = info.vftable;
     vftable.destructor = (IUsUnitExtensionVftable::Destructor)&stackLeaderDtor;
-    // TODO: replace !all! vftable members
+    vftable.getMovement = (IUsStackLeaderVftable::GetInt)&stackLeaderGetMovement;
+    vftable.getAbilityName = (IUsStackLeaderVftable::GetAbilityName)&stackLeaderGetAbilityName;
+    vftable
+        .hasMovementBonus = (IUsStackLeaderVftable::HasMovementBonus)&stackLeaderHasMovementBonus;
+    vftable.getScout = (IUsStackLeaderVftable::GetInt)&stackLeaderGetScout;
+    vftable.getLeadership = (IUsStackLeaderVftable::GetInt)&stackLeaderGetLeadership;
+    vftable.getNegotiate = (IUsStackLeaderVftable::GetInt)&stackLeaderGetNegotiate;
+    vftable.hasAbility = (IUsStackLeaderVftable::HasAbility)&stackLeaderHasAbility;
+    vftable.getFastRetreat = (IUsStackLeaderVftable::GetFastRetreat)&stackLeaderGetFastRetreat;
+    vftable.getLowerCost = (IUsStackLeaderVftable::GetInt)&stackLeaderGetLowerCost;
 }
 
 void initAttackRttiInfo()
