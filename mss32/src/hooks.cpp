@@ -120,6 +120,7 @@
 #include "playerincomehooks.h"
 #include "racecategory.h"
 #include "racetype.h"
+#include "restrictions.h"
 #include "scenariodata.h"
 #include "scenariodataarray.h"
 #include "scenarioinfo.h"
@@ -1554,6 +1555,8 @@ void __stdcall getAttackPowerHooked(int* power,
 
     using namespace game;
 
+    const auto& restrictions = game::gameRestrictions();
+
     const auto attackClass = attack->vftable->getAttackClass(attack);
 
     if (!attackHasPower(attackClass)) {
@@ -1593,7 +1596,8 @@ void __stdcall getAttackPowerHooked(int* power,
             tmpPower += tmpPower * *bonus / 100;
         }
 
-        tmpPower = std::clamp(tmpPower, attackPowerLimits.min, attackPowerLimits.max);
+        tmpPower = std::clamp(tmpPower, restrictions.attackPower->min,
+                              restrictions.attackPower->max);
     }
 
     const auto& attacks = AttackClassCategories::get();
@@ -1603,7 +1607,7 @@ void __stdcall getAttackPowerHooked(int* power,
     }
 
     tmpPower -= battle.getAttackPowerReduction(battleMsgData, unitId);
-    *power = std::clamp(tmpPower, attackPowerLimits.min, attackPowerLimits.max);
+    *power = std::clamp(tmpPower, restrictions.attackPower->min, restrictions.attackPower->max);
 }
 
 bool __stdcall attackShouldMissHooked(const int* power)

@@ -27,6 +27,7 @@
 #include "encunitdescriptor.h"
 #include "game.h"
 #include "hooks.h"
+#include "restrictions.h"
 #include "settings.h"
 #include "textboxinterf.h"
 #include "textids.h"
@@ -93,6 +94,8 @@ std::string getAttackPowerText(game::IAttack* attack,
 {
     using namespace game;
 
+    const auto& restrictions = game::gameRestrictions();
+
     std::string result;
     if (attackHasPower(attack->vftable->getAttackClass(attack))) {
         int attackPower;
@@ -103,7 +106,7 @@ std::string getAttackPowerText(game::IAttack* attack,
             attackPowerModified = std::clamp(
                 gameFunctions().applyPercentModifiers(attackPower, modifiers,
                                                       ModifierElementTypeFlag::Power),
-                attackPowerLimits.min, attackPowerLimits.max);
+                restrictions.attackPower->min, restrictions.attackPower->max);
         }
 
         result = appendColoredBonus(fmt::format("{:d}%", attackPowerModified),
@@ -342,6 +345,8 @@ std::string getAttackInitiativeText(game::IAttack* attack,
 {
     using namespace game;
 
+    const auto& restrictions = game::gameRestrictions();
+
     int initiative = attack->vftable->getInitiative(attack);
 
     int initiativeModified = initiative;
@@ -349,7 +354,7 @@ std::string getAttackInitiativeText(game::IAttack* attack,
         initiativeModified = std::clamp(
             gameFunctions().applyPercentModifiers(initiative, modifiers,
                                                   ModifierElementTypeFlag::Initiative),
-            attackInitiativeLimits.min, attackInitiativeLimits.max);
+            restrictions.attackInitiative->min, restrictions.attackInitiative->max);
     }
 
     int initiativeTotalBoosted = initiativeTotal;

@@ -20,8 +20,6 @@
 #ifndef ATTACKUTILS_H
 #define ATTACKUTILS_H
 
-#include "restrictions.h"
-
 namespace game {
 struct CMidgardID;
 struct IAttack;
@@ -30,9 +28,6 @@ struct LAttackClass;
 } // namespace game
 
 namespace hooks {
-
-extern const game::Restriction<int> attackPowerLimits;
-extern const game::Restriction<int> attackInitiativeLimits;
 
 game::IAttack* getAttack(const game::CMidgardID* attackId);
 game::CAttackImpl* getAttackImpl(const game::IAttack* attack);

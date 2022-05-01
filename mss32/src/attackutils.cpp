@@ -30,9 +30,6 @@
 
 namespace hooks {
 
-const game::Restriction<int> attackPowerLimits{-100, 100};
-const game::Restriction<int> attackInitiativeLimits{1, 150};
-
 game::IAttack* getAttack(const game::CMidgardID* attackId)
 {
     using namespace game;
