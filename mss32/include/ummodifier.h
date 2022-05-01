@@ -62,6 +62,7 @@ static_assert(sizeof(ModifierValue) == 8,
 // clang-format off
 enum class ModifierElementTypeFlag : int
 {
+    None                = 0b0000000000000000,
     // Used by CUmStack
     MoveAllowance       = 0b0000000000000001,
     ScoutingRange       = 0b0000000000000010,

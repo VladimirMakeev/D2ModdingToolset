@@ -35,6 +35,7 @@ struct CCustomModifier
     game::IUsStackLeader usStackLeader;
     game::IAttack attack;
     game::IAttack attack2;
+    game::ModifierElementTypeFlag lastElementQuery;
     std::string script;
 
     game::IUsUnit* getPrev();

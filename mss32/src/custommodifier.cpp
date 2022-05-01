@@ -124,6 +124,7 @@ CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
 
     thisptr->usUnit.id = emptyId;
     CUmModifierApi::get().constructor(&thisptr->umModifier, id, globalData);
+    thisptr->lastElementQuery = ModifierElementTypeFlag::None;
     new (&thisptr->script) std::string(script);
     initVftable(thisptr);
 
@@ -259,6 +260,71 @@ bool __fastcall modifierIsBoost(const game::CUmModifier* thisptr, int /*%edx*/)
     return false; // TODO: script function
 }
 
+bool __fastcall modifierHasElement(const game::CUmModifier* thisptr,
+                                   int /*%edx*/,
+                                   game::ModifierElementTypeFlag type)
+{
+    using namespace game;
+
+    auto thiz = castModifierToCustomModifier(thisptr);
+
+    bool result = true; // TODO: check that corresponding script function exists
+    thiz->lastElementQuery = result ? type : ModifierElementTypeFlag::None;
+    return result;
+}
+
+int __fastcall modifierGetFirstElementValue(const game::CUmModifier* thisptr, int /*%edx*/)
+{
+    using namespace game;
+
+    auto thiz = castModifierToCustomModifier(thisptr);
+
+    // The values are used to check if this modifier can be applied, to apply spell effects, etc.
+    // Custom modifiers do not have defined element values.
+    // The goal here is to provide universal static values to pass most of the checks,
+    // while having neutral effect if the values are applied directly.
+    switch (thiz->lastElementQuery) {
+    case ModifierElementTypeFlag::Leadership:
+        // Used by GetCombinedLeadership (Akella 0x4a7d6d) to check if Leadership leader upgrade can
+        // be offered.
+        return 0;
+    case ModifierElementTypeFlag::MoveAbility:
+        // Used by CanUseItem (Akella 0x5ed7cf) to check if leader already has this movement bonus.
+        return emptyCategoryId; // game::GroundId
+    case ModifierElementTypeFlag::LeaderAbility:
+        // Used by CanUseItem (Akella 0x5ed7cf) to check if leader already has this ability.
+        return emptyCategoryId; // game::LeaderAbilityId
+    case ModifierElementTypeFlag::QtyDamage:
+    case ModifierElementTypeFlag::Power:
+    case ModifierElementTypeFlag::Initiative:
+        // Used by ApplyPercentModifiers (Akella 0x577515) to exclude editor modifiers when
+        // calculating bonus damage/power/ini in GenerateAttackDescription (Akella 0x57652b).
+        return 0;
+    case ModifierElementTypeFlag::Hp:
+        // Used by CEffectModifierApply (Akella 0x439cd1) to apply Gallean's Boon G000UM7545.
+        return 0;
+    case ModifierElementTypeFlag::Armor:
+        // Used by ApplyFortificationArmor (Akella 0x4212a2).
+        // Used by ApplyAbsoluteModifiers (Akella 0x57646e) to exclude editor modifiers when
+        // calculating bonus armor in GenerateUnitDescription (Akella 0x5757eb).
+        return 0;
+    case ModifierElementTypeFlag::ImmunityAlways:
+    case ModifierElementTypeFlag::ImmunityOnce:
+        // Used by CanUseItem (Akella 0x5ed7cf) to check if unit already immune to attack source.
+        return emptyCategoryId; // game::AttackSourceId
+    case ModifierElementTypeFlag::ImmunityclassAlways:
+    case ModifierElementTypeFlag::ImmunityclassOnce:
+        // Used by CanUseItem (Akella 0x5ed7cf) to check if unit already immune to attack class.
+        return emptyCategoryId; // game::AttackClassId
+    case ModifierElementTypeFlag::MoveAllowance:
+    case ModifierElementTypeFlag::ScoutingRange:
+    case ModifierElementTypeFlag::Regeneration:
+    case ModifierElementTypeFlag::AttackDrain:
+    default:
+        return 0;
+    }
+}
+
 void __fastcall stackLeaderDtor(game::IUsStackLeader* thisptr, int /*%edx*/, char flags)
 {
     auto thiz = castStackLeaderToCustomModifier(thisptr);
@@ -313,6 +379,9 @@ void initModifierRttiInfo()
                                           CanApplyToUnitCategory)&modifierCanApplyToUnitCategory;
     vftable.isLower = (CUmModifierVftable::GetBool)&modifierIsLower;
     vftable.isBoost = (CUmModifierVftable::GetBool)&modifierIsBoost;
+    vftable.hasElement = (CUmModifierVftable::HasElement)&modifierHasElement;
+    vftable.getFirstElementValue = (CUmModifierVftable::
+                                        GetFirstElementValue)&modifierGetFirstElementValue;
     // TODO: replace !all! vftable members, do not copy original vftable
 }
 
