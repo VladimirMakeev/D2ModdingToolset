@@ -29,19 +29,38 @@
 
 namespace hooks {
 
+/** Returns lua environment with bound api and specified source loaded and executed. */
+sol::environment executeScript(const std::string& source, sol::protected_function_result& result);
+
+/** Returns lua environment with bound api and specified file loaded and executed. */
+std::optional<sol::environment> executeScriptFile(const std::filesystem::path& path,
+                                                  bool alwaysExists = false);
+
+/**
+ * Returns function with specified name from lua environment to call from c++.
+ * @tparam T expected script function signature.
+ * @param[in] env lua environment where to search.
+ * @param[in] name function name in lua script.
+ * @param[in] alwaysExists true to show error message if the function does not exist.
+ */
 template <typename T>
-static inline std::optional<T> getFunction(const sol::object object, const char* name)
+static inline std::optional<T> getScriptFunction(const sol::environment& env,
+                                                 const char* name,
+                                                 bool alwaysExists = false)
 {
+    const sol::object object = env[name];
     const sol::type objectType = object.get_type();
 
     if (objectType != sol::type::function) {
-        logError("mssProxyError.log",
-                 fmt::format("'{:s}' is not a function, type: {:d}", name, (int)objectType));
+        if (alwaysExists) {
+            showErrorMessageBox(
+                fmt::format("'{:s}' is not a function, type: {:d}.", name, (int)objectType));
+        }
         return std::nullopt;
     }
 
     if (!object.is<T>()) {
-        logError("mssProxyError.log", fmt::format("Function '{:s}' has wrong signature", name));
+        showErrorMessageBox(fmt::format("Function '{:s}' has wrong signature.", name));
         return std::nullopt;
     }
 
@@ -49,49 +68,24 @@ static inline std::optional<T> getFunction(const sol::object object, const char*
 }
 
 /**
- * Returns script function with specified name to call from c++.
- * @tparam T expected script function signature.
- * @param[in] lua fully initialized and loaded lua state wrapper where to search.
- * @param[in] name function name in lua script.
- */
-template <typename T>
-static inline std::optional<T> getScriptFunction(const sol::state& lua, const char* name)
-{
-    return getFunction<T>(lua[name], name);
-}
-
-/**
  * Returns function with specified name from lua environment to call from c++.
  * @tparam T expected script function signature.
- * @param[in] env lua environment where to search.
+ * @param[in] path filename of script source.
  * @param[in] name function name in lua script.
- */
-template <typename T>
-static inline std::optional<T> getScriptFunction(const sol::environment& env, const char* name)
-{
-    return getFunction<T>(env[name], name);
-}
-
-/**
- * Returns script function with specified name from specified file to call from c++.
- * @tparam T expected script function signature.
- * @param[in] name function name in lua script.
- * @param[out] lua returns lua state where the function executes.
- * @param[inout] alwaysExists true to show error message if the function does not exist.
- * @param[inout] bindApi true to bind additional apis like 'math' or 'table'.
+ * @param[out] env environment where the function executes.
+ * @param[in] alwaysExists true to show error message if the function does not exist.
  */
 template <typename T>
 static inline std::optional<T> getScriptFunction(const std::filesystem::path& path,
                                                  const char* name,
-                                                 std::optional<sol::state>& lua,
-                                                 bool alwaysExists = false,
-                                                 bool bindApi = false)
+                                                 std::optional<sol::environment>& env,
+                                                 bool alwaysExists = false)
 {
-    lua = loadScriptFile(path, alwaysExists, bindApi);
-    if (!lua)
+    env = executeScriptFile(path, alwaysExists);
+    if (!env)
         return std::nullopt;
 
-    auto function = getFunction<T>((*lua)[name], name);
+    auto function = getScriptFunction<T>(*env, name, false);
     if (!function && alwaysExists) {
         showErrorMessageBox(fmt::format("Could not find function '{:s}' in script '{:s}'.\n"
                                         "Make sure function exists and has correct signature.",
@@ -100,14 +94,6 @@ static inline std::optional<T> getScriptFunction(const std::filesystem::path& pa
 
     return function;
 }
-
-/** Returns lua state wrapper with specified script loaded in it and api bound. */
-std::optional<sol::state> loadScriptFile(const std::filesystem::path& path,
-                                         bool alwaysExists = false,
-                                         bool bindApi = false);
-
-/** Returns lua state wrapper with optionally bound api. */
-sol::state createLuaState(bool bindApi = false);
 
 } // namespace hooks
 

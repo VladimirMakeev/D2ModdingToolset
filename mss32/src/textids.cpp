@@ -22,7 +22,6 @@
 #include "scripts.h"
 #include "utils.h"
 #include <fmt/format.h>
-#include <sol/sol.hpp>
 
 namespace hooks {
 
@@ -133,11 +132,11 @@ void initialize(TextIds& value)
 {
     const auto path{hooks::scriptsFolder() / "textids.lua"};
     try {
-        const auto lua{loadScriptFile(path)};
-        if (!lua)
+        const auto env{executeScriptFile(path)};
+        if (!env)
             return;
 
-        const sol::table& table = (*lua)["textids"];
+        const sol::table& table = (*env)["textids"];
         readInterfTextIds(table, value.interf);
         readEventsTextIds(table, value.events);
         readLobbyTextIds(table, value.lobby);

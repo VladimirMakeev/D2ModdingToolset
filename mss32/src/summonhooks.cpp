@@ -48,11 +48,11 @@ static int getSummonLevel(const game::CMidUnit* summoner,
 {
     using namespace game;
 
-    std::optional<sol::state> lua;
+    std::optional<sol::environment> env;
     const auto path{scriptsFolder() / "summon.lua"};
     using GetLevel = std::function<int(const bindings::UnitView&, const bindings::UnitImplView&,
                                        const bindings::ItemView*)>;
-    auto getLevel = getScriptFunction<GetLevel>(path, "getLevel", lua, true, true);
+    auto getLevel = getScriptFunction<GetLevel>(path, "getLevel", env, true);
     if (!getLevel) {
         return 0;
     }

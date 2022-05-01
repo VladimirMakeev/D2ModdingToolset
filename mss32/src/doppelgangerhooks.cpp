@@ -43,10 +43,10 @@ namespace hooks {
 static int getDoppelgangerTransformLevel(const game::CMidUnit* doppelganger,
                                          const game::CMidUnit* targetUnit)
 {
-    std::optional<sol::state> lua;
+    std::optional<sol::environment> env;
     const auto path{scriptsFolder() / "doppelganger.lua"};
     using GetLevel = std::function<int(const bindings::UnitView&, const bindings::UnitView&)>;
-    auto getLevel = getScriptFunction<GetLevel>(path, "getLevel", lua, true, true);
+    auto getLevel = getScriptFunction<GetLevel>(path, "getLevel", env, true);
     if (!getLevel) {
         return 0;
     }
