@@ -331,6 +331,12 @@ const char* __fastcall modifierGetDescription(const game::CUmModifier* thisptr, 
     return getGlobalText(textIdString.c_str());
 }
 
+void __fastcall modifierUpdateUnitImplId(game::CUmModifier* thisptr, int /*%edx*/)
+{
+    auto thiz = castModifierToCustomModifier(thisptr);
+    thiz->usUnit.id = thiz->getPrev()->id;
+}
+
 void __fastcall stackLeaderDtor(game::IUsStackLeader* thisptr, int /*%edx*/, char flags)
 {
     auto thiz = castStackLeaderToCustomModifier(thisptr);
@@ -373,7 +379,7 @@ void initModifierRttiInfo()
     using namespace game;
 
     auto& info = rttiInfo.umModifier;
-    replaceRttiInfo(info, CUmUnitApi::vftable().umModifier);
+    replaceRttiInfo(info, CUmUnitApi::vftable().umModifier, false);
 
     auto& vftable = info.vftable;
     vftable.destructor = (CUmModifierVftable::Destructor)&modifierDtor;
@@ -389,7 +395,7 @@ void initModifierRttiInfo()
     vftable.getFirstElementValue = (CUmModifierVftable::
                                         GetFirstElementValue)&modifierGetFirstElementValue;
     vftable.getDescription = (CUmModifierVftable::GetDescription)&modifierGetDescription;
-    // TODO: replace !all! vftable members, do not copy original vftable
+    vftable.updateUnitImplId = (CUmModifierVftable::UpdateUnitImplId)&modifierUpdateUnitImplId;
 }
 
 void initStackLeaderRttiInfo()
