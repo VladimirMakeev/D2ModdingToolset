@@ -98,16 +98,16 @@ std::string getAttackPowerText(game::IAttack* attack,
         int attackPower;
         attack->vftable->getPower(attack, &attackPower);
 
+        int attackPowerModified = attackPower;
         if (modifiers != nullptr) {
-            const auto& fn = gameFunctions();
-            int attackPowerModified = std::clamp(
-                fn.applyPercentModifiers(attackPower, modifiers, ModifierElementTypeFlag::Power),
+            attackPowerModified = std::clamp(
+                gameFunctions().applyPercentModifiers(attackPower, modifiers,
+                                                      ModifierElementTypeFlag::Power),
                 attackPowerLimits.min, attackPowerLimits.max);
+        }
 
-            result = appendColoredBonus(fmt::format("{:d}%", attackPowerModified),
-                                        attackPowerTotal - attackPowerModified);
-        } else
-            result = fmt::format("{:d}%", attackPower);
+        result = appendColoredBonus(fmt::format("{:d}%", attackPowerModified),
+                                    attackPowerTotal - attackPowerModified);
     } else
         result = "100%";
 
@@ -258,9 +258,11 @@ std::string getAttackDamageModifiableText(const game::IAttack* attack,
         }
     }
 
-    const auto& fn = gameFunctions();
-    int damageModified = fn.applyPercentModifiers(damage, modifiers,
-                                                  ModifierElementTypeFlag::QtyDamage);
+    int damageModified = damage;
+    if (modifiers != nullptr) {
+        damageModified = gameFunctions().applyPercentModifiers(damage, modifiers,
+                                                               ModifierElementTypeFlag::QtyDamage);
+    }
     if (damageModified > damageMax)
         damageModified = damageMax;
     damageModified *= damageMultiplier;
@@ -342,10 +344,13 @@ std::string getAttackInitiativeText(game::IAttack* attack,
 
     int initiative = attack->vftable->getInitiative(attack);
 
-    const auto& fn = gameFunctions();
-    int initiativeModified = std::clamp(
-        fn.applyPercentModifiers(initiative, modifiers, ModifierElementTypeFlag::Initiative),
-        attackInitiativeLimits.min, attackInitiativeLimits.max);
+    int initiativeModified = initiative;
+    if (modifiers != nullptr) {
+        initiativeModified = std::clamp(
+            gameFunctions().applyPercentModifiers(initiative, modifiers,
+                                                  ModifierElementTypeFlag::Initiative),
+            attackInitiativeLimits.min, attackInitiativeLimits.max);
+    }
 
     int initiativeTotalBoosted = initiativeTotal;
     initiativeTotalBoosted -= initiativeTotal * getLowerInitiative(lowerInitiativeLevel) / 100;
@@ -638,7 +643,7 @@ std::string getDamageText(game::IEncUnitDescriptor* descriptor,
                                       boostDamageLevel, lowerDamageLevel, damageMax);
 
     if (attack2 != nullptr) {
-        auto damage2 = getAttackDamageText(attack2, modifiers,
+        auto damage2 = getAttackDamageText(attack2, nullptr,
                                            getAttackQtyDamageOrHealHooked(attack2, damageMax),
                                            boostDamageLevel, lowerDamageLevel, damageMax);
         if (result == "0")
