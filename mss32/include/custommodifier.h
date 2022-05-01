@@ -42,6 +42,7 @@ struct CCustomModifier
     game::IUsSoldier* getPrevSoldier();
     game::IUsStackLeader* getPrevStackLeader();
     game::IAttack* getPrevAttack(const game::IAttack* current);
+    game::IAttack* getAttack(bool primary);
     bool isLeaderOnly();
 };
 

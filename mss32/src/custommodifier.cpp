@@ -106,6 +106,17 @@ game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* current)
     return nullptr;
 }
 
+game::IAttack* CCustomModifier::getAttack(bool primary)
+{
+    auto result = primary ? &attack : &attack2;
+    auto prev = getPrevAttack(result);
+    if (!prev)
+        return nullptr;
+
+    result->id = prev->id;
+    return result;
+}
+
 bool CCustomModifier::isLeaderOnly()
 {
     // TODO: test script to contain only leader modification functions
@@ -319,14 +330,12 @@ const game::LImmuneCat* __fastcall soldierGetImmuneByAttackSource(
 
 game::IAttack* __fastcall soldierGetAttackById(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
-    auto thiz = castSoldierToCustomModifier(thisptr);
-    return &thiz->attack;
+    return castSoldierToCustomModifier(thisptr)->getAttack(true);
 }
 
 game::IAttack* __fastcall soldierGetSecondAttackById(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
-    auto thiz = castSoldierToCustomModifier(thisptr);
-    return &thiz->attack2;
+    return castSoldierToCustomModifier(thisptr)->getAttack(false);
 }
 
 bool __fastcall soldierGetAttackTwice(const game::IUsSoldier* thisptr, int /*%edx*/)
