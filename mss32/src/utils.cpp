@@ -102,6 +102,21 @@ std::string getTranslatedText(const char* textIdString)
     return {gameFunctions().getInterfaceText(&textId)};
 }
 
+const char* getGlobalText(const char* textIdString)
+{
+    using namespace game;
+
+    const auto& globalApi = GlobalDataApi::get();
+
+    CMidgardID textId{};
+    CMidgardIDApi::get().fromString(&textId, textIdString);
+    if (textId == invalidId)
+        return "";
+
+    const auto texts = (*globalApi.getGlobalData())->texts;
+    return globalApi.findTextById(texts, &textId);
+}
+
 bool replace(std::string& str, const std::string& keyword, const std::string& replacement)
 {
     const auto pos = str.find(keyword);
