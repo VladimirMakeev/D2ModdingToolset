@@ -1313,7 +1313,7 @@ int __stdcall computeTargetUnitAiPriorityHooked(const game::IMidgardObjectMap* o
     auto attack = soldier->vftable->getAttackById(soldier);
     auto attackClassId = attack->vftable->getAttackClass(attack)->id;
 
-    AttackClassId attack2ClassId = (AttackClassId)-1;
+    AttackClassId attack2ClassId = (AttackClassId)emptyCategoryId;
     auto attack2 = soldier->vftable->getSecondAttackById(soldier);
     if (attack2)
         attack2ClassId = attack2->vftable->getAttackClass(attack2)->id;

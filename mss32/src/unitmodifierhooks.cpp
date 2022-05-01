@@ -47,7 +47,7 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
 
     auto data = (TUnitModifierData*)memAlloc(sizeof(TUnitModifierData));
     if (data) {
-        data->group.id = (ModifierSourceId)-1;
+        data->group.id = (ModifierSourceId)emptyCategoryId;
         data->group.table = nullptr;
         data->group.vftable = LModifGroupApi::vftable();
         data->modifier = nullptr;

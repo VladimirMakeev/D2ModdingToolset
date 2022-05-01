@@ -95,9 +95,9 @@ void fillCustomAttackSources(const std::filesystem::path& dbfFilePath)
                          "Found custom attack source {:s}, name id {:s}, immunity ai rating {:d}",
                          text, nameId, immunityAiRating));
 
-            customSources.push_back(
-                {LAttackSource{AttackSourceCategories::vftable(), nullptr, (AttackSourceId)-1},
-                 text, nameId, (double)immunityAiRating, ++wardFlagPosition});
+            customSources.push_back({LAttackSource{AttackSourceCategories::vftable(), nullptr,
+                                                   (AttackSourceId)emptyCategoryId},
+                                     text, nameId, (double)immunityAiRating, ++wardFlagPosition});
         }
     }
 }
@@ -158,10 +158,11 @@ void fillCustomAttackReaches(const std::filesystem::path& dbfFilePath)
 
             logDebug("customAttacks.log", fmt::format("Found custom attack reach {:s}", text));
 
-            customReaches.push_back(
-                {LAttackReach{AttackReachCategories::vftable(), nullptr, (AttackReachId)-1}, text,
-                 reachTxt, targetsTxt, trimSpaces(selectionScript), trimSpaces(attackScript),
-                 markAttackTargets, melee, (std::uint32_t)maxTargets});
+            customReaches.push_back({LAttackReach{AttackReachCategories::vftable(), nullptr,
+                                                  (AttackReachId)emptyCategoryId},
+                                     text, reachTxt, targetsTxt, trimSpaces(selectionScript),
+                                     trimSpaces(attackScript), markAttackTargets, melee,
+                                     (std::uint32_t)maxTargets});
         }
     }
 }

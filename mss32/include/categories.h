@@ -58,6 +58,8 @@ struct LAttitudesCategoryTable : CEnumConstantTable<AiAttitudeId>
 struct LAttitudesCategory : public Category<AiAttitudeId>
 { };
 
+static const int emptyCategoryId = -1;
+
 namespace CategoryTableApi {
 
 template <typename Table, typename Category>
