@@ -2513,6 +2513,9 @@
     <ClInclude Include="include\umunithooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
+    <ClInclude Include="include\isostillbackground.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\terraintile.h">
       <Filter>game</Filter>
     </ClInclude>
