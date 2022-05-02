@@ -497,13 +497,15 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
     auto unitGroup = fn.getStackFortRuinGroup(tmp, objectMap, unitGroupId);
     auto targetGroup = fn.getStackFortRuinGroup(tmp, objectMap, targetGroupId);
 
-    for (const auto& targetPosition : *value) {
-        auto unitId = getTargetUnitId(targetPosition, targetGroup, unitGroup);
+    for (auto it = value->begin(); it != value->end();) {
+        int position = *it++; // Prevents iterator invalidation on erasing
+
+        auto unitId = getTargetUnitId(position, targetGroup, unitGroup);
         if (unitId == emptyId)
             continue;
 
         if (fn.isUnitImmuneToAttack(objectMap, battleMsgData, &unitId, attack, true)) {
-            intSetApi.erase(value, &targetPosition);
+            intSetApi.erase(value, &position);
         }
     }
 }
