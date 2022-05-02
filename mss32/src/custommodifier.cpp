@@ -198,7 +198,7 @@ game::IUsUnitExtension* __fastcall unitCast(const game::IUsUnit* thisptr,
     if (!strcmp(rawTypeName, typeInfoRawName(rtti.IUsSoldierType))) {
         return (IUsUnitExtension*)&thiz->usSoldier;
     } else if (!strcmp(rawTypeName, typeInfoRawName(rtti.IUsStackLeaderType))) {
-        auto prevStackLeader = prev->vftable->cast(thisptr, rawTypeName);
+        auto prevStackLeader = prev->vftable->cast(prev, rawTypeName);
         return prevStackLeader ? (IUsUnitExtension*)&thiz->usStackLeader : nullptr;
     }
 
