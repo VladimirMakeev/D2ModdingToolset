@@ -620,6 +620,117 @@ void __fastcall attackDtor(game::IAttack* thisptr, int /*%edx*/, char flags)
     customModifierDtor(thiz, flags);
 }
 
+const char* __fastcall attackGetName(const game::IAttack* thisptr, int /*%edx*/)
+{
+    // TODO: script function, differentiate between primary and secondary
+    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    return prev->vftable->getName(prev);
+}
+
+const char* __fastcall attackGetDescription(const game::IAttack* thisptr, int /*%edx*/)
+{
+    // TODO: script function, differentiate between primary and secondary
+    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    return prev->vftable->getDescription(prev);
+}
+
+game::LAttackClass* __fastcall attackGetAttackClass(const game::IAttack* thisptr, int /*%edx*/)
+{
+    // TODO: script function, differentiate between primary and secondary
+    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    return prev->vftable->getAttackClass(prev);
+}
+
+game::LAttackSource* __fastcall attackGetAttackSource(const game::IAttack* thisptr, int /*%edx*/)
+{
+    // TODO: script function, differentiate between primary and secondary
+    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    return prev->vftable->getAttackSource(prev);
+}
+
+int __fastcall attackGetInitiative(const game::IAttack* thisptr, int /*%edx*/)
+{
+    // TODO: script function, differentiate between primary and secondary
+    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    return prev->vftable->getInitiative(prev);
+}
+
+int* __fastcall attackGetPower(const game::IAttack* thisptr, int /*%edx*/, int* power)
+{
+    // TODO: script function, differentiate between primary and secondary
+    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    return prev->vftable->getPower(prev, power);
+}
+
+game::LAttackReach* __fastcall attackGetAttackReach(const game::IAttack* thisptr, int /*%edx*/)
+{
+    // TODO: script function, differentiate between primary and secondary
+    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    return prev->vftable->getAttackReach(prev);
+}
+
+int __fastcall attackGetQtyDamage(const game::IAttack* thisptr, int /*%edx*/)
+{
+    // TODO: script function, differentiate between primary and secondary
+    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    return prev->vftable->getQtyDamage(prev);
+}
+
+int __fastcall attackGetQtyHeal(const game::IAttack* thisptr, int /*%edx*/)
+{
+    // TODO: script function, differentiate between primary and secondary
+    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    return prev->vftable->getQtyHeal(prev);
+}
+
+int __fastcall attackGetDrain(const game::IAttack* thisptr, int /*%edx*/, int damage)
+{
+    // TODO: script function, differentiate between primary and secondary
+    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    return prev->vftable->getDrain(prev, damage);
+}
+
+int __fastcall attackGetLevel(const game::IAttack* thisptr, int /*%edx*/)
+{
+    // TODO: script function, differentiate between primary and secondary
+    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    return prev->vftable->getLevel(prev);
+}
+
+const game::CMidgardID* __fastcall attackGetAltAttackId(const game::IAttack* thisptr, int /*%edx*/)
+{
+    // TODO: script function, differentiate between primary and secondary
+    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    return prev->vftable->getAltAttackId(prev);
+}
+
+bool __fastcall attackGetInfinite(const game::IAttack* thisptr, int /*%edx*/)
+{
+    // TODO: script function, differentiate between primary and secondary
+    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    return prev->vftable->getInfinite(prev);
+}
+
+game::IdVector* __fastcall attackGetWards(const game::IAttack* thisptr, int /*%edx*/)
+{
+    // TODO: script function, differentiate between primary and secondary
+    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    return prev->vftable->getWards(prev);
+}
+
+bool __fastcall attackGetCritHit(const game::IAttack* thisptr, int /*%edx*/)
+{
+    // TODO: script function, differentiate between primary and secondary
+    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    return prev->vftable->getCritHit(prev);
+}
+
+void __fastcall attackGetData(const game::IAttack* thisptr, int /*%edx*/, game::CAttackData* value)
+{
+    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    prev->vftable->getData(prev, value);
+}
+
 void initUnitRttiInfo()
 {
     using namespace game;
@@ -734,7 +845,22 @@ void initAttackRttiInfo()
 
     auto& vftable = info.vftable;
     vftable.destructor = (IMidObjectVftable::Destructor)&attackDtor;
-    // TODO: replace !all! vftable members
+    vftable.getName = (IAttackVftable::GetCStr)&attackGetName;
+    vftable.getDescription = (IAttackVftable::GetCStr)&attackGetDescription;
+    vftable.getAttackClass = (IAttackVftable::GetAttackClass)&attackGetAttackClass;
+    vftable.getAttackSource = (IAttackVftable::GetAttackSource)&attackGetAttackSource;
+    vftable.getInitiative = (IAttackVftable::GetInitiative)&attackGetInitiative;
+    vftable.getPower = (IAttackVftable::GetPower)&attackGetPower;
+    vftable.getAttackReach = (IAttackVftable::GetAttackReach)&attackGetAttackReach;
+    vftable.getQtyDamage = (IAttackVftable::GetInt)&attackGetQtyDamage;
+    vftable.getQtyHeal = (IAttackVftable::GetInt)&attackGetQtyHeal;
+    vftable.getDrain = (IAttackVftable::GetDrain)&attackGetDrain;
+    vftable.getLevel = (IAttackVftable::GetInt)&attackGetLevel;
+    vftable.getAltAttackId = (IAttackVftable::GetId)&attackGetAltAttackId;
+    vftable.getInfinite = (IAttackVftable::GetBool)&attackGetInfinite;
+    vftable.getWards = (IAttackVftable::GetWards)&attackGetWards;
+    vftable.getCritHit = (IAttackVftable::GetBool)&attackGetCritHit;
+    vftable.getData = (IAttackVftable::GetData)&attackGetData;
 }
 
 void initAttack2RttiInfo()
@@ -749,7 +875,22 @@ void initAttack2RttiInfo()
 
     auto& vftable = info.vftable;
     vftable.destructor = (IMidObjectVftable::Destructor)&attackDtor;
-    // TODO: replace !all! vftable members
+    vftable.getName = (IAttackVftable::GetCStr)&attackGetName;
+    vftable.getDescription = (IAttackVftable::GetCStr)&attackGetDescription;
+    vftable.getAttackClass = (IAttackVftable::GetAttackClass)&attackGetAttackClass;
+    vftable.getAttackSource = (IAttackVftable::GetAttackSource)&attackGetAttackSource;
+    vftable.getInitiative = (IAttackVftable::GetInitiative)&attackGetInitiative;
+    vftable.getPower = (IAttackVftable::GetPower)&attackGetPower;
+    vftable.getAttackReach = (IAttackVftable::GetAttackReach)&attackGetAttackReach;
+    vftable.getQtyDamage = (IAttackVftable::GetInt)&attackGetQtyDamage;
+    vftable.getQtyHeal = (IAttackVftable::GetInt)&attackGetQtyHeal;
+    vftable.getDrain = (IAttackVftable::GetDrain)&attackGetDrain;
+    vftable.getLevel = (IAttackVftable::GetInt)&attackGetLevel;
+    vftable.getAltAttackId = (IAttackVftable::GetId)&attackGetAltAttackId;
+    vftable.getInfinite = (IAttackVftable::GetBool)&attackGetInfinite;
+    vftable.getWards = (IAttackVftable::GetWards)&attackGetWards;
+    vftable.getCritHit = (IAttackVftable::GetBool)&attackGetCritHit;
+    vftable.getData = (IAttackVftable::GetData)&attackGetData;
 }
 
 void initRttiInfo()
