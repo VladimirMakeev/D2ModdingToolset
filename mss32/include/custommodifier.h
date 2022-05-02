@@ -27,6 +27,8 @@
 
 namespace hooks {
 
+struct CustomAttackData;
+
 struct CCustomModifier
 {
     game::IUsUnit usUnit;
@@ -44,6 +46,7 @@ struct CCustomModifier
     game::IAttack* getPrevAttack(const game::IAttack* current);
     game::IAttack* getAttack(bool primary);
     bool isLeaderOnly();
+    CustomAttackData getCustomAttackData(const game::IAttack* current);
 };
 
 static_assert(

@@ -115,10 +115,9 @@ std::string getAttackPowerText(game::IAttack* attack,
         result = "100%";
 
     if (attack->vftable->getCritHit(attack)) {
-        auto attackImpl = getAttackImpl(attack);
-        int critPower = attackImpl ? attackImpl->data->critPower : userSettings().criticalHitChance;
-        if (critPower != 100)
-            return fmt::format("{:s} ({:d}%)", result.c_str(), critPower);
+        auto customData = getCustomAttackData(attack);
+        if (customData.critPower != 100)
+            return fmt::format("{:s} ({:d}%)", result.c_str(), customData.critPower);
     }
 
     return result;
@@ -230,15 +229,12 @@ std::string getRatedOrSplitAttackDamageText(const game::IAttack* attack,
     if (maxTargets < 2)
         return damageText;
 
-    auto attackImpl = getAttackImpl(attack);
-    if (!attackImpl)
-        return damageText;
-
-    if (attackImpl->data->damageSplit) {
+    auto customData = getCustomAttackData(attack);
+    if (customData.damageSplit) {
         return getSplitAttackDamageText(damageText);
     } else {
         return getRatedAttackDamageText(attack, damageText, damage, critDamage, maxTargets,
-                                        !attackImpl->data->damageRatioPerTarget);
+                                        !customData.damageRatioPerTarget);
     }
 }
 
@@ -255,8 +251,8 @@ std::string getAttackDamageModifiableText(const game::IAttack* attack,
 
     int damageMultiplier = 1;
     if (getCustomAttacks().damageRatios.enabled) {
-        auto attackImpl = getAttackImpl(attack);
-        if (attackImpl && attackImpl->data->damageSplit) {
+        auto customData = getCustomAttackData(attack);
+        if (customData.damageSplit) {
             damageMultiplier = userSettings().splitDamageMultiplier;
         }
     }
@@ -286,10 +282,8 @@ std::string getAttackDamageModifiableText(const game::IAttack* attack,
 
     int critDamage = 0;
     if (attack->vftable->getCritHit(attack)) {
-        auto attackImpl = getAttackImpl(attack);
-        auto critDamageRate = attackImpl ? attackImpl->data->critDamage
-                                         : userSettings().criticalHitDamage;
-        critDamage = damageTotalBoosted * critDamageRate / 100;
+        auto customData = getCustomAttackData(attack);
+        critDamage = damageTotalBoosted * customData.critDamage / 100;
         damagePlusBonusPlusMax = getAttackPlusCritDamageText(damagePlusBonusPlusMax, critDamage);
     }
 

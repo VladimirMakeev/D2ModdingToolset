@@ -18,6 +18,8 @@
  */
 
 #include "custommodifier.h"
+#include "customattacks.h"
+#include "customattackutils.h"
 #include "dynamiccast.h"
 #include "game.h"
 #include "mempool.h"
@@ -121,6 +123,13 @@ bool CCustomModifier::isLeaderOnly()
 {
     // TODO: test script to contain only leader modification functions
     return false;
+}
+
+CustomAttackData CCustomModifier::getCustomAttackData(const game::IAttack* current)
+{
+    // TODO: script functions, differentiate between primary and secondary
+    auto prev = getPrevAttack(current);
+    return hooks::getCustomAttackData(prev);
 }
 
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,

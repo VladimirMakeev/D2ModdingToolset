@@ -21,11 +21,13 @@
 #include "attack.h"
 #include "attackclasscat.h"
 #include "attackimpl.h"
+#include "attackmodified.h"
 #include "attackutils.h"
 #include "batattack.h"
 #include "batattacktransformself.h"
 #include "battlemsgdata.h"
 #include "customattacks.h"
+#include "custommodifier.h"
 #include "dbffile.h"
 #include "dynamiccast.h"
 #include "game.h"
@@ -541,14 +543,11 @@ std::vector<double> computeAttackDamageRatio(const game::IAttack* attack, int ta
 {
     std::vector<double> result;
 
-    auto attackImpl = getAttackImpl(attack);
-    if (!attackImpl)
+    auto customData = getCustomAttackData(attack);
+    if (customData.damageRatio == 100 && !customData.damageSplit)
         return result;
 
-    if (attackImpl->data->damageRatio == 100 && !attackImpl->data->damageSplit)
-        return result;
-
-    const double ratio = (double)attackImpl->data->damageRatio / 100;
+    const double ratio = (double)customData.damageRatio / 100;
 
     double currentRatio = ratio;
     double totalRatio = 1.0;
@@ -556,11 +555,11 @@ std::vector<double> computeAttackDamageRatio(const game::IAttack* attack, int ta
     for (int i = 1; i < targetCount; i++) {
         result.push_back(currentRatio);
         totalRatio += currentRatio;
-        if (attackImpl->data->damageRatioPerTarget)
+        if (customData.damageRatioPerTarget)
             currentRatio *= ratio;
     }
 
-    if (attackImpl->data->damageSplit) {
+    if (customData.damageSplit) {
         for (auto& value : result) {
             value /= totalRatio * userSettings().splitDamageMultiplier;
         }
@@ -574,19 +573,15 @@ double computeTotalDamageRatio(const game::IAttack* attack, int targetCount)
     if (!getCustomAttacks().damageRatios.enabled)
         return targetCount;
 
-    auto attackImpl = getAttackImpl(attack);
-    if (!attackImpl)
-        return targetCount;
-
-    auto damageRatio = attackImpl->data->damageRatio;
-    if (attackImpl->data->damageSplit) {
+    auto customData = getCustomAttackData(attack);
+    if (customData.damageSplit) {
         return 1.0 * userSettings().splitDamageMultiplier;
-    } else if (damageRatio != 100) {
-        double ratio = (double)damageRatio / 100;
+    } else if (customData.damageRatio != 100) {
+        double ratio = (double)customData.damageRatio / 100;
 
         double value = 1.0;
         for (int i = 1; i < targetCount; i++) {
-            value += attackImpl->data->damageRatioPerTarget ? pow(ratio, i) : ratio;
+            value += customData.damageRatioPerTarget ? pow(ratio, i) : ratio;
         }
 
         return value;
@@ -615,6 +610,45 @@ int computeAverageTotalDamage(const game::IAttack* attack, int damage)
     }
 
     return damage;
+}
+
+CustomAttackData getCustomAttackData(const game::IAttack* attack)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    auto current = attack;
+    while (current) {
+        // Do this before dynamicCast because CCustomModifier does not support IAttack RTTI.
+        auto customModifier = castAttackToCustomModifier(current);
+        if (customModifier) {
+            return customModifier->getCustomAttackData(current);
+        }
+
+        auto attackImpl = (CAttackImpl*)dynamicCast(current, 0, rtti.IAttackType,
+                                                    rtti.CAttackImplType, 0);
+        if (attackImpl) {
+            const auto data = attackImpl->data;
+
+            CustomAttackData result{};
+            result.damageRatio = data->damageRatio;
+            result.damageRatioPerTarget = data->damageRatioPerTarget;
+            result.damageSplit = data->damageSplit;
+            result.critDamage = data->critDamage;
+            result.critPower = data->critPower;
+
+            return result;
+        }
+
+        auto attackModified = (CAttackModified*)dynamicCast(current, 0, rtti.IAttackType,
+                                                            rtti.CAttackModifiedType, 0);
+        current = attackModified ? attackModified->data->prev : nullptr;
+    }
+
+    // Should never happen unless attack is null
+    return {};
 }
 
 } // namespace hooks

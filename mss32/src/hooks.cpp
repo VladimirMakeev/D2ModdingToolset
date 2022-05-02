@@ -1515,13 +1515,10 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
         }
 
         if (critHit) {
-            auto attackImpl = getAttackImpl(attack);
-            int critPower = attackImpl ? attackImpl->data->critPower
-                                       : userSettings().criticalHitChance;
+            auto customData = getCustomAttackData(attack);
+            int critPower = customData.critPower;
             if (!fn.attackShouldMiss(&critPower)) {
-                int critDamageRate = attackImpl ? attackImpl->data->critDamage
-                                                : userSettings().criticalHitDamage;
-                critDamage = damageWithBuffs * critDamageRate / 100;
+                critDamage = damageWithBuffs * customData.critDamage / 100;
             }
         }
     }

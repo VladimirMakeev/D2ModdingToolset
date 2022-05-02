@@ -35,6 +35,15 @@ static const char damageSplitColumnName[] = "DAM_SPLIT";
 static const char critDamageColumnName[] = "CRIT_DAM";
 static const char critPowerColumnName[] = "CRIT_POWER";
 
+struct CustomAttackData
+{
+    std::uint8_t damageRatio;
+    bool damageRatioPerTarget;
+    bool damageSplit;
+    std::uint8_t critDamage;
+    std::uint8_t critPower;
+};
+
 struct CustomAttackSource
 {
     game::LAttackSource source;
