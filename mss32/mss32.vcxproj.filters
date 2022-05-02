@@ -2516,6 +2516,9 @@
     <ClInclude Include="include\isoground2.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\bordertile.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\isoborder.h">
       <Filter>game</Filter>
     </ClInclude>

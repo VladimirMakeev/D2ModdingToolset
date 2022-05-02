@@ -528,6 +528,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\bindings\unitslotview.h" />
     <ClInclude Include="include\bindings\unitview.h" />
     <ClInclude Include="include\bestowwardshooks.h" />
+    <ClInclude Include="include\bordertile.h" />
     <ClInclude Include="include\buildingbranch.h" />
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />
