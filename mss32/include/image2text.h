@@ -22,6 +22,7 @@
 
 #include "d2string.h"
 #include "mqimage2surface16.h"
+#include "mqrect.h"
 
 namespace game {
 
@@ -29,13 +30,10 @@ namespace game {
 struct CImage2Text : public CMqImage2Surface16
 {
     String text;
-    int unk;
-    int unk2;
+    CMqPoint textPosition; /**< Top-left position where text starts inside of textArea. */
     bool unk3;
     char pad[3];
-    int unk4;
-    int unk5;
-    CMqPoint size2;
+    CMqRect textArea;
 };
 
 static_assert(sizeof(CImage2Text) == 88, "Size of CImage2Text structure must be exactly 88 bytes");

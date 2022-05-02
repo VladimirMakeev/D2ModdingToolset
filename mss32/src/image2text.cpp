@@ -24,7 +24,7 @@
 namespace game::CImage2TextApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::Constructor)0x534af8,
@@ -39,7 +39,12 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::Constructor)0x5340d6,
         (Api::SetText)0x5341aa,
-    }
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x48e80f,
+        (Api::SetText)0x48e8e3,
+    },
 }};
 // clang-format on
 
