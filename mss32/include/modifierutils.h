@@ -26,8 +26,10 @@
 
 namespace game {
 struct IMidgardObjectMap;
+struct IUsUnit;
 struct CMidUnit;
 struct UnitInfo;
+struct TUnitModifier;
 struct CUmModifier;
 struct CUmUnit;
 struct LAttackSource;
@@ -42,7 +44,11 @@ bool unitCanBeModified(game::BattleMsgData* battleMsgData, game::CMidgardID* tar
 
 game::CUmUnit* castUmModifierToUmUnit(game::CUmModifier* modifier);
 
-game::CUmModifier* getModifier(const game::CMidgardID* modifierId);
+game::IUsUnit* castUmModifierToUnit(game::CUmModifier* modifier);
+
+game::CUmModifier* castUnitToUmModifier(game::IUsUnit* unit);
+
+const game::TUnitModifier* getUnitModifier(const game::CMidgardID* modifierId);
 
 void getModifierAttackSource(game::CUmUnit* modifier, game::LAttackSource* value);
 

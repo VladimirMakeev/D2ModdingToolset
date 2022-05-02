@@ -57,7 +57,25 @@ game::CUmUnit* castUmModifierToUmUnit(game::CUmModifier* modifier)
     return (CUmUnit*)dynamicCast(modifier, 0, rtti.CUmModifierType, rtti.CUmUnitType, 0);
 }
 
-game::CUmModifier* getModifier(const game::CMidgardID* modifierId)
+game::IUsUnit* castUmModifierToUnit(game::CUmModifier* modifier)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    return (IUsUnit*)dynamicCast(modifier, 0, rtti.CUmModifierType, rtti.IUsUnitType, 0);
+}
+
+game::CUmModifier* castUnitToUmModifier(game::IUsUnit* unit)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    return (CUmModifier*)dynamicCast(unit, 0, rtti.IUsUnitType, rtti.CUmModifierType, 0);
+}
+
+const game::TUnitModifier* getUnitModifier(const game::CMidgardID* modifierId)
 {
     using namespace game;
 
@@ -65,7 +83,7 @@ game::CUmModifier* getModifier(const game::CMidgardID* modifierId)
     const auto modifiers = (*global.getGlobalData())->modifiers;
     const TUnitModifier* unitModifier = (TUnitModifier*)global.findById(modifiers, modifierId);
 
-    return unitModifier->data->modifier;
+    return unitModifier;
 }
 
 void getModifierAttackSource(game::CUmUnit* modifier, game::LAttackSource* value)
@@ -182,7 +200,7 @@ bool canApplyModifier(game::BattleMsgData* battleMsgData,
     if (battle.unitHasModifier(battleMsgData, modifierId, &targetUnit->id))
         return false;
 
-    CUmModifier* modifier = getModifier(modifierId);
+    CUmModifier* modifier = getUnitModifier(modifierId)->data->modifier;
 
     CUmUnit* umUnit = castUmModifierToUmUnit(modifier);
     if (umUnit) {
@@ -317,7 +335,7 @@ bool applyModifier(const game::CMidgardID* unitId,
     if (targetUnit->transformed)
         addUniqueIdToList(targetUnit->origModifiers, modifierId);
 
-    CUmModifier* modifier = getModifier(modifierId);
+    CUmModifier* modifier = getUnitModifier(modifierId)->data->modifier;
 
     CUmUnit* umUnit = castUmModifierToUmUnit(modifier);
     if (umUnit) {
