@@ -20,15 +20,18 @@
 #ifndef ENCPARAMBASE_H
 #define ENCPARAMBASE_H
 
+#include "d2set.h"
 #include "encparam.h"
+#include "smartptr.h"
 
 namespace game {
 
 struct CEncParamBaseData
 {
-    int unknown;
-    int unknown2;
-    char unknown3[36];
+    int type;
+    int statuses; // See CEncParamBaseSetStatus
+    SmartPointer functor;
+    Set<int> list;
 };
 
 static_assert(sizeof(CEncParamBaseData) == 44,
