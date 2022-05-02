@@ -889,6 +889,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\terraincat.h" />
     <ClInclude Include="include\terraincountmap.h" />
     <ClInclude Include="include\terrainnamemap.h" />
+    <ClInclude Include="include\terraintile.h" />
     <ClInclude Include="include\testcondition.h" />
     <ClInclude Include="include\testconditionhooks.h" />
     <ClInclude Include="include\textandid.h" />
