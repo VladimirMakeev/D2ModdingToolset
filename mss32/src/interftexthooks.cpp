@@ -38,7 +38,7 @@
 
 namespace hooks {
 
-game::IAttack* getAttack(game::IEncUnitDescriptor* descriptor)
+game::IAttack* getGlobalAttack(game::IEncUnitDescriptor* descriptor)
 {
     using namespace game;
 
@@ -54,7 +54,7 @@ game::IAttack* getAttack(game::IEncUnitDescriptor* descriptor)
     return attack;
 }
 
-game::IAttack* getAttack2(game::IEncUnitDescriptor* descriptor)
+game::IAttack* getGlobalAttack2(game::IEncUnitDescriptor* descriptor)
 {
     using namespace game;
 
@@ -63,7 +63,7 @@ game::IAttack* getAttack2(game::IEncUnitDescriptor* descriptor)
     return getAttack(&attack2Id);
 }
 
-game::IAttack* getAltAttack(game::IEncUnitDescriptor* descriptor)
+game::IAttack* getGlobalAltAttack(game::IEncUnitDescriptor* descriptor)
 {
     using namespace game;
 
@@ -693,9 +693,9 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
 {
     using namespace game;
 
-    auto attack = getAttack(descriptor);
-    auto attack2 = getAttack2(descriptor);
-    auto altAttack = getAltAttack(descriptor);
+    auto globalAttack = getGlobalAttack(descriptor);
+    auto globalAttack2 = getGlobalAttack2(descriptor);
+    auto globalAltAttack = getGlobalAltAttack(descriptor);
 
     auto description = getInterfaceText("X005TA0424"); // "%PART1%%PART2%"
 
@@ -713,32 +713,33 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
 
     replace(description, "%TWICE%", getTwiceText(descriptor));
 
-    replace(description, "%ALTATTACK%", getAltAttackText(descriptor, altAttack));
+    replace(description, "%ALTATTACK%", getAltAttackText(descriptor, globalAltAttack));
 
-    replace(description, "%ATTACK%", getAttackText(descriptor, attack));
+    replace(description, "%ATTACK%", getAttackText(descriptor, globalAttack));
 
-    replace(description, "%SECOND%", getSecondText(descriptor, attack2));
+    replace(description, "%SECOND%", getSecondText(descriptor, globalAttack2));
 
-    replace(description, "%HIT%", getHitText(descriptor, attack, altAttack, editorModifiers));
+    replace(description, "%HIT%",
+            getHitText(descriptor, globalAttack, globalAltAttack, editorModifiers));
 
-    replace(description, "%HIT2%", getHit2Text(descriptor, attack2));
+    replace(description, "%HIT2%", getHit2Text(descriptor, globalAttack2));
 
-    replace(description, "%EFFECT%", getEffectText(attack));
+    replace(description, "%EFFECT%", getEffectText(globalAttack));
 
     replace(description, "%DAMAGE%",
-            getDamageText(descriptor, attack, attack2, altAttack, editorModifiers, boostDamageLevel,
-                          lowerDamageLevel, damageMax));
+            getDamageText(descriptor, globalAttack, globalAttack2, globalAltAttack, editorModifiers,
+                          boostDamageLevel, lowerDamageLevel, damageMax));
 
-    replace(description, "%SOURCE%", getSourceText(attack, altAttack));
+    replace(description, "%SOURCE%", getSourceText(globalAttack, globalAltAttack));
 
-    replace(description, "%SOURCE2%", getSource2Text(attack2));
+    replace(description, "%SOURCE2%", getSource2Text(globalAttack2));
 
     replace(description, "%INIT%",
-            getInitText(descriptor, attack, editorModifiers, lowerInitiativeLevel));
+            getInitText(descriptor, globalAttack, editorModifiers, lowerInitiativeLevel));
 
-    replace(description, "%REACH%", getReachText(attack, altAttack));
+    replace(description, "%REACH%", getReachText(globalAttack, globalAltAttack));
 
-    replace(description, "%TARGETS%", getTargetsText(attack, altAttack));
+    replace(description, "%TARGETS%", getTargetsText(globalAttack, globalAltAttack));
 
     auto textBox = CDialogInterfApi::get().findTextBox(dialog, "TXT_ATTACK_INFO");
     CTextBoxInterfApi::get().setString(textBox, description.c_str());
