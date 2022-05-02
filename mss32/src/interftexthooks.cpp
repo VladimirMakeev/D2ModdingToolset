@@ -409,13 +409,12 @@ std::string getAttackSourceText(const game::LAttackSource* source)
     return "";
 }
 
-std::string getAttackReachText(game::IAttack* attack)
+std::string getAttackReachText(const game::LAttackReach* reach)
 {
     using namespace game;
 
     const auto& reaches = AttackReachCategories::get();
 
-    auto reach = attack->vftable->getAttackReach(attack);
     if (reach->id == reaches.adjacent->id)
         return getInterfaceText("X005TA0201"); // "Adjacent units"
     else if (reach->id == reaches.all->id || reach->id == reaches.any->id)
@@ -431,13 +430,12 @@ std::string getAttackReachText(game::IAttack* attack)
     return "";
 }
 
-std::string getAttackTargetsText(game::IAttack* attack)
+std::string getAttackTargetsText(const game::LAttackReach* reach)
 {
     using namespace game;
 
     const auto& reaches = AttackReachCategories::get();
 
-    auto reach = attack->vftable->getAttackReach(attack);
     if (reach->id == reaches.all->id)
         return getInterfaceText("X005TA0674"); // "6"
     else if (reach->id == reaches.any->id || reach->id == reaches.adjacent->id)
@@ -605,23 +603,43 @@ std::string getSourceText(game::IEncUnitDescriptor* descriptor,
     return fmt::format("\\p110;{:s}\\p0;", result);
 }
 
-std::string getReachText(game::IAttack* attack, game::IAttack* altAttack)
+std::string getReachText(game::IEncUnitDescriptor* descriptor,
+                         game::IAttack* attack,
+                         game::IAttack* altAttack)
 {
-    auto result = getAttackReachText(attack);
+    auto reach = descriptor->vftable->getAttackReach(descriptor);
+    auto globalReach = attack->vftable->getAttackReach(attack);
 
-    if (altAttack != nullptr)
-        result = addAltAttackTextValue(result, getAttackReachText(altAttack));
+    std::string result = getAttackReachText(reach);
+    if (reach->id != globalReach->id) {
+        result = getModifiedValueText(result);
+    }
+
+    if (altAttack != nullptr) {
+        auto altReach = altAttack->vftable->getAttackReach(altAttack);
+        result = addAltAttackTextValue(result, getAttackReachText(altReach));
+    }
 
     // Fixes vertical tab in case of multiline
     return fmt::format("\\p110;{:s}\\p0;", result);
 }
 
-std::string getTargetsText(game::IAttack* attack, game::IAttack* altAttack)
+std::string getTargetsText(game::IEncUnitDescriptor* descriptor,
+                           game::IAttack* attack,
+                           game::IAttack* altAttack)
 {
-    auto result = getAttackTargetsText(attack);
+    auto reach = descriptor->vftable->getAttackReach(descriptor);
+    auto globalReach = attack->vftable->getAttackReach(attack);
 
-    if (altAttack != nullptr)
-        result = addAltAttackTextValue(result, getAttackTargetsText(altAttack));
+    std::string result = getAttackTargetsText(reach);
+    if (reach->id != globalReach->id) {
+        result = getModifiedValueText(result);
+    }
+
+    if (altAttack != nullptr) {
+        auto altReach = altAttack->vftable->getAttackReach(altAttack);
+        result = addAltAttackTextValue(result, getAttackTargetsText(altReach));
+    }
 
     // Fixes vertical tab in case of multiline
     return fmt::format("\\p110;{:s}\\p0;", result);
@@ -770,9 +788,9 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
     replace(description, "%INIT%",
             getInitText(descriptor, globalAttack, editorModifiers, lowerInitiativeLevel));
 
-    replace(description, "%REACH%", getReachText(globalAttack, globalAltAttack));
+    replace(description, "%REACH%", getReachText(descriptor, globalAttack, globalAltAttack));
 
-    replace(description, "%TARGETS%", getTargetsText(globalAttack, globalAltAttack));
+    replace(description, "%TARGETS%", getTargetsText(descriptor, globalAttack, globalAltAttack));
 
     auto textBox = CDialogInterfApi::get().findTextBox(dialog, "TXT_ATTACK_INFO");
     CTextBoxInterfApi::get().setString(textBox, description.c_str());
