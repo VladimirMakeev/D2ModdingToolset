@@ -20,13 +20,17 @@
 #ifndef ENCUNITDESCRIPTOR_H
 #define ENCUNITDESCRIPTOR_H
 
+#include "attackclasscat.h"
+#include "attacksourcecat.h"
+#include "d2list.h"
+#include "idvector.h"
+#include "leaderabilitycat.h"
+
 namespace game {
 
 struct IEncUnitDescriptorVftable;
-struct CMidgardID;
-struct LAttackClass;
-struct LAttackSource;
 struct LAttackReach;
+struct LLeaderAbility;
 
 struct IEncUnitDescriptor
 {
@@ -83,7 +87,59 @@ struct IEncUnitDescriptorVftable
 
     GetBool attacksTwice;
 
-    void* methods[23];
+    GetInt getLeadership;
+
+    GetInt getNbBattle;
+
+    GetBool isUnitInStack;
+
+    GetInt getMovement;
+
+    GetBool isUnitLeader;
+
+    GetId getGlobalUnitImplId;
+
+    GetStr getUnitName;
+
+    GetStr getUnitDescription;
+
+    GetInt getUnitLevel;
+
+    GetInt getUnitArmor;
+
+    GetBool isUnitAtMaxLevel;
+
+    GetInt getUnitCurrentXp;
+
+    GetInt getUnitXpNext;
+
+    GetBool canUnitLevelUp;
+
+    using GetUnitRequiredBuildings = void(__thiscall*)(IEncUnitDescriptor* thisptr,
+                                                       IdVector* buildings);
+    GetUnitRequiredBuildings getUnitRequiredBuildings;
+
+    GetBool getUnitDynLevel;
+
+    GetBool unknownMethod;
+
+    GetBool getLeaderFlyAbility;
+
+    using GetLeaderAbilities = void(__thiscall*)(IEncUnitDescriptor* thisptr,
+                                                 List<LLeaderAbility>* abilities);
+    GetLeaderAbilities getLeaderAbilities;
+
+    using GetAttackClasses = void(__thiscall*)(IEncUnitDescriptor* thisptr,
+                                               List<LAttackClass>* attackClasses);
+    GetAttackClasses getAttackClassesUnitIsImmuneTo;
+
+    using GetAttackSources = void(__thiscall*)(IEncUnitDescriptor* thisptr,
+                                               List<LAttackSource>* attackSources);
+    GetAttackSources getAttackSourcesUnitIsImmuneTo;
+
+    GetAttackClasses getAttackClassesUnitIsResistantTo;
+
+    GetAttackSources getAttackSourcesUnitIsResistantTo;
 };
 
 static_assert(sizeof(IEncUnitDescriptorVftable) == 43 * sizeof(void*),
