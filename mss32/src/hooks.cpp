@@ -1447,7 +1447,7 @@ game::CEncLayoutSpell* __fastcall encLayoutSpellCtorHooked(game::CEncLayoutSpell
     }
 
     // Show spell price and casting cost
-    encParam->data->unknown2 = 4;
+    encParam->data->statuses = 4;
     return getOriginalFunctions().encLayoutSpellCtor(thisptr, objectMap, interface, a2, spellId,
                                                      encParam, playerId);
 }
