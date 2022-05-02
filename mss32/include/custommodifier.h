@@ -63,6 +63,8 @@ static_assert(
     offsetof(CCustomModifier, umModifier) == offsetof(game::CUmUnit, umModifier),
     "CustomModifier::umModifier offset should be the same as of CUmUnit as it reuses its rtti info");
 
+CCustomModifier* castModifierToCustomModifier(const game::CUmModifier* modifier);
+
 CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack);
 
 game::CUmModifier* createCustomModifier(const char* script,

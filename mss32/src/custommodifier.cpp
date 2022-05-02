@@ -52,8 +52,11 @@ static inline CCustomModifier* castSoldierToCustomModifier(const game::IUsSoldie
                                               - offsetof(CCustomModifier, usSoldier));
 }
 
-static inline CCustomModifier* castModifierToCustomModifier(const game::CUmModifier* modifier)
+CCustomModifier* castModifierToCustomModifier(const game::CUmModifier* modifier)
 {
+    if (modifier->vftable != &rttiInfo.umModifier.vftable)
+        return nullptr;
+
     return reinterpret_cast<CCustomModifier*>((uintptr_t)modifier
                                               - offsetof(CCustomModifier, umModifier));
 }
