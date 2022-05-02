@@ -24,7 +24,7 @@
 namespace game::UnitCategories {
 
 // clang-format off
-static std::array<Categories, 3> categories = {{
+static std::array<Categories, 4> categories = {{
     // Akella
     Categories{
         (LUnitCategory*)0x83a1a0,
@@ -32,7 +32,7 @@ static std::array<Categories, 3> categories = {{
         (LUnitCategory*)0x83a1d0,
         (LUnitCategory*)0x83a1b0,
         (LUnitCategory*)0x83a1c0,
-        (LUnitCategory*)0x83a1f0
+        (LUnitCategory*)0x83a1f0,
     },
     // Russobit
     Categories{
@@ -41,7 +41,7 @@ static std::array<Categories, 3> categories = {{
         (LUnitCategory*)0x83a1d0,
         (LUnitCategory*)0x83a1b0,
         (LUnitCategory*)0x83a1c0,
-        (LUnitCategory*)0x83a1f0
+        (LUnitCategory*)0x83a1f0,
     },
     // Gog
     Categories{
@@ -50,17 +50,28 @@ static std::array<Categories, 3> categories = {{
         (LUnitCategory*)0x838180,
         (LUnitCategory*)0x838160,
         (LUnitCategory*)0x838170,
-        (LUnitCategory*)0x8381a0
+        (LUnitCategory*)0x8381a0,
+    },
+    // Scenario Editor
+    Categories{
+        (LUnitCategory*)0x666070,
+        (LUnitCategory*)0x6660b0,
+        (LUnitCategory*)0x6660a0,
+        (LUnitCategory*)0x666080,
+        (LUnitCategory*)0x666090,
+        (LUnitCategory*)0x6660c0,
     }
 }};
 
-static std::array<const void*, 3> vftables = {{
+static std::array<const void*, 4> vftables = {{
     // Akella
     (const void*)0x6ea5cc,
     // Russobit
     (const void*)0x6ea5cc,
     // Gog
-    (const void*)0x6e856c
+    (const void*)0x6e856c,
+    // Scenario Editor
+    (const void*)0x5ddfac,
 }};
 // clang-format on
 
