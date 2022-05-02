@@ -465,11 +465,10 @@ std::string getCritHitText()
     return getInterfaceText("X160TA0017"); // "Critical hit"
 }
 
-std::string getAttackName(game::IAttack* attack)
+std::string getAttackText(game::IAttack* attack, const char* name)
 {
     using namespace game;
 
-    auto name = attack->vftable->getName(attack);
     if (attack->vftable->getInfinite(attack))
         return fmt::format("{:s} ({:s})", name, getInfiniteText());
     else if (attack->vftable->getCritHit(attack))
@@ -534,13 +533,22 @@ std::string getTwiceText(game::IEncUnitDescriptor* descriptor)
     return result;
 }
 
-std::string getAltAttackText(game::IAttack* altAttack)
+std::string getAttackText(game::IEncUnitDescriptor* descriptor, game::IAttack* attack)
+{
+    auto name = descriptor->vftable->getAttackName(descriptor);
+
+    return getAttackText(attack, name);
+}
+
+std::string getAltAttackText(game::IEncUnitDescriptor* descriptor, game::IAttack* altAttack)
 {
     if (altAttack == nullptr)
         return "";
 
+    auto name = descriptor->vftable->getAltAttackName(descriptor);
+
     auto result = getInterfaceText("X005TA0829"); // "%ATTACK% or %BLANK%"
-    replace(result, "%ATTACK%", getAttackName(altAttack));
+    replace(result, "%ATTACK%", getAttackText(altAttack, name));
     replace(result, "%BLANK%", "");
     return result;
 }
@@ -595,13 +603,15 @@ std::string getTargetsText(game::IAttack* attack, game::IAttack* altAttack)
     return fmt::format("\\p110;{:s}\\p0;", result);
 }
 
-std::string getSecondText(game::IAttack* attack2)
+std::string getSecondText(game::IEncUnitDescriptor* descriptor, game::IAttack* attack2)
 {
     if (attack2 == nullptr)
         return "";
 
+    auto name = descriptor->vftable->getAttack2Name(descriptor);
+
     auto result = getInterfaceText("X005TA0785"); // " / %ATTACK%"
-    replace(result, "%ATTACK%", getAttackName(attack2));
+    replace(result, "%ATTACK%", getAttackText(attack2, name));
     return result;
 }
 
@@ -703,11 +713,11 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
 
     replace(description, "%TWICE%", getTwiceText(descriptor));
 
-    replace(description, "%ALTATTACK%", getAltAttackText(altAttack));
+    replace(description, "%ALTATTACK%", getAltAttackText(descriptor, altAttack));
 
-    replace(description, "%ATTACK%", getAttackName(attack));
+    replace(description, "%ATTACK%", getAttackText(descriptor, attack));
 
-    replace(description, "%SECOND%", getSecondText(attack2));
+    replace(description, "%SECOND%", getSecondText(descriptor, attack2));
 
     replace(description, "%HIT%", getHitText(descriptor, attack, altAttack, editorModifiers));
 
