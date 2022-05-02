@@ -160,6 +160,9 @@ struct Api
 
     using Destructor = void(__thiscall*)(CUmModifier* thisptr);
     Destructor destructor;
+
+    using SetPrev = void(__thiscall*)(CUmModifier* thisptr, const IUsUnit* value);
+    SetPrev setPrev;
 };
 
 Api& get();
