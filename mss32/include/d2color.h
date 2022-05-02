@@ -27,13 +27,14 @@ namespace game {
 /** Representation of a color in game. */
 struct Color
 {
-    Color() = default;
+    constexpr Color() = default;
 
-    Color(std::uint32_t value)
+    /** ABGR format. */
+    constexpr Color(std::uint32_t value)
         : value{value}
     { }
 
-    Color(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a = 0)
+    constexpr Color(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a = 0)
         : r{r}
         , g{g}
         , b{b}
