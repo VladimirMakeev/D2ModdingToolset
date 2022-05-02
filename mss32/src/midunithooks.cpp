@@ -50,7 +50,7 @@ bool __fastcall addModifierHooked(game::CMidUnit* thisptr,
 
     auto customModifier = castModifierToCustomModifier(modifier);
     if (customModifier)
-        customModifier->setUnitId(thisptr->id);
+        customModifier->setUnit(thisptr);
 
     thisptr->unitImpl = castUmModifierToUnit(modifier);
     return true;

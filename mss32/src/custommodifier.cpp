@@ -135,9 +135,9 @@ CustomAttackData CCustomModifier::getCustomAttackData(const game::IAttack* curre
     return hooks::getCustomAttackData(prev);
 }
 
-void CCustomModifier::setUnitId(const game::CMidgardID& value)
+void CCustomModifier::setUnit(const game::CMidUnit* value)
 {
-    unitId = value;
+    unit = value;
 }
 
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
@@ -152,7 +152,7 @@ CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
 
     thisptr->usUnit.id = emptyId;
     CUmModifierApi::get().constructor(&thisptr->umModifier, id, globalData);
-    thisptr->unitId = emptyId;
+    thisptr->unit = nullptr;
     thisptr->lastElementQuery = ModifierElementTypeFlag::None;
     new (&thisptr->script) std::string(script);
     initVftable(thisptr);
@@ -166,7 +166,7 @@ CCustomModifier* customModifierCopyCtor(CCustomModifier* thisptr, const CCustomM
 
     thisptr->usUnit.id = src->usUnit.id;
     CUmModifierApi::get().copyConstructor(&thisptr->umModifier, &src->umModifier);
-    thisptr->unitId = src->unitId;
+    thisptr->unit = src->unit;
     thisptr->lastElementQuery = src->lastElementQuery;
     new (&thisptr->script) std::string(src->script);
     initVftable(thisptr);
