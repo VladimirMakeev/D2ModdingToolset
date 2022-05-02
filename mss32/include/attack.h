@@ -126,6 +126,12 @@ struct CAttackData
     };
 };
 
+namespace IAttackApi {
+
+const IAttackVftable* vftable();
+
+} // namespace IAttackApi
+
 } // namespace game
 
 #endif // ATTACK_H
