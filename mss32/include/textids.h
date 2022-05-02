@@ -37,6 +37,7 @@ struct TextIds
         std::string ratedDamageEqual;
         std::string ratedDamageSeparator;
         std::string splitDamage;
+        std::string modifiedValue;
     } interf;
 
     struct Events

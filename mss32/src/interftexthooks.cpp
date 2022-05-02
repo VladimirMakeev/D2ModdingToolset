@@ -88,6 +88,16 @@ std::string appendColoredBonus(const std::string& base, int diff)
     return text;
 }
 
+std::string getModifiedValueText(const std::string& value)
+{
+    auto text = getInterfaceText(textIds().interf.modifiedValue.c_str());
+    if (text.empty())
+        text = "\\c025;090;000;%VALUE%\\c000;000;000;";
+
+    replace(text, "%VALUE%", value);
+    return text;
+}
+
 std::string getAttackPowerText(game::IAttack* attack,
                                const game::IdList* editorModifiers,
                                int powerTotal,
@@ -577,9 +587,21 @@ std::string getHitText(game::IEncUnitDescriptor* descriptor,
     return result;
 }
 
-std::string getSourceText(game::IAttack* attack, game::IAttack* altAttack)
+std::string getSourceText(game::IEncUnitDescriptor* descriptor,
+                          game::IAttack* attack,
+                          game::IAttack* altAttack)
 {
-    auto result = getAttackSourceText(attack);
+    using namespace game;
+
+    auto source = descriptor->vftable->getAttackSource(descriptor);
+    auto globalSource = attack->vftable->getAttackSource(attack);
+
+    std::string result;
+    if (source->id != globalSource->id) {
+        result = getModifiedValueText(getAttackSourceText(source));
+    } else {
+        result = getAttackSourceText(attack);
+    }
 
     if (altAttack != nullptr)
         result = addAltAttackTextValue(result, getAttackSourceText(altAttack));
@@ -744,7 +766,7 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
             getDamageText(descriptor, globalAttack, globalAttack2, globalAltAttack, editorModifiers,
                           boostDamageLevel, lowerDamageLevel, damageMax));
 
-    replace(description, "%SOURCE%", getSourceText(globalAttack, globalAltAttack));
+    replace(description, "%SOURCE%", getSourceText(descriptor, globalAttack, globalAltAttack));
 
     replace(description, "%SOURCE2%", getSource2Text(globalAttack2));
 

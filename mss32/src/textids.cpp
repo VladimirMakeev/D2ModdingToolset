@@ -126,6 +126,7 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.ratedDamageEqual = interf.value().get_or("ratedDamageEqual", std::string());
     value.ratedDamageSeparator = interf.value().get_or("ratedDamageSeparator", std::string());
     value.splitDamage = interf.value().get_or("splitDamage", std::string());
+    value.modifiedValue = interf.value().get_or("modifiedValue", std::string());
 }
 
 void initialize(TextIds& value)
