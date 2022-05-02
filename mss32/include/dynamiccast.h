@@ -139,6 +139,7 @@ struct Rtti
     TypeDescriptor* CMidLocationType;
     TypeDescriptor* TUsRacialSoldierType;
     TypeDescriptor* IUsStackLeaderType;
+    TypeDescriptor* IUsUnitType;
 };
 
 const Rtti& rtti();

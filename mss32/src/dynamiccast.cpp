@@ -82,6 +82,7 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)0x793c38,
         (TypeDescriptor*)0x7af710,
         (TypeDescriptor*)0x78f118,
+        (TypeDescriptor*)0x7acdc8,
     },
     // Russobit
     Rtti{
@@ -117,6 +118,7 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)0x793c38,
         (TypeDescriptor*)0x7af710,
         (TypeDescriptor*)0x78f118,
+        (TypeDescriptor*)0x7acdc8,
     },
     // Gog
     Rtti{
@@ -152,6 +154,7 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)0x791be0,
         (TypeDescriptor*)0x7ad6c8,
         (TypeDescriptor*)0x78d0c0,
+        (TypeDescriptor*)0x7aad80,
     },
     // Scenario Editor
     Rtti{
@@ -187,6 +190,7 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)0x649768,
         (TypeDescriptor*)nullptr,
         (TypeDescriptor*)0x649398,
+        (TypeDescriptor*)0x655848,
     },
 }};
 // clang-format on
