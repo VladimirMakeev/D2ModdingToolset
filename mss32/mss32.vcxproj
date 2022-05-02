@@ -562,6 +562,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\d2tree.h" />
     <ClInclude Include="include\isoborder.h" />
     <ClInclude Include="include\isoground2.h" />
+    <ClInclude Include="include\isogroundindexer.h" />
     <ClInclude Include="include\isostillbackground.h" />
     <ClInclude Include="include\mainview2.h" />
     <ClInclude Include="include\mainview2hooks.h" />
