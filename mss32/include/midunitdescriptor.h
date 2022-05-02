@@ -26,9 +26,20 @@ namespace game {
 
 struct IAttack;
 struct IUsSoldier;
+struct IMidgardObjectMap;
+struct CMidUnit;
 
 struct CMidUnitDescriptor : public IEncUnitDescriptor
-{ };
+{
+    IMidgardObjectMap* objectMap;
+    CMidgardID* playerId;
+    CMidgardID unitId;
+    CMidgardID groupId;
+    CMidUnit* unit;
+};
+
+static_assert(sizeof(CMidUnitDescriptor) == 24,
+              "Size of CMidUnitDescriptor structure must be exactly 24 bytes");
 
 namespace CMidUnitDescriptorApi {
 
