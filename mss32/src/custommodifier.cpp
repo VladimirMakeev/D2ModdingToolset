@@ -157,6 +157,7 @@ CCustomModifier* customModifierCopyCtor(CCustomModifier* thisptr, const CCustomM
 
     thisptr->usUnit.id = src->usUnit.id;
     CUmModifierApi::get().copyConstructor(&thisptr->umModifier, &src->umModifier);
+    thisptr->lastElementQuery = src->lastElementQuery;
     new (&thisptr->script) std::string(src->script);
     initVftable(thisptr);
 
