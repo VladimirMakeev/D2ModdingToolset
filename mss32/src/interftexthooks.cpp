@@ -373,31 +373,31 @@ std::string getAttackInitiativeText(game::IAttack* attack,
                               initiativeTotalBoosted - initiativeModified);
 }
 
-std::string getAttackSourceText(const game::LAttackSource* attackSource)
+std::string getAttackSourceText(const game::LAttackSource* source)
 {
     using namespace game;
 
-    if (attackSource == nullptr)
+    const auto& sources = AttackSourceCategories::get();
+
+    if (source == nullptr)
         return getInterfaceText("X005TA0473"); // "None"
 
-    std::string text;
-    AttackSourceId id = attackSource->id;
-    const auto& attackSources = AttackSourceCategories::get();
-    if (id == attackSources.weapon->id)
+    AttackSourceId id = source->id;
+    if (id == sources.weapon->id)
         return getInterfaceText("X005TA0145"); // "Weapon"
-    else if (id == attackSources.mind->id)
+    else if (id == sources.mind->id)
         return getInterfaceText("X005TA0146"); // "Mind"
-    else if (id == attackSources.life->id)
+    else if (id == sources.life->id)
         return getInterfaceText("X005TA0147"); // "Life"
-    else if (id == attackSources.death->id)
+    else if (id == sources.death->id)
         return getInterfaceText("X005TA0148"); // "Death"
-    else if (id == attackSources.fire->id)
+    else if (id == sources.fire->id)
         return getInterfaceText("X005TA0149"); // "Fire"
-    else if (id == attackSources.water->id)
+    else if (id == sources.water->id)
         return getInterfaceText("X005TA0150"); // "Water"
-    else if (id == attackSources.air->id)
+    else if (id == sources.air->id)
         return getInterfaceText("X005TA0151"); // "Air"
-    else if (id == attackSources.earth->id)
+    else if (id == sources.earth->id)
         return getInterfaceText("X005TA0152"); // "Earth"
     else {
         for (const auto& custom : getCustomAttacks().sources) {
@@ -407,11 +407,6 @@ std::string getAttackSourceText(const game::LAttackSource* attackSource)
     }
 
     return "";
-}
-
-std::string getAttackSourceText(game::IAttack* attack)
-{
-    return getAttackSourceText(attack->vftable->getAttackSource(attack));
 }
 
 std::string getAttackReachText(game::IAttack* attack)
@@ -596,15 +591,15 @@ std::string getSourceText(game::IEncUnitDescriptor* descriptor,
     auto source = descriptor->vftable->getAttackSource(descriptor);
     auto globalSource = attack->vftable->getAttackSource(attack);
 
-    std::string result;
+    std::string result = getAttackSourceText(source);
     if (source->id != globalSource->id) {
-        result = getModifiedValueText(getAttackSourceText(source));
-    } else {
-        result = getAttackSourceText(attack);
+        result = getModifiedValueText(result);
     }
 
-    if (altAttack != nullptr)
-        result = addAltAttackTextValue(result, getAttackSourceText(altAttack));
+    if (altAttack != nullptr) {
+        auto altSource = altAttack->vftable->getAttackSource(altAttack);
+        result = addAltAttackTextValue(result, getAttackSourceText(altSource));
+    }
 
     // Fixes vertical tab in case of multiline
     return fmt::format("\\p110;{:s}\\p0;", result);
@@ -663,8 +658,10 @@ std::string getSource2Text(game::IAttack* attack2)
     if (attack2 == nullptr)
         return "";
 
+    auto globalSource = attack2->vftable->getAttackSource(attack2);
+
     auto result = getInterfaceText("X005TA0816"); // " / %SOURCE%"
-    replace(result, "%SOURCE%", getAttackSourceText(attack2));
+    replace(result, "%SOURCE%", getAttackSourceText(globalSource));
     return result;
 }
 
