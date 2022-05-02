@@ -24,7 +24,7 @@
 namespace game::CMultiLayerImgApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::Constructor)0x5b5c88,
@@ -39,7 +39,12 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::Constructor)0x5b4f54,
         (Api::AddImage)0x5b507d,
-    }
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x5607ba,
+        (Api::AddImage)0x5608e3,
+    },
 }};
 // clang-format on
 
