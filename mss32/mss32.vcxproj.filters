@@ -2516,6 +2516,9 @@
     <ClInclude Include="include\isostillbackground.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\midisogroundindexer.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\isogroundindexer.h">
       <Filter>game</Filter>
     </ClInclude>

@@ -566,6 +566,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\isostillbackground.h" />
     <ClInclude Include="include\mainview2.h" />
     <ClInclude Include="include\mainview2hooks.h" />
+    <ClInclude Include="include\midisogroundindexer.h" />
     <ClInclude Include="include\mq_c_s.h" />
     <ClInclude Include="include\d2osexception.h" />
     <ClInclude Include="include\d2pair.h" />
