@@ -478,9 +478,7 @@
     <ClCompile Include="src\textboxinterf.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="src\textids.cpp">
-      <Filter>game</Filter>
-    </ClCompile>
+    <ClCompile Include="src\textids.cpp" />
     <ClCompile Include="src\subracecat.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -1781,9 +1779,7 @@
     <ClInclude Include="include\textboxinterf.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="include\textids.h">
-      <Filter>game</Filter>
-    </ClInclude>
+    <ClInclude Include="include\textids.h" />
     <ClInclude Include="include\unitutils.h">
       <Filter>utils</Filter>
     </ClInclude>
