@@ -37,6 +37,7 @@ struct CCustomModifier
     game::IUsStackLeader usStackLeader;
     game::IAttack attack;
     game::IAttack attack2;
+    game::CMidgardID unitId;
     game::ModifierElementTypeFlag lastElementQuery;
     std::string script;
 
@@ -47,6 +48,7 @@ struct CCustomModifier
     game::IAttack* getAttack(bool primary);
     bool isLeaderOnly();
     CustomAttackData getCustomAttackData(const game::IAttack* current);
+    void setUnitId(const game::CMidgardID& value);
 };
 
 static_assert(
