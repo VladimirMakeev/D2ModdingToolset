@@ -824,9 +824,9 @@ void initStackLeaderRttiInfo()
 
     // None of the existing RTTI can be reused as this class has unique offset.
     // Lucky for us, the game is not using IUsStackLeader for dynamic casts so we should be fine
-    // without RTTI. Otherwise, we would need to either patch dynamicCast or create our own RTTI.
+    // with base RTTI. Otherwise, we would need to either patch dynamicCast or create our own RTTI.
     auto& info = rttiInfo.usStackLeader;
-    info.locator = nullptr;
+    replaceRttiInfo(info, IUsStackLeaderApi::vftable(), false);
 
     auto& vftable = info.vftable;
     vftable.destructor = (IUsUnitExtensionVftable::Destructor)&stackLeaderDtor;
@@ -848,9 +848,9 @@ void initAttackRttiInfo()
 
     // None of the existing RTTI can be reused as this class has unique offset.
     // Lucky for us, the game is not using IAttack for dynamic casts so we should be fine
-    // without RTTI. Otherwise, we would need to either patch dynamicCast or create our own RTTI.
+    // with base RTTI. Otherwise, we would need to either patch dynamicCast or create our own RTTI.
     auto& info = rttiInfo.attack;
-    info.locator = nullptr;
+    replaceRttiInfo(info, IAttackApi::vftable(), false);
 
     auto& vftable = info.vftable;
     vftable.destructor = (IMidObjectVftable::Destructor)&attackDtor;
@@ -878,9 +878,9 @@ void initAttack2RttiInfo()
 
     // None of the existing RTTI can be reused as this class has unique offset.
     // Lucky for us, the game is not using IAttack for dynamic casts so we should be fine
-    // without RTTI. Otherwise, we would need to either patch dynamicCast or create our own RTTI.
+    // with base RTTI. Otherwise, we would need to either patch dynamicCast or create our own RTTI.
     auto& info = rttiInfo.attack2;
-    info.locator = nullptr;
+    replaceRttiInfo(info, IAttackApi::vftable(), false);
 
     auto& vftable = info.vftable;
     vftable.destructor = (IMidObjectVftable::Destructor)&attackDtor;

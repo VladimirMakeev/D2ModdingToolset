@@ -621,7 +621,6 @@ CustomAttackData getCustomAttackData(const game::IAttack* attack)
 
     auto current = attack;
     while (current) {
-        // Do this before dynamicCast because CCustomModifier does not support IAttack RTTI.
         auto customModifier = castAttackToCustomModifier(current);
         if (customModifier) {
             return customModifier->getCustomAttackData(current);
