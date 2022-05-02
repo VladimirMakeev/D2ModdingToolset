@@ -572,6 +572,7 @@ Hooks getHooks()
     // Support custom modifiers
     hooks.emplace_back(HookInfo{LModifGroupTableApi::get().constructor, modifGroupTableCtorHooked});
     hooks.emplace_back(HookInfo{TUnitModifierApi::get().constructor, unitModifierCtorHooked});
+    hooks.emplace_back(HookInfo{CMidUnitApi::get().addModifier, addModifierHooked});
 
     return hooks;
 }

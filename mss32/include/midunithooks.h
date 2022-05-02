@@ -29,6 +29,10 @@ struct CScenarioVisitor;
 
 namespace hooks {
 
+bool __fastcall addModifierHooked(game::CMidUnit* thisptr,
+                                  int /*%edx*/,
+                                  const game::CMidgardID* modifierId);
+
 bool __fastcall removeModifierHooked(game::CMidUnit* thisptr,
                                      int /*%edx*/,
                                      const game::CMidgardID* modifierId);

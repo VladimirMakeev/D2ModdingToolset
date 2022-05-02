@@ -18,13 +18,43 @@
  */
 
 #include "midunithooks.h"
+#include "custommodifier.h"
+#include "modifierutils.h"
 #include "originalfunctions.h"
 #include "stringandid.h"
+#include "ummodifier.h"
+#include "unitmodifier.h"
 #include "ussoldier.h"
 #include "usunit.h"
 #include "usunitimpl.h"
 
 namespace hooks {
+
+bool __fastcall addModifierHooked(game::CMidUnit* thisptr,
+                                  int /*%edx*/,
+                                  const game::CMidgardID* modifierId)
+{
+    using namespace game;
+
+    const auto unitModifier = getUnitModifier(modifierId);
+    if (!unitModifier || !unitModifier->vftable->canApplyToUnit(unitModifier, thisptr->unitImpl))
+        return false;
+
+    auto modifier = unitModifier->vftable->createModifier(unitModifier);
+
+    auto prevModifier = castUnitToUmModifier(thisptr->unitImpl);
+    if (prevModifier)
+        prevModifier->data->next = modifier;
+
+    CUmModifierApi::get().setPrev(modifier, thisptr->unitImpl);
+
+    auto customModifier = castModifierToCustomModifier(modifier);
+    if (customModifier)
+        customModifier->setUnitId(thisptr->id);
+
+    thisptr->unitImpl = castUmModifierToUnit(modifier);
+    return true;
+}
 
 bool __fastcall removeModifierHooked(game::CMidUnit* thisptr,
                                      int /*%edx*/,
