@@ -72,6 +72,11 @@ struct Api
     using GetHpMax = int(__thiscall*)(const CMidUnit* thisptr);
     GetHpMax getHpMax;
 
+    using Upgrade = bool(__thiscall*)(CMidUnit* thisptr,
+                                      const CScenarioVisitor* visitor,
+                                      const CMidgardID* upgradeImplId);
+    Upgrade upgrade;
+
     using Transform = bool(__thiscall*)(CMidUnit* thisptr,
                                         const CScenarioVisitor* visitor,
                                         const IMidgardObjectMap* objectMap,
