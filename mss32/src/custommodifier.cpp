@@ -135,12 +135,6 @@ game::IAttack* CCustomModifier::getAttack(bool primary)
     return result;
 }
 
-bool CCustomModifier::isLeaderOnly()
-{
-    // TODO: test script to contain only leader modification functions
-    return false;
-}
-
 CustomAttackData CCustomModifier::getCustomAttackData(const game::IAttack* current)
 {
     // TODO: script functions, differentiate between primary and secondary
@@ -560,8 +554,10 @@ bool __fastcall modifierCanApplyToUnit(const game::CUmModifier* thisptr,
 
     const auto& fn = gameFunctions();
 
+    // TODO: script function + unit and isLeader as args
+    bool isLeaderOnly = false;
     auto thiz = castModifierToCustomModifier(thisptr);
-    if (thiz->isLeaderOnly())
+    if (isLeaderOnly)
         return fn.castUnitImplToStackLeader(unit) != nullptr;
     else
         return fn.castUnitImplToSoldier(unit) != nullptr;
@@ -575,8 +571,10 @@ bool __fastcall modifierCanApplyToUnitCategory(const game::CUmModifier* thisptr,
 
     const auto& unitCategories = UnitCategories::get();
 
+    // TODO: script function + unit category as arg
+    bool isLeaderOnly = false;
     auto thiz = castModifierToCustomModifier(thisptr);
-    if (!thiz->isLeaderOnly())
+    if (!isLeaderOnly)
         return true;
 
     auto id = unitCategory->id;

@@ -53,7 +53,6 @@ struct CCustomModifier
     game::IUsStackLeader* getPrevStackLeader();
     game::IAttack* getPrevAttack(const game::IAttack* current);
     game::IAttack* getAttack(bool primary);
-    bool isLeaderOnly();
     CustomAttackData getCustomAttackData(const game::IAttack* current);
     void setUnit(const game::CMidUnit* value);
 
