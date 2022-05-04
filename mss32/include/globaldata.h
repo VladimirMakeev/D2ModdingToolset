@@ -161,6 +161,7 @@ struct Api
                                                                const CMidgardID* id);
     FindDynUpgradeById findDynUpgradeById;
 
+    /** Searches a text from Tglobal.dbf by its id. Returns empty string if not found. */
     using FindTextById = const char*(__thiscall*)(const TextMap* thisptr, const CMidgardID* id);
     FindTextById findTextById;
 };
