@@ -37,6 +37,7 @@ namespace hooks {
  */
 using GetString = std::function<std::string(const bindings::LeaderView&, const std::string&)>;
 using GetInteger = std::function<int(const bindings::LeaderView&, int)>;
+using GetIntegerByInteger = std::function<int(const bindings::LeaderView&, int, int)>;
 
 static struct
 {
@@ -178,6 +179,24 @@ int CCustomModifier::getInteger(const char* functionName, int prev)
         if (f) {
             bindings::LeaderView unitView{unit, getPrev()};
             return (*f)(unitView, prev);
+        }
+    } catch (const std::exception& e) {
+        showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                        "Reason: '{:s}'",
+                                        functionName, e.what()));
+    }
+
+    return prev;
+}
+
+int CCustomModifier::getIntegerByInteger(const char* functionName, int param, int prev)
+{
+    std::optional<sol::environment> env;
+    auto f = getScriptFunction<GetIntegerByInteger>(modifiersFolder() / script, functionName, env);
+    try {
+        if (f) {
+            bindings::LeaderView unitView{unit, getPrev()};
+            return (*f)(unitView, param, prev);
         }
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
