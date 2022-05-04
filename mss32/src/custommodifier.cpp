@@ -113,6 +113,7 @@ game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* current)
 
 game::IAttack* CCustomModifier::getAttack(bool primary)
 {
+    // TODO: script functions to return attack id, differentiate between primary and secondary
     auto result = primary ? &attack : &attack2;
     auto prev = getPrevAttack(result);
     if (!prev)
