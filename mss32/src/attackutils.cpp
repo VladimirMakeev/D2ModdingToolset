@@ -108,31 +108,30 @@ int getLowerInitiative(int level)
 
 bool attackHasPower(const game::LAttackClass* attackClass)
 {
-    const auto& attacks = game::AttackClassCategories::get();
+    const auto& classes = game::AttackClassCategories::get();
     const auto id = attackClass->id;
 
-    return id == attacks.paralyze->id || id == attacks.petrify->id || id == attacks.damage->id
-           || id == attacks.drain->id || id == attacks.drainOverflow->id || id == attacks.fear->id
-           || id == attacks.lowerDamage->id || id == attacks.lowerInitiative->id
-           || id == attacks.poison->id || id == attacks.frostbite->id || id == attacks.blister->id
-           || id == attacks.bestowWards->id || id == attacks.shatter->id || id == attacks.revive->id
-           || id == attacks.drainLevel->id || id == attacks.transformSelf->id
-           || id == attacks.transformOther->id;
+    return id == classes.paralyze->id || id == classes.petrify->id || id == classes.damage->id
+           || id == classes.drain->id || id == classes.drainOverflow->id || id == classes.fear->id
+           || id == classes.lowerDamage->id || id == classes.lowerInitiative->id
+           || id == classes.poison->id || id == classes.frostbite->id || id == classes.blister->id
+           || id == classes.bestowWards->id || id == classes.shatter->id || id == classes.revive->id
+           || id == classes.drainLevel->id || id == classes.transformSelf->id
+           || id == classes.transformOther->id;
 }
 
 bool isMeleeAttack(const game::IAttack* attack)
 {
     using namespace game;
 
-    const auto& attackReaches = AttackReachCategories::get();
+    const auto& reaches = AttackReachCategories::get();
 
-    auto attackReach = attack->vftable->getAttackReach(attack);
-    if (attackReach->id == attackReaches.adjacent->id) {
+    auto reach = attack->vftable->getAttackReach(attack);
+    if (reach->id == reaches.adjacent->id) {
         return true;
-    } else if (attackReach->id != attackReaches.all->id
-               && attackReach->id != attackReaches.any->id) {
+    } else if (reach->id != reaches.all->id && reach->id != reaches.any->id) {
         for (auto& custom : getCustomAttacks().reaches) {
-            if (attackReach->id == custom.reach.id) {
+            if (reach->id == custom.reach.id) {
                 return custom.melee;
             }
         }
