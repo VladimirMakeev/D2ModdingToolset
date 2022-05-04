@@ -66,6 +66,12 @@ const std::filesystem::path& scriptsFolder()
     return folder;
 }
 
+const std::filesystem::path& modifiersFolder()
+{
+    static const std::filesystem::path folder{gameFolder() / "Scripts" / "Modifiers"};
+    return folder;
+}
+
 const std::filesystem::path& exePath()
 {
     static std::filesystem::path exe{};

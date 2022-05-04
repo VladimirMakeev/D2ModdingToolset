@@ -44,6 +44,9 @@ const std::filesystem::path& gameFolder();
 /** Returns full path to the scripts folder. */
 const std::filesystem::path& scriptsFolder();
 
+/** Returns full path to the modifier scripts folder. */
+const std::filesystem::path& modifiersFolder();
+
 /** Returns full path to the executable that is currently running. */
 const std::filesystem::path& exePath();
 
