@@ -57,6 +57,7 @@ struct CCustomModifier
     void setUnit(const game::CMidUnit* value);
 
     const char* getGlobalTextById(const char* functionName, const char* prev);
+    int getInteger(const char* functionName, int prev);
 };
 
 static_assert(

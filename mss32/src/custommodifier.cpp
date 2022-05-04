@@ -35,6 +35,7 @@ namespace hooks {
  * If a unit is not a leader, LeaderView methods will return stub values.
  */
 using GetString = std::function<std::string(const bindings::LeaderView&, const std::string&)>;
+using GetInteger = std::function<int(const bindings::LeaderView&, int)>;
 
 static struct
 {
@@ -158,6 +159,24 @@ const char* CCustomModifier::getGlobalTextById(const char* functionName, const c
             bindings::LeaderView unitView{unit, getPrev()};
             auto textId = (*f)(unitView, prev);
             return getGlobalText(textId);
+        }
+    } catch (const std::exception& e) {
+        showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                        "Reason: '{:s}'",
+                                        functionName, e.what()));
+    }
+
+    return prev;
+}
+
+int CCustomModifier::getInteger(const char* functionName, int prev)
+{
+    std::optional<sol::environment> env;
+    auto f = getScriptFunction<GetInteger>(modifiersFolder() / script, functionName, env);
+    try {
+        if (f) {
+            bindings::LeaderView unitView{unit, getPrev()};
+            return (*f)(unitView, prev);
         }
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
