@@ -22,6 +22,7 @@
 #include "customattackutils.h"
 #include "dynamiccast.h"
 #include "game.h"
+#include "immunecat.h"
 #include "leaderview.h"
 #include "mempool.h"
 #include "restrictions.h"
@@ -412,14 +413,36 @@ int __fastcall soldierGetXpKilled(const game::IUsSoldier* thisptr, int /*%edx*/)
     return thiz->getInteger("getXpKilled", prev->vftable->getXpKilled(prev));
 }
 
+const game::LImmuneCat* getImmuneCatById(int categoryId, const game::LImmuneCat* default)
+{
+    using namespace game;
+
+    const auto& immunities = ImmuneCategories::get();
+
+    switch ((ImmuneId)categoryId) {
+    case ImmuneId::Notimmune:
+        return immunities.notimmune;
+    case ImmuneId::Once:
+        return immunities.once;
+    case ImmuneId::Always:
+        return immunities.always;
+    default:
+        return default;
+    }
+}
+
 const game::LImmuneCat* __fastcall soldierGetImmuneByAttackClass(
     const game::IUsSoldier* thisptr,
     int /*%edx*/,
     const game::LAttackClass* attackClass)
 {
-    // TODO: script function
-    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
-    return prev->vftable->getImmuneByAttackClass(prev, attackClass);
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    auto prev = thiz->getPrevSoldier();
+
+    auto prevValue = prev->vftable->getImmuneByAttackClass(prev, attackClass);
+    auto value = thiz->getIntegerByInteger("immuneToAttack", (int)attackClass->id,
+                                           (int)prevValue->id);
+    return getImmuneCatById(value, prevValue);
 }
 
 const game::LImmuneCat* __fastcall soldierGetImmuneByAttackSource(
