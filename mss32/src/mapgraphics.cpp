@@ -58,8 +58,8 @@ static std::array<Api, 4> functions = {{
         (Api::SetMapGraphics)0x4044be,
         (Api::GetTileIndex)0x49ba3f,
         (Api::StoreBlackTiles)0x49ba8f,
-        (Api::ShowImageOnMap)nullptr,
-        (Api::HideLayerImages)nullptr,
+        (Api::ShowImageOnMap)0x554042,
+        (Api::HideLayerImages)0x55411d,
     },
 }};
 // clang-format on

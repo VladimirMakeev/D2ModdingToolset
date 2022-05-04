@@ -23,6 +23,7 @@
 #include "d2list.h"
 #include "d2map.h"
 #include "functordispatch1.h"
+#include "mqrect.h"
 #include "smartptr.h"
 #include <cstddef>
 
@@ -31,7 +32,6 @@ namespace game {
 struct C2DEngine;
 struct CIsoEngineGround;
 struct IIsoCBScroll;
-struct CMqPoint;
 struct IMqImage2;
 struct CIsoLayer;
 
@@ -54,10 +54,7 @@ static_assert(sizeof(HashElementIndexMap) == 36,
 struct MapGraphics
 {
     C2DEngine* engine2d;
-    int unknown;
-    int unknown2;
-    int unknown3;
-    int unknown4;
+    CMqRect isoViewArea; /**< Area of isometric map view. */
     int mapSize;
     HashElementIndexMap hashElementIndexMap;
     CIsoEngineGround* isoEngineGround;
