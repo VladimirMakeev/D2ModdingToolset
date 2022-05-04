@@ -387,9 +387,10 @@ int __fastcall soldierGetXpNext(const game::IUsSoldier* thisptr, int /*%edx*/)
 
 int __fastcall soldierGetXpKilled(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
-    return prev->vftable->getXpKilled(prev);
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    auto prev = thiz->getPrevSoldier();
+
+    return thiz->getInteger("getXpKilled", prev->vftable->getXpKilled(prev));
 }
 
 const game::LImmuneCat* __fastcall soldierGetImmuneByAttackClass(
