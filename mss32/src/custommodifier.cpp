@@ -512,7 +512,6 @@ const game::CMidgardID* __fastcall soldierGetDynUpg1(const game::IUsSoldier* thi
 
 int __fastcall soldierGetDynUpgLvl(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
-    // TODO: script function
     auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
     return prev->vftable->getDynUpgLvl(prev);
 }
