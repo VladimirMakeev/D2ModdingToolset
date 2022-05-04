@@ -46,6 +46,7 @@ struct CCustomModifier
     const game::CMidUnit* unit;
     game::ModifierElementTypeFlag lastElementQuery;
     std::string script;
+    int regen;
 
     game::IUsUnit* getPrev();
     game::IUsSoldier* getPrevSoldier();

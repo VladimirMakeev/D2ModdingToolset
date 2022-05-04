@@ -280,6 +280,7 @@ const char* __fastcall soldierGetName(const game::IUsSoldier* thisptr, int /*%ed
 {
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
+
     return thiz->getGlobalTextById("getNameId", prev->vftable->getName(prev));
 }
 
@@ -287,6 +288,7 @@ const char* __fastcall soldierGetDescription(const game::IUsSoldier* thisptr, in
 {
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
+
     return thiz->getGlobalTextById("getDescriptionId", prev->vftable->getDescription(prev));
 }
 
@@ -367,9 +369,12 @@ const game::LDeathAnimCategory* __fastcall soldierGetDeathAnim(const game::IUsSo
 
 int* __fastcall soldierGetRegen(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
-    return prev->vftable->getRegen(prev);
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    auto prev = thiz->getPrevSoldier();
+
+    auto value = thiz->getInteger("getRegen", *prev->vftable->getRegen(prev));
+    thiz->regen = std::clamp(value, 0, 100);
+    return &thiz->regen;
 }
 
 int __fastcall soldierGetXpNext(const game::IUsSoldier* thisptr, int /*%edx*/)
