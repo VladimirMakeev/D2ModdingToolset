@@ -55,6 +55,8 @@ struct CCustomModifier
     bool isLeaderOnly();
     CustomAttackData getCustomAttackData(const game::IAttack* current);
     void setUnit(const game::CMidUnit* value);
+
+    const char* getGlobalTextById(const char* functionName, const char* prev);
 };
 
 static_assert(

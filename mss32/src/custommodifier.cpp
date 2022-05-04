@@ -22,11 +22,19 @@
 #include "customattackutils.h"
 #include "dynamiccast.h"
 #include "game.h"
+#include "leaderview.h"
 #include "mempool.h"
+#include "scripts.h"
 #include "unitcat.h"
 #include "utils.h"
 
 namespace hooks {
+
+/**
+ * Script functions always use LeaderView so Lua can bind access to its properties.
+ * If a unit is not a leader, LeaderView methods will return stub values.
+ */
+using GetString = std::function<std::string(const bindings::LeaderView&, const std::string&)>;
 
 static struct
 {
@@ -139,6 +147,25 @@ CustomAttackData CCustomModifier::getCustomAttackData(const game::IAttack* curre
 void CCustomModifier::setUnit(const game::CMidUnit* value)
 {
     unit = value;
+}
+
+const char* CCustomModifier::getGlobalTextById(const char* functionName, const char* prev)
+{
+    std::optional<sol::environment> env;
+    auto f = getScriptFunction<GetString>(modifiersFolder() / script, functionName, env);
+    try {
+        if (f) {
+            bindings::LeaderView unitView{unit, getPrev()};
+            auto textId = (*f)(unitView, prev);
+            return getGlobalText(textId);
+        }
+    } catch (const std::exception& e) {
+        showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                        "Reason: '{:s}'",
+                                        functionName, e.what()));
+    }
+
+    return prev;
 }
 
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
