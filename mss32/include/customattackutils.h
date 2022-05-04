@@ -127,7 +127,7 @@ void fillCustomDamageRatios(const game::IAttack* attack, const game::IdList* tar
 
 int applyAttackDamageRatio(int damage, double ratio);
 
-std::vector<double> computeAttackDamageRatio(const game::IAttack* attack, int targetCount);
+std::vector<double> computeAttackDamageRatio(const CustomAttackData& customData, int targetCount);
 
 double computeTotalDamageRatio(const game::IAttack* attack, int targetCount);
 

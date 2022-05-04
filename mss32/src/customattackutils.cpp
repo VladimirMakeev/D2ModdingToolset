@@ -519,7 +519,7 @@ void fillCustomDamageRatios(const game::IAttack* attack, const game::IdList* tar
 
     const auto& listApi = IdListApi::get();
 
-    auto ratios = computeAttackDamageRatio(attack, targets->length);
+    auto ratios = computeAttackDamageRatio(getCustomAttackData(attack), targets->length);
     if (ratios.empty())
         return;
 
@@ -539,11 +539,10 @@ int applyAttackDamageRatio(int damage, double ratio)
     return result > 0 ? result : 1;
 }
 
-std::vector<double> computeAttackDamageRatio(const game::IAttack* attack, int targetCount)
+std::vector<double> computeAttackDamageRatio(const CustomAttackData& customData, int targetCount)
 {
     std::vector<double> result;
 
-    auto customData = getCustomAttackData(attack);
     if (customData.damageRatio == 100 && !customData.damageSplit)
         return result;
 

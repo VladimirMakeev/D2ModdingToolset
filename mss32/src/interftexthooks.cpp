@@ -18,6 +18,7 @@
  */
 
 #include "interftexthooks.h"
+#include "attackdescriptor.h"
 #include "attackimpl.h"
 #include "attackutils.h"
 #include "customattacks.h"
@@ -27,161 +28,142 @@
 #include "encunitdescriptor.h"
 #include "game.h"
 #include "hooks.h"
+#include "midunit.h"
+#include "midunitdescriptor.h"
 #include "restrictions.h"
 #include "settings.h"
 #include "textboxinterf.h"
 #include "textids.h"
 #include "ummodifier.h"
 #include "unitutils.h"
+#include "ussoldierimpl.h"
 #include "utils.h"
 #include <fmt/format.h>
 
 namespace hooks {
 
-game::IAttack* getGlobalAttack(game::IEncUnitDescriptor* descriptor)
+std::string getMaxStringText(const std::string& value)
 {
-    using namespace game;
-
-    CMidgardID attackId{};
-    descriptor->vftable->getAttackId(descriptor, &attackId);
-
-    auto attack = getAttack(&attackId);
-    if (attack == nullptr) {
-        generateUnitImplByAttackId(&attackId);
-        attack = getAttack(&attackId);
-    }
-
-    return attack;
-}
-
-game::IAttack* getGlobalAttack2(game::IEncUnitDescriptor* descriptor)
-{
-    using namespace game;
-
-    CMidgardID attack2Id{};
-    descriptor->vftable->getAttack2Id(descriptor, &attack2Id);
-    return getAttack(&attack2Id);
-}
-
-game::IAttack* getGlobalAltAttack(game::IEncUnitDescriptor* descriptor)
-{
-    using namespace game;
-
-    CMidgardID altAttackId{};
-    descriptor->vftable->getAltAttackId(descriptor, &altAttackId);
-    return getAttack(&altAttackId);
-}
-
-std::string appendColoredBonus(const std::string& base, int diff)
-{
-    if (diff == 0)
-        return base;
-
-    auto text = base;
-    // "\c025;090;000; + %NUMBER%"
-    // "\c100;000;000; - %NUMBER%"
-    text += getInterfaceText(diff > 0 ? "X005TA0486" : "X005TA0487");
-    // "\c000;000;000;"
-    text += getInterfaceText("X005TA0488");
-    replace(text, "%NUMBER%", fmt::format("{:d}", abs(diff)));
-
-    return text;
-}
-
-std::string getModifiedValueText(const std::string& value)
-{
-    auto text = getInterfaceText(textIds().interf.modifiedValue.c_str());
-    if (text.empty())
-        text = "\\c025;090;000;%VALUE%\\c000;000;000;";
-
-    replace(text, "%VALUE%", value);
-    return text;
-}
-
-std::string getAttackPowerText(game::IAttack* attack,
-                               const game::IdList* editorModifiers,
-                               int powerTotal,
-                               const game::LAttackClass* attackClass)
-{
-    using namespace game;
-
-    const auto& restrictions = game::gameRestrictions();
-
-    std::string result;
-    if (attackHasPower(attackClass) && attackHasPower(attack->vftable->getAttackClass(attack))) {
-        int power;
-        attack->vftable->getPower(attack, &power);
-
-        int powerModified = power;
-        if (editorModifiers != nullptr) {
-            powerModified = std::clamp(gameFunctions().applyPercentModifiers(
-                                           power, editorModifiers, ModifierElementTypeFlag::Power),
-                                       restrictions.attackPower->min,
-                                       restrictions.attackPower->max);
-        }
-
-        result = appendColoredBonus(fmt::format("{:d}%", powerModified),
-                                    powerTotal - powerModified);
-    } else if (attackHasPower(attackClass)) {
-        result = fmt::format("{:d}%", powerTotal);
-    } else
-        result = "100%";
-
-    if (attack->vftable->getCritHit(attack)) {
-        auto customData = getCustomAttackData(attack);
-        if (customData.critPower != 100)
-            return fmt::format("{:s} ({:d}%)", result.c_str(), customData.critPower);
-    }
-
+    // "%DMG% \c000;000;000;(\c128;000;000;Max\c000;000;000;)"
+    auto result = getInterfaceText("X005TA0811");
+    replace(result, "%DMG%", value);
     return result;
 }
 
-std::string getAttackDamageMaxText(const std::string& damage)
+std::string getModifiedNumberText(int value, int bonus, bool percent, int max = INT_MAX)
 {
-    // "%DMG% \c000;000;000;(\c128;000;000;Max\c000;000;000;)"
-    auto max = getInterfaceText("X005TA0811");
-    replace(max, "%DMG%", damage);
-    return max;
+    auto result = fmt::format(percent ? "{:d}%" : "{:d}", value);
+
+    if (bonus) {
+        // "\c025;090;000; + %NUMBER%"
+        // "\c100;000;000; - %NUMBER%"
+        result += getInterfaceText(bonus > 0 ? "X005TA0486" : "X005TA0487");
+        // "\c000;000;000;"
+        result += getInterfaceText("X005TA0488");
+        replace(result, "%NUMBER%", fmt::format("{:d}", abs(bonus)));
+    }
+
+    return (value + bonus < max) ? result : getMaxStringText(result);
 }
 
-std::string getAttackPlusCritDamageText(const std::string& damage, int critDamage)
+std::string getModifiedStringText(const std::string& value, bool modified)
+{
+    if (!modified)
+        return value;
+
+    auto result = getInterfaceText(textIds().interf.modifiedValue.c_str());
+    if (result.empty())
+        result = "\\c025;090;000;%VALUE%\\c000;000;000;";
+
+    replace(result, "%VALUE%", value);
+    return result;
+}
+
+std::string addAltAttackText(const std::string& base, const std::string& value)
+{
+    auto result = getInterfaceText("X005TA0829"); // "%ATTACK% or %BLANK%"
+    replace(result, "%ATTACK%", value);
+    replace(result, "%BLANK%", base);
+    return result;
+}
+
+std::string addAttack2Text(const std::string& base, const std::string& value)
+{
+    auto result = getInterfaceText("X005TA0785"); // " / %ATTACK%"
+    replace(result, "%ATTACK%", value);
+    result.insert(0, base);
+    return result;
+}
+
+std::string getCritHitText()
+{
+    auto text = getInterfaceText(textIds().interf.critHitAttack.c_str());
+    if (text.length())
+        return text;
+
+    return getInterfaceText("X160TA0017"); // "Critical hit"
+}
+
+std::string addCritHitText(const std::string& base, const std::string& value)
 {
     auto text = getInterfaceText(textIds().interf.critHitDamage.c_str());
     if (text.empty())
         text = "%DMG% (%CRIT%)";
 
-    replace(text, "%DMG%", damage);
-    replace(text, "%CRIT%", fmt::format("{:d}", critDamage));
+    replace(text, "%DMG%", base);
+    replace(text, "%CRIT%", value);
+    return text;
+}
+
+std::string getInfiniteText()
+{
+    auto text = getInterfaceText(textIds().interf.infiniteAttack.c_str());
+    if (text.length())
+        return text;
+
+    return "Lasting";
+}
+
+std::string addInfiniteText(const std::string& base, const std::string& value)
+{
+    auto text = getInterfaceText(textIds().interf.infiniteText.c_str());
+    if (text.empty())
+        text = "%ATTACK% (%INFINITE%)";
+
+    replace(text, "%ATTACK%", base);
+    replace(text, "%INFINITE%", value);
     return text;
 }
 
 std::string getRatedAttackDamageText(int damage, int critDamage, double ratio)
 {
     auto result = fmt::format("{:d}", applyAttackDamageRatio(damage, ratio));
-    if (critDamage)
-        result = getAttackPlusCritDamageText(result, applyAttackDamageRatio(critDamage, ratio));
+
+    if (critDamage) {
+        auto critText = fmt::format("{:d}", applyAttackDamageRatio(critDamage, ratio));
+        result = addCritHitText(result, critText);
+    }
 
     return result;
 }
 
-std::string getRatedAttackDamageText(const game::IAttack* attack,
-                                     const std::string& damageText,
-                                     int damage,
-                                     int critDamage,
-                                     int maxTargets,
-                                     bool sameRatio)
+std::string getRatedAttackDamageText(const std::string& base,
+                                     const utils::AttackDescriptor& actual,
+                                     int damageBoosted)
 {
-    auto ratios = computeAttackDamageRatio(attack, maxTargets);
+    auto ratios = computeAttackDamageRatio(actual.custom(), actual.maxTargets());
     if (ratios.size() < 2)
-        return damageText;
-    else if (sameRatio && ratios.size() > 2) {
+        return base;
+
+    auto critDamage = damageBoosted * actual.critDamage() / 100;
+    if (!actual.damageRatioPerTarget() && ratios.size() > 2) {
         auto result = getInterfaceText(textIds().interf.ratedDamageEqual.c_str());
         if (result.empty())
             result = "%DMG%, (%TARGETS%x) %RATED%";
 
-        replace(result, "%DMG%", damageText);
+        replace(result, "%DMG%", base);
         replace(result, "%TARGETS%", fmt::format("{:d}", ratios.size() - 1));
-        replace(result, "%RATED%", getRatedAttackDamageText(damage, critDamage, ratios[1]));
+        replace(result, "%RATED%", getRatedAttackDamageText(damageBoosted, critDamage, ratios[1]));
         return result;
     } else {
         auto result = getInterfaceText(textIds().interf.ratedDamage.c_str());
@@ -193,184 +175,166 @@ std::string getRatedAttackDamageText(const game::IAttack* attack,
             separator = ", ";
 
         std::string rated;
-        for (auto it = ++(ratios.begin()); it < ratios.end(); ++it) {
+        for (auto it = ratios.begin() + 1; it < ratios.end(); ++it) {
             if (!rated.empty())
                 rated += separator;
-            rated += getRatedAttackDamageText(damage, critDamage, *it);
+            rated += getRatedAttackDamageText(damageBoosted, critDamage, *it);
         }
 
-        replace(result, "%DMG%", damageText);
+        replace(result, "%DMG%", base);
         replace(result, "%RATED%", rated);
         return result;
     }
 }
 
-std::string getSplitAttackDamageText(const std::string& damageText)
+std::string getSplitAttackDamageText(const std::string& base)
 {
     auto result = getInterfaceText(textIds().interf.splitDamage.c_str());
     if (result.empty())
         result = "%DMG%, split between targets";
 
-    replace(result, "%DMG%", damageText);
+    replace(result, "%DMG%", base);
     return result;
 }
 
-std::string getRatedOrSplitAttackDamageText(const game::IAttack* attack,
-                                            const std::string& damageText,
-                                            int damage,
-                                            int critDamage)
+std::string getAttackPowerText(const utils::AttackDescriptor& actual,
+                               const utils::AttackDescriptor& global,
+                               const game::IdList* editorModifiers)
 {
     using namespace game;
 
-    const auto& reaches = AttackReachCategories::get();
+    const auto& fn = gameFunctions();
+    const auto& restrictions = gameRestrictions();
 
-    int maxTargets = 0;
-    auto reach = attack->vftable->getAttackReach(attack);
-    if (reach->id == reaches.all->id) {
-        maxTargets = 6;
-    } else if (reach->id == reaches.any->id || reach->id == reaches.adjacent->id) {
-        maxTargets = 1;
-    } else {
-        for (const auto& custom : getCustomAttacks().reaches) {
-            if (reach->id == custom.reach.id) {
-                maxTargets = custom.maxTargets;
-                break;
-            }
+    int power = actual.power();
+    if (attackHasPower(actual.class_()) && attackHasPower(global.class_())) {
+        power = global.power();
+        if (editorModifiers != nullptr) {
+            power = fn.applyPercentModifiers(power, editorModifiers,
+                                             ModifierElementTypeFlag::Power);
+            power = std::clamp(power, restrictions.attackPower->min, restrictions.attackPower->max);
         }
     }
 
-    if (maxTargets < 2)
-        return damageText;
+    std::string result = getModifiedNumberText(power, actual.power() - power, true);
 
-    auto customData = getCustomAttackData(attack);
-    if (customData.damageSplit) {
-        return getSplitAttackDamageText(damageText);
-    } else {
-        return getRatedAttackDamageText(attack, damageText, damage, critDamage, maxTargets,
-                                        !customData.damageRatioPerTarget);
+    if (actual.critHit()) {
+        int critPower = global.critPower() ? global.critPower() : actual.critPower();
+        auto critText = getModifiedNumberText(critPower, actual.critPower() - critPower, true);
+        result = addCritHitText(result, critText);
     }
+
+    return result;
 }
 
-std::string getAttackDamageModifiableText(const game::IAttack* attack,
-                                          const game::IdList* editorModifiers,
-                                          int damageTotal,
-                                          int boostDamageLevel,
-                                          int lowerDamageLevel,
-                                          int damageMax)
+std::string getAttackInitiativeText(const utils::AttackDescriptor& actual,
+                                    const utils::AttackDescriptor& global,
+                                    const game::IdList* editorModifiers,
+                                    int lowerInitiativeLevel)
 {
     using namespace game;
 
-    int damage = getAttackQtyDamageOrHealHooked(attack, damageMax);
+    const auto& fn = gameFunctions();
+    const auto& restrictions = gameRestrictions();
 
-    int damageMultiplier = 1;
-    if (getCustomAttacks().damageRatios.enabled) {
-        auto customData = getCustomAttackData(attack);
-        if (customData.damageSplit) {
-            damageMultiplier = userSettings().splitDamageMultiplier;
-        }
-    }
-
-    int damageModified = damage;
+    int initiative = global.initiative();
     if (editorModifiers != nullptr) {
-        damageModified = gameFunctions().applyPercentModifiers(damage, editorModifiers,
-                                                               ModifierElementTypeFlag::QtyDamage);
-    }
-    if (damageModified > damageMax)
-        damageModified = damageMax;
-    damageModified *= damageMultiplier;
-
-    int damageTotalBoosted = damageTotal;
-    damageTotalBoosted += damageTotal * getBoostDamage(boostDamageLevel) / 100;
-    damageTotalBoosted -= damageTotal * getLowerDamage(lowerDamageLevel) / 100;
-    if (damageTotalBoosted > damageMax)
-        damageTotalBoosted = damageMax;
-    damageTotalBoosted *= damageMultiplier;
-
-    auto damagePlusBonus = appendColoredBonus(fmt::format("{:d}", damageModified),
-                                              damageTotalBoosted - damageModified);
-
-    auto damagePlusBonusPlusMax = (damageTotalBoosted / damageMultiplier) < damageMax
-                                      ? damagePlusBonus
-                                      : getAttackDamageMaxText(damagePlusBonus);
-
-    int critDamage = 0;
-    if (attack->vftable->getCritHit(attack)) {
-        auto customData = getCustomAttackData(attack);
-        critDamage = damageTotalBoosted * customData.critDamage / 100;
-        damagePlusBonusPlusMax = getAttackPlusCritDamageText(damagePlusBonusPlusMax, critDamage);
+        initiative = fn.applyPercentModifiers(initiative, editorModifiers,
+                                              ModifierElementTypeFlag::Initiative);
+        initiative = std::clamp(initiative, restrictions.attackInitiative->min,
+                                restrictions.attackInitiative->max);
     }
 
-    if (getCustomAttacks().damageRatios.enabled) {
-        damagePlusBonusPlusMax = getRatedOrSplitAttackDamageText(attack, damagePlusBonusPlusMax,
-                                                                 damageTotalBoosted, critDamage);
-    }
-
-    return damagePlusBonusPlusMax;
+    int boosted = actual.initiative();
+    boosted -= actual.initiative() * getLowerInitiative(lowerInitiativeLevel) / 100;
+    return getModifiedNumberText(initiative, boosted - initiative, false);
 }
 
-std::string getAttackDamageText(game::IAttack* attack,
+std::string getDamageDrainAttackDamageText(const utils::AttackDescriptor& actual,
+                                           const utils::AttackDescriptor& global,
+                                           const game::IdList* editorModifiers,
+                                           int boostDamageLevel,
+                                           int lowerDamageLevel,
+                                           int damageMax)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& restrictions = gameRestrictions();
+
+    int multiplier = actual.damageSplit() ? userSettings().splitDamageMultiplier : 1;
+
+    int damage = global.damage();
+    if (editorModifiers != nullptr) {
+        damage = fn.applyPercentModifiers(damage, editorModifiers,
+                                          ModifierElementTypeFlag::QtyDamage);
+        damage = std::clamp(damage, restrictions.unitDamage->min, damageMax);
+    }
+    damage *= multiplier;
+
+    int boosted = actual.damage();
+    boosted += actual.damage() * getBoostDamage(boostDamageLevel) / 100;
+    boosted -= actual.damage() * getLowerDamage(lowerDamageLevel) / 100;
+    boosted = std::clamp(boosted, restrictions.unitDamage->min, damageMax);
+    boosted *= multiplier;
+
+    auto result = getModifiedNumberText(damage, boosted - damage, false, damageMax * multiplier);
+
+    if (actual.critHit()) {
+        int critDamage = global.critDamage() ? global.critDamage() : actual.critDamage();
+        auto critText = getModifiedNumberText(boosted * critDamage / 100,
+                                              boosted * (actual.critDamage() - critDamage) / 100,
+                                              false);
+        result = addCritHitText(result, critText);
+    }
+
+    if (actual.maxTargets() < 2)
+        return result;
+    else if (actual.damageSplit()) {
+        return getSplitAttackDamageText(result);
+    } else {
+        return getRatedAttackDamageText(result, actual, boosted);
+    }
+}
+
+std::string getAttackDamageText(const utils::AttackDescriptor& actual,
+                                const utils::AttackDescriptor& global,
                                 const game::IdList* editorModifiers,
-                                int damageTotal,
-                                const game::LAttackClass* attackClass,
-                                int level,
                                 int boostDamageLevel,
                                 int lowerDamageLevel,
                                 int damageMax)
 {
     using namespace game;
 
-    std::string text;
-    auto id = attackClass->id;
-    const auto& attackClasses = AttackClassCategories::get();
-    if (id == attackClasses.boostDamage->id) {
-        text = getInterfaceText("X005TA0535"); // "+%BOOST%%"
-        replace(text, "%BOOST%", fmt::format("{:d}", getBoostDamage(level)));
-    } else if (id == attackClasses.lowerDamage->id) {
-        text = getInterfaceText("X005TA0550"); // "-%LOWER%%"
-        replace(text, "%LOWER%", fmt::format("{:d}", getLowerDamage(level)));
-    } else if (id == attackClasses.lowerInitiative->id) {
-        text = getInterfaceText("X005TA0550"); // "-%LOWER%%"
-        replace(text, "%LOWER%", fmt::format("{:d}", getLowerInitiative(level)));
-    } else if (id == attackClasses.damage->id || id == attackClasses.drain->id
-               || id == attackClasses.drainOverflow->id) {
-        text = getAttackDamageModifiableText(attack, editorModifiers, damageTotal, boostDamageLevel,
-                                             lowerDamageLevel, damageMax);
-    } else if (id == attackClasses.heal->id || id == attackClasses.bestowWards->id) {
-        int heal = attack->vftable->getQtyHeal(attack);
-        text = fmt::format("{:d}", heal);
+    const auto& classes = AttackClassCategories::get();
+
+    std::string result;
+    auto id = actual.class_()->id;
+    if (id == classes.boostDamage->id) {
+        int boost = global.boost() ? global.boost() : actual.boost();
+        result = getInterfaceText("X005TA0535"); // "+%BOOST%%"
+        replace(result, "%BOOST%", getModifiedNumberText(boost, actual.boost() - boost, false));
+    } else if (id == classes.lowerDamage->id) {
+        int lower = global.lower() ? global.lower() : actual.lower();
+        result = getInterfaceText("X005TA0550"); // "-%LOWER%%"
+        replace(result, "%LOWER%", getModifiedNumberText(lower, actual.lower() - lower, false));
+    } else if (id == classes.lowerInitiative->id) {
+        int lower = global.lowerIni() ? global.lowerIni() : actual.lowerIni();
+        result = getInterfaceText("X005TA0550"); // "-%LOWER%%"
+        replace(result, "%LOWER%", getModifiedNumberText(lower, actual.lowerIni() - lower, false));
+    } else if (id == classes.damage->id || id == classes.drain->id
+               || id == classes.drainOverflow->id) {
+        result = getDamageDrainAttackDamageText(actual, global, editorModifiers, boostDamageLevel,
+                                                lowerDamageLevel, damageMax);
+    } else if (id == classes.heal->id || id == classes.bestowWards->id) {
+        int heal = global.heal() ? global.heal() : actual.heal();
+        result = getModifiedNumberText(heal, actual.heal() - heal, false);
     } else {
-        int damage = getAttackQtyDamageOrHealHooked(attack, damageMax);
-        auto dmg = fmt::format("{:d}", damage);
-        text = damage < damageMax ? dmg : getAttackDamageMaxText(dmg);
+        int damage = global.damage() ? global.damage() : actual.damage();
+        result = getModifiedNumberText(damage, actual.damage() - damage, false, damageMax);
     }
 
-    return text;
-}
-
-std::string getAttackInitiativeText(game::IAttack* attack,
-                                    const game::IdList* editorModifiers,
-                                    int initiativeTotal,
-                                    int lowerInitiativeLevel)
-{
-    using namespace game;
-
-    const auto& restrictions = game::gameRestrictions();
-
-    int initiative = attack->vftable->getInitiative(attack);
-
-    int initiativeModified = initiative;
-    if (editorModifiers != nullptr) {
-        initiativeModified = std::clamp(
-            gameFunctions().applyPercentModifiers(initiative, editorModifiers,
-                                                  ModifierElementTypeFlag::Initiative),
-            restrictions.attackInitiative->min, restrictions.attackInitiative->max);
-    }
-
-    int initiativeTotalBoosted = initiativeTotal;
-    initiativeTotalBoosted -= initiativeTotal * getLowerInitiative(lowerInitiativeLevel) / 100;
-
-    return appendColoredBonus(fmt::format("{:d}", initiativeModified),
-                              initiativeTotalBoosted - initiativeModified);
+    return result;
 }
 
 std::string getAttackSourceText(const game::LAttackSource* source)
@@ -407,6 +371,13 @@ std::string getAttackSourceText(const game::LAttackSource* source)
     }
 
     return "";
+}
+
+std::string getAttackSourceText(const utils::AttackDescriptor& actual,
+                                const utils::AttackDescriptor& global)
+{
+    std::string result = getAttackSourceText(actual.source());
+    return getModifiedStringText(result, actual.source()->id != global.source()->id);
 }
 
 std::string getAttackReachText(const game::LAttackReach* reach)
@@ -451,287 +422,185 @@ std::string getAttackTargetsText(const game::LAttackReach* reach)
     return "";
 }
 
-std::string getInfiniteText()
+std::string getAttackText(const utils::AttackDescriptor& actual,
+                          const utils::AttackDescriptor& global)
 {
     using namespace game;
 
-    auto text = getInterfaceText(textIds().interf.infiniteAttack.c_str());
-    if (text.length())
-        return text;
+    std::string result = getModifiedStringText(actual.name(), global.empty());
 
-    return "Lasting";
-}
+    if (actual.infinite()) {
+        auto text = getInfiniteText();
+        result = addInfiniteText(result, getModifiedStringText(text, !global.infinite()));
+    } else if (actual.critHit()) {
+        auto text = getCritHitText();
+        result = addCritHitText(result, getModifiedStringText(text, !global.critHit()));
+    }
 
-std::string getCritHitText()
-{
-    using namespace game;
-
-    auto text = getInterfaceText(textIds().interf.critHitAttack.c_str());
-    if (text.length())
-        return text;
-
-    return getInterfaceText("X160TA0017"); // "Critical hit"
-}
-
-std::string getAttackText(game::IAttack* attack, const char* name)
-{
-    using namespace game;
-
-    if (attack->vftable->getInfinite(attack))
-        return fmt::format("{:s} ({:s})", name, getInfiniteText());
-    else if (attack->vftable->getCritHit(attack))
-        return fmt::format("{:s} ({:s})", name, getCritHitText());
-    else
-        return name;
-}
-
-std::string addAltAttackTextValue(const std::string& value,
-                                  const std::string& altValue,
-                                  bool omitDuplicate = true)
-{
-    if (omitDuplicate && value == altValue)
-        return value;
-
-    auto result = getInterfaceText("X005TA0829"); // "%ATTACK% or %BLANK%"
-    replace(result, "%ATTACK%", altValue);
-    replace(result, "%BLANK%", value);
     return result;
 }
 
-std::string addAttack2TextValue(const std::string& value,
-                                const std::string& value2,
-                                bool omitDuplicate = true)
-{
-    if (omitDuplicate && value == value2)
-        return value;
-
-    auto result = getInterfaceText("X005TA0785"); // " / %ATTACK%"
-    replace(result, "%ATTACK%", value2);
-    result.insert(0, value);
-    return result;
-}
-
-std::string getEffectText(game::IEncUnitDescriptor* descriptor, game::IAttack* attack)
+std::string getTwiceField(game::IEncUnitDescriptor* descriptor)
 {
     using namespace game;
 
-    auto id = descriptor->vftable->getAttackClass(descriptor)->id;
-    const auto& attackClasses = AttackClassCategories::get();
-    if (id == attackClasses.heal->id)
-        return getInterfaceText("X005TA0504"); // "Heal"
-    else if (id == attackClasses.bestowWards->id)
-        return getInterfaceText("X005TA0504"); // "Heal"
-    else if (id == attackClasses.boostDamage->id)
-        return getInterfaceText("X005TA0534"); // "Boost"
-    else if (id == attackClasses.lowerDamage->id)
-        return getInterfaceText("X005TA0547"); // "Lower"
-    else if (id == attackClasses.lowerInitiative->id)
-        return getInterfaceText("X005TA0551"); // "Lower initiative"
-    else
-        return getInterfaceText("X005TA0503"); // "Damage"
-}
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
 
-std::string getTwiceText(game::IEncUnitDescriptor* descriptor)
-{
     if (!descriptor->vftable->attacksTwice(descriptor))
         return "";
 
     auto result = getInterfaceText("X005TA0786"); // "(2x) %BLANK%"
     replace(result, "%BLANK%", "");
-    return result;
-}
 
-std::string getAttackText(game::IEncUnitDescriptor* descriptor, game::IAttack* attack)
-{
-    auto name = descriptor->vftable->getAttackName(descriptor);
-
-    return getAttackText(attack, name);
-}
-
-std::string getAltAttackText(game::IEncUnitDescriptor* descriptor, game::IAttack* altAttack)
-{
-    if (altAttack == nullptr)
-        return "";
-
-    auto name = descriptor->vftable->getAltAttackName(descriptor);
-
-    auto result = getInterfaceText("X005TA0829"); // "%ATTACK% or %BLANK%"
-    replace(result, "%ATTACK%", getAttackText(altAttack, name));
-    replace(result, "%BLANK%", "");
-    return result;
-}
-
-std::string getHitText(game::IEncUnitDescriptor* descriptor,
-                       game::IAttack* attack,
-                       game::IAttack* altAttack,
-                       const game::IdList* editorModifiers)
-{
-    auto result = getAttackPowerText(attack, editorModifiers,
-                                     descriptor->vftable->getAttackPower(descriptor),
-                                     descriptor->vftable->getAttackClass(descriptor));
-
-    if (altAttack != nullptr && attackHasPower(altAttack->vftable->getAttackClass(altAttack))) {
-        auto value = getAttackPowerText(altAttack, nullptr,
-                                        descriptor->vftable->getAltAttackPower(descriptor),
-                                        altAttack->vftable->getAttackClass(altAttack));
-        result = addAltAttackTextValue(result, value);
+    bool modified = false;
+    auto midUnitDescriptor = (const game::CMidUnitDescriptor*)
+        dynamicCast(descriptor, 0, rtti.IEncUnitDescriptorType, rtti.CMidUnitDescriptorType, 0);
+    if (midUnitDescriptor) {
+        const auto unitImpl = midUnitDescriptor->unit->unitImpl;
+        const auto soldier = castUnitImplToSoldierWithLogging(unitImpl);
+        const auto soldierImpl = getSoldierImpl(soldier);
+        modified = soldierImpl && !soldierImpl->vftable->getAttackTwice(soldierImpl);
     }
 
+    return getModifiedStringText(result, modified);
+}
+
+std::string getAltAttackField(const utils::AttackDescriptor& actual,
+                              const utils::AttackDescriptor& global)
+{
+    if (actual.empty())
+        return "";
+
+    return addAltAttackText("", getAttackText(actual, global));
+}
+
+std::string getAttackField(const utils::AttackDescriptor& actual,
+                           const utils::AttackDescriptor& global)
+{
+    return getAttackText(actual, global);
+}
+
+std::string getSecondField(const utils::AttackDescriptor& actual,
+                           const utils::AttackDescriptor& global)
+{
+    if (actual.empty())
+        return "";
+
+    return addAttack2Text("", getAttackText(actual, global));
+}
+
+std::string getHitField(const utils::AttackDescriptor& actual,
+                        const utils::AttackDescriptor& global,
+                        const game::IdList* editorModifiers)
+{
+    return getAttackPowerText(actual, global, editorModifiers);
+}
+
+std::string getHit2Field(const utils::AttackDescriptor& actual,
+                         const utils::AttackDescriptor& global)
+{
+    if (actual.empty())
+        return "";
+
+    auto result = getInterfaceText("X005TA0881"); // " / %POWER%"
+    replace(result, "%POWER%", getAttackPowerText(actual, global, nullptr));
     return result;
 }
 
-std::string getSourceText(game::IEncUnitDescriptor* descriptor,
-                          game::IAttack* attack,
-                          game::IAttack* altAttack)
+std::string getEffectField(const utils::AttackDescriptor& actual)
 {
     using namespace game;
 
-    auto source = descriptor->vftable->getAttackSource(descriptor);
-    auto globalSource = attack->vftable->getAttackSource(attack);
+    const auto& classes = AttackClassCategories::get();
 
-    std::string result = getAttackSourceText(source);
-    if (source->id != globalSource->id) {
-        result = getModifiedValueText(result);
-    }
-
-    if (altAttack != nullptr) {
-        auto altSource = altAttack->vftable->getAttackSource(altAttack);
-        result = addAltAttackTextValue(result, getAttackSourceText(altSource));
-    }
-
-    // Fixes vertical tab in case of multiline
-    return fmt::format("\\p110;{:s}\\p0;", result);
+    AttackClassId id = actual.class_()->id;
+    if (id == classes.heal->id || id == classes.bestowWards->id)
+        return getInterfaceText("X005TA0504"); // "Heal"
+    else if (id == classes.boostDamage->id)
+        return getInterfaceText("X005TA0534"); // "Boost"
+    else if (id == classes.lowerDamage->id)
+        return getInterfaceText("X005TA0547"); // "Lower"
+    else if (id == classes.lowerInitiative->id)
+        return getInterfaceText("X005TA0551"); // "Lower initiative"
+    else
+        return getInterfaceText("X005TA0503"); // "Damage"
 }
 
-std::string getReachText(game::IEncUnitDescriptor* descriptor,
-                         game::IAttack* attack,
-                         game::IAttack* altAttack)
+std::string getDamageField(const utils::AttackDescriptor& actual,
+                           const utils::AttackDescriptor& global,
+                           const utils::AttackDescriptor& actual2,
+                           const utils::AttackDescriptor& global2,
+                           const game::IdList* editorModifiers,
+                           int boostDamageLevel,
+                           int lowerDamageLevel,
+                           int damageMax)
 {
-    auto reach = descriptor->vftable->getAttackReach(descriptor);
-    auto globalReach = attack->vftable->getAttackReach(attack);
+    auto result = getAttackDamageText(actual, global, editorModifiers, boostDamageLevel,
+                                      lowerDamageLevel, damageMax);
 
-    std::string result = getAttackReachText(reach);
-    if (reach->id != globalReach->id) {
-        result = getModifiedValueText(result);
-    }
-
-    if (altAttack != nullptr) {
-        auto altReach = altAttack->vftable->getAttackReach(altAttack);
-        result = addAltAttackTextValue(result, getAttackReachText(altReach));
-    }
-
-    // Fixes vertical tab in case of multiline
-    return fmt::format("\\p110;{:s}\\p0;", result);
-}
-
-std::string getTargetsText(game::IEncUnitDescriptor* descriptor,
-                           game::IAttack* attack,
-                           game::IAttack* altAttack)
-{
-    auto reach = descriptor->vftable->getAttackReach(descriptor);
-    auto globalReach = attack->vftable->getAttackReach(attack);
-
-    std::string result = getAttackTargetsText(reach);
-    if (reach->id != globalReach->id) {
-        result = getModifiedValueText(result);
-    }
-
-    if (altAttack != nullptr) {
-        auto altReach = altAttack->vftable->getAttackReach(altAttack);
-        result = addAltAttackTextValue(result, getAttackTargetsText(altReach));
-    }
-
-    // Fixes vertical tab in case of multiline
-    return fmt::format("\\p110;{:s}\\p0;", result);
-}
-
-std::string getSecondText(game::IEncUnitDescriptor* descriptor, game::IAttack* attack2)
-{
-    if (attack2 == nullptr)
-        return "";
-
-    auto name = descriptor->vftable->getAttack2Name(descriptor);
-
-    auto result = getInterfaceText("X005TA0785"); // " / %ATTACK%"
-    replace(result, "%ATTACK%", getAttackText(attack2, name));
-    return result;
-}
-
-std::string getHit2Text(game::IEncUnitDescriptor* descriptor, game::IAttack* attack2)
-{
-    if (attack2 == nullptr)
-        return "";
-
-    auto power = getAttackPowerText(attack2, nullptr,
-                                    descriptor->vftable->getAttack2Power(descriptor),
-                                    attack2->vftable->getAttackClass(attack2));
-
-    auto result = getInterfaceText("X005TA0881"); // " / %POWER%"
-    replace(result, "%POWER%", power);
-    return result;
-}
-
-std::string getSource2Text(game::IAttack* attack2)
-{
-    if (attack2 == nullptr)
-        return "";
-
-    auto globalSource = attack2->vftable->getAttackSource(attack2);
-
-    auto result = getInterfaceText("X005TA0816"); // " / %SOURCE%"
-    replace(result, "%SOURCE%", getAttackSourceText(globalSource));
-    return result;
-}
-
-std::string getDamageText(game::IEncUnitDescriptor* descriptor,
-                          game::IAttack* attack,
-                          game::IAttack* attack2,
-                          game::IAttack* altAttack,
-                          const game::IdList* editorModifiers,
-                          int boostDamageLevel,
-                          int lowerDamageLevel,
-                          int damageMax)
-{
-    auto result = getAttackDamageText(attack, editorModifiers,
-                                      descriptor->vftable->getAttackDamageOrHeal(descriptor),
-                                      descriptor->vftable->getAttackClass(descriptor),
-                                      descriptor->vftable->getAttackLevel(descriptor),
-                                      boostDamageLevel, lowerDamageLevel, damageMax);
-
-    if (attack2 != nullptr) {
-        auto damage2 = getAttackDamageText(attack2, nullptr,
-                                           getAttackQtyDamageOrHealHooked(attack2, damageMax),
-                                           attack2->vftable->getAttackClass(attack2),
-                                           attack2->vftable->getLevel(attack2), boostDamageLevel,
+    if (!actual2.empty()) {
+        auto damage2 = getAttackDamageText(actual2, global2, nullptr, boostDamageLevel,
                                            lowerDamageLevel, damageMax);
         if (result == "0")
             result = damage2;
         else if (damage2 != "0")
-            result = addAttack2TextValue(result, damage2, false);
-    }
-
-    if (altAttack != nullptr) {
-        auto altDamage = getAttackDamageText(altAttack, nullptr,
-                                             getAttackQtyDamageOrHealHooked(altAttack, damageMax),
-                                             altAttack->vftable->getAttackClass(altAttack),
-                                             altAttack->vftable->getLevel(altAttack),
-                                             boostDamageLevel, lowerDamageLevel, damageMax);
-        if (altDamage != "0")
-            result = addAltAttackTextValue(result, altDamage, false);
+            result = addAttack2Text(result, damage2);
     }
 
     // Fixes vertical tab in case of multiline
     return fmt::format("\\p110;{:s}\\p0;", result);
 }
 
-std::string getInitText(game::IEncUnitDescriptor* descriptor,
-                        game::IAttack* attack,
-                        const game::IdList* editorModifiers,
-                        int lowerInitiativeLevel)
+std::string getSourceField(const utils::AttackDescriptor& actual,
+                           const utils::AttackDescriptor& global,
+                           const utils::AttackDescriptor& actualAlt,
+                           const utils::AttackDescriptor& globalAlt)
 {
-    return getAttackInitiativeText(attack, editorModifiers,
-                                   descriptor->vftable->getAttackInitiative(descriptor),
-                                   lowerInitiativeLevel);
+    std::string result = getAttackSourceText(actual, global);
+
+    const auto& classes = game::AttackClassCategories::get();
+    if (actualAlt.class_()->id == classes.doppelganger->id) {
+        if (userSettings().doppelgangerRespectsEnemyImmunity
+            || userSettings().doppelgangerRespectsAllyImmunity) {
+            result = addAltAttackText(result, getAttackSourceText(actualAlt, globalAlt));
+        }
+    }
+
+    return result;
+}
+
+std::string getSource2Field(const utils::AttackDescriptor& actual,
+                            const utils::AttackDescriptor& global)
+{
+    if (actual.empty())
+        return "";
+
+    auto result = getInterfaceText("X005TA0816"); // " / %SOURCE%"
+    replace(result, "%SOURCE%", getAttackSourceText(actual, global));
+    return result;
+}
+
+std::string getInitField(const utils::AttackDescriptor& actual,
+                         const utils::AttackDescriptor& global,
+                         const game::IdList* editorModifiers,
+                         int lowerInitiativeLevel)
+{
+    return getAttackInitiativeText(actual, global, editorModifiers, lowerInitiativeLevel);
+}
+
+std::string getReachField(const utils::AttackDescriptor& actual,
+                          const utils::AttackDescriptor& global)
+{
+    std::string result = getAttackReachText(actual.reach());
+    return getModifiedStringText(result, actual.reach()->id != global.reach()->id);
+}
+
+std::string getTargetsField(const utils::AttackDescriptor& actual,
+                            const utils::AttackDescriptor& global)
+{
+    std::string result = getAttackTargetsText(actual.reach());
+    return getModifiedStringText(result, actual.reach()->id != global.reach()->id);
 }
 
 void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descriptor,
@@ -742,11 +611,16 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
                                                const game::IdList* editorModifiers,
                                                int damageMax)
 {
-    using namespace game;
+    using namespace utils;
 
-    auto globalAttack = getGlobalAttack(descriptor);
-    auto globalAttack2 = getGlobalAttack2(descriptor);
-    auto globalAltAttack = getGlobalAltAttack(descriptor);
+    AttackDescriptor actual(descriptor, AttackType::Primary, false);
+    AttackDescriptor global(descriptor, AttackType::Primary, true);
+    AttackDescriptor actual2(descriptor, AttackType::Secondary, false);
+    AttackDescriptor global2(descriptor, AttackType::Secondary, true);
+    AttackDescriptor actualAlt(descriptor, AttackType::Alternative, false);
+    AttackDescriptor globalAlt(descriptor, AttackType::Alternative, true);
+
+    using namespace game;
 
     auto description = getInterfaceText("X005TA0424"); // "%PART1%%PART2%"
 
@@ -762,35 +636,34 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
     // \fMedBold;Targets:\t\fNormal;%TARGETS%
     replace(description, "%PART2%", getInterfaceText("X005TA0788"));
 
-    replace(description, "%TWICE%", getTwiceText(descriptor));
+    replace(description, "%TWICE%", getTwiceField(descriptor));
 
-    replace(description, "%ALTATTACK%", getAltAttackText(descriptor, globalAltAttack));
+    replace(description, "%ALTATTACK%", getAltAttackField(actualAlt, globalAlt));
 
-    replace(description, "%ATTACK%", getAttackText(descriptor, globalAttack));
+    replace(description, "%ATTACK%", getAttackField(actual, global));
 
-    replace(description, "%SECOND%", getSecondText(descriptor, globalAttack2));
+    replace(description, "%SECOND%", getSecondField(actual2, global2));
 
-    replace(description, "%HIT%",
-            getHitText(descriptor, globalAttack, globalAltAttack, editorModifiers));
+    replace(description, "%HIT%", getHitField(actual, global, editorModifiers));
 
-    replace(description, "%HIT2%", getHit2Text(descriptor, globalAttack2));
+    replace(description, "%HIT2%", getHit2Field(actual2, global2));
 
-    replace(description, "%EFFECT%", getEffectText(descriptor, globalAttack));
+    replace(description, "%EFFECT%", getEffectField(actual));
 
     replace(description, "%DAMAGE%",
-            getDamageText(descriptor, globalAttack, globalAttack2, globalAltAttack, editorModifiers,
-                          boostDamageLevel, lowerDamageLevel, damageMax));
+            getDamageField(actual, global, actual2, global2, editorModifiers, boostDamageLevel,
+                           lowerDamageLevel, damageMax));
 
-    replace(description, "%SOURCE%", getSourceText(descriptor, globalAttack, globalAltAttack));
+    replace(description, "%SOURCE%", getSourceField(actual, global, actualAlt, globalAlt));
 
-    replace(description, "%SOURCE2%", getSource2Text(globalAttack2));
+    replace(description, "%SOURCE2%", getSource2Field(actual2, global2));
 
     replace(description, "%INIT%",
-            getInitText(descriptor, globalAttack, editorModifiers, lowerInitiativeLevel));
+            getInitField(actual, global, editorModifiers, lowerInitiativeLevel));
 
-    replace(description, "%REACH%", getReachText(descriptor, globalAttack, globalAltAttack));
+    replace(description, "%REACH%", getReachField(actual, global));
 
-    replace(description, "%TARGETS%", getTargetsText(descriptor, globalAttack, globalAltAttack));
+    replace(description, "%TARGETS%", getTargetsField(actual, global));
 
     auto textBox = CDialogInterfApi::get().findTextBox(dialog, "TXT_ATTACK_INFO");
     CTextBoxInterfApi::get().setString(textBox, description.c_str());
