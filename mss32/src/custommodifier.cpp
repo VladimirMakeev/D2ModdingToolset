@@ -340,9 +340,14 @@ int __fastcall soldierGetHitPoints(const game::IUsSoldier* thisptr, int /*%edx*/
 
 int* __fastcall soldierGetArmor(const game::IUsSoldier* thisptr, int /*%edx*/, int* armor)
 {
-    // TODO: script function
-    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
-    return prev->vftable->getArmor(prev, armor);
+    const auto& restrictions = game::gameRestrictions();
+
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    auto prev = thiz->getPrevSoldier();
+
+    auto value = thiz->getInteger("getArmor", *prev->vftable->getArmor(prev, armor));
+    *armor = std::clamp(value, restrictions.unitArmor->min, restrictions.unitArmor->max);
+    return armor;
 }
 
 const game::CMidgardID* __fastcall soldierGetBaseUnitImplId(const game::IUsSoldier* thisptr,
