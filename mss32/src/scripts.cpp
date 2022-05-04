@@ -182,6 +182,12 @@ static void bindApi(sol::state& lua)
         "TravelItem", ItemId::TravelItem,
         "Special", ItemId::Special
     );
+
+    lua.new_enum("Immune",
+        "NotImmune", ImmuneId::Notimmune,
+        "Once", ImmuneId::Once,
+        "Always", ImmuneId::Always
+    );
     // clang-format on
 
     bindings::UnitView::bind(lua);
