@@ -379,9 +379,10 @@ int* __fastcall soldierGetRegen(const game::IUsSoldier* thisptr, int /*%edx*/)
 
 int __fastcall soldierGetXpNext(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
-    return prev->vftable->getXpNext(prev);
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    auto prev = thiz->getPrevSoldier();
+
+    return thiz->getInteger("getXpNext", prev->vftable->getXpNext(prev));
 }
 
 int __fastcall soldierGetXpKilled(const game::IUsSoldier* thisptr, int /*%edx*/)
