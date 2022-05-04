@@ -45,12 +45,12 @@ int LeaderView::getCategory() const
 {
     auto leader{game::gameFunctions().castUnitImplToLeader(getUnitImpl())};
     if (!leader) {
-        return 0;
+        return game::emptyCategoryId;
     }
 
     auto category{leader->vftable->getCategory(leader)};
     if (!category) {
-        return 0;
+        return game::emptyCategoryId;
     }
 
     return static_cast<int>(category->id);
