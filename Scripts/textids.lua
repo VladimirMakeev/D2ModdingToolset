@@ -26,7 +26,8 @@ textids = {
 		-- Fallback text id is the standard "X160TA0017".
 		critHitAttack = "",
 
-		-- Defines text id to format Critical Hit damage in unit encyclopedia.
+		-- Defines text id to format Critical Hit text in unit encyclopedia.
+		-- Despite its name, it is used to format all crit fields (name, power and damage).
 		-- The text must contain keywords "%DMG%" and "%CRIT%".
 		-- Fallback text is "%DMG% (%CRIT%)".
 		critHitDamage = "",
