@@ -262,11 +262,12 @@ const char* __fastcall soldierGetName(const game::IUsSoldier* thisptr, int /*%ed
     auto prev = thiz->getPrevSoldier();
     return thiz->getGlobalTextById("getNameId", prev->vftable->getName(prev));
 }
+
 const char* __fastcall soldierGetDescription(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
-    return prev->vftable->getDescription(prev);
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    auto prev = thiz->getPrevSoldier();
+    return thiz->getGlobalTextById("getDescriptionId", prev->vftable->getDescription(prev));
 }
 
 const game::CMidgardID* __fastcall soldierGetRaceId(const game::IUsSoldier* thisptr, int /*%edx*/)
