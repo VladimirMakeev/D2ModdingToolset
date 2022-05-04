@@ -297,12 +297,14 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
             data->critPower = (std::uint8_t)critPower;
     }
 
+    data->damageRatio = 100;
+    data->damageRatioPerTarget = false;
+    data->damageSplit = false;
     if (getCustomAttacks().damageRatios.enabled) {
         int damageRatio;
         db.readIntWithBoundsCheck(&damageRatio, dbTable, damageRatioColumnName, 0, 255);
-        if (damageRatio == 0)
-            damageRatio = 100;
-        data->damageRatio = (std::uint8_t)damageRatio;
+        if (damageRatio != 0)
+            data->damageRatio = (std::uint8_t)damageRatio;
 
         data->damageRatioPerTarget = false;
         db.readBool(&data->damageRatioPerTarget, dbTable, damageRatioPerTargetColumnName);
