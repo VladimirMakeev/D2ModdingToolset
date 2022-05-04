@@ -24,6 +24,7 @@
 #include "game.h"
 #include "leaderview.h"
 #include "mempool.h"
+#include "restrictions.h"
 #include "scripts.h"
 #include "unitcat.h"
 #include "utils.h"
@@ -328,9 +329,13 @@ int __fastcall soldierGetLevel(const game::IUsSoldier* thisptr, int /*%edx*/)
 
 int __fastcall soldierGetHitPoints(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
-    return prev->vftable->getHitPoints(prev);
+    const auto& restrictions = game::gameRestrictions();
+
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    auto prev = thiz->getPrevSoldier();
+
+    auto value = thiz->getInteger("getHp", prev->vftable->getHitPoints(prev));
+    return std::clamp(value, restrictions.unitHp->min, restrictions.unitHp->max);
 }
 
 int* __fastcall soldierGetArmor(const game::IUsSoldier* thisptr, int /*%edx*/, int* armor)
