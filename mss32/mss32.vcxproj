@@ -155,6 +155,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomTypes.cpp" />
     <ClCompile Include="src\attack.cpp" />
     <ClCompile Include="src\attackclasscat.cpp" />
+    <ClCompile Include="src\attackdescriptor.cpp" />
     <ClCompile Include="src\attackimpl.cpp" />
     <ClCompile Include="src\attackmodified.cpp" />
     <ClCompile Include="src\attacktypepairvector.cpp" />
@@ -481,6 +482,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\aispellcat.h" />
     <ClInclude Include="include\attack.h" />
     <ClInclude Include="include\attackclasscat.h" />
+    <ClInclude Include="include\attackdescriptor.h" />
     <ClInclude Include="include\attackimpl.h" />
     <ClInclude Include="include\attackmodified.h" />
     <ClInclude Include="include\attacktypepairvector.h" />

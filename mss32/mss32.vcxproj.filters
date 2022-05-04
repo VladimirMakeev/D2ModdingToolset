@@ -1001,6 +1001,9 @@
     <ClCompile Include="src\usstackleader.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\attackdescriptor.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2562,6 +2565,9 @@
     </ClInclude>
     <ClInclude Include="include\modifgrouphooks.h">
       <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\attackdescriptor.h">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
