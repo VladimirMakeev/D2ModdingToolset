@@ -450,9 +450,13 @@ const game::LImmuneCat* __fastcall soldierGetImmuneByAttackSource(
     int /*%edx*/,
     const game::LAttackSource* attackSource)
 {
-    // TODO: script function
-    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
-    return prev->vftable->getImmuneByAttackSource(prev, attackSource);
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    auto prev = thiz->getPrevSoldier();
+
+    auto prevValue = prev->vftable->getImmuneByAttackSource(prev, attackSource);
+    auto value = thiz->getIntegerByInteger("immuneToSource", (int)attackSource->id,
+                                           (int)prevValue->id);
+    return getImmuneCatById(value, prevValue);
 }
 
 game::IAttack* __fastcall soldierGetAttackById(const game::IUsSoldier* thisptr, int /*%edx*/)
