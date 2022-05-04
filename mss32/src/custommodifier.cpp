@@ -301,7 +301,7 @@ const char* __fastcall soldierGetName(const game::IUsSoldier* thisptr, int /*%ed
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
 
-    return thiz->getGlobalTextById("getNameId", prev->vftable->getName(prev));
+    return thiz->getGlobalTextById("getNameTxt", prev->vftable->getName(prev));
 }
 
 const char* __fastcall soldierGetDescription(const game::IUsSoldier* thisptr, int /*%edx*/)
@@ -309,7 +309,7 @@ const char* __fastcall soldierGetDescription(const game::IUsSoldier* thisptr, in
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
 
-    return thiz->getGlobalTextById("getDescriptionId", prev->vftable->getDescription(prev));
+    return thiz->getGlobalTextById("getDescTxt", prev->vftable->getDescription(prev));
 }
 
 const game::CMidgardID* __fastcall soldierGetRaceId(const game::IUsSoldier* thisptr, int /*%edx*/)
@@ -356,7 +356,7 @@ int __fastcall soldierGetHitPoints(const game::IUsSoldier* thisptr, int /*%edx*/
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
 
-    auto value = thiz->getInteger("getHp", prev->vftable->getHitPoints(prev));
+    auto value = thiz->getInteger("getHitPoint", prev->vftable->getHitPoints(prev));
     return std::clamp(value, restrictions.unitHp->min, restrictions.unitHp->max);
 }
 
@@ -440,7 +440,7 @@ const game::LImmuneCat* __fastcall soldierGetImmuneByAttackClass(
     auto prev = thiz->getPrevSoldier();
 
     auto prevValue = prev->vftable->getImmuneByAttackClass(prev, attackClass);
-    auto value = thiz->getIntegerByInteger("immuneToAttack", (int)attackClass->id,
+    auto value = thiz->getIntegerByInteger("getImmuneToAttack", (int)attackClass->id,
                                            (int)prevValue->id);
     return getImmuneCatById(value, prevValue);
 }
@@ -454,7 +454,7 @@ const game::LImmuneCat* __fastcall soldierGetImmuneByAttackSource(
     auto prev = thiz->getPrevSoldier();
 
     auto prevValue = prev->vftable->getImmuneByAttackSource(prev, attackSource);
-    auto value = thiz->getIntegerByInteger("immuneToSource", (int)attackSource->id,
+    auto value = thiz->getIntegerByInteger("getImmuneToSource", (int)attackSource->id,
                                            (int)prevValue->id);
     return getImmuneCatById(value, prevValue);
 }
