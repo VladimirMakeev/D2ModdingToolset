@@ -31,6 +31,7 @@ struct TextIds
         std::string sellAllValuables;
         std::string sellAllItems;
         std::string infiniteAttack;
+        std::string infiniteText;
         std::string critHitAttack;
         std::string critHitDamage;
         std::string ratedDamage;

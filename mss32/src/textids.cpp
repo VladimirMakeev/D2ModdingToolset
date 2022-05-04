@@ -120,6 +120,7 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.sellAllValuables = interf.value().get_or("sellAllValuables", std::string());
     value.sellAllItems = interf.value().get_or("sellAllItems", std::string());
     value.infiniteAttack = interf.value().get_or("infiniteAttack", std::string());
+    value.infiniteText = interf.value().get_or("infiniteText", std::string());
     value.critHitAttack = interf.value().get_or("critHitAttack", std::string());
     value.critHitDamage = interf.value().get_or("critHitDamage", std::string());
     value.ratedDamage = interf.value().get_or("ratedDamage", std::string());
