@@ -591,24 +591,9 @@ double computeTotalDamageRatio(const game::IAttack* attack, int targetCount)
 
 int computeAverageTotalDamage(const game::IAttack* attack, int damage)
 {
-    using namespace game;
-
-    const auto& reaches = AttackReachCategories::get();
-
-    auto attackReach = attack->vftable->getAttackReach(attack);
-    if (attackReach->id == reaches.all->id) {
-        return damage * 3;
-    } else if (attackReach->id != reaches.any->id && attackReach->id != reaches.adjacent->id) {
-        for (const auto& custom : getCustomAttacks().reaches) {
-            if (attackReach->id == custom.reach.id) {
-                if (custom.maxTargets == 1)
-                    return damage;
-                return damage * custom.maxTargets / 2;
-            }
-        }
-    }
-
-    return damage;
+    int maxTargets = getAttackMaxTargets(attack->vftable->getAttackReach(attack));
+    int avgTargets = maxTargets % 2 + maxTargets / 2;
+    return damage * avgTargets;
 }
 
 CustomAttackData getCustomAttackData(const game::IAttack* attack)

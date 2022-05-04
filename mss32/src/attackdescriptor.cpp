@@ -256,30 +256,6 @@ bool AttackDescriptor::damageSplit() const
     return custom().damageSplit;
 }
 
-int AttackDescriptor::maxTargets() const
-{
-    using namespace game;
-
-    const auto& reaches = AttackReachCategories::get();
-
-    int maxTargets = 0;
-    auto reachId = data.reach->id;
-    if (reachId == reaches.all->id) {
-        maxTargets = 6;
-    } else if (reachId == reaches.any->id || reachId == reaches.adjacent->id) {
-        maxTargets = 1;
-    } else {
-        for (const auto& custom : hooks::getCustomAttacks().reaches) {
-            if (reachId == custom.reach.id) {
-                maxTargets = custom.maxTargets;
-                break;
-            }
-        }
-    }
-
-    return maxTargets;
-}
-
 const hooks::CustomAttackData& AttackDescriptor::custom() const
 {
     return data.custom;

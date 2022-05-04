@@ -151,7 +151,7 @@ std::string getRatedAttackDamageText(const std::string& base,
                                      const utils::AttackDescriptor& actual,
                                      int damageBoosted)
 {
-    auto ratios = computeAttackDamageRatio(actual.custom(), actual.maxTargets());
+    auto ratios = computeAttackDamageRatio(actual.custom(), getAttackMaxTargets(actual.reach()));
     if (ratios.size() < 2)
         return base;
 
@@ -288,7 +288,7 @@ std::string getDamageDrainAttackDamageText(const utils::AttackDescriptor& actual
         result = addCritHitText(result, critText);
     }
 
-    if (actual.maxTargets() < 2)
+    if (getAttackMaxTargets(actual.reach()) < 2)
         return result;
     else if (actual.damageSplit()) {
         return getSplitAttackDamageText(result);

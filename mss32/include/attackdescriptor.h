@@ -86,7 +86,6 @@ public:
     std::uint8_t damageRatio() const;
     bool damageRatioPerTarget() const;
     bool damageSplit() const;
-    int maxTargets() const;
     const hooks::CustomAttackData& custom() const;
 
 private:

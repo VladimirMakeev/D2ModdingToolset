@@ -140,4 +140,25 @@ bool isMeleeAttack(const game::IAttack* attack)
     return false;
 }
 
+int getAttackMaxTargets(const game::LAttackReach* reach)
+{
+    using namespace game;
+
+    const auto& reaches = AttackReachCategories::get();
+
+    if (reach->id == reaches.all->id) {
+        return 6;
+    } else if (reach->id == reaches.any->id || reach->id == reaches.adjacent->id) {
+        return 1;
+    } else {
+        for (const auto& custom : getCustomAttacks().reaches) {
+            if (reach->id == custom.reach.id) {
+                return custom.maxTargets;
+            }
+        }
+    }
+
+    return 0;
+}
+
 } // namespace hooks
