@@ -102,14 +102,14 @@ std::string getInterfaceText(const char* textIdString)
     return {gameFunctions().getInterfaceText(&textId)};
 }
 
-const char* getGlobalText(const char* textIdString)
+const char* getGlobalText(const std::string& textIdString)
 {
     using namespace game;
 
     const auto& globalApi = GlobalDataApi::get();
 
     CMidgardID textId{};
-    CMidgardIDApi::get().fromString(&textId, textIdString);
+    CMidgardIDApi::get().fromString(&textId, textIdString.c_str());
     if (textId == invalidId)
         return "";
 
