@@ -27,7 +27,7 @@ namespace bindings {
 class LeaderView : public UnitView
 {
 public:
-    LeaderView(const game::CMidUnit* unit);
+    using UnitView::UnitView;
 
     static void bind(sol::state& lua);
 

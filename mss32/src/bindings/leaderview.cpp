@@ -29,10 +29,6 @@
 
 namespace bindings {
 
-LeaderView::LeaderView(const game::CMidUnit* unit)
-    : UnitView(unit)
-{ }
-
 void LeaderView::bind(sol::state& lua)
 {
     auto leader = lua.new_usertype<LeaderView>("LeaderView", sol::base_classes,
@@ -47,7 +43,7 @@ void LeaderView::bind(sol::state& lua)
 
 int LeaderView::getCategory() const
 {
-    auto leader{game::gameFunctions().castUnitImplToLeader(unit->unitImpl)};
+    auto leader{game::gameFunctions().castUnitImplToLeader(getUnitImpl())};
     if (!leader) {
         return 0;
     }
@@ -62,21 +58,21 @@ int LeaderView::getCategory() const
 
 int LeaderView::getMovement() const
 {
-    auto leader{game::gameFunctions().castUnitImplToStackLeader(unit->unitImpl)};
+    auto leader{game::gameFunctions().castUnitImplToStackLeader(getUnitImpl())};
 
     return leader ? leader->vftable->getMovement(leader) : 0;
 }
 
 int LeaderView::getScout() const
 {
-    auto leader{game::gameFunctions().castUnitImplToStackLeader(unit->unitImpl)};
+    auto leader{game::gameFunctions().castUnitImplToStackLeader(getUnitImpl())};
 
     return leader ? leader->vftable->getScout(leader) : 0;
 }
 
 int LeaderView::getLeadership() const
 {
-    auto leader{game::gameFunctions().castUnitImplToStackLeader(unit->unitImpl)};
+    auto leader{game::gameFunctions().castUnitImplToStackLeader(getUnitImpl())};
 
     return leader ? leader->vftable->getLeadership(leader) : 0;
 }
@@ -85,7 +81,7 @@ bool LeaderView::hasAbility(int abilityId) const
 {
     using namespace game;
 
-    auto leader{game::gameFunctions().castUnitImplToStackLeader(unit->unitImpl)};
+    auto leader{game::gameFunctions().castUnitImplToStackLeader(getUnitImpl())};
     if (!leader) {
         return false;
     }
@@ -125,7 +121,7 @@ bool LeaderView::hasMoveBonus(int groundId) const
 {
     using namespace game;
 
-    auto leader{game::gameFunctions().castUnitImplToStackLeader(unit->unitImpl)};
+    auto leader{game::gameFunctions().castUnitImplToStackLeader(getUnitImpl())};
     if (!leader) {
         return false;
     }

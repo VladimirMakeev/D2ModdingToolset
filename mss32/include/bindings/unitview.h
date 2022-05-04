@@ -27,8 +27,9 @@ class state;
 }
 
 namespace game {
+struct IUsUnit;
 struct CMidUnit;
-}
+} // namespace game
 
 namespace bindings {
 
@@ -38,6 +39,7 @@ class UnitView
 {
 public:
     UnitView(const game::CMidUnit* unit);
+    UnitView(const game::CMidUnit* unit, const game::IUsUnit* unitImpl);
 
     static void bind(sol::state& lua);
 
@@ -52,7 +54,10 @@ public:
     int getHpMax() const;
 
 protected:
+    const game::IUsUnit* getUnitImpl() const;
+
     const game::CMidUnit* unit;
+    const game::IUsUnit* unitImpl;
 };
 
 } // namespace bindings

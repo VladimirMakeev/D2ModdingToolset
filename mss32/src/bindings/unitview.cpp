@@ -36,6 +36,12 @@ namespace bindings {
 
 UnitView::UnitView(const game::CMidUnit* unit)
     : unit(unit)
+    , unitImpl(nullptr)
+{ }
+
+UnitView::UnitView(const game::CMidUnit* unit, const game::IUsUnit* unitImpl)
+    : unit(unit)
+    , unitImpl(unitImpl)
 { }
 
 void UnitView::bind(sol::state& lua)
@@ -50,7 +56,7 @@ void UnitView::bind(sol::state& lua)
 
 std::optional<UnitImplView> UnitView::getImpl() const
 {
-    return {unit->unitImpl};
+    return {getUnitImpl()};
 }
 
 std::optional<UnitImplView> UnitView::getBaseImpl() const
@@ -72,7 +78,16 @@ int UnitView::getHpMax() const
 {
     using namespace game;
 
-    return CMidUnitApi::get().getHpMax(unit);
+    if (unit->transformed && unit->keepHp)
+        return unit->hpBefMax;
+
+    auto soldier = gameFunctions().castUnitImplToSoldier(getUnitImpl());
+    return soldier->vftable->getHitPoints(soldier);
+}
+
+const game::IUsUnit* UnitView::getUnitImpl() const
+{
+    return unitImpl ? unitImpl : unit->unitImpl;
 }
 
 } // namespace bindings
