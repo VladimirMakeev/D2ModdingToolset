@@ -52,11 +52,20 @@ struct CCustomModifier
     game::IUsSoldier* getPrevSoldier();
     game::IUsStackLeader* getPrevStackLeader();
     game::IAttack* getPrevAttack(const game::IAttack* current);
+    CCustomModifier* getPrevCustomModifier();
     game::IAttack* getAttack(bool primary);
     CustomAttackData getCustomAttackData(const game::IAttack* current);
     void setUnit(const game::CMidUnit* value);
+    const char* getFormattedGlobalText(const std::string& formatId, const std::string& valueId);
 
-    const char* getGlobalTextById(const char* functionName, const char* prev);
+    std::string getNameTxt();
+    std::string getPrevNameTxt();
+    std::string getBaseNameTxt();
+    std::string getDescTxt();
+    std::string getPrevDescTxt();
+    std::string getBaseDescTxt();
+
+    std::string getString(const char* functionName, const std::string& prev);
     int getInteger(const char* functionName, int prev);
     int getIntegerIntParam(const char* functionName, int param, int prev);
 };

@@ -28,7 +28,11 @@
 #include "restrictions.h"
 #include "scripts.h"
 #include "unitcat.h"
+#include "unitutils.h"
+#include "ussoldierimpl.h"
 #include "utils.h"
+#include <mutex>
+#include <set>
 
 namespace hooks {
 
@@ -132,6 +136,28 @@ game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* current)
     return nullptr;
 }
 
+CCustomModifier* CCustomModifier::getPrevCustomModifier()
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    auto current = getPrev();
+    while (current) {
+        auto modifier = (CUmModifier*)dynamicCast(current, 0, rtti.IUsUnitType,
+                                                  rtti.CUmModifierType, 0);
+
+        auto customModifier = castModifierToCustomModifier(modifier);
+        if (customModifier)
+            return customModifier;
+
+        current = modifier ? modifier->data->prev : nullptr;
+    }
+
+    return nullptr;
+}
+
 game::IAttack* CCustomModifier::getAttack(bool primary)
 {
     // TODO: script functions to return attack id, differentiate between primary and secondary
@@ -156,15 +182,69 @@ void CCustomModifier::setUnit(const game::CMidUnit* value)
     unit = value;
 }
 
-const char* CCustomModifier::getGlobalTextById(const char* functionName, const char* prev)
+const char* CCustomModifier::getFormattedGlobalText(const std::string& formatId,
+                                                    const std::string& valueId)
+{
+    static std::set<std::string> globals;
+    static std::mutex globalsMutex;
+
+    auto format = getGlobalText(formatId);
+    auto value = getGlobalText(valueId);
+
+    std::string formatted = format;
+    if (!replace(formatted, "%VALUE%", value))
+        return format;
+
+    // No iterators or references are invalidated on insert
+    // so it is safe to return raw char pointer.
+    const std::lock_guard<std::mutex> lock(globalsMutex);
+    return globals.insert(formatted).first->c_str();
+}
+
+std::string CCustomModifier::getNameTxt()
+{
+    return getString("getNameTxt", getPrevNameTxt());
+}
+
+std::string CCustomModifier::getPrevNameTxt()
+{
+    auto prev = getPrevCustomModifier();
+    return prev ? prev->getNameTxt() : getBaseNameTxt();
+}
+
+std::string CCustomModifier::getBaseNameTxt()
+{
+    auto soldierImpl = getSoldierImpl(getPrev());
+    auto id = soldierImpl ? soldierImpl->data->name.id : game::invalidId;
+    return idToString(&id);
+}
+
+std::string CCustomModifier::getDescTxt()
+{
+    return getString("getDescTxt", getPrevDescTxt());
+}
+
+std::string CCustomModifier::getPrevDescTxt()
+{
+    auto prev = getPrevCustomModifier();
+    return prev ? prev->getDescTxt() : getBaseNameTxt();
+}
+
+std::string CCustomModifier::getBaseDescTxt()
+{
+    auto soldierImpl = getSoldierImpl(getPrev());
+    auto id = soldierImpl ? soldierImpl->data->description.id : game::invalidId;
+    return idToString(&id);
+}
+
+std::string CCustomModifier::getString(const char* functionName, const std::string& prev)
 {
     std::optional<sol::environment> env;
     auto f = getScriptFunction<GetString>(modifiersFolder() / script, functionName, env);
     try {
         if (f) {
             bindings::LeaderView unitView{unit, getPrev()};
-            auto textId = (*f)(unitView, prev);
-            return getGlobalText(textId);
+            return (*f)(unitView, prev);
         }
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
@@ -302,17 +382,13 @@ void __fastcall soldierDtor(game::IUsSoldier* thisptr, int /*%edx*/, char flags)
 const char* __fastcall soldierGetName(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
     auto thiz = castSoldierToCustomModifier(thisptr);
-    auto prev = thiz->getPrevSoldier();
-
-    return thiz->getGlobalTextById("getNameTxt", prev->vftable->getName(prev));
+    return thiz->getFormattedGlobalText(thiz->getNameTxt(), thiz->getBaseNameTxt());
 }
 
 const char* __fastcall soldierGetDescription(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
     auto thiz = castSoldierToCustomModifier(thisptr);
-    auto prev = thiz->getPrevSoldier();
-
-    return thiz->getGlobalTextById("getDescTxt", prev->vftable->getDescription(prev));
+    return thiz->getFormattedGlobalText(thiz->getDescTxt(), thiz->getBaseDescTxt());
 }
 
 const game::CMidgardID* __fastcall soldierGetRaceId(const game::IUsSoldier* thisptr, int /*%edx*/)
