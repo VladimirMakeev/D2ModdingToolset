@@ -187,6 +187,17 @@ static void bindApi(sol::state& lua)
         "Once", ImmuneId::Once,
         "Always", ImmuneId::Always
     );
+
+    lua.new_enum("DeathAnimation",
+        "Human", DeathAnimationId::Human,
+        "Heretic", DeathAnimationId::Heretic,
+        "Dwarf", DeathAnimationId::Dwarf,
+        "Undead", DeathAnimationId::Undead,
+        "Neutral", DeathAnimationId::Neutral,
+        "Dragon", DeathAnimationId::Dragon,
+        "Ghost", DeathAnimationId::Ghost,
+        "Elf", DeathAnimationId::Elf
+    );
     // clang-format on
 
     bindings::UnitView::bind(lua);
