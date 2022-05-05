@@ -21,6 +21,7 @@
 #define UNITIMPLVIEW_H
 
 #include <optional>
+#include <string>
 
 namespace sol {
 class state;
@@ -42,6 +43,7 @@ public:
 
     static void bind(sol::state& lua);
 
+    std::string getId() const;
     /** Returns unit implementation level. */
     int getLevel() const;
     /** Returns experience points needed for next level. */

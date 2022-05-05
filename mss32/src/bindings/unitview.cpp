@@ -47,6 +47,7 @@ UnitView::UnitView(const game::CMidUnit* unit, const game::IUsUnit* unitImpl)
 void UnitView::bind(sol::state& lua)
 {
     auto unit = lua.new_usertype<UnitView>("Unit");
+    unit["id"] = sol::property(&UnitView::getId);
     unit["xp"] = sol::property(&UnitView::getXp);
     unit["hp"] = sol::property(&UnitView::getHp);
     unit["hpMax"] = sol::property(&UnitView::getHpMax);
@@ -86,6 +87,12 @@ std::optional<UnitImplView> UnitView::getBaseUnit() const
         return std::nullopt;
 
     return {globalUnitImpl};
+}
+
+std::string UnitView::getId() const
+{
+    auto id = unit ? unit->id : game::invalidId;
+    return hooks::idToString(&id);
 }
 
 int UnitView::getXp() const

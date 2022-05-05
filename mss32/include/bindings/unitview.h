@@ -21,6 +21,7 @@
 #define UNITVIEW_H
 
 #include <optional>
+#include <string>
 
 namespace sol {
 class state;
@@ -50,6 +51,7 @@ public:
     /** Returns BASE_UNIT specified in Gunits.dbf. */
     std::optional<UnitImplView> getBaseUnit() const;
 
+    std::string getId() const;
     /** Returns unit's current experience points. */
     int getXp() const;
     int getHp() const;

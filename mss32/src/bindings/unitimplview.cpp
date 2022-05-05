@@ -47,6 +47,7 @@ UnitImplView::UnitImplView(const game::IUsUnit* unitImpl)
 void UnitImplView::bind(sol::state& lua)
 {
     auto impl = lua.new_usertype<UnitImplView>("UnitImpl");
+    impl["id"] = sol::property(&UnitImplView::getId);
     impl["level"] = sol::property(&UnitImplView::getLevel);
     impl["xpNext"] = sol::property(&UnitImplView::getXpNext);
     impl["xpKilled"] = sol::property(&UnitImplView::getXpKilled);
@@ -71,6 +72,12 @@ void UnitImplView::bind(sol::state& lua)
     impl["leadership"] = sol::property(&UnitImplView::getLeadership);
     impl["hasAbility"] = &UnitImplView::hasAbility;
     impl["hasMoveBonus"] = &UnitImplView::hasMoveBonus;
+}
+
+std::string UnitImplView::getId() const
+{
+    auto id = impl ? impl->id : game::invalidId;
+    return hooks::idToString(&id);
 }
 
 int UnitImplView::getLevel() const
