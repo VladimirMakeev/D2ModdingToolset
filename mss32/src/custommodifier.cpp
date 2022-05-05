@@ -225,7 +225,8 @@ game::IAttack* CCustomModifier::getAttackById(bool primary, game::IAttack* prev)
 {
     using namespace game;
 
-    auto prevIdString = idToString(prev ? &prev->id : &emptyId);
+    // Lowercase to match values from DBF
+    auto prevIdString = idToString(prev ? &prev->id : &emptyId, true);
     auto idString = getValue<GetStr>(primary ? "getAttackId" : "getAttack2Id", prevIdString);
     if (idString != prevIdString) {
         auto result = getGlobalAttack(idString);
@@ -251,7 +252,7 @@ std::string CCustomModifier::getBaseNameTxt() const
 {
     auto soldierImpl = getSoldierImpl(getPrev());
     auto id = soldierImpl ? soldierImpl->data->name.id : game::invalidId;
-    return idToString(&id);
+    return idToString(&id, true); // Lowercase to match values from DBF
 }
 
 std::string CCustomModifier::getDescTxt() const
@@ -269,7 +270,7 @@ std::string CCustomModifier::getBaseDescTxt() const
 {
     auto soldierImpl = getSoldierImpl(getPrev());
     auto id = soldierImpl ? soldierImpl->data->description.id : game::invalidId;
-    return idToString(&id);
+    return idToString(&id, true); // Lowercase to match values from DBF
 }
 
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,

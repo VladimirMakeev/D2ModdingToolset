@@ -51,7 +51,7 @@ const std::filesystem::path& modifiersFolder();
 const std::filesystem::path& exePath();
 
 /** Returns id as string. */
-std::string idToString(const game::CMidgardID* id);
+std::string idToString(const game::CMidgardID* id, bool lowercase = false);
 
 /** Returns interface text by specified id string. */
 std::string getInterfaceText(const char* textIdString);

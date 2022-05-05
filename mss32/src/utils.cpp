@@ -87,10 +87,16 @@ const std::filesystem::path& exePath()
     return exe;
 }
 
-std::string idToString(const game::CMidgardID* id)
+std::string idToString(const game::CMidgardID* id, bool lowercase)
 {
     char idString[11] = {0};
     game::CMidgardIDApi::get().toString(id, idString);
+
+    if (lowercase) {
+        for (auto& c : idString) {
+            c = (char)std::tolower((unsigned char)c);
+        }
+    }
 
     return {idString};
 }
