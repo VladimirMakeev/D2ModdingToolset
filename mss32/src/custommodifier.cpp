@@ -251,7 +251,7 @@ CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
     CUmModifierApi::get().constructor(&thisptr->umModifier, id, globalData);
     thisptr->unit = nullptr;
     thisptr->lastElementQuery = ModifierElementTypeFlag::None;
-    new (&thisptr->script) std::string(script);
+    new (&thisptr->script) std::filesystem::path(modifiersFolder() / script);
     initVftable(thisptr);
 
     return thisptr;
@@ -265,7 +265,7 @@ CCustomModifier* customModifierCopyCtor(CCustomModifier* thisptr, const CCustomM
     CUmModifierApi::get().copyConstructor(&thisptr->umModifier, &src->umModifier);
     thisptr->unit = src->unit;
     thisptr->lastElementQuery = src->lastElementQuery;
-    new (&thisptr->script) std::string(src->script);
+    new (&thisptr->script) std::filesystem::path(src->script);
     initVftable(thisptr);
 
     return thisptr;
@@ -275,7 +275,7 @@ void customModifierDtor(CCustomModifier* thisptr, char flags)
 {
     using namespace game;
 
-    thisptr->script.~basic_string();
+    thisptr->script.~path();
 
     CUmModifierApi::get().destructor(&thisptr->umModifier);
 
@@ -631,8 +631,7 @@ bool __fastcall modifierCanApplyToUnit(const game::CUmModifier* thisptr,
     auto thiz = castModifierToCustomModifier(thisptr);
 
     std::optional<sol::environment> env;
-    auto f = getScriptFunction<CanApplyToUnit>(modifiersFolder() / thiz->script, "canApplyToUnit",
-                                               env);
+    auto f = getScriptFunction<CanApplyToUnit>(thiz->script, "canApplyToUnit", env);
     try {
         if (f) {
             bindings::UnitImplView unitImplView{unit};

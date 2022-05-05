@@ -48,7 +48,7 @@ struct CCustomModifier
     game::IAttack attack2;
     const game::CMidUnit* unit;
     game::ModifierElementTypeFlag lastElementQuery;
-    std::string script;
+    std::filesystem::path script;
     int regen;
     game::Bank enrollCost;
     game::Bank reviveCost;
@@ -78,7 +78,7 @@ struct CCustomModifier
     T getValue(const char* functionName, const T& prev) const
     {
         std::optional<sol::environment> env;
-        auto f = getScriptFunction<F>(modifiersFolder() / script, functionName, env);
+        auto f = getScriptFunction<F>(script, functionName, env);
         try {
             if (f) {
                 bindings::UnitView unitView{unit, getPrev()};
@@ -97,7 +97,7 @@ struct CCustomModifier
     T getValueParam(const char* functionName, const T& param, const T& prev) const
     {
         std::optional<sol::environment> env;
-        auto f = getScriptFunction<F>(modifiersFolder() / script, functionName, env);
+        auto f = getScriptFunction<F>(script, functionName, env);
         try {
             if (f) {
                 bindings::UnitView unitView{unit, getPrev()};
