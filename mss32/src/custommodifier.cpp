@@ -39,6 +39,8 @@ using GetStr = std::function<std::string(const bindings::UnitView&, const std::s
 using GetInt = std::function<int(const bindings::UnitView&, int)>;
 using GetIntParam = std::function<int(const bindings::UnitView&, int, int)>;
 using GetBool = std::function<bool(const bindings::UnitView&, bool)>;
+using GetBank = std::function<bindings::CurrencyView(const bindings::UnitView&,
+                                                     const bindings::CurrencyView&)>;
 
 static struct
 {
@@ -533,9 +535,14 @@ const game::Bank* __fastcall soldierGetEnrollCost(const game::IUsSoldier* thispt
 
 const game::Bank* __fastcall soldierGetReviveCost(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
-    return prev->vftable->getReviveCost(prev);
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    auto prev = thiz->getPrevSoldier();
+
+    bindings::CurrencyView prevValue{*prev->vftable->getReviveCost(prev)};
+    auto value = thiz->getValue<GetBank>("getReviveCost", prevValue);
+
+    thiz->reviveCost = value.bank;
+    return &thiz->reviveCost;
 }
 
 const game::Bank* __fastcall soldierGetHealCost(const game::IUsSoldier* thisptr, int /*%edx*/)

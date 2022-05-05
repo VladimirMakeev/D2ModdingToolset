@@ -21,6 +21,7 @@
 #define CUSTOMMODIFIER_H
 
 #include "attack.h"
+#include "currencyview.h"
 #include "scripts.h"
 #include "umunit.h"
 #include "unitview.h"
@@ -49,6 +50,7 @@ struct CCustomModifier
     game::ModifierElementTypeFlag lastElementQuery;
     std::string script;
     int regen;
+    game::Bank reviveCost;
 
     game::IAttack* getAttack(bool primary);
     void setUnit(const game::CMidUnit* value);
