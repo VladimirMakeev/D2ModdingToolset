@@ -50,7 +50,10 @@ struct CCustomModifier
     game::ModifierElementTypeFlag lastElementQuery;
     std::string script;
     int regen;
+    game::Bank enrollCost;
     game::Bank reviveCost;
+    game::Bank healCost;
+    game::Bank trainingCost;
 
     game::IAttack* getAttack(bool primary);
     void setUnit(const game::CMidUnit* value);

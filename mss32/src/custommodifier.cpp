@@ -528,9 +528,14 @@ bool __fastcall soldierGetAttackTwice(const game::IUsSoldier* thisptr, int /*%ed
 
 const game::Bank* __fastcall soldierGetEnrollCost(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
-    return prev->vftable->getEnrollCost(prev);
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    auto prev = thiz->getPrevSoldier();
+
+    bindings::CurrencyView prevValue{*prev->vftable->getEnrollCost(prev)};
+    auto value = thiz->getValue<GetBank>("getEnrollCost", prevValue);
+
+    thiz->enrollCost = value.bank;
+    return &thiz->enrollCost;
 }
 
 const game::Bank* __fastcall soldierGetReviveCost(const game::IUsSoldier* thisptr, int /*%edx*/)
@@ -547,16 +552,26 @@ const game::Bank* __fastcall soldierGetReviveCost(const game::IUsSoldier* thispt
 
 const game::Bank* __fastcall soldierGetHealCost(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
-    return prev->vftable->getHealCost(prev);
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    auto prev = thiz->getPrevSoldier();
+
+    bindings::CurrencyView prevValue{*prev->vftable->getHealCost(prev)};
+    auto value = thiz->getValue<GetBank>("getHealCost", prevValue);
+
+    thiz->healCost = value.bank;
+    return &thiz->healCost;
 }
 
 const game::Bank* __fastcall soldierGetTrainingCost(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
-    return prev->vftable->getTrainingCost(prev);
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    auto prev = thiz->getPrevSoldier();
+
+    bindings::CurrencyView prevValue{*prev->vftable->getTrainingCost(prev)};
+    auto value = thiz->getValue<GetBank>("getTrainingCost", prevValue);
+
+    thiz->trainingCost = value.bank;
+    return &thiz->trainingCost;
 }
 
 const game::CMidgardID* __fastcall soldierGetDynUpg1(const game::IUsSoldier* thisptr, int /*%edx*/)
