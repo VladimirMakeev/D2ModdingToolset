@@ -48,26 +48,28 @@ struct CCustomModifier
     std::string script;
     int regen;
 
-    game::IUsUnit* getPrev();
-    game::IUsSoldier* getPrevSoldier();
-    game::IUsStackLeader* getPrevStackLeader();
-    game::IAttack* getPrevAttack(const game::IAttack* current);
-    CCustomModifier* getPrevCustomModifier();
     game::IAttack* getAttack(bool primary);
-    CustomAttackData getCustomAttackData(const game::IAttack* current);
     void setUnit(const game::CMidUnit* value);
-    const char* getFormattedGlobalText(const std::string& formatId, const std::string& valueId);
 
-    std::string getNameTxt();
-    std::string getPrevNameTxt();
-    std::string getBaseNameTxt();
-    std::string getDescTxt();
-    std::string getPrevDescTxt();
-    std::string getBaseDescTxt();
+    game::IUsUnit* getPrev() const;
+    game::IUsSoldier* getPrevSoldier() const;
+    game::IUsStackLeader* getPrevStackLeader() const;
+    game::IAttack* getPrevAttack(const game::IAttack* current) const;
+    CCustomModifier* getPrevCustomModifier() const;
+    CustomAttackData getCustomAttackData(const game::IAttack* current) const;
+    const char* getFormattedGlobalText(const std::string& formatId,
+                                       const std::string& valueId) const;
 
-    std::string getString(const char* functionName, const std::string& prev);
-    int getInteger(const char* functionName, int prev);
-    int getIntegerIntParam(const char* functionName, int param, int prev);
+    std::string getNameTxt() const;
+    std::string getPrevNameTxt() const;
+    std::string getBaseNameTxt() const;
+    std::string getDescTxt() const;
+    std::string getPrevDescTxt() const;
+    std::string getBaseDescTxt() const;
+
+    std::string getString(const char* functionName, const std::string& prev) const;
+    int getInteger(const char* functionName, int prev) const;
+    int getIntegerIntParam(const char* functionName, int param, int prev) const;
 };
 
 static_assert(

@@ -106,22 +106,22 @@ CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack)
     return nullptr;
 }
 
-game::IUsUnit* CCustomModifier::getPrev()
+game::IUsUnit* CCustomModifier::getPrev() const
 {
     return umModifier.data->prev;
 }
 
-game::IUsSoldier* CCustomModifier::getPrevSoldier()
+game::IUsSoldier* CCustomModifier::getPrevSoldier() const
 {
     return game::gameFunctions().castUnitImplToSoldier(getPrev());
 }
 
-game::IUsStackLeader* CCustomModifier::getPrevStackLeader()
+game::IUsStackLeader* CCustomModifier::getPrevStackLeader() const
 {
     return game::gameFunctions().castUnitImplToStackLeader(getPrev());
 }
 
-game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* current)
+game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* current) const
 {
     auto prev = getPrevSoldier();
     if (!prev)
@@ -136,7 +136,7 @@ game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* current)
     return nullptr;
 }
 
-CCustomModifier* CCustomModifier::getPrevCustomModifier()
+CCustomModifier* CCustomModifier::getPrevCustomModifier() const
 {
     using namespace game;
 
@@ -170,7 +170,7 @@ game::IAttack* CCustomModifier::getAttack(bool primary)
     return result;
 }
 
-CustomAttackData CCustomModifier::getCustomAttackData(const game::IAttack* current)
+CustomAttackData CCustomModifier::getCustomAttackData(const game::IAttack* current) const
 {
     // TODO: script functions, differentiate between primary and secondary
     auto prev = getPrevAttack(current);
@@ -183,7 +183,7 @@ void CCustomModifier::setUnit(const game::CMidUnit* value)
 }
 
 const char* CCustomModifier::getFormattedGlobalText(const std::string& formatId,
-                                                    const std::string& valueId)
+                                                    const std::string& valueId) const
 {
     static std::set<std::string> globals;
     static std::mutex globalsMutex;
@@ -201,43 +201,43 @@ const char* CCustomModifier::getFormattedGlobalText(const std::string& formatId,
     return globals.insert(formatted).first->c_str();
 }
 
-std::string CCustomModifier::getNameTxt()
+std::string CCustomModifier::getNameTxt() const
 {
     return getString("getNameTxt", getPrevNameTxt());
 }
 
-std::string CCustomModifier::getPrevNameTxt()
+std::string CCustomModifier::getPrevNameTxt() const
 {
     auto prev = getPrevCustomModifier();
     return prev ? prev->getNameTxt() : getBaseNameTxt();
 }
 
-std::string CCustomModifier::getBaseNameTxt()
+std::string CCustomModifier::getBaseNameTxt() const
 {
     auto soldierImpl = getSoldierImpl(getPrev());
     auto id = soldierImpl ? soldierImpl->data->name.id : game::invalidId;
     return idToString(&id);
 }
 
-std::string CCustomModifier::getDescTxt()
+std::string CCustomModifier::getDescTxt() const
 {
     return getString("getDescTxt", getPrevDescTxt());
 }
 
-std::string CCustomModifier::getPrevDescTxt()
+std::string CCustomModifier::getPrevDescTxt() const
 {
     auto prev = getPrevCustomModifier();
     return prev ? prev->getDescTxt() : getBaseNameTxt();
 }
 
-std::string CCustomModifier::getBaseDescTxt()
+std::string CCustomModifier::getBaseDescTxt() const
 {
     auto soldierImpl = getSoldierImpl(getPrev());
     auto id = soldierImpl ? soldierImpl->data->description.id : game::invalidId;
     return idToString(&id);
 }
 
-std::string CCustomModifier::getString(const char* functionName, const std::string& prev)
+std::string CCustomModifier::getString(const char* functionName, const std::string& prev) const
 {
     std::optional<sol::environment> env;
     auto f = getScriptFunction<GetString>(modifiersFolder() / script, functionName, env);
@@ -255,7 +255,7 @@ std::string CCustomModifier::getString(const char* functionName, const std::stri
     return prev;
 }
 
-int CCustomModifier::getInteger(const char* functionName, int prev)
+int CCustomModifier::getInteger(const char* functionName, int prev) const
 {
     std::optional<sol::environment> env;
     auto f = getScriptFunction<GetInteger>(modifiersFolder() / script, functionName, env);
@@ -273,7 +273,7 @@ int CCustomModifier::getInteger(const char* functionName, int prev)
     return prev;
 }
 
-int CCustomModifier::getIntegerIntParam(const char* functionName, int param, int prev)
+int CCustomModifier::getIntegerIntParam(const char* functionName, int param, int prev) const
 {
     std::optional<sol::environment> env;
     auto f = getScriptFunction<GetIntegerIntParam>(modifiersFolder() / script, functionName, env);
