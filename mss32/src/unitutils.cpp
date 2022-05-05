@@ -146,27 +146,37 @@ game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidgardID* globalUnitImplId)
     return result;
 }
 
-game::TUsSoldierImpl* getSoldierImpl(const game::IUsSoldier* soldier)
+game::TUsSoldierImpl* getSoldierImpl(const game::IUsUnit* unit)
 {
     using namespace game;
 
-    const auto& fn = gameFunctions();
     const auto& rtti = RttiApi::rtti();
     const auto dynamicCast = RttiApi::get().dynamicCast;
 
-    auto current = soldier;
+    auto current = unit;
     while (current) {
-        auto soldierImpl = (TUsSoldierImpl*)dynamicCast(current, 0, rtti.IUsSoldierType,
+        auto soldierImpl = (TUsSoldierImpl*)dynamicCast(current, 0, rtti.IUsUnitType,
                                                         rtti.TUsSoldierImplType, 0);
         if (soldierImpl)
             return soldierImpl;
 
-        auto modifier = (CUmModifier*)dynamicCast(current, 0, rtti.IUsSoldierType,
+        auto modifier = (CUmModifier*)dynamicCast(current, 0, rtti.IUsUnitType,
                                                   rtti.CUmModifierType, 0);
-        current = modifier ? fn.castUnitImplToSoldier(modifier->data->prev) : nullptr;
+        current = modifier ? modifier->data->prev : nullptr;
     }
 
     return nullptr;
+}
+
+game::TUsSoldierImpl* getSoldierImpl(const game::IUsSoldier* soldier)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    auto unit = (IUsUnit*)dynamicCast(soldier, 0, rtti.IUsSoldierType, rtti.IUsUnitType, 0);
+    return getSoldierImpl(unit);
 }
 
 game::IAttack* getAttack(const game::IUsSoldier* soldier, bool primary, bool checkAltAttack)

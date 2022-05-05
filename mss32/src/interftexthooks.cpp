@@ -458,8 +458,7 @@ std::string getTwiceField(game::IEncUnitDescriptor* descriptor)
         dynamicCast(descriptor, 0, rtti.IEncUnitDescriptorType, rtti.CMidUnitDescriptorType, 0);
     if (midUnitDescriptor) {
         const auto unitImpl = midUnitDescriptor->unit->unitImpl;
-        const auto soldier = castUnitImplToSoldierWithLogging(unitImpl);
-        const auto soldierImpl = getSoldierImpl(soldier);
+        const auto soldierImpl = getSoldierImpl(unitImpl);
         modified = soldierImpl && !soldierImpl->vftable->getAttackTwice(soldierImpl);
     }
 
