@@ -38,7 +38,7 @@ namespace hooks {
  */
 using GetString = std::function<std::string(const bindings::LeaderView&, const std::string&)>;
 using GetInteger = std::function<int(const bindings::LeaderView&, int)>;
-using GetIntegerByInteger = std::function<int(const bindings::LeaderView&, int, int)>;
+using GetIntegerIntParam = std::function<int(const bindings::LeaderView&, int, int)>;
 
 static struct
 {
@@ -184,10 +184,10 @@ int CCustomModifier::getInteger(const char* functionName, int prev)
     return prev;
 }
 
-int CCustomModifier::getIntegerByInteger(const char* functionName, int param, int prev)
+int CCustomModifier::getIntegerIntParam(const char* functionName, int param, int prev)
 {
     std::optional<sol::environment> env;
-    auto f = getScriptFunction<GetIntegerByInteger>(modifiersFolder() / script, functionName, env);
+    auto f = getScriptFunction<GetIntegerIntParam>(modifiersFolder() / script, functionName, env);
     try {
         if (f) {
             bindings::LeaderView unitView{unit, getPrev()};
@@ -434,8 +434,8 @@ const game::LImmuneCat* __fastcall soldierGetImmuneByAttackClass(
     auto prev = thiz->getPrevSoldier();
 
     auto prevValue = prev->vftable->getImmuneByAttackClass(prev, attackClass);
-    auto value = thiz->getIntegerByInteger("getImmuneToAttack", (int)attackClass->id,
-                                           (int)prevValue->id);
+    auto value = thiz->getIntegerIntParam("getImmuneToAttack", (int)attackClass->id,
+                                          (int)prevValue->id);
     return getImmuneCatById(value, prevValue);
 }
 
@@ -448,8 +448,8 @@ const game::LImmuneCat* __fastcall soldierGetImmuneByAttackSource(
     auto prev = thiz->getPrevSoldier();
 
     auto prevValue = prev->vftable->getImmuneByAttackSource(prev, attackSource);
-    auto value = thiz->getIntegerByInteger("getImmuneToSource", (int)attackSource->id,
-                                           (int)prevValue->id);
+    auto value = thiz->getIntegerIntParam("getImmuneToSource", (int)attackSource->id,
+                                          (int)prevValue->id);
     return getImmuneCatById(value, prevValue);
 }
 

@@ -58,7 +58,7 @@ struct CCustomModifier
 
     const char* getGlobalTextById(const char* functionName, const char* prev);
     int getInteger(const char* functionName, int prev);
-    int getIntegerByInteger(const char* functionName, int param, int prev);
+    int getIntegerIntParam(const char* functionName, int param, int prev);
 };
 
 static_assert(
