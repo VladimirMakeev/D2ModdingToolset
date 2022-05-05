@@ -60,13 +60,16 @@ static inline CCustomModifier* castUnitToCustomModifier(const game::IUsUnit* uni
 
 static inline CCustomModifier* castSoldierToCustomModifier(const game::IUsSoldier* soldier)
 {
+    if (soldier == nullptr)
+        return nullptr;
+
     return reinterpret_cast<CCustomModifier*>((uintptr_t)soldier
                                               - offsetof(CCustomModifier, usSoldier));
 }
 
 CCustomModifier* castModifierToCustomModifier(const game::CUmModifier* modifier)
 {
-    if (modifier->vftable != &rttiInfo.umModifier.vftable)
+    if (!modifier || modifier->vftable != &rttiInfo.umModifier.vftable)
         return nullptr;
 
     return reinterpret_cast<CCustomModifier*>((uintptr_t)modifier
@@ -76,12 +79,18 @@ CCustomModifier* castModifierToCustomModifier(const game::CUmModifier* modifier)
 static inline CCustomModifier* castStackLeaderToCustomModifier(
     const game::IUsStackLeader* stackLeader)
 {
+    if (stackLeader == nullptr)
+        return nullptr;
+
     return reinterpret_cast<CCustomModifier*>((uintptr_t)stackLeader
                                               - offsetof(CCustomModifier, usStackLeader));
 }
 
 CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack)
 {
+    if (attack == nullptr)
+        return nullptr;
+
     if (attack->vftable == &rttiInfo.attack.vftable) {
         return reinterpret_cast<CCustomModifier*>((uintptr_t)attack
                                                   - offsetof(CCustomModifier, attack));
