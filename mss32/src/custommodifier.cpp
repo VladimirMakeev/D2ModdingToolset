@@ -18,6 +18,7 @@
  */
 
 #include "custommodifier.h"
+#include "attackutils.h"
 #include "customattacks.h"
 #include "customattackutils.h"
 #include "deathanimcat.h"
@@ -130,9 +131,9 @@ game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* current) cons
         return nullptr;
 
     if (current == &attack) {
-        return prev->vftable->getAttackById(prev);
+        return getAttackById(true, prev->vftable->getAttackById(prev));
     } else if (current == &attack2) {
-        return prev->vftable->getSecondAttackById(prev);
+        return getAttackById(false, prev->vftable->getSecondAttackById(prev));
     }
 
     return nullptr;
@@ -162,7 +163,6 @@ CCustomModifier* CCustomModifier::getPrevCustomModifier() const
 
 game::IAttack* CCustomModifier::getAttack(bool primary)
 {
-    // TODO: script functions to return attack id, differentiate between primary and secondary
     auto result = primary ? &attack : &attack2;
     auto prev = getPrevAttack(result);
     if (!prev)
@@ -201,6 +201,39 @@ const char* CCustomModifier::getFormattedGlobalText(const std::string& formatId,
     // so it is safe to return raw char pointer.
     const std::lock_guard<std::mutex> lock(globalsMutex);
     return globals.insert(formatted).first->c_str();
+}
+
+game::IAttack* CCustomModifier::getGlobalAttack(const std::string& idString) const
+{
+    using namespace game;
+
+    CMidgardID attackId{};
+    CMidgardIDApi::get().fromString(&attackId, idString.c_str());
+    if (attackId == invalidId)
+        return nullptr;
+
+    auto result = hooks::getAttack(&attackId);
+    if (!result) {
+        generateUnitImplByAttackId(&attackId);
+        result = hooks::getAttack(&attackId);
+    }
+
+    return result;
+}
+
+game::IAttack* CCustomModifier::getAttackById(bool primary, game::IAttack* prev) const
+{
+    using namespace game;
+
+    auto prevIdString = idToString(prev ? &prev->id : &emptyId);
+    auto idString = getValue<GetStr>(primary ? "getAttackId" : "getAttack2Id", prevIdString);
+    if (idString != prevIdString) {
+        auto result = getGlobalAttack(idString);
+        if (result)
+            return result;
+    }
+
+    return prev;
 }
 
 std::string CCustomModifier::getNameTxt() const

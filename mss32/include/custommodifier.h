@@ -66,6 +66,8 @@ struct CCustomModifier
     CustomAttackData getCustomAttackData(const game::IAttack* current) const;
     const char* getFormattedGlobalText(const std::string& formatId,
                                        const std::string& valueId) const;
+    game::IAttack* getGlobalAttack(const std::string& idString) const;
+    game::IAttack* getAttackById(bool primary, game::IAttack* prev) const;
 
     std::string getNameTxt() const;
     std::string getPrevNameTxt() const;
