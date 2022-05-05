@@ -43,6 +43,7 @@ using GetBool = std::function<bool(const bindings::UnitView&, bool)>;
 using GetBank = std::function<bindings::CurrencyView(const bindings::UnitView&,
                                                      const bindings::CurrencyView&)>;
 using CanApplyToUnit = std::function<bool(const bindings::UnitImplView&)>;
+using CanApplyToUnitType = std::function<bool(int)>;
 
 static struct
 {
@@ -650,19 +651,21 @@ bool __fastcall modifierCanApplyToUnitCategory(const game::CUmModifier* thisptr,
                                                int /*%edx*/,
                                                const game::LUnitCategory* unitCategory)
 {
-    using namespace game;
-
-    const auto& unitCategories = UnitCategories::get();
-
-    // TODO: script function + unit category as arg
-    bool isLeaderOnly = false;
     auto thiz = castModifierToCustomModifier(thisptr);
-    if (!isLeaderOnly)
-        return true;
 
-    auto id = unitCategory->id;
-    return id == unitCategories.noble->id || id == unitCategories.leader->id
-           || id == unitCategories.summon->id || id == unitCategories.illusion->id;
+    std::optional<sol::environment> env;
+    auto f = getScriptFunction<CanApplyToUnitType>(thiz->script, "canApplyToUnitType", env);
+    try {
+        if (f) {
+            return (*f)((int)unitCategory->id);
+        }
+    } catch (const std::exception& e) {
+        showErrorMessageBox(fmt::format("Failed to run 'canApplyToUnitType' script.\n"
+                                        "Reason: '{:s}'",
+                                        e.what()));
+    }
+
+    return true;
 }
 
 bool __fastcall modifierIsLower(const game::CUmModifier* thisptr, int /*%edx*/)
