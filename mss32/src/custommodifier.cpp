@@ -518,9 +518,10 @@ game::IAttack* __fastcall soldierGetSecondAttackById(const game::IUsSoldier* thi
 
 bool __fastcall soldierGetAttackTwice(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
-    return prev->vftable->getAttackTwice(prev);
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    auto prev = thiz->getPrevSoldier();
+
+    return thiz->getValue<GetBool>("getAtckTwice", prev->vftable->getAttackTwice(prev));
 }
 
 const game::Bank* __fastcall soldierGetEnrollCost(const game::IUsSoldier* thisptr, int /*%edx*/)
