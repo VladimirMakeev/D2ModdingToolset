@@ -20,6 +20,7 @@
 #include "custommodifier.h"
 #include "customattacks.h"
 #include "customattackutils.h"
+#include "deathanimcat.h"
 #include "dynamiccast.h"
 #include "game.h"
 #include "immunecat.h"
@@ -457,9 +458,35 @@ const game::CMidgardID* __fastcall soldierGetBaseUnitImplId(const game::IUsSoldi
 const game::LDeathAnimCategory* __fastcall soldierGetDeathAnim(const game::IUsSoldier* thisptr,
                                                                int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castSoldierToCustomModifier(thisptr)->getPrevSoldier();
-    return prev->vftable->getDeathAnim(prev);
+    using namespace game;
+
+    const auto& annimations = DeathAnimCategories::get();
+
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    auto prev = thiz->getPrevSoldier();
+
+    auto prevValue = prev->vftable->getDeathAnim(prev);
+    auto value = thiz->getInteger("getDeathAnim", (int)prevValue->id);
+    switch ((DeathAnimationId)value) {
+    case DeathAnimationId::Human:
+        return annimations.human;
+    case DeathAnimationId::Heretic:
+        return annimations.heretic;
+    case DeathAnimationId::Dwarf:
+        return annimations.dwarf;
+    case DeathAnimationId::Undead:
+        return annimations.undead;
+    case DeathAnimationId::Neutral:
+        return annimations.neutral;
+    case DeathAnimationId::Dragon:
+        return annimations.dragon;
+    case DeathAnimationId::Ghost:
+        return annimations.ghost;
+    case DeathAnimationId::Elf:
+        return annimations.elf;
+    default:
+        return prevValue;
+    }
 }
 
 int* __fastcall soldierGetRegen(const game::IUsSoldier* thisptr, int /*%edx*/)
