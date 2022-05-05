@@ -51,6 +51,7 @@ void UnitImplView::bind(sol::state& lua)
     impl["level"] = sol::property(&UnitImplView::getLevel);
     impl["xpNext"] = sol::property(&UnitImplView::getXpNext);
     impl["xpKilled"] = sol::property(&UnitImplView::getXpKilled);
+    impl["hitPoint"] = sol::property(&UnitImplView::getHitPoint);
     impl["armor"] = sol::property(&UnitImplView::getArmor);
     impl["regen"] = sol::property(&UnitImplView::getRegen);
     impl["race"] = sol::property(&UnitImplView::getRace);
@@ -102,6 +103,12 @@ int UnitImplView::getXpKilled() const
 {
     auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
     return soldier ? soldier->vftable->getXpKilled(soldier) : 0;
+}
+
+int UnitImplView::getHitPoint() const
+{
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    return soldier ? soldier->vftable->getHitPoints(soldier) : 0;
 }
 
 int UnitImplView::getArmor() const

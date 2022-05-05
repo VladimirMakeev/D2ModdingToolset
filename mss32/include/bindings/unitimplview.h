@@ -51,6 +51,7 @@ public:
     /** Returns level after which dynUpgrade2 rules are applied. */
     int getDynUpgLevel() const;
     int getXpKilled() const;
+    int getHitPoint() const;
     int getArmor() const;
     int getRegen() const;
     int getRace() const;
