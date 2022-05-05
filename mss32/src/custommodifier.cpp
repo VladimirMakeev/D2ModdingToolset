@@ -23,12 +23,12 @@
 #include "dynamiccast.h"
 #include "game.h"
 #include "immunecat.h"
-#include "leaderview.h"
 #include "mempool.h"
 #include "restrictions.h"
 #include "scripts.h"
 #include "unitcat.h"
 #include "unitutils.h"
+#include "unitview.h"
 #include "ussoldierimpl.h"
 #include "utils.h"
 #include <mutex>
@@ -36,13 +36,9 @@
 
 namespace hooks {
 
-/**
- * Script functions always use LeaderView so Lua can bind access to its properties.
- * If a unit is not a leader, LeaderView methods will return stub values.
- */
-using GetString = std::function<std::string(const bindings::LeaderView&, const std::string&)>;
-using GetInteger = std::function<int(const bindings::LeaderView&, int)>;
-using GetIntegerIntParam = std::function<int(const bindings::LeaderView&, int, int)>;
+using GetString = std::function<std::string(const bindings::UnitView&, const std::string&)>;
+using GetInteger = std::function<int(const bindings::UnitView&, int)>;
+using GetIntegerIntParam = std::function<int(const bindings::UnitView&, int, int)>;
 
 static struct
 {
@@ -243,7 +239,7 @@ std::string CCustomModifier::getString(const char* functionName, const std::stri
     auto f = getScriptFunction<GetString>(modifiersFolder() / script, functionName, env);
     try {
         if (f) {
-            bindings::LeaderView unitView{unit, getPrev()};
+            bindings::UnitView unitView{unit, getPrev()};
             return (*f)(unitView, prev);
         }
     } catch (const std::exception& e) {
@@ -261,7 +257,7 @@ int CCustomModifier::getInteger(const char* functionName, int prev) const
     auto f = getScriptFunction<GetInteger>(modifiersFolder() / script, functionName, env);
     try {
         if (f) {
-            bindings::LeaderView unitView{unit, getPrev()};
+            bindings::UnitView unitView{unit, getPrev()};
             return (*f)(unitView, prev);
         }
     } catch (const std::exception& e) {
@@ -279,7 +275,7 @@ int CCustomModifier::getIntegerIntParam(const char* functionName, int param, int
     auto f = getScriptFunction<GetIntegerIntParam>(modifiersFolder() / script, functionName, env);
     try {
         if (f) {
-            bindings::LeaderView unitView{unit, getPrev()};
+            bindings::UnitView unitView{unit, getPrev()};
             return (*f)(unitView, param, prev);
         }
     } catch (const std::exception& e) {

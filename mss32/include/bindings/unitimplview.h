@@ -58,6 +58,25 @@ public:
     bool isWaterOnly() const;
     bool attacksTwice() const;
 
+    /* Have to implement leader properties here because sol does not support down-casting
+     * (https://sol2.readthedocs.io/en/latest/api/usertype.html#inheritance).
+     * This means that derived class members cannot be accessed from base reference.
+     * For example, if script function argument has type of UnitImplView, and you pass inherited
+     * LeaderImplView instance, then there is no way to access leader members. */
+    bool isLeader() const;
+    /** Returns leader category id. */
+    int getCategory() const;
+    /** Returns leader maximum movement points. */
+    int getMovement() const;
+    /** Returns leader scouting range. */
+    int getScout() const;
+    /** Returns current leadership value. */
+    int getLeadership() const;
+    /** Returns true if leader has LLeaderAbility with specified id. */
+    bool hasAbility(int abilityId) const;
+    /** Returns true if leader has movement bonus on LGroundCategory with specified id. */
+    bool hasMoveBonus(int groundId) const;
+
     /** Returns dynamic upgrade 1. */
     std::optional<DynUpgradeView> getDynUpgrade1() const;
     /** Returns dynamic upgrade 2. */

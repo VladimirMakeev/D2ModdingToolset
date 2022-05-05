@@ -55,6 +55,19 @@ public:
     int getHp() const;
     int getHpMax() const;
 
+    /** Returns leader category id. */
+    int getCategory() const;
+    /** Returns leader maximum movement points. */
+    int getMovement() const;
+    /** Returns leader scouting range. */
+    int getScout() const;
+    /** Returns current leadership value. */
+    int getLeadership() const;
+    /** Returns true if leader has LLeaderAbility with specified id. */
+    bool hasAbility(int abilityId) const;
+    /** Returns true if leader has movement bonus on LGroundCategory with specified id. */
+    bool hasMoveBonus(int groundId) const;
+
 protected:
     const game::IUsUnit* getUnitImpl() const;
 

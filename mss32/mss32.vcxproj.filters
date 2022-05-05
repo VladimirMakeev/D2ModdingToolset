@@ -893,9 +893,6 @@
     <ClCompile Include="src\bindings\stackview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
-    <ClCompile Include="src\bindings\leaderview.cpp">
-      <Filter>bindings</Filter>
-    </ClCompile>
     <ClCompile Include="src\midgardplan.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -2384,9 +2381,6 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\stackview.h">
-      <Filter>bindings</Filter>
-    </ClInclude>
-    <ClInclude Include="include\bindings\leaderview.h">
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\midgardplan.h">

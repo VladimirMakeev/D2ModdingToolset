@@ -25,7 +25,6 @@
 #include "idview.h"
 #include "itembaseview.h"
 #include "itemview.h"
-#include "leaderview.h"
 #include "locationview.h"
 #include "log.h"
 #include "point.h"
@@ -202,7 +201,6 @@ static void bindApi(sol::state& lua)
     bindings::ScenarioVariableView::bind(lua);
     bindings::TileView::bind(lua);
     bindings::StackView::bind(lua);
-    bindings::LeaderView::bind(lua);
     bindings::GroupView::bind(lua);
     bindings::AttackView::bind(lua);
     bindings::CurrencyView::bind(lua);

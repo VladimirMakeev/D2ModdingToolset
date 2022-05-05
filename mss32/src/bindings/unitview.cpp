@@ -53,6 +53,13 @@ void UnitView::bind(sol::state& lua)
     unit["impl"] = sol::property(&UnitView::getImpl);
     unit["baseImpl"] = sol::property(&UnitView::getBaseImpl);
     unit["baseUnit"] = sol::property(&UnitView::getBaseUnit);
+
+    unit["type"] = sol::property(&UnitView::getCategory);
+    unit["movement"] = sol::property(&UnitView::getMovement);
+    unit["scout"] = sol::property(&UnitView::getScout);
+    unit["leadership"] = sol::property(&UnitView::getLeadership);
+    unit["hasAbility"] = &UnitView::hasAbility;
+    unit["hasMoveBonus"] = &UnitView::hasMoveBonus;
 }
 
 std::optional<UnitImplView> UnitView::getImpl() const
@@ -100,6 +107,36 @@ int UnitView::getHpMax() const
 
     auto soldier = gameFunctions().castUnitImplToSoldier(getUnitImpl());
     return soldier->vftable->getHitPoints(soldier);
+}
+
+int UnitView::getCategory() const
+{
+    return getImpl()->getCategory();
+}
+
+int UnitView::getMovement() const
+{
+    return getImpl()->getMovement();
+}
+
+int UnitView::getScout() const
+{
+    return getImpl()->getScout();
+}
+
+int UnitView::getLeadership() const
+{
+    return getImpl()->getLeadership();
+}
+
+bool UnitView::hasAbility(int abilityId) const
+{
+    return getImpl()->hasAbility(abilityId);
+}
+
+bool UnitView::hasMoveBonus(int groundId) const
+{
+    return getImpl()->hasMoveBonus(groundId);
 }
 
 const game::IUsUnit* UnitView::getUnitImpl() const
