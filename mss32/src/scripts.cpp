@@ -99,6 +99,15 @@ static void bindApi(sol::state& lua)
         "Mountain", GroundId::Mountain
     );
 
+    lua.new_enum("Unit",
+        "Soldier", UnitId::Soldier,
+        "Noble", UnitId::Noble,
+        "Leader", UnitId::Leader,
+        "Summon", UnitId::Summon,
+        "Illusion", UnitId::Illusion,
+        "Guardian", UnitId::Guardian
+    );
+
     lua.new_enum("Leader",
         "Fighter", LeaderId::Fighter,
         "Explorer", LeaderId::Explorer,
