@@ -27,6 +27,7 @@
 #include "mempool.h"
 #include "restrictions.h"
 #include "unitcat.h"
+#include "unitimplview.h"
 #include "unitutils.h"
 #include "ussoldierimpl.h"
 #include "utils.h"
@@ -41,6 +42,7 @@ using GetIntParam = std::function<int(const bindings::UnitView&, int, int)>;
 using GetBool = std::function<bool(const bindings::UnitView&, bool)>;
 using GetBank = std::function<bindings::CurrencyView(const bindings::UnitView&,
                                                      const bindings::CurrencyView&)>;
+using CanApplyToUnit = std::function<bool(const bindings::UnitImplView&)>;
 
 static struct
 {
@@ -626,17 +628,23 @@ bool __fastcall modifierCanApplyToUnit(const game::CUmModifier* thisptr,
                                        int /*%edx*/,
                                        const game::IUsUnit* unit)
 {
-    using namespace game;
-
-    const auto& fn = gameFunctions();
-
-    // TODO: script function + unit and isLeader as args
-    bool isLeaderOnly = false;
     auto thiz = castModifierToCustomModifier(thisptr);
-    if (isLeaderOnly)
-        return fn.castUnitImplToStackLeader(unit) != nullptr;
-    else
-        return fn.castUnitImplToSoldier(unit) != nullptr;
+
+    std::optional<sol::environment> env;
+    auto f = getScriptFunction<CanApplyToUnit>(modifiersFolder() / thiz->script, "canApplyToUnit",
+                                               env);
+    try {
+        if (f) {
+            bindings::UnitImplView unitImplView{unit};
+            return (*f)(unitImplView);
+        }
+    } catch (const std::exception& e) {
+        showErrorMessageBox(fmt::format("Failed to run 'canApplyToUnit' script.\n"
+                                        "Reason: '{:s}'",
+                                        e.what()));
+    }
+
+    return true;
 }
 
 bool __fastcall modifierCanApplyToUnitCategory(const game::CUmModifier* thisptr,
