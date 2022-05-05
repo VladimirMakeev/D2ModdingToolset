@@ -1001,6 +1001,9 @@
     <ClCompile Include="src\attackdescriptor.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\deathanimcat.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">

@@ -234,6 +234,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\dbf\dbfrecord.cpp" />
     <ClCompile Include="src\dbtable.cpp" />
     <ClCompile Include="src\ddcarryoveritems.cpp" />
+    <ClCompile Include="src\deathanimcat.cpp" />
     <ClCompile Include="src\dialoginterf.cpp" />
     <ClCompile Include="src\difficultylevel.cpp" />
     <ClCompile Include="src\displayhandlerhooks.cpp" />
