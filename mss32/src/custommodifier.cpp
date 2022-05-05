@@ -44,6 +44,7 @@ using GetBank = std::function<bindings::CurrencyView(const bindings::UnitView&,
                                                      const bindings::CurrencyView&)>;
 using CanApplyToUnit = std::function<bool(const bindings::UnitImplView&)>;
 using CanApplyToUnitType = std::function<bool(int)>;
+using GetDesc = std::function<std::string()>;
 
 static struct
 {
@@ -745,8 +746,22 @@ int __fastcall modifierGetFirstElementValue(const game::CUmModifier* thisptr, in
 
 const char* __fastcall modifierGetDescription(const game::CUmModifier* thisptr, int /*%edx*/)
 {
-    std::string textIdString; // TODO: script function
-    return getGlobalText(textIdString.c_str());
+    auto thiz = castModifierToCustomModifier(thisptr);
+
+    std::optional<sol::environment> env;
+    auto f = getScriptFunction<GetDesc>(thiz->script, "getModifierDescTxt", env);
+    try {
+        if (f) {
+            auto textIdString = (*f)();
+            return getGlobalText(textIdString);
+        }
+    } catch (const std::exception& e) {
+        showErrorMessageBox(fmt::format("Failed to run 'getModifierDescTxt' script.\n"
+                                        "Reason: '{:s}'",
+                                        e.what()));
+    }
+
+    return "";
 }
 
 void __fastcall modifierUpdateUnitImplId(game::CUmModifier* thisptr, int /*%edx*/)
