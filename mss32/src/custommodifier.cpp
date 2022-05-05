@@ -26,10 +26,8 @@
 #include "immunecat.h"
 #include "mempool.h"
 #include "restrictions.h"
-#include "scripts.h"
 #include "unitcat.h"
 #include "unitutils.h"
-#include "unitview.h"
 #include "ussoldierimpl.h"
 #include "utils.h"
 #include <mutex>
@@ -37,9 +35,10 @@
 
 namespace hooks {
 
-using GetString = std::function<std::string(const bindings::UnitView&, const std::string&)>;
-using GetInteger = std::function<int(const bindings::UnitView&, int)>;
-using GetIntegerIntParam = std::function<int(const bindings::UnitView&, int, int)>;
+using GetStr = std::function<std::string(const bindings::UnitView&, const std::string&)>;
+using GetInt = std::function<int(const bindings::UnitView&, int)>;
+using GetIntParam = std::function<int(const bindings::UnitView&, int, int)>;
+using GetBool = std::function<bool(const bindings::UnitView&, bool)>;
 
 static struct
 {
@@ -200,7 +199,7 @@ const char* CCustomModifier::getFormattedGlobalText(const std::string& formatId,
 
 std::string CCustomModifier::getNameTxt() const
 {
-    return getString("getNameTxt", getPrevNameTxt());
+    return getValue<GetStr>("getNameTxt", getPrevNameTxt());
 }
 
 std::string CCustomModifier::getPrevNameTxt() const
@@ -218,7 +217,7 @@ std::string CCustomModifier::getBaseNameTxt() const
 
 std::string CCustomModifier::getDescTxt() const
 {
-    return getString("getDescTxt", getPrevDescTxt());
+    return getValue<GetStr>("getDescTxt", getPrevDescTxt());
 }
 
 std::string CCustomModifier::getPrevDescTxt() const
@@ -232,60 +231,6 @@ std::string CCustomModifier::getBaseDescTxt() const
     auto soldierImpl = getSoldierImpl(getPrev());
     auto id = soldierImpl ? soldierImpl->data->description.id : game::invalidId;
     return idToString(&id);
-}
-
-std::string CCustomModifier::getString(const char* functionName, const std::string& prev) const
-{
-    std::optional<sol::environment> env;
-    auto f = getScriptFunction<GetString>(modifiersFolder() / script, functionName, env);
-    try {
-        if (f) {
-            bindings::UnitView unitView{unit, getPrev()};
-            return (*f)(unitView, prev);
-        }
-    } catch (const std::exception& e) {
-        showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
-                                        "Reason: '{:s}'",
-                                        functionName, e.what()));
-    }
-
-    return prev;
-}
-
-int CCustomModifier::getInteger(const char* functionName, int prev) const
-{
-    std::optional<sol::environment> env;
-    auto f = getScriptFunction<GetInteger>(modifiersFolder() / script, functionName, env);
-    try {
-        if (f) {
-            bindings::UnitView unitView{unit, getPrev()};
-            return (*f)(unitView, prev);
-        }
-    } catch (const std::exception& e) {
-        showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
-                                        "Reason: '{:s}'",
-                                        functionName, e.what()));
-    }
-
-    return prev;
-}
-
-int CCustomModifier::getIntegerIntParam(const char* functionName, int param, int prev) const
-{
-    std::optional<sol::environment> env;
-    auto f = getScriptFunction<GetIntegerIntParam>(modifiersFolder() / script, functionName, env);
-    try {
-        if (f) {
-            bindings::UnitView unitView{unit, getPrev()};
-            return (*f)(unitView, param, prev);
-        }
-    } catch (const std::exception& e) {
-        showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
-                                        "Reason: '{:s}'",
-                                        functionName, e.what()));
-    }
-
-    return prev;
 }
 
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
@@ -432,7 +377,7 @@ int __fastcall soldierGetHitPoints(const game::IUsSoldier* thisptr, int /*%edx*/
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
 
-    auto value = thiz->getInteger("getHitPoint", prev->vftable->getHitPoints(prev));
+    auto value = thiz->getValue<GetInt>("getHitPoint", prev->vftable->getHitPoints(prev));
     return std::clamp(value, restrictions.unitHp->min, restrictions.unitHp->max);
 }
 
@@ -443,7 +388,7 @@ int* __fastcall soldierGetArmor(const game::IUsSoldier* thisptr, int /*%edx*/, i
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
 
-    auto value = thiz->getInteger("getArmor", *prev->vftable->getArmor(prev, armor));
+    auto value = thiz->getValue<GetInt>("getArmor", *prev->vftable->getArmor(prev, armor));
     *armor = std::clamp(value, restrictions.unitArmor->min, restrictions.unitArmor->max);
     return armor;
 }
@@ -466,7 +411,7 @@ const game::LDeathAnimCategory* __fastcall soldierGetDeathAnim(const game::IUsSo
     auto prev = thiz->getPrevSoldier();
 
     auto prevValue = prev->vftable->getDeathAnim(prev);
-    auto value = thiz->getInteger("getDeathAnim", (int)prevValue->id);
+    auto value = thiz->getValue<GetInt>("getDeathAnim", (int)prevValue->id);
     switch ((DeathAnimationId)value) {
     case DeathAnimationId::Human:
         return annimations.human;
@@ -494,7 +439,7 @@ int* __fastcall soldierGetRegen(const game::IUsSoldier* thisptr, int /*%edx*/)
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
 
-    auto value = thiz->getInteger("getRegen", *prev->vftable->getRegen(prev));
+    auto value = thiz->getValue<GetInt>("getRegen", *prev->vftable->getRegen(prev));
     thiz->regen = std::clamp(value, 0, 100);
     return &thiz->regen;
 }
@@ -504,7 +449,7 @@ int __fastcall soldierGetXpNext(const game::IUsSoldier* thisptr, int /*%edx*/)
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
 
-    return thiz->getInteger("getXpNext", prev->vftable->getXpNext(prev));
+    return thiz->getValue<GetInt>("getXpNext", prev->vftable->getXpNext(prev));
 }
 
 int __fastcall soldierGetXpKilled(const game::IUsSoldier* thisptr, int /*%edx*/)
@@ -512,7 +457,7 @@ int __fastcall soldierGetXpKilled(const game::IUsSoldier* thisptr, int /*%edx*/)
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
 
-    return thiz->getInteger("getXpKilled", prev->vftable->getXpKilled(prev));
+    return thiz->getValue<GetInt>("getXpKilled", prev->vftable->getXpKilled(prev));
 }
 
 const game::LImmuneCat* getImmuneCatById(int categoryId, const game::LImmuneCat* default)
@@ -542,8 +487,8 @@ const game::LImmuneCat* __fastcall soldierGetImmuneByAttackClass(
     auto prev = thiz->getPrevSoldier();
 
     auto prevValue = prev->vftable->getImmuneByAttackClass(prev, attackClass);
-    auto value = thiz->getIntegerIntParam("getImmuneToAttack", (int)attackClass->id,
-                                          (int)prevValue->id);
+    auto value = thiz->getValueParam<GetIntParam>("getImmuneToAttack", (int)attackClass->id,
+                                                  (int)prevValue->id);
     return getImmuneCatById(value, prevValue);
 }
 
@@ -556,8 +501,8 @@ const game::LImmuneCat* __fastcall soldierGetImmuneByAttackSource(
     auto prev = thiz->getPrevSoldier();
 
     auto prevValue = prev->vftable->getImmuneByAttackSource(prev, attackSource);
-    auto value = thiz->getIntegerIntParam("getImmuneToSource", (int)attackSource->id,
-                                          (int)prevValue->id);
+    auto value = thiz->getValueParam<GetIntParam>("getImmuneToSource", (int)attackSource->id,
+                                                  (int)prevValue->id);
     return getImmuneCatById(value, prevValue);
 }
 

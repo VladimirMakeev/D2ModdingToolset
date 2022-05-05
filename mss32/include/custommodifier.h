@@ -21,7 +21,9 @@
 #define CUSTOMMODIFIER_H
 
 #include "attack.h"
+#include "scripts.h"
 #include "umunit.h"
+#include "unitview.h"
 #include "usstackleader.h"
 #include <string>
 
@@ -67,9 +69,43 @@ struct CCustomModifier
     std::string getPrevDescTxt() const;
     std::string getBaseDescTxt() const;
 
-    std::string getString(const char* functionName, const std::string& prev) const;
-    int getInteger(const char* functionName, int prev) const;
-    int getIntegerIntParam(const char* functionName, int param, int prev) const;
+    template <typename F, typename T>
+    T getValue(const char* functionName, const T& prev) const
+    {
+        std::optional<sol::environment> env;
+        auto f = getScriptFunction<F>(modifiersFolder() / script, functionName, env);
+        try {
+            if (f) {
+                bindings::UnitView unitView{unit, getPrev()};
+                return (*f)(unitView, prev);
+            }
+        } catch (const std::exception& e) {
+            showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                            "Reason: '{:s}'",
+                                            functionName, e.what()));
+        }
+
+        return prev;
+    }
+
+    template <typename F, typename T>
+    T getValueParam(const char* functionName, const T& param, const T& prev) const
+    {
+        std::optional<sol::environment> env;
+        auto f = getScriptFunction<F>(modifiersFolder() / script, functionName, env);
+        try {
+            if (f) {
+                bindings::UnitView unitView{unit, getPrev()};
+                return (*f)(unitView, param, prev);
+            }
+        } catch (const std::exception& e) {
+            showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                            "Reason: '{:s}'",
+                                            functionName, e.what()));
+        }
+
+        return prev;
+    }
 };
 
 static_assert(
