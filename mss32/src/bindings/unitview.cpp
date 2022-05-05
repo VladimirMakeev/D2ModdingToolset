@@ -53,7 +53,6 @@ void UnitView::bind(sol::state& lua)
     unit["hpMax"] = sol::property(&UnitView::getHpMax);
     unit["impl"] = sol::property(&UnitView::getImpl);
     unit["baseImpl"] = sol::property(&UnitView::getBaseImpl);
-    unit["baseUnit"] = sol::property(&UnitView::getBaseUnit);
 
     unit["type"] = sol::property(&UnitView::getCategory);
     unit["movement"] = sol::property(&UnitView::getMovement);
@@ -71,22 +70,6 @@ std::optional<UnitImplView> UnitView::getImpl() const
 std::optional<UnitImplView> UnitView::getBaseImpl() const
 {
     return {hooks::getGlobalUnitImpl(unit)};
-}
-
-std::optional<UnitImplView> UnitView::getBaseUnit() const
-{
-    using namespace game;
-
-    auto soldier = gameFunctions().castUnitImplToSoldier(getUnitImpl());
-    auto baseUnitImplId = soldier->vftable->getBaseUnitImplId(soldier);
-    if (*baseUnitImplId == emptyId)
-        return std::nullopt;
-
-    auto globalUnitImpl = hooks::getGlobalUnitImpl(baseUnitImplId);
-    if (!globalUnitImpl)
-        return std::nullopt;
-
-    return {globalUnitImpl};
 }
 
 std::string UnitView::getId() const

@@ -48,8 +48,6 @@ public:
     std::optional<UnitImplView> getImpl() const;
     /** Returns unit base implementation. */
     std::optional<UnitImplView> getBaseImpl() const;
-    /** Returns BASE_UNIT specified in Gunits.dbf. */
-    std::optional<UnitImplView> getBaseUnit() const;
 
     std::string getId() const;
     /** Returns unit's current experience points. */

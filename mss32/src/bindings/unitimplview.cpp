@@ -66,6 +66,7 @@ void UnitImplView::bind(sol::state& lua)
     impl["dynUpg2"] = sol::property(&UnitImplView::getDynUpgrade2);
     impl["attack1"] = sol::property(&UnitImplView::getAttack);
     impl["attack2"] = sol::property(&UnitImplView::getAttack2);
+    impl["base"] = sol::property(&UnitImplView::getBaseUnit);
 
     impl["leaderType"] = sol::property(&UnitImplView::getLeaderCategory);
     impl["movement"] = sol::property(&UnitImplView::getMovement);
@@ -183,6 +184,25 @@ int UnitImplView::getUnitCategory() const
     }
 
     return static_cast<int>(category->id);
+}
+
+std::optional<UnitImplView> UnitImplView::getBaseUnit() const
+{
+    using namespace game;
+
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    if (!soldier)
+        return std::nullopt;
+
+    auto baseUnitImplId = soldier->vftable->getBaseUnitImplId(soldier);
+    if (*baseUnitImplId == emptyId)
+        return std::nullopt;
+
+    auto globalUnitImpl = hooks::getGlobalUnitImpl(baseUnitImplId);
+    if (!globalUnitImpl)
+        return std::nullopt;
+
+    return {globalUnitImpl};
 }
 
 int UnitImplView::getLeaderCategory() const

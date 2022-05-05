@@ -61,6 +61,8 @@ public:
     bool isWaterOnly() const;
     bool attacksTwice() const;
     int getUnitCategory() const;
+    /** Returns BASE_UNIT specified in Gunits.dbf. */
+    std::optional<UnitImplView> getBaseUnit() const;
 
     /* Have to implement leader properties here because sol does not support down-casting
      * (https://sol2.readthedocs.io/en/latest/api/usertype.html#inheritance).
