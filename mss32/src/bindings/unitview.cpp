@@ -118,7 +118,8 @@ int UnitView::getHpMax() const
 
 int UnitView::getCategory() const
 {
-    return getImpl()->getCategory();
+    // Returns leader category for backward compatibility.
+    return getImpl()->getLeaderCategory();
 }
 
 int UnitView::getMovement() const

@@ -60,15 +60,15 @@ public:
     bool isMale() const;
     bool isWaterOnly() const;
     bool attacksTwice() const;
+    int getUnitCategory() const;
 
     /* Have to implement leader properties here because sol does not support down-casting
      * (https://sol2.readthedocs.io/en/latest/api/usertype.html#inheritance).
      * This means that derived class members cannot be accessed from base reference.
      * For example, if script function argument has type of UnitImplView, and you pass inherited
      * LeaderImplView instance, then there is no way to access leader members. */
-    bool isLeader() const;
     /** Returns leader category id. */
-    int getCategory() const;
+    int getLeaderCategory() const;
     /** Returns leader maximum movement points. */
     int getMovement() const;
     /** Returns leader scouting range. */

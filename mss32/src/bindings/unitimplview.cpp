@@ -60,14 +60,14 @@ void UnitImplView::bind(sol::state& lua)
     impl["male"] = sol::property(&UnitImplView::isMale);
     impl["waterOnly"] = sol::property(&UnitImplView::isWaterOnly);
     impl["attacksTwice"] = sol::property(&UnitImplView::attacksTwice);
+    impl["type"] = sol::property(&UnitImplView::getUnitCategory);
     impl["dynUpgLvl"] = sol::property(&UnitImplView::getDynUpgLevel);
     impl["dynUpg1"] = sol::property(&UnitImplView::getDynUpgrade1);
     impl["dynUpg2"] = sol::property(&UnitImplView::getDynUpgrade2);
     impl["attack1"] = sol::property(&UnitImplView::getAttack);
     impl["attack2"] = sol::property(&UnitImplView::getAttack2);
 
-    impl["leader"] = sol::property(&UnitImplView::isLeader);
-    impl["type"] = sol::property(&UnitImplView::getCategory);
+    impl["leaderType"] = sol::property(&UnitImplView::getLeaderCategory);
     impl["movement"] = sol::property(&UnitImplView::getMovement);
     impl["scout"] = sol::property(&UnitImplView::getScout);
     impl["leadership"] = sol::property(&UnitImplView::getLeadership);
@@ -173,12 +173,19 @@ bool UnitImplView::attacksTwice() const
     return soldier ? soldier->vftable->getAttackTwice(soldier) : false;
 }
 
-bool UnitImplView::isLeader() const
+int UnitImplView::getUnitCategory() const
 {
-    return game::gameFunctions().castUnitImplToStackLeader(impl) != nullptr;
+    using namespace game;
+
+    auto category{impl->vftable->getCategory(impl)};
+    if (!category) {
+        return emptyCategoryId;
+    }
+
+    return static_cast<int>(category->id);
 }
 
-int UnitImplView::getCategory() const
+int UnitImplView::getLeaderCategory() const
 {
     using namespace game;
 
