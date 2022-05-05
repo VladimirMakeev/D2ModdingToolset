@@ -28,7 +28,6 @@
 #include "unitutils.h"
 #include "ussoldier.h"
 #include "usunitimpl.h"
-#include "utils.h"
 #include <fmt/format.h>
 #include <sol/sol.hpp>
 
@@ -72,10 +71,9 @@ std::optional<UnitImplView> UnitView::getBaseImpl() const
     return {hooks::getGlobalUnitImpl(unit)};
 }
 
-std::string UnitView::getId() const
+IdView UnitView::getId() const
 {
-    auto id = unit ? unit->id : game::invalidId;
-    return hooks::idToString(&id);
+    return IdView{unit->id};
 }
 
 int UnitView::getXp() const

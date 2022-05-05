@@ -20,8 +20,8 @@
 #ifndef UNITIMPLVIEW_H
 #define UNITIMPLVIEW_H
 
+#include "idview.h"
 #include <optional>
-#include <string>
 
 namespace sol {
 class state;
@@ -43,7 +43,7 @@ public:
 
     static void bind(sol::state& lua);
 
-    std::string getId() const;
+    IdView getId() const;
     /** Returns unit implementation level. */
     int getLevel() const;
     /** Returns experience points needed for next level. */

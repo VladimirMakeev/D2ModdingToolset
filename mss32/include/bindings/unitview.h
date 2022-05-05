@@ -20,8 +20,8 @@
 #ifndef UNITVIEW_H
 #define UNITVIEW_H
 
+#include "idview.h"
 #include <optional>
-#include <string>
 
 namespace sol {
 class state;
@@ -49,7 +49,7 @@ public:
     /** Returns unit base implementation. */
     std::optional<UnitImplView> getBaseImpl() const;
 
-    std::string getId() const;
+    IdView getId() const;
     /** Returns unit's current experience points. */
     int getXp() const;
     int getHp() const;

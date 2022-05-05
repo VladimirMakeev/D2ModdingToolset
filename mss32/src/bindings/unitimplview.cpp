@@ -34,7 +34,6 @@
 #include "ussoldier.h"
 #include "usstackleader.h"
 #include "usunitimpl.h"
-#include "utils.h"
 #include <fmt/format.h>
 #include <sol/sol.hpp>
 
@@ -76,10 +75,9 @@ void UnitImplView::bind(sol::state& lua)
     impl["hasMoveBonus"] = &UnitImplView::hasMoveBonus;
 }
 
-std::string UnitImplView::getId() const
+IdView UnitImplView::getId() const
 {
-    auto id = impl ? impl->id : game::invalidId;
-    return hooks::idToString(&id);
+    return IdView{impl->id};
 }
 
 int UnitImplView::getLevel() const
