@@ -985,6 +985,9 @@
     <ClCompile Include="src\isoengineground.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\isoenginegroundhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
     <ClCompile Include="src\surfacedecompressdata.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -2517,6 +2520,9 @@
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\umunithooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\isoenginegroundhooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\isostillbackground.h">

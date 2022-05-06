@@ -77,6 +77,7 @@
 #include "idlist.h"
 #include "interfmanager.h"
 #include "interftexthooks.h"
+#include "isoenginegroundhooks.h"
 #include "itemtransferhooks.h"
 #include "iterators.h"
 #include "leaderabilitycat.h"
@@ -306,6 +307,9 @@ static Hooks getGameHooks()
         {GameImagesApi::get().getCityIconImageNames, getCityIconImageNamesHooked, (void**)&orig.getCityIconImageNames},
         // Support grid toggle button
         {CMainView2Api::get().showIsoDialog, mainView2ShowIsoDialogHooked},
+        // Reference ground rendering implementation
+        {CGroundTextureApi::vftable()->draw, groundTextureDrawHooked},
+        {CGroundTextureApi::isoEngineVftable()->render, isoEngineGroundRenderHooked},
     };
     // clang-format on
 

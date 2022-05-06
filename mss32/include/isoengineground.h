@@ -45,6 +45,16 @@ struct CTerrainTile;
 using BorderTilePtr = SmartPtr<CBorderTile>;
 using TerrainTilePtr = SmartPtr<CTerrainTile>;
 
+/** Tile image size in pixels. */
+constexpr int tileWidth{64};
+constexpr int tileHeight{32};
+
+constexpr int tileHalfWidth{tileWidth / 2};
+constexpr int tileHalfHeight{tileHeight / 2};
+
+/** Number of pixels in tile image. */
+constexpr int tilePixelCount{tileWidth * tileHeight};
+
 /** Used to convert between tile name prefixes and vice versa. */
 enum class TilePrefix : std::uint32_t
 {
