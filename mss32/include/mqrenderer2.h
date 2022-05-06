@@ -76,10 +76,10 @@ struct IMqRenderer2Vftable
 
     using Method4 = int(__thiscall*)(IMqRenderer2* thisptr,
                                      TextureHandle* textureHandle,
-                                     CMqPoint* start,
-                                     CMqPoint* offset,
-                                     CMqPoint* size,
-                                     CMqRect* area);
+                                     const CMqPoint* start,
+                                     const CMqPoint* offset,
+                                     const CMqPoint* size,
+                                     const CMqRect* area);
     Method4 method4;
 
     void* method5;
