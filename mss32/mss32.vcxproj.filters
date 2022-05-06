@@ -982,6 +982,9 @@
     <ClCompile Include="src\ummodifier.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\surfacedecompressdata.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
