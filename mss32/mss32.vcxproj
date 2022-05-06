@@ -271,6 +271,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\immunecat.cpp" />
     <ClCompile Include="src\interfmanager.cpp" />
     <ClCompile Include="src\interftexthooks.cpp" />
+    <ClCompile Include="src\isoengineground.cpp" />
     <ClCompile Include="src\isolayers.cpp" />
     <ClCompile Include="src\itemcategory.cpp" />
     <ClCompile Include="src\itemtransferhooks.cpp" />
