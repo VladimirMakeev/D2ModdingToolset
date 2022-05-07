@@ -507,6 +507,10 @@ Hooks getHooks()
         HookInfo{CMidUnitDescriptorApi::get().getAttack, midUnitDescriptorGetAttackHooked});
     hooks.emplace_back(HookInfo{CMidUnitDescriptorApi::vftable()->getAttackInitiative,
                                 midUnitDescriptorGetAttackInitiativeHooked});
+    // Fix crash in encyclopedia showing info
+    // about dyn leveled (stopped) doppleganger that transformed to stack leader
+    hooks.emplace_back(HookInfo{CMidUnitDescriptorApi ::vftable()->isUnitLeader,
+                                midUnitDescriptorIsUnitLeaderHooked});
 
     if (userSettings().debugMode) {
         // Show and log game exceptions information

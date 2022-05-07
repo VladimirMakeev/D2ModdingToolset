@@ -33,6 +33,9 @@ game::IAttack* __fastcall midUnitDescriptorGetAttackHooked(const game::CMidUnitD
 int __fastcall midUnitDescriptorGetAttackInitiativeHooked(const game::CMidUnitDescriptor* thisptr,
                                                           int /*%edx*/);
 
+bool __fastcall midUnitDescriptorIsUnitLeaderHooked(const game::CMidUnitDescriptor* thisptr,
+                                                    int /*%edx*/);
+
 } // namespace hooks
 
 #endif // MIDUNITDESCRIPTORHOOKS_H
