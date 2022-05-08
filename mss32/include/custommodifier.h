@@ -68,10 +68,8 @@ struct CCustomModifier
                                        const game::CMidgardID& valueId) const;
 
     game::CMidgardID getNameTxt() const;
-    game::CMidgardID getPrevNameTxt() const;
     game::CMidgardID getBaseNameTxt() const;
     game::CMidgardID getDescTxt() const;
-    game::CMidgardID getPrevDescTxt() const;
     game::CMidgardID getBaseDescTxt() const;
 
     template <typename F, typename T>

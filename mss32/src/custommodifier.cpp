@@ -248,14 +248,10 @@ const char* CCustomModifier::getFormattedGlobalText(const game::CMidgardID& form
 
 game::CMidgardID CCustomModifier::getNameTxt() const
 {
-    bindings::IdView prevValue{getPrevNameTxt()};
-    return getValue<GetId>("getNameTxt", prevValue);
-}
-
-game::CMidgardID CCustomModifier::getPrevNameTxt() const
-{
     auto prev = getPrevCustomModifier();
-    return prev ? prev->getNameTxt() : getBaseNameTxt();
+
+    bindings::IdView prevValue{prev ? prev->getNameTxt() : getBaseNameTxt()};
+    return getValue<GetId>("getNameTxt", prevValue);
 }
 
 game::CMidgardID CCustomModifier::getBaseNameTxt() const
@@ -266,14 +262,10 @@ game::CMidgardID CCustomModifier::getBaseNameTxt() const
 
 game::CMidgardID CCustomModifier::getDescTxt() const
 {
-    bindings::IdView prevValue{getPrevDescTxt()};
-    return getValue<GetId>("getDescTxt", prevValue);
-}
-
-game::CMidgardID CCustomModifier::getPrevDescTxt() const
-{
     auto prev = getPrevCustomModifier();
-    return prev ? prev->getDescTxt() : getBaseNameTxt();
+
+    bindings::IdView prevValue{prev ? prev->getDescTxt() : getBaseDescTxt()};
+    return getValue<GetId>("getDescTxt", prevValue);
 }
 
 game::CMidgardID CCustomModifier::getBaseDescTxt() const
