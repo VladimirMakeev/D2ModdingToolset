@@ -30,6 +30,7 @@
 #include "effectinterf.h"
 #include "effectresult.h"
 #include "enclayoutspell.h"
+#include "enclayoutunit.h"
 #include "exchangeinterf.h"
 #include "game.h"
 #include "gameimages.h"
@@ -107,6 +108,8 @@ struct OriginalFunctions
 
     game::GameImagesApi::Api::GetCityPreviewLargeImageNames getCityPreviewLargeImageNames;
     game::GameImagesApi::Api::GetCityIconImageNames getCityIconImageNames;
+
+    game::CEncLayoutUnitApi::Api::Update encLayoutUnitUpdate;
 };
 
 OriginalFunctions& getOriginalFunctions();

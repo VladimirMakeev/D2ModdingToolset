@@ -66,6 +66,7 @@
 #include "editor.h"
 #include "effectinterfhooks.h"
 #include "effectresulthooks.h"
+#include "enclayoutunithooks.h"
 #include "encparambase.h"
 #include "eventconditioncathooks.h"
 #include "eventeffectcathooks.h"
@@ -571,6 +572,10 @@ Hooks getHooks()
         hooks.emplace_back(
             HookInfo{CUmUnitApi::vftable().usSoldier->getRegen, umUnitGetRegenHooked});
     }
+
+    // Show effective HP in unit encyclopedia
+    hooks.emplace_back(HookInfo{CEncLayoutUnitApi::get().update, encLayoutUnitUpdateHooked,
+                                (void**)&orig.encLayoutUnitUpdate});
 
     return hooks;
 }

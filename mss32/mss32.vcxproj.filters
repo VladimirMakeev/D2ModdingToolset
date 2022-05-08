@@ -994,6 +994,9 @@
     <ClCompile Include="src\enclayoutunit.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\enclayoutunithooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2554,6 +2557,9 @@
     </ClInclude>
     <ClInclude Include="include\enclayoutunit.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\enclayoutunithooks.h">
+      <Filter>hooks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
