@@ -30,6 +30,7 @@
 #include "immunecat.h"
 #include "leaderabilitycat.h"
 #include "mempool.h"
+#include "midunit.h"
 #include "restrictions.h"
 #include "unitcat.h"
 #include "unitimplview.h"
@@ -1111,8 +1112,21 @@ const game::LAttackReach* __fastcall attackGetAttackReach(const game::IAttack* t
 int __fastcall attackGetQtyDamage(const game::IAttack* thisptr, int /*%edx*/)
 {
     // TODO: script function, differentiate between primary and secondary
-    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
-    return prev->vftable->getQtyDamage(prev);
+    // auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    // return prev->vftable->getQtyDamage(prev);
+
+    const auto& restrictions = game::gameRestrictions();
+    const auto& fn = game::gameFunctions();
+
+    auto thiz = castAttackToCustomModifier(thisptr);
+    auto prev = thiz->getPrevAttack(thisptr);
+
+    auto damageMax = fn.getUnitImplDamageMax(&thiz->unit->unitImpl->id);
+
+    auto value = thiz->getValue<GetInt>(thisptr == &thiz->attack ? "getAttackDamage"
+                                                                 : "getAttack2Damage",
+                                        prev->vftable->getQtyDamage(prev));
+    return std::clamp(value, restrictions.unitDamage->min, damageMax);
 }
 
 int __fastcall attackGetQtyHeal(const game::IAttack* thisptr, int /*%edx*/)
