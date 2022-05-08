@@ -25,7 +25,9 @@
 #include "deathanimcat.h"
 #include "dynamiccast.h"
 #include "game.h"
+#include "groundcat.h"
 #include "immunecat.h"
+#include "leaderabilitycat.h"
 #include "mempool.h"
 #include "restrictions.h"
 #include "unitcat.h"
@@ -43,6 +45,7 @@ using GetInt = std::function<int(const bindings::UnitView&, int)>;
 using GetIntParam = std::function<int(const bindings::UnitView&, int, int)>;
 using GetUint8 = std::function<std::uint8_t(const bindings::UnitView&, std::uint8_t)>;
 using GetBool = std::function<bool(const bindings::UnitView&, bool)>;
+using GetBoolParam = std::function<bool(const bindings::UnitView&, int, bool)>;
 using GetBank = std::function<bindings::CurrencyView(const bindings::UnitView&,
                                                      const bindings::CurrencyView&)>;
 using CanApplyToUnit = std::function<bool(const bindings::UnitImplView&)>;
@@ -810,14 +813,17 @@ void __fastcall stackLeaderDtor(game::IUsStackLeader* thisptr, int /*%edx*/, cha
 
 int __fastcall stackLeaderGetMovement(const game::IUsStackLeader* thisptr, int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
-    return prev->vftable->getMovement(prev);
+    const auto& restrictions = game::gameRestrictions();
+
+    auto thiz = castStackLeaderToCustomModifier(thisptr);
+    auto prev = thiz->getPrevStackLeader();
+
+    auto value = thiz->getValue<GetInt>("getMovement", prev->vftable->getMovement(prev));
+    return std::clamp(value, restrictions.stackMovement->min, restrictions.stackMovement->max);
 }
 
 const char* __fastcall stackLeaderGetAbilityName(const game::IUsStackLeader* thisptr, int /*%edx*/)
 {
-    // TODO: script function
     auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
     return prev->vftable->getAbilityName(prev);
 }
@@ -826,53 +832,69 @@ bool __fastcall stackLeaderHasMovementBonus(const game::IUsStackLeader* thisptr,
                                             int /*%edx*/,
                                             const game::LGroundCategory* ground)
 {
-    // TODO: script function
-    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
-    return prev->vftable->hasMovementBonus(prev, ground);
+    auto thiz = castStackLeaderToCustomModifier(thisptr);
+    auto prev = thiz->getPrevStackLeader();
+
+    return thiz->getValueParam<GetBoolParam>("hasMovementBonus", (int)ground->id,
+                                             prev->vftable->hasMovementBonus(prev, ground));
 }
 
 int __fastcall stackLeaderGetScout(const game::IUsStackLeader* thisptr, int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
-    return prev->vftable->getScout(prev);
+    const auto& restrictions = game::gameRestrictions();
+
+    auto thiz = castStackLeaderToCustomModifier(thisptr);
+    auto prev = thiz->getPrevStackLeader();
+
+    auto value = thiz->getValue<GetInt>("getScout", prev->vftable->getScout(prev));
+    return std::clamp(value, restrictions.stackScoutRange->min, restrictions.stackScoutRange->max);
 }
 
 int __fastcall stackLeaderGetLeadership(const game::IUsStackLeader* thisptr, int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
-    return prev->vftable->getLeadership(prev);
+    const auto& restrictions = game::gameRestrictions();
+
+    auto thiz = castStackLeaderToCustomModifier(thisptr);
+    auto prev = thiz->getPrevStackLeader();
+
+    auto value = thiz->getValue<GetInt>("getLeadership", prev->vftable->getLeadership(prev));
+    return std::clamp(value, restrictions.stackLeadership->min, restrictions.stackLeadership->max);
 }
 
 int __fastcall stackLeaderGetNegotiate(const game::IUsStackLeader* thisptr, int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
-    return prev->vftable->getNegotiate(prev);
+    auto thiz = castStackLeaderToCustomModifier(thisptr);
+    auto prev = thiz->getPrevStackLeader();
+
+    return thiz->getValue<GetInt>("getNegotiate", prev->vftable->getNegotiate(prev));
 }
 
 bool __fastcall stackLeaderHasAbility(const game::IUsStackLeader* thisptr,
                                       int /*%edx*/,
                                       const game::LLeaderAbility* ability)
 {
-    // TODO: script function
-    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
-    return prev->vftable->hasAbility(prev, ability);
+    auto thiz = castStackLeaderToCustomModifier(thisptr);
+    auto prev = thiz->getPrevStackLeader();
+
+    return thiz->getValueParam<GetBoolParam>("hasAbility", (int)ability->id,
+                                             prev->vftable->hasAbility(prev, ability));
 }
 
 bool __fastcall stackLeaderGetFastRetreat(const game::IUsStackLeader* thisptr, int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
-    return prev->vftable->getFastRetreat(prev);
+    auto thiz = castStackLeaderToCustomModifier(thisptr);
+    auto prev = thiz->getPrevStackLeader();
+
+    return thiz->getValue<GetBool>("getFastRetreat", prev->vftable->getFastRetreat(prev));
 }
 
 int __fastcall stackLeaderGetLowerCost(const game::IUsStackLeader* thisptr, int /*%edx*/)
 {
-    // TODO: script function
-    auto prev = castStackLeaderToCustomModifier(thisptr)->getPrevStackLeader();
-    return prev->vftable->getLowerCost(prev);
+    auto thiz = castStackLeaderToCustomModifier(thisptr);
+    auto prev = thiz->getPrevStackLeader();
+
+    auto value = thiz->getValue<GetInt>("getLowerCost", prev->vftable->getLowerCost(prev));
+    return std::clamp(value, 0, 100);
 }
 
 void __fastcall attackDtor(game::IAttack* thisptr, int /*%edx*/, char flags)

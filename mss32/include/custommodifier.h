@@ -93,8 +93,8 @@ struct CCustomModifier
         return prev;
     }
 
-    template <typename F, typename T>
-    T getValueParam(const char* functionName, const T& param, const T& prev) const
+    template <typename F, typename T, typename P>
+    T getValueParam(const char* functionName, const P& param, const T& prev) const
     {
         std::optional<sol::environment> env;
         auto f = getScriptFunction<F>(script, functionName, env);
