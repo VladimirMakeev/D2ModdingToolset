@@ -48,6 +48,7 @@ using GetBank = std::function<bindings::CurrencyView(const bindings::UnitView&,
 using CanApplyToUnit = std::function<bool(const bindings::UnitImplView&)>;
 using CanApplyToUnitType = std::function<bool(int)>;
 using GetDesc = std::function<bindings::IdView()>;
+using IsLowerBoost = std::function<bool()>;
 
 static struct
 {
@@ -710,12 +711,14 @@ bool __fastcall modifierCanApplyToUnitCategory(const game::CUmModifier* thisptr,
 
 bool __fastcall modifierIsLower(const game::CUmModifier* thisptr, int /*%edx*/)
 {
-    return false; // TODO: script function
+    auto thiz = castModifierToCustomModifier(thisptr);
+    return thiz->getValueNoParam<IsLowerBoost>("canApplyAsLowerSpell", true);
 }
 
 bool __fastcall modifierIsBoost(const game::CUmModifier* thisptr, int /*%edx*/)
 {
-    return false; // TODO: script function
+    auto thiz = castModifierToCustomModifier(thisptr);
+    return thiz->getValueNoParam<IsLowerBoost>("canApplyAsBoostSpell", true);
 }
 
 bool __fastcall modifierHasElement(const game::CUmModifier* thisptr,
@@ -785,21 +788,12 @@ int __fastcall modifierGetFirstElementValue(const game::CUmModifier* thisptr, in
 
 const char* __fastcall modifierGetDescription(const game::CUmModifier* thisptr, int /*%edx*/)
 {
+    using namespace game;
+
     auto thiz = castModifierToCustomModifier(thisptr);
 
-    std::optional<sol::environment> env;
-    auto f = getScriptFunction<GetDesc>(thiz->script, "getModifierDescTxt", env);
-    try {
-        if (f) {
-            return getGlobalText((*f)());
-        }
-    } catch (const std::exception& e) {
-        showErrorMessageBox(fmt::format("Failed to run 'getModifierDescTxt' script.\n"
-                                        "Reason: '{:s}'",
-                                        e.what()));
-    }
-
-    return "";
+    CMidgardID id = thiz->getValueNoParam<GetDesc>("getModifierDescTxt", bindings::IdView(emptyId));
+    return getGlobalText(id);
 }
 
 void __fastcall modifierUpdateUnitImplId(game::CUmModifier* thisptr, int /*%edx*/)

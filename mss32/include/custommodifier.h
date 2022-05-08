@@ -111,6 +111,24 @@ struct CCustomModifier
 
         return prev;
     }
+
+    template <typename F, typename T>
+    T getValueNoParam(const char* functionName, T def) const
+    {
+        std::optional<sol::environment> env;
+        auto f = getScriptFunction<F>(script, functionName, env);
+        try {
+            if (f) {
+                return (*f)();
+            }
+        } catch (const std::exception& e) {
+            showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                            "Reason: '{:s}'",
+                                            functionName, e.what()));
+        }
+
+        return def;
+    }
 };
 
 static_assert(
