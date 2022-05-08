@@ -60,10 +60,10 @@ struct CCustomModifier
     game::IUsUnit* getPrev() const;
     game::IUsSoldier* getPrevSoldier() const;
     game::IUsStackLeader* getPrevStackLeader() const;
-    game::IAttack* getPrevAttack(const game::IAttack* current) const;
+    game::IAttack* getPrevAttack(const game::IAttack* thisptr) const;
     game::IAttack* getPrevAttack(bool primary) const;
     CCustomModifier* getPrevCustomModifier() const;
-    CustomAttackData getCustomAttackData(const game::IAttack* current) const;
+    CustomAttackData getCustomAttackData(const game::IAttack* thisptr) const;
     const char* getFormattedGlobalText(const game::CMidgardID& formatId,
                                        const game::CMidgardID& valueId) const;
 

@@ -130,11 +130,11 @@ game::IUsStackLeader* CCustomModifier::getPrevStackLeader() const
     return game::gameFunctions().castUnitImplToStackLeader(getPrev());
 }
 
-game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* current) const
+game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* thisptr) const
 {
-    if (current == &attack) {
+    if (thisptr == &attack) {
         return getPrevAttack(true);
-    } else if (current == &attack2) {
+    } else if (thisptr == &attack2) {
         return getPrevAttack(false);
     }
 
@@ -196,12 +196,12 @@ game::IAttack* CCustomModifier::getAttack(bool primary)
     return result;
 }
 
-CustomAttackData CCustomModifier::getCustomAttackData(const game::IAttack* current) const
+CustomAttackData CCustomModifier::getCustomAttackData(const game::IAttack* thisptr) const
 {
-    auto prev = getPrevAttack(current);
+    auto prev = getPrevAttack(thisptr);
 
     auto value = hooks::getCustomAttackData(prev);
-    if (current == &attack) {
+    if (thisptr == &attack) {
         value.damageRatio = getValue<GetUint8>("getAttackDamRatio", value.damageRatio);
         value.damageRatioPerTarget = getValue<GetBool>("getAttackDrRepeat",
                                                        value.damageRatioPerTarget);
@@ -209,7 +209,7 @@ CustomAttackData CCustomModifier::getCustomAttackData(const game::IAttack* curre
         value.critDamage = getValue<GetUint8>("getAttackCritDamage", value.critDamage);
         value.critPower = std::clamp(getValue<GetUint8>("getAttackCritPower", value.critPower),
                                      (uint8_t)0, (uint8_t)100);
-    } else if (current == &attack2) {
+    } else if (thisptr == &attack2) {
         value.damageRatio = getValue<GetUint8>("getAttack2DamRatio", value.damageRatio);
         value.damageRatioPerTarget = getValue<GetBool>("getAttack2DrRepeat",
                                                        value.damageRatioPerTarget);
