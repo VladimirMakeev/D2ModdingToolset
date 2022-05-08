@@ -1066,9 +1066,16 @@ int __fastcall attackGetInitiative(const game::IAttack* thisptr, int /*%edx*/)
 
 int* __fastcall attackGetPower(const game::IAttack* thisptr, int /*%edx*/, int* power)
 {
-    // TODO: script function, differentiate between primary and secondary
-    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
-    return prev->vftable->getPower(prev, power);
+    const auto& restrictions = game::gameRestrictions();
+
+    auto thiz = castAttackToCustomModifier(thisptr);
+    auto prev = thiz->getPrevAttack(thisptr);
+
+    auto value = thiz->getValue<GetInt>(thisptr == &thiz->attack ? "getAttackPower"
+                                                                 : "getAttack2Power",
+                                        *prev->vftable->getPower(prev, power));
+    *power = std::clamp(value, restrictions.attackPower->min, restrictions.attackPower->max);
+    return power;
 }
 
 game::LAttackReach* __fastcall attackGetAttackReach(const game::IAttack* thisptr, int /*%edx*/)
