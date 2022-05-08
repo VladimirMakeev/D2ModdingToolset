@@ -41,6 +41,7 @@ namespace hooks {
 using GetId = std::function<bindings::IdView(const bindings::UnitView&, const bindings::IdView&)>;
 using GetInt = std::function<int(const bindings::UnitView&, int)>;
 using GetIntParam = std::function<int(const bindings::UnitView&, int, int)>;
+using GetUint8 = std::function<std::uint8_t(const bindings::UnitView&, std::uint8_t)>;
 using GetBool = std::function<bool(const bindings::UnitView&, bool)>;
 using GetBank = std::function<bindings::CurrencyView(const bindings::UnitView&,
                                                      const bindings::CurrencyView&)>;
@@ -193,9 +194,28 @@ game::IAttack* CCustomModifier::getAttack(bool primary)
 
 CustomAttackData CCustomModifier::getCustomAttackData(const game::IAttack* current) const
 {
-    // TODO: script functions, differentiate between primary and secondary
     auto prev = getPrevAttack(current);
-    return hooks::getCustomAttackData(prev);
+
+    auto value = hooks::getCustomAttackData(prev);
+    if (current == &attack) {
+        value.damageRatio = getValue<GetUint8>("getAttackDamRatio", value.damageRatio);
+        value.damageRatioPerTarget = getValue<GetBool>("getAttackDrRepeat",
+                                                       value.damageRatioPerTarget);
+        value.damageSplit = getValue<GetBool>("getAttackDrSplit", value.damageSplit);
+        value.critDamage = getValue<GetUint8>("getAttackCritDamage", value.critDamage);
+        value.critPower = std::clamp(getValue<GetUint8>("getAttackCritPower", value.critPower),
+                                     (uint8_t)0, (uint8_t)100);
+    } else if (current == &attack2) {
+        value.damageRatio = getValue<GetUint8>("getAttack2DamRatio", value.damageRatio);
+        value.damageRatioPerTarget = getValue<GetBool>("getAttack2DrRepeat",
+                                                       value.damageRatioPerTarget);
+        value.damageSplit = getValue<GetBool>("getAttack2DrSplit", value.damageSplit);
+        value.critDamage = getValue<GetUint8>("getAttack2CritDamage", value.critDamage);
+        value.critPower = std::clamp(getValue<GetUint8>("getAttack2CritPower", value.critPower),
+                                     (uint8_t)0, (uint8_t)100);
+    }
+
+    return value;
 }
 
 void CCustomModifier::setUnit(const game::CMidUnit* value)
