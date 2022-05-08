@@ -1146,9 +1146,11 @@ int __fastcall attackGetDrain(const game::IAttack* thisptr, int /*%edx*/, int da
 
 int __fastcall attackGetLevel(const game::IAttack* thisptr, int /*%edx*/)
 {
-    // TODO: script function, differentiate between primary and secondary
-    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
-    return prev->vftable->getLevel(prev);
+    auto thiz = castAttackToCustomModifier(thisptr);
+    auto prev = thiz->getPrevAttack(thisptr);
+
+    return thiz->getValue<GetInt>(thisptr == &thiz->attack ? "getAttackLevel" : "getAttack2Level",
+                                  prev->vftable->getLevel(prev));
 }
 
 const game::CMidgardID* __fastcall attackGetAltAttackId(const game::IAttack* thisptr, int /*%edx*/)
