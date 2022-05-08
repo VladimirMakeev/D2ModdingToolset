@@ -1186,9 +1186,12 @@ game::IdVector* __fastcall attackGetWards(const game::IAttack* thisptr, int /*%e
 
 bool __fastcall attackGetCritHit(const game::IAttack* thisptr, int /*%edx*/)
 {
-    // TODO: script function, differentiate between primary and secondary
-    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
-    return prev->vftable->getCritHit(prev);
+    auto thiz = castAttackToCustomModifier(thisptr);
+    auto prev = thiz->getPrevAttack(thisptr);
+
+    return thiz->getValue<GetBool>(thisptr == &thiz->attack ? "getAttackCritHit"
+                                                            : "getAttack2CritHit",
+                                   prev->vftable->getCritHit(prev));
 }
 
 void __fastcall attackGetData(const game::IAttack* thisptr, int /*%edx*/, game::CAttackData* value)
