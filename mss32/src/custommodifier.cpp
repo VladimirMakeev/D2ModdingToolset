@@ -42,7 +42,9 @@
 
 namespace hooks {
 
+using Ids = std::vector<bindings::IdView>;
 using GetId = std::function<bindings::IdView(const bindings::UnitView&, const bindings::IdView&)>;
+using GetIds = std::function<sol::table(const bindings::UnitView&, const Ids&)>;
 using GetInt = std::function<int(const bindings::UnitView&, int)>;
 using GetIntParam = std::function<int(const bindings::UnitView&, int, int)>;
 using GetUint8 = std::function<std::uint8_t(const bindings::UnitView&, std::uint8_t)>;
@@ -115,6 +117,31 @@ CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack)
     }
 
     return nullptr;
+}
+
+Ids IdVectorToIds(const game::IdVector* src)
+{
+    Ids value;
+    for (const game::CMidgardID* it = src->bgn; it != src->end; it++) {
+        value.push_back(it);
+    }
+
+    return value;
+}
+
+void IdsToIdVector(const Ids& src, game::IdVector* dst)
+{
+    using namespace game;
+
+    const auto& idVectorApi = IdVectorApi::get();
+
+    IdVector tmp{};
+    idVectorApi.reserve(&tmp, 1);
+    for (const auto& id : src) {
+        idVectorApi.pushBack(&tmp, &(const CMidgardID&)id);
+    }
+    idVectorApi.copy(dst, tmp.bgn, tmp.end);
+    idVectorApi.destructor(&tmp);
 }
 
 game::IUsUnit* CCustomModifier::getPrev() const
@@ -320,9 +347,14 @@ CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
 
     thisptr->usUnit.id = emptyId;
     CUmModifierApi::get().constructor(&thisptr->umModifier, id, globalData);
+
     thisptr->unit = nullptr;
     thisptr->lastElementQuery = ModifierElementTypeFlag::None;
     new (&thisptr->script) std::filesystem::path(modifiersFolder() / script);
+
+    thisptr->wards = {};
+    IdVectorApi::get().reserve(&thisptr->wards, 1);
+
     initVftable(thisptr);
 
     return thisptr;
@@ -334,9 +366,15 @@ CCustomModifier* customModifierCopyCtor(CCustomModifier* thisptr, const CCustomM
 
     thisptr->usUnit.id = src->usUnit.id;
     CUmModifierApi::get().copyConstructor(&thisptr->umModifier, &src->umModifier);
+
     thisptr->unit = src->unit;
     thisptr->lastElementQuery = src->lastElementQuery;
     new (&thisptr->script) std::filesystem::path(src->script);
+
+    thisptr->wards = {};
+    IdVectorApi::get().reserve(&thisptr->wards, 1);
+    IdVectorApi::get().copy(&thisptr->wards, src->wards.bgn, src->wards.end);
+
     initVftable(thisptr);
 
     return thisptr;
@@ -347,6 +385,8 @@ void customModifierDtor(CCustomModifier* thisptr, char flags)
     using namespace game;
 
     thisptr->script.~path();
+
+    IdVectorApi::get().destructor(&thisptr->wards);
 
     CUmModifierApi::get().destructor(&thisptr->umModifier);
 
@@ -1179,9 +1219,21 @@ bool __fastcall attackGetInfinite(const game::IAttack* thisptr, int /*%edx*/)
 
 game::IdVector* __fastcall attackGetWards(const game::IAttack* thisptr, int /*%edx*/)
 {
-    // TODO: script function, differentiate between primary and secondary
-    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
-    return prev->vftable->getWards(prev);
+    auto thiz = castAttackToCustomModifier(thisptr);
+    auto prev = thiz->getPrevAttack(thisptr);
+
+    auto prevValueRaw = prev->vftable->getWards(prev);
+    Ids prevValue = IdVectorToIds(prevValueRaw);
+    auto value = thiz->getValueAs<GetIds>(thisptr == &thiz->attack ? "getAttackWards"
+                                                                   : "getAttack2Wards",
+                                          prevValue);
+
+    if (value == prevValue) {
+        return prevValueRaw;
+    } else {
+        IdsToIdVector(value, &thiz->wards);
+        return &thiz->wards;
+    }
 }
 
 bool __fastcall attackGetCritHit(const game::IAttack* thisptr, int /*%edx*/)

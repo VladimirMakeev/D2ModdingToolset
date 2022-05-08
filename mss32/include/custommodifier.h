@@ -22,6 +22,7 @@
 
 #include "attack.h"
 #include "currency.h"
+#include "idvector.h"
 #include "scripts.h"
 #include "umunit.h"
 #include "unitview.h"
@@ -54,6 +55,7 @@ struct CCustomModifier
     game::Bank healCost;
     game::Bank trainingCost;
     game::CMidgardID altAttackId;
+    game::IdVector wards;
 
     game::IAttack* getAttack(bool primary);
     void setUnit(const game::CMidUnit* value);
@@ -87,6 +89,25 @@ struct CCustomModifier
             if (f) {
                 bindings::UnitView unitView{unit, getPrev()};
                 return (*f)(unitView, prev);
+            }
+        } catch (const std::exception& e) {
+            showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                            "Reason: '{:s}'",
+                                            functionName, e.what()));
+        }
+
+        return prev;
+    }
+
+    template <typename F, typename T>
+    T getValueAs(const char* functionName, const T& prev) const
+    {
+        std::optional<sol::environment> env;
+        auto f = getScriptFunction<F>(script, functionName, env);
+        try {
+            if (f) {
+                bindings::UnitView unitView{unit, getPrev()};
+                return (*f)(unitView, prev).as<T>();
             }
         } catch (const std::exception& e) {
             showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
