@@ -194,6 +194,13 @@ using GetStackFortRuinGroup = CMidUnitGroup*(__thiscall*)(void* thisptr,
                                                           const IMidgardObjectMap* objectMap,
                                                           const CMidgardID* objectId);
 
+/**
+ * Returns id of the object with the group the unit belongs to.
+ * Returned id is always valid.
+ */
+using GetStackFortRuinId = const CMidgardID*(__stdcall*)(const CMidgardID* unitId,
+                                                         const IMidgardObjectMap* objectMap);
+
 /** Deletes all building in capital of specified player. */
 using DeletePlayerBuildings = int(__stdcall*)(IMidgardObjectMap* objectMap,
                                               const CMidPlayer* player);
@@ -612,6 +619,7 @@ struct Functions
     AttackClassToString attackClassToString;
     GetAttackSourceWardFlagPosition getAttackSourceWardFlagPosition;
     GetStackFortRuinGroup getStackFortRuinGroup;
+    GetStackFortRuinId getStackFortRuinId;
     DeletePlayerBuildings deletePlayerBuildings;
     GetInterfaceText getInterfaceText;
     ComputePlayerDailyIncome computePlayerDailyIncome;
