@@ -37,7 +37,7 @@ struct TUsStackLeaderImplData
     int scout;         /**< SCOUT */
     int leadership;    /**< LEADERSHIP */
     int negotiate;     /**< NEGOTIATE */
-    bool unknown;
+    bool fastRetreat;
     char padding[3];
     TextAndId abilityText; /**< ABIL_TXT */
     mq_c_s<LGroundCategory> moveBonuses;
