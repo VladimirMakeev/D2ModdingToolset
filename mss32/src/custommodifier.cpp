@@ -127,17 +127,35 @@ game::IUsStackLeader* CCustomModifier::getPrevStackLeader() const
 
 game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* current) const
 {
-    auto prev = getPrevSoldier();
-    if (!prev)
-        return nullptr;
-
     if (current == &attack) {
-        return getAttackById(true, prev->vftable->getAttackById(prev));
+        return getPrevAttack(true);
     } else if (current == &attack2) {
-        return getAttackById(false, prev->vftable->getSecondAttackById(prev));
+        return getPrevAttack(false);
     }
 
     return nullptr;
+}
+
+game::IAttack* CCustomModifier::getPrevAttack(bool primary) const
+{
+    using namespace game;
+
+    auto prev = getPrevSoldier();
+    auto soldierImpl = getSoldierImpl(prev);
+    if (!soldierImpl)
+        return nullptr;
+
+    auto& attackId = primary ? soldierImpl->data->attackId : soldierImpl->data->attack2Id;
+
+    // HACK: temporary swapping attack ids to get new attack wrapped in previous modifiers
+    // TODO: try to find a better way
+    bindings::IdView prevValue{attackId};
+    attackId = getValue<GetId>(primary ? "getAttackId" : "getAttack2Id", prevValue);
+
+    auto result = primary ? prev->vftable->getAttackById(prev)
+                          : prev->vftable->getSecondAttackById(prev);
+    attackId = prevValue;
+    return result;
 }
 
 CCustomModifier* CCustomModifier::getPrevCustomModifier() const
@@ -202,34 +220,6 @@ const char* CCustomModifier::getFormattedGlobalText(const game::CMidgardID& form
     // so it is safe to return raw char pointer.
     const std::lock_guard<std::mutex> lock(globalsMutex);
     return globals.insert(formatted).first->c_str();
-}
-
-game::IAttack* CCustomModifier::getGlobalAttack(const game::CMidgardID& id) const
-{
-    using namespace game;
-
-    auto result = hooks::getAttack(&id);
-    if (!result) {
-        generateUnitImplByAttackId(&id);
-        result = hooks::getAttack(&id);
-    }
-
-    return result;
-}
-
-game::IAttack* CCustomModifier::getAttackById(bool primary, game::IAttack* prev) const
-{
-    using namespace game;
-
-    bindings::IdView prevValue{prev ? prev->id : emptyId};
-    const CMidgardID id = getValue<GetId>(primary ? "getAttackId" : "getAttack2Id", prevValue);
-    if (id != prevValue && id != emptyId) {
-        auto result = getGlobalAttack(id);
-        if (result)
-            return result;
-    }
-
-    return prev;
 }
 
 game::CMidgardID CCustomModifier::getNameTxt() const
