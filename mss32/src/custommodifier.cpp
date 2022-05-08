@@ -942,18 +942,110 @@ const char* __fastcall attackGetDescription(const game::IAttack* thisptr, int /*
                                         thiz->getAttackBaseDescTxt(thisptr));
 }
 
-game::LAttackClass* __fastcall attackGetAttackClass(const game::IAttack* thisptr, int /*%edx*/)
+const game::LAttackClass* __fastcall attackGetAttackClass(const game::IAttack* thisptr,
+                                                          int /*%edx*/)
 {
-    // TODO: script function, differentiate between primary and secondary
-    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
-    return prev->vftable->getAttackClass(prev);
+    using namespace game;
+
+    const auto& classes = AttackClassCategories::get();
+
+    auto thiz = castAttackToCustomModifier(thisptr);
+    auto prev = thiz->getPrevAttack(thisptr);
+
+    auto prevValue = prev->vftable->getAttackClass(prev);
+    auto value = thiz->getValue<GetInt>(thisptr == &thiz->attack ? "getAttackClass"
+                                                                 : "getAttack2Class",
+                                        (int)prevValue->id);
+    switch ((AttackClassId)value) {
+    case AttackClassId::Damage:
+        return classes.damage;
+    case AttackClassId::Drain:
+        return classes.drain;
+    case AttackClassId::Paralyze:
+        return classes.paralyze;
+    case AttackClassId::Heal:
+        return classes.heal;
+    case AttackClassId::Fear:
+        return classes.fear;
+    case AttackClassId::BoostDamage:
+        return classes.boostDamage;
+    case AttackClassId::Petrify:
+        return classes.petrify;
+    case AttackClassId::LowerDamage:
+        return classes.lowerDamage;
+    case AttackClassId::LowerInitiative:
+        return classes.lowerInitiative;
+    case AttackClassId::Poison:
+        return classes.poison;
+    case AttackClassId::Frostbite:
+        return classes.frostbite;
+    case AttackClassId::Revive:
+        return classes.revive;
+    case AttackClassId::DrainOverflow:
+        return classes.drainOverflow;
+    case AttackClassId::Cure:
+        return classes.cure;
+    case AttackClassId::Summon:
+        return classes.summon;
+    case AttackClassId::DrainLevel:
+        return classes.drainLevel;
+    case AttackClassId::GiveAttack:
+        return classes.giveAttack;
+    case AttackClassId::Doppelganger:
+        return classes.doppelganger;
+    case AttackClassId::TransformSelf:
+        return classes.transformSelf;
+    case AttackClassId::TransformOther:
+        return classes.transformOther;
+    case AttackClassId::Blister:
+        return classes.blister;
+    case AttackClassId::BestowWards:
+        return classes.bestowWards;
+    case AttackClassId::Shatter:
+        return classes.shatter;
+    default:
+        return prevValue;
+    }
 }
 
-game::LAttackSource* __fastcall attackGetAttackSource(const game::IAttack* thisptr, int /*%edx*/)
+const game::LAttackSource* __fastcall attackGetAttackSource(const game::IAttack* thisptr,
+                                                            int /*%edx*/)
 {
-    // TODO: script function, differentiate between primary and secondary
-    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
-    return prev->vftable->getAttackSource(prev);
+    using namespace game;
+
+    const auto& sources = AttackSourceCategories::get();
+
+    auto thiz = castAttackToCustomModifier(thisptr);
+    auto prev = thiz->getPrevAttack(thisptr);
+
+    auto prevValue = prev->vftable->getAttackSource(prev);
+    auto value = thiz->getValue<GetInt>(thisptr == &thiz->attack ? "getAttackSource"
+                                                                 : "getAttack2Source",
+                                        (int)prevValue->id);
+    switch ((AttackSourceId)value) {
+    case AttackSourceId::Weapon:
+        return sources.weapon;
+    case AttackSourceId::Mind:
+        return sources.mind;
+    case AttackSourceId::Life:
+        return sources.life;
+    case AttackSourceId::Death:
+        return sources.death;
+    case AttackSourceId::Fire:
+        return sources.fire;
+    case AttackSourceId::Water:
+        return sources.water;
+    case AttackSourceId::Earth:
+        return sources.earth;
+    case AttackSourceId::Air:
+        return sources.air;
+    default:
+        for (const auto& custom : getCustomAttacks().sources) {
+            if (custom.source.id == (AttackSourceId)value)
+                return &custom.source;
+        }
+        return prevValue;
+    }
 }
 
 int __fastcall attackGetInitiative(const game::IAttack* thisptr, int /*%edx*/)
