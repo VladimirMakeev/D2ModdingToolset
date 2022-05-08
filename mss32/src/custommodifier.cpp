@@ -1155,9 +1155,16 @@ int __fastcall attackGetLevel(const game::IAttack* thisptr, int /*%edx*/)
 
 const game::CMidgardID* __fastcall attackGetAltAttackId(const game::IAttack* thisptr, int /*%edx*/)
 {
-    // TODO: script function, differentiate between primary and secondary
-    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
-    return prev->vftable->getAltAttackId(prev);
+    auto thiz = castAttackToCustomModifier(thisptr);
+    auto prev = thiz->getPrevAttack(thisptr);
+
+    auto prevId = prev->vftable->getAltAttackId(prev);
+    if (thisptr != &thiz->attack)
+        return prevId;
+
+    bindings::IdView prevValue{prevId};
+    thiz->altAttackId = thiz->getValue<GetId>("getAltAttackId", prevValue);
+    return &thiz->altAttackId;
 }
 
 bool __fastcall attackGetInfinite(const game::IAttack* thisptr, int /*%edx*/)

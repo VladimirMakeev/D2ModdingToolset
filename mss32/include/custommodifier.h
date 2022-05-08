@@ -53,6 +53,7 @@ struct CCustomModifier
     game::Bank reviveCost;
     game::Bank healCost;
     game::Bank trainingCost;
+    game::CMidgardID altAttackId;
 
     game::IAttack* getAttack(bool primary);
     void setUnit(const game::CMidUnit* value);
