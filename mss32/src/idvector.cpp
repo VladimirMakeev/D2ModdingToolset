@@ -27,19 +27,31 @@ namespace game::IdVectorApi {
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::PushBack)0x4118f0
+        (Api::Destructor)0x410dc1,
+        (Api::PushBack)0x4118f0,
+        (Api::Reserve)0x41683d,
+        (Api::Copy)0x46c081,
     },
     // Russobit
     Api{
-        (Api::PushBack)0x4118f0
+        (Api::Destructor)0x410dc1,
+        (Api::PushBack)0x4118f0,
+        (Api::Reserve)0x41683d,
+        (Api::Copy)0x46c081,
     },
     // Gog
     Api{
-        (Api::PushBack)0x4114ce
+        (Api::Destructor)0x41099f,
+        (Api::PushBack)0x4114ce,
+        (Api::Reserve)0x416517,
+        (Api::Copy)0x46ba06,
     },
     // Scenario Editor
     Api{
-        (Api::PushBack)0x4151ff
+        (Api::Destructor)0x414ed1,
+        (Api::PushBack)0x4151ff,
+        (Api::Reserve)0x4152eb,
+        (Api::Copy)0x415269,
     }
 }};
 // clang-format on
