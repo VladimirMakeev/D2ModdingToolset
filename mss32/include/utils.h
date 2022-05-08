@@ -56,7 +56,8 @@ std::string idToString(const game::CMidgardID* id, bool lowercase = false);
 /** Returns interface text by specified id string. */
 std::string getInterfaceText(const char* textIdString);
 
-/** Returns global text by specified id string. */
+/** Returns global text by specified id. */
+const char* getGlobalText(const game::CMidgardID& textId);
 const char* getGlobalText(const std::string& textIdString);
 
 /** Tries to replace first occurence of 'keyword' in 'str' with 'replacement'. */
