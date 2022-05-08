@@ -991,6 +991,9 @@
     <ClCompile Include="src\surfacedecompressdata.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\enclayoutunit.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2547,6 +2550,9 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\enclayout.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\enclayoutunit.h">
       <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>

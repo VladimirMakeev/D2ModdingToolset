@@ -247,6 +247,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\effectresult.cpp" />
     <ClCompile Include="src\effectresulthooks.cpp" />
     <ClCompile Include="src\enclayoutspell.cpp" />
+    <ClCompile Include="src\enclayoutunit.cpp" />
     <ClCompile Include="src\eventconditioncat.cpp" />
     <ClCompile Include="src\eventconditioncathooks.cpp" />
     <ClCompile Include="src\eventeffectcat.cpp" />
@@ -564,6 +565,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\d2map.h" />
     <ClInclude Include="include\d2tree.h" />
     <ClInclude Include="include\enclayout.h" />
+    <ClInclude Include="include\enclayoutunit.h" />
     <ClInclude Include="include\isoborder.h" />
     <ClInclude Include="include\isoenginegroundhooks.h" />
     <ClInclude Include="include\isoground2.h" />
