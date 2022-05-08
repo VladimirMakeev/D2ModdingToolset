@@ -1078,11 +1078,34 @@ int* __fastcall attackGetPower(const game::IAttack* thisptr, int /*%edx*/, int* 
     return power;
 }
 
-game::LAttackReach* __fastcall attackGetAttackReach(const game::IAttack* thisptr, int /*%edx*/)
+const game::LAttackReach* __fastcall attackGetAttackReach(const game::IAttack* thisptr,
+                                                          int /*%edx*/)
 {
-    // TODO: script function, differentiate between primary and secondary
-    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
-    return prev->vftable->getAttackReach(prev);
+    using namespace game;
+
+    const auto& reaches = AttackReachCategories::get();
+
+    auto thiz = castAttackToCustomModifier(thisptr);
+    auto prev = thiz->getPrevAttack(thisptr);
+
+    auto prevValue = prev->vftable->getAttackReach(prev);
+    auto value = thiz->getValue<GetInt>(thisptr == &thiz->attack ? "getAttackReach"
+                                                                 : "getAttack2Reach",
+                                        (int)prevValue->id);
+    switch ((AttackReachId)value) {
+    case AttackReachId::All:
+        return reaches.all;
+    case AttackReachId::Any:
+        return reaches.any;
+    case AttackReachId::Adjacent:
+        return reaches.adjacent;
+    default:
+        for (const auto& custom : getCustomAttacks().reaches) {
+            if (custom.reach.id == (AttackReachId)value)
+                return &custom.reach;
+        }
+        return prevValue;
+    }
 }
 
 int __fastcall attackGetQtyDamage(const game::IAttack* thisptr, int /*%edx*/)
