@@ -21,12 +21,11 @@
 #define CUSTOMMODIFIER_H
 
 #include "attack.h"
-#include "currencyview.h"
+#include "currency.h"
 #include "scripts.h"
 #include "umunit.h"
 #include "unitview.h"
 #include "usstackleader.h"
-#include <string>
 
 namespace game {
 
@@ -64,17 +63,17 @@ struct CCustomModifier
     game::IAttack* getPrevAttack(const game::IAttack* current) const;
     CCustomModifier* getPrevCustomModifier() const;
     CustomAttackData getCustomAttackData(const game::IAttack* current) const;
-    const char* getFormattedGlobalText(const std::string& formatId,
-                                       const std::string& valueId) const;
-    game::IAttack* getGlobalAttack(const std::string& idString) const;
+    const char* getFormattedGlobalText(const game::CMidgardID& formatId,
+                                       const game::CMidgardID& valueId) const;
+    game::IAttack* getGlobalAttack(const game::CMidgardID& id) const;
     game::IAttack* getAttackById(bool primary, game::IAttack* prev) const;
 
-    std::string getNameTxt() const;
-    std::string getPrevNameTxt() const;
-    std::string getBaseNameTxt() const;
-    std::string getDescTxt() const;
-    std::string getPrevDescTxt() const;
-    std::string getBaseDescTxt() const;
+    game::CMidgardID getNameTxt() const;
+    game::CMidgardID getPrevNameTxt() const;
+    game::CMidgardID getBaseNameTxt() const;
+    game::CMidgardID getDescTxt() const;
+    game::CMidgardID getPrevDescTxt() const;
+    game::CMidgardID getBaseDescTxt() const;
 
     template <typename F, typename T>
     T getValue(const char* functionName, const T& prev) const

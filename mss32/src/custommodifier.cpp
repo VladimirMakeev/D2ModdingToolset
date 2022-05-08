@@ -19,6 +19,7 @@
 
 #include "custommodifier.h"
 #include "attackutils.h"
+#include "currencyview.h"
 #include "customattacks.h"
 #include "customattackutils.h"
 #include "deathanimcat.h"
@@ -37,7 +38,7 @@
 
 namespace hooks {
 
-using GetStr = std::function<std::string(const bindings::UnitView&, const std::string&)>;
+using GetId = std::function<bindings::IdView(const bindings::UnitView&, const bindings::IdView&)>;
 using GetInt = std::function<int(const bindings::UnitView&, int)>;
 using GetIntParam = std::function<int(const bindings::UnitView&, int, int)>;
 using GetBool = std::function<bool(const bindings::UnitView&, bool)>;
@@ -45,7 +46,7 @@ using GetBank = std::function<bindings::CurrencyView(const bindings::UnitView&,
                                                      const bindings::CurrencyView&)>;
 using CanApplyToUnit = std::function<bool(const bindings::UnitImplView&)>;
 using CanApplyToUnitType = std::function<bool(int)>;
-using GetDesc = std::function<std::string()>;
+using GetDesc = std::function<bindings::IdView()>;
 
 static struct
 {
@@ -184,8 +185,8 @@ void CCustomModifier::setUnit(const game::CMidUnit* value)
     unit = value;
 }
 
-const char* CCustomModifier::getFormattedGlobalText(const std::string& formatId,
-                                                    const std::string& valueId) const
+const char* CCustomModifier::getFormattedGlobalText(const game::CMidgardID& formatId,
+                                                    const game::CMidgardID& valueId) const
 {
     static std::set<std::string> globals;
     static std::mutex globalsMutex;
@@ -203,19 +204,14 @@ const char* CCustomModifier::getFormattedGlobalText(const std::string& formatId,
     return globals.insert(formatted).first->c_str();
 }
 
-game::IAttack* CCustomModifier::getGlobalAttack(const std::string& idString) const
+game::IAttack* CCustomModifier::getGlobalAttack(const game::CMidgardID& id) const
 {
     using namespace game;
 
-    CMidgardID attackId{};
-    CMidgardIDApi::get().fromString(&attackId, idString.c_str());
-    if (attackId == invalidId)
-        return nullptr;
-
-    auto result = hooks::getAttack(&attackId);
+    auto result = hooks::getAttack(&id);
     if (!result) {
-        generateUnitImplByAttackId(&attackId);
-        result = hooks::getAttack(&attackId);
+        generateUnitImplByAttackId(&id);
+        result = hooks::getAttack(&id);
     }
 
     return result;
@@ -225,11 +221,10 @@ game::IAttack* CCustomModifier::getAttackById(bool primary, game::IAttack* prev)
 {
     using namespace game;
 
-    // Lowercase to match values from DBF
-    auto prevIdString = idToString(prev ? &prev->id : &emptyId, true);
-    auto idString = getValue<GetStr>(primary ? "getAttackId" : "getAttack2Id", prevIdString);
-    if (idString != prevIdString) {
-        auto result = getGlobalAttack(idString);
+    bindings::IdView prevValue{prev ? prev->id : emptyId};
+    const CMidgardID id = getValue<GetId>(primary ? "getAttackId" : "getAttack2Id", prevValue);
+    if (id != prevValue && id != emptyId) {
+        auto result = getGlobalAttack(id);
         if (result)
             return result;
     }
@@ -237,40 +232,40 @@ game::IAttack* CCustomModifier::getAttackById(bool primary, game::IAttack* prev)
     return prev;
 }
 
-std::string CCustomModifier::getNameTxt() const
+game::CMidgardID CCustomModifier::getNameTxt() const
 {
-    return getValue<GetStr>("getNameTxt", getPrevNameTxt());
+    bindings::IdView prevValue{getPrevNameTxt()};
+    return getValue<GetId>("getNameTxt", prevValue);
 }
 
-std::string CCustomModifier::getPrevNameTxt() const
+game::CMidgardID CCustomModifier::getPrevNameTxt() const
 {
     auto prev = getPrevCustomModifier();
     return prev ? prev->getNameTxt() : getBaseNameTxt();
 }
 
-std::string CCustomModifier::getBaseNameTxt() const
+game::CMidgardID CCustomModifier::getBaseNameTxt() const
 {
     auto soldierImpl = getSoldierImpl(getPrev());
-    auto id = soldierImpl ? soldierImpl->data->name.id : game::invalidId;
-    return idToString(&id, true); // Lowercase to match values from DBF
+    return soldierImpl ? soldierImpl->data->name.id : game::invalidId;
 }
 
-std::string CCustomModifier::getDescTxt() const
+game::CMidgardID CCustomModifier::getDescTxt() const
 {
-    return getValue<GetStr>("getDescTxt", getPrevDescTxt());
+    bindings::IdView prevValue{getPrevDescTxt()};
+    return getValue<GetId>("getDescTxt", prevValue);
 }
 
-std::string CCustomModifier::getPrevDescTxt() const
+game::CMidgardID CCustomModifier::getPrevDescTxt() const
 {
     auto prev = getPrevCustomModifier();
     return prev ? prev->getDescTxt() : getBaseNameTxt();
 }
 
-std::string CCustomModifier::getBaseDescTxt() const
+game::CMidgardID CCustomModifier::getBaseDescTxt() const
 {
     auto soldierImpl = getSoldierImpl(getPrev());
-    auto id = soldierImpl ? soldierImpl->data->description.id : game::invalidId;
-    return idToString(&id, true); // Lowercase to match values from DBF
+    return soldierImpl ? soldierImpl->data->description.id : game::invalidId;
 }
 
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
@@ -786,8 +781,7 @@ const char* __fastcall modifierGetDescription(const game::CUmModifier* thisptr, 
     auto f = getScriptFunction<GetDesc>(thiz->script, "getModifierDescTxt", env);
     try {
         if (f) {
-            auto textIdString = (*f)();
-            return getGlobalText(textIdString);
+            return getGlobalText((*f)());
         }
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run 'getModifierDescTxt' script.\n"
