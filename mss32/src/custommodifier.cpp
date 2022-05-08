@@ -1127,9 +1127,11 @@ int __fastcall attackGetQtyDamage(const game::IAttack* thisptr, int /*%edx*/)
 
 int __fastcall attackGetQtyHeal(const game::IAttack* thisptr, int /*%edx*/)
 {
-    // TODO: script function, differentiate between primary and secondary
-    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
-    return prev->vftable->getQtyHeal(prev);
+    auto thiz = castAttackToCustomModifier(thisptr);
+    auto prev = thiz->getPrevAttack(thisptr);
+
+    return thiz->getValue<GetInt>(thisptr == &thiz->attack ? "getAttackHeal" : "getAttack2Heal",
+                                  prev->vftable->getQtyHeal(prev));
 }
 
 int __fastcall attackGetDrain(const game::IAttack* thisptr, int /*%edx*/, int damage)
