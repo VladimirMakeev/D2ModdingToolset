@@ -72,6 +72,11 @@ struct CCustomModifier
     game::CMidgardID getDescTxt() const;
     game::CMidgardID getBaseDescTxt() const;
 
+    game::CMidgardID getAttackNameTxt(const game::IAttack* thisptr) const;
+    game::CMidgardID getAttackBaseNameTxt(const game::IAttack* thisptr) const;
+    game::CMidgardID getAttackDescTxt(const game::IAttack* thisptr) const;
+    game::CMidgardID getAttackBaseDescTxt(const game::IAttack* thisptr) const;
+
     template <typename F, typename T>
     T getValue(const char* functionName, const T& prev) const
     {

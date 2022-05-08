@@ -18,6 +18,7 @@
  */
 
 #include "custommodifier.h"
+#include "attackimpl.h"
 #include "attackutils.h"
 #include "currencyview.h"
 #include "customattacks.h"
@@ -272,6 +273,38 @@ game::CMidgardID CCustomModifier::getBaseDescTxt() const
 {
     auto soldierImpl = getSoldierImpl(getPrev());
     return soldierImpl ? soldierImpl->data->description.id : game::invalidId;
+}
+
+game::CMidgardID CCustomModifier::getAttackNameTxt(const game::IAttack* thisptr) const
+{
+    auto prev = getPrevCustomModifier();
+
+    bindings::IdView prevValue{prev ? prev->getAttackNameTxt(thisptr)
+                                    : getAttackBaseNameTxt(thisptr)};
+    return getValue<GetId>(thisptr == &attack ? "getAttackNameTxt" : "getAttack2NameTxt",
+                           prevValue);
+}
+
+game::CMidgardID CCustomModifier::getAttackBaseNameTxt(const game::IAttack* thisptr) const
+{
+    auto attackImpl = getAttackImpl(thisptr);
+    return attackImpl ? attackImpl->data->name.id : game::invalidId;
+}
+
+game::CMidgardID CCustomModifier::getAttackDescTxt(const game::IAttack* thisptr) const
+{
+    auto prev = getPrevCustomModifier();
+
+    bindings::IdView prevValue{prev ? prev->getAttackDescTxt(thisptr)
+                                    : getAttackBaseDescTxt(thisptr)};
+    return getValue<GetId>(thisptr == &attack ? "getAttackDescTxt" : "getAttack2DescTxt",
+                           prevValue);
+}
+
+game::CMidgardID CCustomModifier::getAttackBaseDescTxt(const game::IAttack* thisptr) const
+{
+    auto attackImpl = getAttackImpl(thisptr);
+    return attackImpl ? attackImpl->data->description.id : game::invalidId;
 }
 
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
@@ -897,16 +930,16 @@ void __fastcall attackDtor(game::IAttack* thisptr, int /*%edx*/, char flags)
 
 const char* __fastcall attackGetName(const game::IAttack* thisptr, int /*%edx*/)
 {
-    // TODO: script function, differentiate between primary and secondary
-    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
-    return prev->vftable->getName(prev);
+    auto thiz = castAttackToCustomModifier(thisptr);
+    return thiz->getFormattedGlobalText(thiz->getAttackNameTxt(thisptr),
+                                        thiz->getAttackBaseNameTxt(thisptr));
 }
 
 const char* __fastcall attackGetDescription(const game::IAttack* thisptr, int /*%edx*/)
 {
-    // TODO: script function, differentiate between primary and secondary
-    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
-    return prev->vftable->getDescription(prev);
+    auto thiz = castAttackToCustomModifier(thisptr);
+    return thiz->getFormattedGlobalText(thiz->getAttackDescTxt(thisptr),
+                                        thiz->getAttackBaseDescTxt(thisptr));
 }
 
 game::LAttackClass* __fastcall attackGetAttackClass(const game::IAttack* thisptr, int /*%edx*/)
