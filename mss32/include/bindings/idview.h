@@ -43,6 +43,11 @@ struct IdView
         return id == other.id;
     }
 
+    operator const game::CMidgardID&() const
+    {
+        return id;
+    }
+
     static void bind(sol::state& lua);
 
     static IdView getEmptyId();
