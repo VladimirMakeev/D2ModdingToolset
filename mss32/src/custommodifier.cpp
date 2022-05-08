@@ -1169,9 +1169,12 @@ const game::CMidgardID* __fastcall attackGetAltAttackId(const game::IAttack* thi
 
 bool __fastcall attackGetInfinite(const game::IAttack* thisptr, int /*%edx*/)
 {
-    // TODO: script function, differentiate between primary and secondary
-    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
-    return prev->vftable->getInfinite(prev);
+    auto thiz = castAttackToCustomModifier(thisptr);
+    auto prev = thiz->getPrevAttack(thisptr);
+
+    return thiz->getValue<GetBool>(thisptr == &thiz->attack ? "getAttackInfinite"
+                                                            : "getAttack2Infinite",
+                                   prev->vftable->getInfinite(prev));
 }
 
 game::IdVector* __fastcall attackGetWards(const game::IAttack* thisptr, int /*%edx*/)
