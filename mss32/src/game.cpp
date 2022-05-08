@@ -127,6 +127,7 @@ static std::array<Functions, 4> functions = {{
         (AddCapitalBuilding)0x4224ec,
         (CastUnitImplToLeader)0x424a87,
         (GetBaseUnitImplId)0x64ae7f,
+        (GetUnitImplDamageMax)0x61f0a7,
     },
     // Russobit
     Functions{
@@ -230,6 +231,7 @@ static std::array<Functions, 4> functions = {{
         (AddCapitalBuilding)0x4224ec,
         (CastUnitImplToLeader)0x424a87,
         (GetBaseUnitImplId)0x64ae7f,
+        (GetUnitImplDamageMax)0x61f0a7,
     },
     // Gog
     Functions{
@@ -333,6 +335,7 @@ static std::array<Functions, 4> functions = {{
         (AddCapitalBuilding)0x42200a,
         (CastUnitImplToLeader)0x424565,
         (GetBaseUnitImplId)0x6497bf,
+        (GetUnitImplDamageMax)0x61dbe3,
     },
     // Scenario Editor
     Functions{
@@ -436,6 +439,7 @@ static std::array<Functions, 4> functions = {{
         (AddCapitalBuilding)nullptr,
         (CastUnitImplToLeader)nullptr,
         (GetBaseUnitImplId)nullptr,
+        (GetUnitImplDamageMax)0x522abf,
     },
 }};
 

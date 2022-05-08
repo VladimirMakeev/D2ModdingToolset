@@ -588,6 +588,8 @@ using GetBaseUnitImplId = CMidgardID*(__stdcall*)(CMidgardID* value,
                                                   const CMidgardID* unitId,
                                                   bool original);
 
+using GetUnitImplDamageMax = int(__stdcall*)(CMidgardID* unitImplId);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -691,6 +693,7 @@ struct Functions
     AddCapitalBuilding addCapitalBuilding;
     CastUnitImplToLeader castUnitImplToLeader;
     GetBaseUnitImplId getBaseUnitImplId;
+    GetUnitImplDamageMax getUnitImplDamageMax;
 };
 
 /** Global variables used in game. */
