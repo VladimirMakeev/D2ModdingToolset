@@ -1111,10 +1111,6 @@ const game::LAttackReach* __fastcall attackGetAttackReach(const game::IAttack* t
 
 int __fastcall attackGetQtyDamage(const game::IAttack* thisptr, int /*%edx*/)
 {
-    // TODO: script function, differentiate between primary and secondary
-    // auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
-    // return prev->vftable->getQtyDamage(prev);
-
     const auto& restrictions = game::gameRestrictions();
     const auto& fn = game::gameFunctions();
 
