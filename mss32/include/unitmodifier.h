@@ -20,25 +20,25 @@
 #ifndef UNITMODIFIER_H
 #define UNITMODIFIER_H
 
-#include "usunitimpl.h"
+#include "midobject.h"
 #include "modifgroup.h"
+#include "usunitimpl.h"
 
 namespace game {
 
 struct TUnitModifierVftable;
 
-struct TUnitModifier
+struct TUnitModifier : public IMidObjectT<TUnitModifierVftable>
 {
-    const TUnitModifierVftable* vftable;
     CMidgardID id;
     LModifGroup* group;
 };
 
-struct TUnitModifierVftable
-{
-    using Destructor = void(__thiscall*)(TUnitModifier* thisptr, bool freeMemory);
-    Destructor destructor;
+static_assert(sizeof(TUnitModifier) == 12,
+              "Size of TUnitModifier structure must be exactly 12 bytes");
 
+struct TUnitModifierVftable : public IMidObjectVftable
+{
     using Method1 = int(__thiscall*)(TUnitModifier* thisptr, int a2);
     Method1 method1;
 
@@ -51,9 +51,6 @@ struct TUnitModifierVftable
     using Method4 = int(__thiscall*)(TUnitModifier* thisptr);
     Method4 method4;
 };
-
-static_assert(sizeof(TUnitModifier) == 12,
-              "Size of TUnitModifier structure must be exactly 12 bytes");
 
 } // namespace game
 
