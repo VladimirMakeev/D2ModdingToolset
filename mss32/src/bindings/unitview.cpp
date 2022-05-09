@@ -45,7 +45,7 @@ UnitView::UnitView(const game::CMidUnit* unit, const game::IUsUnit* unitImpl)
 
 void UnitView::bind(sol::state& lua)
 {
-    auto unit = lua.new_usertype<UnitView>("Unit");
+    auto unit = lua.new_usertype<UnitView>("UnitView");
     unit["id"] = sol::property(&UnitView::getId);
     unit["xp"] = sol::property(&UnitView::getXp);
     unit["hp"] = sol::property(&UnitView::getHp);
