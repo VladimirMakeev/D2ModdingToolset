@@ -1130,9 +1130,10 @@ const game::LAttackReach* __fastcall attackGetAttackReach(const game::IAttack* t
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getAttackReach(prev);
-    auto value = thiz->getValue<GetInt>(thisptr == &thiz->attack ? "getAttackReach"
-                                                                 : "getAttack2Reach",
-                                        (int)prevValue->id);
+    if (thisptr != &thiz->attack)
+        return prevValue;
+
+    auto value = thiz->getValue<GetInt>("getAttackReach", (int)prevValue->id);
     switch ((AttackReachId)value) {
     case AttackReachId::All:
         return reaches.all;
