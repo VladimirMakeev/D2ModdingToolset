@@ -319,7 +319,7 @@ game::CMidgardID CCustomModifier::getAttackNameTxt(const game::IAttack* thisptr)
 
 game::CMidgardID CCustomModifier::getAttackBaseNameTxt(const game::IAttack* thisptr) const
 {
-    auto attackImpl = getAttackImpl(thisptr, true);
+    auto attackImpl = getAttackImpl(thisptr);
     return attackImpl ? attackImpl->data->name.id : game::invalidId;
 }
 
@@ -335,7 +335,7 @@ game::CMidgardID CCustomModifier::getAttackDescTxt(const game::IAttack* thisptr)
 
 game::CMidgardID CCustomModifier::getAttackBaseDescTxt(const game::IAttack* thisptr) const
 {
-    auto attackImpl = getAttackImpl(thisptr, true);
+    auto attackImpl = getAttackImpl(thisptr);
     return attackImpl ? attackImpl->data->description.id : game::invalidId;
 }
 
