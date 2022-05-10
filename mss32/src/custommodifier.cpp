@@ -999,9 +999,9 @@ const game::LAttackClass* __fastcall attackGetAttackClass(const game::IAttack* t
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getAttackClass(prev);
-    auto value = thiz->getValue<GetInt>(thisptr == &thiz->attack ? "getAttackClass"
-                                                                 : "getAttack2Class",
-                                        (int)prevValue->id);
+
+    auto name = thisptr == &thiz->attack ? "getAttackClass" : "getAttack2Class";
+    auto value = thiz->getValue<GetInt>(name, (int)prevValue->id);
     switch ((AttackClassId)value) {
     case AttackClassId::Damage:
         return classes.damage;
@@ -1065,9 +1065,9 @@ const game::LAttackSource* __fastcall attackGetAttackSource(const game::IAttack*
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getAttackSource(prev);
-    auto value = thiz->getValue<GetInt>(thisptr == &thiz->attack ? "getAttackSource"
-                                                                 : "getAttack2Source",
-                                        (int)prevValue->id);
+
+    auto name = thisptr == &thiz->attack ? "getAttackSource" : "getAttack2Source";
+    auto value = thiz->getValue<GetInt>(name, (int)prevValue->id);
     switch ((AttackSourceId)value) {
     case AttackSourceId::Weapon:
         return sources.weapon;
@@ -1117,9 +1117,10 @@ int* __fastcall attackGetPower(const game::IAttack* thisptr, int /*%edx*/, int* 
     auto thiz = castAttackToCustomModifier(thisptr);
     auto prev = thiz->getPrevAttack(thisptr);
 
-    auto value = thiz->getValue<GetInt>(thisptr == &thiz->attack ? "getAttackPower"
-                                                                 : "getAttack2Power",
-                                        *prev->vftable->getPower(prev, power));
+    auto prevValue = *prev->vftable->getPower(prev, power);
+
+    auto name = thisptr == &thiz->attack ? "getAttackPower" : "getAttack2Power";
+    auto value = thiz->getValue<GetInt>(name, prevValue);
     *power = std::clamp(value, restrictions.attackPower->min, restrictions.attackPower->max);
     return power;
 }
@@ -1163,12 +1164,12 @@ int __fastcall attackGetQtyDamage(const game::IAttack* thisptr, int /*%edx*/)
     auto thiz = castAttackToCustomModifier(thisptr);
     auto prev = thiz->getPrevAttack(thisptr);
 
-    auto damageMax = fn.getUnitImplDamageMax(&thiz->unit->unitImpl->id);
+    auto prevValue = prev->vftable->getQtyDamage(prev);
 
-    auto value = thiz->getValue<GetInt>(thisptr == &thiz->attack ? "getAttackDamage"
-                                                                 : "getAttack2Damage",
-                                        prev->vftable->getQtyDamage(prev));
-    return std::clamp(value, restrictions.unitDamage->min, damageMax);
+    auto name = thisptr == &thiz->attack ? "getAttackDamage" : "getAttack2Damage";
+    auto value = thiz->getValue<GetInt>(name, prevValue);
+    return std::clamp(value, restrictions.unitDamage->min,
+                      fn.getUnitImplDamageMax(&thiz->unit->unitImpl->id));
 }
 
 int __fastcall attackGetQtyHeal(const game::IAttack* thisptr, int /*%edx*/)
@@ -1176,8 +1177,10 @@ int __fastcall attackGetQtyHeal(const game::IAttack* thisptr, int /*%edx*/)
     auto thiz = castAttackToCustomModifier(thisptr);
     auto prev = thiz->getPrevAttack(thisptr);
 
-    return thiz->getValue<GetInt>(thisptr == &thiz->attack ? "getAttackHeal" : "getAttack2Heal",
-                                  prev->vftable->getQtyHeal(prev));
+    auto prevValue = prev->vftable->getQtyHeal(prev);
+
+    auto name = thisptr == &thiz->attack ? "getAttackHeal" : "getAttack2Heal";
+    return thiz->getValue<GetInt>(name, prevValue);
 }
 
 int __fastcall attackGetDrain(const game::IAttack* thisptr, int /*%edx*/, int damage)
@@ -1185,9 +1188,10 @@ int __fastcall attackGetDrain(const game::IAttack* thisptr, int /*%edx*/, int da
     auto thiz = castAttackToCustomModifier(thisptr);
     auto prev = thiz->getPrevAttack(thisptr);
 
-    return thiz->getValueParam<GetIntParam>(thisptr == &thiz->attack ? "getAttackDrain"
-                                                                     : "getAttack2Drain",
-                                            damage, prev->vftable->getDrain(prev, damage));
+    auto prevValue = prev->vftable->getDrain(prev, damage);
+
+    auto name = thisptr == &thiz->attack ? "getAttackDrain" : "getAttack2Drain";
+    return thiz->getValueParam<GetIntParam>(name, damage, prevValue);
 }
 
 int __fastcall attackGetLevel(const game::IAttack* thisptr, int /*%edx*/)
@@ -1195,8 +1199,10 @@ int __fastcall attackGetLevel(const game::IAttack* thisptr, int /*%edx*/)
     auto thiz = castAttackToCustomModifier(thisptr);
     auto prev = thiz->getPrevAttack(thisptr);
 
-    return thiz->getValue<GetInt>(thisptr == &thiz->attack ? "getAttackLevel" : "getAttack2Level",
-                                  prev->vftable->getLevel(prev));
+    auto prevValue = prev->vftable->getLevel(prev);
+
+    auto name = thisptr == &thiz->attack ? "getAttackLevel" : "getAttack2Level";
+    return thiz->getValue<GetInt>(name, prevValue);
 }
 
 const game::CMidgardID* __fastcall attackGetAltAttackId(const game::IAttack* thisptr, int /*%edx*/)
@@ -1204,12 +1210,12 @@ const game::CMidgardID* __fastcall attackGetAltAttackId(const game::IAttack* thi
     auto thiz = castAttackToCustomModifier(thisptr);
     auto prev = thiz->getPrevAttack(thisptr);
 
-    auto prevId = prev->vftable->getAltAttackId(prev);
+    auto prevValue = prev->vftable->getAltAttackId(prev);
     if (thisptr != &thiz->attack)
-        return prevId;
+        return prevValue;
 
-    bindings::IdView prevValue{prevId};
-    thiz->altAttackId = thiz->getValue<GetId>("getAltAttackId", prevValue);
+    bindings::IdView prevId{prevValue};
+    thiz->altAttackId = thiz->getValue<GetId>("getAltAttackId", prevId);
     return &thiz->altAttackId;
 }
 
@@ -1218,9 +1224,10 @@ bool __fastcall attackGetInfinite(const game::IAttack* thisptr, int /*%edx*/)
     auto thiz = castAttackToCustomModifier(thisptr);
     auto prev = thiz->getPrevAttack(thisptr);
 
-    return thiz->getValue<GetBool>(thisptr == &thiz->attack ? "getAttackInfinite"
-                                                            : "getAttack2Infinite",
-                                   prev->vftable->getInfinite(prev));
+    auto prevValue = prev->vftable->getInfinite(prev);
+
+    auto name = thisptr == &thiz->attack ? "getAttackInfinite" : "getAttack2Infinite";
+    return thiz->getValue<GetBool>(name, prevValue);
 }
 
 game::IdVector* __fastcall attackGetWards(const game::IAttack* thisptr, int /*%edx*/)
@@ -1228,14 +1235,13 @@ game::IdVector* __fastcall attackGetWards(const game::IAttack* thisptr, int /*%e
     auto thiz = castAttackToCustomModifier(thisptr);
     auto prev = thiz->getPrevAttack(thisptr);
 
-    auto prevValueRaw = prev->vftable->getWards(prev);
-    Ids prevValue = IdVectorToIds(prevValueRaw);
-    auto value = thiz->getValueAs<GetIds>(thisptr == &thiz->attack ? "getAttackWards"
-                                                                   : "getAttack2Wards",
-                                          prevValue);
+    auto prevValue = prev->vftable->getWards(prev);
+    Ids prevIds = IdVectorToIds(prevValue);
 
-    if (value == prevValue) {
-        return prevValueRaw;
+    auto name = thisptr == &thiz->attack ? "getAttackWards" : "getAttack2Wards";
+    auto value = thiz->getValueAs<GetIds>(name, prevIds);
+    if (value == prevIds) {
+        return prevValue;
     } else {
         IdsToIdVector(value, &thiz->wards);
         return &thiz->wards;
@@ -1247,14 +1253,17 @@ bool __fastcall attackGetCritHit(const game::IAttack* thisptr, int /*%edx*/)
     auto thiz = castAttackToCustomModifier(thisptr);
     auto prev = thiz->getPrevAttack(thisptr);
 
-    return thiz->getValue<GetBool>(thisptr == &thiz->attack ? "getAttackCritHit"
-                                                            : "getAttack2CritHit",
-                                   prev->vftable->getCritHit(prev));
+    auto prevValue = prev->vftable->getCritHit(prev);
+
+    auto name = thisptr == &thiz->attack ? "getAttackCritHit" : "getAttack2CritHit";
+    return thiz->getValue<GetBool>(name, prevValue);
 }
 
 void __fastcall attackGetData(const game::IAttack* thisptr, int /*%edx*/, game::CAttackData* value)
 {
-    auto prev = castAttackToCustomModifier(thisptr)->getPrevAttack(thisptr);
+    auto thiz = castAttackToCustomModifier(thisptr);
+    auto prev = thiz->getPrevAttack(thisptr);
+
     prev->vftable->getData(prev, value);
 }
 
