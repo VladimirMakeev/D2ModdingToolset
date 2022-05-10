@@ -43,6 +43,11 @@ struct IdView
         return id == other.id;
     }
 
+    bool operator!=(const IdView& other) const
+    {
+        return id != other.id;
+    }
+
     operator const game::CMidgardID&() const
     {
         return id;
