@@ -68,10 +68,10 @@ game::IAttack* getGlobalAttack(game::IEncUnitDescriptor* descriptor, AttackType 
     if (attackId == emptyId)
         return nullptr;
 
-    auto attack = hooks::getAttack(&attackId);
+    auto attack = hooks::getGlobalAttack(&attackId);
     if (attack == nullptr && type == AttackType::Primary) {
         hooks::generateUnitImplByAttackId(&attackId);
-        attack = hooks::getAttack(&attackId);
+        attack = hooks::getGlobalAttack(&attackId);
     }
 
     return attack;

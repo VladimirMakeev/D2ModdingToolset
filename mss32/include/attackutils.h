@@ -30,7 +30,7 @@ struct LAttackReach;
 
 namespace hooks {
 
-game::IAttack* getAttack(const game::CMidgardID* attackId);
+game::IAttack* getGlobalAttack(const game::CMidgardID* attackId);
 game::CAttackImpl* getAttackImpl(const game::IAttack* attack);
 int getBoostDamage(int level);
 int getLowerDamage(int level);

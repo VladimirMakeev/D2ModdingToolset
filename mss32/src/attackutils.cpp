@@ -30,7 +30,7 @@
 
 namespace hooks {
 
-game::IAttack* getAttack(const game::CMidgardID* attackId)
+game::IAttack* getGlobalAttack(const game::CMidgardID* attackId)
 {
     using namespace game;
 
