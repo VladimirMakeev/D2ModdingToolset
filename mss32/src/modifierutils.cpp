@@ -20,6 +20,7 @@
 #include "modifierutils.h"
 #include "attack.h"
 #include "battlemsgdata.h"
+#include "custommodifier.h"
 #include "dynamiccast.h"
 #include "game.h"
 #include "globaldata.h"
@@ -202,6 +203,9 @@ bool canApplyModifier(game::BattleMsgData* battleMsgData,
 
     CUmModifier* modifier = getUnitModifier(modifierId)->data->modifier;
 
+    if (castModifierToCustomModifier(modifier))
+        return true;
+
     CUmUnit* umUnit = castUmModifierToUmUnit(modifier);
     if (umUnit) {
         if (modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::Hp)
@@ -336,6 +340,10 @@ bool applyModifier(const game::CMidgardID* unitId,
         addUniqueIdToList(targetUnit->origModifiers, modifierId);
 
     CUmModifier* modifier = getUnitModifier(modifierId)->data->modifier;
+
+    // No ward reset in case of custom modifier because we don't know if it grants it or not
+    if (castModifierToCustomModifier(modifier))
+        return true;
 
     CUmUnit* umUnit = castUmModifierToUmUnit(modifier);
     if (umUnit) {
