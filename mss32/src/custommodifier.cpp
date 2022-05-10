@@ -173,21 +173,22 @@ game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* thisptr,
 
 game::IAttack* CCustomModifier::getPrevAttack(bool primary, bool checkAltAttack) const
 {
-    using namespace game;
-
     auto prev = getPrevSoldier();
 
-    auto soldierImpl = getSoldierImpl(prev);
-    auto& attackId = primary ? soldierImpl->data->attackId : soldierImpl->data->attack2Id;
+    bool isAltAttack;
+    auto prevValue = hooks::getAttack(prev, primary, checkAltAttack, &isAltAttack);
+    if (isAltAttack)
+        return prevValue;
 
-    // HACK: temporary swapping attack ids to get new attack wrapped in previous modifiers
-    // TODO: try to find a better way
-    bindings::IdView prevValue{attackId};
-    attackId = getValue<GetId>(primary ? "getAttackId" : "getAttack2Id", prevValue);
+    bindings::IdView prevId{prevValue ? prevValue->id : game::emptyId};
+    auto value = getValue<GetId>(primary ? "getAttackId" : "getAttack2Id", prevId);
+    if (value != prevId) {
+        auto attack = getGlobalAttack(&value.id);
+        if (attack)
+            return attack;
+    }
 
-    auto result = hooks::getAttack(prev, primary, checkAltAttack);
-    attackId = prevValue;
-    return result;
+    return prevValue;
 }
 
 CCustomModifier* CCustomModifier::getPrevCustomModifier() const
