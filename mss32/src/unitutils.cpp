@@ -179,24 +179,30 @@ game::TUsSoldierImpl* getSoldierImpl(const game::IUsSoldier* soldier)
     return getSoldierImpl(unit);
 }
 
-game::IAttack* getAttack(const game::IUsSoldier* soldier, bool primary, bool checkAltAttack)
+game::IAttack* getAttack(const game::IUsSoldier* soldier,
+                         bool primary,
+                         bool checkAltAttack,
+                         bool* isAltAttack)
 {
     using namespace game;
 
+    if (isAltAttack)
+        *isAltAttack = false;
+
     auto attack = primary ? soldier->vftable->getAttackById(soldier)
                           : soldier->vftable->getSecondAttackById(soldier);
-    if (attack == nullptr)
-        return nullptr;
-
-    if (!checkAltAttack)
+    if (attack == nullptr || !primary || !checkAltAttack)
         return attack;
 
     auto altAttackId = attack->vftable->getAltAttackId(attack);
     if (*altAttackId == emptyId)
         return attack;
 
+    if (isAltAttack)
+        *isAltAttack = true;
+
     auto soldierImpl = getSoldierImpl(soldier);
-    auto& attackId = primary ? soldierImpl->data->attackId : soldierImpl->data->attack2Id;
+    auto& attackId = soldierImpl->data->attackId;
 
     // HACK: temporary swapping attack ids to get alt attack wrapped in CAttackModified
     auto prevId = attackId;
