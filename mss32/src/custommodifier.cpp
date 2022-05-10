@@ -159,26 +159,25 @@ game::IUsStackLeader* CCustomModifier::getPrevStackLeader() const
     return game::gameFunctions().castUnitImplToStackLeader(getPrev());
 }
 
-game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* thisptr) const
+game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* thisptr,
+                                              bool checkAltAttack) const
 {
     if (thisptr == &attack) {
-        return getPrevAttack(true);
+        return getPrevAttack(true, checkAltAttack);
     } else if (thisptr == &attack2) {
-        return getPrevAttack(false);
+        return getPrevAttack(false, checkAltAttack);
     }
 
     return nullptr;
 }
 
-game::IAttack* CCustomModifier::getPrevAttack(bool primary) const
+game::IAttack* CCustomModifier::getPrevAttack(bool primary, bool checkAltAttack) const
 {
     using namespace game;
 
     auto prev = getPrevSoldier();
-    auto soldierImpl = getSoldierImpl(prev);
-    if (!soldierImpl)
-        return nullptr;
 
+    auto soldierImpl = getSoldierImpl(prev);
     auto& attackId = primary ? soldierImpl->data->attackId : soldierImpl->data->attack2Id;
 
     // HACK: temporary swapping attack ids to get new attack wrapped in previous modifiers
@@ -186,8 +185,7 @@ game::IAttack* CCustomModifier::getPrevAttack(bool primary) const
     bindings::IdView prevValue{attackId};
     attackId = getValue<GetId>(primary ? "getAttackId" : "getAttack2Id", prevValue);
 
-    auto result = primary ? prev->vftable->getAttackById(prev)
-                          : prev->vftable->getSecondAttackById(prev);
+    auto result = hooks::getAttack(prev, primary, checkAltAttack);
     attackId = prevValue;
     return result;
 }
@@ -217,9 +215,15 @@ CCustomModifier* CCustomModifier::getPrevCustomModifier() const
 game::IAttack* CCustomModifier::getAttack(bool primary)
 {
     auto result = primary ? &attack : &attack2;
-    auto prev = getPrevAttack(result);
+    auto prev = getPrevAttack(result, false);
     if (!prev)
         return nullptr;
+
+    if (primary) {
+        auto altAttackId = prev->vftable->getAltAttackId(prev);
+        if (*altAttackId != game::emptyId)
+            return prev;
+    }
 
     result->id = prev->id;
     return result;
@@ -315,7 +319,7 @@ game::CMidgardID CCustomModifier::getAttackNameTxt(const game::IAttack* thisptr)
 
 game::CMidgardID CCustomModifier::getAttackBaseNameTxt(const game::IAttack* thisptr) const
 {
-    auto attackImpl = getAttackImpl(thisptr);
+    auto attackImpl = getAttackImpl(thisptr, true);
     return attackImpl ? attackImpl->data->name.id : game::invalidId;
 }
 
@@ -331,7 +335,7 @@ game::CMidgardID CCustomModifier::getAttackDescTxt(const game::IAttack* thisptr)
 
 game::CMidgardID CCustomModifier::getAttackBaseDescTxt(const game::IAttack* thisptr) const
 {
-    auto attackImpl = getAttackImpl(thisptr);
+    auto attackImpl = getAttackImpl(thisptr, true);
     return attackImpl ? attackImpl->data->description.id : game::invalidId;
 }
 
