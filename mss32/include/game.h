@@ -597,6 +597,9 @@ using ReadGlobalAttacks = AttackMap**(__thiscall*)(AttackMap** thisptr,
 
 using GetAltAttackIdCheckClass = const CMidgardID*(__stdcall*)(const IAttack* attack);
 
+using UnitHasDoppelgangerAttack = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                   const CMidgardID* unitId);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -703,6 +706,7 @@ struct Functions
     GetUnitImplDamageMax getUnitImplDamageMax;
     ReadGlobalAttacks readGlobalAttacks;
     GetAltAttackIdCheckClass getAltAttackIdCheckClass;
+    UnitHasDoppelgangerAttack unitHasDoppelgangerAttack;
 };
 
 /** Global variables used in game. */
