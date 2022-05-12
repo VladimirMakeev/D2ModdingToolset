@@ -26,6 +26,18 @@ struct CMidgardID;
 struct CBatImagesLoader;
 struct IMqImage2;
 
+/** Battle cursor types supported in game and their image names. */
+enum class BattleCursorType : int
+{
+    Default = 0, /**< CUDEFAULT */
+    Attack,      /**< CUATTACK */
+    AttackN,     /**< CUATTACKN */
+    Heal,        /**< CUHEAL */
+    HealN,       /**< CUHEALN */
+    Transf,      /**< CUTRANSF */
+    TransfN,     /**< CUTRANSFN */
+};
+
 namespace BatImagesLoaderApi {
 
 struct Api
