@@ -80,6 +80,7 @@ struct CTileVariation;
 using RacesMap = mq_c_s<Pair<CMidgardID, TRaceType*>>;
 using DynUpgradeList = List<SmartPtr<CDynUpgrade>>;
 using TextMap = mq_c_s<Pair<CMidgardID, char*>>;
+using AttackMap = mq_c_s<Pair<CMidgardID, CAttackImpl*>>;
 
 /** Holds global game information. */
 struct GlobalData
@@ -123,7 +124,7 @@ struct GlobalData
     mq_c_s<Pair<CMidgardID, TStrategicSpell*>>* spells;
     mq_c_s<Pair<CMidgardID, TUsUnitImpl*>>** units;
     mq_c_s<Pair<CMidgardID, TUnitModifier*>>* modifiers;
-    mq_c_s<Pair<CMidgardID, CAttackImpl*>>* attacks;
+    AttackMap* attacks;
     mq_c_s<Pair<CMidgardID, TLandmark*>>** landmarks;
     TItemTypeList* itemTypes;
     int* actions;
