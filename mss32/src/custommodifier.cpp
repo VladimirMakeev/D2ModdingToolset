@@ -1369,17 +1369,10 @@ void initStackLeaderRttiInfo()
     vftable.getLowerCost = (IUsStackLeaderVftable::GetInt)&stackLeaderGetLowerCost;
 }
 
-void initAttackRttiInfo()
+void initAttackVftable(game::IAttackVftable& vftable)
 {
     using namespace game;
 
-    // None of the existing RTTI can be reused as this class has unique offset.
-    // Lucky for us, the game is not using IAttack for dynamic casts so we should be fine
-    // with base RTTI. Otherwise, we would need to either patch dynamicCast or create our own RTTI.
-    auto& info = rttiInfo.attack;
-    replaceRttiInfo(info, IAttackApi::vftable(), false);
-
-    auto& vftable = info.vftable;
     vftable.destructor = (IMidObjectVftable::Destructor)&attackDtor;
     vftable.getName = (IAttackVftable::GetCStr)&attackGetName;
     vftable.getDescription = (IAttackVftable::GetCStr)&attackGetDescription;
@@ -1399,6 +1392,18 @@ void initAttackRttiInfo()
     vftable.getData = (IAttackVftable::GetData)&attackGetData;
 }
 
+void initAttackRttiInfo()
+{
+    using namespace game;
+
+    // None of the existing RTTI can be reused as this class has unique offset.
+    // Lucky for us, the game is not using IAttack for dynamic casts so we should be fine
+    // with base RTTI. Otherwise, we would need to either patch dynamicCast or create our own RTTI.
+    auto& info = rttiInfo.attack;
+    replaceRttiInfo(info, IAttackApi::vftable(), false);
+    initAttackVftable(info.vftable);
+}
+
 void initAttack2RttiInfo()
 {
     using namespace game;
@@ -1408,25 +1413,7 @@ void initAttack2RttiInfo()
     // with base RTTI. Otherwise, we would need to either patch dynamicCast or create our own RTTI.
     auto& info = rttiInfo.attack2;
     replaceRttiInfo(info, IAttackApi::vftable(), false);
-
-    auto& vftable = info.vftable;
-    vftable.destructor = (IMidObjectVftable::Destructor)&attackDtor;
-    vftable.getName = (IAttackVftable::GetCStr)&attackGetName;
-    vftable.getDescription = (IAttackVftable::GetCStr)&attackGetDescription;
-    vftable.getAttackClass = (IAttackVftable::GetAttackClass)&attackGetAttackClass;
-    vftable.getAttackSource = (IAttackVftable::GetAttackSource)&attackGetAttackSource;
-    vftable.getInitiative = (IAttackVftable::GetInitiative)&attackGetInitiative;
-    vftable.getPower = (IAttackVftable::GetPower)&attackGetPower;
-    vftable.getAttackReach = (IAttackVftable::GetAttackReach)&attackGetAttackReach;
-    vftable.getQtyDamage = (IAttackVftable::GetInt)&attackGetQtyDamage;
-    vftable.getQtyHeal = (IAttackVftable::GetInt)&attackGetQtyHeal;
-    vftable.getDrain = (IAttackVftable::GetDrain)&attackGetDrain;
-    vftable.getLevel = (IAttackVftable::GetInt)&attackGetLevel;
-    vftable.getAltAttackId = (IAttackVftable::GetId)&attackGetAltAttackId;
-    vftable.getInfinite = (IAttackVftable::GetBool)&attackGetInfinite;
-    vftable.getWards = (IAttackVftable::GetWards)&attackGetWards;
-    vftable.getCritHit = (IAttackVftable::GetBool)&attackGetCritHit;
-    vftable.getData = (IAttackVftable::GetData)&attackGetData;
+    initAttackVftable(info.vftable);
 }
 
 void initRttiInfo()
