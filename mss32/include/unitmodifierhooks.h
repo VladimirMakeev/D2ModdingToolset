@@ -35,6 +35,8 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
                                                        void* codeBaseEnvProxy,
                                                        const game::GlobalData** globalData);
 
+void __fastcall unitModifierDtorHooked(game::TUnitModifier* thisptr, int /*%edx*/, char flags);
+
 } // namespace hooks
 
 #endif // UNITMODIFIERHOOKS_H

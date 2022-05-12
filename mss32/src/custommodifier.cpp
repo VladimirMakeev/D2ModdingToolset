@@ -20,9 +20,9 @@
 #include "custommodifier.h"
 #include "attackimpl.h"
 #include "attackutils.h"
-#include "currencyview.h"
 #include "customattacks.h"
 #include "customattackutils.h"
+#include "custommodifierfunctions.h"
 #include "deathanimcat.h"
 #include "dynamiccast.h"
 #include "game.h"
@@ -33,7 +33,6 @@
 #include "midunit.h"
 #include "restrictions.h"
 #include "unitcat.h"
-#include "unitimplview.h"
 #include "unitutils.h"
 #include "ussoldierimpl.h"
 #include "utils.h"
@@ -42,20 +41,14 @@
 
 namespace hooks {
 
-using Ids = std::vector<bindings::IdView>;
-using GetId = std::function<bindings::IdView(const bindings::UnitView&, const bindings::IdView&)>;
-using GetIds = std::function<sol::table(const bindings::UnitView&, const Ids&)>;
-using GetInt = std::function<int(const bindings::UnitView&, int)>;
-using GetIntParam = std::function<int(const bindings::UnitView&, int, int)>;
-using GetUint8 = std::function<std::uint8_t(const bindings::UnitView&, std::uint8_t)>;
-using GetBool = std::function<bool(const bindings::UnitView&, bool)>;
-using GetBoolParam = std::function<bool(const bindings::UnitView&, int, bool)>;
-using GetBank = std::function<bindings::CurrencyView(const bindings::UnitView&,
-                                                     const bindings::CurrencyView&)>;
-using CanApplyToUnit = std::function<bool(const bindings::UnitImplView&)>;
-using CanApplyToUnitType = std::function<bool(int)>;
-using GetDesc = std::function<bindings::IdView()>;
-using IsLowerBoost = std::function<bool()>;
+#define GET_VALUE(_FUNC_, _PREV_) getValue(functions->##_FUNC_, #_FUNC_, _PREV_)
+#define THIZ_GET_VALUE(_FUNC_, _PREV_) thiz->getValue(thiz->functions->##_FUNC_, #_FUNC_, _PREV_)
+#define THIZ_GET_VALUE_AS(_FUNC_, _PREV_)                                                          \
+    thiz->getValueAs(thiz->functions->##_FUNC_, #_FUNC_, _PREV_)
+#define THIZ_GET_VALUE_PARAM(_FUNC_, _PARAM_, _PREV_)                                              \
+    thiz->getValueParam(thiz->functions->##_FUNC_, #_FUNC_, _PARAM_, _PREV_)
+#define THIZ_GET_VALUE_NO_PARAM(_FUNC_, _DEF_)                                                     \
+    thiz->getValueNoParam(thiz->functions->##_FUNC_, #_FUNC_, _DEF_)
 
 static struct
 {
@@ -199,7 +192,7 @@ const game::IAttack* CCustomModifier::getAttackToWrap(bool primary) const
     auto prevValue = hooks::getAttack(prev, primary, false);
 
     bindings::IdView prevId{prevValue ? prevValue->id : game::emptyId};
-    auto value = getValue<GetId>(primary ? "getAttackId" : "getAttack2Id", prevId);
+    auto value = primary ? GET_VALUE(getAttackId, prevId) : GET_VALUE(getAttack2Id, prevId);
     if (value != prevId) {
         auto attack = getGlobalAttack(&value.id);
         if (attack)
@@ -228,21 +221,19 @@ CustomAttackData CCustomModifier::getCustomAttackData(const game::IAttack* thisp
 
     auto value = hooks::getCustomAttackData(prev);
     if (thisptr == &attack) {
-        value.damageRatio = getValue<GetUint8>("getAttackDamRatio", value.damageRatio);
-        value.damageRatioPerTarget = getValue<GetBool>("getAttackDrRepeat",
-                                                       value.damageRatioPerTarget);
-        value.damageSplit = getValue<GetBool>("getAttackDrSplit", value.damageSplit);
-        value.critDamage = getValue<GetUint8>("getAttackCritDamage", value.critDamage);
-        value.critPower = std::clamp(getValue<GetUint8>("getAttackCritPower", value.critPower),
-                                     (uint8_t)0, (uint8_t)100);
+        value.damageRatio = GET_VALUE(getAttackDamRatio, value.damageRatio);
+        value.damageRatioPerTarget = GET_VALUE(getAttackDrRepeat, value.damageRatioPerTarget);
+        value.damageSplit = GET_VALUE(getAttackDrSplit, value.damageSplit);
+        value.critDamage = GET_VALUE(getAttackCritDamage, value.critDamage);
+        value.critPower = std::clamp(GET_VALUE(getAttackCritPower, value.critPower), (uint8_t)0,
+                                     (uint8_t)100);
     } else if (thisptr == &attack2) {
-        value.damageRatio = getValue<GetUint8>("getAttack2DamRatio", value.damageRatio);
-        value.damageRatioPerTarget = getValue<GetBool>("getAttack2DrRepeat",
-                                                       value.damageRatioPerTarget);
-        value.damageSplit = getValue<GetBool>("getAttack2DrSplit", value.damageSplit);
-        value.critDamage = getValue<GetUint8>("getAttack2CritDamage", value.critDamage);
-        value.critPower = std::clamp(getValue<GetUint8>("getAttack2CritPower", value.critPower),
-                                     (uint8_t)0, (uint8_t)100);
+        value.damageRatio = GET_VALUE(getAttack2DamRatio, value.damageRatio);
+        value.damageRatioPerTarget = GET_VALUE(getAttack2DrRepeat, value.damageRatioPerTarget);
+        value.damageSplit = GET_VALUE(getAttack2DrSplit, value.damageSplit);
+        value.critDamage = GET_VALUE(getAttack2CritDamage, value.critDamage);
+        value.critPower = std::clamp(GET_VALUE(getAttack2CritPower, value.critPower), (uint8_t)0,
+                                     (uint8_t)100);
     }
 
     return value;
@@ -277,7 +268,7 @@ game::CMidgardID CCustomModifier::getNameTxt() const
     auto prev = getPrevCustomModifier();
 
     bindings::IdView prevValue{prev ? prev->getNameTxt() : getBaseNameTxt()};
-    return getValue<GetId>("getNameTxt", prevValue);
+    return GET_VALUE(getNameTxt, prevValue);
 }
 
 game::CMidgardID CCustomModifier::getBaseNameTxt() const
@@ -291,7 +282,7 @@ game::CMidgardID CCustomModifier::getDescTxt() const
     auto prev = getPrevCustomModifier();
 
     bindings::IdView prevValue{prev ? prev->getDescTxt() : getBaseDescTxt()};
-    return getValue<GetId>("getDescTxt", prevValue);
+    return GET_VALUE(getDescTxt, prevValue);
 }
 
 game::CMidgardID CCustomModifier::getBaseDescTxt() const
@@ -306,8 +297,8 @@ game::CMidgardID CCustomModifier::getAttackNameTxt(const game::IAttack* thisptr)
 
     bindings::IdView prevValue{prev ? prev->getAttackNameTxt(thisptr)
                                     : getAttackBaseNameTxt(thisptr)};
-    return getValue<GetId>(thisptr == &attack ? "getAttackNameTxt" : "getAttack2NameTxt",
-                           prevValue);
+    return thisptr == &attack ? GET_VALUE(getAttackNameTxt, prevValue)
+                              : GET_VALUE(getAttack2NameTxt, prevValue);
 }
 
 game::CMidgardID CCustomModifier::getAttackBaseNameTxt(const game::IAttack* thisptr) const
@@ -322,8 +313,8 @@ game::CMidgardID CCustomModifier::getAttackDescTxt(const game::IAttack* thisptr)
 
     bindings::IdView prevValue{prev ? prev->getAttackDescTxt(thisptr)
                                     : getAttackBaseDescTxt(thisptr)};
-    return getValue<GetId>(thisptr == &attack ? "getAttackDescTxt" : "getAttack2DescTxt",
-                           prevValue);
+    return thisptr == &attack ? GET_VALUE(getAttackDescTxt, prevValue)
+                              : GET_VALUE(getAttack2DescTxt, prevValue);
 }
 
 game::CMidgardID CCustomModifier::getAttackBaseDescTxt(const game::IAttack* thisptr) const
@@ -333,7 +324,7 @@ game::CMidgardID CCustomModifier::getAttackBaseDescTxt(const game::IAttack* this
 }
 
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
-                                    const char* script,
+                                    const CustomModifierFunctions* functions,
                                     const game::CMidgardID* id,
                                     const game::GlobalData** globalData)
 {
@@ -349,7 +340,7 @@ CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
     thisptr->prevAttack = nullptr;
     thisptr->prevAttack2 = nullptr;
     thisptr->lastElementQuery = ModifierElementTypeFlag::None;
-    new (&thisptr->script) std::filesystem::path(modifiersFolder() / script);
+    thisptr->functions = functions;
 
     thisptr->wards = {};
     IdVectorApi::get().reserve(&thisptr->wards, 1);
@@ -368,7 +359,7 @@ CCustomModifier* customModifierCopyCtor(CCustomModifier* thisptr, const CCustomM
 
     thisptr->unit = src->unit;
     thisptr->lastElementQuery = src->lastElementQuery;
-    new (&thisptr->script) std::filesystem::path(src->script);
+    thisptr->functions = src->functions;
 
     thisptr->wards = {};
     IdVectorApi::get().reserve(&thisptr->wards, 1);
@@ -382,8 +373,6 @@ CCustomModifier* customModifierCopyCtor(CCustomModifier* thisptr, const CCustomM
 void customModifierDtor(CCustomModifier* thisptr, char flags)
 {
     using namespace game;
-
-    thisptr->script.~path();
 
     IdVectorApi::get().destructor(&thisptr->wards);
 
@@ -491,7 +480,7 @@ int __fastcall soldierGetHitPoints(const game::IUsSoldier* thisptr, int /*%edx*/
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
 
-    auto value = thiz->getValue<GetInt>("getHitPoint", prev->vftable->getHitPoints(prev));
+    auto value = THIZ_GET_VALUE(getHitPoint, prev->vftable->getHitPoints(prev));
     return std::clamp(value, restrictions.unitHp->min, restrictions.unitHp->max);
 }
 
@@ -502,7 +491,7 @@ int* __fastcall soldierGetArmor(const game::IUsSoldier* thisptr, int /*%edx*/, i
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
 
-    auto value = thiz->getValue<GetInt>("getArmor", *prev->vftable->getArmor(prev, armor));
+    auto value = THIZ_GET_VALUE(getArmor, *prev->vftable->getArmor(prev, armor));
     *armor = std::clamp(value, restrictions.unitArmor->min, restrictions.unitArmor->max);
     return armor;
 }
@@ -525,7 +514,7 @@ const game::LDeathAnimCategory* __fastcall soldierGetDeathAnim(const game::IUsSo
     auto prev = thiz->getPrevSoldier();
 
     auto prevValue = prev->vftable->getDeathAnim(prev);
-    auto value = thiz->getValue<GetInt>("getDeathAnim", (int)prevValue->id);
+    auto value = THIZ_GET_VALUE(getDeathAnim, (int)prevValue->id);
     switch ((DeathAnimationId)value) {
     case DeathAnimationId::Human:
         return annimations.human;
@@ -553,7 +542,7 @@ int* __fastcall soldierGetRegen(const game::IUsSoldier* thisptr, int /*%edx*/)
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
 
-    auto value = thiz->getValue<GetInt>("getRegen", *prev->vftable->getRegen(prev));
+    auto value = THIZ_GET_VALUE(getRegen, *prev->vftable->getRegen(prev));
     thiz->regen = std::clamp(value, 0, 100);
     return &thiz->regen;
 }
@@ -563,7 +552,7 @@ int __fastcall soldierGetXpNext(const game::IUsSoldier* thisptr, int /*%edx*/)
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
 
-    return thiz->getValue<GetInt>("getXpNext", prev->vftable->getXpNext(prev));
+    return THIZ_GET_VALUE(getXpNext, prev->vftable->getXpNext(prev));
 }
 
 int __fastcall soldierGetXpKilled(const game::IUsSoldier* thisptr, int /*%edx*/)
@@ -571,7 +560,7 @@ int __fastcall soldierGetXpKilled(const game::IUsSoldier* thisptr, int /*%edx*/)
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
 
-    return thiz->getValue<GetInt>("getXpKilled", prev->vftable->getXpKilled(prev));
+    return THIZ_GET_VALUE(getXpKilled, prev->vftable->getXpKilled(prev));
 }
 
 const game::LImmuneCat* getImmuneCatById(int categoryId, const game::LImmuneCat* default)
@@ -601,8 +590,7 @@ const game::LImmuneCat* __fastcall soldierGetImmuneByAttackClass(
     auto prev = thiz->getPrevSoldier();
 
     auto prevValue = prev->vftable->getImmuneByAttackClass(prev, attackClass);
-    auto value = thiz->getValueParam<GetIntParam>("getImmuneToAttack", (int)attackClass->id,
-                                                  (int)prevValue->id);
+    auto value = THIZ_GET_VALUE_PARAM(getImmuneToAttack, (int)attackClass->id, (int)prevValue->id);
     return getImmuneCatById(value, prevValue);
 }
 
@@ -615,8 +603,7 @@ const game::LImmuneCat* __fastcall soldierGetImmuneByAttackSource(
     auto prev = thiz->getPrevSoldier();
 
     auto prevValue = prev->vftable->getImmuneByAttackSource(prev, attackSource);
-    auto value = thiz->getValueParam<GetIntParam>("getImmuneToSource", (int)attackSource->id,
-                                                  (int)prevValue->id);
+    auto value = THIZ_GET_VALUE_PARAM(getImmuneToSource, (int)attackSource->id, (int)prevValue->id);
     return getImmuneCatById(value, prevValue);
 }
 
@@ -645,7 +632,7 @@ bool __fastcall soldierGetAttackTwice(const game::IUsSoldier* thisptr, int /*%ed
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
 
-    return thiz->getValue<GetBool>("getAtckTwice", prev->vftable->getAttackTwice(prev));
+    return THIZ_GET_VALUE(getAtckTwice, prev->vftable->getAttackTwice(prev));
 }
 
 const game::Bank* __fastcall soldierGetEnrollCost(const game::IUsSoldier* thisptr, int /*%edx*/)
@@ -654,7 +641,7 @@ const game::Bank* __fastcall soldierGetEnrollCost(const game::IUsSoldier* thispt
     auto prev = thiz->getPrevSoldier();
 
     bindings::CurrencyView prevValue{*prev->vftable->getEnrollCost(prev)};
-    auto value = thiz->getValue<GetBank>("getEnrollCost", prevValue);
+    auto value = THIZ_GET_VALUE(getEnrollCost, prevValue);
 
     thiz->enrollCost = value.bank;
     return &thiz->enrollCost;
@@ -666,7 +653,7 @@ const game::Bank* __fastcall soldierGetReviveCost(const game::IUsSoldier* thispt
     auto prev = thiz->getPrevSoldier();
 
     bindings::CurrencyView prevValue{*prev->vftable->getReviveCost(prev)};
-    auto value = thiz->getValue<GetBank>("getReviveCost", prevValue);
+    auto value = THIZ_GET_VALUE(getReviveCost, prevValue);
 
     thiz->reviveCost = value.bank;
     return &thiz->reviveCost;
@@ -678,7 +665,7 @@ const game::Bank* __fastcall soldierGetHealCost(const game::IUsSoldier* thisptr,
     auto prev = thiz->getPrevSoldier();
 
     bindings::CurrencyView prevValue{*prev->vftable->getHealCost(prev)};
-    auto value = thiz->getValue<GetBank>("getHealCost", prevValue);
+    auto value = THIZ_GET_VALUE(getHealCost, prevValue);
 
     thiz->healCost = value.bank;
     return &thiz->healCost;
@@ -690,7 +677,7 @@ const game::Bank* __fastcall soldierGetTrainingCost(const game::IUsSoldier* this
     auto prev = thiz->getPrevSoldier();
 
     bindings::CurrencyView prevValue{*prev->vftable->getTrainingCost(prev)};
-    auto value = thiz->getValue<GetBank>("getTrainingCost", prevValue);
+    auto value = THIZ_GET_VALUE(getTrainingCost, prevValue);
 
     thiz->trainingCost = value.bank;
     return &thiz->trainingCost;
@@ -750,8 +737,7 @@ bool __fastcall modifierCanApplyToUnit(const game::CUmModifier* thisptr,
 {
     auto thiz = castModifierToCustomModifier(thisptr);
 
-    std::optional<sol::environment> env;
-    auto f = getScriptFunction<CanApplyToUnit>(thiz->script, "canApplyToUnit", env);
+    auto f = thiz->functions->canApplyToUnit;
     try {
         if (f) {
             bindings::UnitImplView unitImplView{unit};
@@ -772,8 +758,7 @@ bool __fastcall modifierCanApplyToUnitCategory(const game::CUmModifier* thisptr,
 {
     auto thiz = castModifierToCustomModifier(thisptr);
 
-    std::optional<sol::environment> env;
-    auto f = getScriptFunction<CanApplyToUnitType>(thiz->script, "canApplyToUnitType", env);
+    auto f = thiz->functions->canApplyToUnitType;
     try {
         if (f) {
             return (*f)((int)unitCategory->id);
@@ -790,13 +775,13 @@ bool __fastcall modifierCanApplyToUnitCategory(const game::CUmModifier* thisptr,
 bool __fastcall modifierIsLower(const game::CUmModifier* thisptr, int /*%edx*/)
 {
     auto thiz = castModifierToCustomModifier(thisptr);
-    return thiz->getValueNoParam<IsLowerBoost>("canApplyAsLowerSpell", true);
+    return THIZ_GET_VALUE_NO_PARAM(canApplyAsLowerSpell, true);
 }
 
 bool __fastcall modifierIsBoost(const game::CUmModifier* thisptr, int /*%edx*/)
 {
     auto thiz = castModifierToCustomModifier(thisptr);
-    return thiz->getValueNoParam<IsLowerBoost>("canApplyAsBoostSpell", true);
+    return THIZ_GET_VALUE_NO_PARAM(canApplyAsBoostSpell, true);
 }
 
 bool __fastcall modifierHasElement(const game::CUmModifier* thisptr,
@@ -870,7 +855,7 @@ const char* __fastcall modifierGetDescription(const game::CUmModifier* thisptr, 
 
     auto thiz = castModifierToCustomModifier(thisptr);
 
-    CMidgardID id = thiz->getValueNoParam<GetDesc>("getModifierDescTxt", bindings::IdView(emptyId));
+    CMidgardID id = THIZ_GET_VALUE_NO_PARAM(getModifierDescTxt, bindings::IdView(emptyId));
     return getGlobalText(id);
 }
 
@@ -893,7 +878,7 @@ int __fastcall stackLeaderGetMovement(const game::IUsStackLeader* thisptr, int /
     auto thiz = castStackLeaderToCustomModifier(thisptr);
     auto prev = thiz->getPrevStackLeader();
 
-    auto value = thiz->getValue<GetInt>("getMovement", prev->vftable->getMovement(prev));
+    auto value = THIZ_GET_VALUE(getMovement, prev->vftable->getMovement(prev));
     return std::clamp(value, restrictions.stackMovement->min, restrictions.stackMovement->max);
 }
 
@@ -910,8 +895,8 @@ bool __fastcall stackLeaderHasMovementBonus(const game::IUsStackLeader* thisptr,
     auto thiz = castStackLeaderToCustomModifier(thisptr);
     auto prev = thiz->getPrevStackLeader();
 
-    return thiz->getValueParam<GetBoolParam>("hasMovementBonus", (int)ground->id,
-                                             prev->vftable->hasMovementBonus(prev, ground));
+    return THIZ_GET_VALUE_PARAM(hasMovementBonus, (int)ground->id,
+                                prev->vftable->hasMovementBonus(prev, ground));
 }
 
 int __fastcall stackLeaderGetScout(const game::IUsStackLeader* thisptr, int /*%edx*/)
@@ -921,7 +906,7 @@ int __fastcall stackLeaderGetScout(const game::IUsStackLeader* thisptr, int /*%e
     auto thiz = castStackLeaderToCustomModifier(thisptr);
     auto prev = thiz->getPrevStackLeader();
 
-    auto value = thiz->getValue<GetInt>("getScout", prev->vftable->getScout(prev));
+    auto value = THIZ_GET_VALUE(getScout, prev->vftable->getScout(prev));
     return std::clamp(value, restrictions.stackScoutRange->min, restrictions.stackScoutRange->max);
 }
 
@@ -932,7 +917,7 @@ int __fastcall stackLeaderGetLeadership(const game::IUsStackLeader* thisptr, int
     auto thiz = castStackLeaderToCustomModifier(thisptr);
     auto prev = thiz->getPrevStackLeader();
 
-    auto value = thiz->getValue<GetInt>("getLeadership", prev->vftable->getLeadership(prev));
+    auto value = THIZ_GET_VALUE(getLeadership, prev->vftable->getLeadership(prev));
     return std::clamp(value, restrictions.stackLeadership->min, restrictions.stackLeadership->max);
 }
 
@@ -941,7 +926,7 @@ int __fastcall stackLeaderGetNegotiate(const game::IUsStackLeader* thisptr, int 
     auto thiz = castStackLeaderToCustomModifier(thisptr);
     auto prev = thiz->getPrevStackLeader();
 
-    return thiz->getValue<GetInt>("getNegotiate", prev->vftable->getNegotiate(prev));
+    return THIZ_GET_VALUE(getNegotiate, prev->vftable->getNegotiate(prev));
 }
 
 bool __fastcall stackLeaderHasAbility(const game::IUsStackLeader* thisptr,
@@ -951,8 +936,8 @@ bool __fastcall stackLeaderHasAbility(const game::IUsStackLeader* thisptr,
     auto thiz = castStackLeaderToCustomModifier(thisptr);
     auto prev = thiz->getPrevStackLeader();
 
-    return thiz->getValueParam<GetBoolParam>("hasAbility", (int)ability->id,
-                                             prev->vftable->hasAbility(prev, ability));
+    return THIZ_GET_VALUE_PARAM(hasAbility, (int)ability->id,
+                                prev->vftable->hasAbility(prev, ability));
 }
 
 bool __fastcall stackLeaderGetFastRetreat(const game::IUsStackLeader* thisptr, int /*%edx*/)
@@ -960,7 +945,7 @@ bool __fastcall stackLeaderGetFastRetreat(const game::IUsStackLeader* thisptr, i
     auto thiz = castStackLeaderToCustomModifier(thisptr);
     auto prev = thiz->getPrevStackLeader();
 
-    return thiz->getValue<GetBool>("getFastRetreat", prev->vftable->getFastRetreat(prev));
+    return THIZ_GET_VALUE(getFastRetreat, prev->vftable->getFastRetreat(prev));
 }
 
 int __fastcall stackLeaderGetLowerCost(const game::IUsStackLeader* thisptr, int /*%edx*/)
@@ -968,7 +953,7 @@ int __fastcall stackLeaderGetLowerCost(const game::IUsStackLeader* thisptr, int 
     auto thiz = castStackLeaderToCustomModifier(thisptr);
     auto prev = thiz->getPrevStackLeader();
 
-    auto value = thiz->getValue<GetInt>("getLowerCost", prev->vftable->getLowerCost(prev));
+    auto value = THIZ_GET_VALUE(getLowerCost, prev->vftable->getLowerCost(prev));
     return std::clamp(value, 0, 100);
 }
 
@@ -1004,8 +989,9 @@ const game::LAttackClass* __fastcall attackGetAttackClass(const game::IAttack* t
 
     auto prevValue = prev->vftable->getAttackClass(prev);
 
-    auto name = thisptr == &thiz->attack ? "getAttackClass" : "getAttack2Class";
-    auto value = thiz->getValue<GetInt>(name, (int)prevValue->id);
+    bool primary = thisptr == &thiz->attack;
+    auto value = primary ? THIZ_GET_VALUE(getAttackClass, (int)prevValue->id)
+                         : THIZ_GET_VALUE(getAttack2Class, (int)prevValue->id);
     switch ((AttackClassId)value) {
     case AttackClassId::Damage:
         return classes.damage;
@@ -1070,8 +1056,9 @@ const game::LAttackSource* __fastcall attackGetAttackSource(const game::IAttack*
 
     auto prevValue = prev->vftable->getAttackSource(prev);
 
-    auto name = thisptr == &thiz->attack ? "getAttackSource" : "getAttack2Source";
-    auto value = thiz->getValue<GetInt>(name, (int)prevValue->id);
+    bool primary = thisptr == &thiz->attack;
+    auto value = primary ? THIZ_GET_VALUE(getAttackSource, (int)prevValue->id)
+                         : THIZ_GET_VALUE(getAttack2Source, (int)prevValue->id);
     switch ((AttackSourceId)value) {
     case AttackSourceId::Weapon:
         return sources.weapon;
@@ -1109,7 +1096,7 @@ int __fastcall attackGetInitiative(const game::IAttack* thisptr, int /*%edx*/)
     if (thisptr != &thiz->attack)
         return prevValue;
 
-    auto value = thiz->getValue<GetInt>("getAttackInitiative", prevValue);
+    auto value = THIZ_GET_VALUE(getAttackInitiative, prevValue);
     return std::clamp(value, restrictions.attackInitiative->min,
                       restrictions.attackInitiative->max);
 }
@@ -1123,8 +1110,9 @@ int* __fastcall attackGetPower(const game::IAttack* thisptr, int /*%edx*/, int* 
 
     auto prevValue = *prev->vftable->getPower(prev, power);
 
-    auto name = thisptr == &thiz->attack ? "getAttackPower" : "getAttack2Power";
-    auto value = thiz->getValue<GetInt>(name, prevValue);
+    bool primary = thisptr == &thiz->attack;
+    auto value = primary ? THIZ_GET_VALUE(getAttackPower, prevValue)
+                         : THIZ_GET_VALUE(getAttack2Power, prevValue);
     *power = std::clamp(value, restrictions.attackPower->min, restrictions.attackPower->max);
     return power;
 }
@@ -1143,7 +1131,7 @@ const game::LAttackReach* __fastcall attackGetAttackReach(const game::IAttack* t
     if (thisptr != &thiz->attack)
         return prevValue;
 
-    auto value = thiz->getValue<GetInt>("getAttackReach", (int)prevValue->id);
+    auto value = THIZ_GET_VALUE(getAttackReach, (int)prevValue->id);
     switch ((AttackReachId)value) {
     case AttackReachId::All:
         return reaches.all;
@@ -1170,8 +1158,9 @@ int __fastcall attackGetQtyDamage(const game::IAttack* thisptr, int /*%edx*/)
 
     auto prevValue = prev->vftable->getQtyDamage(prev);
 
-    auto name = thisptr == &thiz->attack ? "getAttackDamage" : "getAttack2Damage";
-    auto value = thiz->getValue<GetInt>(name, prevValue);
+    bool primary = thisptr == &thiz->attack;
+    auto value = primary ? THIZ_GET_VALUE(getAttackDamage, prevValue)
+                         : THIZ_GET_VALUE(getAttack2Damage, prevValue);
     return std::clamp(value, restrictions.unitDamage->min,
                       fn.getUnitImplDamageMax(&thiz->unit->unitImpl->id));
 }
@@ -1183,8 +1172,9 @@ int __fastcall attackGetQtyHeal(const game::IAttack* thisptr, int /*%edx*/)
 
     auto prevValue = prev->vftable->getQtyHeal(prev);
 
-    auto name = thisptr == &thiz->attack ? "getAttackHeal" : "getAttack2Heal";
-    return thiz->getValue<GetInt>(name, prevValue);
+    bool primary = thisptr == &thiz->attack;
+    return primary ? THIZ_GET_VALUE(getAttackHeal, prevValue)
+                   : THIZ_GET_VALUE(getAttack2Heal, prevValue);
 }
 
 int __fastcall attackGetDrain(const game::IAttack* thisptr, int /*%edx*/, int damage)
@@ -1194,8 +1184,9 @@ int __fastcall attackGetDrain(const game::IAttack* thisptr, int /*%edx*/, int da
 
     auto prevValue = prev->vftable->getDrain(prev, damage);
 
-    auto name = thisptr == &thiz->attack ? "getAttackDrain" : "getAttack2Drain";
-    return thiz->getValueParam<GetIntParam>(name, damage, prevValue);
+    bool primary = thisptr == &thiz->attack;
+    return primary ? THIZ_GET_VALUE_PARAM(getAttackDrain, damage, prevValue)
+                   : THIZ_GET_VALUE_PARAM(getAttack2Drain, damage, prevValue);
 }
 
 int __fastcall attackGetLevel(const game::IAttack* thisptr, int /*%edx*/)
@@ -1205,8 +1196,9 @@ int __fastcall attackGetLevel(const game::IAttack* thisptr, int /*%edx*/)
 
     auto prevValue = prev->vftable->getLevel(prev);
 
-    auto name = thisptr == &thiz->attack ? "getAttackLevel" : "getAttack2Level";
-    return thiz->getValue<GetInt>(name, prevValue);
+    bool primary = thisptr == &thiz->attack;
+    return primary ? THIZ_GET_VALUE(getAttackLevel, prevValue)
+                   : THIZ_GET_VALUE(getAttack2Level, prevValue);
 }
 
 const game::CMidgardID* __fastcall attackGetAltAttackId(const game::IAttack* thisptr, int /*%edx*/)
@@ -1222,7 +1214,7 @@ const game::CMidgardID* __fastcall attackGetAltAttackId(const game::IAttack* thi
         return prevValue;
 
     bindings::IdView prevId{prevValue};
-    thiz->altAttackId = thiz->getValue<GetId>("getAltAttackId", prevId);
+    thiz->altAttackId = THIZ_GET_VALUE(getAltAttackId, prevId);
     return &thiz->altAttackId;
 }
 
@@ -1233,8 +1225,9 @@ bool __fastcall attackGetInfinite(const game::IAttack* thisptr, int /*%edx*/)
 
     auto prevValue = prev->vftable->getInfinite(prev);
 
-    auto name = thisptr == &thiz->attack ? "getAttackInfinite" : "getAttack2Infinite";
-    return thiz->getValue<GetBool>(name, prevValue);
+    bool primary = thisptr == &thiz->attack;
+    return primary ? THIZ_GET_VALUE(getAttackInfinite, prevValue)
+                   : THIZ_GET_VALUE(getAttack2Infinite, prevValue);
 }
 
 game::IdVector* __fastcall attackGetWards(const game::IAttack* thisptr, int /*%edx*/)
@@ -1245,8 +1238,9 @@ game::IdVector* __fastcall attackGetWards(const game::IAttack* thisptr, int /*%e
     auto prevValue = prev->vftable->getWards(prev);
     Ids prevIds = IdVectorToIds(prevValue);
 
-    auto name = thisptr == &thiz->attack ? "getAttackWards" : "getAttack2Wards";
-    auto value = thiz->getValueAs<GetIds>(name, prevIds);
+    bool primary = thisptr == &thiz->attack;
+    auto value = primary ? THIZ_GET_VALUE_AS(getAttackWards, prevIds)
+                         : THIZ_GET_VALUE_AS(getAttack2Wards, prevIds);
     if (value == prevIds) {
         return prevValue;
     } else {
@@ -1262,8 +1256,9 @@ bool __fastcall attackGetCritHit(const game::IAttack* thisptr, int /*%edx*/)
 
     auto prevValue = prev->vftable->getCritHit(prev);
 
-    auto name = thisptr == &thiz->attack ? "getAttackCritHit" : "getAttack2CritHit";
-    return thiz->getValue<GetBool>(name, prevValue);
+    bool primary = thisptr == &thiz->attack;
+    return primary ? THIZ_GET_VALUE(getAttackCritHit, prevValue)
+                   : THIZ_GET_VALUE(getAttack2CritHit, prevValue);
 }
 
 void __fastcall attackGetData(const game::IAttack* thisptr, int /*%edx*/, game::CAttackData* value)
@@ -1447,14 +1442,14 @@ void initVftable(CCustomModifier* thisptr)
     thisptr->attack2.vftable = &rttiInfo.attack2.vftable;
 }
 
-game::CUmModifier* createCustomModifier(const char* script,
+game::CUmModifier* createCustomModifier(const CustomModifierFunctions* functions,
                                         const game::CMidgardID* id,
                                         const game::GlobalData** globalData)
 {
     using namespace game;
 
     auto customModifier = (CCustomModifier*)Memory::get().allocate(sizeof(CCustomModifier));
-    customModifierCtor(customModifier, script, id, globalData);
+    customModifierCtor(customModifier, functions, id, globalData);
     return &customModifier->umModifier;
 }
 

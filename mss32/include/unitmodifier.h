@@ -24,6 +24,10 @@
 #include "midobject.h"
 #include "modifgroup.h"
 
+namespace hooks {
+struct CustomModifierFunctions;
+}
+
 namespace game {
 
 struct TUnitModifierVftable;
@@ -39,6 +43,11 @@ struct TUnitModifierData
     CUmModifier* modifier;
 };
 
+struct TUnitModifierDataPatched : TUnitModifierData
+{
+    hooks::CustomModifierFunctions* functions;
+};
+
 /**
  * Serves as single modifier factory. Id holds an id of modifier that this factory produces.
  * Reads modifier from DBF, then holds it as global instance and redirects all the calls to it.
@@ -48,7 +57,7 @@ struct TUnitModifierData
  */
 struct TUnitModifier : IMidObjectT<TUnitModifierVftable>
 {
-    TUnitModifierData* data;
+    TUnitModifierDataPatched* data;
 };
 
 static_assert(sizeof(TUnitModifier) == 12,

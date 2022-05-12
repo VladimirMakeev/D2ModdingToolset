@@ -226,6 +226,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\customattacks.cpp" />
     <ClCompile Include="src\customattackutils.cpp" />
     <ClCompile Include="src\custommodifier.cpp" />
+    <ClCompile Include="src\custommodifierfunctions.cpp" />
     <ClCompile Include="src\custommodifiers.cpp" />
     <ClCompile Include="src\d2osexception.cpp" />
     <ClCompile Include="src\d2string.cpp" />
@@ -567,6 +568,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\customattacks.h" />
     <ClInclude Include="include\customattackutils.h" />
     <ClInclude Include="include\custommodifier.h" />
+    <ClInclude Include="include\custommodifierfunctions.h" />
     <ClInclude Include="include\custommodifiers.h" />
     <ClInclude Include="include\d2color.h" />
     <ClInclude Include="include\d2map.h" />

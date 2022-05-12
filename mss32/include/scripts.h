@@ -67,6 +67,15 @@ static inline std::optional<T> getScriptFunction(const sol::environment& env,
     return static_cast<T>(object.as<sol::function>());
 }
 
+template <typename T>
+static inline void getScriptFunction(const sol::environment& env,
+                                     const char* name,
+                                     std::optional<T>* value,
+                                     bool alwaysExists = false)
+{
+    *value = getScriptFunction<T>(env, name, alwaysExists);
+}
+
 /**
  * Returns function with specified name from lua environment to call from c++.
  * @tparam T expected script function signature.

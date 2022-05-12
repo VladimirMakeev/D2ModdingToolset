@@ -1007,6 +1007,9 @@
     <ClCompile Include="src\unittypedescriptor.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\custommodifierfunctions.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2571,6 +2574,9 @@
     </ClInclude>
     <ClInclude Include="include\unittypedescriptor.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\custommodifierfunctions.h">
+      <Filter>features</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

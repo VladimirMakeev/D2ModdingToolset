@@ -37,6 +37,7 @@ struct CMidUnit;
 namespace hooks {
 
 struct CustomAttackData;
+struct CustomModifierFunctions;
 
 struct CCustomModifier
 {
@@ -50,7 +51,7 @@ struct CCustomModifier
     const game::IAttack* prevAttack;
     const game::IAttack* prevAttack2;
     game::ModifierElementTypeFlag lastElementQuery;
-    std::filesystem::path script;
+    const CustomModifierFunctions* functions;
     int regen;
     game::Bank enrollCost;
     game::Bank reviveCost;
@@ -83,14 +84,12 @@ struct CCustomModifier
     game::CMidgardID getAttackBaseDescTxt(const game::IAttack* thisptr) const;
 
     template <typename F, typename T>
-    T getValue(const char* functionName, const T& prev) const
+    T getValue(F function, const char* functionName, const T& prev) const
     {
-        std::optional<sol::environment> env;
-        auto f = getScriptFunction<F>(script, functionName, env);
         try {
-            if (f) {
+            if (function) {
                 bindings::UnitView unitView{unit, getPrev()};
-                return (*f)(unitView, prev);
+                return (*function)(unitView, prev);
             }
         } catch (const std::exception& e) {
             showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
@@ -102,14 +101,12 @@ struct CCustomModifier
     }
 
     template <typename F, typename T>
-    T getValueAs(const char* functionName, const T& prev) const
+    T getValueAs(F function, const char* functionName, const T& prev) const
     {
-        std::optional<sol::environment> env;
-        auto f = getScriptFunction<F>(script, functionName, env);
         try {
-            if (f) {
+            if (function) {
                 bindings::UnitView unitView{unit, getPrev()};
-                return (*f)(unitView, prev).as<T>();
+                return (*function)(unitView, prev).as<T>();
             }
         } catch (const std::exception& e) {
             showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
@@ -121,14 +118,12 @@ struct CCustomModifier
     }
 
     template <typename F, typename T, typename P>
-    T getValueParam(const char* functionName, const P& param, const T& prev) const
+    T getValueParam(F function, const char* functionName, const P& param, const T& prev) const
     {
-        std::optional<sol::environment> env;
-        auto f = getScriptFunction<F>(script, functionName, env);
         try {
-            if (f) {
+            if (function) {
                 bindings::UnitView unitView{unit, getPrev()};
-                return (*f)(unitView, param, prev);
+                return (*function)(unitView, param, prev);
             }
         } catch (const std::exception& e) {
             showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
@@ -140,13 +135,11 @@ struct CCustomModifier
     }
 
     template <typename F, typename T>
-    T getValueNoParam(const char* functionName, T def) const
+    T getValueNoParam(F function, const char* functionName, T def) const
     {
-        std::optional<sol::environment> env;
-        auto f = getScriptFunction<F>(script, functionName, env);
         try {
-            if (f) {
-                return (*f)();
+            if (function) {
+                return (*function)();
             }
         } catch (const std::exception& e) {
             showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
@@ -174,7 +167,7 @@ CCustomModifier* castModifierToCustomModifier(const game::CUmModifier* modifier)
 
 CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack);
 
-game::CUmModifier* createCustomModifier(const char* script,
+game::CUmModifier* createCustomModifier(const CustomModifierFunctions* functions,
                                         const game::CMidgardID* id,
                                         const game::GlobalData** globalData);
 

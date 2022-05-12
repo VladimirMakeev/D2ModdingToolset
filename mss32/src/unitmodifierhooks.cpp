@@ -19,6 +19,7 @@
 
 #include "unitmodifierhooks.h"
 #include "custommodifier.h"
+#include "custommodifierfunctions.h"
 #include "custommodifiers.h"
 #include "d2string.h"
 #include "dbtable.h"
@@ -45,12 +46,13 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
     thisptr->vftable = TUnitModifierApi::vftable();
     thisptr->id = emptyId;
 
-    auto data = (TUnitModifierData*)memAlloc(sizeof(TUnitModifierData));
+    auto data = (TUnitModifierDataPatched*)memAlloc(sizeof(TUnitModifierDataPatched));
     if (data) {
         data->group.id = (ModifierSourceId)emptyCategoryId;
         data->group.table = nullptr;
         data->group.vftable = LModifGroupApi::vftable();
         data->modifier = nullptr;
+        data->functions = nullptr;
     }
     thisptr->data = data;
 
@@ -61,7 +63,8 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
         String script{};
         dbApi.readString(&script, dbTable, "SCRIPT");
 
-        data->modifier = createCustomModifier(script.string, &thisptr->id, globalData);
+        data->functions = createCustomModifierFunctions(script.string);
+        data->modifier = createCustomModifier(data->functions, &thisptr->id, globalData);
 
         stringApi.free(&script);
     } else {
@@ -70,6 +73,31 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
     }
 
     return thisptr;
+}
+
+void __fastcall unitModifierDtorHooked(game::TUnitModifier* thisptr, int /*%edx*/, char flags)
+{
+    using namespace game;
+
+    const auto& memFree = Memory::get().freeNonZero;
+
+    auto data = thisptr->data;
+    if (data) {
+        auto modifier = data->modifier;
+        if (modifier)
+            modifier->vftable->destructor(modifier, true);
+
+        auto functions = data->functions;
+        if (functions) {
+            deleteCustomModifierFunctions(data->functions);
+        }
+
+        memFree(data);
+    }
+
+    if (flags & 1) {
+        memFree(thisptr);
+    }
 }
 
 } // namespace hooks
