@@ -595,6 +595,8 @@ using ReadGlobalAttacks = AttackMap**(__thiscall*)(AttackMap** thisptr,
                                                    void* codeBaseEnvProxy,
                                                    const GlobalData** globalData);
 
+using GetAltAttackIdCheckClass = const CMidgardID*(__stdcall*)(const IAttack* attack);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -700,6 +702,7 @@ struct Functions
     GetBaseUnitImplId getBaseUnitImplId;
     GetUnitImplDamageMax getUnitImplDamageMax;
     ReadGlobalAttacks readGlobalAttacks;
+    GetAltAttackIdCheckClass getAltAttackIdCheckClass;
 };
 
 /** Global variables used in game. */
