@@ -209,10 +209,10 @@ game::IAttack* getAltAttack(const game::IUsSoldier* soldier,
     const auto dynamicCast = RttiApi::get().dynamicCast;
     const auto& attackModifiedApi = CAttackModifiedApi::get();
 
-    if (!attackHasAltAttack(attack->vftable->getAttackClass(attack)))
+    auto altAttackId = attack->vftable->getAltAttackId(attack);
+    if (*altAttackId == emptyId)
         return nullptr;
 
-    auto altAttackId = attack->vftable->getAltAttackId(attack);
     auto result = getGlobalAttack(altAttackId);
     if (result == nullptr)
         return nullptr;

@@ -37,7 +37,7 @@ game::IAttack* __fastcall umAttackGetAttackByIdHooked(const game::IUsSoldier* th
     auto soldier = fn.castUnitImplToSoldier(unitImpl);
 
     auto attack = soldier->vftable->getAttackById(soldier);
-    if (attackHasAltAttack(attack->vftable->getAttackClass(attack)))
+    if (*attack->vftable->getAltAttackId(attack) != emptyId)
         return attack;
 
     auto attackModified = &umattack->data->attackModified;

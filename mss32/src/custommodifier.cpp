@@ -625,7 +625,7 @@ const game::IAttack* __fastcall soldierGetAttackById(const game::IUsSoldier* thi
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getAttackToWrap(true);
 
-    if (attackHasAltAttack(prev->vftable->getAttackClass(prev)))
+    if (*prev->vftable->getAltAttackId(prev) != game::emptyId)
         return prev;
 
     return thiz->wrap(prev, true);
@@ -1213,6 +1213,9 @@ const game::CMidgardID* __fastcall attackGetAltAttackId(const game::IAttack* thi
 {
     auto thiz = castAttackToCustomModifier(thisptr);
     auto prev = thiz->getPrevAttack(thisptr);
+
+    if (!attackHasAltAttack(prev->vftable->getAttackClass(prev)))
+        return &game::emptyId;
 
     auto prevValue = prev->vftable->getAltAttackId(prev);
     if (thisptr != &thiz->attack)

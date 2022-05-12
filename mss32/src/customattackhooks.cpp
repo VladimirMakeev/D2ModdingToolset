@@ -259,7 +259,7 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
         data->infinite = false;
     }
 
-    if (id == categories.transformSelf->id || id == categories.doppelganger->id) {
+    if (attackHasAltAttack(&thisptr->data->attackClass)) {
         db.readId(&data->altAttack, dbTable, "ALT_ATTACK");
     } else {
         data->altAttack = emptyId;
