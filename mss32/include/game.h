@@ -590,6 +590,11 @@ using GetBaseUnitImplId = CMidgardID*(__stdcall*)(CMidgardID* value,
 
 using GetUnitImplDamageMax = int(__stdcall*)(CMidgardID* unitImplId);
 
+using ReadGlobalAttacks = AttackMap**(__thiscall*)(AttackMap** thisptr,
+                                                   const char* globalsFolderPath,
+                                                   void* codeBaseEnvProxy,
+                                                   const GlobalData** globalData);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -694,6 +699,7 @@ struct Functions
     CastUnitImplToLeader castUnitImplToLeader;
     GetBaseUnitImplId getBaseUnitImplId;
     GetUnitImplDamageMax getUnitImplDamageMax;
+    ReadGlobalAttacks readGlobalAttacks;
 };
 
 /** Global variables used in game. */
