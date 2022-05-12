@@ -72,7 +72,7 @@ struct CCustomModifier
     const game::IAttack* getAttackToWrap(bool primary) const;
     CustomAttackData getCustomAttackData(const game::IAttack* thisptr) const;
     const char* getFormattedGlobalText(const game::CMidgardID& formatId,
-                                       const game::CMidgardID& valueId) const;
+                                       const game::CMidgardID& baseId) const;
 
     game::CMidgardID getNameTxt() const;
     game::CMidgardID getBaseNameTxt() const;

@@ -245,16 +245,16 @@ void CCustomModifier::setUnit(const game::CMidUnit* value)
 }
 
 const char* CCustomModifier::getFormattedGlobalText(const game::CMidgardID& formatId,
-                                                    const game::CMidgardID& valueId) const
+                                                    const game::CMidgardID& baseId) const
 {
     static std::set<std::string> globals;
     static std::mutex globalsMutex;
 
     auto format = getGlobalText(formatId);
-    auto value = getGlobalText(valueId);
+    auto base = getGlobalText(baseId);
 
     std::string formatted = format;
-    if (!replace(formatted, "%VALUE%", value))
+    if (!replace(formatted, "%BASE%", base))
         return format;
 
     // No iterators or references are invalidated on insert
