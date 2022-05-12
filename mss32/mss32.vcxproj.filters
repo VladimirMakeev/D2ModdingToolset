@@ -1004,6 +1004,9 @@
     <ClCompile Include="src\deathanimcat.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\unittypedescriptor.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2565,6 +2568,9 @@
     </ClInclude>
     <ClInclude Include="include\attackdescriptor.h">
       <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\unittypedescriptor.h">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
