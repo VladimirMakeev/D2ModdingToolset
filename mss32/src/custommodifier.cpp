@@ -325,6 +325,7 @@ game::CMidgardID CCustomModifier::getAttackBaseDescTxt(const game::IAttack* this
 
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
                                     const CustomModifierFunctions* functions,
+                                    const char* scriptFileName,
                                     const game::CMidgardID* id,
                                     const game::GlobalData** globalData)
 {
@@ -341,6 +342,7 @@ CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
     thisptr->prevAttack2 = nullptr;
     thisptr->lastElementQuery = ModifierElementTypeFlag::None;
     thisptr->functions = functions;
+    new (&thisptr->scriptFileName) std::string(scriptFileName);
 
     thisptr->wards = {};
     IdVectorApi::get().reserve(&thisptr->wards, 1);
@@ -360,6 +362,7 @@ CCustomModifier* customModifierCopyCtor(CCustomModifier* thisptr, const CCustomM
     thisptr->unit = src->unit;
     thisptr->lastElementQuery = src->lastElementQuery;
     thisptr->functions = src->functions;
+    new (&thisptr->scriptFileName) std::string(src->scriptFileName);
 
     thisptr->wards = {};
     IdVectorApi::get().reserve(&thisptr->wards, 1);
@@ -373,6 +376,8 @@ CCustomModifier* customModifierCopyCtor(CCustomModifier* thisptr, const CCustomM
 void customModifierDtor(CCustomModifier* thisptr, char flags)
 {
     using namespace game;
+
+    thisptr->scriptFileName.~basic_string();
 
     IdVectorApi::get().destructor(&thisptr->wards);
 
@@ -744,9 +749,10 @@ bool __fastcall modifierCanApplyToUnit(const game::CUmModifier* thisptr,
             return (*f)(unitImplView);
         }
     } catch (const std::exception& e) {
-        showErrorMessageBox(fmt::format("Failed to run 'canApplyToUnit' script.\n"
+        showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                        "Function: 'canApplyToUnit'\n"
                                         "Reason: '{:s}'",
-                                        e.what()));
+                                        thiz->scriptFileName, e.what()));
     }
 
     return true;
@@ -764,9 +770,10 @@ bool __fastcall modifierCanApplyToUnitCategory(const game::CUmModifier* thisptr,
             return (*f)((int)unitCategory->id);
         }
     } catch (const std::exception& e) {
-        showErrorMessageBox(fmt::format("Failed to run 'canApplyToUnitType' script.\n"
+        showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                        "Function: 'canApplyToUnitType'\n"
                                         "Reason: '{:s}'",
-                                        e.what()));
+                                        thiz->scriptFileName, e.what()));
     }
 
     return true;
@@ -1443,13 +1450,14 @@ void initVftable(CCustomModifier* thisptr)
 }
 
 game::CUmModifier* createCustomModifier(const CustomModifierFunctions* functions,
+                                        const char* scriptFileName,
                                         const game::CMidgardID* id,
                                         const game::GlobalData** globalData)
 {
     using namespace game;
 
     auto customModifier = (CCustomModifier*)Memory::get().allocate(sizeof(CCustomModifier));
-    customModifierCtor(customModifier, functions, id, globalData);
+    customModifierCtor(customModifier, functions, scriptFileName, id, globalData);
     return &customModifier->umModifier;
 }
 

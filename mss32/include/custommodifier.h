@@ -52,6 +52,7 @@ struct CCustomModifier
     const game::IAttack* prevAttack2;
     game::ModifierElementTypeFlag lastElementQuery;
     const CustomModifierFunctions* functions;
+    std::string scriptFileName;
     int regen;
     game::Bank enrollCost;
     game::Bank reviveCost;
@@ -93,8 +94,9 @@ struct CCustomModifier
             }
         } catch (const std::exception& e) {
             showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                            "Function: '{:s}'\n"
                                             "Reason: '{:s}'",
-                                            functionName, e.what()));
+                                            scriptFileName, functionName, e.what()));
         }
 
         return prev;
@@ -110,8 +112,9 @@ struct CCustomModifier
             }
         } catch (const std::exception& e) {
             showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                            "Function: '{:s}'\n"
                                             "Reason: '{:s}'",
-                                            functionName, e.what()));
+                                            scriptFileName, functionName, e.what()));
         }
 
         return prev;
@@ -127,8 +130,9 @@ struct CCustomModifier
             }
         } catch (const std::exception& e) {
             showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                            "Function: '{:s}'\n"
                                             "Reason: '{:s}'",
-                                            functionName, e.what()));
+                                            scriptFileName, functionName, e.what()));
         }
 
         return prev;
@@ -143,8 +147,9 @@ struct CCustomModifier
             }
         } catch (const std::exception& e) {
             showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                            "Function: '{:s}'\n"
                                             "Reason: '{:s}'",
-                                            functionName, e.what()));
+                                            scriptFileName, functionName, e.what()));
         }
 
         return def;
@@ -168,6 +173,7 @@ CCustomModifier* castModifierToCustomModifier(const game::CUmModifier* modifier)
 CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack);
 
 game::CUmModifier* createCustomModifier(const CustomModifierFunctions* functions,
+                                        const char* scriptFileName,
                                         const game::CMidgardID* id,
                                         const game::GlobalData** globalData);
 
