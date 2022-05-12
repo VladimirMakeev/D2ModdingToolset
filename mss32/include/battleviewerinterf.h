@@ -405,9 +405,9 @@ struct Api
     using UnknownMethod7 = void(__thiscall*)(CBattleViewerInterf* thisptr);
     UnknownMethod7 unknownMethod7;
 
-    using UnknownMethod8 = bool(__thiscall*)(CBattleViewerInterf* thisptr,
-                                             const CMqPoint* mousePosition);
-    UnknownMethod8 unknownMethod8;
+    using UpdateCursor = bool(__thiscall*)(CBattleViewerInterf* thisptr,
+                                           const CMqPoint* mousePosition);
+    UpdateCursor updateCursor;
 
     using UnknownMethod9 = void(__thiscall*)(CBattleViewerInterf* thisptr);
     UnknownMethod9 unknownMethod9;
