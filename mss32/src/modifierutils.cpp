@@ -58,6 +58,15 @@ game::CUmUnit* castUmModifierToUmUnit(game::CUmModifier* modifier)
     return (CUmUnit*)dynamicCast(modifier, 0, rtti.CUmModifierType, rtti.CUmUnitType, 0);
 }
 
+game::CUmAttack* castUmModifierToUmAttack(game::CUmModifier* modifier)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    return (CUmAttack*)dynamicCast(modifier, 0, rtti.CUmModifierType, rtti.CUmAttackType, 0);
+}
+
 game::IUsUnit* castUmModifierToUnit(game::CUmModifier* modifier)
 {
     using namespace game;
@@ -74,6 +83,22 @@ game::CUmModifier* castUnitToUmModifier(game::IUsUnit* unit)
     const auto& rtti = RttiApi::rtti();
     const auto dynamicCast = RttiApi::get().dynamicCast;
     return (CUmModifier*)dynamicCast(unit, 0, rtti.IUsUnitType, rtti.CUmModifierType, 0);
+}
+
+game::CUmModifier* getFirstUmModifier(game::IUsUnit* unit)
+{
+    using namespace game;
+
+    CUmModifier* result = nullptr;
+    for (auto curr = unit; curr; curr = result->data->prev) {
+        auto modifier = castUnitToUmModifier(curr);
+        if (!modifier)
+            break;
+
+        result = modifier;
+    }
+
+    return result;
 }
 
 const game::TUnitModifier* getUnitModifier(const game::CMidgardID* modifierId)

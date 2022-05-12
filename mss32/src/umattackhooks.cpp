@@ -18,6 +18,7 @@
  */
 
 #include "umattackhooks.h"
+#include "attackutils.h"
 #include "game.h"
 #include "umattack.h"
 
@@ -36,8 +37,7 @@ game::IAttack* __fastcall umAttackGetAttackByIdHooked(const game::IUsSoldier* th
     auto soldier = fn.castUnitImplToSoldier(unitImpl);
 
     auto attack = soldier->vftable->getAttackById(soldier);
-    auto altAttackId = attack->vftable->getAltAttackId(attack);
-    if (*altAttackId != emptyId)
+    if (attackHasAltAttack(attack->vftable->getAttackClass(attack)))
         return attack;
 
     auto attackModified = &umattack->data->attackModified;

@@ -142,6 +142,7 @@ struct Rtti
     TypeDescriptor* IUsUnitType;
     TypeDescriptor* IEncUnitDescriptorType;
     TypeDescriptor* CMidUnitDescriptorType;
+    TypeDescriptor* CUmAttackType;
 };
 
 const Rtti& rtti();

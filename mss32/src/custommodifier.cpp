@@ -144,54 +144,33 @@ void IdsToIdVector(const Ids& src, game::IdVector* dst)
     idVectorApi.destructor(&tmp);
 }
 
-game::IUsUnit* CCustomModifier::getPrev() const
+const game::IUsUnit* CCustomModifier::getPrev() const
 {
     return umModifier.data->prev;
 }
 
-game::IUsSoldier* CCustomModifier::getPrevSoldier() const
+const game::IUsSoldier* CCustomModifier::getPrevSoldier() const
 {
     return game::gameFunctions().castUnitImplToSoldier(getPrev());
 }
 
-game::IUsStackLeader* CCustomModifier::getPrevStackLeader() const
+const game::IUsStackLeader* CCustomModifier::getPrevStackLeader() const
 {
     return game::gameFunctions().castUnitImplToStackLeader(getPrev());
 }
 
-game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* thisptr,
-                                              bool checkAltAttack) const
+const game::IAttack* CCustomModifier::getPrevAttack(const game::IAttack* thisptr) const
 {
     if (thisptr == &attack) {
-        return getPrevAttack(true, checkAltAttack);
+        return prevAttack;
     } else if (thisptr == &attack2) {
-        return getPrevAttack(false, checkAltAttack);
+        return prevAttack2;
     }
 
     return nullptr;
 }
 
-game::IAttack* CCustomModifier::getPrevAttack(bool primary, bool checkAltAttack) const
-{
-    auto prev = getPrevSoldier();
-
-    bool isAltAttack;
-    auto prevValue = hooks::getAttack(prev, primary, checkAltAttack, &isAltAttack);
-    if (isAltAttack)
-        return prevValue;
-
-    bindings::IdView prevId{prevValue ? prevValue->id : game::emptyId};
-    auto value = getValue<GetId>(primary ? "getAttackId" : "getAttack2Id", prevId);
-    if (value != prevId) {
-        auto attack = getGlobalAttack(&value.id);
-        if (attack)
-            return attack;
-    }
-
-    return prevValue;
-}
-
-CCustomModifier* CCustomModifier::getPrevCustomModifier() const
+const CCustomModifier* CCustomModifier::getPrevCustomModifier() const
 {
     using namespace game;
 
@@ -213,21 +192,34 @@ CCustomModifier* CCustomModifier::getPrevCustomModifier() const
     return nullptr;
 }
 
-game::IAttack* CCustomModifier::getAttack(bool primary)
+const game::IAttack* CCustomModifier::getAttackToWrap(bool primary) const
 {
-    auto result = primary ? &attack : &attack2;
-    auto prev = getPrevAttack(result, false);
-    if (!prev)
-        return nullptr;
+    auto prev = getPrevSoldier();
 
-    if (primary) {
-        auto altAttackId = prev->vftable->getAltAttackId(prev);
-        if (*altAttackId != game::emptyId)
-            return prev;
+    auto prevValue = hooks::getAttack(prev, primary, false);
+
+    bindings::IdView prevId{prevValue ? prevValue->id : game::emptyId};
+    auto value = getValue<GetId>(primary ? "getAttackId" : "getAttack2Id", prevId);
+    if (value != prevId) {
+        auto attack = getGlobalAttack(&value.id);
+        if (attack)
+            return attack;
     }
 
-    result->id = prev->id;
-    return result;
+    return prevValue;
+}
+
+game::IAttack* CCustomModifier::wrap(const game::IAttack* prev, bool primary)
+{
+    if (primary) {
+        attack.id = prev->id;
+        prevAttack = prev;
+        return &attack;
+    } else {
+        attack2.id = prev->id;
+        prevAttack2 = prev;
+        return &attack2;
+    }
 }
 
 CustomAttackData CCustomModifier::getCustomAttackData(const game::IAttack* thisptr) const
@@ -354,6 +346,8 @@ CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
     CUmModifierApi::get().constructor(&thisptr->umModifier, id, globalData);
 
     thisptr->unit = nullptr;
+    thisptr->prevAttack = nullptr;
+    thisptr->prevAttack2 = nullptr;
     thisptr->lastElementQuery = ModifierElementTypeFlag::None;
     new (&thisptr->script) std::filesystem::path(modifiersFolder() / script);
 
@@ -626,14 +620,24 @@ const game::LImmuneCat* __fastcall soldierGetImmuneByAttackSource(
     return getImmuneCatById(value, prevValue);
 }
 
-game::IAttack* __fastcall soldierGetAttackById(const game::IUsSoldier* thisptr, int /*%edx*/)
+const game::IAttack* __fastcall soldierGetAttackById(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
-    return castSoldierToCustomModifier(thisptr)->getAttack(true);
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    auto prev = thiz->getAttackToWrap(true);
+
+    if (attackHasAltAttack(prev->vftable->getAttackClass(prev)))
+        return prev;
+
+    return thiz->wrap(prev, true);
 }
 
-game::IAttack* __fastcall soldierGetSecondAttackById(const game::IUsSoldier* thisptr, int /*%edx*/)
+const game::IAttack* __fastcall soldierGetSecondAttackById(const game::IUsSoldier* thisptr,
+                                                           int /*%edx*/)
 {
-    return castSoldierToCustomModifier(thisptr)->getAttack(false);
+    auto thiz = castSoldierToCustomModifier(thisptr);
+    auto prev = thiz->getAttackToWrap(false);
+
+    return prev ? thiz->wrap(prev, false) : nullptr;
 }
 
 bool __fastcall soldierGetAttackTwice(const game::IUsSoldier* thisptr, int /*%edx*/)

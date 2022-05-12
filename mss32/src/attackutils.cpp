@@ -120,6 +120,14 @@ bool attackHasPower(const game::LAttackClass* attackClass)
            || id == classes.transformOther->id;
 }
 
+bool attackHasAltAttack(const game::LAttackClass* attackClass)
+{
+    const auto& classes = game::AttackClassCategories::get();
+    const auto id = attackClass->id;
+
+    return id == classes.transformSelf->id || id == classes.doppelganger->id;
+}
+
 bool isMeleeAttack(const game::IAttack* attack)
 {
     using namespace game;

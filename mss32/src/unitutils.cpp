@@ -21,8 +21,10 @@
 #include "attack.h"
 #include "attacksourcecat.h"
 #include "attacksourcelist.h"
+#include "attackutils.h"
 #include "battlemsgdata.h"
 #include "customattacks.h"
+#include "custommodifier.h"
 #include "dynamiccast.h"
 #include "game.h"
 #include "gameutils.h"
@@ -32,7 +34,9 @@
 #include "midgardid.h"
 #include "midstack.h"
 #include "midunit.h"
+#include "modifierutils.h"
 #include "settings.h"
+#include "umattack.h"
 #include "ummodifier.h"
 #include "unitgenerator.h"
 #include "ussoldier.h"
@@ -179,38 +183,56 @@ game::TUsSoldierImpl* getSoldierImpl(const game::IUsSoldier* soldier)
     return getSoldierImpl(unit);
 }
 
-game::IAttack* getAttack(const game::IUsSoldier* soldier,
-                         bool primary,
-                         bool checkAltAttack,
-                         bool* isAltAttack)
+game::IAttack* getAttack(const game::IUsSoldier* soldier, bool primary, bool checkAltAttack)
 {
     using namespace game;
 
-    if (isAltAttack)
-        *isAltAttack = false;
-
     auto attack = primary ? soldier->vftable->getAttackById(soldier)
                           : soldier->vftable->getSecondAttackById(soldier);
-    if (attack == nullptr || !primary || !checkAltAttack)
-        return attack;
 
-    auto altAttackId = attack->vftable->getAltAttackId(attack);
-    if (*altAttackId == emptyId)
-        return attack;
-
-    if (isAltAttack)
-        *isAltAttack = true;
-
-    auto soldierImpl = getSoldierImpl(soldier);
-    auto& attackId = soldierImpl->data->attackId;
-
-    // HACK: temporary swapping attack ids to get alt attack wrapped in CAttackModified
-    auto prevId = attackId;
-    attackId = *altAttackId;
-    attack = soldier->vftable->getAttackById(soldier);
-    attackId = prevId;
+    if (checkAltAttack && attack != nullptr) {
+        auto altAttack = getAltAttack(soldier, attack, primary);
+        if (altAttack)
+            return altAttack;
+    }
 
     return attack;
+}
+
+game::IAttack* getAltAttack(const game::IUsSoldier* soldier,
+                            const game::IAttack* attack,
+                            bool primary)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& attackModifiedApi = CAttackModifiedApi::get();
+
+    if (!attackHasAltAttack(attack->vftable->getAttackClass(attack)))
+        return nullptr;
+
+    auto altAttackId = attack->vftable->getAltAttackId(attack);
+    auto result = getGlobalAttack(altAttackId);
+    if (result == nullptr)
+        return nullptr;
+
+    auto unitImpl = (IUsUnit*)dynamicCast(soldier, 0, rtti.IUsSoldierType, rtti.IUsUnitType, 0);
+    for (CUmModifier* curr = getFirstUmModifier(unitImpl); curr; curr = curr->data->next) {
+        auto umAttack = castUmModifierToUmAttack(curr);
+        if (umAttack) {
+            auto attackModified = &umAttack->data->attackModified;
+            attackModifiedApi.wrap(attackModified, result);
+            result = attackModified;
+        } else {
+            auto custom = castModifierToCustomModifier(curr);
+            if (custom) {
+                result = custom->wrap(result, primary);
+            }
+        }
+    }
+
+    return result;
 }
 
 int getArmor(const game::CMidgardID* unitId,

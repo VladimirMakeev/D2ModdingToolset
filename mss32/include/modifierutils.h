@@ -32,6 +32,7 @@ struct UnitInfo;
 struct TUnitModifier;
 struct CUmModifier;
 struct CUmUnit;
+struct CUmAttack;
 struct LAttackSource;
 struct LAttackClass;
 struct IAttack;
@@ -44,9 +45,13 @@ bool unitCanBeModified(game::BattleMsgData* battleMsgData, game::CMidgardID* tar
 
 game::CUmUnit* castUmModifierToUmUnit(game::CUmModifier* modifier);
 
+game::CUmAttack* castUmModifierToUmAttack(game::CUmModifier* modifier);
+
 game::IUsUnit* castUmModifierToUnit(game::CUmModifier* modifier);
 
 game::CUmModifier* castUnitToUmModifier(game::IUsUnit* unit);
+
+game::CUmModifier* getFirstUmModifier(game::IUsUnit* unit);
 
 const game::TUnitModifier* getUnitModifier(const game::CMidgardID* modifierId);
 

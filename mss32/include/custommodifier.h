@@ -47,6 +47,8 @@ struct CCustomModifier
     game::IAttack attack;
     game::IAttack attack2;
     const game::CMidUnit* unit;
+    const game::IAttack* prevAttack;
+    const game::IAttack* prevAttack2;
     game::ModifierElementTypeFlag lastElementQuery;
     std::filesystem::path script;
     int regen;
@@ -57,15 +59,15 @@ struct CCustomModifier
     game::CMidgardID altAttackId;
     game::IdVector wards;
 
-    game::IAttack* getAttack(bool primary);
+    game::IAttack* wrap(const game::IAttack* prev, bool primary);
     void setUnit(const game::CMidUnit* value);
 
-    game::IUsUnit* getPrev() const;
-    game::IUsSoldier* getPrevSoldier() const;
-    game::IUsStackLeader* getPrevStackLeader() const;
-    game::IAttack* getPrevAttack(const game::IAttack* thisptr, bool checkAltAttack = true) const;
-    game::IAttack* getPrevAttack(bool primary, bool checkAltAttack) const;
-    CCustomModifier* getPrevCustomModifier() const;
+    const game::IUsUnit* getPrev() const;
+    const game::IUsSoldier* getPrevSoldier() const;
+    const game::IUsStackLeader* getPrevStackLeader() const;
+    const game::IAttack* getPrevAttack(const game::IAttack* thisptr) const;
+    const CCustomModifier* getPrevCustomModifier() const;
+    const game::IAttack* getAttackToWrap(bool primary) const;
     CustomAttackData getCustomAttackData(const game::IAttack* thisptr) const;
     const char* getFormattedGlobalText(const game::CMidgardID& formatId,
                                        const game::CMidgardID& valueId) const;

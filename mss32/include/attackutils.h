@@ -36,6 +36,7 @@ int getBoostDamage(int level);
 int getLowerDamage(int level);
 int getLowerInitiative(int level);
 bool attackHasPower(const game::LAttackClass* attackClass); // Power is chance to hit / accuracy
+bool attackHasAltAttack(const game::LAttackClass* attackClass);
 bool isMeleeAttack(const game::IAttack* attack);
 int getAttackMaxTargets(const game::LAttackReach* reach);
 
