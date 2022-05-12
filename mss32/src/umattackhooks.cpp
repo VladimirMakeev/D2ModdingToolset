@@ -33,15 +33,15 @@ game::IAttack* __fastcall umAttackGetAttackByIdHooked(const game::IUsSoldier* th
 
     auto umattack = castSoldierToUmAttack(thisptr);
 
-    auto unitImpl = umattack->umModifier.data->prev;
-    auto soldier = fn.castUnitImplToSoldier(unitImpl);
+    auto prevUnitImpl = umattack->umModifier.data->prev;
+    auto prevSoldier = fn.castUnitImplToSoldier(prevUnitImpl);
 
-    auto attack = soldier->vftable->getAttackById(soldier);
-    if (*attack->vftable->getAltAttackId(attack) != emptyId)
-        return attack;
+    auto prev = prevSoldier->vftable->getAttackById(prevSoldier);
+    if (*prev->vftable->getAltAttackId(prev) != emptyId)
+        return prev;
 
     auto attackModified = &umattack->data->attackModified;
-    attackModifiedApi.wrap(attackModified, attack);
+    attackModifiedApi.wrap(attackModified, prev);
     return attackModified;
 }
 
