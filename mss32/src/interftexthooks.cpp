@@ -42,7 +42,7 @@
 
 namespace hooks {
 
-std::string getMaxStringText(const std::string& value)
+std::string getMaxText(const std::string& value)
 {
     // "%DMG% \c000;000;000;(\c128;000;000;Max\c000;000;000;)"
     auto result = getInterfaceText("X005TA0811");
@@ -50,24 +50,39 @@ std::string getMaxStringText(const std::string& value)
     return result;
 }
 
-std::string getModifiedNumberText(int value,
-                                  bool valuePercent,
-                                  int bonus,
-                                  bool bonusPercent,
-                                  int max = INT_MAX)
+std::string getNumberText(int value, bool percent)
 {
-    auto result = fmt::format(valuePercent ? "{:d}%" : "{:d}", value);
+    return fmt::format(percent ? "{:d}%" : "{:d}", value);
+}
+
+std::string getBonusNumberText(int bonus, bool percent)
+{
+    if (!bonus)
+        return "";
+
+    // "\c025;090;000; + %NUMBER%"
+    // "\c100;000;000; - %NUMBER%"
+    auto result = getInterfaceText(bonus > 0 ? "X005TA0486" : "X005TA0487");
+    // "\c000;000;000;"
+    result += getInterfaceText("X005TA0488");
+    replace(result, "%NUMBER%", fmt::format(percent ? "{:d}%" : "{:d}", abs(bonus)));
+
+    return result;
+}
+
+std::string getModifiedNumberText(int value, int bonus, bool percent, int max = INT_MAX)
+{
+    auto result = getNumberText(value, percent);
 
     if (bonus) {
-        // "\c025;090;000; + %NUMBER%"
-        // "\c100;000;000; - %NUMBER%"
-        result += getInterfaceText(bonus > 0 ? "X005TA0486" : "X005TA0487");
-        // "\c000;000;000;"
-        result += getInterfaceText("X005TA0488");
-        replace(result, "%NUMBER%", fmt::format(bonusPercent ? "{:d}%" : "{:d}", abs(bonus)));
+        result += getBonusNumberText(bonus, percent);
     }
 
-    return (value + bonus < max) ? result : getMaxStringText(result);
+    if (value + bonus >= max) {
+        result = getMaxText(result);
+    }
+
+    return result;
 }
 
 std::string getModifiedStringText(const std::string& value, bool modified)
@@ -220,12 +235,11 @@ std::string getAttackPowerText(const utils::AttackDescriptor& actual,
         }
     }
 
-    std::string result = getModifiedNumberText(power, true, actual.power() - power, true);
+    std::string result = getModifiedNumberText(power, actual.power() - power, true);
 
     if (actual.critHit()) {
         int critPower = global.critPower() ? global.critPower() : actual.critPower();
-        auto critText = getModifiedNumberText(critPower, true, actual.critPower() - critPower,
-                                              true);
+        auto critText = getModifiedNumberText(critPower, actual.critPower() - critPower, true);
         result = addCritHitText(result, critText);
     }
 
@@ -252,7 +266,7 @@ std::string getAttackInitiativeText(const utils::AttackDescriptor& actual,
 
     int boosted = actual.initiative();
     boosted -= actual.initiative() * getLowerInitiative(lowerInitiativeLevel) / 100;
-    return getModifiedNumberText(initiative, false, boosted - initiative, false);
+    return getModifiedNumberText(initiative, boosted - initiative, false);
 }
 
 std::string getDamageDrainAttackDamageText(const utils::AttackDescriptor& actual,
@@ -283,12 +297,11 @@ std::string getDamageDrainAttackDamageText(const utils::AttackDescriptor& actual
     boosted = std::clamp(boosted, restrictions.unitDamage->min, damageMax);
     boosted *= multiplier;
 
-    auto result = getModifiedNumberText(damage, false, boosted - damage, false,
-                                        damageMax * multiplier);
+    auto result = getModifiedNumberText(damage, boosted - damage, false, damageMax * multiplier);
 
     if (actual.critHit()) {
         int critDamage = global.critDamage() ? global.critDamage() : actual.critDamage();
-        auto critText = getModifiedNumberText(boosted * critDamage / 100, false,
+        auto critText = getModifiedNumberText(boosted * critDamage / 100,
                                               boosted * (actual.critDamage() - critDamage) / 100,
                                               false);
         result = addCritHitText(result, critText);
@@ -303,6 +316,45 @@ std::string getDamageDrainAttackDamageText(const utils::AttackDescriptor& actual
     }
 }
 
+std::string getBoostDamageAttackDamageText(const utils::AttackDescriptor& actual,
+                                           const utils::AttackDescriptor& global)
+{
+    int boost = global.boost() ? global.boost() : actual.boost();
+
+    auto result = getInterfaceText("X005TA0535"); // "+%BOOST%%"
+    replace(result, "%BOOST%", getNumberText(boost, false));
+
+    result += getBonusNumberText(actual.boost() - boost, true);
+
+    return result;
+}
+
+std::string getLowerDamageAttackDamageText(const utils::AttackDescriptor& actual,
+                                           const utils::AttackDescriptor& global)
+{
+    int lower = global.lower() ? global.lower() : actual.lower();
+
+    auto result = getInterfaceText("X005TA0550"); // "-%LOWER%%"
+    replace(result, "%LOWER%", getNumberText(lower, false));
+
+    result += getBonusNumberText(actual.lower() - lower, true);
+
+    return result;
+}
+
+std::string getLowerInitiativeAttackDamageText(const utils::AttackDescriptor& actual,
+                                               const utils::AttackDescriptor& global)
+{
+    int lower = global.lowerIni() ? global.lowerIni() : actual.lowerIni();
+
+    auto result = getInterfaceText("X005TA0550"); // "-%LOWER%%"
+    replace(result, "%LOWER%", getNumberText(lower, false));
+
+    result += getBonusNumberText(actual.lowerIni() - lower, true);
+
+    return result;
+}
+
 std::string getAttackDamageText(const utils::AttackDescriptor& actual,
                                 const utils::AttackDescriptor& global,
                                 const game::IdList* editorModifiers,
@@ -314,36 +366,24 @@ std::string getAttackDamageText(const utils::AttackDescriptor& actual,
 
     const auto& classes = AttackClassCategories::get();
 
-    std::string result;
     auto id = actual.class_()->id;
     if (id == classes.boostDamage->id) {
-        int boost = global.boost() ? global.boost() : actual.boost();
-        result = getInterfaceText("X005TA0535"); // "+%BOOST%%"
-        replace(result, "%BOOST%",
-                getModifiedNumberText(boost, false, actual.boost() - boost, true));
+        return getBoostDamageAttackDamageText(actual, global);
     } else if (id == classes.lowerDamage->id) {
-        int lower = global.lower() ? global.lower() : actual.lower();
-        result = getInterfaceText("X005TA0550"); // "-%LOWER%%"
-        replace(result, "%LOWER%",
-                getModifiedNumberText(lower, false, actual.lower() - lower, true));
+        return getLowerDamageAttackDamageText(actual, global);
     } else if (id == classes.lowerInitiative->id) {
-        int lower = global.lowerIni() ? global.lowerIni() : actual.lowerIni();
-        result = getInterfaceText("X005TA0550"); // "-%LOWER%%"
-        replace(result, "%LOWER%",
-                getModifiedNumberText(lower, false, actual.lowerIni() - lower, true));
+        return getLowerInitiativeAttackDamageText(actual, global);
     } else if (id == classes.damage->id || id == classes.drain->id
                || id == classes.drainOverflow->id) {
-        result = getDamageDrainAttackDamageText(actual, global, editorModifiers, boostDamageLevel,
-                                                lowerDamageLevel, damageMax);
+        return getDamageDrainAttackDamageText(actual, global, editorModifiers, boostDamageLevel,
+                                              lowerDamageLevel, damageMax);
     } else if (id == classes.heal->id || id == classes.bestowWards->id) {
         int heal = global.heal() ? global.heal() : actual.heal();
-        result = getModifiedNumberText(heal, false, actual.heal() - heal, false);
+        return getModifiedNumberText(heal, actual.heal() - heal, false);
     } else {
         int damage = global.damage() ? global.damage() : actual.damage();
-        result = getModifiedNumberText(damage, false, actual.damage() - damage, false, damageMax);
+        return getModifiedNumberText(damage, actual.damage() - damage, false, damageMax);
     }
-
-    return result;
 }
 
 std::string getAttackSourceText(const game::LAttackSource* source)
@@ -431,8 +471,8 @@ std::string getAttackTargetsText(const game::LAttackReach* reach)
     return "";
 }
 
-std::string getAttackText(const utils::AttackDescriptor& actual,
-                          const utils::AttackDescriptor& global)
+std::string getAttackNameText(const utils::AttackDescriptor& actual,
+                              const utils::AttackDescriptor& global)
 {
     using namespace game;
 
@@ -480,13 +520,13 @@ std::string getAltAttackField(const utils::AttackDescriptor& actual,
     if (actual.empty())
         return "";
 
-    return addAltAttackText("", getAttackText(actual, global));
+    return addAltAttackText("", getAttackNameText(actual, global));
 }
 
 std::string getAttackField(const utils::AttackDescriptor& actual,
                            const utils::AttackDescriptor& global)
 {
-    return getAttackText(actual, global);
+    return getAttackNameText(actual, global);
 }
 
 std::string getSecondField(const utils::AttackDescriptor& actual,
@@ -495,7 +535,7 @@ std::string getSecondField(const utils::AttackDescriptor& actual,
     if (actual.empty())
         return "";
 
-    return addAttack2Text("", getAttackText(actual, global));
+    return addAttack2Text("", getAttackNameText(actual, global));
 }
 
 std::string getHitField(const utils::AttackDescriptor& actual,
