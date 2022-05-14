@@ -402,6 +402,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\textboxinterf.cpp" />
     <ClCompile Include="src\textids.cpp" />
     <ClCompile Include="src\tileindices.cpp" />
+    <ClCompile Include="src\tileprefixes.cpp" />
     <ClCompile Include="src\tilevariation.cpp" />
     <ClCompile Include="src\togglebutton.cpp" />
     <ClCompile Include="src\transformotherhooks.cpp" />
@@ -909,6 +910,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\textids.h" />
     <ClInclude Include="include\texturehandle.h" />
     <ClInclude Include="include\tileindices.h" />
+    <ClInclude Include="include\tileprefixes.h" />
     <ClInclude Include="include\tilevariation.h" />
     <ClInclude Include="include\togglebutton.h" />
     <ClInclude Include="include\tooltip.h" />

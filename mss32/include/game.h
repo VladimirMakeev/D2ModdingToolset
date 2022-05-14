@@ -549,12 +549,6 @@ using GetTerrainByRace = const LTerrainCategory*(__stdcall*)(const LRaceCategory
 /** Returns race category that corresponds to specified terrain category. */
 using GetRaceByTerrain = const LRaceCategory*(__stdcall*)(const LTerrainCategory* terrain);
 
-/** Returns tile prefix number by tile prefix name. */
-using GetTilePrefixByName = int(__stdcall*)(const char* tileNamePrefix);
-
-/** Returns tile prefix name by tile prefix number. */
-using GetTilePrefixName = const char*(__stdcall*)(int tilePrefixNumber);
-
 /** Assumption: returns color index for minimap. */
 using GetNumberByTerrainGround = int(__stdcall*)(const LTerrainCategory* terrain,
                                                  const LGroundCategory* ground);
@@ -666,8 +660,6 @@ struct Functions
     GetTerrainByRace getTerrainByRace2;
     GetRaceByTerrain getRaceByTerrain;
     GetRaceByTerrain getPlayableRaceByTerrain;
-    GetTilePrefixByName getTilePrefixByName;
-    GetTilePrefixName getTilePrefixName;
     GetNumberByTerrainGround getNumberByTerrainGround;
     ThrowGenericException throwGenericException;
     IgnorePlayerEvents ignorePlayerEvents;
