@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2022 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,22 +20,43 @@
 #ifndef TILEINDICES_H
 #define TILEINDICES_H
 
+#include "tileprefixes.h"
+#include <cstdint>
+
 namespace game {
 
 struct LTerrainCategory;
 struct LGroundCategory;
 
-/** Indices for fast CIsoEngineGround data lookup. */
+/**
+ * Indices of CIsoEngineGroundData::terrainTiles elements and their relations with tile images.
+ * Order of these indices determines drawing order for border tiles.
+ * Water tiles are drawn first staying at the bottom while ground tiles are drawn above.
+ * Snowy terrain of mountain clans always drawn last and stays on top of others.
+ */
+enum class TileArrayIndex : std::uint32_t
+{
+    Black, /**< Black tiles drawn outside of map bounds. */
+    Water,
+    Neutral,
+    Heretic,
+    Undead,
+    Human,
+    Elf,
+    Dwarf,
+};
+
+/** Stores indices of CIsoEngineGroundData::terrainTiles for fast access. */
 struct TileIndices
 {
-    int water;
-    int neutral;
-    int human;
-    int heretic;
-    int dwarf;
-    int undead;
-    int black; /**< Fog of war. */
-    int elf;
+    TileArrayIndex water;
+    TileArrayIndex neutral;
+    TileArrayIndex human;
+    TileArrayIndex heretic;
+    TileArrayIndex dwarf;
+    TileArrayIndex undead;
+    TileArrayIndex black;
+    TileArrayIndex elf;
 };
 
 static_assert(sizeof(TileIndices) == 32, "Size of TileIndices structure must be exactly 32 bytes");
@@ -47,10 +68,10 @@ struct Api
     using Constructor = TileIndices*(__thiscall*)(TileIndices* thisptr);
     Constructor constructor;
 
-    using CreateBorderTiles = void(__stdcall*)(int tileIndex, int terrainTile);
+    using CreateBorderTiles = void(__stdcall*)(TileArrayIndex tileIndex, TilePrefix tilePrefix);
     CreateBorderTiles createBorderTiles;
 
-    using CreateTerrainTiles = void(__stdcall*)(int tileIndex, int tilePrefixNumber);
+    using CreateTerrainTiles = void(__stdcall*)(TileArrayIndex tileIndex, TilePrefix tilePrefix);
     CreateTerrainTiles createTerrainTiles;
 
     using GetTileDataIndex = int(__thiscall*)(const TileIndices* thisptr,

@@ -26,6 +26,7 @@
 #include "mqtexture.h"
 #include "smartptr.h"
 #include "texturehandle.h"
+#include "tileindices.h"
 #include <cstddef>
 #include <cstdint>
 
@@ -54,52 +55,6 @@ constexpr int tileHalfHeight{tileHeight / 2};
 
 /** Number of pixels in tile image. */
 constexpr int tilePixelCount{tileWidth * tileHeight};
-
-/** Used to convert between tile name prefixes and vice versa. */
-enum class TilePrefix : std::uint32_t
-{
-    Water,   /**< WA */
-    Neutral, /**< NE */
-    Human,   /**< HU */
-    Heretic, /**< HE */
-    Dwarf,   /**< DW */
-    Undead,  /**< UN */
-    Black,   /**< BL */
-    Elf,     /**< EL */
-};
-
-/**
- * Indices of CIsoEngineGroundData::terrainTiles elements and their relations with tile images.
- * Order of these indices determines drawing order for border tiles.
- * Water tiles are drawn first staying at the bottom while ground tiles are drawn above.
- * Snowy terrain of mountain clans always drawn last and stays on top of others.
- */
-enum class TileArrayIndex : std::uint32_t
-{
-    Black, /**< Black tiles drawn outside of map bounds. */
-    Water,
-    Neutral,
-    Heretic,
-    Undead,
-    Human,
-    Elf,
-    Dwarf,
-};
-
-/** Stores indices of CIsoEngineGroundData::terrainTiles for fast access. */
-struct TileIndices
-{
-    TileArrayIndex water;
-    TileArrayIndex neutral;
-    TileArrayIndex human;
-    TileArrayIndex heretic;
-    TileArrayIndex dwarf;
-    TileArrayIndex undead;
-    TileArrayIndex black;
-    TileArrayIndex elf;
-};
-
-static_assert(sizeof(TileIndices) == 32, "Size of TileIndices structure must be exactly 32 bytes");
 
 struct GroundTilesData
 {
