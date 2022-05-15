@@ -987,22 +987,18 @@ const char* __fastcall attackGetDescription(const game::IAttack* thisptr, int /*
 const game::LAttackClass* __fastcall attackGetAttackClass(const game::IAttack* thisptr,
                                                           int /*%edx*/)
 {
-    auto thiz = castAttackToCustomModifier(thisptr);
-    return thiz->getAttackClass(thisptr == &thiz->attack);
-}
-
-const game::LAttackClass* CCustomModifier::getAttackClass(bool primary) const
-{
     using namespace game;
 
     const auto& classes = AttackClassCategories::get();
 
-    auto prev = primary ? prevAttack : prevAttack2;
+    auto thiz = castAttackToCustomModifier(thisptr);
+    auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getAttackClass(prev);
 
-    auto value = primary ? GET_VALUE(getAttackClass, (int)prevValue->id)
-                         : GET_VALUE(getAttack2Class, (int)prevValue->id);
+    bool primary = thisptr == &thiz->attack;
+    auto value = primary ? THIZ_GET_VALUE(getAttackClass, (int)prevValue->id)
+                         : THIZ_GET_VALUE(getAttack2Class, (int)prevValue->id);
     switch ((AttackClassId)value) {
     case AttackClassId::Damage:
         return classes.damage;
@@ -1220,9 +1216,6 @@ const game::CMidgardID* __fastcall attackGetAltAttackId(const game::IAttack* thi
     auto prevValue = prev->vftable->getAltAttackId(prev);
     if (thisptr != &thiz->attack)
         return prevValue;
-
-    if (!attackHasAltAttack(thiz->getAttackClass(true)))
-        return &game::emptyId;
 
     bindings::IdView prevId{prevValue};
     thiz->altAttackId = THIZ_GET_VALUE(getAltAttackId, prevId);
