@@ -259,7 +259,7 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
         data->infinite = false;
     }
 
-    if (attackHasAltAttack(&thisptr->data->attackClass)) {
+    if (attackHasAltAttack(thisptr->data->attackClass.id)) {
         db.readId(&data->altAttack, dbTable, "ALT_ATTACK");
     } else {
         data->altAttack = emptyId;

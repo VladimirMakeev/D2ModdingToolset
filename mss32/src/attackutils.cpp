@@ -120,11 +120,6 @@ bool attackHasPower(const game::LAttackClass* attackClass)
            || id == classes.transformOther->id;
 }
 
-bool attackHasAltAttack(const game::LAttackClass* attackClass)
-{
-    return attackHasAltAttack(attackClass->id);
-}
-
 bool attackHasAltAttack(game::AttackClassId id)
 {
     const auto& classes = game::AttackClassCategories::get();
