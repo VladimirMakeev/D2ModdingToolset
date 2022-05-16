@@ -77,7 +77,6 @@ struct CustomModifierFunctions
     std::optional<GetInt> getLowerCost;
     std::optional<GetId> getAttackId;
     std::optional<GetId> getAttack2Id;
-    std::optional<GetId> getAltAttackId;
     std::optional<GetInt> getAttackReach;
     std::optional<GetInt> getAttackInitiative;
     std::optional<GetId> getAttackNameTxt;

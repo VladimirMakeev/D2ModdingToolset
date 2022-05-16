@@ -65,7 +65,6 @@ CustomModifierFunctions* createCustomModifierFunctions(const char* scriptFileNam
     FUNCTION(getLowerCost)
     FUNCTION(getAttackId)
     FUNCTION(getAttack2Id)
-    FUNCTION(getAltAttackId)
     FUNCTION(getAttackReach)
     FUNCTION(getAttackInitiative)
     FUNCTION(getAttackNameTxt)

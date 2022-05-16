@@ -617,6 +617,7 @@ const game::IAttack* __fastcall soldierGetAttackById(const game::IUsSoldier* thi
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getAttackToWrap(true);
 
+    // Return unwrapped attack - its alt attack should be wrapped instead
     if (*prev->vftable->getAltAttackId(prev) != game::emptyId)
         return prev;
 
@@ -1210,16 +1211,12 @@ int __fastcall attackGetLevel(const game::IAttack* thisptr, int /*%edx*/)
 
 const game::CMidgardID* __fastcall attackGetAltAttackId(const game::IAttack* thisptr, int /*%edx*/)
 {
+    // Modyfing this value has no effect because alt attack is wrapped instead of the primary
+
     auto thiz = castAttackToCustomModifier(thisptr);
     auto prev = thiz->getPrevAttack(thisptr);
 
-    auto prevValue = prev->vftable->getAltAttackId(prev);
-    if (thisptr != &thiz->attack)
-        return prevValue;
-
-    bindings::IdView prevId{prevValue};
-    thiz->altAttackId = THIZ_GET_VALUE(getAltAttackId, prevId);
-    return &thiz->altAttackId;
+    return prev->vftable->getAltAttackId(prev);
 }
 
 bool __fastcall attackGetInfinite(const game::IAttack* thisptr, int /*%edx*/)

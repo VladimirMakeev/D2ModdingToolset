@@ -37,6 +37,8 @@ game::IAttack* __fastcall umAttackGetAttackByIdHooked(const game::IUsSoldier* th
     auto prevSoldier = fn.castUnitImplToSoldier(prevUnitImpl);
 
     auto prev = prevSoldier->vftable->getAttackById(prevSoldier);
+
+    // Return unwrapped attack - its alt attack should be wrapped instead
     if (*prev->vftable->getAltAttackId(prev) != emptyId)
         return prev;
 
