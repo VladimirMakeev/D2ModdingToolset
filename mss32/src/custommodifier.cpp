@@ -1010,6 +1010,15 @@ const game::LAttackClass* __fastcall attackGetAttackClass(const game::IAttack* t
     bool primary = thisptr == &thiz->attack;
     auto value = primary ? THIZ_GET_VALUE(getAttackClass, (int)prevValue->id)
                          : THIZ_GET_VALUE(getAttack2Class, (int)prevValue->id);
+
+    // Prevents infinite recursion since alt attack is wrapped instead of the primary
+    if (primary && attackHasAltAttack((AttackClassId)value)) {
+        thiz->showInvalidRetvalMessage(
+            "getAttackClass",
+            "Cannot change attack class to one with alt attack (Doppelganger, TransformSelf). Use 'getAttackId' for this purpose.");
+        return prevValue;
+    }
+
     switch ((AttackClassId)value) {
     case AttackClassId::Damage:
         return classes.damage;

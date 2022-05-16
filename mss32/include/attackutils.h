@@ -26,6 +26,8 @@ struct IAttack;
 struct CAttackImpl;
 struct LAttackClass;
 struct LAttackReach;
+
+enum class AttackClassId : int;
 } // namespace game
 
 namespace hooks {
@@ -37,6 +39,7 @@ int getLowerDamage(int level);
 int getLowerInitiative(int level);
 bool attackHasPower(const game::LAttackClass* attackClass); // Power is chance to hit / accuracy
 bool attackHasAltAttack(const game::LAttackClass* attackClass);
+bool attackHasAltAttack(game::AttackClassId id);
 bool isMeleeAttack(const game::IAttack* attack);
 int getAttackMaxTargets(const game::LAttackReach* reach);
 
