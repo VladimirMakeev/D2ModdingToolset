@@ -73,6 +73,8 @@ struct CCustomModifier
     CustomAttackData getCustomAttackData(const game::IAttack* thisptr) const;
     const char* getFormattedGlobalText(const game::CMidgardID& formatId,
                                        const game::CMidgardID& baseId) const;
+    void showScriptErrorMessage(const char* functionName, const char* reason) const;
+    void showInvalidRetvalMessage(const char* functionName, const char* reason) const;
 
     game::CMidgardID getNameTxt() const;
     game::CMidgardID getBaseNameTxt() const;
@@ -93,10 +95,7 @@ struct CCustomModifier
                 return (*function)(unitView, prev);
             }
         } catch (const std::exception& e) {
-            showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
-                                            "Function: '{:s}'\n"
-                                            "Reason: '{:s}'",
-                                            scriptFileName, functionName, e.what()));
+            showScriptErrorMessage(functionName, e.what());
         }
 
         return prev;
@@ -111,10 +110,7 @@ struct CCustomModifier
                 return (*function)(unitView, prev).as<T>();
             }
         } catch (const std::exception& e) {
-            showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
-                                            "Function: '{:s}'\n"
-                                            "Reason: '{:s}'",
-                                            scriptFileName, functionName, e.what()));
+            showScriptErrorMessage(functionName, e.what());
         }
 
         return prev;
@@ -129,10 +125,7 @@ struct CCustomModifier
                 return (*function)(unitView, param, prev);
             }
         } catch (const std::exception& e) {
-            showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
-                                            "Function: '{:s}'\n"
-                                            "Reason: '{:s}'",
-                                            scriptFileName, functionName, e.what()));
+            showScriptErrorMessage(functionName, e.what());
         }
 
         return prev;
@@ -146,10 +139,7 @@ struct CCustomModifier
                 return (*function)();
             }
         } catch (const std::exception& e) {
-            showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
-                                            "Function: '{:s}'\n"
-                                            "Reason: '{:s}'",
-                                            scriptFileName, functionName, e.what()));
+            showScriptErrorMessage(functionName, e.what());
         }
 
         return def;

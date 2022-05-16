@@ -263,6 +263,22 @@ const char* CCustomModifier::getFormattedGlobalText(const game::CMidgardID& form
     return globals.insert(formatted).first->c_str();
 }
 
+void CCustomModifier::showScriptErrorMessage(const char* functionName, const char* reason) const
+{
+    showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
+                                    "Function: '{:s}'\n"
+                                    "Reason: '{:s}'",
+                                    scriptFileName, functionName, reason));
+}
+
+void CCustomModifier::showInvalidRetvalMessage(const char* functionName, const char* reason) const
+{
+    showErrorMessageBox(fmt::format("Invalid return value in '{:s}' script.\n"
+                                    "Function: '{:s}'\n"
+                                    "Reason: '{:s}'",
+                                    scriptFileName, functionName, reason));
+}
+
 game::CMidgardID CCustomModifier::getNameTxt() const
 {
     auto prev = getPrevCustomModifier();
@@ -750,10 +766,7 @@ bool __fastcall modifierCanApplyToUnit(const game::CUmModifier* thisptr,
             return (*f)(unitImplView);
         }
     } catch (const std::exception& e) {
-        showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
-                                        "Function: 'canApplyToUnit'\n"
-                                        "Reason: '{:s}'",
-                                        thiz->scriptFileName, e.what()));
+        thiz->showScriptErrorMessage("canApplyToUnit", e.what());
     }
 
     return true;
@@ -771,10 +784,7 @@ bool __fastcall modifierCanApplyToUnitCategory(const game::CUmModifier* thisptr,
             return (*f)((int)unitCategory->id);
         }
     } catch (const std::exception& e) {
-        showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
-                                        "Function: 'canApplyToUnitType'\n"
-                                        "Reason: '{:s}'",
-                                        thiz->scriptFileName, e.what()));
+        thiz->showScriptErrorMessage("canApplyToUnitType", e.what());
     }
 
     return true;
