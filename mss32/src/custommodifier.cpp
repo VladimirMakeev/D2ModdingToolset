@@ -290,7 +290,7 @@ game::CMidgardID CCustomModifier::getNameTxt() const
 game::CMidgardID CCustomModifier::getBaseNameTxt() const
 {
     auto soldierImpl = getSoldierImpl(getPrev());
-    return soldierImpl ? soldierImpl->data->name.id : game::invalidId;
+    return soldierImpl ? soldierImpl->data->name.id : game::emptyId;
 }
 
 game::CMidgardID CCustomModifier::getDescTxt() const
@@ -304,39 +304,43 @@ game::CMidgardID CCustomModifier::getDescTxt() const
 game::CMidgardID CCustomModifier::getBaseDescTxt() const
 {
     auto soldierImpl = getSoldierImpl(getPrev());
-    return soldierImpl ? soldierImpl->data->description.id : game::invalidId;
+    return soldierImpl ? soldierImpl->data->description.id : game::emptyId;
 }
 
 game::CMidgardID CCustomModifier::getAttackNameTxt(bool primary) const
 {
     auto prev = getPrevCustomModifier();
 
-    bindings::IdView prevValue{prev ? prev->getAttackNameTxt(primary)
-                                    : getAttackBaseNameTxt(primary)};
-    return primary ? GET_VALUE(getAttackNameTxt, prevValue)
-                   : GET_VALUE(getAttack2NameTxt, prevValue);
+    auto prevValue = prev ? prev->getAttackNameTxt(primary) : game::emptyId;
+    if (prevValue == game::emptyId)
+        prevValue = getAttackBaseNameTxt(primary);
+
+    bindings::IdView prevId{prevValue};
+    return primary ? GET_VALUE(getAttackNameTxt, prevId) : GET_VALUE(getAttack2NameTxt, prevId);
 }
 
 game::CMidgardID CCustomModifier::getAttackBaseNameTxt(bool primary) const
 {
     auto attackImpl = getAttackImpl(primary ? &attack : &attack2);
-    return attackImpl ? attackImpl->data->name.id : game::invalidId;
+    return attackImpl ? attackImpl->data->name.id : game::emptyId;
 }
 
 game::CMidgardID CCustomModifier::getAttackDescTxt(bool primary) const
 {
     auto prev = getPrevCustomModifier();
 
-    bindings::IdView prevValue{prev ? prev->getAttackDescTxt(primary)
-                                    : getAttackBaseDescTxt(primary)};
-    return primary ? GET_VALUE(getAttackDescTxt, prevValue)
-                   : GET_VALUE(getAttack2DescTxt, prevValue);
+    auto prevValue = prev ? prev->getAttackDescTxt(primary) : game::emptyId;
+    if (prevValue == game::emptyId)
+        prevValue = getAttackBaseDescTxt(primary);
+
+    bindings::IdView prevId{prevValue};
+    return primary ? GET_VALUE(getAttackDescTxt, prevId) : GET_VALUE(getAttack2DescTxt, prevId);
 }
 
 game::CMidgardID CCustomModifier::getAttackBaseDescTxt(bool primary) const
 {
     auto attackImpl = getAttackImpl(primary ? &attack : &attack2);
-    return attackImpl ? attackImpl->data->description.id : game::invalidId;
+    return attackImpl ? attackImpl->data->description.id : game::emptyId;
 }
 
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
@@ -376,6 +380,8 @@ CCustomModifier* customModifierCopyCtor(CCustomModifier* thisptr, const CCustomM
     CUmModifierApi::get().copyConstructor(&thisptr->umModifier, &src->umModifier);
 
     thisptr->unit = src->unit;
+    thisptr->prevAttack = src->prevAttack;
+    thisptr->prevAttack2 = src->prevAttack2;
     thisptr->lastElementQuery = src->lastElementQuery;
     thisptr->functions = src->functions;
     new (&thisptr->scriptFileName) std::string(src->scriptFileName);
