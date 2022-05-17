@@ -984,15 +984,19 @@ void __fastcall attackDtor(game::IAttack* thisptr, int /*%edx*/, char flags)
 const char* __fastcall attackGetName(const game::IAttack* thisptr, int /*%edx*/)
 {
     auto thiz = castAttackToCustomModifier(thisptr);
-    return thiz->getFormattedGlobalText(thiz->getAttackNameTxt(thisptr),
-                                        thiz->getAttackBaseNameTxt(thisptr));
+
+    bool primary = thisptr == &thiz->attack;
+    return thiz->getFormattedGlobalText(thiz->getAttackNameTxt(primary),
+                                        thiz->getAttackBaseNameTxt(primary));
 }
 
 const char* __fastcall attackGetDescription(const game::IAttack* thisptr, int /*%edx*/)
 {
     auto thiz = castAttackToCustomModifier(thisptr);
-    return thiz->getFormattedGlobalText(thiz->getAttackDescTxt(thisptr),
-                                        thiz->getAttackBaseDescTxt(thisptr));
+
+    bool primary = thisptr == &thiz->attack;
+    return thiz->getFormattedGlobalText(thiz->getAttackDescTxt(primary),
+                                        thiz->getAttackBaseDescTxt(primary));
 }
 
 const game::LAttackClass* __fastcall attackGetAttackClass(const game::IAttack* thisptr,
