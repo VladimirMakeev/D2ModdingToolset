@@ -307,35 +307,35 @@ game::CMidgardID CCustomModifier::getBaseDescTxt() const
     return soldierImpl ? soldierImpl->data->description.id : game::invalidId;
 }
 
-game::CMidgardID CCustomModifier::getAttackNameTxt(const game::IAttack* thisptr) const
+game::CMidgardID CCustomModifier::getAttackNameTxt(bool primary) const
 {
     auto prev = getPrevCustomModifier();
 
-    bindings::IdView prevValue{prev ? prev->getAttackNameTxt(thisptr)
-                                    : getAttackBaseNameTxt(thisptr)};
-    return thisptr == &attack ? GET_VALUE(getAttackNameTxt, prevValue)
-                              : GET_VALUE(getAttack2NameTxt, prevValue);
+    bindings::IdView prevValue{prev ? prev->getAttackNameTxt(primary)
+                                    : getAttackBaseNameTxt(primary)};
+    return primary ? GET_VALUE(getAttackNameTxt, prevValue)
+                   : GET_VALUE(getAttack2NameTxt, prevValue);
 }
 
-game::CMidgardID CCustomModifier::getAttackBaseNameTxt(const game::IAttack* thisptr) const
+game::CMidgardID CCustomModifier::getAttackBaseNameTxt(bool primary) const
 {
-    auto attackImpl = getAttackImpl(thisptr);
+    auto attackImpl = getAttackImpl(primary ? &attack : &attack2);
     return attackImpl ? attackImpl->data->name.id : game::invalidId;
 }
 
-game::CMidgardID CCustomModifier::getAttackDescTxt(const game::IAttack* thisptr) const
+game::CMidgardID CCustomModifier::getAttackDescTxt(bool primary) const
 {
     auto prev = getPrevCustomModifier();
 
-    bindings::IdView prevValue{prev ? prev->getAttackDescTxt(thisptr)
-                                    : getAttackBaseDescTxt(thisptr)};
-    return thisptr == &attack ? GET_VALUE(getAttackDescTxt, prevValue)
-                              : GET_VALUE(getAttack2DescTxt, prevValue);
+    bindings::IdView prevValue{prev ? prev->getAttackDescTxt(primary)
+                                    : getAttackBaseDescTxt(primary)};
+    return primary ? GET_VALUE(getAttackDescTxt, prevValue)
+                   : GET_VALUE(getAttack2DescTxt, prevValue);
 }
 
-game::CMidgardID CCustomModifier::getAttackBaseDescTxt(const game::IAttack* thisptr) const
+game::CMidgardID CCustomModifier::getAttackBaseDescTxt(bool primary) const
 {
-    auto attackImpl = getAttackImpl(thisptr);
+    auto attackImpl = getAttackImpl(primary ? &attack : &attack2);
     return attackImpl ? attackImpl->data->description.id : game::invalidId;
 }
 
