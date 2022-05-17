@@ -23,8 +23,10 @@
 #include "customattacks.h"
 #include "customattackutils.h"
 #include "dynamiccast.h"
+#include "game.h"
 #include "midunit.h"
 #include "midunitdescriptor.h"
+#include "ummodifier.h"
 #include "unitutils.h"
 
 namespace utils {
@@ -181,9 +183,19 @@ const game::LAttackReach* AttackDescriptor::reach() const
     return data.reach;
 }
 
-int AttackDescriptor::damage() const
+int AttackDescriptor::damage(const game::IdList* modifiers) const
 {
-    return data.damage;
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    if (!hooks::attackHasDamage(data.class_->id))
+        return 0;
+
+    if (!modifiers)
+        return data.damage;
+
+    return fn.applyPercentModifiers(data.damage, modifiers, ModifierElementTypeFlag::QtyDamage);
 }
 
 int AttackDescriptor::heal() const
@@ -191,14 +203,37 @@ int AttackDescriptor::heal() const
     return data.heal;
 }
 
-int AttackDescriptor::power() const
+bool AttackDescriptor::hasPower() const
 {
-    return hooks::attackHasPower(data.class_) ? data.power : 100;
+    return hooks::attackHasPower(data.class_);
 }
 
-int AttackDescriptor::initiative() const
+int AttackDescriptor::power(const game::IdList* modifiers) const
 {
-    return data.initiative;
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    if (!hasPower())
+        return 100;
+
+    if (!modifiers)
+        return data.power;
+
+    return fn.applyPercentModifiers(data.power, modifiers, ModifierElementTypeFlag::Power);
+}
+
+int AttackDescriptor::initiative(const game::IdList* modifiers) const
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    if (!modifiers)
+        return data.initiative;
+
+    return fn.applyPercentModifiers(data.initiative, modifiers,
+                                    ModifierElementTypeFlag::Initiative);
 }
 
 int AttackDescriptor::level() const
@@ -223,22 +258,22 @@ int AttackDescriptor::lowerIni() const
 
 bool AttackDescriptor::infinite() const
 {
-    return data.infinite;
+    return hooks::attackHasInfinite(data.class_->id) ? data.infinite : false;
 }
 
 bool AttackDescriptor::critHit() const
 {
-    return data.critHit;
+    return hooks::attackHasCritHit(data.class_->id) ? data.critHit : false;
 }
 
 std::uint8_t AttackDescriptor::critDamage() const
 {
-    return data.critHit ? custom().critDamage : 0;
+    return critHit() ? custom().critDamage : 0;
 }
 
 std::uint8_t AttackDescriptor::critPower() const
 {
-    return data.critHit ? custom().critPower : 0;
+    return critHit() ? custom().critPower : 0;
 }
 
 std::uint8_t AttackDescriptor::damageRatio() const

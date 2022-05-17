@@ -70,15 +70,16 @@ std::string getBonusNumberText(int bonus, bool percent)
     return result;
 }
 
-std::string getModifiedNumberText(int value, int bonus, bool percent, int max = INT_MAX)
+std::string getModifiedNumberText(int value, int base, bool percent, int max = INT_MAX)
 {
-    auto result = getNumberText(value, percent);
+    auto result = getNumberText(base, percent);
 
+    int bonus = value - base;
     if (bonus) {
         result += getBonusNumberText(bonus, percent);
     }
 
-    if (value + bonus >= max) {
+    if (value >= max) {
         result = getMaxText(result);
     }
 
@@ -220,27 +221,18 @@ std::string getAttackPowerText(const utils::AttackDescriptor& actual,
                                const utils::AttackDescriptor& global,
                                const game::IdList* editorModifiers)
 {
-    using namespace game;
-
-    const auto& fn = gameFunctions();
-    const auto& restrictions = gameRestrictions();
-
-    int power = actual.power();
-    if (attackHasPower(actual.class_()) && attackHasPower(global.class_())) {
-        power = global.power();
-        if (editorModifiers != nullptr) {
-            power = fn.applyPercentModifiers(power, editorModifiers,
-                                             ModifierElementTypeFlag::Power);
-            power = std::clamp(power, restrictions.attackPower->min, restrictions.attackPower->max);
-        }
+    std::string result;
+    if (actual.hasPower() && global.hasPower()) {
+        result = getModifiedNumberText(actual.power(), global.power(editorModifiers), true);
+    } else {
+        result = getNumberText(actual.power(), true);
     }
 
-    std::string result = getModifiedNumberText(power, actual.power() - power, true);
-
-    if (actual.critHit()) {
-        int critPower = global.critPower() ? global.critPower() : actual.critPower();
-        auto critText = getModifiedNumberText(critPower, actual.critPower() - critPower, true);
-        result = addCritHitText(result, critText);
+    if (actual.critHit() && global.critHit()) {
+        result = addCritHitText(result, getModifiedNumberText(actual.critPower(),
+                                                              global.critPower(), true));
+    } else if (actual.critHit()) {
+        result = addCritHitText(result, getNumberText(actual.critPower(), true));
     }
 
     return result;
@@ -251,22 +243,8 @@ std::string getAttackInitiativeText(const utils::AttackDescriptor& actual,
                                     const game::IdList* editorModifiers,
                                     int lowerInitiativeLevel)
 {
-    using namespace game;
-
-    const auto& fn = gameFunctions();
-    const auto& restrictions = gameRestrictions();
-
-    int initiative = global.initiative();
-    if (editorModifiers != nullptr) {
-        initiative = fn.applyPercentModifiers(initiative, editorModifiers,
-                                              ModifierElementTypeFlag::Initiative);
-        initiative = std::clamp(initiative, restrictions.attackInitiative->min,
-                                restrictions.attackInitiative->max);
-    }
-
-    int boosted = actual.initiative();
-    boosted -= actual.initiative() * getLowerInitiative(lowerInitiativeLevel) / 100;
-    return getModifiedNumberText(initiative, boosted - initiative, false);
+    int boosted = actual.initiative() * (1 - getLowerInitiative(lowerInitiativeLevel) / 100);
+    return getModifiedNumberText(boosted, global.initiative(editorModifiers), false);
 }
 
 std::string getDamageDrainAttackDamageText(const utils::AttackDescriptor& actual,
@@ -276,35 +254,23 @@ std::string getDamageDrainAttackDamageText(const utils::AttackDescriptor& actual
                                            int lowerDamageLevel,
                                            int damageMax)
 {
-    using namespace game;
-
-    const auto& fn = gameFunctions();
-    const auto& restrictions = gameRestrictions();
-
     int multiplier = actual.damageSplit() ? userSettings().splitDamageMultiplier : 1;
 
-    int damage = global.damage();
-    if (editorModifiers != nullptr) {
-        damage = fn.applyPercentModifiers(damage, editorModifiers,
-                                          ModifierElementTypeFlag::QtyDamage);
-        damage = std::clamp(damage, restrictions.unitDamage->min, damageMax);
-    }
-    damage *= multiplier;
-
-    int boosted = actual.damage();
-    boosted += actual.damage() * getBoostDamage(boostDamageLevel) / 100;
-    boosted -= actual.damage() * getLowerDamage(lowerDamageLevel) / 100;
-    boosted = std::clamp(boosted, restrictions.unitDamage->min, damageMax);
+    int boost = getBoostDamage(boostDamageLevel) - getLowerDamage(lowerDamageLevel);
+    int boosted = actual.damage() * (1 + boost / 100);
+    if (boosted > damageMax)
+        boosted = damageMax;
     boosted *= multiplier;
 
-    auto result = getModifiedNumberText(damage, boosted - damage, false, damageMax * multiplier);
+    auto result = getModifiedNumberText(boosted, global.damage(editorModifiers) * multiplier, false,
+                                        damageMax * multiplier);
 
-    if (actual.critHit()) {
-        int critDamage = global.critDamage() ? global.critDamage() : actual.critDamage();
-        auto critText = getModifiedNumberText(boosted * critDamage / 100,
-                                              boosted * (actual.critDamage() - critDamage) / 100,
-                                              false);
-        result = addCritHitText(result, critText);
+    if (actual.critHit() && global.critHit()) {
+        result = addCritHitText(result,
+                                getModifiedNumberText(boosted * actual.critDamage() / 100,
+                                                      boosted * global.critDamage() / 100, false));
+    } else if (actual.critHit()) {
+        result = addCritHitText(result, getNumberText(boosted * actual.critDamage() / 100, false));
     }
 
     if (getAttackMaxTargets(actual.reach()) < 2)
@@ -378,11 +344,9 @@ std::string getAttackDamageText(const utils::AttackDescriptor& actual,
         return getDamageDrainAttackDamageText(actual, global, editorModifiers, boostDamageLevel,
                                               lowerDamageLevel, damageMax);
     } else if (id == classes.heal->id || id == classes.bestowWards->id) {
-        int heal = global.heal() ? global.heal() : actual.heal();
-        return getModifiedNumberText(heal, actual.heal() - heal, false);
+        return getModifiedNumberText(actual.heal(), global.heal(), false);
     } else {
-        int damage = global.damage() ? global.damage() : actual.damage();
-        return getModifiedNumberText(damage, actual.damage() - damage, false, damageMax);
+        return getModifiedNumberText(actual.damage(), global.damage(), false, damageMax);
     }
 }
 

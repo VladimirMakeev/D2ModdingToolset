@@ -21,6 +21,7 @@
 #define ATTACKDESCRIPTOR_H
 
 #include "customattacks.h"
+#include "idlist.h"
 
 namespace game {
 struct IEncUnitDescriptor;
@@ -71,10 +72,11 @@ public:
     const game::LAttackClass* class_() const;
     const game::LAttackSource* source() const;
     const game::LAttackReach* reach() const;
-    int damage() const;
+    int damage(const game::IdList* modifiers = nullptr) const;
     int heal() const;
-    int power() const;
-    int initiative() const;
+    bool hasPower() const;
+    int power(const game::IdList* modifiers = nullptr) const;
+    int initiative(const game::IdList* modifiers = nullptr) const;
     int level() const;
     int boost() const;
     int lower() const;
