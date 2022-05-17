@@ -120,6 +120,32 @@ bool attackHasPower(const game::LAttackClass* attackClass)
            || id == classes.transformOther->id;
 }
 
+bool attackHasDamage(game::AttackClassId id)
+{
+    const auto& classes = game::AttackClassCategories::get();
+
+    return id == classes.damage->id || id == classes.drain->id || id == classes.drainOverflow->id
+           || id == classes.poison->id || id == classes.frostbite->id || id == classes.blister->id
+           || id == classes.shatter->id;
+}
+
+bool attackHasInfinite(game::AttackClassId id)
+{
+    const auto& classes = game::AttackClassCategories::get();
+
+    return id == classes.paralyze->id || id == classes.petrify->id || id == classes.boostDamage->id
+           || id == classes.lowerDamage->id || id == classes.lowerInitiative->id
+           || id == classes.poison->id || id == classes.frostbite->id || id == classes.blister->id
+           || id == classes.transformOther->id;
+}
+
+bool attackHasCritHit(game::AttackClassId id)
+{
+    const auto& classes = game::AttackClassCategories::get();
+
+    return id == classes.damage->id || id == classes.drain->id || id == classes.drainOverflow->id;
+}
+
 bool attackHasAltAttack(game::AttackClassId id)
 {
     const auto& classes = game::AttackClassCategories::get();
