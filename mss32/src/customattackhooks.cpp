@@ -223,10 +223,7 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
         db.readPower(&data->power, &data->power, dbTable, "POWER", &thisptr->id);
     }
 
-    if (id == categories.damage->id || id == categories.drain->id
-        || id == categories.drainOverflow->id || id == categories.poison->id
-        || id == categories.frostbite->id || id == categories.blister->id
-        || id == categories.shatter->id) {
+    if (attackHasDamage(thisptr->data->attackClass.id)) {
         db.readDamage(&data->qtyDamage, dbTable, "QTY_DAM", &thisptr->id);
     } else {
         data->qtyDamage = 0;
@@ -249,11 +246,7 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
         data->level = -1;
     }
 
-    if (id == categories.paralyze->id || id == categories.petrify->id
-        || id == categories.boostDamage->id || id == categories.lowerDamage->id
-        || id == categories.lowerInitiative->id || id == categories.poison->id
-        || id == categories.frostbite->id || id == categories.blister->id
-        || id == categories.transformOther->id) {
+    if (attackHasInfinite(thisptr->data->attackClass.id)) {
         db.readInfinite(&data->infinite, dbTable, "INFINITE");
     } else {
         data->infinite = false;
@@ -277,7 +270,7 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
         }
     }
 
-    if (id == categories.damage->id) {
+    if (attackHasCritHit(thisptr->data->attackClass.id)) {
         db.readBool(&data->critHit, dbTable, "CRIT_HIT");
     } else {
         data->critHit = false;
