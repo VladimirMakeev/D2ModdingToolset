@@ -400,6 +400,25 @@
     - Take the multiplier into account when picking base values for `QTY_DAM` in `Gattacks.dbf` along with `DAMAGE` in `GDynUpgr.dbf`;
     - The multiplied damage is correctly displayed in unit encyclopedia.
   </details>
+- <details>
+    <summary>Supports custom unit modifiers;</summary>
+
+    ![Demo video](https://user-images.githubusercontent.com/5180699/169149545-9f6e8284-6325-4ccd-a555-5db8851569e4.mp4). Customizable via Lua scripting.<br />
+    [Scripts/Modifiers](Scripts/Modifiers) includes example modifier scripts.<br />
+
+    - Add `L_CUSTOM` category to `LModifS.dbf` or simply copy the file from [Examples](Examples);
+    - Add `SCRIPT` (Character, size 40) column to `Gmodif.dbf`;
+    - Add a new modifier entry in `Gmodif.dbf`;
+    - Specify the new modifier id (use format `gXXXum9XXX` if you want it to be available as Scenario Editor modifier);
+    - Specify `SOURCE` id that corresponds to `L_CUSTOM` category added earlier (example `LModifS.dbf` uses `4` as the id);
+    - Specify `SCRIPT` file name that will be used for this modifier (omit file path, for example `berserk.lua`);
+    - Add a name for the modifier to `Tglobal.dbf` (it should be returned by `getModifierDescTxt` script function);
+    - Refer to [Scripts/Modifiers](Scripts/Modifiers) examples and [luaApi](luaApi.md) to create your modifier script;
+    - Try assigning the created modifier to item, potion or spell, or simply use it as Scenario Editor modifier.
+
+    ![image](https://user-images.githubusercontent.com/5180699/169152674-16261837-fa50-4c15-89d1-a1ee70fa7544.png)
+    ![image](https://user-images.githubusercontent.com/5180699/169152799-5a7e7e2a-f230-4faf-bd17-db3ee5343397.png)
+  </details>
 
 ### Bug fixes:
 - Fixes game crash in battles with summoners involved;
