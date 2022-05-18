@@ -65,22 +65,6 @@ std::string getBonusNumberText(int bonus, bool percent)
     return result;
 }
 
-std::string getModifiedNumberText(int value, int base, bool percent, int max = INT_MAX)
-{
-    auto result = getNumberText(base, percent);
-
-    int bonus = value - base;
-    if (bonus) {
-        result += getBonusNumberText(bonus, percent);
-    }
-
-    if (value >= max) {
-        result = getMaxText(result);
-    }
-
-    return result;
-}
-
 std::string getModifiedStringText(const std::string& value, bool modified)
 {
     if (!modified)
@@ -91,6 +75,27 @@ std::string getModifiedStringText(const std::string& value, bool modified)
         result = "\\c025;090;000;%VALUE%\\c000;000;000;";
 
     replace(result, "%VALUE%", value);
+    return result;
+}
+
+std::string getModifiedNumberText(int value, int base, bool percent, int max = INT_MAX)
+{
+    std::string result;
+
+    int bonus = value - base;
+    if (base && bonus) {
+        result = getNumberText(base, percent);
+        result += getBonusNumberText(bonus, percent);
+    } else if (bonus) {
+        result = getModifiedStringText(getNumberText(bonus, percent), true);
+    } else {
+        result = getNumberText(base, percent);
+    }
+
+    if (value >= max) {
+        result = getMaxText(result);
+    }
+
     return result;
 }
 
@@ -119,14 +124,14 @@ std::string getCritHitText()
     return getInterfaceText("X160TA0017"); // "Critical hit"
 }
 
-std::string addCritHitText(const std::string& base, const std::string& value)
+std::string addCritHitText(const std::string& base, const std::string& value, bool full)
 {
     auto text = getInterfaceText(textIds().interf.critHitDamage.c_str());
     if (text.empty())
         text = "%DMG% (%CRIT%)";
 
     replace(text, "%DMG%", base);
-    replace(text, "%CRIT%", value);
+    replace(text, "%CRIT%", full ? fmt::format("{:s} {:s}", getCritHitText(), value) : value);
     return text;
 }
 
@@ -139,24 +144,30 @@ std::string getInfiniteText()
     return "Lasting";
 }
 
-std::string addInfiniteText(const std::string& base, const std::string& value)
+std::string addInfiniteText(const std::string& base,
+                            const utils::AttackDescriptor& actual,
+                            const utils::AttackDescriptor& global)
 {
+    if (!actual.infinite())
+        return base;
+
     auto text = getInterfaceText(textIds().interf.infiniteText.c_str());
     if (text.empty())
         text = "%ATTACK% (%INFINITE%)";
 
     replace(text, "%ATTACK%", base);
-    replace(text, "%INFINITE%", value);
+    replace(text, "%INFINITE%", getModifiedStringText(getInfiniteText(), !global.infinite()));
     return text;
 }
 
 std::string getRatedAttackDamageText(int damage, int critDamage, double ratio)
 {
-    auto result = fmt::format("{:d}", applyAttackDamageRatio(damage, ratio));
+    auto result = getNumberText(applyAttackDamageRatio(damage, ratio), false);
 
     if (critDamage) {
-        auto critText = fmt::format("{:d}", applyAttackDamageRatio(critDamage, ratio));
-        result = addCritHitText(result, critText);
+        result = addCritHitText(result,
+                                getNumberText(applyAttackDamageRatio(critDamage, ratio), false),
+                                false);
     }
 
     return result;
@@ -223,11 +234,10 @@ std::string getAttackPowerText(const utils::AttackDescriptor& actual,
         result = getNumberText(actual.power(), true);
     }
 
-    if (actual.critHit() && global.critHit()) {
-        result = addCritHitText(result, getModifiedNumberText(actual.critPower(),
-                                                              global.critPower(), true));
-    } else if (actual.critHit()) {
-        result = addCritHitText(result, getNumberText(actual.critPower(), true));
+    if (actual.critHit()) {
+        result = addCritHitText(result,
+                                getModifiedNumberText(actual.critPower(), global.critPower(), true),
+                                true);
     }
 
     return result;
@@ -260,12 +270,11 @@ std::string getDamageDrainAttackDamageText(const utils::AttackDescriptor& actual
     auto result = getModifiedNumberText(boosted, global.damage(editorModifiers) * multiplier, false,
                                         damageMax * multiplier);
 
-    if (actual.critHit() && global.critHit()) {
+    if (actual.critHit()) {
         result = addCritHitText(result,
                                 getModifiedNumberText(boosted * actual.critDamage() / 100,
-                                                      boosted * global.critDamage() / 100, false));
-    } else if (actual.critHit()) {
-        result = addCritHitText(result, getNumberText(boosted * actual.critDamage() / 100, false));
+                                                      boosted * global.critDamage() / 100, false),
+                                true);
     }
 
     if (getAttackMaxTargets(actual.reach()) < 2)
@@ -327,22 +336,25 @@ std::string getAttackDamageText(const utils::AttackDescriptor& actual,
 
     const auto& classes = AttackClassCategories::get();
 
-    auto id = actual.class_()->id;
-    if (id == classes.boostDamage->id) {
-        return getBoostDamageAttackDamageText(actual, global);
-    } else if (id == classes.lowerDamage->id) {
-        return getLowerDamageAttackDamageText(actual, global);
-    } else if (id == classes.lowerInitiative->id) {
-        return getLowerInitiativeAttackDamageText(actual, global);
-    } else if (id == classes.damage->id || id == classes.drain->id
-               || id == classes.drainOverflow->id) {
-        return getDamageDrainAttackDamageText(actual, global, editorModifiers, boostDamageLevel,
-                                              lowerDamageLevel, damageMax);
-    } else if (id == classes.heal->id || id == classes.bestowWards->id) {
-        return getModifiedNumberText(actual.heal(), global.heal(), false);
+    std::string result;
+    if (actual.class_()->id == classes.boostDamage->id) {
+        result = getBoostDamageAttackDamageText(actual, global);
+    } else if (actual.class_()->id == classes.lowerDamage->id) {
+        result = getLowerDamageAttackDamageText(actual, global);
+    } else if (actual.class_()->id == classes.lowerInitiative->id) {
+        result = getLowerInitiativeAttackDamageText(actual, global);
+    } else if (actual.class_()->id == classes.damage->id || actual.class_()->id == classes.drain->id
+               || actual.class_()->id == classes.drainOverflow->id) {
+        result = getDamageDrainAttackDamageText(actual, global, editorModifiers, boostDamageLevel,
+                                                lowerDamageLevel, damageMax);
+    } else if (actual.class_()->id == classes.heal->id
+               || actual.class_()->id == classes.bestowWards->id) {
+        result = getModifiedNumberText(actual.heal(), global.heal(), false);
     } else {
-        return getModifiedNumberText(actual.damage(), global.damage(), false, damageMax);
+        result = getModifiedNumberText(actual.damage(), global.damage(), false, damageMax);
     }
+
+    return addInfiniteText(result, actual, global);
 }
 
 std::string getAttackSourceText(const game::LAttackSource* source)
@@ -433,19 +445,7 @@ std::string getAttackTargetsText(const game::LAttackReach* reach)
 std::string getAttackNameText(const utils::AttackDescriptor& actual,
                               const utils::AttackDescriptor& global)
 {
-    using namespace game;
-
-    std::string result = getModifiedStringText(actual.name(), global.empty());
-
-    if (actual.infinite()) {
-        auto text = getInfiniteText();
-        result = addInfiniteText(result, getModifiedStringText(text, !global.infinite()));
-    } else if (actual.critHit()) {
-        auto text = getCritHitText();
-        result = addCritHitText(result, getModifiedStringText(text, !global.critHit()));
-    }
-
-    return result;
+    return getModifiedStringText(actual.name(), actual.name() != global.name());
 }
 
 std::string getTwiceField(game::IEncUnitDescriptor* descriptor)
@@ -521,14 +521,13 @@ std::string getEffectField(const utils::AttackDescriptor& actual)
 
     const auto& classes = AttackClassCategories::get();
 
-    AttackClassId id = actual.class_()->id;
-    if (id == classes.heal->id || id == classes.bestowWards->id)
+    if (actual.class_()->id == classes.heal->id || actual.class_()->id == classes.bestowWards->id)
         return getInterfaceText("X005TA0504"); // "Heal"
-    else if (id == classes.boostDamage->id)
+    else if (actual.class_()->id == classes.boostDamage->id)
         return getInterfaceText("X005TA0534"); // "Boost"
-    else if (id == classes.lowerDamage->id)
+    else if (actual.class_()->id == classes.lowerDamage->id)
         return getInterfaceText("X005TA0547"); // "Lower"
-    else if (id == classes.lowerInitiative->id)
+    else if (actual.class_()->id == classes.lowerInitiative->id)
         return getInterfaceText("X005TA0551"); // "Lower initiative"
     else
         return getInterfaceText("X005TA0503"); // "Damage"
