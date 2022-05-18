@@ -71,6 +71,7 @@ struct IUsRacialSoldier;
 struct NetPlayerInfo;
 struct LBuildingCategory;
 struct IUsLeader;
+struct LDeathAnimCategory;
 
 enum class ModifierElementTypeFlag : int;
 
@@ -600,6 +601,9 @@ using GetAltAttackIdCheckClass = const CMidgardID*(__stdcall*)(const IAttack* at
 using UnitHasDoppelgangerAttack = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                    const CMidgardID* unitId);
 
+using GetDeathAnimationByUnitOrItemId =
+    LDeathAnimCategory*(__stdcall*)(const CMidgardID* unitOrItemId);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -707,6 +711,7 @@ struct Functions
     ReadGlobalAttacks readGlobalAttacks;
     GetAltAttackIdCheckClass getAltAttackIdCheckClass;
     UnitHasDoppelgangerAttack unitHasDoppelgangerAttack;
+    GetDeathAnimationByUnitOrItemId getDeathAnimationByUnitOrItemId;
 };
 
 /** Global variables used in game. */
