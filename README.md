@@ -409,7 +409,7 @@
     - Add `L_CUSTOM` category to `LModifS.dbf` or simply copy the file from [Examples](Examples);
     - Add `SCRIPT` (Character, size 40) column to `Gmodif.dbf`;
     - Add a new modifier entry in `Gmodif.dbf`;
-    - Specify the new modifier id (use format `gXXXum9XXX` if you want it to be available as Scenario Editor modifier);
+    - Specify the new `MODIF_ID` (use format `gXXXum9XXX` if you want it to be available as Scenario Editor modifier);
     - Specify `SOURCE` id that corresponds to `L_CUSTOM` category added earlier (example `LModifS.dbf` uses `4` as the id);
     - Specify `SCRIPT` file name that will be used for this modifier (omit file path, for example `berserk.lua`);
     - Add a name for the modifier to `Tglobal.dbf` (it should be returned by `getModifierDescTxt` script function);
