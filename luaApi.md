@@ -508,33 +508,38 @@ attack.crit
 Represents game currency, mana and gold united.
 
 Methods:
+##### new
+Creates new currency from existing object.
+```lua
+Currency.new(existing)
+```
 ##### infernalMana
-Returns amount of infernal mana.
+Returns or sets amount of infernal mana.
 ```lua
 currency.infernalMana
 ```
 ##### lifeMana
-Returns amount of life mana.
+Returns or sets amount of life mana.
 ```lua
 currency.lifeMana
 ```
 ##### deathMana
-Returns amount of death mana.
+Returns or sets amount of death mana.
 ```lua
 currency.deathMana
 ```
 ##### runicMana
-Returns amount of runic mana.
+Returns or sets amount of runic mana.
 ```lua
 currency.runicMana
 ```
 ##### groveMana
-Returns amount of grove mana.
+Returns or sets amount of grove mana.
 ```lua
 currency.groveMana
 ```
 ##### gold
-Returns amount of gold.
+Returns or sets amount of gold.
 ```lua
 currency.gold
 ```
