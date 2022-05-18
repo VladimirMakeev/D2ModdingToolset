@@ -22,6 +22,7 @@ Scripts folder itself should be placed in the game folder.
 - getSelectedTargetAndTwoChainedRandom.lua - contains attack targeting logic for random chain attack reach
 - getSelectedTargetAndOneRandom.lua - contains attack targeting logic for additional random target
 - getWoundedFemaleGreenskinTargets.lua - contains targeting logic that only allows to reach wounded female greenskins
+- [Scripts/Modifiers](Scripts/Modifiers) contain custom modifier script examples
 
 ### API reference
 
@@ -53,6 +54,11 @@ Terrain = { Human, Dwarf, Heretic, Undead, Neutral, Elf }
 Ground = { Plain, Forest, Water, Mountain }
 ```
 
+##### Unit
+```
+Unit = { Soldier, Noble, Leader, Summon, Illusion, Guardian }
+```
+
 ##### Leader
 ```
 Leader = { Fighter, Explorer, Mage, Rod, Noble }
@@ -81,10 +87,20 @@ Source = { Weapon, Mind, Life, Death, Fire, Water, Earth, Air }
 Reach = { All, Any, Adjacent }
 ```
 
+##### Immune
+```
+Immune = { NotImmune, Once, Always }
+```
+
 ##### Item
 ```
 Item = { Armor, Jewel, Weapon, Banner, PotionBoost, PotionHeal, PotionRevive,
          PotionPermanent, Scroll, Wand, Valuable, Orb, Talisman, TravelItem, Special }
+```
+
+##### DeathAnimation
+```
+DeathAnimation = { Human, Heretic, Dwarf, Undead, Neutral, Dragon, Ghost, Elf }
 ```
 
 ---
@@ -128,6 +144,7 @@ tostring(id)
 
 #### Unit
 Represents game unit that participates in a battle, takes damage and performs attacks.
+Unit can also be a leader. Leaders are main units in stacks.
 
 Methods:
 ```lua
@@ -144,36 +161,33 @@ unit.impl
 -- Returns unit's base implementation.
 -- Base implementation is a record in GUnits.dbf that describes unit basic stats.
 unit.baseImpl
+-- Returns leader maximum movement points (or 0 if unit is not a leader).
+unit.movement
+-- Returns leader scouting range (or 0 if unit is not a leader).
+unit.scout
+-- Returns current leadership value (or 0 if unit is not a leader).
+unit.leadership
 ```
-
----
-
-#### Leader
-Represents leader unit. Leaders are main units in stacks. Leader has all methods of [units](luaApi.md#unit).
-
-Methods:
-##### type
-Returns leader [type](luaApi.md#leader).
+##### id
+Returns unit [id](luaApi.md#id). This is different to id of [Unit implementation](luaApi.md#unit-implementation).
+The value is unique for every unit on scenario map.
 ```lua
-leader.type
+unit.id
+```
+##### type
+Returns leader [type](luaApi.md#leader) (or -1 if unit is not a leader).
+```lua
+unit.type
 ```
 ##### hasAbility
-Returns true if leader has specified [ability](luaApi.md#ability).
+Returns true if leader has specified [ability](luaApi.md#ability) (or false if unit is not a leader).
 ```lua
-leader:hasAbility(Ability.TalismanUse)
+unit:hasAbility(Ability.TalismanUse)
 ```
 ##### hasMoveBonus
-Returns true if leader has movement bonus on specified [ground](luaApi.md#ground).
+Returns true if leader has movement bonus on specified [ground](luaApi.md#ground) (or false if unit is not a leader).
 ```lua
-leader:hasMoveBonus(Ground.Water)
-```
-```lua
--- Returns leader maximum movement points.
-leader.movement
--- Returns leader scouting range.
-leader.scout
--- Returns current leadership value.
-leader.leadership
+unit:hasMoveBonus(Ground.Water)
 ```
 
 ---
@@ -211,10 +225,46 @@ impl.dynUpgLvl
 impl.dynUpg1
 -- Returns dynamic upgrade 2.
 impl.dynUpg2
---- Returns primary attack or nil if no primary attack used.
+-- Returns primary attack or nil if no primary attack used.
 impl.attack1
---- Returns secondary attack or nil if no secondary attack used.
+-- Returns secondary attack or nil if no secondary attack used.
 impl.attack2
+-- Returns leader maximum movement points (or 0 if unit is not a leader).
+impl.movement
+-- Returns leader scouting range (or 0 if unit is not a leader).
+impl.scout
+-- Returns current leadership value (or 0 if unit is not a leader).
+impl.leadership
+```
+##### id
+Returns unit [id](luaApi.md#id). `UNIT_ID` value from `GUnits.dbf`.
+```lua
+impl.id
+```
+##### base
+Returns base [Unit implementation](luaApi.md#unit-implementation). `BASE_UNIT` value from `GUnits.dbf`.
+```lua
+impl.base
+```
+##### type
+Returns unit [type](luaApi.md#unit).
+```lua
+impl.type
+```
+##### leaderType
+Returns leader [type](luaApi.md#leader) (or -1 if unit is not a leader).
+```lua
+impl.leaderType
+```
+##### hasAbility
+Returns true if leader has specified [ability](luaApi.md#ability) (or false if unit is not a leader).
+```lua
+impl:hasAbility(Ability.TalismanUse)
+```
+##### hasMoveBonus
+Returns true if leader has movement bonus on specified [ground](luaApi.md#ground) (or false if unit is not a leader).
+```lua
+impl:hasMoveBonus(Ground.Water)
 ```
 
 ---
