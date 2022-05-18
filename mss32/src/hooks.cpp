@@ -1558,7 +1558,7 @@ void __stdcall getAttackPowerHooked(int* power,
 
     const auto attackClass = attack->vftable->getAttackClass(attack);
 
-    if (!attackHasPower(attackClass)) {
+    if (!attackHasPower(attackClass->id)) {
         *power = 100;
         return;
     }

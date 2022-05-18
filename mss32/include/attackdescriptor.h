@@ -49,9 +49,9 @@ struct AttackDescriptorData
 {
     bool empty;
     std::string name;
-    const game::LAttackClass* class_;
-    const game::LAttackSource* source;
-    const game::LAttackReach* reach;
+    game::AttackClassId classId;
+    game::AttackSourceId sourceId;
+    game::AttackReachId reachId;
     int damage;
     int heal;
     int power;
@@ -69,9 +69,9 @@ public:
 
     bool empty() const;
     std::string name() const;
-    const game::LAttackClass* class_() const;
-    const game::LAttackSource* source() const;
-    const game::LAttackReach* reach() const;
+    game::AttackClassId classId() const;
+    game::AttackSourceId sourceId() const;
+    game::AttackReachId reachId() const;
     int damage(const game::IdList* modifiers = nullptr) const;
     int heal() const;
     bool hasPower() const;

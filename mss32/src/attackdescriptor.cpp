@@ -109,21 +109,17 @@ void AttackDescriptor::initialize(game::IAttack* attack,
 {
     using namespace game;
 
-    static LAttackClass emptyClass = {nullptr, nullptr, (AttackClassId)emptyCategoryId};
-    static LAttackSource emptySource = {nullptr, nullptr, (AttackSourceId)emptyCategoryId};
-    static LAttackReach emptyReach = {nullptr, nullptr, (AttackReachId)emptyCategoryId};
-
     data = {};
     if (attack == nullptr) {
         data.empty = true;
-        data.class_ = &emptyClass;
-        data.source = &emptySource;
-        data.reach = &emptyReach;
+        data.classId = (AttackClassId)emptyCategoryId;
+        data.sourceId = (AttackSourceId)emptyCategoryId;
+        data.reachId = (AttackReachId)emptyCategoryId;
     } else if (descriptor && type == AttackType::Primary) {
         data.name = descriptor->vftable->getAttackName(descriptor);
-        data.class_ = descriptor->vftable->getAttackClass(descriptor);
-        data.source = descriptor->vftable->getAttackSource(descriptor);
-        data.reach = descriptor->vftable->getAttackReach(descriptor);
+        data.classId = descriptor->vftable->getAttackClass(descriptor)->id;
+        data.sourceId = descriptor->vftable->getAttackSource(descriptor)->id;
+        data.reachId = descriptor->vftable->getAttackReach(descriptor)->id;
         data.damage = descriptor->vftable->getAttackDamageOrHeal(descriptor);
         data.heal = data.damage;
         data.power = descriptor->vftable->getAttackPower(descriptor);
@@ -133,9 +129,9 @@ void AttackDescriptor::initialize(game::IAttack* attack,
         data.critHit = attack->vftable->getCritHit(attack);
         data.custom = hooks::getCustomAttackData(attack);
     } else {
-        data.class_ = attack->vftable->getAttackClass(attack);
-        data.source = attack->vftable->getAttackSource(attack);
-        data.reach = attack->vftable->getAttackReach(attack);
+        data.classId = attack->vftable->getAttackClass(attack)->id;
+        data.sourceId = attack->vftable->getAttackSource(attack)->id;
+        data.reachId = attack->vftable->getAttackReach(attack)->id;
         data.damage = attack->vftable->getQtyDamage(attack);
         data.heal = attack->vftable->getQtyHeal(attack);
         data.initiative = attack->vftable->getInitiative(attack);
@@ -168,19 +164,19 @@ std::string AttackDescriptor::name() const
     return data.name;
 }
 
-const game::LAttackClass* AttackDescriptor::class_() const
+game::AttackClassId AttackDescriptor::classId() const
 {
-    return data.class_;
+    return data.classId;
 }
 
-const game::LAttackSource* AttackDescriptor::source() const
+game::AttackSourceId AttackDescriptor::sourceId() const
 {
-    return data.source;
+    return data.sourceId;
 }
 
-const game::LAttackReach* AttackDescriptor::reach() const
+game::AttackReachId AttackDescriptor::reachId() const
 {
-    return data.reach;
+    return data.reachId;
 }
 
 int AttackDescriptor::damage(const game::IdList* modifiers) const
@@ -189,7 +185,7 @@ int AttackDescriptor::damage(const game::IdList* modifiers) const
 
     const auto& fn = gameFunctions();
 
-    if (!hooks::attackHasDamage(data.class_->id))
+    if (!hooks::attackHasDamage(data.classId))
         return 0;
 
     if (!modifiers)
@@ -205,7 +201,7 @@ int AttackDescriptor::heal() const
 
 bool AttackDescriptor::hasPower() const
 {
-    return hooks::attackHasPower(data.class_);
+    return hooks::attackHasPower(data.classId);
 }
 
 int AttackDescriptor::power(const game::IdList* modifiers) const
@@ -258,12 +254,12 @@ int AttackDescriptor::lowerIni() const
 
 bool AttackDescriptor::infinite() const
 {
-    return hooks::attackHasInfinite(data.class_->id) ? data.infinite : false;
+    return hooks::attackHasInfinite(data.classId) ? data.infinite : false;
 }
 
 bool AttackDescriptor::critHit() const
 {
-    return hooks::attackHasCritHit(data.class_->id) ? data.critHit : false;
+    return hooks::attackHasCritHit(data.classId) ? data.critHit : false;
 }
 
 std::uint8_t AttackDescriptor::critDamage() const

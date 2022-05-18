@@ -106,10 +106,9 @@ int getLowerInitiative(int level)
     return vars->battleLowerIni;
 }
 
-bool attackHasPower(const game::LAttackClass* attackClass)
+bool attackHasPower(game::AttackClassId id)
 {
     const auto& classes = game::AttackClassCategories::get();
-    const auto id = attackClass->id;
 
     return id == classes.paralyze->id || id == classes.petrify->id || id == classes.damage->id
            || id == classes.drain->id || id == classes.drainOverflow->id || id == classes.fear->id
@@ -173,19 +172,19 @@ bool isMeleeAttack(const game::IAttack* attack)
     return false;
 }
 
-int getAttackMaxTargets(const game::LAttackReach* reach)
+int getAttackMaxTargets(const game::AttackReachId id)
 {
     using namespace game;
 
     const auto& reaches = AttackReachCategories::get();
 
-    if (reach->id == reaches.all->id) {
+    if (id == reaches.all->id) {
         return 6;
-    } else if (reach->id == reaches.any->id || reach->id == reaches.adjacent->id) {
+    } else if (id == reaches.any->id || id == reaches.adjacent->id) {
         return 1;
     } else {
         for (const auto& custom : getCustomAttacks().reaches) {
-            if (reach->id == custom.reach.id) {
+            if (id == custom.reach.id) {
                 return custom.maxTargets;
             }
         }

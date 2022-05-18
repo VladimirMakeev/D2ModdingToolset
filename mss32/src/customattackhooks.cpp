@@ -219,7 +219,7 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
     const auto& categories = AttackClassCategories::get();
     const auto id = thisptr->data->attackClass.id;
 
-    if (attackHasPower(&thisptr->data->attackClass)) {
+    if (attackHasPower(thisptr->data->attackClass.id)) {
         db.readPower(&data->power, &data->power, dbTable, "POWER", &thisptr->id);
     }
 

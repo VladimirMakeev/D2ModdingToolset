@@ -24,10 +24,9 @@ namespace game {
 struct CMidgardID;
 struct IAttack;
 struct CAttackImpl;
-struct LAttackClass;
-struct LAttackReach;
 
 enum class AttackClassId : int;
+enum class AttackReachId : int;
 } // namespace game
 
 namespace hooks {
@@ -37,13 +36,13 @@ game::CAttackImpl* getAttackImpl(const game::IAttack* attack);
 int getBoostDamage(int level);
 int getLowerDamage(int level);
 int getLowerInitiative(int level);
-bool attackHasPower(const game::LAttackClass* attackClass); // Power is chance to hit / accuracy
+bool attackHasPower(game::AttackClassId id); // Power is chance to hit / accuracy
 bool attackHasDamage(game::AttackClassId id);
 bool attackHasInfinite(game::AttackClassId id);
 bool attackHasCritHit(game::AttackClassId id);
 bool attackHasAltAttack(game::AttackClassId id);
 bool isMeleeAttack(const game::IAttack* attack);
-int getAttackMaxTargets(const game::LAttackReach* reach);
+int getAttackMaxTargets(game::AttackReachId id);
 
 } // namespace hooks
 

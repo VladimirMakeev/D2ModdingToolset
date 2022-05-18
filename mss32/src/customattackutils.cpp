@@ -591,7 +591,7 @@ double computeTotalDamageRatio(const game::IAttack* attack, int targetCount)
 
 int computeAverageTotalDamage(const game::IAttack* attack, int damage)
 {
-    int maxTargets = getAttackMaxTargets(attack->vftable->getAttackReach(attack));
+    int maxTargets = getAttackMaxTargets(attack->vftable->getAttackReach(attack)->id);
     int avgTargets = maxTargets % 2 + maxTargets / 2;
     return damage * avgTargets;
 }

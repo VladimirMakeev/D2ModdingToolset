@@ -177,7 +177,7 @@ std::string getRatedAttackDamageText(const std::string& base,
                                      const utils::AttackDescriptor& actual,
                                      int damageBoosted)
 {
-    auto ratios = computeAttackDamageRatio(actual.custom(), getAttackMaxTargets(actual.reach()));
+    auto ratios = computeAttackDamageRatio(actual.custom(), getAttackMaxTargets(actual.reachId()));
     if (ratios.size() < 2)
         return base;
 
@@ -277,7 +277,7 @@ std::string getDamageDrainAttackDamageText(const utils::AttackDescriptor& actual
                                 true);
     }
 
-    if (getAttackMaxTargets(actual.reach()) < 2)
+    if (getAttackMaxTargets(actual.reachId()) < 2)
         return result;
     else if (actual.damageSplit()) {
         return getSplitAttackDamageText(result);
@@ -337,18 +337,18 @@ std::string getAttackDamageText(const utils::AttackDescriptor& actual,
     const auto& classes = AttackClassCategories::get();
 
     std::string result;
-    if (actual.class_()->id == classes.boostDamage->id) {
+    if (actual.classId() == classes.boostDamage->id) {
         result = getBoostDamageAttackDamageText(actual, global);
-    } else if (actual.class_()->id == classes.lowerDamage->id) {
+    } else if (actual.classId() == classes.lowerDamage->id) {
         result = getLowerDamageAttackDamageText(actual, global);
-    } else if (actual.class_()->id == classes.lowerInitiative->id) {
+    } else if (actual.classId() == classes.lowerInitiative->id) {
         result = getLowerInitiativeAttackDamageText(actual, global);
-    } else if (actual.class_()->id == classes.damage->id || actual.class_()->id == classes.drain->id
-               || actual.class_()->id == classes.drainOverflow->id) {
+    } else if (actual.classId() == classes.damage->id || actual.classId() == classes.drain->id
+               || actual.classId() == classes.drainOverflow->id) {
         result = getDamageDrainAttackDamageText(actual, global, editorModifiers, boostDamageLevel,
                                                 lowerDamageLevel, damageMax);
-    } else if (actual.class_()->id == classes.heal->id
-               || actual.class_()->id == classes.bestowWards->id) {
+    } else if (actual.classId() == classes.heal->id
+               || actual.classId() == classes.bestowWards->id) {
         result = getModifiedNumberText(actual.heal(), global.heal(), false);
     } else {
         result = getModifiedNumberText(actual.damage(), global.damage(), false, damageMax);
@@ -357,17 +357,15 @@ std::string getAttackDamageText(const utils::AttackDescriptor& actual,
     return addInfiniteText(result, actual, global);
 }
 
-std::string getAttackSourceText(const game::LAttackSource* source)
+std::string getAttackSourceText(game::AttackSourceId id)
 {
     using namespace game;
 
     const auto& sources = AttackSourceCategories::get();
 
-    if (source == nullptr)
+    if (id == (AttackSourceId)emptyCategoryId)
         return getInterfaceText("X005TA0473"); // "None"
-
-    AttackSourceId id = source->id;
-    if (id == sources.weapon->id)
+    else if (id == sources.weapon->id)
         return getInterfaceText("X005TA0145"); // "Weapon"
     else if (id == sources.mind->id)
         return getInterfaceText("X005TA0146"); // "Mind"
@@ -396,23 +394,23 @@ std::string getAttackSourceText(const game::LAttackSource* source)
 std::string getAttackSourceText(const utils::AttackDescriptor& actual,
                                 const utils::AttackDescriptor& global)
 {
-    std::string result = getAttackSourceText(actual.source());
-    return getModifiedStringText(result, actual.source()->id != global.source()->id);
+    std::string result = getAttackSourceText(actual.sourceId());
+    return getModifiedStringText(result, actual.sourceId() != global.sourceId());
 }
 
-std::string getAttackReachText(const game::LAttackReach* reach)
+std::string getAttackReachText(game::AttackReachId id)
 {
     using namespace game;
 
     const auto& reaches = AttackReachCategories::get();
 
-    if (reach->id == reaches.adjacent->id)
+    if (id == reaches.adjacent->id)
         return getInterfaceText("X005TA0201"); // "Adjacent units"
-    else if (reach->id == reaches.all->id || reach->id == reaches.any->id)
+    else if (id == reaches.all->id || id == reaches.any->id)
         return getInterfaceText("X005TA0200"); // "Any unit"
     else {
         for (const auto& custom : getCustomAttacks().reaches) {
-            if (reach->id == custom.reach.id) {
+            if (id == custom.reach.id) {
                 return getInterfaceText(custom.reachTxt.c_str());
             }
         }
@@ -421,19 +419,19 @@ std::string getAttackReachText(const game::LAttackReach* reach)
     return "";
 }
 
-std::string getAttackTargetsText(const game::LAttackReach* reach)
+std::string getAttackTargetsText(game::AttackReachId id)
 {
     using namespace game;
 
     const auto& reaches = AttackReachCategories::get();
 
-    if (reach->id == reaches.all->id)
+    if (id == reaches.all->id)
         return getInterfaceText("X005TA0674"); // "6"
-    else if (reach->id == reaches.any->id || reach->id == reaches.adjacent->id)
+    else if (id == reaches.any->id || id == reaches.adjacent->id)
         return getInterfaceText("X005TA0675"); // "1"
     else {
         for (const auto& custom : getCustomAttacks().reaches) {
-            if (reach->id == custom.reach.id) {
+            if (id == custom.reach.id) {
                 return getInterfaceText(custom.targetsTxt.c_str());
             }
         }
@@ -521,13 +519,13 @@ std::string getEffectField(const utils::AttackDescriptor& actual)
 
     const auto& classes = AttackClassCategories::get();
 
-    if (actual.class_()->id == classes.heal->id || actual.class_()->id == classes.bestowWards->id)
+    if (actual.classId() == classes.heal->id || actual.classId() == classes.bestowWards->id)
         return getInterfaceText("X005TA0504"); // "Heal"
-    else if (actual.class_()->id == classes.boostDamage->id)
+    else if (actual.classId() == classes.boostDamage->id)
         return getInterfaceText("X005TA0534"); // "Boost"
-    else if (actual.class_()->id == classes.lowerDamage->id)
+    else if (actual.classId() == classes.lowerDamage->id)
         return getInterfaceText("X005TA0547"); // "Lower"
-    else if (actual.class_()->id == classes.lowerInitiative->id)
+    else if (actual.classId() == classes.lowerInitiative->id)
         return getInterfaceText("X005TA0551"); // "Lower initiative"
     else
         return getInterfaceText("X005TA0503"); // "Damage"
@@ -566,7 +564,7 @@ std::string getSourceField(const utils::AttackDescriptor& actual,
     std::string result = getAttackSourceText(actual, global);
 
     const auto& classes = game::AttackClassCategories::get();
-    if (actualAlt.class_()->id == classes.doppelganger->id) {
+    if (actualAlt.classId() == classes.doppelganger->id) {
         if (userSettings().doppelgangerRespectsEnemyImmunity
             || userSettings().doppelgangerRespectsAllyImmunity) {
             result = addAltAttackText(result, getAttackSourceText(actualAlt, globalAlt));
@@ -598,15 +596,15 @@ std::string getInitField(const utils::AttackDescriptor& actual,
 std::string getReachField(const utils::AttackDescriptor& actual,
                           const utils::AttackDescriptor& global)
 {
-    std::string result = getAttackReachText(actual.reach());
-    return getModifiedStringText(result, actual.reach()->id != global.reach()->id);
+    std::string result = getAttackReachText(actual.reachId());
+    return getModifiedStringText(result, actual.reachId() != global.reachId());
 }
 
 std::string getTargetsField(const utils::AttackDescriptor& actual,
                             const utils::AttackDescriptor& global)
 {
-    std::string result = getAttackTargetsText(actual.reach());
-    return getModifiedStringText(result, actual.reach()->id != global.reach()->id);
+    std::string result = getAttackTargetsText(actual.reachId());
+    return getModifiedStringText(result, actual.reachId() != global.reachId());
 }
 
 void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descriptor,
@@ -679,7 +677,7 @@ game::String* __stdcall getAttackSourceTextHooked(game::String* value,
                                                   const game::LAttackSource* attackSource)
 {
     const auto& stringApi = game::StringApi::get();
-    stringApi.initFromString(value, getAttackSourceText(attackSource).c_str());
+    stringApi.initFromString(value, getAttackSourceText(attackSource->id).c_str());
     return value;
 }
 
@@ -689,7 +687,7 @@ void __stdcall appendAttackSourceTextHooked(const game::LAttackSource* attackSou
 {
     const auto& stringApi = game::StringApi::get();
 
-    auto text = getAttackSourceText(attackSource);
+    auto text = getAttackSourceText(attackSource->id);
 
     if (*valueIsNotEmpty)
         stringApi.append(value, ", ", strlen(", "));
