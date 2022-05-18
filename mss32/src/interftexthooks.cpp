@@ -555,8 +555,7 @@ std::string getDamageField(const utils::AttackDescriptor& actual,
             result = addAttack2Text(result, damage2);
     }
 
-    // Fixes vertical tab in case of multiline
-    return fmt::format("\\p110;{:s}\\p0;", result);
+    return result;
 }
 
 std::string getSourceField(const utils::AttackDescriptor& actual,
