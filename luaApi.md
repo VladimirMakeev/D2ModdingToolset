@@ -469,7 +469,7 @@ scenario.size
 ---
 
 #### Attack
-Represents attack of [Unit Implementation](luaApi.md#unit-implementation).
+Represents attack of [Unit implementation](luaApi.md#unit-implementation).
 
 Methods:
 ##### type
@@ -566,13 +566,13 @@ Returns item [value](luaApi.md#currency).
 base.value
 ```
 ##### unitImpl
-Returns related [Unit Implementation](luaApi.md#unit-implementation).
+Returns related [Unit implementation](luaApi.md#unit-implementation).
 For instance: in case of "Angel Orb", Angel unit implementation is returned.
 ```lua
 base.unitImpl
 ```
 
-#### Item object
+#### Item
 Represents item object in the current scenario.
 
 Methods:
@@ -614,8 +614,9 @@ end
 ```
 
 #### transformSelf.lua
+`unit` has type [Unit](luaApi.md#unit-1).
+`transformImpl` is [Unit implementation](luaApi.md#unit-implementation).
 ```lua
--- 'unit' has type Unit, 'transformImpl' is a Unit implementation
 function getLevel(unit, transformImpl)
     -- Transform into current level or level of resulting unit's template, whichever is bigger.
     return math.max(unit.impl.level, transformImpl.level)
@@ -623,17 +624,20 @@ end
 ```
 
 #### transformOther.lua
+`attacker` and `target` has type [Unit](luaApi.md#unit-1).
+`transformImpl` is [Unit implementation](luaApi.md#unit-implementation).
+`item` is [Item](luaApi.md#item-1).
 ```lua
--- 'attacker' and 'target' has type Unit, 'transformImpl' is a Unit implementation, 'item' is Item object
 function getLevel(attacker, target, transformImpl, item)
     -- transform using target level with a minimum of transform impl level
     return math.max(target.impl.level, transformImpl.level);
 end
 ```
 
+`attacker` and `target` has type [Unit](luaApi.md#unit-1).
+`item` is [Item](luaApi.md#item-1).
 #### drainLevel.lua
 ```lua
--- 'attacker' and 'target' has type Unit, 'item' is Item object
 function getLevel(attacker, target, item)
     -- transform into unit with its level minus 1 and minus attacker over-level
     return math.max(1, target.impl.level - 1 - attacker.impl.level + attacker.baseImpl.level);
@@ -641,8 +645,10 @@ end
 ```
 
 #### summon.lua
+`summoner` has type [Unit](luaApi.md#unit-1).
+`summonImpl` is [Unit implementation](luaApi.md#unit-implementation).
+`item` is [Item](luaApi.md#item-1).
 ```lua
--- 'summoner' has type Unit, 'summonImpl' is a Unit implementation, 'item' is Item object
 function getLevel(summoner, summonImpl, item)
     -- Use base level of summon if cheap item is used to summon it
     if item and item.base.value.gold < 500 then
@@ -739,3 +745,26 @@ end)
 
 return tilesTotal == count
 ```
+
+---
+
+### Custom modifiers
+Modifiers in the game stack on top of each other, making ordered modifiers chain.<br>
+First modifier takes base values from the unit it modifies, next - values modified by the first modifier and so on.<br>
+Custom modifiers allow you to modify every stat of unit and its attacks in a single script file with a number of uniform functions.<br>
+
+Most of the custom modifier functions have the following form:
+```lua
+function getSomething(unit, prev)
+    if someCondition then
+        return modifiedValue
+    end
+
+    return prev
+end
+```
+`unit` has type [Unit](luaApi.md#unit-1). The unit is presented in a state before the current modifier is applied.<br>
+`prev` is a previous value of the stat. It is either a base value or a value modified by the previous modifier.
+
+Check [Scripts/Modifiers](Scripts/Modifiers) for script examples.<br>
+[template.lua](Scripts/Modifiers/template.lua) contains a complete list of available functions.
