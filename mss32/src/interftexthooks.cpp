@@ -350,6 +350,9 @@ std::string getAttackDamageText(const utils::AttackDescriptor& actual,
     } else if (actual.classId() == classes.heal->id
                || actual.classId() == classes.bestowWards->id) {
         result = getModifiedNumberText(actual.heal(), global.heal(), false);
+    } else if (actual.classId() == classes.poison->id || actual.classId() == classes.frostbite->id
+               || actual.classId() == classes.blister->id) {
+        result = getNumberText(global.damage(), false);
     } else {
         result = getModifiedNumberText(actual.damage(), global.damage(), false, damageMax);
     }
