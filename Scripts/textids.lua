@@ -27,7 +27,7 @@ textids = {
 		critHitAttack = "",
 
 		-- Defines text id to format Critical Hit text in unit encyclopedia.
-		-- Despite its name, it is used to format all crit fields (name, power and damage).
+		-- Despite its name, it is used to format both crit hit damage and power (chance to hit).
 		-- The text must contain keywords "%DMG%" and "%CRIT%".
 		-- Fallback text is "%DMG% (%CRIT%)".
 		critHitDamage = "",
@@ -50,6 +50,12 @@ textids = {
 		-- The text must contain keyword "%DMG%".
 		-- Fallback text is "%DMG%, split between targets".
 		splitDamage = "",
+
+		-- Defines modified text representation in unit encyclopedia.
+		-- Modified text includes attack name, source, reach, etc.
+		-- The text must contain keyword "%VALUE%".
+		-- Fallback text is "\\c025;090;000;%VALUE%\\c000;000;000;".
+		modifiedValue = "",
 	},
 
 	-- Text ids related to events logic
