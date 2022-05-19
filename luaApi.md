@@ -203,6 +203,8 @@ impl.level
 impl.xpNext
 -- Returns experience points granted for killing the unit. XP_KILLED value from GUnits.dbf.
 impl.xpKilled
+-- Returns unit's hit points. HIT_POINT value from GUnits.dbf.
+impl.hp
 -- Returns unit's armor. ARMOR value from GUnits.dbf.
 impl.armor
 -- Returns unit's regen. REGEN value from GUnits.dbf.
