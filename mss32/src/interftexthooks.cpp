@@ -50,7 +50,7 @@ std::string getNumberText(int value, bool percent)
     return fmt::format(percent ? "{:d}%" : "{:d}", value);
 }
 
-std::string getBonusNumberText(int bonus, bool percent)
+std::string getBonusNumberText(int bonus, bool percent, bool trim = false)
 {
     if (!bonus)
         return "";
@@ -60,8 +60,18 @@ std::string getBonusNumberText(int bonus, bool percent)
     auto result = getInterfaceText(bonus > 0 ? "X005TA0486" : "X005TA0487");
     // "\c000;000;000;"
     result += getInterfaceText("X005TA0488");
-    replace(result, "%NUMBER%", fmt::format(percent ? "{:d}%" : "{:d}", abs(bonus)));
 
+    if (trim) {
+        // Doing greedy keyword search because we cannot be sure that the standard format string is
+        // unchanged
+        if (bonus > 0) {
+            replace(result, " + %NUMBER%", "+ %NUMBER%");
+        } else {
+            replace(result, " - %NUMBER%", "- %NUMBER%");
+        }
+    }
+
+    replace(result, "%NUMBER%", fmt::format(percent ? "{:d}%" : "{:d}", abs(bonus)));
     return result;
 }
 
@@ -87,7 +97,7 @@ std::string getModifiedNumberText(int value, int base, bool percent, int max = I
         result = getNumberText(base, percent);
         result += getBonusNumberText(bonus, percent);
     } else if (bonus) {
-        result = getModifiedStringText(getNumberText(bonus, percent), true);
+        result = getBonusNumberText(bonus, percent, true);
     } else {
         result = getNumberText(base, percent);
     }
