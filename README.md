@@ -322,7 +322,11 @@
     - Add a new entry in `LattS.dbf`;
     - Specify the custom source `ID` and `TEXT` accordingly;
     - Specify the id of the source name from `TApp.dbf` in `NAME_TXT` ('X005TA0153' for instance);
-    - Specify `IMMU_AI_R`: AI rating of the source immunity - used to determine how powerful a unit with such ward or immunity is. The greater - the better. For example, elemental immunities have average rating of 5, while weapon immunity has 57. Can be omitted - 5 is the default.
+    - Specify `IMMU_AI_R`: AI rating of the source immunity - used to determine how powerful a unit with such ward or immunity is. The greater - the better. For example, elemental immunities have average rating of 5, while weapon immunity has 57. Can be omitted - 5 is the default;
+    - Consider adding vertical align to unit encyclopedia fields to properly accommodate custom attack source text:
+        - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;
+        - Note how attack name fields `%TWICE%%ALTATTACK%%ATTACK%%SECOND%` are enclosed in vertical align `\p110;` and `\p0;`;
+        - Use the same technique to enclose `%SOURCE%%SOURCE2%` field in `X005TA0788` (like `\p110;%SOURCE%%SOURCE2%\p0;`).
 
     ![image](https://user-images.githubusercontent.com/5180699/122281194-ac1e3380-cef2-11eb-902a-29821d0ceae5.png)
 
@@ -346,7 +350,11 @@
     - `ATT_SCRIPT` (Character, size 48) is similar to `SEL_SCRIPT`, but determines which units will be **affected** by attack;
     - `MRK_TARGTS` (Logical) determines whether `ATT_SCRIPT` should be used to also mark targets with circle animation on battlefield. Usually should be **true**, except when the attack affects random targets (`L_CHAIN` for instance);
     - `MAX_TARGTS` (Numeric, size 1) specifies maximum number of targets that can be affected by attack. Used for AI rating calculations, and for damage ratio display formatting in unit encyclopedia;
-    - `MELEE` (Logical) determines whether the attack considered as melee. Used by AI for unit hiring, positioning and targeting.
+    - `MELEE` (Logical) determines whether the attack considered as melee. Used by AI for unit hiring, positioning and targeting;
+    - Consider adding vertical align to unit encyclopedia fields to properly accommodate custom attack reach text:
+        - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;
+        - Note how attack name fields `%TWICE%%ALTATTACK%%ATTACK%%SECOND%` are enclosed in vertical align `\p110;` and `\p0;`;
+        - Use the same technique to enclose `%REACH%` and `%TARGETS%` fields in `X005TA0788` (like `\p110;%REACH%\p0;`).
 
     Example descriptions for `TARGET_TXT`:
     ```
@@ -384,7 +392,11 @@
         - `ratedDamageEqual`
         - `ratedDamageSeparator`
         - `splitDamage`
-    - Specify corresponding text ids in [textids.lua](Scripts/textids.lua).
+    - Specify corresponding text ids in [textids.lua](Scripts/textids.lua);
+    - Consider adding vertical align to unit encyclopedia fields to properly accommodate damage ratio text:
+        - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;
+        - Note how attack name fields `%TWICE%%ALTATTACK%%ATTACK%%SECOND%` are enclosed in vertical align `\p110;` and `\p0;`;
+        - Use the same technique to enclose `%DAMAGE%` field in `X005TA0788` (like `\p110;%DAMAGE%\p0;`).
 
     ![image](https://user-images.githubusercontent.com/5180699/124194976-2b565e80-dad2-11eb-8395-58614dcd669f.png)
 
@@ -408,13 +420,17 @@
 
     - Add `L_CUSTOM` category to `LModifS.dbf` or simply copy the file from [Examples](Examples);
     - Add `SCRIPT` (Character, size 40) column to `Gmodif.dbf`;
-    - Add a new modifier entry in `Gmodif.dbf`;
-    - Specify the new `MODIF_ID` (use format `gXXXum9XXX` if you want it to be available as Scenario Editor modifier);
-    - Specify `SOURCE` id that corresponds to `L_CUSTOM` category added earlier (example `LModifS.dbf` uses `4` as the id);
-    - Specify `SCRIPT` file name that will be used for this modifier (omit file path, for example `berserk.lua`);
+    - Add a new modifier entry in `Gmodif.dbf`:
+        - Specify new `MODIF_ID` (use format `gXXXum9XXX` if you want it to be available as Scenario Editor modifier);
+        - Specify `SOURCE` id that corresponds to `L_CUSTOM` category added earlier (example `LModifS.dbf` uses `4` as the id);
+        - Specify `SCRIPT` file name that will be used for this modifier (omit file path, for example `berserk.lua`);
     - Add a description text for the modifier to `Tglobal.dbf` (it should be returned by `getModifierDescTxt` script function);
     - Refer to [Scripts/Modifiers](Scripts/Modifiers) examples and [luaApi](luaApi.md) to create your modifier script;
-    - Try assigning the created modifier to item, potion or spell, or simply use it as Scenario Editor modifier.
+    - Try assigning the created modifier to item, potion or spell, or simply use it as Scenario Editor modifier;
+    - Consider adding vertical align to unit encyclopedia fields to properly accommodate custom modifier bonuses text:
+        - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;
+        - Note how attack name fields `%TWICE%%ALTATTACK%%ATTACK%%SECOND%` are enclosed in vertical align `\p110;` and `\p0;`;
+        - Use the same technique to enclose `%HIT%%HIT2%` and `%DAMAGE%` fields (like `\p110;%DAMAGE%\p0;`).
 
     ![image](https://user-images.githubusercontent.com/5180699/169152674-16261837-fa50-4c15-89d1-a1ee70fa7544.png)
     ![image](https://user-images.githubusercontent.com/5180699/169152799-5a7e7e2a-f230-4faf-bd17-db3ee5343397.png)
