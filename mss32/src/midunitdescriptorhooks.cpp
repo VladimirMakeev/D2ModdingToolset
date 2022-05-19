@@ -20,8 +20,10 @@
 #include "midunitdescriptorhooks.h"
 #include "attack.h"
 #include "dynamiccast.h"
+#include "game.h"
 #include "midgardobjectmap.h"
 #include "midstack.h"
+#include "midunit.h"
 #include "midunitdescriptor.h"
 #include "unitutils.h"
 
@@ -56,8 +58,15 @@ bool __fastcall midUnitDescriptorIsUnitLeaderHooked(const game::CMidUnitDescript
 {
     using namespace game;
 
+    const auto& fn = gameFunctions();
+
     if (CMidgardIDApi::get().getType(&thisptr->groupId) != IdType::Stack) {
         // Only stacks can contain leader units
+        return false;
+    }
+
+    // Fix crash on viewing stack leader transformed to ordinary soldier
+    if (fn.castUnitImplToStackLeader(thisptr->unit->unitImpl) == nullptr) {
         return false;
     }
 
