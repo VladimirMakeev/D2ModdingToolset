@@ -72,7 +72,7 @@ public:
     game::AttackClassId classId() const;
     game::AttackSourceId sourceId() const;
     game::AttackReachId reachId() const;
-    int damage(const game::IdList* modifiers = nullptr) const;
+    int damage(const game::IdList* modifiers = nullptr, int max = INT_MAX) const;
     int heal() const;
     bool hasPower() const;
     int power(const game::IdList* modifiers = nullptr) const;

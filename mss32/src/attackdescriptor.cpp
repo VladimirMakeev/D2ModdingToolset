@@ -26,6 +26,7 @@
 #include "game.h"
 #include "midunit.h"
 #include "midunitdescriptor.h"
+#include "restrictions.h"
 #include "ummodifier.h"
 #include "unitutils.h"
 
@@ -179,11 +180,12 @@ game::AttackReachId AttackDescriptor::reachId() const
     return data.reachId;
 }
 
-int AttackDescriptor::damage(const game::IdList* modifiers) const
+int AttackDescriptor::damage(const game::IdList* modifiers, int max) const
 {
     using namespace game;
 
     const auto& fn = gameFunctions();
+    const auto& restrictions = game::gameRestrictions();
 
     if (!hooks::attackHasDamage(data.classId))
         return 0;
@@ -191,7 +193,9 @@ int AttackDescriptor::damage(const game::IdList* modifiers) const
     if (!modifiers)
         return data.damage;
 
-    return fn.applyPercentModifiers(data.damage, modifiers, ModifierElementTypeFlag::QtyDamage);
+    int value = fn.applyPercentModifiers(data.damage, modifiers,
+                                         ModifierElementTypeFlag::QtyDamage);
+    return std::clamp(value, restrictions.unitDamage->min, max);
 }
 
 int AttackDescriptor::heal() const
@@ -209,6 +213,7 @@ int AttackDescriptor::power(const game::IdList* modifiers) const
     using namespace game;
 
     const auto& fn = gameFunctions();
+    const auto& restrictions = game::gameRestrictions();
 
     if (!hasPower())
         return 100;
@@ -216,7 +221,8 @@ int AttackDescriptor::power(const game::IdList* modifiers) const
     if (!modifiers)
         return data.power;
 
-    return fn.applyPercentModifiers(data.power, modifiers, ModifierElementTypeFlag::Power);
+    int value = fn.applyPercentModifiers(data.power, modifiers, ModifierElementTypeFlag::Power);
+    return std::clamp(value, restrictions.attackPower->min, restrictions.attackPower->max);
 }
 
 int AttackDescriptor::initiative(const game::IdList* modifiers) const
@@ -224,12 +230,15 @@ int AttackDescriptor::initiative(const game::IdList* modifiers) const
     using namespace game;
 
     const auto& fn = gameFunctions();
+    const auto& restrictions = game::gameRestrictions();
 
     if (!modifiers)
         return data.initiative;
 
-    return fn.applyPercentModifiers(data.initiative, modifiers,
-                                    ModifierElementTypeFlag::Initiative);
+    int value = fn.applyPercentModifiers(data.initiative, modifiers,
+                                         ModifierElementTypeFlag::Initiative);
+    return std::clamp(value, restrictions.attackInitiative->min,
+                      restrictions.attackInitiative->max);
 }
 
 int AttackDescriptor::level() const

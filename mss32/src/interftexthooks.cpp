@@ -277,8 +277,9 @@ std::string getDamageDrainAttackDamageText(const utils::AttackDescriptor& actual
         boosted = damageMax;
     boosted *= multiplier;
 
-    auto result = getModifiedNumberText(boosted, global.damage(editorModifiers) * multiplier, false,
-                                        damageMax * multiplier);
+    auto result = getModifiedNumberText(boosted,
+                                        global.damage(editorModifiers, damageMax) * multiplier,
+                                        false, damageMax * multiplier);
 
     if (actual.critHit()) {
         result = addCritHitText(result,
