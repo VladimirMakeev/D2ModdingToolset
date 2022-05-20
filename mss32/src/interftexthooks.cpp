@@ -377,9 +377,7 @@ std::string getAttackSourceText(game::AttackSourceId id)
 
     const auto& sources = AttackSourceCategories::get();
 
-    if (id == (AttackSourceId)emptyCategoryId)
-        return getInterfaceText("X005TA0473"); // "None"
-    else if (id == sources.weapon->id)
+    if (id == sources.weapon->id)
         return getInterfaceText("X005TA0145"); // "Weapon"
     else if (id == sources.mind->id)
         return getInterfaceText("X005TA0146"); // "Mind"
@@ -403,6 +401,14 @@ std::string getAttackSourceText(game::AttackSourceId id)
     }
 
     return "";
+}
+
+std::string getAttackSourceText(const game::LAttackSource* source)
+{
+    if (!source)
+        return getInterfaceText("X005TA0473"); // "None"
+
+    return getAttackSourceText(source->id);
 }
 
 std::string getAttackSourceText(const utils::AttackDescriptor& actual,
@@ -690,7 +696,7 @@ game::String* __stdcall getAttackSourceTextHooked(game::String* value,
                                                   const game::LAttackSource* attackSource)
 {
     const auto& stringApi = game::StringApi::get();
-    stringApi.initFromString(value, getAttackSourceText(attackSource->id).c_str());
+    stringApi.initFromString(value, getAttackSourceText(attackSource).c_str());
     return value;
 }
 
@@ -700,7 +706,7 @@ void __stdcall appendAttackSourceTextHooked(const game::LAttackSource* attackSou
 {
     const auto& stringApi = game::StringApi::get();
 
-    auto text = getAttackSourceText(attackSource->id);
+    auto text = getAttackSourceText(attackSource);
 
     if (*valueIsNotEmpty)
         stringApi.append(value, ", ", strlen(", "));
