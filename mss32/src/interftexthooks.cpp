@@ -258,7 +258,8 @@ std::string getAttackInitiativeText(const utils::AttackDescriptor& actual,
                                     const game::IdList* editorModifiers,
                                     int lowerInitiativeLevel)
 {
-    int boosted = actual.initiative() * (1 - getLowerInitiative(lowerInitiativeLevel) / 100);
+    int boost = -getLowerInitiative(lowerInitiativeLevel);
+    int boosted = actual.initiative() + actual.initiative() * boost / 100;
     return getModifiedNumberText(boosted, global.initiative(editorModifiers), false);
 }
 
@@ -272,7 +273,7 @@ std::string getDamageDrainAttackDamageText(const utils::AttackDescriptor& actual
     int multiplier = actual.damageSplit() ? userSettings().splitDamageMultiplier : 1;
 
     int boost = getBoostDamage(boostDamageLevel) - getLowerDamage(lowerDamageLevel);
-    int boosted = actual.damage() * (1 + boost / 100);
+    int boosted = actual.damage() + actual.damage() * boost / 100;
     if (boosted > damageMax)
         boosted = damageMax;
     boosted *= multiplier;
