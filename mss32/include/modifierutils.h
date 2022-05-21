@@ -112,6 +112,8 @@ std::set<game::CMidgardID> getModifiedUnitIds(game::UnitInfo* unitInfo);
 std::set<game::CMidgardID> getUnitModifierIds(game::UnitInfo* unitInfo,
                                               const game::CMidgardID* modifiedUnitId);
 
+game::IAttack* wrapAltAttack(const game::IUsUnit* unit, game::IAttack* attack);
+
 } // namespace hooks
 
 #endif // MODIFIERUTILS_H

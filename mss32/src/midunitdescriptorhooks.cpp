@@ -19,6 +19,7 @@
 
 #include "midunitdescriptorhooks.h"
 #include "attack.h"
+#include "midunit.h"
 #include "midunitdescriptor.h"
 #include "unitutils.h"
 
@@ -27,13 +28,11 @@ namespace hooks {
 game::IAttack* __fastcall midUnitDescriptorGetAttackHooked(const game::CMidUnitDescriptor* thisptr,
                                                            int /*%edx*/)
 {
-    using namespace game;
+    auto unit = thisptr->unit;
+    if (!unit)
+        return nullptr;
 
-    const auto& descriptorApi = CMidUnitDescriptorApi::get();
-
-    auto soldier = descriptorApi.getSoldier(thisptr);
-
-    return getAttack(soldier, true, true);
+    return getAttack(unit->unitImpl, true, true);
 }
 
 int __fastcall midUnitDescriptorGetAttackInitiativeHooked(const game::CMidUnitDescriptor* thisptr,

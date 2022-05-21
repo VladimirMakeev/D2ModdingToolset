@@ -30,6 +30,7 @@
 namespace game {
 
 struct CUmAttackData;
+struct CUmAttackDataPatched;
 struct GlobalData;
 struct CDBTable;
 
@@ -38,7 +39,7 @@ struct CUmAttack
     IUsUnit usUnit;
     IUsSoldier usSoldier;
     CUmModifier umModifier;
-    CUmAttackData* data;
+    CUmAttackDataPatched* data;
 };
 
 static_assert(sizeof(CUmAttack) == 24, "Size of CUmAttack structure must be exactly 24 bytes");
@@ -55,6 +56,11 @@ struct CUmAttackData
 
 static_assert(sizeof(CUmAttackData) == 52,
               "Size of CUmAttackData structure must be exactly 52 bytes");
+
+struct CUmAttackDataPatched : CUmAttackData
+{
+    CAttackModified altAttackModified;
+};
 
 static inline CUmAttack* castSoldierToUmAttack(const IUsSoldier* soldier)
 {
@@ -89,7 +95,14 @@ struct Api
 
 Api& get();
 
-const IUsSoldierVftable* vftable();
+struct Vftable
+{
+    const IUsUnitVftable* usUnit;
+    const IUsSoldierVftable* usSoldier;
+    const CUmModifierVftable* umModifier;
+};
+
+Vftable& vftable();
 
 } // namespace CUmAttackApi
 

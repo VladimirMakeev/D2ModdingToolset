@@ -21,14 +21,25 @@
 #define UMATTACKHOOKS_H
 
 namespace game {
+struct CMidgardID;
+struct GlobalData;
+struct CDBTable;
 struct IAttack;
 struct IUsSoldier;
+struct CUmAttack;
 } // namespace game
 
 namespace hooks {
 
-game::IAttack* __fastcall umAttackGetAttackByIdHooked(const game::IUsSoldier* thisptr,
-                                                      int /*%edx*/);
+game::CUmAttack* __fastcall umAttackCtorHooked(game::CUmAttack* thisptr,
+                                               int /*%edx*/,
+                                               const game::CMidgardID* modifierId,
+                                               game::CDBTable* dbTable,
+                                               const game::GlobalData** globalData);
+
+game::CUmAttack* __fastcall umAttackCopyCtorHooked(game::CUmAttack* thisptr,
+                                                   int /*%edx*/,
+                                                   const game::CUmAttack* src);
 
 } // namespace hooks
 

@@ -29,6 +29,7 @@
 #include "midunit.h"
 #include "modifgroup.h"
 #include "settings.h"
+#include "umattack.h"
 #include "umunit.h"
 #include "unitmodifier.h"
 #include "ussoldier.h"
@@ -450,6 +451,30 @@ std::set<game::CMidgardID> getUnitModifierIds(game::UnitInfo* unitInfo,
     for (auto info = getModifiedUnits(unitInfo, &end); info < end; info++) {
         if (info->unitId == *modifiedUnitId)
             result.insert(validateId(info->modifierId));
+    }
+
+    return result;
+}
+
+game::IAttack* wrapAltAttack(const game::IUsUnit* unit, game::IAttack* attack)
+{
+    using namespace game;
+
+    const auto& attackModifiedApi = CAttackModifiedApi::get();
+
+    auto result = attack;
+    for (CUmModifier* curr = getFirstUmModifier(unit); curr; curr = curr->data->next) {
+        auto umAttack = castUmModifierToUmAttack(curr);
+        if (umAttack) {
+            auto altAttackModified = &umAttack->data->altAttackModified;
+            attackModifiedApi.wrap(altAttackModified, result);
+            result = altAttackModified;
+        } else {
+            auto custom = castModifierToCustomModifier(curr);
+            if (custom) {
+                result = custom->wrapAltAttack(result);
+            }
+        }
     }
 
     return result;

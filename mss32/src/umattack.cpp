@@ -59,15 +59,31 @@ static std::array<Api, 4> functions = {{
     }
 }};
 
-static std::array<IUsSoldierVftable*, 4> vftables = {{
+static std::array<Vftable, 4> vftables = {{
     // Akella
-    (IUsSoldierVftable*)0x6ecf2c,
+    Vftable{
+        (IUsUnitVftable*)0x6ecfa4,
+        (IUsSoldierVftable*)0x6ecf2c,
+        (CUmModifierVftable*)0x6ecefc,
+    },
     // Russobit
-    (IUsSoldierVftable*)0x6ecf2c,
+    Vftable{
+        (IUsUnitVftable*)0x6ecfa4,
+        (IUsSoldierVftable*)0x6ecf2c,
+        (CUmModifierVftable*)0x6ecefc,
+    },
     // Gog
-    (IUsSoldierVftable*)0x6eaecc,
+    Vftable{
+        (IUsUnitVftable*)0x6eaf44,
+        (IUsSoldierVftable*)0x6eaecc,
+        (CUmModifierVftable*)0x6eae9c,
+    },
     // Scenario Editor
-    (IUsSoldierVftable*)0x5e10ec,
+    Vftable{
+        (IUsUnitVftable*)0x5e1164,
+        (IUsSoldierVftable*)0x5e10ec,
+        (CUmModifierVftable*)0x5e10bc,
+    },
 }};
 // clang-format on
 
@@ -76,7 +92,7 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-const IUsSoldierVftable* vftable()
+Vftable& vftable()
 {
     return vftables[static_cast<int>(hooks::gameVersion())];
 }

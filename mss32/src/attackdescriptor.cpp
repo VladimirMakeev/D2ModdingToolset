@@ -32,17 +32,17 @@
 
 namespace utils {
 
-game::IAttack* getAttack(game::IUsSoldier* soldier, AttackType type)
+game::IAttack* getAttack(game::IUsUnit* unitImpl, AttackType type)
 {
     using namespace game;
 
     switch (type) {
     case AttackType::Primary:
-        return hooks::getAttack(soldier, true, true);
+        return hooks::getAttack(unitImpl, true, true);
     case AttackType::Secondary:
-        return hooks::getAttack(soldier, false, false);
+        return hooks::getAttack(unitImpl, false, false);
     case AttackType::Alternative: {
-        auto attack = hooks::getAttack(soldier, true, false);
+        auto attack = hooks::getAttack(unitImpl, true, false);
         if (*attack->vftable->getAltAttackId(attack) != emptyId)
             return attack;
     }
@@ -96,8 +96,7 @@ AttackDescriptor::AttackDescriptor(game::IEncUnitDescriptor* descriptor,
             dynamicCast(descriptor, 0, rtti.IEncUnitDescriptorType, rtti.CMidUnitDescriptorType, 0);
         if (midUnitDescriptor) {
             const auto unitImpl = midUnitDescriptor->unit->unitImpl;
-            const auto soldier = hooks::castUnitImplToSoldierWithLogging(unitImpl);
-            initialize(getAttack(soldier, type), nullptr, type);
+            initialize(getAttack(unitImpl, type), nullptr, type);
         } else {
             initialize(getGlobalAttack(descriptor, type), descriptor, type);
         }

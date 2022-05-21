@@ -39,17 +39,21 @@ namespace hooks {
 struct CustomAttackData;
 struct CustomModifierFunctions;
 
+struct CAttackModifiedCustom : public game::IAttack
+{
+    const game::IAttack* prev;
+};
+
 struct CCustomModifier
 {
     game::IUsUnit usUnit;
     game::IUsSoldier usSoldier;
     game::CUmModifier umModifier;
     game::IUsStackLeader usStackLeader;
-    game::IAttack attack;
-    game::IAttack attack2;
+    CAttackModifiedCustom attack;
+    CAttackModifiedCustom attack2;
+    CAttackModifiedCustom altAttack;
     const game::CMidUnit* unit;
-    const game::IAttack* prevAttack;
-    const game::IAttack* prevAttack2;
     game::ModifierElementTypeFlag lastElementQuery;
     const CustomModifierFunctions* functions;
     std::string scriptFileName;
@@ -58,18 +62,17 @@ struct CCustomModifier
     game::Bank reviveCost;
     game::Bank healCost;
     game::Bank trainingCost;
-    game::CMidgardID altAttackId;
     game::IdVector wards;
 
-    game::IAttack* wrap(const game::IAttack* prev, bool primary);
     void setUnit(const game::CMidUnit* value);
+    game::IAttack* getAttack(bool primary);
+    game::IAttack* wrapAltAttack(const game::IAttack* value);
 
     const game::IUsUnit* getPrev() const;
     const game::IUsSoldier* getPrevSoldier() const;
     const game::IUsStackLeader* getPrevStackLeader() const;
     const game::IAttack* getPrevAttack(const game::IAttack* thisptr) const;
     const CCustomModifier* getPrevCustomModifier() const;
-    const game::IAttack* getAttackToWrap(bool primary) const;
     CustomAttackData getCustomAttackData(const game::IAttack* thisptr) const;
     const char* getFormattedGlobalText(const game::CMidgardID& formatId,
                                        const game::CMidgardID& baseId) const;
@@ -81,10 +84,10 @@ struct CCustomModifier
     game::CMidgardID getDescTxt() const;
     game::CMidgardID getBaseDescTxt() const;
 
-    game::CMidgardID getAttackNameTxt(bool primary) const;
-    game::CMidgardID getAttackBaseNameTxt(bool primary) const;
-    game::CMidgardID getAttackDescTxt(bool primary) const;
-    game::CMidgardID getAttackBaseDescTxt(bool primary) const;
+    game::CMidgardID getAttackNameTxt(const game::IAttack* thisptr) const;
+    game::CMidgardID getAttackBaseNameTxt(const game::IAttack* thisptr) const;
+    game::CMidgardID getAttackDescTxt(const game::IAttack* thisptr) const;
+    game::CMidgardID getAttackBaseDescTxt(const game::IAttack* thisptr) const;
 
     template <typename F, typename T>
     T getValue(F function, const char* functionName, const T& prev) const

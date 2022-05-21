@@ -501,8 +501,8 @@ Hooks getHooks()
     // Support custom attack reaches
     hooks.emplace_back(HookInfo{fn.chooseUnitLane, chooseUnitLaneHooked});
     // Fix missing modifiers of alternative attacks
-    hooks.emplace_back(
-        HookInfo{CUmAttackApi::vftable()->getAttackById, umAttackGetAttackByIdHooked});
+    hooks.emplace_back(HookInfo{CUmAttackApi::get().constructor, umAttackCtorHooked});
+    hooks.emplace_back(HookInfo{CUmAttackApi::get().copyConstructor, umAttackCopyCtorHooked});
     // Fix incorrect representation of alternative attack modifiers in unit encyclopedia
     hooks.emplace_back(
         HookInfo{CMidUnitDescriptorApi::get().getAttack, midUnitDescriptorGetAttackHooked});
@@ -1804,13 +1804,12 @@ void __stdcall getUnitAttacksHooked(const game::IMidgardObjectMap* objectMap,
     const auto& vectorApi = AttackTypePairVectorApi::get();
 
     auto unit = fn.findUnitById(objectMap, unitId);
-    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
 
-    auto attack = getAttack(soldier, true, checkAltAttack);
+    auto attack = getAttack(unit->unitImpl, true, checkAltAttack);
     AttackTypePair pair{attack, AttackType::Primary};
     vectorApi.pushBack(value, &pair);
 
-    auto attack2 = getAttack(soldier, false, checkAltAttack);
+    auto attack2 = getAttack(unit->unitImpl, false, checkAltAttack);
     if (attack2) {
         AttackTypePair pair{attack2, AttackType::Secondary};
         vectorApi.pushBack(value, &pair);
