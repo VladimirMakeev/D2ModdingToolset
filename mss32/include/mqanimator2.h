@@ -35,10 +35,10 @@ struct IMqAnimator2Vftable
 {
     using HandleAnimation = bool(__thiscall*)(IMqAnimator2* thisptr, IMqAnimation* animation);
 
-    HandleAnimation addAnimation;
-    HandleAnimation addAnimation2;
-    HandleAnimation removeAnimation;
-    HandleAnimation removeAnimation2;
+    HandleAnimation addSlowAnimation;
+    HandleAnimation addFastAnimation;
+    HandleAnimation removeSlowAnimation;
+    HandleAnimation removeFastAnimation;
 };
 
 static_assert(sizeof(IMqAnimator2Vftable) == 4 * sizeof(void*),
