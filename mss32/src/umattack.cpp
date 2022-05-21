@@ -24,6 +24,41 @@
 namespace game::CUmAttackApi {
 
 // clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)0x5a56b9,
+        (Api::CopyConstructor)0x5a5939,
+        (Api::DataConstructor)0x5a58a7,
+        (Api::DataCopyConstructor)0x5a59ce,
+        (Api::ReadData)0x5a57cf,
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)0x5a56b9,
+        (Api::CopyConstructor)0x5a5939,
+        (Api::DataConstructor)0x5a58a7,
+        (Api::DataCopyConstructor)0x5a59ce,
+        (Api::ReadData)0x5a57cf,
+    },
+    // Gog
+    Api{
+        (Api::Constructor)0x5a4949,
+        (Api::CopyConstructor)0x5a4bc9,
+        (Api::DataConstructor)0x5a4b37,
+        (Api::DataCopyConstructor)0x5a4c5e,
+        (Api::ReadData)0x5a4a5f,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x54d852,
+        (Api::CopyConstructor)0x54dad2,
+        (Api::DataConstructor)0x54da40,
+        (Api::DataCopyConstructor)0x54db67,
+        (Api::ReadData)0x54d968,
+    }
+}};
+
 static std::array<IUsSoldierVftable*, 4> vftables = {{
     // Akella
     (IUsSoldierVftable*)0x6ecf2c,
@@ -35,6 +70,11 @@ static std::array<IUsSoldierVftable*, 4> vftables = {{
     (IUsSoldierVftable*)0x5e10ec,
 }};
 // clang-format on
+
+Api& get()
+{
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
 const IUsSoldierVftable* vftable()
 {
