@@ -50,6 +50,13 @@ namespace CAttackModifiedApi {
 
 struct Api
 {
+    using Constructor = CAttackModified*(__thiscall*)(CAttackModified* thisptr);
+    Constructor constructor;
+
+    using CopyConstructor = CAttackModified*(__thiscall*)(CAttackModified* thisptr,
+                                                          const CAttackModified* src);
+    CopyConstructor copyConstructor;
+
     using Wrap = void(__thiscall*)(CAttackModified* thisptr, const IAttack* attack);
     Wrap wrap;
 };

@@ -27,18 +27,26 @@ namespace game::CAttackModifiedApi {
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
+        (Api::Constructor)0x5aa0ca,
+        (Api::CopyConstructor)0x5aa1cb,
         (Api::Wrap)0x5aa317,
     },
     // Russobit
     Api{
+        (Api::Constructor)0x5aa0ca,
+        (Api::CopyConstructor)0x5aa1cb,
         (Api::Wrap)0x5aa317,
     },
     // Gog
     Api{
+        (Api::Constructor)0x5a9352,
+        (Api::CopyConstructor)0x5a9453,
         (Api::Wrap)0x5a959f,
     },
     // Scenario Editor
     Api{
+        (Api::Constructor)0x55142b,
+        (Api::CopyConstructor)0x55152c,
         (Api::Wrap)0x551678,
     },
 }};
