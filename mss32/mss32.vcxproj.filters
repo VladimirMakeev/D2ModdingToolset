@@ -1000,6 +1000,9 @@
     <ClCompile Include="src\tileprefixes.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\campaignstream.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2565,6 +2568,9 @@
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\tileprefixes.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\campaignstream.h">
       <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
