@@ -34,6 +34,7 @@ struct IMqRasterizerFactory;
 struct IMqRasterizer;
 struct CUIManager;
 struct CLogFile;
+struct Animations;
 
 struct CRendererImpl
     : public IMqDisplay2T<CRendererImplDisplayVftable>
@@ -52,7 +53,7 @@ struct CRendererImpl
     float fps;
     RECT windowClientArea;
     int unknown6;
-    char unknown7;
+    bool renderingInProcess;
     char padding[3];
     RenderData40SetIntPair** data40IntPair;
     Set<RenderPaletteData>** paletteData;
@@ -60,7 +61,7 @@ struct CRendererImpl
     char unknown8;
     char padding2[3];
     int unknown9;
-    int unknown10;
+    Animations* animations;
     RenderStatistics renderStats;
     SmartPointer ptr;
     CLogFile* logFile;
