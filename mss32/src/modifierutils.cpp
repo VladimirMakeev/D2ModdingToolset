@@ -76,7 +76,7 @@ game::IUsUnit* castUmModifierToUnit(game::CUmModifier* modifier)
     return (IUsUnit*)dynamicCast(modifier, 0, rtti.CUmModifierType, rtti.IUsUnitType, 0);
 }
 
-game::CUmModifier* castUnitToUmModifier(game::IUsUnit* unit)
+game::CUmModifier* castUnitToUmModifier(const game::IUsUnit* unit)
 {
     using namespace game;
 
@@ -85,7 +85,7 @@ game::CUmModifier* castUnitToUmModifier(game::IUsUnit* unit)
     return (CUmModifier*)dynamicCast(unit, 0, rtti.IUsUnitType, rtti.CUmModifierType, 0);
 }
 
-game::CUmModifier* getFirstUmModifier(game::IUsUnit* unit)
+game::CUmModifier* getFirstUmModifier(const game::IUsUnit* unit)
 {
     using namespace game;
 

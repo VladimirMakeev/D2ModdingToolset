@@ -49,9 +49,9 @@ game::CUmAttack* castUmModifierToUmAttack(game::CUmModifier* modifier);
 
 game::IUsUnit* castUmModifierToUnit(game::CUmModifier* modifier);
 
-game::CUmModifier* castUnitToUmModifier(game::IUsUnit* unit);
+game::CUmModifier* castUnitToUmModifier(const game::IUsUnit* unit);
 
-game::CUmModifier* getFirstUmModifier(game::IUsUnit* unit);
+game::CUmModifier* getFirstUmModifier(const game::IUsUnit* unit);
 
 const game::TUnitModifier* getUnitModifier(const game::CMidgardID* modifierId);
 
