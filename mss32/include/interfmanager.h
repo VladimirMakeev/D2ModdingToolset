@@ -43,18 +43,24 @@ struct CInterfManagerVftable
     using Destructor = void(__thiscall*)(CInterfManager* thisptr, char flags);
     Destructor destructor;
 
+    using GetBool = bool(__thiscall*)(const CInterfManager* thisptr);
+
     /** Returns true if interfaces list is empty. */
-    using IsInterfacesEmpty = bool(__thiscall*)(const CInterfManager* thisptr);
-    IsInterfacesEmpty isInterfacesEmpty;
+    GetBool isInterfacesEmpty;
 
     /** Returns topmost interface or nullptr if interfaces list is empty. */
     using GetInterface = CInterface*(__thiscall*)(CInterfManager* thisptr);
     GetInterface getInterface;
 
-    void* unknown;
+    /**
+     * Returns next interface in list after specified one or nullptr.
+     * Assumption: returns interface that is below specified.
+     */
+    using GetNextInterface = CInterface*(__thiscall*)(CInterfManager* thisptr, CInterface* interf);
+    GetNextInterface getNextInterface;
 
     /** Shows interface as top element. */
-    using ShowInterface = bool(__thiscall*)(CInterfManager* thisptr, CInterface* interface);
+    using ShowInterface = bool(__thiscall*)(CInterfManager* thisptr, CInterface* interf);
     ShowInterface showInterface;
 
     /**
@@ -64,7 +70,7 @@ struct CInterfManagerVftable
     GetInterface removeInterface;
 
     /** Hides specified interface. */
-    using HideInterface = bool(__thiscall*)(CInterfManager* thisptr, CInterface* interface);
+    using HideInterface = bool(__thiscall*)(CInterfManager* thisptr, CInterface* interf);
     HideInterface hideInterface;
 
     /** Clears the list deleting all interfaces. */
@@ -75,19 +81,35 @@ struct CInterfManagerVftable
                                                IInterfBorderDisplay* borderDisplay);
     SetBorderDisplay setBorderDisplay;
 
-    void* methods[4];
+    using SetRememberedInterface = bool(__thiscall*)(CInterfManager* thisptr, CInterface* interf);
+    SetRememberedInterface setRememberedInterface;
+
+    using ClearRememberedInterface = void(__thiscall*)(CInterfManager* thisptr);
+    ClearRememberedInterface clearRememberedInterface;
+
+    GetInterface getRememberedInterface;
+
+    using SetMousePosition = void(__thiscall*)(CInterfManager* thisptr, const CMqPoint* position);
+    SetMousePosition setMousePosition;
 
     using SetGlobalKeyHandler = void(__thiscall*)(CInterfManager* thisptr,
                                                   GlobalKeyPressDispatchPtr* handler);
     SetGlobalKeyHandler setGlobalKeyHandler;
 
-    void* methods2[2];
+    using SetInputAllowed = void(__thiscall*)(CInterfManager* thisptr, bool allowed);
+    SetInputAllowed setInputAllowed;
+
+    GetBool isInputAllowed;
 
     /** Returns game window resolution. */
     using GetResolution = const CMqRect*(__thiscall*)(const CInterfManager* thisptr);
     GetResolution getResolution;
 
-    void* methods3[2];
+    using SetResolution = void(__thiscall*)(CInterfManager* thisptr);
+    SetResolution setResolution;
+
+    using GetPaletteKey = std::uint32_t(__thiscall*)(const CInterfManager* thisptr);
+    GetPaletteKey getPaletteKey;
 
     using GetTooltip = CTooltipImpl*(__thiscall*)(CInterfManager* thisptr);
     GetTooltip getTooltip;
@@ -95,7 +117,12 @@ struct CInterfManagerVftable
     using GetCursor = CCursorImpl*(__thiscall*)(CInterfManager* thisptr);
     GetCursor getCursor;
 
-    void* methods4[2];
+    using ConvertPosition = CMqPoint*(__thiscall*)(CInterfManager* thisptr,
+                                                   CMqPoint* result,
+                                                   CMqPoint* point);
+
+    ConvertPosition method21;
+    ConvertPosition method22;
 };
 
 static_assert(sizeof(CInterfManagerVftable) == 23 * sizeof(void*),
@@ -108,20 +135,31 @@ struct CInterfManager
 
 struct CInterfManagerImplData
 {
-    char unknown[8];
+    SmartPtr<CMqPresentationManager> presentationMgr;
     SmartPtr<CTooltipImpl> tooltipImpl;
     SmartPtr<CCursorImpl> cursorImpl;
     /** Topmost interface is always first in the list. */
     List<CInterface*> interfaces;
-    char unknown2[100];
+    UiEvent visibilityEvent;
+    UiEvent keypressEvent;
+    UiEvent mousePressEvent;
+    UiEvent mouseMoveEvent;
+    CInterface* rememberedInterface;
     /**
      * Called before processing handleKeyboard() of topmost interface.
      * Used for checking special key combinations globally in the game.
      */
     GlobalKeyPressDispatchPtr onKeyPressed;
-    char unknown3[28];
+    bool inputAllowed;
+    char padding[3];
+    CMqRect resolution;
+    std::uint32_t paletteKey;
+    bool unknown5;
+    char padding2[3];
     IInterfBorderDisplay* borderDisplay;
-    char unknown4[20];
+    bool unknown3;
+    char padding3[3];
+    CMqRect area;
 };
 
 static_assert(sizeof(CInterfManagerImplData) == 200,
