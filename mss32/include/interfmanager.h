@@ -22,7 +22,7 @@
 
 #include "d2list.h"
 #include "functordispatch2.h"
-#include "presentation.h"
+#include "mqpresentationmanager.h"
 #include "smartptr.h"
 #include <cstddef>
 
@@ -129,7 +129,7 @@ static_assert(sizeof(CInterfManagerImplData) == 200,
 
 struct CInterfManagerImpl
     : public CInterfManager
-    , public IPresentation
+    , public CMqPresentationManager::IPresentation
 {
     CInterfManagerImplData* data;
 };

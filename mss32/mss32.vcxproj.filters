@@ -1233,9 +1233,6 @@
     <ClInclude Include="include\popupdialoginterf.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="include\presentation.h">
-      <Filter>game</Filter>
-    </ClInclude>
     <ClInclude Include="include\racetype.h">
       <Filter>game</Filter>
     </ClInclude>
