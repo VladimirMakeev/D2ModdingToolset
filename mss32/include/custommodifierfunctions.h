@@ -29,24 +29,25 @@
 
 namespace hooks {
 
-using Ids = std::vector<bindings::IdView>;
-using GetId = std::function<bindings::IdView(const bindings::UnitView&, const bindings::IdView&)>;
-using GetIds = std::function<sol::table(const bindings::UnitView&, const Ids&)>;
-using GetInt = std::function<int(const bindings::UnitView&, int)>;
-using GetIntParam = std::function<int(const bindings::UnitView&, int, int)>;
-using GetUint8 = std::function<std::uint8_t(const bindings::UnitView&, std::uint8_t)>;
-using GetBool = std::function<bool(const bindings::UnitView&, bool)>;
-using GetBoolParam = std::function<bool(const bindings::UnitView&, int, bool)>;
-using GetBank = std::function<bindings::CurrencyView(const bindings::UnitView&,
-                                                     const bindings::CurrencyView&)>;
-using CanApplyToUnit = std::function<bool(const bindings::UnitImplView&)>;
-using CanApplyToUnitType = std::function<bool(int)>;
-using GetDesc = std::function<bindings::IdView()>;
-using IsLowerBoost = std::function<bool()>;
-
 struct CustomModifierFunctions
 {
     void initialize(const std::string& scriptFileName);
+
+    using GetId = std::function<bindings::IdView(const bindings::UnitView&,
+                                                 const bindings::IdView&)>;
+    using GetIds = std::function<sol::table(const bindings::UnitView&,
+                                            const std::vector<bindings::IdView>&)>;
+    using GetInt = std::function<int(const bindings::UnitView&, int)>;
+    using GetIntParam = std::function<int(const bindings::UnitView&, int, int)>;
+    using GetUint8 = std::function<std::uint8_t(const bindings::UnitView&, std::uint8_t)>;
+    using GetBool = std::function<bool(const bindings::UnitView&, bool)>;
+    using GetBoolParam = std::function<bool(const bindings::UnitView&, int, bool)>;
+    using GetBank = std::function<bindings::CurrencyView(const bindings::UnitView&,
+                                                         const bindings::CurrencyView&)>;
+    using CanApplyToUnit = std::function<bool(const bindings::UnitImplView&)>;
+    using CanApplyToUnitType = std::function<bool(int)>;
+    using GetDesc = std::function<bindings::IdView()>;
+    using IsLowerBoost = std::function<bool()>;
 
     std::optional<sol::environment> environment;
     std::optional<GetDesc> getModifierDescTxt;

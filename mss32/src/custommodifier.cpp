@@ -120,17 +120,17 @@ CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack)
     return nullptr;
 }
 
-Ids IdVectorToIds(const game::IdVector* src)
+std::vector<bindings::IdView> IdVectorToIds(const game::IdVector* src)
 {
-    Ids value;
+    std::vector<bindings::IdView> value;
     for (const game::CMidgardID* it = src->bgn; it != src->end; it++) {
         value.push_back(it);
     }
 
-    return value;
+    return std::move(value);
 }
 
-void IdsToIdVector(const Ids& src, game::IdVector* dst)
+void IdsToIdVector(const std::vector<bindings::IdView>& src, game::IdVector* dst)
 {
     using namespace game;
 
@@ -1289,7 +1289,7 @@ game::IdVector* __fastcall attackGetWards(const game::IAttack* thisptr, int /*%e
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getWards(prev);
-    Ids prevIds = IdVectorToIds(prevValue);
+    auto prevIds = IdVectorToIds(prevValue);
 
     bool primary = thisptr != &thiz->attack2;
     auto value = primary ? THIZ_GET_VALUE_AS(getAttackWards, prevIds)
