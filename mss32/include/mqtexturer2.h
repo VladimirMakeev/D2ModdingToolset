@@ -138,9 +138,12 @@ struct IMqTexturer2Vftable
     using RemovePalette = bool(__thiscall*)(IMqTexturer2* thisptr, std::uint32_t key);
     RemovePalette removePalette;
 
-    /** Assumption: something related to low-end video card settings. */
-    using Method11 = int(__thiscall*)(IMqTexturer2* thisptr);
-    Method11 method11;
+    /**
+     * Clears texture cache.
+     * Called from CMidgardOnKeyPressed when pressing Ctrl+E.
+     */
+    using ClearTextureCache = int(__thiscall*)(IMqTexturer2* thisptr);
+    ClearTextureCache clearTextureCache;
 
     /** Returns current texturer statistics. */
     using GetTexturerStats = void(__thiscall*)(const IMqTexturer2* thisptr,

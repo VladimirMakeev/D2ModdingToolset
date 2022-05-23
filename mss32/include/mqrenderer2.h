@@ -91,8 +91,12 @@ struct IMqRenderer2Vftable
                                              RenderStatistics* statistics);
     GetRenderStats getRenderStats;
 
-    using Method8 = void(__thiscall*)(IMqRenderer2* thisptr);
-    Method8 method8;
+    /**
+     * Clears render statistics, except blitCount.
+     * Called from CMidgardOnKeyPressed when pressing Ctrl+R.
+     */
+    using ResetRenderStats = void(__thiscall*)(IMqRenderer2* thisptr);
+    ResetRenderStats resetRenderStats;
 
     using Method9 = void(__thiscall*)(IMqRenderer2* thisptr, int a2, int a3, int a4);
     Method9 method9;
