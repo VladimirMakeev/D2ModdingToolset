@@ -22,19 +22,15 @@
 
 namespace hooks {
 
-CustomModifierFunctions* createCustomModifierFunctions(const char* scriptFileName)
+void CustomModifierFunctions::initialize(const std::string& scriptFileName)
 {
-    auto value = new CustomModifierFunctions();
+    environment = executeScriptFile(modifiersFolder() / scriptFileName);
+    if (!environment)
+        return;
 
-    std::filesystem::path path(modifiersFolder() / scriptFileName);
+#define FUNCTION(_NAME_) getScriptFunction(env, #_NAME_, &##_NAME_);
 
-    value->env = executeScriptFile(path);
-    if (!value->env)
-        return value;
-
-#define FUNCTION(_NAME_) getScriptFunction(env, #_NAME_, &value->##_NAME_);
-
-    const auto& env = *value->env;
+    const auto& env = *environment;
     FUNCTION(getModifierDescTxt)
     FUNCTION(canApplyToUnit)
     FUNCTION(canApplyToUnitType)
@@ -101,8 +97,6 @@ CustomModifierFunctions* createCustomModifierFunctions(const char* scriptFileNam
     FUNCTION(getAttack2CritHit)
     FUNCTION(getAttackWards)
     FUNCTION(getAttack2Wards)
-
-    return value;
 }
 
 void deleteCustomModifierFunctions(CustomModifierFunctions* value)

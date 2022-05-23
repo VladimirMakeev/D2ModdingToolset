@@ -33,6 +33,7 @@
 #include "midunit.h"
 #include "restrictions.h"
 #include "unitcat.h"
+#include "unitmodifierhooks.h"
 #include "unitutils.h"
 #include "ussoldierimpl.h"
 #include "utils.h"
@@ -41,14 +42,17 @@
 
 namespace hooks {
 
-#define GET_VALUE(_FUNC_, _PREV_) getValue(functions->##_FUNC_, #_FUNC_, _PREV_)
-#define THIZ_GET_VALUE(_FUNC_, _PREV_) thiz->getValue(thiz->functions->##_FUNC_, #_FUNC_, _PREV_)
+#define GET_VALUE(_FUNC_, _PREV_)                                                                  \
+    getValue(getCustomModifierFunctions(unitModifier).##_FUNC_, #_FUNC_, _PREV_)
+#define THIZ_GET_VALUE(_FUNC_, _PREV_)                                                             \
+    thiz->getValue(getCustomModifierFunctions(thiz->unitModifier).##_FUNC_, #_FUNC_, _PREV_)
 #define THIZ_GET_VALUE_AS(_FUNC_, _PREV_)                                                          \
-    thiz->getValueAs(thiz->functions->##_FUNC_, #_FUNC_, _PREV_)
+    thiz->getValueAs(getCustomModifierFunctions(thiz->unitModifier).##_FUNC_, #_FUNC_, _PREV_)
 #define THIZ_GET_VALUE_PARAM(_FUNC_, _PARAM_, _PREV_)                                              \
-    thiz->getValueParam(thiz->functions->##_FUNC_, #_FUNC_, _PARAM_, _PREV_)
+    thiz->getValueParam(getCustomModifierFunctions(thiz->unitModifier).##_FUNC_, #_FUNC_, _PARAM_, \
+                        _PREV_)
 #define THIZ_GET_VALUE_NO_PARAM(_FUNC_, _DEF_)                                                     \
-    thiz->getValueNoParam(thiz->functions->##_FUNC_, #_FUNC_, _DEF_)
+    thiz->getValueNoParam(getCustomModifierFunctions(thiz->unitModifier).##_FUNC_, #_FUNC_, _DEF_)
 
 static struct
 {
@@ -215,6 +219,19 @@ CustomAttackData CCustomModifier::getCustomAttackData(const game::IAttack* thisp
     return value;
 }
 
+CustomModifierData& CCustomModifier::getData()
+{
+    const std::lock_guard<std::mutex> lock(dataMutex);
+
+    auto result = data.emplace(std::this_thread::get_id(), CustomModifierData{});
+    if (result.second) {
+        auto& wards = result.first->second.wards;
+        game::IdVectorApi::get().reserve(&wards, 1);
+    }
+
+    return result.first->second;
+}
+
 void CCustomModifier::setUnit(const game::CMidUnit* value)
 {
     unit = value;
@@ -359,7 +376,7 @@ game::CMidgardID CCustomModifier::getAttackBaseDescTxt(const game::IAttack* this
 }
 
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
-                                    const CustomModifierFunctions* functions,
+                                    const game::TUnitModifier* unitModifier,
                                     const char* scriptFileName,
                                     const game::CMidgardID* id,
                                     const game::GlobalData** globalData)
@@ -372,16 +389,14 @@ CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
     thisptr->usUnit.id = emptyId;
     CUmModifierApi::get().constructor(&thisptr->umModifier, id, globalData);
 
-    thisptr->unit = nullptr;
     thisptr->attack.prev = nullptr;
     thisptr->attack2.prev = nullptr;
     thisptr->altAttack.prev = nullptr;
-    thisptr->lastElementQuery = ModifierElementTypeFlag::None;
-    thisptr->functions = functions;
-    new (&thisptr->scriptFileName) std::string(scriptFileName);
-
-    thisptr->wards = {};
-    IdVectorApi::get().reserve(&thisptr->wards, 1);
+    thisptr->unit = nullptr;
+    thisptr->unitModifier = unitModifier;
+    new (const_cast<std::string*>(&thisptr->scriptFileName)) std::string(scriptFileName);
+    new (&thisptr->data) CustomModifierDataMap();
+    new (&thisptr->dataMutex) std::mutex();
 
     initVftable(thisptr);
 
@@ -395,17 +410,14 @@ CCustomModifier* customModifierCopyCtor(CCustomModifier* thisptr, const CCustomM
     thisptr->usUnit.id = src->usUnit.id;
     CUmModifierApi::get().copyConstructor(&thisptr->umModifier, &src->umModifier);
 
-    thisptr->unit = src->unit;
     thisptr->attack.prev = src->attack.prev;
     thisptr->attack2.prev = src->attack2.prev;
     thisptr->altAttack.prev = src->altAttack.prev;
-    thisptr->lastElementQuery = src->lastElementQuery;
-    thisptr->functions = src->functions;
-    new (&thisptr->scriptFileName) std::string(src->scriptFileName);
-
-    thisptr->wards = {};
-    IdVectorApi::get().reserve(&thisptr->wards, 1);
-    IdVectorApi::get().copy(&thisptr->wards, src->wards.bgn, src->wards.end);
+    thisptr->unit = src->unit;
+    thisptr->unitModifier = src->unitModifier;
+    new (const_cast<std::string*>(&thisptr->scriptFileName)) std::string(src->scriptFileName);
+    new (&thisptr->data) CustomModifierDataMap(); // No copy required
+    new (&thisptr->dataMutex) std::mutex();
 
     initVftable(thisptr);
 
@@ -418,7 +430,11 @@ void customModifierDtor(CCustomModifier* thisptr, char flags)
 
     thisptr->scriptFileName.~basic_string();
 
-    IdVectorApi::get().destructor(&thisptr->wards);
+    for (auto& data : thisptr->data) {
+        IdVectorApi::get().destructor(&data.second.wards);
+    }
+    thisptr->data.~map();
+    thisptr->dataMutex.~mutex();
 
     CUmModifierApi::get().destructor(&thisptr->umModifier);
 
@@ -587,8 +603,10 @@ int* __fastcall soldierGetRegen(const game::IUsSoldier* thisptr, int /*%edx*/)
     auto prev = thiz->getPrevSoldier();
 
     auto value = THIZ_GET_VALUE(getRegen, *prev->vftable->getRegen(prev));
-    thiz->regen = std::clamp(value, 0, 100);
-    return &thiz->regen;
+
+    auto& regen = thiz->getData().regen;
+    regen = std::clamp(value, 0, 100);
+    return &regen;
 }
 
 int __fastcall soldierGetXpNext(const game::IUsSoldier* thisptr, int /*%edx*/)
@@ -680,8 +698,9 @@ const game::Bank* __fastcall soldierGetEnrollCost(const game::IUsSoldier* thispt
     bindings::CurrencyView prevValue{*prev->vftable->getEnrollCost(prev)};
     auto value = THIZ_GET_VALUE(getEnrollCost, prevValue);
 
-    thiz->enrollCost = value.bank;
-    return &thiz->enrollCost;
+    auto& enrollCost = thiz->getData().enrollCost;
+    enrollCost = value.bank;
+    return &enrollCost;
 }
 
 const game::Bank* __fastcall soldierGetReviveCost(const game::IUsSoldier* thisptr, int /*%edx*/)
@@ -692,8 +711,9 @@ const game::Bank* __fastcall soldierGetReviveCost(const game::IUsSoldier* thispt
     bindings::CurrencyView prevValue{*prev->vftable->getReviveCost(prev)};
     auto value = THIZ_GET_VALUE(getReviveCost, prevValue);
 
-    thiz->reviveCost = value.bank;
-    return &thiz->reviveCost;
+    auto& reviveCost = thiz->getData().reviveCost;
+    reviveCost = value.bank;
+    return &reviveCost;
 }
 
 const game::Bank* __fastcall soldierGetHealCost(const game::IUsSoldier* thisptr, int /*%edx*/)
@@ -704,8 +724,9 @@ const game::Bank* __fastcall soldierGetHealCost(const game::IUsSoldier* thisptr,
     bindings::CurrencyView prevValue{*prev->vftable->getHealCost(prev)};
     auto value = THIZ_GET_VALUE(getHealCost, prevValue);
 
-    thiz->healCost = value.bank;
-    return &thiz->healCost;
+    auto& healCost = thiz->getData().healCost;
+    healCost = value.bank;
+    return &healCost;
 }
 
 const game::Bank* __fastcall soldierGetTrainingCost(const game::IUsSoldier* thisptr, int /*%edx*/)
@@ -716,8 +737,9 @@ const game::Bank* __fastcall soldierGetTrainingCost(const game::IUsSoldier* this
     bindings::CurrencyView prevValue{*prev->vftable->getTrainingCost(prev)};
     auto value = THIZ_GET_VALUE(getTrainingCost, prevValue);
 
-    thiz->trainingCost = value.bank;
-    return &thiz->trainingCost;
+    auto& trainingCost = thiz->getData().trainingCost;
+    trainingCost = value.bank;
+    return &trainingCost;
 }
 
 const game::CMidgardID* __fastcall soldierGetDynUpg1(const game::IUsSoldier* thisptr, int /*%edx*/)
@@ -774,7 +796,7 @@ bool __fastcall modifierCanApplyToUnit(const game::CUmModifier* thisptr,
 {
     auto thiz = castModifierToCustomModifier(thisptr);
 
-    auto f = thiz->functions->canApplyToUnit;
+    auto f = getCustomModifierFunctions(thiz->unitModifier).canApplyToUnit;
     try {
         if (f) {
             bindings::UnitImplView unitImplView{unit};
@@ -793,7 +815,7 @@ bool __fastcall modifierCanApplyToUnitCategory(const game::CUmModifier* thisptr,
 {
     auto thiz = castModifierToCustomModifier(thisptr);
 
-    auto f = thiz->functions->canApplyToUnitType;
+    auto f = getCustomModifierFunctions(thiz->unitModifier).canApplyToUnitType;
     try {
         if (f) {
             return (*f)((int)unitCategory->id);
@@ -821,13 +843,7 @@ bool __fastcall modifierHasElement(const game::CUmModifier* thisptr,
                                    int /*%edx*/,
                                    game::ModifierElementTypeFlag type)
 {
-    using namespace game;
-
-    auto thiz = castModifierToCustomModifier(thisptr);
-
-    bool result = false;
-    thiz->lastElementQuery = result ? type : ModifierElementTypeFlag::None;
-    return result;
+    return false; // should cause modifierGetFirstElementValue to not be called at all
 }
 
 int __fastcall modifierGetFirstElementValue(const game::CUmModifier* thisptr, int /*%edx*/)
@@ -840,7 +856,7 @@ int __fastcall modifierGetFirstElementValue(const game::CUmModifier* thisptr, in
     // Custom modifiers do not have defined element values.
     // The goal here is to provide universal static values to pass most of the checks,
     // while having neutral effect if the values are applied directly.
-    switch (thiz->lastElementQuery) {
+    switch (thiz->getData().lastElementQuery) {
     case ModifierElementTypeFlag::Leadership:
         // Used by GetCombinedLeadership (Akella 0x4a7d6d) to check if Leadership leader upgrade can
         // be offered.
@@ -1281,8 +1297,9 @@ game::IdVector* __fastcall attackGetWards(const game::IAttack* thisptr, int /*%e
     if (value == prevIds) {
         return prevValue;
     } else {
-        IdsToIdVector(value, &thiz->wards);
-        return &thiz->wards;
+        auto& wards = thiz->getData().wards;
+        IdsToIdVector(value, &wards);
+        return &wards;
     }
 }
 
@@ -1463,7 +1480,7 @@ void initVftable(CCustomModifier* thisptr)
     thisptr->altAttack.vftable = &rttiInfo.altAttack.vftable;
 }
 
-game::CUmModifier* createCustomModifier(const CustomModifierFunctions* functions,
+game::CUmModifier* createCustomModifier(const game::TUnitModifier* unitModifier,
                                         const char* scriptFileName,
                                         const game::CMidgardID* id,
                                         const game::GlobalData** globalData)
@@ -1471,7 +1488,7 @@ game::CUmModifier* createCustomModifier(const CustomModifierFunctions* functions
     using namespace game;
 
     auto customModifier = (CCustomModifier*)Memory::get().allocate(sizeof(CCustomModifier));
-    customModifierCtor(customModifier, functions, scriptFileName, id, globalData);
+    customModifierCtor(customModifier, unitModifier, scriptFileName, id, globalData);
     return &customModifier->umModifier;
 }
 

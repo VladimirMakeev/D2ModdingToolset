@@ -28,6 +28,10 @@ struct TUnitModifier;
 
 namespace hooks {
 
+struct CustomModifierFunctions;
+
+const CustomModifierFunctions& getCustomModifierFunctions(const game::TUnitModifier* unitModifier);
+
 game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* thisptr,
                                                        int /*%edx*/,
                                                        const game::CDBTable* dbTable,

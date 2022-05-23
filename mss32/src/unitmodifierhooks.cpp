@@ -27,8 +27,37 @@
 #include "mempool.h"
 #include "modifgroup.h"
 #include "unitmodifier.h"
+#include <map>
+#include <mutex>
+#include <thread>
 
 namespace hooks {
+
+using CustomModifierFunctionsMap = std::map<std::thread::id, CustomModifierFunctions>;
+
+struct TUnitModifierDataPatched : game::TUnitModifierData
+{
+    std::string scriptFileName;
+    CustomModifierFunctionsMap functions;
+    std::mutex functionsMutex;
+};
+
+const CustomModifierFunctions& getCustomModifierFunctions(const game::TUnitModifier* unitModifier)
+{
+    auto data = (TUnitModifierDataPatched*)unitModifier->data;
+
+    const std::lock_guard<std::mutex> lock(data->functionsMutex);
+
+    auto& map = data->functions;
+    auto key = std::this_thread::get_id();
+    auto it = map.find(key);
+    if (it != map.end())
+        return it->second;
+
+    auto& result = map[key];
+    result.initialize(data->scriptFileName);
+    return result;
+}
 
 game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* thisptr,
                                                        int /*%edx*/,
@@ -52,7 +81,9 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
         data->group.table = nullptr;
         data->group.vftable = LModifGroupApi::vftable();
         data->modifier = nullptr;
-        data->functions = nullptr;
+        new (&data->scriptFileName) std::string();
+        new (&data->functions) CustomModifierFunctionsMap();
+        new (&data->functionsMutex) std::mutex();
     }
     thisptr->data = data;
 
@@ -62,12 +93,11 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
     if (data->group.id == getCustomModifiers().group.id) {
         String script{};
         dbApi.readString(&script, dbTable, "SCRIPT");
-
-        data->functions = createCustomModifierFunctions(script.string);
-        data->modifier = createCustomModifier(data->functions, script.string, &thisptr->id,
-                                              globalData);
-
+        data->scriptFileName = script.string;
         stringApi.free(&script);
+
+        data->modifier = createCustomModifier(thisptr, data->scriptFileName.c_str(), &thisptr->id,
+                                              globalData);
     } else {
         dbApi.readModifier(&data->modifier, &thisptr->id, &data->group, globalsFolderPath,
                            codeBaseEnvProxy, globalData);
@@ -82,16 +112,15 @@ void __fastcall unitModifierDtorHooked(game::TUnitModifier* thisptr, int /*%edx*
 
     const auto& memFree = Memory::get().freeNonZero;
 
-    auto data = thisptr->data;
+    auto data = (TUnitModifierDataPatched*)thisptr->data;
     if (data) {
         auto modifier = data->modifier;
         if (modifier)
             modifier->vftable->destructor(modifier, true);
 
-        auto functions = data->functions;
-        if (functions) {
-            deleteCustomModifierFunctions(data->functions);
-        }
+        data->scriptFileName.~basic_string();
+        data->functions.~map();
+        data->functionsMutex.~mutex();
 
         memFree(data);
     }

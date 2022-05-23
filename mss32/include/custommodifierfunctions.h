@@ -46,7 +46,9 @@ using IsLowerBoost = std::function<bool()>;
 
 struct CustomModifierFunctions
 {
-    std::optional<sol::environment> env;
+    void initialize(const std::string& scriptFileName);
+
+    std::optional<sol::environment> environment;
     std::optional<GetDesc> getModifierDescTxt;
     std::optional<CanApplyToUnit> canApplyToUnit;
     std::optional<CanApplyToUnitType> canApplyToUnitType;
@@ -114,9 +116,6 @@ struct CustomModifierFunctions
     std::optional<GetIds> getAttackWards;
     std::optional<GetIds> getAttack2Wards;
 };
-
-CustomModifierFunctions* createCustomModifierFunctions(const char* scriptFileName);
-void deleteCustomModifierFunctions(CustomModifierFunctions* value);
 
 } // namespace hooks
 

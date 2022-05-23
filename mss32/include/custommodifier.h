@@ -27,22 +27,37 @@
 #include "umunit.h"
 #include "unitview.h"
 #include "usstackleader.h"
+#include <map>
+#include <mutex>
 
 namespace game {
 
 struct CMidUnit;
+struct TUnitModifier;
 
 } // namespace game
 
 namespace hooks {
 
 struct CustomAttackData;
-struct CustomModifierFunctions;
 
 struct CAttackModifiedCustom : public game::IAttack
 {
     const game::IAttack* prev;
 };
+
+struct CustomModifierData
+{
+    game::ModifierElementTypeFlag lastElementQuery;
+    game::Bank enrollCost;
+    game::Bank reviveCost;
+    game::Bank healCost;
+    game::Bank trainingCost;
+    game::IdVector wards;
+    int regen;
+};
+
+using CustomModifierDataMap = std::map<std::thread::id, CustomModifierData>;
 
 struct CCustomModifier
 {
@@ -54,16 +69,13 @@ struct CCustomModifier
     CAttackModifiedCustom attack2;
     CAttackModifiedCustom altAttack;
     const game::CMidUnit* unit;
-    game::ModifierElementTypeFlag lastElementQuery;
-    const CustomModifierFunctions* functions;
-    std::string scriptFileName;
-    int regen;
-    game::Bank enrollCost;
-    game::Bank reviveCost;
-    game::Bank healCost;
-    game::Bank trainingCost;
-    game::IdVector wards;
+    const game::TUnitModifier* unitModifier;
+    const std::string scriptFileName;
+    // Thread-sensitive data
+    CustomModifierDataMap data;
+    std::mutex dataMutex;
 
+    CustomModifierData& getData();
     void setUnit(const game::CMidUnit* value);
     game::IAttack* getAttack(bool primary);
     game::IAttack* wrapAltAttack(const game::IAttack* value);
@@ -165,7 +177,7 @@ CCustomModifier* castModifierToCustomModifier(const game::CUmModifier* modifier)
 
 CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack);
 
-game::CUmModifier* createCustomModifier(const CustomModifierFunctions* functions,
+game::CUmModifier* createCustomModifier(const game::TUnitModifier* unitModifier,
                                         const char* scriptFileName,
                                         const game::CMidgardID* id,
                                         const game::GlobalData** globalData);
