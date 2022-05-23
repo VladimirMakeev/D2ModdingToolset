@@ -252,7 +252,7 @@ sol::state& getLua()
     return lua;
 }
 
-std::string getSource(const std::filesystem::path& path)
+const std::string& getSource(const std::filesystem::path& path)
 {
     static std::unordered_map<std::filesystem::path, std::string, PathHash> sources;
     static std::mutex sourcesMutex;
@@ -286,7 +286,7 @@ std::optional<sol::environment> executeScriptFile(const std::filesystem::path& p
     if (!alwaysExists && !std::filesystem::exists(path))
         return std::nullopt;
 
-    auto source = getSource(path);
+    const auto& source = getSource(path);
     if (source.empty()) {
         showErrorMessageBox(fmt::format("Failed to read '{:s}' script file.", path.string()));
         return std::nullopt;
