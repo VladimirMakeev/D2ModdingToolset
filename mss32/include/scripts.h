@@ -39,16 +39,16 @@ std::optional<sol::environment> executeScriptFile(const std::filesystem::path& p
 /**
  * Returns function with specified name from lua environment to call from c++.
  * @tparam T expected script function signature.
- * @param[in] env lua environment where to search.
+ * @param[in] environment lua environment where to search.
  * @param[in] name function name in lua script.
  * @param[in] alwaysExists true to show error message if the function does not exist.
  */
 template <typename T>
-static inline std::optional<T> getScriptFunction(const sol::environment& env,
+static inline std::optional<T> getScriptFunction(const sol::environment& environment,
                                                  const char* name,
                                                  bool alwaysExists = false)
 {
-    const sol::object object = env[name];
+    const sol::object object = environment[name];
     const sol::type objectType = object.get_type();
 
     if (objectType != sol::type::function) {
@@ -68,12 +68,12 @@ static inline std::optional<T> getScriptFunction(const sol::environment& env,
 }
 
 template <typename T>
-static inline void getScriptFunction(const sol::environment& env,
+static inline void getScriptFunction(const sol::environment& environment,
                                      const char* name,
                                      std::optional<T>* value,
                                      bool alwaysExists = false)
 {
-    *value = getScriptFunction<T>(env, name, alwaysExists);
+    *value = getScriptFunction<T>(environment, name, alwaysExists);
 }
 
 /**
@@ -81,20 +81,20 @@ static inline void getScriptFunction(const sol::environment& env,
  * @tparam T expected script function signature.
  * @param[in] path filename of script source.
  * @param[in] name function name in lua script.
- * @param[out] env environment where the function executes.
+ * @param[out] environment lua environment where the function executes.
  * @param[in] alwaysExists true to show error message if the function does not exist.
  */
 template <typename T>
 static inline std::optional<T> getScriptFunction(const std::filesystem::path& path,
                                                  const char* name,
-                                                 std::optional<sol::environment>& env,
+                                                 std::optional<sol::environment>& environment,
                                                  bool alwaysExists = false)
 {
-    env = executeScriptFile(path, alwaysExists);
-    if (!env)
+    environment = executeScriptFile(path, alwaysExists);
+    if (!environment)
         return std::nullopt;
 
-    auto function = getScriptFunction<T>(*env, name, false);
+    auto function = getScriptFunction<T>(*environment, name, false);
     if (!function && alwaysExists) {
         showErrorMessageBox(fmt::format("Could not find function '{:s}' in script '{:s}'.\n"
                                         "Make sure function exists and has correct signature.",
