@@ -19,6 +19,7 @@
 
 #include "modifierutils.h"
 #include "attack.h"
+#include "attackmodified.h"
 #include "battlemsgdata.h"
 #include "custommodifier.h"
 #include "dynamiccast.h"
@@ -29,7 +30,7 @@
 #include "midunit.h"
 #include "modifgroup.h"
 #include "settings.h"
-#include "umattack.h"
+#include "umattackhooks.h"
 #include "umunit.h"
 #include "unitmodifier.h"
 #include "ussoldier.h"
@@ -466,7 +467,7 @@ game::IAttack* wrapAltAttack(const game::IUsUnit* unit, game::IAttack* attack)
     for (CUmModifier* curr = getFirstUmModifier(unit); curr; curr = curr->data->next) {
         auto umAttack = castUmModifierToUmAttack(curr);
         if (umAttack) {
-            auto altAttackModified = &umAttack->data->altAttackModified;
+            auto altAttackModified = getAltAttackModified(umAttack);
             attackModifiedApi.wrap(altAttackModified, result);
             result = altAttackModified;
         } else {

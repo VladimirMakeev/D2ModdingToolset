@@ -27,9 +27,12 @@ struct CDBTable;
 struct IAttack;
 struct IUsSoldier;
 struct CUmAttack;
+struct CAttackModified;
 } // namespace game
 
 namespace hooks {
+
+game::CAttackModified* getAltAttackModified(const game::CUmAttack* umAttack);
 
 game::CUmAttack* __fastcall umAttackCtorHooked(game::CUmAttack* thisptr,
                                                int /*%edx*/,

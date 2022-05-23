@@ -25,6 +25,17 @@
 
 namespace hooks {
 
+struct CUmAttackDataPatched : game::CUmAttackData
+{
+    game::CAttackModified altAttackModified;
+};
+
+game::CAttackModified* getAltAttackModified(const game::CUmAttack* umAttack)
+{
+    auto data = (CUmAttackDataPatched*)umAttack->data;
+    return &data->altAttackModified;
+}
+
 game::CUmAttack* __fastcall umAttackCtorHooked(game::CUmAttack* thisptr,
                                                int /*%edx*/,
                                                const game::CMidgardID* modifierId,
@@ -61,7 +72,7 @@ game::CUmAttack* __fastcall umAttackCtorHooked(game::CUmAttack* thisptr,
     attackData->qtyDamage = thisptr->data->qtyDamage.value;
     attackData->attackDrain = thisptr->data->attackDrain.value;
 
-    attackModifiedApi.copyConstructor(&thisptr->data->altAttackModified,
+    attackModifiedApi.copyConstructor(getAltAttackModified(thisptr),
                                       &thisptr->data->attackModified);
 
     return thisptr;
@@ -82,8 +93,7 @@ game::CUmAttack* __fastcall umAttackCopyCtorHooked(game::CUmAttack* thisptr,
 
     thisptr->data = (CUmAttackDataPatched*)Memory::get().allocate(sizeof(CUmAttackDataPatched));
     CUmAttackApi::get().dataCopyConstructor(thisptr->data, src->data);
-    attackModifiedApi.copyConstructor(&thisptr->data->altAttackModified,
-                                      &src->data->altAttackModified);
+    attackModifiedApi.copyConstructor(getAltAttackModified(thisptr), getAltAttackModified(src));
 
     thisptr->usUnit.vftable = umAttackVftable.usUnit;
     thisptr->usSoldier.vftable = umAttackVftable.usSoldier;

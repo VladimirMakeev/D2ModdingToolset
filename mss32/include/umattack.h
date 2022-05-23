@@ -30,7 +30,6 @@
 namespace game {
 
 struct CUmAttackData;
-struct CUmAttackDataPatched;
 struct GlobalData;
 struct CDBTable;
 
@@ -39,7 +38,7 @@ struct CUmAttack
     IUsUnit usUnit;
     IUsSoldier usSoldier;
     CUmModifier umModifier;
-    CUmAttackDataPatched* data;
+    CUmAttackData* data;
 };
 
 static_assert(sizeof(CUmAttack) == 24, "Size of CUmAttack structure must be exactly 24 bytes");
@@ -56,11 +55,6 @@ struct CUmAttackData
 
 static_assert(sizeof(CUmAttackData) == 52,
               "Size of CUmAttackData structure must be exactly 52 bytes");
-
-struct CUmAttackDataPatched : CUmAttackData
-{
-    CAttackModified altAttackModified;
-};
 
 static inline CUmAttack* castSoldierToUmAttack(const IUsSoldier* soldier)
 {
