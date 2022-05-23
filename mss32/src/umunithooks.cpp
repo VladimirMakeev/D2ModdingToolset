@@ -27,6 +27,11 @@
 
 namespace hooks {
 
+struct CUmUnitDataPatched : game::CUmUnitData
+{
+    int regenerationStacked;
+};
+
 game::CUmUnit* __fastcall umUnitCtorHooked(game::CUmUnit* thisptr,
                                            int /*%edx*/,
                                            const game::CMidgardID* modifierId,
