@@ -127,7 +127,7 @@ std::vector<bindings::IdView> IdVectorToIds(const game::IdVector* src)
         value.push_back(it);
     }
 
-    return std::move(value);
+    return value;
 }
 
 void IdsToIdVector(const std::vector<bindings::IdView>& src, game::IdVector* dst)
