@@ -31,7 +31,6 @@ namespace game {
 
 struct CInterfManager;
 struct CInterface;
-struct CMqPoint;
 struct CTooltipImpl;
 struct CCursorImpl;
 struct IInterfBorderDisplay;
