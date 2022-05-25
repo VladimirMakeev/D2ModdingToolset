@@ -20,24 +20,18 @@
 #ifndef UNITMODIFIER_H
 #define UNITMODIFIER_H
 
-#include "midgardid.h"
 #include "midobject.h"
 #include "modifgroup.h"
 
 namespace game {
 
+struct TUnitModifierData;
 struct TUnitModifierVftable;
 struct GlobalData;
 struct CDBTable;
 struct IUsUnit;
 struct LUnitCategory;
 struct CUmModifier;
-
-struct TUnitModifierData
-{
-    LModifGroup group;
-    CUmModifier* modifier;
-};
 
 /**
  * Serves as single modifier factory. Id holds an id of modifier that this factory produces.
@@ -53,6 +47,15 @@ struct TUnitModifier : IMidObjectT<TUnitModifierVftable>
 
 static_assert(sizeof(TUnitModifier) == 12,
               "Size of TUnitModifier structure must be exactly 12 bytes");
+
+struct TUnitModifierData
+{
+    LModifGroup group;
+    CUmModifier* modifier;
+};
+
+static_assert(sizeof(TUnitModifierData) == 16,
+              "Size of TUnitModifierData structure must be exactly 16 bytes");
 
 struct TUnitModifierVftable : IMidObjectVftable
 {
