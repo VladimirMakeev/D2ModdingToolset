@@ -59,7 +59,7 @@ static int getArmorWithModifiers(game::IdList& modifiers)
 
     for (const auto& modifier : modifiers) {
         auto unitModifier{(TUnitModifier*)globalApi.findById(globalData->modifiers, &modifier)};
-        auto umModifier{unitModifier->group->modifier};
+        auto umModifier{unitModifier->data->modifier};
 
         if (umModifier->vftable->hasElement(umModifier, ModifierElementTypeFlag::Armor)) {
             armor += umModifier->vftable->getFirstElementValue(umModifier);
