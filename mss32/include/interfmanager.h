@@ -23,6 +23,7 @@
 #include "d2list.h"
 #include "functordispatch2.h"
 #include "mqpresentationmanager.h"
+#include "mqrect.h"
 #include "smartptr.h"
 #include <cstddef>
 
@@ -30,7 +31,7 @@ namespace game {
 
 struct CInterfManager;
 struct CInterface;
-struct CMqRect;
+struct CMqPoint;
 struct CTooltipImpl;
 struct CCursorImpl;
 struct IInterfBorderDisplay;
