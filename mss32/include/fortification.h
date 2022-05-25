@@ -86,7 +86,7 @@ struct CFortificationVftable : public IMidScenarioObjectVftable
 
     /** Adds protection modifier ids to the list. */
     using GetProtection = void(__thiscall*)(CFortification* thisptr,
-                                            IMidgardObjectMap* objectMap,
+                                            const IMidgardObjectMap* objectMap,
                                             IdList* list);
     GetProtection getProtection;
 

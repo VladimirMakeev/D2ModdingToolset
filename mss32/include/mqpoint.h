@@ -38,6 +38,23 @@ static constexpr bool operator!=(const CMqPoint& a, const CMqPoint& b)
     return !(a == b);
 }
 
+static constexpr CMqPoint& operator+=(CMqPoint& a, const CMqPoint& b)
+{
+    a.x += b.x;
+    a.y += b.y;
+    return a;
+}
+
+static constexpr CMqPoint operator+(const CMqPoint& a, const CMqPoint& b)
+{
+    return CMqPoint{a.x + b.x, a.y + b.y};
+}
+
+static constexpr CMqPoint operator-(const CMqPoint& a, const CMqPoint& b)
+{
+    return CMqPoint{a.x - b.x, a.y - b.y};
+}
+
 } // namespace game
 
 #endif // MQPOINT_H

@@ -117,6 +117,16 @@
     ```
   </details>
 - <details>
+    <summary>Button to show grid in game;</summary>
+
+    Add toggle button with name `TOG_GRID` to `DLG_ISO_LAND` in Interf.dlg.
+
+    Example of button description in Interf.dlg:
+    ```
+    TOGGLE  TOG_GRID,128,63,160,92,DLG_ISO_GRID_N,DLG_ISO_GRID_H,DLG_ISO_GRID_C,DLG_ISO_GRID_D,DLG_ISO_GRID_H,DLG_ISO_GRID_H,DLG_ISO_GRID_H,"",71
+    ```
+  </details>
+- <details>
     <summary>Adds missing attack information in unit encyclopedia;</summary>
 
     - Enable `detailedAttackDescription` in [settings.lua](Scripts/settings.lua);
@@ -140,6 +150,18 @@
     - Custom attack sources;
     - Custom attack reaches;
     - Custom attack damage ratios.
+  </details>
+
+- <details>
+    <summary>Shows effective HP in unit encyclopedia;</summary>
+
+    Add text box with name `TXT_EFFECTIVE_HP` to `DLG_R_C_UNIT` in `Interf.dlg` and `ScenEdit.dlg` files.<br />
+    Specify text id from `TApp.dbf` and `TAppEdit.dbf` that contains key `%HP%`.
+    
+    Example of text box description in Interf.dlg:
+    ```
+    TEXT    TXT_EFFECTIVE_HP,468,95,663,231,,"X015TA0002",""
+    ```
   </details>
 
 #### Strategic map
@@ -197,6 +219,18 @@
       - CLANS .. - Mountain Clans;
       - HORDES .. - Undead Hordes;
       - ELVES .. - Elven Alliance;
+  </details>
+- <details>
+    <summary>Neutral cities can use race-specific graphics;</summary>
+
+    Add cities graphics with names `G000FT0000NE<tier><race>` to isoAnim.ff and isoStill.ff.<br />
+    `tier` is a city tier, values from 1 to 5.<br />
+    `race` is a race suffix:
+    - `DW` for Mountain Clans;
+    - `EL` for Elven Alliance;
+    - `HE` for Legions of the Damned;
+    - `HU` for Empire;
+    - `UN` for Undead Hordes;    
   </details>
 - Allows Scenario Editor to place merchants, mages, trainers and mercenaries on water tiles;
 - Allows Scenario Editor to place more than 200 stacks on a map;
@@ -440,6 +474,7 @@
 - Fixes game crash in battles with summoners involved;
 - Fixes game crash when AI controlled unit with transform self attack uses alternative attack with 'adjacent' attack range;
 - Fixes game crash on 144x144 maps that occurs if there is a party standing on a lower-left or lower-right edge of the map;
+- Fixes game crash in unit encyclopedia showing doppelganger info when it copied stack leader;
 - Fixes AI unit placement logic for melee units with vampiric attacks;
 - Fixes AI targeting for single lower-damage and lower-initiative attacks;
 - Fixes AI targeting for shatter attacks where it tends to pick a most armored target ignoring general prioritization;

@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2022 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,51 +17,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mapgraphics.h"
+#include "campaignstream.h"
 #include "version.h"
 #include <array>
 
-namespace game::MapGraphicsApi {
+namespace game::CampaignStreamApi {
 
 // clang-format off
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::GetMapGraphics)0x540e28,
-        (Api::SetMapGraphics)0x407f37,
-        (Api::GetTileIndex)0x541e15,
-        (Api::SetOutOfBordersTileIndex)0x541e65,
-        (Api::ShowImageOnMap)0x5adf66,
-        (Api::HideLayerImages)0x5ae08a,
+        (Api::Constructor)0x609619,
+        (Api::HasErrors)0x5e5099,
+        (Api::Destructor)0x609695,
     },
     // Russobit
     Api{
-        (Api::GetMapGraphics)0x540e28,
-        (Api::SetMapGraphics)0x407f37,
-        (Api::GetTileIndex)0x541e15,
-        (Api::SetOutOfBordersTileIndex)0x541e65,
-        (Api::ShowImageOnMap)0x5adf66,
-        (Api::HideLayerImages)0x5ae08a,
+        (Api::Constructor)0x609619,
+        (Api::HasErrors)0x5e5099,
+        (Api::Destructor)0x609695,
     },
     // Gog
     Api{
-        (Api::GetMapGraphics)0x5404d9,
-        (Api::SetMapGraphics)0x407be5,
-        (Api::GetTileIndex)0x5414c5,
-        (Api::SetOutOfBordersTileIndex)0x541515,
-        (Api::ShowImageOnMap)0x5ad1ee,
-        (Api::HideLayerImages)0x5ad312,
+        (Api::Constructor)0x6080e3,
+        (Api::HasErrors)0x5e3db6,
+        (Api::Destructor)0x60815f,
     },
     // Scenario Editor
     Api{
-        (Api::GetMapGraphics)0x49aac3,
-        (Api::SetMapGraphics)0x4044be,
-        (Api::GetTileIndex)0x49ba3f,
-        (Api::SetOutOfBordersTileIndex)0x49ba8f,
-        (Api::ShowImageOnMap)0x554042,
-        (Api::HideLayerImages)0x55411d,
+        (Api::Constructor)0x5042b8,
+        (Api::HasErrors)0x4dc307,
+        (Api::Destructor)0x504334,
     },
 }};
+
 // clang-format on
 
 Api& get()
@@ -69,4 +58,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::MapGraphicsApi
+} // namespace game::CampaignStreamApi

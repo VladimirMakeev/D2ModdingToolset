@@ -19,6 +19,10 @@
 
 #include "midunitdescriptorhooks.h"
 #include "attack.h"
+#include "dynamiccast.h"
+#include "game.h"
+#include "midgardobjectmap.h"
+#include "midstack.h"
 #include "midunit.h"
 #include "midunitdescriptor.h"
 #include "unitutils.h"
@@ -45,6 +49,41 @@ int __fastcall midUnitDescriptorGetAttackInitiativeHooked(const game::CMidUnitDe
     auto attack = descriptorApi.getAttack(thisptr);
 
     return attack->vftable->getInitiative(attack);
+}
+
+bool __fastcall midUnitDescriptorIsUnitLeaderHooked(const game::CMidUnitDescriptor* thisptr,
+                                                    int /*%edx*/)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    if (CMidgardIDApi::get().getType(&thisptr->groupId) != IdType::Stack) {
+        // Only stacks can contain leader units
+        return false;
+    }
+
+    // Fix crash on viewing stack leader transformed to ordinary soldier
+    if (fn.castUnitImplToStackLeader(thisptr->unit->unitImpl) == nullptr) {
+        return false;
+    }
+
+    auto objectMap{thisptr->objectMap};
+    auto stackObject{objectMap->vftable->findScenarioObjectById(objectMap, &thisptr->groupId)};
+    if (!stackObject) {
+        return false;
+    }
+
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+
+    auto stack{(const CMidStack*)dynamicCast(stackObject, 0, rtti.IMidScenarioObjectType,
+                                             rtti.CMidStackType, 0)};
+    if (!stack) {
+        return false;
+    }
+
+    return stack->leaderId == thisptr->unitId;
 }
 
 } // namespace hooks

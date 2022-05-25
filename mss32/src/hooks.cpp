@@ -66,6 +66,7 @@
 #include "editor.h"
 #include "effectinterfhooks.h"
 #include "effectresulthooks.h"
+#include "enclayoutunithooks.h"
 #include "encparambase.h"
 #include "eventconditioncathooks.h"
 #include "eventeffectcathooks.h"
@@ -77,6 +78,7 @@
 #include "idlist.h"
 #include "interfmanager.h"
 #include "interftexthooks.h"
+#include "isoenginegroundhooks.h"
 #include "itemtransferhooks.h"
 #include "iterators.h"
 #include "leaderabilitycat.h"
@@ -311,6 +313,9 @@ static Hooks getGameHooks()
         {GameImagesApi::get().getCityIconImageNames, getCityIconImageNamesHooked, (void**)&orig.getCityIconImageNames},
         // Support grid toggle button
         {CMainView2Api::get().showIsoDialog, mainView2ShowIsoDialogHooked},
+        // Reference ground rendering implementation
+        {CGroundTextureApi::vftable()->draw, groundTextureDrawHooked},
+        {CGroundTextureApi::isoEngineVftable()->render, isoEngineGroundRenderHooked},
     };
     // clang-format on
 
@@ -508,6 +513,10 @@ Hooks getHooks()
         HookInfo{CMidUnitDescriptorApi::get().getAttack, midUnitDescriptorGetAttackHooked});
     hooks.emplace_back(HookInfo{CMidUnitDescriptorApi::vftable()->getAttackInitiative,
                                 midUnitDescriptorGetAttackInitiativeHooked});
+    // Fix crash in encyclopedia showing info
+    // about dyn leveled (stopped) doppleganger that transformed to stack leader
+    hooks.emplace_back(HookInfo{CMidUnitDescriptorApi ::vftable()->isUnitLeader,
+                                midUnitDescriptorIsUnitLeaderHooked});
 
     if (userSettings().debugMode) {
         // Show and log game exceptions information
@@ -574,6 +583,10 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{TUnitModifierApi::get().constructor, unitModifierCtorHooked});
     hooks.emplace_back(HookInfo{TUnitModifierApi::vftable()->destructor, unitModifierDtorHooked});
     hooks.emplace_back(HookInfo{CMidUnitApi::get().addModifier, addModifierHooked});
+
+    // Show effective HP in unit encyclopedia
+    hooks.emplace_back(HookInfo{CEncLayoutUnitApi::get().update, encLayoutUnitUpdateHooked,
+                                (void**)&orig.encLayoutUnitUpdate});
 
     return hooks;
 }

@@ -20,9 +20,13 @@
 #ifndef INTERFCURSOR_H
 #define INTERFCURSOR_H
 
+#include "smartptr.h"
+
 namespace game {
 
 struct IInterfCursorVftable;
+struct CMqPoint;
+struct CursorHandle;
 
 struct IInterfCursor
 {
@@ -32,10 +36,20 @@ struct IInterfCursor
 // Virtual table does not contain destructor
 struct IInterfCursorVftable
 {
-    void* method1;
-    void* method2;
-    void* method3;
-    void* method4;
+    using GetHandle = void(__thiscall*)(IInterfCursor* thisptr,
+                                        SmartPtr<CursorHandle>* cursorHandle,
+                                        const CMqPoint* mousePosition);
+    GetHandle getHandle;
+
+    using SetUnknown = void(__thiscall*)(IInterfCursor* thisptr, bool value);
+    SetUnknown setUnknown;
+
+    using GetUnknown = bool(__thiscall*)(const IInterfCursor* thisptr);
+    GetUnknown getUnknown;
+
+    using SetHandle = SmartPtr<CursorHandle>*(__thiscall*)(IInterfCursor* thisptr,
+                                                           SmartPtr<CursorHandle>* cursorHandle);
+    SetHandle setHandle;
 };
 
 static_assert(sizeof(IInterfCursorVftable) == 4 * sizeof(void*),

@@ -25,18 +25,21 @@
 #include "battlemsgdata.h"
 #include "customattacks.h"
 #include "dynamiccast.h"
+#include "fortification.h"
 #include "game.h"
 #include "gameutils.h"
 #include "globaldata.h"
 #include "immunecat.h"
 #include "log.h"
 #include "midgardid.h"
+#include "midgardobjectmap.h"
 #include "midstack.h"
 #include "midunit.h"
 #include "modifierutils.h"
 #include "settings.h"
 #include "ummodifier.h"
 #include "unitgenerator.h"
+#include "unitmodifier.h"
 #include "ussoldier.h"
 #include "ussoldierimpl.h"
 #include "usunitimpl.h"
@@ -44,6 +47,27 @@
 #include <fmt/format.h>
 
 namespace hooks {
+
+static int getArmorWithModifiers(game::IdList& modifiers)
+{
+    using namespace game;
+
+    auto& globalApi{GlobalDataApi::get()};
+    auto globalData{*globalApi.getGlobalData()};
+
+    int armor{};
+
+    for (const auto& modifier : modifiers) {
+        auto unitModifier{(TUnitModifier*)globalApi.findById(globalData->modifiers, &modifier)};
+        auto umModifier{unitModifier->group->modifier};
+
+        if (umModifier->vftable->hasElement(umModifier, ModifierElementTypeFlag::Armor)) {
+            armor += umModifier->vftable->getFirstElementValue(umModifier);
+        }
+    }
+
+    return armor;
+}
 
 void generateUnitImplByAttackId(const game::CMidgardID* attackId)
 {
@@ -220,6 +244,56 @@ int getArmor(const game::CMidgardID* unitId,
         armor -= battle.getUnitFortificationArmor(battleMsgData, unitId);
 
     return armor > 0 ? armor : 0;
+}
+
+int getCityProtection(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& fn{gameFunctions()};
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+
+    auto findObject{objectMap->vftable->findScenarioObjectById};
+
+    auto objectId{fn.getStackFortRuinId(unitId, objectMap)};
+    const auto objectType{CMidgardIDApi::get().getType(objectId)};
+
+    CMidgardID fortificationId{emptyId};
+
+    if (objectType == IdType::Fortification) {
+        fortificationId = *objectId;
+    } else if (objectType == IdType::Stack) {
+        auto stackObject{findObject(objectMap, objectId)};
+        auto stack{(const CMidStack*)dynamicCast(stackObject, 0, rtti.IMidScenarioObjectType,
+                                                 rtti.CMidStackType, 0)};
+
+        if (stack && stack->insideId != emptyId) {
+            fortificationId = stack->insideId;
+        }
+    }
+
+    if (fortificationId != emptyId) {
+        auto fortification{(CFortification*)findObject(objectMap, &fortificationId)};
+
+        if (fortification) {
+            auto vftable{(const CFortificationVftable*)fortification->vftable};
+
+            const auto& list{IdListApi::get()};
+            IdList modifiers;
+            list.constructor(&modifiers);
+
+            vftable->getProtection(fortification, objectMap, &modifiers);
+
+            const auto protection{getArmorWithModifiers(modifiers)};
+            list.destructor(&modifiers);
+
+            return protection;
+        }
+    }
+
+    // Only fortifications (cities) grant protection
+    return 0;
 }
 
 int computeUnitEffectiveHp(const game::CMidUnit* unit, int armor)

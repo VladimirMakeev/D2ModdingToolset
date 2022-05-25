@@ -55,6 +55,10 @@ int getArmor(const game::CMidgardID* unitId,
              const game::BattleMsgData* battleMsgData,
              bool includeShattered,
              bool includeFortification);
+
+/** Returns unit bonus armor from city, if he is inside one. */
+int getCityProtection(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* unitId);
+
 int computeUnitEffectiveHp(const game::CMidUnit* unit, int armor);
 int computeShatterDamage(const game::CMidgardID* unitId,
                          const game::IUsSoldier* soldier,

@@ -20,6 +20,8 @@
 #ifndef C2DENGINE_H
 #define C2DENGINE_H
 
+#include "mqpoint.h"
+
 namespace game {
 
 struct C2DEngineMapImpl;
@@ -27,7 +29,9 @@ struct C2DEngineMapImpl;
 struct C2DEngineData
 {
     C2DEngineMapImpl* engineMapImpl;
-    char unknown[32];
+    CMqPoint textureCoordScreenStart; /**< Top-left screen corner position in texture coordinates */
+    char unknown[16];
+    CMqPoint position2;
 };
 
 static_assert(sizeof(C2DEngineData) == 36,

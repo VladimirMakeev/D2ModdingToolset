@@ -17,33 +17,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MQANIMATOR2_H
-#define MQANIMATOR2_H
+#include "tileprefixes.h"
+#include "version.h"
+#include <array>
 
-namespace game {
+namespace game::TilePrefixApi {
 
-struct IMqAnimator2Vftable;
-struct IMqAnimation;
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::GetTilePrefixByName)0x5bbb1c,
+        (Api::GetTilePrefixName)0x5bb5d4,
+    },
+    // Russobit
+    Api{
+        (Api::GetTilePrefixByName)0x5bbb1c,
+        (Api::GetTilePrefixName)0x5bb5d4,
+    },
+    // Gog
+    Api{
+        (Api::GetTilePrefixByName)0x5baacc,
+        (Api::GetTilePrefixName)0x5ba584,
+    },
+    // Scenario Editor
+    Api{
+        (Api::GetTilePrefixByName)0x55c84c,
+        (Api::GetTilePrefixName)0x55c304,
+    },
+}};
+// clang-format on
 
-struct IMqAnimator2
+Api& get()
 {
-    IMqAnimator2Vftable* vftable;
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-// Virtual table does not contain destructor
-struct IMqAnimator2Vftable
-{
-    using HandleAnimation = bool(__thiscall*)(IMqAnimator2* thisptr, IMqAnimation* animation);
-
-    HandleAnimation addSlowAnimation;
-    HandleAnimation addFastAnimation;
-    HandleAnimation removeSlowAnimation;
-    HandleAnimation removeFastAnimation;
-};
-
-static_assert(sizeof(IMqAnimator2Vftable) == 4 * sizeof(void*),
-              "IMqAnimator2 vftable must have exactly 4 methods");
-
-} // namespace game
-
-#endif // MQANIMATOR2_H
+} // namespace game::TilePrefixApi

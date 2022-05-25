@@ -22,13 +22,12 @@
 
 #include "interfaddon.h"
 #include "interfcursor.h"
-#include "presentation.h"
+#include "mqpresentationmanager.h"
 #include "smartptr.h"
 
 namespace game {
 
 struct CInterfManagerImpl;
-struct CMqPresentationManager;
 struct CUIManager;
 struct CursorHandle;
 
@@ -48,7 +47,7 @@ static_assert(sizeof(CCursorImplData) == 32,
 struct CCursorImpl
     : public IInterfCursor
     , public IInterfAddOn
-    , public IPresentation
+    , public CMqPresentationManager::IPresentation
 {
     CCursorImplData* data;
 };

@@ -17,33 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MQANIMATOR2_H
-#define MQANIMATOR2_H
+#ifndef ENCLAYOUT_H
+#define ENCLAYOUT_H
+
+#include "interface.h"
 
 namespace game {
 
-struct IMqAnimator2Vftable;
-struct IMqAnimation;
+struct CDialogInterf;
 
-struct IMqAnimator2
+struct IEncLayout : public CInterface
 {
-    IMqAnimator2Vftable* vftable;
+    CDialogInterf* dialog;
 };
-
-// Virtual table does not contain destructor
-struct IMqAnimator2Vftable
-{
-    using HandleAnimation = bool(__thiscall*)(IMqAnimator2* thisptr, IMqAnimation* animation);
-
-    HandleAnimation addSlowAnimation;
-    HandleAnimation addFastAnimation;
-    HandleAnimation removeSlowAnimation;
-    HandleAnimation removeFastAnimation;
-};
-
-static_assert(sizeof(IMqAnimator2Vftable) == 4 * sizeof(void*),
-              "IMqAnimator2 vftable must have exactly 4 methods");
 
 } // namespace game
 
-#endif // MQANIMATOR2_H
+#endif // ENCLAYOUT_H

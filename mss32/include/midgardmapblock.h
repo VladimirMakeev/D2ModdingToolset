@@ -31,6 +31,16 @@ namespace game {
 
 struct IMidgardObjectMap;
 struct IMidgardStreamEnv;
+struct LGroundCategory;
+struct LTerrainCategory;
+
+/*
+ Tile contents:
+ +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ |  forest index 2 |    forest index    |                 |   tile variation   | ground |terrain |
+ +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+  31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+ */
 
 /** Represents block of tiles in scenario file and game. */
 struct CMidgardMapBlock : public IMidScenarioObject
@@ -52,7 +62,7 @@ static constexpr inline GroundId tileGround(std::uint32_t tile)
     return static_cast<GroundId>((tile >> 3) & 7);
 }
 
-static constexpr inline std::uint8_t tileForestImage(std::uint32_t tile)
+static constexpr inline std::uint8_t tileForestIndex2(std::uint32_t tile)
 {
     return tile >> 26;
 }
@@ -61,20 +71,48 @@ namespace CMidgardMapBlockApi {
 
 struct Api
 {
-    /** Reads or writes object data. */
-    using Stream = void(__thiscall*)(CMidgardMapBlock* thisptr,
-                                     IMidgardObjectMap* objectMap,
-                                     IMidgardStreamEnv* streamEnv);
-    Stream stream;
+    /** Allocates memory for map block object and calls constructor. */
+    using Allocate = CMidgardMapBlock*(__stdcall*)(const CMidgardID* blockId);
+    Allocate allocate;
+
+    using Constructor = CMidgardMapBlock*(__thiscall*)(CMidgardMapBlock* thisptr,
+                                                       const CMidgardID* blockId);
+    Constructor constructor;
 
     /** Counts number of tiles with plain ground and their terrain coverage for each race. */
     using CountTerrainCoverage = bool(__thiscall*)(const CMidgardMapBlock* thisptr,
                                                    TerrainCountMap* terrainCoverage,
                                                    int* plainTiles);
     CountTerrainCoverage countTerrainCoverage;
+
+    /** Sets terrain for tile at specified map position. */
+    using SetTerrain = bool(__thiscall*)(CMidgardMapBlock* thisptr,
+                                         const LTerrainCategory* terrain,
+                                         const CMqPoint* position);
+    SetTerrain setTerrain;
+
+    /** Returns terrain for tile at specified position. */
+    using GetTerrain = bool(__thiscall*)(CMidgardMapBlock* thisptr,
+                                         LTerrainCategory* terrain,
+                                         const CMqPoint* position);
+    GetTerrain getTerrain;
+
+    /** Sets ground for tile at specified map position. */
+    using SetGround = bool(__thiscall*)(CMidgardMapBlock* thisptr,
+                                        const LGroundCategory* ground,
+                                        const CMqPoint* position);
+    SetGround setGround;
+
+    /** Returns ground for tile at specified position. */
+    using GetGround = bool(__thiscall*)(CMidgardMapBlock* thisptr,
+                                        LGroundCategory* ground,
+                                        const CMqPoint* position);
+    GetGround getGround;
 };
 
 Api& get();
+
+IMidScenarioObjectVftable* vftable();
 
 } // namespace CMidgardMapBlockApi
 

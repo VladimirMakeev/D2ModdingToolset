@@ -17,33 +17,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MQANIMATOR2_H
-#define MQANIMATOR2_H
+#ifndef ENCLAYOUTUNITHOOKS_H
+#define ENCLAYOUTUNITHOOKS_H
 
 namespace game {
+struct CEncLayoutUnit;
+}
 
-struct IMqAnimator2Vftable;
-struct IMqAnimation;
+namespace hooks {
 
-struct IMqAnimator2
-{
-    IMqAnimator2Vftable* vftable;
-};
+void __fastcall encLayoutUnitUpdateHooked(game::CEncLayoutUnit* thisptr, int /*%edx*/);
 
-// Virtual table does not contain destructor
-struct IMqAnimator2Vftable
-{
-    using HandleAnimation = bool(__thiscall*)(IMqAnimator2* thisptr, IMqAnimation* animation);
+}
 
-    HandleAnimation addSlowAnimation;
-    HandleAnimation addFastAnimation;
-    HandleAnimation removeSlowAnimation;
-    HandleAnimation removeFastAnimation;
-};
-
-static_assert(sizeof(IMqAnimator2Vftable) == 4 * sizeof(void*),
-              "IMqAnimator2 vftable must have exactly 4 methods");
-
-} // namespace game
-
-#endif // MQANIMATOR2_H
+#endif // ENCLAYOUTUNITHOOKS_H

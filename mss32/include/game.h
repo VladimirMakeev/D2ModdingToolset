@@ -195,6 +195,13 @@ using GetStackFortRuinGroup = CMidUnitGroup*(__thiscall*)(void* thisptr,
                                                           const IMidgardObjectMap* objectMap,
                                                           const CMidgardID* objectId);
 
+/**
+ * Returns id of the object with the group the unit belongs to.
+ * Returned id is always valid.
+ */
+using GetStackFortRuinId = const CMidgardID*(__stdcall*)(const CMidgardID* unitId,
+                                                         const IMidgardObjectMap* objectMap);
+
 /** Deletes all building in capital of specified player. */
 using DeletePlayerBuildings = int(__stdcall*)(IMidgardObjectMap* objectMap,
                                               const CMidPlayer* player);
@@ -543,12 +550,6 @@ using GetTerrainByRace = const LTerrainCategory*(__stdcall*)(const LRaceCategory
 /** Returns race category that corresponds to specified terrain category. */
 using GetRaceByTerrain = const LRaceCategory*(__stdcall*)(const LTerrainCategory* terrain);
 
-/** Returns tile prefix number by tile prefix name. */
-using GetTilePrefixByName = int(__stdcall*)(const char* tileNamePrefix);
-
-/** Returns tile prefix name by tile prefix number. */
-using GetTilePrefixName = const char*(__stdcall*)(int tilePrefixNumber);
-
 /** Assumption: returns color index for minimap. */
 using GetNumberByTerrainGround = int(__stdcall*)(const LTerrainCategory* terrain,
                                                  const LGroundCategory* ground);
@@ -628,6 +629,7 @@ struct Functions
     AttackClassToString attackClassToString;
     GetAttackSourceWardFlagPosition getAttackSourceWardFlagPosition;
     GetStackFortRuinGroup getStackFortRuinGroup;
+    GetStackFortRuinId getStackFortRuinId;
     DeletePlayerBuildings deletePlayerBuildings;
     GetInterfaceText getInterfaceText;
     ComputePlayerDailyIncome computePlayerDailyIncome;
@@ -674,8 +676,6 @@ struct Functions
     GetTerrainByRace getTerrainByRace2;
     GetRaceByTerrain getRaceByTerrain;
     GetRaceByTerrain getPlayableRaceByTerrain;
-    GetTilePrefixByName getTilePrefixByName;
-    GetTilePrefixName getTilePrefixName;
     GetNumberByTerrainGround getNumberByTerrainGround;
     ThrowGenericException throwGenericException;
     IgnorePlayerEvents ignorePlayerEvents;

@@ -17,33 +17,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MQANIMATOR2_H
-#define MQANIMATOR2_H
+#ifndef TILEPREFIXES_H
+#define TILEPREFIXES_H
+
+#include <cstdint>
 
 namespace game {
 
-struct IMqAnimator2Vftable;
-struct IMqAnimation;
-
-struct IMqAnimator2
+/** Used to convert between tile name prefixes and vice versa. */
+enum class TilePrefix : std::uint32_t
 {
-    IMqAnimator2Vftable* vftable;
+    Water,   /**< WA */
+    Neutral, /**< NE */
+    Human,   /**< HU */
+    Heretic, /**< HE */
+    Dwarf,   /**< DW */
+    Undead,  /**< UN */
+    Black,   /**< BL */
+    Elf,     /**< EL */
 };
 
-// Virtual table does not contain destructor
-struct IMqAnimator2Vftable
-{
-    using HandleAnimation = bool(__thiscall*)(IMqAnimator2* thisptr, IMqAnimation* animation);
+namespace TilePrefixApi {
 
-    HandleAnimation addSlowAnimation;
-    HandleAnimation addFastAnimation;
-    HandleAnimation removeSlowAnimation;
-    HandleAnimation removeFastAnimation;
+struct Api
+{
+    /** Returns tile prefix number by tile prefix name. */
+    using GetTilePrefixByName = TilePrefix(__stdcall*)(const char* tileNamePrefix);
+    GetTilePrefixByName getTilePrefixByName;
+
+    /** Returns tile prefix name by tile prefix number. */
+    using GetTilePrefixName = const char*(__stdcall*)(TilePrefix tilePrefix);
+    GetTilePrefixName getTilePrefixName;
 };
 
-static_assert(sizeof(IMqAnimator2Vftable) == 4 * sizeof(void*),
-              "IMqAnimator2 vftable must have exactly 4 methods");
+Api& get();
+
+} // namespace TilePrefixApi
 
 } // namespace game
 
-#endif // MQANIMATOR2_H
+#endif // TILEPREFIXES_H

@@ -1010,6 +1010,27 @@
     <ClCompile Include="src\custommodifierfunctions.cpp">
       <Filter>features</Filter>
     </ClCompile>
+    <ClCompile Include="src\isoengineground.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\isoenginegroundhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\surfacedecompressdata.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enclayoutunit.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enclayoutunithooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tileprefixes.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\campaignstream.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -1238,9 +1259,6 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\popupdialoginterf.h">
-      <Filter>game</Filter>
-    </ClInclude>
-    <ClInclude Include="include\presentation.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\racetype.h">
@@ -2536,6 +2554,9 @@
     <ClInclude Include="include\umunithooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
+    <ClInclude Include="include\isoenginegroundhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
     <ClInclude Include="include\isostillbackground.h">
       <Filter>game</Filter>
     </ClInclude>
@@ -2577,6 +2598,27 @@
     </ClInclude>
     <ClInclude Include="include\custommodifierfunctions.h">
       <Filter>features</Filter>
+    </ClInclude>
+    <ClInclude Include="include\enclayout.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\enclayoutunit.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\enclayoutunithooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tileprefixes.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\campaignstream.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\animations.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\mqpresentationmanager.h">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

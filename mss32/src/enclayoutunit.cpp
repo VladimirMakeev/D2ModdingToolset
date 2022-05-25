@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2022 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,16 +17,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PRESENTATION_H
-#define PRESENTATION_H
+#include "enclayoutunit.h"
+#include "version.h"
+#include <array>
 
-namespace game {
+namespace game::CEncLayoutUnitApi {
 
-struct IPresentation
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::Update)0x5757eb,
+    },
+    // Russobit
+    Api{
+        (Api::Update)0x5757eb,
+    },
+    // Gog
+    Api{
+        (Api::Update)0x574e40,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Update)0x4c6287,
+    },
+}};
+// clang-format on
+
+Api& get()
 {
-    const void* vftable;
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-} // namespace game
-
-#endif // PRESENTATION_H
+} // namespace game::CEncLayoutUnitApi

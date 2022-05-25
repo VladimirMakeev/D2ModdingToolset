@@ -208,6 +208,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
     <ClCompile Include="src\button.cpp" />
+    <ClCompile Include="src\campaignstream.cpp" />
     <ClCompile Include="src\capitaldata.cpp" />
     <ClCompile Include="src\capitaldatlist.cpp" />
     <ClCompile Include="src\citystackinterf.cpp" />
@@ -250,7 +251,9 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\effectinterfhooks.cpp" />
     <ClCompile Include="src\effectresult.cpp" />
     <ClCompile Include="src\effectresulthooks.cpp" />
+    <ClCompile Include="src\enclayoutunithooks.cpp" />
     <ClCompile Include="src\enclayoutspell.cpp" />
+    <ClCompile Include="src\enclayoutunit.cpp" />
     <ClCompile Include="src\eventconditioncat.cpp" />
     <ClCompile Include="src\eventconditioncathooks.cpp" />
     <ClCompile Include="src\eventeffectcat.cpp" />
@@ -275,6 +278,8 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\immunecat.cpp" />
     <ClCompile Include="src\interfmanager.cpp" />
     <ClCompile Include="src\interftexthooks.cpp" />
+    <ClCompile Include="src\isoengineground.cpp" />
+    <ClCompile Include="src\isoenginegroundhooks.cpp" />
     <ClCompile Include="src\isolayers.cpp" />
     <ClCompile Include="src\itemcategory.cpp" />
     <ClCompile Include="src\itemtransferhooks.cpp" />
@@ -393,6 +398,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\subracecat.cpp" />
     <ClCompile Include="src\summonhooks.cpp" />
     <ClCompile Include="src\intset.cpp" />
+    <ClCompile Include="src\surfacedecompressdata.cpp" />
     <ClCompile Include="src\targetslistutils.cpp" />
     <ClCompile Include="src\taskchangecolor.cpp" />
     <ClCompile Include="src\terraincat.cpp" />
@@ -403,6 +409,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\textboxinterf.cpp" />
     <ClCompile Include="src\textids.cpp" />
     <ClCompile Include="src\tileindices.cpp" />
+    <ClCompile Include="src\tileprefixes.cpp" />
     <ClCompile Include="src\tilevariation.cpp" />
     <ClCompile Include="src\togglebutton.cpp" />
     <ClCompile Include="src\transformotherhooks.cpp" />
@@ -482,6 +489,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\2denginemapimpl.h" />
     <ClInclude Include="include\aipriority.h" />
     <ClInclude Include="include\aispellcat.h" />
+    <ClInclude Include="include\animations.h" />
     <ClInclude Include="include\attack.h" />
     <ClInclude Include="include\attackclasscat.h" />
     <ClInclude Include="include\attackdescriptor.h" />
@@ -543,6 +551,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />
     <ClInclude Include="include\button.h" />
+    <ClInclude Include="include\campaignstream.h" />
     <ClInclude Include="include\canselect.h" />
     <ClInclude Include="include\capital.h" />
     <ClInclude Include="include\capitaldata.h" />
@@ -573,7 +582,11 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\d2color.h" />
     <ClInclude Include="include\d2map.h" />
     <ClInclude Include="include\d2tree.h" />
+    <ClInclude Include="include\enclayout.h" />
+    <ClInclude Include="include\enclayoutunithooks.h" />
+    <ClInclude Include="include\enclayoutunit.h" />
     <ClInclude Include="include\isoborder.h" />
+    <ClInclude Include="include\isoenginegroundhooks.h" />
     <ClInclude Include="include\isoground2.h" />
     <ClInclude Include="include\isogroundindexer.h" />
     <ClInclude Include="include\isostillbackground.h" />
@@ -581,6 +594,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mainview2hooks.h" />
     <ClInclude Include="include\midisogroundindexer.h" />
     <ClInclude Include="include\modifgrouphooks.h" />
+    <ClInclude Include="include\mqpresentationmanager.h" />
     <ClInclude Include="include\mq_c_s.h" />
     <ClInclude Include="include\d2osexception.h" />
     <ClInclude Include="include\d2pair.h" />
@@ -853,7 +867,6 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\popupdialoginterf.h" />
     <ClInclude Include="include\mqpoint.h" />
     <ClInclude Include="include\popupinterf.h" />
-    <ClInclude Include="include\presentation.h" />
     <ClInclude Include="include\racecategory.h" />
     <ClInclude Include="include\racelist.h" />
     <ClInclude Include="include\racetype.h" />
@@ -914,6 +927,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\textids.h" />
     <ClInclude Include="include\texturehandle.h" />
     <ClInclude Include="include\tileindices.h" />
+    <ClInclude Include="include\tileprefixes.h" />
     <ClInclude Include="include\tilevariation.h" />
     <ClInclude Include="include\togglebutton.h" />
     <ClInclude Include="include\tooltip.h" />

@@ -23,7 +23,9 @@
 #include "d2list.h"
 #include "d2map.h"
 #include "functordispatch1.h"
+#include "mqrect.h"
 #include "smartptr.h"
+#include "tileindices.h"
 #include <cstddef>
 
 namespace game {
@@ -31,7 +33,6 @@ namespace game {
 struct C2DEngine;
 struct CIsoEngineGround;
 struct IIsoCBScroll;
-struct CMqPoint;
 struct IMqImage2;
 struct CIsoLayer;
 
@@ -54,10 +55,7 @@ static_assert(sizeof(HashElementIndexMap) == 36,
 struct MapGraphics
 {
     C2DEngine* engine2d;
-    int unknown;
-    int unknown2;
-    int unknown3;
-    int unknown4;
+    CMqRect isoViewArea; /**< Area of isometric map view. */
     int mapSize;
     HashElementIndexMap hashElementIndexMap;
     CIsoEngineGround* isoEngineGround;
@@ -98,11 +96,13 @@ struct Api
     using SetMapGraphics = void(__thiscall*)(MapGraphicsPtr* thisptr, MapGraphics** data);
     SetMapGraphics setMapGraphics;
 
-    using GetTileIndex = int(__thiscall*)(MapGraphics** thisptr, bool waterTile);
+    using GetTileIndex = TileArrayIndex(__thiscall*)(MapGraphics** thisptr, bool waterTile);
     GetTileIndex getTileIndex;
 
-    using StoreBlackTiles = int(__thiscall*)(MapGraphics** thisptr, int blackTilesIndex);
-    StoreBlackTiles storeBlackTiles;
+    /** Sets tile array index used for tiles outside of map bounds. */
+    using SetOutOfBordersTileIndex = int(__thiscall*)(MapGraphics** thisptr,
+                                                      TileArrayIndex tileIndex);
+    SetOutOfBordersTileIndex setOutOfBordersTileIndex;
 
     /**
      * Shows specified image on selected layer.

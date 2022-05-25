@@ -59,27 +59,28 @@ struct IMqRenderer2Vftable
     GetFps getFPS;
 
     /**
-     * Assumption: pre-render.
-     * Called before drawing CInterface elements.
+     * Called before rendering frame.
+     * Clears screen with solid black color.
+     * Called before drawing CMqPresentationManager::IPresentation elements.
      */
-    using Method2 = void(__thiscall*)(IMqRenderer2* thisptr);
-    Method2 method2;
+    using BeforeRender = void(__thiscall*)(IMqRenderer2* thisptr);
+    BeforeRender beforeRender;
 
     /**
      * Assumption: main rendering logic.
-     * Called after drawing CInterface elements.
+     * Called after drawing all CMqPresentationManager::IPresentation elements.
      * Calls IMqTexture methods to draw their contents. Performs alpha blending.
-     * Swaps front and back buffers, updates fps and render statistics.
+     * Swaps front and back buffers, updates fps, animations and render statistics.
      */
-    using Method3 = int(__thiscall*)(IMqRenderer2* thisptr);
-    Method3 method3;
+    using RenderFrame = int(__thiscall*)(IMqRenderer2* thisptr);
+    RenderFrame renderFrame;
 
     using Method4 = int(__thiscall*)(IMqRenderer2* thisptr,
                                      TextureHandle* textureHandle,
-                                     CMqPoint* start,
-                                     CMqPoint* offset,
-                                     CMqPoint* size,
-                                     CMqRect* area);
+                                     const CMqPoint* start,
+                                     const CMqPoint* offset,
+                                     const CMqPoint* size,
+                                     const CMqRect* area);
     Method4 method4;
 
     void* method5;
@@ -90,8 +91,12 @@ struct IMqRenderer2Vftable
                                              RenderStatistics* statistics);
     GetRenderStats getRenderStats;
 
-    using Method8 = void(__thiscall*)(IMqRenderer2* thisptr);
-    Method8 method8;
+    /**
+     * Clears render statistics, except blitCount.
+     * Called from CMidgardOnKeyPressed when pressing Ctrl+R.
+     */
+    using ResetRenderStats = void(__thiscall*)(IMqRenderer2* thisptr);
+    ResetRenderStats resetRenderStats;
 
     using Method9 = void(__thiscall*)(IMqRenderer2* thisptr, int a2, int a3, int a4);
     Method9 method9;

@@ -51,6 +51,44 @@ struct SurfaceDecompressData
 static_assert(sizeof(SurfaceDecompressData) == 1072,
               "Size of SurfaceDecompressData structure must be exactly 1072 bytes");
 
+namespace SurfaceDecompressDataApi {
+
+struct Api
+{
+    /** Converts 32-bit color to 16-bit according to surface data settings. */
+    using ConvertColor = std::uint16_t(__thiscall*)(const SurfaceDecompressData* thisptr,
+                                                    const Color* color);
+    ConvertColor convertColor;
+
+    /** Fills specified area with plain color. */
+    using FillArea = void(__thiscall*)(SurfaceDecompressData* thisptr,
+                                       std::uint16_t convertedColor,
+                                       const CMqRect* area);
+    FillArea fillArea;
+
+    using SetColor = void(__thiscall*)(SurfaceDecompressData* thisptr, Color color);
+    SetColor setColor;
+
+    /**
+     * Draws text string into surface.
+     * Text string can contain color and font specificators.
+     * @param[in] text text string to draw.
+     * @param[in] area area which text should occupy.
+     * @param[in] pos top-left starting position of text inside area.
+     * @param a5 meaning unknown.
+     */
+    using DrawTextString = void(__stdcall*)(SurfaceDecompressData* surfaceData,
+                                            const char* text,
+                                            const CMqRect* area,
+                                            const CMqPoint* pos,
+                                            bool a5);
+    DrawTextString drawTextString;
+};
+
+Api& get();
+
+} // namespace SurfaceDecompressDataApi
+
 } // namespace game
 
 #endif // SURFACEDECOMPRESSDATA_H

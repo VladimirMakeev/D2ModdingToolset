@@ -22,6 +22,7 @@
 
 #include "midobject.h"
 #include "modifgroup.h"
+#include "usunitimpl.h"
 
 namespace game {
 

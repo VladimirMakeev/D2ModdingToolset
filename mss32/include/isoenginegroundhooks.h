@@ -17,33 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MQANIMATOR2_H
-#define MQANIMATOR2_H
+#ifndef ISOENGINEGROUNDHOOKS_H
+#define ISOENGINEGROUNDHOOKS_H
 
-namespace game {
+#include "isoengineground.h"
 
-struct IMqAnimator2Vftable;
-struct IMqAnimation;
+namespace hooks {
 
-struct IMqAnimator2
-{
-    IMqAnimator2Vftable* vftable;
-};
+void __stdcall groundTextureDrawHooked(game::CIsoEngineGround::CGroundTexture* thisptr,
+                                       game::SurfaceDecompressData* decompressData);
 
-// Virtual table does not contain destructor
-struct IMqAnimator2Vftable
-{
-    using HandleAnimation = bool(__thiscall*)(IMqAnimator2* thisptr, IMqAnimation* animation);
+void __fastcall isoEngineGroundRenderHooked(game::CIsoEngineGround* thisptr,
+                                            int /*%edx*/,
+                                            game::IMqRenderer2* renderer,
+                                            const game::CMqPoint* position,
+                                            const game::CMqRect* area);
 
-    HandleAnimation addSlowAnimation;
-    HandleAnimation addFastAnimation;
-    HandleAnimation removeSlowAnimation;
-    HandleAnimation removeFastAnimation;
-};
+} // namespace hooks
 
-static_assert(sizeof(IMqAnimator2Vftable) == 4 * sizeof(void*),
-              "IMqAnimator2 vftable must have exactly 4 methods");
-
-} // namespace game
-
-#endif // MQANIMATOR2_H
+#endif // ISOENGINEGROUNDHOOKS_H
