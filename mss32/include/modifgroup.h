@@ -20,19 +20,40 @@
 #ifndef MODIFGROUP_H
 #define MODIFGROUP_H
 
-#include "ummodifier.h"
+#include "categories.h"
 
 namespace game {
+
+struct LModifGroup : public Category<ModifierSourceId>
+{ };
 
 struct LModifGroupTable : public CEnumConstantTable<ModifierSourceId>
 { };
 
-struct LModifGroup : public Category<ModifierSourceId>
+namespace LModifGroupApi {
+
+struct Categories
 {
-    CUmModifier* modifier;
+    LModifGroup* unit;
+    LModifGroup* stack;
+    LModifGroup* attack;
 };
 
-static_assert(sizeof(LModifGroup) == 16, "Size of LModifGroup structure must be exactly 16 bytes");
+Categories& categories();
+
+void* vftable();
+
+} // namespace LModifGroupApi
+
+namespace LModifGroupTableApi {
+
+using Api = CategoryTableApi::Api<LModifGroupTable, LModifGroup>;
+
+Api& get();
+
+void* vftable();
+
+} // namespace LModifGroupTableApi
 
 } // namespace game
 

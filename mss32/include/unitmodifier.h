@@ -22,35 +22,78 @@
 
 #include "midobject.h"
 #include "modifgroup.h"
-#include "usunitimpl.h"
 
 namespace game {
 
+struct TUnitModifierData;
 struct TUnitModifierVftable;
+struct GlobalData;
+struct CDBTable;
+struct IUsUnit;
+struct LUnitCategory;
+struct CUmModifier;
 
-struct TUnitModifier : public IMidObjectT<TUnitModifierVftable>
+/**
+ * Serves as single modifier factory. Id holds an id of modifier that this factory produces.
+ * Reads modifier from DBF, then holds it as global instance and redirects all the calls to it.
+ * Provides access to the global instance in cases where modifier is used globally (city armor
+ * bonus, some spell effects, etc.) or to check if it can be applied.
+ * Uses CUmModifier::Copy to create new instances to be applied to individual units.
+ */
+struct TUnitModifier : IMidObjectT<TUnitModifierVftable>
 {
-    CMidgardID id;
-    LModifGroup* group;
+    TUnitModifierData* data;
 };
 
 static_assert(sizeof(TUnitModifier) == 12,
               "Size of TUnitModifier structure must be exactly 12 bytes");
 
-struct TUnitModifierVftable : public IMidObjectVftable
+struct TUnitModifierData
 {
-    using Method1 = int(__thiscall*)(TUnitModifier* thisptr, int a2);
-    Method1 method1;
-
-    using IsApplicable = bool(__thiscall*)(TUnitModifier* thisptr, TUsUnitImpl* unitImpl);
-    IsApplicable isApplicable;
-
-    using Method3 = int(__thiscall*)(TUnitModifier* thisptr, int a2);
-    Method3 method3;
-
-    using Method4 = int(__thiscall*)(TUnitModifier* thisptr);
-    Method4 method4;
+    LModifGroup group;
+    CUmModifier* modifier;
 };
+
+static_assert(sizeof(TUnitModifierData) == 16,
+              "Size of TUnitModifierData structure must be exactly 16 bytes");
+
+struct TUnitModifierVftable : IMidObjectVftable
+{
+    using CanApplyWithLeadership = bool(__thiscall*)(const TUnitModifier* thisptr,
+                                                     const int* leadership);
+    CanApplyWithLeadership canApplyWithLeadership;
+
+    using CanApplyToUnit = bool(__thiscall*)(const TUnitModifier* thisptr, const IUsUnit* unit);
+    CanApplyToUnit canApplyToUnit;
+
+    using CanApplyToUnitCategory = bool(__thiscall*)(const TUnitModifier* thisptr,
+                                                     const LUnitCategory* unitCategory);
+    CanApplyToUnitCategory canApplyToUnitCategory;
+
+    using CreateModifier = CUmModifier*(__thiscall*)(const TUnitModifier* thisptr);
+    CreateModifier createModifier;
+};
+
+static_assert(sizeof(TUnitModifierVftable) == 5 * sizeof(void*),
+              "TUnitModifier vftable must have exactly 5 methods");
+
+namespace TUnitModifierApi {
+
+struct Api
+{
+    using Constructor = TUnitModifier*(__thiscall*)(TUnitModifier* thisptr,
+                                                    const CDBTable* dbTable,
+                                                    const char* globalsFolderPath,
+                                                    void* codeBaseEnvProxy,
+                                                    const GlobalData** globalData);
+    Constructor constructor;
+};
+
+Api& get();
+
+const TUnitModifierVftable* vftable();
+
+} // namespace TUnitModifierApi
 
 } // namespace game
 

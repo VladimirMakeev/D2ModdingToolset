@@ -72,6 +72,13 @@ struct CompleteObjectLocator
     ClassHierarchyDescriptor* classDescriptor; /**< Describes inheritance hierarchy. */
 };
 
+template <typename T>
+struct RttiInfo
+{
+    const CompleteObjectLocator* locator;
+    T vftable;
+};
+
 namespace RttiApi {
 
 struct Api
@@ -91,6 +98,9 @@ struct Api
                                         const TypeDescriptor* dstType,
                                         int isReference);
     DynamicCast dynamicCast;
+
+    using TypeInfoRawName = const char*(__thiscall*)(const TypeDescriptor* thisptr);
+    TypeInfoRawName* typeInfoRawName;
 };
 
 Api& get();
@@ -128,6 +138,11 @@ struct Rtti
     TypeDescriptor* CBatAttackTransformSelfType;
     TypeDescriptor* CMidLocationType;
     TypeDescriptor* TUsRacialSoldierType;
+    TypeDescriptor* IUsStackLeaderType;
+    TypeDescriptor* IUsUnitType;
+    TypeDescriptor* IEncUnitDescriptorType;
+    TypeDescriptor* CMidUnitDescriptorType;
+    TypeDescriptor* CUmAttackType;
 };
 
 const Rtti& rtti();

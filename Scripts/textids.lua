@@ -17,11 +17,17 @@ textids = {
 		-- Fallback text is "Lasting".
 		infiniteAttack = "",
 
+		-- Defines text id to format Infinite text in unit encyclopedia.
+		-- The text must contain keywords "%ATTACK%" and "%INFINITE%".
+		-- Fallback text is "%ATTACK% (%INFINITE%)".
+		infiniteText = "",
+
 		-- Defines text id to mark Critical Hit attacks in unit encyclopedia.
 		-- Fallback text id is the standard "X160TA0017".
 		critHitAttack = "",
 
-		-- Defines text id to format Critical Hit damage in unit encyclopedia.
+		-- Defines text id to format Critical Hit text in unit encyclopedia.
+		-- Despite its name, it is used to format both crit hit damage and power (chance to hit).
 		-- The text must contain keywords "%DMG%" and "%CRIT%".
 		-- Fallback text is "%DMG% (%CRIT%)".
 		critHitDamage = "",
@@ -44,6 +50,12 @@ textids = {
 		-- The text must contain keyword "%DMG%".
 		-- Fallback text is "%DMG%, split between targets".
 		splitDamage = "",
+
+		-- Defines modified text representation in unit encyclopedia.
+		-- Modified text includes attack name, source, reach, etc.
+		-- The text must contain keyword "%VALUE%".
+		-- Fallback text is "\\c025;090;000;%VALUE%\\c000;000;000;".
+		modifiedValue = "",
 	},
 
 	-- Text ids related to events logic

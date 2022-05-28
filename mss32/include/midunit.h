@@ -34,7 +34,6 @@ struct CScenarioVisitor;
 /** Holds unit related data in scenario file and game. */
 struct CMidUnit : public IMidScenarioObject
 {
-    CMidgardID unitId;
     int creation;
     StringAndId name;
     bool dynLevel;
@@ -73,6 +72,11 @@ struct Api
     using GetHpMax = int(__thiscall*)(const CMidUnit* thisptr);
     GetHpMax getHpMax;
 
+    using Upgrade = bool(__thiscall*)(CMidUnit* thisptr,
+                                      const CScenarioVisitor* visitor,
+                                      const CMidgardID* upgradeImplId);
+    Upgrade upgrade;
+
     using Transform = bool(__thiscall*)(CMidUnit* thisptr,
                                         const CScenarioVisitor* visitor,
                                         const IMidgardObjectMap* objectMap,
@@ -86,7 +90,7 @@ struct Api
     using AddModifiers = bool(__stdcall*)(const game::IdList* value,
                                           CMidUnit* unit,
                                           char* errorBuffer,
-                                          bool checkApplicable);
+                                          bool checkCanApply);
     AddModifiers addModifiers;
 
     using RemoveModifiers = bool(__stdcall*)(IUsUnit** unitImpl);

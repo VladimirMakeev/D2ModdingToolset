@@ -25,7 +25,7 @@
 #include "customattack.h"
 #include "customattacks.h"
 #include "customattackutils.h"
-#include "dbf/dbffile.h"
+#include "dbfaccess.h"
 #include "dbtable.h"
 #include "dynamiccast.h"
 #include "game.h"
@@ -53,7 +53,6 @@
 namespace hooks {
 
 game::LAttackClass customAttackClass{};
-static bool customAttackExists{false};
 
 game::LAttackClassTable* __fastcall attackClassTableCtorHooked(game::LAttackClassTable* thisptr,
                                                                int /*%edx*/,
@@ -65,23 +64,10 @@ game::LAttackClassTable* __fastcall attackClassTableCtorHooked(game::LAttackClas
 
     logDebug("newAttackType.log", "LAttackClassTable c-tor hook started");
 
-    {
-        utils::DbfFile dbf;
-        std::filesystem::path globals{globalsFolderPath};
-        if (!dbf.open(globals / dbfFileName)) {
-            logError("mssProxyError.log", fmt::format("Could not open {:s}", dbfFileName));
-        } else {
-            utils::DbfRecord record;
-            if (dbf.recordsTotal() > 26 && dbf.record(record, 26)) {
-                std::string categoryName;
-                if (record.value(categoryName, "TEXT")
-                    && trimSpaces(categoryName) == customCategoryName) {
-                    customAttackExists = true;
-                    logDebug("newAttackType.log", "Found custom attack category");
-                }
-            }
-        }
-    }
+    const auto dbfFilePath{std::filesystem::path(globalsFolderPath) / dbfFileName};
+    bool customAttackExists = utils::dbValueExists(dbfFilePath, "TEXT", customCategoryName);
+    if (customAttackExists)
+        logDebug("newAttackType.log", "Found custom attack category");
 
     using namespace game;
     thisptr->bgn = nullptr;
@@ -219,35 +205,32 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
     thisptr->vftable = CAttackImplApi::vftable();
 
     const auto& db = CDBTableApi::get();
-    db.readId(&thisptr->attackId, dbTable, "ATT_ID");
+    db.readId(&thisptr->id, dbTable, "ATT_ID");
 
     auto gData = *globalData;
     auto data = thisptr->data;
-    db.readText(&data->name, dbTable, "NAME_TXT", gData->text);
-    db.readText(&data->description, dbTable, "DESC_TXT", gData->text);
+    db.readText(&data->name, dbTable, "NAME_TXT", gData->texts);
+    db.readText(&data->description, dbTable, "DESC_TXT", gData->texts);
     db.findAttackClass(&data->attackClass, dbTable, "CLASS", gData->attackClasses);
     db.findAttackSource(&data->attackSource, dbTable, "SOURCE", gData->attackSources);
-    db.findAttackReach(&data->attackReach, dbTable, "REACH", gData->attackReach);
-    db.readInitiative(&data->initiative, dbTable, "INITIATIVE", &thisptr->attackId);
+    db.findAttackReach(&data->attackReach, dbTable, "REACH", gData->attackReaches);
+    db.readInitiative(&data->initiative, dbTable, "INITIATIVE", &thisptr->id);
 
     const auto& categories = AttackClassCategories::get();
     const auto id = thisptr->data->attackClass.id;
 
-    if (attackHasPower(&thisptr->data->attackClass)) {
-        db.readPower(&data->power, &data->power, dbTable, "POWER", &thisptr->attackId);
+    if (attackHasPower(thisptr->data->attackClass.id)) {
+        db.readPower(&data->power, &data->power, dbTable, "POWER", &thisptr->id);
     }
 
-    if (id == categories.damage->id || id == categories.drain->id
-        || id == categories.drainOverflow->id || id == categories.poison->id
-        || id == categories.frostbite->id || id == categories.blister->id
-        || id == categories.shatter->id) {
-        db.readDamage(&data->qtyDamage, dbTable, "QTY_DAM", &thisptr->attackId);
+    if (attackHasDamage(thisptr->data->attackClass.id)) {
+        db.readDamage(&data->qtyDamage, dbTable, "QTY_DAM", &thisptr->id);
     } else {
         data->qtyDamage = 0;
     }
 
     if (id == categories.heal->id || id == categories.revive->id) {
-        db.readHeal(&data->qtyHeal, dbTable, "QTY_HEAL", &thisptr->attackId);
+        db.readHeal(&data->qtyHeal, dbTable, "QTY_HEAL", &thisptr->id);
     } else if (id == categories.bestowWards->id) {
         data->qtyHeal = 0;
         db.readIntWithBoundsCheck(&data->qtyHeal, dbTable, "QTY_HEAL", 0,
@@ -258,22 +241,18 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
 
     if (id == categories.boostDamage->id || id == categories.lowerDamage->id
         || id == categories.lowerInitiative->id) {
-        db.readAttackLevel(&data->level, dbTable, "LEVEL", &thisptr->attackId, &data->attackClass);
+        db.readAttackLevel(&data->level, dbTable, "LEVEL", &thisptr->id, &data->attackClass);
     } else {
         data->level = -1;
     }
 
-    if (id == categories.paralyze->id || id == categories.petrify->id
-        || id == categories.boostDamage->id || id == categories.lowerDamage->id
-        || id == categories.lowerInitiative->id || id == categories.poison->id
-        || id == categories.frostbite->id || id == categories.blister->id
-        || id == categories.transformOther->id) {
+    if (attackHasInfinite(thisptr->data->attackClass.id)) {
         db.readInfinite(&data->infinite, dbTable, "INFINITE");
     } else {
         data->infinite = false;
     }
 
-    if (id == categories.transformSelf->id || id == categories.doppelganger->id) {
+    if (attackHasAltAttack(thisptr->data->attackClass.id)) {
         db.readId(&data->altAttack, dbTable, "ALT_ATTACK");
     } else {
         data->altAttack = emptyId;
@@ -291,7 +270,7 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
         }
     }
 
-    if (id == categories.damage->id) {
+    if (attackHasCritHit(thisptr->data->attackClass.id)) {
         db.readBool(&data->critHit, dbTable, "CRIT_HIT");
     } else {
         data->critHit = false;
@@ -311,12 +290,14 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
             data->critPower = (std::uint8_t)critPower;
     }
 
+    data->damageRatio = 100;
+    data->damageRatioPerTarget = false;
+    data->damageSplit = false;
     if (getCustomAttacks().damageRatios.enabled) {
         int damageRatio;
         db.readIntWithBoundsCheck(&damageRatio, dbTable, damageRatioColumnName, 0, 255);
-        if (damageRatio == 0)
-            damageRatio = 100;
-        data->damageRatio = (std::uint8_t)damageRatio;
+        if (damageRatio != 0)
+            data->damageRatio = (std::uint8_t)damageRatio;
 
         data->damageRatioPerTarget = false;
         db.readBool(&data->damageRatioPerTarget, dbTable, damageRatioPerTargetColumnName);
@@ -879,10 +860,10 @@ bool __stdcall findDamageAndShatterAttackTargetWithMeleeReach(
     }
 
     if (primaryTarget) {
-        *value = primaryTarget->unitId;
+        *value = primaryTarget->id;
         return true;
     } else if (secondaryTarget) {
-        *value = secondaryTarget->unitId;
+        *value = secondaryTarget->id;
         return true;
     }
 
@@ -953,7 +934,7 @@ bool __stdcall findDamageAndShatterAttackTargetWithNonMeleeReach(
     }
 
     if (result) {
-        *value = result->unitId;
+        *value = result->id;
         return true;
     }
 
@@ -1003,7 +984,7 @@ bool __stdcall findShatterOnlyAttackTarget(const game::IMidgardObjectMap* object
     }
 
     if (result) {
-        *value = result->unitId;
+        *value = result->id;
         return true;
     }
 
@@ -1029,7 +1010,7 @@ bool __stdcall findShatterAttackTarget(const game::IMidgardObjectMap* objectMap,
 
     auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
 
-    auto attackDamage = fn.computeAttackDamageCheckAltAttack(soldier, &unit->unitImpl->unitId,
+    auto attackDamage = fn.computeAttackDamageCheckAltAttack(soldier, &unit->unitImpl->id,
                                                              battleMsgData, unitId);
     if (attackDamage > 0) {
         IAttack* primaryAttack = fn.getAttackById(objectMap, unitId, 1, true);
@@ -1133,10 +1114,10 @@ bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap*
     }
 
     if (primaryTarget) {
-        *value = primaryTarget->unitId;
+        *value = primaryTarget->id;
         return true;
     } else if (secondaryTarget) {
-        *value = secondaryTarget->unitId;
+        *value = secondaryTarget->id;
         return true;
     }
 
@@ -1182,7 +1163,7 @@ bool __stdcall isAttackBetterThanItemUsageHooked(const game::IItem* item,
 
     auto itemBattle = (CItemBattle*)dynamicCast(item, 0, rtti.IItemType, rtti.CItemBattleType, 0);
 
-    auto itemAttack = getAttack(&itemBattle->attackId);
+    auto itemAttack = getGlobalAttack(&itemBattle->attackId);
     if (itemAttack->vftable->getQtyDamage(itemAttack) == 0)
         return false;
 
@@ -1327,7 +1308,7 @@ int __stdcall computeTargetUnitAiPriorityHooked(const game::IMidgardObjectMap* o
     auto attack = soldier->vftable->getAttackById(soldier);
     auto attackClassId = attack->vftable->getAttackClass(attack)->id;
 
-    AttackClassId attack2ClassId = (AttackClassId)-1;
+    AttackClassId attack2ClassId = (AttackClassId)emptyCategoryId;
     auto attack2 = soldier->vftable->getSecondAttackById(soldier);
     if (attack2)
         attack2ClassId = attack2->vftable->getAttackClass(attack2)->id;
@@ -1395,7 +1376,7 @@ bool __fastcall midStackInitializeHooked(game::CMidStack* thisptr,
     thisptr->leaderId = *leaderId;
     thisptr->leaderAlive = leader->currentHp > 0;
 
-    if (!thisptr->inventory.vftable->method1(&thisptr->inventory, &thisptr->stackId, objectMap))
+    if (!thisptr->inventory.vftable->method1(&thisptr->inventory, &thisptr->id, objectMap))
         return false;
 
     if (!stackApi.setPosition(thisptr, objectMap, position, false))

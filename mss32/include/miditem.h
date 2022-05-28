@@ -31,7 +31,6 @@ struct IMidgardObjectMap;
 /** Holds item related data in scenario file and game. */
 struct CMidItem : public IMidScenarioObject
 {
-    CMidgardID itemId;
     CMidgardID globalItemId;
 };
 

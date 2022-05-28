@@ -36,7 +36,6 @@ struct CMidUnitGroupRuin : public CMidUnitGroup
 
 struct CMidRuin : public IMidScenarioObject
 {
-    CMidgardID ruinId;
     IMapElement mapElement;
     IAiPriority aiPriority;
     CMidUnitGroupRuin group;

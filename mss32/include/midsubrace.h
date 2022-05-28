@@ -30,7 +30,6 @@ namespace game {
 /** Represents subrace in scenario file and game. */
 struct CMidSubRace : public IMidScenarioObject
 {
-    CMidgardID subraceId;
     LSubRaceCategory subraceCategory;
     CMidgardID playerId;
     StringAndId name;

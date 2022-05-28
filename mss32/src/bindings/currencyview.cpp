@@ -43,17 +43,16 @@ bool CurrencyView::operator<=(const CurrencyView& value) const
 
 void CurrencyView::bind(sol::state& lua)
 {
-    auto view = lua.new_usertype<CurrencyView>("CurrencyView", sol::meta_function::equal_to,
-                                               &operator==, sol::meta_function::less_than,
-                                               &operator<,
-                                               sol::meta_function::less_than_or_equal_to,
-                                               &operator<=);
-    view["infernalMana"] = sol::property(&getInfernalMana);
-    view["lifeMana"] = sol::property(&getLifeMana);
-    view["deathMana"] = sol::property(&getDeathMana);
-    view["runicMana"] = sol::property(&getRunicMana);
-    view["groveMana"] = sol::property(&getGroveMana);
-    view["gold"] = sol::property(&getGold);
+    auto view = lua.new_usertype<CurrencyView>(
+        "Currency", sol::constructors<CurrencyView(const CurrencyView&)>(),
+        sol::meta_function::equal_to, &operator==, sol::meta_function::less_than, &operator<,
+        sol::meta_function::less_than_or_equal_to, &operator<=);
+    view["infernalMana"] = sol::property(&getInfernalMana, &setInfernalMana);
+    view["lifeMana"] = sol::property(&getLifeMana, &setLifeMana);
+    view["deathMana"] = sol::property(&getDeathMana, &setDeathMana);
+    view["runicMana"] = sol::property(&getRunicMana, &setRunicMana);
+    view["groveMana"] = sol::property(&getGroveMana, &setGroveMana);
+    view["gold"] = sol::property(&getGold, &setGold);
 }
 
 int CurrencyView::getInfernalMana() const
@@ -61,9 +60,23 @@ int CurrencyView::getInfernalMana() const
     return bank.infernalMana;
 }
 
+void CurrencyView::setInfernalMana(int value)
+{
+    using namespace game;
+
+    BankApi::get().set(&bank, CurrencyType::InfernalMana, (int16_t)value);
+}
+
 int CurrencyView::getLifeMana() const
 {
     return bank.lifeMana;
+}
+
+void CurrencyView::setLifeMana(int value)
+{
+    using namespace game;
+
+    BankApi::get().set(&bank, CurrencyType::LifeMana, (int16_t)value);
 }
 
 int CurrencyView::getDeathMana() const
@@ -71,9 +84,23 @@ int CurrencyView::getDeathMana() const
     return bank.deathMana;
 }
 
+void CurrencyView::setDeathMana(int value)
+{
+    using namespace game;
+
+    BankApi::get().set(&bank, CurrencyType::DeathMana, (int16_t)value);
+}
+
 int CurrencyView::getRunicMana() const
 {
     return bank.runicMana;
+}
+
+void CurrencyView::setRunicMana(int value)
+{
+    using namespace game;
+
+    BankApi::get().set(&bank, CurrencyType::RunicMana, (int16_t)value);
 }
 
 int CurrencyView::getGroveMana() const
@@ -81,9 +108,23 @@ int CurrencyView::getGroveMana() const
     return bank.groveMana;
 }
 
+void CurrencyView::setGroveMana(int value)
+{
+    using namespace game;
+
+    BankApi::get().set(&bank, CurrencyType::GroveMana, (int16_t)value);
+}
+
 int CurrencyView::getGold() const
 {
     return bank.gold;
+}
+
+void CurrencyView::setGold(int value)
+{
+    using namespace game;
+
+    BankApi::get().set(&bank, CurrencyType::Gold, (int16_t)value);
 }
 
 } // namespace bindings

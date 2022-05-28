@@ -20,6 +20,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include "dynamiccast.h"
 #include "midgardid.h"
 #include "midscenvariables.h"
 #include <filesystem>
@@ -43,14 +44,21 @@ const std::filesystem::path& gameFolder();
 /** Returns full path to the scripts folder. */
 const std::filesystem::path& scriptsFolder();
 
+/** Returns full path to the modifier scripts folder. */
+const std::filesystem::path& modifiersFolder();
+
 /** Returns full path to the executable that is currently running. */
 const std::filesystem::path& exePath();
 
 /** Returns id as string. */
-std::string idToString(const game::CMidgardID* id);
+std::string idToString(const game::CMidgardID* id, bool lowercase = false);
 
-/** Returns translated text by specified id string. */
-std::string getTranslatedText(const char* textIdString);
+/** Returns interface text by specified id string. */
+std::string getInterfaceText(const char* textIdString);
+
+/** Returns global text by specified id. */
+const char* getGlobalText(const game::CMidgardID& textId);
+const char* getGlobalText(const std::string& textIdString);
 
 /** Tries to replace first occurence of 'keyword' in 'str' with 'replacement'. */
 bool replace(std::string& str, const std::string& keyword, const std::string& replacement);
@@ -86,6 +94,17 @@ void createTimerEvent(game::UiEvent* timerEvent,
 
 /** Computes MD5 hash of files in specified folder. */
 bool computeHash(const std::filesystem::path& folder, std::string& hash);
+
+template <typename T>
+static inline void replaceRttiInfo(game::RttiInfo<T>& dst, const T* src, bool copyVftable = true)
+{
+    dst.locator = *reinterpret_cast<const game::CompleteObjectLocator**>(
+        reinterpret_cast<std::uintptr_t>(src) - sizeof(game::CompleteObjectLocator*));
+
+    if (copyVftable) {
+        std::memcpy(&dst.vftable, src, sizeof(T));
+    }
+}
 
 } // namespace hooks
 

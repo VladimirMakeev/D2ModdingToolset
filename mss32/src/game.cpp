@@ -126,6 +126,11 @@ static std::array<Functions, 4> functions = {{
         (AddCapitalBuilding)0x4224ec,
         (CastUnitImplToLeader)0x424a87,
         (GetBaseUnitImplId)0x64ae7f,
+        (GetUnitImplDamageMax)0x61f0a7,
+        (ReadGlobalAttacks)0x593d63,
+        (GetAltAttackIdCheckClass)0x59a965,
+        (UnitHasDoppelgangerAttack)0x62a88c,
+        (GetDeathAnimationByUnitOrItemId)0x6492e3,
     },
     // Russobit
     Functions{
@@ -228,6 +233,11 @@ static std::array<Functions, 4> functions = {{
         (AddCapitalBuilding)0x4224ec,
         (CastUnitImplToLeader)0x424a87,
         (GetBaseUnitImplId)0x64ae7f,
+        (GetUnitImplDamageMax)0x61f0a7,
+        (ReadGlobalAttacks)0x593d63,
+        (GetAltAttackIdCheckClass)0x59a965,
+        (UnitHasDoppelgangerAttack)0x62a88c,
+        (GetDeathAnimationByUnitOrItemId)0x6492e3,
     },
     // Gog
     Functions{
@@ -330,6 +340,11 @@ static std::array<Functions, 4> functions = {{
         (AddCapitalBuilding)0x42200a,
         (CastUnitImplToLeader)0x424565,
         (GetBaseUnitImplId)0x6497bf,
+        (GetUnitImplDamageMax)0x61dbe3,
+        (ReadGlobalAttacks)0x592e47,
+        (GetAltAttackIdCheckClass)0x599aef,
+        (UnitHasDoppelgangerAttack)0x6293cc,
+        (GetDeathAnimationByUnitOrItemId)0x647b63,
     },
     // Scenario Editor
     Functions{
@@ -380,7 +395,7 @@ static std::array<Functions, 4> functions = {{
         (ComputeUnitDynUpgrade)0x5444e6,
         (ShowMovementPath)nullptr,
         (GetMidgardPlan)nullptr,
-        (CastUnitImplToNoble)nullptr,
+        (CastUnitImplToNoble)0x4296d0,
         (GetBlockingPathNearbyStackId)nullptr,
         (GetFortOrRuinEntrance)nullptr,
         (StackCanMoveToPosition)nullptr,
@@ -427,11 +442,16 @@ static std::array<Functions, 4> functions = {{
         (IsUnitUseAdditionalAnimation)0x564ae7,
         (CheckUnitForHire)nullptr,
         (CheckUnitForHire)nullptr,
-        (CastUnitImplToRacialSoldier)nullptr,
+        (CastUnitImplToRacialSoldier)0x4cfc0a,
         (BuildLordSpecificBuildings)nullptr,
         (AddCapitalBuilding)nullptr,
-        (CastUnitImplToLeader)nullptr,
+        (CastUnitImplToLeader)0x4453c3,
         (GetBaseUnitImplId)nullptr,
+        (GetUnitImplDamageMax)0x522abf,
+        (ReadGlobalAttacks)0x537e05,
+        (GetAltAttackIdCheckClass)0x54554f,
+        (UnitHasDoppelgangerAttack)nullptr,
+        (GetDeathAnimationByUnitOrItemId)nullptr,
     },
 }};
 

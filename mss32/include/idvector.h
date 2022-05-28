@@ -31,8 +31,19 @@ namespace IdVectorApi {
 
 struct Api
 {
+    using Destructor = void(__thiscall*)(IdVector* thisptr);
+    Destructor destructor;
+
     using PushBack = void(__thiscall*)(IdVector* thisptr, const CMidgardID* id);
     PushBack pushBack;
+
+    using Reserve = void(__thiscall*)(IdVector* thisptr, unsigned int count);
+    Reserve reserve;
+
+    using Copy = void(__thiscall*)(IdVector* thisptr,
+                                   const CMidgardID* begin,
+                                   const CMidgardID* end);
+    Copy copy;
 };
 
 Api& get();

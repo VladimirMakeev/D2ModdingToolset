@@ -18,31 +18,88 @@
  */
 
 #include "umattackhooks.h"
-#include "game.h"
+#include "dbtable.h"
+#include "mempool.h"
 #include "umattack.h"
+#include "utils.h"
 
 namespace hooks {
 
-game::IAttack* __fastcall umAttackGetAttackByIdHooked(const game::IUsSoldier* thisptr, int /*%edx*/)
+struct CUmAttackDataPatched : game::CUmAttackData
+{
+    game::CAttackModified altAttackModified;
+};
+
+game::CAttackModified* getAltAttackModified(const game::CUmAttack* umAttack)
+{
+    auto data = (CUmAttackDataPatched*)umAttack->data;
+    return &data->altAttackModified;
+}
+
+game::CUmAttack* __fastcall umAttackCtorHooked(game::CUmAttack* thisptr,
+                                               int /*%edx*/,
+                                               const game::CMidgardID* modifierId,
+                                               game::CDBTable* dbTable,
+                                               const game::GlobalData** globalData)
 {
     using namespace game;
 
-    const auto& fn = gameFunctions();
+    const auto& umAttackApi = CUmAttackApi::get();
+    const auto& umAttackVftable = CUmAttackApi::vftable();
+    const auto& attackModifiedApi = CAttackModifiedApi::get();
+    const auto& dbApi = CDBTableApi::get();
+
+    thisptr->usUnit.id = emptyId;
+
+    CUmModifierApi::get().constructor(&thisptr->umModifier, modifierId, globalData);
+
+    thisptr->data = (CUmAttackDataPatched*)Memory::get().allocate(sizeof(CUmAttackDataPatched));
+    umAttackApi.dataConstructor(thisptr->data);
+
+    thisptr->usUnit.vftable = umAttackVftable.usUnit;
+    thisptr->usSoldier.vftable = umAttackVftable.usSoldier;
+    thisptr->umModifier.vftable = umAttackVftable.umModifier;
+
+    if (dbApi.eof(dbTable))
+        dbApi.missingValueException(dbApi.getName(dbTable), idToString(modifierId).c_str());
+
+    for (; !dbApi.eof(dbTable); dbApi.next(dbTable))
+        umAttackApi.readData(dbTable, thisptr->data, globalData);
+
+    auto& attackData = thisptr->data->attackModified.data;
+    attackData->initiative = thisptr->data->initiative.value;
+    attackData->power = thisptr->data->power.value;
+    attackData->qtyDamage = thisptr->data->qtyDamage.value;
+    attackData->attackDrain = thisptr->data->attackDrain.value;
+
+    attackModifiedApi.copyConstructor(getAltAttackModified(thisptr),
+                                      &thisptr->data->attackModified);
+
+    return thisptr;
+}
+
+game::CUmAttack* __fastcall umAttackCopyCtorHooked(game::CUmAttack* thisptr,
+                                                   int /*%edx*/,
+                                                   const game::CUmAttack* src)
+{
+    using namespace game;
+
+    const auto& umAttackVftable = CUmAttackApi::vftable();
     const auto& attackModifiedApi = CAttackModifiedApi::get();
 
-    auto umattack = castSoldierToUmAttack(thisptr);
+    thisptr->usUnit.id = src->usUnit.id;
 
-    auto unitImpl = umattack->umModifier.data->underlying;
-    auto soldier = fn.castUnitImplToSoldier(unitImpl);
+    CUmModifierApi::get().copyConstructor(&thisptr->umModifier, &src->umModifier);
 
-    auto attack = soldier->vftable->getAttackById(soldier);
-    auto altAttackId = attack->vftable->getAltAttackId(attack);
-    if (*altAttackId != emptyId)
-        return attack;
+    thisptr->data = (CUmAttackDataPatched*)Memory::get().allocate(sizeof(CUmAttackDataPatched));
+    CUmAttackApi::get().dataCopyConstructor(thisptr->data, src->data);
+    attackModifiedApi.copyConstructor(getAltAttackModified(thisptr), getAltAttackModified(src));
 
-    auto attackModified = &umattack->data->attackModified;
-    attackModifiedApi.wrap(attackModified, attack);
-    return attackModified;
+    thisptr->usUnit.vftable = umAttackVftable.usUnit;
+    thisptr->usSoldier.vftable = umAttackVftable.usSoldier;
+    thisptr->umModifier.vftable = umAttackVftable.umModifier;
+
+    return thisptr;
 }
 
 } // namespace hooks

@@ -21,6 +21,7 @@
 #include "attack.h"
 #include "attackmodified.h"
 #include "customattacks.h"
+#include "custommodifier.h"
 #include "dynamiccast.h"
 #include "globaldata.h"
 #include "globalvariables.h"
@@ -29,10 +30,7 @@
 
 namespace hooks {
 
-const game::Restriction<int> attackPowerLimits{-100, 100};
-const game::Restriction<int> attackInitiativeLimits{1, 150};
-
-game::IAttack* getAttack(const game::CMidgardID* attackId)
+game::IAttack* getGlobalAttack(const game::CMidgardID* attackId)
 {
     using namespace game;
 
@@ -54,6 +52,12 @@ game::CAttackImpl* getAttackImpl(const game::IAttack* attack)
 
     auto current = attack;
     while (current) {
+        auto customModifier = castAttackToCustomModifier(current);
+        if (customModifier) {
+            current = customModifier->getPrevAttack(current);
+            continue;
+        }
+
         auto attackImpl = (CAttackImpl*)dynamicCast(current, 0, rtti.IAttackType,
                                                     rtti.CAttackImplType, 0);
         if (attackImpl)
@@ -61,7 +65,7 @@ game::CAttackImpl* getAttackImpl(const game::IAttack* attack)
 
         auto attackModified = (CAttackModified*)dynamicCast(current, 0, rtti.IAttackType,
                                                             rtti.CAttackModifiedType, 0);
-        current = attackModified ? attackModified->data->underlying : nullptr;
+        current = attackModified ? attackModified->data->prev : nullptr;
     }
 
     return nullptr;
@@ -102,39 +106,91 @@ int getLowerInitiative(int level)
     return vars->battleLowerIni;
 }
 
-bool attackHasPower(const game::LAttackClass* attackClass)
+bool attackHasPower(game::AttackClassId id)
 {
-    const auto& attacks = game::AttackClassCategories::get();
-    const auto id = attackClass->id;
+    const auto& classes = game::AttackClassCategories::get();
 
-    return id == attacks.paralyze->id || id == attacks.petrify->id || id == attacks.damage->id
-           || id == attacks.drain->id || id == attacks.drainOverflow->id || id == attacks.fear->id
-           || id == attacks.lowerDamage->id || id == attacks.lowerInitiative->id
-           || id == attacks.poison->id || id == attacks.frostbite->id || id == attacks.blister->id
-           || id == attacks.bestowWards->id || id == attacks.shatter->id || id == attacks.revive->id
-           || id == attacks.drainLevel->id || id == attacks.transformSelf->id
-           || id == attacks.transformOther->id;
+    return id == classes.paralyze->id || id == classes.petrify->id || id == classes.damage->id
+           || id == classes.drain->id || id == classes.drainOverflow->id || id == classes.fear->id
+           || id == classes.lowerDamage->id || id == classes.lowerInitiative->id
+           || id == classes.poison->id || id == classes.frostbite->id || id == classes.blister->id
+           || id == classes.bestowWards->id || id == classes.shatter->id || id == classes.revive->id
+           || id == classes.drainLevel->id || id == classes.transformSelf->id
+           || id == classes.transformOther->id;
+}
+
+bool attackHasDamage(game::AttackClassId id)
+{
+    const auto& classes = game::AttackClassCategories::get();
+
+    return id == classes.damage->id || id == classes.drain->id || id == classes.drainOverflow->id
+           || id == classes.poison->id || id == classes.frostbite->id || id == classes.blister->id
+           || id == classes.shatter->id;
+}
+
+bool attackHasInfinite(game::AttackClassId id)
+{
+    const auto& classes = game::AttackClassCategories::get();
+
+    return id == classes.paralyze->id || id == classes.petrify->id || id == classes.boostDamage->id
+           || id == classes.lowerDamage->id || id == classes.lowerInitiative->id
+           || id == classes.poison->id || id == classes.frostbite->id || id == classes.blister->id
+           || id == classes.transformOther->id;
+}
+
+bool attackHasCritHit(game::AttackClassId id)
+{
+    const auto& classes = game::AttackClassCategories::get();
+
+    return id == classes.damage->id || id == classes.drain->id || id == classes.drainOverflow->id;
+}
+
+bool attackHasAltAttack(game::AttackClassId id)
+{
+    const auto& classes = game::AttackClassCategories::get();
+
+    return id == classes.transformSelf->id || id == classes.doppelganger->id;
 }
 
 bool isMeleeAttack(const game::IAttack* attack)
 {
     using namespace game;
 
-    const auto& attackReaches = AttackReachCategories::get();
+    const auto& reaches = AttackReachCategories::get();
 
-    auto attackReach = attack->vftable->getAttackReach(attack);
-    if (attackReach->id == attackReaches.adjacent->id) {
+    auto reach = attack->vftable->getAttackReach(attack);
+    if (reach->id == reaches.adjacent->id) {
         return true;
-    } else if (attackReach->id != attackReaches.all->id
-               && attackReach->id != attackReaches.any->id) {
+    } else if (reach->id != reaches.all->id && reach->id != reaches.any->id) {
         for (auto& custom : getCustomAttacks().reaches) {
-            if (attackReach->id == custom.reach.id) {
+            if (reach->id == custom.reach.id) {
                 return custom.melee;
             }
         }
     }
 
     return false;
+}
+
+int getAttackMaxTargets(const game::AttackReachId id)
+{
+    using namespace game;
+
+    const auto& reaches = AttackReachCategories::get();
+
+    if (id == reaches.all->id) {
+        return 6;
+    } else if (id == reaches.any->id || id == reaches.adjacent->id) {
+        return 1;
+    } else {
+        for (const auto& custom : getCustomAttacks().reaches) {
+            if (id == custom.reach.id) {
+                return custom.maxTargets;
+            }
+        }
+    }
+
+    return 0;
 }
 
 } // namespace hooks

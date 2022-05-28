@@ -79,14 +79,16 @@ struct CTileVariation;
 
 using RacesMap = mq_c_s<Pair<CMidgardID, TRaceType*>>;
 using DynUpgradeList = List<SmartPtr<CDynUpgrade>>;
+using TextMap = mq_c_s<Pair<CMidgardID, char*>>;
+using AttackMap = mq_c_s<Pair<CMidgardID, CAttackImpl*>>;
 
 /** Holds global game information. */
 struct GlobalData
 {
-    mq_c_s<Pair<CMidgardID, char*>>* text;
+    TextMap* texts;
     LAttackClassTable* attackClasses;
     LAttackSourceTable* attackSources;
-    LAttackReachTable* attackReach;
+    LAttackReachTable* attackReaches;
     LUnitBranchTable* unitBranches;
     LUnitCategoryTable* unitCategories;
     LBuildingCategoryTable* buildingCategories;
@@ -122,7 +124,7 @@ struct GlobalData
     mq_c_s<Pair<CMidgardID, TStrategicSpell*>>* spells;
     mq_c_s<Pair<CMidgardID, TUsUnitImpl*>>** units;
     mq_c_s<Pair<CMidgardID, TUnitModifier*>>* modifiers;
-    mq_c_s<Pair<CMidgardID, CAttackImpl*>>* attacks;
+    AttackMap* attacks;
     mq_c_s<Pair<CMidgardID, TLandmark*>>** landmarks;
     TItemTypeList* itemTypes;
     int* actions;
@@ -159,6 +161,10 @@ struct Api
     using FindDynUpgradeById = const CDynUpgrade*(__thiscall*)(DynUpgradeList* thisptr,
                                                                const CMidgardID* id);
     FindDynUpgradeById findDynUpgradeById;
+
+    /** Searches a text from Tglobal.dbf by its id. Returns empty string if not found. */
+    using FindTextById = const char*(__thiscall*)(const TextMap* thisptr, const CMidgardID* id);
+    FindTextById findTextById;
 };
 
 Api& get();

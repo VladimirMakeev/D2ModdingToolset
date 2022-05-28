@@ -105,8 +105,8 @@ std::optional<TileView> ScenarioView::getTile(int x, int y) const
     CMidgardID blockId{};
     const std::uint32_t blockX = x / 8 * 8;
     const std::uint32_t blockY = y / 4 * 4;
-    id.fromParts(&blockId, IdCategory::Scenario, id.getCategoryIndex(&info->infoId),
-                 IdType::MapBlock, blockX | (blockY << 8));
+    id.fromParts(&blockId, IdCategory::Scenario, id.getCategoryIndex(&info->id), IdType::MapBlock,
+                 blockX | (blockY << 8));
 
     auto blockObj = objectMap->vftable->findScenarioObjectById(objectMap, &blockId);
     if (!blockObj) {

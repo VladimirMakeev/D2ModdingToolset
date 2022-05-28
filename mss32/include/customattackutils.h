@@ -38,6 +38,7 @@ class UnitSlotView;
 
 namespace hooks {
 
+struct CustomAttackData;
 struct CustomAttackReach;
 
 using UnitSlots = std::vector<bindings::UnitSlotView>;
@@ -126,11 +127,13 @@ void fillCustomDamageRatios(const game::IAttack* attack, const game::IdList* tar
 
 int applyAttackDamageRatio(int damage, double ratio);
 
-std::vector<double> computeAttackDamageRatio(const game::IAttack* attack, int targetCount);
+std::vector<double> computeAttackDamageRatio(const CustomAttackData& customData, int targetCount);
 
 double computeTotalDamageRatio(const game::IAttack* attack, int targetCount);
 
 int computeAverageTotalDamage(const game::IAttack* attack, int damage);
+
+CustomAttackData getCustomAttackData(const game::IAttack* attack);
 
 } // namespace hooks
 

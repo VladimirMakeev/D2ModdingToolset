@@ -21,11 +21,13 @@
 #include "attack.h"
 #include "attackclasscat.h"
 #include "attackimpl.h"
+#include "attackmodified.h"
 #include "attackutils.h"
 #include "batattack.h"
 #include "batattacktransformself.h"
 #include "battlemsgdata.h"
 #include "customattacks.h"
+#include "custommodifier.h"
 #include "dbffile.h"
 #include "dynamiccast.h"
 #include "game.h"
@@ -95,9 +97,9 @@ void fillCustomAttackSources(const std::filesystem::path& dbfFilePath)
                          "Found custom attack source {:s}, name id {:s}, immunity ai rating {:d}",
                          text, nameId, immunityAiRating));
 
-            customSources.push_back(
-                {LAttackSource{AttackSourceCategories::vftable(), nullptr, (AttackSourceId)-1},
-                 text, nameId, (double)immunityAiRating, ++wardFlagPosition});
+            customSources.push_back({LAttackSource{AttackSourceCategories::vftable(), nullptr,
+                                                   (AttackSourceId)emptyCategoryId},
+                                     text, nameId, (double)immunityAiRating, ++wardFlagPosition});
         }
     }
 }
@@ -158,10 +160,11 @@ void fillCustomAttackReaches(const std::filesystem::path& dbfFilePath)
 
             logDebug("customAttacks.log", fmt::format("Found custom attack reach {:s}", text));
 
-            customReaches.push_back(
-                {LAttackReach{AttackReachCategories::vftable(), nullptr, (AttackReachId)-1}, text,
-                 reachTxt, targetsTxt, trimSpaces(selectionScript), trimSpaces(attackScript),
-                 markAttackTargets, melee, (std::uint32_t)maxTargets});
+            customReaches.push_back({LAttackReach{AttackReachCategories::vftable(), nullptr,
+                                                  (AttackReachId)emptyCategoryId},
+                                     text, reachTxt, targetsTxt, trimSpaces(selectionScript),
+                                     trimSpaces(attackScript), markAttackTargets, melee,
+                                     (std::uint32_t)maxTargets});
         }
     }
 }
@@ -516,7 +519,7 @@ void fillCustomDamageRatios(const game::IAttack* attack, const game::IdList* tar
 
     const auto& listApi = IdListApi::get();
 
-    auto ratios = computeAttackDamageRatio(attack, targets->length);
+    auto ratios = computeAttackDamageRatio(getCustomAttackData(attack), targets->length);
     if (ratios.empty())
         return;
 
@@ -536,18 +539,14 @@ int applyAttackDamageRatio(int damage, double ratio)
     return result > 0 ? result : 1;
 }
 
-std::vector<double> computeAttackDamageRatio(const game::IAttack* attack, int targetCount)
+std::vector<double> computeAttackDamageRatio(const CustomAttackData& customData, int targetCount)
 {
     std::vector<double> result;
 
-    auto attackImpl = getAttackImpl(attack);
-    if (!attackImpl)
+    if (customData.damageRatio == 100 && !customData.damageSplit)
         return result;
 
-    if (attackImpl->data->damageRatio == 100 && !attackImpl->data->damageSplit)
-        return result;
-
-    const double ratio = (double)attackImpl->data->damageRatio / 100;
+    const double ratio = (double)customData.damageRatio / 100;
 
     double currentRatio = ratio;
     double totalRatio = 1.0;
@@ -555,11 +554,11 @@ std::vector<double> computeAttackDamageRatio(const game::IAttack* attack, int ta
     for (int i = 1; i < targetCount; i++) {
         result.push_back(currentRatio);
         totalRatio += currentRatio;
-        if (attackImpl->data->damageRatioPerTarget)
+        if (customData.damageRatioPerTarget)
             currentRatio *= ratio;
     }
 
-    if (attackImpl->data->damageSplit) {
+    if (customData.damageSplit) {
         for (auto& value : result) {
             value /= totalRatio * userSettings().splitDamageMultiplier;
         }
@@ -573,19 +572,15 @@ double computeTotalDamageRatio(const game::IAttack* attack, int targetCount)
     if (!getCustomAttacks().damageRatios.enabled)
         return targetCount;
 
-    auto attackImpl = getAttackImpl(attack);
-    if (!attackImpl)
-        return targetCount;
-
-    auto damageRatio = attackImpl->data->damageRatio;
-    if (attackImpl->data->damageSplit) {
+    auto customData = getCustomAttackData(attack);
+    if (customData.damageSplit) {
         return 1.0 * userSettings().splitDamageMultiplier;
-    } else if (damageRatio != 100) {
-        double ratio = (double)damageRatio / 100;
+    } else if (customData.damageRatio != 100) {
+        double ratio = (double)customData.damageRatio / 100;
 
         double value = 1.0;
         for (int i = 1; i < targetCount; i++) {
-            value += attackImpl->data->damageRatioPerTarget ? pow(ratio, i) : ratio;
+            value += customData.damageRatioPerTarget ? pow(ratio, i) : ratio;
         }
 
         return value;
@@ -596,24 +591,47 @@ double computeTotalDamageRatio(const game::IAttack* attack, int targetCount)
 
 int computeAverageTotalDamage(const game::IAttack* attack, int damage)
 {
+    int maxTargets = getAttackMaxTargets(attack->vftable->getAttackReach(attack)->id);
+    int avgTargets = maxTargets % 2 + maxTargets / 2;
+    return damage * avgTargets;
+}
+
+CustomAttackData getCustomAttackData(const game::IAttack* attack)
+{
     using namespace game;
 
-    const auto& reaches = AttackReachCategories::get();
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
 
-    auto attackReach = attack->vftable->getAttackReach(attack);
-    if (attackReach->id == reaches.all->id) {
-        return damage * 3;
-    } else if (attackReach->id != reaches.any->id && attackReach->id != reaches.adjacent->id) {
-        for (const auto& custom : getCustomAttacks().reaches) {
-            if (attackReach->id == custom.reach.id) {
-                if (custom.maxTargets == 1)
-                    return damage;
-                return damage * custom.maxTargets / 2;
-            }
+    auto current = attack;
+    while (current) {
+        auto customModifier = castAttackToCustomModifier(current);
+        if (customModifier) {
+            return customModifier->getCustomAttackData(current);
         }
+
+        auto attackImpl = (CAttackImpl*)dynamicCast(current, 0, rtti.IAttackType,
+                                                    rtti.CAttackImplType, 0);
+        if (attackImpl) {
+            const auto data = attackImpl->data;
+
+            CustomAttackData result{};
+            result.damageRatio = data->damageRatio;
+            result.damageRatioPerTarget = data->damageRatioPerTarget;
+            result.damageSplit = data->damageSplit;
+            result.critDamage = data->critDamage;
+            result.critPower = data->critPower;
+
+            return result;
+        }
+
+        auto attackModified = (CAttackModified*)dynamicCast(current, 0, rtti.IAttackType,
+                                                            rtti.CAttackModifiedType, 0);
+        current = attackModified ? attackModified->data->prev : nullptr;
     }
 
-    return damage;
+    // Should never happen unless attack is null
+    return {};
 }
 
 } // namespace hooks

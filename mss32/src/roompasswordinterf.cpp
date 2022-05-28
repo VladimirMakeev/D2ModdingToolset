@@ -77,7 +77,7 @@ static void __fastcall onOkPressed(CRoomPasswordInterf* thisptr, int /*%edx*/)
         closeRoomPasswordInterf(thisptr);
         onSuccess(menuLobby);
     } else {
-        auto message{getTranslatedText(textIds().lobby.wrongRoomPassword.c_str())};
+        auto message{getInterfaceText(textIds().lobby.wrongRoomPassword.c_str())};
         if (message.empty()) {
             message = "Wrong room password";
         }

@@ -46,7 +46,7 @@ void ItemBaseView::bind(sol::state& lua)
 int ItemBaseView::getCategory() const
 {
     auto category = item->vftable->getCategory(item);
-    return category ? (int)category->id : -1;
+    return category ? (int)category->id : game::emptyCategoryId;
 }
 
 std::string ItemBaseView::getName() const

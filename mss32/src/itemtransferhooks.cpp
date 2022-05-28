@@ -848,37 +848,37 @@ static std::string bankToPriceMessage(const game::Bank& bank)
 
     std::string priceText;
     if (bank.gold) {
-        auto text = getTranslatedText("X005TA0055");
+        auto text = getInterfaceText("X005TA0055");
         replace(text, "%QTY%", fmt::format("{:d}", bank.gold));
         priceText.append(text + '\n');
     }
 
     if (bank.runicMana) {
-        auto text = getTranslatedText("X005TA0056");
+        auto text = getInterfaceText("X005TA0056");
         replace(text, "%QTY%", fmt::format("{:d}", bank.runicMana));
         priceText.append(text + '\n');
     }
 
     if (bank.deathMana) {
-        auto text = getTranslatedText("X005TA0057");
+        auto text = getInterfaceText("X005TA0057");
         replace(text, "%QTY%", fmt::format("{:d}", bank.deathMana));
         priceText.append(text + '\n');
     }
 
     if (bank.lifeMana) {
-        auto text = getTranslatedText("X005TA0058");
+        auto text = getInterfaceText("X005TA0058");
         replace(text, "%QTY%", fmt::format("{:d}", bank.lifeMana));
         priceText.append(text + '\n');
     }
 
     if (bank.infernalMana) {
-        auto text = getTranslatedText("X005TA0059");
+        auto text = getInterfaceText("X005TA0059");
         replace(text, "%QTY%", fmt::format("{:d}", bank.infernalMana));
         priceText.append(text + '\n');
     }
 
     if (bank.groveMana) {
-        auto text = getTranslatedText("X160TA0001");
+        auto text = getInterfaceText("X160TA0001");
         replace(text, "%QTY%", fmt::format("{:d}", bank.groveMana));
         priceText.append(text + '\n');
     }
@@ -943,7 +943,7 @@ void __fastcall merchantSellValuables(game::CSiteMerchantInterf* thisptr, int /*
     }
 
     const auto priceText = bankToPriceMessage(sellPrice);
-    auto message = getTranslatedText(textIds().interf.sellAllValuables.c_str());
+    auto message = getInterfaceText(textIds().interf.sellAllValuables.c_str());
     if (!message.empty()) {
         replace(message, "%PRICE%", priceText);
     } else {
@@ -974,7 +974,7 @@ void __fastcall merchantSellAll(game::CSiteMerchantInterf* thisptr, int /*%edx*/
     }
 
     const auto priceText = bankToPriceMessage(sellPrice);
-    auto message = getTranslatedText(textIds().interf.sellAllItems.c_str());
+    auto message = getInterfaceText(textIds().interf.sellAllItems.c_str());
     if (!message.empty()) {
         replace(message, "%PRICE%", priceText);
     } else {

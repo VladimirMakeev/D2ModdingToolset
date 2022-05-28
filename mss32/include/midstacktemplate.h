@@ -49,7 +49,6 @@ struct StackTemplateListNode
 
 struct CMidStackTemplate : public IMidScenarioObject
 {
-    CMidgardID templateId;
     CMidgardID ownerId;
     CMidgardID subraceId;
     LOrderCategory orderCategory;

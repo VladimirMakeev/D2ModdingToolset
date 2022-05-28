@@ -111,7 +111,7 @@ void LobbyServerConnectionCallback::onPacketReceived(DefaultMessageIDTypes type,
 {
     switch (type) {
     case ID_CONNECTION_ATTEMPT_FAILED: {
-        auto message{getTranslatedText(textIds().lobby.connectAttemptFailed.c_str())};
+        auto message{getInterfaceText(textIds().lobby.connectAttemptFailed.c_str())};
         if (message.empty()) {
             message = "Connection attempt failed";
         }
@@ -120,7 +120,7 @@ void LobbyServerConnectionCallback::onPacketReceived(DefaultMessageIDTypes type,
         return;
     }
     case ID_NO_FREE_INCOMING_CONNECTIONS: {
-        auto message{getTranslatedText(textIds().lobby.serverIsFull.c_str())};
+        auto message{getInterfaceText(textIds().lobby.serverIsFull.c_str())};
         if (message.empty()) {
             message = "Lobby server is full";
         }
@@ -135,7 +135,7 @@ void LobbyServerConnectionCallback::onPacketReceived(DefaultMessageIDTypes type,
     case ID_CONNECTION_REQUEST_ACCEPTED: {
         std::string hash;
         if (!computeHash(gameFolder() / "Globals", hash)) {
-            auto message{getTranslatedText(textIds().lobby.computeHashFailed.c_str())};
+            auto message{getInterfaceText(textIds().lobby.computeHashFailed.c_str())};
             if (message.empty()) {
                 message = "Could not compute hash";
             }
@@ -145,7 +145,7 @@ void LobbyServerConnectionCallback::onPacketReceived(DefaultMessageIDTypes type,
         }
 
         if (!tryCheckFilesIntegrity(hash.c_str())) {
-            auto message{getTranslatedText(textIds().lobby.requestHashCheckFailed.c_str())};
+            auto message{getInterfaceText(textIds().lobby.requestHashCheckFailed.c_str())};
             if (message.empty()) {
                 message = "Could not request game integrity check";
             }
@@ -172,7 +172,7 @@ void LobbyServerConnectionCallback::onPacketReceived(DefaultMessageIDTypes type,
             return;
         }
 
-        auto message{getTranslatedText(textIds().lobby.wrongHash.c_str())};
+        auto message{getInterfaceText(textIds().lobby.wrongHash.c_str())};
         if (message.empty()) {
             message = "Game integrity check failed";
         }
@@ -188,7 +188,7 @@ void LobbyServerConnectionCallback::onPacketReceived(DefaultMessageIDTypes type,
 
 static void __fastcall menuProtocolTimeoutHandler(CMenuCustomProtocol* menu, int /*%edx*/)
 {
-    auto message{getTranslatedText(textIds().lobby.serverNotResponding.c_str())};
+    auto message{getInterfaceText(textIds().lobby.serverNotResponding.c_str())};
     if (message.empty()) {
         message = "Failed to connect.\nLobby server not responding";
     }
@@ -213,7 +213,7 @@ void __fastcall menuProtocolDisplayCallbackHooked(game::CMenuProtocol* thisptr,
     }
 
     if (selectedIndex == lastIndex) {
-        auto serverName{getTranslatedText(textIds().lobby.serverName.c_str())};
+        auto serverName{getInterfaceText(textIds().lobby.serverName.c_str())};
         if (serverName.empty()) {
             serverName = "Lobby server";
         }

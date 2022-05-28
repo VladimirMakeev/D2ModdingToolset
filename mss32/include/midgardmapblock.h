@@ -45,7 +45,6 @@ struct LTerrainCategory;
 /** Represents block of tiles in scenario file and game. */
 struct CMidgardMapBlock : public IMidScenarioObject
 {
-    CMidgardID blockId;
     std::uint32_t tiles[32]; /**< 8 tiles along the X axis by 4 tiles along the Y axis. */
     CMqPoint position;
 };

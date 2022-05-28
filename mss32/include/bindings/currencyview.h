@@ -40,11 +40,17 @@ public:
     static void bind(sol::state& lua);
 
     int getInfernalMana() const;
+    void setInfernalMana(int value);
     int getLifeMana() const;
+    void setLifeMana(int value);
     int getDeathMana() const;
+    void setDeathMana(int value);
     int getRunicMana() const;
+    void setRunicMana(int value);
     int getGroveMana() const;
+    void setGroveMana(int value);
     int getGold() const;
+    void setGold(int value);
 
     game::Bank bank;
 };

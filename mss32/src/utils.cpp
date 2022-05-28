@@ -66,6 +66,12 @@ const std::filesystem::path& scriptsFolder()
     return folder;
 }
 
+const std::filesystem::path& modifiersFolder()
+{
+    static const std::filesystem::path folder{gameFolder() / "Scripts" / "Modifiers"};
+    return folder;
+}
+
 const std::filesystem::path& exePath()
 {
     static std::filesystem::path exe{};
@@ -81,15 +87,21 @@ const std::filesystem::path& exePath()
     return exe;
 }
 
-std::string idToString(const game::CMidgardID* id)
+std::string idToString(const game::CMidgardID* id, bool lowercase)
 {
     char idString[11] = {0};
     game::CMidgardIDApi::get().toString(id, idString);
 
+    if (lowercase) {
+        for (auto& c : idString) {
+            c = (char)std::tolower((unsigned char)c);
+        }
+    }
+
     return {idString};
 }
 
-std::string getTranslatedText(const char* textIdString)
+std::string getInterfaceText(const char* textIdString)
 {
     using namespace game;
 
@@ -100,6 +112,28 @@ std::string getTranslatedText(const char* textIdString)
     CMidgardIDApi::get().fromString(&textId, textIdString);
 
     return {gameFunctions().getInterfaceText(&textId)};
+}
+
+const char* getGlobalText(const game::CMidgardID& textId)
+{
+    using namespace game;
+
+    const auto& globalApi = GlobalDataApi::get();
+
+    const auto texts = (*globalApi.getGlobalData())->texts;
+    return globalApi.findTextById(texts, &textId);
+}
+
+const char* getGlobalText(const std::string& textIdString)
+{
+    using namespace game;
+
+    CMidgardID textId{};
+    CMidgardIDApi::get().fromString(&textId, textIdString.c_str());
+    if (textId == invalidId)
+        return "";
+
+    return getGlobalText(textId);
 }
 
 bool replace(std::string& str, const std::string& keyword, const std::string& replacement)

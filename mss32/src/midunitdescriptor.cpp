@@ -29,21 +29,25 @@ static std::array<Api, 4> functions = {{
     Api{
         (Api::GetSoldier)0x57eda2,
         (Api::GetAttack)0x57edb8,
+        (Api::GetAltAttack)0x57ee00,
     },
     // Russobit
     Api{
         (Api::GetSoldier)0x57eda2,
         (Api::GetAttack)0x57edb8,
+        (Api::GetAltAttack)0x57ee00,
     },
     // Gog
     Api{
         (Api::GetSoldier)0x57e45d,
         (Api::GetAttack)0x57e473,
+        (Api::GetAltAttack)0x57e4bb,
     },
     // Scenario Editor
     Api{
         (Api::GetSoldier)0x4d01e6,
         (Api::GetAttack)0x4d01fc,
+        (Api::GetAltAttack)0x4d0244,
     },
 }};
 

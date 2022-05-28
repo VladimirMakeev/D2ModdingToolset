@@ -71,6 +71,7 @@ struct IUsRacialSoldier;
 struct NetPlayerInfo;
 struct LBuildingCategory;
 struct IUsLeader;
+struct LDeathAnimCategory;
 
 enum class ModifierElementTypeFlag : int;
 
@@ -443,7 +444,7 @@ using GenerateAttackDescription = void(__stdcall*)(IEncUnitDescriptor* descripto
                                                    int boostDamageLevel,
                                                    int lowerDamageLevel,
                                                    int lowerInitiativeLevel,
-                                                   const IdList* modifiers,
+                                                   const IdList* editorModifiers,
                                                    int damageMax);
 
 using CreateMenuAnimation = SmartPtr<IMqImage2>*(__stdcall*)(SmartPtr<IMqImage2>* animation,
@@ -589,6 +590,21 @@ using GetBaseUnitImplId = CMidgardID*(__stdcall*)(CMidgardID* value,
                                                   const CMidgardID* unitId,
                                                   bool original);
 
+using GetUnitImplDamageMax = int(__stdcall*)(CMidgardID* unitImplId);
+
+using ReadGlobalAttacks = AttackMap**(__thiscall*)(AttackMap** thisptr,
+                                                   const char* globalsFolderPath,
+                                                   void* codeBaseEnvProxy,
+                                                   const GlobalData** globalData);
+
+using GetAltAttackIdCheckClass = const CMidgardID*(__stdcall*)(const IAttack* attack);
+
+using UnitHasDoppelgangerAttack = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                   const CMidgardID* unitId);
+
+using GetDeathAnimationByUnitOrItemId =
+    LDeathAnimCategory*(__stdcall*)(const CMidgardID* unitOrItemId);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -691,6 +707,11 @@ struct Functions
     AddCapitalBuilding addCapitalBuilding;
     CastUnitImplToLeader castUnitImplToLeader;
     GetBaseUnitImplId getBaseUnitImplId;
+    GetUnitImplDamageMax getUnitImplDamageMax;
+    ReadGlobalAttacks readGlobalAttacks;
+    GetAltAttackIdCheckClass getAltAttackIdCheckClass;
+    UnitHasDoppelgangerAttack unitHasDoppelgangerAttack;
+    GetDeathAnimationByUnitOrItemId getDeathAnimationByUnitOrItemId;
 };
 
 /** Global variables used in game. */

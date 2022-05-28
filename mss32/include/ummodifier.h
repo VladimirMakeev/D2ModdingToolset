@@ -20,7 +20,7 @@
 #ifndef UMMODIFIER_H
 #define UMMODIFIER_H
 
-#include "usunitimpl.h"
+#include "midgardid.h"
 
 namespace game {
 
@@ -28,7 +28,15 @@ struct CUmModifierVftable;
 struct CUmModifierData;
 struct ModifierValue;
 struct GlobalData;
+struct IUsUnit;
+struct LUnitCategory;
 
+/**
+ * Stored as global instance by TUnitModifier.
+ * Most of the methods can be called on that instance (which is not applied to unit),
+ * to check it before applying, or for specific needs like providing city armor bonus.
+ * A copy is created every time it needs to be applied to unit.
+ */
 struct CUmModifier
 {
     const CUmModifierVftable* vftable;
@@ -47,11 +55,14 @@ struct ModifierValue
 static_assert(sizeof(ModifierValue) == 8,
               "Size of ModifierValue structure must be exactly 8 bytes");
 
-/** Modifier element types (bitflags), corresponds to ModifierElementType enum (values are not
- * identical). */
+/**
+ * Modifier element types (bitflags).
+ * Correspond to ModifierElementType enum (values are not identical).
+ */
 // clang-format off
 enum class ModifierElementTypeFlag : int
 {
+    None                = 0b0000000000000000,
     // Used by CUmStack
     MoveAllowance       = 0b0000000000000001,
     ScoutingRange       = 0b0000000000000010,
@@ -80,41 +91,55 @@ struct CUmModifierVftable
     using Destructor = void(__thiscall*)(CUmModifier* thisptr, bool freeMemory);
     Destructor destructor;
 
-    using Method1 = int(__thiscall*)(CUmModifier* thisptr);
-    Method1 method1;
+    /** Called on global instance to create a copy to be applied to a unit. */
+    using Copy = CUmModifier*(__thiscall*)(const CUmModifier* thisptr);
+    Copy copy;
 
-    using Method2 = bool(__thiscall*)(CUmModifier* thisptr, int* a2);
-    Method2 method2;
+    /**
+     * Called on global instance to check if can be applied if stack leader has specified
+     * leadership.
+     */
+    using CanApplyWithLeadership = bool(__thiscall*)(const CUmModifier* thisptr,
+                                                     const int* leadership);
+    CanApplyWithLeadership canApplyWithLeadership;
 
-    using Method3 = bool(__thiscall*)(CUmModifier* thisptr, TUsUnitImpl* unitImpl);
-    Method3 method3;
+    /** Called on global instance to check if it can be applied to unit. */
+    using CanApplyToUnit = bool(__thiscall*)(const CUmModifier* thisptr, const IUsUnit* unit);
+    CanApplyToUnit canApplyToUnit;
 
-    using Method4 = bool(__thiscall*)(CUmModifier* thisptr, int a2);
-    Method4 method4;
+    /** Called on global instance (for example, to check if banner can have it). */
+    using CanApplyToUnitCategory = bool(__thiscall*)(const CUmModifier* thisptr,
+                                                     const LUnitCategory* unitCategory);
+    CanApplyToUnitCategory canApplyToUnitCategory;
 
-    using Method5 = bool(__thiscall*)(CUmModifier* thisptr);
-    Method5 method5;
+    /** Called on global instance (for example, to check if it matches spell category). */
+    using GetBool = bool(__thiscall*)(const CUmModifier* thisptr);
+    GetBool isLower;
+    GetBool isBoost;
 
-    using Method6 = bool(__thiscall*)(CUmModifier* thisptr);
-    Method6 method6;
-
-    using HasElement = bool(__thiscall*)(CUmModifier* thisptr, ModifierElementTypeFlag type);
+    /** Called on global instance (for example, to add city armor bonus). */
+    using HasElement = bool(__thiscall*)(const CUmModifier* thisptr, ModifierElementTypeFlag type);
     HasElement hasElement;
 
-    using GetFirstElementValue = int(__thiscall*)(CUmModifier* thisptr);
+    /** Called on global instance (for example, to add city armor bonus). */
+    using GetFirstElementValue = int(__thiscall*)(const CUmModifier* thisptr);
     GetFirstElementValue getFirstElementValue;
 
-    using GetDesc = const char*(__thiscall*)(CUmModifier* thisptr);
-    GetDesc getDesc;
+    using GetDescription = const char*(__thiscall*)(const CUmModifier* thisptr);
+    GetDescription getDescription;
 
-    using Method10 = int(__thiscall*)(CUmModifier* thisptr);
-    Method10 method10;
+    /** Takes unit impl id from previous unit and sets it for self. */
+    using UpdateUnitImplId = void(__thiscall*)(CUmModifier* thisptr);
+    UpdateUnitImplId updateUnitImplId;
 };
+
+static_assert(sizeof(CUmModifierVftable) == 11 * sizeof(void*),
+              "CUmModifier vftable must have exactly 11 methods");
 
 struct CUmModifierData
 {
-    int unknown;
-    IUsUnit* underlying;
+    CUmModifier* next;
+    IUsUnit* prev;
     CMidgardID modifierId;
 };
 
@@ -132,6 +157,12 @@ struct Api
 
     using CopyConstructor = CUmModifier*(__thiscall*)(CUmModifier* thisptr, const CUmModifier* src);
     CopyConstructor copyConstructor;
+
+    using Destructor = void(__thiscall*)(CUmModifier* thisptr);
+    Destructor destructor;
+
+    using SetPrev = void(__thiscall*)(CUmModifier* thisptr, const IUsUnit* value);
+    SetPrev setPrev;
 };
 
 Api& get();

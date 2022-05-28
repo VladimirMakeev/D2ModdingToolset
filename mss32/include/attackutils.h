@@ -20,27 +20,29 @@
 #ifndef ATTACKUTILS_H
 #define ATTACKUTILS_H
 
-#include "restrictions.h"
-
 namespace game {
 struct CMidgardID;
 struct IAttack;
 struct CAttackImpl;
-struct LAttackClass;
+
+enum class AttackClassId : int;
+enum class AttackReachId : int;
 } // namespace game
 
 namespace hooks {
 
-extern const game::Restriction<int> attackPowerLimits;
-extern const game::Restriction<int> attackInitiativeLimits;
-
-game::IAttack* getAttack(const game::CMidgardID* attackId);
+game::IAttack* getGlobalAttack(const game::CMidgardID* attackId);
 game::CAttackImpl* getAttackImpl(const game::IAttack* attack);
 int getBoostDamage(int level);
 int getLowerDamage(int level);
 int getLowerInitiative(int level);
-bool attackHasPower(const game::LAttackClass* attackClass); // Power is chance to hit / accuracy
+bool attackHasPower(game::AttackClassId id); // Power is chance to hit / accuracy
+bool attackHasDamage(game::AttackClassId id);
+bool attackHasInfinite(game::AttackClassId id);
+bool attackHasCritHit(game::AttackClassId id);
+bool attackHasAltAttack(game::AttackClassId id);
 bool isMeleeAttack(const game::IAttack* attack);
+int getAttackMaxTargets(game::AttackReachId id);
 
 } // namespace hooks
 

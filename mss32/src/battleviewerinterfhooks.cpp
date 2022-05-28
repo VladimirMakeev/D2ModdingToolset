@@ -628,7 +628,7 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
     mousePosition.y -= viewer->data->dialogInterfArea.p1.y;
 
     viewerApi.markAttackTargets(viewer, &mousePosition, false);
-    viewerApi.unknownMethod8(viewer, &mousePosition);
+    viewerApi.updateCursor(viewer, &mousePosition);
 }
 
 void __fastcall battleViewerInterfUpdateBattleItemsHooked(game::CBattleViewerInterf* thisptr,

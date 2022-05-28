@@ -46,10 +46,10 @@ int heal(game::IMidgardObjectMap* objectMap,
     int hpBefore = targetUnit->currentHp;
 
     const auto& visitors = VisitorApi::get();
-    visitors.changeUnitHp(&targetUnit->unitId, qtyHeal, objectMap, 1);
+    visitors.changeUnitHp(&targetUnit->id, qtyHeal, objectMap, 1);
 
     int hpAfter = targetUnit->currentHp;
-    BattleMsgDataApi::get().setUnitHp(battleMsgData, &targetUnit->unitId, hpAfter);
+    BattleMsgDataApi::get().setUnitHp(battleMsgData, &targetUnit->id, hpAfter);
 
     return hpAfter - hpBefore;
 }

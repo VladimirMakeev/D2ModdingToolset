@@ -36,7 +36,7 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
                                                int boostDamageLevel,
                                                int lowerDamageLevel,
                                                int lowerInitiativeLevel,
-                                               const game::IdList* modifiers,
+                                               const game::IdList* editorModifiers,
                                                int damageMax);
 
 game::String* __stdcall getAttackSourceTextHooked(game::String* value,

@@ -26,10 +26,13 @@
 
 namespace game {
 struct IMidgardObjectMap;
+struct IUsUnit;
 struct CMidUnit;
 struct UnitInfo;
+struct TUnitModifier;
 struct CUmModifier;
 struct CUmUnit;
+struct CUmAttack;
 struct LAttackSource;
 struct LAttackClass;
 struct IAttack;
@@ -42,7 +45,15 @@ bool unitCanBeModified(game::BattleMsgData* battleMsgData, game::CMidgardID* tar
 
 game::CUmUnit* castUmModifierToUmUnit(game::CUmModifier* modifier);
 
-game::CUmModifier* getModifier(const game::CMidgardID* modifierId);
+game::CUmAttack* castUmModifierToUmAttack(game::CUmModifier* modifier);
+
+game::IUsUnit* castUmModifierToUnit(game::CUmModifier* modifier);
+
+game::CUmModifier* castUnitToUmModifier(const game::IUsUnit* unit);
+
+game::CUmModifier* getFirstUmModifier(const game::IUsUnit* unit);
+
+const game::TUnitModifier* getUnitModifier(const game::CMidgardID* modifierId);
 
 void getModifierAttackSource(game::CUmUnit* modifier, game::LAttackSource* value);
 
@@ -100,6 +111,8 @@ std::set<game::CMidgardID> getModifiedUnitIds(game::UnitInfo* unitInfo);
 
 std::set<game::CMidgardID> getUnitModifierIds(game::UnitInfo* unitInfo,
                                               const game::CMidgardID* modifiedUnitId);
+
+game::IAttack* wrapAltAttack(const game::IUsUnit* unit, game::IAttack* attack);
 
 } // namespace hooks
 

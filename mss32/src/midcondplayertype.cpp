@@ -127,12 +127,12 @@ void __stdcall midCondPlayerTypeGetInfoString(game::String* info,
     const auto& playerTypeTextIds = textIds().events.conditions.playerType;
 
     if (ai) {
-        type = getTranslatedText(playerTypeTextIds.ai.c_str());
+        type = getInterfaceText(playerTypeTextIds.ai.c_str());
         if (type.empty()) {
             type = "AI";
         }
     } else {
-        type = getTranslatedText(playerTypeTextIds.human.c_str());
+        type = getInterfaceText(playerTypeTextIds.human.c_str());
         if (type.empty()) {
             type = "human";
         }
@@ -242,7 +242,7 @@ void __fastcall condPlayerTypeInterfOkButtonHandler(CCondPlayerTypeInterf* thisp
         const int conditionsTotal = midEvent->conditions.end - midEvent->conditions.bgn;
         if (conditionsTotal >= 10) {
             // Could not create new condition
-            showMessageBox(getTranslatedText("X100TA0631"));
+            showMessageBox(getInterfaceText("X100TA0631"));
             return;
         }
     }
@@ -407,7 +407,7 @@ bool checkPlayerTypeConditionValid(game::CDialogInterf* dialog,
     getConditionsOfType(event, &category, conditions);
 
     if (conditions.size() > 1) {
-        auto message = getTranslatedText(textIds().events.conditions.playerType.tooMany.c_str());
+        auto message = getInterfaceText(textIds().events.conditions.playerType.tooMany.c_str());
         if (message.empty()) {
             message = "Only one condition of type \"Player type\" is allowed per event.";
         }

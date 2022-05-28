@@ -50,7 +50,6 @@ static std::array<Categories, 4> categories = {{
         (LAttackReach*)0x6658f8,
     },
 }};
-// clang-format on
 
 static std::array<const void*, 4> vftables = {{
     // Akella

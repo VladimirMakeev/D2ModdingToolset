@@ -28,7 +28,6 @@
 #include "unitutils.h"
 #include "ussoldier.h"
 #include "usunitimpl.h"
-#include "utils.h"
 #include <fmt/format.h>
 #include <sol/sol.hpp>
 
@@ -36,26 +35,45 @@ namespace bindings {
 
 UnitView::UnitView(const game::CMidUnit* unit)
     : unit(unit)
+    , unitImpl(nullptr)
+{ }
+
+UnitView::UnitView(const game::CMidUnit* unit, const game::IUsUnit* unitImpl)
+    : unit(unit)
+    , unitImpl(unitImpl)
 { }
 
 void UnitView::bind(sol::state& lua)
 {
-    auto unit = lua.new_usertype<UnitView>("Unit");
+    auto unit = lua.new_usertype<UnitView>("UnitView");
+    unit["id"] = sol::property(&UnitView::getId);
     unit["xp"] = sol::property(&UnitView::getXp);
     unit["hp"] = sol::property(&UnitView::getHp);
     unit["hpMax"] = sol::property(&UnitView::getHpMax);
     unit["impl"] = sol::property(&UnitView::getImpl);
     unit["baseImpl"] = sol::property(&UnitView::getBaseImpl);
+
+    unit["type"] = sol::property(&UnitView::getCategory);
+    unit["movement"] = sol::property(&UnitView::getMovement);
+    unit["scout"] = sol::property(&UnitView::getScout);
+    unit["leadership"] = sol::property(&UnitView::getLeadership);
+    unit["hasAbility"] = &UnitView::hasAbility;
+    unit["hasMoveBonus"] = &UnitView::hasMoveBonus;
 }
 
 std::optional<UnitImplView> UnitView::getImpl() const
 {
-    return {unit->unitImpl};
+    return {getUnitImpl()};
 }
 
 std::optional<UnitImplView> UnitView::getBaseImpl() const
 {
     return {hooks::getGlobalUnitImpl(unit)};
+}
+
+IdView UnitView::getId() const
+{
+    return IdView{unit->id};
 }
 
 int UnitView::getXp() const
@@ -72,7 +90,47 @@ int UnitView::getHpMax() const
 {
     using namespace game;
 
-    return CMidUnitApi::get().getHpMax(unit);
+    if (unit->transformed && unit->keepHp)
+        return unit->hpBefMax;
+
+    auto soldier = gameFunctions().castUnitImplToSoldier(getUnitImpl());
+    return soldier->vftable->getHitPoints(soldier);
+}
+
+int UnitView::getCategory() const
+{
+    // Returns leader category for backward compatibility.
+    return getImpl()->getLeaderCategory();
+}
+
+int UnitView::getMovement() const
+{
+    return getImpl()->getMovement();
+}
+
+int UnitView::getScout() const
+{
+    return getImpl()->getScout();
+}
+
+int UnitView::getLeadership() const
+{
+    return getImpl()->getLeadership();
+}
+
+bool UnitView::hasAbility(int abilityId) const
+{
+    return getImpl()->hasAbility(abilityId);
+}
+
+bool UnitView::hasMoveBonus(int groundId) const
+{
+    return getImpl()->hasMoveBonus(groundId);
+}
+
+const game::IUsUnit* UnitView::getUnitImpl() const
+{
+    return unitImpl ? unitImpl : unit->unitImpl;
 }
 
 } // namespace bindings

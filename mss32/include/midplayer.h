@@ -34,7 +34,6 @@ struct TRaceType;
 /** Holds player related data in scenario file and game. */
 struct CMidPlayer : public IMidScenarioObject
 {
-    CMidgardID playerId;
     StringAndId name;
     StringAndId description;
     int face;

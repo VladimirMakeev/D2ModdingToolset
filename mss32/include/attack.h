@@ -24,7 +24,6 @@
 #include "attackreachcat.h"
 #include "attacksourcecat.h"
 #include "idvector.h"
-#include "midgardid.h"
 #include "midobject.h"
 #include "textandid.h"
 #include <cstdint>
@@ -35,15 +34,11 @@ struct IAttackVftable;
 struct CAttackData;
 
 /** Base class for units attacks. */
-struct IAttack
-{
-    const IAttackVftable* vftable;
-};
+struct IAttack : IMidObjectT<IAttackVftable>
+{ };
 
-struct IAttackVftable
+struct IAttackVftable : IMidObjectVftable
 {
-    void* destructor;
-
     using GetCStr = const char*(__thiscall*)(const IAttack* thisptr);
     GetCStr getName;
     GetCStr getDescription;
@@ -133,13 +128,7 @@ struct CAttackData
 
 namespace IAttackApi {
 
-struct Api
-{
-    using GetId = const CMidgardID*(__thiscall*)(const IAttack* thisptr);
-    GetId getId;
-};
-
-Api& get();
+const IAttackVftable* vftable();
 
 } // namespace IAttackApi
 

@@ -29,6 +29,9 @@ static std::array<Api, 4> functions = {{
     Api{
         (Api::FindBuildingCategory)0x58c041,
         (Api::FindUnitBranchCategory)0x58c0bf,
+        (Api::FindModifGroupCategory)0x58aea0,
+        (Api::ReadString)0x5b003c,
+        (Api::ReadModifier)0x58ab19,
         (Api::ReadUnitLevel)0x58be7c,
         (Api::MissingValueException)0x5965ac,
         (Api::DuplicateRecordException)0x59d474,
@@ -53,6 +56,9 @@ static std::array<Api, 4> functions = {{
     Api{
         (Api::FindBuildingCategory)0x58c041,
         (Api::FindUnitBranchCategory)0x58c0bf,
+        (Api::FindModifGroupCategory)0x58aea0,
+        (Api::ReadString)0x5b003c,
+        (Api::ReadModifier)0x58ab19,
         (Api::ReadUnitLevel)0x58be7c,
         (Api::MissingValueException)0x5965ac,
         (Api::DuplicateRecordException)0x59d474,
@@ -77,6 +83,9 @@ static std::array<Api, 4> functions = {{
     Api{
         (Api::FindBuildingCategory)0x58b1cf,
         (Api::FindUnitBranchCategory)0x58b24d,
+        (Api::FindModifGroupCategory)0x58a00c,
+        (Api::ReadString)0x5af300,
+        (Api::ReadModifier)0x589c88,
         (Api::ReadUnitLevel)0x58afd7,
         (Api::MissingValueException)0x5956d1,
         (Api::DuplicateRecordException)0x59c710,
@@ -101,6 +110,9 @@ static std::array<Api, 4> functions = {{
     Api{
         (Api::FindBuildingCategory)0x538bf7,
         (Api::FindUnitBranchCategory)0x538c75,
+        (Api::FindModifGroupCategory)0x535c30,
+        (Api::ReadString)0x55799d,
+        (Api::ReadModifier)0x5358a5,
         (Api::ReadUnitLevel)0x538a1b,
         (Api::MissingValueException)0x536b7e,
         (Api::DuplicateRecordException)0x53f9b2,

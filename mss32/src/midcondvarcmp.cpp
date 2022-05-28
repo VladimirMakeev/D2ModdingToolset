@@ -153,37 +153,37 @@ void __stdcall midCondVarCmpGetInfoString(game::String* info,
 
     switch (condition->compareType) {
     case CompareType::Equal:
-        comparison = getTranslatedText(varCmpTextIds.equal.c_str());
+        comparison = getInterfaceText(varCmpTextIds.equal.c_str());
         if (comparison.empty()) {
             comparison = "is equal to";
         }
         break;
     case CompareType::NotEqual:
-        comparison = getTranslatedText(varCmpTextIds.notEqual.c_str());
+        comparison = getInterfaceText(varCmpTextIds.notEqual.c_str());
         if (comparison.empty()) {
             comparison = "is not equal to";
         }
         break;
     case CompareType::Greater:
-        comparison = getTranslatedText(varCmpTextIds.greater.c_str());
+        comparison = getInterfaceText(varCmpTextIds.greater.c_str());
         if (comparison.empty()) {
             comparison = "is greater than";
         }
         break;
     case CompareType::GreaterEqual:
-        comparison = getTranslatedText(varCmpTextIds.greaterEqual.c_str());
+        comparison = getInterfaceText(varCmpTextIds.greaterEqual.c_str());
         if (comparison.empty()) {
             comparison = "is greater or equal to";
         }
         break;
     case CompareType::Less:
-        comparison = getTranslatedText(varCmpTextIds.less.c_str());
+        comparison = getInterfaceText(varCmpTextIds.less.c_str());
         if (comparison.empty()) {
             comparison = "is less than";
         }
         break;
     case CompareType::LessEqual:
-        comparison = getTranslatedText(varCmpTextIds.lessEqual.c_str());
+        comparison = getInterfaceText(varCmpTextIds.lessEqual.c_str());
         if (comparison.empty()) {
             comparison = "is less or equal to";
         }
@@ -340,7 +340,7 @@ void __fastcall condVarCmpInterfOkButtonHandler(CCondVarCmpInterf* thisptr, int 
         const int conditionsTotal = midEvent->conditions.end - midEvent->conditions.bgn;
         if (conditionsTotal >= 10) {
             // Could not create new condition
-            showMessageBox(getTranslatedText("X100TA0631"));
+            showMessageBox(getInterfaceText("X100TA0631"));
             return;
         }
     }

@@ -47,8 +47,9 @@ bool isUnitSmall(const game::CMidUnit* unit);
 game::CMidgardID getGlobalUnitImplId(const game::CMidUnit* unit);
 game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidUnit* unit);
 game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidgardID* globalUnitImplId);
+game::TUsSoldierImpl* getSoldierImpl(const game::IUsUnit* unit);
 game::TUsSoldierImpl* getSoldierImpl(const game::IUsSoldier* soldier);
-game::IAttack* getAttack(const game::IUsSoldier* soldier, bool primary, bool checkAltAttack);
+game::IAttack* getAttack(const game::IUsUnit* unit, bool primary, bool checkAltAttack);
 int getArmor(const game::CMidgardID* unitId,
              const game::IUsSoldier* soldier,
              const game::BattleMsgData* battleMsgData,

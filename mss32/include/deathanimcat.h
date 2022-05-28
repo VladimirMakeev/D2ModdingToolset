@@ -30,6 +30,24 @@ struct LDeathAnimCategoryTable : CEnumConstantTable<DeathAnimationId>
 struct LDeathAnimCategory : public Category<DeathAnimationId>
 { };
 
+namespace DeathAnimCategories {
+
+struct Categories
+{
+    LDeathAnimCategory* elf;
+    LDeathAnimCategory* ghost;
+    LDeathAnimCategory* neutral;
+    LDeathAnimCategory* dragon;
+    LDeathAnimCategory* dwarf;
+    LDeathAnimCategory* human;
+    LDeathAnimCategory* undead;
+    LDeathAnimCategory* heretic;
+};
+
+Categories& get();
+
+} // namespace DeathAnimCategories
+
 } // namespace game
 
 #endif // DEATHANIMCAT_H

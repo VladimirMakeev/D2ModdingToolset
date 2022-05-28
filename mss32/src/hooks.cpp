@@ -53,7 +53,7 @@
 #include "customattacks.h"
 #include "customattackutils.h"
 #include "d2string.h"
-#include "dbf/dbffile.h"
+#include "dbfaccess.h"
 #include "dbtable.h"
 #include "dialoginterf.h"
 #include "difficultylevel.h"
@@ -109,6 +109,8 @@
 #include "midunitdescriptorhooks.h"
 #include "midunithooks.h"
 #include "midvillage.h"
+#include "modifgroup.h"
+#include "modifgrouphooks.h"
 #include "modifierutils.h"
 #include "movepathhooks.h"
 #include "musichooks.h"
@@ -120,6 +122,7 @@
 #include "playerincomehooks.h"
 #include "racecategory.h"
 #include "racetype.h"
+#include "restrictions.h"
 #include "scenariodata.h"
 #include "scenariodataarray.h"
 #include "scenarioinfo.h"
@@ -136,6 +139,8 @@
 #include "umunithooks.h"
 #include "unitbranchcat.h"
 #include "unitgenerator.h"
+#include "unitmodifier.h"
+#include "unitmodifierhooks.h"
 #include "unitsforhire.h"
 #include "unitutils.h"
 #include "untransformeffecthooks.h"
@@ -501,8 +506,8 @@ Hooks getHooks()
     // Support custom attack reaches
     hooks.emplace_back(HookInfo{fn.chooseUnitLane, chooseUnitLaneHooked});
     // Fix missing modifiers of alternative attacks
-    hooks.emplace_back(
-        HookInfo{CUmAttackApi::vftable()->getAttackById, umAttackGetAttackByIdHooked});
+    hooks.emplace_back(HookInfo{CUmAttackApi::get().constructor, umAttackCtorHooked});
+    hooks.emplace_back(HookInfo{CUmAttackApi::get().copyConstructor, umAttackCopyCtorHooked});
     // Fix incorrect representation of alternative attack modifiers in unit encyclopedia
     hooks.emplace_back(
         HookInfo{CMidUnitDescriptorApi::get().getAttack, midUnitDescriptorGetAttackHooked});
@@ -572,6 +577,12 @@ Hooks getHooks()
         hooks.emplace_back(
             HookInfo{CUmUnitApi::vftable().usSoldier->getRegen, umUnitGetRegenHooked});
     }
+
+    // Support custom modifiers
+    hooks.emplace_back(HookInfo{LModifGroupTableApi::get().constructor, modifGroupTableCtorHooked});
+    hooks.emplace_back(HookInfo{TUnitModifierApi::get().constructor, unitModifierCtorHooked});
+    hooks.emplace_back(HookInfo{TUnitModifierApi::vftable()->destructor, unitModifierDtorHooked});
+    hooks.emplace_back(HookInfo{CMidUnitApi::get().addModifier, addModifierHooked});
 
     // Show effective HP in unit encyclopedia
     hooks.emplace_back(HookInfo{CEncLayoutUnitApi::get().update, encLayoutUnitUpdateHooked,
@@ -959,7 +970,7 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
             continue;
         }
 
-        if (race->raceId != *soldier->vftable->getRaceId(soldier)) {
+        if (race->id != *soldier->vftable->getRaceId(soldier)) {
             continue;
         }
 
@@ -1049,7 +1060,7 @@ void __stdcall createBuildingTypeHooked(const game::CDBTable* dbTable,
     }
 
     if (!gameFunctions().addObjectAndCheckDuplicates(a2, buildingType)) {
-        db.duplicateRecordException(dbTable, &buildingType->buildingId);
+        db.duplicateRecordException(dbTable, &buildingType->id);
     }
 }
 
@@ -1063,22 +1074,10 @@ game::LBuildingCategoryTable* __fastcall buildingCategoryTableCtorHooked(
 
     logDebug("newBuildingType.log", "Hook started");
 
-    {
-        utils::DbfFile dbf;
-        std::filesystem::path globals{globalsFolderPath};
-        if (!dbf.open(globals / dbfFileName)) {
-            logError("mssProxyError.log", fmt::format("Could not open {:s}", dbfFileName));
-        } else {
-            utils::DbfRecord record;
-            if (dbf.recordsTotal() > 4 && dbf.record(record, 4)) {
-                std::string categoryName;
-                if (record.value(categoryName, "TEXT") && trimSpaces(categoryName) == "L_CUSTOM") {
-                    customCategoryExists = true;
-                    logDebug("newBuildingType.log", "Found custom building category");
-                }
-            }
-        }
-    }
+    const auto dbfFilePath{std::filesystem::path(globalsFolderPath) / dbfFileName};
+    customCategoryExists = utils::dbValueExists(dbfFilePath, "TEXT", "L_CUSTOM");
+    if (customCategoryExists)
+        logDebug("newBuildingType.log", "Found custom building category");
 
     using namespace game;
     auto& table = LBuildingCategoryTableApi::get();
@@ -1240,7 +1239,7 @@ game::CMidgardID* __stdcall radioButtonIndexToPlayerIdHooked(game::CMidgardID* p
         break;
     }
 
-    *playerId = player ? player->playerId : emptyId;
+    *playerId = player ? player->id : emptyId;
 
     return playerId;
 }
@@ -1379,7 +1378,7 @@ void __fastcall shatterOnHitHooked(game::CBatAttackShatter* thisptr,
 
     BattleAttackUnitInfo info{};
     info.unitId = *unitId;
-    info.unitImplId = unit->unitImpl->unitId;
+    info.unitImplId = unit->unitImpl->id;
     info.attackMissed = false;
     info.damage = 0;
 
@@ -1531,13 +1530,10 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
         }
 
         if (critHit) {
-            auto attackImpl = getAttackImpl(attack);
-            int critPower = attackImpl ? attackImpl->data->critPower
-                                       : userSettings().criticalHitChance;
+            auto customData = getCustomAttackData(attack);
+            int critPower = customData.critPower;
             if (!fn.attackShouldMiss(&critPower)) {
-                int critDamageRate = attackImpl ? attackImpl->data->critDamage
-                                                : userSettings().criticalHitDamage;
-                critDamage = damageWithBuffs * critDamageRate / 100;
+                critDamage = damageWithBuffs * customData.critDamage / 100;
             }
         }
     }
@@ -1571,9 +1567,11 @@ void __stdcall getAttackPowerHooked(int* power,
 
     using namespace game;
 
+    const auto& restrictions = game::gameRestrictions();
+
     const auto attackClass = attack->vftable->getAttackClass(attack);
 
-    if (!attackHasPower(attackClass)) {
+    if (!attackHasPower(attackClass->id)) {
         *power = 100;
         return;
     }
@@ -1610,7 +1608,8 @@ void __stdcall getAttackPowerHooked(int* power,
             tmpPower += tmpPower * *bonus / 100;
         }
 
-        tmpPower = std::clamp(tmpPower, attackPowerLimits.min, attackPowerLimits.max);
+        tmpPower = std::clamp(tmpPower, restrictions.attackPower->min,
+                              restrictions.attackPower->max);
     }
 
     const auto& attacks = AttackClassCategories::get();
@@ -1620,7 +1619,7 @@ void __stdcall getAttackPowerHooked(int* power,
     }
 
     tmpPower -= battle.getAttackPowerReduction(battleMsgData, unitId);
-    *power = std::clamp(tmpPower, attackPowerLimits.min, attackPowerLimits.max);
+    *power = std::clamp(tmpPower, restrictions.attackPower->min, restrictions.attackPower->max);
 }
 
 bool __stdcall attackShouldMissHooked(const int* power)
@@ -1741,7 +1740,7 @@ int __stdcall computeUnitEffectiveHpHooked(const game::IMidgardObjectMap* object
         return 0;
 
     int armor;
-    fn.computeArmor(&armor, objectMap, battleMsgData, &unit->unitId);
+    fn.computeArmor(&armor, objectMap, battleMsgData, &unit->id);
 
     return computeUnitEffectiveHp(unit, armor);
 }
@@ -1818,13 +1817,12 @@ void __stdcall getUnitAttacksHooked(const game::IMidgardObjectMap* objectMap,
     const auto& vectorApi = AttackTypePairVectorApi::get();
 
     auto unit = fn.findUnitById(objectMap, unitId);
-    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
 
-    auto attack = getAttack(soldier, true, checkAltAttack);
+    auto attack = getAttack(unit->unitImpl, true, checkAltAttack);
     AttackTypePair pair{attack, AttackType::Primary};
     vectorApi.pushBack(value, &pair);
 
-    auto attack2 = getAttack(soldier, false, checkAltAttack);
+    auto attack2 = getAttack(unit->unitImpl, false, checkAltAttack);
     if (attack2) {
         AttackTypePair pair{attack2, AttackType::Secondary};
         vectorApi.pushBack(value, &pair);

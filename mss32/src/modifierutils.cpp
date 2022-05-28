@@ -19,14 +19,18 @@
 
 #include "modifierutils.h"
 #include "attack.h"
+#include "attackmodified.h"
 #include "battlemsgdata.h"
+#include "custommodifier.h"
 #include "dynamiccast.h"
 #include "game.h"
 #include "globaldata.h"
 #include "idlistutils.h"
 #include "midgardobjectmap.h"
 #include "midunit.h"
+#include "modifgroup.h"
 #include "settings.h"
+#include "umattackhooks.h"
 #include "umunit.h"
 #include "unitmodifier.h"
 #include "ussoldier.h"
@@ -56,7 +60,50 @@ game::CUmUnit* castUmModifierToUmUnit(game::CUmModifier* modifier)
     return (CUmUnit*)dynamicCast(modifier, 0, rtti.CUmModifierType, rtti.CUmUnitType, 0);
 }
 
-game::CUmModifier* getModifier(const game::CMidgardID* modifierId)
+game::CUmAttack* castUmModifierToUmAttack(game::CUmModifier* modifier)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    return (CUmAttack*)dynamicCast(modifier, 0, rtti.CUmModifierType, rtti.CUmAttackType, 0);
+}
+
+game::IUsUnit* castUmModifierToUnit(game::CUmModifier* modifier)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    return (IUsUnit*)dynamicCast(modifier, 0, rtti.CUmModifierType, rtti.IUsUnitType, 0);
+}
+
+game::CUmModifier* castUnitToUmModifier(const game::IUsUnit* unit)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    return (CUmModifier*)dynamicCast(unit, 0, rtti.IUsUnitType, rtti.CUmModifierType, 0);
+}
+
+game::CUmModifier* getFirstUmModifier(const game::IUsUnit* unit)
+{
+    using namespace game;
+
+    CUmModifier* result = nullptr;
+    for (auto curr = unit; curr; curr = result->data->prev) {
+        auto modifier = castUnitToUmModifier(curr);
+        if (!modifier)
+            break;
+
+        result = modifier;
+    }
+
+    return result;
+}
+
+const game::TUnitModifier* getUnitModifier(const game::CMidgardID* modifierId)
 {
     using namespace game;
 
@@ -64,7 +111,7 @@ game::CUmModifier* getModifier(const game::CMidgardID* modifierId)
     const auto modifiers = (*global.getGlobalData())->modifiers;
     const TUnitModifier* unitModifier = (TUnitModifier*)global.findById(modifiers, modifierId);
 
-    return unitModifier->group->modifier;
+    return unitModifier;
 }
 
 void getModifierAttackSource(game::CUmUnit* modifier, game::LAttackSource* value)
@@ -136,7 +183,7 @@ bool canApplyImmunityModifier(game::BattleMsgData* battleMsgData,
             return true;
 
         const auto& battle = BattleMsgDataApi::get();
-        if (battle.isUnitAttackSourceWardRemoved(battleMsgData, &targetUnit->unitId, &attackSource))
+        if (battle.isUnitAttackSourceWardRemoved(battleMsgData, &targetUnit->id, &attackSource))
             return true;
     }
 
@@ -164,7 +211,7 @@ bool canApplyImmunityclassModifier(game::BattleMsgData* battleMsgData,
             return true;
 
         const auto& battle = BattleMsgDataApi::get();
-        if (battle.isUnitAttackClassWardRemoved(battleMsgData, &targetUnit->unitId, &attackClass))
+        if (battle.isUnitAttackClassWardRemoved(battleMsgData, &targetUnit->id, &attackClass))
             return true;
     }
 
@@ -178,10 +225,13 @@ bool canApplyModifier(game::BattleMsgData* battleMsgData,
     using namespace game;
 
     const auto& battle = BattleMsgDataApi::get();
-    if (battle.unitHasModifier(battleMsgData, modifierId, &targetUnit->unitId))
+    if (battle.unitHasModifier(battleMsgData, modifierId, &targetUnit->id))
         return false;
 
-    CUmModifier* modifier = getModifier(modifierId);
+    CUmModifier* modifier = getUnitModifier(modifierId)->data->modifier;
+
+    if (castModifierToCustomModifier(modifier))
+        return true;
 
     CUmUnit* umUnit = castUmModifierToUmUnit(modifier);
     if (umUnit) {
@@ -265,7 +315,7 @@ bool addUnitModifierInfo(game::BattleMsgData* battleMsgData,
     using namespace game;
 
     const auto& battle = BattleMsgDataApi::get();
-    auto& modifierIds = battle.getUnitInfoById(battleMsgData, &targetUnit->unitId)->modifierIds;
+    auto& modifierIds = battle.getUnitInfoById(battleMsgData, &targetUnit->id)->modifierIds;
     for (auto& id : modifierIds) {
         if (id == invalidId) {
             id = *modifierId;
@@ -291,7 +341,7 @@ bool addModifiedUnitInfo(const game::CMidgardID* unitId,
         if (info->unitId == invalidId) {
             if (!addUnitModifierInfo(battleMsgData, targetUnit, modifierId))
                 return false;
-            info->unitId = targetUnit->unitId;
+            info->unitId = targetUnit->id;
             info->modifierId = *modifierId;
             return true;
         }
@@ -316,15 +366,19 @@ bool applyModifier(const game::CMidgardID* unitId,
     if (targetUnit->transformed)
         addUniqueIdToList(targetUnit->origModifiers, modifierId);
 
-    CUmModifier* modifier = getModifier(modifierId);
+    CUmModifier* modifier = getUnitModifier(modifierId)->data->modifier;
+
+    // No ward reset in case of custom modifier because we don't know if it grants it or not
+    if (castModifierToCustomModifier(modifier))
+        return true;
 
     CUmUnit* umUnit = castUmModifierToUmUnit(modifier);
     if (umUnit) {
         if (modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::ImmunityOnce))
-            resetUnitAttackSourceWard(battleMsgData, &targetUnit->unitId, umUnit);
+            resetUnitAttackSourceWard(battleMsgData, &targetUnit->id, umUnit);
 
         if (modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::ImmunityclassOnce))
-            resetUnitAttackClassWard(battleMsgData, &targetUnit->unitId, umUnit);
+            resetUnitAttackClassWard(battleMsgData, &targetUnit->id, umUnit);
     }
 
     return true;
@@ -344,7 +398,7 @@ void removeModifier(game::BattleMsgData* battleMsgData,
     // Fixes modifiers becoming permanent after modified unit is transformed
     removeIdFromList(unit->origModifiers, modifierId);
 
-    BattleMsgDataApi::get().resetUnitModifierInfo(battleMsgData, &unit->unitId, modifierId);
+    BattleMsgDataApi::get().resetUnitModifierInfo(battleMsgData, &unit->id, modifierId);
 }
 
 void removeModifiers(game::BattleMsgData* battleMsgData,
@@ -398,6 +452,30 @@ std::set<game::CMidgardID> getUnitModifierIds(game::UnitInfo* unitInfo,
     for (auto info = getModifiedUnits(unitInfo, &end); info < end; info++) {
         if (info->unitId == *modifiedUnitId)
             result.insert(validateId(info->modifierId));
+    }
+
+    return result;
+}
+
+game::IAttack* wrapAltAttack(const game::IUsUnit* unit, game::IAttack* attack)
+{
+    using namespace game;
+
+    const auto& attackModifiedApi = CAttackModifiedApi::get();
+
+    auto result = attack;
+    for (CUmModifier* curr = getFirstUmModifier(unit); curr; curr = curr->data->next) {
+        auto umAttack = castUmModifierToUmAttack(curr);
+        if (umAttack) {
+            auto altAttackModified = getAltAttackModified(umAttack);
+            attackModifiedApi.wrap(altAttackModified, result);
+            result = altAttackModified;
+        } else {
+            auto custom = castModifierToCustomModifier(curr);
+            if (custom) {
+                result = custom->wrapAltAttack(result);
+            }
+        }
     }
 
     return result;

@@ -62,7 +62,7 @@ void __fastcall menuLoadSkirmishMultiLoadScenarioHooked(game::CMenuLoad* thisptr
 
     if (!isRoomAndPlayerNamesValid(thisptr)) {
         // Please enter valid game and player names
-        showMessageBox(getTranslatedText("X005TA0867"));
+        showMessageBox(getInterfaceText("X005TA0867"));
         return;
     }
 

@@ -409,9 +409,6 @@
     <ClCompile Include="src\transformselfhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
-    <ClCompile Include="src\attack.cpp">
-      <Filter>game</Filter>
-    </ClCompile>
     <ClCompile Include="src\scripts.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -481,9 +478,7 @@
     <ClCompile Include="src\textboxinterf.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="src\textids.cpp">
-      <Filter>game</Filter>
-    </ClCompile>
+    <ClCompile Include="src\textids.cpp" />
     <ClCompile Include="src\subracecat.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -898,9 +893,6 @@
     <ClCompile Include="src\bindings\stackview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
-    <ClCompile Include="src\bindings\leaderview.cpp">
-      <Filter>bindings</Filter>
-    </ClCompile>
     <ClCompile Include="src\midgardplan.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -981,6 +973,42 @@
     </ClCompile>
     <ClCompile Include="src\ummodifier.cpp">
       <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\unitmodifier.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\unitmodifierhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modifgroup.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\custommodifiers.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
+    <ClCompile Include="src\custommodifier.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modifgrouphooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\attack.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\usstackleader.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\attackdescriptor.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\deathanimcat.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\unittypedescriptor.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\custommodifierfunctions.cpp">
+      <Filter>features</Filter>
     </ClCompile>
     <ClCompile Include="src\isoengineground.cpp">
       <Filter>game</Filter>
@@ -1781,9 +1809,7 @@
     <ClInclude Include="include\textboxinterf.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="include\textids.h">
-      <Filter>game</Filter>
-    </ClInclude>
+    <ClInclude Include="include\textids.h" />
     <ClInclude Include="include\unitutils.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -2387,9 +2413,6 @@
     <ClInclude Include="include\bindings\stackview.h">
       <Filter>bindings</Filter>
     </ClInclude>
-    <ClInclude Include="include\bindings\leaderview.h">
-      <Filter>bindings</Filter>
-    </ClInclude>
     <ClInclude Include="include\midgardplan.h">
       <Filter>game</Filter>
     </ClInclude>
@@ -2557,6 +2580,27 @@
     </ClInclude>
     <ClInclude Include="include\isoborder.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\unitmodifierhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\custommodifiers.h">
+      <Filter>features</Filter>
+    </ClInclude>
+    <ClInclude Include="include\custommodifier.h">
+      <Filter>features</Filter>
+    </ClInclude>
+    <ClInclude Include="include\modifgrouphooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\attackdescriptor.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\unittypedescriptor.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\custommodifierfunctions.h">
+      <Filter>features</Filter>
     </ClInclude>
     <ClInclude Include="include\enclayout.h">
       <Filter>game</Filter>

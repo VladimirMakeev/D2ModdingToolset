@@ -20,6 +20,7 @@
 #ifndef DBFACCESS_H
 #define DBFACCESS_H
 
+#include <filesystem>
 #include <string>
 
 namespace game {
@@ -52,6 +53,10 @@ bool dbRead(game::CMidgardID& id,
  * @returns false in case of invalid row number or nonexisting column name.
  */
 bool dbRead(int& result, const DbfFile& database, size_t row, const std::string& columnName);
+
+bool dbValueExists(const std::filesystem::path& dbfFilePath,
+                   const std::string& columnName,
+                   const std::string& value);
 
 } // namespace utils
 

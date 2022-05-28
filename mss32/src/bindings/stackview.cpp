@@ -19,10 +19,10 @@
 
 #include "stackview.h"
 #include "game.h"
-#include "leaderview.h"
 #include "midgardobjectmap.h"
 #include "midstack.h"
 #include "midsubrace.h"
+#include "unitview.h"
 #include <sol/sol.hpp>
 
 namespace bindings {
@@ -45,17 +45,17 @@ void StackView::bind(sol::state& lua)
 
 GroupView StackView::getGroup() const
 {
-    return GroupView{&stack->group, objectMap, &stack->stackId};
+    return GroupView{&stack->group, objectMap, &stack->id};
 }
 
-std::optional<LeaderView> StackView::getLeader() const
+std::optional<UnitView> StackView::getLeader() const
 {
     auto leaderUnit{game::gameFunctions().findUnitById(objectMap, &stack->leaderId)};
     if (!leaderUnit) {
         return std::nullopt;
     }
 
-    return LeaderView{leaderUnit};
+    return UnitView{leaderUnit};
 }
 
 int StackView::getMovement() const

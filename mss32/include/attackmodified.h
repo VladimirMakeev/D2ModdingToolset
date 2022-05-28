@@ -28,7 +28,6 @@ struct CAttackModifiedData;
 
 struct CAttackModified : public IAttack
 {
-    CMidgardID attackId;
     CAttackModifiedData* data;
 };
 
@@ -37,7 +36,7 @@ static_assert(sizeof(CAttackModified) == 12,
 
 struct CAttackModifiedData
 {
-    IAttack* underlying;
+    IAttack* prev;
     int initiative;
     int power;
     int qtyDamage;
@@ -51,6 +50,13 @@ namespace CAttackModifiedApi {
 
 struct Api
 {
+    using Constructor = CAttackModified*(__thiscall*)(CAttackModified* thisptr);
+    Constructor constructor;
+
+    using CopyConstructor = CAttackModified*(__thiscall*)(CAttackModified* thisptr,
+                                                          const CAttackModified* src);
+    CopyConstructor copyConstructor;
+
     using Wrap = void(__thiscall*)(CAttackModified* thisptr, const IAttack* attack);
     Wrap wrap;
 };

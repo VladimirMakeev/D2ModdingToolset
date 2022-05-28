@@ -93,7 +93,7 @@ void __fastcall drainLevelAttackOnHitHooked(game::CBatAttackDrainLevel* thisptr,
         return;
 
     const CMidUnit* targetUnit = fn.findUnitById(objectMap, targetUnitId);
-    const CMidgardID targetUnitImplId{targetUnit->unitImpl->unitId};
+    const CMidgardID targetUnitImplId{targetUnit->unitImpl->id};
 
     int targetLevel = 1;
     auto targetSoldier = fn.castUnitImplToSoldier(targetUnit->unitImpl);

@@ -196,8 +196,10 @@ struct CBattleViewerInterfData
     CBattleViewerUnknown unknown11;
     char unknown5[4];
     CBatViewerUtils::CAnimCounter animCounter;
-    char unknown10[4];
-    CMqRect pUnitGroupSpotArea;
+    char unknown10;
+    bool unknown12;
+    char unknown13[2];
+    CMqRect unitGroupSpotArea;
     bool unknown7;
     bool unknown8;
     bool unknown9;
@@ -405,9 +407,9 @@ struct Api
     using UnknownMethod7 = void(__thiscall*)(CBattleViewerInterf* thisptr);
     UnknownMethod7 unknownMethod7;
 
-    using UnknownMethod8 = bool(__thiscall*)(CBattleViewerInterf* thisptr,
-                                             const CMqPoint* mousePosition);
-    UnknownMethod8 unknownMethod8;
+    using UpdateCursor = bool(__thiscall*)(CBattleViewerInterf* thisptr,
+                                           const CMqPoint* mousePosition);
+    UpdateCursor updateCursor;
 
     using UnknownMethod9 = void(__thiscall*)(CBattleViewerInterf* thisptr);
     UnknownMethod9 unknownMethod9;

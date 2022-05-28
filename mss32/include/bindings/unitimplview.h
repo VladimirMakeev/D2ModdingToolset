@@ -20,6 +20,7 @@
 #ifndef UNITIMPLVIEW_H
 #define UNITIMPLVIEW_H
 
+#include "idview.h"
 #include <optional>
 
 namespace sol {
@@ -42,6 +43,7 @@ public:
 
     static void bind(sol::state& lua);
 
+    IdView getId() const;
     /** Returns unit implementation level. */
     int getLevel() const;
     /** Returns experience points needed for next level. */
@@ -49,6 +51,7 @@ public:
     /** Returns level after which dynUpgrade2 rules are applied. */
     int getDynUpgLevel() const;
     int getXpKilled() const;
+    int getHitPoint() const;
     int getArmor() const;
     int getRegen() const;
     int getRace() const;
@@ -57,6 +60,27 @@ public:
     bool isMale() const;
     bool isWaterOnly() const;
     bool attacksTwice() const;
+    int getUnitCategory() const;
+    /** Returns BASE_UNIT specified in Gunits.dbf. */
+    std::optional<UnitImplView> getBaseUnit() const;
+
+    /* Have to implement leader properties here because sol does not support down-casting
+     * (https://sol2.readthedocs.io/en/latest/api/usertype.html#inheritance).
+     * This means that derived class members cannot be accessed from base reference.
+     * For example, if script function argument has type of UnitImplView, and you pass inherited
+     * LeaderImplView instance, then there is no way to access leader members. */
+    /** Returns leader category id. */
+    int getLeaderCategory() const;
+    /** Returns leader maximum movement points. */
+    int getMovement() const;
+    /** Returns leader scouting range. */
+    int getScout() const;
+    /** Returns current leadership value. */
+    int getLeadership() const;
+    /** Returns true if leader has LLeaderAbility with specified id. */
+    bool hasAbility(int abilityId) const;
+    /** Returns true if leader has movement bonus on LGroundCategory with specified id. */
+    bool hasMoveBonus(int groundId) const;
 
     /** Returns dynamic upgrade 1. */
     std::optional<DynUpgradeView> getDynUpgrade1() const;

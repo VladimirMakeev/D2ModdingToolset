@@ -22,6 +22,7 @@ Scripts folder itself should be placed in the game folder.
 - getSelectedTargetAndTwoChainedRandom.lua - contains attack targeting logic for random chain attack reach
 - getSelectedTargetAndOneRandom.lua - contains attack targeting logic for additional random target
 - getWoundedFemaleGreenskinTargets.lua - contains targeting logic that only allows to reach wounded female greenskins
+- [Scripts/Modifiers](Scripts/Modifiers) contain custom modifier script examples
 
 ### API reference
 
@@ -53,6 +54,11 @@ Terrain = { Human, Dwarf, Heretic, Undead, Neutral, Elf }
 Ground = { Plain, Forest, Water, Mountain }
 ```
 
+##### Unit
+```
+Unit = { Soldier, Noble, Leader, Summon, Illusion, Guardian }
+```
+
 ##### Leader
 ```
 Leader = { Fighter, Explorer, Mage, Rod, Noble }
@@ -81,10 +87,20 @@ Source = { Weapon, Mind, Life, Death, Fire, Water, Earth, Air }
 Reach = { All, Any, Adjacent }
 ```
 
+##### Immune
+```
+Immune = { NotImmune, Once, Always }
+```
+
 ##### Item
 ```
 Item = { Armor, Jewel, Weapon, Banner, PotionBoost, PotionHeal, PotionRevive,
          PotionPermanent, Scroll, Wand, Valuable, Orb, Talisman, TravelItem, Special }
+```
+
+##### DeathAnimation
+```
+DeathAnimation = { Human, Heretic, Dwarf, Undead, Neutral, Dragon, Ghost, Elf }
 ```
 
 ---
@@ -128,6 +144,7 @@ tostring(id)
 
 #### Unit
 Represents game unit that participates in a battle, takes damage and performs attacks.
+Unit can also be a leader. Leaders are main units in stacks.
 
 Methods:
 ```lua
@@ -144,36 +161,33 @@ unit.impl
 -- Returns unit's base implementation.
 -- Base implementation is a record in GUnits.dbf that describes unit basic stats.
 unit.baseImpl
+-- Returns leader maximum movement points (or 0 if unit is not a leader).
+unit.movement
+-- Returns leader scouting range (or 0 if unit is not a leader).
+unit.scout
+-- Returns current leadership value (or 0 if unit is not a leader).
+unit.leadership
 ```
-
----
-
-#### Leader
-Represents leader unit. Leaders are main units in stacks. Leader has all methods of [units](luaApi.md#unit).
-
-Methods:
-##### type
-Returns leader [type](luaApi.md#leader).
+##### id
+Returns unit [id](luaApi.md#id). This is different to id of [Unit implementation](luaApi.md#unit-implementation).
+The value is unique for every unit on scenario map.
 ```lua
-leader.type
+unit.id
+```
+##### type
+Returns leader [type](luaApi.md#leader) (or -1 if unit is not a leader).
+```lua
+unit.type
 ```
 ##### hasAbility
-Returns true if leader has specified [ability](luaApi.md#ability).
+Returns true if leader has specified [ability](luaApi.md#ability) (or false if unit is not a leader).
 ```lua
-leader:hasAbility(Ability.TalismanUse)
+unit:hasAbility(Ability.TalismanUse)
 ```
 ##### hasMoveBonus
-Returns true if leader has movement bonus on specified [ground](luaApi.md#ground).
+Returns true if leader has movement bonus on specified [ground](luaApi.md#ground) (or false if unit is not a leader).
 ```lua
-leader:hasMoveBonus(Ground.Water)
-```
-```lua
--- Returns leader maximum movement points.
-leader.movement
--- Returns leader scouting range.
-leader.scout
--- Returns current leadership value.
-leader.leadership
+unit:hasMoveBonus(Ground.Water)
 ```
 
 ---
@@ -189,6 +203,8 @@ impl.level
 impl.xpNext
 -- Returns experience points granted for killing the unit. XP_KILLED value from GUnits.dbf.
 impl.xpKilled
+-- Returns unit's hit points. HIT_POINT value from GUnits.dbf.
+impl.hp
 -- Returns unit's armor. ARMOR value from GUnits.dbf.
 impl.armor
 -- Returns unit's regen. REGEN value from GUnits.dbf.
@@ -211,10 +227,46 @@ impl.dynUpgLvl
 impl.dynUpg1
 -- Returns dynamic upgrade 2.
 impl.dynUpg2
---- Returns primary attack or nil if no primary attack used.
+-- Returns primary attack or nil if no primary attack used.
 impl.attack1
---- Returns secondary attack or nil if no secondary attack used.
+-- Returns secondary attack or nil if no secondary attack used.
 impl.attack2
+-- Returns leader maximum movement points (or 0 if unit is not a leader).
+impl.movement
+-- Returns leader scouting range (or 0 if unit is not a leader).
+impl.scout
+-- Returns current leadership value (or 0 if unit is not a leader).
+impl.leadership
+```
+##### id
+Returns unit [id](luaApi.md#id). `UNIT_ID` value from `GUnits.dbf`.
+```lua
+impl.id
+```
+##### base
+Returns base [Unit implementation](luaApi.md#unit-implementation). `BASE_UNIT` value from `GUnits.dbf`.
+```lua
+impl.base
+```
+##### type
+Returns unit [type](luaApi.md#unit).
+```lua
+impl.type
+```
+##### leaderType
+Returns leader [type](luaApi.md#leader) (or -1 if unit is not a leader).
+```lua
+impl.leaderType
+```
+##### hasAbility
+Returns true if leader has specified [ability](luaApi.md#ability) (or false if unit is not a leader).
+```lua
+impl:hasAbility(Ability.TalismanUse)
+```
+##### hasMoveBonus
+Returns true if leader has movement bonus on specified [ground](luaApi.md#ground) (or false if unit is not a leader).
+```lua
+impl:hasMoveBonus(Ground.Water)
 ```
 
 ---
@@ -419,7 +471,7 @@ scenario.size
 ---
 
 #### Attack
-Represents attack of [Unit Implementation](luaApi.md#unit-implementation).
+Represents attack of [Unit implementation](luaApi.md#unit-implementation).
 
 Methods:
 ##### type
@@ -458,33 +510,38 @@ attack.crit
 Represents game currency, mana and gold united.
 
 Methods:
+##### new
+Creates new currency from existing object.
+```lua
+Currency.new(existing)
+```
 ##### infernalMana
-Returns amount of infernal mana.
+Returns or sets amount of infernal mana.
 ```lua
 currency.infernalMana
 ```
 ##### lifeMana
-Returns amount of life mana.
+Returns or sets amount of life mana.
 ```lua
 currency.lifeMana
 ```
 ##### deathMana
-Returns amount of death mana.
+Returns or sets amount of death mana.
 ```lua
 currency.deathMana
 ```
 ##### runicMana
-Returns amount of runic mana.
+Returns or sets amount of runic mana.
 ```lua
 currency.runicMana
 ```
 ##### groveMana
-Returns amount of grove mana.
+Returns or sets amount of grove mana.
 ```lua
 currency.groveMana
 ```
 ##### gold
-Returns amount of gold.
+Returns or sets amount of gold.
 ```lua
 currency.gold
 ```
@@ -516,13 +573,13 @@ Returns item [value](luaApi.md#currency).
 base.value
 ```
 ##### unitImpl
-Returns related [Unit Implementation](luaApi.md#unit-implementation).
+Returns related [Unit implementation](luaApi.md#unit-implementation).
 For instance: in case of "Angel Orb", Angel unit implementation is returned.
 ```lua
 base.unitImpl
 ```
 
-#### Item object
+#### Item
 Represents item object in the current scenario.
 
 Methods:
@@ -564,8 +621,9 @@ end
 ```
 
 #### transformSelf.lua
+`unit` has type [Unit](luaApi.md#unit-1).
+`transformImpl` is [Unit implementation](luaApi.md#unit-implementation).
 ```lua
--- 'unit' has type Unit, 'transformImpl' is a Unit implementation
 function getLevel(unit, transformImpl)
     -- Transform into current level or level of resulting unit's template, whichever is bigger.
     return math.max(unit.impl.level, transformImpl.level)
@@ -573,17 +631,20 @@ end
 ```
 
 #### transformOther.lua
+`attacker` and `target` has type [Unit](luaApi.md#unit-1).
+`transformImpl` is [Unit implementation](luaApi.md#unit-implementation).
+`item` is [Item](luaApi.md#item-1).
 ```lua
--- 'attacker' and 'target' has type Unit, 'transformImpl' is a Unit implementation, 'item' is Item object
 function getLevel(attacker, target, transformImpl, item)
     -- transform using target level with a minimum of transform impl level
     return math.max(target.impl.level, transformImpl.level);
 end
 ```
 
+`attacker` and `target` has type [Unit](luaApi.md#unit-1).
+`item` is [Item](luaApi.md#item-1).
 #### drainLevel.lua
 ```lua
--- 'attacker' and 'target' has type Unit, 'item' is Item object
 function getLevel(attacker, target, item)
     -- transform into unit with its level minus 1 and minus attacker over-level
     return math.max(1, target.impl.level - 1 - attacker.impl.level + attacker.baseImpl.level);
@@ -591,8 +652,10 @@ end
 ```
 
 #### summon.lua
+`summoner` has type [Unit](luaApi.md#unit-1).
+`summonImpl` is [Unit implementation](luaApi.md#unit-implementation).
+`item` is [Item](luaApi.md#item-1).
 ```lua
--- 'summoner' has type Unit, 'summonImpl' is a Unit implementation, 'item' is Item object
 function getLevel(summoner, summonImpl, item)
     -- Use base level of summon if cheap item is used to summon it
     if item and item.base.value.gold < 500 then
@@ -689,3 +752,26 @@ end)
 
 return tilesTotal == count
 ```
+
+---
+
+### Custom modifiers
+Modifiers in the game stack on top of each other, making ordered modifiers chain.<br>
+First modifier takes base values from the unit it modifies, next - values modified by the first modifier and so on.<br>
+Custom modifiers allow you to modify every stat of unit and its attacks in a single script file with a number of uniform functions.<br>
+
+Most of the custom modifier functions have the following form:
+```lua
+function getSomething(unit, prev)
+    if someCondition then
+        return modifiedValue
+    end
+
+    return prev
+end
+```
+`unit` has type [Unit](luaApi.md#unit-1). The unit is presented in a state before the current modifier is applied.<br>
+`prev` is a previous value of the stat. It is either a base value or a value modified by the previous modifier.
+
+Check [Scripts/Modifiers](Scripts/Modifiers) for script examples.<br>
+[template.lua](Scripts/Modifiers/template.lua) contains a complete list of available functions.

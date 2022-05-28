@@ -25,7 +25,6 @@
 #include "idview.h"
 #include "itembaseview.h"
 #include "itemview.h"
-#include "leaderview.h"
 #include "locationview.h"
 #include "log.h"
 #include "point.h"
@@ -98,6 +97,15 @@ static void bindApi(sol::state& lua)
         "Forest", GroundId::Forest,
         "Water", GroundId::Water,
         "Mountain", GroundId::Mountain
+    );
+
+    lua.new_enum("Unit",
+        "Soldier", UnitId::Soldier,
+        "Noble", UnitId::Noble,
+        "Leader", UnitId::Leader,
+        "Summon", UnitId::Summon,
+        "Illusion", UnitId::Illusion,
+        "Guardian", UnitId::Guardian
     );
 
     lua.new_enum("Leader",
@@ -182,6 +190,23 @@ static void bindApi(sol::state& lua)
         "TravelItem", ItemId::TravelItem,
         "Special", ItemId::Special
     );
+
+    lua.new_enum("Immune",
+        "NotImmune", ImmuneId::Notimmune,
+        "Once", ImmuneId::Once,
+        "Always", ImmuneId::Always
+    );
+
+    lua.new_enum("DeathAnimation",
+        "Human", DeathAnimationId::Human,
+        "Heretic", DeathAnimationId::Heretic,
+        "Dwarf", DeathAnimationId::Dwarf,
+        "Undead", DeathAnimationId::Undead,
+        "Neutral", DeathAnimationId::Neutral,
+        "Dragon", DeathAnimationId::Dragon,
+        "Ghost", DeathAnimationId::Ghost,
+        "Elf", DeathAnimationId::Elf
+    );
     // clang-format on
 
     bindings::UnitView::bind(lua);
@@ -196,7 +221,6 @@ static void bindApi(sol::state& lua)
     bindings::ScenarioVariableView::bind(lua);
     bindings::TileView::bind(lua);
     bindings::StackView::bind(lua);
-    bindings::LeaderView::bind(lua);
     bindings::GroupView::bind(lua);
     bindings::AttackView::bind(lua);
     bindings::CurrencyView::bind(lua);
@@ -228,7 +252,7 @@ sol::state& getLua()
     return lua;
 }
 
-std::string getSource(const std::filesystem::path& path)
+const std::string& getSource(const std::filesystem::path& path)
 {
     static std::unordered_map<std::filesystem::path, std::string, PathHash> sources;
     static std::mutex sourcesMutex;
@@ -262,7 +286,7 @@ std::optional<sol::environment> executeScriptFile(const std::filesystem::path& p
     if (!alwaysExists && !std::filesystem::exists(path))
         return std::nullopt;
 
-    auto source = getSource(path);
+    const auto& source = getSource(path);
     if (source.empty()) {
         showErrorMessageBox(fmt::format("Failed to read '{:s}' script file.", path.string()));
         return std::nullopt;

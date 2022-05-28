@@ -20,6 +20,8 @@
 #ifndef MIDOBJECT_H
 #define MIDOBJECT_H
 
+#include "midgardid.h"
+
 namespace game {
 
 struct IMidObject;
@@ -34,6 +36,7 @@ template <typename T = IMidObjectVftable>
 struct IMidObjectT
 {
     const T* vftable;
+    CMidgardID id;
 };
 
 struct IMidObject : public IMidObjectT<>

@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,25 +24,21 @@
 namespace game::IAttackApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<IAttackVftable*, 4> vftables = {{
     // Akella
-    Api{
-        (Api::GetId)0x43c4a1,
-    },
+    (IAttackVftable*)0x6eb52c,
     // Russobit
-    Api{
-        (Api::GetId)0x43c4a1,
-    },
+    (IAttackVftable*)0x6eb52c,
     // Gog
-    Api{
-        (Api::GetId)0x43bf6f,
-    }
+    (IAttackVftable*)0x6e94cc,
+    // Scenario Editor
+    (IAttackVftable*)0x5df4b4,
 }};
 // clang-format on
 
-Api& get()
+const IAttackVftable* vftable()
 {
-    return functions[static_cast<int>(hooks::gameVersion())];
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::IAttackApi

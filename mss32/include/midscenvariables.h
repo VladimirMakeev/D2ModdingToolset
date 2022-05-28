@@ -41,7 +41,6 @@ static_assert(sizeof(ScenarioVariableData) == 40,
  */
 struct CMidScenVariables : public IMidScenarioObject
 {
-    CMidgardID variablesId;
     int unknown;
     Map<int, ScenarioVariableData> variables;
 };

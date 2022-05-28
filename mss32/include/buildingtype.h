@@ -55,7 +55,6 @@ static_assert(sizeof(TBuildingTypeData) == 84,
 /** Holds building information read from Gbuild.dbf. */
 struct TBuildingType : public game::IMidObject
 {
-    CMidgardID buildingId;
     TBuildingTypeData* data;
 };
 

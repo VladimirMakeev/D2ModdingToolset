@@ -28,18 +28,22 @@ static std::array<Api, 4> functions = {{
     // Akella
     Api {
         (Api::DynamicCast)0x66d466,
+        (Api::TypeInfoRawName*)0x6ce2cc,
     },
     // Russobit
     Api {
         (Api::DynamicCast)0x66d466,
+        (Api::TypeInfoRawName*)0x6ce2cc,
     },
     // Gog
     Api {
         (Api::DynamicCast)0x66bda6,
+        (Api::TypeInfoRawName*)0x6cc25c,
     },
     // Scenario Editor
     Api {
         (Api::DynamicCast)0x57109c,
+        (Api::TypeInfoRawName*)0x5ca258,
     },
 }};
 
@@ -77,6 +81,11 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)0x7b51e8,
         (TypeDescriptor*)0x793c38,
         (TypeDescriptor*)0x7af710,
+        (TypeDescriptor*)0x78f118,
+        (TypeDescriptor*)0x7acdc8,
+        (TypeDescriptor*)0x7a1178,
+        (TypeDescriptor*)0x7ad348,
+        (TypeDescriptor*)0x7b0138,
     },
     // Russobit
     Rtti{
@@ -111,6 +120,11 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)0x7b51e8,
         (TypeDescriptor*)0x793c38,
         (TypeDescriptor*)0x7af710,
+        (TypeDescriptor*)0x78f118,
+        (TypeDescriptor*)0x7acdc8,
+        (TypeDescriptor*)0x7a1178,
+        (TypeDescriptor*)0x7ad348,
+        (TypeDescriptor*)0x7b0138,
     },
     // Gog
     Rtti{
@@ -145,6 +159,11 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)0x7b3198,
         (TypeDescriptor*)0x791be0,
         (TypeDescriptor*)0x7ad6c8,
+        (TypeDescriptor*)0x78d0c0,
+        (TypeDescriptor*)0x7aad80,
+        (TypeDescriptor*)0x79f118,
+        (TypeDescriptor*)0x7ab300,
+        (TypeDescriptor*)0x7ae0f0,
     },
     // Scenario Editor
     Rtti{
@@ -179,6 +198,11 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)nullptr,
         (TypeDescriptor*)0x649768,
         (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)0x649398,
+        (TypeDescriptor*)0x655848,
+        (TypeDescriptor*)0x655d80,
+        (TypeDescriptor*)0x655e28,
+        (TypeDescriptor*)0x65bd38,
     },
 }};
 // clang-format on

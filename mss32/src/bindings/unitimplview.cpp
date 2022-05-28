@@ -22,14 +22,18 @@
 #include "dynupgradeview.h"
 #include "game.h"
 #include "globaldata.h"
+#include "groundcat.h"
+#include "leaderabilitycat.h"
+#include "leadercategory.h"
 #include "log.h"
 #include "midsubrace.h"
 #include "racecategory.h"
 #include "racetype.h"
 #include "unitutils.h"
+#include "usleader.h"
 #include "ussoldier.h"
+#include "usstackleader.h"
 #include "usunitimpl.h"
-#include "utils.h"
 #include <fmt/format.h>
 #include <sol/sol.hpp>
 
@@ -42,9 +46,11 @@ UnitImplView::UnitImplView(const game::IUsUnit* unitImpl)
 void UnitImplView::bind(sol::state& lua)
 {
     auto impl = lua.new_usertype<UnitImplView>("UnitImpl");
+    impl["id"] = sol::property(&UnitImplView::getId);
     impl["level"] = sol::property(&UnitImplView::getLevel);
     impl["xpNext"] = sol::property(&UnitImplView::getXpNext);
     impl["xpKilled"] = sol::property(&UnitImplView::getXpKilled);
+    impl["hp"] = sol::property(&UnitImplView::getHitPoint);
     impl["armor"] = sol::property(&UnitImplView::getArmor);
     impl["regen"] = sol::property(&UnitImplView::getRegen);
     impl["race"] = sol::property(&UnitImplView::getRace);
@@ -53,11 +59,25 @@ void UnitImplView::bind(sol::state& lua)
     impl["male"] = sol::property(&UnitImplView::isMale);
     impl["waterOnly"] = sol::property(&UnitImplView::isWaterOnly);
     impl["attacksTwice"] = sol::property(&UnitImplView::attacksTwice);
+    impl["type"] = sol::property(&UnitImplView::getUnitCategory);
     impl["dynUpgLvl"] = sol::property(&UnitImplView::getDynUpgLevel);
     impl["dynUpg1"] = sol::property(&UnitImplView::getDynUpgrade1);
     impl["dynUpg2"] = sol::property(&UnitImplView::getDynUpgrade2);
     impl["attack1"] = sol::property(&UnitImplView::getAttack);
     impl["attack2"] = sol::property(&UnitImplView::getAttack2);
+    impl["base"] = sol::property(&UnitImplView::getBaseUnit);
+
+    impl["leaderType"] = sol::property(&UnitImplView::getLeaderCategory);
+    impl["movement"] = sol::property(&UnitImplView::getMovement);
+    impl["scout"] = sol::property(&UnitImplView::getScout);
+    impl["leadership"] = sol::property(&UnitImplView::getLeadership);
+    impl["hasAbility"] = &UnitImplView::hasAbility;
+    impl["hasMoveBonus"] = &UnitImplView::hasMoveBonus;
+}
+
+IdView UnitImplView::getId() const
+{
+    return IdView{impl->id};
 }
 
 int UnitImplView::getLevel() const
@@ -82,6 +102,12 @@ int UnitImplView::getXpKilled() const
 {
     auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
     return soldier ? soldier->vftable->getXpKilled(soldier) : 0;
+}
+
+int UnitImplView::getHitPoint() const
+{
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    return soldier ? soldier->vftable->getHitPoints(soldier) : 0;
 }
 
 int UnitImplView::getArmor() const
@@ -146,6 +172,141 @@ bool UnitImplView::attacksTwice() const
     return soldier ? soldier->vftable->getAttackTwice(soldier) : false;
 }
 
+int UnitImplView::getUnitCategory() const
+{
+    using namespace game;
+
+    auto category{impl->vftable->getCategory(impl)};
+    if (!category) {
+        return emptyCategoryId;
+    }
+
+    return static_cast<int>(category->id);
+}
+
+std::optional<UnitImplView> UnitImplView::getBaseUnit() const
+{
+    using namespace game;
+
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
+    if (!soldier)
+        return std::nullopt;
+
+    auto baseUnitImplId = soldier->vftable->getBaseUnitImplId(soldier);
+    if (*baseUnitImplId == emptyId)
+        return std::nullopt;
+
+    auto globalUnitImpl = hooks::getGlobalUnitImpl(baseUnitImplId);
+    if (!globalUnitImpl)
+        return std::nullopt;
+
+    return {globalUnitImpl};
+}
+
+int UnitImplView::getLeaderCategory() const
+{
+    using namespace game;
+
+    auto leader{gameFunctions().castUnitImplToLeader(impl)};
+    if (!leader) {
+        return emptyCategoryId;
+    }
+
+    auto category{leader->vftable->getCategory(leader)};
+    if (!category) {
+        return emptyCategoryId;
+    }
+
+    return static_cast<int>(category->id);
+}
+
+int UnitImplView::getMovement() const
+{
+    auto leader{game::gameFunctions().castUnitImplToStackLeader(impl)};
+
+    return leader ? leader->vftable->getMovement(leader) : 0;
+}
+
+int UnitImplView::getScout() const
+{
+    auto leader{game::gameFunctions().castUnitImplToStackLeader(impl)};
+
+    return leader ? leader->vftable->getScout(leader) : 0;
+}
+
+int UnitImplView::getLeadership() const
+{
+    auto leader{game::gameFunctions().castUnitImplToStackLeader(impl)};
+
+    return leader ? leader->vftable->getLeadership(leader) : 0;
+}
+
+bool UnitImplView::hasAbility(int abilityId) const
+{
+    using namespace game;
+
+    auto leader{gameFunctions().castUnitImplToStackLeader(impl)};
+    if (!leader) {
+        return false;
+    }
+
+    auto leaderHasAbility{leader->vftable->hasAbility};
+    const auto& abilities{LeaderAbilityCategories::get()};
+
+    switch (static_cast<LeaderAbilityId>(abilityId)) {
+    case LeaderAbilityId::Incorruptible:
+        return leaderHasAbility(leader, abilities.incorruptible);
+    case LeaderAbilityId::WeaponMaster:
+        return leaderHasAbility(leader, abilities.weaponMaster);
+    case LeaderAbilityId::WandScrollUse:
+        return leaderHasAbility(leader, abilities.wandScrollUse);
+    case LeaderAbilityId::WeaponArmorUse:
+        return leaderHasAbility(leader, abilities.weaponArmorUse);
+    case LeaderAbilityId::BannerUse:
+        return leaderHasAbility(leader, abilities.bannerUse);
+    case LeaderAbilityId::JewelryUse:
+        return leaderHasAbility(leader, abilities.jewelryUse);
+    case LeaderAbilityId::Rod:
+        return leaderHasAbility(leader, abilities.rod);
+    case LeaderAbilityId::OrbUse:
+        return leaderHasAbility(leader, abilities.orbUse);
+    case LeaderAbilityId::TalismanUse:
+        return leaderHasAbility(leader, abilities.talismanUse);
+    case LeaderAbilityId::TravelItemUse:
+        return leaderHasAbility(leader, abilities.travelItemUse);
+    case LeaderAbilityId::CriticalHit:
+        return leaderHasAbility(leader, abilities.criticalHit);
+    }
+
+    return false;
+}
+
+bool UnitImplView::hasMoveBonus(int groundId) const
+{
+    using namespace game;
+
+    auto leader{gameFunctions().castUnitImplToStackLeader(impl)};
+    if (!leader) {
+        return false;
+    }
+
+    auto hasBonus{leader->vftable->hasMovementBonus};
+    const auto& grounds{GroundCategories::get()};
+
+    switch (static_cast<GroundId>(groundId)) {
+    case GroundId::Plain:
+        return hasBonus(leader, grounds.plain);
+    case GroundId::Forest:
+        return hasBonus(leader, grounds.forest);
+    case GroundId::Water:
+        return hasBonus(leader, grounds.water);
+    case GroundId::Mountain:
+        return hasBonus(leader, grounds.mountain);
+    }
+
+    return false;
+}
+
 std::optional<DynUpgradeView> UnitImplView::getDynUpgrade1() const
 {
     return getDynUpgrade(1);
@@ -202,7 +363,7 @@ std::optional<DynUpgradeView> UnitImplView::getDynUpgrade(int upgradeNumber) con
     if (!id) {
         hooks::logError("mssProxyError.log",
                         fmt::format("Dyn upgrade {:d} id is null, unit impl {:s}", upgradeNumber,
-                                    hooks::idToString(&impl->unitId)));
+                                    hooks::idToString(&impl->id)));
         return std::nullopt;
     }
 

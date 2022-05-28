@@ -121,7 +121,7 @@ void __fastcall summonAttackOnHitHooked(game::CBatAttackSummon* thisptr,
     const bool canSummonBig = thisptr->vftable->canPerform(thisptr, objectMap, battleMsgData,
                                                            &bigUnitSummonId);
 
-    auto attackId{IAttackApi::get().getId(thisptr->attack)};
+    auto attackId = &thisptr->attack->id;
 
     CMidgardID summonImplId{emptyId};
     fn.getSummonUnitImplId(&summonImplId, objectMap, attackId, &targetGroupId, targetUnitId,
@@ -224,7 +224,7 @@ void __fastcall summonAttackOnHitHooked(game::CBatAttackSummon* thisptr,
 
     BattleAttackUnitInfo info{};
     info.unitId = newUnitId;
-    info.unitImplId = newUnit->unitImpl->unitId;
+    info.unitImplId = newUnit->unitImpl->id;
     BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
 
     battle.addSummonedUnit(battleMsgData, objectMap, &newUnitId, &targetGroupId);

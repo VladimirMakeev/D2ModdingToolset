@@ -29,7 +29,7 @@ struct IMidgardObjectMap;
 
 namespace bindings {
 
-class LeaderView;
+class UnitView;
 
 class StackView
 {
@@ -41,7 +41,7 @@ public:
     /** Returns stack units as a group. */
     GroupView getGroup() const;
     /** Returns stack leader. */
-    std::optional<LeaderView> getLeader() const;
+    std::optional<UnitView> getLeader() const;
     /** Returns stack current movement points. */
     int getMovement() const;
     /** Returns stack subrace category id. */

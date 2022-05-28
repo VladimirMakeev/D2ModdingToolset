@@ -31,12 +31,14 @@ struct TextIds
         std::string sellAllValuables;
         std::string sellAllItems;
         std::string infiniteAttack;
+        std::string infiniteText;
         std::string critHitAttack;
         std::string critHitDamage;
         std::string ratedDamage;
         std::string ratedDamageEqual;
         std::string ratedDamageSeparator;
         std::string splitDamage;
+        std::string modifiedValue;
     } interf;
 
     struct Events

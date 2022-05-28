@@ -113,7 +113,6 @@ static_assert(offsetof(TLordTypeData, buildList) == 32,
 /** Holds information read from GLord.dbf. */
 struct TLordType : public IMidObject
 {
-    CMidgardID lordId;
     TLordTypeData* data;
 };
 

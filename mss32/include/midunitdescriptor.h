@@ -50,6 +50,9 @@ struct Api
 
     using GetAttack = IAttack*(__thiscall*)(const CMidUnitDescriptor* thisptr);
     GetAttack getAttack;
+
+    using GetAltAttack = IAttack*(__thiscall*)(const CMidUnitDescriptor* thisptr);
+    GetAltAttack getAltAttack;
 };
 
 Api& get();
