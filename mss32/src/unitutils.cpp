@@ -139,20 +139,20 @@ bool isUnitSmall(const game::CMidUnit* unit)
     return soldier->vftable->getSizeSmall(soldier);
 }
 
-game::CMidgardID getGlobalUnitImplId(const game::CMidUnit* unit)
+game::CMidgardID getGlobalUnitImplId(const game::CMidgardID* unitImplId)
 {
     using namespace game;
 
     CMidgardID globalImplId{};
     CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
-    unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &globalImplId, &unit->unitImpl->id);
+    unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &globalImplId, unitImplId);
 
     return globalImplId;
 }
 
 game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidUnit* unit)
 {
-    const game::CMidgardID globalImplId{getGlobalUnitImplId(unit)};
+    const game::CMidgardID globalImplId{getGlobalUnitImplId(&unit->unitImpl->id)};
     return getGlobalUnitImpl(&globalImplId);
 }
 
