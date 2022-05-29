@@ -316,6 +316,8 @@ static Hooks getGameHooks()
         // Reference ground rendering implementation
         {CGroundTextureApi::vftable()->draw, groundTextureDrawHooked},
         {CGroundTextureApi::isoEngineVftable()->render, isoEngineGroundRenderHooked},
+        // Support native modifiers
+        {CMidUnitApi::get().upgrade, upgradeHooked},
     };
     // clang-format on
 
@@ -587,6 +589,11 @@ Hooks getHooks()
     // Show effective HP in unit encyclopedia
     hooks.emplace_back(HookInfo{CEncLayoutUnitApi::get().update, encLayoutUnitUpdateHooked,
                                 (void**)&orig.encLayoutUnitUpdate});
+
+    // Support native modifiers
+    hooks.emplace_back(HookInfo{CMidUnitApi::get().getModifiers, getModifiersHooked});
+    hooks.emplace_back(
+        HookInfo{CMidUnitApi::get().addModifiers, addModifiersHooked, (void**)&orig.addModifiers});
 
     return hooks;
 }

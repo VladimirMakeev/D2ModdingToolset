@@ -20,6 +20,8 @@
 #ifndef MIDUNITHOOKS_H
 #define MIDUNITHOOKS_H
 
+#include "idlist.h"
+
 namespace game {
 struct CMidgardID;
 struct IMidgardObjectMap;
@@ -43,6 +45,18 @@ bool __fastcall transformHooked(game::CMidUnit* thisptr,
                                 const game::IMidgardObjectMap* objectMap,
                                 const game::CMidgardID* transformImplId,
                                 bool keepHp);
+
+bool __fastcall upgradeHooked(game::CMidUnit* thisptr,
+                              int /*%edx*/,
+                              const game::CScenarioVisitor* visitor,
+                              const game::CMidgardID* upgradeImplId);
+
+bool __stdcall getModifiersHooked(game::IdList* value, const game::CMidUnit* unit);
+
+bool __stdcall addModifiersHooked(const game::IdList* value,
+                                  game::CMidUnit* unit,
+                                  char* errorBuffer,
+                                  bool checkCanApply);
 
 } // namespace hooks
 

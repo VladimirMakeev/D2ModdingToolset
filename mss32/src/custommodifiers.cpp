@@ -20,10 +20,57 @@
 #include "custommodifiers.h"
 #include "dbffile.h"
 #include "log.h"
+#include "unitutils.h"
 #include "utils.h"
 #include <fmt/format.h>
 
 namespace hooks {
+
+void fillNativeModifiers(CustomModifiers::NativeMap& value)
+{
+    using namespace game;
+
+    const auto& idApi = CMidgardIDApi::get();
+
+    utils::DbfFile dbf;
+    const auto dbfFilePath{globalsFolder() / "GUmodif.dbf"};
+    if (!dbf.open(dbfFilePath))
+        return;
+
+    const auto recordsTotal{dbf.recordsTotal()};
+    for (std::uint32_t i = 0; i < recordsTotal; ++i) {
+        utils::DbfRecord record;
+        if (!dbf.record(record, i)) {
+            logError("mssProxyError.log", fmt::format("Could not read record {:d} from {:s}", i,
+                                                      dbfFilePath.filename().string()));
+            return;
+        }
+
+        if (record.isDeleted())
+            continue;
+
+        std::string tmp;
+        CMidgardID unitId;
+        record.value(tmp, "UNIT_ID");
+        if (*idApi.fromString(&unitId, trimSpaces(tmp).c_str()) == invalidId) {
+            logError("mssProxyError.log",
+                     fmt::format("Could not read unit id '{:s}' from {:s}", tmp.c_str(),
+                                 dbfFilePath.filename().string()));
+            continue;
+        }
+
+        CMidgardID modifierId;
+        record.value(tmp, "MODIF_ID");
+        if (*idApi.fromString(&modifierId, trimSpaces(tmp).c_str()) == invalidId) {
+            logError("mssProxyError.log",
+                     fmt::format("Could not read modifier id '{:s}' from {:s}", tmp.c_str(),
+                                 dbfFilePath.filename().string()));
+            continue;
+        }
+
+        value[unitId.value].insert(modifierId);
+    }
+}
 
 CustomModifiers& getCustomModifiers()
 {
@@ -37,10 +84,24 @@ CustomModifiers& getCustomModifiers()
         value.group.table = nullptr;
         value.group.vftable = LModifGroupApi::vftable();
 
+        fillNativeModifiers(value.native);
+
         initialized = true;
     }
 
     return value;
+}
+
+NativeModifiers getNativeModifiers(const game::CMidgardID& unitImplId)
+{
+    using namespace game;
+
+    const auto& native = getCustomModifiers().native;
+    auto it = native.find(getGlobalUnitImplId(&unitImplId).value);
+    if (it != native.end())
+        return it->second;
+
+    return {};
 }
 
 } // namespace hooks

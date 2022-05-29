@@ -87,6 +87,7 @@ struct OriginalFunctions
     game::ITestConditionApi::Api::Create createTestCondition;
     game::CMidEventApi::Api::CheckValid checkEventValid;
     game::BattleMsgDataApi::Api::BeforeBattleRound beforeBattleRound;
+    game::CMidUnitApi::Api::AddModifiers addModifiers;
 
     game::CMidEvEffectApi::Api::CreateFromCategory createEventEffectFromCategory;
     game::CMidEvEffectApi::Api::GetInfoString eventEffectGetInfoString;
