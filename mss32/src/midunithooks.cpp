@@ -92,7 +92,7 @@ bool __fastcall transformHooked(game::CMidUnit* thisptr,
         thisptr->hpBefore = thisptr->currentHp;
         thisptr->hpBefMax = soldier->vftable->getHitPoints(soldier);
         thisptr->origXp = thisptr->currentXp;
-        unitApi.getModifiers(thisptr, &thisptr->origModifiers);
+        unitApi.getModifiers(&thisptr->origModifiers, thisptr);
     }
 
     auto globalData = *global.getGlobalData();
