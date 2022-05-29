@@ -515,10 +515,6 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
 
 void fillCustomDamageRatios(const game::IAttack* attack, const game::IdList* targets)
 {
-    using namespace game;
-
-    const auto& listApi = IdListApi::get();
-
     auto ratios = computeAttackDamageRatio(getCustomAttackData(attack), targets->length);
     if (ratios.empty())
         return;
