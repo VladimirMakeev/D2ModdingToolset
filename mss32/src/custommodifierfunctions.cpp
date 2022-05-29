@@ -99,9 +99,4 @@ void CustomModifierFunctions::initialize(const std::string& scriptFileName)
     FUNCTION(getAttack2Wards)
 }
 
-void deleteCustomModifierFunctions(CustomModifierFunctions* value)
-{
-    delete value;
-}
-
 } // namespace hooks
