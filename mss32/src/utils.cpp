@@ -60,6 +60,12 @@ const std::filesystem::path& gameFolder()
     return folder;
 }
 
+const std::filesystem::path& globalsFolder()
+{
+    static const std::filesystem::path folder{gameFolder() / "Globals"};
+    return folder;
+}
+
 const std::filesystem::path& scriptsFolder()
 {
     static const std::filesystem::path folder{gameFolder() / "Scripts"};

@@ -227,7 +227,7 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
         return FALSE;
     }
 
-    if (hooks::executableIsGame() && !hooks::loadUnitsForHire(hooks::gameFolder())) {
+    if (hooks::executableIsGame() && !hooks::loadUnitsForHire()) {
         MessageBox(NULL, "Failed to load new units. Check error log for details.",
                    "mss32.dll proxy", MB_OK);
         return FALSE;

@@ -41,6 +41,9 @@ std::string trimSpaces(const std::string& str);
 /** Returns full path to the game folder. */
 const std::filesystem::path& gameFolder();
 
+/** Returns full path to the globals folder. */
+const std::filesystem::path& globalsFolder();
+
 /** Returns full path to the scripts folder. */
 const std::filesystem::path& scriptsFolder();
 

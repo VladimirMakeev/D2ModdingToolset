@@ -44,7 +44,7 @@ using UnitsForHire = std::vector<IdsArray>;
  * New units can be accessed using unitsForHire().
  * @returns false in case of database access error.
  */
-bool loadUnitsForHire(const std::filesystem::path& gameFolder);
+bool loadUnitsForHire();
 
 const UnitsForHire& unitsForHire();
 
