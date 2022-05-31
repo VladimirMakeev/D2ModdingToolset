@@ -50,25 +50,36 @@ void fillNativeModifiers(CustomModifiers::NativeMap& value)
             continue;
 
         std::string tmp;
-        CMidgardID unitId;
         record.value(tmp, "UNIT_ID");
-        if (*idApi.fromString(&unitId, trimSpaces(tmp).c_str()) == invalidId) {
+        tmp = trimSpaces(tmp);
+
+        CMidgardID unitId;
+        if (*idApi.fromString(&unitId, tmp.c_str()) == invalidId) {
             logError("mssProxyError.log",
                      fmt::format("Could not read unit id '{:s}' from {:s}", tmp.c_str(),
                                  dbfFilePath.filename().string()));
             continue;
         }
 
-        CMidgardID modifierId;
-        record.value(tmp, "MODIF_ID");
-        if (*idApi.fromString(&modifierId, trimSpaces(tmp).c_str()) == invalidId) {
-            logError("mssProxyError.log",
-                     fmt::format("Could not read modifier id '{:s}' from {:s}", tmp.c_str(),
-                                 dbfFilePath.filename().string()));
-            continue;
-        }
+        auto& modifiers = value[unitId.value];
+        for (int j = 1;; ++j) {
+            if (!record.value(tmp, fmt::format("MODIF_{:d}", j)))
+                break;
 
-        value[unitId.value].push_back(modifierId);
+            tmp = trimSpaces(tmp);
+            if (!tmp.size())
+                break;
+
+            CMidgardID modifierId;
+            if (*idApi.fromString(&modifierId, tmp.c_str()) == invalidId) {
+                logError("mssProxyError.log",
+                         fmt::format("Could not read modifier id '{:s}' from {:s}", tmp.c_str(),
+                                     dbfFilePath.filename().string()));
+                break;
+            }
+
+            modifiers.push_back(modifierId);
+        }
     }
 }
 
