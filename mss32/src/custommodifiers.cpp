@@ -68,7 +68,7 @@ void fillNativeModifiers(CustomModifiers::NativeMap& value)
             continue;
         }
 
-        value[unitId.value].insert(modifierId);
+        value[unitId.value].push_back(modifierId);
     }
 }
 
@@ -96,12 +96,18 @@ NativeModifiers getNativeModifiers(const game::CMidgardID& unitImplId)
 {
     using namespace game;
 
-    const auto& native = getCustomModifiers().native;
-    auto it = native.find(getGlobalUnitImplId(&unitImplId).value);
-    if (it != native.end())
-        return it->second;
+    NativeModifiers result;
 
-    return {};
+    const auto& native = getCustomModifiers().native;
+    auto it = native.find(emptyId.value);
+    if (it != native.end())
+        result = it->second;
+
+    it = native.find(getGlobalUnitImplId(&unitImplId).value);
+    if (it != native.end())
+        result.insert(result.end(), it->second.begin(), it->second.end());
+
+    return result;
 }
 
 } // namespace hooks

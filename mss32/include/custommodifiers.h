@@ -30,7 +30,7 @@ namespace hooks {
 static const char customModifGroupName[] = "L_CUSTOM";
 static const char scriptColumnName[] = "SCRIPT";
 
-using NativeModifiers = std::set<game::CMidgardID>;
+using NativeModifiers = std::list<game::CMidgardID>;
 
 struct CustomModifiers
 {

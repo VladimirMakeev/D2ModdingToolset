@@ -188,7 +188,7 @@ bool __stdcall getModifiersHooked(game::IdList* value, const game::CMidUnit* uni
             break;
 
         auto modifierId = modifier->data->modifierId;
-        auto it = nativeModifiers.find(modifierId);
+        auto it = std::find(nativeModifiers.begin(), nativeModifiers.end(), modifierId);
         if (it != nativeModifiers.end()) {
             // Count skipped in case if native mod is duplicated by normal one
             nativeModifiers.erase(it);
