@@ -35,7 +35,7 @@ struct IMqImage2;
 struct CEncLayoutUnitData
 {
     CMidgardID unitId;
-    IMidgardObjectMap* objectMap;
+    const IMidgardObjectMap* objectMap;
     int unknown;
     int unknown2;
     int unknown3;
@@ -80,7 +80,7 @@ struct Api
     Constructor constructor;
 
     using Constructor2 = CEncLayoutUnit*(__thiscall*)(CEncLayoutUnit* thisptr,
-                                                      const IEncUnitDescriptor* descriptor,
+                                                      IEncUnitDescriptor* descriptor,
                                                       CInterface* parent,
                                                       const CMqRect* rect,
                                                       const CEncParamBase* encParam);
