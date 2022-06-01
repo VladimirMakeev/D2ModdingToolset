@@ -586,6 +586,16 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{TUnitModifierApi::vftable()->destructor, unitModifierDtorHooked});
     hooks.emplace_back(HookInfo{CMidUnitApi::get().addModifier, addModifierHooked});
 
+    // Support custom modifiers display for unit encyclopedia
+    hooks.emplace_back(HookInfo{CEncLayoutUnitApi::get().constructor, encLayoutUnitCtorHooked});
+    hooks.emplace_back(HookInfo{CEncLayoutUnitApi::get().constructor2, encLayoutUnitCtor2Hooked});
+    hooks.emplace_back(
+        HookInfo{CEncLayoutUnitApi::get().dataConstructor, encLayoutUnitDataCtorHooked});
+    hooks.emplace_back(
+        HookInfo{CEncLayoutUnitApi::get().dataDestructor, encLayoutUnitDataDtorHooked});
+    hooks.emplace_back(HookInfo{CEncLayoutUnitApi::get().initialize, encLayoutUnitInitializeHooked,
+                                (void**)&orig.encLayoutUnitInitialize});
+
     // Show effective HP in unit encyclopedia
     hooks.emplace_back(HookInfo{CEncLayoutUnitApi::get().update, encLayoutUnitUpdateHooked,
                                 (void**)&orig.encLayoutUnitUpdate});

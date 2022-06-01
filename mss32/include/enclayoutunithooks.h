@@ -21,13 +21,44 @@
 #define ENCLAYOUTUNITHOOKS_H
 
 namespace game {
+struct CMqRect;
+struct CMidgardID;
+struct IMidgardObjectMap;
+struct CInterface;
+struct IEncUnitDescriptor;
+struct CEncParamBase;
 struct CEncLayoutUnit;
-}
+struct CEncLayoutUnitData;
+} // namespace game
 
 namespace hooks {
 
+game::CEncLayoutUnit* __fastcall encLayoutUnitCtorHooked(game::CEncLayoutUnit* thisptr,
+                                                         int /*%edx*/,
+                                                         const game::IMidgardObjectMap* objectMap,
+                                                         game::CInterface* parent,
+                                                         const game::CMqRect* rect,
+                                                         const game::CMidgardID* unitId,
+                                                         const game::CEncParamBase* encParam,
+                                                         const game::CMidgardID* playerId);
+
+game::CEncLayoutUnit* __fastcall encLayoutUnitCtor2Hooked(game::CEncLayoutUnit* thisptr,
+                                                          int /*%edx*/,
+                                                          game::IEncUnitDescriptor* descriptor,
+                                                          game::CInterface* parent,
+                                                          const game::CMqRect* rect,
+                                                          const game::CEncParamBase* encParam);
+
+game::CEncLayoutUnitData* __fastcall encLayoutUnitDataCtorHooked(game::CEncLayoutUnitData* thisptr,
+                                                                 int /*%edx*/);
+
+void __fastcall encLayoutUnitDataDtorHooked(game::CEncLayoutUnitData* thisptr, int /*%edx*/);
+
+void __fastcall encLayoutUnitInitializeHooked(game::CEncLayoutUnit* thisptr,
+                                              const game::CEncParamBase* encParam);
+
 void __fastcall encLayoutUnitUpdateHooked(game::CEncLayoutUnit* thisptr, int /*%edx*/);
 
-}
+} // namespace hooks
 
 #endif // ENCLAYOUTUNITHOOKS_H

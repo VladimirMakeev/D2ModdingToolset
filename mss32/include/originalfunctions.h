@@ -110,6 +110,7 @@ struct OriginalFunctions
     game::GameImagesApi::Api::GetCityPreviewLargeImageNames getCityPreviewLargeImageNames;
     game::GameImagesApi::Api::GetCityIconImageNames getCityIconImageNames;
 
+    game::CEncLayoutUnitApi::Api::Initialize encLayoutUnitInitialize;
     game::CEncLayoutUnitApi::Api::Update encLayoutUnitUpdate;
 };
 
