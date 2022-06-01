@@ -30,6 +30,7 @@ namespace game {
 struct IMidgardObjectMap;
 struct IEncUnitDescriptor;
 struct CEncParamBase;
+struct IMqImage2;
 
 struct CEncLayoutUnitData
 {
@@ -41,8 +42,8 @@ struct CEncLayoutUnitData
     int unknown4;
     int unknown5;
     int unknown6;
-    Vector<SmartPointer> array1;
-    Vector<String> stringArray;
+    Vector<SmartPtr<IMqImage2>> leaderAbilityIcons;
+    Vector<String> leaderAbilityTexts;
     IEncUnitDescriptor* unitDescriptor;
 };
 
