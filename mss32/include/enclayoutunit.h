@@ -58,6 +58,14 @@ struct CEncLayoutUnit : public IEncLayout
 static_assert(sizeof(CEncLayoutUnit) == 16,
               "Size of CEncLayoutUnit structure must be exactly 16 bytes");
 
+struct CEncLayoutUnitVftable : CInterfaceVftable
+{
+    void* method35;
+};
+
+static_assert(sizeof(CEncLayoutUnitVftable) == 35 * sizeof(void*),
+              "CEncLayoutUnit vftable must have exactly 35 methods");
+
 namespace CEncLayoutUnitApi {
 
 struct Api
@@ -92,6 +100,8 @@ struct Api
 };
 
 Api& get();
+
+CEncLayoutUnitVftable* vftable();
 
 } // namespace CEncLayoutUnitApi
 
