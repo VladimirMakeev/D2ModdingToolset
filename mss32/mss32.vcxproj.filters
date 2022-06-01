@@ -1037,6 +1037,9 @@
     <ClCompile Include="src\enclayout.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\imageptrvector.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2627,6 +2630,9 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqpresentationmanager.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imageptrvector.h">
       <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>

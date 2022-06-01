@@ -276,6 +276,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\image2text.cpp" />
     <ClCompile Include="src\imagelayerlist.cpp" />
     <ClCompile Include="src\imagepointlist.cpp" />
+    <ClCompile Include="src\imageptrvector.cpp" />
     <ClCompile Include="src\immunecat.cpp" />
     <ClCompile Include="src\interfmanager.cpp" />
     <ClCompile Include="src\interftexthooks.cpp" />
@@ -587,6 +588,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\enclayout.h" />
     <ClInclude Include="include\enclayoutunithooks.h" />
     <ClInclude Include="include\enclayoutunit.h" />
+    <ClInclude Include="include\imageptrvector.h" />
     <ClInclude Include="include\isoborder.h" />
     <ClInclude Include="include\isoenginegroundhooks.h" />
     <ClInclude Include="include\isoground2.h" />

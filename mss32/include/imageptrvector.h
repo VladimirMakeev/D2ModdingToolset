@@ -1,0 +1,55 @@
+/*
+ * This file is part of the modding toolset for Disciples 2.
+ * (https://github.com/VladimirMakeev/D2ModdingToolset)
+ * Copyright (C) 2022 Stanislav Egorov.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef IMAGEPTRVECTOR_H
+#define IMAGEPTRVECTOR_H
+
+#include "d2vector.h"
+#include "smartptr.h"
+
+namespace game {
+
+struct IMqImage2;
+
+using ImagePtr = SmartPtr<IMqImage2>;
+using ImagePtrVector = Vector<ImagePtr>;
+
+static_assert(sizeof(ImagePtrVector) == 16, "ImagePtrVector structure must be exactly 16 bytes");
+
+namespace ImagePtrVectorApi {
+
+struct Api
+{
+    using Destructor = void(__thiscall*)(ImagePtrVector* thisptr);
+    Destructor destructor;
+
+    using Reserve = void(__thiscall*)(ImagePtrVector* thisptr, unsigned int count);
+    Reserve reserve;
+
+    using PushBack = void*(__thiscall*)(ImagePtrVector* thisptr, const ImagePtr* value);
+    PushBack pushBack;
+};
+
+Api& get();
+
+} // namespace ImagePtrVectorApi
+
+} // namespace game
+
+#endif // IMAGEPTRVECTOR_H
