@@ -44,6 +44,9 @@
     <Filter Include="modules\slikenet\lobby2\rooms">
       <UniqueIdentifier>{30703c2c-8175-41dd-9242-e81842359a9d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\custom event conditions">
+      <UniqueIdentifier>{a12ec29a-1852-47f8-bff4-1fa0ceca32e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\fmt\src\format.cc">
@@ -695,25 +698,13 @@
     <ClCompile Include="src\testconditionhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
-    <ClCompile Include="src\midcondownresource.cpp">
-      <Filter>game</Filter>
-    </ClCompile>
     <ClCompile Include="src\mideventhooks.cpp">
       <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="src\midcondgamemode.cpp">
-      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\effectinterf.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\eventeffectcat.cpp">
-      <Filter>game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\midcondplayertype.cpp">
-      <Filter>game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\midcondvarcmp.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\mideveffect.cpp">
@@ -733,9 +724,6 @@
     </ClCompile>
     <ClCompile Include="src\effectresulthooks.cpp">
       <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="src\midcondscript.cpp">
-      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\bindings\scenarioview.cpp">
       <Filter>bindings</Filter>
@@ -1039,6 +1027,21 @@
     </ClCompile>
     <ClCompile Include="src\imageptrvector.cpp">
       <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midcondgamemode.cpp">
+      <Filter>features\custom event conditions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midcondownresource.cpp">
+      <Filter>features\custom event conditions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midcondplayertype.cpp">
+      <Filter>features\custom event conditions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midcondscript.cpp">
+      <Filter>features\custom event conditions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midcondvarcmp.cpp">
+      <Filter>features\custom event conditions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2098,25 +2101,13 @@
     <ClInclude Include="include\testconditionhooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
-    <ClInclude Include="include\midcondownresource.h">
-      <Filter>game</Filter>
-    </ClInclude>
     <ClInclude Include="include\mideventhooks.h">
       <Filter>hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="include\midcondgamemode.h">
-      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\effectinterf.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\effectinterfhandler.h">
-      <Filter>game</Filter>
-    </ClInclude>
-    <ClInclude Include="include\midcondplayertype.h">
-      <Filter>game</Filter>
-    </ClInclude>
-    <ClInclude Include="include\midcondvarcmp.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\effectresult.h">
@@ -2147,9 +2138,6 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\midlandmark.h">
-      <Filter>game</Filter>
-    </ClInclude>
-    <ClInclude Include="include\midcondscript.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\scenarioview.h">
@@ -2634,6 +2622,21 @@
     </ClInclude>
     <ClInclude Include="include\imageptrvector.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midcondvarcmp.h">
+      <Filter>features\custom event conditions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midcondgamemode.h">
+      <Filter>features\custom event conditions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midcondownresource.h">
+      <Filter>features\custom event conditions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midcondplayertype.h">
+      <Filter>features\custom event conditions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midcondscript.h">
+      <Filter>features\custom event conditions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
