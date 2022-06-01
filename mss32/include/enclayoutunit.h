@@ -29,6 +29,7 @@ namespace game {
 
 struct IMidgardObjectMap;
 struct IEncUnitDescriptor;
+struct CEncParamBase;
 
 struct CEncLayoutUnitData
 {
@@ -60,6 +61,31 @@ namespace CEncLayoutUnitApi {
 
 struct Api
 {
+    using Constructor = CEncLayoutUnit*(__thiscall*)(CEncLayoutUnit* thisptr,
+                                                     const IMidgardObjectMap* objectMap,
+                                                     CInterface* parent,
+                                                     const CMqRect* rect,
+                                                     const CMidgardID* unitId,
+                                                     const CEncParamBase* encParam,
+                                                     const CMidgardID* playerId);
+    Constructor constructor;
+
+    using Constructor2 = CEncLayoutUnit*(__thiscall*)(CEncLayoutUnit* thisptr,
+                                                      const IEncUnitDescriptor* descriptor,
+                                                      CInterface* parent,
+                                                      const CMqRect* rect,
+                                                      const CEncParamBase* encParam);
+    Constructor2 constructor2;
+
+    using DataConstructor = CEncLayoutUnitData*(__thiscall*)(CEncLayoutUnitData* thisptr);
+    DataConstructor dataConstructor;
+
+    using DataDestructor = void(__thiscall*)(CEncLayoutUnitData* thisptr);
+    DataDestructor dataDestructor;
+
+    using Initialize = void(__thiscall*)(CEncLayoutUnit* thisptr, const CEncParamBase* encParam);
+    Initialize initialize;
+
     using Update = void(__thiscall*)(CEncLayoutUnit* thisptr);
     Update update;
 };

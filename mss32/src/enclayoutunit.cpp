@@ -27,18 +27,38 @@ namespace game::CEncLayoutUnitApi {
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
+        (Api::Constructor)0x574e9c,
+        (Api::Constructor2)0x574fd5,
+        (Api::DataConstructor)0x574f48,
+        (Api::DataDestructor)0x577d72,
+        (Api::Initialize)0x5750b1,
         (Api::Update)0x5757eb,
     },
     // Russobit
     Api{
+        (Api::Constructor)0x574e9c,
+        (Api::Constructor2)0x574fd5,
+        (Api::DataConstructor)0x574f48,
+        (Api::DataDestructor)0x577d72,
+        (Api::Initialize)0x5750b1,
         (Api::Update)0x5757eb,
     },
     // Gog
     Api{
+        (Api::Constructor)0x5744f1,
+        (Api::Constructor2)0x57462a,
+        (Api::DataConstructor)0x57459d,
+        (Api::DataDestructor)0x57742d,
+        (Api::Initialize)0x574706,
         (Api::Update)0x574e40,
     },
     // Scenario Editor
     Api{
+        (Api::Constructor)0x4c5915,
+        (Api::Constructor2)0x4c5a71,
+        (Api::DataConstructor)0x4c59c1,
+        (Api::DataDestructor)0x4c8d48,
+        (Api::Initialize)0x4c5b4d,
         (Api::Update)0x4c6287,
     },
 }};
