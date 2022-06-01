@@ -251,6 +251,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\effectinterfhooks.cpp" />
     <ClCompile Include="src\effectresult.cpp" />
     <ClCompile Include="src\effectresulthooks.cpp" />
+    <ClCompile Include="src\enclayout.cpp" />
     <ClCompile Include="src\enclayoutunithooks.cpp" />
     <ClCompile Include="src\enclayoutspell.cpp" />
     <ClCompile Include="src\enclayoutunit.cpp" />

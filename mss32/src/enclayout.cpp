@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,37 +17,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ENCLAYOUT_H
-#define ENCLAYOUT_H
+#include "enclayout.h"
+#include "version.h"
+#include <array>
 
-#include "interface.h"
+namespace game::IEncLayoutApi {
 
-namespace game {
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)0x5746a7,
+        (Api::Destructor)0x5746e3,
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)0x5746a7,
+        (Api::Destructor)0x5746e3,
+    },
+    // Gog
+    Api{
+        (Api::Constructor)0x573cfc,
+        (Api::Destructor)0x573d38,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x4c5127,
+        (Api::Destructor)0x4c5163,
+    },
+}};
+// clang-format on
 
-struct CDialogInterf;
-
-struct IEncLayout : public CInterface
+Api& get()
 {
-    CDialogInterf* dialog;
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-namespace IEncLayoutApi {
-
-struct Api
-{
-    using Constructor = IEncLayout*(__thiscall*)(IEncLayout* thisptr,
-                                                 CInterface* parent,
-                                                 const CMqRect* rect);
-    Constructor constructor;
-
-    using Destructor = void(__thiscall*)(IEncLayout* thisptr);
-    Destructor destructor;
-};
-
-Api& get();
-
-} // namespace IEncLayoutApi
-
-} // namespace game
-
-#endif // ENCLAYOUT_H
+} // namespace game::IEncLayoutApi

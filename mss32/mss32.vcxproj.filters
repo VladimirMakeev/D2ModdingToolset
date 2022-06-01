@@ -1034,6 +1034,9 @@
     <ClCompile Include="src\campaignstream.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\enclayout.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
