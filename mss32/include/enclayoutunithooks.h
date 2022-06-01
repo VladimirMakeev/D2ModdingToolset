@@ -55,6 +55,7 @@ game::CEncLayoutUnitData* __fastcall encLayoutUnitDataCtorHooked(game::CEncLayou
 void __fastcall encLayoutUnitDataDtorHooked(game::CEncLayoutUnitData* thisptr, int /*%edx*/);
 
 void __fastcall encLayoutUnitInitializeHooked(game::CEncLayoutUnit* thisptr,
+                                              int /*%edx*/,
                                               const game::CEncParamBase* encParam);
 
 void __fastcall encLayoutUnitUpdateHooked(game::CEncLayoutUnit* thisptr, int /*%edx*/);

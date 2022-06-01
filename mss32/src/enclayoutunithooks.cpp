@@ -174,6 +174,7 @@ void __fastcall encLayoutUnitDataDtorHooked(game::CEncLayoutUnitData* thisptr, i
 }
 
 void __fastcall encLayoutUnitInitializeHooked(game::CEncLayoutUnit* thisptr,
+                                              int /*%edx*/,
                                               const game::CEncParamBase* encParam)
 {
     using namespace game;
