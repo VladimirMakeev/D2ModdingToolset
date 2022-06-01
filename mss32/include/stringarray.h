@@ -34,6 +34,12 @@ namespace StringArrayApi {
 
 struct Api
 {
+    using Destructor = void(__thiscall*)(StringArray* thisptr);
+    Destructor destructor;
+
+    using Reserve = void(__thiscall*)(StringArray* thisptr, unsigned int count);
+    Reserve reserve;
+
     /**
      * Adds new string element to the end of the array.
      * @param[in] thisptr pointer to array to add to.
