@@ -56,7 +56,7 @@ static std::array<Api, 4> functions = {{
     Api{
         (Api::AssignFunctor)0,
         (Api::AssignDisplayTextFunctor)0x4d1524,
-        (Api::AssignDisplaySurfaceFunctor)0,
+        (Api::AssignDisplaySurfaceFunctor)0x4d1652,
         (Api::SetElementsTotal)0x48d410,
         (Api::SelectedIndex)0x48d127,
         (Api::SetSelectedIndex)0x48d3ef,
