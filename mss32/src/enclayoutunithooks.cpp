@@ -19,6 +19,7 @@
 
 #include "enclayoutunithooks.h"
 #include "custommodifier.h"
+#include "custommodifiers.h"
 #include "dialoginterf.h"
 #include "enclayoutunit.h"
 #include "encunitdescriptor.h"
@@ -27,11 +28,13 @@
 #include "listbox.h"
 #include "mempool.h"
 #include "midunitdescriptor.h"
+#include "modifierutils.h"
 #include "originalfunctions.h"
 #include "settings.h"
 #include "stringarray.h"
 #include "textboxinterf.h"
 #include "textids.h"
+#include "unitmodifier.h"
 #include "unittypedescriptor.h"
 #include "unitutils.h"
 #include "utils.h"
@@ -104,7 +107,8 @@ void addModifierInfo(game::CEncLayoutUnit* layout, hooks::CCustomModifier* modif
     auto data = (CEncLayoutUnitDataPatched*)layout->data;
 
     IMqImage2* icon = nullptr;
-    GameImagesApi::get().getIconImageByName(&icon, "ABIL0005"); // TODO: get icon name from modifier
+    auto modifierId = modifier->umModifier.data->modifierId;
+    GameImagesApi::get().getIconImageByName(&icon, idToString(&modifierId).c_str());
 
     ImagePtr iconPtr{};
     smartPtrApi.createOrFree((SmartPointer*)&iconPtr, icon);
@@ -121,8 +125,7 @@ void addModifierInfo(game::CEncLayoutUnit* layout, hooks::CCustomModifier* modif
         if (format.empty())
             format = "\\vC;%DESC%";
     }
-    replace(format, "%DESC%",
-            "Don't wanna close my eyes, don't wanna fall asleep."); // TODO: get desc from modifier
+    replace(format, "%DESC%", getGlobalText(modifier->descTxt));
 
     String text{};
     stringApi.initFromString(&text, format.c_str());
@@ -134,11 +137,50 @@ void addModifiersInfo(game::CEncLayoutUnit* layout)
 {
     using namespace game;
 
-    // TODO: enum unit modifiers
-    addModifierInfo(layout, nullptr, false);
+    int count = 0;
+    if (CMidgardIDApi::get().getType(&layout->data->unitId) == IdType::Unit) {
+        const auto unit = gameFunctions().findUnitById(layout->data->objectMap,
+                                                       &layout->data->unitId);
+        if (!unit)
+            return;
+
+        auto nativeModifiers = getNativeModifiers(unit->unitImpl->id);
+
+        for (auto curr = getFirstUmModifier(unit->unitImpl); curr; curr = curr->data->next) {
+            auto customModifier = castModifierToCustomModifier(curr);
+            if (!customModifier) {
+                continue;
+            }
+
+            auto it = std::find(nativeModifiers.begin(), nativeModifiers.end(),
+                                curr->data->modifierId);
+
+            addModifierInfo(layout, customModifier, it != nativeModifiers.end());
+            ++count;
+        }
+
+    } else {
+        for (const auto& modifierId : getNativeModifiers(layout->data->unitId)) {
+            const auto unitModifier = getUnitModifier(&modifierId);
+            if (!unitModifier) {
+                continue;
+            }
+
+            auto customModifier = castModifierToCustomModifier(unitModifier->data->modifier);
+            if (!customModifier) {
+                continue;
+            }
+
+            addModifierInfo(layout, customModifier, true);
+            ++count;
+        }
+    }
+
+    if (count == 0)
+        count = 1; // To display "None" text
 
     auto listBox = CDialogInterfApi::get().findListBox(layout->dialog, modifiersListBoxName);
-    CListBoxInterfApi::get().setElementsTotal(listBox, 1); // TODO: count of modifiers
+    CListBoxInterfApi::get().setElementsTotal(listBox, count);
 }
 
 void __fastcall modifiersListBoxDisplayCallback(const game::CEncLayoutUnit* thisptr,
@@ -157,15 +199,25 @@ void __fastcall modifiersListBoxDisplayCallback(const game::CEncLayoutUnit* this
 
     auto data = (CEncLayoutUnitDataPatched*)thisptr->data;
 
-    auto length = data->modifierTexts.end - data->modifierTexts.bgn;
-    if ((int)index >= length)
-        return;
-
     CMqRect textClientArea = *lineArea;
     textClientArea.p2.x -= textClientArea.p1.x;
     textClientArea.p2.y -= textClientArea.p1.y;
     textClientArea.p1.x = 31; // Width of modifier icon
     textClientArea.p1.y = 0;
+
+    auto length = data->modifierTexts.end - data->modifierTexts.bgn;
+    if (length == 0 && index == 0) {
+        auto text = getInterfaceText(textIds().interf.modifiersEmpty.c_str());
+        if (text.empty())
+            text = getInterfaceText("X005TA0676");
+
+        textClientArea.p1.x = 0;
+        imagePointListApi.addText(contents, lineArea, text.c_str(), &textClientArea, false, 0);
+        return;
+    }
+
+    if ((int)index >= length)
+        return;
 
     std::string text = data->modifierTexts.bgn[index].string;
     auto& icon = data->modifierIcons.bgn[index];
