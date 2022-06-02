@@ -96,8 +96,14 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
         data->scriptFileName = script.string;
         stringApi.free(&script);
 
-        data->modifier = createCustomModifier(thisptr, data->scriptFileName.c_str(), &thisptr->id,
-                                              globalData);
+        CMidgardID descTxt;
+        dbApi.readId(&descTxt, dbTable, "DESC_TXT");
+
+        bool display;
+        dbApi.readBool(&display, dbTable, "DISPLAY");
+
+        data->modifier = createCustomModifier(thisptr, data->scriptFileName.c_str(), &descTxt,
+                                              display, globalData);
     } else {
         dbApi.readModifier(&data->modifier, &thisptr->id, &data->group, globalsFolderPath,
                            codeBaseEnvProxy, globalData);

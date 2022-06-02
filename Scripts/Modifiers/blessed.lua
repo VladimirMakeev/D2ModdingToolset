@@ -1,7 +1,3 @@
-function getModifierDescTxt()
-	return Id.new("x000tg6052")
-end
-
 function getAttackHeal(unit, prev)
 	return prev + 20
 end

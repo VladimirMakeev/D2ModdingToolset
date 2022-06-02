@@ -50,7 +50,6 @@ struct CustomModifierFunctions
     using IsLowerBoost = std::function<bool()>;
 
     std::optional<sol::environment> environment;
-    std::optional<GetDesc> getModifierDescTxt;
     std::optional<CanApplyToUnit> canApplyToUnit;
     std::optional<CanApplyToUnitType> canApplyToUnitType;
     std::optional<IsLowerBoost> canApplyAsLowerSpell;

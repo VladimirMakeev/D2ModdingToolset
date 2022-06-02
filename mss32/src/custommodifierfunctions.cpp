@@ -31,7 +31,6 @@ void CustomModifierFunctions::initialize(const std::string& scriptFileName)
 #define FUNCTION(_NAME_) getScriptFunction(env, #_NAME_, &##_NAME_);
 
     const auto& env = *environment;
-    FUNCTION(getModifierDescTxt)
     FUNCTION(canApplyToUnit)
     FUNCTION(canApplyToUnitType)
     FUNCTION(canApplyAsLowerSpell)
