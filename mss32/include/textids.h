@@ -40,6 +40,7 @@ struct TextIds
         std::string splitDamage;
         std::string modifiedValue;
         std::string modifiersCaption;
+        std::string modifiersEmpty;
         std::string modifierDescription;
         std::string nativeModifierDescription;
     } interf;

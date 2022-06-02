@@ -129,6 +129,7 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.splitDamage = interf.value().get_or("splitDamage", std::string());
     value.modifiedValue = interf.value().get_or("modifiedValue", std::string());
     value.modifiersCaption = interf.value().get_or("modifiersCaption", std::string());
+    value.modifiersEmpty = interf.value().get_or("modifiersEmpty", std::string());
     value.modifierDescription = interf.value().get_or("modifierDescription", std::string());
     value.nativeModifierDescription = interf.value().get_or("nativeModifierDescription",
                                                             std::string());
