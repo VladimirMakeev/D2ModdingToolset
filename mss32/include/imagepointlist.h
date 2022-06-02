@@ -20,9 +20,10 @@
 #ifndef IMAGEPOINTLIST_H
 #define IMAGEPOINTLIST_H
 
+#include "d2color.h"
 #include "d2list.h"
 #include "d2pair.h"
-#include "mqpoint.h"
+#include "mqrect.h"
 #include "smartptr.h"
 
 namespace game {
@@ -39,6 +40,24 @@ struct Api
 {
     using Add = void(__thiscall*)(ImagePointList* thisptr, ImagePtrPointPair* pair);
     Add add;
+
+    using AddText = bool(__cdecl*)(ImagePointList* list,
+                                   const CMqRect* area,
+                                   const char* text,
+                                   const CMqRect* textArea,
+                                   bool outline,
+                                   Color color);
+    AddText addText;
+
+    using AddImageWithText = bool(__stdcall*)(ImagePointList* list,
+                                              const CMqRect* area,
+                                              const ImagePtr* image,
+                                              const CMqPoint* imagePos,
+                                              const char* text,
+                                              const CMqRect* textArea,
+                                              bool outline,
+                                              Color color);
+    AddImageWithText addImageWithText;
 };
 
 Api& get();
