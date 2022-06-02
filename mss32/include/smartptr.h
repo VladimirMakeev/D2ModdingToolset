@@ -22,6 +22,7 @@
 
 namespace game {
 
+/** Assumption: implementation of Boost refcount_ptr used in game. */
 template <typename T>
 struct SmartPtr
 {
