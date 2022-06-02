@@ -18,22 +18,29 @@
  */
 
 #include "enclayoutunithooks.h"
+#include "custommodifier.h"
 #include "dialoginterf.h"
 #include "enclayoutunit.h"
 #include "encunitdescriptor.h"
+#include "gameimages.h"
 #include "imageptrvector.h"
+#include "listbox.h"
 #include "mempool.h"
 #include "midunitdescriptor.h"
 #include "originalfunctions.h"
 #include "settings.h"
 #include "stringarray.h"
 #include "textboxinterf.h"
+#include "textids.h"
 #include "unittypedescriptor.h"
 #include "unitutils.h"
 #include "utils.h"
 #include <fmt/format.h>
 
 namespace hooks {
+
+static const char modifiersTextBoxName[] = "TXT_MODIFIERS";
+static const char modifiersListBoxName[] = "LBOX_MODIFIERS";
 
 struct CEncLayoutUnitDataPatched : game::CEncLayoutUnitData
 {
@@ -87,6 +94,90 @@ game::CEncLayoutUnitData* createData(const game::IMidgardObjectMap* objectMap,
     return data;
 }
 
+void addModifierInfo(game::CEncLayoutUnit* layout, hooks::CCustomModifier* modifier, bool native)
+{
+    using namespace game;
+
+    const auto& stringApi = game::StringApi::get();
+    const auto& smartPtrApi = SmartPointerApi::get();
+
+    auto data = (CEncLayoutUnitDataPatched*)layout->data;
+
+    IMqImage2* icon = nullptr;
+    GameImagesApi::get().getIconImageByName(&icon, "ABIL0005"); // TODO: get icon name from modifier
+
+    ImagePtr iconPtr{};
+    smartPtrApi.createOrFree((SmartPointer*)&iconPtr, icon);
+    ImagePtrVectorApi::get().pushBack(&data->modifierIcons, &iconPtr);
+    smartPtrApi.createOrFree((SmartPointer*)&iconPtr, nullptr);
+
+    std::string format;
+    if (native) {
+        format = getInterfaceText(textIds().interf.nativeModifierDescription.c_str());
+        if (format.empty())
+            format = "\\vC;\\fMedBold;%DESC%\\fNormal;";
+    } else {
+        format = getInterfaceText(textIds().interf.modifierDescription.c_str());
+        if (format.empty())
+            format = "\\vC;%DESC%";
+    }
+    replace(format, "%DESC%",
+            "Don't wanna close my eyes, don't wanna fall asleep."); // TODO: get desc from modifier
+
+    String text{};
+    stringApi.initFromString(&text, format.c_str());
+    StringArrayApi::get().pushBack(&data->modifierTexts, &text);
+    stringApi.free(&text);
+}
+
+void addModifiersInfo(game::CEncLayoutUnit* layout)
+{
+    using namespace game;
+
+    // TODO: enum unit modifiers
+    addModifierInfo(layout, nullptr, false);
+
+    auto listBox = CDialogInterfApi::get().findListBox(layout->dialog, modifiersListBoxName);
+    CListBoxInterfApi::get().setElementsTotal(listBox, 1); // TODO: count of modifiers
+}
+
+void __fastcall modifiersListBoxDisplayCallback(const game::CEncLayoutUnit* thisptr,
+                                                int /*%edx*/,
+                                                game::ImagePointList* contents,
+                                                const game::CMqRect* lineArea,
+                                                unsigned int index,
+                                                bool selected)
+{
+    using namespace game;
+
+    const auto& imagePointListApi = ImagePointListApi::get();
+
+    if (index < 0)
+        return;
+
+    auto data = (CEncLayoutUnitDataPatched*)thisptr->data;
+
+    auto length = data->modifierTexts.end - data->modifierTexts.bgn;
+    if ((int)index >= length)
+        return;
+
+    CMqRect textClientArea = *lineArea;
+    textClientArea.p2.x -= textClientArea.p1.x;
+    textClientArea.p2.y -= textClientArea.p1.y;
+    textClientArea.p1.x = 31; // Width of modifier icon
+    textClientArea.p1.y = 0;
+
+    std::string text = data->modifierTexts.bgn[index].string;
+    auto& icon = data->modifierIcons.bgn[index];
+    if (icon.data) {
+        CMqPoint iconClientPos{0, 0};
+        imagePointListApi.addImageWithText(contents, lineArea, &icon, &iconClientPos, text.c_str(),
+                                           &textClientArea, false, 0);
+    } else {
+        imagePointListApi.addText(contents, lineArea, text.c_str(), &textClientArea, false, 0);
+    }
+}
+
 game::CEncLayoutUnit* __fastcall encLayoutUnitCtorHooked(game::CEncLayoutUnit* thisptr,
                                                          int /*%edx*/,
                                                          const game::IMidgardObjectMap* objectMap,
@@ -136,22 +227,25 @@ game::CEncLayoutUnitData* __fastcall encLayoutUnitDataCtorHooked(game::CEncLayou
 {
     using namespace game;
 
+    const auto& imagePtrVectorApi = ImagePtrVectorApi::get();
+    const auto& stringArrayApi = StringArrayApi::get();
+
     thisptr->unitId = invalidId;
 
     thisptr->leaderAbilityIcons = {};
-    ImagePtrVectorApi::get().reserve(&thisptr->leaderAbilityIcons, 1);
+    imagePtrVectorApi.reserve(&thisptr->leaderAbilityIcons, 1);
 
     thisptr->leaderAbilityTexts = {};
-    StringArrayApi::get().reserve(&thisptr->leaderAbilityTexts, 1);
+    stringArrayApi.reserve(&thisptr->leaderAbilityTexts, 1);
 
     thisptr->unitDescriptor = nullptr;
 
     auto patched = (CEncLayoutUnitDataPatched*)thisptr;
     patched->modifierIcons = {};
-    ImagePtrVectorApi::get().reserve(&patched->modifierIcons, 1);
+    imagePtrVectorApi.reserve(&patched->modifierIcons, 1);
 
     patched->modifierTexts = {};
-    StringArrayApi::get().reserve(&patched->modifierTexts, 1);
+    stringArrayApi.reserve(&patched->modifierTexts, 1);
 
     return thisptr;
 }
@@ -160,17 +254,20 @@ void __fastcall encLayoutUnitDataDtorHooked(game::CEncLayoutUnitData* thisptr, i
 {
     using namespace game;
 
+    const auto& imagePtrVectorApi = ImagePtrVectorApi::get();
+    const auto& stringArrayApi = StringArrayApi::get();
+
     auto descriptor = thisptr->unitDescriptor;
     if (descriptor) {
         descriptor->vftable->destructor(descriptor, true);
     }
 
-    StringArrayApi::get().destructor(&thisptr->leaderAbilityTexts);
-    ImagePtrVectorApi::get().destructor(&thisptr->leaderAbilityIcons);
+    stringArrayApi.destructor(&thisptr->leaderAbilityTexts);
+    imagePtrVectorApi.destructor(&thisptr->leaderAbilityIcons);
 
     auto patched = (CEncLayoutUnitDataPatched*)thisptr;
-    StringArrayApi::get().destructor(&patched->modifierTexts);
-    ImagePtrVectorApi::get().destructor(&patched->modifierIcons);
+    stringArrayApi.destructor(&patched->modifierTexts);
+    imagePtrVectorApi.destructor(&patched->modifierIcons);
 }
 
 void __fastcall encLayoutUnitInitializeHooked(game::CEncLayoutUnit* thisptr,
@@ -179,11 +276,31 @@ void __fastcall encLayoutUnitInitializeHooked(game::CEncLayoutUnit* thisptr,
 {
     using namespace game;
 
+    const auto& dialogApi = CDialogInterfApi::get();
+
     getOriginalFunctions().encLayoutUnitInitialize(thisptr, encParam);
 
-    // TODO: implement listbox callback, create and assign functor
+    if (!dialogApi.findControl(thisptr->dialog, modifiersListBoxName)) {
+        return;
+    }
 
-    // TODO: fill modifier icons and texts
+    if (dialogApi.findControl(thisptr->dialog, modifiersTextBoxName)) {
+        auto text = getInterfaceText(textIds().interf.modifiersCaption.c_str());
+        if (text.empty())
+            text = "\\fMedBold;Effects:\\fNormal;";
+
+        auto textBox = dialogApi.findTextBox(thisptr->dialog, modifiersTextBoxName);
+        CTextBoxInterfApi::get().setString(textBox, text.c_str());
+    }
+
+    SmartPointer functor{};
+    auto callback = (CEncLayoutUnitApi::Api::ListBoxDisplayCallback)modifiersListBoxDisplayCallback;
+    CEncLayoutUnitApi::get().createListBoxDisplayFunctor(&functor, 0, thisptr, &callback);
+    CListBoxInterfApi::get().assignDisplaySurfaceFunctor(thisptr->dialog, modifiersListBoxName,
+                                                         "DLG_R_C_UNIT", &functor);
+    SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
+
+    addModifiersInfo(thisptr);
 }
 
 void __fastcall encLayoutUnitUpdateHooked(game::CEncLayoutUnit* thisptr, int /*%edx*/)
