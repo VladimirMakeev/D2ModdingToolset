@@ -41,12 +41,12 @@ struct Api
     using Add = void(__thiscall*)(ImagePointList* thisptr, ImagePtrPointPair* pair);
     Add add;
 
-    using AddText = bool(__cdecl*)(ImagePointList* list,
-                                   const CMqRect* area,
-                                   const char* text,
-                                   const CMqRect* textArea,
-                                   bool outline,
-                                   Color color);
+    using AddText = bool(__stdcall*)(ImagePointList* list,
+                                     const CMqRect* area,
+                                     const char* text,
+                                     const CMqRect* textArea,
+                                     bool outline,
+                                     Color color);
     AddText addText;
 
     using AddImageWithText = bool(__stdcall*)(ImagePointList* list,
