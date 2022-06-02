@@ -73,7 +73,7 @@ struct Api
     using Constructor = CEncLayoutUnit*(__thiscall*)(CEncLayoutUnit* thisptr,
                                                      const IMidgardObjectMap* objectMap,
                                                      CInterface* parent,
-                                                     const CMqRect* rect,
+                                                     const CMqRect* area,
                                                      const CMidgardID* unitId,
                                                      const CEncParamBase* encParam,
                                                      const CMidgardID* playerId);
@@ -82,7 +82,7 @@ struct Api
     using Constructor2 = CEncLayoutUnit*(__thiscall*)(CEncLayoutUnit* thisptr,
                                                       IEncUnitDescriptor* descriptor,
                                                       CInterface* parent,
-                                                      const CMqRect* rect,
+                                                      const CMqRect* area,
                                                       const CEncParamBase* encParam);
     Constructor2 constructor2;
 

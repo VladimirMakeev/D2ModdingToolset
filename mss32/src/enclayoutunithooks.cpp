@@ -91,14 +91,14 @@ game::CEncLayoutUnit* __fastcall encLayoutUnitCtorHooked(game::CEncLayoutUnit* t
                                                          int /*%edx*/,
                                                          const game::IMidgardObjectMap* objectMap,
                                                          game::CInterface* parent,
-                                                         const game::CMqRect* rect,
+                                                         const game::CMqRect* area,
                                                          const game::CMidgardID* unitId,
                                                          const game::CEncParamBase* encParam,
                                                          const game::CMidgardID* playerId)
 {
     using namespace game;
 
-    IEncLayoutApi::get().constructor(thisptr, parent, rect);
+    IEncLayoutApi::get().constructor(thisptr, parent, area);
 
     auto descriptor = createUnitDescriptor(objectMap, unitId, playerId);
 
@@ -115,12 +115,12 @@ game::CEncLayoutUnit* __fastcall encLayoutUnitCtor2Hooked(game::CEncLayoutUnit* 
                                                           int /*%edx*/,
                                                           game::IEncUnitDescriptor* descriptor,
                                                           game::CInterface* parent,
-                                                          const game::CMqRect* rect,
+                                                          const game::CMqRect* area,
                                                           const game::CEncParamBase* encParam)
 {
     using namespace game;
 
-    IEncLayoutApi::get().constructor(thisptr, parent, rect);
+    IEncLayoutApi::get().constructor(thisptr, parent, area);
 
     thisptr->vftable = CEncLayoutUnitApi::vftable();
     thisptr->data = createData(nullptr, &emptyId, descriptor);

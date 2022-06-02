@@ -37,7 +37,7 @@ game::CEncLayoutUnit* __fastcall encLayoutUnitCtorHooked(game::CEncLayoutUnit* t
                                                          int /*%edx*/,
                                                          const game::IMidgardObjectMap* objectMap,
                                                          game::CInterface* parent,
-                                                         const game::CMqRect* rect,
+                                                         const game::CMqRect* area,
                                                          const game::CMidgardID* unitId,
                                                          const game::CEncParamBase* encParam,
                                                          const game::CMidgardID* playerId);
@@ -46,7 +46,7 @@ game::CEncLayoutUnit* __fastcall encLayoutUnitCtor2Hooked(game::CEncLayoutUnit* 
                                                           int /*%edx*/,
                                                           game::IEncUnitDescriptor* descriptor,
                                                           game::CInterface* parent,
-                                                          const game::CMqRect* rect,
+                                                          const game::CMqRect* area,
                                                           const game::CEncParamBase* encParam);
 
 game::CEncLayoutUnitData* __fastcall encLayoutUnitDataCtorHooked(game::CEncLayoutUnitData* thisptr,

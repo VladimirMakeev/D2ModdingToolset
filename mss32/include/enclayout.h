@@ -37,7 +37,7 @@ struct Api
 {
     using Constructor = IEncLayout*(__thiscall*)(IEncLayout* thisptr,
                                                  CInterface* parent,
-                                                 const CMqRect* rect);
+                                                 const CMqRect* area);
     Constructor constructor;
 
     using Destructor = void(__thiscall*)(IEncLayout* thisptr);
