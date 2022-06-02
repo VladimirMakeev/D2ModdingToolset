@@ -39,6 +39,7 @@ static std::array<Api, 4> functions = {{
         (Api::GetVillageImage)0x5b93e7,
         (Api::GetCityPreviewLargeImageNames)0x5c66b8,
         (Api::GetCityIconImageNames)0x5c7046,
+        (Api::GetIconImageByName)0x5b37b3,
     },
     // Russobit
     Api{
@@ -54,6 +55,7 @@ static std::array<Api, 4> functions = {{
         (Api::GetVillageImage)0x5b93e7,
         (Api::GetCityPreviewLargeImageNames)0x5c66b8,
         (Api::GetCityIconImageNames)0x5c7046,
+        (Api::GetIconImageByName)0x5b37b3,
     },
     // Gog
     Api{
@@ -69,6 +71,7 @@ static std::array<Api, 4> functions = {{
         (Api::GetVillageImage)0x5b8382,
         (Api::GetCityPreviewLargeImageNames)0x5c56a1,
         (Api::GetCityIconImageNames)0x5c602f,
+        (Api::GetIconImageByName)0x5b2a79,
     },
     // Scenario Editor
     Api{
@@ -84,6 +87,7 @@ static std::array<Api, 4> functions = {{
         (Api::GetVillageImage)0x5554ef,
         (Api::GetCityPreviewLargeImageNames)nullptr,
         (Api::GetCityIconImageNames)nullptr,
+        (Api::GetIconImageByName)0x55498d,
     },
 }};
 // clang-format on
