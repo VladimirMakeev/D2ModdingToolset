@@ -57,6 +57,8 @@ static void showGrid(int mapSize)
             mapGraphics.showImageOnMap(&mapPosition, isoLayers().grid, gridImage, 0, 0);
         }
     }
+
+    imagesApi.createOrFreeGameImages(&imagesPtr, nullptr);
 }
 
 static void hideGrid()
