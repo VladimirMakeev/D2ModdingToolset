@@ -33,6 +33,7 @@ static std::array<Api, 4> functions = {{
         (Api::DataDestructor)0x577d72,
         (Api::Initialize)0x5750b1,
         (Api::Update)0x5757eb,
+        (Api::CreateListBoxDisplayFunctor)0x577b6d,
     },
     // Russobit
     Api{
@@ -42,6 +43,7 @@ static std::array<Api, 4> functions = {{
         (Api::DataDestructor)0x577d72,
         (Api::Initialize)0x5750b1,
         (Api::Update)0x5757eb,
+        (Api::CreateListBoxDisplayFunctor)0x577b6d,
     },
     // Gog
     Api{
@@ -51,6 +53,7 @@ static std::array<Api, 4> functions = {{
         (Api::DataDestructor)0x57742d,
         (Api::Initialize)0x574706,
         (Api::Update)0x574e40,
+        (Api::CreateListBoxDisplayFunctor)0x577228,
     },
     // Scenario Editor
     Api{
@@ -60,6 +63,7 @@ static std::array<Api, 4> functions = {{
         (Api::DataDestructor)0x4c8d48,
         (Api::Initialize)0x4c5b4d,
         (Api::Update)0x4c6287,
+        (Api::CreateListBoxDisplayFunctor)0x4c885f,
     },
 }};
 

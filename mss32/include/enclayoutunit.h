@@ -23,6 +23,7 @@
 #include "d2string.h"
 #include "d2vector.h"
 #include "enclayout.h"
+#include "imagepointlist.h"
 #include "midgardid.h"
 
 namespace game {
@@ -97,6 +98,18 @@ struct Api
 
     using Update = void(__thiscall*)(CEncLayoutUnit* thisptr);
     Update update;
+
+    using ListBoxDisplayCallback = void(__thiscall*)(const CEncLayoutUnit* thisptr,
+                                                     ImagePointList* contents,
+                                                     const CMqRect* lineArea,
+                                                     unsigned int index,
+                                                     bool selected);
+
+    using CreateListBoxDisplayFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                                  int a2,
+                                                                  CEncLayoutUnit* layout,
+                                                                  ListBoxDisplayCallback* callback);
+    CreateListBoxDisplayFunctor createListBoxDisplayFunctor;
 };
 
 Api& get();
