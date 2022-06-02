@@ -21,13 +21,13 @@
 #define CONDINTERF_H
 
 #include "popupinterf.h"
+#include "smartptr.h"
 
 namespace game {
 
 struct CMidEvCondition;
 struct CMidgardID;
 struct LEventCondCategory;
-struct Functor;
 struct IMidgardObjectMap;
 struct String;
 
@@ -87,10 +87,10 @@ struct Api
     // from CCondFrequencyInterf. Its safe because all functors for derived types
     // share the same implementation and callbacks signatures.
     // We could reuse functor of any other derived type.
-    using CreateButtonFunctor = Functor*(__stdcall*)(Functor* functor,
-                                                     int a2,
-                                                     CCondInterf* condInterf,
-                                                     ButtonCallback* callback);
+    using CreateButtonFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                          int a2,
+                                                          CCondInterf* condInterf,
+                                                          ButtonCallback* callback);
     CreateButtonFunctor createButtonFunctor;
 
     struct RadioButtonCallback
@@ -102,10 +102,10 @@ struct Api
     };
 
     // Same hack as with button. Here we reusing logic from CCondStackExistsInterf.
-    using CreateRadioButtonFunctor = Functor*(__stdcall*)(Functor* functor,
-                                                          int a2,
-                                                          CCondInterf* condInterf,
-                                                          RadioButtonCallback* callback);
+    using CreateRadioButtonFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                               int a2,
+                                                               CCondInterf* condInterf,
+                                                               RadioButtonCallback* callback);
     CreateRadioButtonFunctor createRadioButtonFunctor;
 
     struct ListBoxDisplayCallback
@@ -119,10 +119,10 @@ struct Api
     };
 
     // Reuse logic from CCondVarInRangeInterf
-    using CreateListBoxDisplayFunctor = Functor*(__stdcall*)(Functor* functor,
-                                                             int a2,
-                                                             CCondInterf* condInterf,
-                                                             ListBoxDisplayCallback* callback);
+    using CreateListBoxDisplayFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                                  int a2,
+                                                                  CCondInterf* condInterf,
+                                                                  ListBoxDisplayCallback* callback);
     CreateListBoxDisplayFunctor createListBoxDisplayFunctor;
 
     using GetObjectMap = IMidgardObjectMap*(__thiscall*)(void* thisptr);

@@ -21,7 +21,6 @@
 #include "button.h"
 #include "dialoginterf.h"
 #include "editboxinterf.h"
-#include "functor.h"
 #include "lobbyclient.h"
 #include "log.h"
 #include "mempool.h"
@@ -113,13 +112,13 @@ CRegisterAccountInterf* createRegisterAccountInterf()
     auto& dialogApi = CDialogInterfApi::get();
     auto dialog = *interf->dialog;
 
-    Functor functor;
+    SmartPointer functor;
     auto callback = (CMenuBaseApi::Api::ButtonCallback)cancelRegisterAccount;
     CMenuBaseApi::get().createButtonFunctor(&functor, 0, (CMenuBase*)interf, &callback);
 
     CButtonInterfApi::get().assignFunctor(dialog, "BTN_CANCEL", dialogName, &functor, 0);
 
-    const auto freeFunctor = FunctorApi::get().createOrFree;
+    const auto freeFunctor = SmartPointerApi::get().createOrFreeNoDtor;
     freeFunctor(&functor, nullptr);
 
     callback = (CMenuBaseApi::Api::ButtonCallback)tryRegisterAccount;

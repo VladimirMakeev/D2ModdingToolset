@@ -22,6 +22,7 @@
 
 #include "fullscreeninterf.h"
 #include "middatacache.h"
+#include "smartptr.h"
 
 namespace game {
 
@@ -29,7 +30,6 @@ struct CPhaseGame;
 struct CZoomInterface;
 struct CDialogInterf;
 struct IMqImage2;
-struct Functor;
 struct CToggleButton;
 
 struct CMainView2
@@ -91,10 +91,10 @@ struct Api
         int unknown;
     };
 
-    using CreateToggleButtonFunctor = Functor*(__stdcall*)(Functor* functor,
-                                                           int a2,
-                                                           CMainView2* mainView,
-                                                           ToggleButtonCallback* callback);
+    using CreateToggleButtonFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                                int a2,
+                                                                CMainView2* mainView,
+                                                                ToggleButtonCallback* callback);
     CreateToggleButtonFunctor createToggleButtonFunctor;
 };
 

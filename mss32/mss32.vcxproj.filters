@@ -97,9 +97,6 @@
     <ClCompile Include="src\dynamiccast.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="src\functor.cpp">
-      <Filter>game</Filter>
-    </ClCompile>
     <ClCompile Include="src\game.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -1118,9 +1115,6 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\fortification.h">
-      <Filter>game</Filter>
-    </ClInclude>
-    <ClInclude Include="include\functor.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\game.h">

@@ -25,7 +25,6 @@
 
 namespace game {
 
-struct Functor;
 struct CMqPoint;
 struct CMqUIControllerSimple;
 struct CMqUIKernelSimple;
@@ -69,10 +68,10 @@ struct Api
      * All functor creating functions here are reused since they implement the same logic.
      * The only difference is the template arguments that were used in the original game code.
      */
-    using CreateTimerEventFunctor = Functor*(__stdcall*)(Functor* functor,
-                                                         int zero,
-                                                         void* userData,
-                                                         TimerEventCallback* callback);
+    using CreateTimerEventFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                              int zero,
+                                                              void* userData,
+                                                              TimerEventCallback* callback);
     CreateTimerEventFunctor createTimerEventFunctor;
 
     /**
@@ -86,7 +85,7 @@ struct Api
      */
     using CreateTimerEvent = UiEvent*(__thiscall*)(CUIManager* thisptr,
                                                    UiEvent* uiEvent,
-                                                   Functor* functor,
+                                                   SmartPointer* functor,
                                                    std::uint32_t timeoutMs);
     CreateTimerEvent createTimerEvent;
 
@@ -97,15 +96,15 @@ struct Api
     };
 
     /** Creates functor to be used in update event. */
-    using CreateUpdateEventFunctor = Functor*(__stdcall*)(Functor* functor,
-                                                          int zero,
-                                                          void* userData,
-                                                          UpdateEventCallback* callback);
+    using CreateUpdateEventFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                               int zero,
+                                                               void* userData,
+                                                               UpdateEventCallback* callback);
     CreateUpdateEventFunctor createUpdateEventFunctor;
 
     using CreateUiEvent = UiEvent*(__thiscall*)(CUIManager* thisptr,
                                                 UiEvent* uiEvent,
-                                                Functor* functor);
+                                                SmartPointer* functor);
 
     /**
      * Creates event with constant updates, callback is called from game message processing loop.
@@ -186,7 +185,7 @@ struct Api
      */
     using CreateMessageEvent = UiEvent*(__thiscall*)(CUIManager* thisptr,
                                                      UiEvent* uiEvent,
-                                                     Functor* functor,
+                                                     SmartPointer* functor,
                                                      std::uint32_t messageId);
     CreateMessageEvent createMessageEvent;
 

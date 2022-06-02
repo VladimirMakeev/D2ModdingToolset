@@ -21,12 +21,12 @@
 #define TOGGLEBUTTON_H
 
 #include "interface.h"
+#include "smartptr.h"
 
 namespace game {
 
 struct CToggleButtonVftable;
 struct CDialogInterf;
-struct Functor;
 
 struct CToggleButtonData
 {
@@ -79,7 +79,7 @@ struct Api
     using AssignFunctor = CToggleButton*(__stdcall*)(CDialogInterf* dialog,
                                                      const char* buttonName,
                                                      const char* dialogName,
-                                                     Functor* functor,
+                                                     SmartPointer* functor,
                                                      int hotkey);
     AssignFunctor assignFunctor;
 };

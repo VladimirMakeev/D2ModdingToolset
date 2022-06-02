@@ -24,7 +24,6 @@
 #include "dynamiccast.h"
 #include "exchangeinterf.h"
 #include "fortification.h"
-#include "functor.h"
 #include "globaldata.h"
 #include "interfmanager.h"
 #include "itembase.h"
@@ -287,13 +286,13 @@ game::CCityStackInterf* __fastcall cityStackInterfCtorHooked(game::CCityStackInt
     getOriginalFunctions().cityStackInterfCtor(thisptr, taskOpenInterf, phaseGame, cityId);
 
     const auto& button = CButtonInterfApi::get();
-    const auto freeFunctor = FunctorApi::get().createOrFree;
+    const auto freeFunctor = SmartPointerApi::get().createOrFreeNoDtor;
     const char dialogName[] = "DLG_CITY_STACK";
     auto dialog = CDragAndDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
 
     using ButtonCallback = CCityStackInterfApi::Api::ButtonCallback;
     ButtonCallback callback{};
-    Functor functor;
+    SmartPointer functor;
 
     const auto& dialogApi = CDialogInterfApi::get();
     const auto& cityStackInterf = CCityStackInterfApi::get();
@@ -462,13 +461,13 @@ game::CExchangeInterf* __fastcall exchangeInterfCtorHooked(game::CExchangeInterf
                                               stackRightSide);
 
     const auto& button = CButtonInterfApi::get();
-    const auto freeFunctor = FunctorApi::get().createOrFree;
+    const auto freeFunctor = SmartPointerApi::get().createOrFreeNoDtor;
     const char dialogName[] = "DLG_EXCHANGE";
     auto dialog = CDragAndDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
 
     using ButtonCallback = CExchangeInterfApi::Api::ButtonCallback;
     ButtonCallback callback{};
-    Functor functor;
+    SmartPointer functor;
 
     const auto& dialogApi = CDialogInterfApi::get();
     const auto& exchangeInterf = CExchangeInterfApi::get();
@@ -665,13 +664,13 @@ game::CPickUpDropInterf* __fastcall pickupDropInterfCtorHooked(game::CPickUpDrop
     getOriginalFunctions().pickupDropInterfCtor(thisptr, taskOpenInterf, phaseGame, stackId, bagId);
 
     const auto& button = CButtonInterfApi::get();
-    const auto freeFunctor = FunctorApi::get().createOrFree;
+    const auto freeFunctor = SmartPointerApi::get().createOrFreeNoDtor;
     const char dialogName[] = "DLG_PICKUP_DROP";
     auto dialog = CDragAndDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
 
     using ButtonCallback = CPickUpDropInterfApi::Api::ButtonCallback;
     ButtonCallback callback{};
-    Functor functor;
+    SmartPointer functor;
 
     const auto& dialogApi = CDialogInterfApi::get();
     const auto& pickupInterf = CPickUpDropInterfApi::get();
@@ -1003,13 +1002,13 @@ game::CSiteMerchantInterf* __fastcall siteMerchantInterfCtorHooked(
                                                   merchantId);
 
     const auto& button = CButtonInterfApi::get();
-    const auto freeFunctor = FunctorApi::get().createOrFree;
+    const auto freeFunctor = SmartPointerApi::get().createOrFreeNoDtor;
     const char dialogName[] = "DLG_MERCHANT";
     auto dialog = CDragAndDropInterfApi::get().getDialog(&thisptr->dragDropInterf);
 
     using ButtonCallback = CSiteMerchantInterfApi::Api::ButtonCallback;
     ButtonCallback callback{};
-    Functor functor;
+    SmartPointer functor;
 
     const auto& dialogApi = CDialogInterfApi::get();
     const auto& merchantInterf = CSiteMerchantInterfApi::get();

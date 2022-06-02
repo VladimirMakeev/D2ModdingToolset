@@ -261,7 +261,6 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\eventeffectcathooks.cpp" />
     <ClCompile Include="src\exchangeinterf.cpp" />
     <ClCompile Include="src\fortcategory.cpp" />
-    <ClCompile Include="src\functor.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\gameimages.cpp" />
     <ClCompile Include="src\gameutils.cpp" />
@@ -647,7 +646,6 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\fortification.h" />
     <ClInclude Include="include\freetask.h" />
     <ClInclude Include="include\fullscreeninterf.h" />
-    <ClInclude Include="include\functor.h" />
     <ClInclude Include="include\functordispatch0.h" />
     <ClInclude Include="include\functordispatch1.h" />
     <ClInclude Include="include\functordispatch2.h" />

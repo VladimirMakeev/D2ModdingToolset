@@ -22,12 +22,12 @@
 
 #include "functordispatch1.h"
 #include "interface.h"
+#include "smartptr.h"
 #include <cstddef>
 
 namespace game {
 
 struct CDialogInterf;
-struct Functor;
 struct CImage2TextBackground;
 struct CListBoxInterfData;
 
@@ -112,7 +112,7 @@ struct Api
     using AssignFunctor = CListBoxInterf*(__stdcall*)(CDialogInterf* dialog,
                                                       const char* listBoxName,
                                                       const char* dialogName,
-                                                      Functor* functor);
+                                                      SmartPointer* functor);
     AssignFunctor assignFunctor;
 
     /**
@@ -129,7 +129,7 @@ struct Api
     using AssignDisplayTextFunctor = CListBoxInterf*(__stdcall*)(CDialogInterf* dialog,
                                                                  const char* listBoxName,
                                                                  const char* dialogName,
-                                                                 Functor* functor,
+                                                                 SmartPointer* functor,
                                                                  bool addTextShortenedMark);
     AssignDisplayTextFunctor assignDisplayTextFunctor;
 
@@ -146,7 +146,7 @@ struct Api
     using AssignDisplaySurfaceFunctor = CListBoxInterf*(__stdcall*)(CDialogInterf* dialog,
                                                                     const char* listBoxName,
                                                                     const char* dialogName,
-                                                                    Functor* functor);
+                                                                    SmartPointer* functor);
     AssignDisplaySurfaceFunctor assignDisplaySurfaceFunctor;
 
     /**

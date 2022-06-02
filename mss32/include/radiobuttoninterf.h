@@ -23,12 +23,12 @@
 #include "d2pair.h"
 #include "functordispatch1.h"
 #include "interface.h"
+#include "smartptr.h"
 
 namespace game {
 
 struct CToggleButton;
 struct CDialogInterf;
-struct Functor;
 
 struct CRadioButtonInterfData
 {
@@ -76,7 +76,7 @@ struct Api
     using SetOnButtonPressed = CRadioButtonInterf*(__stdcall*)(CDialogInterf* dialog,
                                                                const char* buttonName,
                                                                const char* dialogName,
-                                                               Functor* functor);
+                                                               SmartPointer* functor);
     SetOnButtonPressed setOnButtonPressed;
 };
 

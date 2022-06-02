@@ -38,12 +38,21 @@ struct Api
 {
     /**
      * Sets SmartPointer data or releases it, freeing memory if referenceCount equals zero.
+     * Calls virtual destructor with flag 1 to free object memory.
      * @param[in] thisptr SmartPointer to initialize or free.
      * @param[in] data pointer to managed memory.
-     * @returns unknown.
      */
-    using CreateOrFree = void*(__thiscall*)(SmartPointer* thisptr, void* data);
+    using CreateOrFree = void(__thiscall*)(SmartPointer* thisptr, void* data);
     CreateOrFree createOrFree;
+
+    /**
+     * Sets SmartPointer data or releases it, freeing memory if referenceCount equals zero.
+     * Directly frees the memory allocated by the managed object.
+     * @param[in] thisptr SmartPointer to initialize or free.
+     * @param[in] data pointer to managed memory.
+     */
+    using CreateOrFreeNoDestructor = void(__thiscall*)(SmartPointer* thisptr, void* data);
+    CreateOrFreeNoDestructor createOrFreeNoDtor;
 
     using Copy = SmartPointer*(__thiscall*)(SmartPointer* thisptr, SmartPointer* other);
     Copy copy;

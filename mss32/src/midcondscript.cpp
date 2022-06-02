@@ -27,7 +27,6 @@
 #include "editboxinterf.h"
 #include "editor.h"
 #include "eventconditioncathooks.h"
-#include "functor.h"
 #include "game.h"
 #include "interfmanager.h"
 #include "iterators.h"
@@ -593,66 +592,66 @@ game::editor::CCondInterf* createCondScriptInterf(game::ITask* task,
     if (dialogApi.findButton(dialog, "BTN_OK")) {
         using ButtonCallback = CCondInterfApi::Api::ButtonCallback;
         ButtonCallback callback{};
-        Functor functor{};
+        SmartPointer functor{};
 
         callback.callback = (ButtonCallback::Callback)condScriptInterfOkButtonHandler;
         CCondInterfApi::get().createButtonFunctor(&functor, 0, thisptr, &callback);
 
         const auto& button = CButtonInterfApi::get();
         button.assignFunctor(dialog, "BTN_OK", dialogName, &functor, 0);
-        FunctorApi::get().createOrFree(&functor, nullptr);
+        SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
     }
 
     if (dialogApi.findButton(dialog, "BTN_CANCEL")) {
         using ButtonCallback = CCondInterfApi::Api::ButtonCallback;
         ButtonCallback callback{};
-        Functor functor{};
+        SmartPointer functor{};
 
         callback.callback = (ButtonCallback::Callback)condScriptInterfCancelButtonHandler;
         CCondInterfApi::get().createButtonFunctor(&functor, 0, thisptr, &callback);
 
         const auto& button = CButtonInterfApi::get();
         button.assignFunctor(dialog, "BTN_CANCEL", dialogName, &functor, 0);
-        FunctorApi::get().createOrFree(&functor, nullptr);
+        SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
     }
 
     if (dialogApi.findButton(dialog, "BTN_LOAD")) {
         using ButtonCallback = CCondInterfApi::Api::ButtonCallback;
         ButtonCallback callback{};
-        Functor functor{};
+        SmartPointer functor{};
 
         callback.callback = (ButtonCallback::Callback)condScriptInterfLoadButtonHandler;
         CCondInterfApi::get().createButtonFunctor(&functor, 0, thisptr, &callback);
 
         const auto& button = CButtonInterfApi::get();
         button.assignFunctor(dialog, "BTN_LOAD", dialogName, &functor, 0);
-        FunctorApi::get().createOrFree(&functor, nullptr);
+        SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
     }
 
     if (dialogApi.findButton(dialog, "BTN_PASTE_ID")) {
         using ButtonCallback = CCondInterfApi::Api::ButtonCallback;
         ButtonCallback callback{};
-        Functor functor{};
+        SmartPointer functor{};
 
         callback.callback = (ButtonCallback::Callback)condScriptInterfPasteIdButtonHandler;
         CCondInterfApi::get().createButtonFunctor(&functor, 0, thisptr, &callback);
 
         const auto& button = CButtonInterfApi::get();
         button.assignFunctor(dialog, "BTN_PASTE_ID", dialogName, &functor, 0);
-        FunctorApi::get().createOrFree(&functor, nullptr);
+        SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
     }
 
     if (dialogApi.findButton(dialog, "BTN_DOCS")) {
         using ButtonCallback = CCondInterfApi::Api::ButtonCallback;
         ButtonCallback callback{};
-        Functor functor{};
+        SmartPointer functor{};
 
         callback.callback = (ButtonCallback::Callback)condScriptInterfDocsButtonHandler;
         CCondInterfApi::get().createButtonFunctor(&functor, 0, thisptr, &callback);
 
         const auto& button = CButtonInterfApi::get();
         button.assignFunctor(dialog, "BTN_DOCS", dialogName, &functor, 0);
-        FunctorApi::get().createOrFree(&functor, nullptr);
+        SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
     }
 
     const auto& radioApi = CRadioButtonInterfApi::get();
@@ -662,13 +661,13 @@ game::editor::CCondInterf* createCondScriptInterf(game::ITask* task,
 
         using Callback = CCondInterfApi::Api::RadioButtonCallback;
         Callback callback{};
-        Functor functor{};
+        SmartPointer functor{};
 
         callback.callback = (Callback::Callback)condScriptInterfOnFilterChanged;
         CCondInterfApi::get().createRadioButtonFunctor(&functor, 0, thisptr, &callback);
 
         radioApi.setOnButtonPressed(dialog, "RAD_FILTER", dialogName, &functor);
-        FunctorApi::get().createOrFree(&functor, nullptr);
+        SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
 
         // Disable button since 'other' list is not implemented yet
         radioApi.setButtonEnabled(radioButton, (int)ObjectFilter::Other, false);
@@ -679,13 +678,13 @@ game::editor::CCondInterf* createCondScriptInterf(game::ITask* task,
     if (listBox) {
         using ListBoxCallback = CCondInterfApi::Api::ListBoxDisplayCallback;
         ListBoxCallback callback{};
-        Functor functor{};
+        SmartPointer functor{};
 
         callback.callback = (ListBoxCallback::Callback)condScriptInterfStackListBoxDisplayHandler;
         CCondInterfApi::get().createListBoxDisplayFunctor(&functor, 0, thisptr, &callback);
 
         listApi.assignDisplayTextFunctor(dialog, "TLBOX_OBJECTS", dialogName, &functor, false);
-        FunctorApi::get().createOrFree(&functor, nullptr);
+        SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
         // Init with stacks, since its toggle button selected by default
         listApi.setElementsTotal(listBox, thisptr->stacks.size());
     }

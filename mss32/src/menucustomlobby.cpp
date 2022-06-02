@@ -22,7 +22,6 @@
 #include "button.h"
 #include "dialoginterf.h"
 #include "dynamiccast.h"
-#include "functor.h"
 #include "globaldata.h"
 #include "image2fill.h"
 #include "image2outline.h"
@@ -528,13 +527,13 @@ void menuCustomLobbyCtor(CMenuCustomLobby* menu, game::CMenuPhase* menuPhase)
     std::vector<RoomInfo>().swap(menu->rooms);
     menu->loggedIn = false;
 
-    const auto freeFunctor = FunctorApi::get().createOrFree;
+    const auto freeFunctor = SmartPointerApi::get().createOrFreeNoDtor;
 
     // Setup button handlers
     {
         auto dialog = menuBase.getDialogInterface(menu);
 
-        Functor functor;
+        SmartPointer functor;
         menuBase.createButtonFunctor(&functor, 0, menu, &menuBase.buttonBackCallback);
 
         const auto& button = CButtonInterfApi::get();

@@ -72,7 +72,6 @@
 #include "eventeffectcathooks.h"
 #include "fortcategory.h"
 #include "fortification.h"
-#include "functor.h"
 #include "gameutils.h"
 #include "globaldata.h"
 #include "idlist.h"
@@ -827,8 +826,8 @@ static void menuNewSkirmishCtor(game::CMenuNewSkirmish* thisptr,
     const auto dialog = menuBase.getDialogInterface(thisptr);
     const auto& menu = CMenuNewSkirmishApi::get();
     const auto& button = CButtonInterfApi::get();
-    const auto freeFunctor = FunctorApi::get().createOrFree;
-    Functor functor;
+    const auto freeFunctor = SmartPointerApi::get().createOrFreeNoDtor;
+    SmartPointer functor;
 
     menuBase.createButtonFunctor(&functor, 0, thisptr, &menuBase.buttonBackCallback);
     button.assignFunctor(dialog, "BTN_BACK", dialogName, &functor, 0);
