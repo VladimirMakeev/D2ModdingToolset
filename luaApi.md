@@ -178,7 +178,7 @@ unit.scout
 unit.leadership
 ```
 ##### id
-Returns unit [id](luaApi.md#id). This is different to id of [Unit implementation](luaApi.md#unit-implementation).
+Returns unit [id](luaApi.md#id). This is different to id of [unit implementation](luaApi.md#unit-implementation).
 The value is unique for every unit on scenario map.
 ```lua
 unit.id
@@ -263,7 +263,7 @@ Returns unit [id](luaApi.md#id). `UNIT_ID` value from `GUnits.dbf`.
 impl.id
 ```
 ##### base
-Returns base [Unit implementation](luaApi.md#unit-implementation). `BASE_UNIT` value from `GUnits.dbf`.
+Returns base [unit implementation](luaApi.md#unit-implementation). `BASE_UNIT` value from `GUnits.dbf`.
 ```lua
 impl.base
 ```
@@ -337,6 +337,33 @@ group.slots
 
 ---
 
+#### Player
+Represents game player including AI and neutrals.
+
+Methods:
+##### id
+Returns player [id](luaApi.md#id). The value is unique for every player on scenario map.
+```lua
+player.id
+```
+##### race
+Returns player [race](luaApi.md#race).
+```lua
+player.race
+```
+##### lord
+Returns player [lord](luaApi.md#lord).
+```lua
+player.lord
+```
+##### bank
+Returns player [bank](luaApi.md#currency).
+```lua
+player.bank
+```
+
+---
+
 #### Stack
 Represents [group](luaApi.md#group) of 6 [units](luaApi.md#unit-slot) on a map. One of the units is a leader.
 
@@ -383,33 +410,6 @@ stack.movement
 stack.inside
 --- Returns true if stack is invisible.
 stack.invisible
-```
-
----
-
-#### Player
-Represents game player including AI and neutrals.
-
-Methods:
-##### id
-Returns player [id](luaApi.md#id). The value is unique for every player on scenario map.
-```lua
-player.id
-```
-##### race
-Returns player [race](luaApi.md#race).
-```lua
-player.race
-```
-##### lord
-Returns player [lord](luaApi.md#lord).
-```lua
-player.lord
-```
-##### bank
-Returns player [bank](luaApi.md#currency).
-```lua
-player.bank
 ```
 
 ---
