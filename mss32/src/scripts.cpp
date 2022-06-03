@@ -27,6 +27,7 @@
 #include "itemview.h"
 #include "locationview.h"
 #include "log.h"
+#include "midstack.h"
 #include "point.h"
 #include "scenariovariableview.h"
 #include "scenarioview.h"
@@ -189,6 +190,16 @@ static void bindApi(sol::state& lua)
         "Talisman", ItemId::Talisman,
         "TravelItem", ItemId::TravelItem,
         "Special", ItemId::Special
+    );
+
+    lua.new_enum("Equipment",
+        "Banner", EquippedItemIdx::Banner,
+        "Tome", EquippedItemIdx::Tome,
+        "Battle1", EquippedItemIdx::Battle1,
+        "Battle2", EquippedItemIdx::Battle2,
+        "Artifact1", EquippedItemIdx::Artifact1,
+        "Artifact2", EquippedItemIdx::Artifact2,
+        "Boots", EquippedItemIdx::Boots
     );
 
     lua.new_enum("Immune",
