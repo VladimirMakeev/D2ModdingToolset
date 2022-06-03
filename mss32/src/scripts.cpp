@@ -66,6 +66,12 @@ static void bindApi(sol::state& lua)
         "Elf", RaceId::Elf
     );
 
+    lua.new_enum("Lord",
+        "Mage", LordId::Mage,
+        "Warrior", LordId::Warrior,
+        "Diplomat", LordId::Diplomat
+    );
+
     lua.new_enum("Subrace",
         "Custom", SubRaceId::Custom,
         "Human", SubRaceId::Human,
