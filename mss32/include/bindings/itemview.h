@@ -21,6 +21,7 @@
 #define ITEMVIEW_H
 
 #include "currencyview.h"
+#include "idview.h"
 #include "midgardid.h"
 #include <optional>
 
@@ -43,11 +44,12 @@ public:
 
     static void bind(sol::state& lua);
 
+    IdView getId() const;
     std::optional<ItemBaseView> getBase() const;
     CurrencyView getSellValue() const;
 
 private:
-    const game::CMidgardID itemId;
+    game::CMidgardID itemId;
     const game::IMidgardObjectMap* objectMap;
 };
 
