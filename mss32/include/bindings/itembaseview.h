@@ -21,6 +21,7 @@
 #define ITEMBASEVIEW_H
 
 #include "currencyview.h"
+#include "idview.h"
 #include "midgardid.h"
 #include <optional>
 #include <string>
@@ -45,6 +46,7 @@ public:
 
     static void bind(sol::state& lua);
 
+    IdView getId() const;
     int getCategory() const;
     std::string getName() const;
     std::string getDescription() const;
