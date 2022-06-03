@@ -179,16 +179,21 @@ bool isModifiableDamageAttack(game::AttackClassId id)
 
 bool isMeleeAttack(const game::IAttack* attack)
 {
+    auto reach = attack->vftable->getAttackReach(attack);
+    return isMeleeAttack(reach->id);
+}
+
+bool isMeleeAttack(game::AttackReachId id)
+{
     using namespace game;
 
     const auto& reaches = AttackReachCategories::get();
 
-    auto reach = attack->vftable->getAttackReach(attack);
-    if (reach->id == reaches.adjacent->id) {
+    if (id == reaches.adjacent->id) {
         return true;
-    } else if (reach->id != reaches.all->id && reach->id != reaches.any->id) {
+    } else if (id != reaches.all->id && id != reaches.any->id) {
         for (auto& custom : getCustomAttacks().reaches) {
-            if (reach->id == custom.reach.id) {
+            if (id == custom.reach.id) {
                 return custom.melee;
             }
         }
