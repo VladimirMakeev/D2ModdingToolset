@@ -341,6 +341,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\midmsgboxbuttonhandlerstd.cpp" />
     <ClCompile Include="src\midmusic.cpp" />
     <ClCompile Include="src\midscenvariables.cpp" />
+    <ClCompile Include="src\midserverlogic.cpp" />
     <ClCompile Include="src\midstack.cpp" />
     <ClCompile Include="src\midunitdescriptor.cpp" />
     <ClCompile Include="src\midunitdescriptorhooks.cpp" />
