@@ -319,6 +319,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\menuprotocolhooks.cpp" />
     <ClCompile Include="src\menurace.cpp" />
     <ClCompile Include="src\draganddropinterf.cpp" />
+    <ClCompile Include="src\midclientcore.cpp" />
     <ClCompile Include="src\midcondgamemode.cpp" />
     <ClCompile Include="src\midcondownresource.cpp" />
     <ClCompile Include="src\midcondplayertype.cpp" />

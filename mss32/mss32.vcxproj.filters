@@ -1040,6 +1040,9 @@
     <ClCompile Include="src\midcondvarcmp.cpp">
       <Filter>features\custom event conditions</Filter>
     </ClCompile>
+    <ClCompile Include="src\midclientcore.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
     <ClCompile Include="src\editorglobaldata.cpp">
       <Filter>game</Filter>
     </ClCompile>

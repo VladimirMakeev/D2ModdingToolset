@@ -51,6 +51,18 @@ struct CMidClientCore : public IMqNetSystem
     CMidClientCoreData* data;
 };
 
+namespace CMidClientCoreApi {
+
+struct Api
+{
+    using GetObjectMap = IMidgardObjectMap*(__thiscall*)(CMidClientCore* thisptr);
+    GetObjectMap getObjectMap;
+};
+
+Api& get();
+
+} // namespace CMidClientCoreApi
+
 } // namespace game
 
 #endif // MIDCLIENTCORE_H
