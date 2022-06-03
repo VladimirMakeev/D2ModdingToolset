@@ -459,7 +459,7 @@
     - Add `DISPLAY` (Logical) column to `Gmodif.dbf`;
     - (Optional) Setup modifiers panel for Unit Encyclopedia:
         - Include `LBOX_MODIFIERS` and `TXT_MODIFIERS` elements to `Interf.dlg` and `ScenEdit.dlg`. [Interf.dlg](Examples/Modifiers/Interf.dlg) and [ScenEdit.dlg](Examples/Modifiers/ScenEdit.dlg) contain examples of modified `DLG_R_C_UNIT` dialog of Unit Encyclopedia;
-        - Note that the examples intentionally hide some native elements: 'Leader abilities', 'Leadership', 'Battles won', locked-unit / upgrade-needed indicators;
+        - Note that the examples intentionally hide or reposition some native elements: 'Leader abilities', 'Leadership', 'Battles won', locked-unit / upgrade-needed indicators;
         - Try extending the dialog bounds or otherwise rearrange its elements to properly accomodate all the available elements as you like;
         - Specify `modifiersCaption` text in `TApp.dbf` and `TAppEdit.dbf` and its id in a corresponding entry of [textids.lua](Scripts/textids.lua);
         - Repeat for `modifiersEmpty`, `modifierDescription` and `nativeModifierDescription` entries;
