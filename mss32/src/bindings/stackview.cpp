@@ -19,6 +19,7 @@
 
 #include "stackview.h"
 #include "game.h"
+#include "gameutils.h"
 #include "itemview.h"
 #include "midgardobjectmap.h"
 #include "midstack.h"
@@ -39,6 +40,7 @@ void StackView::bind(sol::state& lua)
     stackView["id"] = sol::property(&StackView::getId);
     stackView["group"] = sol::property(&StackView::getGroup);
     stackView["leader"] = sol::property(&StackView::getLeader);
+    stackView["player"] = sol::property(&StackView::getPlayer);
     stackView["movement"] = sol::property(&StackView::getMovement);
     stackView["subrace"] = sol::property(&StackView::getSubrace);
     stackView["inside"] = sol::property(&StackView::isInside);
@@ -66,6 +68,12 @@ std::optional<UnitView> StackView::getLeader() const
     }
 
     return UnitView{leaderUnit, objectMap};
+}
+
+PlayerView StackView::getPlayer() const
+{
+    auto player = hooks::getPlayer(objectMap, &stack->ownerId);
+    return PlayerView{player, objectMap};
 }
 
 int StackView::getMovement() const

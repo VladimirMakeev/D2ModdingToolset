@@ -22,6 +22,7 @@
 
 #include "groupview.h"
 #include "idview.h"
+#include "playerview.h"
 #include <optional>
 #include <vector>
 
@@ -49,6 +50,7 @@ public:
     GroupView getGroup() const;
     /** Returns stack leader. */
     std::optional<UnitView> getLeader() const;
+    PlayerView getPlayer() const;
     /** Returns stack current movement points. */
     int getMovement() const;
     /** Returns stack subrace category id. */
