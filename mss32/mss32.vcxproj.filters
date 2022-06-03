@@ -1049,6 +1049,9 @@
     <ClCompile Include="src\midserverlogic.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\scriptutils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2649,6 +2652,9 @@
     </ClInclude>
     <ClInclude Include="include\editorglobaldata.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scriptutils.h">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
