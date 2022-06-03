@@ -20,12 +20,26 @@
 #include "gameutils.h"
 #include "battlemsgdata.h"
 #include "dynamiccast.h"
+#include "editorglobaldata.h"
+#include "fortification.h"
 #include "game.h"
+#include "midclient.h"
+#include "midclientcore.h"
+#include "midgard.h"
 #include "midgardobjectmap.h"
 #include "midgardplan.h"
+#include "midgardscenariomap.h"
 #include "midplayer.h"
+#include "midruin.h"
 #include "midscenvariables.h"
+#include "midserver.h"
+#include "midserverlogic.h"
+#include "midstack.h"
 #include "scenarioinfo.h"
+#include "version.h"
+#include <thread>
+
+extern std::thread::id mainThreadId;
 
 namespace hooks {
 
@@ -51,6 +65,62 @@ bool isGreaterPickRandomIfEqual(int first, int second)
     const auto& fn = gameFunctions();
 
     return first > second || (first == second && fn.generateRandomNumber(2) == 1);
+}
+
+const game::IMidgardObjectMap* getObjectMap()
+{
+    using namespace game;
+
+    if (gameVersion() == GameVersion::ScenarioEditor) {
+        auto global = *EditorGlobalDataApi::get().getGlobalData();
+        if (!global->initialized)
+            return nullptr;
+
+        return global->unknown2->data->scenarioMap;
+    }
+
+    auto midgard = CMidgardApi::get().instance();
+    if (std::this_thread::get_id() == mainThreadId) {
+        auto client = midgard->data->client;
+        if (!client)
+            return nullptr;
+
+        return CMidClientCoreApi::get().getObjectMap(&client->core);
+    } else {
+        auto server = midgard->data->server;
+        if (!server)
+            return nullptr;
+
+        return CMidServerLogicApi::get().getObjectMap(server->data->serverLogic);
+    }
+}
+
+const game::CMidUnitGroup* getGroup(const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* groupId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, groupId);
+    switch (CMidgardIDApi::get().getType(groupId)) {
+    case IdType::Stack: {
+        auto stack = (const CMidStack*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType,
+                                                   rtti.CMidStackType, 0);
+        return stack ? &stack->group : nullptr;
+    }
+    case IdType::Fortification: {
+        auto fortification = static_cast<const CFortification*>(obj);
+        return fortification ? &fortification->group : nullptr;
+    }
+    case IdType::Ruin:
+        auto ruin = static_cast<const CMidRuin*>(obj);
+        return ruin ? &ruin->group : nullptr;
+    }
+
+    return nullptr;
 }
 
 const game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMap,
@@ -158,6 +228,22 @@ game::CMidStack* getStack(const game::IMidgardObjectMap* objectMap,
                              : battleMsgData->defenderGroupId;
 
     return getStack(objectMap, &groupId);
+}
+
+const game::CMidStack* getStackByUnitId(const game::IMidgardObjectMap* objectMap,
+                                        const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    auto groupId = fn.getStackIdByUnitId(objectMap, unitId);
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, groupId);
+    return (const CMidStack*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType, rtti.CMidStackType,
+                                         0);
 }
 
 } // namespace hooks

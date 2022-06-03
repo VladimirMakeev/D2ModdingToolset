@@ -36,6 +36,13 @@ namespace hooks {
 
 bool isGreaterPickRandomIfEqual(int first, int second);
 
+/** Picks object map that corresponds to the calling thread (client vs server). */
+const game::IMidgardObjectMap* getObjectMap();
+
+/** Analogue of GetStackFortRuinGroup that is absent in Scenario Editor. */
+const game::CMidUnitGroup* getGroup(const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* groupId);
+
 const game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMap,
                                                const game::BattleMsgData* battleMsgData,
                                                const game::CMidgardID* unitId,
@@ -60,6 +67,9 @@ game::CMidStack* getStack(const game::IMidgardObjectMap* objectMap,
 game::CMidStack* getStack(const game::IMidgardObjectMap* objectMap,
                           const game::BattleMsgData* battleMsgData,
                           const game::CMidgardID* unitId);
+
+const game::CMidStack* getStackByUnitId(const game::IMidgardObjectMap* objectMap,
+                                        const game::CMidgardID* unitId);
 
 } // namespace hooks
 
