@@ -199,12 +199,12 @@ Returns true if leader has movement bonus on specified [ground](luaApi.md#ground
 unit:hasMoveBonus(Ground.Water)
 ```
 ##### group
-Returns unit's [group](luaApi.md#group).
+Returns unit's [group](luaApi.md#group-1).
 ```lua
 unit.group
 ```
 ##### stack
-Returns unit's [stack](luaApi.md#stack).
+Returns unit's [stack](luaApi.md#stack-1).
 ```lua
 unit.stack
 ```
