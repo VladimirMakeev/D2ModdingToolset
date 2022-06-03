@@ -30,6 +30,8 @@ struct IAttack;
 
 namespace bindings {
 
+struct IdView;
+
 class AttackView
 {
 public:
@@ -37,6 +39,7 @@ public:
 
     static void bind(sol::state& lua);
 
+    IdView getId() const;
     /** Returns attack class id. */
     int getAttackClass() const;
     /** Returns attack source id. */

@@ -19,6 +19,7 @@
 
 #include "attackview.h"
 #include "attack.h"
+#include "idview.h"
 #include <sol/sol.hpp>
 
 namespace bindings {
@@ -30,6 +31,7 @@ AttackView::AttackView(const game::IAttack* attack)
 void AttackView::bind(sol::state& lua)
 {
     auto attackView = lua.new_usertype<AttackView>("AttackView");
+    attackView["id"] = sol::property(&AttackView::getId);
     attackView["type"] = sol::property(&AttackView::getAttackClass);
     attackView["source"] = sol::property(&AttackView::getAttackSource);
     attackView["initiative"] = sol::property(&AttackView::getInitiative);
@@ -39,6 +41,11 @@ void AttackView::bind(sol::state& lua)
     attackView["heal"] = sol::property(&AttackView::getHeal);
     attackView["infinite"] = sol::property(&AttackView::isInfinite);
     attackView["crit"] = sol::property(&AttackView::canCrit);
+}
+
+IdView AttackView::getId() const
+{
+    return attack->id;
 }
 
 int AttackView::getAttackClass() const
