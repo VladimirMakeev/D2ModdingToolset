@@ -465,7 +465,7 @@
         - Repeat for `modifiersEmpty`, `modifierDescription` and `nativeModifierDescription` entries;
     - (Optional) Add a new modifier description and icon (it will be displayed in Scenario Editor and Unit Encyclopedia):
         - Create a description in `Tglobal.dbf`. You can use rich formatting like `\fMedBold;Born Leader\n\fSmall;+1 leadership every 3 levels.\fNormal;`;
-        - Create an icon in `Icons.ff` (using special software like `D2ResExplorer`). **Its name should correspond to modifier id** to be linked with it (similar to spell icons and other game resources);
+        - Create `31x36px` icon in `Icons.ff` (using special software like `D2ResExplorer`). **Its name should correspond to modifier id** to be linked with it (similar to spell icons and other game resources), like `G000UM9048`;
     - Add a new modifier entry in `Gmodif.dbf` (see example [Gmodif.dbf](Examples/Modifiers/Gmodif.dbf)):
         - Specify new `MODIF_ID` (use format `gXXXum9XXX` if you want it to be available as Scenario Editor modifier);
         - Specify `SOURCE` id that corresponds to `L_CUSTOM` category added earlier (example `LModifS.dbf` uses `4` as the id);
