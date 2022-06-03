@@ -22,6 +22,7 @@
 
 #include "idview.h"
 #include <optional>
+#include <vector>
 
 namespace sol {
 class state;
