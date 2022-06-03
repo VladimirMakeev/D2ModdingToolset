@@ -133,13 +133,13 @@ int UnitImplView::getRace() const
 
     auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
     if (!soldier)
-        return 0;
+        return emptyCategoryId;
 
     auto raceId = soldier->vftable->getRaceId(soldier);
     auto races = (*globalApi.getGlobalData())->races;
     auto race = (TRaceType*)globalApi.findById(races, raceId);
     if (!race)
-        return 0;
+        return emptyCategoryId;
 
     return (int)race->data->raceType.id;
 }
@@ -147,7 +147,7 @@ int UnitImplView::getRace() const
 int UnitImplView::getSubRace() const
 {
     auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
-    return soldier ? (int)soldier->vftable->getSubrace(soldier)->id : 0;
+    return soldier ? (int)soldier->vftable->getSubrace(soldier)->id : game::emptyCategoryId;
 }
 
 bool UnitImplView::isSmall() const
