@@ -44,6 +44,10 @@ Race = { Human, Undead, Heretic, Dwarf, Neutral, Elf }
 Subrace = { Custom, Human, Undead, Heretic, Dwarf, Neutral, NeutralHuman, NeutralElf, NeutralGreenSkin,
             NeutralDragon, NeutralMarsh, NeutralWater, NeutralBarbarian, NeutralWolf, Elf }
 ```
+##### Lord
+```lua
+Lord = { Mage, Warrior, Diplomat }
+```
 ##### Terrain
 ```lua
 Terrain = { Human, Dwarf, Heretic, Undead, Neutral, Elf }
@@ -96,6 +100,11 @@ Immune = { NotImmune, Once, Always }
 ```
 Item = { Armor, Jewel, Weapon, Banner, PotionBoost, PotionHeal, PotionRevive,
          PotionPermanent, Scroll, Wand, Valuable, Orb, Talisman, TravelItem, Special }
+```
+
+##### Equipment
+```
+Equipment = { Banner, Tome, Battle1, Battle2, Artifact1, Artifact2, Boots }
 ```
 
 ##### DeathAnimation
@@ -175,7 +184,7 @@ The value is unique for every unit on scenario map.
 unit.id
 ```
 ##### type
-Returns leader [type](luaApi.md#leader) (or -1 if unit is not a leader).
+Returns [leader](luaApi.md#leader) type (or -1 if unit is not a leader).
 ```lua
 unit.type
 ```
@@ -188,6 +197,16 @@ unit:hasAbility(Ability.TalismanUse)
 Returns true if leader has movement bonus on specified [ground](luaApi.md#ground) (or false if unit is not a leader).
 ```lua
 unit:hasMoveBonus(Ground.Water)
+```
+##### group
+Returns unit's [group](luaApi.md#group).
+```lua
+unit.group
+```
+##### stack
+Returns unit's [stack](luaApi.md#stack).
+```lua
+unit.stack
 ```
 
 ---
@@ -254,7 +273,7 @@ Returns unit [type](luaApi.md#unit).
 impl.type
 ```
 ##### leaderType
-Returns leader [type](luaApi.md#leader) (or -1 if unit is not a leader).
+Returns [leader](luaApi.md#leader) type (or -1 if unit is not a leader).
 ```lua
 impl.leaderType
 ```
@@ -267,6 +286,11 @@ impl:hasAbility(Ability.TalismanUse)
 Returns true if leader has movement bonus on specified [ground](luaApi.md#ground) (or false if unit is not a leader).
 ```lua
 impl:hasMoveBonus(Ground.Water)
+```
+##### modifiers
+Returns array of applied modifier [ids](luaApi.md#id).
+```lua
+impl.modifiers
 ```
 
 ---
@@ -314,23 +338,43 @@ group.slots
 ---
 
 #### Stack
-Represents [group](luaApi.md#group) of 6 [units](luaApi.md#unit-slot) on a map. One of the units is a [leader](luaApi.md#leader-1).
+Represents [group](luaApi.md#group) of 6 [units](luaApi.md#unit-slot) on a map. One of the units is a leader.
 
 Methods:
+##### id
+Returns stack [id](luaApi.md#id). The value is unique for every stack on scenario map.
+```lua
+stack.id
+```
 ##### group
 Returns stack units as a [group](luaApi.md#group).
 ```lua
 stack.group
 ```
 ##### leader
-Returns stack [leader](luaApi.md#leader-1).
+Returns stack leader [unit](luaApi.md#unit-1).
 ```lua
 stack.leader
+```
+##### player
+Returns stack [player](luaApi.md#player).
+```lua
+stack.player
 ```
 ##### subrace
 Returns stack [subrace](luaApi.md#subrace).
 ```lua
 stack.subrace
+```
+##### inventoryItems
+Returns array of inventory [items](luaApi.md#item-1). This includes equipped items.
+```lua
+stack.inventoryItems
+```
+##### getEquippedItem
+Returns equipped [item](luaApi.md#item-1) by [equipment](luaApi.md#equipment) value.
+```lua
+stack:getEquippedItem(Equipment.Boots)
 ```
 ```lua
 --- Returns stack current movement points.
@@ -339,6 +383,33 @@ stack.movement
 stack.inside
 --- Returns true if stack is invisible.
 stack.invisible
+```
+
+---
+
+#### Player
+Represents game player including AI and neutrals.
+
+Methods:
+##### id
+Returns player [id](luaApi.md#id). The value is unique for every player on scenario map.
+```lua
+player.id
+```
+##### race
+Returns player [race](luaApi.md#race).
+```lua
+player.race
+```
+##### lord
+Returns player [lord](luaApi.md#lord).
+```lua
+player.lord
+```
+##### bank
+Returns player [bank](luaApi.md#currency).
+```lua
+player.bank
 ```
 
 ---
@@ -474,6 +545,11 @@ scenario.size
 Represents attack of [Unit implementation](luaApi.md#unit-implementation).
 
 Methods:
+##### id
+Returns attack [id](luaApi.md#id). This is different for every dynamic upgrade unit gets.
+```lua
+attack.id
+```
 ##### type
 Returns attack [type](luaApi.md#attack).
 ```lua
@@ -502,6 +578,20 @@ attack.heal
 attack.infinite
 --- Returns true if attack can inflict critical damage.
 attack.crit
+--- Returns true if attack is melee (L_ADJACENT or custom reach marked as MELEE in LAttR.dbf).
+attack.melee
+--- Returns maximum number of targets (1, 6 or MAX_TARGTS value for custom reach in LAttR.dbf).
+attack.maxTargets
+--- Returns critical damage percent [0 : 255].
+attack.critDamage
+--- Returns critical damage chance [0 : 100].
+attack.critPower
+--- Returns damage ratio [0 : 255] for additional targets.
+attack.damageRatio
+--- Returns true if damage ratio reapplied for each consecutive target.
+attack.damageRatioPerTarget
+--- Returns true if damage is split among targets.
+attack.damageSplit
 ```
 
 ---
@@ -552,6 +642,11 @@ currency.gold
 Represents base item of any type (described in GItem.dbf).
 
 Methods:
+##### id
+Returns item [id](luaApi.md#id). `ITEM_ID` value from `GItem.dbf`.
+```lua
+base.id
+```
 ##### type
 Returns item [type](luaApi.md#item).
 ```lua
@@ -583,8 +678,14 @@ base.unitImpl
 Represents item object in the current scenario.
 
 Methods:
+##### id
+Returns item [id](luaApi.md#id). This is different to id of [Item base](luaApi.md#itembase).
+The value is unique for every item on scenario map.
+```lua
+item.id
+```
 ##### base
-Returns item [base](luaApi.md#itembase).
+Returns [Item base](luaApi.md#itembase).
 ```lua
 item.base
 ```
