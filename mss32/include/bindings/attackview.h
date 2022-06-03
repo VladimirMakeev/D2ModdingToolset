@@ -59,6 +59,14 @@ public:
     /** Returns true if attack can apply critical damage. */
     bool canCrit() const;
 
+    bool isMelee() const;
+    int maxTargets() const;
+    int critDamage() const;
+    int critPower() const;
+    int damageRatio() const;
+    bool damageRatioPerTarget() const;
+    bool damageSplit() const;
+
 private:
     const game::IAttack* attack;
 };

@@ -19,6 +19,9 @@
 
 #include "attackview.h"
 #include "attack.h"
+#include "attackutils.h"
+#include "customattacks.h"
+#include "customattackutils.h"
 #include "idview.h"
 #include <sol/sol.hpp>
 
@@ -41,6 +44,14 @@ void AttackView::bind(sol::state& lua)
     attackView["heal"] = sol::property(&AttackView::getHeal);
     attackView["infinite"] = sol::property(&AttackView::isInfinite);
     attackView["crit"] = sol::property(&AttackView::canCrit);
+    attackView["melee"] = sol::property(&AttackView::isMelee);
+    attackView["maxTargets"] = sol::property(&AttackView::maxTargets);
+
+    attackView["critDamage"] = sol::property(&AttackView::critDamage);
+    attackView["critPower"] = sol::property(&AttackView::critPower);
+    attackView["damageRatio"] = sol::property(&AttackView::damageRatio);
+    attackView["damageRatioPerTarget"] = sol::property(&AttackView::damageRatioPerTarget);
+    attackView["damageSplit"] = sol::property(&AttackView::damageSplit);
 }
 
 IdView AttackView::getId() const
@@ -109,6 +120,42 @@ bool AttackView::isInfinite() const
 bool AttackView::canCrit() const
 {
     return attack->vftable->getCritHit(attack);
+}
+
+bool AttackView::isMelee() const
+{
+    return hooks::isMeleeAttack(attack);
+}
+
+int AttackView::maxTargets() const
+{
+    auto reach{attack->vftable->getAttackReach(attack)};
+    return hooks::getAttackMaxTargets(reach->id);
+}
+
+int AttackView::critDamage() const
+{
+    return hooks::getCustomAttackData(attack).critDamage;
+}
+
+int AttackView::critPower() const
+{
+    return hooks::getCustomAttackData(attack).critPower;
+}
+
+int AttackView::damageRatio() const
+{
+    return hooks::getCustomAttackData(attack).damageRatio;
+}
+
+bool AttackView::damageRatioPerTarget() const
+{
+    return hooks::getCustomAttackData(attack).damageRatioPerTarget;
+}
+
+bool AttackView::damageSplit() const
+{
+    return hooks::getCustomAttackData(attack).damageSplit;
 }
 
 } // namespace bindings
