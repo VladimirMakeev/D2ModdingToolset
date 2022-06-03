@@ -28,6 +28,7 @@
 #include "locationview.h"
 #include "log.h"
 #include "midstack.h"
+#include "playerview.h"
 #include "point.h"
 #include "scenariovariableview.h"
 #include "scenarioview.h"
@@ -243,6 +244,7 @@ static void bindApi(sol::state& lua)
     bindings::CurrencyView::bind(lua);
     bindings::ItemBaseView::bind(lua);
     bindings::ItemView::bind(lua);
+    bindings::PlayerView::bind(lua);
 
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }
