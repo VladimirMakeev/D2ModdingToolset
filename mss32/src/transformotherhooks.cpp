@@ -61,8 +61,8 @@ static int getTransformOtherLevel(const game::CMidUnit* unit,
     }
 
     try {
-        const bindings::UnitView attacker{unit};
-        const bindings::UnitView target{targetUnit};
+        const bindings::UnitView attacker{unit, objectMap};
+        const bindings::UnitView target{targetUnit, objectMap};
         const bindings::UnitImplView impl{transformImpl};
 
         if (CMidgardIDApi::get().getType(unitOrItemId) == IdType::Item) {

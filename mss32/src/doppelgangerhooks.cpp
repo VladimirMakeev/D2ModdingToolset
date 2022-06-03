@@ -41,7 +41,8 @@
 namespace hooks {
 
 static int getDoppelgangerTransformLevel(const game::CMidUnit* doppelganger,
-                                         const game::CMidUnit* targetUnit)
+                                         const game::CMidUnit* targetUnit,
+                                         const game::IMidgardObjectMap* objectMap)
 {
     std::optional<sol::environment> env;
     const auto path{scriptsFolder() / "doppelganger.lua"};
@@ -52,8 +53,8 @@ static int getDoppelgangerTransformLevel(const game::CMidUnit* doppelganger,
     }
 
     try {
-        const bindings::UnitView attacker{doppelganger};
-        const bindings::UnitView target{targetUnit};
+        const bindings::UnitView attacker{doppelganger, objectMap};
+        const bindings::UnitView target{targetUnit, objectMap};
 
         return (*getLevel)(attacker, target);
     } catch (const std::exception& e) {
@@ -207,7 +208,7 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
     CMidgardID targetUnitImplId = targetUnit->unitImpl->id;
 
     const CMidUnit* unit = fn.findUnitById(objectMap, &thisptr->unitId);
-    const auto transformLevel = getDoppelgangerTransformLevel(unit, targetUnit);
+    const auto transformLevel = getDoppelgangerTransformLevel(unit, targetUnit, objectMap);
 
     CMidgardID transformUnitImplId{targetUnit->unitImpl->id};
     CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;

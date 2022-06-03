@@ -239,10 +239,10 @@ UnitSlots getTargets(const game::IMidgardObjectMap* objectMap,
 
             if (battle.canPerformAttackOnUnitWithStatusCheck(objectMap, battleMsgData, batAttack,
                                                              &targetUnitId)) {
-                value.emplace_back(bindings::UnitSlotView(targetUnit, i, targetGroupId));
+                value.emplace_back(bindings::UnitSlotView(targetUnit, objectMap, i, targetGroupId));
             }
         } else if (isSummonAttack) {
-            value.emplace_back(bindings::UnitSlotView(nullptr, i, targetGroupId));
+            value.emplace_back(bindings::UnitSlotView(nullptr, objectMap, i, targetGroupId));
         }
     }
 
@@ -278,7 +278,7 @@ std::vector<bindings::UnitSlotView> getAllies(const game::IMidgardObjectMap* obj
             continue;
         }
 
-        value.emplace_back(bindings::UnitSlotView(allyUnit, i, unitGroupId));
+        value.emplace_back(bindings::UnitSlotView(allyUnit, objectMap, i, unitGroupId));
     }
 
     return value;
@@ -306,9 +306,9 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
 
     auto unit = fn.findUnitById(objectMap, unitId);
     int unitPosition = groupApi.getUnitPosition(unitGroup, unitId);
-    bindings::UnitSlotView attacker(unit, unitPosition, unitGroupId);
+    bindings::UnitSlotView attacker(unit, objectMap, unitPosition, unitGroupId);
 
-    bindings::UnitSlotView selected(nullptr, -1, &emptyId);
+    bindings::UnitSlotView selected(nullptr, objectMap, -1, &emptyId);
 
     auto targets = getTargets(objectMap, battleMsgData, batAttack, targetGroupId, unitId, &emptyId);
     auto allies = getAllies(objectMap, battleMsgData, unitGroupId, unitId);
@@ -392,14 +392,14 @@ UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* 
 
     auto unit = fn.findUnitById(objectMap, unitId);
     int unitPosition = groupApi.getUnitPosition(unitGroup, unitId);
-    bindings::UnitSlotView attacker(unit, unitPosition, unitGroupId);
+    bindings::UnitSlotView attacker(unit, objectMap, unitPosition, unitGroupId);
 
     auto target = fn.findUnitById(objectMap, targetUnitId);
     int targetPosition = groupApi.getUnitPosition(targetGroup, targetUnitId);
     if (targetPosition == -1) {
         targetPosition = id.summonUnitIdToPosition(targetUnitId);
     }
-    bindings::UnitSlotView selected(target, targetPosition, targetGroupId);
+    bindings::UnitSlotView selected(target, objectMap, targetPosition, targetGroupId);
 
     auto targets = getTargets(objectMap, battleMsgData, batAttack, targetGroupId, unitId,
                               targetUnitId);

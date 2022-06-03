@@ -28,8 +28,9 @@ class state;
 }
 
 namespace game {
+struct IMidgardObjectMap;
 struct CMidUnit;
-}
+} // namespace game
 
 namespace bindings {
 
@@ -38,7 +39,10 @@ class UnitView;
 class UnitSlotView
 {
 public:
-    UnitSlotView(const game::CMidUnit* unit, int position, const game::CMidgardID* groupId);
+    UnitSlotView(const game::CMidUnit* unit,
+                 const game::IMidgardObjectMap* objectMap,
+                 int position,
+                 const game::CMidgardID* groupId);
     bool operator==(const UnitSlotView& value) const;
 
     static void bind(sol::state& lua);
@@ -56,6 +60,7 @@ public:
 
 private:
     const game::CMidUnit* unit;
+    const game::IMidgardObjectMap* objectMap;
     int position;
     game::CMidgardID groupId;
 };

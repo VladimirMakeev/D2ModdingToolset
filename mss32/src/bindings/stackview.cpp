@@ -55,7 +55,7 @@ std::optional<UnitView> StackView::getLeader() const
         return std::nullopt;
     }
 
-    return UnitView{leaderUnit};
+    return UnitView{leaderUnit, objectMap};
 }
 
 int StackView::getMovement() const

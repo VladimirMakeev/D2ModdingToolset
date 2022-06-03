@@ -58,7 +58,7 @@ static int getSummonLevel(const game::CMidUnit* summoner,
     }
 
     try {
-        const bindings::UnitView summonerUnit{summoner};
+        const bindings::UnitView summonerUnit{summoner, objectMap};
         const bindings::UnitImplView impl{summonImpl};
 
         if (CMidgardIDApi::get().getType(unitOrItemId) == IdType::Item) {

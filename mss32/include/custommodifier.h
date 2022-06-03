@@ -22,6 +22,7 @@
 
 #include "attack.h"
 #include "currency.h"
+#include "gameutils.h"
 #include "idvector.h"
 #include "scripts.h"
 #include "umunit.h"
@@ -108,7 +109,7 @@ struct CCustomModifier
     {
         try {
             if (function) {
-                bindings::UnitView unitView{unit, getPrev()};
+                bindings::UnitView unitView{unit, getObjectMap(), getPrev()};
                 return (*function)(unitView, prev);
             }
         } catch (const std::exception& e) {
@@ -123,7 +124,7 @@ struct CCustomModifier
     {
         try {
             if (function) {
-                bindings::UnitView unitView{unit, getPrev()};
+                bindings::UnitView unitView{unit, getObjectMap(), getPrev()};
                 return (*function)(unitView, prev).as<T>();
             }
         } catch (const std::exception& e) {
@@ -138,7 +139,7 @@ struct CCustomModifier
     {
         try {
             if (function) {
-                bindings::UnitView unitView{unit, getPrev()};
+                bindings::UnitView unitView{unit, getObjectMap(), getPrev()};
                 return (*function)(unitView, param, prev);
             }
         } catch (const std::exception& e) {

@@ -62,8 +62,8 @@ static int getDrainLevel(const game::CMidUnit* unit,
     }
 
     try {
-        const bindings::UnitView attacker{unit};
-        const bindings::UnitView target{targetUnit};
+        const bindings::UnitView attacker{unit, objectMap};
+        const bindings::UnitView target{targetUnit, objectMap};
 
         if (CMidgardIDApi::get().getType(unitOrItemId) == IdType::Item) {
             const bindings::ItemView itemView{unitOrItemId, objectMap};

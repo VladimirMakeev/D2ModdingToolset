@@ -20,6 +20,7 @@
 #include "unitview.h"
 #include "dynupgrade.h"
 #include "game.h"
+#include "gameutils.h"
 #include "globaldata.h"
 #include "log.h"
 #include "midunit.h"
@@ -33,13 +34,17 @@
 
 namespace bindings {
 
-UnitView::UnitView(const game::CMidUnit* unit)
+UnitView::UnitView(const game::CMidUnit* unit, const game::IMidgardObjectMap* objectMap)
     : unit(unit)
+    , objectMap(objectMap)
     , unitImpl(nullptr)
 { }
 
-UnitView::UnitView(const game::CMidUnit* unit, const game::IUsUnit* unitImpl)
+UnitView::UnitView(const game::CMidUnit* unit,
+                   const game::IMidgardObjectMap* objectMap,
+                   const game::IUsUnit* unitImpl)
     : unit(unit)
+    , objectMap(objectMap)
     , unitImpl(unitImpl)
 { }
 
@@ -52,6 +57,8 @@ void UnitView::bind(sol::state& lua)
     unit["hpMax"] = sol::property(&UnitView::getHpMax);
     unit["impl"] = sol::property(&UnitView::getImpl);
     unit["baseImpl"] = sol::property(&UnitView::getBaseImpl);
+    unit["group"] = sol::property(&UnitView::getGroup);
+    unit["stack"] = sol::property(&UnitView::getStack);
 
     unit["type"] = sol::property(&UnitView::getCategory);
     unit["movement"] = sol::property(&UnitView::getMovement);
@@ -69,6 +76,26 @@ std::optional<UnitImplView> UnitView::getImpl() const
 std::optional<UnitImplView> UnitView::getBaseImpl() const
 {
     return {hooks::getGlobalUnitImpl(unit)};
+}
+
+GroupView UnitView::getGroup() const
+{
+    using namespace game;
+
+    auto groupId = gameFunctions().getStackFortRuinId(&unit->id, objectMap);
+
+    auto group = hooks::getGroup(objectMap, groupId);
+
+    return GroupView{group, objectMap, groupId};
+}
+
+std::optional<StackView> UnitView::getStack() const
+{
+    auto stack = hooks::getStackByUnitId(objectMap, &unit->id);
+    if (!stack)
+        return std::nullopt;
+
+    return {StackView{stack, objectMap}};
 }
 
 IdView UnitView::getId() const
