@@ -36,10 +36,10 @@ namespace hooks {
 
 bool isGreaterPickRandomIfEqual(int first, int second);
 
-game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMap,
-                                         const game::BattleMsgData* battleMsgData,
-                                         const game::CMidgardID* unitId,
-                                         bool ally);
+const game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMap,
+                                               const game::BattleMsgData* battleMsgData,
+                                               const game::CMidgardID* unitId,
+                                               bool ally);
 
 const game::CScenarioInfo* getScenarioInfo(const game::IMidgardObjectMap* objectMap);
 

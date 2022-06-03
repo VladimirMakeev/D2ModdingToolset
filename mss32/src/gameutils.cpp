@@ -53,10 +53,10 @@ bool isGreaterPickRandomIfEqual(int first, int second)
     return first > second || (first == second && fn.generateRandomNumber(2) == 1);
 }
 
-game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMap,
-                                         const game::BattleMsgData* battleMsgData,
-                                         const game::CMidgardID* unitId,
-                                         bool ally)
+const game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMap,
+                                               const game::BattleMsgData* battleMsgData,
+                                               const game::CMidgardID* unitId,
+                                               bool ally)
 {
     using namespace game;
 
