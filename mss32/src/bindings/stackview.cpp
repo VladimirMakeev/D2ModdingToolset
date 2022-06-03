@@ -19,6 +19,7 @@
 
 #include "stackview.h"
 #include "game.h"
+#include "itemview.h"
 #include "midgardobjectmap.h"
 #include "midstack.h"
 #include "midsubrace.h"
@@ -35,12 +36,21 @@ StackView::StackView(const game::CMidStack* stack, const game::IMidgardObjectMap
 void StackView::bind(sol::state& lua)
 {
     auto stackView = lua.new_usertype<StackView>("StackView");
+    stackView["id"] = sol::property(&StackView::getId);
     stackView["group"] = sol::property(&StackView::getGroup);
     stackView["leader"] = sol::property(&StackView::getLeader);
     stackView["movement"] = sol::property(&StackView::getMovement);
     stackView["subrace"] = sol::property(&StackView::getSubrace);
     stackView["inside"] = sol::property(&StackView::isInside);
     stackView["invisible"] = sol::property(&StackView::isInvisible);
+
+    stackView["inventoryItems"] = sol::property(&StackView::getInventoryItems);
+    stackView["getEquippedItem"] = &StackView::getLeaderEquippedItem;
+}
+
+IdView StackView::getId() const
+{
+    return IdView{stack->id};
 }
 
 GroupView StackView::getGroup() const
@@ -79,6 +89,35 @@ bool StackView::isInside() const
 bool StackView::isInvisible() const
 {
     return stack->invisible;
+}
+
+std::vector<ItemView> StackView::getInventoryItems() const
+{
+    const auto& items = stack->inventory.items;
+    const auto count = items.end - items.bgn;
+
+    std::vector<ItemView> result;
+    result.reserve(count);
+
+    for (const game::CMidgardID* it = items.bgn; it != items.end; it++) {
+        result.push_back(ItemView{it, objectMap});
+    }
+
+    return result;
+}
+
+std::optional<ItemView> StackView::getLeaderEquippedItem(const game::EquippedItemIdx& idx) const
+{
+    const auto& items = stack->leaderEquippedItems;
+    const auto count = items.end - items.bgn;
+    if (idx < 0 || idx >= count)
+        return std::nullopt;
+
+    auto itemId = stack->leaderEquippedItems.bgn[idx];
+    if (itemId == game::emptyId)
+        return std::nullopt;
+
+    return {ItemView{&itemId, objectMap}};
 }
 
 } // namespace bindings

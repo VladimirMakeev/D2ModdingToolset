@@ -21,15 +21,21 @@
 #define STACKVIEW_H
 
 #include "groupview.h"
+#include "idview.h"
+#include <optional>
+#include <vector>
 
 namespace game {
 struct CMidStack;
 struct IMidgardObjectMap;
+
+enum EquippedItemIdx;
 } // namespace game
 
 namespace bindings {
 
 class UnitView;
+class ItemView;
 
 class StackView
 {
@@ -38,6 +44,7 @@ public:
 
     static void bind(sol::state& lua);
 
+    IdView getId() const;
     /** Returns stack units as a group. */
     GroupView getGroup() const;
     /** Returns stack leader. */
@@ -50,6 +57,9 @@ public:
     bool isInside() const;
 
     bool isInvisible() const;
+
+    std::vector<ItemView> getInventoryItems() const;
+    std::optional<ItemView> getLeaderEquippedItem(const game::EquippedItemIdx& idx) const;
 
 private:
     const game::CMidStack* stack;
