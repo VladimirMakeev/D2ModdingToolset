@@ -20,6 +20,7 @@
 #ifndef TILEINDICES_H
 #define TILEINDICES_H
 
+#include "d2assert.h"
 #include "tileprefixes.h"
 #include <cstdint>
 
@@ -59,7 +60,7 @@ struct TileIndices
     TileArrayIndex elf;
 };
 
-static_assert(sizeof(TileIndices) == 32, "Size of TileIndices structure must be exactly 32 bytes");
+assert_size(TileIndices, 32);
 
 namespace TileIndicesApi {
 

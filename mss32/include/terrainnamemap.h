@@ -30,8 +30,7 @@ using TerrainNameMap = Map<LTerrainCategory, char[3]>;
 using TerrainNameMapNode = MapNode<LTerrainCategory, char[3]>;
 using TerrainNameMapIterator = MapIterator<LTerrainCategory, char[3]>;
 
-static_assert(sizeof(TerrainNameMapNode) == 32,
-              "Size of TerrainNameMapNode structure must be exactly 32 bytes");
+assert_size(TerrainNameMapNode, 32);
 
 namespace TerrainNameMapApi {
 

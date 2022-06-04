@@ -50,7 +50,7 @@ struct WidgetState
     char padding[2];
 };
 
-static_assert(sizeof(WidgetState) == 16, "Size of WidgetState structure must be exactly 16 bytes");
+assert_size(WidgetState, 16);
 
 struct WidgetImage
 {
@@ -59,7 +59,7 @@ struct WidgetImage
     int unknown;
 };
 
-static_assert(sizeof(WidgetImage) == 20, "Size of WidgetImage structure must be exactly 20 bytes");
+assert_size(WidgetImage, 20);
 
 using WidgetMouseMoveFunctor = CBFunctorDispatch3<CWidgetInterf*, const CMqPoint*, unsigned int>;
 using WidgetMousePressFunctor = CBFunctorDispatch2<CWidgetInterf*, const CMqPoint*>;
@@ -94,16 +94,14 @@ struct CWidgetInterfData
     WidgetState* state;
 };
 
-static_assert(sizeof(CWidgetInterfData) == 244,
-              "Size of CWidgetInterfData structure must be exactly 244 bytes");
+assert_size(CWidgetInterfData, 244);
 
 struct CWidgetInterf : public CInterface
 {
     CWidgetInterfData* data;
 };
 
-static_assert(sizeof(CWidgetInterf) == 12,
-              "Size of CWidgetInterf structure must be exactly 12 bytes");
+assert_size(CWidgetInterf, 12);
 
 } // namespace game
 

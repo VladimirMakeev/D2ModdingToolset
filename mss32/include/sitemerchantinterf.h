@@ -37,8 +37,7 @@ struct CSiteMerchantInterfData
     char unknown3[60];
 };
 
-static_assert(sizeof(CSiteMerchantInterfData) == 76,
-              "Size of CSiteMerchantInterfData structure must be exactly 76 bytes");
+assert_size(CSiteMerchantInterfData, 76);
 
 /**
  * Shows merchant trade window.
@@ -51,8 +50,7 @@ struct CSiteMerchantInterf : public CMidDataCache2::INotify
     CSiteMerchantInterfData* data;
 };
 
-static_assert(sizeof(CSiteMerchantInterf) == 40,
-              "Size of CSiteMerchantInterf structure must be exactly 40 bytes");
+assert_size(CSiteMerchantInterf, 40);
 
 namespace CSiteMerchantInterfApi {
 

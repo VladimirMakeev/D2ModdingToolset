@@ -155,14 +155,9 @@ struct GlobalVariables
     String tutorialName;
 };
 
-static_assert(sizeof(GlobalVariables) == 352,
-              "Size of GlobalVariables structure must be exactly 352 bytes");
-
-static_assert(offsetof(GlobalVariables, rodPlacementCost) == 148,
-              "GlobalVariables::rodPlacementCost offset must be 148 bytes");
-
-static_assert(offsetof(GlobalVariables, talismanCharges) == 296,
-              "GlobalVariables::talismanCharges offset must be 296 bytes");
+assert_size(GlobalVariables, 352);
+assert_offset(GlobalVariables, rodPlacementCost, 148);
+assert_offset(GlobalVariables, talismanCharges, 296);
 
 } // namespace game
 

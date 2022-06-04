@@ -42,8 +42,7 @@ struct CNetDPlaySession : public IMqNetSession
     char padding[3];
 };
 
-static_assert(sizeof(CNetDPlaySession) == 64,
-              "Size of CNetDPlaySession structure must be exactly 64 bytes");
+assert_size(CNetDPlaySession, 64);
 
 } // namespace game
 

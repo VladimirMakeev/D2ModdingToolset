@@ -93,8 +93,7 @@ struct ModifiedUnitInfo
     CMidgardID modifierId;
 };
 
-static_assert(sizeof(ModifiedUnitInfo) == 8,
-              "Size of ModifiedUnitInfo structure must be exactly 8 bytes");
+assert_size(ModifiedUnitInfo, 8);
 
 /** Array of 48 items (8 modifiers x 6 units). */
 static const size_t ModifiedUnitCountPatched = 48;
@@ -104,8 +103,7 @@ union ModifiedUnitsPatched
     ModifiedUnitInfo* patched;
 };
 
-static_assert(sizeof(ModifiedUnitsPatched) == 64,
-              "Size of ModifiedUnitsPatched union must be exactly 64 bytes");
+assert_size(ModifiedUnitsPatched, 64);
 
 union AttackSourceImmunityStatusesPatched
 {
@@ -117,8 +115,7 @@ union AttackSourceImmunityStatusesPatched
     std::uint32_t patched;
 };
 
-static_assert(sizeof(AttackSourceImmunityStatusesPatched) == 4,
-              "Size of AttackSourceImmunityStatusesPatched union must be exactly 4 bytes");
+assert_size(AttackSourceImmunityStatusesPatched, 4);
 
 /** Battle turn info. */
 struct BattleTurn
@@ -130,7 +127,7 @@ struct BattleTurn
     char padding[3];
 };
 
-static_assert(sizeof(BattleTurn) == 8, "Size of BattleTurn structure must be exactly 8 bytes");
+assert_size(BattleTurn, 8);
 
 /** Additional unit statuses and information packed in single byte. */
 union UnitFlags
@@ -154,7 +151,7 @@ union UnitFlags
     std::uint8_t value;
 };
 
-static_assert(sizeof(UnitFlags) == 1, "Size of UnitFlags union must be exactly 1 byte");
+assert_size(UnitFlags, 1);
 
 /** Holds unit information used in battle. */
 struct UnitInfo
@@ -202,25 +199,14 @@ struct UnitInfo
     int attackPowerReduction;
 };
 
-static_assert(sizeof(UnitInfo) == 168, "Size of UnitInfo structure must be exactly 168 bytes");
-
-static_assert(offsetof(UnitInfo, unitStatuses) == 8,
-              "UnitInfo::unitStatuses offset must be 8 bytes");
-
-static_assert(offsetof(UnitInfo, unitHp) == 44, "UnitInfo::unitHp offset must be 44 bytes");
-
-static_assert(offsetof(UnitInfo, unitXp) == 46, "UnitInfo::unitXp offset must be 46 bytes");
-
-static_assert(offsetof(UnitInfo, unitFlags) == 48, "UnitInfo::unitFlags offset must be 48 bytes");
-
-static_assert(offsetof(UnitInfo, poisonAppliedRound) == 51,
-              "UnitInfo::poisonAppliedRound offset must be 51 bytes");
-
-static_assert(offsetof(UnitInfo, modifiedUnits) == 60,
-              "UnitInfo::modifiedUnits offset must be 60 bytes");
-
-static_assert(offsetof(UnitInfo, shatteredArmor) == 156,
-              "UnitInfo::shatteredArmor offset must be 156 bytes");
+assert_size(UnitInfo, 168);
+assert_offset(UnitInfo, unitStatuses, 8);
+assert_offset(UnitInfo, unitHp, 44);
+assert_offset(UnitInfo, unitXp, 46);
+assert_offset(UnitInfo, unitFlags, 48);
+assert_offset(UnitInfo, poisonAppliedRound, 51);
+assert_offset(UnitInfo, modifiedUnits, 60);
+assert_offset(UnitInfo, shatteredArmor, 156);
 
 using GroupIdTargetsPair = Pair<CMidgardID, TargetSet>;
 
@@ -269,14 +255,9 @@ struct BattleMsgData
     char unknown11[4];
 };
 
-static_assert(sizeof(BattleMsgData) == 3920,
-              "Size of BattleMsgData structure must be exactly 3920 bytes");
-
-static_assert(offsetof(BattleMsgData, turnsOrder) == 3696,
-              "BattleMsgData::turnsOrder offset must be 3696 bytes");
-
-static_assert(offsetof(BattleMsgData, attackerStackUnitIds) == 3816,
-              "BattleMsgData::attackerStackUnitIds offset must be 3816 bytes");
+assert_size(BattleMsgData, 3920);
+assert_offset(BattleMsgData, turnsOrder, 3696);
+assert_offset(BattleMsgData, attackerStackUnitIds, 3816);
 
 namespace BattleMsgDataApi {
 

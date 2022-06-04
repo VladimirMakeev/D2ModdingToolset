@@ -56,20 +56,11 @@ struct CCityStackInterfData
     char unknown7[40];
 };
 
-static_assert(sizeof(CCityStackInterfData) == 136,
-              "Size of CCityStackInterfData structure must be exactly 136 bytes");
-
-static_assert(offsetof(CCityStackInterfData, reinfGroup) == 20,
-              "CCityStackInterfData::reinfGroup offset must be 20 bytes");
-
-static_assert(offsetof(CCityStackInterfData, fortInventoryDisplay) == 28,
-              "CCityStackInterfData::fortInventoryDisplay offset must be 28 bytes");
-
-static_assert(offsetof(CCityStackInterfData, dismissUnit) == 56,
-              "CCityStackInterfData::dismissUnit offset must be 56 bytes");
-
-static_assert(offsetof(CCityStackInterfData, fortificationId) == 92,
-              "CCityStackInterfData::fortificationId offset must be 92 bytes");
+assert_size(CCityStackInterfData, 136);
+assert_offset(CCityStackInterfData, reinfGroup, 20);
+assert_offset(CCityStackInterfData, fortInventoryDisplay, 28);
+assert_offset(CCityStackInterfData, dismissUnit, 56);
+assert_offset(CCityStackInterfData, fortificationId, 92);
 
 /**
  * Shows stack, garrison and unit hire window of cities and capitals.
@@ -83,11 +74,8 @@ struct CCityStackInterf : public CMidDataCache2::INotify
     CCityStackInterfData* data;
 };
 
-static_assert(sizeof(CCityStackInterf) == 44,
-              "Size of CCityStackInterf structure must be exactly 44 bytes");
-
-static_assert(offsetof(CCityStackInterf, dragDropInterf) == 12,
-              "CCityStackInterf::dragDropInterf offset must be 12 bytes");
+assert_size(CCityStackInterf, 44);
+assert_offset(CCityStackInterf, dragDropInterf, 12);
 
 namespace CCityStackInterfApi {
 

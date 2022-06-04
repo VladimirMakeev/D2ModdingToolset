@@ -20,6 +20,8 @@
 #ifndef MQNETPLAYERENUM_H
 #define MQNETPLAYERENUM_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct String;
@@ -48,8 +50,7 @@ struct IMqNetPlayerEnumVftable
     GetId getId;
 };
 
-static_assert(sizeof(IMqNetPlayerEnumVftable) == 3 * sizeof(void*),
-              "IMqNetPlayerEnum vftable must have exactly 3 methods");
+assert_vftable_size(IMqNetPlayerEnumVftable, 3);
 
 } // namespace game
 

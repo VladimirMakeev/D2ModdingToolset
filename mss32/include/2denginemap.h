@@ -20,6 +20,8 @@
 #ifndef C2DENGINEMAP_H
 #define C2DENGINEMAP_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct C2DEngineMapVftable;
@@ -81,8 +83,7 @@ struct C2DEngineMapVftable
     Clear clear;
 };
 
-static_assert(sizeof(C2DEngineMapVftable) == 7 * sizeof(void*),
-              "C2DEngineMap vftable must have exactly 7 methods");
+assert_vftable_size(C2DEngineMapVftable, 7);
 
 } // namespace game
 

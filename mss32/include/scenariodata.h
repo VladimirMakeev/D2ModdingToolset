@@ -55,8 +55,7 @@ struct ScenarioData
     int unknown2;
 };
 
-static_assert(sizeof(ScenarioData) == 128,
-              "Size of ScenarioData structure must be exactly 128 bytes");
+assert_size(ScenarioData, 128);
 
 namespace ScenarioDataApi {
 

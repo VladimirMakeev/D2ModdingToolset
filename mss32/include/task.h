@@ -20,6 +20,7 @@
 #ifndef TASK_H
 #define TASK_H
 
+#include "d2assert.h"
 #include "smartptr.h"
 #include <cstdint>
 
@@ -64,8 +65,7 @@ struct ITaskVftable
     GetTaskManager getTaskManager;
 };
 
-static_assert(sizeof(ITaskVftable) == 6 * sizeof(void*),
-              "ITask vftable must have exactly 6 methods");
+assert_vftable_size(ITaskVftable, 6);
 
 } // namespace game
 

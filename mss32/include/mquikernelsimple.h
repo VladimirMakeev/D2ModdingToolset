@@ -34,7 +34,7 @@ struct TimerData
     std::uint32_t timeoutMs;
 };
 
-static_assert(sizeof(TimerData) == 12, "Size of TimerData structure must be exactly 12 bytes");
+assert_size(TimerData, 12);
 
 struct CMqUIKernelSimpleData
 {
@@ -58,16 +58,14 @@ struct CMqUIKernelSimpleData
     IMqUIController* uiController;
 };
 
-static_assert(sizeof(CMqUIKernelSimpleData) == 92,
-              "Size of CMqUIKernelSimpleData structure must be exactly 92 bytes");
+assert_size(CMqUIKernelSimpleData, 92);
 
 struct CMqUIKernelSimple : public IMqUIKernel
 {
     CMqUIKernelSimpleData* data;
 };
 
-static_assert(sizeof(CMqUIKernelSimple) == 8,
-              "Size of CMqUIKernelSimple structure must be exactly 8 bytes");
+assert_size(CMqUIKernelSimple, 8);
 
 } // namespace game
 

@@ -45,16 +45,14 @@ struct CEncLayoutUnitData
     IEncUnitDescriptor* unitDescriptor;
 };
 
-static_assert(sizeof(CEncLayoutUnitData) == 68,
-              "Size of CEncLayoutUnitData structure must be exactly 68 bytes");
+assert_size(CEncLayoutUnitData, 68);
 
 struct CEncLayoutUnit : public IEncLayout
 {
     CEncLayoutUnitData* data;
 };
 
-static_assert(sizeof(CEncLayoutUnit) == 16,
-              "Size of CEncLayoutUnit structure must be exactly 16 bytes");
+assert_size(CEncLayoutUnit, 16);
 
 namespace CEncLayoutUnitApi {
 

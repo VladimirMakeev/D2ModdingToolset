@@ -49,8 +49,7 @@ struct CTaskMapChangeData
     SmartPointer ptr3;
 };
 
-static_assert(sizeof(CTaskMapChangeData) == 44,
-              "Size of CTaskMapChangeData structure must be exactly 44 bytes");
+assert_size(CTaskMapChangeData, 44);
 
 /** Base class for map changing tools logic. */
 struct CTaskMapChange : CTaskBase

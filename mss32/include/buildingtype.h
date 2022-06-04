@@ -49,8 +49,7 @@ struct TBuildingTypeData
     LBuildingCategory category;
 };
 
-static_assert(sizeof(TBuildingTypeData) == 84,
-              "Size of TBuildingTypeData structure must be exactly 84 bytes");
+assert_size(TBuildingTypeData, 84);
 
 /** Holds building information read from Gbuild.dbf. */
 struct TBuildingType : public game::IMidObject
@@ -58,8 +57,7 @@ struct TBuildingType : public game::IMidObject
     TBuildingTypeData* data;
 };
 
-static_assert(sizeof(TBuildingType) == 12,
-              "Size of TBuildingType structure must be exactly 12 bytes");
+assert_size(TBuildingType, 12);
 
 /** Holds unit upgrade building information read from Gbuild.dbf. */
 struct TBuildingUnitUpgType : public TBuildingType
@@ -68,8 +66,7 @@ struct TBuildingUnitUpgType : public TBuildingType
     int level;
 };
 
-static_assert(sizeof(TBuildingUnitUpgType) == 28,
-              "Size of TBuildingUnitUpgType structure must be exactly 28 bytes");
+assert_size(TBuildingUnitUpgType, 28);
 
 namespace TBuildingTypeApi {
 

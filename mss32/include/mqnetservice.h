@@ -78,8 +78,7 @@ struct IMqNetServiceVftable
     JoinSession joinSession;
 };
 
-static_assert(sizeof(IMqNetServiceVftable) == 5 * sizeof(void*),
-              "IMqNetService vftable must have exactly 5 methods");
+assert_vftable_size(IMqNetServiceVftable, 5);
 
 } // namespace game
 

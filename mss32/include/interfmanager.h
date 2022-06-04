@@ -20,6 +20,7 @@
 #ifndef INTERFMANAGER_H
 #define INTERFMANAGER_H
 
+#include "d2assert.h"
 #include "d2list.h"
 #include "functordispatch2.h"
 #include "mqpresentationmanager.h"
@@ -125,8 +126,7 @@ struct CInterfManagerVftable
     ConvertPosition method22;
 };
 
-static_assert(sizeof(CInterfManagerVftable) == 23 * sizeof(void*),
-              "CInterfManager vftable must have exactly 23 methods");
+assert_vftable_size(CInterfManagerVftable, 23);
 
 struct CInterfManager
 {
@@ -162,8 +162,7 @@ struct CInterfManagerImplData
     CMqRect area;
 };
 
-static_assert(sizeof(CInterfManagerImplData) == 200,
-              "Size of CInterfManagerImplData structure must be exactly 200 bytes");
+assert_size(CInterfManagerImplData, 200);
 
 struct CInterfManagerImpl
     : public CInterfManager
@@ -172,14 +171,9 @@ struct CInterfManagerImpl
     CInterfManagerImplData* data;
 };
 
-static_assert(sizeof(CInterfManagerImpl) == 12,
-              "Size of CInterfManagerImpl structure must be exactly 12 bytes");
-
-static_assert(offsetof(CInterfManagerImpl, CInterfManagerImpl::CInterfManager::vftable) == 0,
-              "Vftable offset for CInterfManager in CInterfManagerImpl structure must be 0 bytes");
-
-static_assert(offsetof(CInterfManagerImpl, CInterfManagerImpl::IPresentation::vftable) == 4,
-              "Vftable offset for IPresentation in CInterfManagerImpl structure must be 4 bytes");
+assert_size(CInterfManagerImpl, 12);
+assert_offset(CInterfManagerImpl, CInterfManagerImpl::CInterfManager::vftable, 0);
+assert_offset(CInterfManagerImpl, CInterfManagerImpl::IPresentation::vftable, 4);
 
 using InterfManagerImplPtr = SmartPtr<CInterfManagerImpl>;
 

@@ -35,8 +35,7 @@ struct CItemBaseData
     CMidgardID unitId;
 };
 
-static_assert(sizeof(CItemBaseData) == 32,
-              "Size of CItemBaseData structure must be exactly 32 bytes");
+assert_size(CItemBaseData, 32);
 
 /** Base class for all items read from GItem.dbf. */
 struct CItemBase : public IItem
@@ -45,7 +44,7 @@ struct CItemBase : public IItem
     CItemBaseData* data;
 };
 
-static_assert(sizeof(CItemBase) == 12, "Size of CItemBase structure must be exactly 12 bytes");
+assert_size(CItemBase, 12);
 
 } // namespace game
 

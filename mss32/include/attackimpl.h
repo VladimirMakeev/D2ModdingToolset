@@ -67,17 +67,10 @@ struct CAttackImplData
     };
 };
 
-static_assert(sizeof(CAttackImplData) == 100,
-              "Size of CAttackImplData structure must be exactly 100 bytes");
-
-static_assert(offsetof(CAttackImplData, attackSource) == 44,
-              "CAttackImplData::attackSource offset must be 44 bytes");
-
-static_assert(offsetof(CAttackImplData, attackReach) == 56,
-              "CAttackImplData::attackReach offset must be 56 bytes");
-
-static_assert(offsetof(CAttackImplData, critHit) == 96,
-              "CAttackImplData::critHit offset must be 96 bytes");
+assert_size(CAttackImplData, 100);
+assert_offset(CAttackImplData, attackSource, 44);
+assert_offset(CAttackImplData, attackReach, 56);
+assert_offset(CAttackImplData, critHit, 96);
 
 /** Holds attack data read from GAttacks.dbf. */
 struct CAttackImpl : public IAttack
@@ -85,7 +78,7 @@ struct CAttackImpl : public IAttack
     CAttackImplData* data;
 };
 
-static_assert(sizeof(CAttackImpl) == 12, "Size of CAttackImpl structure must be exactly 12 bytes");
+assert_size(CAttackImpl, 12);
 
 namespace CAttackImplApi {
 

@@ -34,17 +34,10 @@ struct CItemPotionHeal
     int quantityHp;
 };
 
-static_assert(sizeof(CItemPotionHeal) == 20,
-              "Size of CItemPotionHeal structure must be exactly 20 bytes");
-
-static_assert(offsetof(CItemPotionHeal, CItemPotionHeal::IItemExPotionHeal::vftable) == 0,
-              "Vftable offset for IItemExPotionHeal in CItemPotionHeal structure must be 0 bytes");
-
-static_assert(offsetof(CItemPotionHeal, CItemPotionHeal::CItemBase::vftable) == 4,
-              "Vftable offset for CItemBase in CItemPotionHeal structure must be 4 bytes");
-
-static_assert(offsetof(CItemPotionHeal, quantityHp) == 16,
-              "CItemPotionHeal::quantityHp offset must be 16 bytes");
+assert_size(CItemPotionHeal, 20);
+assert_offset(CItemPotionHeal, CItemPotionHeal::IItemExPotionHeal::vftable, 0);
+assert_offset(CItemPotionHeal, CItemPotionHeal::CItemBase::vftable, 4);
+assert_offset(CItemPotionHeal, quantityHp, 16);
 
 } // namespace game
 

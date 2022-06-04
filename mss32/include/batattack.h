@@ -20,6 +20,7 @@
 #ifndef BATATTACK_H
 #define BATATTACK_H
 
+#include "d2assert.h"
 #include "targetset.h"
 
 namespace game {
@@ -144,8 +145,7 @@ struct IBatAttackVftable
     UnknownMethod method17;
 };
 
-static_assert(sizeof(IBatAttackVftable) == 18 * sizeof(void*),
-              "IBatAttack vftable must have exactly 18 methods");
+assert_vftable_size(IBatAttackVftable, 18);
 
 } // namespace game
 

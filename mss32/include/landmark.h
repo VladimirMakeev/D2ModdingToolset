@@ -38,17 +38,15 @@ struct TLandmarkData
     TextAndId description;
 };
 
-static_assert(sizeof(TLandmarkData) == 40,
-              "Size of TLandmarkData structure must be exactly 40 bytes");
+assert_size(TLandmarkData, 40);
 
 /** Holds landmark information read from GLmark.dbf. */
 struct TLandmark : public IMidObject
 {
-    CMidgardID landmarkId;
     TLandmarkData* data;
 };
 
-static_assert(sizeof(TLandmark) == 12, "Size of TLandmark structure must be exactly 12 bytes");
+assert_size(TLandmark, 12);
 
 } // namespace game
 

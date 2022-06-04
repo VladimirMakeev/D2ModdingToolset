@@ -51,11 +51,8 @@ struct CButtonInterfVftable : public CInterfaceVftable
     void* method44;
 };
 
-static_assert(sizeof(CButtonInterfVftable) == 45 * sizeof(void*),
-              "CButtonInterf vftable must have exactly 45 methods");
-
-static_assert(offsetof(CButtonInterfVftable, setEnabled) == 160,
-              "CButtonInterfVftable::setEnabled offset must be 160 bytes");
+assert_vftable_size(CButtonInterfVftable, 45);
+assert_offset(CButtonInterfVftable, setEnabled, 160);
 
 namespace CButtonInterfApi {
 

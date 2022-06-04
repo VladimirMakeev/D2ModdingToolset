@@ -102,8 +102,7 @@ struct IMidgardObjectMapVftable
     void* unknown;
 };
 
-static_assert(sizeof(IMidgardObjectMapVftable) == 13 * sizeof(void*),
-              "IMidgardObjectMap vftable must have exactly 13 methods");
+assert_vftable_size(IMidgardObjectMapVftable, 13);
 
 struct IMidgardObjectMap
 {
@@ -137,11 +136,8 @@ struct IMidgardObjectMap
     const IMidgardObjectMapVftable* vftable;
 };
 
-static_assert(sizeof(IMidgardObjectMap::Iterator) == 16,
-              "IMidgardObjectMap::Iterator structure must be exactly 16 bytes");
-
-static_assert(sizeof(IMidgardObjectMap::IteratorVftable) == 4 * sizeof(void*),
-              "IMidgardObjectMap::Iterator vftable must have exactly 4 methods");
+assert_size(IMidgardObjectMap::Iterator, 16);
+assert_vftable_size(IMidgardObjectMap::IteratorVftable, 4);
 
 } // namespace game
 

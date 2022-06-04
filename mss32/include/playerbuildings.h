@@ -32,8 +32,7 @@ struct CPlayerBuildings : public IMidScenarioObject
     IdList buildings;
 };
 
-static_assert(sizeof(CPlayerBuildings) == 28,
-              "Size of CPlayerBuildings structure must be exactly 28 bytes");
+assert_size(CPlayerBuildings, 28);
 
 } // namespace game
 

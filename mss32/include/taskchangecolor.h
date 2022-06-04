@@ -44,8 +44,7 @@ struct CTaskChangeColorData
     SelectedTerrain selectedTerrain;
 };
 
-static_assert(sizeof(CTaskChangeColorData) == 4,
-              "Size of CTaskChangeColorData structure must be exactly 4 bytes");
+assert_size(CTaskChangeColorData, 4);
 
 /** Changes map terrain. */
 struct CTaskChangeColor : public CTaskMapChange
@@ -53,8 +52,7 @@ struct CTaskChangeColor : public CTaskMapChange
     CTaskChangeColorData* data;
 };
 
-static_assert(sizeof(CTaskChangeColor) == 28,
-              "Size of CTaskChangeColor structure must be exactly 28 bytes");
+assert_size(CTaskChangeColor, 28);
 
 namespace CTaskChangeColorApi {
 

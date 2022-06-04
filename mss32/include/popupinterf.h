@@ -32,8 +32,7 @@ struct CPopupInterfData
     ITask* task;
 };
 
-static_assert(sizeof(CPopupInterfData) == 12,
-              "Size of CPopupInterfData structure must be exactly 12 bytes");
+assert_size(CPopupInterfData, 12);
 
 struct CPopupInterf
     : public CPopupDialogInterf
@@ -42,11 +41,8 @@ struct CPopupInterf
     CPopupInterfData* popupData;
 };
 
-static_assert(sizeof(CPopupInterf) == 24,
-              "Size of CPopupInterf structure must be exactly 24 bytes");
-
-static_assert(offsetof(CPopupInterf, popupData) == 20,
-              "CPopupInterf::popupData offset must be 20 bytes");
+assert_size(CPopupInterf, 24);
+assert_offset(CPopupInterf, popupData, 20);
 
 } // namespace game
 

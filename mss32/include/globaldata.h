@@ -138,10 +138,8 @@ struct GlobalData
     int initialized;
 };
 
-static_assert(sizeof(GlobalData) == 204, "Size of GlobalData structure must be exactly 204 bytes");
-
-static_assert(offsetof(GlobalData, dynUpgrade) == 176,
-              "GlobalData::dynUpgrade offset must be 176 bytes");
+assert_size(GlobalData, 204);
+assert_offset(GlobalData, dynUpgrade, 176);
 
 namespace GlobalDataApi {
 

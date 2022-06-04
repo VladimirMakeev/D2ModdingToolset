@@ -39,8 +39,7 @@ struct CRadioButtonInterfData
     SmartPtr<CBFunctorDispatch1<int>> onButtonPressed;
 };
 
-static_assert(sizeof(CRadioButtonInterfData) == 32,
-              "Size of CRadioButtonInterfData structure must be exactly 32 bytes");
+assert_size(CRadioButtonInterfData, 32);
 
 /**
  * Radio button ui element.
@@ -51,8 +50,7 @@ struct CRadioButtonInterf : public CInterface
     CRadioButtonInterfData* data;
 };
 
-static_assert(sizeof(CRadioButtonInterf) == 12,
-              "Size of CRadioButtonInterf structure must be exactly 12 bytes");
+assert_size(CRadioButtonInterf, 12);
 
 namespace CRadioButtonInterfApi {
 

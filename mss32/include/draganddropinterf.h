@@ -34,8 +34,7 @@ struct CDragAndDropInterfData
     char unknown2[8];
 };
 
-static_assert(sizeof(CDragAndDropInterfData) == 72,
-              "Size of CDragAndDropInterfData structure must be exactly 72 bytes");
+assert_size(CDragAndDropInterfData, 72);
 
 struct CDragAndDropInterf : public CFullScreenInterf
 {

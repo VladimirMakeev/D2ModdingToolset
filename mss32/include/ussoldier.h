@@ -20,6 +20,7 @@
 #ifndef USSOLDIER_H
 #define USSOLDIER_H
 
+#include "d2assert.h"
 #include "usunitextension.h"
 
 namespace game {
@@ -114,8 +115,7 @@ struct IUsSoldierVftable : public IUsUnitExtensionVftable
     GetBool getWaterOnly;
 };
 
-static_assert(sizeof(IUsSoldierVftable) == 29 * sizeof(void*),
-              "IUsSoldier vftable must have exactly 29 methods");
+assert_vftable_size(IUsSoldierVftable, 29);
 
 } // namespace game
 

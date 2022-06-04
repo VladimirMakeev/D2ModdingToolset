@@ -33,8 +33,7 @@ struct UiEventData
     SmartPtr<T> callback;
 };
 
-static_assert(sizeof(UiEventData<void>) == 12,
-              "Size of UiEventData structure must be exactly 12 bytes");
+assert_size(UiEventData<void>, 12);
 
 struct UiMessageEventData
 {
@@ -43,8 +42,7 @@ struct UiMessageEventData
     SmartPtr<UiMessageCallback> callback;
 };
 
-static_assert(sizeof(UiMessageEventData) == 16,
-              "Size of UiMessageEventData structure must be exactly 12 bytes");
+assert_size(UiMessageEventData, 16);
 
 struct CallbackPointerPair
 {
@@ -54,8 +52,7 @@ struct CallbackPointerPair
     void* end;
 };
 
-static_assert(sizeof(CallbackPointerPair) == 12,
-              "Size of CallbackPointerPair structure must be exactly 12 bytes");
+assert_size(CallbackPointerPair, 12);
 
 struct CMqUIControllerSimpleData
 {
@@ -79,16 +76,14 @@ struct CMqUIControllerSimpleData
     CallbackPointerPair unknown8;
 };
 
-static_assert(sizeof(CMqUIControllerSimpleData) == 340,
-              "Size of CMqUIControllerSimpleData structure must be exactly 340 bytes");
+assert_size(CMqUIControllerSimpleData, 340);
 
 struct CMqUIControllerSimple : public IMqUIController
 {
     CMqUIControllerSimpleData* data;
 };
 
-static_assert(sizeof(CMqUIControllerSimple) == 8,
-              "Size of CMqUIControllerSimple structure must be exactly 8 bytes");
+assert_size(CMqUIControllerSimple, 8);
 
 } // namespace game
 

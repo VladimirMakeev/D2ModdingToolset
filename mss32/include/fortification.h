@@ -51,19 +51,11 @@ struct CFortification : public IMidScenarioObject
     CMidgardID stackId;
 };
 
-static_assert(offsetof(CFortification, aiPriority) == 28,
-              "CFortification::aiPriority offset must be 28 bytes");
-
-static_assert(offsetof(CFortification, name) == 36, "CFortification::name offset must be 36 bytes");
-
-static_assert(offsetof(CFortification, description) == 48,
-              "CFortification::description offset must be 48 bytes");
-
-static_assert(offsetof(CFortification, group) == 60,
-              "CFortification::group offset must be 60 bytes");
-
-static_assert(offsetof(CFortification, inventory) == 112,
-              "CFortification::inventory offset must be 112 bytes");
+assert_offset(CFortification, aiPriority, 28);
+assert_offset(CFortification, name, 36);
+assert_offset(CFortification, description, 48);
+assert_offset(CFortification, group, 60);
+assert_offset(CFortification, inventory, 112);
 
 struct CFortificationVftable : public IMidScenarioObjectVftable
 {
@@ -109,8 +101,7 @@ struct CFortificationVftable : public IMidScenarioObjectVftable
     SetOwner setOwner;
 };
 
-static_assert(sizeof(CFortificationVftable) == 15 * sizeof(void*),
-              "CFortification vftable must have exactly 15 methods");
+assert_vftable_size(CFortificationVftable, 15);
 
 } // namespace game
 

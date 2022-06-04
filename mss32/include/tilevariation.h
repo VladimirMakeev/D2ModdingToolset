@@ -20,6 +20,7 @@
 #ifndef TILEVARIATION_H
 #define TILEVARIATION_H
 
+#include "d2assert.h"
 #include "groundcat.h"
 #include "terraincat.h"
 #include <cstddef>
@@ -37,11 +38,8 @@ struct TileVariationRecord
     TileVariationRecord* next;
 };
 
-static_assert(sizeof(TileVariationRecord) == 40,
-              "Size of TileVariationRecord structure must be exactly 40 bytes");
-
-static_assert(offsetof(TileVariationRecord, quantity) == 28,
-              "TileVariationRecord::quantity offset must be 28 bytes");
+assert_size(TileVariationRecord, 40);
+assert_offset(TileVariationRecord, quantity, 28);
 
 struct CTileVariationData
 {
@@ -63,11 +61,8 @@ struct CTileVariationData
     void* allocator;
 };
 
-static_assert(sizeof(CTileVariationData) == 44,
-              "Size of CTileVariationData structure must be exactly 44 bytes");
-
-static_assert(offsetof(CTileVariationData, reallocationTreshold) == 16,
-              "CTileVariationData::reallocationTreshold offset must be 16 bytes");
+assert_size(CTileVariationData, 44);
+assert_offset(CTileVariationData, reallocationTreshold, 16);
 
 /** Holds tile information read from GTileDBI.dbf. */
 struct CTileVariation
@@ -76,8 +71,7 @@ struct CTileVariation
     CTileVariationData* data;
 };
 
-static_assert(sizeof(CTileVariation) == 8,
-              "Size of CTileVariation structure must be exactly 8 bytes");
+assert_size(CTileVariation, 8);
 
 struct TileVariationIterator
 {
@@ -90,8 +84,7 @@ struct TileVariationIterator
     char padding2[3];
 };
 
-static_assert(sizeof(TileVariationIterator) == 20,
-              "Size of TileVariationIterator structure must be exactly 20 bytes");
+assert_size(TileVariationIterator, 20);
 
 namespace CTileVariationApi {
 

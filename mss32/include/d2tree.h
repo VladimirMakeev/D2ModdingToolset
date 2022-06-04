@@ -20,6 +20,7 @@
 #ifndef D2TREE_H
 #define D2TREE_H
 
+#include "d2assert.h"
 #include <cstdint>
 
 namespace game {
@@ -41,8 +42,7 @@ struct TreeNode
     T value;
 };
 
-static_assert(sizeof(TreeNode<int>) == 20,
-              "Size of TreeNode<int> structure must be exactly 20 bytes");
+assert_size(TreeNode<int>, 20);
 
 /** Implementation of std::_Tree<T>::const_iterator used in game.
  * Inline methods exactly correspond to in-game implementation. */
@@ -97,8 +97,7 @@ struct ConstTreeIterator
     }
 };
 
-static_assert(sizeof(ConstTreeIterator<int>) == 12,
-              "Size of ConstTreeIterator structure must be exactly 12 bytes");
+assert_size(ConstTreeIterator<int>, 12);
 
 /** Implementation of std::_Tree<T>::iterator used in game.
  * Inline methods exactly correspond to in-game implementation. */
@@ -131,8 +130,7 @@ struct TreeIterator : public ConstTreeIterator<T>
     }
 };
 
-static_assert(sizeof(TreeIterator<int>) == 12,
-              "Size of TreeIterator structure must be exactly 12 bytes");
+assert_size(TreeIterator<int>, 12);
 
 /** Implementation of std::_Tree<T> (ordered red-black tree) used in game.
  * Inline methods exactly correspond to in-game implementation. */
@@ -169,7 +167,8 @@ struct Tree
     }
 };
 
-static_assert(sizeof(Tree<int, void*>) == 28, "Size of Tree structure must be exactly 28 bytes");
+using AssertTreeSize = Tree<int, void*>;
+assert_size(AssertTreeSize, 28);
 
 } // namespace game
 

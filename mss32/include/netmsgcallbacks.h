@@ -56,8 +56,7 @@ struct NetMsgCallbacks
     void* node2;
 };
 
-static_assert(sizeof(NetMsgCallbacks) == 28,
-              "Size of NetMsgCallbacks structure must be exactly 28 bytes");
+assert_size(NetMsgCallbacks, 28);
 
 namespace NetMsgApi {
 

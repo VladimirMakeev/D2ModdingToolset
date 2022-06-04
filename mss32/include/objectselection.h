@@ -44,8 +44,7 @@ struct ObjectSelectionData
     SmartPtr<IMqImage2> selectYesImage;
 };
 
-static_assert(sizeof(ObjectSelectionData) == 52,
-              "Size of ObjectSelectionData structure must be exactly 52 bytes");
+assert_size(ObjectSelectionData, 52);
 
 } // namespace game
 

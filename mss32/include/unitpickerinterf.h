@@ -68,8 +68,7 @@ struct CUnitPickerInterfData
     char padding[2];
 };
 
-static_assert(sizeof(CUnitPickerInterfData) == 64,
-              "Size of CUnitPickerInterfData structure must be exactly 64 bytes");
+assert_size(CUnitPickerInterfData, 64);
 
 /** Represents DLG_ENROLL_UNITS from ScenEdit.dlg. */
 struct CUnitPickerInterf : public CPopupInterf
@@ -77,8 +76,7 @@ struct CUnitPickerInterf : public CPopupInterf
     CUnitPickerInterfData* data;
 };
 
-static_assert(sizeof(CUnitPickerInterf) == 28,
-              "Size of CUnitPickerInterf structure must be exactly 28 bytes");
+assert_size(CUnitPickerInterf, 28);
 
 namespace CUnitPickerInterfApi {
 

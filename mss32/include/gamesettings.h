@@ -134,8 +134,7 @@ struct GameSettings
     String defaultPlayerName;
 };
 
-static_assert(sizeof(GameSettings) == 468,
-              "Size of GameSettings structure must be exactly 468 bytes");
+assert_size(GameSettings, 468);
 
 } // namespace game
 

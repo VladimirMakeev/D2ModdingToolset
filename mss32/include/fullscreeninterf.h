@@ -34,8 +34,7 @@ struct CFullScreenInterfData
     char padding[3];
 };
 
-static_assert(sizeof(CFullScreenInterfData) == 8,
-              "Size of CFullScreenInterfData structure must be exactly 8 bytes");
+assert_size(CFullScreenInterfData, 8);
 
 struct CFullScreenInterf : public CInterfFullScreen
 {

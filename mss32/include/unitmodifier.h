@@ -45,8 +45,7 @@ struct TUnitModifier : IMidObjectT<TUnitModifierVftable>
     TUnitModifierData* data;
 };
 
-static_assert(sizeof(TUnitModifier) == 12,
-              "Size of TUnitModifier structure must be exactly 12 bytes");
+assert_size(TUnitModifier, 12);
 
 struct TUnitModifierData
 {
@@ -54,8 +53,7 @@ struct TUnitModifierData
     CUmModifier* modifier;
 };
 
-static_assert(sizeof(TUnitModifierData) == 16,
-              "Size of TUnitModifierData structure must be exactly 16 bytes");
+assert_size(TUnitModifierData, 16);
 
 struct TUnitModifierVftable : IMidObjectVftable
 {
@@ -74,8 +72,7 @@ struct TUnitModifierVftable : IMidObjectVftable
     CreateModifier createModifier;
 };
 
-static_assert(sizeof(TUnitModifierVftable) == 5 * sizeof(void*),
-              "TUnitModifier vftable must have exactly 5 methods");
+assert_vftable_size(TUnitModifierVftable, 5);
 
 namespace TUnitModifierApi {
 

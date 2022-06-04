@@ -41,7 +41,7 @@ struct CUmAttack
     CUmAttackData* data;
 };
 
-static_assert(sizeof(CUmAttack) == 24, "Size of CUmAttack structure must be exactly 24 bytes");
+assert_size(CUmAttack, 24);
 
 struct CUmAttackData
 {
@@ -53,8 +53,7 @@ struct CUmAttackData
     CAttackModified attackModified;
 };
 
-static_assert(sizeof(CUmAttackData) == 52,
-              "Size of CUmAttackData structure must be exactly 52 bytes");
+assert_size(CUmAttackData, 52);
 
 static inline CUmAttack* castSoldierToUmAttack(const IUsSoldier* soldier)
 {

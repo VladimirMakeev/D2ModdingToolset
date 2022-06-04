@@ -20,6 +20,7 @@
 #ifndef TEXTUREHANDLE_H
 #define TEXTUREHANDLE_H
 
+#include "d2assert.h"
 #include "mqpoint.h"
 
 namespace game {
@@ -32,8 +33,7 @@ struct TextureHandle
     int* refCount;
 };
 
-static_assert(sizeof(TextureHandle) == 16,
-              "Size of TextureHandle structure must be exactly 16 bytes");
+assert_size(TextureHandle, 16);
 
 } // namespace game
 

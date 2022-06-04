@@ -41,8 +41,7 @@ struct CCursorImplData
     char padding[3];
 };
 
-static_assert(sizeof(CCursorImplData) == 32,
-              "Size of CCursorImplData structure must be exactly 32 bytes");
+assert_size(CCursorImplData, 32);
 
 struct CCursorImpl
     : public IInterfCursor
@@ -52,7 +51,7 @@ struct CCursorImpl
     CCursorImplData* data;
 };
 
-static_assert(sizeof(CCursorImpl) == 16, "Size of CCursorImpl structure must be exactly 16 bytes");
+assert_size(CCursorImpl, 16);
 
 } // namespace game
 

@@ -27,7 +27,7 @@ namespace game {
 struct CItemScroll : public CItemSpell
 { };
 
-static_assert(sizeof(CItemScroll) == 20, "Size of CItemScroll structure must be exactly 20 bytes");
+assert_size(CItemScroll, 20);
 
 } // namespace game
 

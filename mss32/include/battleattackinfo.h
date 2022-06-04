@@ -20,6 +20,7 @@
 #ifndef BATTLEATTACKINFO_H
 #define BATTLEATTACKINFO_H
 
+#include "d2assert.h"
 #include "d2list.h"
 #include "midgardid.h"
 #include <cstddef>
@@ -65,8 +66,7 @@ struct BattleAttackUnitInfo
     int criticalDamage;
 };
 
-static_assert(sizeof(BattleAttackUnitInfo) == 20,
-              "Size of BattleAttackUnitInfo structure must be exactly 20 bytes");
+assert_size(BattleAttackUnitInfo, 20);
 
 using AttackUnitInfoList = List<BattleAttackUnitInfo>;
 
@@ -85,11 +85,8 @@ struct BattleAttackInfo
     AttackUnitInfoList unitsInfo;
 };
 
-static_assert(sizeof(BattleAttackInfo) == 36,
-              "Size of BattleAttackInfo structure must be exactly 36 bytes");
-
-static_assert(offsetof(BattleAttackInfo, unitsInfo) == 20,
-              "BattleAttackInfo::unitsInfo offset must be 20 bytes");
+assert_size(BattleAttackInfo, 36);
+assert_offset(BattleAttackInfo, unitsInfo, 20);
 
 namespace BattleAttackInfoApi {
 

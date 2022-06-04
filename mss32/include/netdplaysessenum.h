@@ -41,8 +41,7 @@ struct CNetDPlaySessEnum : public IMqNetSessEnum
     char padding[3];
 };
 
-static_assert(sizeof(CNetDPlaySessEnum) == 68,
-              "Size of CNetDPlaySessEnum structure must be exactly 68 bytes");
+assert_size(CNetDPlaySessEnum, 68);
 
 } // namespace game
 

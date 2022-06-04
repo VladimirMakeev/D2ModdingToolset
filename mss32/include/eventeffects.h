@@ -36,8 +36,7 @@ struct CMidEffectWin : public CMidEvEffect
     CMidgardID playerId;
 };
 
-static_assert(sizeof(CMidEffectWin) == 32,
-              "Size of CMidEffectWin structure must be exactly 32 bytes");
+assert_size(CMidEffectWin, 32);
 
 /** Create new stack. */
 struct CMidEffectCreateStack : public CMidEvEffect
@@ -46,8 +45,7 @@ struct CMidEffectCreateStack : public CMidEvEffect
     CMidgardID locationId;
 };
 
-static_assert(sizeof(CMidEffectCreateStack) == 32,
-              "Size of CMidEffectCreateStack structure must be exactly 32 bytes");
+assert_size(CMidEffectCreateStack, 32);
 
 /** Cast spell on triggerer. */
 struct CMidEffectCastSpell : public CMidEvEffect
@@ -56,8 +54,7 @@ struct CMidEffectCastSpell : public CMidEvEffect
     CMidgardID playerId;
 };
 
-static_assert(sizeof(CMidEffectCastSpell) == 32,
-              "Size of CMidEffectCastSpell structure must be exactly 32 bytes");
+assert_size(CMidEffectCastSpell, 32);
 
 /** Cast spell at specific location. */
 struct CMidEffectCastSpellMap : public CMidEvEffect
@@ -67,8 +64,7 @@ struct CMidEffectCastSpellMap : public CMidEvEffect
     CMidgardID playerId;
 };
 
-static_assert(sizeof(CMidEffectCastSpellMap) == 36,
-              "Size of CMidEffectCastSpellMap structure must be exactly 36 bytes");
+assert_size(CMidEffectCastSpellMap, 36);
 
 /** Change stack owner. */
 struct CMidEffectChangeOwner : public CMidEvEffect
@@ -81,8 +77,7 @@ struct CMidEffectChangeOwner : public CMidEvEffect
     char padding2[3];
 };
 
-static_assert(sizeof(CMidEffectChangeOwner) == 40,
-              "Size of CMidEffectChangeOwner structure must be exactly 40 bytes");
+assert_size(CMidEffectChangeOwner, 40);
 
 /** Change stack order. */
 struct CMidEffectChangeOrder : public CMidEvEffect
@@ -94,8 +89,7 @@ struct CMidEffectChangeOrder : public CMidEvEffect
     CMidgardID orderTargetId;
 };
 
-static_assert(sizeof(CMidEffectChangeOrder) == 48,
-              "Size of CMidEffectChangeOrder structure must be exactly 48 bytes");
+assert_size(CMidEffectChangeOrder, 48);
 
 /** Move stack next to triggerer. */
 struct CMidEffectMoveBeside : public CMidEvEffect
@@ -103,8 +97,7 @@ struct CMidEffectMoveBeside : public CMidEvEffect
     CMidgardID stackId;
 };
 
-static_assert(sizeof(CMidEffectMoveBeside) == 28,
-              "Size of CMidEffectMoveBeside structure must be exactly 28 bytes");
+assert_size(CMidEffectMoveBeside, 28);
 
 /** Go into battle. */
 struct CMidEffectBattle : public CMidEvEffect
@@ -114,8 +107,7 @@ struct CMidEffectBattle : public CMidEvEffect
     char padding[3];
 };
 
-static_assert(sizeof(CMidEffectBattle) == 32,
-              "Size of CMidEffectBattle structure must be exactly 32 bytes");
+assert_size(CMidEffectBattle, 32);
 
 /** Enable/disable another event. */
 struct CMidEffectEnableEvent : public CMidEvEffect
@@ -125,8 +117,7 @@ struct CMidEffectEnableEvent : public CMidEvEffect
     char padding[3];
 };
 
-static_assert(sizeof(CMidEffectEnableEvent) == 32,
-              "Size of CMidEffectEnableEvent structure must be exactly 32 bytes");
+assert_size(CMidEffectEnableEvent, 32);
 
 /** Give spell. */
 struct CMidEffectGiveSpell : public CMidEvEffect
@@ -134,8 +125,7 @@ struct CMidEffectGiveSpell : public CMidEvEffect
     CMidgardID spellId;
 };
 
-static_assert(sizeof(CMidEffectGiveSpell) == 28,
-              "Size of CMidEffectGiveSpell structure must be exactly 28 bytes");
+assert_size(CMidEffectGiveSpell, 28);
 
 enum GiveItemTarget : int
 {
@@ -150,8 +140,7 @@ struct CMidEffectGiveItem : public CMidEvEffect
     GiveItemTarget giveTo;
 };
 
-static_assert(sizeof(CMidEffectGiveItem) == 32,
-              "Size of CMidEffectGiveItem structure must be exactly 32 bytes");
+assert_size(CMidEffectGiveItem, 32);
 
 /** Move stack to specific location. */
 struct CMidEffectMove : public CMidEvEffect
@@ -162,8 +151,7 @@ struct CMidEffectMove : public CMidEvEffect
     char padding[3];
 };
 
-static_assert(sizeof(CMidEffectMove) == 36,
-              "Size of CMidEffectMove structure must be exactly 36 bytes");
+assert_size(CMidEffectMove, 36);
 
 /** Ally two AI players. */
 struct CMidEffectAlly : public CMidEvEffect
@@ -174,8 +162,7 @@ struct CMidEffectAlly : public CMidEvEffect
     char padding[3];
 };
 
-static_assert(sizeof(CMidEffectAlly) == 36,
-              "Size of CMidEffectAlly structure must be exactly 36 bytes");
+assert_size(CMidEffectAlly, 36);
 
 /** Change player diplomacy meter. */
 struct CMidEffectDiplomacy : public CMidEvEffect
@@ -187,8 +174,7 @@ struct CMidEffectDiplomacy : public CMidEvEffect
     char padding[3];
 };
 
-static_assert(sizeof(CMidEffectDiplomacy) == 40,
-              "Size of CMidEffectDiplomacy structure must be exactly 40 bytes");
+assert_size(CMidEffectDiplomacy, 40);
 
 enum class UnfogRadius : int
 {
@@ -229,8 +215,7 @@ struct CMidEffectUnfog : public CMidEvEffect
     UnfogRadius radius;
 };
 
-static_assert(sizeof(CMidEffectUnfog) == 64,
-              "Size of CMidEffectUnfog structure must be exactly 64 bytes");
+assert_size(CMidEffectUnfog, 64);
 
 /** Remove mountains around a location. */
 struct CMidEffectMountain : public CMidEvEffect
@@ -238,8 +223,7 @@ struct CMidEffectMountain : public CMidEvEffect
     CMidgardID locationId;
 };
 
-static_assert(sizeof(CMidEffectMountain) == 28,
-              "Size of CMidEffectMountain structure must be exactly 28 bytes");
+assert_size(CMidEffectMountain, 28);
 
 /** Remove landmark. */
 struct CMidEffectRmvLMark : public CMidEvEffect
@@ -249,8 +233,7 @@ struct CMidEffectRmvLMark : public CMidEvEffect
     char padding[3];
 };
 
-static_assert(sizeof(CMidEffectRmvLMark) == 32,
-              "Size of CMidEffectRmvLMark structure must be exactly 32 bytes");
+assert_size(CMidEffectRmvLMark, 32);
 
 /** Change landmark. */
 struct CMidEffectChangeLandmark : public CMidEvEffect
@@ -259,8 +242,7 @@ struct CMidEffectChangeLandmark : public CMidEvEffect
     CMidgardID landmarkTypeId;
 };
 
-static_assert(sizeof(CMidEffectChangeLandmark) == 32,
-              "Size of CMidEffectChangeLandmark structure must be exactly 32 bytes");
+assert_size(CMidEffectChangeLandmark, 32);
 
 /** Change terrain. */
 struct CMidEffectChangeTerrain : public CMidEvEffect
@@ -270,8 +252,7 @@ struct CMidEffectChangeTerrain : public CMidEvEffect
     int areaSize;
 };
 
-static_assert(sizeof(CMidEffectChangeTerrain) == 44,
-              "Size of CMidEffectChangeTerrain structure must be exactly 44 bytes");
+assert_size(CMidEffectChangeTerrain, 44);
 
 /** Change scenario objective text. */
 struct CMidEffectObjective : public CMidEvEffect
@@ -279,8 +260,7 @@ struct CMidEffectObjective : public CMidEvEffect
     StringAndId objective;
 };
 
-static_assert(sizeof(CMidEffectObjective) == 36,
-              "Size of CMidEffectObjective structure must be exactly 36 bytes");
+assert_size(CMidEffectObjective, 36);
 
 enum class PopupShowMode : int
 {
@@ -304,8 +284,7 @@ struct CMidEffectPopup : public CMidEvEffect
     char padding2[3];
 };
 
-static_assert(sizeof(CMidEffectPopup) == 64,
-              "Size of CMidEffectPopup structure must be exactly 64 bytes");
+assert_size(CMidEffectPopup, 64);
 
 /** Destroy item. */
 struct CMidEffectDestroyItem : public CMidEvEffect
@@ -315,8 +294,7 @@ struct CMidEffectDestroyItem : public CMidEvEffect
     char padding[3];
 };
 
-static_assert(sizeof(CMidEffectDestroyItem) == 32,
-              "Size of CMidEffectDestroyItem structure must be exactly 32 bytes");
+assert_size(CMidEffectDestroyItem, 32);
 
 /** Remove stack. */
 struct CMidEffectRemoveStack : public CMidEvEffect
@@ -326,8 +304,7 @@ struct CMidEffectRemoveStack : public CMidEvEffect
     char padding[3];
 };
 
-static_assert(sizeof(CMidEffectRemoveStack) == 32,
-              "Size of CMidEffectRemoveStack structure must be exactly 32 bytes");
+assert_size(CMidEffectRemoveStack, 32);
 
 enum class ModifyVariableOperation : int
 {
@@ -346,8 +323,7 @@ struct CMidEffectModifyVariable : public CMidEvEffect
     int variableId;
 };
 
-static_assert(sizeof(CMidEffectModifyVariable) == 36,
-              "Size of CMidEffectModifyVariable structure must be exactly 36 bytes");
+assert_size(CMidEffectModifyVariable, 36);
 
 } // namespace game
 

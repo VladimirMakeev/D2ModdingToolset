@@ -20,6 +20,8 @@
 #ifndef TASKMANAGERHOLDER_H
 #define TASKMANAGERHOLDER_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct ITask;
@@ -43,8 +45,7 @@ struct ITaskManagerHolderVftable
     GetTask getTask;
 };
 
-static_assert(sizeof(ITaskManagerHolderVftable) == 3 * sizeof(void*),
-              "ITaskManagerHolder vftable must have exactly 3 methods");
+assert_vftable_size(ITaskManagerHolderVftable, 3);
 
 } // namespace game
 

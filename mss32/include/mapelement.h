@@ -20,6 +20,7 @@
 #ifndef MAPELEMENT_H
 #define MAPELEMENT_H
 
+#include "d2assert.h"
 #include "mqpoint.h"
 
 namespace game {
@@ -36,7 +37,7 @@ struct IMapElement
     int sizeY;
 };
 
-static_assert(sizeof(IMapElement) == 20, "Size of IMapElement structure must be exactly 20 bytes");
+assert_size(IMapElement, 20);
 
 struct IMapElementVftable
 {
@@ -54,8 +55,7 @@ struct IMapElementVftable
     void* method2;
 };
 
-static_assert(sizeof(IMapElementVftable) == 3 * sizeof(void*),
-              "IMapElement vftable must have exactly 3 methods");
+assert_vftable_size(IMapElementVftable, 3);
 
 } // namespace game
 

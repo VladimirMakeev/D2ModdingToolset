@@ -20,6 +20,7 @@
 #ifndef GAMEIMAGES_H
 #define GAMEIMAGES_H
 
+#include "d2assert.h"
 #include "smartptr.h"
 #include "stringintlist.h"
 
@@ -62,7 +63,7 @@ struct GameImages
     char padding[3];
 };
 
-static_assert(sizeof(GameImages) == 100, "Size of GameImages structure must be exactly 100 bytes");
+assert_size(GameImages, 100);
 
 using GameImagesPtr = SmartPtr<GameImages*>;
 

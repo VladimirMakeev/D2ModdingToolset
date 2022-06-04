@@ -42,8 +42,7 @@ struct CImgFactory
     };
 };
 
-static_assert(sizeof(CImgFactory::Image::Vftable) == 11 * sizeof(void*),
-              "CImgFactory::Image vftable must have exactly 11 methods");
+assert_vftable_size(CImgFactory::Image::Vftable, 11);
 
 } // namespace game
 

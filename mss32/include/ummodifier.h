@@ -43,7 +43,7 @@ struct CUmModifier
     CUmModifierData* data;
 };
 
-static_assert(sizeof(CUmModifier) == 8, "Size of CUmModifier structure must be exactly 8 bytes");
+assert_size(CUmModifier, 8);
 
 struct ModifierValue
 {
@@ -52,8 +52,7 @@ struct ModifierValue
     int value;
 };
 
-static_assert(sizeof(ModifierValue) == 8,
-              "Size of ModifierValue structure must be exactly 8 bytes");
+assert_size(ModifierValue, 8);
 
 /**
  * Modifier element types (bitflags).
@@ -133,8 +132,7 @@ struct CUmModifierVftable
     UpdateUnitImplId updateUnitImplId;
 };
 
-static_assert(sizeof(CUmModifierVftable) == 11 * sizeof(void*),
-              "CUmModifier vftable must have exactly 11 methods");
+assert_vftable_size(CUmModifierVftable, 11);
 
 struct CUmModifierData
 {
@@ -143,8 +141,7 @@ struct CUmModifierData
     CMidgardID modifierId;
 };
 
-static_assert(sizeof(CUmModifierData) == 12,
-              "Size of CUmModifierData structure must be exactly 12 bytes");
+assert_size(CUmModifierData, 12);
 
 namespace CUmModifierApi {
 

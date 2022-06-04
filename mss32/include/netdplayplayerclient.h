@@ -34,8 +34,7 @@ struct CNetDPlayPlayerClient : public IMqNetPlayerClient
     char padding[3];
 };
 
-static_assert(sizeof(CNetDPlayPlayerClient) == 12,
-              "Size of CNetDPlayPlayerClient structure must be exactly 12 bytes");
+assert_size(CNetDPlayPlayerClient, 12);
 
 } // namespace game
 

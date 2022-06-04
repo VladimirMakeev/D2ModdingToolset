@@ -20,6 +20,7 @@
 #ifndef C2DENGINE_H
 #define C2DENGINE_H
 
+#include "d2assert.h"
 #include "mqpoint.h"
 
 namespace game {
@@ -34,8 +35,7 @@ struct C2DEngineData
     CMqPoint position2;
 };
 
-static_assert(sizeof(C2DEngineData) == 36,
-              "Size of C2DEngineData structure must be exactly 36 bytes");
+assert_size(C2DEngineData, 36);
 
 struct C2DEngine
 {
@@ -43,7 +43,7 @@ struct C2DEngine
     C2DEngineData* data;
 };
 
-static_assert(sizeof(C2DEngine) == 8, "Size of C2DEngine structure must be exactly 8 bytes");
+assert_size(C2DEngine, 8);
 
 } // namespace game
 

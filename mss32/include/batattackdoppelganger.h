@@ -40,8 +40,7 @@ struct CBatAttackDoppelganger : public CBatAttackBase
     IBatAttack* altAttack;
 };
 
-static_assert(sizeof(CBatAttackDoppelganger) == 28,
-              "Size of CBatAttackDoppelganger structure must be exactly 28 bytes");
+assert_size(CBatAttackDoppelganger, 28);
 
 namespace CBatAttackDoppelgangerApi {
 

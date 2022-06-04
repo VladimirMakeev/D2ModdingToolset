@@ -20,6 +20,7 @@
 #ifndef RENDERTYPES_H
 #define RENDERTYPES_H
 
+#include "d2assert.h"
 #include "d2pair.h"
 #include "d2set.h"
 #include "texturehandle.h"
@@ -43,8 +44,7 @@ struct RenderData22
     __int16 opacity;
 };
 
-static_assert(sizeof(RenderData22) == 24,
-              "Size of RenderData22 structure must be exactly 24 bytes");
+assert_size(RenderData22, 24);
 
 struct RenderData40
 {
@@ -52,8 +52,7 @@ struct RenderData40
     RenderData22 data22;
 };
 
-static_assert(sizeof(RenderData40) == 40,
-              "Size of RenderData40 structure must be exactly 40 bytes");
+assert_size(RenderData40, 40);
 
 using RenderData40SetIntPair = Pair<Set<RenderData40>, int /* free index */>;
 
@@ -79,8 +78,7 @@ struct RenderData416
     int type; /**< Assumption: hint. */
 };
 
-static_assert(sizeof(RenderData416) == 416,
-              "Size of RenderData416 structure must be exactly 416 bytes");
+assert_size(RenderData416, 416);
 
 struct RenderData420
 {
@@ -88,13 +86,11 @@ struct RenderData420
     RenderData416 data416;
 };
 
-static_assert(sizeof(RenderData420) == 420,
-              "Size of RenderData420 structure must be exactly 420 bytes");
+assert_size(RenderData420, 420);
 
 using PaletteEntryPair = Pair<PALETTEENTRY[256], IDirectDrawPalette*>;
 
-static_assert(sizeof(PaletteEntryPair) == 1028,
-              "Size of PaletteEntryPair structure must be exactly 1028 bytes");
+assert_size(PaletteEntryPair, 1028);
 
 struct RenderPaletteData
 {

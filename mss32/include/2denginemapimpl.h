@@ -35,8 +35,7 @@ using ElementIndexHashMap = Map<int /* elementIndex */,
                                 int /* isoLayerPositionHash */,
                                 SmartPointer>;
 
-static_assert(sizeof(ElementIndexHashMap) == 36,
-              "Size of ElementIndexHashMap structure must be exactly 36 bytes");
+assert_size(ElementIndexHashMap, 36);
 
 struct EngineMapImageElementData
 {
@@ -46,13 +45,11 @@ struct EngineMapImageElementData
     int elementIndex;
 };
 
-static_assert(sizeof(EngineMapImageElementData) == 24,
-              "Size of EngineMapImageElementData structure must be exactly 24 bytes");
+assert_size(EngineMapImageElementData, 24);
 
 using ElementDataArray = Vector<EngineMapImageElementData, SmartPointer>;
 
-static_assert(sizeof(ElementDataArray) == 20,
-              "Size of ElementDataArray structure must be exactly 20 bytes");
+assert_size(ElementDataArray, 20);
 
 struct EngineMapImageElement
 {
@@ -70,8 +67,7 @@ struct EngineMapImageElement
     char padding[3];
 };
 
-static_assert(sizeof(EngineMapImageElement) == 44,
-              "Size of EngineMapImageElement structure must be exactly 44 bytes");
+assert_size(EngineMapImageElement, 44);
 
 struct C2DEngineMapImplData
 {
@@ -85,16 +81,14 @@ struct C2DEngineMapImplData
     char unknown[24];
 };
 
-static_assert(sizeof(C2DEngineMapImplData) == 120,
-              "Size of C2DEngineMapImplData structure must be exactly 120 bytes");
+assert_size(C2DEngineMapImplData, 120);
 
 struct C2DEngineMapImpl : public C2DEngineMap
 {
     C2DEngineMapImplData* data;
 };
 
-static_assert(sizeof(C2DEngineMapImpl) == 8,
-              "Size of C2DEngineMapImpl structure must be exactly 8 bytes");
+assert_size(C2DEngineMapImpl, 8);
 
 } // namespace game
 

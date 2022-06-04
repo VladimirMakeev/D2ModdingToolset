@@ -43,8 +43,7 @@ struct CBatAttackBestowWards : public CBatAttackBase
     int attackImplMagic;
 };
 
-static_assert(sizeof(CBatAttackBestowWards) == 32,
-              "Size of CBatAttackBestowWards structure must be exactly 32 bytes");
+assert_size(CBatAttackBestowWards, 32);
 
 namespace CBatAttackBestowWardsApi {
 

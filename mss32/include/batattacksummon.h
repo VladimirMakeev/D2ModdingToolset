@@ -37,8 +37,7 @@ struct CBatAttackSummon : public CBatAttackBase
     int unknown;
 };
 
-static_assert(sizeof(CBatAttackSummon) == 24,
-              "Size of CBatAttackSummon structure must be exactly 24 bytes");
+assert_size(CBatAttackSummon, 24);
 
 namespace CBatAttackSummonApi {
 

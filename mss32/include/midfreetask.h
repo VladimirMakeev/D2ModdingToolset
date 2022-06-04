@@ -33,8 +33,7 @@ struct CMidFreeTask : public IMidTask
     CTaskManager* taskManager;
 };
 
-static_assert(sizeof(CMidFreeTask) == 16,
-              "Size of CMidFreeTask structure must be exactly 16 bytes");
+assert_size(CMidFreeTask, 16);
 
 } // namespace game
 

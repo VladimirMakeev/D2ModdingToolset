@@ -20,6 +20,7 @@
 #ifndef IISOGROUND2_H
 #define IISOGROUND2_H
 
+#include "d2assert.h"
 #include <cstdint>
 
 namespace game {
@@ -34,7 +35,7 @@ struct IIsoGround2
     IIsoGround2Vftable* vftable;
 };
 
-static_assert(sizeof(IIsoGround2) == 4, "Size of IIsoGround2 structure must be exactly 4 bytes");
+assert_size(IIsoGround2, 4);
 
 struct IIsoGround2Vftable
 {
@@ -57,8 +58,7 @@ struct IIsoGround2Vftable
     Method2 method2;
 };
 
-static_assert(sizeof(IIsoGround2Vftable) == 3 * sizeof(void*),
-              "IIsoGround2 vftable must have exactly 3 methods");
+assert_vftable_size(IIsoGround2Vftable, 3);
 
 } // namespace game
 

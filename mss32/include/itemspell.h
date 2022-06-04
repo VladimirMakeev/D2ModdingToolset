@@ -34,15 +34,10 @@ struct CItemSpell
     CMidgardID spellId;
 };
 
-static_assert(sizeof(CItemSpell) == 20, "Size of CItemSpell structure must be exactly 20 bytes");
-
-static_assert(offsetof(CItemSpell, CItemSpell::IItemExSpell::vftable) == 0,
-              "Vftable offset for IItemExSpell in CItemSpell structure must be 0 bytes");
-
-static_assert(offsetof(CItemSpell, CItemSpell::CItemBase::vftable) == 4,
-              "Vftable offset for CItemBase in CItemSpell structure must be 4 bytes");
-
-static_assert(offsetof(CItemSpell, spellId) == 16, "CItemSpell::spellId offset must be 16 bytes");
+assert_size(CItemSpell, 20);
+assert_offset(CItemSpell, CItemSpell::IItemExSpell::vftable, 0);
+assert_offset(CItemSpell, CItemSpell::CItemBase::vftable, 4);
+assert_offset(CItemSpell, spellId, 16);
 
 } // namespace game
 

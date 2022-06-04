@@ -30,8 +30,7 @@ struct CBatAttackUntransformEffect : public CBatAttackBase
     CMidgardID unitId;
 };
 
-static_assert(sizeof(CBatAttackUntransformEffect) == 8,
-              "Size of CBatAttackUntransformEffect structure must be exactly 8 bytes");
+assert_size(CBatAttackUntransformEffect, 8);
 
 namespace CBatAttackUntransformEffectApi {
 

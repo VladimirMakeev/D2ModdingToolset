@@ -31,8 +31,7 @@ struct CAttackModified : public IAttack
     CAttackModifiedData* data;
 };
 
-static_assert(sizeof(CAttackModified) == 12,
-              "Size of CAttackModified structure must be exactly 12 bytes");
+assert_size(CAttackModified, 12);
 
 struct CAttackModifiedData
 {
@@ -43,8 +42,7 @@ struct CAttackModifiedData
     int attackDrain;
 };
 
-static_assert(sizeof(CAttackModifiedData) == 20,
-              "Size of CAttackModifiedData structure must be exactly 20 bytes");
+assert_size(CAttackModifiedData, 20);
 
 namespace CAttackModifiedApi {
 

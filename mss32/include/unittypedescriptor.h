@@ -32,8 +32,7 @@ struct CUnitTypeDescriptor : public IEncUnitDescriptor
     CMidgardID unitImplId;
 };
 
-static_assert(sizeof(CUnitTypeDescriptor) == 8,
-              "Size of CUnitTypeDescriptor structure must be exactly 8 bytes");
+assert_size(CUnitTypeDescriptor, 8);
 
 namespace CUnitTypeDescriptorApi {
 

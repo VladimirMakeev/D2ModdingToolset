@@ -20,6 +20,7 @@
 #ifndef TEXTANDID_H
 #define TEXTANDID_H
 
+#include "d2assert.h"
 #include "d2pair.h"
 #include "midgardid.h"
 #include "mq_c_s.h"
@@ -32,7 +33,7 @@ struct TextAndId
     CMidgardID id;
 };
 
-static_assert(sizeof(TextAndId) == 8, "Size of TextAndId structure must be exactly 8 bytes");
+assert_size(TextAndId, 8);
 
 } // namespace game
 

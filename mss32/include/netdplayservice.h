@@ -43,8 +43,7 @@ struct CNetDPlayService : public IMqNetService
     int unknown5;
 };
 
-static_assert(sizeof(CNetDPlayService) == 64,
-              "Size of CNetDPlayService structure must be exactly 64 bytes");
+assert_size(CNetDPlayService, 64);
 
 } // namespace game
 

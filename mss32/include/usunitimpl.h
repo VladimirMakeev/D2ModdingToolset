@@ -31,7 +31,7 @@ struct TUsUnitImpl : public IUsUnit
     LUnitCategory category;
 };
 
-static_assert(sizeof(TUsUnitImpl) == 20, "Size of TUsUnitImpl structure must be exactly 20 bytes");
+assert_size(TUsUnitImpl, 20);
 
 } // namespace game
 

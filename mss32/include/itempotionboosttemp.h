@@ -28,8 +28,7 @@ namespace game {
 struct CItemPotionBoostTemp : public CItemPotionBoost
 { };
 
-static_assert(sizeof(CItemPotionBoostTemp) == 20,
-              "Size of CItemPotionBoostTemp structure must be exactly 20 bytes");
+assert_size(CItemPotionBoostTemp, 20);
 
 } // namespace game
 

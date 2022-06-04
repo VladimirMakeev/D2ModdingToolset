@@ -20,6 +20,8 @@
 #ifndef MQTEXTURE_H
 #define MQTEXTURE_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct IMqTextureVftable;
@@ -50,8 +52,7 @@ struct IMqTextureVftable
     IsDirty isDirty;
 };
 
-static_assert(sizeof(IMqTextureVftable) == 3 * sizeof(void*),
-              "IMqTexture vftable must have exactly 3 methods");
+assert_vftable_size(IMqTextureVftable, 3);
 
 } // namespace game
 

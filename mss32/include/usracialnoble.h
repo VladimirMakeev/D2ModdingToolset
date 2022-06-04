@@ -45,26 +45,13 @@ struct TUsRacialNoble
     , public TUsLeaderImpl
 { };
 
-static_assert(sizeof(TUsRacialNoble) == 52,
-              "Size of TUsRacialNoble structure must be exactly 52 bytes");
-
-static_assert(offsetof(TUsRacialNoble, TUsRacialNoble::IUsNoble::vftable) == 0,
-              "Vftable offset for IUsNoble in TUsRacialNoble structure must be 0 bytes");
-
-static_assert(offsetof(TUsRacialNoble, TUsRacialNoble::IUsGlobal::vftable) == 4,
-              "Vftable offset for IUsGlobal in TUsRacialNoble structure must be 4 bytes");
-
-static_assert(offsetof(TUsRacialNoble, TUsRacialNoble::TUsUnitImpl::vftable) == 8,
-              "Vftable offset for TUsUnitImpl in TUsRacialNoble structure must be 8 bytes");
-
-static_assert(offsetof(TUsRacialNoble, TUsRacialNoble::TUsSoldierImpl::vftable) == 28,
-              "Vftable offset for TUsSoldierImpl in TUsRacialNoble structure must be 28 bytes");
-
-static_assert(offsetof(TUsRacialNoble, TUsRacialNoble::TUsStackLeaderImpl::vftable) == 36,
-              "Vftable offset for TUsStackLeaderImpl in TUsRacialNoble structure must be 36 bytes");
-
-static_assert(offsetof(TUsRacialNoble, TUsRacialNoble::TUsLeaderImpl::vftable) == 44,
-              "Vftable offset for TUsLeaderImpl in TUsRacialNoble structure must be 44 bytes");
+assert_size(TUsRacialNoble, 52);
+assert_offset(TUsRacialNoble, TUsRacialNoble::IUsNoble::vftable, 0);
+assert_offset(TUsRacialNoble, TUsRacialNoble::IUsGlobal::vftable, 4);
+assert_offset(TUsRacialNoble, TUsRacialNoble::TUsUnitImpl::vftable, 8);
+assert_offset(TUsRacialNoble, TUsRacialNoble::TUsSoldierImpl::vftable, 28);
+assert_offset(TUsRacialNoble, TUsRacialNoble::TUsStackLeaderImpl::vftable, 36);
+assert_offset(TUsRacialNoble, TUsRacialNoble::TUsLeaderImpl::vftable, 44);
 
 } // namespace game
 

@@ -20,6 +20,8 @@
 #ifndef STDFILEIMPL_H
 #define STDFILEIMPL_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct IStdFileImplVftable;
@@ -105,8 +107,7 @@ struct IStdFileImplVftable
     GetHandle getHandle;
 };
 
-static_assert(sizeof(IStdFileImplVftable) == 12 * sizeof(void*),
-              "IStdFileImpl vftable must have exactly 12 methods");
+assert_vftable_size(IStdFileImplVftable, 12);
 
 } // namespace game
 

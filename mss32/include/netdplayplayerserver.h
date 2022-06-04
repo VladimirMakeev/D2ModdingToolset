@@ -32,8 +32,7 @@ struct CNetDPlayPlayerServer : public IMqNetPlayerServer
     CNetDPlayPlayer* player;
 };
 
-static_assert(sizeof(CNetDPlayPlayerServer) == 8,
-              "Size of CNetDPlayPlayerServer structure must be exactly 8 bytes");
+assert_size(CNetDPlayPlayerServer, 8);
 
 } // namespace game
 

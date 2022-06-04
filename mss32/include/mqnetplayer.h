@@ -20,6 +20,8 @@
 #ifndef MQNETPLAYER_H
 #define MQNETPLAYER_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct String;
@@ -95,8 +97,7 @@ struct IMqNetPlayerVftable
     Method8 method8;
 };
 
-static_assert(sizeof(IMqNetPlayerVftable) == 9 * sizeof(void*),
-              "IMqNetPlayer vftable must have exactly 9 methods");
+assert_vftable_size(IMqNetPlayerVftable, 9);
 
 } // namespace game
 

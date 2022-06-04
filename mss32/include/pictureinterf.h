@@ -37,8 +37,7 @@ struct CPictureInterfData
     SmartPtr<CBFunctorDispatch1<CPictureInterf*>> onMouseDoubleClicked;
 };
 
-static_assert(sizeof(CPictureInterfData) == 20,
-              "Size of CPictureInterfData structure must be exactly 20 bytes");
+assert_size(CPictureInterfData, 20);
 
 /**
  * Picture ui element.
@@ -49,8 +48,7 @@ struct CPictureInterf : public CInterface
     CPictureInterfData* data;
 };
 
-static_assert(sizeof(CPictureInterf) == 12,
-              "Size of CPictureInterf structure must be exactly 12 bytes");
+assert_size(CPictureInterf, 12);
 
 namespace CPictureInterfApi {
 

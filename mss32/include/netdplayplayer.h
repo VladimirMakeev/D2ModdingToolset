@@ -48,8 +48,7 @@ struct CNetDPlayPlayer : public IMqNetPlayer
     List<void*> messages;
 };
 
-static_assert(sizeof(CNetDPlayPlayer) == 68,
-              "Size of CNetDPlayPlayer structure must be exactly 68 bytes");
+assert_size(CNetDPlayPlayer, 68);
 
 } // namespace game
 

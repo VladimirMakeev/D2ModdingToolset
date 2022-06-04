@@ -36,8 +36,7 @@ struct CBatAttackGiveAttack : public CBatAttackBase
     int attackNumber; /**< 1 if this is a unit's primary attack, 2 for secondary. */
 };
 
-static_assert(sizeof(CBatAttackGiveAttack) == 16,
-              "Size of CBatAttackGiveAttack structure must be exactly 16 bytes");
+assert_size(CBatAttackGiveAttack, 16);
 
 namespace CBatAttackGiveAttackApi {
 

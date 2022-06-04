@@ -63,8 +63,7 @@ struct IEventEffectVftable
     StopProcessing stopProcessing;
 };
 
-static_assert(sizeof(IEventEffectVftable) == 5 * sizeof(void*),
-              "IEventEffect vftable must have exactly 5 methods");
+assert_vftable_size(IEventEffectVftable, 5);
 
 } // namespace game
 

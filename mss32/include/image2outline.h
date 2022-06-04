@@ -32,8 +32,7 @@ struct CImage2Outline : public CMqImage2Surface16
     CMqPoint size2;
 };
 
-static_assert(sizeof(CImage2Outline) == 56,
-              "Size of CImage2Outline structure must be exactly 56 bytes");
+assert_size(CImage2Outline, 56);
 
 namespace CImage2OutlineApi {
 

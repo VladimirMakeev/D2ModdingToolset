@@ -20,6 +20,7 @@
 #ifndef UNITPOSITIONPAIR_H
 #define UNITPOSITIONPAIR_H
 
+#include "d2assert.h"
 #include "d2pair.h"
 
 namespace game {
@@ -31,8 +32,7 @@ namespace game {
  */
 using UnitPositionPair = Pair<int, bool>;
 
-static_assert(sizeof(UnitPositionPair) == 8,
-              "Size of UnitPositionPair structure must be exactly 8 bytes");
+assert_size(UnitPositionPair, 8);
 
 } // namespace game
 

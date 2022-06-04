@@ -42,8 +42,7 @@ struct CBatAttackShatter : public CBatAttackBase
     int unknown4;
 };
 
-static_assert(sizeof(CBatAttackShatter) == 32,
-              "Size of CBatAttackShatter structure must be exactly 32 bytes");
+assert_size(CBatAttackShatter, 32);
 
 namespace CBatAttackShatterApi {
 

@@ -53,8 +53,7 @@ struct IMidScenarioObjectVftable : public IMidObjectVftable
     Method3 method3;
 };
 
-static_assert(sizeof(IMidScenarioObjectVftable) == 4 * sizeof(void*),
-              "IMidScenarioObject vftable must have exactly 4 methods");
+assert_vftable_size(IMidScenarioObjectVftable, 4);
 
 } // namespace game
 

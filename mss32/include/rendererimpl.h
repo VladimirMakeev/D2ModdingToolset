@@ -20,6 +20,7 @@
 #ifndef RENDERERIMPL_H
 #define RENDERERIMPL_H
 
+#include "d2assert.h"
 #include "mqanimator2.h"
 #include "mqdisplay2.h"
 #include "mqrenderer2.h"
@@ -67,25 +68,13 @@ struct CRendererImpl
     CLogFile* logFile;
 };
 
-static_assert(sizeof(CRendererImpl) == 176,
-              "Size of CRendererImpl structure must be exactly 176 bytes");
-
-static_assert(offsetof(CRendererImpl, CRendererImpl::IMqRenderer2::vftable) == 4,
-              "Vftable offset for IMqRenderer2 in CRendererImpl structure must be 4 bytes");
-
-static_assert(offsetof(CRendererImpl, CRendererImpl::IMqTexturer2::vftable) == 8,
-              "Vftable offset for IMqTexturer2 in CRendererImpl structure must be 8 bytes");
-
-static_assert(offsetof(CRendererImpl, CRendererImpl::IMqAnimator2::vftable) == 12,
-              "Vftable offset for IMqAnimator2 in CRendererImpl structure must be 12 bytes");
-
-static_assert(offsetof(CRendererImpl, rasterizer) == 20,
-              "CRendererImpl::rasterizer offset must be 20 bytes");
-
-static_assert(offsetof(CRendererImpl, fps) == 80, "CRendererImpl::fps offset must be 80 bytes");
-
-static_assert(offsetof(CRendererImpl, data40IntPair) == 108,
-              "CRendererImpl::data40IntPair offset must be 108 bytes");
+assert_size(CRendererImpl, 176);
+assert_offset(CRendererImpl, CRendererImpl::IMqRenderer2::vftable, 4);
+assert_offset(CRendererImpl, CRendererImpl::IMqTexturer2::vftable, 8);
+assert_offset(CRendererImpl, CRendererImpl::IMqAnimator2::vftable, 12);
+assert_offset(CRendererImpl, rasterizer, 20);
+assert_offset(CRendererImpl, fps, 80);
+assert_offset(CRendererImpl, data40IntPair, 108);
 
 struct CRendererImplDisplayVftable : public IMqDisplay2Vftable
 {
@@ -93,8 +82,7 @@ struct CRendererImplDisplayVftable : public IMqDisplay2Vftable
     Destructor destructor;
 };
 
-static_assert(sizeof(CRendererImplDisplayVftable) == 12 * sizeof(void*),
-              "CRendererImpl vftable for IMqDisplay2 must have exactly 12 methods");
+assert_vftable_size(CRendererImplDisplayVftable, 12);
 
 } // namespace game
 

@@ -82,42 +82,23 @@ struct CBatUnitAnimData
     char unknown10[12];
 };
 
-static_assert(sizeof(CBatUnitAnimData) == 4136,
-              "Size of CBatUnitAnimData structure must be exactly 4136 bytes");
-
-static_assert(offsetof(CBatUnitAnimData, objectMap) == 8,
-              "CBatUnitAnimData::objectMap offset must be 8 bytes");
-
-static_assert(offsetof(CBatUnitAnimData, bigUnit) == 37,
-              "CBatUnitAnimData::bigUnit offset must be 37 bytes");
-
-static_assert(offsetof(CBatUnitAnimData, unknownId) == 40,
-              "CBatUnitAnimData::unknownId offset must be 40 bytes");
-
-static_assert(offsetof(CBatUnitAnimData, battleMsgData) == 48,
-              "CBatUnitAnimData::battleMsgData offset must be 48 bytes");
-
-static_assert(offsetof(CBatUnitAnimData, smallUnitImageArea) == 3988,
-              "CBatUnitAnimData::smallUnitImageArea offset must be 3988 bytes");
-
-static_assert(offsetof(CBatUnitAnimData, ptr1) == 4036,
-              "CBatUnitAnimData::ptr1 offset must be 4036 bytes");
-
-static_assert(offsetof(CBatUnitAnimData, unknown5) == 4072,
-              "CBatUnitAnimData::unknown5 offset must be 4072 bytes");
-
-static_assert(offsetof(CBatUnitAnimData, string1) == 4088,
-              "CBatUnitAnimData::string1 offset must be 4088 bytes");
-
-static_assert(offsetof(CBatUnitAnimData, string2) == 4108,
-              "CBatUnitAnimData::string2 offset must be 4108 bytes");
+assert_size(CBatUnitAnimData, 4136);
+assert_offset(CBatUnitAnimData, objectMap, 8);
+assert_offset(CBatUnitAnimData, bigUnit, 37);
+assert_offset(CBatUnitAnimData, unknownId, 40);
+assert_offset(CBatUnitAnimData, battleMsgData, 48);
+assert_offset(CBatUnitAnimData, smallUnitImageArea, 3988);
+assert_offset(CBatUnitAnimData, ptr1, 4036);
+assert_offset(CBatUnitAnimData, unknown5, 4072);
+assert_offset(CBatUnitAnimData, string1, 4088);
+assert_offset(CBatUnitAnimData, string2, 4108);
 
 struct CBatUnitAnim : public IMqAnimation
 {
     CBatUnitAnimData* data;
 };
 
-static_assert(sizeof(CBatUnitAnim) == 8, "Size of CBatUnitAnim structure must be exactly 8 bytes");
+assert_size(CBatUnitAnim, 8);
 
 namespace BatUnitAnimApi {
 

@@ -34,8 +34,7 @@ struct CEncParamBaseData
     Set<int> list;
 };
 
-static_assert(sizeof(CEncParamBaseData) == 44,
-              "Size of CEncParamBaseData structure must be exactly 44 bytes");
+assert_size(CEncParamBaseData, 44);
 
 /** Base class for ingame encyclopedia parameters. */
 struct CEncParamBase : public IEncParam

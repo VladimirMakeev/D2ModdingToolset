@@ -20,6 +20,7 @@
 #ifndef SCENARIODATAARRAY_H
 #define SCENARIODATAARRAY_H
 
+#include "d2assert.h"
 #include "d2vector.h"
 
 namespace game {
@@ -36,8 +37,7 @@ struct ScenarioDataArrayWrapped
     int maxScenarioFileIndex;
 };
 
-static_assert(sizeof(ScenarioDataArrayWrapped) == 24,
-              "Size of ScenarioDataArrayWrapped structure must be exactly 24 bytes");
+assert_size(ScenarioDataArrayWrapped, 24);
 
 namespace ScenarioDataArrayApi {
 

@@ -32,8 +32,7 @@ struct CNetDPlayPlayerEnum : public IMqNetPlayerEnum
     String name;
 };
 
-static_assert(sizeof(CNetDPlayPlayerEnum) == 24,
-              "Size of CNetDPlayPlayerEnum structure must be exactly 24 bytes");
+assert_size(CNetDPlayPlayerEnum, 24);
 
 } // namespace game
 

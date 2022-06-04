@@ -50,8 +50,7 @@ struct IUsLeaderVftable : public IUsUnitExtensionVftable
     Link link;
 };
 
-static_assert(sizeof(IUsLeaderVftable) == 5 * sizeof(void*),
-              "IUsLeader vftable must have exactly 5 methods");
+assert_vftable_size(IUsLeaderVftable, 5);
 
 } // namespace game
 

@@ -20,6 +20,7 @@
 #ifndef D2COLOR_H
 #define D2COLOR_H
 
+#include "d2assert.h"
 #include <cstdint>
 
 namespace game {
@@ -55,7 +56,7 @@ struct Color
     };
 };
 
-static_assert(sizeof(Color) == 4, "Size of Color structure must be exactly 4 bytes");
+assert_size(Color, 4);
 
 } // namespace game
 

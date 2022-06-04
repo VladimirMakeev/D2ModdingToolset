@@ -65,8 +65,7 @@ struct CBattleViewerGroupAreas
     String itemBgndString;
 };
 
-static_assert(sizeof(CBattleViewerGroupAreas) == 416,
-              "Size of CBattleViewerGroupAreas structure must be exactly 416 bytes");
+assert_size(CBattleViewerGroupAreas, 416);
 
 struct CBattleViewerUnknownData
 {
@@ -76,8 +75,7 @@ struct CBattleViewerUnknownData
     int unknown4;
 };
 
-static_assert(sizeof(CBattleViewerUnknownData) == 16,
-              "Size of CBattleViewerUnknownData structure must be exactly 16 bytes");
+assert_size(CBattleViewerUnknownData, 16);
 
 struct CBattleViewerUnknown
 {
@@ -88,11 +86,8 @@ struct CBattleViewerUnknown
     Set<void> list; /** < Each node contains 16 bytes of data. */
 };
 
-static_assert(offsetof(CBattleViewerUnknown, data3) == 112,
-              "CBattleViewerUnknown::data3 offset must be 112 bytes");
-
-static_assert(offsetof(CBattleViewerUnknown, string) == 208,
-              "CBattleViewerUnknown::string offset must be 208 bytes");
+assert_offset(CBattleViewerUnknown, data3, 112);
+assert_offset(CBattleViewerUnknown, string, 208);
 
 struct CBattleViewerAttackTargetData
 {
@@ -103,8 +98,7 @@ struct CBattleViewerAttackTargetData
     UnitPositionMap unitPositions;
 };
 
-static_assert(sizeof(CBattleViewerAttackTargetData) == 36,
-              "Size of CBattleViewerAttackTargetData structure must be exactly 36 bytes");
+assert_size(CBattleViewerAttackTargetData, 36);
 
 struct CBattleViewerItemTargetData
 {
@@ -115,8 +109,7 @@ struct CBattleViewerItemTargetData
     UnitPositionMap unitPositions;
 };
 
-static_assert(sizeof(CBattleViewerItemTargetData) == 36,
-              "Size of CBattleViewerItemTargetData structure must be exactly 36 bytes");
+assert_size(CBattleViewerItemTargetData, 36);
 
 struct CBattleViewerTargetDataSet
 {
@@ -124,8 +117,7 @@ struct CBattleViewerTargetDataSet
     CBattleViewerItemTargetData items[2];
 };
 
-static_assert(sizeof(CBattleViewerTargetDataSet) == 108,
-              "Size of CBattleViewerTargetDataSet structure must be exactly 108 bytes");
+assert_size(CBattleViewerTargetDataSet, 108);
 
 struct CBattleViewerUnknownUnitData
 {
@@ -137,8 +129,7 @@ struct CBattleViewerUnknownUnitData
     char padding;
 };
 
-static_assert(sizeof(CBattleViewerUnknownUnitData) == 12,
-              "Size of CBattleViewerUnknownUnitData structure must be exactly 12 bytes");
+assert_size(CBattleViewerUnknownUnitData, 12);
 
 using CUnknownUnitDataMap = Map<CMidgardID, CBattleViewerUnknownUnitData>;
 
@@ -148,8 +139,7 @@ struct CUnitRectAndId
     CMidgardID id;
 };
 
-static_assert(sizeof(CUnitRectAndId) == 20,
-              "Size of CUnitRectAndId structure must be exactly 20 bytes");
+assert_size(CUnitRectAndId, 20);
 
 struct CBattleViewerTargetUnitData : CUnitRectAndId
 {
@@ -163,8 +153,7 @@ struct CBattleViewerTargetUnitData : CUnitRectAndId
     char padding[2];
 };
 
-static_assert(sizeof(CBattleViewerTargetUnitData) == 32,
-              "Size of CBattleViewerTargetUnitData structure must be exactly 32 bytes");
+assert_size(CBattleViewerTargetUnitData, 32);
 
 struct CBattleViewerInterfData
 {
@@ -213,26 +202,13 @@ struct CBattleViewerInterfData
     char padding[3];
 };
 
-static_assert(sizeof(CBattleViewerInterfData) == 5384,
-              "Size of CBattleViewerInterfData structure must be exactly 5384 bytes");
-
-static_assert(offsetof(CBattleViewerInterfData, batViewer2dEngine) == 4136,
-              "CBattleViewerInterfData::batViewer2dEngine offset must be 4136 bytes");
-
-static_assert(offsetof(CBattleViewerInterfData, imagesLoader) == 4156,
-              "CBattleViewerInterfData::imagesLoader offset must be 4156 bytes");
-
-static_assert(offsetof(CBattleViewerInterfData, bigFace) == 4992,
-              "CBattleViewerInterfData::bigFace offset must be 4992 bytes");
-
-static_assert(offsetof(CBattleViewerInterfData, bigFace2) == 5012,
-              "CBattleViewerInterfData::bigFace2 offset must be 5012 bytes");
-
-static_assert(offsetof(CBattleViewerInterfData, bothPlayersHuman) == 5368,
-              "CBattleViewerInterfData::bothPlayersHuman offset must be 5368 bytes");
-
-static_assert(offsetof(CBattleViewerInterfData, objectMap) == 5376,
-              "CBattleViewerInterfData::objectMap offset must be 5376 bytes");
+assert_size(CBattleViewerInterfData, 5384);
+assert_offset(CBattleViewerInterfData, batViewer2dEngine, 4136);
+assert_offset(CBattleViewerInterfData, imagesLoader, 4156);
+assert_offset(CBattleViewerInterfData, bigFace, 4992);
+assert_offset(CBattleViewerInterfData, bigFace2, 5012);
+assert_offset(CBattleViewerInterfData, bothPlayersHuman, 5368);
+assert_offset(CBattleViewerInterfData, objectMap, 5376);
 
 struct CBattleViewerInterfData2
 {
@@ -268,8 +244,7 @@ struct CBattleViewerInterfData2
     char unknown12;
 };
 
-static_assert(sizeof(CBattleViewerInterfData2) == 196,
-              "Size of CBattleViewerInterfData2 structure must be exactly 196 bytes");
+assert_size(CBattleViewerInterfData2, 196);
 
 /**
  * Renders battle screen and handles user input during battle.
@@ -282,8 +257,7 @@ struct CBattleViewerInterf : public CDragAndDropInterf
     CBattleViewerInterfData2* data2;
 };
 
-static_assert(sizeof(CBattleViewerInterf) == 36,
-              "Size of CBattleViewerInterf structure must be exactly 36 bytes");
+assert_size(CBattleViewerInterf, 36);
 
 static inline CBattleViewerInterf* castBatViewerToBattleViewerInterf(IBatViewer* value)
 {

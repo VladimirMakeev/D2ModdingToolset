@@ -82,8 +82,7 @@ struct CMidInventoryVftable
     RemoveItem removeItem;
 };
 
-static_assert(sizeof(CMidInventoryVftable) == 10 * sizeof(void*),
-              "CMidInventory vftable must have exactly 10 methods");
+assert_vftable_size(CMidInventoryVftable, 10);
 
 } // namespace game
 

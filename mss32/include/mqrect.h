@@ -20,6 +20,7 @@
 #ifndef MQRECT_H
 #define MQRECT_H
 
+#include "d2assert.h"
 #include "mqpoint.h"
 
 namespace game {
@@ -30,7 +31,7 @@ struct CMqRect
     CMqPoint p2; /**< Bottom-right point.*/
 };
 
-static_assert(sizeof(CMqRect) == 16, "Size of CMqRect structure must be exactly 16 bytes");
+assert_size(CMqRect, 16);
 
 namespace MqRectApi {
 

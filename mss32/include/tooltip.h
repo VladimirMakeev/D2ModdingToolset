@@ -31,7 +31,7 @@ struct Tooltip
     int unknown;
 };
 
-static_assert(sizeof(Tooltip) == 20, "Size of Tooltip structure must be exactly 20 bytes");
+assert_size(Tooltip, 20);
 
 } // namespace game
 

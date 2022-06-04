@@ -21,7 +21,7 @@
 #define MQTEXTURER2_H
 
 #include <cstdint>
-#include <wingdi.h>
+#include <windows.h>
 
 namespace game {
 

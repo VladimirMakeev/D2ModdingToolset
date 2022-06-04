@@ -49,11 +49,8 @@ struct CInterfaceData
     TooltipPtr tooltip;
 };
 
-static_assert(sizeof(CInterfaceData) == 64,
-              "Size of CInterfaceData structure must be exactly 64 bytes");
-
-static_assert(offsetof(CInterfaceData, childs) == 28,
-              "CInterfaceData::childs offset must be 28 bytes");
+assert_size(CInterfaceData, 64);
+assert_offset(CInterfaceData, childs, 28);
 
 template <typename T>
 struct CInterfaceT
@@ -226,8 +223,7 @@ struct CInterfaceVftable
     SetParent setParent;
 };
 
-static_assert(sizeof(CInterfaceVftable) == 34 * sizeof(void*),
-              "CInterface vftable must have exactly 34 methods");
+assert_vftable_size(CInterfaceVftable, 34);
 
 } // namespace game
 

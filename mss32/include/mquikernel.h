@@ -20,6 +20,7 @@
 #ifndef MQUIKERNEL_H
 #define MQUIKERNEL_H
 
+#include "d2assert.h"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <cstdint>
@@ -179,8 +180,7 @@ struct IMqUIKernelVftable
     RemoveTimer removeTimer;
 };
 
-static_assert(sizeof(IMqUIKernelVftable) == 28 * sizeof(void*),
-              "IMqUIKernel vftable must have exactly 28 methods");
+assert_vftable_size(IMqUIKernelVftable, 28);
 
 } // namespace game
 

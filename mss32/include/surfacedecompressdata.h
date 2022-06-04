@@ -48,8 +48,7 @@ struct SurfaceDecompressData
     std::uint32_t alphaBitMask;
 };
 
-static_assert(sizeof(SurfaceDecompressData) == 1072,
-              "Size of SurfaceDecompressData structure must be exactly 1072 bytes");
+assert_size(SurfaceDecompressData, 1072);
 
 namespace SurfaceDecompressDataApi {
 

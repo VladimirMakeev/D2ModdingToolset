@@ -66,8 +66,7 @@ struct IBatViewerVftable
     BattleEnd battleEnd;
 };
 
-static_assert(sizeof(IBatViewerVftable) == 4 * sizeof(void*),
-              "IBatViewer vftable must have exactly 4 methods");
+assert_vftable_size(IBatViewerVftable, 4);
 
 struct BatViewerTargetData
 {
@@ -75,8 +74,7 @@ struct BatViewerTargetData
     UnitPositionMap targetPositions;
 };
 
-static_assert(sizeof(BatViewerTargetData) == 32,
-              "Size of BatViewerTargetData structure must be exactly 32 bytes");
+assert_size(BatViewerTargetData, 32);
 
 struct BatViewerTargetDataSet
 {
@@ -84,8 +82,7 @@ struct BatViewerTargetDataSet
     BatViewerTargetData items[2];
 };
 
-static_assert(sizeof(BatViewerTargetDataSet) == 96,
-              "Size of BatViewerTargetDataSet structure must be exactly 96 bytes");
+assert_size(BatViewerTargetDataSet, 96);
 
 } // namespace game
 

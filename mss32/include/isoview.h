@@ -35,11 +35,8 @@ struct CIsoViewData
     char unknown2[72];
 };
 
-static_assert(sizeof(CIsoViewData) == 92,
-              "Size of CIsoViewData structure must be exactly 92 bytes");
-
-static_assert(offsetof(CIsoViewData, dialogInterf) == 16,
-              "CIsoViewData::dialogInterf offset must be 16 bytes");
+assert_size(CIsoViewData, 92);
+assert_offset(CIsoViewData, dialogInterf, 16);
 
 /** Represents DLG_ISO_VIEW from ScenEdit.dlg. */
 struct CIsoView : public CFullScreenInterf

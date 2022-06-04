@@ -57,14 +57,9 @@ struct CScenarioInfo : public IMidScenarioObject
     int mapSeed;
 };
 
-static_assert(sizeof(CScenarioInfo) == 120,
-              "Size of CScenarioInfo structure must be exactly 120 bytes");
-
-static_assert(offsetof(CScenarioInfo, scenarioDifficulty) == 52,
-              "CScenarioInfo::scenarioDifficulty offset must be 52 bytes");
-
-static_assert(offsetof(CScenarioInfo, unitMaxTier) == 100,
-              "CScenarioInfo::unitMaxTier offset must be 100 bytes");
+assert_size(CScenarioInfo, 120);
+assert_offset(CScenarioInfo, scenarioDifficulty, 52);
+assert_offset(CScenarioInfo, unitMaxTier, 100);
 
 } // namespace game
 
