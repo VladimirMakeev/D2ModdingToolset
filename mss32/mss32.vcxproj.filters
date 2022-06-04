@@ -1055,6 +1055,9 @@
     <ClCompile Include="src\bindings\playerview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\modifierview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2660,6 +2663,9 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\playerview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\modifierview.h">
       <Filter>bindings</Filter>
     </ClInclude>
   </ItemGroup>
