@@ -219,7 +219,7 @@ Returns unit's [stack](luaApi.md#stack-1).
 unit.stack
 ```
 ##### modifiers
-Returns array of applied [modifiers] (luaApi.md#modifier).
+Returns array of applied [modifiers](luaApi.md#modifier).
 ```lua
 unit.modifiers
 ```
