@@ -24,6 +24,8 @@
 #include "globaldata.h"
 #include "log.h"
 #include "midunit.h"
+#include "modifierview.h"
+#include "ummodifier.h"
 #include "unitgenerator.h"
 #include "unitimplview.h"
 #include "unitutils.h"
@@ -66,6 +68,7 @@ void UnitView::bind(sol::state& lua)
     unit["leadership"] = sol::property(&UnitView::getLeadership);
     unit["hasAbility"] = &UnitView::hasAbility;
     unit["hasMoveBonus"] = &UnitView::hasMoveBonus;
+    unit["modifiers"] = sol::property(&UnitView::getModifiers);
 }
 
 std::optional<UnitImplView> UnitView::getImpl() const
@@ -153,6 +156,28 @@ bool UnitView::hasAbility(int abilityId) const
 bool UnitView::hasMoveBonus(int groundId) const
 {
     return getImpl()->hasMoveBonus(groundId);
+}
+
+std::vector<ModifierView> UnitView::getModifiers() const
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    std::vector<ModifierView> result;
+
+    CUmModifier* modifier = nullptr;
+    for (auto curr = unit->unitImpl; curr; curr = modifier->data->prev) {
+        modifier = (CUmModifier*)dynamicCast(curr, 0, rtti.IUsUnitType, rtti.CUmModifierType, 0);
+        if (!modifier)
+            break;
+
+        result.push_back(ModifierView{modifier, objectMap});
+    }
+
+    std::reverse(result.begin(), result.end());
+    return result;
 }
 
 const game::IUsUnit* UnitView::getUnitImpl() const

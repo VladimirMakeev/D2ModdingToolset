@@ -149,6 +149,16 @@ Id.emptyId()
 tostring(id)
 ```
 
+#### Modifier
+Represents unit modifier. Modifiers wrap [unit implementation](luaApi.md#unit-implementation).
+
+Methods:
+##### id
+Returns modifier [id](luaApi.md#id). `MODIF_ID` value from `Gmodif.dbf`.
+```lua
+modifier.id
+```
+
 ---
 
 #### Unit
@@ -207,6 +217,11 @@ unit.group
 Returns unit's [stack](luaApi.md#stack-1).
 ```lua
 unit.stack
+```
+##### modifiers
+Returns array of applied [modifiers] (luaApi.md#modifier).
+```lua
+unit.modifiers
 ```
 
 ---
@@ -286,11 +301,6 @@ impl:hasAbility(Ability.TalismanUse)
 Returns true if leader has movement bonus on specified [ground](luaApi.md#ground) (or false if unit is not a leader).
 ```lua
 impl:hasMoveBonus(Ground.Water)
-```
-##### modifiers
-Returns array of applied modifier [ids](luaApi.md#id).
-```lua
-impl.modifiers
 ```
 
 ---

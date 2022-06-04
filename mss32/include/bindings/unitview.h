@@ -37,6 +37,7 @@ struct CMidUnit;
 namespace bindings {
 
 class UnitImplView;
+class ModifierView;
 
 class UnitView
 {
@@ -74,6 +75,8 @@ public:
     bool hasAbility(int abilityId) const;
     /** Returns true if leader has movement bonus on LGroundCategory with specified id. */
     bool hasMoveBonus(int groundId) const;
+
+    std::vector<ModifierView> getModifiers() const;
 
 protected:
     const game::IUsUnit* getUnitImpl() const;

@@ -29,7 +29,6 @@
 #include "midsubrace.h"
 #include "racecategory.h"
 #include "racetype.h"
-#include "ummodifier.h"
 #include "unitutils.h"
 #include "usleader.h"
 #include "ussoldier.h"
@@ -67,7 +66,6 @@ void UnitImplView::bind(sol::state& lua)
     impl["attack1"] = sol::property(&UnitImplView::getAttack);
     impl["attack2"] = sol::property(&UnitImplView::getAttack2);
     impl["base"] = sol::property(&UnitImplView::getBaseUnit);
-    impl["modifiers"] = sol::property(&UnitImplView::getModifiers);
 
     impl["leaderType"] = sol::property(&UnitImplView::getLeaderCategory);
     impl["movement"] = sol::property(&UnitImplView::getMovement);
@@ -203,29 +201,6 @@ std::optional<UnitImplView> UnitImplView::getBaseUnit() const
         return std::nullopt;
 
     return {globalUnitImpl};
-}
-
-std::vector<IdView> UnitImplView::getModifiers() const
-{
-    using namespace game;
-
-    const auto& rtti = RttiApi::rtti();
-    const auto dynamicCast = RttiApi::get().dynamicCast;
-
-    std::vector<IdView> result;
-
-    CUmModifier* modifier = nullptr;
-    for (auto curr = impl; curr; curr = modifier->data->prev) {
-        modifier = (CUmModifier*)dynamicCast(curr, 0, rtti.IUsUnitType, rtti.CUmModifierType, 0);
-        if (!modifier)
-            break;
-
-        auto modifierId = modifier->data->modifierId;
-        result.push_back(modifierId);
-    }
-
-    std::reverse(result.begin(), result.end());
-    return result;
 }
 
 int UnitImplView::getLeaderCategory() const
