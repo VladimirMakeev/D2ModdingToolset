@@ -239,9 +239,11 @@ const game::CMidStack* getStackByUnitId(const game::IMidgardObjectMap* objectMap
     const auto& rtti = RttiApi::rtti();
     const auto dynamicCast = RttiApi::get().dynamicCast;
 
-    auto groupId = fn.getStackIdByUnitId(objectMap, unitId);
+    auto stackId = fn.getStackIdByUnitId(objectMap, unitId);
+    if (!stackId)
+        return nullptr;
 
-    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, groupId);
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, stackId);
     return (const CMidStack*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType, rtti.CMidStackType,
                                          0);
 }
