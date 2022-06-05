@@ -148,7 +148,7 @@ void addModifiersInfo(game::CEncLayoutUnit* layout)
 
         for (auto curr = getFirstUmModifier(unit->unitImpl); curr; curr = curr->data->next) {
             auto customModifier = castModifierToCustomModifier(curr);
-            if (!customModifier) {
+            if (!customModifier || !customModifier->display) {
                 continue;
             }
 
@@ -158,7 +158,6 @@ void addModifiersInfo(game::CEncLayoutUnit* layout)
             addModifierInfo(layout, customModifier, it != nativeModifiers.end());
             ++count;
         }
-
     } else {
         for (const auto& modifierId : getNativeModifiers(layout->data->unitId)) {
             const auto unitModifier = getUnitModifier(&modifierId);
@@ -167,7 +166,7 @@ void addModifiersInfo(game::CEncLayoutUnit* layout)
             }
 
             auto customModifier = castModifierToCustomModifier(unitModifier->data->modifier);
-            if (!customModifier) {
+            if (!customModifier || !customModifier->display) {
                 continue;
             }
 
