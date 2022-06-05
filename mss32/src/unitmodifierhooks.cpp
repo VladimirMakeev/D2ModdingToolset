@@ -71,6 +71,7 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
     const auto& memAlloc = Memory::get().allocate;
     const auto& dbApi = CDBTableApi::get();
     const auto& stringApi = StringApi::get();
+    const auto& idApi = CMidgardIDApi::get();
 
     thisptr->vftable = TUnitModifierApi::vftable();
     thisptr->id = emptyId;
@@ -93,11 +94,18 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
     if (data->group.id == getCustomModifiers().group.id) {
         String script{};
         dbApi.readString(&script, dbTable, "SCRIPT");
-        data->scriptFileName = script.string;
+        if (script.string)
+            data->scriptFileName = script.string;
         stringApi.free(&script);
 
+        String descTxtString{};
+        dbApi.readString(&descTxtString, dbTable, "DESC_TXT");
         CMidgardID descTxt;
-        dbApi.readId(&descTxt, dbTable, "DESC_TXT");
+        idApi.fromString(&descTxt, descTxtString.string);
+        stringApi.free(&descTxtString);
+
+        if (descTxt == invalidId)
+            idApi.fromString(&descTxt, "x000tg6000"); // "!! Missing modifier name !!"
 
         bool display;
         dbApi.readBool(&display, dbTable, "DISPLAY");

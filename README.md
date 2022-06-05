@@ -470,8 +470,8 @@
         - Specify new `MODIF_ID` (use format `gXXXum9XXX` if you want it to be available as Scenario Editor modifier);
         - Specify `SOURCE` id that corresponds to `L_CUSTOM` category added earlier (example `LModifS.dbf` uses `4` as the id);
         - Specify `SCRIPT` file name that will be used for this modifier (omit file path, for example `berserk.lua`);
-        - (Optional) Specify `DESC_TXT` id that corresponds to `Tglobal.dbf` entry added earlier;
-        - (Optional) Specify `DISPLAY` that controls whether the modifier should appear in modifiers panel for Unit Encyclopedia;
+        - (Optional) Specify `DESC_TXT` id that corresponds to `Tglobal.dbf` entry added earlier (defaults to the standard stub `x000tg6000`);
+        - (Optional) Specify `DISPLAY` that controls whether the modifier should appear in modifiers panel for Unit Encyclopedia (defaults to false);
     - Refer to [Scripts/Modifiers](Scripts/Modifiers) examples and [luaApi](luaApi.md) to create your modifier script;
     - Try assigning the created modifier to item, potion or spell, or simply use it as Scenario Editor modifier;
     - Consider adding vertical align to unit encyclopedia fields to properly accommodate custom modifier bonuses text:
