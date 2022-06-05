@@ -20,6 +20,7 @@
 #pragma comment(lib, "detours.lib")
 
 #include "customattacks.h"
+#include "custommodifiers.h"
 #include "hooks.h"
 #include "log.h"
 #include "restrictions.h"
@@ -233,7 +234,10 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
         return FALSE;
     }
 
+    // Lazy initialization is not optimal as the data can be accessed in parallel threads.
+    // Thread sync is excessive because the data is read-only or thread-exclusive once initialized.
     hooks::initializeCustomAttacks();
+    hooks::initializeCustomModifiers();
 
     adjustGameRestrictions();
     setupVftableHooks();

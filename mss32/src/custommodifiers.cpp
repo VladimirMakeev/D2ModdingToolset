@@ -83,22 +83,22 @@ void fillNativeModifiers(CustomModifiers::NativeMap& value)
     }
 }
 
-CustomModifiers& getCustomModifiers()
+void initializeCustomModifiers()
 {
     using namespace game;
 
+    auto& value = getCustomModifiers();
+
+    value.group.id = (ModifierSourceId)emptyCategoryId;
+    value.group.table = nullptr;
+    value.group.vftable = LModifGroupApi::vftable();
+
+    fillNativeModifiers(value.native);
+}
+
+CustomModifiers& getCustomModifiers()
+{
     static CustomModifiers value{};
-    static bool initialized = false;
-
-    if (!initialized) {
-        value.group.id = (ModifierSourceId)emptyCategoryId;
-        value.group.table = nullptr;
-        value.group.vftable = LModifGroupApi::vftable();
-
-        fillNativeModifiers(value.native);
-
-        initialized = true;
-    }
 
     return value;
 }

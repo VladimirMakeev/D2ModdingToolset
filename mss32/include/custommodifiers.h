@@ -40,6 +40,7 @@ struct CustomModifiers
     NativeMap native;
 };
 
+void initializeCustomModifiers();
 CustomModifiers& getCustomModifiers();
 NativeModifiers getNativeModifiers(const game::CMidgardID& unitImplId);
 
