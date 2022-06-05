@@ -371,6 +371,16 @@ Returns player [bank](luaApi.md#currency).
 ```lua
 player.bank
 ```
+##### human
+Returns true if player is human (not AI).
+```lua
+player.human
+```
+##### alwaysAi
+Returns true if player is always AI.
+```lua
+player.alwaysAi
+```
 
 ---
 

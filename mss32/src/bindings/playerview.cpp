@@ -40,6 +40,8 @@ void PlayerView::bind(sol::state& lua)
     view["race"] = sol::property(&getRaceCategoryId);
     view["lord"] = sol::property(&getLordCategoryId);
     view["bank"] = sol::property(&getBank);
+    view["human"] = sol::property(&isHuman);
+    view["alwaysAi"] = sol::property(&isAlwaysAi);
 }
 
 IdView PlayerView::getId() const
@@ -73,6 +75,16 @@ int PlayerView::getLordCategoryId() const
 CurrencyView PlayerView::getBank() const
 {
     return {player->bank};
+}
+
+bool PlayerView::isHuman() const
+{
+    return player->isHuman;
+}
+
+bool PlayerView::isAlwaysAi() const
+{
+    return player->alwaysAi;
 }
 
 } // namespace bindings

@@ -45,6 +45,8 @@ public:
     int getRaceCategoryId() const;
     int getLordCategoryId() const;
     CurrencyView getBank() const;
+    bool isHuman() const;
+    bool isAlwaysAi() const;
 
 private:
     const game::CMidPlayer* player;
