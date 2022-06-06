@@ -76,7 +76,11 @@ const game::IMidgardObjectMap* getObjectMap()
         if (!global->initialized)
             return nullptr;
 
-        return global->unknown2->data->scenarioMap;
+        auto unknown2 = global->unknown2;
+        if (!unknown2 || !unknown2->data)
+            return nullptr;
+
+        return unknown2->data->scenarioMap;
     }
 
     auto midgard = CMidgardApi::get().instance();
