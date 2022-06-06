@@ -78,11 +78,27 @@ static std::array<Api, 4> functions = {{
         (Api::ReplaceImpl)nullptr,
     },
 }};
+
+static std::array<CMidUnitVftable*, 4> vftables = {{
+    // Akella
+    (CMidUnitVftable*)0x6f0914,
+    // Russobit
+    (CMidUnitVftable*)0x6f0914,
+    // Gog
+    (CMidUnitVftable*)0x6ee8b4,
+    // Scenario Editor
+    (CMidUnitVftable*)0x5da34c,
+}};
 // clang-format on
 
 Api& get()
 {
     return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+CMidUnitVftable* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::CMidUnitApi

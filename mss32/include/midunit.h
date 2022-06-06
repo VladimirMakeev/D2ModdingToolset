@@ -30,6 +30,7 @@ namespace game {
 
 struct IUsUnit;
 struct CScenarioVisitor;
+struct CMidUnitVftable;
 
 /** Holds unit related data in scenario file and game. */
 struct CMidUnit : public IMidScenarioObject
@@ -57,6 +58,31 @@ static_assert(sizeof(CMidUnit) == 80, "Size of CMidUnit structure must be exactl
 static_assert(offsetof(CMidUnit, dynLevel) == 24, "CMidUnit::dynLevel offset must be 24 bytes");
 static_assert(offsetof(CMidUnit, origTypeId) == 44, "CMidUnit::origTypeId offset must be 44 bytes");
 static_assert(offsetof(CMidUnit, origXp) == 60, "CMidUnit::origXp offset must be 60 bytes");
+
+struct CMidUnitVftable : IMidScenarioObjectVftable
+{
+    /**
+     * Called by server when new unit is created.
+     * Used in CreateUnit, CVisitorChangeStackLeader::Apply and CVisitorAddUnitToGroup::Apply.
+     */
+    using InitWithSoldierImpl = bool(__thiscall*)(CMidUnit* thisptr,
+                                                  const IMidgardObjectMap* objectMap,
+                                                  const CMidgardID* unitImplId,
+                                                  const int* turn);
+    InitWithSoldierImpl initWithSoldierImpl;
+
+    /**
+     * Called by server when unit is removed. Calls RemoveModifiers and sets unitImpl to null.
+     * Used in CVisitorChangeStackLeader::Apply and CVisitorRmvUnitFromGroup::Apply.
+     * Not actually a finalize method as it is not called every time a unit instance is destroyed.
+     * Destructor also calls RemoveModifiers on its own.
+     */
+    using RemoveUnitImpl = bool(__thiscall*)(CMidUnit* thisptr, int a2);
+    RemoveUnitImpl removeUnitImpl;
+};
+
+static_assert(sizeof(CMidUnitVftable) == 6 * sizeof(void*),
+              "CMidUnit vftable must have exactly 6 methods");
 
 namespace CMidUnitApi {
 
@@ -101,6 +127,8 @@ struct Api
 };
 
 Api& get();
+
+CMidUnitVftable* vftable();
 
 } // namespace CMidUnitApi
 
