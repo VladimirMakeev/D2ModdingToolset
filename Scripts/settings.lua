@@ -25,7 +25,7 @@ settings = {
 	unitMaxArmor = 90,
 
 	-- Maximum allowed scout range for troops [7 : 100]
-	stackMaxScoutRange = 7,
+	stackMaxScoutRange = 8,
 
 	-- Total armor shatter damage [0 : 100]
 	shatteredArmorMax = 100,
