@@ -169,6 +169,25 @@ bool __fastcall upgradeHooked(game::CMidUnit* thisptr,
     return true;
 }
 
+bool __fastcall initWithSoldierImplHooked(game::CMidUnit* thisptr,
+                                          int /*%edx*/,
+                                          const game::IMidgardObjectMap* objectMap,
+                                          const game::CMidgardID* unitImplId,
+                                          const int* turn)
+{
+    using namespace game;
+
+    if (!getOriginalFunctions().initWithSoldierImpl(thisptr, objectMap, unitImplId, turn)) {
+        return false;
+    }
+
+    for (const auto& modifierId : getNativeModifiers(thisptr->unitImpl->id)) {
+        CMidUnitApi::get().addModifier(thisptr, &modifierId);
+    }
+
+    return true;
+}
+
 bool __stdcall getModifiersHooked(game::IdList* value, const game::CMidUnit* unit)
 {
     using namespace game;

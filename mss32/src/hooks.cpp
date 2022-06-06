@@ -603,6 +603,8 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{CMidUnitApi::get().getModifiers, getModifiersHooked});
     hooks.emplace_back(
         HookInfo{CMidUnitApi::get().addModifiers, addModifiersHooked, (void**)&orig.addModifiers});
+    hooks.emplace_back(HookInfo{CMidUnitApi::vftable()->initWithSoldierImpl,
+                                initWithSoldierImplHooked, (void**)&orig.initWithSoldierImpl});
 
     return hooks;
 }
