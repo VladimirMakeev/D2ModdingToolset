@@ -25,7 +25,10 @@ settings = {
 	unitMaxArmor = 90,
 
 	-- Maximum allowed scout range for troops [7 : 100]
-	stackMaxScoutRange = 7,
+	-- minimum value could not be less than highest scout value
+	-- of all units in GUnits.dbf
+	-- For example: not less than 7 because of Centaur Lancer (g000uu5111) in original game
+	stackMaxScoutRange = 8,
 
 	-- Total armor shatter damage [0 : 100]
 	shatteredArmorMax = 100,
