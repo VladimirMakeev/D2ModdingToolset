@@ -31,6 +31,7 @@ struct CMqPoint;
 struct SurfaceDecompressData;
 struct IDirectDrawSurface7;
 struct IDirectDrawPalette;
+struct CMqRect;
 
 struct IMqRasterizer
 {
@@ -87,11 +88,23 @@ struct IMqRasterizerVftable
                                                         CMqPoint* screenSurfaceSize);
     GetScreenSurfaceSize getScreenSurfaceSize;
 
-    void* method6;
-    void* method7;
+    /** Assumption: notifies rasterizer that scaling of specified area has started. */
+    using StartScaling = void(__thiscall*)(IMqRasterizer* thisptr,
+                                           const CMqRect* area,
+                                           const CMqPoint* position);
+    StartScaling startScaling;
 
-    using Method8 = bool(__thiscall*)(IMqRasterizer* thisptr);
-    Method8 method8;
+    /** Assumption: notifies rasterizer that scaling has ended. */
+    using EndScaling = void(__thiscall*)(IMqRasterizer* thisptr);
+    EndScaling endScaling;
+
+    /**
+     * Returns true if rasterizer can perform image scaling.
+     * It means that startScaling and endScaling methods are implemented.
+     * CDisplayD3D returns its member value while CDisplayDDraw always returns false.
+     */
+    using IsScalingSupported = bool(__thiscall*)(const IMqRasterizer* thisptr);
+    IsScalingSupported isScalingSupported;
 
     /** Returns true if game is in fullscreen mode. */
     using IsFullscreen = bool(__thiscall*)(const IMqRasterizer* thisptr);

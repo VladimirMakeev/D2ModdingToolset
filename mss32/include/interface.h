@@ -123,13 +123,13 @@ struct CInterfaceVftable
     DrawBorder shouldDrawBorder;
 
     /**
-     * Meaning unknown.
+     * Assumption: returns true if scaling is disabled for this interface element.
      * CInterface returns false,
      * CInterfDialog checks interface below it and call its method, or returns false.
      * CMainView2 returns true, while CFullScreenInterf returns false.
      */
-    using Method10 = bool(__thiscall*)(CInterface* thisptr);
-    Method10 method10;
+    using ShouldIgnoreScaling = bool(__thiscall*)(const CInterface* thisptr);
+    ShouldIgnoreScaling shouldIgnoreScaling;
 
     using Method11 = int(__thiscall*)(CInterface* thisptr);
     Method11 method11;
