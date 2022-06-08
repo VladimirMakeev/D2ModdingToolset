@@ -25,10 +25,12 @@
 #include "midgardobjectmap.h"
 #include "midgardplan.h"
 #include "midscenvariables.h"
+#include "playerview.h"
 #include "scenarioinfo.h"
 #include "scenvariablesview.h"
 #include "stackview.h"
 #include "tileview.h"
+#include "unitview.h"
 #include <sol/sol.hpp>
 
 namespace bindings {
@@ -46,7 +48,10 @@ void ScenarioView::bind(sol::state& lua)
     scenario["getTile"] = sol::overload<>(&ScenarioView::getTile, &ScenarioView::getTileByPoint);
     scenario["getStack"] = sol::overload<>(&ScenarioView::getStack, &ScenarioView::getStackById,
                                            &ScenarioView::getStackByCoordinates,
-                                           &ScenarioView::getStackByPoint);
+                                           &ScenarioView::getStackByPoint,
+                                           &ScenarioView::getStackByUnit);
+    scenario["getPlayer"] = sol::overload<>(&ScenarioView::getPlayer, &ScenarioView::getPlayerById,
+                                            &ScenarioView::getPlayerByStack);
     scenario["day"] = sol::property(&ScenarioView::getCurrentDay);
     scenario["size"] = sol::property(&ScenarioView::getSize);
 }
@@ -171,6 +176,37 @@ std::optional<StackView> ScenarioView::getStackByCoordinates(int x, int y) const
 std::optional<StackView> ScenarioView::getStackByPoint(const Point& p) const
 {
     return getStackByCoordinates(p.x, p.y);
+}
+
+std::optional<StackView> ScenarioView::getStackByUnit(const UnitView& unit) const
+{
+    auto unitId = unit.getId();
+    auto stack = hooks::getStackByUnitId(objectMap, &unitId.id);
+    if (!stack)
+        return std::nullopt;
+
+    return {StackView{stack, objectMap}};
+}
+
+std::optional<PlayerView> ScenarioView::getPlayer(const std::string& id) const
+{
+    return getPlayerById(IdView{id});
+}
+
+std::optional<PlayerView> ScenarioView::getPlayerById(const IdView& id) const
+{
+    auto player = hooks::getPlayer(objectMap, &id.id);
+    return {PlayerView{player}};
+}
+
+std::optional<PlayerView> ScenarioView::getPlayerByStack(const StackView& stack) const
+{
+    auto playerId = stack.getOwnerId();
+    auto player = hooks::getPlayer(objectMap, &playerId.id);
+    if (!player)
+        return std::nullopt;
+
+    return {PlayerView{player}};
 }
 
 int ScenarioView::getCurrentDay() const

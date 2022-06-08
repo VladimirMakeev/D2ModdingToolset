@@ -25,7 +25,6 @@ class state;
 }
 
 namespace game {
-struct IMidgardObjectMap;
 struct CMidPlayer;
 } // namespace game
 
@@ -37,7 +36,7 @@ class CurrencyView;
 class PlayerView
 {
 public:
-    PlayerView(const game::CMidPlayer* player, const game::IMidgardObjectMap* objectMap);
+    PlayerView(const game::CMidPlayer* player);
 
     static void bind(sol::state& lua);
 
@@ -50,7 +49,6 @@ public:
 
 private:
     const game::CMidPlayer* player;
-    const game::IMidgardObjectMap* objectMap;
 };
 
 } // namespace bindings

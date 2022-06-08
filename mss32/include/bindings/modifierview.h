@@ -25,7 +25,6 @@ class state;
 }
 
 namespace game {
-struct IMidgardObjectMap;
 struct CUmModifier;
 } // namespace game
 
@@ -36,7 +35,7 @@ struct IdView;
 class ModifierView
 {
 public:
-    ModifierView(const game::CUmModifier* modifier, const game::IMidgardObjectMap* objectMap);
+    ModifierView(const game::CUmModifier* modifier);
 
     static void bind(sol::state& lua);
 
@@ -44,7 +43,6 @@ public:
 
 private:
     const game::CUmModifier* modifier;
-    const game::IMidgardObjectMap* objectMap;
 };
 
 } // namespace bindings

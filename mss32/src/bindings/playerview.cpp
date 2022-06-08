@@ -28,9 +28,8 @@
 
 namespace bindings {
 
-PlayerView::PlayerView(const game::CMidPlayer* player, const game::IMidgardObjectMap* objectMap)
+PlayerView::PlayerView(const game::CMidPlayer* player)
     : player{player}
-    , objectMap{objectMap}
 { }
 
 void PlayerView::bind(sol::state& lua)

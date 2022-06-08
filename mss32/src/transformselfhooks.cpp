@@ -45,9 +45,7 @@
 
 namespace hooks {
 
-static int getTransformSelfLevel(const game::CMidUnit* unit,
-                                 game::TUsUnitImpl* transformImpl,
-                                 game::IMidgardObjectMap* objectMap)
+static int getTransformSelfLevel(const game::CMidUnit* unit, game::TUsUnitImpl* transformImpl)
 {
     std::optional<sol::environment> env;
     const auto path{scriptsFolder() / "transformSelf.lua"};
@@ -58,7 +56,7 @@ static int getTransformSelfLevel(const game::CMidUnit* unit,
     }
 
     try {
-        const bindings::UnitView attacker{unit, objectMap};
+        const bindings::UnitView attacker{unit};
         const bindings::UnitImplView impl{transformImpl};
 
         return (*getLevel)(attacker, impl);
@@ -193,7 +191,7 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
         auto transformImpl = static_cast<TUsUnitImpl*>(
             global.findById(globalData->units, &transformImplId));
 
-        const auto transformLevel = getTransformSelfLevel(targetUnit, transformImpl, objectMap);
+        const auto transformLevel = getTransformSelfLevel(targetUnit, transformImpl);
 
         CUnitGenerator* unitGenerator = globalData->unitGenerator;
 

@@ -20,7 +20,6 @@
 #include "unitview.h"
 #include "dynupgrade.h"
 #include "game.h"
-#include "gameutils.h"
 #include "globaldata.h"
 #include "log.h"
 #include "midunit.h"
@@ -36,17 +35,13 @@
 
 namespace bindings {
 
-UnitView::UnitView(const game::CMidUnit* unit, const game::IMidgardObjectMap* objectMap)
+UnitView::UnitView(const game::CMidUnit* unit)
     : unit(unit)
-    , objectMap(objectMap)
     , unitImpl(nullptr)
 { }
 
-UnitView::UnitView(const game::CMidUnit* unit,
-                   const game::IMidgardObjectMap* objectMap,
-                   const game::IUsUnit* unitImpl)
+UnitView::UnitView(const game::CMidUnit* unit, const game::IUsUnit* unitImpl)
     : unit(unit)
-    , objectMap(objectMap)
     , unitImpl(unitImpl)
 { }
 
@@ -59,16 +54,15 @@ void UnitView::bind(sol::state& lua)
     unit["hpMax"] = sol::property(&UnitView::getHpMax);
     unit["impl"] = sol::property(&UnitView::getImpl);
     unit["baseImpl"] = sol::property(&UnitView::getBaseImpl);
-    unit["group"] = sol::property(&UnitView::getGroup);
-    unit["stack"] = sol::property(&UnitView::getStack);
+    unit["modifiers"] = sol::property(&UnitView::getModifiers);
 
+    // Leader properties for backward compatibility
     unit["type"] = sol::property(&UnitView::getCategory);
     unit["movement"] = sol::property(&UnitView::getMovement);
     unit["scout"] = sol::property(&UnitView::getScout);
     unit["leadership"] = sol::property(&UnitView::getLeadership);
     unit["hasAbility"] = &UnitView::hasAbility;
     unit["hasMoveBonus"] = &UnitView::hasMoveBonus;
-    unit["modifiers"] = sol::property(&UnitView::getModifiers);
 }
 
 std::optional<UnitImplView> UnitView::getImpl() const
@@ -79,26 +73,6 @@ std::optional<UnitImplView> UnitView::getImpl() const
 std::optional<UnitImplView> UnitView::getBaseImpl() const
 {
     return {hooks::getGlobalUnitImpl(unit)};
-}
-
-GroupView UnitView::getGroup() const
-{
-    using namespace game;
-
-    auto groupId = gameFunctions().getStackFortRuinId(&unit->id, objectMap);
-
-    auto group = hooks::getGroup(objectMap, groupId);
-
-    return GroupView{group, objectMap, groupId};
-}
-
-std::optional<StackView> UnitView::getStack() const
-{
-    auto stack = hooks::getStackByUnitId(objectMap, &unit->id);
-    if (!stack)
-        return std::nullopt;
-
-    return {StackView{stack, objectMap}};
 }
 
 IdView UnitView::getId() const
@@ -129,7 +103,6 @@ int UnitView::getHpMax() const
 
 int UnitView::getCategory() const
 {
-    // Returns leader category for backward compatibility.
     return getImpl()->getLeaderCategory();
 }
 
@@ -173,7 +146,7 @@ std::vector<ModifierView> UnitView::getModifiers() const
         if (!modifier)
             break;
 
-        result.push_back(ModifierView{modifier, objectMap});
+        result.push_back(ModifierView{modifier});
     }
 
     std::reverse(result.begin(), result.end());

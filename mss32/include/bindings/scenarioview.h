@@ -39,6 +39,8 @@ class LocationView;
 class ScenVariablesView;
 class TileView;
 class StackView;
+class UnitView;
+class PlayerView;
 
 class ScenarioView
 {
@@ -67,6 +69,15 @@ public:
     std::optional<StackView> getStackByCoordinates(int x, int y) const;
     /** Searches for stack at specified point. */
     std::optional<StackView> getStackByPoint(const Point& p) const;
+    /** Searches for stack that has specified unit. */
+    std::optional<StackView> getStackByUnit(const UnitView& unit) const;
+
+    /** Searches for player by id string. */
+    std::optional<PlayerView> getPlayer(const std::string& id) const;
+    /** Searches for player by id. */
+    std::optional<PlayerView> getPlayerById(const IdView& id) const;
+    /** Searches for player that controls specified stack. */
+    std::optional<PlayerView> getPlayerByStack(const StackView& stack) const;
 
     int getCurrentDay() const;
     int getSize() const;

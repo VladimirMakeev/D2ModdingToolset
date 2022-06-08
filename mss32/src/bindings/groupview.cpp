@@ -48,12 +48,11 @@ GroupView::GroupSlots GroupView::getSlots() const
         const auto& unitId{group->positions[i]};
 
         if (unitId == game::emptyId) {
-            slots.emplace_back(UnitSlotView(nullptr, objectMap, i, &groupId));
+            slots.emplace_back(UnitSlotView(nullptr, i, &groupId));
             continue;
         }
 
-        slots.emplace_back(
-            UnitSlotView(fn.findUnitById(objectMap, &unitId), objectMap, i, &groupId));
+        slots.emplace_back(UnitSlotView(fn.findUnitById(objectMap, &unitId), i, &groupId));
     }
 
     return slots;

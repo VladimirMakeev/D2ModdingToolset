@@ -26,11 +26,9 @@
 namespace bindings {
 
 UnitSlotView::UnitSlotView(const game::CMidUnit* unit,
-                           const game::IMidgardObjectMap* objectMap,
                            int position,
                            const game::CMidgardID* groupId)
     : unit(unit)
-    , objectMap(objectMap)
     , position(position)
     , groupId(*groupId)
 { }
@@ -56,7 +54,7 @@ void UnitSlotView::bind(sol::state& lua)
 std::optional<UnitView> UnitSlotView::getUnitView() const
 {
     if (unit)
-        return {UnitView(unit, objectMap)};
+        return {UnitView(unit)};
 
     return std::nullopt;
 }

@@ -24,10 +24,8 @@
 
 namespace bindings {
 
-ModifierView::ModifierView(const game::CUmModifier* modifier,
-                           const game::IMidgardObjectMap* objectMap)
+ModifierView::ModifierView(const game::CUmModifier* modifier)
     : modifier{modifier}
-    , objectMap{objectMap}
 { }
 
 void ModifierView::bind(sol::state& lua)

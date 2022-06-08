@@ -20,9 +20,7 @@
 #ifndef UNITVIEW_H
 #define UNITVIEW_H
 
-#include "groupview.h"
 #include "idview.h"
-#include "stackview.h"
 #include <optional>
 
 namespace sol {
@@ -42,10 +40,8 @@ class ModifierView;
 class UnitView
 {
 public:
-    UnitView(const game::CMidUnit* unit, const game::IMidgardObjectMap* objectMap);
-    UnitView(const game::CMidUnit* unit,
-             const game::IMidgardObjectMap* objectMap,
-             const game::IUsUnit* unitImpl);
+    UnitView(const game::CMidUnit* unit);
+    UnitView(const game::CMidUnit* unit, const game::IUsUnit* unitImpl);
 
     static void bind(sol::state& lua);
 
@@ -54,8 +50,7 @@ public:
     /** Returns unit base implementation. */
     std::optional<UnitImplView> getBaseImpl() const;
 
-    GroupView getGroup() const;
-    std::optional<StackView> getStack() const;
+    std::vector<ModifierView> getModifiers() const;
 
     IdView getId() const;
     /** Returns unit's current experience points. */
@@ -76,13 +71,10 @@ public:
     /** Returns true if leader has movement bonus on LGroundCategory with specified id. */
     bool hasMoveBonus(int groundId) const;
 
-    std::vector<ModifierView> getModifiers() const;
-
 protected:
     const game::IUsUnit* getUnitImpl() const;
 
     const game::CMidUnit* unit;
-    const game::IMidgardObjectMap* objectMap;
     const game::IUsUnit* unitImpl;
 };
 
