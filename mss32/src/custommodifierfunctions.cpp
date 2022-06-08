@@ -24,7 +24,7 @@ namespace hooks {
 
 void CustomModifierFunctions::initialize(const std::string& scriptFileName)
 {
-    environment = executeScriptFile(modifiersFolder() / scriptFileName);
+    environment = executeScriptFile(modifiersFolder() / scriptFileName, false, true);
     if (!environment)
         return;
 

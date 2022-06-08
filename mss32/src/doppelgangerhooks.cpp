@@ -46,7 +46,7 @@ static int getDoppelgangerTransformLevel(const game::CMidUnit* doppelganger,
     std::optional<sol::environment> env;
     const auto path{scriptsFolder() / "doppelganger.lua"};
     using GetLevel = std::function<int(const bindings::UnitView&, const bindings::UnitView&)>;
-    auto getLevel = getScriptFunction<GetLevel>(path, "getLevel", env, true);
+    auto getLevel = getScriptFunction<GetLevel>(path, "getLevel", env, true, true);
     if (!getLevel) {
         return 0;
     }

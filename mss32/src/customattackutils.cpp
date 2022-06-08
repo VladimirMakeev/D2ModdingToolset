@@ -181,7 +181,7 @@ UnitSlots getTargetsToSelectOrAttack(const std::string& scriptFile,
     using GetTargets = std::function<sol::table(const bindings::UnitSlotView&,
                                                 const bindings::UnitSlotView&, const UnitSlots&,
                                                 const UnitSlots&, bool)>;
-    auto getTargets = getScriptFunction<GetTargets>(path, "getTargets", env, true);
+    auto getTargets = getScriptFunction<GetTargets>(path, "getTargets", env, true, true);
     if (!getTargets) {
         return UnitSlots();
     }

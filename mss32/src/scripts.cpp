@@ -22,6 +22,7 @@
 #include "categoryids.h"
 #include "currencyview.h"
 #include "dynupgradeview.h"
+#include "gameutils.h"
 #include "idview.h"
 #include "itembaseview.h"
 #include "itemview.h"
@@ -289,7 +290,14 @@ const std::string& getSource(const std::filesystem::path& path)
     return source;
 }
 
-sol::environment executeScript(const std::string& source, sol::protected_function_result& result)
+bindings::ScenarioView getScenario()
+{
+    return {getObjectMap()};
+}
+
+sol::environment executeScript(const std::string& source,
+                               sol::protected_function_result& result,
+                               bool bindScenario)
 {
     auto& lua = getLua();
 
@@ -298,11 +306,17 @@ sol::environment executeScript(const std::string& source, sol::protected_functio
     sol::environment env{lua, sol::create, lua.globals()};
     result = lua.safe_script(source, env,
                              [](lua_State*, sol::protected_function_result pfr) { return pfr; });
+
+    if (bindScenario) {
+        env["getScenario"] = &getScenario;
+    }
+
     return env;
 }
 
 std::optional<sol::environment> executeScriptFile(const std::filesystem::path& path,
-                                                  bool alwaysExists)
+                                                  bool alwaysExists,
+                                                  bool bindScenario)
 {
     if (!alwaysExists && !std::filesystem::exists(path))
         return std::nullopt;
@@ -314,7 +328,7 @@ std::optional<sol::environment> executeScriptFile(const std::filesystem::path& p
     }
 
     sol::protected_function_result result;
-    auto env = executeScript(source, result);
+    auto env = executeScript(source, result, bindScenario);
     if (!result.valid()) {
         const sol::error err = result;
         showErrorMessageBox(fmt::format("Failed to execute script '{:s}'.\n"
