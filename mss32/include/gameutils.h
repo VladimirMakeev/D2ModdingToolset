@@ -36,7 +36,14 @@ namespace hooks {
 
 bool isGreaterPickRandomIfEqual(int first, int second);
 
-/** Picks object map that corresponds to the calling thread (client vs server). */
+/**
+ * Picks object map that corresponds to the calling thread (client vs server).
+ * Object map can be unavailable while in a loading state.
+ * The game has such map available, while editor keeps it unavailable while loading.
+ * The only known case so far, is that game/editor calls IUsSoldier::getHitPoint
+ * while it loads units from scenario stream thus while the map is just being loaded.
+ * This triggers CCustomModifier "getHitPoint" script that can try to access the map.
+ */
 const game::IMidgardObjectMap* getObjectMap();
 
 /** Analogue of GetStackFortRuinGroup that is absent in Scenario Editor. */
