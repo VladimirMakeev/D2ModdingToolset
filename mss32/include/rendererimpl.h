@@ -21,6 +21,7 @@
 #define RENDERERIMPL_H
 
 #include "d2assert.h"
+#include "d2map.h"
 #include "mqanimator2.h"
 #include "mqdisplay2.h"
 #include "mqrenderer2.h"
@@ -47,18 +48,18 @@ struct CRendererImpl
     IMqRasterizer* rasterizer;
     SmartPtr<CUIManager> uiManager;
     UiEvent destroyEvent;
-    int unknown3;
+    int batchNumber;
     int unknown4;
     LARGE_INTEGER perfFrequency;
     LARGE_INTEGER perfCounter;
     float fps;
     RECT windowClientArea;
-    int unknown6;
+    RenderQueue* renderQueue;
     bool renderingInProcess;
     char padding[3];
     RenderData40SetIntPair** data40IntPair;
-    Set<RenderPaletteData>** paletteData;
-    Set<RenderData420>** data420;
+    Map<std::uint32_t /* RenderData22::paletteKey */, PaletteEntryPair>** paletteEntryMap;
+    Map<std::uint32_t /* *TextureHandle::indexPtr */, TextureSurface>** textureSurfaceMap;
     char unknown8;
     char padding2[3];
     int unknown9;

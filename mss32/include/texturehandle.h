@@ -22,6 +22,7 @@
 
 #include "d2assert.h"
 #include "mqpoint.h"
+#include <cstdint>
 
 namespace game {
 
@@ -29,7 +30,7 @@ namespace game {
 struct TextureHandle
 {
     CMqPoint textureSize;
-    int* indexPtr;
+    std::uint32_t* indexPtr; /**< Used as a key for search in CRendererImpl::textureSurfaceMap. */
     int* refCount;
 };
 

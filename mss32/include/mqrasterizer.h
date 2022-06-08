@@ -132,9 +132,9 @@ struct IMqRasterizerVftable
 
     using AlphaBlend = void(__thiscall*)(IMqRasterizer* thisptr,
                                          IDirectDrawSurface7* srcSurface,
-                                         int a9,
+                                         CMqPoint* a9,
                                          CMqPoint* dstPosition,
-                                         int a10,
+                                         CMqPoint* a10,
                                          int opacity);
     AlphaBlend alphaBlend;
 
@@ -150,7 +150,11 @@ struct IMqRasterizerVftable
                                                    int maybeBitsPerPixel);
     CreateSurfaceDecomp createSurfaceDecomp;
 
-    /** Calls IDirectDraw7::CreateSurface with DDSCAPS_OFFSCREENPLAIN description flag. */
+    /**
+     * Calls IDirectDraw7::CreateSurface with DDSCAPS_OFFSCREENPLAIN description flag.
+     * @param[in] hintPtr used only by CDisplayD3D to create dynamic (DDSCAPS2_HINTDYNAMIC)
+     * or static (DDSCAPS2_HINTSTATIC) surfaces. Dynamic surface created when hint value is 2.
+     */
     using CreateOffscreenSurface = void(__thiscall*)(IMqRasterizer* thisptr,
                                                      IDirectDrawSurface7** surface,
                                                      CMqPoint* size,
@@ -174,8 +178,18 @@ struct IMqRasterizerVftable
                                             PALETTEENTRY* paletteEntries);
     CreatePalette createPalette;
 
-    using Method23 = bool(__thiscall*)(IMqRasterizer* thisptr, int a2, int a3, __int16 a4);
-    Method23 method23;
+    /**
+     * Blits screen surface inside 'area' onto offscreen surface,
+     * copies screen surface color key into offscreen surface
+     * and calls (if opacity is 300 or 400) CColorConversion::IImpl::doubleLighter
+     * using offscreen surface.
+     * @returns true if there were no errors
+     */
+    using DoubleLighter = bool(__thiscall*)(IMqRasterizer* thisptr,
+                                            IDirectDrawSurface7* offscreenSurface,
+                                            const CMqRect* area,
+                                            std::uint16_t opacity);
+    DoubleLighter doubleLighter;
 
     using Method24 = void(__thiscall*)(IMqRasterizer* thisptr, int a2, unsigned int a3, int a4);
     Method24 method24;

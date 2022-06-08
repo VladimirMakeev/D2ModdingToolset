@@ -21,11 +21,13 @@
 #define RENDERTYPES_H
 
 #include "d2assert.h"
+#include "d2list.h"
 #include "d2pair.h"
 #include "d2set.h"
+#include "mqrect.h"
 #include "texturehandle.h"
+#include <Windows.h>
 #include <cstdint>
-#include <windows.h>
 
 namespace game {
 
@@ -37,15 +39,23 @@ struct RenderData22
 {
     IMqTexture* texture;
     CMqPoint textureSize;
-    std::uint32_t key;
-    int type; /**< Assumption: hint. */
-    bool unknown3;
+    std::uint32_t paletteKey; /**< Used for CRendererImpl::paletteEntryMap search.
+                               * Value of zero reserved for 'default' palette.
+                               */
+    std::uint32_t hint;       /**< Can be 0, 1 or 2.
+                               * Passed through IMqTexturer2::addTexture, for example.
+                               * Used in IMqRasterizer::createOffscreenSurface.
+                               */
+    bool hasCustomPalette;    /**< paletteKey is not zero, valid palette should be passed to
+                               * IMqRasterizer::createSurfaceDecomp.
+                               */
     char padding;
-    __int16 opacity;
+    std::int16_t opacity;
 };
 
 assert_size(RenderData22, 24);
 
+/** Maps texture handles to IMqTextures. */
 struct RenderData40
 {
     TextureHandle textureHandle;
@@ -54,49 +64,101 @@ struct RenderData40
 
 assert_size(RenderData40, 40);
 
-using RenderData40SetIntPair = Pair<Set<RenderData40>, int /* free index */>;
+using RenderData40SetIntPair = Pair<Set<RenderData40>,
+                                    std::uint32_t /* free texture handle index */>;
 
-struct RenderData416_16
-{
-    int unknown;
-    int unknown2;
-    int unknown3;
-    int unknown4;
-};
-
-static_assert(sizeof(RenderData416_16) == 16,
-              "Size of RenderData416_16 structure must be exactly 16 bytes");
-
-struct RenderData416
+/** Name chosen according to log message in 0x519000. */
+struct TextureSurface
 {
     int surfacesCount;
-    IDirectDrawSurface7* surfaces[20];
-    RenderData416_16 array2[20];
+    IDirectDrawSurface7* surfaces[20]; /**< Used in 0x519000 for alpha blend. */
+    CMqRect areas[20];
     bool unknown2;
     char padding[3];
-    int unknown3;
-    int type; /**< Assumption: hint. */
+    int batchNumber;    /**< Can be set to -1. See IMqTexturer2::Method6 or 0x51b3b0 calls. */
+    std::uint32_t hint; /**< Same as RenderData22::hint.
+                         * Used in IMqRasterizer::createOffscreenSurface.
+                         */
 };
 
-assert_size(RenderData416, 416);
+assert_size(TextureSurface, 416);
 
-struct RenderData420
-{
-    std::uint32_t key;
-    RenderData416 data416;
-};
-
-assert_size(RenderData420, 420);
-
-using PaletteEntryPair = Pair<PALETTEENTRY[256], IDirectDrawPalette*>;
+using PaletteEntryPair = Pair<::tagPALETTEENTRY[256], IDirectDrawPalette*>;
 
 assert_size(PaletteEntryPair, 1028);
 
-struct RenderPaletteData
+struct RenderOperation
 {
-    std::uint32_t key;
-    PaletteEntryPair pair;
+    /** Operation type. */
+    enum class Type : int
+    {
+        Draw,         /**< Calls IMqRasterizer::alphaBlend. */
+        StartScaling, /**< Calls IMqRasterizer::startScaling. */
+        EndScaling,   /**< Calls IMqRasterizer::endScaling. */
+    };
+
+    Type type;
+    TextureHandle textureHandle;
+    CMqPoint offset;
+    CMqPoint start;
+    CMqPoint size;
+    CMqRect area;
+    /**
+     * Holds opacity or negative value.
+     * In case of negative value, RenderData22::opacity is used for alpha blend.
+     */
+    int maybeOpacity;
 };
+
+assert_size(RenderOperation, 64);
+assert_offset(RenderOperation, offset, 20);
+
+/** Stores rendering operations that later will be packed into a batch. */
+struct RenderQueue
+{
+    RenderOperation* operations;
+    int operationsCount; /**< Current number of operations in queue. */
+    int maxOperations;   /**< Set to 3072 in c-tor. */
+    CMqRect windowClientArea;
+    List<CMqRect> rectList;
+    List<CMqRect> rectList2;
+    int unknown;
+};
+
+assert_size(RenderQueue, 64);
+
+struct RenderBatchElement
+{
+    TextureHandle textureHandle;
+    /**
+     * True if there is a TextureSurface found in CRendererImpl::textureSurfaceMap.
+     * It means there is no need to create texture surface for this batch operation.
+     */
+    bool textureSurfaceExist;
+    /**
+     * True if:
+     * - one of the TextureSurface::surfaces was lost and restored
+     * - TextureSurface was created for this batch
+     * - RenderData22 found by textureHandle returned texture->isDirty().
+     */
+    bool dirtyOrRestored;
+    char padding[2];
+};
+
+assert_size(RenderBatchElement, 20);
+
+/**
+ * Stores batch elements to render.
+ * Populated from RenderQueue using RenderOperations with type Draw.
+ */
+struct RenderBatch
+{
+    RenderBatchElement* array;
+    int elementCount;
+    int maxElements;
+};
+
+assert_size(RenderBatch, 12);
 
 } // namespace game
 
