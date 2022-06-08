@@ -42,6 +42,11 @@ class StackView;
 class UnitView;
 class PlayerView;
 
+/**
+ * Returns stub values if objectMap is null.
+ * This handles cases where some scripts can be called while the map is in a loading state.
+ * See getScenarioMap utility for details.
+ */
 class ScenarioView
 {
 public:

@@ -65,6 +65,10 @@ std::optional<LocationView> ScenarioView::getLocationById(const IdView& id) cons
 {
     using namespace game;
 
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
     auto obj = objectMap->vftable->findScenarioObjectById(objectMap, &id.id);
     if (!obj) {
         return std::nullopt;
@@ -84,6 +88,10 @@ std::optional<LocationView> ScenarioView::getLocationById(const IdView& id) cons
 
 std::optional<ScenVariablesView> ScenarioView::getScenVariables() const
 {
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
     auto variables{hooks::getScenarioVariables(objectMap)};
     if (!variables) {
         return std::nullopt;
@@ -94,6 +102,10 @@ std::optional<ScenVariablesView> ScenarioView::getScenVariables() const
 
 std::optional<TileView> ScenarioView::getTile(int x, int y) const
 {
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
     auto info = hooks::getScenarioInfo(objectMap);
     if (!info) {
         return std::nullopt;
@@ -145,6 +157,10 @@ std::optional<StackView> ScenarioView::getStack(const std::string& id) const
 
 std::optional<StackView> ScenarioView::getStackById(const IdView& id) const
 {
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
     auto stack = hooks::getStack(objectMap, &id.id);
     if (!stack) {
         return std::nullopt;
@@ -156,6 +172,10 @@ std::optional<StackView> ScenarioView::getStackById(const IdView& id) const
 std::optional<StackView> ScenarioView::getStackByCoordinates(int x, int y) const
 {
     using namespace game;
+
+    if (!objectMap) {
+        return std::nullopt;
+    }
 
     auto plan{hooks::getMidgardPlan(objectMap)};
     if (!plan) {
@@ -180,6 +200,10 @@ std::optional<StackView> ScenarioView::getStackByPoint(const Point& p) const
 
 std::optional<StackView> ScenarioView::getStackByUnit(const UnitView& unit) const
 {
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
     auto unitId = unit.getId();
     auto stack = hooks::getStackByUnitId(objectMap, &unitId.id);
     if (!stack)
@@ -195,12 +219,20 @@ std::optional<PlayerView> ScenarioView::getPlayer(const std::string& id) const
 
 std::optional<PlayerView> ScenarioView::getPlayerById(const IdView& id) const
 {
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
     auto player = hooks::getPlayer(objectMap, &id.id);
     return {PlayerView{player}};
 }
 
 std::optional<PlayerView> ScenarioView::getPlayerByStack(const StackView& stack) const
 {
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
     auto playerId = stack.getOwnerId();
     auto player = hooks::getPlayer(objectMap, &playerId.id);
     if (!player)
@@ -211,12 +243,20 @@ std::optional<PlayerView> ScenarioView::getPlayerByStack(const StackView& stack)
 
 int ScenarioView::getCurrentDay() const
 {
+    if (!objectMap) {
+        return 0;
+    }
+
     auto info = hooks::getScenarioInfo(objectMap);
     return info ? info->currentTurn : 0;
 }
 
 int ScenarioView::getSize() const
 {
+    if (!objectMap) {
+        return 0;
+    }
+
     auto info = hooks::getScenarioInfo(objectMap);
     return info ? info->mapSize : 0;
 }
