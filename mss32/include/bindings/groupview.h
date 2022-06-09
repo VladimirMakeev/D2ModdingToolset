@@ -50,6 +50,8 @@ public:
     /** Returns group as array of 6 unit slots. */
     GroupSlots getSlots() const;
 
+    bool hasUnit(const bindings::UnitView& unit) const;
+
 protected:
     const game::CMidUnitGroup* group;
     const game::IMidgardObjectMap* objectMap;
