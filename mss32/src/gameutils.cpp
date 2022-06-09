@@ -20,7 +20,6 @@
 #include "gameutils.h"
 #include "battlemsgdata.h"
 #include "dynamiccast.h"
-#include "editorglobaldata.h"
 #include "fortification.h"
 #include "game.h"
 #include "midclient.h"
@@ -36,6 +35,7 @@
 #include "midserverlogic.h"
 #include "midstack.h"
 #include "scenarioinfo.h"
+#include "scenedit.h"
 #include "version.h"
 #include <thread>
 
@@ -72,11 +72,11 @@ const game::IMidgardObjectMap* getObjectMap()
     using namespace game;
 
     if (gameVersion() == GameVersion::ScenarioEditor) {
-        auto global = *EditorGlobalDataApi::get().getGlobalData();
-        if (!global->initialized)
+        auto editorData = CScenEditApi::get().instance()->data;
+        if (!editorData->initialized)
             return nullptr;
 
-        auto unknown2 = global->unknown2;
+        auto unknown2 = editorData->unknown2;
         if (!unknown2 || !unknown2->data)
             return nullptr;
 

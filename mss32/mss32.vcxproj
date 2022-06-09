@@ -249,7 +249,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\dynamiccast.cpp" />
     <ClCompile Include="src\editboxinterf.cpp" />
     <ClCompile Include="src\editor.cpp" />
-    <ClCompile Include="src\editorglobaldata.cpp" />
+    <ClCompile Include="src\scenedit.cpp" />
     <ClCompile Include="src\effectinterf.cpp" />
     <ClCompile Include="src\effectinterfhooks.cpp" />
     <ClCompile Include="src\effectresult.cpp" />
@@ -598,7 +598,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\enclayoutunit.h" />
     <ClInclude Include="include\imageptrvector.h" />
     <ClInclude Include="include\interfborderdisplay.h" />
-    <ClInclude Include="include\editorglobaldata.h" />
+    <ClInclude Include="include\scenedit.h" />
     <ClInclude Include="include\isoborder.h" />
     <ClInclude Include="include\isoenginegroundhooks.h" />
     <ClInclude Include="include\isoground2.h" />

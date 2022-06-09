@@ -17,40 +17,46 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EDITORGLOBALDATA_H
-#define EDITORGLOBALDATA_H
+#ifndef SCENEDIT_H
+#define SCENEDIT_H
 
 #include <cstddef>
 
 namespace game {
 
-struct EditorGlobalDataUnknown;
-struct EditorGlobalDataUnknownData;
+struct CScenEditData;
+struct CScenEditDataUnknown;
+struct CScenEditDataUnknownData;
 struct CMidgardScenarioMap;
 
-struct EditorGlobalData
+struct CScenEdit
+{
+    CScenEditData* data;
+};
+
+struct CScenEditData
 {
     bool initialized;
     char unknown[23];
-    EditorGlobalDataUnknown* unknown2;
+    CScenEditDataUnknown* unknown2;
     char unknown3[1080];
 };
 
-static_assert(sizeof(EditorGlobalData) == 1108,
-              "Size of EditorGlobalData structure must be exactly 1108 bytes");
+static_assert(sizeof(CScenEditData) == 1108,
+              "Size of CScenEditData structure must be exactly 1108 bytes");
 
-static_assert(offsetof(EditorGlobalData, unknown2) == 24,
-              "EditorGlobalData::unknown2 offset must be 24 bytes");
+static_assert(offsetof(CScenEditData, unknown2) == 24,
+              "CScenEditData::unknown2 offset must be 24 bytes");
 
-struct EditorGlobalDataUnknown
+struct CScenEditDataUnknown
 {
-    EditorGlobalDataUnknownData* data;
+    CScenEditDataUnknownData* data;
 };
 
-static_assert(sizeof(EditorGlobalDataUnknown) == 4,
-              "Size of EditorGlobalDataUnknown structure must be exactly 4 bytes");
+static_assert(sizeof(CScenEditDataUnknown) == 4,
+              "Size of CScenEditDataUnknown structure must be exactly 4 bytes");
 
-struct EditorGlobalDataUnknownData
+struct CScenEditDataUnknownData
 {
     int unknown;
     int unknown2;
@@ -60,21 +66,21 @@ struct EditorGlobalDataUnknownData
     int unknown5;
 };
 
-static_assert(sizeof(EditorGlobalDataUnknownData) == 24,
-              "Size of EditorGlobalDataUnknownData structure must be exactly 1108 bytes");
+static_assert(sizeof(CScenEditDataUnknownData) == 24,
+              "Size of CScenEditDataUnknownData structure must be exactly 1108 bytes");
 
-namespace EditorGlobalDataApi {
+namespace CScenEditApi {
 
 struct Api
 {
-    using GetGlobalData = EditorGlobalData**(__cdecl*)();
-    GetGlobalData getGlobalData;
+    using Instance = CScenEdit*(__cdecl*)();
+    Instance instance;
 };
 
 Api& get();
 
-} // namespace EditorGlobalDataApi
+} // namespace CScenEditApi
 
 } // namespace game
 
-#endif // EDITORGLOBALDATA_H
+#endif // SCENEDIT_H

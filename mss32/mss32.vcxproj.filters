@@ -1043,7 +1043,7 @@
     <ClCompile Include="src\midclientcore.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="src\editorglobaldata.cpp">
+    <ClCompile Include="src\scenedit.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\midserverlogic.cpp">
@@ -2656,7 +2656,7 @@
     <ClInclude Include="include\interfborderdisplay.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="include\editorglobaldata.h">
+    <ClInclude Include="include\scenedit.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\scriptutils.h">

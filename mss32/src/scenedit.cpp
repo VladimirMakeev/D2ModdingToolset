@@ -17,13 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "editorglobaldata.h"
+#include "scenedit.h"
 
-namespace game::EditorGlobalDataApi {
+namespace game::CScenEditApi {
 
 // clang-format off
 Api functions{
-    (Api::GetGlobalData)0x4013af,
+    (Api::Instance)0x4013af,
 };
 // clang-format on
 
@@ -32,4 +32,4 @@ Api& get()
     return functions;
 }
 
-} // namespace game::EditorGlobalDataApi
+} // namespace game::CScenEditApi
