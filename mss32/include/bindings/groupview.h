@@ -34,6 +34,7 @@ struct IMidgardObjectMap;
 
 namespace bindings {
 
+struct IdView;
 class UnitSlotView;
 
 class GroupView
@@ -51,6 +52,7 @@ public:
     GroupSlots getSlots() const;
 
     bool hasUnit(const bindings::UnitView& unit) const;
+    bool hasUnitById(const bindings::IdView& unitId) const;
 
 protected:
     const game::CMidUnitGroup* group;
