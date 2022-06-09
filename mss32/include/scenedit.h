@@ -67,7 +67,7 @@ struct CScenEditDataUnknownData
 };
 
 static_assert(sizeof(CScenEditDataUnknownData) == 24,
-              "Size of CScenEditDataUnknownData structure must be exactly 1108 bytes");
+              "Size of CScenEditDataUnknownData structure must be exactly 24 bytes");
 
 namespace CScenEditApi {
 
