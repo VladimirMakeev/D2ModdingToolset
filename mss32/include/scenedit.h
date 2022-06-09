@@ -34,6 +34,8 @@ struct CScenEdit
     CScenEditData* data;
 };
 
+static_assert(sizeof(CScenEdit) == 4, "Size of CScenEdit structure must be exactly 4 bytes");
+
 struct CScenEditData
 {
     bool initialized;
