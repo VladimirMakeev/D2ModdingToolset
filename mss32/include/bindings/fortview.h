@@ -46,6 +46,7 @@ public:
 
     IdView getId() const;
     IdView getOwnerId() const;
+    IdView getStackId() const;
     GroupView getGroup() const;
     int getSubrace() const;
     std::vector<ItemView> getInventoryItems() const;

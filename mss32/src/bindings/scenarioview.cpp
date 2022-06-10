@@ -53,11 +53,13 @@ void ScenarioView::bind(sol::state& lua)
     scenario["getStack"] = sol::overload<>(&ScenarioView::getStack, &ScenarioView::getStackById,
                                            &ScenarioView::getStackByCoordinates,
                                            &ScenarioView::getStackByPoint,
-                                           &ScenarioView::getStackByUnit);
+                                           &ScenarioView::getStackByUnit,
+                                           &ScenarioView::getStackByFort);
     scenario["getFort"] = sol::overload<>(&ScenarioView::getFort, &ScenarioView::getFortById,
                                           &ScenarioView::getFortByCoordinates,
                                           &ScenarioView::getFortByPoint,
-                                          &ScenarioView::getFortByUnit);
+                                          &ScenarioView::getFortByUnit,
+                                          &ScenarioView::getFortByStack);
     scenario["getRuin"] = sol::overload<>(&ScenarioView::getRuin, &ScenarioView::getRuinById,
                                           &ScenarioView::getRuinByCoordinates,
                                           &ScenarioView::getRuinByPoint,
@@ -214,6 +216,12 @@ std::optional<StackView> ScenarioView::getStackByUnit(const UnitView& unit) cons
     return {StackView{stack, objectMap}};
 }
 
+std::optional<StackView> ScenarioView::getStackByFort(const FortView& fort) const
+{
+    auto stackId = fort.getStackId();
+    return getStackById(stackId);
+}
+
 std::optional<FortView> ScenarioView::getFort(const std::string& id) const
 {
     return getFortById(IdView{id});
@@ -267,6 +275,12 @@ std::optional<FortView> ScenarioView::getFortByUnit(const UnitView& unit) const
     }
 
     return {FortView{fort, objectMap}};
+}
+
+std::optional<FortView> ScenarioView::getFortByStack(const StackView& stack) const
+{
+    auto fortId = stack.getInsideId();
+    return getFortById(fortId);
 }
 
 std::optional<RuinView> ScenarioView::getRuin(const std::string& id) const

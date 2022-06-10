@@ -60,6 +60,11 @@ IdView StackView::getOwnerId() const
     return IdView{stack->ownerId};
 }
 
+IdView StackView::getInsideId() const
+{
+    return IdView{stack->insideId};
+}
+
 GroupView StackView::getGroup() const
 {
     return GroupView{&stack->group, objectMap, &stack->id};

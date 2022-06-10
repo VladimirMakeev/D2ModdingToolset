@@ -52,6 +52,11 @@ IdView FortView::getOwnerId() const
     return IdView{fort->ownerId};
 }
 
+IdView FortView::getStackId() const
+{
+    return IdView{fort->stackId};
+}
+
 GroupView FortView::getGroup() const
 {
     return GroupView{&fort->group, objectMap, &fort->id};

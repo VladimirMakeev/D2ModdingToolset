@@ -50,6 +50,7 @@ public:
 
     IdView getId() const;
     IdView getOwnerId() const;
+    IdView getInsideId() const;
     /** Returns stack units as a group. */
     GroupView getGroup() const;
     /** Returns stack leader. */

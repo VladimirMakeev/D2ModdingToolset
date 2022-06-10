@@ -599,6 +599,7 @@ Searches for [stack](luaApi.md#stack) by:
 - pair of coordinates
 - [point](luaApi.md#point)
 - [unit](luaApi.md#unit-1) of its group
+- [fort](luaApi.md#fort) that this stack is visiting
 
 Returns nil if not found.
 ```lua
@@ -614,6 +615,7 @@ Searches for [fort](luaApi.md#fort) by:
 - pair of coordinates
 - [point](luaApi.md#point)
 - [unit](luaApi.md#unit-1) of its group
+- visiting [stack](luaApi.md#stack)
 
 Returns nil if not found.
 ```lua

@@ -81,6 +81,8 @@ public:
     std::optional<StackView> getStackByPoint(const Point& p) const;
     /** Searches for stack that has specified unit. */
     std::optional<StackView> getStackByUnit(const UnitView& unit) const;
+    /** Searches for stack that visiting specified fort. */
+    std::optional<StackView> getStackByFort(const FortView& fort) const;
 
     /** Searches for fort by id string. */
     std::optional<FortView> getFort(const std::string& id) const;
@@ -92,6 +94,8 @@ public:
     std::optional<FortView> getFortByPoint(const Point& p) const;
     /** Searches for fort that has specified unit. */
     std::optional<FortView> getFortByUnit(const UnitView& unit) const;
+    /** Searches for fort that has specified visiting stack. */
+    std::optional<FortView> getFortByStack(const StackView& stack) const;
 
     /** Searches for ruin by id string. */
     std::optional<RuinView> getRuin(const std::string& id) const;
