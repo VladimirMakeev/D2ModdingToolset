@@ -29,6 +29,7 @@
 #include "midscenvariables.h"
 #include "playerview.h"
 #include "point.h"
+#include "ruinview.h"
 #include "scenarioinfo.h"
 #include "scenvariablesview.h"
 #include "stackview.h"
@@ -57,6 +58,10 @@ void ScenarioView::bind(sol::state& lua)
                                           &ScenarioView::getFortByCoordinates,
                                           &ScenarioView::getFortByPoint,
                                           &ScenarioView::getFortByUnit);
+    scenario["getRuin"] = sol::overload<>(&ScenarioView::getRuin, &ScenarioView::getRuinById,
+                                          &ScenarioView::getRuinByCoordinates,
+                                          &ScenarioView::getRuinByPoint,
+                                          &ScenarioView::getRuinByUnit);
     scenario["getPlayer"] = sol::overload<>(&ScenarioView::getPlayer, &ScenarioView::getPlayerById,
                                             &ScenarioView::getPlayerByStack);
     scenario["day"] = sol::property(&ScenarioView::getCurrentDay);
@@ -259,6 +264,61 @@ std::optional<FortView> ScenarioView::getFortByUnit(const UnitView& unit) const
     }
 
     return {FortView{fort, objectMap}};
+}
+
+std::optional<RuinView> ScenarioView::getRuin(const std::string& id) const
+{
+    return getRuinById(IdView{id});
+}
+
+std::optional<RuinView> ScenarioView::getRuinById(const IdView& id) const
+{
+    using namespace game;
+
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    if (CMidgardIDApi::get().getType(&id.id) != IdType::Ruin) {
+        return std::nullopt;
+    }
+
+    auto ruin = hooks::getRuin(objectMap, &id.id);
+    if (!ruin) {
+        return std::nullopt;
+    }
+
+    return {RuinView{ruin, objectMap}};
+}
+
+std::optional<RuinView> ScenarioView::getRuinByCoordinates(int x, int y) const
+{
+    auto ruinId = getObjectId(x, y, game::IdType::Ruin);
+    if (!ruinId) {
+        return std::nullopt;
+    }
+
+    return getRuinById(IdView{ruinId});
+}
+
+std::optional<RuinView> ScenarioView::getRuinByPoint(const Point& p) const
+{
+    return getRuinByCoordinates(p.x, p.y);
+}
+
+std::optional<RuinView> ScenarioView::getRuinByUnit(const UnitView& unit) const
+{
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    auto unitId = unit.getId();
+    auto ruin = hooks::getRuinByUnitId(objectMap, &unitId.id);
+    if (!ruin) {
+        return std::nullopt;
+    }
+
+    return {RuinView{ruin, objectMap}};
 }
 
 std::optional<PlayerView> ScenarioView::getPlayer(const std::string& id) const

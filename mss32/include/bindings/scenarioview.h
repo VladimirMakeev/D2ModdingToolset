@@ -43,6 +43,7 @@ class ScenVariablesView;
 class TileView;
 class StackView;
 class FortView;
+class RuinView;
 class UnitView;
 class PlayerView;
 
@@ -91,6 +92,17 @@ public:
     std::optional<FortView> getFortByPoint(const Point& p) const;
     /** Searches for fort that has specified unit. */
     std::optional<FortView> getFortByUnit(const UnitView& unit) const;
+
+    /** Searches for ruin by id string. */
+    std::optional<RuinView> getRuin(const std::string& id) const;
+    /** Searches for ruin by id. */
+    std::optional<RuinView> getRuinById(const IdView& id) const;
+    /** Searches for ruin by coordinate pair. */
+    std::optional<RuinView> getRuinByCoordinates(int x, int y) const;
+    /** Searches for ruin at specified point. */
+    std::optional<RuinView> getRuinByPoint(const Point& p) const;
+    /** Searches for ruin that has specified unit. */
+    std::optional<RuinView> getRuinByUnit(const UnitView& unit) const;
 
     /** Searches for player by id string. */
     std::optional<PlayerView> getPlayer(const std::string& id) const;
