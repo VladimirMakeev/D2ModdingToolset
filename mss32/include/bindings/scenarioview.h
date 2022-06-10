@@ -28,7 +28,10 @@ class state;
 }
 
 namespace game {
+struct CMidgardID;
 struct IMidgardObjectMap;
+
+enum class IdType : int;
 } // namespace game
 
 namespace bindings {
@@ -88,6 +91,8 @@ public:
     int getSize() const;
 
 private:
+    const game::CMidgardID* getObjectId(int x, int y, game::IdType type) const;
+
     const game::IMidgardObjectMap* objectMap;
 };
 

@@ -173,21 +173,7 @@ std::optional<StackView> ScenarioView::getStackById(const IdView& id) const
 
 std::optional<StackView> ScenarioView::getStackByCoordinates(int x, int y) const
 {
-    using namespace game;
-
-    if (!objectMap) {
-        return std::nullopt;
-    }
-
-    auto plan{hooks::getMidgardPlan(objectMap)};
-    if (!plan) {
-        return std::nullopt;
-    }
-
-    const CMqPoint position{x, y};
-    const IdType objectType{IdType::Stack};
-
-    auto stackId{CMidgardPlanApi::get().getObjectId(plan, &position, &objectType)};
+    auto stackId = getObjectId(x, y, game::IdType::Stack);
     if (!stackId) {
         return std::nullopt;
     }
@@ -208,8 +194,9 @@ std::optional<StackView> ScenarioView::getStackByUnit(const UnitView& unit) cons
 
     auto unitId = unit.getId();
     auto stack = hooks::getStackByUnitId(objectMap, &unitId.id);
-    if (!stack)
+    if (!stack) {
         return std::nullopt;
+    }
 
     return {StackView{stack, objectMap}};
 }
@@ -261,6 +248,23 @@ int ScenarioView::getSize() const
 
     auto info = hooks::getScenarioInfo(objectMap);
     return info ? info->mapSize : 0;
+}
+
+const game::CMidgardID* ScenarioView::getObjectId(int x, int y, game::IdType type) const
+{
+    using namespace game;
+
+    if (!objectMap) {
+        return nullptr;
+    }
+
+    auto plan{hooks::getMidgardPlan(objectMap)};
+    if (!plan) {
+        return nullptr;
+    }
+
+    const CMqPoint position{x, y};
+    return CMidgardPlanApi::get().getObjectId(plan, &position, &type);
 }
 
 } // namespace bindings
