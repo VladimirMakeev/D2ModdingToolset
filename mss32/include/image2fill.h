@@ -32,7 +32,7 @@ struct CImage2Fill : public CMqImage2Surface16
     CMqPoint size;
 };
 
-static_assert(sizeof(CImage2Fill) == 56, "Size of CImage2Fill structure must be exactly 56 bytes");
+assert_size(CImage2Fill, 56);
 
 namespace CImage2FillApi {
 

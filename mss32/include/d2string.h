@@ -20,6 +20,7 @@
 #ifndef D2STRING_H
 #define D2STRING_H
 
+#include "d2assert.h"
 #include <cstdint>
 
 namespace game {
@@ -33,7 +34,7 @@ struct String
     void* allocator;
 };
 
-static_assert(sizeof(String) == 16, "Size of String structure must be exactly 16 bytes");
+assert_size(String, 16);
 
 namespace StringApi {
 

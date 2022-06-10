@@ -28,7 +28,7 @@ namespace game {
 struct CCapital : public CFortification
 { };
 
-static_assert(sizeof(CCapital) == 144, "Size of CCapital structure must be exactly 144 bytes");
+assert_size(CCapital, 144);
 
 } // namespace game
 

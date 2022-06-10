@@ -51,8 +51,9 @@ struct IMqRenderer2
 // Virtual table does not contain destructor
 struct IMqRenderer2Vftable
 {
-    using Method0 = int(__thiscall*)(IMqRenderer2* thisptr);
-    Method0 method0;
+    /** Assumption: returns current batch number. */
+    using GetBatchNumber = int(__thiscall*)(IMqRenderer2* thisptr);
+    GetBatchNumber getBatchNumber;
 
     /** Returns current fps the game is running on. */
     using GetFps = float(__thiscall*)(const IMqRenderer2* thisptr);
@@ -61,30 +62,52 @@ struct IMqRenderer2Vftable
     /**
      * Called before rendering frame.
      * Clears screen with solid black color.
+     * Sets 'frame rendering' flag.
      * Called before drawing CMqPresentationManager::IPresentation elements.
      */
     using BeforeRender = void(__thiscall*)(IMqRenderer2* thisptr);
     BeforeRender beforeRender;
 
     /**
-     * Assumption: main rendering logic.
+     * Main rendering logic.
      * Called after drawing all CMqPresentationManager::IPresentation elements.
-     * Calls IMqTexture methods to draw their contents. Performs alpha blending.
+     * Processes render queue into batch and calls IMqTexture methods
+     * to draw their contents if dirty. Performs alpha blending.
      * Swaps front and back buffers, updates fps, animations and render statistics.
+     * Resets 'frame rendering' flag.
      */
     using RenderFrame = int(__thiscall*)(IMqRenderer2* thisptr);
     RenderFrame renderFrame;
 
-    using Method4 = int(__thiscall*)(IMqRenderer2* thisptr,
-                                     TextureHandle* textureHandle,
-                                     const CMqPoint* start,
-                                     const CMqPoint* offset,
-                                     const CMqPoint* size,
-                                     const CMqRect* area);
-    Method4 method4;
+    /**
+     * Adds texture handle with specified dimensions to render queue
+     * for rendering in the current frame.
+     * For example, called from CMqImage2Surface16::IMqImage2::render (0x670790).
+     * CMqImage2Surface16 adds its texture handle along with points and area,
+     * so render will pack this into a batch and call IMqTexture::draw during batch processing.
+     * Does nothing if 'frame rendering' flag is not set.
+     */
+    using DrawTexture = void(__thiscall*)(IMqRenderer2* thisptr,
+                                          TextureHandle* textureHandle,
+                                          const CMqPoint* start,
+                                          const CMqPoint* offset,
+                                          const CMqPoint* size,
+                                          const CMqRect* area);
+    DrawTexture drawTexture;
 
-    void* method5;
-    void* method6;
+    /**
+     * Adds specified area to render queue list.
+     * Use cases unknown.
+     */
+    using AddArea = void(__thiscall*)(IMqRenderer2* thisptr, const CMqRect* area);
+    AddArea addArea;
+
+    /**
+     * Removes first area from render queue list.
+     * Use cases unknown.
+     */
+    using RemoveArea = void(__thiscall*)(IMqRenderer2* thisptr);
+    RemoveArea removeArea;
 
     /** Returns current renderer statistics. */
     using GetRenderStats = void(__thiscall*)(const IMqRenderer2* thisptr,

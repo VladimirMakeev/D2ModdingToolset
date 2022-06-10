@@ -137,8 +137,7 @@ struct IMqUIControllerVftable
     RunMessageCallbacks runMessageCallbacks;
 };
 
-static_assert(sizeof(IMqUIControllerVftable) == 28 * sizeof(void*),
-              "IMqUIController vftable must have exactly 28 methods");
+assert_vftable_size(IMqUIControllerVftable, 28);
 
 } // namespace game
 

@@ -36,8 +36,7 @@ struct CursorHandleNodeData
     int unknown;
 };
 
-static_assert(sizeof(CursorHandleNodeData) == 36,
-              "Size of CursorHandleNodeData structure must be exactly 36 bytes");
+assert_size(CursorHandleNodeData, 36);
 
 struct CursorHandleData
 {
@@ -45,15 +44,14 @@ struct CursorHandleData
     CMqRect area;
 };
 
-static_assert(sizeof(CursorHandleData) == 32,
-              "Size of CursorHandleData structure must be exactly 32 bytes");
+assert_size(CursorHandleData, 32);
 
 struct CursorHandle
 {
     CursorHandleData* data;
 };
 
-static_assert(sizeof(CursorHandle) == 4, "Size of CursorHandle structure must be exactly 4 bytes");
+assert_size(CursorHandle, 4);
 
 /** Cursor types supported in game and their image names. */
 enum class CursorType : int

@@ -46,11 +46,8 @@ struct CListBoxInterf : public CInterface
     };
 };
 
-static_assert(sizeof(CListBoxInterf) == 12,
-              "Size of CListBoxInterf structure must be exactly 12 bytes");
-
-static_assert(offsetof(CListBoxInterf, listBoxData) == 8,
-              "CListBoxInterf::listBoxData offset must be 8 bytes");
+assert_size(CListBoxInterf, 12);
+assert_offset(CListBoxInterf, listBoxData, 8);
 
 struct CListBoxInterfData
 {
@@ -75,16 +72,14 @@ struct CListBoxInterfData
     CMqPoint bgndImagePos;
 };
 
-static_assert(sizeof(CListBoxInterfData) == 148,
-              "Size of CListBoxInterfData structure must be exactly 148 bytes");
+assert_size(CListBoxInterfData, 148);
 
 struct CListBoxDisplayTextData
 {
     char unknown[48];
 };
 
-static_assert(sizeof(CListBoxDisplayTextData) == 48,
-              "Size of CListBoxDisplayTextData structure must be exactly 48 bytes");
+assert_size(CListBoxDisplayTextData, 48);
 
 /** Assumption: implements rendering for list box containing text elements. */
 struct CListBoxDisplayText : public CListBoxInterf::LBDisplay
@@ -92,8 +87,7 @@ struct CListBoxDisplayText : public CListBoxInterf::LBDisplay
     CListBoxDisplayTextData* data;
 };
 
-static_assert(sizeof(CListBoxDisplayText) == 8,
-              "Size of CListBoxDisplayText structure must be exactly 8 bytes");
+assert_size(CListBoxDisplayText, 8);
 
 namespace CListBoxInterfApi {
 

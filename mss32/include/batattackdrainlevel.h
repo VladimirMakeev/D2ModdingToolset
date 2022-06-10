@@ -36,8 +36,7 @@ struct CBatAttackDrainLevel : public CBatAttackBase
     int unknown;
 };
 
-static_assert(sizeof(CBatAttackDrainLevel) == 24,
-              "Size of CBatAttackDrainLevel structure must be exactly 24 bytes");
+assert_size(CBatAttackDrainLevel, 24);
 
 namespace CBatAttackDrainLevelApi {
 

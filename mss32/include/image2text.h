@@ -36,7 +36,7 @@ struct CImage2Text : public CMqImage2Surface16
     CMqRect textArea;
 };
 
-static_assert(sizeof(CImage2Text) == 88, "Size of CImage2Text structure must be exactly 88 bytes");
+assert_size(CImage2Text, 88);
 
 namespace CImage2TextApi {
 

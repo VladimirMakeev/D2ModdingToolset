@@ -142,8 +142,7 @@ struct IEncUnitDescriptorVftable
     GetAttackSources getAttackSourcesUnitIsResistantTo;
 };
 
-static_assert(sizeof(IEncUnitDescriptorVftable) == 43 * sizeof(void*),
-              "IEncUnitDescriptor vftable must have exactly 43 methods");
+assert_vftable_size(IEncUnitDescriptorVftable, 43);
 
 } // namespace game
 

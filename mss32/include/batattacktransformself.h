@@ -37,8 +37,7 @@ struct CBatAttackTransformSelf : public IBatAttack
     IAttack* attack;
 };
 
-static_assert(sizeof(CBatAttackTransformSelf) == 24,
-              "Size of CBatAttackTransformSelf structure must be exactly 24 bytes");
+assert_size(CBatAttackTransformSelf, 24);
 
 namespace CBatAttackTransformSelfApi {
 

@@ -27,8 +27,7 @@ namespace game {
 struct CItemJewelry : public CItemEquipment
 { };
 
-static_assert(sizeof(CItemJewelry) == 24,
-              "Size of CItemJewelry structure must be exactly 24 bytes");
+assert_size(CItemJewelry, 24);
 
 } // namespace game
 

@@ -41,8 +41,7 @@ struct CEffectInterfData
     int unknown;
 };
 
-static_assert(sizeof(CEffectInterfData) == 8,
-              "Size of CEffectInterfData structure must be exactly 8 bytes");
+assert_size(CEffectInterfData, 8);
 
 /** Base class for all event effects popup windows. */
 struct CEffectInterf : public CPopupInterf
@@ -50,8 +49,7 @@ struct CEffectInterf : public CPopupInterf
     CEffectInterfData* data;
 };
 
-static_assert(sizeof(CEffectInterf) == 28,
-              "Size of CEffectInterf structure must be exactly 28 bytes");
+assert_size(CEffectInterf, 28);
 
 struct CEffectInterfVftable : public CInterfaceVftable
 {
@@ -59,8 +57,7 @@ struct CEffectInterfVftable : public CInterfaceVftable
     SetEventEffect setEventEffect;
 };
 
-static_assert(sizeof(CEffectInterfVftable) == 35 * sizeof(void*),
-              "CEffectInterf vftable must have exactly 35 methods");
+assert_vftable_size(CEffectInterfVftable, 35);
 
 namespace CEffectInterfApi {
 

@@ -52,11 +52,8 @@ struct CPhaseGameData
     CIsoChatDisplay* isoChatDisplay;
 };
 
-static_assert(sizeof(CPhaseGameData) == 76,
-              "Size of CPhaseGameData structure must be exactly 76 bytes");
-
-static_assert(offsetof(CPhaseGameData, midClient) == 36,
-              "CPhaseGameData::midClient offset must be 36 bytes");
+assert_size(CPhaseGameData, 76);
+assert_offset(CPhaseGameData, midClient, 36);
 
 struct CPhaseGame : public CMidCommandQueue2::INotifyCQ
 {
@@ -65,9 +62,8 @@ struct CPhaseGame : public CMidCommandQueue2::INotifyCQ
     CPhaseGameData* data;
 };
 
-static_assert(sizeof(CPhaseGame) == 20, "Size of CPhaseGame structure must be exactly 20 bytes");
-
-static_assert(offsetof(CPhaseGame, phase) == 8, "CPhaseGame::phase offset must be 8 bytes");
+assert_size(CPhaseGame, 20);
+assert_offset(CPhaseGame, phase, 8);
 
 } // namespace game
 

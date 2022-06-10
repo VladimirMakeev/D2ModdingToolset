@@ -20,6 +20,8 @@
 #ifndef TASKMANAGER_H
 #define TASKMANAGER_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct ITaskManagerHolder;
@@ -30,8 +32,7 @@ struct CTaskManagerData
     ITaskManagerHolder* taskManagerHolder;
 };
 
-static_assert(sizeof(CTaskManagerData) == 8,
-              "Size of CTaskManagerData structure must be exactly 8 bytes");
+assert_size(CTaskManagerData, 8);
 
 struct CTaskManager
 {
@@ -39,7 +40,7 @@ struct CTaskManager
     CTaskManagerData* data;
 };
 
-static_assert(sizeof(CTaskManager) == 8, "Size of CTaskManager structure must be exactly 8 bytes");
+assert_size(CTaskManager, 8);
 
 } // namespace game
 

@@ -30,8 +30,7 @@ struct CInterfDialog : public CInterface
     int unknown;
 };
 
-static_assert(offsetof(CInterfDialog, unknown) == 8,
-              "CInterfDialog::unknown offset must be 8 bytes");
+assert_offset(CInterfDialog, unknown, 8);
 
 } // namespace game
 

@@ -74,8 +74,7 @@ struct IEffectResultVftable
     StopProcessing stopProcessing;
 };
 
-static_assert(sizeof(IEffectResultVftable) == 3 * sizeof(void*),
-              "IEffectResult vftable must have exactly 3 methods");
+assert_vftable_size(IEffectResultVftable, 3);
 
 namespace IEffectResultApi {
 

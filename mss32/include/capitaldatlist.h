@@ -32,8 +32,7 @@ struct CapitalDatRecord
     List<void*> list;
 };
 
-static_assert(sizeof(CapitalDatRecord) == 24,
-              "Size of CapitalDatRecord structure must be exactly 24 bytes");
+assert_size(CapitalDatRecord, 24);
 
 using CapitalDatList = List<CapitalDatRecord**>;
 

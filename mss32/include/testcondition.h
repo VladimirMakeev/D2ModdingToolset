@@ -20,6 +20,8 @@
 #ifndef TESTCONDITION_H
 #define TESTCONDITION_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct IMidgardObjectMap;
@@ -46,8 +48,7 @@ struct ITestConditionVftable
     Test test;
 };
 
-static_assert(sizeof(ITestConditionVftable) == 2 * sizeof(void*),
-              "ITestCondition vftable must have exactly 2 methods");
+assert_vftable_size(ITestConditionVftable, 2);
 
 namespace ITestConditionApi {
 

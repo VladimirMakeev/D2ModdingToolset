@@ -23,6 +23,7 @@
 #include "attackclasscat.h"
 #include "attackreachcat.h"
 #include "attacksourcecat.h"
+#include "d2assert.h"
 #include "idvector.h"
 #include "midobject.h"
 #include "textandid.h"
@@ -84,8 +85,7 @@ struct IAttackVftable : IMidObjectVftable
     GetData getData;
 };
 
-static_assert(sizeof(IAttackVftable) == 17 * sizeof(void*),
-              "IAttack vftable must have exactly 17 methods");
+assert_vftable_size(IAttackVftable, 17);
 
 /** Contains values and references to CAttackImplData fields. */
 struct CAttackData

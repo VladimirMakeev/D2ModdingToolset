@@ -45,8 +45,7 @@ struct CBuildingBranchData
     String branchDialogName;
 };
 
-static_assert(sizeof(CBuildingBranchData) == 60,
-              "Size of CBuildingBranchData structure must be exactly 60 bytes");
+assert_size(CBuildingBranchData, 60);
 
 struct CBuildingBranch
 {

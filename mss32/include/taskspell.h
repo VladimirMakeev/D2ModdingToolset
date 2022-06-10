@@ -53,8 +53,7 @@ struct CTaskSpellData
     SmartPtr<IMqImage2> spellAreaImage;
 };
 
-static_assert(sizeof(CTaskSpellData) == 92,
-              "Size of CTaskSpellData structure must be exactly 92 bytes");
+assert_size(CTaskSpellData, 92);
 
 /** Base class for spell cast target selection logic. */
 struct CTaskSpell
@@ -65,7 +64,7 @@ struct CTaskSpell
     CTaskSpellData* data;
 };
 
-static_assert(sizeof(CTaskSpell) == 32, "Size of CTaskSpell structure must be exactly 32 bytes");
+assert_size(CTaskSpell, 32);
 
 struct CTaskSpellVftable : public ITaskVftable
 {
@@ -81,8 +80,7 @@ struct CTaskSpellVftable : public ITaskVftable
     CastSpell castSpell;
 };
 
-static_assert(sizeof(CTaskSpellVftable) == 8 * sizeof(void*),
-              "CTaskSpell vftable must have exactly 8 methods");
+assert_vftable_size(CTaskSpellVftable, 8);
 
 } // namespace game
 

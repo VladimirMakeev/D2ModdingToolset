@@ -35,16 +35,10 @@ struct CItemBattle
     CMidgardID modEquipId;
 };
 
-static_assert(sizeof(CItemBattle) == 24, "Size of CItemBattle structure must be exactly 24 bytes");
-
-static_assert(offsetof(CItemBattle, CItemBattle::IItemExEquipment::vftable) == 0,
-              "Vftable offset for IItemExEquipment in CItemBattle structure must be 0 bytes");
-
-static_assert(offsetof(CItemBattle, CItemBattle::CItemBase::vftable) == 4,
-              "Vftable offset for CItemBase in CItemBattle structure must be 4 bytes");
-
-static_assert(offsetof(CItemBattle, attackId) == 16,
-              "CItemBattle::attackId offset must be 16 bytes");
+assert_size(CItemBattle, 24);
+assert_offset(CItemBattle, CItemBattle::IItemExEquipment::vftable, 0);
+assert_offset(CItemBattle, CItemBattle::CItemBase::vftable, 4);
+assert_offset(CItemBattle, attackId, 16);
 
 } // namespace game
 

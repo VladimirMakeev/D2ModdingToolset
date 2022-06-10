@@ -35,12 +35,9 @@ struct CMusicFaderData
     char unknown2[24];
 };
 
-static_assert(sizeof(CMusicFaderData) == 76,
-              "Size of CMusicFaderData structure must be exactly 76 bytes");
-static_assert(offsetof(CMusicFaderData, uiEvent) == 8,
-              "CMusicFaderData::uiEvent offset must be 8 bytes");
-static_assert(offsetof(CMusicFaderData, functor) == 44,
-              "CMusicFaderData::functor offset must be 44 bytes");
+assert_size(CMusicFaderData, 76);
+assert_offset(CMusicFaderData, uiEvent, 8);
+assert_offset(CMusicFaderData, functor, 44);
 
 struct CMusicFader
 {
@@ -48,7 +45,7 @@ struct CMusicFader
     CMusicFaderData* data;
 };
 
-static_assert(sizeof(CMusicFader) == 8, "Size of CMusicFader structure must be exactly 8 bytes");
+assert_size(CMusicFader, 8);
 
 namespace CMusicFaderApi {
 

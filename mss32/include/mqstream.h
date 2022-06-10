@@ -20,6 +20,8 @@
 #ifndef MQSTREAM_H
 #define MQSTREAM_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct CMqStreamVftable;
@@ -31,7 +33,7 @@ struct CMqStream
     char padding[3];
 };
 
-static_assert(sizeof(CMqStream) == 8, "Size of CMqStream structure must be exactly 8 bytes");
+assert_size(CMqStream, 8);
 
 struct CMqStreamVftable
 {
@@ -44,8 +46,7 @@ struct CMqStreamVftable
     void* methods[3];
 };
 
-static_assert(sizeof(CMqStreamVftable) == 5 * sizeof(void*),
-              "CMqStream vftable must have exactly 5 methods");
+assert_vftable_size(CMqStreamVftable, 5);
 
 } // namespace game
 

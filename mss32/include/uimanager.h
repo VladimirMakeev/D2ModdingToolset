@@ -20,6 +20,7 @@
 #ifndef UIMANAGER_H
 #define UIMANAGER_H
 
+#include "d2assert.h"
 #include "smartptr.h"
 #include <cstdint>
 
@@ -36,8 +37,7 @@ struct CUIManagerData
     CMqUIKernelSimple* uiKernel;
 };
 
-static_assert(sizeof(CUIManagerData) == 8,
-              "Size of CUIManagerData structure must be exactly 8 bytes");
+assert_size(CUIManagerData, 8);
 
 struct CUIManager
 {
@@ -45,7 +45,7 @@ struct CUIManager
     CUIManagerData* data;
 };
 
-static_assert(sizeof(CUIManager) == 8, "Size of CUIManager structure must be exactly 8 bytes");
+assert_size(CUIManager, 8);
 
 using UIManagerPtr = SmartPtr<CUIManager>;
 

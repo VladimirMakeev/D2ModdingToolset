@@ -20,6 +20,7 @@
 #ifndef NETMSGMAPENTRY_H
 #define NETMSGMAPENTRY_H
 
+#include "d2assert.h"
 #include <cstdint>
 
 namespace game {
@@ -70,8 +71,7 @@ struct CNetMsgMapEntry_member : public CNetMsgMapEntryT<CNetMsgMapEntry_memberVf
     bool(__thiscall* callback)(void* thisptr, CNetMsg* netMessage, std::uint32_t idFrom);
 };
 
-static_assert(sizeof(CNetMsgMapEntry_member) == 12,
-              "Size of CNetMsgMapEntry_member structure must be exactly 12 bytes");
+assert_size(CNetMsgMapEntry_member, 12);
 
 struct CNetMsgMapEntry_memberVftable : public CNetMsgMapEntryVftable
 {
@@ -104,8 +104,7 @@ struct CNetMsgMapEntryWReceiver_member
     int unknown;
 };
 
-static_assert(sizeof(CNetMsgMapEntryWReceiver_member) == 16,
-              "Size of CNetMsgMapEntryWReceiver_member structure must be exactly 16 bytes");
+assert_size(CNetMsgMapEntryWReceiver_member, 16);
 
 struct CNetMsgMapEntryWReceiver_memberVftable : public CNetMsgMapEntryVftable
 {

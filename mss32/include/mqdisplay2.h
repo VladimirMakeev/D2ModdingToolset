@@ -25,6 +25,7 @@ namespace game {
 struct IMqDisplay2Vftable;
 struct CMqPoint;
 struct DisplaySettings;
+struct CMqRect;
 
 template <typename T>
 struct IMqDisplay2T
@@ -51,14 +52,27 @@ struct IMqDisplay2Vftable
                                                         CMqPoint* screenSurfaceSize);
     GetScreenSurfaceSize getScreenSurfaceSize;
 
-    using Method3 = int(__thiscall*)(IMqDisplay2* thisptr, int a2, int a3);
-    Method3 method3;
+    /**
+     * Assumption: adds scaling start operation to the render queue if rendering is in process.
+     * Otherwise immediately starts scaling in IMqRasterizer.
+     * Does nothing if rasterizer does not support scaling.
+     */
+    using StartScaling = void(__thiscall*)(IMqDisplay2* thisptr,
+                                           const CMqRect* area,
+                                           const CMqPoint* position);
+    StartScaling startScaling;
 
-    using Method4 = int(__thiscall*)(IMqDisplay2* thisptr);
-    Method4 method4;
+    /**
+     * Assumption: adds scaling end operation to the render queue if rendering is in process.
+     * Otherwise immediately ends scaling in IMqRasterizer.
+     * Does nothing if rasterizer does not support scaling.
+     */
+    using EndScaling = void(__thiscall*)(IMqDisplay2* thisptr);
+    EndScaling endScaling;
 
-    using Method5 = bool(__thiscall*)(IMqDisplay2* thisptr);
-    Method5 method5;
+    /** Returns true if scaling operations are supported by current IMqRasterizer. */
+    using IsScalingSupported = bool(__thiscall*)(const IMqDisplay2* thisptr);
+    IsScalingSupported isScalingSupported;
 
     /** Returns true if game is in full screen mode. */
     using IsFullscreen = bool(__thiscall*)(const IMqDisplay2* thisptr);

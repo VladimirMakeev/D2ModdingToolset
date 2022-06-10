@@ -20,6 +20,7 @@
 #ifndef UIEVENT_H
 #define UIEVENT_H
 
+#include "d2assert.h"
 #include "smartptr.h"
 #include <cstdint>
 
@@ -79,7 +80,7 @@ struct UiEvent
     int* referenceCount;
 };
 
-static_assert(sizeof(UiEvent) == 24, "Size of UiEvent structure must be exactly 24 bytes");
+assert_size(UiEvent, 24);
 
 namespace UiEventApi {
 

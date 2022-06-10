@@ -20,6 +20,7 @@
 #ifndef ANIMATIONS_H
 #define ANIMATIONS_H
 
+#include "d2assert.h"
 #include "d2list.h"
 #include "smartptr.h"
 #include <cstdint>
@@ -42,8 +43,7 @@ struct AnimationLists
     char padding[3];
 };
 
-static_assert(sizeof(AnimationLists) == 68,
-              "Size of AnimationLists structure must be exactly 68 bytes");
+assert_size(AnimationLists, 68);
 
 struct AnimationsData
 {
@@ -51,15 +51,14 @@ struct AnimationsData
     AnimationLists* fastAnimations; /**< Update interval 33ms, fast. */
 };
 
-static_assert(sizeof(AnimationsData) == 8,
-              "Size of AnimationsData structure must be exactly 8 bytes");
+assert_size(AnimationsData, 8);
 
 struct Animations
 {
     AnimationsData* data;
 };
 
-static_assert(sizeof(Animations) == 4, "Size of Animations structure must be exactly 4 bytes");
+assert_size(Animations, 4);
 
 } // namespace game
 

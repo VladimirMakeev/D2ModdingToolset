@@ -36,8 +36,7 @@ struct CapitalData
     CapitalRaceSet races;
 };
 
-static_assert(sizeof(CapitalData) == 108,
-              "Size of CapitalData structure must be exactly 108 bytes");
+assert_size(CapitalData, 108);
 
 using CapitalDataPtr = SmartPtr<CapitalData*>;
 

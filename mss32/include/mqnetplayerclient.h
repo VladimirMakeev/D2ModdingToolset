@@ -44,8 +44,7 @@ struct IMqNetPlayerClientVftable : public IMqNetPlayerVftable
     IsHost isHost;
 };
 
-static_assert(sizeof(IMqNetPlayerClientVftable) == 11 * sizeof(void*),
-              "IMqNetPlayerClient vftable must have exactly 11 methods");
+assert_vftable_size(IMqNetPlayerClientVftable, 11);
 
 } // namespace game
 

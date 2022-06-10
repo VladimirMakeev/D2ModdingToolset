@@ -29,8 +29,7 @@ struct CTaskBaseData
     char unknown[8];
 };
 
-static_assert(sizeof(CTaskBaseData) == 8,
-              "Size of CTaskBaseData structure must be exactly 8 bytes");
+assert_size(CTaskBaseData, 8);
 
 struct CTaskBase : public CFreeTask
 {

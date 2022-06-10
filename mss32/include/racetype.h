@@ -72,8 +72,7 @@ struct TRaceTypeData
     TRaceTypeCityInformation* cityInfo;
 };
 
-static_assert(sizeof(TRaceTypeData) == 104,
-              "Size of TRaceTypeData structure must be exactly 104 bytes");
+assert_size(TRaceTypeData, 104);
 
 /** Holds race information read from Grace.dbf. */
 struct TRaceType : public IMidObject
@@ -81,7 +80,7 @@ struct TRaceType : public IMidObject
     TRaceTypeData* data;
 };
 
-static_assert(sizeof(TRaceType) == 12, "Size of TRaceType structure must be exactly 12 bytes");
+assert_size(TRaceType, 12);
 
 struct TRaceTypeVftable : public IMidObjectVftable
 {
@@ -94,8 +93,7 @@ struct TRaceTypeVftable : public IMidObjectVftable
     Validate validate;
 };
 
-static_assert(sizeof(TRaceTypeVftable) == 2 * sizeof(void*),
-              "TRaceType vftable must have exactly 2 methods");
+assert_vftable_size(TRaceTypeVftable, 2);
 
 } // namespace game
 

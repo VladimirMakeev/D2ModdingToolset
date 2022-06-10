@@ -38,8 +38,7 @@ struct CBatAttackDrainOverflow : public CBatAttackBase
     IAttack* attack;
 };
 
-static_assert(sizeof(CBatAttackDrainOverflow) == 20,
-              "Size of CBatAttackDrainOverflow structure must be exactly 20 bytes");
+assert_size(CBatAttackDrainOverflow, 20);
 
 /** Maps heal ammount to unit id. */
 using DrainOverflowHealData = Map<CMidgardID, int>;

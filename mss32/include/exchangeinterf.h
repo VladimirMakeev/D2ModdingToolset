@@ -36,8 +36,7 @@ struct CExchangeInterfData
     char unknown3[168];
 };
 
-static_assert(sizeof(CExchangeInterfData) == 184,
-              "Size of CExchangeInterfData structure must be exactly 184 bytes");
+assert_size(CExchangeInterfData, 184);
 
 /**
  * Shows window of exchange between two stacks.
@@ -49,11 +48,8 @@ struct CExchangeInterf : public CMidDataCache2::INotify
     CExchangeInterfData* data;
 };
 
-static_assert(sizeof(CExchangeInterf) == 36,
-              "Size of CExchangeInterf structure must be exactly 36 bytes");
-
-static_assert(offsetof(CExchangeInterf, data) == 32,
-              "CExchangeInterf::data offset must be 32 bytes");
+assert_size(CExchangeInterf, 36);
+assert_offset(CExchangeInterf, data, 32);
 
 namespace CExchangeInterfApi {
 struct Api

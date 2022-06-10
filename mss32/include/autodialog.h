@@ -20,6 +20,7 @@
 #ifndef AUTODIALOG_H
 #define AUTODIALOG_H
 
+#include "d2assert.h"
 #include "d2set.h"
 #include "d2string.h"
 #include "smartptr.h"
@@ -53,8 +54,7 @@ struct CAutoDialogData
     Set<char[52]> dialogSet;
 };
 
-static_assert(sizeof(CAutoDialogData) == 60,
-              "Size of CAutoDialogData structure must be exactly 60 bytes");
+assert_size(CAutoDialogData, 60);
 
 /** Holds necessary data to create CInterface objects from .dlg files. */
 struct CAutoDialog
@@ -62,7 +62,7 @@ struct CAutoDialog
     CAutoDialogData* data;
 };
 
-static_assert(sizeof(CAutoDialog) == 4, "Size of CAutoDialog structure must be exactly 4 bytes");
+assert_size(CAutoDialog, 4);
 
 namespace AutoDialogApi {
 

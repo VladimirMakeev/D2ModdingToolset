@@ -46,7 +46,7 @@ struct CCondInterf : public CPopupInterf
     CCondInterfData* condData;
 };
 
-static_assert(sizeof(CCondInterf) == 28, "Size of CCondInterf structure must be exactly 28 bytes");
+assert_size(CCondInterf, 28);
 
 struct CCondInterfVftable : public CInterfaceVftable
 {
@@ -55,8 +55,7 @@ struct CCondInterfVftable : public CInterfaceVftable
     SetEventCondition setEventCondition;
 };
 
-static_assert(sizeof(CCondInterfVftable) == 35 * sizeof(void*),
-              "CCondInterf vftable must have exactly 35 methods");
+assert_vftable_size(CCondInterfVftable, 35);
 
 namespace CCondInterfApi {
 

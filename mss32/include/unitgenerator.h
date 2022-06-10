@@ -20,6 +20,8 @@
 #ifndef UNITGENERATOR_H
 #define UNITGENERATOR_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct CMidgardID;
@@ -82,8 +84,7 @@ struct CUnitGeneratorVftable
     GetUnitImplsTotal getUnitImplsTotal;
 };
 
-static_assert(sizeof(CUnitGeneratorVftable) == 6 * sizeof(void*),
-              "CUnitGenerator vftable must have exactly 6 methods");
+assert_vftable_size(CUnitGeneratorVftable, 6);
 
 } // namespace game
 

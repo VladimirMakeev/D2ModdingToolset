@@ -20,6 +20,8 @@
 #ifndef PHASE_H
 #define PHASE_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct CMidClient;
@@ -32,7 +34,7 @@ struct CPhaseData
     int unknown;
 };
 
-static_assert(sizeof(CPhaseData) == 8, "Size of CPhaseData structure must be exactly 8 bytes");
+assert_size(CPhaseData, 8);
 
 struct CPhase
 {
@@ -40,7 +42,7 @@ struct CPhase
     CPhaseData* data;
 };
 
-static_assert(sizeof(CPhase) == 8, "Size of CPhase structure must be exactly 8 bytes");
+assert_size(CPhase, 8);
 
 namespace CPhaseApi {
 

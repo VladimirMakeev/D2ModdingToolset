@@ -20,6 +20,7 @@
 #ifndef STRINGARRAY_H
 #define STRINGARRAY_H
 
+#include "d2assert.h"
 #include "d2vector.h"
 
 namespace game {
@@ -28,7 +29,7 @@ struct String;
 
 using StringArray = Vector<String>;
 
-static_assert(sizeof(StringArray) == 16, "StringArray structure must be exactly 16 bytes");
+assert_size(StringArray, 16);
 
 namespace StringArrayApi {
 

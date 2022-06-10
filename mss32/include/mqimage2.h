@@ -20,6 +20,7 @@
 #ifndef MQIMAGE2_H
 #define MQIMAGE2_H
 
+#include "d2assert.h"
 #include <cstdint>
 
 namespace game {
@@ -80,8 +81,7 @@ struct IMqImage2Vftable
     Method8 method8;
 };
 
-static_assert(sizeof(IMqImage2Vftable) == 9 * sizeof(void*),
-              "IMqImage2 vftable must have exactly 9 methods");
+assert_vftable_size(IMqImage2Vftable, 9);
 
 } // namespace game
 

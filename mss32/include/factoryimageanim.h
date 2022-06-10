@@ -41,11 +41,8 @@ struct FactoryImageAnim
     char padding[3];
 };
 
-static_assert(sizeof(FactoryImageAnim) == 40,
-              "Size of FactoryImageAnim structure must be exactly 40 bytes");
-
-static_assert(offsetof(FactoryImageAnim, presentationMgr) == 8,
-              "FactoryImageAnim::presentationMgr offset must be 8 bytes");
+assert_size(FactoryImageAnim, 40);
+assert_offset(FactoryImageAnim, presentationMgr, 8);
 
 } // namespace game
 

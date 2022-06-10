@@ -19,6 +19,8 @@
 #ifndef ISOBORDER_H
 #define ISOBORDER_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct IIsoBorderVftable;
@@ -31,7 +33,7 @@ struct IIsoBorder
     IIsoBorderVftable* vftable;
 };
 
-static_assert(sizeof(IIsoBorder) == 4, "Size of IIsoBorder structure must be exactly 4 bytes");
+assert_size(IIsoBorder, 4);
 
 struct IIsoBorderVftable
 {
@@ -57,8 +59,7 @@ struct IIsoBorderVftable
     GetByteData getByteData;
 };
 
-static_assert(sizeof(IIsoBorderVftable) == 5 * sizeof(void*),
-              "IIsoBorder vftable must have exactly 5 methods");
+assert_vftable_size(IIsoBorderVftable, 5);
 
 } // namespace game
 

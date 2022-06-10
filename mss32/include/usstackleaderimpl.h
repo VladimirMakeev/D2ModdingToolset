@@ -44,8 +44,7 @@ struct TUsStackLeaderImplData
     mq_c_s<LLeaderAbility> abililies;
 };
 
-static_assert(sizeof(TUsStackLeaderImplData) == 72,
-              "Size of TUsStackLeaderImplData structure must be exactly 72 bytes");
+assert_size(TUsStackLeaderImplData, 72);
 
 struct TUsStackLeaderImplVftable : public IUsStackLeaderVftable
 {
@@ -54,8 +53,7 @@ struct TUsStackLeaderImplVftable : public IUsStackLeaderVftable
     Link link;
 };
 
-static_assert(sizeof(TUsStackLeaderImplVftable) == 11 * sizeof(void*),
-              "TUsStackLeaderImpl vftable must have exactly 11 methods");
+assert_vftable_size(TUsStackLeaderImplVftable, 11);
 
 /** Implementation of stack leader interface. */
 struct TUsStackLeaderImpl : public IUsStackLeaderT<TUsStackLeaderImplVftable>

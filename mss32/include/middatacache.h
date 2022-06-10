@@ -42,8 +42,7 @@ struct CMidDataCache2 : public IMidgardObjectMap
     int unknown3;
 };
 
-static_assert(sizeof(CMidDataCache2) == 36,
-              "Size of CMidDataCache2 structure must be exactly 36 bytes");
+assert_size(CMidDataCache2, 36);
 
 } // namespace game
 

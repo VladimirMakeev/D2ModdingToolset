@@ -33,8 +33,7 @@ struct CMidDragDropInterf : public CDragAndDropInterf
     CPhaseGame* phaseGame;
 };
 
-static_assert(offsetof(CMidDragDropInterf, phaseGame) == 24,
-              "CMidDragDropInterf::phaseGame offset must be 24 bytes");
+assert_offset(CMidDragDropInterf, phaseGame, 24);
 
 } // namespace game
 

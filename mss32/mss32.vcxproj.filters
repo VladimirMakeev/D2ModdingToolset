@@ -2632,6 +2632,12 @@
     <ClInclude Include="include\midcondscript.h">
       <Filter>features\custom event conditions</Filter>
     </ClInclude>
+    <ClInclude Include="include\d2assert.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\interfborderdisplay.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">

@@ -57,11 +57,8 @@ struct CMidCommandQueue2
     UiEvent commandQueueEvent;
 };
 
-static_assert(sizeof(CMidCommandQueue2) == 92,
-              "Size of CMidCommandQueue2 structure must be exactly 92 bytes");
-
-static_assert(sizeof(CMidCommandQueue2::CNMMap) == 8,
-              "Size of CMidCommandQueue2::CNMMap structure must be exactly 8 bytes");
+assert_size(CMidCommandQueue2, 92);
+assert_size(CMidCommandQueue2::CNMMap, 8);
 
 } // namespace game
 

@@ -49,8 +49,7 @@ struct CIsoLayer;
  */
 using HashElementIndexMap = Map<int /* hash */, int /* elementIndex */, SmartPointer>;
 
-static_assert(sizeof(HashElementIndexMap) == 36,
-              "Size of HashElementIndexMap structure must be exactly 36 bytes");
+assert_size(HashElementIndexMap, 36);
 
 struct MapGraphics
 {
@@ -72,17 +71,10 @@ struct MapGraphics
     SmartPtr<CBFunctorDispatch1wRet<const CMqPoint*, bool>> canConvertMouse;
 };
 
-static_assert(sizeof(MapGraphics) == 100,
-              "Size of MapGraphics structure must be exactly 100 bytes");
-
-static_assert(offsetof(MapGraphics, isoEngineGround) == 60,
-              "MapGraphics::isoEngineGround offset must be 60 bytes");
-
-static_assert(offsetof(MapGraphics, isoScrollList) == 72,
-              "MapGraphics::isoScrollList offset must be 72 bytes");
-
-static_assert(offsetof(MapGraphics, canConvertMouse) == 92,
-              "MapGraphics::canConvertMouse offset must be 92 bytes");
+assert_size(MapGraphics, 100);
+assert_offset(MapGraphics, isoEngineGround, 60);
+assert_offset(MapGraphics, isoScrollList, 72);
+assert_offset(MapGraphics, canConvertMouse, 92);
 
 using MapGraphicsPtr = SmartPtr<MapGraphics*>;
 

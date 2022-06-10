@@ -37,8 +37,7 @@ struct CToggleButtonData
     SmartPointer ptrArray[7];
 };
 
-static_assert(sizeof(CToggleButtonData) == 72,
-              "Size of CToggleButtonData structure must be exactly 72 bytes");
+assert_size(CToggleButtonData, 72);
 
 /**
  * Toggle button ui element.
@@ -49,8 +48,7 @@ struct CToggleButton : public CInterfaceT<CToggleButtonVftable>
     CToggleButtonData* data;
 };
 
-static_assert(sizeof(CToggleButton) == 12,
-              "Size of CToggleButton structure must be exactly 12 bytes");
+assert_size(CToggleButton, 12);
 
 struct CToggleButtonVftable : public CInterfaceVftable
 {
@@ -63,11 +61,8 @@ struct CToggleButtonVftable : public CInterfaceVftable
     void* method37;
 };
 
-static_assert(sizeof(CToggleButtonVftable) == 38 * sizeof(void*),
-              "CToggleButton vftable must have exactly 38 methods");
-
-static_assert(offsetof(CToggleButtonVftable, setEnabled) == 140,
-              "CToggleButtonVftable::setEnabled offset must be 140 bytes");
+assert_vftable_size(CToggleButtonVftable, 38);
+assert_offset(CToggleButtonVftable, setEnabled, 140);
 
 namespace CToggleButtonApi {
 

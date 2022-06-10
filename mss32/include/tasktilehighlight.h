@@ -38,8 +38,7 @@ struct CTaskTileHighlight : public CMidFreeTask
     Impl* impl;
 };
 
-static_assert(sizeof(CTaskTileHighlight) == 20,
-              "Size of CTaskTileHighlight structure must be exactly 20 bytes");
+assert_size(CTaskTileHighlight, 20);
 
 } // namespace game
 

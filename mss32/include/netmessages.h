@@ -33,8 +33,7 @@ struct CMidgardID;
 struct CMenusReqVersionMsg : public CNetMsg
 { };
 
-static_assert(sizeof(CMenusReqVersionMsg) == 4,
-              "Size of CMenusReqVersionMsg structure must be exactly 4 bytes");
+assert_size(CMenusReqVersionMsg, 4);
 
 /** Send by server to clients in response to CMenusReqVersionMsg. */
 struct CGameVersionMsg : public CNetMsg
@@ -42,15 +41,13 @@ struct CGameVersionMsg : public CNetMsg
     int gameVersion; /**< Initialized with CMidServerLogicCoreData::gameVersion value. */
 };
 
-static_assert(sizeof(CGameVersionMsg) == 8,
-              "Size of CGameVersionMsg structure must be exactly 8 bytes");
+assert_size(CGameVersionMsg, 8);
 
 /** Send by client from game menu to get scenario information from server. */
 struct CMenusReqInfoMsg : public CNetMsg
 { };
 
-static_assert(sizeof(CMenusReqInfoMsg) == 4,
-              "Size of CMenusReqInfoMsg structure must be exactly 4 bytes");
+assert_size(CMenusReqInfoMsg, 4);
 
 /** Send by server to clients in response to CMenusReqInfoMsg. */
 struct CMenusAnsInfoMsg : public CNetMsg
@@ -68,8 +65,7 @@ struct CMenusAnsInfoMsg : public CNetMsg
     char padding[3];
 };
 
-static_assert(sizeof(CMenusAnsInfoMsg) == 56,
-              "Size of CMenusAnsInfoMsg structure must be exactly 56 bytes");
+assert_size(CMenusAnsInfoMsg, 56);
 
 namespace NetMessagesApi {
 

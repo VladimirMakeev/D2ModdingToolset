@@ -43,14 +43,9 @@ struct CMqThreadData
     std::uint32_t timeoutMs;
 };
 
-static_assert(sizeof(CMqThreadData) == 96,
-              "Size of CMqThreadData structure must be exactly 96 bytes");
-
-static_assert(offsetof(CMqThreadData, freeTimerId) == 32,
-              "CMqThreadData::freeTimerId offset must be 32 bytes");
-
-static_assert(offsetof(CMqThreadData, threadHandle) == 80,
-              "CMqThreadData::threadHandle offset must be 80 bytes");
+assert_size(CMqThreadData, 96);
+assert_offset(CMqThreadData, freeTimerId, 32);
+assert_offset(CMqThreadData, threadHandle, 80);
 
 struct CMqThreadVftable;
 
@@ -91,8 +86,7 @@ struct CMqThreadVftable
     Update update;
 };
 
-static_assert(sizeof(CMqThreadVftable) == 5 * sizeof(void*),
-              "Size of CMqThread vftable must have exactly 5 methods");
+assert_vftable_size(CMqThreadVftable, 5);
 
 } // namespace game
 

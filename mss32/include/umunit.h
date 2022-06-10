@@ -41,7 +41,7 @@ struct CUmUnit
     CUmUnitData* data;
 };
 
-static_assert(sizeof(CUmUnit) == 24, "Size of CUmUnit structure must be exactly 24 bytes");
+assert_size(CUmUnit, 24);
 
 struct CUmUnitData
 {
@@ -57,7 +57,7 @@ struct CUmUnitData
     TextAndId desc;
 };
 
-static_assert(sizeof(CUmUnitData) == 68, "Size of CUmUnitData structure must be exactly 68 bytes");
+assert_size(CUmUnitData, 68);
 
 static inline CUmUnit* castSoldierToUmUnit(const IUsSoldier* soldier)
 {

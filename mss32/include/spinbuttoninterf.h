@@ -48,11 +48,8 @@ struct CSpinButtonInterfData
     CMqPoint bgndImagePos;
 };
 
-static_assert(sizeof(CSpinButtonInterfData) == 52,
-              "Size of CSpinButtonInterfData structure must be exactly 52 bytes");
-
-static_assert(offsetof(CSpinButtonInterfData, increment) == 32,
-              "CSpinButtonInterfData::increment offset must be 32 bytes");
+assert_size(CSpinButtonInterfData, 52);
+assert_offset(CSpinButtonInterfData, increment, 32);
 
 /**
  * Spin button ui element.
@@ -63,8 +60,7 @@ struct CSpinButtonInterf : public CInterface
     CSpinButtonInterfData* data;
 };
 
-static_assert(sizeof(CSpinButtonInterf) == 12,
-              "Size of CSpinButtonInterf structure must be exactly 12 bytes");
+assert_size(CSpinButtonInterf, 12);
 
 } // namespace game
 

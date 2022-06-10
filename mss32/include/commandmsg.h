@@ -101,7 +101,7 @@ struct CCommandMsg : public CNetMsgT<CCommandMsgVftable>
     IdList* ids;
 };
 
-static_assert(sizeof(CCommandMsg) == 16, "Size of CCommandMsg structure must be exactly 16 bytes");
+assert_size(CCommandMsg, 16);
 
 enum class CommandMsgParam : int
 {
@@ -125,8 +125,7 @@ struct CCommandMsgVftable : public CNetMsgVftable
     void* method5;
 };
 
-static_assert(sizeof(CCommandMsgVftable) == 5 * sizeof(void*),
-              "CCommandMsg vftable must have exactly 5 methods");
+assert_vftable_size(CCommandMsgVftable, 5);
 
 namespace CCommandMsgApi {
 

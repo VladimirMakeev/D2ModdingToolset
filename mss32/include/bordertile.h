@@ -29,7 +29,7 @@ struct CBorderTile : public IIsoBorder
     void*** imageData;
 };
 
-static_assert(sizeof(CBorderTile) == 8, "Size of CBorderTile structure must be exactly 8 bytes");
+assert_size(CBorderTile, 8);
 
 } // namespace game
 

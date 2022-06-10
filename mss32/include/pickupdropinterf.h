@@ -37,8 +37,7 @@ struct CPickUpDropInterfData
     char unknown3[56];
 };
 
-static_assert(sizeof(CPickUpDropInterfData) == 72,
-              "Size of CPickUpDropInterfData structure must be exactly 72 bytes");
+assert_size(CPickUpDropInterfData, 72);
 
 /**
  * Shows window of exchange between stack and treasure chest.
@@ -51,11 +50,8 @@ struct CPickUpDropInterf : public CMidDataCache2::INotify
     CPickUpDropInterfData* data;
 };
 
-static_assert(sizeof(CPickUpDropInterf) == 40,
-              "Size of CPickUpDropInterf structure must be exactly 40 bytes");
-
-static_assert(offsetof(CPickUpDropInterf, dragDropInterf) == 8,
-              "CPickUpDropInterf::dragDropInterf offset must be 8 bytes");
+assert_size(CPickUpDropInterf, 40);
+assert_offset(CPickUpDropInterf, dragDropInterf, 8);
 
 namespace CPickUpDropInterfApi {
 

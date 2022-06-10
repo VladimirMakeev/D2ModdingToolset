@@ -42,8 +42,7 @@ struct IUsRacialSoldierVftable : public IUsUnitExtensionVftable
     GetId getEnrollBuildingId;
 };
 
-static_assert(sizeof(IUsRacialSoldierVftable) == 4 * sizeof(void*),
-              "IUsRacialSoldier vftable must have exactly 4 methods");
+assert_vftable_size(IUsRacialSoldierVftable, 4);
 
 /** Holds soldier specific data read from GUnits.dbf. */
 struct TUsRacialSoldierData
@@ -54,8 +53,7 @@ struct TUsRacialSoldierData
     CMidgardID enrollBuildingId;  /**< ENROLL_B */
 };
 
-static_assert(sizeof(TUsRacialSoldierData) == 16,
-              "Size of TUsRacialSoldierData structure must be exactly 16 bytes");
+assert_size(TUsRacialSoldierData, 16);
 
 /**
  * Represents soldier unit template.
@@ -73,23 +71,12 @@ struct TUsRacialSoldier
     TUsRacialSoldierData* data;
 };
 
-static_assert(sizeof(TUsRacialSoldier) == 40,
-              "Size of TUsRacialSoldier structure must be exactly 40 bytes");
-
-static_assert(offsetof(TUsRacialSoldier, TUsRacialSoldier::IUsRacialSoldier::vftable) == 0,
-              "Vftable offset for IUsRacialSoldier in TUsRacialSoldier structure must be 0 bytes");
-
-static_assert(offsetof(TUsRacialSoldier, TUsRacialSoldier::IUsGlobal::vftable) == 4,
-              "Vftable offset for IUsGlobal in TUsRacialSoldier structure must be 4 bytes");
-
-static_assert(offsetof(TUsRacialSoldier, TUsRacialSoldier::TUsUnitImpl::vftable) == 8,
-              "Vftable offset for TUsUnitImpl in TUsRacialSoldier structure must be 8 bytes");
-
-static_assert(offsetof(TUsRacialSoldier, TUsRacialSoldier::TUsSoldierImpl::vftable) == 28,
-              "Vftable offset for TUsSoldierImpl in TUsRacialSoldier structure must be 28 bytes");
-
-static_assert(offsetof(TUsRacialSoldier, data) == 36,
-              "TUsRacialSoldier::data offset must be 36 bytes");
+assert_size(TUsRacialSoldier, 40);
+assert_offset(TUsRacialSoldier, TUsRacialSoldier::IUsRacialSoldier::vftable, 0);
+assert_offset(TUsRacialSoldier, TUsRacialSoldier::IUsGlobal::vftable, 4);
+assert_offset(TUsRacialSoldier, TUsRacialSoldier::TUsUnitImpl::vftable, 8);
+assert_offset(TUsRacialSoldier, TUsRacialSoldier::TUsSoldierImpl::vftable, 28);
+assert_offset(TUsRacialSoldier, data, 36);
 
 } // namespace game
 

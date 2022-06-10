@@ -42,8 +42,7 @@ struct CTextBoxInterfData
     void* unknown5;
 };
 
-static_assert(sizeof(CTextBoxInterfData) == 76,
-              "Size of CTextBoxInterfData structure must be exactly 76 bytes");
+assert_size(CTextBoxInterfData, 76);
 
 /**
  * Text ui element.
@@ -54,8 +53,7 @@ struct CTextBoxInterf : public CInterface
     CTextBoxInterfData* data;
 };
 
-static_assert(sizeof(CTextBoxInterf) == 12,
-              "Size of CTextBoxInterf structure must be exactly 12 bytes");
+assert_size(CTextBoxInterf, 12);
 
 namespace CTextBoxInterfApi {
 

@@ -20,6 +20,7 @@
 #ifndef NETMSG_H
 #define NETMSG_H
 
+#include "d2assert.h"
 #include <cstdint>
 
 namespace game {
@@ -46,8 +47,7 @@ struct NetMessageHeader
     char messageClassName[36];
 };
 
-static_assert(sizeof(NetMessageHeader) == 44,
-              "Size of NetMessageHeader structure must be exactly 44 bytes");
+assert_size(NetMessageHeader, 44);
 
 /** Game specific messages treated as normal in DirectPlay terms. */
 static constexpr std::uint32_t netMessageNormalType{0xffff};
@@ -64,7 +64,7 @@ struct CNetMsgT
 struct CNetMsg : public CNetMsgT<>
 { };
 
-static_assert(sizeof(CNetMsg) == 4, "Size of CNetMsg structure must be exactly 4 bytes");
+assert_size(CNetMsg, 4);
 
 struct CNetMsgVftable
 {
@@ -75,8 +75,7 @@ struct CNetMsgVftable
     Serialize serialize;
 };
 
-static_assert(sizeof(CNetMsgVftable) == 2 * sizeof(void*),
-              "CNetMsg vftable must have exactly 2 methods");
+assert_vftable_size(CNetMsgVftable, 2);
 
 namespace CNetMsgApi {
 

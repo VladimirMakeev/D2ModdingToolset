@@ -20,6 +20,7 @@
 #ifndef INTERFCURSOR_H
 #define INTERFCURSOR_H
 
+#include "d2assert.h"
 #include "smartptr.h"
 
 namespace game {
@@ -52,8 +53,7 @@ struct IInterfCursorVftable
     SetHandle setHandle;
 };
 
-static_assert(sizeof(IInterfCursorVftable) == 4 * sizeof(void*),
-              "IInterfCursor vftable must have exactly 4 methods");
+assert_vftable_size(IInterfCursorVftable, 4);
 
 } // namespace game
 

@@ -20,7 +20,9 @@
 #ifndef TEXTUREHANDLE_H
 #define TEXTUREHANDLE_H
 
+#include "d2assert.h"
 #include "mqpoint.h"
+#include <cstdint>
 
 namespace game {
 
@@ -28,12 +30,11 @@ namespace game {
 struct TextureHandle
 {
     CMqPoint textureSize;
-    int* indexPtr;
+    std::uint32_t* indexPtr; /**< Used as a key for search in CRendererImpl::textureSurfaceMap. */
     int* refCount;
 };
 
-static_assert(sizeof(TextureHandle) == 16,
-              "Size of TextureHandle structure must be exactly 16 bytes");
+assert_size(TextureHandle, 16);
 
 } // namespace game
 

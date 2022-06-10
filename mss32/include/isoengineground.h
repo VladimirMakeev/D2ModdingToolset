@@ -67,15 +67,14 @@ struct GroundTilesData
     Map<TilePrefix, std::uint32_t[32]> tileBorders;
 };
 
-static_assert(sizeof(GroundTilesData) == 56,
-              "Size of GroundTilesData structure must be exactly 56 bytes");
+assert_size(GroundTilesData, 56);
 
 struct GroundTiles
 {
     GroundTilesData* data;
 };
 
-static_assert(sizeof(GroundTiles) == 4, "Size of GroundTiles structure must be exactly 4 bytes");
+assert_size(GroundTiles, 4);
 
 /** Describes pair of tile border images for specific tile type. */
 struct TileBorders
@@ -87,7 +86,7 @@ struct TileBorders
     int additionalVariation;       /**< Random value in range [0 : 2]. */
 };
 
-static_assert(sizeof(TileBorders) == 20, "Size of TileBorders structure must be exactly 20 bytes");
+assert_size(TileBorders, 20);
 
 /** Holds data about all borders of a single tile. */
 struct TileBordersInfo
@@ -101,8 +100,7 @@ struct TileBordersInfo
     char padding[2];
 };
 
-static_assert(sizeof(TileBordersInfo) == 232,
-              "Size of TileBordersInfo structure must be exactly 232 bytes");
+assert_size(TileBordersInfo, 232);
 
 struct IsoEngineGroundArrayElement
 {
@@ -111,8 +109,7 @@ struct IsoEngineGroundArrayElement
     char padding[3];
 };
 
-static_assert(sizeof(IsoEngineGroundArrayElement) == 12,
-              "Size of IsoEngineGroundArrayElement structure must be exactly 12 bytes");
+assert_size(IsoEngineGroundArrayElement, 12);
 
 using IsoEngineGroundArray = Vector<IsoEngineGroundArrayElement>;
 
@@ -149,17 +146,10 @@ struct CIsoEngineGroundData
     std::uint32_t numTexturesAlongY;
 };
 
-static_assert(sizeof(CIsoEngineGroundData) == 5448,
-              "Size of CIsoEngineGroundData structure must be exactly 5448 bytes");
-
-static_assert(offsetof(CIsoEngineGroundData, tileBorders) == 24,
-              "CIsoEngineGroundData::tileBorders offset must be 24 bytes");
-
-static_assert(offsetof(CIsoEngineGroundData, isoGroundIndexer) == 5412,
-              "CIsoEngineGroundData::isoGroundIndexer offset must be 5412 bytes");
-
-static_assert(offsetof(CIsoEngineGroundData, groundTextures) == 5424,
-              "CIsoEngineGroundData::groundTextures offset must be 5424 bytes");
+assert_size(CIsoEngineGroundData, 5448);
+assert_offset(CIsoEngineGroundData, tileBorders, 24);
+assert_offset(CIsoEngineGroundData, isoGroundIndexer, 5412);
+assert_offset(CIsoEngineGroundData, groundTextures, 5424);
 
 /** Isometric engine responsible for ground rendering. */
 struct CIsoEngineGround
@@ -170,8 +160,7 @@ struct CIsoEngineGround
     CIsoEngineGroundData* data;
 };
 
-static_assert(sizeof(CIsoEngineGround) == 8,
-              "Size of CIsoEngineGround structure must be exactly 8 bytes");
+assert_size(CIsoEngineGround, 8);
 
 struct CIsoEngineGround::CGroundTexture : public IMqTexture
 {
@@ -183,8 +172,7 @@ struct CIsoEngineGround::CGroundTexture : public IMqTexture
     bool hidden;        /**< Indicates that texture is fully hidden and should not be drawn. */
 };
 
-static_assert(sizeof(CIsoEngineGround::CGroundTexture) == 20,
-              "Size of CIsoEngineGround::CGroundTexture structure must be exactly 20 bytes");
+assert_size(CIsoEngineGround::CGroundTexture, 20);
 
 struct IsoGroundTextureData
 {
@@ -193,8 +181,7 @@ struct IsoGroundTextureData
     CMqPoint textureOffset;
 };
 
-static_assert(sizeof(IsoGroundTextureData) == 28,
-              "Size of IsoGroundTextureData structure must be exactly 28 bytes");
+assert_size(IsoGroundTextureData, 28);
 
 struct CIsoEngineGroundVftable
 {
@@ -208,8 +195,7 @@ struct CIsoEngineGroundVftable
     Render render;
 };
 
-static_assert(sizeof(CIsoEngineGroundVftable) == 2 * sizeof(void*),
-              "CIsoEngineGround vftable must have exactly 2 methods");
+assert_vftable_size(CIsoEngineGroundVftable, 2);
 
 /** Holds information about tile borders rendering. */
 struct TileBordersDrawInfo
@@ -222,8 +208,7 @@ struct TileBordersDrawInfo
     char padding[3];
 };
 
-static_assert(sizeof(TileBordersDrawInfo) == 32,
-              "Size of TileBordersDrawInfo structure must be exactly 32 bytes");
+assert_size(TileBordersDrawInfo, 32);
 
 namespace CGroundTextureApi {
 

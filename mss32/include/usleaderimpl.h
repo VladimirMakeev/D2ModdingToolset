@@ -35,8 +35,7 @@ struct TUsLeaderImplData
     LLeaderCategory category;
 };
 
-static_assert(sizeof(TUsLeaderImplData) == 32,
-              "Size of TUsLeaderImplData structure must be exactly 32 bytes");
+assert_size(TUsLeaderImplData, 32);
 
 /** Implementation of leader interface. */
 struct TUsLeaderImpl : public IUsLeader
@@ -44,8 +43,7 @@ struct TUsLeaderImpl : public IUsLeader
     TUsLeaderImplData* data;
 };
 
-static_assert(sizeof(TUsLeaderImpl) == 8,
-              "Size of TUsLeaderImpl structure must be exactly 8 bytes");
+assert_size(TUsLeaderImpl, 8);
 
 } // namespace game
 

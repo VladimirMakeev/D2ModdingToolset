@@ -76,15 +76,14 @@ struct CBatBigFaceData
     char unknown3[4];
 };
 
-static_assert(sizeof(CBatBigFaceData) == 4112,
-              "Size of CBatBigFaceData structure must be exactly 4112 bytes");
+assert_size(CBatBigFaceData, 4112);
 
 struct CBatBigFace : public IMqImage2
 {
     CBatBigFaceData* data;
 };
 
-static_assert(sizeof(CBatBigFace) == 8, "Size of CBatBigFace structure must be exactly 8 bytes");
+assert_size(CBatBigFace, 8);
 
 namespace BatBigFaceApi {
 

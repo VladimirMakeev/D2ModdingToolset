@@ -20,6 +20,8 @@
 #ifndef DISPLAYSETTINGS_H
 #define DISPLAYSETTINGS_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct DisplaySettings
@@ -29,8 +31,7 @@ struct DisplaySettings
     int bitsPerPixel;
 };
 
-static_assert(sizeof(DisplaySettings) == 12,
-              "Size of DisplaySettings structure must be exactly 12 bytes");
+assert_size(DisplaySettings, 12);
 
 } // namespace game
 

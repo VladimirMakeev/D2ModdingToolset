@@ -20,6 +20,7 @@
 #ifndef MIDUNIT_H
 #define MIDUNIT_H
 
+#include "d2assert.h"
 #include "idlist.h"
 #include "midgardid.h"
 #include "midscenarioobject.h"
@@ -53,11 +54,11 @@ struct CMidUnit : public IMidScenarioObject
     IdList origModifiers;
 };
 
-static_assert(sizeof(CMidUnit) == 80, "Size of CMidUnit structure must be exactly 80 bytes");
+assert_size(CMidUnit, 80);
 
-static_assert(offsetof(CMidUnit, dynLevel) == 24, "CMidUnit::dynLevel offset must be 24 bytes");
-static_assert(offsetof(CMidUnit, origTypeId) == 44, "CMidUnit::origTypeId offset must be 44 bytes");
-static_assert(offsetof(CMidUnit, origXp) == 60, "CMidUnit::origXp offset must be 60 bytes");
+assert_offset(CMidUnit, dynLevel, 24);
+assert_offset(CMidUnit, origTypeId, 44);
+assert_offset(CMidUnit, origXp, 60);
 
 struct CMidUnitVftable : IMidScenarioObjectVftable
 {

@@ -34,18 +34,10 @@ struct CItemPotionBoost
     CMidgardID modPotionId;
 };
 
-static_assert(sizeof(CItemPotionBoost) == 20,
-              "Size of CItemPotionBoost structure must be exactly 20 bytes");
-
-static_assert(
-    offsetof(CItemPotionBoost, CItemPotionBoost::IItemExPotionBoost::vftable) == 0,
-    "Vftable offset for IItemExPotionBoost in CItemPotionBoost structure must be 0 bytes");
-
-static_assert(offsetof(CItemPotionBoost, CItemPotionBoost::CItemBase::vftable) == 4,
-              "Vftable offset for CItemBase in CItemPotionBoost structure must be 4 bytes");
-
-static_assert(offsetof(CItemPotionBoost, modPotionId) == 16,
-              "CItemPotionBoost::modPotionId offset must be 16 bytes");
+assert_size(CItemPotionBoost, 20);
+assert_offset(CItemPotionBoost, CItemPotionBoost::IItemExPotionBoost::vftable, 0);
+assert_offset(CItemPotionBoost, CItemPotionBoost::CItemBase::vftable, 4);
+assert_offset(CItemPotionBoost, modPotionId, 16);
 
 } // namespace game
 

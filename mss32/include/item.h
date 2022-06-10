@@ -20,6 +20,8 @@
 #ifndef ITEM_H
 #define ITEM_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct IItemVftable;
@@ -63,8 +65,7 @@ struct IItemVftable
     void* unknown;
 };
 
-static_assert(sizeof(IItemVftable) == 8 * sizeof(void*),
-              "IItem vftable must have exactly 8 methods");
+assert_vftable_size(IItemVftable, 8);
 
 } // namespace game
 

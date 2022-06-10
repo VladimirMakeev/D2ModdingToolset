@@ -49,11 +49,8 @@ struct CInterfaceData
     TooltipPtr tooltip;
 };
 
-static_assert(sizeof(CInterfaceData) == 64,
-              "Size of CInterfaceData structure must be exactly 64 bytes");
-
-static_assert(offsetof(CInterfaceData, childs) == 28,
-              "CInterfaceData::childs offset must be 28 bytes");
+assert_size(CInterfaceData, 64);
+assert_offset(CInterfaceData, childs, 28);
 
 template <typename T>
 struct CInterfaceT
@@ -113,11 +110,26 @@ struct CInterfaceVftable
                                                        const CMqPoint* point);
     GetTooltipAtPoint getTooltipAtPoint;
 
-    using Method8 = void*(__thiscall*)(CInterface* thisptr, void* a2, void* a3);
+    /** Called from CInterfManagerImpl::OnMousePress */
+    using Method8 = CMqPoint*(__thiscall*)(CInterface* thisptr, CMqPoint* p1, CMqPoint* p2);
     Method8 method8;
 
-    void* method9;
-    void* method10;
+    /**
+     * Meaning assumed.
+     * If returns true then IInterfBorderDisplay should be also drawn.
+     * Check CInterfManagerImplDraw for details.
+     */
+    using DrawBorder = bool(__thiscall*)(const CInterface* thisptr);
+    DrawBorder shouldDrawBorder;
+
+    /**
+     * Assumption: returns true if scaling is disabled for this interface element.
+     * CInterface returns false,
+     * CInterfDialog checks interface below it and call its method, or returns false.
+     * CMainView2 returns true, while CFullScreenInterf returns false.
+     */
+    using ShouldIgnoreScaling = bool(__thiscall*)(const CInterface* thisptr);
+    ShouldIgnoreScaling shouldIgnoreScaling;
 
     using Method11 = int(__thiscall*)(CInterface* thisptr);
     Method11 method11;
@@ -132,8 +144,12 @@ struct CInterfaceVftable
     using IsPointInside = bool(__thiscall*)(const CInterface* thisptr, const CMqPoint* point);
     IsPointInside isPointInside;
 
-    void* method15;
-    void* method16;
+    /** Returns area for CMidPopupInterf, for CInterface returns nullptr. */
+    GetArea getArea2;
+
+    /** If returns true, we can call getArea2, result will be non-null.*/
+    using Method16 = bool(__thiscall*)(CInterface* thisptr);
+    Method16 method16;
 
     /** Assumption: resizes interface element and its childs. */
     using Method17 = bool(__thiscall*)(CInterface* thisptr, const CMqPoint* size);
@@ -226,8 +242,7 @@ struct CInterfaceVftable
     SetParent setParent;
 };
 
-static_assert(sizeof(CInterfaceVftable) == 34 * sizeof(void*),
-              "CInterface vftable must have exactly 34 methods");
+assert_vftable_size(CInterfaceVftable, 34);
 
 } // namespace game
 

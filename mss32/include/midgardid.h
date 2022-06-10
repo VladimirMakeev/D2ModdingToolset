@@ -20,6 +20,8 @@
 #ifndef MIDGARDID_H
 #define MIDGARDID_H
 
+#include "d2assert.h"
+
 namespace game {
 
 enum class IdCategory : int
@@ -118,8 +120,7 @@ struct CMidgardID
     int value;
 };
 
-static_assert(sizeof(CMidgardID) == sizeof(int),
-              "Size of CMidgardID structure must equal to the size of int");
+assert_size(CMidgardID, 4);
 
 static constexpr bool operator==(const CMidgardID& first, const CMidgardID& second)
 {

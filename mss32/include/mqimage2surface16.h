@@ -41,11 +41,8 @@ struct CMqImage2Surface16
     char padding[3];
 };
 
-static_assert(sizeof(CMqImage2Surface16) == 44,
-              "Size of CMqImage2Surface16 structure must be exactly 44 bytes");
-
-static_assert(offsetof(CMqImage2Surface16, size) == 32,
-              "CMqImage2Surface16::size offset must be 32 bytes");
+assert_size(CMqImage2Surface16, 44);
+assert_offset(CMqImage2Surface16, size, 32);
 
 } // namespace game
 

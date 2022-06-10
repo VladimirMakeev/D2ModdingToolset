@@ -29,7 +29,7 @@ struct CItemWand : public CItemSpell
     Bank castingCost;
 };
 
-static_assert(sizeof(CItemWand) == 32, "Size of CItemWand structure must be exactly 32 bytes");
+assert_size(CItemWand, 32);
 
 } // namespace game
 

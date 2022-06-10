@@ -45,8 +45,7 @@ struct NetPlayerInfo
     char unknown6[8];
 };
 
-static_assert(sizeof(NetPlayerInfo) == 124,
-              "Size of NetPlayerInfo structure must be exactly 124 bytes");
+assert_size(NetPlayerInfo, 124);
 
 } // namespace game
 

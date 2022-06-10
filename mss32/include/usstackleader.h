@@ -20,6 +20,7 @@
 #ifndef USSTACKLEADER_H
 #define USSTACKLEADER_H
 
+#include "d2assert.h"
 #include "usunitextension.h"
 
 namespace game {
@@ -71,8 +72,7 @@ struct IUsStackLeaderVftable : public IUsUnitExtensionVftable
     GetInt getLowerCost;
 };
 
-static_assert(sizeof(IUsStackLeaderVftable) == 10 * sizeof(void*),
-              "IUsStackLeader vftable must have exactly 10 methods");
+assert_vftable_size(IUsStackLeaderVftable, 10);
 
 namespace IUsStackLeaderApi {
 

@@ -21,6 +21,7 @@
 #define SCENARIOHEADER_H
 
 #include "categoryids.h"
+#include "d2assert.h"
 #include <cstddef>
 #include <cstdint>
 
@@ -35,7 +36,7 @@ struct RaceInfo
     char unknown[36];
 };
 
-static_assert(sizeof(RaceInfo) == 40, "Size of RaceInfo structure must be exactly 40 bytes");
+assert_size(RaceInfo, 40);
 
 #pragma pack(push)
 #pragma pack(1)
@@ -70,32 +71,15 @@ struct ScenarioFileHeader
 };
 #pragma pack(pop)
 
-static_assert(sizeof(ScenarioFileHeader) == 3156,
-              "Size of ScenarioFileHeader structure must be exactly 3156 bytes");
-
-static_assert(offsetof(ScenarioFileHeader, author) == 256,
-              "ScenarioFileHeader::author offset must be 256 bytes");
-
-static_assert(offsetof(ScenarioFileHeader, official) == 277,
-              "ScenarioFileHeader::official offset must be 277 bytes");
-
-static_assert(offsetof(ScenarioFileHeader, name) == 278,
-              "ScenarioFileHeader::name offset must be 278 bytes");
-
-static_assert(offsetof(ScenarioFileHeader, mapSize) == 534,
-              "ScenarioFileHeader::mapSize offset must be 534 bytes");
-
-static_assert(offsetof(ScenarioFileHeader, difficulty) == 538,
-              "ScenarioFileHeader::difficulty offset must be 538 bytes");
-
-static_assert(offsetof(ScenarioFileHeader, campaignId) == 550,
-              "ScenarioFileHeader::campaignId offset must be 550 bytes");
-
-static_assert(offsetof(ScenarioFileHeader, racesTotal) == 2649,
-              "ScenarioFileHeader::racesTotal offset must be 2649 bytes");
-
-static_assert(offsetof(ScenarioFileHeader, races) == 2653,
-              "ScenarioFileHeader::races offset must be 2653 bytes");
+assert_size(ScenarioFileHeader, 3156);
+assert_offset(ScenarioFileHeader, author, 256);
+assert_offset(ScenarioFileHeader, official, 277);
+assert_offset(ScenarioFileHeader, name, 278);
+assert_offset(ScenarioFileHeader, mapSize, 534);
+assert_offset(ScenarioFileHeader, difficulty, 538);
+assert_offset(ScenarioFileHeader, campaignId, 550);
+assert_offset(ScenarioFileHeader, racesTotal, 2649);
+assert_offset(ScenarioFileHeader, races, 2653);
 
 namespace ScenarioFileHeaderApi {
 

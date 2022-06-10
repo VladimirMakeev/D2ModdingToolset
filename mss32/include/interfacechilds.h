@@ -20,6 +20,7 @@
 #ifndef INTERFACECHILDS_H
 #define INTERFACECHILDS_H
 
+#include "d2assert.h"
 #include "d2vector.h"
 
 namespace game {
@@ -32,8 +33,7 @@ struct CInterfaceChilds
     Vector<CInterface*> childs;
 };
 
-static_assert(sizeof(CInterfaceChilds) == 20,
-              "Size of CInterfaceChilds structure must be exactly 20 bytes");
+assert_size(CInterfaceChilds, 20);
 
 } // namespace game
 

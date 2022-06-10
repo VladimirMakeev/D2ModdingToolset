@@ -47,8 +47,7 @@ struct CDialogInterfData
     CMqRect area;
 };
 
-static_assert(sizeof(CDialogInterfData) == 104,
-              "Size of CDialogInterfData structure must be exactly 104 bytes");
+assert_size(CDialogInterfData, 104);
 
 /**
  * Holds ui elements created from AutoDialog script.
@@ -59,11 +58,8 @@ struct CDialogInterf : public CInterface
     CDialogInterfData* data;
 };
 
-static_assert(sizeof(CDialogInterf) == 12,
-              "Size of CDialogInterf structure must be exactly 12 bytes");
-
-static_assert(offsetof(CDialogInterf, data) == 8,
-              "CDialogInterf::dialogInterfData offset must be 8 bytes");
+assert_size(CDialogInterf, 12);
+assert_offset(CDialogInterf, data, 8);
 
 namespace CDialogInterfApi {
 

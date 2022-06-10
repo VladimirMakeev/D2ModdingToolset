@@ -40,7 +40,7 @@ struct CUmStack
     CUmStackData* data;
 };
 
-static_assert(sizeof(CUmStack) == 24, "Size of CUmStack structure must be exactly 24 bytes");
+assert_size(CUmStack, 24);
 
 struct CUmStackData
 {
@@ -55,8 +55,7 @@ struct CUmStackData
     ModifierValue lowerCost;
 };
 
-static_assert(sizeof(CUmStackData) == 60,
-              "Size of CUmStackData structure must be exactly 60 bytes");
+assert_size(CUmStackData, 60);
 
 } // namespace game
 

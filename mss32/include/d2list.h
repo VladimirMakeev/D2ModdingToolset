@@ -20,6 +20,7 @@
 #ifndef D2LIST_H
 #define D2LIST_H
 
+#include "d2assert.h"
 #include <cstdint>
 
 namespace game {
@@ -33,8 +34,7 @@ struct ListNode
     T data;
 };
 
-static_assert(sizeof(ListNode<int>) == 12,
-              "Size of ListNode<int> structure must be exactly 12 bytes");
+assert_size(ListNode<int>, 12);
 
 /** Implementation of std::list<T>::const_iterator used in game.
  * Inline methods exactly correspond to in-game implementation.
@@ -86,8 +86,7 @@ struct ConstListIterator
     }
 };
 
-static_assert(sizeof(ConstListIterator<int>) == 12,
-              "Size of ConstListIterator structure must be exactly 12 bytes");
+assert_size(ConstListIterator<int>, 12);
 
 /** Implementation of std::list<T>::iterator used in game.
  * Inline methods exactly correspond to in-game implementation. */
@@ -120,8 +119,7 @@ struct ListIterator : public ConstListIterator<T>
     }
 };
 
-static_assert(sizeof(ListIterator<int>) == 12,
-              "Size of ListIterator structure must be exactly 12 bytes");
+assert_size(ListIterator<int>, 12);
 
 /** Implementation of std::list<T> used in game.
  * Inline methods exactly correspond to in-game implementation. */
@@ -154,7 +152,7 @@ struct List
     }
 };
 
-static_assert(sizeof(List<int>) == 16, "Size of List structure must be exactly 16 bytes");
+assert_size(List<int>, 16);
 
 } // namespace game
 

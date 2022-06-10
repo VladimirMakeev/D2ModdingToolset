@@ -21,7 +21,7 @@
 #define MQTEXTURER2_H
 
 #include <cstdint>
-#include <wingdi.h>
+#include <windows.h>
 
 namespace game {
 
@@ -69,8 +69,8 @@ struct IMqTexturer2Vftable
                                                                TextureHandle* textureHandle,
                                                                IMqTexture* texture,
                                                                CMqPoint* size,
-                                                               std::uint32_t key,
-                                                               int type,
+                                                               std::uint32_t paletteKey,
+                                                               std::uint32_t hint,
                                                                std::uint16_t opacity);
     AddTextureCheckPalette addTextureCheckPalette;
 
@@ -82,7 +82,7 @@ struct IMqTexturer2Vftable
                                                    TextureHandle* textureHandle,
                                                    IMqTexture* texture,
                                                    const CMqPoint* size,
-                                                   int type,
+                                                   std::uint32_t hint,
                                                    std::uint16_t opacity);
     AddTexture addTexture;
 

@@ -20,6 +20,8 @@
 #ifndef FUNCTORDISPATCH1_H
 #define FUNCTORDISPATCH1_H
 
+#include "d2assert.h"
+
 namespace game {
 
 template <typename T>
@@ -39,8 +41,7 @@ struct CBFunctorDispatch1Vftable
     RunCallback runCallback;
 };
 
-static_assert(sizeof(CBFunctorDispatch1Vftable<void*>) == 1 * sizeof(void*),
-              "CBFunctorDispatch1 vftable must have exactly 1 method");
+assert_vftable_size(CBFunctorDispatch1Vftable<void*>, 1);
 
 template <typename T, typename U>
 struct CBFunctorDispatch1wRetVftable;

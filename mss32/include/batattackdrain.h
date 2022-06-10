@@ -36,8 +36,7 @@ struct CBatAttackDrain : public CBatAttackBase
     IAttack* attack;
 };
 
-static_assert(sizeof(CBatAttackDrain) == 20,
-              "Size of CBatAttackDrain structure must be exactly 20 bytes");
+assert_size(CBatAttackDrain, 20);
 
 namespace CBatAttackDrainApi {
 

@@ -65,8 +65,7 @@ struct CEditBoxInterfData
     CMqPoint bgndImagePos;
 };
 
-static_assert(sizeof(CEditBoxInterfData) == 100,
-              "Size of CEditBoxInterfData structure must be exactly 100 bytes");
+assert_size(CEditBoxInterfData, 100);
 
 /**
  * Edit box ui element.
@@ -77,8 +76,7 @@ struct CEditBoxInterf : public CInterface
     CEditBoxInterfData* data;
 };
 
-static_assert(sizeof(CEditBoxInterf) == 12,
-              "Size of CEditBoxInterf structure must be exactly 12 bytes");
+assert_size(CEditBoxInterf, 12);
 
 namespace CEditBoxInterfApi {
 

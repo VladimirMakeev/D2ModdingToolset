@@ -20,6 +20,8 @@
 #ifndef ISOSTILLBACKGROUND_H
 #define ISOSTILLBACKGROUND_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct IIsoStillBackgroundVftable;
@@ -30,8 +32,7 @@ struct IIsoStillBackground
     IIsoStillBackgroundVftable* vftable;
 };
 
-static_assert(sizeof(IIsoStillBackground) == 4,
-              "Size of IIsoStillBackground structure must be exactly 4 bytes");
+assert_size(IIsoStillBackground, 4);
 
 struct IIsoStillBackgroundVftable
 {
@@ -43,16 +44,14 @@ struct IIsoStillBackgroundVftable
     Draw draw;
 };
 
-static_assert(sizeof(IIsoStillBackgroundVftable) == 2 * sizeof(void*),
-              "IIsoStillBackground vftable must have exactly 2 methods");
+assert_vftable_size(IIsoStillBackgroundVftable, 2);
 
 struct CIsoStillBackground : public IIsoStillBackground
 {
     void*** imageData;
 };
 
-static_assert(sizeof(CIsoStillBackground) == 8,
-              "Size of CIsoStillBackground structure must be exactly 8 bytes");
+assert_size(CIsoStillBackground, 8);
 
 } // namespace game
 

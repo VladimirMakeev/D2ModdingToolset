@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2022 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,43 +17,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DRAGANDDROPINTERF_H
-#define DRAGANDDROPINTERF_H
+#ifndef INTERFBORDERDISPLAY_H
+#define INTERFBORDERDISPLAY_H
 
-#include "fullscreeninterf.h"
-#include "middropmanager.h"
+#include "d2assert.h"
 
 namespace game {
 
-struct CDialogInterf;
+struct IInterfBorderDisplayVftable;
+struct IMqRenderer2;
 
-struct CDragAndDropInterfData
+struct IInterfBorderDisplay
 {
-    char unknown[60];
-    CDialogInterf* dialogInterf;
-    char unknown2[8];
+    IInterfBorderDisplayVftable* vftable;
 };
 
-assert_size(CDragAndDropInterfData, 72);
-
-struct CDragAndDropInterf : public CFullScreenInterf
+struct IInterfBorderDisplayVftable
 {
-    IMidDropManager dropManager;
-    CDragAndDropInterfData* dragAndDropInterfData;
+    using Destructor = void(__thiscall*)(IInterfBorderDisplay* thisptr, char flags);
+    Destructor destructor;
+
+    using Draw = void(__thiscall*)(IInterfBorderDisplay* thisptr, IMqRenderer2* renderer);
+    Draw draw;
 };
 
-namespace CDragAndDropInterfApi {
-
-struct Api
-{
-    using GetDialog = CDialogInterf*(__thiscall*)(CDragAndDropInterf* thisptr);
-    GetDialog getDialog;
-};
-
-Api& get();
-
-} // namespace CDragAndDropInterfApi
+assert_vftable_size(IInterfBorderDisplayVftable, 2);
 
 } // namespace game
 
-#endif // DRAGANDDROPINTERF_H
+#endif // INTERFBORDERDISPLAY_H

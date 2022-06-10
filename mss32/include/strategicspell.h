@@ -55,18 +55,15 @@ struct TStrategicSpellData
     IdVector wards;
 };
 
-static_assert(sizeof(TStrategicSpellData) == 136,
-              "Size of TStrategicSpellData structure must be exactly 136 bytes");
+assert_size(TStrategicSpellData, 136);
 
 /** Holds information read from GSpells.dbf. */
 struct TStrategicSpell : public IMidObject
 {
-    CMidgardID spellId;
     TStrategicSpellData* data;
 };
 
-static_assert(sizeof(TStrategicSpell) == 12,
-              "Size of TStrategicSpell structure must be exactly 12 bytes");
+assert_size(TStrategicSpell, 12);
 
 } // namespace game
 

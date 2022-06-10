@@ -66,7 +66,7 @@ struct CMainView2
     CMqPoint dlgIsoTopLeft;
 };
 
-static_assert(sizeof(CMainView2) == 188, "Size of CMainView2 structure must be exactly 188 bytes");
+assert_size(CMainView2, 188);
 
 namespace CMainView2Api {
 

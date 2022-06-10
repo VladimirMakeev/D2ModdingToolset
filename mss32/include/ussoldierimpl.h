@@ -71,11 +71,8 @@ struct TUsSoldierImplData
     char padding2[3];
 };
 
-static_assert(sizeof(TUsSoldierImplData) == 204,
-              "Size of TUsSoldierImplData structure must be exactly 204 bytes");
-
-static_assert(offsetof(TUsSoldierImplData, sizeSmall) == 184,
-              "TUsSoldierImplData::sizeSmall offset must be 184 bytes");
+assert_size(TUsSoldierImplData, 204);
+assert_offset(TUsSoldierImplData, sizeSmall, 184);
 
 /** Base class for all unit types, holds data read from GUnits.dbf. */
 struct TUsSoldierImpl : public IUsSoldier

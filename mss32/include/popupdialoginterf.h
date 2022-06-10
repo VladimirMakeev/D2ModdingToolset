@@ -31,8 +31,7 @@ struct CPopupDialogInterf : public CInterfDialog
     CDialogInterf** dialog;
 };
 
-static_assert(offsetof(CPopupDialogInterf, dialog) == 12,
-              "CPopupDialogInterf::dialog offset must be 12 bytes");
+assert_offset(CPopupDialogInterf, dialog, 12);
 
 namespace CPopupDialogInterfApi {
 

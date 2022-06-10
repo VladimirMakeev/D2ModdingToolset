@@ -20,6 +20,8 @@
 #ifndef INTERFADDON_H
 #define INTERFADDON_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct IInterfAddOnVftable;
@@ -39,8 +41,7 @@ struct IInterfAddOnVftable
     void* method3;
 };
 
-static_assert(sizeof(IInterfAddOnVftable) == 4 * sizeof(void*),
-              "IInterfAddOn vftable must have exactly 4 methods");
+assert_vftable_size(IInterfAddOnVftable, 4);
 
 } // namespace game
 

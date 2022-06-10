@@ -43,8 +43,7 @@ struct CMqPresentationManager
     CMqPresentationManagerData* data;
 };
 
-static_assert(sizeof(CMqPresentationManager) == 4,
-              "Size of CMqPresentationManager structure must be exactly 4 bytes");
+assert_size(CMqPresentationManager, 4);
 
 struct CMqPresentationManagerData
 {
@@ -62,8 +61,7 @@ struct CMqPresentationManagerData
     CLogFile* logFile;
 };
 
-static_assert(sizeof(CMqPresentationManagerData) == 76,
-              "Size of CMqPresentationManagerData structure must be exactly 76 bytes");
+assert_size(CMqPresentationManagerData, 76);
 
 struct CMqPresentationManager::IPresentationVftable
 {
@@ -76,8 +74,7 @@ struct CMqPresentationManager::IPresentationVftable
     Draw draw;
 };
 
-static_assert(sizeof(CMqPresentationManager::IPresentationVftable) == 2 * sizeof(void*),
-              "CMqPresentationManager::IPresentation vftable must have exactly 2 methods");
+assert_vftable_size(CMqPresentationManager::IPresentationVftable, 2);
 
 } // namespace game
 

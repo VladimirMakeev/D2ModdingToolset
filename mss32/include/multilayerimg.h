@@ -37,8 +37,7 @@ struct MultiLayerImgInfo
     char padding[2];
 };
 
-static_assert(sizeof(MultiLayerImgInfo) == 20,
-              "Size of MultiLayerImgInfo structure must be exactly 20 bytes");
+assert_size(MultiLayerImgInfo, 20);
 
 struct CMultiLayerImgData
 {
@@ -47,8 +46,7 @@ struct CMultiLayerImgData
     std::uint32_t imagesCount;
 };
 
-static_assert(sizeof(CMultiLayerImgData) == 28,
-              "Size of CMultiLayerImgData structure must be exactly 28 bytes");
+assert_size(CMultiLayerImgData, 28);
 
 /** Used to render several images on top of each other. */
 struct CMultiLayerImg : public IMqImage2
@@ -56,8 +54,7 @@ struct CMultiLayerImg : public IMqImage2
     CMultiLayerImgData* data;
 };
 
-static_assert(sizeof(CMultiLayerImg) == 8,
-              "Size of CMultiLayerImg structure must be exactly 8 bytes");
+assert_size(CMultiLayerImg, 8);
 
 namespace CMultiLayerImgApi {
 

@@ -20,6 +20,8 @@
 #ifndef CANSELECT_H
 #define CANSELECT_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct CMqPoint;
@@ -39,8 +41,7 @@ struct ICanSelectVftable
     CanSelect canSelect;
 };
 
-static_assert(sizeof(ICanSelectVftable) == 2 * sizeof(void*),
-              "ICanSelect vftable must have exactly 2 methods");
+assert_vftable_size(ICanSelectVftable, 2);
 
 } // namespace game
 

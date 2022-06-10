@@ -33,19 +33,16 @@ namespace game {
 
 using BuildListDataNode = SetNode<CMidgardID>;
 
-static_assert(sizeof(BuildListDataNode) == 20,
-              "Size of BuildListDataNode structure must be exactly 20 bytes");
+assert_size(BuildListDataNode, 20);
 
 using BuildListData = Set<CMidgardID>;
 
-static_assert(sizeof(BuildListData) == 28,
-              "Size of BuildListData structure must be exactly 28 bytes");
+assert_size(BuildListData, 28);
 
 /** Name and meaning were assumed. */
 using BuildListIterator = SetIterator<CMidgardID>;
 
-static_assert(sizeof(BuildListIterator) == 12,
-              "Size of BuildListIterator structure must be exactly 12 bytes");
+assert_size(BuildListIterator, 12);
 
 /** Holds information read from GBuiList.dbf. */
 struct TLordTypeBuildList
@@ -54,8 +51,7 @@ struct TLordTypeBuildList
     BuildListData data;
 };
 
-static_assert(sizeof(TLordTypeBuildList) == 32,
-              "Size of TLordTypeBuildList structure must be exactly 32 bytes");
+assert_size(TLordTypeBuildList, 32);
 
 struct LeaderUpgData
 {
@@ -67,13 +63,9 @@ struct LeaderUpgData
     char unknown[8];
 };
 
-static_assert(sizeof(LeaderUpgData) == 36,
-              "Size of LeaderUpgData structure must be exactly 36 bytes");
-
-static_assert(offsetof(LeaderUpgData, name) == 12, "LeaderUpgData::name offset must be 12 bytes");
-
-static_assert(offsetof(LeaderUpgData, description) == 20,
-              "LeaderUpgData::description offset must be 20 bytes");
+assert_size(LeaderUpgData, 36);
+assert_offset(LeaderUpgData, name, 12);
+assert_offset(LeaderUpgData, description, 20);
 
 /** Holds information read from GLeaUpg.dbf. */
 struct CLordLeaderUpg
@@ -83,8 +75,7 @@ struct CLordLeaderUpg
     List<LeaderUpgData> upgrades;
 };
 
-static_assert(sizeof(CLordLeaderUpg) == 24,
-              "Size of CLordLeaderUpg structure must be exactly 24 bytes");
+assert_size(CLordLeaderUpg, 24);
 
 struct TLordTypeData
 {
@@ -99,16 +90,10 @@ struct TLordTypeData
     LLordCategory lordCategory;
 };
 
-static_assert(sizeof(TLordTypeData) == 56,
-              "Size of TLordTypeData structure must be exactly 56 bytes");
-
-static_assert(offsetof(TLordTypeData, name) == 4, "TLordTypeData::name offset must be 4 bytes");
-
-static_assert(offsetof(TLordTypeData, description) == 12,
-              "TLordTypeData::description offset must be 12 bytes");
-
-static_assert(offsetof(TLordTypeData, buildList) == 32,
-              "TLordTypeData::buildList offset must be 32 bytes");
+assert_size(TLordTypeData, 56);
+assert_offset(TLordTypeData, name, 4);
+assert_offset(TLordTypeData, description, 12);
+assert_offset(TLordTypeData, buildList, 32);
 
 /** Holds information read from GLord.dbf. */
 struct TLordType : public IMidObject
@@ -116,7 +101,7 @@ struct TLordType : public IMidObject
     TLordTypeData* data;
 };
 
-static_assert(sizeof(TLordType) == 12, "Size of TLordType structure must be exactly 12 bytes");
+assert_size(TLordType, 12);
 
 } // namespace game
 

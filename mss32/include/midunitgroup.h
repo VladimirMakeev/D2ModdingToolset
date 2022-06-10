@@ -83,8 +83,7 @@ struct CMidUnitGroupVftable
     void* methods2[2];
 };
 
-static_assert(sizeof(CMidUnitGroupVftable) == 10 * sizeof(void*),
-              "CMidUnitGroup vftable must have exactly 10 methods");
+assert_vftable_size(CMidUnitGroupVftable, 10);
 
 namespace CMidUnitGroupApi {
 

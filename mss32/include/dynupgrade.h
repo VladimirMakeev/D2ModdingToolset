@@ -47,10 +47,8 @@ struct CDynUpgrade
     int heal;
 };
 
-static_assert(sizeof(CDynUpgrade) == 96, "Size of CDynUpgrade structure must be exactly 96 bytes");
-
-static_assert(offsetof(CDynUpgrade, xpKilled) == 64,
-              "CDynUpgrade::xpKilled offset must be 64 bytes");
+assert_size(CDynUpgrade, 96);
+assert_offset(CDynUpgrade, xpKilled, 64);
 
 } // namespace game
 

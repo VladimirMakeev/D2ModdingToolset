@@ -32,8 +32,7 @@ struct CapitalRaceRecord
     CapitalDatList* list;
 };
 
-static_assert(sizeof(CapitalRaceRecord) == 16,
-              "Size of CapitalRaceRecord structure must be exactly 16 bytes");
+assert_size(CapitalRaceRecord, 16);
 
 using CapitalRaceSet = Set<CapitalRaceRecord>;
 

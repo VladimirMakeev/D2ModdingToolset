@@ -581,6 +581,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\custommodifier.h" />
     <ClInclude Include="include\custommodifierfunctions.h" />
     <ClInclude Include="include\custommodifiers.h" />
+    <ClInclude Include="include\d2assert.h" />
     <ClInclude Include="include\d2color.h" />
     <ClInclude Include="include\d2map.h" />
     <ClInclude Include="include\d2tree.h" />
@@ -588,6 +589,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\enclayoutunithooks.h" />
     <ClInclude Include="include\enclayoutunit.h" />
     <ClInclude Include="include\imageptrvector.h" />
+    <ClInclude Include="include\interfborderdisplay.h" />
     <ClInclude Include="include\isoborder.h" />
     <ClInclude Include="include\isoenginegroundhooks.h" />
     <ClInclude Include="include\isoground2.h" />
