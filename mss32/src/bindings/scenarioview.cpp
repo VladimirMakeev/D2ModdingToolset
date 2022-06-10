@@ -63,7 +63,9 @@ void ScenarioView::bind(sol::state& lua)
                                           &ScenarioView::getRuinByPoint,
                                           &ScenarioView::getRuinByUnit);
     scenario["getPlayer"] = sol::overload<>(&ScenarioView::getPlayer, &ScenarioView::getPlayerById,
-                                            &ScenarioView::getPlayerByStack);
+                                            &ScenarioView::getPlayerByStack,
+                                            &ScenarioView::getPlayerByFort,
+                                            &ScenarioView::getPlayerByRuin);
     scenario["day"] = sol::property(&ScenarioView::getCurrentDay);
     scenario["size"] = sol::property(&ScenarioView::getSize);
 }
@@ -328,7 +330,13 @@ std::optional<PlayerView> ScenarioView::getPlayer(const std::string& id) const
 
 std::optional<PlayerView> ScenarioView::getPlayerById(const IdView& id) const
 {
+    using namespace game;
+
     if (!objectMap) {
+        return std::nullopt;
+    }
+
+    if (CMidgardIDApi::get().getType(&id.id) != IdType::Player) {
         return std::nullopt;
     }
 
@@ -342,10 +350,36 @@ std::optional<PlayerView> ScenarioView::getPlayerByStack(const StackView& stack)
         return std::nullopt;
     }
 
-    auto playerId = stack.getOwnerId();
-    auto player = hooks::getPlayer(objectMap, &playerId.id);
-    if (!player)
+    auto playerId = stack.getOwnerId().id;
+    auto player = hooks::getPlayer(objectMap, &playerId);
+
+    return PlayerView{player};
+}
+
+std::optional<PlayerView> ScenarioView::getPlayerByFort(const FortView& fort) const
+{
+    if (!objectMap) {
         return std::nullopt;
+    }
+
+    auto playerId = fort.getOwnerId().id;
+    auto player = hooks::getPlayer(objectMap, &playerId);
+
+    return PlayerView{player};
+}
+
+std::optional<PlayerView> ScenarioView::getPlayerByRuin(const RuinView& ruin) const
+{
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    auto playerId = ruin.getLooterId().id;
+    if (playerId == game::emptyId) {
+        return std::nullopt;
+    }
+
+    auto player = hooks::getPlayer(objectMap, &playerId);
 
     return {PlayerView{player}};
 }

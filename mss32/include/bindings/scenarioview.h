@@ -110,6 +110,10 @@ public:
     std::optional<PlayerView> getPlayerById(const IdView& id) const;
     /** Searches for player that controls specified stack. */
     std::optional<PlayerView> getPlayerByStack(const StackView& stack) const;
+    /** Searches for player that controls specified fort. */
+    std::optional<PlayerView> getPlayerByFort(const FortView& fort) const;
+    /** Searches for player that looted specified ruin. */
+    std::optional<PlayerView> getPlayerByRuin(const RuinView& ruin) const;
 
     int getCurrentDay() const;
     int getSize() const;
