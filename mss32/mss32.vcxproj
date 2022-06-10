@@ -189,6 +189,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\bindings\attackview.cpp" />
     <ClCompile Include="src\bindings\currencyview.cpp" />
     <ClCompile Include="src\bindings\dynupgradeview.cpp" />
+    <ClCompile Include="src\bindings\fortview.cpp" />
     <ClCompile Include="src\bindings\groupview.cpp" />
     <ClCompile Include="src\bindings\idview.cpp" />
     <ClCompile Include="src\bindings\itembaseview.cpp" />
@@ -539,6 +540,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\bindings\attackview.h" />
     <ClInclude Include="include\bindings\currencyview.h" />
     <ClInclude Include="include\bindings\dynupgradeview.h" />
+    <ClInclude Include="include\bindings\fortview.h" />
     <ClInclude Include="include\bindings\groupview.h" />
     <ClInclude Include="include\bindings\idview.h" />
     <ClInclude Include="include\bindings\itembaseview.h" />
