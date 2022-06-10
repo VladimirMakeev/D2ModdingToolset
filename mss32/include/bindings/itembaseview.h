@@ -24,7 +24,6 @@
 #include "idview.h"
 #include "midgardid.h"
 #include <optional>
-#include <string>
 
 namespace sol {
 class state;
@@ -48,8 +47,6 @@ public:
 
     IdView getId() const;
     int getCategory() const;
-    std::string getName() const;
-    std::string getDescription() const;
     CurrencyView getValue() const;
     std::optional<UnitImplView> getUnitImpl() const;
 

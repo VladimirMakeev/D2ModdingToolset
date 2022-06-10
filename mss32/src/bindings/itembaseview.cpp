@@ -38,8 +38,6 @@ void ItemBaseView::bind(sol::state& lua)
     auto view = lua.new_usertype<ItemBaseView>("ItemBaseView");
     view["id"] = sol::property(&getId);
     view["type"] = sol::property(&getCategory);
-    view["name"] = sol::property(&getName);
-    view["description"] = sol::property(&getDescription);
     view["value"] = sol::property(&getValue);
     view["unitImpl"] = sol::property(&getUnitImpl);
 }
@@ -53,16 +51,6 @@ int ItemBaseView::getCategory() const
 {
     auto category = item->vftable->getCategory(item);
     return category ? (int)category->id : game::emptyCategoryId;
-}
-
-std::string ItemBaseView::getName() const
-{
-    return item->vftable->getName(item);
-}
-
-std::string ItemBaseView::getDescription() const
-{
-    return item->vftable->getDescription(item);
 }
 
 CurrencyView ItemBaseView::getValue() const
