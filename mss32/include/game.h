@@ -205,6 +205,12 @@ using GetStackFortRuinId = const CMidgardID*(__stdcall*)(const CMidgardID* unitI
 using GetStackIdByUnitId = const CMidgardID*(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                          const CMidgardID* unitId);
 
+using GetFortIdByUnitId = const CMidgardID*(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                        const CMidgardID* unitId);
+
+using GetRuinIdByUnitId = const CMidgardID*(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                        const CMidgardID* unitId);
+
 /** Deletes all building in capital of specified player. */
 using DeletePlayerBuildings = int(__stdcall*)(IMidgardObjectMap* objectMap,
                                               const CMidPlayer* player);
@@ -634,6 +640,8 @@ struct Functions
     GetStackFortRuinGroup getStackFortRuinGroup;
     GetStackFortRuinId getStackFortRuinId;
     GetStackIdByUnitId getStackIdByUnitId;
+    GetFortIdByUnitId getFortIdByUnitId;
+    GetRuinIdByUnitId getRuinIdByUnitId;
     DeletePlayerBuildings deletePlayerBuildings;
     GetInterfaceText getInterfaceText;
     ComputePlayerDailyIncome computePlayerDailyIncome;
