@@ -30,6 +30,8 @@ struct CMidPlayer;
 struct CMidScenVariables;
 struct CMidgardPlan;
 struct CMidStack;
+struct CMidRuin;
+struct CFortification;
 } // namespace game
 
 namespace hooks {
@@ -77,6 +79,25 @@ game::CMidStack* getStack(const game::IMidgardObjectMap* objectMap,
 
 const game::CMidStack* getStackByUnitId(const game::IMidgardObjectMap* objectMap,
                                         const game::CMidgardID* unitId);
+
+game::CFortification* getFort(const game::IMidgardObjectMap* objectMap,
+                              const game::CMidgardID* fortId);
+
+game::CFortification* getFort(const game::IMidgardObjectMap* objectMap,
+                              const game::BattleMsgData* battleMsgData,
+                              const game::CMidgardID* unitId);
+
+const game::CFortification* getFortByUnitId(const game::IMidgardObjectMap* objectMap,
+                                            const game::CMidgardID* unitId);
+
+game::CMidRuin* getRuin(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* ruinId);
+
+game::CMidRuin* getRuin(const game::IMidgardObjectMap* objectMap,
+                        const game::BattleMsgData* battleMsgData,
+                        const game::CMidgardID* unitId);
+
+const game::CMidRuin* getRuinByUnitId(const game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* unitId);
 
 } // namespace hooks
 

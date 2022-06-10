@@ -239,17 +239,74 @@ const game::CMidStack* getStackByUnitId(const game::IMidgardObjectMap* objectMap
 {
     using namespace game;
 
-    const auto& fn = gameFunctions();
-    const auto& rtti = RttiApi::rtti();
-    const auto dynamicCast = RttiApi::get().dynamicCast;
+    auto stackId = gameFunctions().getStackIdByUnitId(objectMap, unitId);
 
-    auto stackId = fn.getStackIdByUnitId(objectMap, unitId);
-    if (!stackId)
-        return nullptr;
+    return stackId ? getStack(objectMap, stackId) : nullptr;
+}
 
-    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, stackId);
-    return (const CMidStack*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType, rtti.CMidStackType,
-                                         0);
+game::CFortification* getFort(const game::IMidgardObjectMap* objectMap,
+                              const game::CMidgardID* fortId)
+{
+    using namespace game;
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, fortId);
+    return static_cast<CFortification*>(obj);
+}
+
+game::CFortification* getFort(const game::IMidgardObjectMap* objectMap,
+                              const game::BattleMsgData* battleMsgData,
+                              const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+    CMidgardID groupId = battle.isUnitAttacker(battleMsgData, unitId)
+                             ? battleMsgData->attackerGroupId
+                             : battleMsgData->defenderGroupId;
+
+    return getFort(objectMap, &groupId);
+}
+
+const game::CFortification* getFortByUnitId(const game::IMidgardObjectMap* objectMap,
+                                            const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    auto fortId = gameFunctions().getFortIdByUnitId(objectMap, unitId);
+
+    return fortId ? getFort(objectMap, fortId) : nullptr;
+}
+
+game::CMidRuin* getRuin(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* ruinId)
+{
+    using namespace game;
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, ruinId);
+    return static_cast<CMidRuin*>(obj);
+}
+
+game::CMidRuin* getRuin(const game::IMidgardObjectMap* objectMap,
+                        const game::BattleMsgData* battleMsgData,
+                        const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+    CMidgardID groupId = battle.isUnitAttacker(battleMsgData, unitId)
+                             ? battleMsgData->attackerGroupId
+                             : battleMsgData->defenderGroupId;
+
+    return getRuin(objectMap, &groupId);
+}
+
+const game::CMidRuin* getRuinByUnitId(const game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    auto ruinId = gameFunctions().getRuinIdByUnitId(objectMap, unitId);
+
+    return ruinId ? getRuin(objectMap, ruinId) : nullptr;
 }
 
 } // namespace hooks
