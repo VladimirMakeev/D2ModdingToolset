@@ -54,7 +54,13 @@ void IdView::bind(sol::state& lua)
         "Id",
         sol::constructors<IdView(const char*), IdView(const std::string&),
                           IdView(const game::CMidgardID*), IdView(const game::CMidgardID&)>());
+    id["value"] = &IdView::getValue;
     id["emptyId"] = IdView::getEmptyId;
+}
+
+int IdView::getValue() const
+{
+    return id.value;
 }
 
 IdView IdView::getEmptyId()

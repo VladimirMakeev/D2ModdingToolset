@@ -54,6 +54,8 @@ struct IdView
 
     static void bind(sol::state& lua);
 
+    int getValue() const; // For Lua hash table
+
     static IdView getEmptyId();
 
     game::CMidgardID id;
