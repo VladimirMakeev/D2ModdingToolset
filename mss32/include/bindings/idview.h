@@ -54,7 +54,9 @@ struct IdView
 
     static void bind(sol::state& lua);
 
-    int getValue() const; // For Lua hash table
+    // For Lua hash table
+    int getValue() const;
+    int getTypeIndex() const;
 
     static IdView getEmptyId();
 

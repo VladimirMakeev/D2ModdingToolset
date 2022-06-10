@@ -148,8 +148,11 @@ Id.emptyId()
 -- Converts Id to string
 tostring(id)
 -- Returns integer representation of id.
--- Can be used as Lua table key for best performance
+-- Can be used as Lua table key for best performance.
 id.value
+-- Returns identified object index among the same type of scenario objects (units, stacks, items, etc.).
+-- Can be used as Lua table key for best performance.
+id.typeIndex
 ```
 
 #### Modifier
