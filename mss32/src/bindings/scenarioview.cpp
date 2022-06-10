@@ -19,6 +19,7 @@
 
 #include "scenarioview.h"
 #include "dynamiccast.h"
+#include "fortview.h"
 #include "gameutils.h"
 #include "idview.h"
 #include "locationview.h"
@@ -52,6 +53,10 @@ void ScenarioView::bind(sol::state& lua)
                                            &ScenarioView::getStackByCoordinates,
                                            &ScenarioView::getStackByPoint,
                                            &ScenarioView::getStackByUnit);
+    scenario["getFort"] = sol::overload<>(&ScenarioView::getFort, &ScenarioView::getFortById,
+                                          &ScenarioView::getFortByCoordinates,
+                                          &ScenarioView::getFortByPoint,
+                                          &ScenarioView::getFortByUnit);
     scenario["getPlayer"] = sol::overload<>(&ScenarioView::getPlayer, &ScenarioView::getPlayerById,
                                             &ScenarioView::getPlayerByStack);
     scenario["day"] = sol::property(&ScenarioView::getCurrentDay);
@@ -199,6 +204,61 @@ std::optional<StackView> ScenarioView::getStackByUnit(const UnitView& unit) cons
     }
 
     return {StackView{stack, objectMap}};
+}
+
+std::optional<FortView> ScenarioView::getFort(const std::string& id) const
+{
+    return getFortById(IdView{id});
+}
+
+std::optional<FortView> ScenarioView::getFortById(const IdView& id) const
+{
+    using namespace game;
+
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    if (CMidgardIDApi::get().getType(&id.id) != IdType::Fortification) {
+        return std::nullopt;
+    }
+
+    auto fort = hooks::getFort(objectMap, &id.id);
+    if (!fort) {
+        return std::nullopt;
+    }
+
+    return {FortView{fort, objectMap}};
+}
+
+std::optional<FortView> ScenarioView::getFortByCoordinates(int x, int y) const
+{
+    auto fortId = getObjectId(x, y, game::IdType::Fortification);
+    if (!fortId) {
+        return std::nullopt;
+    }
+
+    return getFortById(IdView{fortId});
+}
+
+std::optional<FortView> ScenarioView::getFortByPoint(const Point& p) const
+{
+    return getFortByCoordinates(p.x, p.y);
+}
+
+std::optional<FortView> ScenarioView::getFortByUnit(const UnitView& unit) const
+{
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    auto unitId = unit.getId();
+    auto fort = hooks::getFortByUnitId(objectMap, &unitId.id);
+    if (!fort) {
+        return std::nullopt;
+    }
+
+    return {FortView{fort, objectMap}};
 }
 
 std::optional<PlayerView> ScenarioView::getPlayer(const std::string& id) const
