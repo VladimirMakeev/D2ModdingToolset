@@ -1061,6 +1061,9 @@
     <ClCompile Include="src\bindings\fortview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\ruinview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2672,6 +2675,9 @@
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\fortview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\ruinview.h">
       <Filter>bindings</Filter>
     </ClInclude>
   </ItemGroup>

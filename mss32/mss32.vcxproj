@@ -198,6 +198,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\bindings\modifierview.cpp" />
     <ClCompile Include="src\bindings\playerview.cpp" />
     <ClCompile Include="src\bindings\point.cpp" />
+    <ClCompile Include="src\bindings\ruinview.cpp" />
     <ClCompile Include="src\bindings\scenariovariableview.cpp" />
     <ClCompile Include="src\bindings\scenarioview.cpp" />
     <ClCompile Include="src\bindings\scenvariablesview.cpp" />
@@ -549,6 +550,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\bindings\modifierview.h" />
     <ClInclude Include="include\bindings\playerview.h" />
     <ClInclude Include="include\bindings\point.h" />
+    <ClInclude Include="include\bindings\ruinview.h" />
     <ClInclude Include="include\bindings\scenariovariableview.h" />
     <ClInclude Include="include\bindings\scenarioview.h" />
     <ClInclude Include="include\bindings\scenvariablesview.h" />
