@@ -22,6 +22,7 @@
 #include "categoryids.h"
 #include "currencyview.h"
 #include "dynupgradeview.h"
+#include "fortview.h"
 #include "gameutils.h"
 #include "groupview.h"
 #include "idview.h"
@@ -33,6 +34,7 @@
 #include "modifierview.h"
 #include "playerview.h"
 #include "point.h"
+#include "ruinview.h"
 #include "scenariovariableview.h"
 #include "scenarioview.h"
 #include "scenvariablesview.h"
@@ -242,6 +244,8 @@ static void bindApi(sol::state& lua)
     bindings::ScenarioVariableView::bind(lua);
     bindings::TileView::bind(lua);
     bindings::StackView::bind(lua);
+    bindings::FortView::bind(lua);
+    bindings::RuinView::bind(lua);
     bindings::GroupView::bind(lua);
     bindings::AttackView::bind(lua);
     bindings::CurrencyView::bind(lua);
