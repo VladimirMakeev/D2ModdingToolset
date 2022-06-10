@@ -1,4 +1,9 @@
---[[ Text ids for Disciples 2 Rise of the Elves v3.01 mss32 proxy dll ]]--
+--[[
+Text ids for Disciples 2 Rise of the Elves v3.01 mss32 proxy dll
+
+Refer to the documentation to find exact meaning of each text id
+https://github.com/VladimirMakeev/D2ModdingToolset/blob/master/README.md
+--]]
 
 textids = {
 	-- Interface text ids from either TApp.dbf or TAppEdit.dbf
