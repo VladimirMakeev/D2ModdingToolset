@@ -147,6 +147,9 @@ Id.new('S143KC0001')
 Id.emptyId()
 -- Converts Id to string
 tostring(id)
+-- Returns integer representation of id.
+-- Can be used as Lua table key for best performance
+id.value
 ```
 
 #### Modifier
@@ -207,16 +210,6 @@ unit:hasAbility(Ability.TalismanUse)
 Returns true if leader has movement bonus on specified [ground](luaApi.md#ground) (or false if unit is not a leader).
 ```lua
 unit:hasMoveBonus(Ground.Water)
-```
-##### group
-Returns unit's [group](luaApi.md#group-1).
-```lua
-unit.group
-```
-##### stack
-Returns unit's [stack](luaApi.md#stack-1).
-```lua
-unit.stack
 ```
 ##### modifiers
 Returns array of applied [modifiers](luaApi.md#modifier).
@@ -344,6 +337,12 @@ Returns group as array of 6 [unit slots](luaApi.md#unit-slot).
 ```lua
 group.slots
 ```
+##### hasUnit
+Returns true if group has specified [unit](luaApi.md#unit-1) or unit [id](luaApi.md#id).
+```lua
+group:hasUnit(unit)
+group:hasUnit(unitId)
+```
 
 ---
 
@@ -385,7 +384,7 @@ player.alwaysAi
 ---
 
 #### Stack
-Represents [group](luaApi.md#group) of 6 [units](luaApi.md#unit-slot) on a map. One of the units is a leader.
+Represents [group](luaApi.md#group) of 6 [unit slots](luaApi.md#unit-slot) on a map. One of the units is a leader.
 
 Methods:
 ##### id
@@ -402,11 +401,6 @@ stack.group
 Returns stack leader [unit](luaApi.md#unit-1).
 ```lua
 stack.leader
-```
-##### player
-Returns stack [player](luaApi.md#player).
-```lua
-stack.player
 ```
 ##### subrace
 Returns stack [subrace](luaApi.md#subrace).
@@ -430,6 +424,61 @@ stack.movement
 stack.inside
 --- Returns true if stack is invisible.
 stack.invisible
+```
+
+---
+
+#### Fort
+Represents Capital or City on a map. Fort contains a garrison [group](luaApi.md#group) of 6 [unit slots](luaApi.md#unit-slot).
+Note that the garrison group is different to a group of visiting [stack](luaApi.md#stack).
+
+Methods:
+##### id
+Returns fort [id](luaApi.md#id). The value is unique for every fort on scenario map.
+```lua
+fort.id
+```
+##### group
+Returns fort units as a [group](luaApi.md#group).
+```lua
+fort.group
+```
+##### subrace
+Returns fort [subrace](luaApi.md#subrace).
+```lua
+fort.subrace
+```
+##### inventoryItems
+Returns array of inventory [items](luaApi.md#item-1).
+```lua
+fort.inventoryItems
+```
+
+---
+
+#### Ruin
+Represents Ruin on a map. Ruin contains a garrison [group](luaApi.md#group) of 6 [unit slots](luaApi.md#unit-slot).
+
+Methods:
+##### id
+Returns ruin [id](luaApi.md#id). The value is unique for every ruin on scenario map.
+```lua
+ruin.id
+```
+##### group
+Returns ruin units as a [group](luaApi.md#group).
+```lua
+ruin.group
+```
+##### item
+Returns [item](luaApi.md#item-1) reward for looting the ruin.
+```lua
+ruin.item
+```
+##### cash
+Returns [cash](luaApi.md#currency) reward for looting the ruin.
+```lua
+ruin.cash
 ```
 
 ---
@@ -541,10 +590,70 @@ if (tile == nil) then
 end
 ```
 ##### getStack
-Searches for [Stack](luaApi.md#stack) by id string, [Id](luaApi.md#id), pair of coordinates or [Point](luaApi.md#point), returns nil if not found.
+Searches for [stack](luaApi.md#stack) by:
+- id string
+- [id](luaApi.md#id)
+- pair of coordinates
+- [point](luaApi.md#point)
+- [unit](luaApi.md#unit-1) of its group
+
+Returns nil if not found.
 ```lua
 local stack = scenario:getStack(10, 15)
 if (stack == nil) then
+    return
+end
+```
+##### getFort
+Searches for [fort](luaApi.md#fort) by:
+- id string
+- [id](luaApi.md#id)
+- pair of coordinates
+- [point](luaApi.md#point)
+- [unit](luaApi.md#unit-1) of its group
+
+Returns nil if not found.
+```lua
+local fort = scenario:getFort(10, 15)
+if (fort == nil) then
+    return
+end
+```
+##### getRuin
+Searches for [ruin](luaApi.md#ruin) by:
+- id string
+- [id](luaApi.md#id)
+- pair of coordinates
+- [point](luaApi.md#point)
+- [unit](luaApi.md#unit-1) of its group
+
+Returns nil if not found.
+```lua
+local ruin = scenario:getRuin(10, 15)
+if (ruin == nil) then
+    return
+end
+```
+##### getPlayer
+Searches for [player](luaApi.md#player) by:
+- id string
+- [id](luaApi.md#id)
+- controlled [stack](luaApi.md#stack)
+- controlled [fort](luaApi.md#fort)
+- looted [ruin](luaApi.md#ruin)
+
+Returns nil if not found.
+```lua
+local player = scenario:getPlayer(stack)
+if (player == nil) then
+    return
+end
+```
+##### getUnit
+Searches for [unit](luaApi.md#unit-1) by id string or [id](luaApi.md#id), returns nil if not found.
+```lua
+local unit = scenario:getUnit('S143UU0001')
+if (unit == nil) then
     return
 end
 ```
@@ -671,16 +780,6 @@ base.id
 Returns item [type](luaApi.md#item).
 ```lua
 base.type
-```
-##### name
-Returns item name.
-```lua
-base.name
-```
-##### description
-Returns item description.
-```lua
-base.description
 ```
 ##### value
 Returns item [value](luaApi.md#currency).
