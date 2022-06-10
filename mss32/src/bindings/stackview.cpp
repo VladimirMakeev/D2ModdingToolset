@@ -85,7 +85,7 @@ int StackView::getSubrace() const
     auto obj{objectMap->vftable->findScenarioObjectById(objectMap, &stack->subraceId)};
     auto subrace{static_cast<const game::CMidSubRace*>(obj)};
 
-    return subrace ? static_cast<int>(subrace->subraceCategory.id) : 0;
+    return subrace ? static_cast<int>(subrace->subraceCategory.id) : game::emptyCategoryId;
 }
 
 bool StackView::isInside() const
