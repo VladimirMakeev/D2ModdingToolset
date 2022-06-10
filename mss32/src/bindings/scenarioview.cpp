@@ -66,6 +66,7 @@ void ScenarioView::bind(sol::state& lua)
                                             &ScenarioView::getPlayerByStack,
                                             &ScenarioView::getPlayerByFort,
                                             &ScenarioView::getPlayerByRuin);
+    scenario["getUnit"] = sol::overload<>(&ScenarioView::getUnit, &ScenarioView::getUnitById);
     scenario["day"] = sol::property(&ScenarioView::getCurrentDay);
     scenario["size"] = sol::property(&ScenarioView::getSize);
 }
@@ -382,6 +383,31 @@ std::optional<PlayerView> ScenarioView::getPlayerByRuin(const RuinView& ruin) co
     auto player = hooks::getPlayer(objectMap, &playerId);
 
     return {PlayerView{player}};
+}
+
+std::optional<UnitView> ScenarioView::getUnit(const std::string& id) const
+{
+    return getUnitById(IdView{id});
+}
+
+std::optional<UnitView> ScenarioView::getUnitById(const IdView& id) const
+{
+    using namespace game;
+
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    if (CMidgardIDApi::get().getType(&id.id) != IdType::Unit) {
+        return std::nullopt;
+    }
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, &id.id);
+    if (!obj) {
+        return std::nullopt;
+    }
+
+    return {UnitView{(const CMidUnit*)obj}};
 }
 
 int ScenarioView::getCurrentDay() const

@@ -115,6 +115,11 @@ public:
     /** Searches for player that looted specified ruin. */
     std::optional<PlayerView> getPlayerByRuin(const RuinView& ruin) const;
 
+    /** Searches for unit by id string. */
+    std::optional<UnitView> getUnit(const std::string& id) const;
+    /** Searches for unit by id. */
+    std::optional<UnitView> getUnitById(const IdView& id) const;
+
     int getCurrentDay() const;
     int getSize() const;
 
