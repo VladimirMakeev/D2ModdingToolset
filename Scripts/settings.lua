@@ -1,4 +1,14 @@
---[[ Settings for Disciples 2 Rise of the Elves v3.01 mss32 proxy dll ]]--
+--[[
+Settings for Disciples 2 Rise of the Elves v3.01 mss32 proxy dll
+
+Most settings correspond to features. Refer to the documentation for more information:
+https://github.com/VladimirMakeev/D2ModdingToolset#features
+
+If you got this file from the GitHub repository, settings have their default values specified.
+If you omit any setting it will have its default value.
+Most settings have their default values correspond to the vanilla game,
+except for quality-of-life like showBanners / showResources and bug fixes like fixEffectiveHpFormula.
+--]]
 
 settings = {
 	-- Show troops banners
