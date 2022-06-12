@@ -704,8 +704,8 @@ void __fastcall isoEngineGroundRenderHooked(game::CIsoEngineGround* thisptr,
             }
         }
 
-        renderer->vftable->method4(renderer, &textureData->textureHandle, &start, &offset, size,
-                                   area);
+        renderer->vftable->drawTexture(renderer, &textureData->textureHandle, &start, &offset, size,
+                                       area);
     }
 }
 
