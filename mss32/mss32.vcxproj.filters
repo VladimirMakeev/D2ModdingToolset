@@ -1040,6 +1040,9 @@
     <ClCompile Include="src\midcondvarcmp.cpp">
       <Filter>features\custom event conditions</Filter>
     </ClCompile>
+    <ClCompile Include="src\editorglobaldata.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2636,6 +2639,9 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\interfborderdisplay.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\editorglobaldata.h">
       <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
