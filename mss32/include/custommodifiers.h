@@ -22,7 +22,7 @@
 
 #include "midgardid.h"
 #include "modifgroup.h"
-#include <set>
+#include <list>
 #include <unordered_map>
 
 namespace hooks {
