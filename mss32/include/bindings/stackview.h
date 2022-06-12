@@ -20,10 +20,12 @@
 #ifndef STACKVIEW_H
 #define STACKVIEW_H
 
-#include "groupview.h"
-#include "idview.h"
 #include <optional>
 #include <vector>
+
+namespace sol {
+class state;
+}
 
 namespace game {
 struct CMidStack;
@@ -34,6 +36,8 @@ enum EquippedItemIdx;
 
 namespace bindings {
 
+struct IdView;
+class GroupView;
 class UnitView;
 class ItemView;
 

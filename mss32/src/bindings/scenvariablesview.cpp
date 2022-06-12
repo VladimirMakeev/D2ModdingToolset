@@ -19,7 +19,6 @@
 
 #include "scenvariablesview.h"
 #include "log.h"
-#include "midscenvariables.h"
 #include "scenariovariableview.h"
 #include "utils.h"
 #include <algorithm>

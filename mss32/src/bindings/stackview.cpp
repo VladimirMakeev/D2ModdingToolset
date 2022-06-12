@@ -19,6 +19,8 @@
 
 #include "stackview.h"
 #include "game.h"
+#include "groupview.h"
+#include "idview.h"
 #include "itemview.h"
 #include "midgardobjectmap.h"
 #include "midstack.h"

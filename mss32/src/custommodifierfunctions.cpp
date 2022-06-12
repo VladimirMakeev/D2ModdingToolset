@@ -19,6 +19,7 @@
 
 #include "custommodifierfunctions.h"
 #include "scripts.h"
+#include "utils.h"
 
 namespace hooks {
 

@@ -23,7 +23,6 @@
 #include "midgardid.h"
 #include "utils.h"
 #include <ostream>
-#include <string>
 
 namespace sol {
 class state;

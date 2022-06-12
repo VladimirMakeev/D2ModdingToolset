@@ -20,7 +20,7 @@
 #ifndef GROUPVIEW_H
 #define GROUPVIEW_H
 
-#include "unitslotview.h"
+#include "midgardid.h"
 #include <vector>
 
 namespace sol {
@@ -35,6 +35,7 @@ struct IMidgardObjectMap;
 namespace bindings {
 
 struct IdView;
+class UnitView;
 class UnitSlotView;
 
 class GroupView

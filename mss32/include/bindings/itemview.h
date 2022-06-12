@@ -20,8 +20,6 @@
 #ifndef ITEMVIEW_H
 #define ITEMVIEW_H
 
-#include "currencyview.h"
-#include "idview.h"
 #include "midgardid.h"
 #include <optional>
 
@@ -35,7 +33,9 @@ struct IMidgardObjectMap;
 
 namespace bindings {
 
+struct IdView;
 class ItemBaseView;
+class CurrencyView;
 
 class ItemView
 {

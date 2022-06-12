@@ -23,6 +23,7 @@
 #include "currencyview.h"
 #include "dynupgradeview.h"
 #include "gameutils.h"
+#include "groupview.h"
 #include "idview.h"
 #include "itembaseview.h"
 #include "itemview.h"

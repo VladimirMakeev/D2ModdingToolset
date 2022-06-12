@@ -20,9 +20,7 @@
 #ifndef UNITIMPLVIEW_H
 #define UNITIMPLVIEW_H
 
-#include "idview.h"
 #include <optional>
-#include <vector>
 
 namespace sol {
 class state;
@@ -34,6 +32,7 @@ struct IUsUnit;
 
 namespace bindings {
 
+struct IdView;
 class DynUpgradeView;
 class AttackView;
 

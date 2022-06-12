@@ -19,6 +19,7 @@
 
 #include "itembaseview.h"
 #include "currencyview.h"
+#include "idview.h"
 #include "itembase.h"
 #include "itemcategory.h"
 #include "unitimplview.h"

@@ -21,6 +21,7 @@
 #include "dynupgrade.h"
 #include "game.h"
 #include "globaldata.h"
+#include "idview.h"
 #include "log.h"
 #include "midunit.h"
 #include "modifierview.h"

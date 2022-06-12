@@ -19,6 +19,7 @@
 
 #include "groupview.h"
 #include "game.h"
+#include "idview.h"
 #include "midunitgroup.h"
 #include "unitslotview.h"
 #include "unitview.h"

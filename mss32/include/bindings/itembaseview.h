@@ -20,9 +20,6 @@
 #ifndef ITEMBASEVIEW_H
 #define ITEMBASEVIEW_H
 
-#include "currencyview.h"
-#include "idview.h"
-#include "midgardid.h"
 #include <optional>
 
 namespace sol {
@@ -36,6 +33,8 @@ struct IMidgardObjectMap;
 
 namespace bindings {
 
+struct IdView;
+class CurrencyView;
 class UnitImplView;
 
 class ItemBaseView
