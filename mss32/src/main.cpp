@@ -244,4 +244,5 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
     // Thread sync is excessive because the data is read-only or thread-exclusive once initialized.
     hooks::initializeCustomAttacks();
     hooks::initializeCustomModifiers();
+    return TRUE;
 }
