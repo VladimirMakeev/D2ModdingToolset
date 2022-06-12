@@ -51,7 +51,6 @@ void fillNativeModifiers(CustomModifiers::NativeMap& value)
 
         std::string tmp;
         record.value(tmp, "UNIT_ID");
-        tmp = trimSpaces(tmp);
 
         CMidgardID unitId;
         if (*idApi.fromString(&unitId, tmp.c_str()) == invalidId) {
