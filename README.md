@@ -451,14 +451,27 @@
 
     ![Demo video](https://user-images.githubusercontent.com/5180699/169149545-9f6e8284-6325-4ccd-a555-5db8851569e4.mp4). Customizable via Lua scripting.<br />
     [Scripts/Modifiers](Scripts/Modifiers) includes example modifier scripts.<br />
+    [template.lua](Scripts/Modifiers/template.lua) contains a complete list of available functions.<br />
 
     - Add `L_CUSTOM` category to `LModifS.dbf` or simply copy the file from [Examples](Examples);
     - Add `SCRIPT` (Character, size 40) column to `Gmodif.dbf`;
-    - Add a new modifier entry in `Gmodif.dbf`:
+    - Add `DESC_TXT` (Character, size 10) column to `Gmodif.dbf`;
+    - Add `DISPLAY` (Logical) column to `Gmodif.dbf`;
+    - (Optional) Setup modifiers panel for Unit Encyclopedia:
+        - Include `LBOX_MODIFIERS` and `TXT_MODIFIERS` elements to `Interf.dlg` and `ScenEdit.dlg`. [Interf.dlg](Examples/Modifiers/Interf.dlg) and [ScenEdit.dlg](Examples/Modifiers/ScenEdit.dlg) contain examples of modified `DLG_R_C_UNIT` dialog of Unit Encyclopedia;
+        - Note that the examples intentionally hide or reposition some native elements: 'Leader abilities', 'Leadership', 'Battles won', locked-unit / upgrade-needed indicators;
+        - Try extending the dialog bounds or otherwise rearrange its elements to properly accomodate all the available elements as you like;
+        - Specify `modifiersCaption` text in `TApp.dbf` and `TAppEdit.dbf` and its id in a corresponding entry of [textids.lua](Scripts/textids.lua);
+        - Repeat for `modifiersEmpty`, `modifierDescription` and `nativeModifierDescription` entries;
+    - (Optional) Add a new modifier description and icon (it will be displayed in Scenario Editor and Unit Encyclopedia):
+        - Create a description in `Tglobal.dbf`. You can use rich formatting like `\fMedBold;Born Leader\n\fSmall;+1 leadership every 3 levels.\fNormal;`;
+        - Create `31x36px` icon in `Icons.ff` (using special software like `D2ResExplorer`). **Its name should correspond to modifier id** to be linked with it (similar to spell icons and other game resources), like `G000UM9048`;
+    - Add a new modifier entry in `Gmodif.dbf` (see example [Gmodif.dbf](Examples/Modifiers/Gmodif.dbf)):
         - Specify new `MODIF_ID` (use format `gXXXum9XXX` if you want it to be available as Scenario Editor modifier);
         - Specify `SOURCE` id that corresponds to `L_CUSTOM` category added earlier (example `LModifS.dbf` uses `4` as the id);
         - Specify `SCRIPT` file name that will be used for this modifier (omit file path, for example `berserk.lua`);
-    - Add a description text for the modifier to `Tglobal.dbf` (it should be returned by `getModifierDescTxt` script function);
+        - (Optional) Specify `DESC_TXT` id that corresponds to `Tglobal.dbf` entry added earlier (defaults to the standard stub `x000tg6000`);
+        - (Optional) Specify `DISPLAY` that controls whether the modifier should appear in modifiers panel for Unit Encyclopedia (defaults to false);
     - Refer to [Scripts/Modifiers](Scripts/Modifiers) examples and [luaApi](luaApi.md) to create your modifier script;
     - Try assigning the created modifier to item, potion or spell, or simply use it as Scenario Editor modifier;
     - Consider adding vertical align to unit encyclopedia fields to properly accommodate custom modifier bonuses text:
@@ -466,8 +479,22 @@
         - Note how attack name fields `%TWICE%%ALTATTACK%%ATTACK%%SECOND%` are enclosed in vertical align `\p110;` and `\p0;`;
         - Use the same technique to enclose `%HIT%%HIT2%` and `%DAMAGE%` fields (like `\p110;%DAMAGE%\p0;`).
 
-    ![image](https://user-images.githubusercontent.com/5180699/169152674-16261837-fa50-4c15-89d1-a1ee70fa7544.png)
-    ![image](https://user-images.githubusercontent.com/5180699/169152799-5a7e7e2a-f230-4faf-bd17-db3ee5343397.png)
+    ![image](https://user-images.githubusercontent.com/5180699/171748030-5af2d922-58fc-4427-915c-003203192bdd.png)
+    ![image](https://user-images.githubusercontent.com/5180699/171749199-09c93dc2-cf3d-4760-a00a-52ce9550814e.png)
+    ![image](https://user-images.githubusercontent.com/5180699/171748309-30751f19-0217-4cb3-9608-e337dad3e894.png)
+    ![image](https://user-images.githubusercontent.com/5180699/171749123-d29bd060-6a92-41da-b212-733bb39f04db.png)
+    ![image](https://user-images.githubusercontent.com/5180699/171748086-b4614eef-f8b1-48db-a172-7fe64328abc9.png)
+  </details>
+- <details>
+    <summary>Supports native unit modifiers;</summary>
+    
+    Allows to assign 'native' modifiers to unit types.<br>
+    That is, a modifier will be permanently applied to all units of the specified type - existing in a scenario or newly created / hired.<br>
+    When unit changes its type (transforms or upgrades), modifiers native to its previous type are automatically removed, and new modifiers that are native to the new type are applied.<br>
+    Native modifiers are not stored in scenario file, thus you can freely manipulate it without scenario file being affected in any way.
+    - Copy [GUmodif.dbf](Examples/Modifiers/GUmodif.dbf) to 'Globals' directory;
+    - `UNIT_ID` specifies id of a unit from `GUnits.dbf`. Use empty id (`g000000000`) if you want a modifier to be applied to **every single unit, note it impacts performance so try to avoid this if its not necessary**;
+    - `MODIF_1`, `MODIF_2`, ..., `MODIF_N` specifies modifier id from `Gmodif.dbf`. In can be either standard or custom modifier.
   </details>
 
 ### Bug fixes:

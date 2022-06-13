@@ -24,6 +24,7 @@
 #include "middatacache.h"
 #include "middragdropinterf.h"
 #include "resetstackext.h"
+#include "smartptr.h"
 #include <cstddef>
 
 namespace game {
@@ -34,7 +35,6 @@ struct CDismissUnit;
 struct CDynLevelUnit;
 struct CHealUnit;
 struct CReviveUnit;
-struct Functor;
 
 struct CCityStackInterfData
 {
@@ -95,10 +95,10 @@ struct Api
         int unknown;
     };
 
-    using CreateButtonFunctor = Functor*(__stdcall*)(Functor* functor,
-                                                     int a2,
-                                                     CCityStackInterf* cityStackInterf,
-                                                     ButtonCallback* callback);
+    using CreateButtonFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                          int a2,
+                                                          CCityStackInterf* cityStackInterf,
+                                                          ButtonCallback* callback);
     CreateButtonFunctor createButtonFunctor;
 };
 

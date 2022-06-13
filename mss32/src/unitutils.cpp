@@ -139,20 +139,20 @@ bool isUnitSmall(const game::CMidUnit* unit)
     return soldier->vftable->getSizeSmall(soldier);
 }
 
-game::CMidgardID getGlobalUnitImplId(const game::CMidUnit* unit)
+game::CMidgardID getGlobalUnitImplId(const game::CMidgardID* unitImplId)
 {
     using namespace game;
 
     CMidgardID globalImplId{};
     CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
-    unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &globalImplId, &unit->unitImpl->id);
+    unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &globalImplId, unitImplId);
 
     return globalImplId;
 }
 
 game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidUnit* unit)
 {
-    const game::CMidgardID globalImplId{getGlobalUnitImplId(unit)};
+    const game::CMidgardID globalImplId{getGlobalUnitImplId(&unit->unitImpl->id)};
     return getGlobalUnitImpl(&globalImplId);
 }
 
@@ -172,6 +172,23 @@ game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidgardID* globalUnitImplId)
     return result;
 }
 
+game::TUsUnitImpl* getUnitImpl(const game::IUsUnit* unit)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    CUmModifier* modifier = nullptr;
+    for (auto curr = unit; curr; curr = modifier->data->prev) {
+        modifier = (CUmModifier*)dynamicCast(curr, 0, rtti.IUsUnitType, rtti.CUmModifierType, 0);
+        if (!modifier)
+            return (TUsUnitImpl*)curr;
+    }
+
+    return nullptr;
+}
+
 game::TUsSoldierImpl* getSoldierImpl(const game::IUsUnit* unit)
 {
     using namespace game;
@@ -179,19 +196,8 @@ game::TUsSoldierImpl* getSoldierImpl(const game::IUsUnit* unit)
     const auto& rtti = RttiApi::rtti();
     const auto dynamicCast = RttiApi::get().dynamicCast;
 
-    auto current = unit;
-    while (current) {
-        auto soldierImpl = (TUsSoldierImpl*)dynamicCast(current, 0, rtti.IUsUnitType,
-                                                        rtti.TUsSoldierImplType, 0);
-        if (soldierImpl)
-            return soldierImpl;
-
-        auto modifier = (CUmModifier*)dynamicCast(current, 0, rtti.IUsUnitType,
-                                                  rtti.CUmModifierType, 0);
-        current = modifier ? modifier->data->prev : nullptr;
-    }
-
-    return nullptr;
+    return (TUsSoldierImpl*)dynamicCast(getUnitImpl(unit), 0, rtti.IUsUnitType,
+                                        rtti.TUsSoldierImplType, 0);
 }
 
 game::TUsSoldierImpl* getSoldierImpl(const game::IUsSoldier* soldier)

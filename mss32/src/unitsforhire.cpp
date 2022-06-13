@@ -23,6 +23,7 @@
 #include "dbfaccess.h"
 #include "log.h"
 #include "midgardid.h"
+#include "utils.h"
 #include <fmt/format.h>
 #include <string>
 #include <type_traits>
@@ -38,15 +39,14 @@ namespace hooks {
 
 static UnitsForHire units;
 
-bool loadUnitsForHire(const std::filesystem::path& gameFolder)
+bool loadUnitsForHire()
 {
     using namespace utils;
 
-    const std::filesystem::path globalsFolder{gameFolder / "globals"};
     const std::string raceDbName{"Grace.dbf"};
 
     DbfFile raceDb;
-    if (!raceDb.open(globalsFolder / raceDbName)) {
+    if (!raceDb.open(globalsFolder() / raceDbName)) {
         logError("mssProxyError.log", fmt::format("Could not read {:s} database.", raceDbName));
         return false;
     }

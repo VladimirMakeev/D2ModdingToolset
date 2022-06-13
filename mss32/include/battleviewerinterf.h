@@ -31,6 +31,7 @@
 #include "draganddropinterf.h"
 #include "midgardid.h"
 #include "mqrect.h"
+#include "smartptr.h"
 #include "uievent.h"
 #include "unitpositionlist.h"
 #include "unitpositionmap.h"
@@ -48,7 +49,6 @@ struct CMidgardMsgBox;
 struct IMidgardObjectMap;
 struct CBatEncyclopediaInterf;
 struct CBatLog;
-struct Functor;
 struct IBatNotify;
 
 struct CBattleViewerGroupAreas
@@ -348,10 +348,10 @@ struct Api
         int unknown;
     };
 
-    using CreateButtonFunctor = Functor*(__stdcall*)(Functor* functor,
-                                                     int a2,
-                                                     CBattleViewerInterf* viewer,
-                                                     ButtonCallback* callback);
+    using CreateButtonFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                          int a2,
+                                                          CBattleViewerInterf* viewer,
+                                                          ButtonCallback* callback);
     CreateButtonFunctor createButtonFunctor;
 
     using UnknownMethod4 = void(__thiscall*)(Vector<CBattleViewerTargetUnitData>* thisptr);

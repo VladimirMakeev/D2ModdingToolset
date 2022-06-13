@@ -21,11 +21,11 @@
 #define MENUNEWSKIRMISH_H
 
 #include "menubase.h"
+#include "smartptr.h"
 
 namespace game {
 
 struct String;
-struct Functor;
 
 /** Represents base class for different skirmish menus. */
 struct CMenuNewSkirmish : public CMenuBase
@@ -62,10 +62,10 @@ struct Api
      * @param[in] pointer to list box callback.
      * @returns initialized functor.
      */
-    using CreateListBoxFunctor = Functor*(__stdcall*)(Functor* functor,
-                                                      int a2,
-                                                      CMenuNewSkirmish* menu,
-                                                      const ListBoxCallback* callback);
+    using CreateListBoxFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                           int a2,
+                                                           CMenuNewSkirmish* menu,
+                                                           const ListBoxCallback* callback);
     CreateListBoxFunctor createListBoxFunctor;
 
     /**
@@ -91,10 +91,10 @@ struct Api
      * @returns initialized functor.
      */
     using CreateListBoxDisplayTextFunctor =
-        Functor*(__stdcall*)(Functor* functor,
-                             int a2,
-                             CMenuNewSkirmish* menu,
-                             const ListBoxDisplayTextCallback* callback);
+        SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                  int a2,
+                                  CMenuNewSkirmish* menu,
+                                  const ListBoxDisplayTextCallback* callback);
     CreateListBoxDisplayTextFunctor createListBoxDisplayTextFunctor;
 
     /**

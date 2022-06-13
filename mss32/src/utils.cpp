@@ -18,7 +18,6 @@
  */
 
 #include "utils.h"
-#include "functor.h"
 #include "game.h"
 #include "interfmanager.h"
 #include "log.h"
@@ -57,6 +56,12 @@ const std::filesystem::path& gameFolder()
         folder.remove_filename();
     }
 
+    return folder;
+}
+
+const std::filesystem::path& globalsFolder()
+{
+    static const std::filesystem::path folder{gameFolder() / "Globals"};
     return folder;
 }
 
@@ -249,7 +254,7 @@ void createTimerEvent(game::UiEvent* timerEvent,
 {
     using namespace game;
 
-    const auto freeFunctor = FunctorApi::get().createOrFree;
+    const auto freeFunctor = SmartPointerApi::get().createOrFreeNoDtor;
     const auto& uiManagerApi = CUIManagerApi::get();
 
     using TimerCallback = CUIManagerApi::Api::TimerEventCallback;
@@ -257,7 +262,7 @@ void createTimerEvent(game::UiEvent* timerEvent,
     TimerCallback timerCallback{};
     timerCallback.callback = (TimerCallback::Callback)callback;
 
-    Functor functor;
+    SmartPointer functor;
     uiManagerApi.createTimerEventFunctor(&functor, 0, userData, &timerCallback);
 
     UIManagerPtr uiManager;

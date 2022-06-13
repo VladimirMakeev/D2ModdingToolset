@@ -33,6 +33,7 @@
 #include "midunit.h"
 #include "restrictions.h"
 #include "unitcat.h"
+#include "unitmodifier.h"
 #include "unitmodifierhooks.h"
 #include "unitutils.h"
 #include "ussoldierimpl.h"
@@ -370,7 +371,8 @@ game::CMidgardID CCustomModifier::getAttackBaseDescTxt(const game::IAttack* atta
 CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
                                     const game::TUnitModifier* unitModifier,
                                     const char* scriptFileName,
-                                    const game::CMidgardID* id,
+                                    const game::CMidgardID* descTxt,
+                                    bool display,
                                     const game::GlobalData** globalData)
 {
     using namespace game;
@@ -379,13 +381,15 @@ CCustomModifier* customModifierCtor(CCustomModifier* thisptr,
     initRttiInfo();
 
     thisptr->usUnit.id = emptyId;
-    CUmModifierApi::get().constructor(&thisptr->umModifier, id, globalData);
+    CUmModifierApi::get().constructor(&thisptr->umModifier, &unitModifier->id, globalData);
 
     thisptr->attack.prev = nullptr;
     thisptr->attack2.prev = nullptr;
     thisptr->altAttack.prev = nullptr;
     thisptr->unit = nullptr;
     thisptr->unitModifier = unitModifier;
+    const_cast<CMidgardID&>(thisptr->descTxt) = *descTxt;
+    const_cast<bool&>(thisptr->display) = display;
     new (const_cast<std::string*>(&thisptr->scriptFileName)) std::string(scriptFileName);
     new (&thisptr->data) CustomModifierDataMap();
     new (&thisptr->dataMutex) std::mutex();
@@ -407,6 +411,8 @@ CCustomModifier* customModifierCopyCtor(CCustomModifier* thisptr, const CCustomM
     thisptr->altAttack.prev = src->altAttack.prev;
     thisptr->unit = src->unit;
     thisptr->unitModifier = src->unitModifier;
+    const_cast<CMidgardID&>(thisptr->descTxt) = src->descTxt;
+    const_cast<bool&>(thisptr->display) = src->display;
     new (const_cast<std::string*>(&thisptr->scriptFileName)) std::string(src->scriptFileName);
     new (&thisptr->data) CustomModifierDataMap(); // No copy required
     new (&thisptr->dataMutex) std::mutex();
@@ -896,8 +902,7 @@ const char* __fastcall modifierGetDescription(const game::CUmModifier* thisptr, 
 
     auto thiz = castModifierToCustomModifier(thisptr);
 
-    CMidgardID id = THIZ_GET_VALUE_NO_PARAM(getModifierDescTxt, bindings::IdView(emptyId));
-    return getGlobalText(id);
+    return getGlobalText(thiz->descTxt);
 }
 
 void __fastcall modifierUpdateUnitImplId(game::CUmModifier* thisptr, int /*%edx*/)
@@ -1476,13 +1481,14 @@ void initVftable(CCustomModifier* thisptr)
 
 game::CUmModifier* createCustomModifier(const game::TUnitModifier* unitModifier,
                                         const char* scriptFileName,
-                                        const game::CMidgardID* id,
+                                        const game::CMidgardID* descTxt,
+                                        bool display,
                                         const game::GlobalData** globalData)
 {
     using namespace game;
 
     auto customModifier = (CCustomModifier*)Memory::get().allocate(sizeof(CCustomModifier));
-    customModifierCtor(customModifier, unitModifier, scriptFileName, id, globalData);
+    customModifierCtor(customModifier, unitModifier, scriptFileName, descTxt, display, globalData);
     return &customModifier->umModifier;
 }
 

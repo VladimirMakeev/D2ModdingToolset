@@ -20,19 +20,29 @@
 #ifndef CUSTOMMODIFIERS_H
 #define CUSTOMMODIFIERS_H
 
+#include "midgardid.h"
 #include "modifgroup.h"
+#include <list>
+#include <unordered_map>
 
 namespace hooks {
 
 static const char customModifGroupName[] = "L_CUSTOM";
 static const char scriptColumnName[] = "SCRIPT";
 
+using NativeModifiers = std::list<game::CMidgardID>;
+
 struct CustomModifiers
 {
     game::LModifGroup group;
+
+    using NativeMap = std::unordered_map<int, NativeModifiers>;
+    NativeMap native;
 };
 
+void initializeCustomModifiers();
 CustomModifiers& getCustomModifiers();
+NativeModifiers getNativeModifiers(const game::CMidgardID& unitImplId);
 
 } // namespace hooks
 

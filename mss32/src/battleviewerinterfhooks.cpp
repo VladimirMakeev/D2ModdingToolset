@@ -29,7 +29,6 @@
 #include "customattackutils.h"
 #include "d2string.h"
 #include "dialoginterf.h"
-#include "functor.h"
 #include "game.h"
 #include "mempool.h"
 #include "middragdropinterf.h"
@@ -362,7 +361,7 @@ void setTimerEvent(game::CBattleViewerInterf* viewer,
 {
     using namespace game;
 
-    Functor functor;
+    SmartPointer functor;
     BattleViewerInterfApi::Api::ButtonCallback buttonCallback{callback};
     BattleViewerInterfApi::get().createButtonFunctor(&functor, 0, viewer, &buttonCallback);
 
@@ -377,7 +376,7 @@ void setTimerEvent(game::CBattleViewerInterf* viewer,
     eventApi.destructor(&timerEvent);
 
     SmartPointerApi::get().createOrFree((SmartPointer*)&uiManager, nullptr);
-    FunctorApi::get().createOrFree(&functor, nullptr);
+    SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
 }
 
 void updateForNormalAttack(game::CBattleViewerInterf* viewer)

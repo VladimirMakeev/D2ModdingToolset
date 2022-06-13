@@ -59,8 +59,26 @@ textids = {
 		-- Defines modified text representation in unit encyclopedia.
 		-- Modified text includes attack name, source, reach, etc.
 		-- The text must contain keyword "%VALUE%".
-		-- Fallback text is "\\c025;090;000;%VALUE%\\c000;000;000;".
+		-- Fallback text is "\c025;090;000;%VALUE%\c000;000;000;".
 		modifiedValue = "",
+
+		-- Defines modifiers list caption in unit encyclopedia.
+		-- Fallback text is "\fMedBold;Effects:\fNormal;"
+		modifiersCaption = "",
+
+		-- Defines modifiers list caption in unit encyclopedia.
+		-- Fallback text id is "X005TA0676" (empty leader abilities).
+		modifiersEmpty = "",
+
+		-- Defines format id for modifier description in unit encyclopedia.
+		-- The text must contain keyword "%DESC%".
+		-- Fallback text is "\vC;%DESC%"
+		modifierDescription = "",
+
+		-- Defines format id for native modifier description in unit encyclopedia.
+		-- The text must contain keyword "%DESC%".
+		-- Fallback text is "\vC;\fMedBold;%DESC%\fNormal;"
+		nativeModifierDescription = "",
 	},
 
 	-- Text ids related to events logic

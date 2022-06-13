@@ -21,6 +21,7 @@
 #define EFFECTINTERF_H
 
 #include "popupinterf.h"
+#include "smartptr.h"
 
 namespace game {
 
@@ -29,7 +30,6 @@ struct CMidgardID;
 struct LEventEffectCategory;
 struct IMidgardObjectMap;
 struct String;
-struct Functor;
 
 namespace editor {
 
@@ -86,10 +86,10 @@ struct Api
         int unknown;
     };
 
-    using CreateButtonFunctor = Functor*(__stdcall*)(Functor* functor,
-                                                     int a2,
-                                                     CEffectInterf* effectInterf,
-                                                     ButtonCallback* callback);
+    using CreateButtonFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                          int a2,
+                                                          CEffectInterf* effectInterf,
+                                                          ButtonCallback* callback);
     CreateButtonFunctor createButtonFunctor;
 
     struct ListBoxDisplayCallback
@@ -102,10 +102,10 @@ struct Api
         int unknown;
     };
 
-    using CreateListBoxDisplayFunctor = Functor*(__stdcall*)(Functor* functor,
-                                                             int a2,
-                                                             CEffectInterf* effectInterf,
-                                                             ListBoxDisplayCallback* callback);
+    using CreateListBoxDisplayFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                                  int a2,
+                                                                  CEffectInterf* effectInterf,
+                                                                  ListBoxDisplayCallback* callback);
     CreateListBoxDisplayFunctor createListBoxDisplayFunctor;
 };
 

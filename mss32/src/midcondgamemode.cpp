@@ -24,7 +24,6 @@
 #include "d2string.h"
 #include "dialoginterf.h"
 #include "eventconditioncathooks.h"
-#include "functor.h"
 #include "game.h"
 #include "interfmanager.h"
 #include "mempool.h"
@@ -333,27 +332,27 @@ game::editor::CCondInterf* createCondGameModeInterf(game::ITask* task,
     if (dialogApi.findButton(dialog, "BTN_OK")) {
         using ButtonCallback = CCondInterfApi::Api::ButtonCallback;
         ButtonCallback callback{};
-        Functor functor{};
+        SmartPointer functor{};
 
         callback.callback = (ButtonCallback::Callback)condGameModeInterfOkButtonHandler;
         CCondInterfApi::get().createButtonFunctor(&functor, 0, thisptr, &callback);
 
         const auto& button = CButtonInterfApi::get();
         button.assignFunctor(dialog, "BTN_OK", dialogName, &functor, 0);
-        FunctorApi::get().createOrFree(&functor, nullptr);
+        SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
     }
 
     if (dialogApi.findButton(dialog, "BTN_CANCEL")) {
         using ButtonCallback = CCondInterfApi::Api::ButtonCallback;
         ButtonCallback callback{};
-        Functor functor{};
+        SmartPointer functor{};
 
         callback.callback = (ButtonCallback::Callback)condGameModeInterfCancelButtonHandler;
         CCondInterfApi::get().createButtonFunctor(&functor, 0, thisptr, &callback);
 
         const auto& button = CButtonInterfApi::get();
         button.assignFunctor(dialog, "BTN_CANCEL", dialogName, &functor, 0);
-        FunctorApi::get().createOrFree(&functor, nullptr);
+        SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
     }
 
     return thisptr;

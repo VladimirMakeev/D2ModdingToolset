@@ -29,21 +29,29 @@ static std::array<Api, 4> functions = {{
     Api {
         (Api::DynamicCast)0x66d466,
         (Api::TypeInfoRawName*)0x6ce2cc,
+        (Api::TypeInfoInequalityOperator*)0x6ce1a0,
+        (Api::TypeIdOperator*)0x6ce2b4,
     },
     // Russobit
     Api {
         (Api::DynamicCast)0x66d466,
         (Api::TypeInfoRawName*)0x6ce2cc,
+        (Api::TypeInfoInequalityOperator*)0x6ce1a0,
+        (Api::TypeIdOperator*)0x6ce2b4,
     },
     // Gog
     Api {
         (Api::DynamicCast)0x66bda6,
         (Api::TypeInfoRawName*)0x6cc25c,
+        (Api::TypeInfoInequalityOperator*)0x6cc1fc,
+        (Api::TypeIdOperator*)0x6cc2c8,
     },
     // Scenario Editor
     Api {
         (Api::DynamicCast)0x57109c,
         (Api::TypeInfoRawName*)0x5ca258,
+        (Api::TypeInfoInequalityOperator*)0x5ca15c,
+        (Api::TypeIdOperator*)0x5ca1f0,
     },
 }};
 

@@ -359,7 +359,7 @@ static std::array<Functions, 4> functions = {{
         (GetLordByPlayer)nullptr,
         (IsTurnValid)0x52d22e,
         (GetAllyOrEnemyGroupId)nullptr,
-        (FindUnitById)nullptr,
+        (FindUnitById)0x526a00,
         (CastUnitImplToSoldier)0x4088f7,
         (CastUnitImplToStackLeader)0x40b6c8,
         (CreateBatAttack)nullptr,

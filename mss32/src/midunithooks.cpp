@@ -19,11 +19,13 @@
 
 #include "midunithooks.h"
 #include "custommodifier.h"
+#include "custommodifiers.h"
 #include "modifierutils.h"
 #include "originalfunctions.h"
 #include "stringandid.h"
 #include "ummodifier.h"
 #include "unitmodifier.h"
+#include "unitutils.h"
 #include "ussoldier.h"
 #include "usunit.h"
 #include "usunitimpl.h"
@@ -92,7 +94,7 @@ bool __fastcall transformHooked(game::CMidUnit* thisptr,
         thisptr->hpBefore = thisptr->currentHp;
         thisptr->hpBefMax = soldier->vftable->getHitPoints(soldier);
         thisptr->origXp = thisptr->currentXp;
-        unitApi.getModifiers(thisptr, &thisptr->origModifiers);
+        unitApi.getModifiers(&thisptr->origModifiers, thisptr);
     }
 
     auto globalData = *global.getGlobalData();
@@ -127,6 +129,109 @@ bool __fastcall transformHooked(game::CMidUnit* thisptr,
     }
 
     return true;
+}
+
+bool __fastcall upgradeHooked(game::CMidUnit* thisptr,
+                              int /*%edx*/,
+                              const game::CScenarioVisitor* visitor,
+                              const game::CMidgardID* upgradeImplId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& unitApi = CMidUnitApi::get();
+    const auto& listApi = IdListApi::get();
+    const auto& rttiApi = RttiApi::get();
+    const auto& typeIdOperator = *rttiApi.typeIdOperator;
+    const auto& typeInfoInequalityOperator = *rttiApi.typeInfoInequalityOperator;
+
+    auto upgradeUnitImpl = getGlobalUnitImpl(upgradeImplId);
+    if (!upgradeUnitImpl)
+        return false;
+
+    auto unitImpl = getUnitImpl(thisptr->unitImpl);
+    if (typeInfoInequalityOperator(typeIdOperator(unitImpl), typeIdOperator(upgradeUnitImpl)))
+        return false;
+
+    IdList modifierIds{};
+    listApi.constructor(&modifierIds);
+    if (!unitApi.getModifiers(&modifierIds, thisptr) || !unitApi.removeModifiers(&thisptr->unitImpl)
+        || !unitApi.replaceImpl(&thisptr->unitImpl, upgradeUnitImpl)
+        || !unitApi.addModifiers(&modifierIds, thisptr, nullptr, true)) {
+        listApi.destructor(&modifierIds);
+        return false;
+    }
+    listApi.destructor(&modifierIds);
+
+    auto soldier = fn.castUnitImplToSoldier(thisptr->unitImpl);
+    thisptr->currentHp = soldier->vftable->getHitPoints(soldier);
+    thisptr->currentXp = 0;
+    return true;
+}
+
+bool __fastcall initWithSoldierImplHooked(game::CMidUnit* thisptr,
+                                          int /*%edx*/,
+                                          const game::IMidgardObjectMap* objectMap,
+                                          const game::CMidgardID* unitImplId,
+                                          const int* turn)
+{
+    using namespace game;
+
+    if (!getOriginalFunctions().initWithSoldierImpl(thisptr, objectMap, unitImplId, turn)) {
+        return false;
+    }
+
+    for (const auto& modifierId : getNativeModifiers(thisptr->unitImpl->id)) {
+        CMidUnitApi::get().addModifier(thisptr, &modifierId);
+    }
+
+    return true;
+}
+
+bool __stdcall getModifiersHooked(game::IdList* value, const game::CMidUnit* unit)
+{
+    using namespace game;
+
+    const auto& listApi = IdListApi::get();
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    listApi.clear(value);
+
+    NativeModifiers nativeModifiers = getNativeModifiers(unit->unitImpl->id);
+
+    CUmModifier* modifier = nullptr;
+    for (auto curr = unit->unitImpl; curr; curr = modifier->data->prev) {
+        modifier = (CUmModifier*)dynamicCast(curr, 0, rtti.IUsUnitType, rtti.CUmModifierType, 0);
+        if (!modifier)
+            break;
+
+        auto modifierId = modifier->data->modifierId;
+        auto it = std::find(nativeModifiers.begin(), nativeModifiers.end(), modifierId);
+        if (it != nativeModifiers.end()) {
+            // Count skipped in case if native mod is duplicated by normal one
+            nativeModifiers.erase(it);
+            continue;
+        }
+
+        listApi.pushFront(value, &modifierId);
+    }
+
+    return true;
+}
+
+bool __stdcall addModifiersHooked(const game::IdList* value,
+                                  game::CMidUnit* unit,
+                                  char* errorBuffer,
+                                  bool checkCanApply)
+{
+    using namespace game;
+
+    for (const auto& modifierId : getNativeModifiers(unit->unitImpl->id)) {
+        CMidUnitApi::get().addModifier(unit, &modifierId);
+    }
+
+    return getOriginalFunctions().addModifiers(value, unit, errorBuffer, checkCanApply);
 }
 
 } // namespace hooks

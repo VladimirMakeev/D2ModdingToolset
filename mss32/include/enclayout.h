@@ -31,6 +31,23 @@ struct IEncLayout : public CInterface
     CDialogInterf* dialog;
 };
 
+namespace IEncLayoutApi {
+
+struct Api
+{
+    using Constructor = IEncLayout*(__thiscall*)(IEncLayout* thisptr,
+                                                 CInterface* parent,
+                                                 const CMqRect* area);
+    Constructor constructor;
+
+    using Destructor = void(__thiscall*)(IEncLayout* thisptr);
+    Destructor destructor;
+};
+
+Api& get();
+
+} // namespace IEncLayoutApi
+
 } // namespace game
 
 #endif // ENCLAYOUT_H

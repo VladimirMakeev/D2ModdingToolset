@@ -21,7 +21,6 @@
 #include "button.h"
 #include "dialoginterf.h"
 #include "editboxinterf.h"
-#include "functor.h"
 #include "log.h"
 #include "mempool.h"
 #include "menubase.h"
@@ -108,12 +107,12 @@ static CRoomPasswordInterf* createRoomPasswordInterf(CMenuCustomLobby* menuLobby
 
     const auto createFunctor = CMenuBaseApi::get().createButtonFunctor;
     const auto assignFunctor = CButtonInterfApi::get().assignFunctor;
-    const auto freeFunctor = FunctorApi::get().createOrFree;
+    const auto freeFunctor = SmartPointerApi::get().createOrFreeNoDtor;
 
     auto& dialogApi = CDialogInterfApi::get();
     auto dialog = *interf->dialog;
 
-    Functor functor;
+    SmartPointer functor;
     auto callback = (CMenuBaseApi::Api::ButtonCallback)onCancelPressed;
     createFunctor(&functor, 0, (CMenuBase*)interf, &callback);
     assignFunctor(dialog, "BTN_CANCEL", dialogName, &functor, 0);

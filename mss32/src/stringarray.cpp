@@ -24,19 +24,31 @@
 namespace game::StringArrayApi {
 
 // clang-format off
-static std::array<Api, 3> functions = { {
+static std::array<Api, 4> functions = { {
     // Akella
     Api{
-        (Api::PushBack)0x4173ba
+        (Api::Destructor)0x40a63e,
+        (Api::Reserve)0x4173e8,
+        (Api::PushBack)0x4173ba,
     },
     // Russobit
     Api{
-        (Api::PushBack)0x4173ba
+        (Api::Destructor)0x40a63e,
+        (Api::Reserve)0x4173e8,
+        (Api::PushBack)0x4173ba,
     },
     // Gog
     Api{
-        (Api::PushBack)0x416fae
-    }
+        (Api::Destructor)0x40a27d,
+        (Api::Reserve)0x416fdc,
+        (Api::PushBack)0x416fae,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Destructor)0x414f16,
+        (Api::Reserve)0x4370a3,
+        (Api::PushBack)0x414ea3,
+    },
 }};
 // clang-format on
 

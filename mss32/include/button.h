@@ -21,11 +21,11 @@
 #define BUTTON_H
 
 #include "interface.h"
+#include "smartptr.h"
 
 namespace game {
 
 struct CDialogInterf;
-struct Functor;
 struct CButtonInterfVftable;
 
 /** Button ui element. */
@@ -71,7 +71,7 @@ struct Api
     using AssignFunctor = CButtonInterf*(__stdcall*)(CDialogInterf* dialog,
                                                      const char* buttonName,
                                                      const char* dialogName,
-                                                     Functor* functor,
+                                                     SmartPointer* functor,
                                                      int hotkey);
     AssignFunctor assignFunctor;
 };

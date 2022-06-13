@@ -24,7 +24,6 @@
 #include "d2string.h"
 #include "dialoginterf.h"
 #include "eventconditioncathooks.h"
-#include "functor.h"
 #include "game.h"
 #include "gameutils.h"
 #include "interfmanager.h"
@@ -448,27 +447,27 @@ game::editor::CCondInterf* createCondVarCmpInterf(game::ITask* task,
     if (dialogApi.findButton(dialog, "BTN_OK")) {
         using ButtonCallback = CCondInterfApi::Api::ButtonCallback;
         ButtonCallback callback{};
-        Functor functor{};
+        SmartPointer functor{};
 
         callback.callback = (ButtonCallback::Callback)condVarCmpInterfOkButtonHandler;
         CCondInterfApi::get().createButtonFunctor(&functor, 0, thisptr, &callback);
 
         const auto& button = CButtonInterfApi::get();
         button.assignFunctor(dialog, "BTN_OK", dialogName, &functor, 0);
-        FunctorApi::get().createOrFree(&functor, nullptr);
+        SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
     }
 
     if (dialogApi.findButton(dialog, "BTN_CANCEL")) {
         using ButtonCallback = CCondInterfApi::Api::ButtonCallback;
         ButtonCallback callback{};
-        Functor functor{};
+        SmartPointer functor{};
 
         callback.callback = (ButtonCallback::Callback)condVarCmpInterfCancelButtonHandler;
         CCondInterfApi::get().createButtonFunctor(&functor, 0, thisptr, &callback);
 
         const auto& button = CButtonInterfApi::get();
         button.assignFunctor(dialog, "BTN_CANCEL", dialogName, &functor, 0);
-        FunctorApi::get().createOrFree(&functor, nullptr);
+        SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
     }
 
     const auto& listApi = CListBoxInterfApi::get();
@@ -476,13 +475,13 @@ game::editor::CCondInterf* createCondVarCmpInterf(game::ITask* task,
     if (variablesList1) {
         using ListBoxCallback = CCondInterfApi::Api::ListBoxDisplayCallback;
         ListBoxCallback callback{};
-        Functor functor{};
+        SmartPointer functor{};
 
         callback.callback = (ListBoxCallback::Callback)condVarCmpInterfListBoxDisplayHandler;
         CCondInterfApi::get().createListBoxDisplayFunctor(&functor, 0, thisptr, &callback);
 
         listApi.assignDisplayTextFunctor(dialog, "TLBOX_VARIABLES1", dialogName, &functor, false);
-        FunctorApi::get().createOrFree(&functor, nullptr);
+        SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
         listApi.setElementsTotal(variablesList1, thisptr->variables.size());
     }
 
@@ -490,13 +489,13 @@ game::editor::CCondInterf* createCondVarCmpInterf(game::ITask* task,
     if (variablesList2) {
         using ListBoxCallback = CCondInterfApi::Api::ListBoxDisplayCallback;
         ListBoxCallback callback{};
-        Functor functor{};
+        SmartPointer functor{};
 
         callback.callback = (ListBoxCallback::Callback)condVarCmpInterfListBoxDisplayHandler;
         CCondInterfApi::get().createListBoxDisplayFunctor(&functor, 0, thisptr, &callback);
 
         listApi.assignDisplayTextFunctor(dialog, "TLBOX_VARIABLES2", dialogName, &functor, false);
-        FunctorApi::get().createOrFree(&functor, nullptr);
+        SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
         listApi.setElementsTotal(variablesList2, thisptr->variables.size());
     }
 

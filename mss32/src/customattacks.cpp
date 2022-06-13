@@ -28,7 +28,7 @@ namespace hooks {
 void initializeCustomAttacks()
 {
     utils::DbfFile dbf;
-    const std::filesystem::path dbfFilePath{gameFolder() / "globals" / "Gattacks.dbf"};
+    const std::filesystem::path dbfFilePath{globalsFolder() / "Gattacks.dbf"};
     if (!dbf.open(dbfFilePath)) {
         logError("mssProxyError.log",
                  fmt::format("Could not open {:s}", dbfFilePath.filename().string()));

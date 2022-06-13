@@ -47,6 +47,9 @@ struct Api
     using PushBack = int(__thiscall*)(IdList* thisptr, const CMidgardID* id);
     PushBack pushBack;
 
+    using PushFront = int(__thiscall*)(IdList* thisptr, const CMidgardID* id);
+    PushFront pushFront;
+
     /** Erases id from list. */
     using Erase = void(__thiscall*)(IdList* thisptr, IdListIterator pos);
     Erase erase;

@@ -72,7 +72,6 @@
 #include "eventeffectcathooks.h"
 #include "fortcategory.h"
 #include "fortification.h"
-#include "functor.h"
 #include "gameutils.h"
 #include "globaldata.h"
 #include "idlist.h"
@@ -316,6 +315,8 @@ static Hooks getGameHooks()
         // Reference ground rendering implementation
         {CGroundTextureApi::vftable()->draw, groundTextureDrawHooked},
         {CGroundTextureApi::isoEngineVftable()->render, isoEngineGroundRenderHooked},
+        // Support native modifiers
+        {CMidUnitApi::get().upgrade, upgradeHooked},
     };
     // clang-format on
 
@@ -584,9 +585,26 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{TUnitModifierApi::vftable()->destructor, unitModifierDtorHooked});
     hooks.emplace_back(HookInfo{CMidUnitApi::get().addModifier, addModifierHooked});
 
+    // Support custom modifiers display for unit encyclopedia
+    hooks.emplace_back(HookInfo{CEncLayoutUnitApi::get().constructor, encLayoutUnitCtorHooked});
+    hooks.emplace_back(HookInfo{CEncLayoutUnitApi::get().constructor2, encLayoutUnitCtor2Hooked});
+    hooks.emplace_back(
+        HookInfo{CEncLayoutUnitApi::get().dataConstructor, encLayoutUnitDataCtorHooked});
+    hooks.emplace_back(
+        HookInfo{CEncLayoutUnitApi::get().dataDestructor, encLayoutUnitDataDtorHooked});
+    hooks.emplace_back(HookInfo{CEncLayoutUnitApi::get().initialize, encLayoutUnitInitializeHooked,
+                                (void**)&orig.encLayoutUnitInitialize});
+
     // Show effective HP in unit encyclopedia
     hooks.emplace_back(HookInfo{CEncLayoutUnitApi::get().update, encLayoutUnitUpdateHooked,
                                 (void**)&orig.encLayoutUnitUpdate});
+
+    // Support native modifiers
+    hooks.emplace_back(HookInfo{CMidUnitApi::get().getModifiers, getModifiersHooked});
+    hooks.emplace_back(
+        HookInfo{CMidUnitApi::get().addModifiers, addModifiersHooked, (void**)&orig.addModifiers});
+    hooks.emplace_back(HookInfo{CMidUnitApi::vftable()->initWithSoldierImpl,
+                                initWithSoldierImplHooked, (void**)&orig.initWithSoldierImpl});
 
     return hooks;
 }
@@ -810,8 +828,8 @@ static void menuNewSkirmishCtor(game::CMenuNewSkirmish* thisptr,
     const auto dialog = menuBase.getDialogInterface(thisptr);
     const auto& menu = CMenuNewSkirmishApi::get();
     const auto& button = CButtonInterfApi::get();
-    const auto freeFunctor = FunctorApi::get().createOrFree;
-    Functor functor;
+    const auto freeFunctor = SmartPointerApi::get().createOrFreeNoDtor;
+    SmartPointer functor;
 
     menuBase.createButtonFunctor(&functor, 0, thisptr, &menuBase.buttonBackCallback);
     button.assignFunctor(dialog, "BTN_BACK", dialogName, &functor, 0);

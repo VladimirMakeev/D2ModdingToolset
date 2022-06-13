@@ -23,10 +23,9 @@
 #include "middatacache.h"
 #include "middragdropinterf.h"
 #include "resetstackext.h"
+#include "smartptr.h"
 
 namespace game {
-
-struct Functor;
 
 struct CSiteMerchantInterfData
 {
@@ -71,10 +70,10 @@ struct Api
         int unknown;
     };
 
-    using CreateButtonFunctor = Functor*(__stdcall*)(Functor* functor,
-                                                     int a2,
-                                                     CSiteMerchantInterf* merchantInterf,
-                                                     ButtonCallback* callback);
+    using CreateButtonFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                          int a2,
+                                                          CSiteMerchantInterf* merchantInterf,
+                                                          ButtonCallback* callback);
     CreateButtonFunctor createButtonFunctor;
 };
 

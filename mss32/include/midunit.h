@@ -31,6 +31,7 @@ namespace game {
 
 struct IUsUnit;
 struct CScenarioVisitor;
+struct CMidUnitVftable;
 
 /** Holds unit related data in scenario file and game. */
 struct CMidUnit : public IMidScenarioObject
@@ -59,6 +60,31 @@ assert_offset(CMidUnit, dynLevel, 24);
 assert_offset(CMidUnit, origTypeId, 44);
 assert_offset(CMidUnit, origXp, 60);
 
+struct CMidUnitVftable : IMidScenarioObjectVftable
+{
+    /**
+     * Called by server when new unit is created.
+     * Used in CreateUnit, CVisitorChangeStackLeader::Apply and CVisitorAddUnitToGroup::Apply.
+     */
+    using InitWithSoldierImpl = bool(__thiscall*)(CMidUnit* thisptr,
+                                                  const IMidgardObjectMap* objectMap,
+                                                  const CMidgardID* unitImplId,
+                                                  const int* turn);
+    InitWithSoldierImpl initWithSoldierImpl;
+
+    /**
+     * Called by server when unit is removed. Calls RemoveModifiers and sets unitImpl to null.
+     * Used in CVisitorChangeStackLeader::Apply and CVisitorRmvUnitFromGroup::Apply.
+     * Not actually a finalize method as it is not called every time a unit instance is destroyed.
+     * Destructor also calls RemoveModifiers on its own.
+     */
+    using RemoveUnitImpl = bool(__thiscall*)(CMidUnit* thisptr, int a2);
+    RemoveUnitImpl removeUnitImpl;
+};
+
+static_assert(sizeof(CMidUnitVftable) == 6 * sizeof(void*),
+              "CMidUnit vftable must have exactly 6 methods");
+
 namespace CMidUnitApi {
 
 struct Api
@@ -66,9 +92,6 @@ struct Api
     using AddRemoveModifier = bool(__thiscall*)(CMidUnit* thisptr, const CMidgardID* modifierId);
     AddRemoveModifier addModifier;
     AddRemoveModifier removeModifier;
-
-    using GetModifiers = bool(__thiscall*)(CMidUnit* thisptr, game::IdList* value);
-    GetModifiers getModifiers;
 
     using GetHpMax = int(__thiscall*)(const CMidUnit* thisptr);
     GetHpMax getHpMax;
@@ -88,7 +111,10 @@ struct Api
     using Untransform = bool(__thiscall*)(CMidUnit* thisptr, const CScenarioVisitor* visitor);
     Untransform untransform;
 
-    using AddModifiers = bool(__stdcall*)(const game::IdList* value,
+    using GetModifiers = bool(__stdcall*)(IdList* value, const CMidUnit* unit);
+    GetModifiers getModifiers;
+
+    using AddModifiers = bool(__stdcall*)(const IdList* value,
                                           CMidUnit* unit,
                                           char* errorBuffer,
                                           bool checkCanApply);
@@ -102,6 +128,8 @@ struct Api
 };
 
 Api& get();
+
+CMidUnitVftable* vftable();
 
 } // namespace CMidUnitApi
 

@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,45 +17,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef STRINGARRAY_H
-#define STRINGARRAY_H
+#ifndef IMAGEPTRVECTOR_H
+#define IMAGEPTRVECTOR_H
 
-#include "d2assert.h"
 #include "d2vector.h"
+#include "smartptr.h"
 
 namespace game {
 
-struct String;
+struct IMqImage2;
 
-using StringArray = Vector<String>;
+using ImagePtr = SmartPtr<IMqImage2>;
+using ImagePtrVector = Vector<ImagePtr>;
 
-assert_size(StringArray, 16);
+static_assert(sizeof(ImagePtrVector) == 16, "ImagePtrVector structure must be exactly 16 bytes");
 
-namespace StringArrayApi {
+namespace ImagePtrVectorApi {
 
 struct Api
 {
-    using Destructor = void(__thiscall*)(StringArray* thisptr);
+    using Destructor = void(__thiscall*)(ImagePtrVector* thisptr);
     Destructor destructor;
 
-    using Reserve = void(__thiscall*)(StringArray* thisptr, unsigned int count);
+    using Reserve = void(__thiscall*)(ImagePtrVector* thisptr, unsigned int count);
     Reserve reserve;
 
-    /**
-     * Adds new string element to the end of the array.
-     * @param[in] thisptr pointer to array to add to.
-     * @param[in] string element to push.
-     * @returns unknown.
-     */
-    using PushBack = void*(__thiscall*)(StringArray* thisptr, const String* string);
+    using PushBack = void*(__thiscall*)(ImagePtrVector* thisptr, const ImagePtr* value);
     PushBack pushBack;
 };
 
-/** Returns StringArray functions according to determined version of the game. */
 Api& get();
 
-} // namespace StringArrayApi
+} // namespace ImagePtrVectorApi
 
 } // namespace game
 
-#endif // STRINGARRAY_H
+#endif // IMAGEPTRVECTOR_H

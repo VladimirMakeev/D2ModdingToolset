@@ -101,6 +101,13 @@ struct Api
 
     using TypeInfoRawName = const char*(__thiscall*)(const TypeDescriptor* thisptr);
     TypeInfoRawName* typeInfoRawName;
+
+    using TypeInfoInequalityOperator = int(__thiscall*)(const TypeDescriptor* thisptr,
+                                                        const TypeDescriptor* other);
+    TypeInfoInequalityOperator* typeInfoInequalityOperator;
+
+    using TypeIdOperator = const TypeDescriptor*(__cdecl*)(const void* ptr);
+    TypeIdOperator* typeIdOperator;
 };
 
 Api& get();

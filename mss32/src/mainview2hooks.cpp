@@ -19,7 +19,6 @@
 
 #include "mainview2hooks.h"
 #include "dialoginterf.h"
-#include "functor.h"
 #include "gameimages.h"
 #include "gameutils.h"
 #include "isolayers.h"
@@ -58,6 +57,8 @@ static void showGrid(int mapSize)
             mapGraphics.showImageOnMap(&mapPosition, isoLayers().grid, gridImage, 0, 0);
         }
     }
+
+    imagesApi.createOrFreeGameImages(&imagesPtr, nullptr);
 }
 
 static void hideGrid()
@@ -116,12 +117,12 @@ void __fastcall mainView2ShowIsoDialogHooked(game::CMainView2* thisptr, int /*%e
     ButtonCallback callback{};
     callback.callback = (ButtonCallback::Callback)&mainView2OnToggleGrid;
 
-    Functor functor;
+    SmartPointer functor;
     mainViewApi.createToggleButtonFunctor(&functor, 0, thisptr, &callback);
 
     const auto& buttonApi{CToggleButtonApi::get()};
     buttonApi.assignFunctor(dialog, buttonName, dialog->data->dialogName, &functor, 0);
-    FunctorApi::get().createOrFree(&functor, nullptr);
+    SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
 
     buttonApi.setChecked(toggleButton, gridVisible);
 }

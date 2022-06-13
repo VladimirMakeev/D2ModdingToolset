@@ -27,26 +27,66 @@ namespace game::CEncLayoutUnitApi {
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
+        (Api::Constructor)0x574e9c,
+        (Api::Constructor2)0x574fd5,
+        (Api::DataConstructor)0x574f48,
+        (Api::DataDestructor)0x577d72,
+        (Api::Initialize)0x5750b1,
         (Api::Update)0x5757eb,
+        (Api::CreateListBoxDisplayFunctor)0x577b6d,
     },
     // Russobit
     Api{
+        (Api::Constructor)0x574e9c,
+        (Api::Constructor2)0x574fd5,
+        (Api::DataConstructor)0x574f48,
+        (Api::DataDestructor)0x577d72,
+        (Api::Initialize)0x5750b1,
         (Api::Update)0x5757eb,
+        (Api::CreateListBoxDisplayFunctor)0x577b6d,
     },
     // Gog
     Api{
+        (Api::Constructor)0x5744f1,
+        (Api::Constructor2)0x57462a,
+        (Api::DataConstructor)0x57459d,
+        (Api::DataDestructor)0x57742d,
+        (Api::Initialize)0x574706,
         (Api::Update)0x574e40,
+        (Api::CreateListBoxDisplayFunctor)0x577228,
     },
     // Scenario Editor
     Api{
+        (Api::Constructor)0x4c5915,
+        (Api::Constructor2)0x4c5a71,
+        (Api::DataConstructor)0x4c59c1,
+        (Api::DataDestructor)0x4c8d48,
+        (Api::Initialize)0x4c5b4d,
         (Api::Update)0x4c6287,
+        (Api::CreateListBoxDisplayFunctor)0x4c885f,
     },
+}};
+
+static std::array<CEncLayoutUnitVftable*, 4> vftables = {{
+    // Akella
+    (CEncLayoutUnitVftable*)0x6e7f7c,
+    // Russobit
+    (CEncLayoutUnitVftable*)0x6e7f7c,
+    // Gog
+    (CEncLayoutUnitVftable*)0x6e5f1c,
+    // Scenario Editor
+    (CEncLayoutUnitVftable*)0x5d72bc,
 }};
 // clang-format on
 
 Api& get()
 {
     return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+CEncLayoutUnitVftable* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::CEncLayoutUnitApi

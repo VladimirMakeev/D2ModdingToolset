@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,29 +17,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "functor.h"
+#include "imageptrvector.h"
 #include "version.h"
 #include <array>
 
-namespace game::FunctorApi {
+namespace game::ImagePtrVectorApi {
 
 // clang-format off
-static std::array<Api, 4> functions = {{
+static std::array<Api, 4> functions = { {
     // Akella
     Api{
-        (Api::CreateOrFree)0x49c5d7,
+        (Api::Destructor)0x495373,
+        (Api::Reserve)0x4957e2,
+        (Api::PushBack)0x4a4fd1,
     },
     // Russobit
     Api{
-        (Api::CreateOrFree)0x49c5d7,
+        (Api::Destructor)0x495373,
+        (Api::Reserve)0x4957e2,
+        (Api::PushBack)0x4a4fd1,
     },
     // Gog
     Api{
-        (Api::CreateOrFree)0x495146,
+        (Api::Destructor)0x494df0,
+        (Api::Reserve)0x495293,
+        (Api::PushBack)0x4a4852,
     },
     // Scenario Editor
     Api{
-        (Api::CreateOrFree)0x4575fe,
+        (Api::Destructor)0x4c871d,
+        (Api::Reserve)0x4c8a7f,
+        (Api::PushBack)0x4c8a01,
     },
 }};
 // clang-format on
@@ -49,4 +57,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::FunctorApi
+} // namespace game::ImagePtrVectorApi

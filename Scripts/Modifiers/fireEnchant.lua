@@ -1,7 +1,3 @@
-function getModifierDescTxt()
-	return Id.new("x000tg6046")
-end
-
 function getAttackSource(unit, prev)
 	return Source.Fire
 end

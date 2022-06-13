@@ -20,7 +20,6 @@
 #ifndef MUSICFADER_H
 #define MUSICFADER_H
 
-#include "functor.h"
 #include "smartptr.h"
 #include "uievent.h"
 #include <cstddef>
@@ -32,7 +31,7 @@ struct CMusicFaderData
     SmartPointer unknownPtr;
     UiEvent uiEvent;
     char unknown[12];
-    Functor functor;
+    SmartPointer functor;
     char unknown2[24];
 };
 

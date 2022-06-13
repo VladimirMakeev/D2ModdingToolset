@@ -71,6 +71,8 @@ struct CCustomModifier
     const game::CMidUnit* unit;
     const game::TUnitModifier* unitModifier;
     const std::string scriptFileName;
+    const game::CMidgardID descTxt;
+    const bool display;
     // Thread-sensitive data
     CustomModifierDataMap data;
     std::mutex dataMutex;
@@ -179,7 +181,8 @@ CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack);
 
 game::CUmModifier* createCustomModifier(const game::TUnitModifier* unitModifier,
                                         const char* scriptFileName,
-                                        const game::CMidgardID* id,
+                                        const game::CMidgardID* descTxt,
+                                        bool display,
                                         const game::GlobalData** globalData);
 
 } // namespace hooks

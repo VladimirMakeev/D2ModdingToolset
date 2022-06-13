@@ -1,7 +1,3 @@
-function getModifierDescTxt()
-	return Id.new("x000tg6049")
-end
-
 function getAttackCritHit(unit, prev)
 	return true
 end

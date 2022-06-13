@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,35 +17,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FUNCTOR_H
-#define FUNCTOR_H
+#include "enclayout.h"
+#include "version.h"
+#include <array>
 
-namespace game {
+namespace game::IEncLayoutApi {
 
-/**
- * Used as wrapper for ui elements callbacks.
- * Assumption: smart pointer with reference counter as int* instead of 'unknown'
- * and owned data instead of 'functorData'.
- */
-struct Functor
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)0x5746a7,
+        (Api::Destructor)0x5746e3,
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)0x5746a7,
+        (Api::Destructor)0x5746e3,
+    },
+    // Gog
+    Api{
+        (Api::Constructor)0x573cfc,
+        (Api::Destructor)0x573d38,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x4c5127,
+        (Api::Destructor)0x4c5163,
+    },
+}};
+// clang-format on
+
+Api& get()
 {
-    void* unknown;
-    void* functorData;
-};
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-namespace FunctorApi {
-
-struct Api
-{
-    /** Creates Functor with specified data, frees memory if functorData is nullptr. */
-    using CreateOrFree = void*(__thiscall*)(Functor* thisptr, void* functorData);
-    CreateOrFree createOrFree;
-};
-
-Api& get();
-
-} // namespace FunctorApi
-
-} // namespace game
-
-#endif // FUNCTOR_H
+} // namespace game::IEncLayoutApi

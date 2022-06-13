@@ -22,13 +22,13 @@
 
 #include "imagepointlist.h"
 #include "interffullscreen.h"
+#include "smartptr.h"
 #include <cstddef>
 
 namespace game {
 
 struct CDialogInterf;
 struct CMenuPhase;
-struct Functor;
 
 struct CMenuBaseData
 {
@@ -79,10 +79,10 @@ struct Api
      * Creates functor for buttons of CMenuBase and its childs.
      * Reused from CMenuNewSkirmish.
      */
-    using CreateButtonFunctor = Functor*(__stdcall*)(Functor* functor,
-                                                     int a2,
-                                                     CMenuBase* menu,
-                                                     const ButtonCallback* callback);
+    using CreateButtonFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                          int a2,
+                                                          CMenuBase* menu,
+                                                          const ButtonCallback* callback);
     CreateButtonFunctor createButtonFunctor;
 
     using ListBoxDisplayCallback = void(__thiscall*)(CMenuBase* thisptr,
@@ -91,10 +91,10 @@ struct Api
                                                      int index,
                                                      bool selected);
 
-    using CreateListBoxDisplayFunctor = Functor*(__stdcall*)(Functor* functor,
-                                                             int a2,
-                                                             CMenuBase* menu,
-                                                             ListBoxDisplayCallback* callback);
+    using CreateListBoxDisplayFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                                  int a2,
+                                                                  CMenuBase* menu,
+                                                                  ListBoxDisplayCallback* callback);
     CreateListBoxDisplayFunctor createListBoxDisplayFunctor;
 };
 

@@ -45,6 +45,12 @@ namespace CMidUnitDescriptorApi {
 
 struct Api
 {
+    using Constructor = CMidUnitDescriptor*(__thiscall*)(CMidUnitDescriptor* thisptr,
+                                                         const IMidgardObjectMap* objectMap,
+                                                         const CMidgardID* unitId,
+                                                         const CMidgardID* playerId);
+    Constructor constructor;
+
     using GetSoldier = IUsSoldier*(__thiscall*)(const CMidUnitDescriptor* thisptr);
     GetSoldier getSoldier;
 

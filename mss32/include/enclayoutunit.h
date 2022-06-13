@@ -23,25 +23,28 @@
 #include "d2string.h"
 #include "d2vector.h"
 #include "enclayout.h"
+#include "imagepointlist.h"
 #include "midgardid.h"
 
 namespace game {
 
 struct IMidgardObjectMap;
 struct IEncUnitDescriptor;
+struct CEncParamBase;
+struct IMqImage2;
 
 struct CEncLayoutUnitData
 {
     CMidgardID unitId;
-    IMidgardObjectMap* objectMap;
+    const IMidgardObjectMap* objectMap;
     int unknown;
     int unknown2;
     int unknown3;
     int unknown4;
     int unknown5;
     int unknown6;
-    Vector<SmartPointer> array1;
-    Vector<String> stringArray;
+    Vector<SmartPtr<IMqImage2>> leaderAbilityIcons;
+    Vector<String> leaderAbilityTexts;
     IEncUnitDescriptor* unitDescriptor;
 };
 
@@ -54,15 +57,62 @@ struct CEncLayoutUnit : public IEncLayout
 
 assert_size(CEncLayoutUnit, 16);
 
+struct CEncLayoutUnitVftable : CInterfaceVftable
+{
+    void* method35;
+};
+
+static_assert(sizeof(CEncLayoutUnitVftable) == 35 * sizeof(void*),
+              "CEncLayoutUnit vftable must have exactly 35 methods");
+
 namespace CEncLayoutUnitApi {
 
 struct Api
 {
+    using Constructor = CEncLayoutUnit*(__thiscall*)(CEncLayoutUnit* thisptr,
+                                                     const IMidgardObjectMap* objectMap,
+                                                     CInterface* parent,
+                                                     const CMqRect* area,
+                                                     const CMidgardID* unitId,
+                                                     const CEncParamBase* encParam,
+                                                     const CMidgardID* playerId);
+    Constructor constructor;
+
+    using Constructor2 = CEncLayoutUnit*(__thiscall*)(CEncLayoutUnit* thisptr,
+                                                      IEncUnitDescriptor* descriptor,
+                                                      CInterface* parent,
+                                                      const CMqRect* area,
+                                                      const CEncParamBase* encParam);
+    Constructor2 constructor2;
+
+    using DataConstructor = CEncLayoutUnitData*(__thiscall*)(CEncLayoutUnitData* thisptr);
+    DataConstructor dataConstructor;
+
+    using DataDestructor = void(__thiscall*)(CEncLayoutUnitData* thisptr);
+    DataDestructor dataDestructor;
+
+    using Initialize = void(__thiscall*)(CEncLayoutUnit* thisptr, const CEncParamBase* encParam);
+    Initialize initialize;
+
     using Update = void(__thiscall*)(CEncLayoutUnit* thisptr);
     Update update;
+
+    using ListBoxDisplayCallback = void(__thiscall*)(const CEncLayoutUnit* thisptr,
+                                                     ImagePointList* contents,
+                                                     const CMqRect* lineArea,
+                                                     unsigned int index,
+                                                     bool selected);
+
+    using CreateListBoxDisplayFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                                  int a2,
+                                                                  CEncLayoutUnit* layout,
+                                                                  ListBoxDisplayCallback* callback);
+    CreateListBoxDisplayFunctor createListBoxDisplayFunctor;
 };
 
 Api& get();
+
+CEncLayoutUnitVftable* vftable();
 
 } // namespace CEncLayoutUnitApi
 

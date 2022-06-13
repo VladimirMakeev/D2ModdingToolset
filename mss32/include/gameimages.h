@@ -142,6 +142,10 @@ struct Api
                                                    const CMidgardID* fortificationId,
                                                    const IMidgardObjectMap* objectMap);
     GetCityIconImageNames getCityIconImageNames;
+
+    /** Returns icon image from Icons.ff by its name. */
+    using GetIconImageByName = IMqImage2**(__stdcall*)(IMqImage2** value, const char* name);
+    GetIconImageByName getIconImageByName;
 };
 
 Api& get();
