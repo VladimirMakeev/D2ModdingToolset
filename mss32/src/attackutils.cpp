@@ -128,6 +128,13 @@ bool attackHasDamage(game::AttackClassId id)
            || id == classes.shatter->id;
 }
 
+bool attackHasHeal(game::AttackClassId id)
+{
+    const auto& classes = game::AttackClassCategories::get();
+
+    return id == classes.heal->id || id == classes.revive->id || id == classes.bestowWards->id;
+}
+
 bool attackHasInfinite(game::AttackClassId id)
 {
     const auto& classes = game::AttackClassCategories::get();
@@ -140,9 +147,7 @@ bool attackHasInfinite(game::AttackClassId id)
 
 bool attackHasCritHit(game::AttackClassId id)
 {
-    const auto& classes = game::AttackClassCategories::get();
-
-    return id == classes.damage->id || id == classes.drain->id || id == classes.drainOverflow->id;
+    return isNormalDamageAttack(id);
 }
 
 bool attackHasAltAttack(game::AttackClassId id)
@@ -150,6 +155,26 @@ bool attackHasAltAttack(game::AttackClassId id)
     const auto& classes = game::AttackClassCategories::get();
 
     return id == classes.transformSelf->id || id == classes.doppelganger->id;
+}
+
+bool attackHasDrain(game::AttackClassId id)
+{
+    return isNormalDamageAttack(id);
+}
+
+bool isNormalDamageAttack(game::AttackClassId id)
+{
+    const auto& classes = game::AttackClassCategories::get();
+
+    return id == classes.damage->id || id == classes.drain->id || id == classes.drainOverflow->id;
+}
+
+bool isModifiableDamageAttack(game::AttackClassId id)
+{
+    const auto& classes = game::AttackClassCategories::get();
+
+    return id == classes.damage->id || id == classes.drain->id || id == classes.drainOverflow->id
+           || id == classes.shatter->id;
 }
 
 bool isMeleeAttack(const game::IAttack* attack)

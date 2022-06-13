@@ -43,6 +43,10 @@ struct TextIds
         std::string modifiersEmpty;
         std::string modifierDescription;
         std::string nativeModifierDescription;
+        std::string drainDescription;
+        std::string drainEffect;
+        std::string overflowAttack;
+        std::string overflowText;
     } interf;
 
     struct Events

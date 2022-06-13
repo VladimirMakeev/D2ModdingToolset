@@ -38,11 +38,26 @@ int getLowerDamage(int level);
 int getLowerInitiative(int level);
 bool attackHasPower(game::AttackClassId id); // Power is chance to hit / accuracy
 bool attackHasDamage(game::AttackClassId id);
+bool attackHasHeal(game::AttackClassId id);
 bool attackHasInfinite(game::AttackClassId id);
 bool attackHasCritHit(game::AttackClassId id);
 bool attackHasAltAttack(game::AttackClassId id);
+bool attackHasDrain(game::AttackClassId id); // Uses IAttack::getDrain
 bool isMeleeAttack(const game::IAttack* attack);
 int getAttackMaxTargets(game::AttackReachId id);
+
+/**
+ * Attack uses ComputeDamage function, thus its damage:
+ * - is mitigated by armor
+ * - can be boosted / lowered
+ * - can be modified
+ * - can critically hit
+ * - can have custom damage ratio
+ */
+bool isNormalDamageAttack(game::AttackClassId id);
+
+/** Attack uses modifiable value of IAttack::getQtyDamage. */
+bool isModifiableDamageAttack(game::AttackClassId id);
 
 } // namespace hooks
 
