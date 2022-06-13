@@ -340,6 +340,11 @@ Returns group as array of 6 [unit slots](luaApi.md#unit-slot).
 ```lua
 group.slots
 ```
+##### units
+Returns group [units](luaApi.md#unit-1).
+```lua
+group.units
+```
 ##### hasUnit
 Returns true if group has specified [unit](luaApi.md#unit-1) or unit [id](luaApi.md#id).
 ```lua
