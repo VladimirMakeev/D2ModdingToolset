@@ -53,6 +53,7 @@ struct AttackDescriptorData
     game::AttackSourceId sourceId;
     game::AttackReachId reachId;
     int damage;
+    int drain;
     int heal;
     int power;
     int initiative;
@@ -80,6 +81,7 @@ public:
     game::AttackSourceId sourceId() const;
     game::AttackReachId reachId() const;
     int damage() const;
+    int drain() const;
     int heal() const;
     bool hasPower() const;
     int power() const;

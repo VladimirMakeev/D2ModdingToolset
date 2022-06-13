@@ -133,6 +133,10 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.modifierDescription = interf.value().get_or("modifierDescription", std::string());
     value.nativeModifierDescription = interf.value().get_or("nativeModifierDescription",
                                                             std::string());
+    value.drainDescription = interf.value().get_or("drainDescription", std::string());
+    value.drainEffect = interf.value().get_or("drainEffect", std::string());
+    value.overflowAttack = interf.value().get_or("overflowAttack", std::string());
+    value.overflowText = interf.value().get_or("overflowText", std::string());
 }
 
 void initialize(TextIds& value)

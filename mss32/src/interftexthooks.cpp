@@ -134,6 +134,15 @@ std::string getCritHitText()
     return getInterfaceText("X160TA0017"); // "Critical hit"
 }
 
+std::string getDrainEffectText()
+{
+    auto text = getInterfaceText(textIds().interf.drainEffect.c_str());
+    if (text.length())
+        return text;
+
+    return getInterfaceText("X005TA0792"); // "Drain"
+}
+
 std::string addCritHitText(const std::string& base, const std::string& value, bool full)
 {
     auto text = getInterfaceText(textIds().interf.critHitDamage.c_str());
@@ -154,6 +163,15 @@ std::string getInfiniteText()
     return "Lasting";
 }
 
+std::string getOverflowText()
+{
+    auto text = getInterfaceText(textIds().interf.overflowAttack.c_str());
+    if (text.length())
+        return text;
+
+    return "Overflow";
+}
+
 std::string addInfiniteText(const std::string& base,
                             const utils::AttackDescriptor& actual,
                             const utils::AttackDescriptor& global)
@@ -167,6 +185,28 @@ std::string addInfiniteText(const std::string& base,
 
     replace(text, "%ATTACK%", base);
     replace(text, "%INFINITE%", getModifiedStringText(getInfiniteText(), !global.infinite()));
+    return text;
+}
+
+std::string addOverflowText(const std::string& base,
+                            const utils::AttackDescriptor& actual,
+                            const utils::AttackDescriptor& global)
+{
+    using namespace game;
+
+    const auto& classes = AttackClassCategories::get();
+
+    if (actual.classId() != classes.drainOverflow->id)
+        return base;
+
+    auto text = getInterfaceText(textIds().interf.overflowText.c_str());
+    if (text.empty())
+        text = "%ATTACK% (%OVERFLOW%)";
+
+    replace(text, "%ATTACK%", base);
+    replace(text, "%OVERFLOW%",
+            getModifiedStringText(getOverflowText(),
+                                  global.classId() != classes.drainOverflow->id));
     return text;
 }
 
@@ -350,6 +390,14 @@ std::string getAttackDamageText(const utils::AttackDescriptor& actual,
     }
 
     return addInfiniteText(result, actual, global);
+}
+
+std::string getAttackDrainText(const utils::AttackDescriptor& actual,
+                               const utils::AttackDescriptor& global)
+{
+    auto result = getModifiedNumberText(actual.drain(), global.drain(), false);
+
+    return addOverflowText(result, actual, global);
 }
 
 std::string getAttackSourceText(game::AttackSourceId id)
@@ -550,6 +598,33 @@ std::string getDamageField(const utils::AttackDescriptor& actual,
     return result;
 }
 
+std::string getDrainField(const utils::AttackDescriptor& actual,
+                          const utils::AttackDescriptor& global,
+                          const utils::AttackDescriptor& actual2,
+                          const utils::AttackDescriptor& global2)
+{
+    if (!actual.drain() && !actual2.drain())
+        return "";
+
+    auto result = getInterfaceText(textIds().interf.drainDescription.c_str());
+    if (result.empty())
+        result = "\\fMedBold;%DRAINEFFECT%:\\t\\fNormal;%DRAIN%\\n";
+
+    auto drain = getAttackDrainText(actual, global);
+    if (!actual2.empty()) {
+        auto drain2 = getAttackDrainText(actual2, global2);
+        if (drain == "0")
+            drain = drain2;
+        else if (drain2 != "0")
+            drain = addAttack2Text(drain, drain2);
+    }
+
+    replace(result, "%DRAINEFFECT%", getDrainEffectText());
+    replace(result, "%DRAIN%", drain);
+
+    return result;
+}
+
 std::string getSourceField(const utils::AttackDescriptor& actual,
                            const utils::AttackDescriptor& global,
                            const utils::AttackDescriptor& actualAlt,
@@ -648,6 +723,8 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
     replace(description, "%EFFECT%", getEffectField(actual));
 
     replace(description, "%DAMAGE%", getDamageField(actual, global, actual2, global2, damageMax));
+
+    replace(description, "%DRAIN%", getDrainField(actual, global, actual2, global2));
 
     replace(description, "%SOURCE%", getSourceField(actual, global, actualAlt, globalAlt));
 

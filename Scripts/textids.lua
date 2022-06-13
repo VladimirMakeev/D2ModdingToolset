@@ -79,6 +79,24 @@ textids = {
 		-- The text must contain keyword "%DESC%".
 		-- Fallback text is "\vC;\fMedBold;%DESC%\fNormal;"
 		nativeModifierDescription = "",
+
+		-- Defines format id for drain description in unit encyclopedia.
+		-- The text must contain keywords "%DRAINEFFECT%" and "%DRAIN%".
+		-- Fallback text is "\fMedBold;%DRAINEFFECT%:\t\fNormal;%DRAIN%\n"
+		drainDescription = "",
+
+		-- Defines text id of drain effect in unit encyclopedia.
+		-- Fallback text id is the standard "X005TA0792".
+		drainEffect = "",
+
+		-- Defines text id to mark Drain Overflow attacks in unit encyclopedia.
+		-- Fallback text is "Overflow".
+		overflowAttack = "",
+
+		-- Defines text id to format Drain Overflow text in unit encyclopedia.
+		-- The text must contain keywords "%ATTACK%" and "%OVERFLOW%".
+		-- Fallback text is "%ATTACK% (%OVERFLOW%)".
+		overflowText = "",
 	},
 
 	-- Text ids related to events logic

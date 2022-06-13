@@ -259,9 +259,19 @@ AttackDescriptor::AttackDescriptor(game::IEncUnitDescriptor* descriptor,
     data.initiative = computeInitiative(data.initiative, lowerInitiativeLevel, modifiers);
     data.damage = computeDamage(data.damage, boostDamageLevel, lowerDamageLevel, modifiers,
                                 damageMax, data.classId, data.custom.damageSplit);
+    data.drain = attackHasDrain(data.classId) ? attack->vftable->getDrain(attack, data.damage) : 0;
     data.power = computePower(data.power, modifiers, data.classId);
     data.infinite = attackHasInfinite(data.classId) ? attack->vftable->getInfinite(attack) : 0;
     data.critHit = attackHasCritHit(data.classId) ? attack->vftable->getCritHit(attack) : false;
+
+    switch (data.classId) {
+    case game::AttackClassId::Drain:
+        data.drain += data.damage * userSettings().drainAttackHeal / 100;
+        break;
+    case game::AttackClassId::DrainOverflow:
+        data.drain += data.damage * userSettings().drainOverflowHeal / 100;
+        break;
+    }
 }
 
 bool AttackDescriptor::empty() const
@@ -292,7 +302,11 @@ game::AttackReachId AttackDescriptor::reachId() const
 int AttackDescriptor::damage() const
 {
     return data.damage;
+}
 
+int AttackDescriptor::drain() const
+{
+    return data.drain;
 }
 
 int AttackDescriptor::heal() const

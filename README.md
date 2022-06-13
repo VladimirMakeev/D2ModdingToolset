@@ -138,7 +138,17 @@
         - `ratedDamageEqual`
         - `ratedDamageSeparator`
         - `splitDamage`
-    - Specify corresponding text ids in [textids.lua](Scripts/textids.lua).
+        - `modifiedValue`
+        - `drainDescription`
+        - `drainEffect`
+        - `overflowAttack`
+        - `overflowText`
+    - Specify corresponding text ids in [textids.lua](Scripts/textids.lua);
+    - (Optional) Consider adding drain attack description:
+        - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;
+        - Add `%DRAIN%` keyword where you like to put the description (propose to place it after damage field like `%DAMAGE%\n%DRAIN%`);
+        - The keyword is replaced with empty string if attack has no drain effect;
+        - Note that you can freely move content between `X005TA0787` and `X005TA0788` if you run out of length limit (because the two strings simply merged together in `X005TA0424`).
     
     The following information is added:
     - Damage of secondary attack if its not either poison, blister or frostbite;
@@ -147,9 +157,11 @@
     - Value of lower initiative;
     - Critical hit indication;
     - Infinite effect indication;
+    - Drain attack description;
     - Custom attack sources;
     - Custom attack reaches;
-    - Custom attack damage ratios.
+    - Custom attack damage ratios;
+    - Custom unit modifiers.
   </details>
 
 - <details>
@@ -360,7 +372,8 @@
     - Consider adding vertical align to unit encyclopedia fields to properly accommodate custom attack source text:
         - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;
         - Note how attack name fields `%TWICE%%ALTATTACK%%ATTACK%%SECOND%` are enclosed in vertical align `\p110;` and `\p0;`;
-        - Use the same technique to enclose `%SOURCE%%SOURCE2%` field in `X005TA0788` (like `\p110;%SOURCE%%SOURCE2%\p0;`).
+        - Use the same technique to enclose `%SOURCE%%SOURCE2%` field in `X005TA0788` (like `\p110;%SOURCE%%SOURCE2%\p0;`);
+        - Note that you can freely move content between `X005TA0787` and `X005TA0788` if you run out of length limit (because the two strings simply merged together in `X005TA0424`).
 
     ![image](https://user-images.githubusercontent.com/5180699/122281194-ac1e3380-cef2-11eb-902a-29821d0ceae5.png)
 
@@ -388,7 +401,8 @@
     - Consider adding vertical align to unit encyclopedia fields to properly accommodate custom attack reach text:
         - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;
         - Note how attack name fields `%TWICE%%ALTATTACK%%ATTACK%%SECOND%` are enclosed in vertical align `\p110;` and `\p0;`;
-        - Use the same technique to enclose `%REACH%` and `%TARGETS%` fields in `X005TA0788` (like `\p110;%REACH%\p0;`).
+        - Use the same technique to enclose `%REACH%` and `%TARGETS%` fields in `X005TA0788` (like `\p110;%REACH%\p0;`);
+        - Note that you can freely move content between `X005TA0787` and `X005TA0788` if you run out of length limit (because the two strings simply merged together in `X005TA0424`).
 
     Example descriptions for `TARGET_TXT`:
     ```
@@ -430,7 +444,8 @@
     - Consider adding vertical align to unit encyclopedia fields to properly accommodate damage ratio text:
         - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;
         - Note how attack name fields `%TWICE%%ALTATTACK%%ATTACK%%SECOND%` are enclosed in vertical align `\p110;` and `\p0;`;
-        - Use the same technique to enclose `%DAMAGE%` field in `X005TA0788` (like `\p110;%DAMAGE%\p0;`).
+        - Use the same technique to enclose `%DAMAGE%` field in `X005TA0788` (like `\p110;%DAMAGE%\p0;`);
+        - Note that you can freely move content between `X005TA0787` and `X005TA0788` if you run out of length limit (because the two strings simply merged together in `X005TA0424`).
 
     ![image](https://user-images.githubusercontent.com/5180699/124194976-2b565e80-dad2-11eb-8395-58614dcd669f.png)
 
@@ -477,7 +492,8 @@
     - Consider adding vertical align to unit encyclopedia fields to properly accommodate custom modifier bonuses text:
         - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;
         - Note how attack name fields `%TWICE%%ALTATTACK%%ATTACK%%SECOND%` are enclosed in vertical align `\p110;` and `\p0;`;
-        - Use the same technique to enclose `%HIT%%HIT2%` and `%DAMAGE%` fields (like `\p110;%DAMAGE%\p0;`).
+        - Use the same technique to enclose `%HIT%%HIT2%` and `%DAMAGE%` fields (like `\p110;%DAMAGE%\p0;`);
+        - Note that you can freely move content between `X005TA0787` and `X005TA0788` if you run out of length limit (because the two strings simply merged together in `X005TA0424`).
 
     ![image](https://user-images.githubusercontent.com/5180699/171748030-5af2d922-58fc-4427-915c-003203192bdd.png)
     ![image](https://user-images.githubusercontent.com/5180699/171749199-09c93dc2-cf3d-4760-a00a-52ce9550814e.png)
