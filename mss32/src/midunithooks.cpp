@@ -20,6 +20,7 @@
 #include "midunithooks.h"
 #include "custommodifier.h"
 #include "custommodifiers.h"
+#include "dynamiccast.h"
 #include "modifierutils.h"
 #include "originalfunctions.h"
 #include "stringandid.h"
