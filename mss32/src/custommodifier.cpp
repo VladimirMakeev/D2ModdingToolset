@@ -247,9 +247,14 @@ game::IAttack* CCustomModifier::getAttack(bool primary)
     bindings::IdView prevId{prevValue ? prevValue->id : game::emptyId};
     auto value = primary ? GET_VALUE(getAttackId, prevId) : GET_VALUE(getAttack2Id, prevId);
     if (value != prevId) {
-        auto global = getGlobalAttack(&value.id);
-        if (global)
-            prevValue = global;
+        if (value.id == game::emptyId) {
+            if (!primary) // Allow to remove secondary attack
+                prevValue = nullptr;
+        } else {
+            auto global = getGlobalAttack(&value.id);
+            if (global)
+                prevValue = global;
+        }
     }
 
     if (prevValue == nullptr)
