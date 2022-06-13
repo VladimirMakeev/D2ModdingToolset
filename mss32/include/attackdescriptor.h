@@ -65,18 +65,25 @@ struct AttackDescriptorData
 class AttackDescriptor
 {
 public:
-    AttackDescriptor(game::IEncUnitDescriptor* descriptor, AttackType type, bool global);
+    AttackDescriptor(game::IEncUnitDescriptor* descriptor,
+                     AttackType type,
+                     bool global,
+                     int boostDamageLevel = 0,
+                     int lowerDamageLevel = 0,
+                     int lowerInitiativeLevel = 0,
+                     const game::IdList* modifiers = nullptr,
+                     int damageMax = INT_MAX);
 
     bool empty() const;
     std::string name() const;
     game::AttackClassId classId() const;
     game::AttackSourceId sourceId() const;
     game::AttackReachId reachId() const;
-    int damage(const game::IdList* modifiers = nullptr, int max = INT_MAX) const;
+    int damage() const;
     int heal() const;
     bool hasPower() const;
-    int power(const game::IdList* modifiers = nullptr) const;
-    int initiative(const game::IdList* modifiers = nullptr) const;
+    int power() const;
+    int initiative() const;
     int level() const;
     int boost() const;
     int lower() const;
@@ -91,8 +98,6 @@ public:
     const hooks::CustomAttackData& custom() const;
 
 private:
-    void initialize(game::IAttack* attack, game::IEncUnitDescriptor* descriptor, AttackType type);
-
     AttackDescriptorData data;
 };
 

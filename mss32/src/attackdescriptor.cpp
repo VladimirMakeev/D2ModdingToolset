@@ -27,6 +27,7 @@
 #include "midunit.h"
 #include "midunitdescriptor.h"
 #include "restrictions.h"
+#include "settings.h"
 #include "ummodifier.h"
 #include "unitutils.h"
 
@@ -80,78 +81,187 @@ game::IAttack* getGlobalAttack(game::IEncUnitDescriptor* descriptor, AttackType 
     return attack;
 }
 
-AttackDescriptor::AttackDescriptor(game::IEncUnitDescriptor* descriptor,
-                                   AttackType type,
-                                   bool global)
+game::IAttack* getAttack(game::IEncUnitDescriptor* descriptor,
+                         AttackType type,
+                         bool global,
+                         bool* useDescriptor)
 {
     using namespace game;
 
     const auto& rtti = RttiApi::rtti();
     const auto dynamicCast = RttiApi::get().dynamicCast;
 
+    *useDescriptor = false;
+
     if (global) {
-        initialize(getGlobalAttack(descriptor, type), nullptr, type);
+        return getGlobalAttack(descriptor, type);
+    }
+
+    auto midUnitDescriptor = (const game::CMidUnitDescriptor*)
+        dynamicCast(descriptor, 0, rtti.IEncUnitDescriptorType, rtti.CMidUnitDescriptorType, 0);
+    if (midUnitDescriptor) {
+        return getAttack(midUnitDescriptor->unit->unitImpl, type);
     } else {
-        auto midUnitDescriptor = (const game::CMidUnitDescriptor*)
-            dynamicCast(descriptor, 0, rtti.IEncUnitDescriptorType, rtti.CMidUnitDescriptorType, 0);
-        if (midUnitDescriptor) {
-            const auto unitImpl = midUnitDescriptor->unit->unitImpl;
-            initialize(getAttack(unitImpl, type), nullptr, type);
-        } else {
-            initialize(getGlobalAttack(descriptor, type), descriptor, type);
-        }
+        *useDescriptor = true;
+        return getGlobalAttack(descriptor, type);
     }
 }
 
-void AttackDescriptor::initialize(game::IAttack* attack,
-                                  game::IEncUnitDescriptor* descriptor,
-                                  AttackType type)
+int computeValue(int base,
+                 int min,
+                 int max,
+                 int boost,
+                 const game::IdList* modifiers,
+                 game::ModifierElementTypeFlag modifierType)
 {
     using namespace game;
 
-    data = {};
+    int result = base;
+
+    if (modifiers) {
+        result = gameFunctions().applyPercentModifiers(result, modifiers, modifierType);
+    }
+
+    if (boost) {
+        result += result * boost / 100;
+    }
+
+    return std::clamp(result, min, max);
+}
+
+int computeDamage(int base,
+                  int boostDamageLevel,
+                  int lowerDamageLevel,
+                  const game::IdList* modifiers,
+                  int damageMax,
+                  game::AttackClassId classId,
+                  bool damageSplit)
+{
+    using namespace game;
+
+    const auto& restrictions = gameRestrictions();
+
+    if (hooks::isNormalDamageAttack(classId)) {
+        int boost = hooks::getBoostDamage(boostDamageLevel)
+                    - hooks::getLowerDamage(lowerDamageLevel);
+        int damage = computeValue(base, restrictions.unitDamage->min, damageMax, boost, modifiers,
+                                  ModifierElementTypeFlag::QtyDamage);
+
+        if (damageSplit) {
+            damage *= hooks::userSettings().splitDamageMultiplier;
+        }
+
+        return damage;
+    } else if (hooks::isModifiableDamageAttack(classId)) {
+        return computeValue(base, restrictions.unitDamage->min, damageMax, 0, modifiers,
+                            ModifierElementTypeFlag::QtyDamage);
+    }
+
+    return base;
+}
+
+int computePower(int base, const game::IdList* modifiers, game::AttackClassId classId)
+{
+    using namespace game;
+
+    const auto& restrictions = gameRestrictions();
+
+    if (!hooks::attackHasPower(classId))
+        return 100;
+
+    return computeValue(base, restrictions.attackPower->min, restrictions.attackPower->max, 0,
+                        modifiers, ModifierElementTypeFlag::Power);
+}
+
+int computeInitiative(int base, int lowerInitiativeLevel, const game::IdList* modifiers)
+{
+    using namespace game;
+
+    const auto& restrictions = gameRestrictions();
+
+    return computeValue(base, restrictions.attackInitiative->min,
+                        restrictions.attackInitiative->max,
+                        -hooks::getLowerInitiative(lowerInitiativeLevel), modifiers,
+                        ModifierElementTypeFlag::Initiative);
+}
+
+AttackDescriptor::AttackDescriptor(game::IEncUnitDescriptor* descriptor,
+                                   AttackType type,
+                                   bool global,
+                                   int boostDamageLevel,
+                                   int lowerDamageLevel,
+                                   int lowerInitiativeLevel,
+                                   const game::IdList* modifiers,
+                                   int damageMax)
+    : data()
+{
+    using namespace hooks;
+
+    bool useDescriptor;
+    auto attack = getAttack(descriptor, type, global, &useDescriptor);
     if (attack == nullptr) {
         data.empty = true;
-        data.classId = (AttackClassId)emptyCategoryId;
-        data.sourceId = (AttackSourceId)emptyCategoryId;
-        data.reachId = (AttackReachId)emptyCategoryId;
-    } else if (descriptor && type == AttackType::Primary) {
+        data.classId = (game::AttackClassId)game::emptyCategoryId;
+        data.sourceId = (game::AttackSourceId)game::emptyCategoryId;
+        data.reachId = (game::AttackReachId)game::emptyCategoryId;
+        return;
+    }
+
+    if (useDescriptor && type == AttackType::Primary) {
         data.name = descriptor->vftable->getAttackName(descriptor);
         data.classId = descriptor->vftable->getAttackClass(descriptor)->id;
         data.sourceId = descriptor->vftable->getAttackSource(descriptor)->id;
         data.reachId = descriptor->vftable->getAttackReach(descriptor)->id;
-        data.damage = descriptor->vftable->getAttackDamageOrHeal(descriptor);
-        data.heal = data.damage;
-        data.power = descriptor->vftable->getAttackPower(descriptor);
         data.initiative = descriptor->vftable->getAttackInitiative(descriptor);
         data.level = descriptor->vftable->getAttackLevel(descriptor);
-        data.infinite = attack->vftable->getInfinite(attack);
-        data.critHit = attack->vftable->getCritHit(attack);
-        data.custom = hooks::getCustomAttackData(attack);
+
+        if (attackHasDamage(data.classId) || attackHasHeal(data.classId)) {
+            data.damage = descriptor->vftable->getAttackDamageOrHeal(descriptor);
+            data.heal = data.damage;
+        }
+
+        if (attackHasPower(data.classId)) {
+            data.power = descriptor->vftable->getAttackPower(descriptor);
+        }
     } else {
         data.classId = attack->vftable->getAttackClass(attack)->id;
         data.sourceId = attack->vftable->getAttackSource(attack)->id;
         data.reachId = attack->vftable->getAttackReach(attack)->id;
-        data.damage = attack->vftable->getQtyDamage(attack);
-        data.heal = attack->vftable->getQtyHeal(attack);
         data.initiative = attack->vftable->getInitiative(attack);
         data.level = attack->vftable->getLevel(attack);
-        data.infinite = attack->vftable->getInfinite(attack);
-        data.critHit = attack->vftable->getCritHit(attack);
-        data.custom = hooks::getCustomAttackData(attack);
 
-        if (descriptor && type == AttackType::Secondary) {
+        if (attackHasDamage(data.classId)) {
+            data.damage = attack->vftable->getQtyDamage(attack);
+        } else if (attackHasHeal(data.classId)) {
+            data.heal = attack->vftable->getQtyHeal(attack);
+        }
+
+        if (useDescriptor && type == AttackType::Secondary) {
             data.name = descriptor->vftable->getAttack2Name(descriptor);
-            data.power = descriptor->vftable->getAttack2Power(descriptor);
-        } else if (descriptor && type == AttackType::Alternative) {
+            if (attackHasPower(data.classId)) {
+                data.power = descriptor->vftable->getAttack2Power(descriptor);
+            }
+        } else if (useDescriptor && type == AttackType::Alternative) {
             data.name = descriptor->vftable->getAltAttackName(descriptor);
-            data.power = descriptor->vftable->getAltAttackPower(descriptor);
+            if (attackHasPower(data.classId)) {
+                data.power = descriptor->vftable->getAltAttackPower(descriptor);
+            }
         } else {
-            int tmp;
             data.name = attack->vftable->getName(attack);
-            data.power = *attack->vftable->getPower(attack, &tmp);
+            if (attackHasPower(data.classId)) {
+                int tmp;
+                data.power = *attack->vftable->getPower(attack, &tmp);
+            }
         }
     }
+
+    data.custom = getCustomAttackData(attack);
+    data.initiative = computeInitiative(data.initiative, lowerInitiativeLevel, modifiers);
+    data.damage = computeDamage(data.damage, boostDamageLevel, lowerDamageLevel, modifiers,
+                                damageMax, data.classId, data.custom.damageSplit);
+    data.power = computePower(data.power, modifiers, data.classId);
+    data.infinite = attackHasInfinite(data.classId) ? attack->vftable->getInfinite(attack) : 0;
+    data.critHit = attackHasCritHit(data.classId) ? attack->vftable->getCritHit(attack) : false;
 }
 
 bool AttackDescriptor::empty() const
@@ -179,22 +289,10 @@ game::AttackReachId AttackDescriptor::reachId() const
     return data.reachId;
 }
 
-int AttackDescriptor::damage(const game::IdList* modifiers, int max) const
+int AttackDescriptor::damage() const
 {
-    using namespace game;
+    return data.damage;
 
-    const auto& fn = gameFunctions();
-    const auto& restrictions = game::gameRestrictions();
-
-    if (!hooks::attackHasDamage(data.classId))
-        return 0;
-
-    if (!modifiers)
-        return data.damage;
-
-    int value = fn.applyPercentModifiers(data.damage, modifiers,
-                                         ModifierElementTypeFlag::QtyDamage);
-    return std::clamp(value, restrictions.unitDamage->min, max);
 }
 
 int AttackDescriptor::heal() const
@@ -207,37 +305,14 @@ bool AttackDescriptor::hasPower() const
     return hooks::attackHasPower(data.classId);
 }
 
-int AttackDescriptor::power(const game::IdList* modifiers) const
+int AttackDescriptor::power() const
 {
-    using namespace game;
-
-    const auto& fn = gameFunctions();
-    const auto& restrictions = game::gameRestrictions();
-
-    if (!hasPower())
-        return 100;
-
-    if (!modifiers)
-        return data.power;
-
-    int value = fn.applyPercentModifiers(data.power, modifiers, ModifierElementTypeFlag::Power);
-    return std::clamp(value, restrictions.attackPower->min, restrictions.attackPower->max);
+    return data.power;
 }
 
-int AttackDescriptor::initiative(const game::IdList* modifiers) const
+int AttackDescriptor::initiative() const
 {
-    using namespace game;
-
-    const auto& fn = gameFunctions();
-    const auto& restrictions = game::gameRestrictions();
-
-    if (!modifiers)
-        return data.initiative;
-
-    int value = fn.applyPercentModifiers(data.initiative, modifiers,
-                                         ModifierElementTypeFlag::Initiative);
-    return std::clamp(value, restrictions.attackInitiative->min,
-                      restrictions.attackInitiative->max);
+    return data.initiative;
 }
 
 int AttackDescriptor::level() const
@@ -262,12 +337,12 @@ int AttackDescriptor::lowerIni() const
 
 bool AttackDescriptor::infinite() const
 {
-    return hooks::attackHasInfinite(data.classId) ? data.infinite : false;
+    return data.infinite;
 }
 
 bool AttackDescriptor::critHit() const
 {
-    return hooks::attackHasCritHit(data.classId) ? data.critHit : false;
+    return data.critHit;
 }
 
 std::uint8_t AttackDescriptor::critDamage() const
