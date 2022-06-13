@@ -58,7 +58,7 @@ void UnitView::bind(sol::state& lua)
     unit["modifiers"] = sol::property(&UnitView::getModifiers);
 
     // Leader properties for backward compatibility
-    unit["type"] = sol::property(&UnitView::getCategory);
+    unit["type"] = sol::property(&UnitView::getLeaderCategory);
     unit["movement"] = sol::property(&UnitView::getMovement);
     unit["scout"] = sol::property(&UnitView::getScout);
     unit["leadership"] = sol::property(&UnitView::getLeadership);
@@ -102,7 +102,7 @@ int UnitView::getHpMax() const
     return soldier->vftable->getHitPoints(soldier);
 }
 
-int UnitView::getCategory() const
+int UnitView::getLeaderCategory() const
 {
     return getImpl()->getLeaderCategory();
 }

@@ -60,7 +60,7 @@ public:
     int getHpMax() const;
 
     /** Returns leader category id. */
-    int getCategory() const;
+    int getLeaderCategory() const;
     /** Returns leader maximum movement points. */
     int getMovement() const;
     /** Returns leader scouting range. */
