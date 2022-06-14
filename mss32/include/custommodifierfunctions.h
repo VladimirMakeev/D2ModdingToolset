@@ -21,6 +21,7 @@
 #define CUSTOMMODIFIERFUNCTIONS_H
 
 #include "currencyview.h"
+#include "idview.h"
 #include "unitimplview.h"
 #include "unitview.h"
 #include <lua.hpp>

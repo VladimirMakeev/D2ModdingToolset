@@ -32,6 +32,7 @@
 #include "mempool.h"
 #include "midunit.h"
 #include "restrictions.h"
+#include "scriptutils.h"
 #include "unitcat.h"
 #include "unitmodifier.h"
 #include "unitmodifierhooks.h"
@@ -119,31 +120,6 @@ CCustomModifier* castAttackToCustomModifier(const game::IAttack* attack)
     }
 
     return nullptr;
-}
-
-std::vector<bindings::IdView> IdVectorToIds(const game::IdVector* src)
-{
-    std::vector<bindings::IdView> value;
-    for (const game::CMidgardID* it = src->bgn; it != src->end; it++) {
-        value.push_back(it);
-    }
-
-    return value;
-}
-
-void IdsToIdVector(const std::vector<bindings::IdView>& src, game::IdVector* dst)
-{
-    using namespace game;
-
-    const auto& idVectorApi = IdVectorApi::get();
-
-    IdVector tmp{};
-    idVectorApi.reserve(&tmp, 1);
-    for (const auto& id : src) {
-        idVectorApi.pushBack(&tmp, &(const CMidgardID&)id);
-    }
-    idVectorApi.copy(dst, tmp.bgn, tmp.end);
-    idVectorApi.destructor(&tmp);
 }
 
 const game::IUsUnit* CCustomModifier::getPrev() const

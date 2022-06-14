@@ -33,10 +33,12 @@
 #include <detours.h>
 #include <fmt/format.h>
 #include <string>
+#include <thread>
 
 static HMODULE library{};
 static void* registerInterface{};
 static void* unregisterInterface{};
+std::thread::id mainThreadId;
 
 extern "C" __declspec(naked) void __stdcall RIB_register_interface(void)
 {
@@ -202,6 +204,8 @@ BOOL APIENTRY DllMain(HMODULE hDll, DWORD reason, LPVOID reserved)
     if (reason != DLL_PROCESS_ATTACH) {
         return TRUE;
     }
+
+    mainThreadId = std::this_thread::get_id();
 
     library = LoadLibrary("Mss23.dll");
     if (!library) {

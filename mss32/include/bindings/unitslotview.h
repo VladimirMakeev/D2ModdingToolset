@@ -29,7 +29,7 @@ class state;
 
 namespace game {
 struct CMidUnit;
-}
+} // namespace game
 
 namespace bindings {
 

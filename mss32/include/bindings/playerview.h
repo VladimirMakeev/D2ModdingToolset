@@ -17,42 +17,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ITEMVIEW_H
-#define ITEMVIEW_H
-
-#include "midgardid.h"
-#include <optional>
+#ifndef PLAYERVIEW_H
+#define PLAYERVIEW_H
 
 namespace sol {
 class state;
 }
 
 namespace game {
-struct IMidgardObjectMap;
+struct CMidPlayer;
 } // namespace game
 
 namespace bindings {
 
 struct IdView;
-class ItemBaseView;
 class CurrencyView;
 
-class ItemView
+class PlayerView
 {
 public:
-    ItemView(const game::CMidgardID* itemId, const game::IMidgardObjectMap* objectMap);
+    PlayerView(const game::CMidPlayer* player);
 
     static void bind(sol::state& lua);
 
     IdView getId() const;
-    std::optional<ItemBaseView> getBase() const;
-    CurrencyView getSellValue() const;
+    int getRaceCategoryId() const;
+    int getLordCategoryId() const;
+    CurrencyView getBank() const;
+    bool isHuman() const;
+    bool isAlwaysAi() const;
 
 private:
-    game::CMidgardID itemId;
-    const game::IMidgardObjectMap* objectMap;
+    const game::CMidPlayer* player;
 };
 
 } // namespace bindings
 
-#endif // ITEMVIEW_H
+#endif // PLAYERVIEW_H

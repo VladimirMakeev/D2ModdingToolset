@@ -140,6 +140,18 @@ static_assert(offsetof(CMidServerLogic, list2) == 300,
 static_assert(offsetof(CMidServerLogic, unknown17) == 316,
               "CMidServerLogic::unknown17 offset must be 316 bytes");
 
+namespace CMidServerLogicApi {
+
+struct Api
+{
+    using GetObjectMap = IMidgardObjectMap*(__thiscall*)(CMidServerLogic* thisptr);
+    GetObjectMap getObjectMap;
+};
+
+Api& get();
+
+} // namespace CMidServerLogicApi
+
 } // namespace game
 
 #endif // MIDSERVERLOGIC_H

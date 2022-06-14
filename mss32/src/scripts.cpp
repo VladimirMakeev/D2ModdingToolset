@@ -22,12 +22,19 @@
 #include "categoryids.h"
 #include "currencyview.h"
 #include "dynupgradeview.h"
+#include "fortview.h"
+#include "gameutils.h"
+#include "groupview.h"
 #include "idview.h"
 #include "itembaseview.h"
 #include "itemview.h"
 #include "locationview.h"
 #include "log.h"
+#include "midstack.h"
+#include "modifierview.h"
+#include "playerview.h"
 #include "point.h"
+#include "ruinview.h"
 #include "scenariovariableview.h"
 #include "scenarioview.h"
 #include "scenvariablesview.h"
@@ -63,6 +70,12 @@ static void bindApi(sol::state& lua)
         "Dwarf", RaceId::Dwarf,
         "Neutral", RaceId::Neutral,
         "Elf", RaceId::Elf
+    );
+
+    lua.new_enum("Lord",
+        "Mage", LordId::Mage,
+        "Warrior", LordId::Warrior,
+        "Diplomat", LordId::Diplomat
     );
 
     lua.new_enum("Subrace",
@@ -191,6 +204,16 @@ static void bindApi(sol::state& lua)
         "Special", ItemId::Special
     );
 
+    lua.new_enum("Equipment",
+        "Banner", EquippedItemIdx::Banner,
+        "Tome", EquippedItemIdx::Tome,
+        "Battle1", EquippedItemIdx::Battle1,
+        "Battle2", EquippedItemIdx::Battle2,
+        "Artifact1", EquippedItemIdx::Artifact1,
+        "Artifact2", EquippedItemIdx::Artifact2,
+        "Boots", EquippedItemIdx::Boots
+    );
+
     lua.new_enum("Immune",
         "NotImmune", ImmuneId::Notimmune,
         "Once", ImmuneId::Once,
@@ -221,11 +244,15 @@ static void bindApi(sol::state& lua)
     bindings::ScenarioVariableView::bind(lua);
     bindings::TileView::bind(lua);
     bindings::StackView::bind(lua);
+    bindings::FortView::bind(lua);
+    bindings::RuinView::bind(lua);
     bindings::GroupView::bind(lua);
     bindings::AttackView::bind(lua);
     bindings::CurrencyView::bind(lua);
     bindings::ItemBaseView::bind(lua);
     bindings::ItemView::bind(lua);
+    bindings::PlayerView::bind(lua);
+    bindings::ModifierView::bind(lua);
 
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }
@@ -268,7 +295,14 @@ const std::string& getSource(const std::filesystem::path& path)
     return source;
 }
 
-sol::environment executeScript(const std::string& source, sol::protected_function_result& result)
+bindings::ScenarioView getScenario()
+{
+    return {getObjectMap()};
+}
+
+sol::environment executeScript(const std::string& source,
+                               sol::protected_function_result& result,
+                               bool bindScenario)
 {
     auto& lua = getLua();
 
@@ -277,11 +311,17 @@ sol::environment executeScript(const std::string& source, sol::protected_functio
     sol::environment env{lua, sol::create, lua.globals()};
     result = lua.safe_script(source, env,
                              [](lua_State*, sol::protected_function_result pfr) { return pfr; });
+
+    if (bindScenario) {
+        env["getScenario"] = &getScenario;
+    }
+
     return env;
 }
 
 std::optional<sol::environment> executeScriptFile(const std::filesystem::path& path,
-                                                  bool alwaysExists)
+                                                  bool alwaysExists,
+                                                  bool bindScenario)
 {
     if (!alwaysExists && !std::filesystem::exists(path))
         return std::nullopt;
@@ -293,7 +333,7 @@ std::optional<sol::environment> executeScriptFile(const std::filesystem::path& p
     }
 
     sol::protected_function_result result;
-    auto env = executeScript(source, result);
+    auto env = executeScript(source, result, bindScenario);
     if (!result.valid()) {
         const sol::error err = result;
         showErrorMessageBox(fmt::format("Failed to execute script '{:s}'.\n"

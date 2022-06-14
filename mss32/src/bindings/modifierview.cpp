@@ -17,42 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ITEMVIEW_H
-#define ITEMVIEW_H
-
-#include "midgardid.h"
-#include <optional>
-
-namespace sol {
-class state;
-}
-
-namespace game {
-struct IMidgardObjectMap;
-} // namespace game
+#include "modifierview.h"
+#include "idview.h"
+#include "ummodifier.h"
+#include <sol/sol.hpp>
 
 namespace bindings {
 
-struct IdView;
-class ItemBaseView;
-class CurrencyView;
+ModifierView::ModifierView(const game::CUmModifier* modifier)
+    : modifier{modifier}
+{ }
 
-class ItemView
+void ModifierView::bind(sol::state& lua)
 {
-public:
-    ItemView(const game::CMidgardID* itemId, const game::IMidgardObjectMap* objectMap);
+    auto view = lua.new_usertype<ModifierView>("ModifierView");
+    view["id"] = sol::property(&getId);
+}
 
-    static void bind(sol::state& lua);
-
-    IdView getId() const;
-    std::optional<ItemBaseView> getBase() const;
-    CurrencyView getSellValue() const;
-
-private:
-    game::CMidgardID itemId;
-    const game::IMidgardObjectMap* objectMap;
-};
+IdView ModifierView::getId() const
+{
+    return modifier->data->modifierId;
+}
 
 } // namespace bindings
-
-#endif // ITEMVIEW_H

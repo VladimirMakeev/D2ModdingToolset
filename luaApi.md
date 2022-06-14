@@ -27,9 +27,24 @@ Scripts folder itself should be placed in the game folder.
 ### API reference
 
 #### Standalone functions
+##### log
+Writes message to `luaDebug.log` file when `debugHooks` is set to true in `settings.lua`.
 ```lua
--- Writes message to 'luaDebug.log' file when debugHooks is set to true
 log('Unit current level:' .. unit.impl.level)
+```
+##### getScenario
+Returns current [scenario](luaApi.md#scenario).
+The function only accessible to scripts where scenario access is appropriate:
+- `summon.lua`
+- `doppelganger.lua`
+- `transformSelf.lua`
+- `transformOther.lua`
+- `drainLevel.lua`
+- custom attack reach scripts
+- custom unit modifier script
+`checkEventCondition` has `scenario` as its argument so `getScenario` is not bound to it.
+```lua
+getScenario():getUnit(unitId)
 ```
 
 ---
@@ -43,6 +58,10 @@ Race = { Human, Undead, Heretic, Dwarf, Neutral, Elf }
 ```lua
 Subrace = { Custom, Human, Undead, Heretic, Dwarf, Neutral, NeutralHuman, NeutralElf, NeutralGreenSkin,
             NeutralDragon, NeutralMarsh, NeutralWater, NeutralBarbarian, NeutralWolf, Elf }
+```
+##### Lord
+```lua
+Lord = { Mage, Warrior, Diplomat }
 ```
 ##### Terrain
 ```lua
@@ -98,6 +117,11 @@ Item = { Armor, Jewel, Weapon, Banner, PotionBoost, PotionHeal, PotionRevive,
          PotionPermanent, Scroll, Wand, Valuable, Orb, Talisman, TravelItem, Special }
 ```
 
+##### Equipment
+```
+Equipment = { Banner, Tome, Battle1, Battle2, Artifact1, Artifact2, Boots }
+```
+
 ##### DeathAnimation
 ```
 DeathAnimation = { Human, Heretic, Dwarf, Undead, Neutral, Dragon, Ghost, Elf }
@@ -138,6 +162,22 @@ Id.new('S143KC0001')
 Id.emptyId()
 -- Converts Id to string
 tostring(id)
+-- Returns integer representation of id.
+-- Can be used as Lua table key for best performance.
+id.value
+-- Returns identified object index among the same type of scenario objects (units, stacks, items, etc.).
+-- Can be used as Lua table key for best performance.
+id.typeIndex
+```
+
+#### Modifier
+Represents unit modifier. Modifiers wrap [unit implementation](luaApi.md#unit-implementation).
+
+Methods:
+##### id
+Returns modifier [id](luaApi.md#id). `MODIF_ID` value from `Gmodif.dbf`.
+```lua
+modifier.id
 ```
 
 ---
@@ -169,13 +209,13 @@ unit.scout
 unit.leadership
 ```
 ##### id
-Returns unit [id](luaApi.md#id). This is different to id of [Unit implementation](luaApi.md#unit-implementation).
+Returns unit [id](luaApi.md#id). This is different to id of [unit implementation](luaApi.md#unit-implementation).
 The value is unique for every unit on scenario map.
 ```lua
 unit.id
 ```
 ##### type
-Returns leader [type](luaApi.md#leader) (or -1 if unit is not a leader).
+Returns [leader](luaApi.md#leader) type (or -1 if unit is not a leader).
 ```lua
 unit.type
 ```
@@ -188,6 +228,11 @@ unit:hasAbility(Ability.TalismanUse)
 Returns true if leader has movement bonus on specified [ground](luaApi.md#ground) (or false if unit is not a leader).
 ```lua
 unit:hasMoveBonus(Ground.Water)
+```
+##### modifiers
+Returns array of applied [modifiers](luaApi.md#modifier).
+```lua
+unit.modifiers
 ```
 
 ---
@@ -244,7 +289,7 @@ Returns unit [id](luaApi.md#id). `UNIT_ID` value from `GUnits.dbf`.
 impl.id
 ```
 ##### base
-Returns base [Unit implementation](luaApi.md#unit-implementation). `BASE_UNIT` value from `GUnits.dbf`.
+Returns base [unit implementation](luaApi.md#unit-implementation). `BASE_UNIT` value from `GUnits.dbf`.
 ```lua
 impl.base
 ```
@@ -254,7 +299,7 @@ Returns unit [type](luaApi.md#unit).
 impl.type
 ```
 ##### leaderType
-Returns leader [type](luaApi.md#leader) (or -1 if unit is not a leader).
+Returns [leader](luaApi.md#leader) type (or -1 if unit is not a leader).
 ```lua
 impl.leaderType
 ```
@@ -310,20 +355,83 @@ Returns group as array of 6 [unit slots](luaApi.md#unit-slot).
 ```lua
 group.slots
 ```
+##### units
+Returns group [units](luaApi.md#unit-1).
+```lua
+group.units
+```
+##### hasUnit
+Returns true if group has specified [unit](luaApi.md#unit-1) or unit [id](luaApi.md#id).
+```lua
+group:hasUnit(unit)
+group:hasUnit(unitId)
+```
+
+---
+
+#### Player
+Represents game player including AI and neutrals.
+
+Methods:
+##### id
+Returns player [id](luaApi.md#id). The value is unique for every player on scenario map.
+```lua
+player.id
+```
+##### race
+Returns player [race](luaApi.md#race).
+```lua
+player.race
+```
+##### lord
+Returns player [lord](luaApi.md#lord).
+```lua
+player.lord
+```
+##### bank
+Returns player [bank](luaApi.md#currency).
+```lua
+player.bank
+```
+##### human
+Returns true if player is human (not AI).
+```lua
+player.human
+```
+##### alwaysAi
+Returns true if player is always AI.
+```lua
+player.alwaysAi
+```
 
 ---
 
 #### Stack
-Represents [group](luaApi.md#group) of 6 [units](luaApi.md#unit-slot) on a map. One of the units is a [leader](luaApi.md#leader-1).
+Represents [group](luaApi.md#group) of 6 [unit slots](luaApi.md#unit-slot) on a map. One of the units is a leader.
 
 Methods:
+##### id
+Returns stack [id](luaApi.md#id). The value is unique for every stack on scenario map.
+```lua
+stack.id
+```
+##### owner
+Returns [player](luaApi.md#player) that owns the stack. Neutral stacks are owned by neutral player.
+```lua
+stack.owner
+```
+##### inside
+Returns [fort](luaApi.md#fort) that this stack is visiting or nil if none.
+```lua
+stack.inside
+```
 ##### group
 Returns stack units as a [group](luaApi.md#group).
 ```lua
 stack.group
 ```
 ##### leader
-Returns stack [leader](luaApi.md#leader-1).
+Returns stack leader [unit](luaApi.md#unit-1).
 ```lua
 stack.leader
 ```
@@ -332,13 +440,91 @@ Returns stack [subrace](luaApi.md#subrace).
 ```lua
 stack.subrace
 ```
+##### inventory
+Returns array of inventory [items](luaApi.md#item-1). This includes equipped items.
+```lua
+stack.inventory
+```
+##### getEquippedItem
+Returns equipped [item](luaApi.md#item-1) by [equipment](luaApi.md#equipment) value.
+```lua
+stack:getEquippedItem(Equipment.Boots)
+```
 ```lua
 --- Returns stack current movement points.
 stack.movement
---- Returns true if stack is inside a city.
-stack.inside
 --- Returns true if stack is invisible.
 stack.invisible
+```
+
+---
+
+#### Fort
+Represents Capital or City on a map. Fort contains a garrison [group](luaApi.md#group) of 6 [unit slots](luaApi.md#unit-slot).
+Note that the garrison group is different to a group of visiting [stack](luaApi.md#stack).
+
+Methods:
+##### id
+Returns fort [id](luaApi.md#id). The value is unique for every fort on scenario map.
+```lua
+fort.id
+```
+##### owner
+Returns [player](luaApi.md#player) that owns the fort. Neutral forts are owned by neutral player.
+```lua
+fort.owner
+```
+##### group
+Returns fort units as a [group](luaApi.md#group).
+```lua
+fort.group
+```
+##### visitor
+Returns visitor [stack](luaApi.md#stack), or nil if none.
+```lua
+fort.visitor
+```
+##### subrace
+Returns fort [subrace](luaApi.md#subrace).
+```lua
+fort.subrace
+```
+##### inventory
+Returns array of inventory [items](luaApi.md#item-1).
+```lua
+fort.inventory
+```
+
+---
+
+#### Ruin
+Represents Ruin on a map. Ruin contains a garrison [group](luaApi.md#group) of 6 [unit slots](luaApi.md#unit-slot).
+
+Methods:
+##### id
+Returns ruin [id](luaApi.md#id). The value is unique for every ruin on scenario map.
+```lua
+ruin.id
+```
+##### looter
+Returns [player](luaApi.md#player) that looted the ruin, or nil if none.
+```lua
+ruin.looter
+```
+##### group
+Returns ruin units as a [group](luaApi.md#group).
+```lua
+ruin.group
+```
+##### item
+Returns [item](luaApi.md#item-1) reward for looting the ruin.
+```lua
+ruin.item
+```
+##### cash
+Returns [cash](luaApi.md#currency) reward for looting the ruin.
+```lua
+ruin.cash
 ```
 
 ---
@@ -450,13 +636,97 @@ if (tile == nil) then
 end
 ```
 ##### getStack
-Searches for [Stack](luaApi.md#stack) by id string, [Id](luaApi.md#id), pair of coordinates or [Point](luaApi.md#point), returns nil if not found.
+Searches for [stack](luaApi.md#stack) by:
+- id string
+- [id](luaApi.md#id)
+- pair of coordinates
+- [point](luaApi.md#point)
+
+Returns nil if not found.
 ```lua
 local stack = scenario:getStack(10, 15)
 if (stack == nil) then
     return
 end
 ```
+##### getFort
+Searches for [fort](luaApi.md#fort) by:
+- id string
+- [id](luaApi.md#id)
+- pair of coordinates
+- [point](luaApi.md#point)
+
+Returns nil if not found.
+```lua
+local fort = scenario:getFort(10, 15)
+if (fort == nil) then
+    return
+end
+```
+##### getRuin
+Searches for [ruin](luaApi.md#ruin) by:
+- id string
+- [id](luaApi.md#id)
+- pair of coordinates
+- [point](luaApi.md#point)
+
+Returns nil if not found.
+```lua
+local ruin = scenario:getRuin(10, 15)
+if (ruin == nil) then
+    return
+end
+```
+##### getPlayer
+Searches for [player](luaApi.md#player) by id string or [id](luaApi.md#id), returns nil if not found.
+```lua
+local player = scenario:getPlayer(stack)
+if (player == nil) then
+    return
+end
+```
+##### getUnit
+Searches for [unit](luaApi.md#unit-1) by id string or [id](luaApi.md#id), returns nil if not found.
+```lua
+local unit = scenario:getUnit('S143UU0001')
+if (unit == nil) then
+    return
+end
+```
+##### findStackByUnit
+Searches for [stack](luaApi.md#stack) that has specified [unit](luaApi.md#unit-1) among all the stacks in the whole [scenario](luaApi.md#scenario).
+You can also use unit id string or [id](luaApi.md#id).
+Returns nil if not found.
+```lua
+local stack = scenario:findStackByUnit(unit)
+if stack == nil then
+    return
+end
+```
+**Note** that this search is heavy in terms of performance, so you probably want to minimize excessive calls and use variables to store its results.
+##### findFortByUnit
+Searches for [fort](luaApi.md#fort) that has specified [unit](luaApi.md#unit-1) in its garrison among all the forts in the whole [scenario](luaApi.md#scenario).
+Only garrison units are counted, visiting stack is ignored.
+You can also use unit id string or [id](luaApi.md#id).
+Returns nil if not found.
+```lua
+local fort = scenario:findFortByUnit(unit)
+if fort == nil then
+    return
+end
+```
+**Note** that this search is heavy in terms of performance, so you probably want to minimize excessive calls and use variables to store its results.
+##### findRuinByUnit
+Searches for [ruin](luaApi.md#ruin) that has specified [unit](luaApi.md#unit-1) among all the ruins in the whole [scenario](luaApi.md#scenario).
+You can also use unit id string or [id](luaApi.md#id).
+Returns nil if not found.
+```lua
+local ruin = scenario:findRuinByUnit(unit)
+if ruin == nil then
+    return
+end
+```
+**Note** that this search is heavy in terms of performance, so you probably want to minimize excessive calls and use variables to store its results.
 ##### day
 Returns number of current day in game.
 ```lua
@@ -474,6 +744,11 @@ scenario.size
 Represents attack of [Unit implementation](luaApi.md#unit-implementation).
 
 Methods:
+##### id
+Returns attack [id](luaApi.md#id). This is different for every dynamic upgrade unit gets.
+```lua
+attack.id
+```
 ##### type
 Returns attack [type](luaApi.md#attack).
 ```lua
@@ -502,6 +777,20 @@ attack.heal
 attack.infinite
 --- Returns true if attack can inflict critical damage.
 attack.crit
+--- Returns true if attack is melee (L_ADJACENT or custom reach marked as MELEE in LAttR.dbf).
+attack.melee
+--- Returns maximum number of targets (1, 6 or MAX_TARGTS value for custom reach in LAttR.dbf).
+attack.maxTargets
+--- Returns critical damage percent [0 : 255].
+attack.critDamage
+--- Returns critical damage chance [0 : 100].
+attack.critPower
+--- Returns damage ratio [0 : 255] for additional targets.
+attack.damageRatio
+--- Returns true if damage ratio reapplied for each consecutive target.
+attack.damageRatioPerTarget
+--- Returns true if damage is split among targets.
+attack.damageSplit
 ```
 
 ---
@@ -552,20 +841,15 @@ currency.gold
 Represents base item of any type (described in GItem.dbf).
 
 Methods:
+##### id
+Returns item [id](luaApi.md#id). `ITEM_ID` value from `GItem.dbf`.
+```lua
+base.id
+```
 ##### type
 Returns item [type](luaApi.md#item).
 ```lua
 base.type
-```
-##### name
-Returns item name.
-```lua
-base.name
-```
-##### description
-Returns item description.
-```lua
-base.description
 ```
 ##### value
 Returns item [value](luaApi.md#currency).
@@ -583,8 +867,14 @@ base.unitImpl
 Represents item object in the current scenario.
 
 Methods:
+##### id
+Returns item [id](luaApi.md#id). This is different to id of [Item base](luaApi.md#itembase).
+The value is unique for every item on scenario map.
+```lua
+item.id
+```
 ##### base
-Returns item [base](luaApi.md#itembase).
+Returns [Item base](luaApi.md#itembase).
 ```lua
 item.base
 ```
@@ -775,3 +1065,68 @@ end
 
 Check [Scripts/Modifiers](Scripts/Modifiers) for script examples.<br>
 [template.lua](Scripts/Modifiers/template.lua) contains a complete list of available functions.
+
+#### Due to how modifiers chain work, you have no direct access to final unit stats
+For example:
+- Lets say we have a unit with base of `50` initiative;
+- Then we give it a potion that increases damage by 50% **if unit initiative** `> 60`;
+- Then we give it another potion that increases initiative to `70`.
+
+The damage bonus **will not work** in this case, even though a final unit initiative is `70` that is `> 60`.
+This is because **damage modifier applied earlier than initiative modifier**.
+If we get `unit.impl.attack1.initiative` from the damage modifier script it will be `50`, because **initiative modifier is not applied yet**.
+
+#### Dangerous way around to get final unit stats
+The limitation described above **can be avoided** by getting unit instance via `getScenario:getUnit(unit.id)`.<br>
+But you have to be **very careful** using this approach, as you can easily fall into a deadloop.
+
+Lets see a **bad example** where we created a modifier that grants bonus armor and regen depending on each other:
+```lua
+function getArmor(unit, prev)
+    local finalUnit = getScenario():getUnit(unit.id)
+    return prev + finalUnit.impl.regen / 5
+end
+
+function getRegen(unit, prev)
+    local finalUnit = getScenario():getUnit(unit.id)
+    return prev + finalUnit.impl.armor / 10
+end
+```
+Or it can be two different modifiers, does not matter:
+```lua
+-- MyBonusArmorMod.lua
+function getArmor(unit, prev)
+    local finalUnit = getScenario():getUnit(unit.id)
+    return prev + finalUnit.impl.regen / 5
+end
+```
+and
+```lua
+-- MyBonusRegenMod.lua
+function getRegen(unit, prev)
+    local finalUnit = getScenario():getUnit(unit.id)
+    return prev + finalUnit.impl.armor / 10
+end
+```
+When this modifier(s) applied to a unit, we are getting circular dependence here: **final armor depends on final regen while final regen depends on final armor**.<br>
+Imagine what happens when the game tries to get unit armor:<br>
+It calls `getArmor` that calls `getRegen` that calls `getArmor` that calls `getRegen` that calls `getArmor` that calls `getRegen` that calls `getArmor`...and so on until your **game hang or crash to desktop**.
+
+As a **good example**, you could refer to a third stat, thus avoiding deadloop condition:
+```lua
+-- MyBonusArmorMod.lua
+function getArmor(unit, prev)
+    local finalUnit = getScenario():getUnit(unit.id)
+    return prev + finalUnit.impl.regen / 5
+end
+```
+and
+```lua
+-- MyBonusRegenMod.lua
+function getRegen(unit, prev)
+    local finalUnit = getScenario():getUnit(unit.id)
+    return prev + finalUnit.impl.level / 10
+end
+```
+This way, regen depends on level, and armor depends on regen and there is no circular dependence in this case.<br>
+**Remember that this is subject for all modifiers that can potentially happen to be applied to the same unit.**

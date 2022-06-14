@@ -20,8 +20,8 @@
 #ifndef UNITVIEW_H
 #define UNITVIEW_H
 
-#include "idview.h"
 #include <optional>
+#include <vector>
 
 namespace sol {
 class state;
@@ -34,7 +34,9 @@ struct CMidUnit;
 
 namespace bindings {
 
+struct IdView;
 class UnitImplView;
+class ModifierView;
 
 class UnitView
 {
@@ -49,6 +51,8 @@ public:
     /** Returns unit base implementation. */
     std::optional<UnitImplView> getBaseImpl() const;
 
+    std::vector<ModifierView> getModifiers() const;
+
     IdView getId() const;
     /** Returns unit's current experience points. */
     int getXp() const;
@@ -56,7 +60,7 @@ public:
     int getHpMax() const;
 
     /** Returns leader category id. */
-    int getCategory() const;
+    int getLeaderCategory() const;
     /** Returns leader maximum movement points. */
     int getMovement() const;
     /** Returns leader scouting range. */

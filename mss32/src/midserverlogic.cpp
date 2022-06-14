@@ -17,42 +17,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ITEMVIEW_H
-#define ITEMVIEW_H
+#include "midserverlogic.h"
+#include "version.h"
+#include <array>
 
-#include "midgardid.h"
-#include <optional>
+namespace game::CMidServerLogicApi {
 
-namespace sol {
-class state;
+// clang-format off
+static std::array<Api, 3> functions = {{
+    // Akella
+    Api{
+        (Api::GetObjectMap)0x4298aa,
+    },
+    // Russobit
+    Api{
+        (Api::GetObjectMap)0x4298aa,
+    },
+    // Gog
+    Api{
+        (Api::GetObjectMap)0x5a77e8,
+    },
+}};
+// clang-format on
+
+Api& get()
+{
+    return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-namespace game {
-struct IMidgardObjectMap;
-} // namespace game
-
-namespace bindings {
-
-struct IdView;
-class ItemBaseView;
-class CurrencyView;
-
-class ItemView
-{
-public:
-    ItemView(const game::CMidgardID* itemId, const game::IMidgardObjectMap* objectMap);
-
-    static void bind(sol::state& lua);
-
-    IdView getId() const;
-    std::optional<ItemBaseView> getBase() const;
-    CurrencyView getSellValue() const;
-
-private:
-    game::CMidgardID itemId;
-    const game::IMidgardObjectMap* objectMap;
-};
-
-} // namespace bindings
-
-#endif // ITEMVIEW_H
+} // namespace game::CMidServerLogicApi

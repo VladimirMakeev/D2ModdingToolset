@@ -28,7 +28,10 @@ class state;
 }
 
 namespace game {
+struct CMidgardID;
 struct IMidgardObjectMap;
+
+enum class IdType : int;
 } // namespace game
 
 namespace bindings {
@@ -39,7 +42,16 @@ class LocationView;
 class ScenVariablesView;
 class TileView;
 class StackView;
+class FortView;
+class RuinView;
+class UnitView;
+class PlayerView;
 
+/**
+ * Returns stub values if objectMap is null.
+ * This handles cases where some scripts can be called while the map is in a loading state.
+ * See getScenarioMap utility for details.
+ */
 class ScenarioView
 {
 public:
@@ -68,10 +80,58 @@ public:
     /** Searches for stack at specified point. */
     std::optional<StackView> getStackByPoint(const Point& p) const;
 
+    /** Searches for fort by id string. */
+    std::optional<FortView> getFort(const std::string& id) const;
+    /** Searches for fort by id. */
+    std::optional<FortView> getFortById(const IdView& id) const;
+    /** Searches for fort by coordinate pair. */
+    std::optional<FortView> getFortByCoordinates(int x, int y) const;
+    /** Searches for fort at specified point. */
+    std::optional<FortView> getFortByPoint(const Point& p) const;
+
+    /** Searches for ruin by id string. */
+    std::optional<RuinView> getRuin(const std::string& id) const;
+    /** Searches for ruin by id. */
+    std::optional<RuinView> getRuinById(const IdView& id) const;
+    /** Searches for ruin by coordinate pair. */
+    std::optional<RuinView> getRuinByCoordinates(int x, int y) const;
+    /** Searches for ruin at specified point. */
+    std::optional<RuinView> getRuinByPoint(const Point& p) const;
+
+    /** Searches for player by id string. */
+    std::optional<PlayerView> getPlayer(const std::string& id) const;
+    /** Searches for player by id. */
+    std::optional<PlayerView> getPlayerById(const IdView& id) const;
+
+    /** Searches for unit by id string. */
+    std::optional<UnitView> getUnit(const std::string& id) const;
+    /** Searches for unit by id. */
+    std::optional<UnitView> getUnitById(const IdView& id) const;
+
+    /** Searches for stack that has specified unit among all the stacks in the whole scenario. */
+    std::optional<StackView> findStackByUnit(const UnitView& unit) const;
+    std::optional<StackView> findStackByUnitId(const IdView& unitId) const;
+    std::optional<StackView> findStackByUnitIdString(const std::string& unitId) const;
+
+    /**
+     * Searches for fort that has specified unit in its garrison among all the forts in the whole
+     * scenario. Only garrison units are counted, visiting stack is ignored.
+     */
+    std::optional<FortView> findFortByUnit(const UnitView& unit) const;
+    std::optional<FortView> findFortByUnitId(const IdView& unitId) const;
+    std::optional<FortView> findFortByUnitIdString(const std::string& unitId) const;
+
+    /** Searches for ruin that has specified unit among all the ruins in the whole scenario. */
+    std::optional<RuinView> findRuinByUnit(const UnitView& unit) const;
+    std::optional<RuinView> findRuinByUnitId(const IdView& unitId) const;
+    std::optional<RuinView> findRuinByUnitIdString(const std::string& unitId) const;
+
     int getCurrentDay() const;
     int getSize() const;
 
 private:
+    const game::CMidgardID* getObjectId(int x, int y, game::IdType type) const;
+
     const game::IMidgardObjectMap* objectMap;
 };
 

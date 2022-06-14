@@ -19,8 +19,10 @@
 
 #include "groupview.h"
 #include "game.h"
+#include "idview.h"
 #include "midunitgroup.h"
 #include "unitslotview.h"
+#include "unitview.h"
 #include <sol/sol.hpp>
 
 namespace bindings {
@@ -37,6 +39,8 @@ void GroupView::bind(sol::state& lua)
 {
     auto group = lua.new_usertype<GroupView>("GroupView");
     group["slots"] = sol::property(&GroupView::getSlots);
+    group["units"] = sol::property(&GroupView::getUnits);
+    group["hasUnit"] = sol::overload<>(&GroupView::hasUnit, &GroupView::hasUnitById);
 }
 
 GroupView::GroupSlots GroupView::getSlots() const
@@ -56,6 +60,35 @@ GroupView::GroupSlots GroupView::getSlots() const
     }
 
     return slots;
+}
+
+GroupView::GroupUnits GroupView::getUnits() const
+{
+    const auto& fn = game::gameFunctions();
+    GroupUnits units;
+
+    for (const game::CMidgardID* it = group->units.bgn; it != group->units.end; ++it) {
+        units.emplace_back(UnitView(fn.findUnitById(objectMap, it)));
+    }
+
+    return units;
+}
+
+bool GroupView::hasUnit(const bindings::UnitView& unit) const
+{
+    auto unitId = unit.getId();
+    return hasUnitById(unitId);
+}
+
+bool GroupView::hasUnitById(const bindings::IdView& unitId) const
+{
+    auto& units = group->units;
+    for (const game::CMidgardID* it = units.bgn; it != units.end; ++it) {
+        if (unitId.id == *it)
+            return true;
+    }
+
+    return false;
 }
 
 } // namespace bindings

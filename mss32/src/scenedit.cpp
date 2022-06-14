@@ -17,42 +17,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ITEMVIEW_H
-#define ITEMVIEW_H
+#include "scenedit.h"
 
-#include "midgardid.h"
-#include <optional>
+namespace game::CScenEditApi {
 
-namespace sol {
-class state;
+// clang-format off
+Api functions{
+    (Api::Instance)0x4013af,
+};
+// clang-format on
+
+Api& get()
+{
+    return functions;
 }
 
-namespace game {
-struct IMidgardObjectMap;
-} // namespace game
-
-namespace bindings {
-
-struct IdView;
-class ItemBaseView;
-class CurrencyView;
-
-class ItemView
-{
-public:
-    ItemView(const game::CMidgardID* itemId, const game::IMidgardObjectMap* objectMap);
-
-    static void bind(sol::state& lua);
-
-    IdView getId() const;
-    std::optional<ItemBaseView> getBase() const;
-    CurrencyView getSellValue() const;
-
-private:
-    game::CMidgardID itemId;
-    const game::IMidgardObjectMap* objectMap;
-};
-
-} // namespace bindings
-
-#endif // ITEMVIEW_H
+} // namespace game::CScenEditApi

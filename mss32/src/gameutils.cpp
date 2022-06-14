@@ -20,12 +20,26 @@
 #include "gameutils.h"
 #include "battlemsgdata.h"
 #include "dynamiccast.h"
+#include "fortification.h"
 #include "game.h"
+#include "midclient.h"
+#include "midclientcore.h"
+#include "midgard.h"
 #include "midgardobjectmap.h"
 #include "midgardplan.h"
+#include "midgardscenariomap.h"
 #include "midplayer.h"
+#include "midruin.h"
 #include "midscenvariables.h"
+#include "midserver.h"
+#include "midserverlogic.h"
+#include "midstack.h"
 #include "scenarioinfo.h"
+#include "scenedit.h"
+#include "version.h"
+#include <thread>
+
+extern std::thread::id mainThreadId;
 
 namespace hooks {
 
@@ -53,10 +67,70 @@ bool isGreaterPickRandomIfEqual(int first, int second)
     return first > second || (first == second && fn.generateRandomNumber(2) == 1);
 }
 
-game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMap,
-                                         const game::BattleMsgData* battleMsgData,
-                                         const game::CMidgardID* unitId,
-                                         bool ally)
+const game::IMidgardObjectMap* getObjectMap()
+{
+    using namespace game;
+
+    if (gameVersion() == GameVersion::ScenarioEditor) {
+        auto editorData = CScenEditApi::get().instance()->data;
+        if (!editorData->initialized)
+            return nullptr;
+
+        auto unknown2 = editorData->unknown2;
+        if (!unknown2 || !unknown2->data)
+            return nullptr;
+
+        return unknown2->data->scenarioMap;
+    }
+
+    auto midgard = CMidgardApi::get().instance();
+    if (std::this_thread::get_id() == mainThreadId) {
+        auto client = midgard->data->client;
+        if (!client)
+            return nullptr;
+
+        return CMidClientCoreApi::get().getObjectMap(&client->core);
+    } else {
+        auto server = midgard->data->server;
+        if (!server)
+            return nullptr;
+
+        return CMidServerLogicApi::get().getObjectMap(server->data->serverLogic);
+    }
+}
+
+const game::CMidUnitGroup* getGroup(const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* groupId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, groupId);
+    switch (CMidgardIDApi::get().getType(groupId)) {
+    case IdType::Stack: {
+        auto stack = (const CMidStack*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType,
+                                                   rtti.CMidStackType, 0);
+        return stack ? &stack->group : nullptr;
+    }
+    case IdType::Fortification: {
+        auto fortification = static_cast<const CFortification*>(obj);
+        return fortification ? &fortification->group : nullptr;
+    }
+    case IdType::Ruin:
+        auto ruin = static_cast<const CMidRuin*>(obj);
+        return ruin ? &ruin->group : nullptr;
+    }
+
+    return nullptr;
+}
+
+const game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMap,
+                                               const game::BattleMsgData* battleMsgData,
+                                               const game::CMidgardID* unitId,
+                                               bool ally)
 {
     using namespace game;
 
@@ -158,6 +232,81 @@ game::CMidStack* getStack(const game::IMidgardObjectMap* objectMap,
                              : battleMsgData->defenderGroupId;
 
     return getStack(objectMap, &groupId);
+}
+
+const game::CMidStack* getStackByUnitId(const game::IMidgardObjectMap* objectMap,
+                                        const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    auto stackId = gameFunctions().getStackIdByUnitId(objectMap, unitId);
+
+    return stackId ? getStack(objectMap, stackId) : nullptr;
+}
+
+game::CFortification* getFort(const game::IMidgardObjectMap* objectMap,
+                              const game::CMidgardID* fortId)
+{
+    using namespace game;
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, fortId);
+    return static_cast<CFortification*>(obj);
+}
+
+game::CFortification* getFort(const game::IMidgardObjectMap* objectMap,
+                              const game::BattleMsgData* battleMsgData,
+                              const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+    CMidgardID groupId = battle.isUnitAttacker(battleMsgData, unitId)
+                             ? battleMsgData->attackerGroupId
+                             : battleMsgData->defenderGroupId;
+
+    return getFort(objectMap, &groupId);
+}
+
+const game::CFortification* getFortByUnitId(const game::IMidgardObjectMap* objectMap,
+                                            const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    auto fortId = gameFunctions().getFortIdByUnitId(objectMap, unitId);
+
+    return fortId ? getFort(objectMap, fortId) : nullptr;
+}
+
+game::CMidRuin* getRuin(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* ruinId)
+{
+    using namespace game;
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, ruinId);
+    return static_cast<CMidRuin*>(obj);
+}
+
+game::CMidRuin* getRuin(const game::IMidgardObjectMap* objectMap,
+                        const game::BattleMsgData* battleMsgData,
+                        const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& battle = BattleMsgDataApi::get();
+    CMidgardID groupId = battle.isUnitAttacker(battleMsgData, unitId)
+                             ? battleMsgData->attackerGroupId
+                             : battleMsgData->defenderGroupId;
+
+    return getRuin(objectMap, &groupId);
+}
+
+const game::CMidRuin* getRuinByUnitId(const game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    auto ruinId = gameFunctions().getRuinIdByUnitId(objectMap, unitId);
+
+    return ruinId ? getRuin(objectMap, ruinId) : nullptr;
 }
 
 } // namespace hooks

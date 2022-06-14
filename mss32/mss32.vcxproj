@@ -189,12 +189,16 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\bindings\attackview.cpp" />
     <ClCompile Include="src\bindings\currencyview.cpp" />
     <ClCompile Include="src\bindings\dynupgradeview.cpp" />
+    <ClCompile Include="src\bindings\fortview.cpp" />
     <ClCompile Include="src\bindings\groupview.cpp" />
     <ClCompile Include="src\bindings\idview.cpp" />
     <ClCompile Include="src\bindings\itembaseview.cpp" />
     <ClCompile Include="src\bindings\itemview.cpp" />
     <ClCompile Include="src\bindings\locationview.cpp" />
+    <ClCompile Include="src\bindings\modifierview.cpp" />
+    <ClCompile Include="src\bindings\playerview.cpp" />
     <ClCompile Include="src\bindings\point.cpp" />
+    <ClCompile Include="src\bindings\ruinview.cpp" />
     <ClCompile Include="src\bindings\scenariovariableview.cpp" />
     <ClCompile Include="src\bindings\scenarioview.cpp" />
     <ClCompile Include="src\bindings\scenvariablesview.cpp" />
@@ -247,6 +251,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\dynamiccast.cpp" />
     <ClCompile Include="src\editboxinterf.cpp" />
     <ClCompile Include="src\editor.cpp" />
+    <ClCompile Include="src\scenedit.cpp" />
     <ClCompile Include="src\effectinterf.cpp" />
     <ClCompile Include="src\effectinterfhooks.cpp" />
     <ClCompile Include="src\effectresult.cpp" />
@@ -318,6 +323,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\menuprotocolhooks.cpp" />
     <ClCompile Include="src\menurace.cpp" />
     <ClCompile Include="src\draganddropinterf.cpp" />
+    <ClCompile Include="src\midclientcore.cpp" />
     <ClCompile Include="src\midcondgamemode.cpp" />
     <ClCompile Include="src\midcondownresource.cpp" />
     <ClCompile Include="src\midcondplayertype.cpp" />
@@ -339,6 +345,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\midmsgboxbuttonhandlerstd.cpp" />
     <ClCompile Include="src\midmusic.cpp" />
     <ClCompile Include="src\midscenvariables.cpp" />
+    <ClCompile Include="src\midserverlogic.cpp" />
     <ClCompile Include="src\midstack.cpp" />
     <ClCompile Include="src\midunitdescriptor.cpp" />
     <ClCompile Include="src\midunitdescriptorhooks.cpp" />
@@ -385,6 +392,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\scenariodataarray.cpp" />
     <ClCompile Include="src\scenarioheader.cpp" />
     <ClCompile Include="src\scripts.cpp" />
+    <ClCompile Include="src\scriptutils.cpp" />
     <ClCompile Include="src\settings.cpp" />
     <ClCompile Include="src\sitemerchantinterf.cpp" />
     <ClCompile Include="src\smartptr.cpp" />
@@ -533,12 +541,16 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\bindings\attackview.h" />
     <ClInclude Include="include\bindings\currencyview.h" />
     <ClInclude Include="include\bindings\dynupgradeview.h" />
+    <ClInclude Include="include\bindings\fortview.h" />
     <ClInclude Include="include\bindings\groupview.h" />
     <ClInclude Include="include\bindings\idview.h" />
     <ClInclude Include="include\bindings\itembaseview.h" />
     <ClInclude Include="include\bindings\itemview.h" />
     <ClInclude Include="include\bindings\locationview.h" />
+    <ClInclude Include="include\bindings\modifierview.h" />
+    <ClInclude Include="include\bindings\playerview.h" />
     <ClInclude Include="include\bindings\point.h" />
+    <ClInclude Include="include\bindings\ruinview.h" />
     <ClInclude Include="include\bindings\scenariovariableview.h" />
     <ClInclude Include="include\bindings\scenarioview.h" />
     <ClInclude Include="include\bindings\scenvariablesview.h" />
@@ -590,6 +602,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\enclayoutunit.h" />
     <ClInclude Include="include\imageptrvector.h" />
     <ClInclude Include="include\interfborderdisplay.h" />
+    <ClInclude Include="include\scenedit.h" />
     <ClInclude Include="include\isoborder.h" />
     <ClInclude Include="include\isoenginegroundhooks.h" />
     <ClInclude Include="include\isoground2.h" />
@@ -889,6 +902,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\scenarioheader.h" />
     <ClInclude Include="include\scenarioinfo.h" />
     <ClInclude Include="include\scripts.h" />
+    <ClInclude Include="include\scriptutils.h" />
     <ClInclude Include="include\settings.h" />
     <ClInclude Include="include\sitecategories.h" />
     <ClInclude Include="include\sitemerchantinterf.h" />

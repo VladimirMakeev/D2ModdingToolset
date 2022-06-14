@@ -18,10 +18,16 @@
  */
 
 #include "stackview.h"
+#include "fortview.h"
 #include "game.h"
+#include "gameutils.h"
+#include "groupview.h"
+#include "idview.h"
+#include "itemview.h"
 #include "midgardobjectmap.h"
 #include "midstack.h"
 #include "midsubrace.h"
+#include "playerview.h"
 #include "unitview.h"
 #include <sol/sol.hpp>
 
@@ -35,12 +41,38 @@ StackView::StackView(const game::CMidStack* stack, const game::IMidgardObjectMap
 void StackView::bind(sol::state& lua)
 {
     auto stackView = lua.new_usertype<StackView>("StackView");
+    stackView["id"] = sol::property(&StackView::getId);
+    stackView["owner"] = sol::property(&StackView::getOwner);
+    stackView["inside"] = sol::property(&StackView::getInside);
     stackView["group"] = sol::property(&StackView::getGroup);
     stackView["leader"] = sol::property(&StackView::getLeader);
     stackView["movement"] = sol::property(&StackView::getMovement);
     stackView["subrace"] = sol::property(&StackView::getSubrace);
-    stackView["inside"] = sol::property(&StackView::isInside);
     stackView["invisible"] = sol::property(&StackView::isInvisible);
+
+    stackView["inventory"] = sol::property(&StackView::getInventoryItems);
+    stackView["getEquippedItem"] = &StackView::getLeaderEquippedItem;
+}
+
+IdView StackView::getId() const
+{
+    return IdView{stack->id};
+}
+
+PlayerView StackView::getOwner() const
+{
+    auto player = hooks::getPlayer(objectMap, &stack->ownerId);
+    return PlayerView{player};
+}
+
+std::optional<FortView> StackView::getInside() const
+{
+    auto fort = hooks::getFort(objectMap, &stack->insideId);
+    if (!fort) {
+        return std::nullopt;
+    }
+
+    return {FortView{fort, objectMap}};
 }
 
 GroupView StackView::getGroup() const
@@ -68,17 +100,41 @@ int StackView::getSubrace() const
     auto obj{objectMap->vftable->findScenarioObjectById(objectMap, &stack->subraceId)};
     auto subrace{static_cast<const game::CMidSubRace*>(obj)};
 
-    return subrace ? static_cast<int>(subrace->subraceCategory.id) : 0;
-}
-
-bool StackView::isInside() const
-{
-    return stack->insideId != game::emptyId;
+    return subrace ? static_cast<int>(subrace->subraceCategory.id) : game::emptyCategoryId;
 }
 
 bool StackView::isInvisible() const
 {
     return stack->invisible;
+}
+
+std::vector<ItemView> StackView::getInventoryItems() const
+{
+    const auto& items = stack->inventory.items;
+    const auto count = items.end - items.bgn;
+
+    std::vector<ItemView> result;
+    result.reserve(count);
+
+    for (const game::CMidgardID* it = items.bgn; it != items.end; it++) {
+        result.push_back(ItemView{it, objectMap});
+    }
+
+    return result;
+}
+
+std::optional<ItemView> StackView::getLeaderEquippedItem(const game::EquippedItemIdx& idx) const
+{
+    const auto& items = stack->leaderEquippedItems;
+    const auto count = items.end - items.bgn;
+    if (idx < 0 || idx >= count)
+        return std::nullopt;
+
+    auto itemId = stack->leaderEquippedItems.bgn[idx];
+    if (itemId == game::emptyId)
+        return std::nullopt;
+
+    return {ItemView{&itemId, objectMap}};
 }
 
 } // namespace bindings

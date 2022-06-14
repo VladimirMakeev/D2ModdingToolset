@@ -17,42 +17,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ITEMVIEW_H
-#define ITEMVIEW_H
+#include "scriptutils.h"
 
-#include "midgardid.h"
-#include <optional>
+namespace hooks {
 
-namespace sol {
-class state;
+std::vector<bindings::IdView> IdVectorToIds(const game::IdVector* src)
+{
+    std::vector<bindings::IdView> value;
+    for (const game::CMidgardID* it = src->bgn; it != src->end; it++) {
+        value.push_back(it);
+    }
+
+    return value;
 }
 
-namespace game {
-struct IMidgardObjectMap;
-} // namespace game
-
-namespace bindings {
-
-struct IdView;
-class ItemBaseView;
-class CurrencyView;
-
-class ItemView
+void IdsToIdVector(const std::vector<bindings::IdView>& src, game::IdVector* dst)
 {
-public:
-    ItemView(const game::CMidgardID* itemId, const game::IMidgardObjectMap* objectMap);
+    using namespace game;
 
-    static void bind(sol::state& lua);
+    const auto& idVectorApi = IdVectorApi::get();
 
-    IdView getId() const;
-    std::optional<ItemBaseView> getBase() const;
-    CurrencyView getSellValue() const;
+    IdVector tmp{};
+    idVectorApi.reserve(&tmp, 1);
+    for (const auto& id : src) {
+        idVectorApi.pushBack(&tmp, &(const CMidgardID&)id);
+    }
+    idVectorApi.copy(dst, tmp.bgn, tmp.end);
+    idVectorApi.destructor(&tmp);
+}
 
-private:
-    game::CMidgardID itemId;
-    const game::IMidgardObjectMap* objectMap;
-};
-
-} // namespace bindings
-
-#endif // ITEMVIEW_H
+} // namespace hooks

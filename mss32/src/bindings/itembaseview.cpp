@@ -19,6 +19,7 @@
 
 #include "itembaseview.h"
 #include "currencyview.h"
+#include "idview.h"
 #include "itembase.h"
 #include "itemcategory.h"
 #include "unitimplview.h"
@@ -28,35 +29,28 @@
 
 namespace bindings {
 
-ItemBaseView::ItemBaseView(const game::CItemBase* item, const game::IMidgardObjectMap* objectMap)
+ItemBaseView::ItemBaseView(const game::CItemBase* item)
     : item{item}
-    , objectMap{objectMap}
 { }
 
 void ItemBaseView::bind(sol::state& lua)
 {
     auto view = lua.new_usertype<ItemBaseView>("ItemBaseView");
+    view["id"] = sol::property(&getId);
     view["type"] = sol::property(&getCategory);
-    view["name"] = sol::property(&getName);
-    view["description"] = sol::property(&getDescription);
     view["value"] = sol::property(&getValue);
     view["unitImpl"] = sol::property(&getUnitImpl);
+}
+
+IdView ItemBaseView::getId() const
+{
+    return item->itemId;
 }
 
 int ItemBaseView::getCategory() const
 {
     auto category = item->vftable->getCategory(item);
     return category ? (int)category->id : game::emptyCategoryId;
-}
-
-std::string ItemBaseView::getName() const
-{
-    return item->vftable->getName(item);
-}
-
-std::string ItemBaseView::getDescription() const
-{
-    return item->vftable->getDescription(item);
 }
 
 CurrencyView ItemBaseView::getValue() const

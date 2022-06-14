@@ -55,7 +55,7 @@ static int getTransformOtherLevel(const game::CMidUnit* unit,
     const auto path{scriptsFolder() / "transformOther.lua"};
     using GetLevel = std::function<int(const bindings::UnitView&, const bindings::UnitView&,
                                        const bindings::UnitImplView&, const bindings::ItemView*)>;
-    auto getLevel = getScriptFunction<GetLevel>(path, "getLevel", env, true);
+    auto getLevel = getScriptFunction<GetLevel>(path, "getLevel", env, true, true);
     if (!getLevel) {
         return 0;
     }

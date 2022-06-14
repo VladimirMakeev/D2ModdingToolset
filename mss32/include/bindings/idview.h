@@ -23,7 +23,6 @@
 #include "midgardid.h"
 #include "utils.h"
 #include <ostream>
-#include <string>
 
 namespace sol {
 class state;
@@ -54,6 +53,10 @@ struct IdView
     }
 
     static void bind(sol::state& lua);
+
+    // For Lua hash table
+    int getValue() const;
+    int getTypeIndex() const;
 
     static IdView getEmptyId();
 

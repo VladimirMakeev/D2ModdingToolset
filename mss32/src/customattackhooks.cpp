@@ -1080,7 +1080,7 @@ bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap*
     const auto& fn = gameFunctions();
     const auto& groupApi = CMidUnitGroupApi::get();
 
-    CMidUnitGroup* enemyGroup = getAllyOrEnemyGroup(objectMap, battleMsgData, unitId, false);
+    auto enemyGroup = getAllyOrEnemyGroup(objectMap, battleMsgData, unitId, false);
 
     int unitPosition = groupApi.getUnitPosition(targetGroup, unitId);
 

@@ -17,42 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ITEMVIEW_H
-#define ITEMVIEW_H
+#ifndef SCRIPTUTILS_H
+#define SCRIPTUTILS_H
 
-#include "midgardid.h"
-#include <optional>
+#include "idvector.h"
+#include "idview.h"
+#include <vector>
 
-namespace sol {
-class state;
-}
+namespace hooks {
 
-namespace game {
-struct IMidgardObjectMap;
-} // namespace game
+std::vector<bindings::IdView> IdVectorToIds(const game::IdVector* src);
+void IdsToIdVector(const std::vector<bindings::IdView>& src, game::IdVector* dst);
 
-namespace bindings {
+} // namespace hooks
 
-struct IdView;
-class ItemBaseView;
-class CurrencyView;
-
-class ItemView
-{
-public:
-    ItemView(const game::CMidgardID* itemId, const game::IMidgardObjectMap* objectMap);
-
-    static void bind(sol::state& lua);
-
-    IdView getId() const;
-    std::optional<ItemBaseView> getBase() const;
-    CurrencyView getSellValue() const;
-
-private:
-    game::CMidgardID itemId;
-    const game::IMidgardObjectMap* objectMap;
-};
-
-} // namespace bindings
-
-#endif // ITEMVIEW_H
+#endif // SCRIPTUTILS_H

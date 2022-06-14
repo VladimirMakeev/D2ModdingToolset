@@ -21,8 +21,11 @@
 #include "dynupgrade.h"
 #include "game.h"
 #include "globaldata.h"
+#include "idview.h"
 #include "log.h"
 #include "midunit.h"
+#include "modifierview.h"
+#include "ummodifier.h"
 #include "unitgenerator.h"
 #include "unitimplview.h"
 #include "unitutils.h"
@@ -52,8 +55,10 @@ void UnitView::bind(sol::state& lua)
     unit["hpMax"] = sol::property(&UnitView::getHpMax);
     unit["impl"] = sol::property(&UnitView::getImpl);
     unit["baseImpl"] = sol::property(&UnitView::getBaseImpl);
+    unit["modifiers"] = sol::property(&UnitView::getModifiers);
 
-    unit["type"] = sol::property(&UnitView::getCategory);
+    // Leader properties for backward compatibility
+    unit["type"] = sol::property(&UnitView::getLeaderCategory);
     unit["movement"] = sol::property(&UnitView::getMovement);
     unit["scout"] = sol::property(&UnitView::getScout);
     unit["leadership"] = sol::property(&UnitView::getLeadership);
@@ -97,9 +102,8 @@ int UnitView::getHpMax() const
     return soldier->vftable->getHitPoints(soldier);
 }
 
-int UnitView::getCategory() const
+int UnitView::getLeaderCategory() const
 {
-    // Returns leader category for backward compatibility.
     return getImpl()->getLeaderCategory();
 }
 
@@ -126,6 +130,28 @@ bool UnitView::hasAbility(int abilityId) const
 bool UnitView::hasMoveBonus(int groundId) const
 {
     return getImpl()->hasMoveBonus(groundId);
+}
+
+std::vector<ModifierView> UnitView::getModifiers() const
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    std::vector<ModifierView> result;
+
+    CUmModifier* modifier = nullptr;
+    for (auto curr = unit->unitImpl; curr; curr = modifier->data->prev) {
+        modifier = (CUmModifier*)dynamicCast(curr, 0, rtti.IUsUnitType, rtti.CUmModifierType, 0);
+        if (!modifier)
+            break;
+
+        result.push_back(ModifierView{modifier});
+    }
+
+    std::reverse(result.begin(), result.end());
+    return result;
 }
 
 const game::IUsUnit* UnitView::getUnitImpl() const

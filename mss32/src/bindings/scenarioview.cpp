@@ -19,16 +19,22 @@
 
 #include "scenarioview.h"
 #include "dynamiccast.h"
+#include "fortview.h"
 #include "gameutils.h"
+#include "idview.h"
 #include "locationview.h"
 #include "midgardmapblock.h"
 #include "midgardobjectmap.h"
 #include "midgardplan.h"
 #include "midscenvariables.h"
+#include "playerview.h"
+#include "point.h"
+#include "ruinview.h"
 #include "scenarioinfo.h"
 #include "scenvariablesview.h"
 #include "stackview.h"
 #include "tileview.h"
+#include "unitview.h"
 #include <sol/sol.hpp>
 
 namespace bindings {
@@ -47,6 +53,23 @@ void ScenarioView::bind(sol::state& lua)
     scenario["getStack"] = sol::overload<>(&ScenarioView::getStack, &ScenarioView::getStackById,
                                            &ScenarioView::getStackByCoordinates,
                                            &ScenarioView::getStackByPoint);
+    scenario["getFort"] = sol::overload<>(&ScenarioView::getFort, &ScenarioView::getFortById,
+                                          &ScenarioView::getFortByCoordinates,
+                                          &ScenarioView::getFortByPoint);
+    scenario["getRuin"] = sol::overload<>(&ScenarioView::getRuin, &ScenarioView::getRuinById,
+                                          &ScenarioView::getRuinByCoordinates,
+                                          &ScenarioView::getRuinByPoint);
+    scenario["getPlayer"] = sol::overload<>(&ScenarioView::getPlayer, &ScenarioView::getPlayerById);
+    scenario["getUnit"] = sol::overload<>(&ScenarioView::getUnit, &ScenarioView::getUnitById);
+    scenario["findStackByUnit"] = sol::overload<>(&ScenarioView::findStackByUnit,
+                                                  &ScenarioView::findStackByUnitId,
+                                                  &ScenarioView::findStackByUnitIdString);
+    scenario["findFortByUnit"] = sol::overload<>(&ScenarioView::findFortByUnit,
+                                                 &ScenarioView::findFortByUnitId,
+                                                 &ScenarioView::findFortByUnitIdString);
+    scenario["findRuinByUnit"] = sol::overload<>(&ScenarioView::findRuinByUnit,
+                                                 &ScenarioView::findRuinByUnitId,
+                                                 &ScenarioView::findRuinByUnitIdString);
     scenario["day"] = sol::property(&ScenarioView::getCurrentDay);
     scenario["size"] = sol::property(&ScenarioView::getSize);
 }
@@ -59,6 +82,10 @@ std::optional<LocationView> ScenarioView::getLocation(const std::string& id) con
 std::optional<LocationView> ScenarioView::getLocationById(const IdView& id) const
 {
     using namespace game;
+
+    if (!objectMap) {
+        return std::nullopt;
+    }
 
     auto obj = objectMap->vftable->findScenarioObjectById(objectMap, &id.id);
     if (!obj) {
@@ -79,6 +106,10 @@ std::optional<LocationView> ScenarioView::getLocationById(const IdView& id) cons
 
 std::optional<ScenVariablesView> ScenarioView::getScenVariables() const
 {
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
     auto variables{hooks::getScenarioVariables(objectMap)};
     if (!variables) {
         return std::nullopt;
@@ -89,6 +120,10 @@ std::optional<ScenVariablesView> ScenarioView::getScenVariables() const
 
 std::optional<TileView> ScenarioView::getTile(int x, int y) const
 {
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
     auto info = hooks::getScenarioInfo(objectMap);
     if (!info) {
         return std::nullopt;
@@ -140,6 +175,10 @@ std::optional<StackView> ScenarioView::getStack(const std::string& id) const
 
 std::optional<StackView> ScenarioView::getStackById(const IdView& id) const
 {
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
     auto stack = hooks::getStack(objectMap, &id.id);
     if (!stack) {
         return std::nullopt;
@@ -150,17 +189,7 @@ std::optional<StackView> ScenarioView::getStackById(const IdView& id) const
 
 std::optional<StackView> ScenarioView::getStackByCoordinates(int x, int y) const
 {
-    using namespace game;
-
-    auto plan{hooks::getMidgardPlan(objectMap)};
-    if (!plan) {
-        return std::nullopt;
-    }
-
-    const CMqPoint position{x, y};
-    const IdType objectType{IdType::Stack};
-
-    auto stackId{CMidgardPlanApi::get().getObjectId(plan, &position, &objectType)};
+    auto stackId = getObjectId(x, y, game::IdType::Stack);
     if (!stackId) {
         return std::nullopt;
     }
@@ -173,16 +202,242 @@ std::optional<StackView> ScenarioView::getStackByPoint(const Point& p) const
     return getStackByCoordinates(p.x, p.y);
 }
 
+std::optional<StackView> ScenarioView::findStackByUnit(const UnitView& unit) const
+{
+    auto unitId = unit.getId();
+    return findStackByUnitId(unitId);
+}
+
+std::optional<StackView> ScenarioView::findStackByUnitId(const IdView& unitId) const
+{
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    auto stack = hooks::getStackByUnitId(objectMap, &unitId.id);
+    if (!stack) {
+        return std::nullopt;
+    }
+
+    return {StackView{stack, objectMap}};
+}
+
+std::optional<StackView> ScenarioView::findStackByUnitIdString(const std::string& unitId) const
+{
+    return findStackByUnitId(IdView{unitId});
+}
+
+std::optional<FortView> ScenarioView::getFort(const std::string& id) const
+{
+    return getFortById(IdView{id});
+}
+
+std::optional<FortView> ScenarioView::getFortById(const IdView& id) const
+{
+    using namespace game;
+
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    if (CMidgardIDApi::get().getType(&id.id) != IdType::Fortification) {
+        return std::nullopt;
+    }
+
+    auto fort = hooks::getFort(objectMap, &id.id);
+    if (!fort) {
+        return std::nullopt;
+    }
+
+    return {FortView{fort, objectMap}};
+}
+
+std::optional<FortView> ScenarioView::getFortByCoordinates(int x, int y) const
+{
+    auto fortId = getObjectId(x, y, game::IdType::Fortification);
+    if (!fortId) {
+        return std::nullopt;
+    }
+
+    return getFortById(IdView{fortId});
+}
+
+std::optional<FortView> ScenarioView::getFortByPoint(const Point& p) const
+{
+    return getFortByCoordinates(p.x, p.y);
+}
+
+std::optional<FortView> ScenarioView::findFortByUnit(const UnitView& unit) const
+{
+    auto unitId = unit.getId();
+    return findFortByUnitId(unitId);
+}
+
+std::optional<FortView> ScenarioView::findFortByUnitId(const IdView& unitId) const
+{
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    auto fort = hooks::getFortByUnitId(objectMap, &unitId.id);
+    if (!fort) {
+        return std::nullopt;
+    }
+
+    return {FortView{fort, objectMap}};
+}
+
+std::optional<FortView> ScenarioView::findFortByUnitIdString(const std::string& unitId) const
+{
+    return findFortByUnitId(IdView{unitId});
+}
+
+std::optional<RuinView> ScenarioView::getRuin(const std::string& id) const
+{
+    return getRuinById(IdView{id});
+}
+
+std::optional<RuinView> ScenarioView::getRuinById(const IdView& id) const
+{
+    using namespace game;
+
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    if (CMidgardIDApi::get().getType(&id.id) != IdType::Ruin) {
+        return std::nullopt;
+    }
+
+    auto ruin = hooks::getRuin(objectMap, &id.id);
+    if (!ruin) {
+        return std::nullopt;
+    }
+
+    return {RuinView{ruin, objectMap}};
+}
+
+std::optional<RuinView> ScenarioView::getRuinByCoordinates(int x, int y) const
+{
+    auto ruinId = getObjectId(x, y, game::IdType::Ruin);
+    if (!ruinId) {
+        return std::nullopt;
+    }
+
+    return getRuinById(IdView{ruinId});
+}
+
+std::optional<RuinView> ScenarioView::getRuinByPoint(const Point& p) const
+{
+    return getRuinByCoordinates(p.x, p.y);
+}
+
+std::optional<RuinView> ScenarioView::findRuinByUnit(const UnitView& unit) const
+{
+    auto unitId = unit.getId();
+    return findRuinByUnitId(unitId);
+}
+
+std::optional<RuinView> ScenarioView::findRuinByUnitId(const IdView& unitId) const
+{
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    auto ruin = hooks::getRuinByUnitId(objectMap, &unitId.id);
+    if (!ruin) {
+        return std::nullopt;
+    }
+
+    return {RuinView{ruin, objectMap}};
+}
+
+std::optional<RuinView> ScenarioView::findRuinByUnitIdString(const std::string& unitId) const
+{
+    return findRuinByUnitId(IdView{unitId});
+}
+
+std::optional<PlayerView> ScenarioView::getPlayer(const std::string& id) const
+{
+    return getPlayerById(IdView{id});
+}
+
+std::optional<PlayerView> ScenarioView::getPlayerById(const IdView& id) const
+{
+    using namespace game;
+
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    if (CMidgardIDApi::get().getType(&id.id) != IdType::Player) {
+        return std::nullopt;
+    }
+
+    auto player = hooks::getPlayer(objectMap, &id.id);
+    return {PlayerView{player}};
+}
+
+std::optional<UnitView> ScenarioView::getUnit(const std::string& id) const
+{
+    return getUnitById(IdView{id});
+}
+
+std::optional<UnitView> ScenarioView::getUnitById(const IdView& id) const
+{
+    using namespace game;
+
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    if (CMidgardIDApi::get().getType(&id.id) != IdType::Unit) {
+        return std::nullopt;
+    }
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, &id.id);
+    if (!obj) {
+        return std::nullopt;
+    }
+
+    return {UnitView{(const CMidUnit*)obj}};
+}
+
 int ScenarioView::getCurrentDay() const
 {
+    if (!objectMap) {
+        return 0;
+    }
+
     auto info = hooks::getScenarioInfo(objectMap);
     return info ? info->currentTurn : 0;
 }
 
 int ScenarioView::getSize() const
 {
+    if (!objectMap) {
+        return 0;
+    }
+
     auto info = hooks::getScenarioInfo(objectMap);
     return info ? info->mapSize : 0;
+}
+
+const game::CMidgardID* ScenarioView::getObjectId(int x, int y, game::IdType type) const
+{
+    using namespace game;
+
+    if (!objectMap) {
+        return nullptr;
+    }
+
+    auto plan{hooks::getMidgardPlan(objectMap)};
+    if (!plan) {
+        return nullptr;
+    }
+
+    const CMqPoint position{x, y};
+    return CMidgardPlanApi::get().getObjectId(plan, &position, &type);
 }
 
 } // namespace bindings

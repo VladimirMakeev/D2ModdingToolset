@@ -17,10 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ITEMVIEW_H
-#define ITEMVIEW_H
+#ifndef RUINVIEW_H
+#define RUINVIEW_H
 
-#include "midgardid.h"
 #include <optional>
 
 namespace sol {
@@ -28,31 +27,36 @@ class state;
 }
 
 namespace game {
+struct CMidRuin;
 struct IMidgardObjectMap;
 } // namespace game
 
 namespace bindings {
 
 struct IdView;
-class ItemBaseView;
+class PlayerView;
+class GroupView;
+class ItemView;
 class CurrencyView;
 
-class ItemView
+class RuinView
 {
 public:
-    ItemView(const game::CMidgardID* itemId, const game::IMidgardObjectMap* objectMap);
+    RuinView(const game::CMidRuin* ruin, const game::IMidgardObjectMap* objectMap);
 
     static void bind(sol::state& lua);
 
     IdView getId() const;
-    std::optional<ItemBaseView> getBase() const;
-    CurrencyView getSellValue() const;
+    std::optional<PlayerView> getLooter() const;
+    GroupView getGroup() const;
+    std::optional<ItemView> getItem() const;
+    CurrencyView getCash() const;
 
 private:
-    game::CMidgardID itemId;
+    const game::CMidRuin* ruin;
     const game::IMidgardObjectMap* objectMap;
 };
 
 } // namespace bindings
 
-#endif // ITEMVIEW_H
+#endif // RUINVIEW_H

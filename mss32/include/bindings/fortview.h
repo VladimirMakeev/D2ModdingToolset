@@ -17,42 +17,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ITEMVIEW_H
-#define ITEMVIEW_H
+#ifndef FORTVIEW_H
+#define FORTVIEW_H
 
-#include "midgardid.h"
 #include <optional>
+#include <vector>
 
 namespace sol {
 class state;
 }
 
 namespace game {
+struct CFortification;
 struct IMidgardObjectMap;
 } // namespace game
 
 namespace bindings {
 
 struct IdView;
-class ItemBaseView;
-class CurrencyView;
+class PlayerView;
+class GroupView;
+class StackView;
+class ItemView;
 
-class ItemView
+class FortView
 {
 public:
-    ItemView(const game::CMidgardID* itemId, const game::IMidgardObjectMap* objectMap);
+    FortView(const game::CFortification* fort, const game::IMidgardObjectMap* objectMap);
 
     static void bind(sol::state& lua);
 
     IdView getId() const;
-    std::optional<ItemBaseView> getBase() const;
-    CurrencyView getSellValue() const;
+    PlayerView getOwner() const;
+    GroupView getGroup() const;
+    std::optional<StackView> getVisitor() const;
+    int getSubrace() const;
+    std::vector<ItemView> getInventoryItems() const;
 
 private:
-    game::CMidgardID itemId;
+    const game::CFortification* fort;
     const game::IMidgardObjectMap* objectMap;
 };
 
 } // namespace bindings
 
-#endif // ITEMVIEW_H
+#endif // FORTVIEW_H

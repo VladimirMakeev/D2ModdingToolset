@@ -30,16 +30,32 @@ struct CMidPlayer;
 struct CMidScenVariables;
 struct CMidgardPlan;
 struct CMidStack;
+struct CMidRuin;
+struct CFortification;
 } // namespace game
 
 namespace hooks {
 
 bool isGreaterPickRandomIfEqual(int first, int second);
 
-game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMap,
-                                         const game::BattleMsgData* battleMsgData,
-                                         const game::CMidgardID* unitId,
-                                         bool ally);
+/**
+ * Picks object map that corresponds to the calling thread (client vs server).
+ * Object map can be unavailable while in a loading state.
+ * The game has such map available, while editor keeps it unavailable while loading.
+ * The only known case so far, is that game/editor calls IUsSoldier::getHitPoint
+ * while it loads units from scenario stream thus while the map is just being loaded.
+ * This triggers CCustomModifier "getHitPoint" script that can try to access the map.
+ */
+const game::IMidgardObjectMap* getObjectMap();
+
+/** Analogue of GetStackFortRuinGroup that is absent in Scenario Editor. */
+const game::CMidUnitGroup* getGroup(const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* groupId);
+
+const game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMap,
+                                               const game::BattleMsgData* battleMsgData,
+                                               const game::CMidgardID* unitId,
+                                               bool ally);
 
 const game::CScenarioInfo* getScenarioInfo(const game::IMidgardObjectMap* objectMap);
 
@@ -60,6 +76,28 @@ game::CMidStack* getStack(const game::IMidgardObjectMap* objectMap,
 game::CMidStack* getStack(const game::IMidgardObjectMap* objectMap,
                           const game::BattleMsgData* battleMsgData,
                           const game::CMidgardID* unitId);
+
+const game::CMidStack* getStackByUnitId(const game::IMidgardObjectMap* objectMap,
+                                        const game::CMidgardID* unitId);
+
+game::CFortification* getFort(const game::IMidgardObjectMap* objectMap,
+                              const game::CMidgardID* fortId);
+
+game::CFortification* getFort(const game::IMidgardObjectMap* objectMap,
+                              const game::BattleMsgData* battleMsgData,
+                              const game::CMidgardID* unitId);
+
+const game::CFortification* getFortByUnitId(const game::IMidgardObjectMap* objectMap,
+                                            const game::CMidgardID* unitId);
+
+game::CMidRuin* getRuin(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* ruinId);
+
+game::CMidRuin* getRuin(const game::IMidgardObjectMap* objectMap,
+                        const game::BattleMsgData* battleMsgData,
+                        const game::CMidgardID* unitId);
+
+const game::CMidRuin* getRuinByUnitId(const game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* unitId);
 
 } // namespace hooks
 

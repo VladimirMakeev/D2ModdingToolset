@@ -30,11 +30,14 @@
 namespace hooks {
 
 /** Returns lua environment with bound api and specified source loaded and executed. */
-sol::environment executeScript(const std::string& source, sol::protected_function_result& result);
+sol::environment executeScript(const std::string& source,
+                               sol::protected_function_result& result,
+                               bool bindScenario = false);
 
 /** Returns lua environment with bound api and specified file loaded and executed. */
 std::optional<sol::environment> executeScriptFile(const std::filesystem::path& path,
-                                                  bool alwaysExists = false);
+                                                  bool alwaysExists = false,
+                                                  bool bindScenario = false);
 
 /**
  * Returns function with specified name from lua environment to call from c++.
@@ -83,14 +86,16 @@ static inline void getScriptFunction(const sol::environment& environment,
  * @param[in] name function name in lua script.
  * @param[out] environment lua environment where the function executes.
  * @param[in] alwaysExists true to show error message if the function does not exist.
+ * @param[in] bindScenario true to bind global 'getScenario' function.
  */
 template <typename T>
 static inline std::optional<T> getScriptFunction(const std::filesystem::path& path,
                                                  const char* name,
                                                  std::optional<sol::environment>& environment,
-                                                 bool alwaysExists = false)
+                                                 bool alwaysExists = false,
+                                                 bool bindScenario = false)
 {
-    environment = executeScriptFile(path, alwaysExists);
+    environment = executeScriptFile(path, alwaysExists, bindScenario);
     if (!environment)
         return std::nullopt;
 

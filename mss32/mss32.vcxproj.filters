@@ -1040,6 +1040,30 @@
     <ClCompile Include="src\midcondvarcmp.cpp">
       <Filter>features\custom event conditions</Filter>
     </ClCompile>
+    <ClCompile Include="src\midclientcore.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenedit.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midserverlogic.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scriptutils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\playerview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\modifierview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\fortview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\ruinview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2637,6 +2661,24 @@
     </ClInclude>
     <ClInclude Include="include\interfborderdisplay.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scenedit.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scriptutils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\playerview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\modifierview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\fortview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\ruinview.h">
+      <Filter>bindings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -20,7 +20,7 @@
 #ifndef GROUPVIEW_H
 #define GROUPVIEW_H
 
-#include "unitslotview.h"
+#include "midgardid.h"
 #include <vector>
 
 namespace sol {
@@ -34,12 +34,15 @@ struct IMidgardObjectMap;
 
 namespace bindings {
 
+struct IdView;
+class UnitView;
 class UnitSlotView;
 
 class GroupView
 {
 public:
     using GroupSlots = std::vector<UnitSlotView>;
+    using GroupUnits = std::vector<UnitView>;
 
     GroupView(const game::CMidUnitGroup* group,
               const game::IMidgardObjectMap* objectMap,
@@ -49,6 +52,11 @@ public:
 
     /** Returns group as array of 6 unit slots. */
     GroupSlots getSlots() const;
+
+    GroupUnits getUnits() const;
+
+    bool hasUnit(const bindings::UnitView& unit) const;
+    bool hasUnitById(const bindings::IdView& unitId) const;
 
 protected:
     const game::CMidUnitGroup* group;
