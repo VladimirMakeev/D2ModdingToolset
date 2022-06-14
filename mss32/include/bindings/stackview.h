@@ -37,6 +37,7 @@ enum EquippedItemIdx;
 namespace bindings {
 
 struct IdView;
+class FortView;
 class GroupView;
 class UnitView;
 class ItemView;
@@ -50,7 +51,7 @@ public:
 
     IdView getId() const;
     IdView getOwnerId() const;
-    IdView getInsideId() const;
+    std::optional<FortView> getInside() const;
     /** Returns stack units as a group. */
     GroupView getGroup() const;
     /** Returns stack leader. */
@@ -59,8 +60,6 @@ public:
     int getMovement() const;
     /** Returns stack subrace category id. */
     int getSubrace() const;
-
-    bool isInside() const;
 
     bool isInvisible() const;
 

@@ -18,7 +18,9 @@
  */
 
 #include "stackview.h"
+#include "fortview.h"
 #include "game.h"
+#include "gameutils.h"
 #include "groupview.h"
 #include "idview.h"
 #include "itemview.h"
@@ -39,11 +41,11 @@ void StackView::bind(sol::state& lua)
 {
     auto stackView = lua.new_usertype<StackView>("StackView");
     stackView["id"] = sol::property(&StackView::getId);
+    stackView["inside"] = sol::property(&StackView::getInside);
     stackView["group"] = sol::property(&StackView::getGroup);
     stackView["leader"] = sol::property(&StackView::getLeader);
     stackView["movement"] = sol::property(&StackView::getMovement);
     stackView["subrace"] = sol::property(&StackView::getSubrace);
-    stackView["inside"] = sol::property(&StackView::isInside);
     stackView["invisible"] = sol::property(&StackView::isInvisible);
 
     stackView["inventoryItems"] = sol::property(&StackView::getInventoryItems);
@@ -60,9 +62,14 @@ IdView StackView::getOwnerId() const
     return IdView{stack->ownerId};
 }
 
-IdView StackView::getInsideId() const
+std::optional<FortView> StackView::getInside() const
 {
-    return IdView{stack->insideId};
+    auto fort = hooks::getFort(objectMap, &stack->insideId);
+    if (!fort) {
+        return std::nullopt;
+    }
+
+    return {FortView{fort, objectMap}};
 }
 
 GroupView StackView::getGroup() const
@@ -91,11 +98,6 @@ int StackView::getSubrace() const
     auto subrace{static_cast<const game::CMidSubRace*>(obj)};
 
     return subrace ? static_cast<int>(subrace->subraceCategory.id) : game::emptyCategoryId;
-}
-
-bool StackView::isInside() const
-{
-    return stack->insideId != game::emptyId;
 }
 
 bool StackView::isInvisible() const

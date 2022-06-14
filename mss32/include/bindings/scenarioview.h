@@ -88,8 +88,6 @@ public:
     std::optional<FortView> getFortByCoordinates(int x, int y) const;
     /** Searches for fort at specified point. */
     std::optional<FortView> getFortByPoint(const Point& p) const;
-    /** Searches for fort that has specified visiting stack. */
-    std::optional<FortView> getFortByStack(const StackView& stack) const;
 
     /** Searches for ruin by id string. */
     std::optional<RuinView> getRuin(const std::string& id) const;

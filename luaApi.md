@@ -400,6 +400,11 @@ Returns stack [id](luaApi.md#id). The value is unique for every stack on scenari
 ```lua
 stack.id
 ```
+##### inside
+Returns [fort](luaApi.md#fort) that this stack is visiting or nil if none.
+```lua
+stack.inside
+```
 ##### group
 Returns stack units as a [group](luaApi.md#group).
 ```lua
@@ -428,8 +433,6 @@ stack:getEquippedItem(Equipment.Boots)
 ```lua
 --- Returns stack current movement points.
 stack.movement
---- Returns true if stack is inside a city.
-stack.inside
 --- Returns true if stack is invisible.
 stack.invisible
 ```
@@ -613,7 +616,6 @@ Searches for [stack](luaApi.md#stack) by:
 - [id](luaApi.md#id)
 - pair of coordinates
 - [point](luaApi.md#point)
-- [fort](luaApi.md#fort) that this stack is visiting
 
 Returns nil if not found.
 ```lua

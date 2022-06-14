@@ -55,8 +55,7 @@ void ScenarioView::bind(sol::state& lua)
                                            &ScenarioView::getStackByPoint);
     scenario["getFort"] = sol::overload<>(&ScenarioView::getFort, &ScenarioView::getFortById,
                                           &ScenarioView::getFortByCoordinates,
-                                          &ScenarioView::getFortByPoint,
-                                          &ScenarioView::getFortByStack);
+                                          &ScenarioView::getFortByPoint);
     scenario["getRuin"] = sol::overload<>(&ScenarioView::getRuin, &ScenarioView::getRuinById,
                                           &ScenarioView::getRuinByCoordinates,
                                           &ScenarioView::getRuinByPoint);
@@ -293,12 +292,6 @@ std::optional<FortView> ScenarioView::findFortByUnitId(const IdView& unitId) con
 std::optional<FortView> ScenarioView::findFortByUnitIdString(const std::string& unitId) const
 {
     return findFortByUnitId(IdView{unitId});
-}
-
-std::optional<FortView> ScenarioView::getFortByStack(const StackView& stack) const
-{
-    auto fortId = stack.getInsideId();
-    return getFortById(fortId);
 }
 
 std::optional<RuinView> ScenarioView::getRuin(const std::string& id) const
