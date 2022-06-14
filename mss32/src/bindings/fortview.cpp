@@ -19,11 +19,13 @@
 
 #include "fortview.h"
 #include "fortification.h"
+#include "gameutils.h"
 #include "groupview.h"
 #include "idview.h"
 #include "itemview.h"
 #include "midgardobjectmap.h"
 #include "midsubrace.h"
+#include "stackview.h"
 #include <sol/sol.hpp>
 
 namespace bindings {
@@ -38,6 +40,7 @@ void FortView::bind(sol::state& lua)
     auto fortView = lua.new_usertype<FortView>("FortView");
     fortView["id"] = sol::property(&FortView::getId);
     fortView["group"] = sol::property(&FortView::getGroup);
+    fortView["visitor"] = sol::property(&FortView::getVisitor);
     fortView["subrace"] = sol::property(&FortView::getSubrace);
     fortView["inventoryItems"] = sol::property(&FortView::getInventoryItems);
 }
@@ -52,14 +55,18 @@ IdView FortView::getOwnerId() const
     return IdView{fort->ownerId};
 }
 
-IdView FortView::getStackId() const
-{
-    return IdView{fort->stackId};
-}
-
 GroupView FortView::getGroup() const
 {
     return GroupView{&fort->group, objectMap, &fort->id};
+}
+
+std::optional<StackView> FortView::getVisitor() const
+{
+    auto stack = hooks::getStack(objectMap, &fort->stackId);
+    if (!stack)
+        return std::nullopt;
+
+    return {StackView{stack, objectMap}};
 }
 
 int FortView::getSubrace() const

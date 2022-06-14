@@ -79,8 +79,6 @@ public:
     std::optional<StackView> getStackByCoordinates(int x, int y) const;
     /** Searches for stack at specified point. */
     std::optional<StackView> getStackByPoint(const Point& p) const;
-    /** Searches for stack that visiting specified fort. */
-    std::optional<StackView> getStackByFort(const FortView& fort) const;
 
     /** Searches for fort by id string. */
     std::optional<FortView> getFort(const std::string& id) const;

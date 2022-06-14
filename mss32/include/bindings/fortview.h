@@ -20,6 +20,7 @@
 #ifndef FORTVIEW_H
 #define FORTVIEW_H
 
+#include <optional>
 #include <vector>
 
 namespace sol {
@@ -35,6 +36,7 @@ namespace bindings {
 
 struct IdView;
 class GroupView;
+class StackView;
 class ItemView;
 
 class FortView
@@ -46,8 +48,8 @@ public:
 
     IdView getId() const;
     IdView getOwnerId() const;
-    IdView getStackId() const;
     GroupView getGroup() const;
+    std::optional<StackView> getVisitor() const;
     int getSubrace() const;
     std::vector<ItemView> getInventoryItems() const;
 
