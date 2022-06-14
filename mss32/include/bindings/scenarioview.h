@@ -102,8 +102,6 @@ public:
     std::optional<PlayerView> getPlayer(const std::string& id) const;
     /** Searches for player by id. */
     std::optional<PlayerView> getPlayerById(const IdView& id) const;
-    /** Searches for player that controls specified stack. */
-    std::optional<PlayerView> getPlayerByStack(const StackView& stack) const;
     /** Searches for player that looted specified ruin. */
     std::optional<PlayerView> getPlayerByRuin(const RuinView& ruin) const;
 

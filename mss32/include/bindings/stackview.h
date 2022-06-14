@@ -37,6 +37,7 @@ enum EquippedItemIdx;
 namespace bindings {
 
 struct IdView;
+class PlayerView;
 class FortView;
 class GroupView;
 class UnitView;
@@ -50,7 +51,7 @@ public:
     static void bind(sol::state& lua);
 
     IdView getId() const;
-    IdView getOwnerId() const;
+    PlayerView getOwner() const;
     std::optional<FortView> getInside() const;
     /** Returns stack units as a group. */
     GroupView getGroup() const;

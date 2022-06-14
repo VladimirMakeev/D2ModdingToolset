@@ -400,6 +400,11 @@ Returns stack [id](luaApi.md#id). The value is unique for every stack on scenari
 ```lua
 stack.id
 ```
+##### owner
+Returns [player](luaApi.md#player) that owns the stack. Neutral stacks are owned by neutral player.
+```lua
+stack.owner
+```
 ##### inside
 Returns [fort](luaApi.md#fort) that this stack is visiting or nil if none.
 ```lua
@@ -656,7 +661,6 @@ end
 Searches for [player](luaApi.md#player) by:
 - id string
 - [id](luaApi.md#id)
-- controlled [stack](luaApi.md#stack)
 - looted [ruin](luaApi.md#ruin)
 
 Returns nil if not found.
