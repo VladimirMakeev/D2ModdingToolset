@@ -25,6 +25,7 @@
 #include "itemview.h"
 #include "midgardobjectmap.h"
 #include "midsubrace.h"
+#include "playerview.h"
 #include "stackview.h"
 #include <sol/sol.hpp>
 
@@ -39,6 +40,7 @@ void FortView::bind(sol::state& lua)
 {
     auto fortView = lua.new_usertype<FortView>("FortView");
     fortView["id"] = sol::property(&FortView::getId);
+    fortView["owner"] = sol::property(&FortView::getOwner);
     fortView["group"] = sol::property(&FortView::getGroup);
     fortView["visitor"] = sol::property(&FortView::getVisitor);
     fortView["subrace"] = sol::property(&FortView::getSubrace);
@@ -50,9 +52,10 @@ IdView FortView::getId() const
     return IdView{fort->id};
 }
 
-IdView FortView::getOwnerId() const
+PlayerView FortView::getOwner() const
 {
-    return IdView{fort->ownerId};
+    auto player = hooks::getPlayer(objectMap, &fort->ownerId);
+    return PlayerView{player};
 }
 
 GroupView FortView::getGroup() const

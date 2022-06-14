@@ -35,6 +35,7 @@ struct IMidgardObjectMap;
 namespace bindings {
 
 struct IdView;
+class PlayerView;
 class GroupView;
 class StackView;
 class ItemView;
@@ -47,7 +48,7 @@ public:
     static void bind(sol::state& lua);
 
     IdView getId() const;
-    IdView getOwnerId() const;
+    PlayerView getOwner() const;
     GroupView getGroup() const;
     std::optional<StackView> getVisitor() const;
     int getSubrace() const;

@@ -446,6 +446,11 @@ Returns fort [id](luaApi.md#id). The value is unique for every fort on scenario 
 ```lua
 fort.id
 ```
+##### owner
+Returns [player](luaApi.md#player) that owns the fort. Neutral forts are owned by neutral player.
+```lua
+fort.owner
+```
 ##### group
 Returns fort units as a [group](luaApi.md#group).
 ```lua
@@ -650,7 +655,6 @@ Searches for [player](luaApi.md#player) by:
 - id string
 - [id](luaApi.md#id)
 - controlled [stack](luaApi.md#stack)
-- controlled [fort](luaApi.md#fort)
 - looted [ruin](luaApi.md#ruin)
 
 Returns nil if not found.
