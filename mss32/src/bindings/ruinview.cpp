@@ -19,10 +19,12 @@
 
 #include "ruinview.h"
 #include "currencyview.h"
+#include "gameutils.h"
 #include "groupview.h"
 #include "idview.h"
 #include "itemview.h"
 #include "midruin.h"
+#include "playerview.h"
 #include <sol/sol.hpp>
 
 namespace bindings {
@@ -36,6 +38,7 @@ void RuinView::bind(sol::state& lua)
 {
     auto ruinView = lua.new_usertype<RuinView>("RuinView");
     ruinView["id"] = sol::property(&RuinView::getId);
+    ruinView["looter"] = sol::property(&RuinView::getLooter);
     ruinView["group"] = sol::property(&RuinView::getGroup);
     ruinView["item"] = sol::property(&RuinView::getItem);
     ruinView["cash"] = sol::property(&RuinView::getCash);
@@ -46,9 +49,14 @@ IdView RuinView::getId() const
     return IdView{ruin->id};
 }
 
-IdView RuinView::getLooterId() const
+std::optional<PlayerView> RuinView::getLooter() const
 {
-    return IdView{ruin->looterId};
+    auto player = hooks::getPlayer(objectMap, &ruin->looterId);
+    if (!player) {
+        return std::nullopt;
+    }
+
+    return {PlayerView{player}};
 }
 
 GroupView RuinView::getGroup() const

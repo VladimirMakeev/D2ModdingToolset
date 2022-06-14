@@ -59,8 +59,7 @@ void ScenarioView::bind(sol::state& lua)
     scenario["getRuin"] = sol::overload<>(&ScenarioView::getRuin, &ScenarioView::getRuinById,
                                           &ScenarioView::getRuinByCoordinates,
                                           &ScenarioView::getRuinByPoint);
-    scenario["getPlayer"] = sol::overload<>(&ScenarioView::getPlayer, &ScenarioView::getPlayerById,
-                                            &ScenarioView::getPlayerByRuin);
+    scenario["getPlayer"] = sol::overload<>(&ScenarioView::getPlayer, &ScenarioView::getPlayerById);
     scenario["getUnit"] = sol::overload<>(&ScenarioView::getUnit, &ScenarioView::getUnitById);
     scenario["findStackByUnit"] = sol::overload<>(&ScenarioView::findStackByUnit,
                                                   &ScenarioView::findStackByUnitId,
@@ -376,22 +375,6 @@ std::optional<PlayerView> ScenarioView::getPlayerById(const IdView& id) const
     }
 
     auto player = hooks::getPlayer(objectMap, &id.id);
-    return {PlayerView{player}};
-}
-
-std::optional<PlayerView> ScenarioView::getPlayerByRuin(const RuinView& ruin) const
-{
-    if (!objectMap) {
-        return std::nullopt;
-    }
-
-    auto playerId = ruin.getLooterId().id;
-    if (playerId == game::emptyId) {
-        return std::nullopt;
-    }
-
-    auto player = hooks::getPlayer(objectMap, &playerId);
-
     return {PlayerView{player}};
 }
 

@@ -491,6 +491,11 @@ Returns ruin [id](luaApi.md#id). The value is unique for every ruin on scenario 
 ```lua
 ruin.id
 ```
+##### looter
+Returns [player](luaApi.md#player) that looted the ruin, or nil if none.
+```lua
+ruin.looter
+```
 ##### group
 Returns ruin units as a [group](luaApi.md#group).
 ```lua
@@ -658,12 +663,7 @@ if (ruin == nil) then
 end
 ```
 ##### getPlayer
-Searches for [player](luaApi.md#player) by:
-- id string
-- [id](luaApi.md#id)
-- looted [ruin](luaApi.md#ruin)
-
-Returns nil if not found.
+Searches for [player](luaApi.md#player) by id string or [id](luaApi.md#id), returns nil if not found.
 ```lua
 local player = scenario:getPlayer(stack)
 if (player == nil) then
