@@ -29,9 +29,8 @@
 
 namespace bindings {
 
-ItemBaseView::ItemBaseView(const game::CItemBase* item, const game::IMidgardObjectMap* objectMap)
+ItemBaseView::ItemBaseView(const game::CItemBase* item)
     : item{item}
-    , objectMap{objectMap}
 { }
 
 void ItemBaseView::bind(sol::state& lua)

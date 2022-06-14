@@ -28,7 +28,6 @@ class state;
 
 namespace game {
 struct CItemBase;
-struct IMidgardObjectMap;
 } // namespace game
 
 namespace bindings {
@@ -40,7 +39,7 @@ class UnitImplView;
 class ItemBaseView
 {
 public:
-    ItemBaseView(const game::CItemBase* item, const game::IMidgardObjectMap* objectMap);
+    ItemBaseView(const game::CItemBase* item);
 
     static void bind(sol::state& lua);
 
@@ -51,7 +50,6 @@ public:
 
 private:
     const game::CItemBase* item;
-    const game::IMidgardObjectMap* objectMap;
 };
 
 } // namespace bindings

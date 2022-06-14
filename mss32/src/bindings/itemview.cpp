@@ -51,7 +51,7 @@ std::optional<ItemBaseView> ItemView::getBase() const
     if (!item)
         return std::nullopt;
 
-    return ItemBaseView{item, objectMap};
+    return ItemBaseView{item};
 }
 
 CurrencyView ItemView::getSellValue() const
