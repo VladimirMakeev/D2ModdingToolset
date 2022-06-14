@@ -53,22 +53,28 @@ void ScenarioView::bind(sol::state& lua)
     scenario["getStack"] = sol::overload<>(&ScenarioView::getStack, &ScenarioView::getStackById,
                                            &ScenarioView::getStackByCoordinates,
                                            &ScenarioView::getStackByPoint,
-                                           &ScenarioView::getStackByUnit,
                                            &ScenarioView::getStackByFort);
     scenario["getFort"] = sol::overload<>(&ScenarioView::getFort, &ScenarioView::getFortById,
                                           &ScenarioView::getFortByCoordinates,
                                           &ScenarioView::getFortByPoint,
-                                          &ScenarioView::getFortByUnit,
                                           &ScenarioView::getFortByStack);
     scenario["getRuin"] = sol::overload<>(&ScenarioView::getRuin, &ScenarioView::getRuinById,
                                           &ScenarioView::getRuinByCoordinates,
-                                          &ScenarioView::getRuinByPoint,
-                                          &ScenarioView::getRuinByUnit);
+                                          &ScenarioView::getRuinByPoint);
     scenario["getPlayer"] = sol::overload<>(&ScenarioView::getPlayer, &ScenarioView::getPlayerById,
                                             &ScenarioView::getPlayerByStack,
                                             &ScenarioView::getPlayerByFort,
                                             &ScenarioView::getPlayerByRuin);
     scenario["getUnit"] = sol::overload<>(&ScenarioView::getUnit, &ScenarioView::getUnitById);
+    scenario["findStackByUnit"] = sol::overload<>(&ScenarioView::findStackByUnit,
+                                                  &ScenarioView::findStackByUnitId,
+                                                  &ScenarioView::findStackByUnitIdString);
+    scenario["findFortByUnit"] = sol::overload<>(&ScenarioView::findFortByUnit,
+                                                 &ScenarioView::findFortByUnitId,
+                                                 &ScenarioView::findFortByUnitIdString);
+    scenario["findRuinByUnit"] = sol::overload<>(&ScenarioView::findRuinByUnit,
+                                                 &ScenarioView::findRuinByUnitId,
+                                                 &ScenarioView::findRuinByUnitIdString);
     scenario["day"] = sol::property(&ScenarioView::getCurrentDay);
     scenario["size"] = sol::property(&ScenarioView::getSize);
 }
@@ -201,19 +207,29 @@ std::optional<StackView> ScenarioView::getStackByPoint(const Point& p) const
     return getStackByCoordinates(p.x, p.y);
 }
 
-std::optional<StackView> ScenarioView::getStackByUnit(const UnitView& unit) const
+std::optional<StackView> ScenarioView::findStackByUnit(const UnitView& unit) const
+{
+    auto unitId = unit.getId();
+    return findStackByUnitId(unitId);
+}
+
+std::optional<StackView> ScenarioView::findStackByUnitId(const IdView& unitId) const
 {
     if (!objectMap) {
         return std::nullopt;
     }
 
-    auto unitId = unit.getId();
     auto stack = hooks::getStackByUnitId(objectMap, &unitId.id);
     if (!stack) {
         return std::nullopt;
     }
 
     return {StackView{stack, objectMap}};
+}
+
+std::optional<StackView> ScenarioView::findStackByUnitIdString(const std::string& unitId) const
+{
+    return findStackByUnitId(IdView{unitId});
 }
 
 std::optional<StackView> ScenarioView::getStackByFort(const FortView& fort) const
@@ -262,19 +278,29 @@ std::optional<FortView> ScenarioView::getFortByPoint(const Point& p) const
     return getFortByCoordinates(p.x, p.y);
 }
 
-std::optional<FortView> ScenarioView::getFortByUnit(const UnitView& unit) const
+std::optional<FortView> ScenarioView::findFortByUnit(const UnitView& unit) const
+{
+    auto unitId = unit.getId();
+    return findFortByUnitId(unitId);
+}
+
+std::optional<FortView> ScenarioView::findFortByUnitId(const IdView& unitId) const
 {
     if (!objectMap) {
         return std::nullopt;
     }
 
-    auto unitId = unit.getId();
     auto fort = hooks::getFortByUnitId(objectMap, &unitId.id);
     if (!fort) {
         return std::nullopt;
     }
 
     return {FortView{fort, objectMap}};
+}
+
+std::optional<FortView> ScenarioView::findFortByUnitIdString(const std::string& unitId) const
+{
+    return findFortByUnitId(IdView{unitId});
 }
 
 std::optional<FortView> ScenarioView::getFortByStack(const StackView& stack) const
@@ -323,19 +349,29 @@ std::optional<RuinView> ScenarioView::getRuinByPoint(const Point& p) const
     return getRuinByCoordinates(p.x, p.y);
 }
 
-std::optional<RuinView> ScenarioView::getRuinByUnit(const UnitView& unit) const
+std::optional<RuinView> ScenarioView::findRuinByUnit(const UnitView& unit) const
+{
+    auto unitId = unit.getId();
+    return findRuinByUnitId(unitId);
+}
+
+std::optional<RuinView> ScenarioView::findRuinByUnitId(const IdView& unitId) const
 {
     if (!objectMap) {
         return std::nullopt;
     }
 
-    auto unitId = unit.getId();
     auto ruin = hooks::getRuinByUnitId(objectMap, &unitId.id);
     if (!ruin) {
         return std::nullopt;
     }
 
     return {RuinView{ruin, objectMap}};
+}
+
+std::optional<RuinView> ScenarioView::findRuinByUnitIdString(const std::string& unitId) const
+{
+    return findRuinByUnitId(IdView{unitId});
 }
 
 std::optional<PlayerView> ScenarioView::getPlayer(const std::string& id) const

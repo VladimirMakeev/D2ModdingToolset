@@ -603,7 +603,6 @@ Searches for [stack](luaApi.md#stack) by:
 - [id](luaApi.md#id)
 - pair of coordinates
 - [point](luaApi.md#point)
-- [unit](luaApi.md#unit-1) of its group
 - [fort](luaApi.md#fort) that this stack is visiting
 
 Returns nil if not found.
@@ -619,7 +618,6 @@ Searches for [fort](luaApi.md#fort) by:
 - [id](luaApi.md#id)
 - pair of coordinates
 - [point](luaApi.md#point)
-- [unit](luaApi.md#unit-1) of its group
 - visiting [stack](luaApi.md#stack)
 
 Returns nil if not found.
@@ -635,7 +633,6 @@ Searches for [ruin](luaApi.md#ruin) by:
 - [id](luaApi.md#id)
 - pair of coordinates
 - [point](luaApi.md#point)
-- [unit](luaApi.md#unit-1) of its group
 
 Returns nil if not found.
 ```lua
@@ -667,6 +664,40 @@ if (unit == nil) then
     return
 end
 ```
+##### findStackByUnit
+Searches for [stack](luaApi.md#stack) that has specified [unit](luaApi.md#unit-1) among all the stacks in the whole [scenario](luaApi.md#scenario).
+You can also use unit id string or [id](luaApi.md#id).
+Returns nil if not found.
+```lua
+local stack = scenario:findStackByUnit(unit)
+if stack == nil then
+    return
+end
+```
+**Note** that this search is heavy in terms of performance, so you probably want to minimize excessive calls and use variables to store its results.
+##### findFortByUnit
+Searches for [fort](luaApi.md#fort) that has specified [unit](luaApi.md#unit-1) in its garrison among all the forts in the whole [scenario](luaApi.md#scenario).
+Only garrison units are counted, visiting stack is ignored.
+You can also use unit id string or [id](luaApi.md#id).
+Returns nil if not found.
+```lua
+local fort = scenario:findFortByUnit(unit)
+if fort == nil then
+    return
+end
+```
+**Note** that this search is heavy in terms of performance, so you probably want to minimize excessive calls and use variables to store its results.
+##### findRuinByUnit
+Searches for [ruin](luaApi.md#ruin) that has specified [unit](luaApi.md#unit-1) among all the ruins in the whole [scenario](luaApi.md#scenario).
+You can also use unit id string or [id](luaApi.md#id).
+Returns nil if not found.
+```lua
+local ruin = scenario:findRuinByUnit(unit)
+if ruin == nil then
+    return
+end
+```
+**Note** that this search is heavy in terms of performance, so you probably want to minimize excessive calls and use variables to store its results.
 ##### day
 Returns number of current day in game.
 ```lua

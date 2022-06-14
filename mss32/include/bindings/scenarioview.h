@@ -79,8 +79,6 @@ public:
     std::optional<StackView> getStackByCoordinates(int x, int y) const;
     /** Searches for stack at specified point. */
     std::optional<StackView> getStackByPoint(const Point& p) const;
-    /** Searches for stack that has specified unit. */
-    std::optional<StackView> getStackByUnit(const UnitView& unit) const;
     /** Searches for stack that visiting specified fort. */
     std::optional<StackView> getStackByFort(const FortView& fort) const;
 
@@ -92,8 +90,6 @@ public:
     std::optional<FortView> getFortByCoordinates(int x, int y) const;
     /** Searches for fort at specified point. */
     std::optional<FortView> getFortByPoint(const Point& p) const;
-    /** Searches for fort that has specified unit. */
-    std::optional<FortView> getFortByUnit(const UnitView& unit) const;
     /** Searches for fort that has specified visiting stack. */
     std::optional<FortView> getFortByStack(const StackView& stack) const;
 
@@ -105,8 +101,6 @@ public:
     std::optional<RuinView> getRuinByCoordinates(int x, int y) const;
     /** Searches for ruin at specified point. */
     std::optional<RuinView> getRuinByPoint(const Point& p) const;
-    /** Searches for ruin that has specified unit. */
-    std::optional<RuinView> getRuinByUnit(const UnitView& unit) const;
 
     /** Searches for player by id string. */
     std::optional<PlayerView> getPlayer(const std::string& id) const;
@@ -123,6 +117,24 @@ public:
     std::optional<UnitView> getUnit(const std::string& id) const;
     /** Searches for unit by id. */
     std::optional<UnitView> getUnitById(const IdView& id) const;
+
+    /** Searches for stack that has specified unit among all the stacks in the whole scenario. */
+    std::optional<StackView> findStackByUnit(const UnitView& unit) const;
+    std::optional<StackView> findStackByUnitId(const IdView& unitId) const;
+    std::optional<StackView> findStackByUnitIdString(const std::string& unitId) const;
+
+    /**
+     * Searches for fort that has specified unit in its garrison among all the forts in the whole
+     * scenario. Only garrison units are counted, visiting stack is ignored.
+     */
+    std::optional<FortView> findFortByUnit(const UnitView& unit) const;
+    std::optional<FortView> findFortByUnitId(const IdView& unitId) const;
+    std::optional<FortView> findFortByUnitIdString(const std::string& unitId) const;
+
+    /** Searches for ruin that has specified unit among all the ruins in the whole scenario. */
+    std::optional<RuinView> findRuinByUnit(const UnitView& unit) const;
+    std::optional<RuinView> findRuinByUnitId(const IdView& unitId) const;
+    std::optional<RuinView> findRuinByUnitIdString(const std::string& unitId) const;
 
     int getCurrentDay() const;
     int getSize() const;
