@@ -29,10 +29,6 @@ namespace sol {
 class state;
 }
 
-namespace game {
-struct CMidScenVariables;
-} // namespace game
-
 namespace bindings {
 
 class ScenarioVariableView;
