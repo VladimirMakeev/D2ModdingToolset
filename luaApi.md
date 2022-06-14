@@ -27,9 +27,24 @@ Scripts folder itself should be placed in the game folder.
 ### API reference
 
 #### Standalone functions
+##### log
+Writes message to `luaDebug.log` file when `debugHooks` is set to true in `settings.lua`.
 ```lua
--- Writes message to 'luaDebug.log' file when debugHooks is set to true
 log('Unit current level:' .. unit.impl.level)
+```
+##### getScenario
+Returns current [scenario](luaApi.md#scenario).
+The function only accessible to scripts where scenario access is appropriate:
+- `summon.lua`
+- `doppelganger.lua`
+- `transformSelf.lua`
+- `transformOther.lua`
+- `drainLevel.lua`
+- custom attack reach scripts
+- custom unit modifier script
+`checkEventCondition` has `scenario` as its argument so `getScenario` is not bound to it.
+```lua
+getScenario():getUnit(unitId)
 ```
 
 ---
@@ -1062,7 +1077,7 @@ This is because **damage modifier applied earlier than initiative modifier**.
 If we get `unit.impl.attack1.initiative` from the damage modifier script it will be `50`, because **initiative modifier is not applied yet**.
 
 #### Dangerous way around to get final unit stats
-The limitation described above **can be avoided** by getting unit instance via `getScenario.getUnit(unit.id)`.<br>
+The limitation described above **can be avoided** by getting unit instance via `getScenario:getUnit(unit.id)`.<br>
 But you have to be **very careful** using this approach, as you can easily fall into a deadloop.
 
 Lets see a **bad example** where we created a modifier that grants bonus armor and regen depending on each other:
