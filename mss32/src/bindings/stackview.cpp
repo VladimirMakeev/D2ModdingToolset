@@ -50,7 +50,7 @@ void StackView::bind(sol::state& lua)
     stackView["subrace"] = sol::property(&StackView::getSubrace);
     stackView["invisible"] = sol::property(&StackView::isInvisible);
 
-    stackView["inventoryItems"] = sol::property(&StackView::getInventoryItems);
+    stackView["inventory"] = sol::property(&StackView::getInventoryItems);
     stackView["getEquippedItem"] = &StackView::getLeaderEquippedItem;
 }
 

@@ -44,7 +44,7 @@ void FortView::bind(sol::state& lua)
     fortView["group"] = sol::property(&FortView::getGroup);
     fortView["visitor"] = sol::property(&FortView::getVisitor);
     fortView["subrace"] = sol::property(&FortView::getSubrace);
-    fortView["inventoryItems"] = sol::property(&FortView::getInventoryItems);
+    fortView["inventory"] = sol::property(&FortView::getInventoryItems);
 }
 
 IdView FortView::getId() const

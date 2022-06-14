@@ -425,10 +425,10 @@ Returns stack [subrace](luaApi.md#subrace).
 ```lua
 stack.subrace
 ```
-##### inventoryItems
+##### inventory
 Returns array of inventory [items](luaApi.md#item-1). This includes equipped items.
 ```lua
-stack.inventoryItems
+stack.inventory
 ```
 ##### getEquippedItem
 Returns equipped [item](luaApi.md#item-1) by [equipment](luaApi.md#equipment) value.
@@ -474,10 +474,10 @@ Returns fort [subrace](luaApi.md#subrace).
 ```lua
 fort.subrace
 ```
-##### inventoryItems
+##### inventory
 Returns array of inventory [items](luaApi.md#item-1).
 ```lua
-fort.inventoryItems
+fort.inventory
 ```
 
 ---
