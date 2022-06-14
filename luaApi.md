@@ -451,6 +451,11 @@ Returns fort units as a [group](luaApi.md#group).
 ```lua
 fort.group
 ```
+##### visitor
+Returns visitor [stack](luaApi.md#stack), or nil if none.
+```lua
+fort.visitor
+```
 ##### subrace
 Returns fort [subrace](luaApi.md#subrace).
 ```lua
@@ -618,7 +623,6 @@ Searches for [fort](luaApi.md#fort) by:
 - [id](luaApi.md#id)
 - pair of coordinates
 - [point](luaApi.md#point)
-- visiting [stack](luaApi.md#stack)
 
 Returns nil if not found.
 ```lua
