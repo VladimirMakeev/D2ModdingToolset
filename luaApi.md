@@ -1003,22 +1003,70 @@ end
 `unit` has type [Unit](luaApi.md#unit-1). The unit is presented in a state before the current modifier is applied.<br>
 `prev` is a previous value of the stat. It is either a base value or a value modified by the previous modifier.
 
-Due to how modifiers chain work, you have no direct access to final unit stats. For example:
+Check [Scripts/Modifiers](Scripts/Modifiers) for script examples.<br>
+[template.lua](Scripts/Modifiers/template.lua) contains a complete list of available functions.
+
+#### Due to how modifiers chain work, you have no direct access to final unit stats
+For example:
 - Lets say we have a unit with base of `50` initiative;
 - Then we give it a potion that increases damage by 50% **if unit initiative** `> 60`;
 - Then we give it another potion that increases initiative to `70`.
 
-And the damage bonus **will not work** in this case, even though a final unit initiative is `70` that is `> 60`.
+The damage bonus **will not work** in this case, even though a final unit initiative is `70` that is `> 60`.
 This is because **damage modifier applied earlier than initiative modifier**.
 If we get `unit.impl.attack1.initiative` from the damage modifier script it will be `50`, because **initiative modifier is not applied yet**.
 
-This limitation **can be avoided** by getting unit instance via `getScenario.getUnit(unit.id)`.<br>
-But you have to be **very careful** using this approach, as you can easily fall into a deadloop, for example:
-- Imagine that we have a modifier with `getArmor` function that calls `getScenario().getUnit(unit.id).getRegen`;
-- Then we have another modifier with `getRegen` function that calls `getScenario().getUnit(unit.id).getArmor`.
+#### Dangerous way around to get final unit stats
+The limitation described above **can be avoided** by getting unit instance via `getScenario.getUnit(unit.id)`.<br>
+But you have to be **very careful** using this approach, as you can easily fall into a deadloop.
 
-Now imagine what happens when the game tries to get unit armor:<br>
+Lets see a **bad example** where we created a modifier that grants bonus armor and regen depending on each other:
+```lua
+function getArmor(unit, prev)
+    local finalUnit = getScenario():getUnit(unit.id)
+    return prev + finalUnit.impl.regen / 5
+end
+
+function getRegen(unit, prev)
+    local finalUnit = getScenario():getUnit(unit.id)
+    return prev + finalUnit.impl.armor / 10
+end
+```
+Or it can be two different modifiers, does not matter:
+```lua
+-- MyBonusArmorMod.lua
+function getArmor(unit, prev)
+    local finalUnit = getScenario():getUnit(unit.id)
+    return prev + finalUnit.impl.regen / 5
+end
+```
+and
+```lua
+-- MyBonusRegenMod.lua
+function getRegen(unit, prev)
+    local finalUnit = getScenario():getUnit(unit.id)
+    return prev + finalUnit.impl.armor / 10
+end
+```
+When this modifier(s) applied to a unit, we are getting circular dependence here: **final armor depends on final regen while final regen depends on final armor**.<br>
+Imagine what happens when the game tries to get unit armor:<br>
 It calls `getArmor` that calls `getRegen` that calls `getArmor` that calls `getRegen` that calls `getArmor` that calls `getRegen` that calls `getArmor`...and so on until your **game hang or crash to desktop**.
 
-Check [Scripts/Modifiers](Scripts/Modifiers) for script examples.<br>
-[template.lua](Scripts/Modifiers/template.lua) contains a complete list of available functions.
+As a **good example**, you could refer to a third stat, thus avoiding deadloop condition:
+```lua
+-- MyBonusArmorMod.lua
+function getArmor(unit, prev)
+    local finalUnit = getScenario():getUnit(unit.id)
+    return prev + finalUnit.impl.regen / 5
+end
+```
+and
+```lua
+-- MyBonusRegenMod.lua
+function getRegen(unit, prev)
+    local finalUnit = getScenario():getUnit(unit.id)
+    return prev + finalUnit.impl.level / 10
+end
+```
+This way, regen depends on level, and armor depends on regen and there is no circular dependence in this case.<br>
+**Remember that this is subject for all modifiers that can potentially happen to be applied to the same unit.**
