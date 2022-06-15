@@ -93,10 +93,10 @@ struct CCustomModifier
     void showScriptErrorMessage(const char* functionName, const char* reason) const;
     void showInvalidRetvalMessage(const char* functionName, const char* reason) const;
 
-    game::CMidgardID getNameTxt() const;
-    game::CMidgardID getBaseNameTxt() const;
-    game::CMidgardID getDescTxt() const;
-    game::CMidgardID getBaseDescTxt() const;
+    game::CMidgardID getUnitNameTxt() const;
+    game::CMidgardID getUnitBaseNameTxt() const;
+    game::CMidgardID getUnitDescTxt() const;
+    game::CMidgardID getUnitBaseDescTxt() const;
 
     game::CMidgardID getAttackNameTxt(bool primary, const game::CMidgardID& baseId) const;
     game::CMidgardID getAttackBaseNameTxt(const game::IAttack* attack) const;
