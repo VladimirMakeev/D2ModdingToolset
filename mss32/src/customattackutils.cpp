@@ -26,7 +26,6 @@
 #include "batattack.h"
 #include "batattacktransformself.h"
 #include "battlemsgdata.h"
-#include "customattacks.h"
 #include "custommodifier.h"
 #include "dbffile.h"
 #include "dynamiccast.h"
@@ -513,17 +512,40 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
     }
 }
 
-void fillCustomDamageRatios(const game::IAttack* attack, const game::IdList* targets)
+void fillCustomAttackTargets(const game::IdList* targets)
 {
-    auto ratios = computeAttackDamageRatio(getCustomAttackData(attack), targets->length);
-    if (ratios.empty())
-        return;
+    auto& result = getCustomAttacks().targets;
+    result.clear();
 
-    auto& customRatios = getCustomAttacks().damageRatios.value;
-    auto ratioIt = ratios.begin();
     for (const auto& unitId : *targets) {
-        customRatios[unitId] = *(ratioIt++);
+        result.push_back(unitId);
     }
+}
+
+const CustomAttackDamageRatios& getCustomDamageRatios(const game::IAttack* attack)
+{
+    auto& damageRatios = getCustomAttacks().damageRatios;
+
+    auto it = damageRatios.find(attack->id);
+    if (it != damageRatios.end()) {
+        return it->second;
+    }
+
+    auto& result = damageRatios[attack->id];
+
+    auto& targets = getCustomAttacks().targets;
+    auto ratios = computeAttackDamageRatio(getCustomAttackData(attack), targets.size());
+
+    auto ratio = ratios.begin();
+    for (auto target : targets) {
+        if (ratio == ratios.end()) {
+            break;
+        }
+        result[target] = *ratio;
+        ++ratio;
+    }
+
+    return result;
 }
 
 int applyAttackDamageRatio(int damage, double ratio)
@@ -565,7 +587,7 @@ std::vector<double> computeAttackDamageRatio(const CustomAttackData& customData,
 
 double computeTotalDamageRatio(const game::IAttack* attack, int targetCount)
 {
-    if (!getCustomAttacks().damageRatios.enabled)
+    if (!getCustomAttacks().damageRatiosEnabled)
         return targetCount;
 
     auto customData = getCustomAttackData(attack);

@@ -35,12 +35,12 @@ void initializeCustomAttacks()
         return;
     }
 
-    getCustomAttacks().damageRatios.enabled = dbf.column(damageRatioColumnName)
-                                              && dbf.column(damageRatioPerTargetColumnName)
-                                              && dbf.column(damageSplitColumnName);
+    getCustomAttacks().damageRatiosEnabled = dbf.column(damageRatioColumnName)
+                                             && dbf.column(damageRatioPerTargetColumnName)
+                                             && dbf.column(damageSplitColumnName);
 
-    getCustomAttacks().perAttackCritSettings = dbf.column(critDamageColumnName)
-                                               && dbf.column(critPowerColumnName);
+    getCustomAttacks().critSettingsEnabled = dbf.column(critDamageColumnName)
+                                             && dbf.column(critPowerColumnName);
 }
 
 CustomAttacks& getCustomAttacks()

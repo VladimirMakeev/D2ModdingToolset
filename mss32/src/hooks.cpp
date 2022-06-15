@@ -1556,10 +1556,10 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
         }
     }
 
-    auto& customDamageRatios = getCustomAttacks().damageRatios;
-    if (customDamageRatios.enabled) {
-        auto ratio = customDamageRatios.value.find(*targetUnitId);
-        if (ratio != customDamageRatios.value.end()) {
+    if (getCustomAttacks().damageRatiosEnabled) {
+        auto& damageRatios = getCustomDamageRatios(attack);
+        auto ratio = damageRatios.find(*targetUnitId);
+        if (ratio != damageRatios.end()) {
             damage = applyAttackDamageRatio(damage, ratio->second);
             critDamage = applyAttackDamageRatio(critDamage, ratio->second);
         }
@@ -1717,9 +1717,8 @@ void __stdcall beforeBattleTurnHooked(game::BattleMsgData* battleMsgData,
 
     battle.setAttackPowerReduction(battleMsgData, unitId, 0);
 
-    auto& customDamageRatios = getCustomAttacks().damageRatios;
-    if (customDamageRatios.enabled)
-        customDamageRatios.value.clear();
+    getCustomAttacks().targets.clear();
+    getCustomAttacks().damageRatios.clear();
 
     auto& freeTransformSelf = getCustomAttacks().freeTransformSelf;
     if (freeTransformSelf.unitId != *unitId) {
