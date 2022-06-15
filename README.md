@@ -488,6 +488,11 @@
         - (Optional) Specify `DESC_TXT` id that corresponds to `Tglobal.dbf` entry added earlier (defaults to the standard stub `x000tg6000`);
         - (Optional) Specify `DISPLAY` that controls whether the modifier should appear in modifiers panel for Unit Encyclopedia (defaults to false);
     - Refer to [Scripts/Modifiers](Scripts/Modifiers) examples and [luaApi](luaApi.md) to create your modifier script;
+	- (Optional) Define dynamic display functions inside your modifier script to control its appearance on modifiers panel depending on a current unit:
+		- Specify `getModifierDisplay(unit, prev)` function to enable or disable modifier display (defaults to `DISPLAY` in `Gmodif.dbf`);
+		- Specify `getModifierDescTxt(unit, prev)` function to redefine modifier description (defaults to `DESC_TXT` in `Gmodif.dbf`);
+		- Specify `getModifierDisplay(unit, prev)` function to redefine modifier icon (defaults to `MODIF_ID` in `Gmodif.dbf`);
+		- See [template.lua](Scripts/Modifiers/template.lua) for examples.
     - Try assigning the created modifier to item, potion or spell, or simply use it as Scenario Editor modifier;
     - Consider adding vertical align to unit encyclopedia fields to properly accommodate custom modifier bonuses text:
         - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;

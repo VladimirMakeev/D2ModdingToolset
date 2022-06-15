@@ -256,6 +256,36 @@ game::IAttack* CCustomModifier::wrapAltAttack(const game::IAttack* value)
     return &altAttack;
 }
 
+bool CCustomModifier::getDisplay() const
+{
+    auto prevValue = display;
+    if (!unit) {
+        return prevValue;
+    }
+
+    return GET_VALUE(getModifierDisplay, prevValue);
+}
+
+game::CMidgardID CCustomModifier::getDescTxt() const
+{
+    auto prevValue = descTxt;
+    if (!unit) {
+        return prevValue;
+    }
+
+    return GET_VALUE(getModifierDescTxt, prevValue);
+}
+
+std::string CCustomModifier::getIconName() const
+{
+    auto prevValue = idToString(&umModifier.data->modifierId);
+    if (!unit) {
+        return prevValue;
+    }
+
+    return GET_VALUE(getModifierIconName, prevValue);
+}
+
 const char* CCustomModifier::getFormattedGlobalText(const game::CMidgardID& formatId,
                                                     const game::CMidgardID& baseId) const
 {

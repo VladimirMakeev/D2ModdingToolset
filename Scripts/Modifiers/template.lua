@@ -20,6 +20,35 @@ function canApplyToUnitType(unitType)
 		unitType == Unit.Illusion
 end
 
+function getModifierDisplay(unit, prev)
+	if unit.impl.level < 3 then
+		return true
+	end
+
+	-- Default is DISPLAY from Gmodif.dbf
+	return prev
+end
+
+function getModifierDescTxt(unit, prev)
+	if unit.impl.level < 3 then
+		-- Description text from Tglobal.dbf
+		return Id.new("x000tg0112")
+	end
+
+	-- Default is DESC_TXT from Gmodif.dbf
+	return prev
+end
+
+function getModifierIconName(unit, prev)
+	if unit.impl.level < 3 then
+		-- Any 31x36 icon name from Icons.ff
+		return "ABIL0007"
+	end
+
+	-- Default is MODIF_ID from Gmodif.dbf
+	return prev
+end
+
 function getNameTxt(unit, prev)
 	-- You can use format text like "Overpowered %BASE%" to get names like "Overpowered Peasant"
 	if unit.hpMax == 100 and unit.type == Leader.Rod then
