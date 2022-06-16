@@ -205,7 +205,7 @@ void updateDefendBattleAction(const game::UnitInfo* unitInfo,
 
     const auto& intSetApi = IntSetApi::get();
 
-    if (unitInfo->unitFlags.parts.attackedOnceOfTwice)
+    if (unitInfo->unitFlags.parts.attackedOnceOfTwice && actions->length)
         return;
 
     BattleAction defend = BattleAction::Defend;
@@ -370,12 +370,12 @@ void __stdcall updateBattleActionsHooked(const game::IMidgardObjectMap* objectMa
 
     auto unitInfo = battleApi.getUnitInfoById(battleMsgData, unitId);
 
-    updateDefendBattleAction(unitInfo, actions);
     updateWaitBattleAction(battleMsgData, unitInfo, actions);
     updateUseItemBattleAction(objectMap, battleMsgData, unitInfo, actions, item1Targets,
                               item2Targets);
     updateRetreatBattleAction(objectMap, battleMsgData, unitInfo, actions);
     updateAttackBattleAction(objectMap, battleMsgData, unitInfo, actions, attackTargets);
+    updateDefendBattleAction(unitInfo, actions);
 }
 
 void __fastcall beforeBattleRoundHooked(game::BattleMsgData* thisptr, int /*%edx*/)
