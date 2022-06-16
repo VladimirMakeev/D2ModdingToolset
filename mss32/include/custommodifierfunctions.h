@@ -45,9 +45,9 @@ struct CustomModifierFunctions
     using GetBoolParam = std::function<bool(const bindings::UnitView&, int, bool)>;
     using GetBank = std::function<bindings::CurrencyView(const bindings::UnitView&,
                                                          const bindings::CurrencyView&)>;
+    using GetString = std::function<std::string(const bindings::UnitView&, const std::string&)>;
     using CanApplyToUnit = std::function<bool(const bindings::UnitImplView&)>;
     using CanApplyToUnitType = std::function<bool(int)>;
-    using GetDesc = std::function<bindings::IdView()>;
     using IsLowerBoost = std::function<bool()>;
 
     std::optional<sol::environment> environment;
@@ -55,6 +55,9 @@ struct CustomModifierFunctions
     std::optional<CanApplyToUnitType> canApplyToUnitType;
     std::optional<IsLowerBoost> canApplyAsLowerSpell;
     std::optional<IsLowerBoost> canApplyAsBoostSpell;
+    std::optional<GetBool> getModifierDisplay;
+    std::optional<GetId> getModifierDescTxt;
+    std::optional<GetString> getModifierIconName;
     std::optional<GetId> getNameTxt;
     std::optional<GetId> getDescTxt;
     std::optional<GetInt> getHitPoint;

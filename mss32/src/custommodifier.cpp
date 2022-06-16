@@ -256,6 +256,36 @@ game::IAttack* CCustomModifier::wrapAltAttack(const game::IAttack* value)
     return &altAttack;
 }
 
+bool CCustomModifier::getDisplay() const
+{
+    auto prevValue = display;
+    if (!unit) {
+        return prevValue;
+    }
+
+    return GET_VALUE(getModifierDisplay, prevValue);
+}
+
+game::CMidgardID CCustomModifier::getDescTxt() const
+{
+    auto prevValue = descTxt;
+    if (!unit) {
+        return prevValue;
+    }
+
+    return GET_VALUE(getModifierDescTxt, prevValue);
+}
+
+std::string CCustomModifier::getIconName() const
+{
+    auto prevValue = idToString(&umModifier.data->modifierId);
+    if (!unit) {
+        return prevValue;
+    }
+
+    return GET_VALUE(getModifierIconName, prevValue);
+}
+
 const char* CCustomModifier::getFormattedGlobalText(const game::CMidgardID& formatId,
                                                     const game::CMidgardID& baseId) const
 {
@@ -291,29 +321,29 @@ void CCustomModifier::showInvalidRetvalMessage(const char* functionName, const c
                                     scriptFileName, functionName, reason));
 }
 
-game::CMidgardID CCustomModifier::getNameTxt() const
+game::CMidgardID CCustomModifier::getUnitNameTxt() const
 {
     auto prev = getPrevCustomModifier();
 
-    bindings::IdView prevValue{prev ? prev->getNameTxt() : getBaseNameTxt()};
+    bindings::IdView prevValue{prev ? prev->getUnitNameTxt() : getUnitBaseNameTxt()};
     return GET_VALUE(getNameTxt, prevValue);
 }
 
-game::CMidgardID CCustomModifier::getBaseNameTxt() const
+game::CMidgardID CCustomModifier::getUnitBaseNameTxt() const
 {
     auto soldierImpl = getSoldierImpl(getPrev());
     return soldierImpl ? soldierImpl->data->name.id : game::emptyId;
 }
 
-game::CMidgardID CCustomModifier::getDescTxt() const
+game::CMidgardID CCustomModifier::getUnitDescTxt() const
 {
     auto prev = getPrevCustomModifier();
 
-    bindings::IdView prevValue{prev ? prev->getDescTxt() : getBaseDescTxt()};
+    bindings::IdView prevValue{prev ? prev->getUnitDescTxt() : getUnitBaseDescTxt()};
     return GET_VALUE(getDescTxt, prevValue);
 }
 
-game::CMidgardID CCustomModifier::getBaseDescTxt() const
+game::CMidgardID CCustomModifier::getUnitBaseDescTxt() const
 {
     auto soldierImpl = getSoldierImpl(getPrev());
     return soldierImpl ? soldierImpl->data->description.id : game::emptyId;
@@ -466,13 +496,13 @@ void __fastcall soldierDtor(game::IUsSoldier* thisptr, int /*%edx*/, char flags)
 const char* __fastcall soldierGetName(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
     auto thiz = castSoldierToCustomModifier(thisptr);
-    return thiz->getFormattedGlobalText(thiz->getNameTxt(), thiz->getBaseNameTxt());
+    return thiz->getFormattedGlobalText(thiz->getUnitNameTxt(), thiz->getUnitBaseNameTxt());
 }
 
 const char* __fastcall soldierGetDescription(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
     auto thiz = castSoldierToCustomModifier(thisptr);
-    return thiz->getFormattedGlobalText(thiz->getDescTxt(), thiz->getBaseDescTxt());
+    return thiz->getFormattedGlobalText(thiz->getUnitDescTxt(), thiz->getUnitBaseDescTxt());
 }
 
 const game::CMidgardID* __fastcall soldierGetRaceId(const game::IUsSoldier* thisptr, int /*%edx*/)

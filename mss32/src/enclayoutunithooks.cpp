@@ -107,8 +107,7 @@ void addModifierInfo(game::CEncLayoutUnit* layout, hooks::CCustomModifier* modif
     auto data = (CEncLayoutUnitDataPatched*)layout->data;
 
     IMqImage2* icon = nullptr;
-    auto modifierId = modifier->umModifier.data->modifierId;
-    GameImagesApi::get().getIconImageByName(&icon, idToString(&modifierId).c_str());
+    GameImagesApi::get().getIconImageByName(&icon, modifier->getIconName().c_str());
 
     ImagePtr iconPtr{};
     smartPtrApi.createOrFree((SmartPointer*)&iconPtr, icon);
@@ -125,7 +124,7 @@ void addModifierInfo(game::CEncLayoutUnit* layout, hooks::CCustomModifier* modif
         if (format.empty())
             format = "\\vC;%DESC%";
     }
-    replace(format, "%DESC%", getGlobalText(modifier->descTxt));
+    replace(format, "%DESC%", getGlobalText(modifier->getDescTxt()));
 
     String text{};
     stringApi.initFromString(&text, format.c_str());
@@ -148,7 +147,7 @@ void addModifiersInfo(game::CEncLayoutUnit* layout)
 
         for (auto curr = getFirstUmModifier(unit->unitImpl); curr; curr = curr->data->next) {
             auto customModifier = castModifierToCustomModifier(curr);
-            if (!customModifier || !customModifier->display) {
+            if (!customModifier || !customModifier->getDisplay()) {
                 continue;
             }
 
@@ -166,7 +165,7 @@ void addModifiersInfo(game::CEncLayoutUnit* layout)
             }
 
             auto customModifier = castModifierToCustomModifier(unitModifier->data->modifier);
-            if (!customModifier || !customModifier->display) {
+            if (!customModifier || !customModifier->getDisplay()) {
                 continue;
             }
 
