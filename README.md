@@ -491,7 +491,7 @@
 	- (Optional) Define dynamic display functions inside your modifier script to control its appearance on modifiers panel depending on a current unit:
 		- Specify `getModifierDisplay(unit, prev)` function to enable or disable modifier display (defaults to `DISPLAY` in `Gmodif.dbf`);
 		- Specify `getModifierDescTxt(unit, prev)` function to redefine modifier description (defaults to `DESC_TXT` in `Gmodif.dbf`);
-		- Specify `getModifierDisplay(unit, prev)` function to redefine modifier icon (defaults to `MODIF_ID` in `Gmodif.dbf`);
+		- Specify `getModifierIconName(unit, prev)` function to redefine modifier icon (defaults to `MODIF_ID` in `Gmodif.dbf`);
 		- See [template.lua](Scripts/Modifiers/template.lua) for examples.
     - Try assigning the created modifier to item, potion or spell, or simply use it as Scenario Editor modifier;
     - Consider adding vertical align to unit encyclopedia fields to properly accommodate custom modifier bonuses text:
