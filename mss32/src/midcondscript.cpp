@@ -760,8 +760,6 @@ bool __fastcall testScriptDoTest(const CTestScript* thisptr,
         return false;
     }
 
-    using CheckCondition = std::function<bool(const bindings::ScenarioView&)>;
-
     auto checkCondition = getProtectedScriptFunction(env, "checkEventCondition", true);
     if (!checkCondition) { // Sanity check, this should never happen
         return false;
