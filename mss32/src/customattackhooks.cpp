@@ -278,7 +278,7 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
 
     data->critDamage = userSettings().criticalHitDamage;
     data->critPower = userSettings().criticalHitChance;
-    if (getCustomAttacks().perAttackCritSettings) {
+    if (getCustomAttacks().critSettingsEnabled) {
         int critDamage;
         db.readIntWithBoundsCheck(&critDamage, dbTable, critDamageColumnName, 0, 255);
         if (critDamage != 0)
@@ -293,7 +293,7 @@ game::CAttackImpl* __fastcall attackImplCtorHooked(game::CAttackImpl* thisptr,
     data->damageRatio = 100;
     data->damageRatioPerTarget = false;
     data->damageSplit = false;
-    if (getCustomAttacks().damageRatios.enabled) {
+    if (getCustomAttacks().damageRatiosEnabled) {
         int damageRatio;
         db.readIntWithBoundsCheck(&damageRatio, dbTable, damageRatioColumnName, 0, 255);
         if (damageRatio != 0)
@@ -631,8 +631,9 @@ void __stdcall getTargetsToAttackHooked(game::IdList* value,
         listApi.pushBack(value, targetUnitId);
     }
 
-    if (getCustomAttacks().damageRatios.enabled)
-        fillCustomDamageRatios(attack, value);
+    if (getCustomAttacks().damageRatiosEnabled) {
+        fillCustomAttackTargets(value);
+    }
 }
 
 void __stdcall fillTargetsListHooked(const game::IMidgardObjectMap* objectMap,

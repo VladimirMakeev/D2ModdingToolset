@@ -20,6 +20,7 @@
 #ifndef CUSTOMATTACKUTILS_H
 #define CUSTOMATTACKUTILS_H
 
+#include "customattacks.h"
 #include "idlist.h"
 #include "targetset.h"
 #include <filesystem>
@@ -123,7 +124,9 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
                           const game::CMidgardID* targetGroupId,
                           game::TargetSet* value);
 
-void fillCustomDamageRatios(const game::IAttack* attack, const game::IdList* targets);
+void fillCustomAttackTargets(const game::IdList* targets);
+
+const CustomAttackDamageRatios& getCustomDamageRatios(const game::IAttack* attack);
 
 int applyAttackDamageRatio(int damage, double ratio);
 

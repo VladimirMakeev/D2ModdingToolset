@@ -223,9 +223,11 @@ std::string getRatedAttackDamageText(int damage, int critDamage, double ratio)
     return result;
 }
 
-std::string getRatedAttackDamageText(const std::string& base, const utils::AttackDescriptor& actual)
+std::string getRatedAttackDamageText(const std::string& base,
+                                     const utils::AttackDescriptor& actual,
+                                     int maxTargets)
 {
-    auto ratios = computeAttackDamageRatio(actual.custom(), getAttackMaxTargets(actual.reachId()));
+    auto ratios = computeAttackDamageRatio(actual.custom(), maxTargets);
     if (ratios.size() < 2)
         return base;
 
@@ -299,6 +301,7 @@ std::string getAttackInitiativeText(const utils::AttackDescriptor& actual,
 
 std::string getDamageDrainAttackDamageText(const utils::AttackDescriptor& actual,
                                            const utils::AttackDescriptor& global,
+                                           int maxTargets,
                                            int damageMax)
 {
     int multiplier = actual.damageSplit() ? userSettings().splitDamageMultiplier : 1;
@@ -313,12 +316,12 @@ std::string getDamageDrainAttackDamageText(const utils::AttackDescriptor& actual
                                 true);
     }
 
-    if (getAttackMaxTargets(actual.reachId()) < 2)
+    if (maxTargets < 2)
         return result;
     else if (actual.damageSplit()) {
         return getSplitAttackDamageText(result);
     } else {
-        return getRatedAttackDamageText(result, actual);
+        return getRatedAttackDamageText(result, actual, maxTargets);
     }
 }
 
@@ -363,6 +366,7 @@ std::string getLowerInitiativeAttackDamageText(const utils::AttackDescriptor& ac
 
 std::string getAttackDamageText(const utils::AttackDescriptor& actual,
                                 const utils::AttackDescriptor& global,
+                                int maxTargets,
                                 int damageMax)
 {
     using namespace game;
@@ -378,7 +382,7 @@ std::string getAttackDamageText(const utils::AttackDescriptor& actual,
         result = getLowerInitiativeAttackDamageText(actual, global);
     } else if (actual.classId() == classes.damage->id || actual.classId() == classes.drain->id
                || actual.classId() == classes.drainOverflow->id) {
-        result = getDamageDrainAttackDamageText(actual, global, damageMax);
+        result = getDamageDrainAttackDamageText(actual, global, maxTargets, damageMax);
     } else if (actual.classId() == classes.heal->id
                || actual.classId() == classes.bestowWards->id) {
         result = getModifiedNumberText(actual.heal(), global.heal(), false);
@@ -585,10 +589,11 @@ std::string getDamageField(const utils::AttackDescriptor& actual,
                            const utils::AttackDescriptor& global2,
                            int damageMax)
 {
-    auto result = getAttackDamageText(actual, global, damageMax);
+    auto maxTargets = getAttackMaxTargets(actual.reachId());
+    auto result = getAttackDamageText(actual, global, maxTargets, damageMax);
 
     if (!actual2.empty()) {
-        auto damage2 = getAttackDamageText(actual2, global2, damageMax);
+        auto damage2 = getAttackDamageText(actual2, global2, maxTargets, damageMax);
         if (result == "0")
             result = damage2;
         else if (damage2 != "0")

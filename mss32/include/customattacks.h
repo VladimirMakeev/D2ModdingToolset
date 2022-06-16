@@ -70,24 +70,22 @@ struct CustomAttackReach
 
 using CustomAttackReaches = std::vector<CustomAttackReach>;
 
-struct CustomDamageRatios
-{
-    bool enabled;
-    std::map<game::CMidgardID, double> value;
-};
+using CustomAttackDamageRatios = std::map<game::CMidgardID, double>;
 
 struct CustomAttacks
 {
     CustomAttackSources sources;
     CustomAttackReaches reaches;
-    CustomDamageRatios damageRatios;
+    std::map<game::CMidgardID, CustomAttackDamageRatios> damageRatios; // Mapped by attack id
+    std::vector<game::CMidgardID> targets;
     struct
     {
         game::CMidgardID unitId;
         std::uint32_t turnCount;
         bool used;
     } freeTransformSelf;
-    bool perAttackCritSettings;
+    bool damageRatiosEnabled;
+    bool critSettingsEnabled;
 };
 
 void initializeCustomAttacks();
