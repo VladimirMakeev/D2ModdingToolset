@@ -345,4 +345,23 @@ std::optional<sol::environment> executeScriptFile(const std::filesystem::path& p
     return {std::move(env)};
 }
 
+std::optional<sol::protected_function> getProtectedScriptFunction(
+    const sol::environment& environment,
+    const char* name,
+    bool alwaysExists)
+{
+    const sol::object object = environment[name];
+    const sol::type objectType = object.get_type();
+
+    if (objectType != sol::type::function) {
+        if (alwaysExists) {
+            showErrorMessageBox(
+                fmt::format("'{:s}' is not a function, type: {:d}.", name, (int)objectType));
+        }
+        return std::nullopt;
+    }
+
+    return {object.as<sol::protected_function>()};
+}
+
 } // namespace hooks

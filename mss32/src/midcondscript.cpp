@@ -760,28 +760,27 @@ bool __fastcall testScriptDoTest(const CTestScript* thisptr,
         return false;
     }
 
-    using CheckCondition = std::function<bool(const bindings::ScenarioView&)>;
-
-    auto checkCondition = getScriptFunction<CheckCondition>(env, "checkEventCondition", true);
+    auto checkCondition = getProtectedScriptFunction(env, "checkEventCondition", true);
     if (!checkCondition) { // Sanity check, this should never happen
         return false;
     }
 
-    try {
-        const bindings::ScenarioView scenario{objectMap};
-
-        return (*checkCondition)(scenario);
-    } catch (const std::exception& e) {
+    const bindings::ScenarioView scenario{objectMap};
+    result = (*checkCondition)(scenario);
+    if (!result.valid()) {
+        const sol::error err = result;
         logError("mssProxyError.log",
                  fmt::format("Failed to execute scriptable event condition.\n"
                              "Event id {:s}\n"
                              "Description: '{:s}'\n"
                              "Script:\n'{:s}'\n"
                              "Reason: '{:s}'",
-                             idToString(eventId), thisptr->condition->description, code, e.what()));
+                             idToString(eventId), thisptr->condition->description, code,
+                             err.what()));
+        return false;
     }
 
-    return false;
+    return result;
 }
 
 static game::ITestConditionVftable testScriptVftable{

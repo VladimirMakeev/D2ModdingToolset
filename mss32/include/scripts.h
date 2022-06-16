@@ -109,6 +109,20 @@ static inline std::optional<T> getScriptFunction(const std::filesystem::path& pa
     return function;
 }
 
+/**
+ * Returns protected_function that is less performant than unsafe_function, but has error handling.
+ * sol::function is defined as unsafe_function for Release build. If an error occurs in such
+ * function, it causes Lua stack to not properly unwind after try...catch block, that eventually
+ * leads to stack overflow. See https://github.com/ThePhD/sol2/issues/65 for details.
+ * @param[in] environment lua environment where to search.
+ * @param[in] name function name in lua script.
+ * @param[in] alwaysExists true to show error message if the function does not exist.
+ */
+std::optional<sol::protected_function> getProtectedScriptFunction(
+    const sol::environment& environment,
+    const char* name,
+    bool alwaysExists = false);
+
 } // namespace hooks
 
 #endif // SCRIPTS_H
