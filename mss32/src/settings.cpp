@@ -77,6 +77,23 @@ static void readAllowBattleItemsSettings(const sol::table& table, Settings::Allo
     value.onDoppelganger = readSetting(category.value(), "onDoppelganger", def.onDoppelganger);
 }
 
+static void readUnitEncyclopediaSettings(const sol::table& table, Settings::UnitEncyclopedia& value)
+{
+    const auto& def = defaultSettings().unitEncyclopedia;
+
+    auto category = table.get<sol::optional<sol::table>>("unitEncyclopedia");
+    if (!category.has_value()) {
+        value = def;
+        // For backward compatibility
+        value.detailedAttackDescription = readSetting(table, "detailedAttackDescription",
+                                                      def.detailedAttackDescription);
+        return;
+    }
+
+    value.detailedAttackDescription = readSetting(category.value(), "detailedAttackDescription",
+                                                  def.detailedAttackDescription);
+}
+
 static void readModifierSettings(const sol::table& table, Settings::Modifiers& value)
 {
     const auto& def = defaultSettings().modifiers;
@@ -187,13 +204,13 @@ static void readSettings(const sol::table& table, Settings& settings)
     settings.unrestrictedBestowWards = readSetting(table, "unrestrictedBestowWards", defaultSettings().unrestrictedBestowWards);
     settings.freeTransformSelfAttack = readSetting(table, "freeTransformSelfAttack", defaultSettings().freeTransformSelfAttack);
     settings.freeTransformSelfAttackInfinite = readSetting(table, "freeTransformSelfAttackInfinite", defaultSettings().freeTransformSelfAttackInfinite);
-    settings.detailedAttackDescription = readSetting(table, "detailedAttackDescription", defaultSettings().detailedAttackDescription);
     settings.fixEffectiveHpFormula = readSetting(table, "fixEffectiveHpFormula", defaultSettings().fixEffectiveHpFormula);
     settings.debugMode = readSetting(table, "debugHooks", defaultSettings().debugMode);
     // clang-format on
 
     readAiAttackPowerSettings(table, settings.aiAttackPowerBonus);
     readAllowBattleItemsSettings(table, settings.allowBattleItems);
+    readUnitEncyclopediaSettings(table, settings.unitEncyclopedia);
     readModifierSettings(table, settings.modifiers);
     readMovementCostSettings(table, settings.movementCost);
     readLobbySettings(table, settings.lobby);
@@ -241,7 +258,7 @@ const Settings& baseSettings()
         settings.unrestrictedBestowWards = false;
         settings.freeTransformSelfAttack = false;
         settings.freeTransformSelfAttackInfinite = false;
-        settings.detailedAttackDescription = false;
+        settings.unitEncyclopedia.detailedAttackDescription = false;
         settings.fixEffectiveHpFormula = false;
         settings.modifiers.cumulativeUnitRegeneration = false;
         settings.allowBattleItems.onTransformOther = false;
@@ -269,7 +286,7 @@ const Settings& defaultSettings()
         settings.showResources = true;
         settings.movementCost.show = true;
         settings.unrestrictedBestowWards = true;
-        settings.detailedAttackDescription = true;
+        settings.unitEncyclopedia.detailedAttackDescription = true;
         settings.fixEffectiveHpFormula = true;
 
         initialized = true;

@@ -531,19 +531,9 @@ Hooks getHooks()
             HookInfo{fn.applyDynUpgradeToAttackData, applyDynUpgradeToAttackDataHooked});
     }
 
-    if (userSettings().detailedAttackDescription != baseSettings().detailedAttackDescription) {
-        /**
-         * Adds missing attack information in unit encyclopedia:
-         * 1) Damage of secondary attack if its not either poison, blister or frostbite
-         * 2) Power (if applicable), source and reach of alternative attack
-         * 3) Value of boost/lower damage if its secondary attack
-         * 4) Value of lower initiative
-         * 5) Critical hit indication
-         * 6) Infinite effect indication
-         * 7) Support custom attack sources
-         * 8) Support custom attack reaches
-         * 9) Support custom attack damage ratios
-         */
+    if (userSettings().unitEncyclopedia.detailedAttackDescription
+        != baseSettings().unitEncyclopedia.detailedAttackDescription) {
+        // Additional display of some stats bonuses, drain, critical hit, custom attack ratios, etc.
         hooks.emplace_back(HookInfo{fn.generateAttackDescription, generateAttackDescriptionHooked});
     }
 

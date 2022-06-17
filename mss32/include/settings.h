@@ -76,8 +76,12 @@ struct Settings
     bool unrestrictedBestowWards;
     bool freeTransformSelfAttack;
     bool freeTransformSelfAttackInfinite;
-    bool detailedAttackDescription;
     bool fixEffectiveHpFormula;
+
+    struct UnitEncyclopedia
+    {
+        bool detailedAttackDescription;
+    } unitEncyclopedia;
 
     struct Modifiers
     {

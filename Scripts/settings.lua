@@ -139,8 +139,10 @@ settings = {
 	-- instead of check against arithmetic mean of two random numbers
 	missChanceSingleRoll = false,
 
-	-- Adds missing attack information in unit encyclopedia
-	detailedAttackDescription = true,
+	unitEncyclopedia = {
+		-- Additional display of some stats bonuses, drain, critical hit, custom attack ratios, etc.
+		detailedAttackDescription = true,
+	},
 
 	-- Fix effective unit hp computation
 	-- Original formula: (hp * armor / 100) + hp

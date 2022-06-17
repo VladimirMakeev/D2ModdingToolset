@@ -129,7 +129,7 @@
 - <details>
     <summary>Adds missing attack information in unit encyclopedia;</summary>
 
-    - Enable `detailedAttackDescription` in [settings.lua](Scripts/settings.lua);
+    - Enable `unitEncyclopedia.detailedAttackDescription` in [settings.lua](Scripts/settings.lua);
     - Add interface text for the following entries in `TApp.dbf` and `TAppEdit.dbf`:
         - `infiniteAttack`
         - `critHitAttack`
@@ -152,7 +152,7 @@
     
     The following information is added:
     - Damage of secondary attack if its not either poison, blister or frostbite;
-    - Power (if applicable), source and reach of alternative attack;
+    - Power (if applicable) and source (if it matters) of alternative attack;
     - Value of boost/lower damage if its secondary attack;
     - Value of lower initiative;
     - Critical hit indication;
