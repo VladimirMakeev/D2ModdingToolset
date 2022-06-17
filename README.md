@@ -163,7 +163,13 @@
     - Custom attack damage ratios;
     - Custom unit modifiers.
   </details>
+- <details>
+    <summary>Adds dynamic upgrade values to unit encyclopedia;</summary>
 
+    The values are only added to unit type encyclopedia while building, hiring or adding (specific to Scenario Editor) units to avoid clutter:
+    - Enable (required dependency) `unitEncyclopedia.detailedAttackDescription` in [settings.lua](Scripts/settings.lua);
+    - Enable `unitEncyclopedia.displayDynamicUpgradeValues` in [settings.lua](Scripts/settings.lua).
+  </details>
 - <details>
     <summary>Shows effective HP in unit encyclopedia;</summary>
 

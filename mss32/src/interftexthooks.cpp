@@ -24,6 +24,7 @@
 #include "customattackutils.h"
 #include "d2string.h"
 #include "dialoginterf.h"
+#include "dynupgrade.h"
 #include "encunitdescriptor.h"
 #include "midunit.h"
 #include "midunitdescriptor.h"
@@ -32,6 +33,7 @@
 #include "textids.h"
 #include "unitutils.h"
 #include "ussoldierimpl.h"
+#include "usunitimpl.h"
 #include "utils.h"
 #include <fmt/format.h>
 
@@ -499,6 +501,63 @@ std::string getAttackNameText(const utils::AttackDescriptor& actual,
     return getModifiedStringText(actual.name(), actual.name() != global.name());
 }
 
+void addDynUpgrTextToField(std::string& description, const char* field, int upgrade1, int upgrade2)
+{
+    if (!upgrade1 || !upgrade2) {
+        return;
+    }
+
+    auto result = getInterfaceText(textIds().interf.dynamicUpgradeValues.c_str());
+    if (result.empty()) {
+        result = "%STAT% (%UPG1% | %UPG2%)";
+    }
+
+    replace(result, "%STAT%", field);
+    replace(result, "%UPG1%", fmt::format("{:+d}", upgrade1));
+    replace(result, "%UPG2%", fmt::format("{:+d}", upgrade2));
+
+    replace(description, field, result);
+}
+
+void addDynUpgrText(std::string& description,
+                    game::IEncUnitDescriptor* descriptor,
+                    const utils::AttackDescriptor& actual,
+                    const utils::AttackDescriptor& actual2)
+{
+    using namespace game;
+
+    if (!userSettings().unitEncyclopedia.displayDynamicUpgradeValues) {
+        return;
+    }
+
+    if (!descriptor->vftable->isUnitType(descriptor)) {
+        return;
+    }
+
+    CMidgardID globalUnitImplId;
+    descriptor->vftable->getGlobalUnitImplId(descriptor, &globalUnitImplId);
+
+    auto globalUnitImpl = getGlobalUnitImpl(&globalUnitImplId);
+
+    auto upgrade1 = getDynUpgrade(globalUnitImpl, 1);
+    auto upgrade2 = getDynUpgrade(globalUnitImpl, 2);
+    if (!upgrade1 || !upgrade2) {
+        return;
+    }
+
+    if (actual.damage() || actual2.damage()) {
+        addDynUpgrTextToField(description, "%DAMAGE%", upgrade1->damage, upgrade2->damage);
+    } else if (actual.heal() || actual2.heal()) {
+        addDynUpgrTextToField(description, "%DAMAGE%", upgrade1->heal, upgrade2->heal);
+    }
+
+    if (actual.hasPower() || actual2.hasPower()) {
+        addDynUpgrTextToField(description, "%HIT2%", upgrade1->power, upgrade2->power);
+    }
+
+    addDynUpgrTextToField(description, "%INIT%", upgrade1->initiative, upgrade2->initiative);
+}
+
 std::string getTwiceField(game::IEncUnitDescriptor* descriptor)
 {
     using namespace game;
@@ -712,6 +771,8 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
     // \fMedBold;Reach:\t\fNormal;%REACH%\n
     // \fMedBold;Targets:\t\fNormal;%TARGETS%
     replace(description, "%PART2%", getInterfaceText("X005TA0788"));
+
+    addDynUpgrText(description, descriptor, actual, actual2);
 
     replace(description, "%TWICE%", getTwiceField(descriptor));
 

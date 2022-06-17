@@ -142,6 +142,9 @@ settings = {
 	unitEncyclopedia = {
 		-- Additional display of some stats bonuses, drain, critical hit, custom attack ratios, etc.
 		detailedAttackDescription = true,
+
+		-- Additional display of dynamic upgrade values (only for unit type encyclopedia to avoid clutter)
+		displayDynamicUpgradeValues = false,
 	},
 
 	-- Fix effective unit hp computation

@@ -97,6 +97,11 @@ textids = {
 		-- The text must contain keywords "%ATTACK%" and "%OVERFLOW%".
 		-- Fallback text is "%ATTACK% (%OVERFLOW%)".
 		overflowText = "",
+
+		-- Defines text id to format dynamic upgrades text in unit encyclopedia.
+		-- The text must contain keywords "%STAT%", %UPG1% and %UPG2%.
+		-- Fallback text is "%STAT% (%UPG1% | %UPG2%)".
+		dynamicUpgradeValues = "",
 	},
 
 	-- Text ids related to events logic

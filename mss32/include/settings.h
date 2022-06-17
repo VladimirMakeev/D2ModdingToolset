@@ -81,6 +81,7 @@ struct Settings
     struct UnitEncyclopedia
     {
         bool detailedAttackDescription;
+        bool displayDynamicUpgradeValues;
     } unitEncyclopedia;
 
     struct Modifiers

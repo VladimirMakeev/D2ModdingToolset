@@ -137,6 +137,7 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.drainEffect = interf.value().get_or("drainEffect", std::string());
     value.overflowAttack = interf.value().get_or("overflowAttack", std::string());
     value.overflowText = interf.value().get_or("overflowText", std::string());
+    value.dynamicUpgradeValues = interf.value().get_or("dynamicUpgradeValues", std::string());
 }
 
 void initialize(TextIds& value)
