@@ -43,7 +43,7 @@ struct IEncUnitDescriptorVftable
     Destructor destructor;
 
     using GetBool = bool(__thiscall*)(IEncUnitDescriptor* thisptr);
-    GetBool method1;
+    GetBool isUnitType;
 
     using GetInt = int(__thiscall*)(IEncUnitDescriptor* thisptr);
     GetInt getHp;

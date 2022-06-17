@@ -379,7 +379,7 @@ void __fastcall encLayoutUnitUpdateHooked(game::CEncLayoutUnit* thisptr, int /*%
     auto unitDescriptor{data->unitDescriptor};
     auto unitArmor{unitDescriptor->vftable->getUnitArmor(unitDescriptor)};
 
-    if (!unitDescriptor->vftable->method1(unitDescriptor)) {
+    if (!unitDescriptor->vftable->isUnitType(unitDescriptor)) {
         unitArmor += getCityProtection(objectMap, &data->unitId);
     }
 
