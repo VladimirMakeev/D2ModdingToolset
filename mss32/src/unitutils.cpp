@@ -252,6 +252,41 @@ int getArmor(const game::CMidgardID* unitId,
     return armor > 0 ? armor : 0;
 }
 
+const game::CDynUpgrade* getDynUpgrade(const game::IUsUnit* unit, int upgradeNumber)
+{
+    using namespace game;
+
+    if (upgradeNumber != 1 && upgradeNumber != 2) {
+        return nullptr;
+    }
+
+    auto soldier = hooks::castUnitImplToSoldierWithLogging(unit);
+    if (!soldier) {
+        return nullptr;
+    }
+
+    auto id = upgradeNumber == 1 ? soldier->vftable->getDynUpg1(soldier)
+                                 : soldier->vftable->getDynUpg2(soldier);
+    if (!id) {
+        hooks::logError("mssProxyError.log",
+                        fmt::format("Dyn upgrade {:d} id is null, unit impl {:s}", upgradeNumber,
+                                    hooks::idToString(&unit->id)));
+        return nullptr;
+    }
+
+    const auto& globalApi = GlobalDataApi::get();
+    auto globalData = *globalApi.getGlobalData();
+
+    auto upgrade = globalApi.findDynUpgradeById(globalData->dynUpgrade, id);
+    if (!upgrade) {
+        hooks::logError("mssProxyError.log", fmt::format("Could not find dyn upgrade {:d} {:s}",
+                                                         upgradeNumber, hooks::idToString(id)));
+        return nullptr;
+    }
+
+    return upgrade;
+}
+
 int getCityProtection(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* unitId)
 {
     using namespace game;

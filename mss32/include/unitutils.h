@@ -34,6 +34,7 @@ struct LAttackSource;
 struct IAttack;
 struct IMidgardObjectMap;
 struct BattleMsgData;
+struct CDynUpgrade;
 } // namespace game
 
 namespace hooks {
@@ -56,6 +57,7 @@ int getArmor(const game::CMidgardID* unitId,
              const game::BattleMsgData* battleMsgData,
              bool includeShattered,
              bool includeFortification);
+const game::CDynUpgrade* getDynUpgrade(const game::IUsUnit* unit, int upgradeNumber);
 
 /** Returns unit bonus armor from city, if he is inside one. */
 int getCityProtection(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* unitId);

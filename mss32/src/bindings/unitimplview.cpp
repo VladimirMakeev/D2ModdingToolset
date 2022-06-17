@@ -350,35 +350,12 @@ std::optional<AttackView> UnitImplView::getAttack2() const
 
 std::optional<DynUpgradeView> UnitImplView::getDynUpgrade(int upgradeNumber) const
 {
-    using namespace game;
-
-    if (upgradeNumber != 1 && upgradeNumber != 2)
-        return std::nullopt;
-
-    auto soldier = hooks::castUnitImplToSoldierWithLogging(impl);
-    if (!soldier)
-        return std::nullopt;
-
-    auto id = upgradeNumber == 1 ? soldier->vftable->getDynUpg1(soldier)
-                                 : soldier->vftable->getDynUpg2(soldier);
-    if (!id) {
-        hooks::logError("mssProxyError.log",
-                        fmt::format("Dyn upgrade {:d} id is null, unit impl {:s}", upgradeNumber,
-                                    hooks::idToString(&impl->id)));
-        return std::nullopt;
-    }
-
-    const auto& globalApi = GlobalDataApi::get();
-    auto globalData = *globalApi.getGlobalData();
-
-    auto upgrade = globalApi.findDynUpgradeById(globalData->dynUpgrade, id);
+    auto upgrade = hooks::getDynUpgrade(impl, upgradeNumber);
     if (!upgrade) {
-        hooks::logError("mssProxyError.log", fmt::format("Could not find dyn upgrade {:d} {:s}",
-                                                         upgradeNumber, hooks::idToString(id)));
         return std::nullopt;
     }
 
-    return {upgrade};
+    return DynUpgradeView{upgrade};
 }
 
 } // namespace bindings
