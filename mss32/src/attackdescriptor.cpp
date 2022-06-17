@@ -215,9 +215,10 @@ AttackDescriptor::AttackDescriptor(game::IEncUnitDescriptor* descriptor,
         data.initiative = descriptor->vftable->getAttackInitiative(descriptor);
         data.level = descriptor->vftable->getAttackLevel(descriptor);
 
-        if (attackHasDamage(data.classId) || attackHasHeal(data.classId)) {
+        if (attackHasDamage(data.classId)) {
             data.damage = descriptor->vftable->getAttackDamageOrHeal(descriptor);
-            data.heal = data.damage;
+        } else if (attackHasHeal(data.classId)) {
+            data.heal = descriptor->vftable->getAttackDamageOrHeal(descriptor);
         }
 
         if (attackHasPower(data.classId)) {
