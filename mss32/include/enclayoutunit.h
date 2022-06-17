@@ -40,9 +40,10 @@ struct CEncLayoutUnitData
     int unknown;
     int unknown2;
     int unknown3;
-    int unknown4;
-    int unknown5;
-    int unknown6;
+    bool unknown4;
+    char padding[3];
+    int shatteredArmor;
+    int fortificationArmor;
     Vector<SmartPtr<IMqImage2>> leaderAbilityIcons;
     Vector<String> leaderAbilityTexts;
     IEncUnitDescriptor* unitDescriptor;

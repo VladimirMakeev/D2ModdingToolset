@@ -90,8 +90,8 @@ game::CEncLayoutUnitData* createData(const game::IMidgardObjectMap* objectMap,
 
     data->unitId = *unitId;
     data->objectMap = objectMap;
-    data->unknown5 = 0;
-    data->unknown6 = 0;
+    data->shatteredArmor = 0;
+    data->fortificationArmor = 0;
     data->unitDescriptor = descriptor;
 
     return data;
