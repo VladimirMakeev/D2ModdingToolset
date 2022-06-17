@@ -515,9 +515,9 @@
 - <details>
     <summary>Supports native unit modifiers;</summary>
     
-    Allows to assign 'native' modifiers to unit types.<br>
-    That is, a modifier will be permanently applied to all units of the specified type - existing in a scenario or newly created / hired.<br>
-    When unit changes its type (transforms or upgrades), modifiers native to its previous type are automatically removed, and new modifiers that are native to the new type are applied.<br>
+    Allows to assign 'native' modifiers to unit types.<br />
+    That is, a modifier will be permanently applied to all units of the specified type - existing in a scenario or newly created / hired.<br />
+    When unit changes its type (transforms or upgrades), modifiers native to its previous type are automatically removed, and new modifiers that are native to the new type are applied.<br />
     Native modifiers are not stored in scenario file, thus you can freely manipulate it without scenario file being affected in any way.
     - Copy [GUmodif.dbf](Examples/Modifiers/GUmodif.dbf) to 'Globals' directory;
     - `UNIT_ID` specifies id of a unit from `GUnits.dbf`. Use empty id (`g000000000`) if you want a modifier to be applied to **every single unit, note it impacts performance so try to avoid this if its not necessary**;
