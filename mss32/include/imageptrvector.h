@@ -20,6 +20,7 @@
 #ifndef IMAGEPTRVECTOR_H
 #define IMAGEPTRVECTOR_H
 
+#include "d2assert.h"
 #include "d2vector.h"
 #include "smartptr.h"
 
@@ -30,7 +31,7 @@ struct IMqImage2;
 using ImagePtr = SmartPtr<IMqImage2>;
 using ImagePtrVector = Vector<ImagePtr>;
 
-static_assert(sizeof(ImagePtrVector) == 16, "ImagePtrVector structure must be exactly 16 bytes");
+assert_size(ImagePtrVector, 16);
 
 namespace ImagePtrVectorApi {
 

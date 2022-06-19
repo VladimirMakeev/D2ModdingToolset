@@ -20,6 +20,8 @@
 #ifndef MIDDROPMANAGER_H
 #define MIDDROPMANAGER_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct IMidDropManagerVftable;
@@ -40,8 +42,7 @@ struct IMidDropManagerVftable
     void* methods[12];
 };
 
-static_assert(sizeof(IMidDropManagerVftable) == 14 * sizeof(void*),
-              "IMidDropManager vftable must have exactly 14 methods");
+assert_vftable_size(IMidDropManagerVftable, 14);
 
 } // namespace game
 

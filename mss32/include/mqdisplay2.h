@@ -20,6 +20,8 @@
 #ifndef MQDISPLAY2_H
 #define MQDISPLAY2_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct IMqDisplay2Vftable;
@@ -99,8 +101,7 @@ struct IMqDisplay2Vftable
     Method10 method10;
 };
 
-static_assert(sizeof(IMqDisplay2Vftable) == 11 * sizeof(void*),
-              "IMqDisplay2 vftable must have exactly 11 methods");
+assert_vftable_size(IMqDisplay2Vftable, 11);
 
 } // namespace game
 

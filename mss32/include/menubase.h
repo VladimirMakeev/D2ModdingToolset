@@ -36,8 +36,7 @@ struct CMenuBaseData
     char unknown[44];
 };
 
-static_assert(sizeof(CMenuBaseData) == 48,
-              "Size of CMenuBaseData structure must be exactly 48 bytes");
+assert_size(CMenuBaseData, 48);
 
 /** Base class for all menus. */
 struct CMenuBase : public CInterfFullScreen
@@ -45,10 +44,8 @@ struct CMenuBase : public CInterfFullScreen
     CMenuBaseData* menuBaseData;
 };
 
-static_assert(sizeof(CMenuBase) == 12, "Size of CMenuBase structure must be exactly 12 bytes");
-
-static_assert(offsetof(CMenuBase, menuBaseData) == 8,
-              "CMenuBase::menuBaseData offset must be 8 bytes");
+assert_size(CMenuBase, 12);
+assert_offset(CMenuBase, menuBaseData, 8);
 
 namespace CMenuBaseApi {
 

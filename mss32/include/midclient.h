@@ -39,7 +39,7 @@ struct TextMessage
     int time;
 };
 
-static_assert(sizeof(TextMessage) == 12, "Size of TextMessage structure must be exactly 12 bytes");
+assert_size(TextMessage, 12);
 
 struct CMidClientData
 {
@@ -58,8 +58,7 @@ struct CMidClientData
     UiEvent notificationShowEvent;
 };
 
-static_assert(sizeof(CMidClientData) == 136,
-              "Size of CMidClientData structure must be exactly 136 bytes");
+assert_size(CMidClientData, 136);
 
 struct CMidClient : public CMidCommandQueue2::INotifyCQ
 {
@@ -67,7 +66,7 @@ struct CMidClient : public CMidCommandQueue2::INotifyCQ
     CMidClientData* data;
 };
 
-static_assert(sizeof(CMidClient) == 16, "Size of CMidClient structure must be exactly 16 bytes");
+assert_size(CMidClient, 16);
 
 } // namespace game
 

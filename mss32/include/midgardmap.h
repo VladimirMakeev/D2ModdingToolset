@@ -35,7 +35,7 @@ struct CMidgardMap : public IMidScenarioObject
     int mapSize;
 };
 
-static_assert(sizeof(CMidgardMap) == 12, "Size of CMidgardMap structure must be exactly 12 bytes");
+assert_size(CMidgardMap, 12);
 
 namespace CMidgardMapApi {
 

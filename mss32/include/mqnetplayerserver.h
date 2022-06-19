@@ -48,8 +48,7 @@ struct IMqNetPlayerServerVftable : public IMqNetPlayerVftable
     SetAllowJoin setAllowJoin;
 };
 
-static_assert(sizeof(IMqNetPlayerServerVftable) == 12 * sizeof(void*),
-              "IMqNetPlayerServer vftable must have exactly 12 methods");
+assert_vftable_size(IMqNetPlayerServerVftable, 12);
 
 } // namespace game
 

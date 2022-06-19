@@ -30,7 +30,7 @@ struct CMenuBase : public CFullScreenInterf
     void* menuBaseData;
 };
 
-static_assert(sizeof(CMenuBase) == 20, "Size of CMenuBase structure must be exactly 20 bytes");
+assert_size(CMenuBase, 20);
 
 } // namespace game::editor
 

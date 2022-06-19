@@ -85,26 +85,14 @@ struct CMidStack
     int nbBattle;
 };
 
-static_assert(sizeof(CMidStack) == 200, "Size of CMidStack structure must be exactly 200 bytes");
-
-static_assert(offsetof(CMidStack, CMidStack::IMapElement::vftable) == 0,
-              "Vftable offset for IMapElement in CMidStack structure must be 0 bytes");
-
-static_assert(offsetof(CMidStack, CMidStack::IMidScenarioObject::vftable) == 20,
-              "Vftable offset for IMidScenarioObject in CMidStack structure must be 20 bytes");
-
-static_assert(offsetof(CMidStack, id) == 24, "CMidStack::stackId offset must be 24 bytes");
-
-static_assert(offsetof(CMidStack, leaderId) == 40, "CMidStack::leaderId offset must be 40 bytes");
-
-static_assert(offsetof(CMidStack, inventory) == 100,
-              "CMidStack::inventory offset must be 64 bytes");
-
-static_assert(offsetof(CMidStack, leaderEquippedItems) == 124,
-              "CMidStack::leaderEquippedItems offset must be 124 bytes");
-
-static_assert(offsetof(CMidStack, orderTargetId) == 172,
-              "CMidStack::orderTargetId offset must be 172 bytes");
+assert_size(CMidStack, 200);
+assert_offset(CMidStack, CMidStack::IMapElement::vftable, 0);
+assert_offset(CMidStack, CMidStack::IMidScenarioObject::vftable, 20);
+assert_offset(CMidStack, id, 24);
+assert_offset(CMidStack, leaderId, 40);
+assert_offset(CMidStack, inventory, 100);
+assert_offset(CMidStack, leaderEquippedItems, 124);
+assert_offset(CMidStack, orderTargetId, 172);
 
 namespace CMidStackApi {
 

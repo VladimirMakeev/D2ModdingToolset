@@ -41,10 +41,8 @@ struct CMidgardMsgBox : public CPopupDialogInterf
     CMidgardMsgBoxData* data;
 };
 
-static_assert(sizeof(CMidgardMsgBox) == 20,
-              "Size of CMidgardMsgBox structure must be exactly 20 bytes");
-
-static_assert(offsetof(CMidgardMsgBox, data) == 16, "CMidgardMsgBox::data offset must be 16 bytes");
+assert_size(CMidgardMsgBox, 20);
+assert_offset(CMidgardMsgBox, data, 16);
 
 namespace CMidgardMsgBoxApi {
 

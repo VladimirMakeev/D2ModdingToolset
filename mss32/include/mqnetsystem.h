@@ -20,6 +20,8 @@
 #ifndef MQNETSYSTEM_H
 #define MQNETSYSTEM_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct IMqNetSystemVftable;
@@ -42,8 +44,7 @@ struct IMqNetSystemVftable
     OnConnectionChanged onPlayerDisconnected;
 };
 
-static_assert(sizeof(IMqNetSystemVftable) == 3 * sizeof(void*),
-              "IMqNetSystem vftable must have exactly 3 methods");
+assert_vftable_size(IMqNetSystemVftable, 3);
 
 } // namespace game
 

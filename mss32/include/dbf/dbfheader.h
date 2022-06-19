@@ -20,6 +20,7 @@
 #ifndef DBFHEADER_H
 #define DBFHEADER_H
 
+#include "d2assert.h"
 #include <cstddef>
 #include <cstdint>
 
@@ -87,11 +88,9 @@ struct DbfHeader
     char reserved2[2];
 };
 
-static_assert(sizeof(DbfHeader) == 32, "Size of DbfHeader structure must be exactly 32 bytes");
-
-static_assert(offsetof(DbfHeader, recordsTotal) == 4,
-              "DbfHeader::recordsTotal offset must be 4 bytes");
-static_assert(offsetof(DbfHeader, language) == 29, "DbfHeader::language offset must be 29 bytes");
+assert_size(DbfHeader, 32);
+assert_offset(DbfHeader, recordsTotal, 4);
+assert_offset(DbfHeader, language, 29);
 
 } // namespace utils
 

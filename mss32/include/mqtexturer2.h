@@ -20,6 +20,7 @@
 #ifndef MQTEXTURER2_H
 #define MQTEXTURER2_H
 
+#include "d2assert.h"
 #include <cstdint>
 #include <windows.h>
 
@@ -39,8 +40,7 @@ struct TexturerStatistics
     int video;
 };
 
-static_assert(sizeof(TexturerStatistics) == 16,
-              "Size of TexturerStatistics structure must be exactly 16 bytes");
+assert_size(TexturerStatistics, 16);
 
 struct IMqTexturer2
 {
@@ -154,8 +154,7 @@ struct IMqTexturer2Vftable
     Method13 method13;
 };
 
-static_assert(sizeof(IMqTexturer2Vftable) == 14 * sizeof(void*),
-              "IMqTexturer2 vftable must have exactly 14 methods");
+assert_vftable_size(IMqTexturer2Vftable, 14);
 
 } // namespace game
 

@@ -62,8 +62,7 @@ struct CEncLayoutUnitVftable : CInterfaceVftable
     void* method35;
 };
 
-static_assert(sizeof(CEncLayoutUnitVftable) == 35 * sizeof(void*),
-              "CEncLayoutUnit vftable must have exactly 35 methods");
+assert_vftable_size(CEncLayoutUnitVftable, 35);
 
 namespace CEncLayoutUnitApi {
 

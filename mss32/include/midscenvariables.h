@@ -32,8 +32,7 @@ struct ScenarioVariableData
     int value;
 };
 
-static_assert(sizeof(ScenarioVariableData) == 40,
-              "Size of ScenarioVariableData structure must be exactly 40 bytes");
+assert_size(ScenarioVariableData, 40);
 
 /**
  * Holds variables information in scenario file and game.
@@ -45,8 +44,7 @@ struct CMidScenVariables : public IMidScenarioObject
     Map<int, ScenarioVariableData> variables;
 };
 
-static_assert(sizeof(CMidScenVariables) == 40,
-              "Size of CMidScenVariables structure must be exactly 40 bytes");
+assert_size(CMidScenVariables, 40);
 
 using ScenarioVariable = Pair<int, ScenarioVariableData>;
 

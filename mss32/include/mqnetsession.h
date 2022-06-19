@@ -79,8 +79,7 @@ struct IMqNetSessionVftable
     CreateServer createServer;
 };
 
-static_assert(sizeof(IMqNetSessionVftable) == 7 * sizeof(void*),
-              "IMqNetSession vftable must have exactly 7 methods");
+assert_vftable_size(IMqNetSessionVftable, 7);
 
 } // namespace game
 

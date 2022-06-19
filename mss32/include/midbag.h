@@ -38,13 +38,10 @@ struct CMidBag : public IMidScenarioObject
     int image;
 };
 
-static_assert(sizeof(CMidBag) == 60, "Size of CMidBag structure must be exactly 60 bytes");
-
-static_assert(offsetof(CMidBag, mapElement) == 8, "CMidBag::mapElement offset must be 8 bytes");
-
-static_assert(offsetof(CMidBag, aiPriority) == 28, "CMidBag::aiPriority offset must be 28 bytes");
-
-static_assert(offsetof(CMidBag, inventory) == 36, "CMidBag::inventory offset must be 36 bytes");
+assert_size(CMidBag, 60);
+assert_offset(CMidBag, mapElement, 8);
+assert_offset(CMidBag, aiPriority, 28);
+assert_offset(CMidBag, inventory, 36);
 
 } // namespace game
 

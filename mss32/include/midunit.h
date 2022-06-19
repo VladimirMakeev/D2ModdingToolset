@@ -82,8 +82,7 @@ struct CMidUnitVftable : IMidScenarioObjectVftable
     RemoveUnitImpl removeUnitImpl;
 };
 
-static_assert(sizeof(CMidUnitVftable) == 6 * sizeof(void*),
-              "CMidUnit vftable must have exactly 6 methods");
+assert_vftable_size(CMidUnitVftable, 6);
 
 namespace CMidUnitApi {
 

@@ -38,8 +38,7 @@ struct CMidUnitDescriptor : public IEncUnitDescriptor
     CMidUnit* unit;
 };
 
-static_assert(sizeof(CMidUnitDescriptor) == 24,
-              "Size of CMidUnitDescriptor structure must be exactly 24 bytes");
+assert_size(CMidUnitDescriptor, 24);
 
 namespace CMidUnitDescriptorApi {
 

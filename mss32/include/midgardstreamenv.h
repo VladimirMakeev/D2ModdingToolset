@@ -20,6 +20,7 @@
 #ifndef MIDGARDSTREAMENV_H
 #define MIDGARDSTREAMENV_H
 
+#include "d2assert.h"
 #include "smartptr.h"
 
 namespace game {
@@ -78,8 +79,7 @@ struct IMidgardStreamEnvVftable
     StreamObjectGuard streamEndObject;
 };
 
-static_assert(sizeof(IMidgardStreamEnvVftable) == 13 * sizeof(void*),
-              "IMidgardStreamEnv vftable must have exactly 13 methods");
+assert_vftable_size(IMidgardStreamEnvVftable, 13);
 
 } // namespace game
 

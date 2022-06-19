@@ -34,7 +34,7 @@ struct CMidItem : public IMidScenarioObject
     CMidgardID globalItemId;
 };
 
-static_assert(sizeof(CMidItem) == 12, "Size of CMidItem structure must be exactly 12 bytes");
+assert_size(CMidItem, 12);
 
 namespace CMidItemApi {
 

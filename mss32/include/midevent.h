@@ -51,15 +51,10 @@ struct CMidEvent : public IMidScenarioObject
     Vector<CMidEvEffect*> effects;
 };
 
-static_assert(sizeof(CMidEvent) == 120, "Size of CMidEvent structure must be exactly 120 bytes");
-
-static_assert(offsetof(CMidEvent, affectedRaces) == 20,
-              "CMidEvent::affectedRaces offset must be 20 bytes");
-
-static_assert(offsetof(CMidEvent, racesCanTrigger) == 48,
-              "CMidEvent::racesCanTrigger offset must be 48 bytes");
-
-static_assert(offsetof(CMidEvent, chance) == 84, "CMidEvent::chance offset must be 84 bytes");
+assert_size(CMidEvent, 120);
+assert_offset(CMidEvent, affectedRaces, 20);
+assert_offset(CMidEvent, racesCanTrigger, 48);
+assert_offset(CMidEvent, chance, 84);
 
 namespace CMidEventApi {
 

@@ -67,14 +67,9 @@ struct CMenuPhaseData
     int unknown10;
 };
 
-static_assert(sizeof(CMenuPhaseData) == 116,
-              "Size of CMenuPhaseData structure must be exactly 116 bytes");
-
-static_assert(offsetof(CMenuPhaseData, races) == 40,
-              "CMenuPhaseData::races offset must be 40 bytes");
-
-static_assert(offsetof(CMenuPhaseData, scenarioFileId) == 84,
-              "CMenuPhaseData::scenarioFileId offset must be 84 bytes");
+assert_size(CMenuPhaseData, 116);
+assert_offset(CMenuPhaseData, races, 40);
+assert_offset(CMenuPhaseData, scenarioFileId, 84);
 
 struct CMenuPhase
     : public IMqNetSystem
@@ -83,13 +78,9 @@ struct CMenuPhase
     CMenuPhaseData* data;
 };
 
-static_assert(sizeof(CMenuPhase) == 12, "Size of CMenuPhase structure must be exactly 12 bytes");
-
-static_assert(offsetof(CMenuPhase, CMenuPhase::IMqNetSystem::vftable) == 0,
-              "Vftable offset for IMqNetSystem in CMenuPhase structure must be 0 bytes");
-
-static_assert(offsetof(CMenuPhase, CMenuPhase::ICatalogValidate::vftable) == 4,
-              "Vftable offset for ICatalogValidate in CMenuPhase structure must be 4 bytes");
+assert_size(CMenuPhase, 12);
+assert_offset(CMenuPhase, CMenuPhase::IMqNetSystem::vftable, 0);
+assert_offset(CMenuPhase, CMenuPhase::ICatalogValidate::vftable, 4);
 
 namespace CMenuPhaseApi {
 

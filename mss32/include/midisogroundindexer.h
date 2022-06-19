@@ -20,6 +20,7 @@
 #ifndef MIDISOGROUNDINDEXER_H
 #define MIDISOGROUNDINDEXER_H
 
+#include "d2assert.h"
 #include "isogroundindexer.h"
 
 namespace game {
@@ -34,16 +35,14 @@ struct CMidIsoGroundIndexerData
     int mapSeed;
 };
 
-static_assert(sizeof(CMidIsoGroundIndexerData) == 1160,
-              "Size of CMidIsoGroundIndexerData structure must be exactly 1160 bytes");
+assert_size(CMidIsoGroundIndexerData, 1160);
 
 struct CMidIsoGroundIndexer : public IIsoGroundIndexer
 {
     CMidIsoGroundIndexerData* data;
 };
 
-static_assert(sizeof(CMidIsoGroundIndexer) == 8,
-              "Size of CMidIsoGroundIndexer structure must be exactly 8 bytes");
+assert_size(CMidIsoGroundIndexer, 8);
 
 } // namespace game
 

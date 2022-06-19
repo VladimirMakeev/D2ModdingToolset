@@ -20,6 +20,7 @@
 #ifndef MQRASTERIZER_H
 #define MQRASTERIZER_H
 
+#include "d2assert.h"
 #include <cstdint>
 #include <windows.h>
 
@@ -54,8 +55,7 @@ struct IMqRasterizer::SurfaceDecompVftable
     GetData getData;
 };
 
-static_assert(sizeof(IMqRasterizer::SurfaceDecompVftable) == 2 * sizeof(void*),
-              "IMqRasterizer::SurfaceDecomp vftable must have exactly 2 methods");
+assert_vftable_size(IMqRasterizer::SurfaceDecompVftable, 2);
 
 struct IMqRasterizerVftable
 {
@@ -198,8 +198,7 @@ struct IMqRasterizerVftable
     Method25 method25;
 };
 
-static_assert(sizeof(IMqRasterizerVftable) == 26 * sizeof(void*),
-              "IMqRasterizer vftable must have exactly 26 methods");
+assert_vftable_size(IMqRasterizerVftable, 26);
 
 } // namespace game
 

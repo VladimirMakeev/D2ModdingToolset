@@ -31,8 +31,7 @@ struct CMidCondFrequency : public CMidEvCondition
     int frequency; /**< In days [1 : 500]. */
 };
 
-static_assert(sizeof(CMidCondFrequency) == 20,
-              "Size of CMidCondFrequency structure must be exactly 20 bytes");
+assert_size(CMidCondFrequency, 20);
 
 /** Entering a predefined zone. */
 struct CMidCondLocation : public CMidEvCondition
@@ -40,8 +39,7 @@ struct CMidCondLocation : public CMidEvCondition
     CMidgardID locationId;
 };
 
-static_assert(sizeof(CMidCondLocation) == 20,
-              "Size of CMidCondLocation structure must be exactly 20 bytes");
+assert_size(CMidCondLocation, 20);
 
 /** Entering a city. */
 struct CMidCondEnterCity : public CMidEvCondition
@@ -49,8 +47,7 @@ struct CMidCondEnterCity : public CMidEvCondition
     CMidgardID cityId;
 };
 
-static_assert(sizeof(CMidCondEnterCity) == 20,
-              "Size of CMidCondEnterCity structure must be exactly 20 bytes");
+assert_size(CMidCondEnterCity, 20);
 
 /** Owning a city. */
 struct CMidCondOwnCity : public CMidEvCondition
@@ -58,8 +55,7 @@ struct CMidCondOwnCity : public CMidEvCondition
     CMidgardID cityId;
 };
 
-static_assert(sizeof(CMidCondOwnCity) == 20,
-              "Size of CMidCondOwnCity structure must be exactly 20 bytes");
+assert_size(CMidCondOwnCity, 20);
 
 /** Destroying a stack. */
 struct CMidCondKillStack : public CMidEvCondition
@@ -67,8 +63,7 @@ struct CMidCondKillStack : public CMidEvCondition
     CMidgardID stackId;
 };
 
-static_assert(sizeof(CMidCondKillStack) == 20,
-              "Size of CMidCondKillStack structure must be exactly 20 bytes");
+assert_size(CMidCondKillStack, 20);
 
 /** Owning an item. */
 struct CMidCondOwnItem : public CMidEvCondition
@@ -76,8 +71,7 @@ struct CMidCondOwnItem : public CMidEvCondition
     CMidgardID itemId;
 };
 
-static_assert(sizeof(CMidCondOwnItem) == 20,
-              "Size of CMidCondOwnItem structure must be exactly 20 bytes");
+assert_size(CMidCondOwnItem, 20);
 
 /** Specific leader owning an item. */
 struct CMidCondLeaderOwnItem : public CMidEvCondition
@@ -86,8 +80,7 @@ struct CMidCondLeaderOwnItem : public CMidEvCondition
     CMidgardID itemId;
 };
 
-static_assert(sizeof(CMidCondLeaderOwnItem) == 24,
-              "Size of CMidCondLeaderOwnItem structure must be exactly 24 bytes");
+assert_size(CMidCondLeaderOwnItem, 24);
 
 /** Diplomacy relations. */
 struct CMidCondDiplomacy : public CMidEvCondition
@@ -97,8 +90,7 @@ struct CMidCondDiplomacy : public CMidEvCondition
     int diplomacy; /**< Percentage based value [-100 : 100]. */
 };
 
-static_assert(sizeof(CMidCondDiplomacy) == 28,
-              "Size of CMidCondDiplomacy structure must be exactly 28 bytes");
+assert_size(CMidCondDiplomacy, 28);
 
 /** Being in alliance. */
 struct CMidCondAlliance : public CMidEvCondition
@@ -107,8 +99,7 @@ struct CMidCondAlliance : public CMidEvCondition
     CMidgardID playerId2;
 };
 
-static_assert(sizeof(CMidCondAlliance) == 24,
-              "Size of CMidCondAlliance structure must be exactly 24 bytes");
+assert_size(CMidCondAlliance, 24);
 
 /** Looting a ruin. */
 struct CMidCondLootRuin : public CMidEvCondition
@@ -116,8 +107,7 @@ struct CMidCondLootRuin : public CMidEvCondition
     CMidgardID ruinId;
 };
 
-static_assert(sizeof(CMidCondLootRuin) == 20,
-              "Size of CMidCondLootRuin structure must be exactly 20 bytes");
+assert_size(CMidCondLootRuin, 20);
 
 /** Transforming x% of the land. */
 struct CMidCondTerraform : public CMidEvCondition
@@ -125,8 +115,7 @@ struct CMidCondTerraform : public CMidEvCondition
     int percentLand; /**< Percentage based value [-100 : 100]. */
 };
 
-static_assert(sizeof(CMidCondTerraform) == 20,
-              "Size of CMidCondTerraform structure must be exactly 20 bytes");
+assert_size(CMidCondTerraform, 20);
 
 /** Visiting a site. */
 struct CMidCondVisitSite : public CMidEvCondition
@@ -134,8 +123,7 @@ struct CMidCondVisitSite : public CMidEvCondition
     CMidgardID siteId;
 };
 
-static_assert(sizeof(CMidCondVisitSite) == 20,
-              "Size of CMidCondVisitSite structure must be exactly 20 bytes");
+assert_size(CMidCondVisitSite, 20);
 
 /** Stack to location. */
 struct CMidCondLeaderToZone : public CMidEvCondition
@@ -144,8 +132,7 @@ struct CMidCondLeaderToZone : public CMidEvCondition
     CMidgardID locationId;
 };
 
-static_assert(sizeof(CMidCondLeaderToZone) == 24,
-              "Size of CMidCondLeaderToZone structure must be exactly 24 bytes");
+assert_size(CMidCondLeaderToZone, 24);
 
 /** Stack to city. */
 struct CMidCondLeaderToCity : public CMidEvCondition
@@ -154,8 +141,7 @@ struct CMidCondLeaderToCity : public CMidEvCondition
     CMidgardID cityId;
 };
 
-static_assert(sizeof(CMidCondLeaderToCity) == 24,
-              "Size of CMidCondLeaderToCity structure must be exactly 24 bytes");
+assert_size(CMidCondLeaderToCity, 24);
 
 /** Item to location. */
 struct CMidCondItemToLocation : public CMidEvCondition
@@ -164,8 +150,7 @@ struct CMidCondItemToLocation : public CMidEvCondition
     CMidgardID locationId;
 };
 
-static_assert(sizeof(CMidCondItemToLocation) == 24,
-              "Size of CMidCondItemToLocation structure must be exactly 24 bytes");
+assert_size(CMidCondItemToLocation, 24);
 
 /** Stack existance. */
 struct CMidCondStackExists : public CMidEvCondition
@@ -174,8 +159,7 @@ struct CMidCondStackExists : public CMidEvCondition
     int existanceStatus;
 };
 
-static_assert(sizeof(CMidCondStackExists) == 24,
-              "Size of CMidCondStackExists structure must be exactly 24 bytes");
+assert_size(CMidCondStackExists, 24);
 
 enum class CondVarComparison : int
 {
@@ -199,8 +183,7 @@ struct CMidCondVarInRange : public CMidEvCondition
     CondVarComparison comparison;
 };
 
-static_assert(sizeof(CMidCondVarInRange) == 44,
-              "Size of CMidCondVarInRange structure must be exactly 44 bytes");
+assert_size(CMidCondVarInRange, 44);
 
 } // namespace game
 

@@ -20,6 +20,8 @@
 #ifndef MIDGARDSTREAM_H
 #define MIDGARDSTREAM_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct IMidgardStreamVftable;
@@ -129,8 +131,7 @@ struct IMidgardStreamVftable
     StreamText streamText;
 };
 
-static_assert(sizeof(IMidgardStreamVftable) == 17 * sizeof(void*),
-              "IMidgardStream vftable must have exactly 17 methods");
+assert_vftable_size(IMidgardStreamVftable, 17);
 
 } // namespace game
 

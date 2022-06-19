@@ -58,14 +58,9 @@ struct CMenuLordData
     int unknown15;
 };
 
-static_assert(sizeof(CMenuLordData) == 144,
-              "Size of CMenuLordData structure must be exactly 144 bytes");
-
-static_assert(offsetof(CMenuLordData, lordFaces) == 52,
-              "CMenuLordData::lordFaces offset must be 52 bytes");
-
-static_assert(offsetof(CMenuLordData, backgroundImage) == 112,
-              "CMenuLordData::backgroundImage offset must be 112 bytes");
+assert_size(CMenuLordData, 144);
+assert_offset(CMenuLordData, lordFaces, 52);
+assert_offset(CMenuLordData, backgroundImage, 112);
 
 /**
  * Lord selection screen.
@@ -76,7 +71,7 @@ struct CMenuLord : public CMenuBase
     CMenuLordData* data;
 };
 
-static_assert(sizeof(CMenuLord) == 16, "Size of CMenuLord structure must be exactly 16 bytes");
+assert_size(CMenuLord, 16);
 
 namespace CMenuLordApi {
 

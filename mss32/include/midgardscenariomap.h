@@ -34,8 +34,7 @@ struct ScenarioObjectRecord
     ScenarioObjectRecord* next;
 };
 
-static_assert(sizeof(ScenarioObjectRecord) == 20,
-              "Size of ScenarioObjectRecord structure must be exactly 20 bytes");
+assert_size(ScenarioObjectRecord, 20);
 
 struct CMidgardScenarioMapData
 {
@@ -55,8 +54,7 @@ struct CMidgardScenarioMapData
     void* allocator;
 };
 
-static_assert(sizeof(CMidgardScenarioMapData) == 40,
-              "Size of CMidgardScenarioMapData structure must be exactly 40 bytes");
+assert_size(CMidgardScenarioMapData, 40);
 
 /** Stores scenario objects. */
 struct CMidgardScenarioMap : public IMidgardObjectMap
@@ -70,8 +68,7 @@ struct CMidgardScenarioMap : public IMidgardObjectMap
     Set<CMidgardID> objectsToErase;
 };
 
-static_assert(sizeof(CMidgardScenarioMap) == 368,
-              "Size of CMidgardScenarioMap structure must be exactly 368 bytes");
+assert_size(CMidgardScenarioMap, 368);
 
 } // namespace game
 

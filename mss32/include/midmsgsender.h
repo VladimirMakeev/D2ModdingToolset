@@ -20,6 +20,8 @@
 #ifndef MIDMSGSENDER_H
 #define MIDMSGSENDER_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct IMidMsgSenderVftable;
@@ -96,8 +98,7 @@ struct IMidMsgSenderVftable
     ExportLeaders exportLeaders;
 };
 
-static_assert(sizeof(IMidMsgSenderVftable) == 10 * sizeof(void*),
-              "Size of IMidMsgSender vftable must have exactly 10 methods");
+assert_vftable_size(IMidMsgSenderVftable, 10);
 
 } // namespace game
 
