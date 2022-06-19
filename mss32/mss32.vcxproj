@@ -385,6 +385,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\racelist.cpp" />
     <ClCompile Include="src\radiobuttoninterf.cpp" />
     <ClCompile Include="src\registeraccountinterf.cpp" />
+    <ClCompile Include="src\rendererimpl.cpp" />
     <ClCompile Include="src\restrictions.cpp" />
     <ClCompile Include="src\roomclientjoin.cpp" />
     <ClCompile Include="src\roompasswordinterf.cpp" />

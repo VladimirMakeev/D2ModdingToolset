@@ -85,6 +85,12 @@ struct CRendererImplDisplayVftable : public IMqDisplay2Vftable
 
 assert_vftable_size(CRendererImplDisplayVftable, 12);
 
+namespace CRendererImplApi {
+
+IMqRenderer2Vftable* vftable();
+
+}
+
 } // namespace game
 
 #endif // RENDERERIMPL_H
