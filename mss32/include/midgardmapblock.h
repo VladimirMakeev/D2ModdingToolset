@@ -92,7 +92,7 @@ struct Api
     SetTerrain setTerrain;
 
     /** Returns terrain for tile at specified position. */
-    using GetTerrain = bool(__thiscall*)(CMidgardMapBlock* thisptr,
+    using GetTerrain = bool(__thiscall*)(const CMidgardMapBlock* thisptr,
                                          LTerrainCategory* terrain,
                                          const CMqPoint* position);
     GetTerrain getTerrain;
