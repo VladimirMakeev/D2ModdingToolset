@@ -37,9 +37,9 @@ struct CEncLayoutUnitData
 {
     CMidgardID unitId;
     const IMidgardObjectMap* objectMap;
-    int unknown;
-    int unknown2;
-    int unknown3;
+    int boostDamageLevel;
+    int lowerDamageLevel;
+    int lowerInitiativeLevel;
     bool unknown4;
     char padding[3];
     int shatteredArmor;
