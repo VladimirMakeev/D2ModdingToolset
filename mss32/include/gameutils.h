@@ -29,9 +29,13 @@ struct CScenarioInfo;
 struct CMidPlayer;
 struct CMidScenVariables;
 struct CMidgardPlan;
+struct CMidgardMap;
+struct CMidgardMapBlock;
 struct CMidStack;
 struct CMidRuin;
 struct CFortification;
+struct LRaceCategory;
+struct LTerrainCategory;
 } // namespace game
 
 namespace hooks {
@@ -66,9 +70,22 @@ const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
                                   const game::BattleMsgData* battleMsgData,
                                   const game::CMidgardID* unitId);
 
+const game::CMidPlayer* getPlayerByUnitId(const game::IMidgardObjectMap* objectMap,
+                                          const game::CMidgardID* unitId);
+
 const game::CMidScenVariables* getScenarioVariables(const game::IMidgardObjectMap* objectMap);
 
 const game::CMidgardPlan* getMidgardPlan(const game::IMidgardObjectMap* objectMap);
+
+const game::CMidgardMap* getMidgardMap(const game::IMidgardObjectMap* objectMap);
+
+const game::CMidgardMapBlock* getMidgardMapBlock(const game::IMidgardObjectMap* objectMap,
+                                                 const game::CMidgardID* mapId,
+                                                 int mapSize,
+                                                 int x,
+                                                 int y);
+
+const game::LTerrainCategory* getTerrainCategory(const game::LRaceCategory* raceCategory);
 
 game::CMidStack* getStack(const game::IMidgardObjectMap* objectMap,
                           const game::CMidgardID* stackId);

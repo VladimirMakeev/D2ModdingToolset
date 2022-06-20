@@ -120,6 +120,8 @@ std::optional<ScenVariablesView> ScenarioView::getScenVariables() const
 
 std::optional<TileView> ScenarioView::getTile(int x, int y) const
 {
+    using namespace game;
+
     if (!objectMap) {
         return std::nullopt;
     }
@@ -129,26 +131,11 @@ std::optional<TileView> ScenarioView::getTile(int x, int y) const
         return std::nullopt;
     }
 
-    if (x < 0 || x >= info->mapSize || y < 0 || y >= info->mapSize) {
-        // Outside of map
+    auto block = hooks::getMidgardMapBlock(objectMap, &info->id, info->mapSize, x, y);
+    if (!block) {
         return std::nullopt;
     }
 
-    using namespace game;
-
-    const auto& id = CMidgardIDApi::get();
-    CMidgardID blockId{};
-    const std::uint32_t blockX = x / 8 * 8;
-    const std::uint32_t blockY = y / 4 * 4;
-    id.fromParts(&blockId, IdCategory::Scenario, id.getCategoryIndex(&info->id), IdType::MapBlock,
-                 blockX | (blockY << 8));
-
-    auto blockObj = objectMap->vftable->findScenarioObjectById(objectMap, &blockId);
-    if (!blockObj) {
-        return std::nullopt;
-    }
-
-    auto block = static_cast<const CMidgardMapBlock*>(blockObj);
     const auto& blockPos = block->position;
     if (x < blockPos.x || x >= blockPos.x + 8 || y < blockPos.y || y >= blockPos.y + 4) {
         // Outside of map block
