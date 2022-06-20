@@ -1064,6 +1064,9 @@
     <ClCompile Include="src\bindings\ruinview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\interfaceutils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
     <ClCompile Include="src\categorylist.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -2685,6 +2688,9 @@
     </ClInclude>
     <ClInclude Include="include\bindings\ruinview.h">
       <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\interfaceutils.h">
+      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\categorylist.h">
       <Filter>game</Filter>

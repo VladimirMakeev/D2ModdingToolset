@@ -26,6 +26,7 @@
 #include "dialoginterf.h"
 #include "dynupgrade.h"
 #include "encunitdescriptor.h"
+#include "interfaceutils.h"
 #include "midunit.h"
 #include "midunitdescriptor.h"
 #include "settings.h"
@@ -33,13 +34,12 @@
 #include "textids.h"
 #include "unitutils.h"
 #include "ussoldierimpl.h"
-#include "usunitimpl.h"
 #include "utils.h"
 #include <fmt/format.h>
 
 namespace hooks {
 
-std::string getMaxText(const std::string& value)
+std::string getMaxDamageText(const std::string& value)
 {
     // "%DMG% \c000;000;000;(\c128;000;000;Max\c000;000;000;)"
     auto result = getInterfaceText("X005TA0811");
@@ -47,68 +47,10 @@ std::string getMaxText(const std::string& value)
     return result;
 }
 
-std::string getNumberText(int value, bool percent)
+std::string getDamageText(int value, int base, int max)
 {
-    return fmt::format(percent ? "{:d}%" : "{:d}", value);
-}
-
-std::string getBonusNumberText(int bonus, bool percent, bool trim = false)
-{
-    if (!bonus)
-        return "";
-
-    // "\c025;090;000; + %NUMBER%"
-    // "\c100;000;000; - %NUMBER%"
-    auto result = getInterfaceText(bonus > 0 ? "X005TA0486" : "X005TA0487");
-    // "\c000;000;000;"
-    result += getInterfaceText("X005TA0488");
-
-    if (trim) {
-        // Doing greedy keyword search because we cannot be sure that the standard format string is
-        // unchanged
-        if (bonus > 0) {
-            replace(result, " + %NUMBER%", "+ %NUMBER%");
-        } else {
-            replace(result, " - %NUMBER%", "- %NUMBER%");
-        }
-    }
-
-    replace(result, "%NUMBER%", fmt::format(percent ? "{:d}%" : "{:d}", abs(bonus)));
-    return result;
-}
-
-std::string getModifiedStringText(const std::string& value, bool modified)
-{
-    if (!modified)
-        return value;
-
-    auto result = getInterfaceText(textIds().interf.modifiedValue.c_str());
-    if (result.empty())
-        result = "\\c025;090;000;%VALUE%\\c000;000;000;";
-
-    replace(result, "%VALUE%", value);
-    return result;
-}
-
-std::string getModifiedNumberText(int value, int base, bool percent, int max = INT_MAX)
-{
-    std::string result;
-
-    int bonus = value - base;
-    if (base && bonus) {
-        result = getNumberText(base, percent);
-        result += getBonusNumberText(bonus, percent);
-    } else if (bonus) {
-        result = getBonusNumberText(bonus, percent, true);
-    } else {
-        result = getNumberText(base, percent);
-    }
-
-    if (value >= max) {
-        result = getMaxText(result);
-    }
-
-    return result;
+    auto result = getModifiedNumberText(value, base, false);
+    return value >= max ? getMaxDamageText(result) : result;
 }
 
 std::string addAltAttackText(const std::string& base, const std::string& value)
@@ -295,20 +237,13 @@ std::string getAttackPowerText(const utils::AttackDescriptor& actual,
     return result;
 }
 
-std::string getAttackInitiativeText(const utils::AttackDescriptor& actual,
-                                    const utils::AttackDescriptor& global)
-{
-    return getModifiedNumberText(actual.initiative(), global.initiative(), false);
-}
-
 std::string getDamageDrainAttackDamageText(const utils::AttackDescriptor& actual,
                                            const utils::AttackDescriptor& global,
                                            int maxTargets,
                                            int damageMax)
 {
     int multiplier = actual.damageSplit() ? userSettings().splitDamageMultiplier : 1;
-    auto result = getModifiedNumberText(actual.damage(), global.damage(), false,
-                                        damageMax * multiplier);
+    auto result = getDamageText(actual.damage(), global.damage(), damageMax * multiplier);
 
     if (actual.critHit()) {
         result = addCritHitText(result,
@@ -348,7 +283,7 @@ std::string getLowerDamageAttackDamageText(const utils::AttackDescriptor& actual
     auto result = getInterfaceText("X005TA0550"); // "-%LOWER%%"
     replace(result, "%LOWER%", getNumberText(lower, false));
 
-    result += getBonusNumberText(actual.lower() - lower, true);
+    result += getBonusNumberText(actual.lower() - lower, true, false, true);
 
     return result;
 }
@@ -361,7 +296,7 @@ std::string getLowerInitiativeAttackDamageText(const utils::AttackDescriptor& ac
     auto result = getInterfaceText("X005TA0550"); // "-%LOWER%%"
     replace(result, "%LOWER%", getNumberText(lower, false));
 
-    result += getBonusNumberText(actual.lowerIni() - lower, true);
+    result += getBonusNumberText(actual.lowerIni() - lower, true, false, true);
 
     return result;
 }
@@ -392,7 +327,7 @@ std::string getAttackDamageText(const utils::AttackDescriptor& actual,
                || actual.classId() == classes.blister->id) {
         result = getNumberText(global.damage(), false);
     } else {
-        result = getModifiedNumberText(actual.damage(), global.damage(), false, damageMax);
+        result = getDamageText(actual.damage(), global.damage(), damageMax);
     }
 
     return addInfiniteText(result, actual, global);
@@ -404,46 +339,6 @@ std::string getAttackDrainText(const utils::AttackDescriptor& actual,
     auto result = getModifiedNumberText(actual.drain(), global.drain(), false);
 
     return addOverflowText(result, actual, global);
-}
-
-std::string getAttackSourceText(game::AttackSourceId id)
-{
-    using namespace game;
-
-    const auto& sources = AttackSourceCategories::get();
-
-    if (id == sources.weapon->id)
-        return getInterfaceText("X005TA0145"); // "Weapon"
-    else if (id == sources.mind->id)
-        return getInterfaceText("X005TA0146"); // "Mind"
-    else if (id == sources.life->id)
-        return getInterfaceText("X005TA0147"); // "Life"
-    else if (id == sources.death->id)
-        return getInterfaceText("X005TA0148"); // "Death"
-    else if (id == sources.fire->id)
-        return getInterfaceText("X005TA0149"); // "Fire"
-    else if (id == sources.water->id)
-        return getInterfaceText("X005TA0150"); // "Water"
-    else if (id == sources.air->id)
-        return getInterfaceText("X005TA0151"); // "Air"
-    else if (id == sources.earth->id)
-        return getInterfaceText("X005TA0152"); // "Earth"
-    else {
-        for (const auto& custom : getCustomAttacks().sources) {
-            if (id == custom.source.id)
-                return getInterfaceText(custom.nameId.c_str());
-        }
-    }
-
-    return "";
-}
-
-std::string getAttackSourceText(const game::LAttackSource* source)
-{
-    if (!source)
-        return getInterfaceText("X005TA0473"); // "None"
-
-    return getAttackSourceText(source->id);
 }
 
 std::string getAttackSourceText(const utils::AttackDescriptor& actual,
@@ -501,69 +396,35 @@ std::string getAttackNameText(const utils::AttackDescriptor& actual,
     return getModifiedStringText(actual.name(), actual.name() != global.name());
 }
 
-void addDynUpgrTextToField(std::string& description, const char* field, int upgrade1, int upgrade2)
-{
-    if (!upgrade1 || !upgrade2) {
-        return;
-    }
-
-    auto result = getInterfaceText(textIds().interf.dynamicUpgradeValues.c_str());
-    if (result.empty()) {
-        result = "%STAT% (%UPG1% | %UPG2%)";
-    }
-
-    replace(result, "%STAT%", field);
-    replace(result, "%UPG1%", fmt::format("{:+d}", upgrade1));
-    replace(result, "%UPG2%", fmt::format("{:+d}", upgrade2));
-
-    replace(description, field, result);
-}
-
-void addDynUpgrText(std::string& description,
-                    game::IEncUnitDescriptor* descriptor,
-                    const utils::AttackDescriptor& actual,
-                    const utils::AttackDescriptor& actual2)
+void addDynUpgradeText(std::string& description,
+                       game::IEncUnitDescriptor* descriptor,
+                       const utils::AttackDescriptor& actual,
+                       const utils::AttackDescriptor& actual2)
 {
     using namespace game;
 
-    if (!userSettings().unitEncyclopedia.displayDynamicUpgradeValues) {
-        return;
-    }
-
-    if (!descriptor->vftable->isUnitType(descriptor)) {
-        return;
-    }
-
-    CMidgardID globalUnitImplId;
-    descriptor->vftable->getGlobalUnitImplId(descriptor, &globalUnitImplId);
-
-    auto globalUnitImpl = getGlobalUnitImpl(&globalUnitImplId);
-
-    auto upgrade1 = getDynUpgrade(globalUnitImpl, 1);
-    auto upgrade2 = getDynUpgrade(globalUnitImpl, 2);
-    if (!upgrade1 || !upgrade2) {
+    const CDynUpgrade* upgrade1 = nullptr;
+    const CDynUpgrade* upgrade2 = nullptr;
+    if (!getDynUpgradesToDisplay(descriptor, &upgrade1, &upgrade2)) {
         return;
     }
 
     if (actual.damage() || actual2.damage()) {
-        addDynUpgrTextToField(description, "%DAMAGE%", upgrade1->damage, upgrade2->damage);
+        addDynUpgradeTextToField(description, "%DAMAGE%", upgrade1->damage, upgrade2->damage);
     } else if (actual.heal() || actual2.heal()) {
-        addDynUpgrTextToField(description, "%DAMAGE%", upgrade1->heal, upgrade2->heal);
+        addDynUpgradeTextToField(description, "%DAMAGE%", upgrade1->heal, upgrade2->heal);
     }
 
     if (actual.hasPower() || actual2.hasPower()) {
-        addDynUpgrTextToField(description, "%HIT2%", upgrade1->power, upgrade2->power);
+        addDynUpgradeTextToField(description, "%HIT2%", upgrade1->power, upgrade2->power);
     }
 
-    addDynUpgrTextToField(description, "%INIT%", upgrade1->initiative, upgrade2->initiative);
+    addDynUpgradeTextToField(description, "%INIT%", upgrade1->initiative, upgrade2->initiative);
 }
 
 std::string getTwiceField(game::IEncUnitDescriptor* descriptor)
 {
     using namespace game;
-
-    const auto& rtti = RttiApi::rtti();
-    const auto dynamicCast = RttiApi::get().dynamicCast;
 
     if (!descriptor->vftable->attacksTwice(descriptor))
         return "";
@@ -572,8 +433,7 @@ std::string getTwiceField(game::IEncUnitDescriptor* descriptor)
     replace(result, "%BLANK%", "");
 
     bool modified = false;
-    auto midUnitDescriptor = (const game::CMidUnitDescriptor*)
-        dynamicCast(descriptor, 0, rtti.IEncUnitDescriptorType, rtti.CMidUnitDescriptorType, 0);
+    auto midUnitDescriptor = castToMidUnitDescriptor(descriptor);
     if (midUnitDescriptor) {
         const auto unitImpl = midUnitDescriptor->unit->unitImpl;
         const auto soldierImpl = getSoldierImpl(unitImpl);
@@ -721,7 +581,7 @@ std::string getSource2Field(const utils::AttackDescriptor& actual,
 std::string getInitField(const utils::AttackDescriptor& actual,
                          const utils::AttackDescriptor& global)
 {
-    return getAttackInitiativeText(actual, global);
+    return getModifiedNumberText(actual.initiative(), global.initiative(), false);
 }
 
 std::string getReachField(const utils::AttackDescriptor& actual,
@@ -759,47 +619,30 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
     AttackDescriptor globalAlt(descriptor, AttackType::Alternative, true);
 
     auto description = getInterfaceText("X005TA0424"); // "%PART1%%PART2%"
-
     // \s110;
     // \fMedBold;Attack:\t\p110;\fNormal;%TWICE%%ALTATTACK%%ATTACK%%SECOND%\p0;\n
     // \fMedBold;Chances to hit:\t\fNormal;%HIT%%HIT2%\n
     replace(description, "%PART1%", getInterfaceText("X005TA0787"));
-
     // \fMedBold;%EFFECT%:\t\fNormal;%DAMAGE%\n
     // \fMedBold;Source:\t\fNormal;%SOURCE%%SOURCE2%\n
     // \fMedBold;Initiative:\t\fNormal;%INIT%\n
     // \fMedBold;Reach:\t\fNormal;%REACH%\n
     // \fMedBold;Targets:\t\fNormal;%TARGETS%
     replace(description, "%PART2%", getInterfaceText("X005TA0788"));
-
-    addDynUpgrText(description, descriptor, actual, actual2);
-
+    addDynUpgradeText(description, descriptor, actual, actual2);
     replace(description, "%TWICE%", getTwiceField(descriptor));
-
     replace(description, "%ALTATTACK%", getAltAttackField(actualAlt, globalAlt));
-
     replace(description, "%ATTACK%", getAttackField(actual, global));
-
     replace(description, "%SECOND%", getSecondField(actual2, global2));
-
     replace(description, "%HIT%", getHitField(actual, global));
-
     replace(description, "%HIT2%", getHit2Field(actual2, global2));
-
     replace(description, "%EFFECT%", getEffectField(actual));
-
     replace(description, "%DAMAGE%", getDamageField(actual, global, actual2, global2, damageMax));
-
     replace(description, "%DRAIN%", getDrainField(actual, global, actual2, global2));
-
     replace(description, "%SOURCE%", getSourceField(actual, global, actualAlt, globalAlt));
-
     replace(description, "%SOURCE2%", getSource2Field(actual2, global2));
-
     replace(description, "%INIT%", getInitField(actual, global));
-
     replace(description, "%REACH%", getReachField(actual, global));
-
     replace(description, "%TARGETS%", getTargetsField(actual, global));
 
     auto textBox = game::CDialogInterfApi::get().findTextBox(dialog, "TXT_ATTACK_INFO");
