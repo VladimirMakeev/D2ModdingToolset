@@ -23,14 +23,16 @@
 #include "attackclasscat.h"
 #include "attacksourcecat.h"
 #include "d2list.h"
-#include "idvector.h"
+#include "d2vector.h"
 #include "leaderabilitycat.h"
 
 namespace game {
 
+struct CMidgardID;
 struct IEncUnitDescriptorVftable;
 struct LAttackReach;
 struct LLeaderAbility;
+struct TBuildingType;
 
 struct IEncUnitDescriptor
 {
@@ -116,7 +118,7 @@ struct IEncUnitDescriptorVftable
     GetBool canUnitLevelUp;
 
     using GetUnitRequiredBuildings = void(__thiscall*)(IEncUnitDescriptor* thisptr,
-                                                       IdVector* buildings);
+                                                       Vector<TBuildingType*>* buildings);
     GetUnitRequiredBuildings getUnitRequiredBuildings;
 
     GetBool getUnitDynLevel;
