@@ -24,7 +24,7 @@
 namespace game::CPictureInterfApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::SetImage)0x5318a0,
@@ -36,7 +36,11 @@ static std::array<Api, 3> functions = {{
     // Gog
     Api{
         (Api::SetImage)0x530db8,
-    }
+    },
+    // Scenario Editor
+    Api{
+        (Api::SetImage)0x494988,
+    },
 }};
 // clang-format on
 
