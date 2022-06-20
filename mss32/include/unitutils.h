@@ -71,6 +71,7 @@ void updateAttackCountAfterTransformation(game::BattleMsgData* battleMsgData,
 bool isStackLeaderAndAllowedToUseBattleItems(const game::IMidgardObjectMap* objectMap,
                                              const game::CMidgardID* unitId,
                                              const game::BattleMsgData* battleMsgData);
+bool hasCriticalHitLeaderAbility(const game::IUsUnit* unitImpl);
 
 } // namespace hooks
 
