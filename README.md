@@ -149,6 +149,8 @@
             - Ruins bonus;
             - Capital / village bonus;
             - Rioting village penalty.
+    
+        ![image](https://user-images.githubusercontent.com/5180699/174579601-7ffa8103-69d7-4848-a3de-d53595bd9084.png)
   </details>
 - <details>
     <summary>Adds missing attack information to unit encyclopedia;</summary>
@@ -200,6 +202,8 @@
         - `dynamicUpgradeLevel`
         - `dynamicUpgradeValues`
     - Add the specified interface text to `TApp.dbf` and `TAppEdit.dbf`.
+    
+    ![image](https://user-images.githubusercontent.com/5180699/174579973-2ef49d93-ac5a-4cae-9d6f-fb0825e82554.png)
   </details>
 - <details>
     <summary>Shows effective HP in unit encyclopedia;</summary>
