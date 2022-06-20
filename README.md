@@ -142,6 +142,7 @@
             ```
                 TEXT	TXT_STATS_2,554,75,664,231,,"X015TA0003",""
             ```
+        - Try extending the dialog bounds or otherwise rearrange its elements to properly accomodate the panel with its contents;
         - Displayed regeneration value includes all the factors:
             - Unit regeneration including modifiers;
             - Warrior lord bonus;
