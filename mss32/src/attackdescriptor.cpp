@@ -22,8 +22,8 @@
 #include "attackutils.h"
 #include "customattacks.h"
 #include "customattackutils.h"
-#include "dynamiccast.h"
 #include "game.h"
+#include "interfaceutils.h"
 #include "midunit.h"
 #include "midunitdescriptor.h"
 #include "restrictions.h"
@@ -86,19 +86,13 @@ game::IAttack* getAttack(game::IEncUnitDescriptor* descriptor,
                          bool global,
                          bool* useDescriptor)
 {
-    using namespace game;
-
-    const auto& rtti = RttiApi::rtti();
-    const auto dynamicCast = RttiApi::get().dynamicCast;
-
     *useDescriptor = false;
 
     if (global) {
         return getGlobalAttack(descriptor, type);
     }
 
-    auto midUnitDescriptor = (const game::CMidUnitDescriptor*)
-        dynamicCast(descriptor, 0, rtti.IEncUnitDescriptorType, rtti.CMidUnitDescriptorType, 0);
+    auto midUnitDescriptor = hooks::castToMidUnitDescriptor(descriptor);
     if (midUnitDescriptor) {
         return getAttack(midUnitDescriptor->unit->unitImpl, type);
     } else {
