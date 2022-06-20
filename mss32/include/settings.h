@@ -80,6 +80,7 @@ struct Settings
 
     struct UnitEncyclopedia
     {
+        bool detailedUnitDescription;
         bool detailedAttackDescription;
         bool displayDynamicUpgradeValues;
     } unitEncyclopedia;

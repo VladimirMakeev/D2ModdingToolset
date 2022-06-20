@@ -90,6 +90,8 @@ static void readUnitEncyclopediaSettings(const sol::table& table, Settings::Unit
         return;
     }
 
+    value.detailedUnitDescription = readSetting(category.value(), "detailedUnitDescription",
+                                                def.detailedUnitDescription);
     value.detailedAttackDescription = readSetting(category.value(), "detailedAttackDescription",
                                                   def.detailedAttackDescription);
     value.displayDynamicUpgradeValues = readSetting(category.value(), "displayDynamicUpgradeValues",
@@ -260,6 +262,7 @@ const Settings& baseSettings()
         settings.unrestrictedBestowWards = false;
         settings.freeTransformSelfAttack = false;
         settings.freeTransformSelfAttackInfinite = false;
+        settings.unitEncyclopedia.detailedUnitDescription = false;
         settings.unitEncyclopedia.detailedAttackDescription = false;
         settings.unitEncyclopedia.displayDynamicUpgradeValues = false;
         settings.fixEffectiveHpFormula = false;
@@ -289,6 +292,7 @@ const Settings& defaultSettings()
         settings.showResources = true;
         settings.movementCost.show = true;
         settings.unrestrictedBestowWards = true;
+        settings.unitEncyclopedia.detailedUnitDescription = true;
         settings.unitEncyclopedia.detailedAttackDescription = true;
         settings.fixEffectiveHpFormula = true;
 

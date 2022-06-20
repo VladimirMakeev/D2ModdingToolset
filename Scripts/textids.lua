@@ -98,9 +98,15 @@ textids = {
 		-- Fallback text is "%ATTACK% (%OVERFLOW%)".
 		overflowText = "",
 
+		-- Defines text id to format dynamic upgrade level in unit encyclopedia.
+		-- The text must contain keyword %STAT%.
+		-- "%UPGLV%" is optional and can be ommited if you don't want to display upgrade level.
+		-- Fallback text is "%STAT% (level-ups weaken at %UPGLV%)".
+		dynamicUpgradeLevel = "",
+
 		-- Defines text id to format dynamic upgrades text in unit encyclopedia.
 		-- The text must contain keywords "%STAT%", %UPG1% and %UPG2%.
-		-- Fallback text is "%STAT% (%UPG1% | %UPG2%)".
+		-- Fallback text is "%STAT% (%UPG1% | %UPG2% per level)".
 		dynamicUpgradeValues = "",
 	},
 

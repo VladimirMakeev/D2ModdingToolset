@@ -140,10 +140,14 @@ settings = {
 	missChanceSingleRoll = false,
 
 	unitEncyclopedia = {
+		-- Additional display of some stats bonuses, regeneration, xp reward for killing, etc.
+		detailedUnitDescription = true,
+
 		-- Additional display of some stats bonuses, drain, critical hit, custom attack ratios, etc.
 		detailedAttackDescription = true,
 
 		-- Additional display of dynamic upgrade values (only for unit type encyclopedia to avoid clutter)
+		-- Enable detailedUnitDescription and/or detailedAttackDescription to show upgrade values for corresponding stats
 		displayDynamicUpgradeValues = false,
 	},
 

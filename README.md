@@ -127,10 +127,45 @@
     ```
   </details>
 - <details>
-    <summary>Adds missing attack information in unit encyclopedia;</summary>
+    <summary>Adds missing unit information to unit encyclopedia;</summary>
 
-    - Enable `unitEncyclopedia.detailedAttackDescription` in [settings.lua](Scripts/settings.lua);
-    - Add interface text for the following entries in `TApp.dbf` and `TAppEdit.dbf`:
+    - Enable `detailedUnitDescription` under `unitEncyclopedia` category in [settings.lua](Scripts/settings.lua) to add the following:
+        - Modifier values for 'HP', 'Immunities' and 'Wards';
+        - Custom unit modifiers.
+    - (Optional) Add extra stats panel:
+        - Add interface text to `TApp.dbf` and `TAppEdit.dbf` that contains `%XPKILL%`, `%EFFHP%` and `%REGEN%` (every keyword is optional), for example:
+            ```
+            X015TA0003
+            \s50;\n\fMedbold;Bounty:\t\fNormal;%XPKILL%\n\fMedbold;Eff. HP:\t\fNormal;%EFFHP%\n\fMedbold;Regen:\t\fNormal;%REGEN%
+            ```
+        - Add text box with name `TXT_STATS_2` to `DLG_R_C_UNIT` in `Interf.dlg` and `ScenEdit.dlg`. Specify added interface text id. For example:
+            ```
+                TEXT	TXT_STATS_2,554,75,664,231,,"X015TA0003",""
+            ```
+        - Displayed regeneration value includes all the factors:
+            - Unit regeneration including modifiers;
+            - Warrior lord bonus;
+            - Race terrain bonus;
+            - Ruins bonus;
+            - Capital / village bonus;
+            - Rioting village penalty.
+  </details>
+- <details>
+    <summary>Adds missing attack information to unit encyclopedia;</summary>
+
+    - Enable `detailedAttackDescription` under `unitEncyclopedia` category in [settings.lua](Scripts/settings.lua) to add the following:
+        - Damage of secondary attack if its not either poison, blister or frostbite;
+        - Power (if applicable) and source (if it matters) of alternative attack;
+        - Value of boost/lower damage if its secondary attack;
+        - Value of lower initiative;
+        - Critical hit indication;
+        - Infinite effect indication;
+        - Drain attack description;
+        - Custom attack sources;
+        - Custom attack reaches;
+        - Custom attack damage ratios;
+        - Custom unit modifiers.
+    - Specify the following interface text ids in [textids.lua](Scripts/textids.lua):
         - `infiniteAttack`
         - `critHitAttack`
         - `critHitDamage`
@@ -143,32 +178,28 @@
         - `drainEffect`
         - `overflowAttack`
         - `overflowText`
-    - Specify corresponding text ids in [textids.lua](Scripts/textids.lua);
+        - `dynamicUpgradeLevel`
+        - `dynamicUpgradeValues`
+    - Add the specified interface text to `TApp.dbf` and `TAppEdit.dbf`;
     - (Optional) Consider adding drain attack description:
         - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;
         - Add `%DRAIN%` keyword where you like to put the description (propose to place it after damage field like `%DAMAGE%\n%DRAIN%`);
         - The keyword is replaced with empty string if attack has no drain effect;
         - Note that you can freely move content between `X005TA0787` and `X005TA0788` if you run out of length limit (because the two strings simply merged together in `X005TA0424`).
-    
-    The following information is added:
-    - Damage of secondary attack if its not either poison, blister or frostbite;
-    - Power (if applicable) and source (if it matters) of alternative attack;
-    - Value of boost/lower damage if its secondary attack;
-    - Value of lower initiative;
-    - Critical hit indication;
-    - Infinite effect indication;
-    - Drain attack description;
-    - Custom attack sources;
-    - Custom attack reaches;
-    - Custom attack damage ratios;
-    - Custom unit modifiers.
   </details>
 - <details>
     <summary>Adds dynamic upgrade values to unit encyclopedia;</summary>
 
-    The values are only added to unit type encyclopedia while building, hiring or adding (specific to Scenario Editor) units to avoid clutter:
-    - Enable (required dependency) `unitEncyclopedia.detailedAttackDescription` in [settings.lua](Scripts/settings.lua);
-    - Enable `unitEncyclopedia.displayDynamicUpgradeValues` in [settings.lua](Scripts/settings.lua).
+    See `unitEncyclopedia` category in [settings.lua](Scripts/settings.lua):
+    - Enable `displayDynamicUpgradeValues`, the values are only shown for unit types to avoid clutter:
+        - While browsing unit buildings in capital;
+        - While hiring from capital, villages or mencenaries;
+        - While adding units to groups (specific to Scenario Editor).
+    - Enable `detailedUnitDescription` and/or `detailedAttackDescription` to show upgrade values for corresponding stats;
+    - Specify the following interface text ids in [textids.lua](Scripts/textids.lua):
+        - `dynamicUpgradeLevel`
+        - `dynamicUpgradeValues`
+    - Add the specified interface text to `TApp.dbf` and `TAppEdit.dbf`.
   </details>
 - <details>
     <summary>Shows effective HP in unit encyclopedia;</summary>
@@ -269,8 +300,10 @@
     - Check `CRIT_HIT` column to enable critical hit for attacks that you wish to customize;
     - `CRIT_DAM` specifies a critical hit damage (0-255%). Falls back to `criticalHitDamage` if empty;
     - `CRIT_POWER` specifies a critical hit chance (0-100%). Falls back to `criticalHitChance` if empty;
-    - Add interface text for `critHitAttack` and `critHitDamage` in `TApp.dbf` and `TAppEdit.dbf`;
-    - Specify corresponding text ids in [textids.lua](Scripts/textids.lua).
+    - Specify the following interface text ids in [textids.lua](Scripts/textids.lua):
+        - `critHitAttack`
+        - `critHitDamage`
+    - Add the specified interface text to `TApp.dbf` and `TAppEdit.dbf`.
 
     ![image](https://user-images.githubusercontent.com/5180699/155902276-44d843ab-b799-4997-ad3c-886bf657107f.png)
   </details>
@@ -441,12 +474,12 @@
     - `DR_REPEAT` specifies whether the `DAM_RATIO` should be applied for every consequent target;
     - `DAM_SPLIT` specifies whether the attack damage (`QTY_DAM`) is split between all the affected targets;
     - `splitDamageMultiplier` in [settings.lua](Scripts/settings.lua) specifies multiplier for `DAM_SPLIT` damage for better late-game scaling (default of 300 max damage split among 6 targets is miserable);
-    - Add interface text for the following entries in `TApp.dbf` and `TAppEdit.dbf`:
+    - Specify the following interface text ids in [textids.lua](Scripts/textids.lua):
         - `ratedDamage`
         - `ratedDamageEqual`
         - `ratedDamageSeparator`
         - `splitDamage`
-    - Specify corresponding text ids in [textids.lua](Scripts/textids.lua);
+    - Add the specified interface text to `TApp.dbf` and `TAppEdit.dbf`;
     - Consider adding vertical align to unit encyclopedia fields to properly accommodate damage ratio text:
         - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;
         - Note how attack name fields `%TWICE%%ALTATTACK%%ATTACK%%SECOND%` are enclosed in vertical align `\p110;` and `\p0;`;
@@ -482,8 +515,12 @@
         - Include `LBOX_MODIFIERS` and `TXT_MODIFIERS` elements to `Interf.dlg` and `ScenEdit.dlg`. [Interf.dlg](Examples/Modifiers/Interf.dlg) and [ScenEdit.dlg](Examples/Modifiers/ScenEdit.dlg) contain examples of modified `DLG_R_C_UNIT` dialog of Unit Encyclopedia;
         - Note that the examples intentionally hide or reposition some native elements: 'Leader abilities', 'Leadership', 'Battles won', locked-unit / upgrade-needed indicators;
         - Try extending the dialog bounds or otherwise rearrange its elements to properly accomodate all the available elements as you like;
-        - Specify `modifiersCaption` text in `TApp.dbf` and `TAppEdit.dbf` and its id in a corresponding entry of [textids.lua](Scripts/textids.lua);
-        - Repeat for `modifiersEmpty`, `modifierDescription` and `nativeModifierDescription` entries;
+        - Specify the following interface text ids in [textids.lua](Scripts/textids.lua):
+            - `modifiersCaption`
+            - `modifiersEmpty`
+            - `modifierDescription`
+            - `nativeModifierDescription`
+        - Add the specified interface text to `TApp.dbf` and `TAppEdit.dbf`.
     - (Optional) Add a new modifier description and icon (it will be displayed in Scenario Editor and Unit Encyclopedia):
         - Create a description in `Tglobal.dbf`. You can use rich formatting like `\fMedBold;Born Leader\n\fSmall;+1 leadership every 3 levels.\fNormal;`;
         - Create `31x36px` icon in `Icons.ff` (using special software like `D2ResExplorer`). **Its name should correspond to modifier id** to be linked with it (similar to spell icons and other game resources), like `G000UM9048`;
@@ -494,11 +531,11 @@
         - (Optional) Specify `DESC_TXT` id that corresponds to `Tglobal.dbf` entry added earlier (defaults to the standard stub `x000tg6000`);
         - (Optional) Specify `DISPLAY` that controls whether the modifier should appear in modifiers panel for Unit Encyclopedia (defaults to false);
     - Refer to [Scripts/Modifiers](Scripts/Modifiers) examples and [luaApi](luaApi.md) to create your modifier script;
-	- (Optional) Define dynamic display functions inside your modifier script to control its appearance on modifiers panel depending on a current unit:
-		- Specify `getModifierDisplay(unit, prev)` function to enable or disable modifier display (defaults to `DISPLAY` in `Gmodif.dbf`);
-		- Specify `getModifierDescTxt(unit, prev)` function to redefine modifier description (defaults to `DESC_TXT` in `Gmodif.dbf`);
-		- Specify `getModifierIconName(unit, prev)` function to redefine modifier icon (defaults to `MODIF_ID` in `Gmodif.dbf`);
-		- See [template.lua](Scripts/Modifiers/template.lua) for examples.
+    - (Optional) Define dynamic display functions inside your modifier script to control its appearance on modifiers panel depending on a current unit:
+        - Specify `getModifierDisplay(unit, prev)` function to enable or disable modifier display (defaults to `DISPLAY` in `Gmodif.dbf`);
+        - Specify `getModifierDescTxt(unit, prev)` function to redefine modifier description (defaults to `DESC_TXT` in `Gmodif.dbf`);
+        - Specify `getModifierIconName(unit, prev)` function to redefine modifier icon (defaults to `MODIF_ID` in `Gmodif.dbf`);
+        - See [template.lua](Scripts/Modifiers/template.lua) for examples.
     - Try assigning the created modifier to item, potion or spell, or simply use it as Scenario Editor modifier;
     - Consider adding vertical align to unit encyclopedia fields to properly accommodate custom modifier bonuses text:
         - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;

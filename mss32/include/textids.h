@@ -47,6 +47,7 @@ struct TextIds
         std::string drainEffect;
         std::string overflowAttack;
         std::string overflowText;
+        std::string dynamicUpgradeLevel;
         std::string dynamicUpgradeValues;
     } interf;
 
