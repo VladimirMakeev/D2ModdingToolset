@@ -48,14 +48,10 @@ struct CMidRuin : public IMidScenarioObject
     int imageIndex;
 };
 
-static_assert(sizeof(CMidRuin) == 164, "Size of CMidRuin structure must be exactly 164 bytes");
-
-static_assert(offsetof(CMidRuin, group) == 36, "CMidRuin::group offset must be 36 bytes");
-
-static_assert(offsetof(CMidRuin, description) == 100,
-              "CMidRuin::description offset must be 100 bytes");
-
-static_assert(offsetof(CMidRuin, looterId) == 128, "CMidRuin::looterId offset must be 128 bytes");
+assert_size(CMidRuin, 164);
+assert_offset(CMidRuin, group, 36);
+assert_offset(CMidRuin, description, 100);
+assert_offset(CMidRuin, looterId, 128);
 
 } // namespace game
 

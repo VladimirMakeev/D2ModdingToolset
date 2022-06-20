@@ -49,8 +49,7 @@ struct CMidgardMapBlock : public IMidScenarioObject
     CMqPoint position;
 };
 
-static_assert(sizeof(CMidgardMapBlock) == 144,
-              "Size of CMidgardMapBlock structure must be exactly 144 bytes");
+assert_size(CMidgardMapBlock, 144);
 
 static constexpr inline TerrainId tileTerrain(std::uint32_t tile)
 {

@@ -39,17 +39,10 @@ struct CMidCampaignScenario
     char wavWin[9];
 };
 
-static_assert(sizeof(CMidCampaignScenario) == 40,
-              "Size of CMidCampaignScenario structure must be exactly 40 bytes");
-
-static_assert(offsetof(CMidCampaignScenario, smkWin) == 13,
-              "CMidCampaignScenario::smkWin offset must be 13 bytes");
-
-static_assert(offsetof(CMidCampaignScenario, smkLose) == 22,
-              "CMidCampaignScenario::smkLose offset must be 22 bytes");
-
-static_assert(offsetof(CMidCampaignScenario, wavWin) == 31,
-              "CMidCampaignScenario::wavWin offset must be 31 bytes");
+assert_size(CMidCampaignScenario, 40);
+assert_offset(CMidCampaignScenario, smkWin, 13);
+assert_offset(CMidCampaignScenario, smkLose, 22);
+assert_offset(CMidCampaignScenario, wavWin, 31);
 
 struct CMidCampaignData
 {
@@ -62,21 +55,16 @@ struct CMidCampaignData
     char padding[3];
 };
 
-static_assert(sizeof(CMidCampaignData) == 60,
-              "Size of CMidCampaignData structure must be exactly 60 bytes");
-
-static_assert(offsetof(CMidCampaignData, name) == 40,
-              "CMidCampaignData::name offset must be 40 bytes");
+assert_size(CMidCampaignData, 60);
+assert_offset(CMidCampaignData, name, 40);
 
 /** Holds campaign data read from CCamp.dbf. */
 struct CMidCampaign : public IMidObject
 {
-    CMidgardID campaignId;
     CMidCampaignData* data;
 };
 
-static_assert(sizeof(CMidCampaign) == 12,
-              "Size of CMidCampaign structure must be exactly 12 bytes");
+assert_size(CMidCampaign, 12);
 
 } // namespace game
 

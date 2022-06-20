@@ -35,8 +35,7 @@ struct MidgardPlanElement
     CMidgardID elementId;
 };
 
-static_assert(sizeof(MidgardPlanElement) == 8,
-              "Size of MidgardPlanElement structure must be exactly 8 bytes");
+assert_size(MidgardPlanElement, 8);
 
 using PlanElements = Vector<MidgardPlanElement>;
 
@@ -49,8 +48,7 @@ struct CMidgardPlan : public IMidScenarioObject
     PlanElements elements2;
 };
 
-static_assert(sizeof(CMidgardPlan) == 5232,
-              "Size of CMidgardPlan structure must be exactly 5232 bytes");
+assert_size(CMidgardPlan, 5232);
 
 namespace CMidgardPlanApi {
 

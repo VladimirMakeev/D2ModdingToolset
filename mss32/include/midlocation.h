@@ -37,14 +37,9 @@ struct CMidLocation
     int radius;
 };
 
-static_assert(sizeof(CMidLocation) == 44,
-              "Size of CMidLocation structure must be exactly 44 bytes");
-
-static_assert(offsetof(CMidLocation, CMidLocation::IMapElement::vftable) == 0,
-              "Vftable offset for IMapElement in CMidLocation structure must be 0 bytes");
-
-static_assert(offsetof(CMidLocation, CMidLocation::IMidScenarioObject::vftable) == 20,
-              "Vftable offset for IMidScenarioObject in CMidLocation structure must be 20 bytes");
+assert_size(CMidLocation, 44);
+assert_offset(CMidLocation, CMidLocation::IMapElement::vftable, 0);
+assert_offset(CMidLocation, CMidLocation::IMidScenarioObject::vftable, 20);
 
 } // namespace game
 

@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2022 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,21 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MENUBASEEDITOR_H
-#define MENUBASEEDITOR_H
+#include "rendererimpl.h"
+#include "version.h"
+#include <array>
 
-#include "fullscreeninterf.h"
+namespace game::CRendererImplApi {
 
-namespace game::editor {
+// clang-format off
+static std::array<IMqRenderer2Vftable*, 4> vftables = {{
+    // Akella
+    (IMqRenderer2Vftable*)0x6e2564,
+    // Russobit
+    (IMqRenderer2Vftable*)0x6e2564,
+    // Gog
+    (IMqRenderer2Vftable*)0x6e050c,
+    // Scenario Editor
+    (IMqRenderer2Vftable*)0x5d6ad4,
+}};
+// clang-format on
 
-/** Base class for all menus used in Scenario Editor. */
-struct CMenuBase : public CFullScreenInterf
+IMqRenderer2Vftable* vftable()
 {
-    void* menuBaseData;
-};
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
 
-assert_size(CMenuBase, 20);
-
-} // namespace game::editor
-
-#endif // MENUBASEEDITOR_H
+} // namespace game::CRendererImplApi

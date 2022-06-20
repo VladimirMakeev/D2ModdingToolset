@@ -46,8 +46,7 @@ struct CMidServerData
     CMidServerLogic* serverLogic;
 };
 
-static_assert(sizeof(CMidServerData) == 32,
-              "Size of CMidServerData structure must be exactly 32 bytes");
+assert_size(CMidServerData, 32);
 
 struct CMidServer
     : public CMqThread
@@ -56,15 +55,10 @@ struct CMidServer
     CMidServerData* data;
 };
 
-static_assert(sizeof(CMidServer) == 16, "Size of CMidServer structure must be exactly 16 bytes");
-
-static_assert(offsetof(CMidServer, CMidServer::CMqThread::vftable) == 0,
-              "Vftable offset for CMqThread in CMidServer structure must be 0 bytes");
-
-static_assert(offsetof(CMidServer, CMidServer::IMqNetSystem::vftable) == 8,
-              "Vftable offset for IMqNetSystem in CMidServer structure must be 8 bytes");
-
-static_assert(offsetof(CMidServer, data) == 12, "CMidServer::data offset must be 12 bytes");
+assert_size(CMidServer, 16);
+assert_offset(CMidServer, CMidServer::CMqThread::vftable, 0);
+assert_offset(CMidServer, CMidServer::IMqNetSystem::vftable, 8);
+assert_offset(CMidServer, data, 12);
 
 } // namespace game
 

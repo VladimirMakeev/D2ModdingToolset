@@ -46,11 +46,9 @@ struct CMidSite : public IMidScenarioObject
     LSiteCategory siteCategory;
 };
 
-static_assert(sizeof(CMidSite) == 120, "Size of CMidSite structure must be exactly 120 bytes");
-
-static_assert(offsetof(CMidSite, mapElement) == 8, "CMidSite::mapElement offset must be 8 bytes");
-
-static_assert(offsetof(CMidSite, title) == 52, "CMidSite::title offset must be 52 bytes");
+assert_size(CMidSite, 120);
+assert_offset(CMidSite, mapElement, 8);
+assert_offset(CMidSite, title, 52);
 
 } // namespace game
 

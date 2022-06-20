@@ -40,11 +40,8 @@ struct CMenuRaceData
     char padding[2];
 };
 
-static_assert(sizeof(CMenuRaceData) == 72,
-              "Size of CMenuRaceData structure must be exactly 72 bytes");
-
-static_assert(offsetof(CMenuRaceData, backgroundImage) == 60,
-              "CMenuRaceData::backgroundImage offset must be 60 bytes");
+assert_size(CMenuRaceData, 72);
+assert_offset(CMenuRaceData, backgroundImage, 60);
 
 /**
  * Base class for race selection menus.
@@ -55,7 +52,7 @@ struct CMenuRace : public CMenuBase
     CMenuRaceData* menuRaceData;
 };
 
-static_assert(sizeof(CMenuRace) == 16, "Size of CMenuRace structure must be exactly 16 bytes");
+assert_size(CMenuRace, 16);
 
 namespace CMenuRaceApi {
 

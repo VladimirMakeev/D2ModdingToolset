@@ -58,8 +58,7 @@ struct IMidServerBuilderVftable
     GetPlayerCount getPlayerCount;
 };
 
-static_assert(sizeof(IMidServerBuilderVftable) == 5 * sizeof(void*),
-              "Size of IMidServerBuilder vftable must have exactly 5 methods");
+assert_vftable_size(IMidServerBuilderVftable, 5);
 
 struct CMidServerBuilderFull : public IMidServerBuilder
 {
@@ -75,8 +74,7 @@ struct CMidServerBuilderFull : public IMidServerBuilder
     char scenarioFilePath[261];
 };
 
-static_assert(sizeof(CMidServerBuilderFull) == 292,
-              "Size of CMidServerBuilderFull structure must be exactly 292 bytes");
+assert_size(CMidServerBuilderFull, 292);
 
 } // namespace game
 

@@ -37,16 +37,14 @@ struct ProtocolInfo
     String name;
 };
 
-static_assert(sizeof(ProtocolInfo) == 44,
-              "Size of ProtocolInfo structure must be exactly 44 bytes");
+assert_size(ProtocolInfo, 44);
 
 struct CMenuProtocolData
 {
     List<ProtocolInfo> protocols;
 };
 
-static_assert(sizeof(CMenuProtocolData) == 16,
-              "Size of CMenuProtocolData structure must be exactly 16 bytes");
+assert_size(CMenuProtocolData, 16);
 
 /**
  * Network protocol selection screen.
@@ -57,8 +55,7 @@ struct CMenuProtocol : public CMenuBase
     CMenuProtocolData* data;
 };
 
-static_assert(sizeof(CMenuProtocol) == 16,
-              "Size of CMenuProtocol structure must be exactly 16 bytes");
+assert_size(CMenuProtocol, 16);
 
 namespace CMenuProtocolApi {
 

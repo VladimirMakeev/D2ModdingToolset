@@ -20,6 +20,8 @@
 #ifndef MIDMSGBOXBUTTONHANDLER_H
 #define MIDMSGBOXBUTTONHANDLER_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct CMidMsgBoxButtonHandlerVftable;
@@ -31,8 +33,7 @@ struct CMidMsgBoxButtonHandler
     CMidMsgBoxButtonHandlerVftable* vftable;
 };
 
-static_assert(sizeof(CMidMsgBoxButtonHandler) == 4,
-              "Size of CMidMsgBoxButtonHandler structure must be exactly 4 bytes");
+assert_size(CMidMsgBoxButtonHandler, 4);
 
 struct CMidMsgBoxButtonHandlerVftable
 {
@@ -49,8 +50,7 @@ struct CMidMsgBoxButtonHandlerVftable
     Handler handler;
 };
 
-static_assert(sizeof(CMidMsgBoxButtonHandlerVftable) == 2 * sizeof(void*),
-              "CMidMsgBoxButtonHandler vftable must have exactly 2 methods");
+assert_vftable_size(CMidMsgBoxButtonHandlerVftable, 2);
 
 } // namespace game
 

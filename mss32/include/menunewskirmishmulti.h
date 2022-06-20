@@ -31,8 +31,7 @@ namespace game {
 struct CMenuNewSkirmishMulti : public CMenuNewSkirmish
 { };
 
-static_assert(sizeof(CMenuNewSkirmishMulti) == 12,
-              "Size of CMenuNewSkirmishMulti structure must be exactly 12 bytes");
+assert_size(CMenuNewSkirmishMulti, 12);
 
 namespace CMenuNewSkirmishMultiApi {
 

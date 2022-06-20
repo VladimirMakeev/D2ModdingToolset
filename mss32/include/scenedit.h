@@ -20,6 +20,7 @@
 #ifndef SCENEDIT_H
 #define SCENEDIT_H
 
+#include "d2assert.h"
 #include <cstddef>
 
 namespace game {
@@ -34,7 +35,7 @@ struct CScenEdit
     CScenEditData* data;
 };
 
-static_assert(sizeof(CScenEdit) == 4, "Size of CScenEdit structure must be exactly 4 bytes");
+assert_size(CScenEdit, 4);
 
 struct CScenEditData
 {
@@ -44,19 +45,15 @@ struct CScenEditData
     char unknown3[1080];
 };
 
-static_assert(sizeof(CScenEditData) == 1108,
-              "Size of CScenEditData structure must be exactly 1108 bytes");
-
-static_assert(offsetof(CScenEditData, unknown2) == 24,
-              "CScenEditData::unknown2 offset must be 24 bytes");
+assert_size(CScenEditData, 1108);
+assert_offset(CScenEditData, unknown2, 24);
 
 struct CScenEditDataUnknown
 {
     CScenEditDataUnknownData* data;
 };
 
-static_assert(sizeof(CScenEditDataUnknown) == 4,
-              "Size of CScenEditDataUnknown structure must be exactly 4 bytes");
+assert_size(CScenEditDataUnknown, 4);
 
 struct CScenEditDataUnknownData
 {
@@ -68,8 +65,7 @@ struct CScenEditDataUnknownData
     int unknown5;
 };
 
-static_assert(sizeof(CScenEditDataUnknownData) == 24,
-              "Size of CScenEditDataUnknownData structure must be exactly 24 bytes");
+assert_size(CScenEditDataUnknownData, 24);
 
 namespace CScenEditApi {
 

@@ -20,6 +20,8 @@
 #ifndef MQRENDERER2_H
 #define MQRENDERER2_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct IMqRenderer2Vftable;
@@ -40,8 +42,7 @@ struct RenderStatistics
     int blitCount;
 };
 
-static_assert(sizeof(RenderStatistics) == 32,
-              "Size of RenderStatistics structure must be exactly 32 bytes");
+assert_size(RenderStatistics, 32);
 
 struct IMqRenderer2
 {
@@ -131,8 +132,7 @@ struct IMqRenderer2Vftable
     Method12 method12;
 };
 
-static_assert(sizeof(IMqRenderer2Vftable) == 13 * sizeof(void*),
-              "IMqRenderer2 vftable must have exactly 13 methods");
+assert_vftable_size(IMqRenderer2Vftable, 13);
 
 } // namespace game
 

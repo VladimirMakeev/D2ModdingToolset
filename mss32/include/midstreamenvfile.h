@@ -53,8 +53,7 @@ struct CMidStreamEnvFile : public IMidgardStreamEnv
     Set<StreamEnvFileInfo> streams;
 };
 
-static_assert(sizeof(CMidStreamEnvFile) == 84,
-              "Size of CMidStreamEnvFile structure must be exactly 84 bytes");
+assert_size(CMidStreamEnvFile, 84);
 
 } // namespace game
 

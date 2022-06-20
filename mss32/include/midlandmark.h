@@ -35,8 +35,7 @@ struct CMidLandmark : public IMidScenarioObject
     StringAndId description;
 };
 
-static_assert(sizeof(CMidLandmark) == 44,
-              "Size of CMidLandmark structure must be exactly 44 bytes");
+assert_size(CMidLandmark, 44);
 
 } // namespace game
 

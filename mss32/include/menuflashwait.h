@@ -27,8 +27,7 @@ namespace game {
 struct CMenuFlashWait : public CPopupDialogInterf
 { };
 
-static_assert(sizeof(CMenuFlashWait) == 16,
-              "Size of CMenuFlashWait structure must be exactly 16 bytes");
+assert_size(CMenuFlashWait, 16);
 
 namespace CMenuFlashWaitApi {
 

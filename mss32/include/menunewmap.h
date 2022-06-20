@@ -51,8 +51,7 @@ struct CMenuNewMapData
     Vector<int> unknown2;
 };
 
-static_assert(sizeof(CMenuNewMapData) == 48,
-              "Size of CMenuNewMapData structure must be exactly 48 bytes");
+assert_size(CMenuNewMapData, 48);
 
 /** Represents DLG_NEW_MAP from ScenEdit.dlg. */
 struct CMenuNewMap : public CMenuBase
@@ -60,7 +59,7 @@ struct CMenuNewMap : public CMenuBase
     CMenuNewMapData* data;
 };
 
-static_assert(sizeof(CMenuNewMap) == 24, "Size of CMenuNewMap structure must be exactly 24 bytes");
+assert_size(CMenuNewMap, 24);
 
 namespace CMenuNewMapApi {
 

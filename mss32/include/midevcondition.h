@@ -72,8 +72,7 @@ struct CMidEvConditionVftable
     Stream stream;
 };
 
-static_assert(sizeof(CMidEvConditionVftable) == 6 * sizeof(void*),
-              "CMidEvCondition vftable must have exactly 6 methods");
+assert_vftable_size(CMidEvConditionVftable, 6);
 
 namespace CMidEvConditionApi {
 

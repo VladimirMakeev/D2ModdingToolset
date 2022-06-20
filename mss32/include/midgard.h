@@ -97,20 +97,12 @@ struct CMidgardData
     char padding2[3];
 };
 
-static_assert(sizeof(CMidgardData) == 252,
-              "Size of CMidgardData structure must be exactly 252 bytes");
-
-static_assert(offsetof(CMidgardData, client) == 40, "CMidgardData::client offset must be 40 bytes");
-
-static_assert(offsetof(CMidgardData, host) == 50, "CMidgardData::host offset must be 50 bytes");
-
-static_assert(offsetof(CMidgardData, settings) == 60,
-              "CMidgardData::settings offset must be 60 bytes");
-
-static_assert(offsetof(CMidgardData, closeEvent) == 156,
-              "CMidgardData::closeEvent offset must be 156 bytes");
-
-static_assert(offsetof(CMidgardData, fps) == 244, "CMidgardData::fps offset must be 244 bytes");
+assert_size(CMidgardData, 252);
+assert_offset(CMidgardData, client, 40);
+assert_offset(CMidgardData, host, 50);
+assert_offset(CMidgardData, settings, 60);
+assert_offset(CMidgardData, closeEvent, 156);
+assert_offset(CMidgardData, fps, 244);
 
 struct CMidgard
     : public IMqNetTraffic
@@ -119,15 +111,10 @@ struct CMidgard
     CMidgardData* data;
 };
 
-static_assert(sizeof(CMidgard) == 12, "Size of CMidgard structure must be exactly 12 bytes");
-
-static_assert(offsetof(CMidgard, CMidgard::IMqNetTraffic::vftable) == 0,
-              "Vftable offset for IMqNetTraffic in CMidgard structure must be 0 bytes");
-
-static_assert(offsetof(CMidgard, CMidgard::IMqAnimation::vftable) == 4,
-              "Vftable offset for IMqAnimation in CMidgard structure must be 4 bytes");
-
-static_assert(offsetof(CMidgard, data) == 8, "CMidgard::data offset must be 8 bytes");
+assert_size(CMidgard, 12);
+assert_offset(CMidgard, CMidgard::IMqNetTraffic::vftable, 0);
+assert_offset(CMidgard, CMidgard::IMqAnimation::vftable, 4);
+assert_offset(CMidgard, data, 8);
 
 namespace CMidgardApi {
 

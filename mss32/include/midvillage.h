@@ -37,14 +37,9 @@ struct CMidVillage : public CFortification
     mq_c_s<LRaceCategory> raceData;
 };
 
-static_assert(sizeof(CMidVillage) == 184,
-              "Size of CMidVillage structure must be exactly 184 bytes");
-
-static_assert(offsetof(CMidVillage, tierLevel) == 144,
-              "CMidVillage::tierLevel offset must be 144 bytes");
-
-static_assert(offsetof(CMidVillage, raceData.data) == 168,
-              "CMidVillage::raceData.data offset must be 168 bytes");
+assert_size(CMidVillage, 184);
+assert_offset(CMidVillage, tierLevel, 144);
+assert_offset(CMidVillage, raceData.data, 168);
 
 } // namespace game
 

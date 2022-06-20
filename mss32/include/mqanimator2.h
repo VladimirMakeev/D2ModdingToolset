@@ -20,6 +20,8 @@
 #ifndef MQANIMATOR2_H
 #define MQANIMATOR2_H
 
+#include "d2assert.h"
+
 namespace game {
 
 struct IMqAnimator2Vftable;
@@ -41,8 +43,7 @@ struct IMqAnimator2Vftable
     HandleAnimation removeFastAnimation;
 };
 
-static_assert(sizeof(IMqAnimator2Vftable) == 4 * sizeof(void*),
-              "IMqAnimator2 vftable must have exactly 4 methods");
+assert_vftable_size(IMqAnimator2Vftable, 4);
 
 } // namespace game
 

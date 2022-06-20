@@ -46,15 +46,14 @@ struct CMidMusicData
     char unknown4[12];
 };
 
-static_assert(sizeof(CMidMusicData) == 632,
-              "Size of CMidMusicData structure must be exactly 632 bytes");
+assert_size(CMidMusicData, 632);
 
 struct CMidMusic
 {
     CMidMusicData* data;
 };
 
-static_assert(sizeof(CMidMusic) == 4, "Size of CMidMusic structure must be exactly 4 bytes");
+assert_size(CMidMusic, 4);
 
 namespace CMidMusicApi {
 

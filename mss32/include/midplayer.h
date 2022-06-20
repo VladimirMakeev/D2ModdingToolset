@@ -58,14 +58,10 @@ struct CMidPlayer : public IMidScenarioObject
     Set<std::uint64_t> exmapData; // Each node contains 8 bytes of data
 };
 
-static_assert(sizeof(CMidPlayer) == 176, "Size of CMidPlayer structure must be exactly 176 bytes");
-
-static_assert(offsetof(CMidPlayer, bank) == 112, "CMidPlayer::bank offset must be 112 bytes");
-
-static_assert(offsetof(CMidPlayer, spellBank) == 124,
-              "CMidPlayer::spellBank offset must be 124 bytes");
-
-static_assert(offsetof(CMidPlayer, isHuman) == 136, "CMidPlayer::isHuman offset must be 136 bytes");
+assert_size(CMidPlayer, 176);
+assert_offset(CMidPlayer, bank, 112);
+assert_offset(CMidPlayer, spellBank, 124);
+assert_offset(CMidPlayer, isHuman, 136);
 
 } // namespace game
 

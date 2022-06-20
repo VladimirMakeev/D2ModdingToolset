@@ -58,14 +58,9 @@ struct CMidServerLogicCoreData
     char unknown8[4];
 };
 
-static_assert(sizeof(CMidServerLogicCoreData) == 72,
-              "Size of CMidServerLogicCoreData structure must be exactly 72 bytes");
-
-static_assert(offsetof(CMidServerLogicCoreData, list) == 24,
-              "CMidServerLogicCoreData::list offset must be 24 bytes");
-
-static_assert(offsetof(CMidServerLogicCoreData, players) == 48,
-              "CMidServerLogicCoreData::players offset must be 48 bytes");
+assert_size(CMidServerLogicCoreData, 72);
+assert_offset(CMidServerLogicCoreData, list, 24);
+assert_offset(CMidServerLogicCoreData, players, 48);
 
 struct CMidServerLogicCore : public IMqNetTraffic
 {

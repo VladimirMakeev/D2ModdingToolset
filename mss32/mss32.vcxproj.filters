@@ -1025,6 +1025,9 @@
     <ClCompile Include="src\imageptrvector.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\rendererimpl.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
     <ClCompile Include="src\midcondgamemode.cpp">
       <Filter>features\custom event conditions</Filter>
     </ClCompile>

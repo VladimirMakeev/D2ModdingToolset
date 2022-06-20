@@ -64,8 +64,7 @@ struct CMidEvEffectVftable
     Stream stream;
 };
 
-static_assert(sizeof(CMidEvEffectVftable) == 5 * sizeof(void*),
-              "CMidEvEffect vftable must have exactly 5 methods");
+assert_vftable_size(CMidEvEffectVftable, 5);
 
 namespace CMidEvEffectApi {
 

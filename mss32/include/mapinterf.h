@@ -46,8 +46,7 @@ struct CMapInterfData
     MapChangeAction selectedAction;
 };
 
-static_assert(sizeof(CMapInterfData) == 4,
-              "Size of CMapInterfData structure must be exactly 4 bytes");
+assert_size(CMapInterfData, 4);
 
 /** Represents DLG_MAP from ScenEdit.dlg. */
 struct CMapInterf : public CIsoView
@@ -55,10 +54,8 @@ struct CMapInterf : public CIsoView
     CMapInterfData* data;
 };
 
-static_assert(sizeof(CMapInterf) == 24, "Size of CMapInterf structure must be exactly 24 bytes");
-
-static_assert(offsetof(CMapInterf, taskManagerHolder) == 8,
-              "CMapInterf::ITaskManagerHolder offset must be 8 bytes");
+assert_size(CMapInterf, 24);
+assert_offset(CMapInterf, taskManagerHolder, 8);
 
 static inline CMapInterf* castTaskManagerToMapInterf(ITaskManagerHolder* taskManager)
 {

@@ -20,6 +20,7 @@
 #ifndef DBFCOLUMN_H
 #define DBFCOLUMN_H
 
+#include "d2assert.h"
 #include <cstddef>
 #include <cstdint>
 
@@ -54,12 +55,9 @@ struct DbfColumn
     bool indexField;
 };
 
-static_assert(sizeof(DbfColumn) == 32, "Size of DbfColumn structure must be exactly 32 bytes");
-
-static_assert(offsetof(DbfColumn, dataAddress) == 12,
-              "DbfColumn::dataAddress offset must be 12 bytes");
-static_assert(offsetof(DbfColumn, workAreaId) == 20,
-              "DbfColumn::workAreaId offset must be 20 bytes");
+assert_size(DbfColumn, 32);
+assert_offset(DbfColumn, dataAddress, 12);
+assert_offset(DbfColumn, workAreaId, 20);
 
 } // namespace utils
 

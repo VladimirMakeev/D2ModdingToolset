@@ -36,7 +36,7 @@ struct CMidSubRace : public IMidScenarioObject
     int banner;
 };
 
-static_assert(sizeof(CMidSubRace) == 40, "Size of CMidSubRace structure must be exactly 40 bytes");
+assert_size(CMidSubRace, 40);
 
 } // namespace game
 

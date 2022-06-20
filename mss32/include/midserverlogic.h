@@ -50,32 +50,15 @@ struct CMidServerLogicData2
     Set<void> list2;
 };
 
-static_assert(sizeof(CMidServerLogicData2) == 164,
-              "Size of CMidServerLogicData2 structure must be exactly 164 bytes");
-
-static_assert(offsetof(CMidServerLogicData2, array) == 12,
-              "CMidServerLogicData2::array offset must be 12 bytes");
-
-static_assert(offsetof(CMidServerLogicData2, array2) == 28,
-              "CMidServerLogicData2::array2 offset must be 28 bytes");
-
-static_assert(offsetof(CMidServerLogicData2, array3) == 44,
-              "CMidServerLogicData2::array3 offset must be 44 bytes");
-
-static_assert(offsetof(CMidServerLogicData2, array4) == 60,
-              "CMidServerLogicData2::array4 offset must be 60 bytes");
-
-static_assert(offsetof(CMidServerLogicData2, array5) == 76,
-              "CMidServerLogicData2::array5 offset must be 76 bytes");
-
-static_assert(offsetof(CMidServerLogicData2, array6) == 92,
-              "CMidServerLogicData2::array6 offset must be 92 bytes");
-
-static_assert(offsetof(CMidServerLogicData2, list) == 108,
-              "CMidServerLogicData2::list offset must be 108 bytes");
-
-static_assert(offsetof(CMidServerLogicData2, list2) == 136,
-              "CMidServerLogicData2::list2 offset must be 136 bytes");
+assert_size(CMidServerLogicData2, 164);
+assert_offset(CMidServerLogicData2, array, 12);
+assert_offset(CMidServerLogicData2, array2, 28);
+assert_offset(CMidServerLogicData2, array3, 44);
+assert_offset(CMidServerLogicData2, array4, 60);
+assert_offset(CMidServerLogicData2, array5, 76);
+assert_offset(CMidServerLogicData2, array6, 92);
+assert_offset(CMidServerLogicData2, list, 108);
+assert_offset(CMidServerLogicData2, list2, 136);
 
 struct CMidServerLogic
     : public CMidServerLogicCore
@@ -110,35 +93,16 @@ struct CMidServerLogic
     BattleMsgData* battleMsgData;
 };
 
-static_assert(sizeof(CMidServerLogic) == 324,
-              "Size of CMidServerLogic structure must be exactly 324 bytes");
-
-static_assert(offsetof(CMidServerLogic, CMidServerLogic::IMidMsgSender::vftable) == 8,
-              "Vftable offset for IMidMsgSender in CMidServerLogic structure must be 8 bytes");
-
-static_assert(offsetof(CMidServerLogic, data) == 24,
-              "CMidServerLogic::data offset must be 24 bytes");
-
-static_assert(offsetof(CMidServerLogic, array) == 36,
-              "CMidServerLogic::array offset must be 36 bytes");
-
-static_assert(offsetof(CMidServerLogic, playersIdList) == 56,
-              "CMidServerLogic::playersIdList offset must be 56 bytes");
-
-static_assert(offsetof(CMidServerLogic, data2) == 80,
-              "CMidServerLogic::data2 offset must be 80 bytes");
-
-static_assert(offsetof(CMidServerLogic, unknown8) == 244,
-              "CMidServerLogic::unknown8 offset must be 244 bytes");
-
-static_assert(offsetof(CMidServerLogic, unknown11) == 272,
-              "CMidServerLogic::unknown11 offset must be 272 bytes");
-
-static_assert(offsetof(CMidServerLogic, list2) == 300,
-              "CMidServerLogic::list2 offset must be 300 bytes");
-
-static_assert(offsetof(CMidServerLogic, unknown17) == 316,
-              "CMidServerLogic::unknown17 offset must be 316 bytes");
+assert_size(CMidServerLogic, 324);
+assert_offset(CMidServerLogic, CMidServerLogic::IMidMsgSender::vftable, 8);
+assert_offset(CMidServerLogic, data, 24);
+assert_offset(CMidServerLogic, array, 36);
+assert_offset(CMidServerLogic, playersIdList, 56);
+assert_offset(CMidServerLogic, data2, 80);
+assert_offset(CMidServerLogic, unknown8, 244);
+assert_offset(CMidServerLogic, unknown11, 272);
+assert_offset(CMidServerLogic, list2, 300);
+assert_offset(CMidServerLogic, unknown17, 316);
 
 namespace CMidServerLogicApi {
 

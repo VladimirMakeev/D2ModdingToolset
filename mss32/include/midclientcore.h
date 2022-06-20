@@ -43,8 +43,7 @@ struct CMidClientCoreData
     CMidHotseatManager* hotseatManager;
 };
 
-static_assert(sizeof(CMidClientCoreData) == 32,
-              "Size of CMidClientCoreData structure must be exactly 32 bytes");
+assert_size(CMidClientCoreData, 32);
 
 struct CMidClientCore : public IMqNetSystem
 {

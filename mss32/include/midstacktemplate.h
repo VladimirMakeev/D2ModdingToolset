@@ -64,14 +64,9 @@ struct CMidStackTemplate : public IMidScenarioObject
     int aiPriority;
 };
 
-static_assert(sizeof(CMidStackTemplate) == 112,
-              "Size of CMidStackTemplate structure must be exactly 112 bytes");
-
-static_assert(offsetof(CMidStackTemplate, orderTargetId) == 28,
-              "CMidStackTemplate::orderTargetId offset must be 28 bytes");
-
-static_assert(offsetof(CMidStackTemplate, facing) == 89,
-              "CMidStackTemplate::facing offset must be 89 bytes");
+assert_size(CMidStackTemplate, 112);
+assert_offset(CMidStackTemplate, orderTargetId, 28);
+assert_offset(CMidStackTemplate, facing, 89);
 
 } // namespace game
 

@@ -34,8 +34,7 @@ struct CMidStreamFile : public IMidgardStream
     char padding[3];
 };
 
-static_assert(sizeof(CMidStreamFile) == 12,
-              "Size of CMidStreamFile structure must be exactly 12 bytes");
+assert_size(CMidStreamFile, 12);
 
 } // namespace game
 

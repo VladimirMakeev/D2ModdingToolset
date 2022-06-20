@@ -64,8 +64,7 @@ struct IMqNetSessEnumVftable
     GetPlayers getPlayers;
 };
 
-static_assert(sizeof(IMqNetSessEnumVftable) == 6 * sizeof(void*),
-              "IMqNetSessEnum vftable must have exactly 6 methods");
+assert_vftable_size(IMqNetSessEnumVftable, 6);
 
 } // namespace game
 
