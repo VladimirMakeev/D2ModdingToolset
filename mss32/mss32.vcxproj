@@ -218,6 +218,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\campaignstream.cpp" />
     <ClCompile Include="src\capitaldata.cpp" />
     <ClCompile Include="src\capitaldatlist.cpp" />
+    <ClCompile Include="src\categorylist.cpp" />
     <ClCompile Include="src\citystackinterf.cpp" />
     <ClCompile Include="src\cmdbattlechooseactionmsg.cpp" />
     <ClCompile Include="src\cmdbattleendmsg.cpp" />
@@ -577,6 +578,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\catalogvalidate.h" />
     <ClInclude Include="include\categories.h" />
     <ClInclude Include="include\categoryids.h" />
+    <ClInclude Include="include\categorylist.h" />
     <ClInclude Include="include\citystackinterf.h" />
     <ClInclude Include="include\cmdbattlechooseactionmsg.h" />
     <ClInclude Include="include\cmdbattleendmsg.h" />
