@@ -63,6 +63,9 @@ const game::CDynUpgrade* getDynUpgrade(const game::IUsUnit* unit, int upgradeNum
 int getCityProtection(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* unitId);
 
 int computeUnitEffectiveHp(const game::CMidUnit* unit, int armor);
+/** Returns unit including bonus regen from lord, fort/ruin and terrain. */
+int getUnitRegen(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* unitId);
+
 int computeShatterDamage(const game::CMidgardID* unitId,
                          const game::IUsSoldier* soldier,
                          const game::BattleMsgData* battleMsgData,

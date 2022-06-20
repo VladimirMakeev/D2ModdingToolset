@@ -25,17 +25,25 @@
 #include "battlemsgdata.h"
 #include "customattacks.h"
 #include "dynamiccast.h"
+#include "fortcategory.h"
 #include "fortification.h"
 #include "game.h"
 #include "gameutils.h"
 #include "globaldata.h"
+#include "globalvariables.h"
 #include "immunecat.h"
 #include "log.h"
+#include "lordtype.h"
 #include "midgardid.h"
+#include "midgardmap.h"
+#include "midgardmapblock.h"
 #include "midgardobjectmap.h"
+#include "midplayer.h"
 #include "midstack.h"
 #include "midunit.h"
+#include "midvillage.h"
 #include "modifierutils.h"
+#include "racetype.h"
 #include "settings.h"
 #include "ummodifier.h"
 #include "unitgenerator.h"
@@ -331,6 +339,122 @@ int computeUnitEffectiveHp(const game::CMidUnit* unit, int armor)
 
     double factor = 1 - (double)armor / 100;
     return lround((double)unit->currentHp / factor);
+}
+
+static int getLordRegenBonus(const game::CMidPlayer* player)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& globalApi = GlobalDataApi::get();
+
+    const auto globalData = *globalApi.getGlobalData();
+    const auto vars = *globalData->globalVariables;
+
+    if (!player || player->capturedById != emptyId) {
+        return 0;
+    }
+
+    if (fn.isRaceCategoryUnplayable(&player->raceType->data->raceType)) {
+        return 0;
+    }
+
+    const auto lords = globalData->lords;
+    const auto lordType = (const TLordType*)globalApi.findById(lords, &player->lordId);
+    if (lordType->data->lordCategory.id == LordCategories::get().warrior->id) {
+        return vars->fighterLeaderRegen;
+    }
+
+    return 0;
+}
+
+static int getFortRegen(int base,
+                        const game::IMidgardObjectMap* objectMap,
+                        const game::CFortification* fort)
+{
+    using namespace game;
+
+    auto vftable{static_cast<const CFortificationVftable*>(fort->vftable)};
+    auto category{vftable->getCategory(fort)};
+    if (category->id == FortCategories::get().village->id) {
+        auto village{static_cast<const CMidVillage*>(fort)};
+        if (village->riotTurn > 0) {
+            return 0; // Units in rioting villages take damage instead of regeneration
+        }
+    }
+
+    int regen;
+    return base + *vftable->getRegen(fort, &regen, objectMap);
+}
+
+static int getTerrainRegenBonus(const game::IMidgardObjectMap* objectMap,
+                                const game::CMidPlayer* player,
+                                const game::CMidStack* stack)
+{
+    using namespace game;
+
+    auto map = getMidgardMap(objectMap);
+    auto block = getMidgardMapBlock(objectMap, &map->id, map->mapSize, stack->position.x,
+                                    stack->position.y);
+
+    LTerrainCategory terrain{};
+    if (!CMidgardMapBlockApi::get().getTerrain(block, &terrain, &stack->position)) {
+        return 0;
+    }
+
+    auto raceTerrain = getTerrainCategory(&player->raceType->data->raceType);
+    if (terrain.id == raceTerrain->id) {
+        return 10; // Strictly hard-coded in game, not even const data
+    }
+
+    return 0;
+}
+
+// See CEffectRegenUnitsApply, CEffectRegenRuinsApply
+int getUnitRegen(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& globalApi = GlobalDataApi::get();
+
+    const auto globalData = *globalApi.getGlobalData();
+    const auto vars = *globalData->globalVariables;
+
+    const CMidPlayer* player = nullptr;
+    const CFortification* fort = nullptr;
+    const CMidRuin* ruin = nullptr;
+    const CMidStack* stack = getStackByUnitId(objectMap, unitId);
+    if (stack) {
+        player = getPlayer(objectMap, &stack->ownerId);
+        if (stack->insideId != emptyId) {
+            fort = getFort(objectMap, &stack->insideId);
+        }
+    } else {
+        fort = getFortByUnitId(objectMap, unitId);
+        if (fort) {
+            player = getPlayer(objectMap, &fort->ownerId);
+        } else {
+            ruin = getRuinByUnitId(objectMap, unitId);
+        }
+    }
+
+    auto unit = fn.findUnitById(objectMap, unitId);
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+
+    int result = *soldier->vftable->getRegen(soldier);
+    result += getLordRegenBonus(player);
+    if (fort) {
+        result += getFortRegen(result, objectMap, fort);
+    } else if (ruin) {
+        // Units in ruins have fixed regen value, no other factors apply
+        result = vars->regenRuin;
+    } else {
+        // Terrain bonus apply only outside
+        result += getTerrainRegenBonus(objectMap, player, stack);
+    }
+
+    return std::clamp(result, 0, 100);
 }
 
 int computeShatterDamage(const game::CMidgardID* unitId,
