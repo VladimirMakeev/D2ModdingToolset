@@ -24,7 +24,7 @@
 namespace game::LeaderAbilityCategories {
 
 // clang-format off
-static std::array<Categories, 3> categories = {{
+static std::array<Categories, 4> categories = {{
     // Akella
     Categories{
         (LLeaderAbility*)0x8395e8,
@@ -66,6 +66,20 @@ static std::array<Categories, 3> categories = {{
         (LLeaderAbility*)0x837618,
         (LLeaderAbility*)0x837628,
         (LLeaderAbility*)0x837638,
+    },
+    // Scenario Editor
+    Categories{
+        (LLeaderAbility*)0x665840,
+        (LLeaderAbility*)0x665850,
+        (LLeaderAbility*)0x665860,
+        (LLeaderAbility*)0x665870,
+        (LLeaderAbility*)0x665880,
+        (LLeaderAbility*)0x665890,
+        (LLeaderAbility*)0x6658A0,
+        (LLeaderAbility*)0x6658B0,
+        (LLeaderAbility*)0x6658C0,
+        (LLeaderAbility*)0x6658D0,
+        (LLeaderAbility*)0x6658E0,
     }
 }};
 // clang-format on

@@ -30,6 +30,7 @@
 #include "gameutils.h"
 #include "globaldata.h"
 #include "immunecat.h"
+#include "leaderabilitycat.h"
 #include "log.h"
 #include "midgardid.h"
 #include "midgardobjectmap.h"
@@ -42,6 +43,7 @@
 #include "unitmodifier.h"
 #include "ussoldier.h"
 #include "ussoldierimpl.h"
+#include "usstackleader.h"
 #include "usunitimpl.h"
 #include "utils.h"
 #include <fmt/format.h>
@@ -386,6 +388,20 @@ bool isStackLeaderAndAllowedToUseBattleItems(const game::IMidgardObjectMap* obje
         return userSettings().allowBattleItems.onDoppelganger;
 
     return true;
+}
+
+bool hasCriticalHitLeaderAbility(const game::IUsUnit* unitImpl)
+{
+    using namespace game;
+
+    const auto& abilities{LeaderAbilityCategories::get()};
+
+    auto stackLeader{gameFunctions().castUnitImplToStackLeader(unitImpl)};
+    if (!stackLeader) {
+        return false;
+    }
+
+    return stackLeader->vftable->hasAbility(stackLeader, abilities.criticalHit);
 }
 
 } // namespace hooks
