@@ -21,6 +21,7 @@
 #define MIDUNITDESCRIPTOR_H
 
 #include "encunitdescriptor.h"
+#include "midgardid.h"
 
 namespace game {
 
