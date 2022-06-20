@@ -481,4 +481,52 @@ game::IAttack* wrapAltAttack(const game::IUsUnit* unit, game::IAttack* attack)
     return result;
 }
 
+void getEditorModifiers(const game::CMidUnit* unit, game::IdList* value)
+{
+    using namespace game;
+
+    const auto& unitApi = CMidUnitApi::get();
+    const auto& idListApi = IdListApi::get();
+    const auto& idApi = CMidgardIDApi::get();
+
+    unitApi.getModifiers(value, unit);
+
+    for (auto it = value->begin(); it != value->end();) {
+        auto typeIndex = idApi.getTypeIndex(&(*it));
+        if (0x9000 <= typeIndex && typeIndex <= 0x9999) { // Scenario Editor modifiers
+            ++it;
+        } else {
+            idListApi.erase(value, it++);
+        }
+    }
+}
+
+int applyModifiers(int base,
+                   const game::IdList& modifiers,
+                   game::ModifierElementTypeFlag type,
+                   bool percent)
+{
+    using namespace game;
+
+    auto& globalApi{GlobalDataApi::get()};
+    auto globalData{*globalApi.getGlobalData()};
+
+    int result = base;
+    for (const auto& modifier : modifiers) {
+        auto unitModifier{(TUnitModifier*)globalApi.findById(globalData->modifiers, &modifier)};
+        auto umModifier{unitModifier->data->modifier};
+
+        if (umModifier->vftable->hasElement(umModifier, type)) {
+            int value = umModifier->vftable->getFirstElementValue(umModifier);
+            if (percent) {
+                result += result * value / 100;
+            } else {
+                result += value;
+            }
+        }
+    }
+
+    return result;
+}
+
 } // namespace hooks
