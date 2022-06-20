@@ -192,9 +192,6 @@ AttackDescriptor::AttackDescriptor(game::IEncUnitDescriptor* descriptor,
 {
     using namespace hooks;
 
-    const auto& rtti = game::RttiApi::rtti();
-    const auto dynamicCast = game::RttiApi::get().dynamicCast;
-
     bool useDescriptor;
     auto attack = getAttack(descriptor, type, global, &useDescriptor);
     if (attack == nullptr) {
@@ -264,17 +261,15 @@ AttackDescriptor::AttackDescriptor(game::IEncUnitDescriptor* descriptor,
     data.critHit = attackHasCritHit(data.classId) ? attack->vftable->getCritHit(attack) : false;
 
     if (!data.critHit && attackHasCritHit(data.classId)) {
-        auto midUnitDescriptor = (const game::CMidUnitDescriptor*)
-            dynamicCast(descriptor, 0, rtti.IEncUnitDescriptorType, rtti.CMidUnitDescriptorType, 0);
-
+        auto midUnitDescriptor = castToMidUnitDescriptor(descriptor);
         if (global || !midUnitDescriptor) {
             game::CMidgardID globalUnitImplId;
             descriptor->vftable->getGlobalUnitImplId(descriptor, &globalUnitImplId);
             auto globalUnitImpl = hooks::getGlobalUnitImpl(&globalUnitImplId);
 
-            data.critHit = hooks::hasCriticalHitLeaderAbility(globalUnitImpl);
+            data.critHit = hasCriticalHitLeaderAbility(globalUnitImpl);
         } else {
-            data.critHit = hooks::hasCriticalHitLeaderAbility(midUnitDescriptor->unit->unitImpl);
+            data.critHit = hasCriticalHitLeaderAbility(midUnitDescriptor->unit->unitImpl);
         }
     }
 
