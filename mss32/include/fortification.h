@@ -67,9 +67,9 @@ struct CFortificationVftable : public IMidScenarioObjectVftable
     GetCString getDescription;
 
     /** Returns daily hp regeneration value. */
-    using GetRegen = int*(__thiscall*)(CFortification* thisptr,
+    using GetRegen = int*(__thiscall*)(const CFortification* thisptr,
                                        int* regen,
-                                       IMidgardObjectMap* objectMap);
+                                       const IMidgardObjectMap* objectMap);
     GetRegen getRegen;
 
     using GetInt = int(__thiscall*)(CFortification* thisptr, IMidgardObjectMap* objectMap);
