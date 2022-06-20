@@ -1530,11 +1530,7 @@ int __stdcall computeDamageHooked(const game::IMidgardObjectMap* objectMap,
         bool critHit = attack->vftable->getCritHit(attack);
         if (!critHit) {
             auto unit = fn.findUnitById(objectMap, attackerUnitId);
-            auto stackLeader = fn.castUnitImplToStackLeader(unit->unitImpl);
-
-            const auto& abilities = LeaderAbilityCategories::get();
-            critHit = stackLeader
-                      && stackLeader->vftable->hasAbility(stackLeader, abilities.criticalHit);
+            critHit = hasCriticalHitLeaderAbility(unit->unitImpl);
         }
 
         if (critHit) {
