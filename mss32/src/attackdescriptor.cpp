@@ -30,6 +30,7 @@
 #include "settings.h"
 #include "ummodifier.h"
 #include "unitutils.h"
+#include "usunitimpl.h"
 
 namespace utils {
 
@@ -197,6 +198,9 @@ AttackDescriptor::AttackDescriptor(game::IEncUnitDescriptor* descriptor,
 {
     using namespace hooks;
 
+    const auto& rtti = game::RttiApi::rtti();
+    const auto dynamicCast = game::RttiApi::get().dynamicCast;
+
     bool useDescriptor;
     auto attack = getAttack(descriptor, type, global, &useDescriptor);
     if (attack == nullptr) {
@@ -263,6 +267,21 @@ AttackDescriptor::AttackDescriptor(game::IEncUnitDescriptor* descriptor,
     data.power = computePower(data.power, modifiers, data.classId);
     data.infinite = attackHasInfinite(data.classId) ? attack->vftable->getInfinite(attack) : 0;
     data.critHit = attackHasCritHit(data.classId) ? attack->vftable->getCritHit(attack) : false;
+
+    if (!data.critHit && attackHasCritHit(data.classId)) {
+        auto midUnitDescriptor = (const game::CMidUnitDescriptor*)
+            dynamicCast(descriptor, 0, rtti.IEncUnitDescriptorType, rtti.CMidUnitDescriptorType, 0);
+
+        if (global || !midUnitDescriptor) {
+            game::CMidgardID globalUnitImplId;
+            descriptor->vftable->getGlobalUnitImplId(descriptor, &globalUnitImplId);
+            auto globalUnitImpl = hooks::getGlobalUnitImpl(&globalUnitImplId);
+
+            data.critHit = hooks::hasCriticalHitLeaderAbility(globalUnitImpl);
+        } else {
+            data.critHit = hooks::hasCriticalHitLeaderAbility(midUnitDescriptor->unit->unitImpl);
+        }
+    }
 
     switch (data.classId) {
     case game::AttackClassId::Drain:
