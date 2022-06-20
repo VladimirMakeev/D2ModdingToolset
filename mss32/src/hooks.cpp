@@ -209,7 +209,7 @@ static Hooks getGameHooks()
         // Fix game crash when AI controlled unit with transform self attack
         // uses alternative attack with 'adjacent' attack range
         // Fix incorrect calculation of effective HP used by AI for target prioritization
-        {fn.computeUnitEffectiveHp, computeUnitEffectiveHpHooked},
+        {fn.computeUnitEffectiveHpForAi, computeUnitEffectiveHpForAiHooked},
         // Allow transform-self attack to not consume a unit turn for transformation
         // Fixes modifiers becoming permanent after modified unit is transformed
         // Support custom attack damage ratios
@@ -1735,9 +1735,9 @@ void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const voi
     getOriginalFunctions().throwException(thisptr, throwInfo);
 }
 
-int __stdcall computeUnitEffectiveHpHooked(const game::IMidgardObjectMap* objectMap,
-                                           const game::CMidUnit* unit,
-                                           const game::BattleMsgData* battleMsgData)
+int __stdcall computeUnitEffectiveHpForAiHooked(const game::IMidgardObjectMap* objectMap,
+                                                const game::CMidUnit* unit,
+                                                const game::BattleMsgData* battleMsgData)
 {
     using namespace game;
 
@@ -1749,7 +1749,7 @@ int __stdcall computeUnitEffectiveHpHooked(const game::IMidgardObjectMap* object
     int armor;
     fn.computeArmor(&armor, objectMap, battleMsgData, &unit->id);
 
-    return computeUnitEffectiveHp(unit, armor);
+    return computeUnitEffectiveHpForAi(unit->currentHp, armor);
 }
 
 void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImplId,

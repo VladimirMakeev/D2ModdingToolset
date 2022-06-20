@@ -835,7 +835,8 @@ bool __stdcall findDamageAndShatterAttackTargetWithMeleeReach(
 
         // Assume effective hp as if target's armor is already shattered - thus adding shatter
         // damage to priority evaluation.
-        int targetEffectiveHp = computeUnitEffectiveHp(targetUnit, targetArmorShattered);
+        int targetEffectiveHp = computeUnitEffectiveHpForAi(targetUnit->currentHp,
+                                                            targetArmorShattered);
         if (!isGreaterPickRandomIfEqual(primaryEffectiveHp, targetEffectiveHp))
             continue;
         if (isSecondary && !isGreaterPickRandomIfEqual(secondaryEffectiveHp, targetEffectiveHp))
@@ -1317,7 +1318,7 @@ int __stdcall computeTargetUnitAiPriorityHooked(const game::IMidgardObjectMap* o
     int modifier = 0;
     if (!soldier->vftable->getSizeSmall(soldier) || isMeleeAttack(attack)
         || attackClassId == attackClasses.boostDamage->id) {
-        int effectiveHp = fn.computeUnitEffectiveHp(objectMap, unit, battleMsgData);
+        int effectiveHp = fn.computeUnitEffectiveHpForAi(objectMap, unit, battleMsgData);
         modifier = effectiveHp > attackerDamage ? -effectiveHp : effectiveHp;
     } else {
         modifier = soldier->vftable->getXpKilled(soldier);

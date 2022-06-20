@@ -325,22 +325,6 @@ int getCityProtection(const game::IMidgardObjectMap* objectMap, const game::CMid
     return 0;
 }
 
-int computeUnitEffectiveHp(const game::CMidUnit* unit, int armor)
-{
-    if (!unit || unit->currentHp < 0)
-        return 0;
-
-    if (!userSettings().fixEffectiveHpFormula) {
-        return unit->currentHp * armor / 100 + unit->currentHp;
-    }
-
-    if (armor > 99)
-        return std::numeric_limits<int>::max();
-
-    double factor = 1 - (double)armor / 100;
-    return lround((double)unit->currentHp / factor);
-}
-
 static int getLordRegenBonus(const game::CMidPlayer* player)
 {
     using namespace game;
@@ -455,6 +439,32 @@ int getUnitRegen(const game::IMidgardObjectMap* objectMap, const game::CMidgardI
     }
 
     return std::clamp(result, 0, 100);
+}
+
+int computeUnitEffectiveHpForAi(int hp, int armor)
+{
+    if (userSettings().fixEffectiveHpFormula) {
+        return computeUnitEffectiveHp(hp, armor);
+    }
+
+    if (hp < 0) {
+        return 0;
+    }
+
+    return hp * armor / 100 + hp;
+}
+
+int computeUnitEffectiveHp(int hp, int armor)
+{
+    if (hp <= 0) {
+        return 0;
+    }
+
+    int factor = 100 - armor;
+    if (factor <= 0)
+        return std::numeric_limits<int>::max();
+
+    return hp * 100 / factor;
 }
 
 int computeShatterDamage(const game::CMidgardID* unitId,
