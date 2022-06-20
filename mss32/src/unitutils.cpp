@@ -48,27 +48,6 @@
 
 namespace hooks {
 
-static int getArmorWithModifiers(game::IdList& modifiers)
-{
-    using namespace game;
-
-    auto& globalApi{GlobalDataApi::get()};
-    auto globalData{*globalApi.getGlobalData()};
-
-    int armor{};
-
-    for (const auto& modifier : modifiers) {
-        auto unitModifier{(TUnitModifier*)globalApi.findById(globalData->modifiers, &modifier)};
-        auto umModifier{unitModifier->data->modifier};
-
-        if (umModifier->vftable->hasElement(umModifier, ModifierElementTypeFlag::Armor)) {
-            armor += umModifier->vftable->getFirstElementValue(umModifier);
-        }
-    }
-
-    return armor;
-}
-
 void generateUnitImplByAttackId(const game::CMidgardID* attackId)
 {
     using namespace game;
@@ -326,7 +305,8 @@ int getCityProtection(const game::IMidgardObjectMap* objectMap, const game::CMid
 
             vftable->getProtection(fortification, objectMap, &modifiers);
 
-            const auto protection{getArmorWithModifiers(modifiers)};
+            const auto protection{
+                applyModifiers(0, modifiers, ModifierElementTypeFlag::Armor, false)};
             list.destructor(&modifiers);
 
             return protection;
