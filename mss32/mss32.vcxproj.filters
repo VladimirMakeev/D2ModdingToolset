@@ -2701,6 +2701,9 @@
     <ClInclude Include="include\intvector.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\viewexportedleaderinterf.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\leaderunitdescriptor.h">
       <Filter>game</Filter>
     </ClInclude>
