@@ -176,6 +176,9 @@
         - `ratedDamageSeparator`
         - `splitDamage`
         - `modifiedValue`
+        - `modifiedNumber`
+        - `positiveBonusNumber`
+        - `negativeBonusNumber`
         - `drainDescription`
         - `drainEffect`
         - `overflowAttack`
