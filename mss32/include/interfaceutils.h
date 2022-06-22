@@ -46,8 +46,11 @@ const game::TUsUnitImpl* getUnitImpl(const game::IEncUnitDescriptor* descriptor)
 bool hasCriticalHitLeaderAbility(const game::IEncUnitDescriptor* descriptor);
 
 std::string getNumberText(int value, bool percent);
-std::string getBonusNumberText(int bonus, bool percent, bool trim = false, bool reverse = false);
-std::string getModifiedNumberText(int value, int base, bool percent, bool reverse = false);
+std::string getBonusNumberText(int bonus, bool percent, bool reverse);
+std::string addBonusNumberText(const std::string& base, int bonus, bool percent, bool reverse);
+std::string getModifiedNumberText(int value, int base, bool percent);
+std::string getModifiedNumberTextFull(int value, int base, bool percent);
+std::string getModifiedNumberTextReverseBonus(int value, int base, bool percent);
 std::string getModifiedStringText(const std::string& value, bool modified);
 
 std::string getAttackSourceText(const game::LAttackSource* source);

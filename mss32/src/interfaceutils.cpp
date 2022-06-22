@@ -127,45 +127,69 @@ std::string getNumberText(int value, bool percent)
     return fmt::format(percent ? "{:d}%" : "{:d}", value);
 }
 
-std::string getBonusNumberText(int bonus, bool percent, bool trim, bool reverse)
+std::string getBonusNumberText(int bonus, bool percent, bool reverse)
 {
     if (!bonus) {
         return "";
     }
-    bool positive = bonus > 0;
 
-    // "\c025;090;000; + %NUMBER%"
-    // "\c100;000;000; - %NUMBER%"
-    auto result = getInterfaceText(positive ? "X005TA0486" : "X005TA0487");
-    // "\c000;000;000;"
-    result += getInterfaceText("X005TA0488");
+    bool positive = reverse ? bonus < 0 : bonus > 0;
 
-    if (trim || reverse) {
-        const char* bonus = "+ %NUMBER%";
-        const char* loss = "- %NUMBER%";
-        std::string keyword = positive ? bonus : loss;
-        if (trim) {
-            keyword.insert(0, 1, ' ');
-        }
-        replace(result, keyword, positive != reverse ? bonus : loss);
+    std::string result;
+    if (positive) {
+        result = getInterfaceText(textIds().interf.positiveBonusNumber.c_str());
+        if (result.empty())
+            result = "\\c025;090;000;%SIGN% %NUMBER%\\c000;000;000;";
+    } else {
+        result = getInterfaceText(textIds().interf.negativeBonusNumber.c_str());
+        if (result.empty())
+            result = "\\c100;000;000;%SIGN% %NUMBER%\\c000;000;000;";
     }
 
-    replace(result, "%NUMBER%", fmt::format(percent ? "{:d}%" : "{:d}", abs(bonus)));
+    replace(result, "%SIGN%", bonus > 0 ? "+" : "-");
+    replace(result, "%NUMBER%", getNumberText(abs(bonus), percent));
     return result;
 }
 
-std::string getModifiedNumberText(int value, int base, bool percent, bool reverse)
+std::string addBonusNumberText(const std::string& base, int bonus, bool percent, bool reverse)
+{
+    auto result = getInterfaceText(textIds().interf.modifiedNumber.c_str());
+    if (result.empty())
+        result = "%NUMBER% %BONUS%";
+
+    replace(result, "%NUMBER%", base);
+    replace(result, "%BONUS%", getBonusNumberText(bonus, percent, reverse));
+    return result;
+}
+
+static std::string getModifiedNumberText(int value, int base, bool percent, bool reverse, bool full)
 {
     int bonus = value - base;
-    if (base && bonus) {
-        auto result = getNumberText(base, percent);
-        result += getBonusNumberText(bonus, percent, reverse);
-        return result;
-    } else if (bonus) {
-        return getBonusNumberText(bonus, percent, true, reverse);
-    } else {
+    if (!bonus) {
         return getNumberText(base, percent);
     }
+
+    if (!base && !full) {
+        return getBonusNumberText(bonus, percent, reverse);
+    }
+
+    auto result = getNumberText(base, percent);
+    return addBonusNumberText(result, bonus, percent, reverse);
+}
+
+std::string getModifiedNumberText(int value, int base, bool percent)
+{
+    return getModifiedNumberText(value, base, percent, false, false);
+}
+
+std::string getModifiedNumberTextFull(int value, int base, bool percent)
+{
+    return getModifiedNumberText(value, base, percent, false, true);
+}
+
+std::string getModifiedNumberTextReverseBonus(int value, int base, bool percent)
+{
+    return getModifiedNumberText(value, base, percent, true, false);
 }
 
 std::string getModifiedStringText(const std::string& value, bool modified)
@@ -294,7 +318,7 @@ bool getDynUpgradesToDisplay(game::IEncUnitDescriptor* descriptor,
 
     CMidgardID globalUnitImplId;
     descriptor->vftable->getGlobalUnitImplId(descriptor, &globalUnitImplId);
-    auto globalUnitImpl = getGlobalUnitImpl(&globalUnitImplId);
+    auto globalUnitImpl = getUnitImpl(&globalUnitImplId);
 
     *upgrade1 = getDynUpgrade(globalUnitImpl, 1);
     *upgrade2 = getDynUpgrade(globalUnitImpl, 2);

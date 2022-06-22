@@ -365,10 +365,11 @@ void __fastcall encLayoutUnitInitializeHooked(game::CEncLayoutUnit* thisptr,
 }
 
 static std::string getImmuOrWardField(game::IEncUnitDescriptor* descriptor,
-                                      const game::IUsSoldier* globalSoldier,
+                                      const game::IUsSoldier* soldierImpl,
                                       game::IEncUnitDescriptorVftable::GetAttackSources getSources,
                                       game::IEncUnitDescriptorVftable::GetAttackClasses getClasses,
-                                      game::ImmuneId immuneId)
+                                      game::ImmuneId immuneId,
+                                      const game::IdList& editorModifiers)
 {
     using namespace game;
 
@@ -388,9 +389,20 @@ static std::string getImmuOrWardField(game::IEncUnitDescriptor* descriptor,
             result += ", ";
         }
 
-        auto immune = globalSoldier->vftable->getImmuneByAttackSource(globalSoldier, &source);
+        auto immune = soldierImpl->vftable->getImmuneByAttackSource(soldierImpl, &source);
+
+        bool modified = immune->id != immuneId;
+        if (modified) {
+            for (auto modifierId : editorModifiers) {
+                if (isImmunityModifier(&modifierId, &source, immuneId)) {
+                    modified = false;
+                    break;
+                }
+            }
+        }
+
         auto text = getAttackSourceText(&source);
-        result += getModifiedStringText(text, immune->id != immuneId);
+        result += getModifiedStringText(text, modified);
     }
 
     for (const auto& class_ : classes) {
@@ -398,9 +410,20 @@ static std::string getImmuOrWardField(game::IEncUnitDescriptor* descriptor,
             result += ", ";
         }
 
-        auto immune = globalSoldier->vftable->getImmuneByAttackClass(globalSoldier, &class_);
+        auto immune = soldierImpl->vftable->getImmuneByAttackClass(soldierImpl, &class_);
+
+        bool modified = immune->id != immuneId;
+        if (modified) {
+            for (auto modifierId : editorModifiers) {
+                if (isImmunityclassModifier(&modifierId, &class_, immuneId)) {
+                    modified = false;
+                    break;
+                }
+            }
+        }
+
         auto text = getAttackClassText(class_.id);
-        result += getModifiedStringText(text, immune->id != immuneId);
+        result += getModifiedStringText(text, modified);
     }
 
     if (result.empty()) {
@@ -416,21 +439,23 @@ static std::string getImmuOrWardField(game::IEncUnitDescriptor* descriptor,
 }
 
 static std::string getImmuField(game::IEncUnitDescriptor* descriptor,
-                                const game::IUsSoldier* globalSoldier)
+                                const game::IUsSoldier* soldierImpl,
+                                const game::IdList& editorModifiers)
 {
-    return getImmuOrWardField(descriptor, globalSoldier,
+    return getImmuOrWardField(descriptor, soldierImpl,
                               descriptor->vftable->getAttackSourcesUnitIsImmuneTo,
                               descriptor->vftable->getAttackClassesUnitIsImmuneTo,
-                              game::ImmuneId::Always);
+                              game::ImmuneId::Always, editorModifiers);
 }
 
 static std::string getWardField(game::IEncUnitDescriptor* descriptor,
-                                const game::IUsSoldier* globalSoldier)
+                                const game::IUsSoldier* soldierImpl,
+                                const game::IdList& editorModifiers)
 {
-    return getImmuOrWardField(descriptor, globalSoldier,
+    return getImmuOrWardField(descriptor, soldierImpl,
                               descriptor->vftable->getAttackSourcesUnitIsResistantTo,
                               descriptor->vftable->getAttackClassesUnitIsResistantTo,
-                              game::ImmuneId::Once);
+                              game::ImmuneId::Once, editorModifiers);
 }
 
 static int getUnitArmor(game::CEncLayoutUnit* layout)
@@ -456,7 +481,7 @@ static int getUnitArmor(game::CEncLayoutUnit* layout)
 }
 
 static std::string getHp2Field(game::IEncUnitDescriptor* descriptor,
-                               const game::IUsSoldier* globalSoldier,
+                               const game::IUsSoldier* soldierImpl,
                                const game::IdList& editorModifiers)
 {
     using namespace game;
@@ -474,18 +499,18 @@ static std::string getHp2Field(game::IEncUnitDescriptor* descriptor,
         return getNumberText(unit->hpBefMax, false);
     }
 
-    int globalHpMax = globalSoldier->vftable->getHitPoints(globalSoldier);
-    globalHpMax = applyModifiers(globalHpMax, editorModifiers, ModifierElementTypeFlag::Hp, true);
-    globalHpMax = std::clamp(globalHpMax, restrictions.unitHp->min, restrictions.unitHp->max);
+    int implHpMax = soldierImpl->vftable->getHitPoints(soldierImpl);
+    implHpMax = applyModifiers(implHpMax, editorModifiers, ModifierElementTypeFlag::Hp);
+    implHpMax = std::clamp(implHpMax, restrictions.unitHp->min, restrictions.unitHp->max);
 
     auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
     auto actualHpMax = soldier->vftable->getHitPoints(soldier);
 
-    return getModifiedNumberText(actualHpMax, globalHpMax, false);
+    return getModifiedNumberText(actualHpMax, implHpMax, false);
 }
 
 static std::string getXp2Field(game::IEncUnitDescriptor* descriptor,
-                               const game::IUsSoldier* globalSoldier)
+                               const game::IUsSoldier* soldierImpl)
 {
     using namespace game;
 
@@ -496,35 +521,34 @@ static std::string getXp2Field(game::IEncUnitDescriptor* descriptor,
         return getNumberText(descriptor->vftable->getUnitXpNext(descriptor), false);
     }
 
-    int globalXpNext = globalSoldier->vftable->getXpNext(globalSoldier);
+    int implXpNext = soldierImpl->vftable->getXpNext(soldierImpl);
 
     auto soldier = fn.castUnitImplToSoldier(midUnitDescriptor->unit->unitImpl);
     auto actualXpNext = soldier->vftable->getXpNext(soldier);
 
-    return getModifiedNumberText(actualXpNext, globalXpNext, false, true);
+    return getModifiedNumberTextReverseBonus(actualXpNext, implXpNext, false);
 }
 
 static std::string getArmorField(game::CEncLayoutUnit* layout,
-                                 const game::IUsSoldier* globalSoldier,
+                                 const game::IUsSoldier* soldierImpl,
                                  const game::IdList& editorModifiers)
 {
     using namespace game;
 
     const auto& restrictions = gameRestrictions();
 
-    int globalArmor;
-    globalSoldier->vftable->getArmor(globalSoldier, &globalArmor);
-    globalArmor = applyModifiers(globalArmor, editorModifiers, ModifierElementTypeFlag::Armor,
-                                 false);
-    globalArmor = std::clamp(globalArmor, restrictions.unitArmor->min, restrictions.unitArmor->max);
+    int implArmor;
+    soldierImpl->vftable->getArmor(soldierImpl, &implArmor);
+    implArmor = applyModifiers(implArmor, editorModifiers, ModifierElementTypeFlag::Armor);
+    implArmor = std::clamp(implArmor, restrictions.unitArmor->min, restrictions.unitArmor->max);
 
     int actualArmor = getUnitArmor(layout);
 
-    return getModifiedNumberText(actualArmor, globalArmor, false, false);
+    return getModifiedNumberTextFull(actualArmor, implArmor, false);
 }
 
 static std::string getXpField(game::IEncUnitDescriptor* descriptor,
-                              const game::IUsSoldier* globalSoldier)
+                              const game::IUsSoldier* soldierImpl)
 {
     if (descriptor->vftable->isUnitAtMaxLevel(descriptor)) {
         // \c128;000;000;Max\c000;000;000;
@@ -535,7 +559,7 @@ static std::string getXpField(game::IEncUnitDescriptor* descriptor,
     auto result = getInterfaceText("X005TA0649");
     replace(result, "%XP1%",
             getNumberText(descriptor->vftable->getUnitCurrentXp(descriptor), false));
-    replace(result, "%XP2%", getXp2Field(descriptor, globalSoldier));
+    replace(result, "%XP2%", getXp2Field(descriptor, soldierImpl));
 
     return result;
 }
@@ -553,8 +577,7 @@ static std::string getEffhpField(game::CEncLayoutUnit* layout)
     return getNumberText(computeUnitEffectiveHp(unitHp, unitArmor), false);
 }
 
-static std::string getRegenField(game::CEncLayoutUnit* layout,
-                                 const game::IUsSoldier* globalSoldier)
+static std::string getRegenField(game::CEncLayoutUnit* layout, const game::IUsSoldier* soldierImpl)
 {
     using namespace game;
 
@@ -564,36 +587,36 @@ static std::string getRegenField(game::CEncLayoutUnit* layout,
     auto descriptor = data->unitDescriptor;
     auto objectMap = data->objectMap;
 
-    auto globalRegen = *globalSoldier->vftable->getRegen(globalSoldier);
+    auto implRegen = *soldierImpl->vftable->getRegen(soldierImpl);
 
     auto midUnitDescriptor = castToMidUnitDescriptor(descriptor);
     if (!midUnitDescriptor) {
-        return getNumberText(globalRegen, true);
+        return getNumberText(implRegen, true);
     }
 
     auto actualRegen = getUnitRegen(objectMap, &data->unitId);
 
-    return getModifiedNumberText(actualRegen, globalRegen, true);
+    return getModifiedNumberText(actualRegen, implRegen, true);
 }
 
 static std::string getXpKillField(game::IEncUnitDescriptor* descriptor,
-                                  const game::IUsSoldier* globalSoldier)
+                                  const game::IUsSoldier* soldierImpl)
 {
     using namespace game;
 
     const auto& fn = gameFunctions();
 
-    auto globalXpKilled = globalSoldier->vftable->getXpKilled(globalSoldier);
+    auto implXpKilled = soldierImpl->vftable->getXpKilled(soldierImpl);
 
     auto midUnitDescriptor = castToMidUnitDescriptor(descriptor);
     if (!midUnitDescriptor) {
-        return getNumberText(globalXpKilled, false);
+        return getNumberText(implXpKilled, false);
     }
 
     auto soldier = fn.castUnitImplToSoldier(midUnitDescriptor->unit->unitImpl);
     auto actualXpKilled = soldier->vftable->getXpKilled(soldier);
 
-    return getModifiedNumberText(actualXpKilled, globalXpKilled, false, true);
+    return getModifiedNumberTextReverseBonus(actualXpKilled, implXpKilled, false);
 }
 
 static std::string getApField(game::IEncUnitDescriptor* descriptor)
@@ -704,7 +727,7 @@ static void setImgUnitIcon(game::CEncLayoutUnit* layout)
 
 static void addStatsDynUpgradeText(std::string& text,
                                    game::IEncUnitDescriptor* descriptor,
-                                   const game::IUsSoldier* globalSoldier)
+                                   const game::IUsSoldier* soldierImpl)
 {
     using namespace game;
 
@@ -714,14 +737,14 @@ static void addStatsDynUpgradeText(std::string& text,
         return;
     }
 
-    addDynUpgradeLevelToField(text, "%LEVEL%", globalSoldier->vftable->getDynUpgLvl(globalSoldier));
+    addDynUpgradeLevelToField(text, "%LEVEL%", soldierImpl->vftable->getDynUpgLvl(soldierImpl));
     addDynUpgradeTextToField(text, "%HP2%", upgrade1->hp, upgrade2->hp);
     addDynUpgradeTextToField(text, "%ARMOR%", upgrade1->armor, upgrade2->armor);
     addDynUpgradeTextToField(text, "%XP%", upgrade1->xpNext, upgrade2->xpNext);
 }
 
 static void setTxtStats(game::CEncLayoutUnit* layout,
-                        const game::IUsSoldier* globalSoldier,
+                        const game::IUsSoldier* soldierImpl,
                         const game::IdList& editorModifiers)
 {
     using namespace game;
@@ -737,14 +760,14 @@ static void setTxtStats(game::CEncLayoutUnit* layout,
     // \fMedbold;Immunities:\t\fNormal;\p110;%IMMU%\mL0;
     // \fMedbold;Wards:\t\fNormal;\p110;%WARD%
     auto text = getInterfaceText("X005TA0423");
-    addStatsDynUpgradeText(text, descriptor, globalSoldier);
+    addStatsDynUpgradeText(text, descriptor, soldierImpl);
     replace(text, "%LEVEL%", getNumberText(descriptor->vftable->getUnitLevel(descriptor), false));
     replace(text, "%HP1%", getNumberText(descriptor->vftable->getHp(descriptor), false));
-    replace(text, "%HP2%", getHp2Field(descriptor, globalSoldier, editorModifiers));
-    replace(text, "%ARMOR%", getArmorField(layout, globalSoldier, editorModifiers));
-    replace(text, "%XP%", getXpField(descriptor, globalSoldier));
-    replace(text, "%IMMU%", getImmuField(descriptor, globalSoldier));
-    replace(text, "%WARD%", getWardField(descriptor, globalSoldier));
+    replace(text, "%HP2%", getHp2Field(descriptor, soldierImpl, editorModifiers));
+    replace(text, "%ARMOR%", getArmorField(layout, soldierImpl, editorModifiers));
+    replace(text, "%XP%", getXpField(descriptor, soldierImpl));
+    replace(text, "%IMMU%", getImmuField(descriptor, soldierImpl, editorModifiers));
+    replace(text, "%WARD%", getWardField(descriptor, soldierImpl, editorModifiers));
 
     auto textBox = CDialogInterfApi::get().findTextBox(layout->dialog, "TXT_STATS");
     CTextBoxInterfApi::get().setString(textBox, text.c_str());
@@ -765,7 +788,7 @@ static void addStats2DynUpgradeText(std::string& text, game::IEncUnitDescriptor*
 }
 
 static void setTxtStats2(game::CEncLayoutUnit* layout,
-                         const game::IUsSoldier* globalSoldier,
+                         const game::IUsSoldier* soldierImpl,
                          const game::IdList& editorModifiers)
 {
     using namespace game;
@@ -788,8 +811,8 @@ static void setTxtStats2(game::CEncLayoutUnit* layout,
     std::string text{textBox->data->text.string};
     addStats2DynUpgradeText(text, descriptor);
     replace(text, "%EFFHP%", getEffhpField(layout));
-    replace(text, "%REGEN%", getRegenField(layout, globalSoldier));
-    replace(text, "%XPKILL%", getXpKillField(descriptor, globalSoldier));
+    replace(text, "%REGEN%", getRegenField(layout, soldierImpl));
+    replace(text, "%XPKILL%", getXpKillField(descriptor, soldierImpl));
 
     CTextBoxInterfApi::get().setString(textBox, text.c_str());
 }
@@ -970,10 +993,8 @@ void __fastcall encLayoutUnitUpdateHooked(game::CEncLayoutUnit* thisptr, int /*%
     auto descriptor = data->unitDescriptor;
     auto objectMap = data->objectMap;
 
-    CMidgardID globalUnitImplId;
-    descriptor->vftable->getGlobalUnitImplId(descriptor, &globalUnitImplId);
-    auto globalUnitImpl = getGlobalUnitImpl(&globalUnitImplId);
-    auto globalSoldier = gameFunctions().castUnitImplToSoldier(globalUnitImpl);
+    auto unitImpl = getUnitImpl(descriptor);
+    auto soldierImpl = gameFunctions().castUnitImplToSoldier(unitImpl);
 
     IdList editorModifiers = {};
     idListApi.constructor(&editorModifiers);
@@ -986,8 +1007,8 @@ void __fastcall encLayoutUnitUpdateHooked(game::CEncLayoutUnit* thisptr, int /*%
     setImgUnitIcon(thisptr);
     setTxtUnitName(thisptr);
     setTxtUnitInfo(thisptr);
-    setTxtStats(thisptr, globalSoldier, editorModifiers);
-    setTxtStats2(thisptr, globalSoldier, editorModifiers);
+    setTxtStats(thisptr, soldierImpl, editorModifiers);
+    setTxtStats2(thisptr, soldierImpl, editorModifiers);
     setTxtLeaderInfo(thisptr);
     setTxtNeedUpgrade(thisptr, &needUpgrade);
     setImgUpgrade(thisptr, needUpgrade);
