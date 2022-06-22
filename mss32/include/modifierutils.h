@@ -123,6 +123,13 @@ int applyModifiers(int base,
                    const game::IdList& modifiers,
                    game::ModifierElementTypeFlag type,
                    bool percent);
+bool isImmunityModifier(const game::CMidgardID* modifierId,
+                        const game::LAttackSource* source,
+                        game::ImmuneId immuneId);
+
+bool isImmunityclassModifier(const game::CMidgardID* modifierId,
+                             const game::LAttackClass* class_,
+                             game::ImmuneId immuneId);
 
 } // namespace hooks
 

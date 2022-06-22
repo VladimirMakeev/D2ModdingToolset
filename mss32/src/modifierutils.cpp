@@ -55,6 +55,9 @@ game::CUmUnit* castUmModifierToUmUnit(game::CUmModifier* modifier)
 {
     using namespace game;
 
+    if (castModifierToCustomModifier(modifier))
+        return nullptr; // CCustomModifier inherits type info from CUmUnit
+
     const auto& rtti = RttiApi::rtti();
     const auto dynamicCast = RttiApi::get().dynamicCast;
     return (CUmUnit*)dynamicCast(modifier, 0, rtti.CUmModifierType, rtti.CUmUnitType, 0);
@@ -230,9 +233,6 @@ bool canApplyModifier(game::BattleMsgData* battleMsgData,
 
     CUmModifier* modifier = getUnitModifier(modifierId)->data->modifier;
 
-    if (castModifierToCustomModifier(modifier))
-        return true;
-
     CUmUnit* umUnit = castUmModifierToUmUnit(modifier);
     if (umUnit) {
         if (modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::Hp)
@@ -369,9 +369,6 @@ bool applyModifier(const game::CMidgardID* unitId,
     CUmModifier* modifier = getUnitModifier(modifierId)->data->modifier;
 
     // No ward reset in case of custom modifier because we don't know if it grants it or not
-    if (castModifierToCustomModifier(modifier))
-        return true;
-
     CUmUnit* umUnit = castUmModifierToUmUnit(modifier);
     if (umUnit) {
         if (modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::ImmunityOnce))
@@ -527,6 +524,73 @@ int applyModifiers(int base,
     }
 
     return result;
+}
+
+bool isImmunityModifier(const game::CMidgardID* modifierId,
+                        const game::LAttackSource* source,
+                        game::ImmuneId immuneId)
+{
+    using namespace game;
+
+    auto modifier = getUnitModifier(modifierId)->data->modifier;
+    switch (immuneId) {
+    case ImmuneId::Once:
+        if (!modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::ImmunityOnce)) {
+            return false;
+        }
+        break;
+    case ImmuneId::Always:
+        if (!modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::ImmunityAlways)) {
+            return false;
+        }
+        break;
+    default:
+        return false;
+    }
+
+    auto umUnit = castUmModifierToUmUnit(modifier);
+    if (!umUnit) {
+        return false;
+    }
+
+    LAttackSource modifierSource{};
+    getModifierAttackSource(umUnit, &modifierSource);
+
+    return modifierSource.id == source->id;
+}
+
+bool isImmunityclassModifier(const game::CMidgardID* modifierId,
+                             const game::LAttackClass* class_,
+                             game::ImmuneId immuneId)
+{
+    using namespace game;
+
+    auto modifier = getUnitModifier(modifierId)->data->modifier;
+    switch (immuneId) {
+    case ImmuneId::Once:
+        if (!modifier->vftable->hasElement(modifier, ModifierElementTypeFlag::ImmunityclassOnce)) {
+            return false;
+        }
+        break;
+    case ImmuneId::Always:
+        if (!modifier->vftable->hasElement(modifier,
+                                           ModifierElementTypeFlag::ImmunityclassAlways)) {
+            return false;
+        }
+        break;
+    default:
+        return false;
+    }
+
+    auto umUnit = castUmModifierToUmUnit(modifier);
+    if (!umUnit) {
+        return false;
+    }
+
+    LAttackClass modifierClass{};
+    getModifierAttackClass(umUnit, &modifierClass);
+
+    return modifierClass.id == class_->id;
 }
 
 } // namespace hooks
