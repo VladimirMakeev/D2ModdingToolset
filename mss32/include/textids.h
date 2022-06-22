@@ -39,6 +39,9 @@ struct TextIds
         std::string ratedDamageSeparator;
         std::string splitDamage;
         std::string modifiedValue;
+        std::string modifiedNumber;
+        std::string positiveBonusNumber;
+        std::string negativeBonusNumber;
         std::string modifiersCaption;
         std::string modifiersEmpty;
         std::string modifierDescription;

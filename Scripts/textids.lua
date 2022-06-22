@@ -62,6 +62,23 @@ textids = {
 		-- Fallback text is "\c025;090;000;%VALUE%\c000;000;000;".
 		modifiedValue = "",
 
+		-- Defines modified number representation in unit encyclopedia.
+		-- The text must contain keywords "%NUMBER%" and "%BONUS%".
+		-- Fallback text is "%NUMBER% %BONUS%".
+		modifiedNumber = "",
+
+		-- Defines positive bonus number representation in unit encyclopedia.
+		-- The text must contain keywords "%NUMBER%" and "%SIGN%".
+		-- Note that sign can be either + or - depending on stat.
+		-- Fallback text is "\c025;090;000;%SIGN% %NUMBER%\c000;000;000;".
+		positiveBonusNumber = "",
+
+		-- Defines negative bonus number representation in unit encyclopedia.
+		-- The text must contain keywords "%NUMBER%" and "%SIGN%".
+		-- Note that sign can be either + or - depending on stat.
+		-- Fallback text is "\c100;000;000;%SIGN% %NUMBER%\c000;000;000;".
+		negativeBonusNumber = "",
+
 		-- Defines modifiers list caption in unit encyclopedia.
 		-- Fallback text is "\fMedBold;Effects:\fNormal;"
 		modifiersCaption = "",
