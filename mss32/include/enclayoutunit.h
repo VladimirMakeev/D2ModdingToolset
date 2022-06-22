@@ -43,6 +43,7 @@ struct CEncLayoutUnitData
     bool unknown4;
     char padding[3];
     int shatteredArmor;
+    /** Unshatterable armor. Non-zero only during combat. */
     int fortificationArmor;
     Vector<SmartPtr<IMqImage2>> leaderAbilityIcons;
     Vector<String> leaderAbilityTexts;
