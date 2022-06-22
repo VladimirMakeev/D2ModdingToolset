@@ -258,18 +258,17 @@ AttackDescriptor::AttackDescriptor(game::IEncUnitDescriptor* descriptor,
     data.drain = attackHasDrain(data.classId) ? attack->vftable->getDrain(attack, data.damage) : 0;
     data.power = computePower(data.power, modifiers, data.classId);
     data.infinite = attackHasInfinite(data.classId) ? attack->vftable->getInfinite(attack) : 0;
-    data.critHit = attackHasCritHit(data.classId) ? attack->vftable->getCritHit(attack) : false;
 
-    if (!data.critHit && attackHasCritHit(data.classId)) {
-        auto midUnitDescriptor = castToMidUnitDescriptor(descriptor);
-        if (global || !midUnitDescriptor) {
-            game::CMidgardID globalUnitImplId;
-            descriptor->vftable->getGlobalUnitImplId(descriptor, &globalUnitImplId);
-            auto globalUnitImpl = hooks::getGlobalUnitImpl(&globalUnitImplId);
-
-            data.critHit = hasCriticalHitLeaderAbility(globalUnitImpl);
-        } else {
-            data.critHit = hasCriticalHitLeaderAbility(midUnitDescriptor->unit->unitImpl);
+    data.critHit = false;
+    if (attackHasCritHit(data.classId)) {
+        data.critHit = attack->vftable->getCritHit(attack);
+        if (!data.critHit) {
+            if (global) {
+                auto unitImpl = getUnitImpl(descriptor);
+                data.critHit = hasCriticalHitLeaderAbility(unitImpl);
+            } else {
+                data.critHit = hasCriticalHitLeaderAbility(descriptor);
+            }
         }
     }
 
