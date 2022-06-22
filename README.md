@@ -135,12 +135,11 @@
     - (Optional) Add extra stats panel:
         - Add interface text to `TApp.dbf` and `TAppEdit.dbf` that contains `%XPKILL%`, `%EFFHP%` and `%REGEN%` (every keyword is optional), for example:
             ```
-            X015TA0003
             \s50;\n\fMedbold;Bounty:\t\fNormal;%XPKILL%\n\fMedbold;Eff. HP:\t\fNormal;%EFFHP%\n\fMedbold;Regen:\t\fNormal;%REGEN%
             ```
         - Add text box with name `TXT_STATS_2` to `DLG_R_C_UNIT` in `Interf.dlg` and `ScenEdit.dlg`. Specify added interface text id. For example:
             ```
-                TEXT	TXT_STATS_2,554,75,664,231,,"X015TA0003",""
+            TEXT	TXT_STATS_2,554,75,664,231,,"X015TA0003",""
             ```
         - Try extending the dialog bounds or otherwise rearrange its elements to properly accomodate the panel with its contents;
         - Displayed regeneration value includes all the factors:
@@ -214,7 +213,7 @@
     
     Example of text box description in Interf.dlg:
     ```
-    TEXT    TXT_EFFECTIVE_HP,468,95,663,231,,"X015TA0002",""
+    TEXT	TXT_EFFECTIVE_HP,468,95,663,231,,"X015TA0002",""
     ```
   </details>
 
