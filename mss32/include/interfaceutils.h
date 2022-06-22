@@ -24,9 +24,12 @@
 
 namespace game {
 struct LAttackSource;
-struct CMidUnitDescriptor;
 struct IEncUnitDescriptor;
+struct CMidUnitDescriptor;
+struct CUnitTypeDescriptor;
+struct CLeaderUnitDescriptor;
 struct CDynUpgrade;
+struct TUsUnitImpl;
 
 enum class AttackSourceId : int;
 enum class AttackClassId : int;
@@ -35,6 +38,12 @@ enum class AttackClassId : int;
 namespace hooks {
 
 const game::CMidUnitDescriptor* castToMidUnitDescriptor(const game::IEncUnitDescriptor* descriptor);
+const game::CUnitTypeDescriptor* castToUnitTypeDescriptor(
+    const game::IEncUnitDescriptor* descriptor);
+const game::CLeaderUnitDescriptor* castToLeaderUnitDescriptor(
+    const game::IEncUnitDescriptor* descriptor);
+const game::TUsUnitImpl* getUnitImpl(const game::IEncUnitDescriptor* descriptor);
+bool hasCriticalHitLeaderAbility(const game::IEncUnitDescriptor* descriptor);
 
 std::string getNumberText(int value, bool percent);
 std::string getBonusNumberText(int bonus, bool percent, bool trim = false, bool reverse = false);

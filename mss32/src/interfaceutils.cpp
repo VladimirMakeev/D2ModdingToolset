@@ -20,10 +20,15 @@
 #include "interfaceutils.h"
 #include "attackclasscat.h"
 #include "attacksourcecat.h"
+#include "categorylist.h"
 #include "customattacks.h"
 #include "encunitdescriptor.h"
+#include "leaderunitdescriptor.h"
+#include "midunit.h"
+#include "midunitdescriptor.h"
 #include "settings.h"
 #include "textids.h"
+#include "unittypedescriptor.h"
 #include "unitutils.h"
 #include "usunitimpl.h"
 #include "utils.h"
@@ -41,6 +46,80 @@ const game::CMidUnitDescriptor* castToMidUnitDescriptor(const game::IEncUnitDesc
 
     return (const game::CMidUnitDescriptor*)dynamicCast(descriptor, 0, rtti.IEncUnitDescriptorType,
                                                         rtti.CMidUnitDescriptorType, 0);
+}
+
+const game::CUnitTypeDescriptor* castToUnitTypeDescriptor(
+    const game::IEncUnitDescriptor* descriptor)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    return (const game::CUnitTypeDescriptor*)dynamicCast(descriptor, 0, rtti.IEncUnitDescriptorType,
+                                                         rtti.CUnitTypeDescriptorType, 0);
+}
+
+const game::CLeaderUnitDescriptor* castToLeaderUnitDescriptor(
+    const game::IEncUnitDescriptor* descriptor)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    return (const game::CLeaderUnitDescriptor*)dynamicCast(descriptor, 0,
+                                                           rtti.IEncUnitDescriptorType,
+                                                           rtti.CLeaderUnitDescriptorType, 0);
+}
+
+const game::TUsUnitImpl* getUnitImpl(const game::IEncUnitDescriptor* descriptor)
+{
+    auto midUnitDescriptor = castToMidUnitDescriptor(descriptor);
+    if (midUnitDescriptor) {
+        return getUnitImpl(midUnitDescriptor->unit->unitImpl);
+    }
+
+    auto unitTypeDescriptor = castToUnitTypeDescriptor(descriptor);
+    if (unitTypeDescriptor) {
+        return getUnitImpl(&unitTypeDescriptor->unitImplId);
+    }
+
+    auto leaderUnitDescriptor = castToLeaderUnitDescriptor(descriptor);
+    if (leaderUnitDescriptor) {
+        const auto& data = leaderUnitDescriptor->data;
+        return generateUnitImpl(&data.globalUnitImplId, data.level);
+    }
+
+    // Should not happen as base game only have 3 descendants of IEncUnitDescriptor
+    return nullptr;
+}
+
+bool hasCriticalHitLeaderAbility(const game::IEncUnitDescriptor* descriptor)
+{
+    using namespace game;
+
+    const auto& categoryListApi = CategoryListApi::get();
+
+    if (!descriptor->vftable->isUnitLeader(descriptor)) {
+        return false;
+    }
+
+    List<LLeaderAbility> abilities{};
+    categoryListApi.constructor((CategoryList*)&abilities);
+    descriptor->vftable->getLeaderAbilities(descriptor, &abilities);
+
+    bool result = false;
+    for (const auto& ability : abilities) {
+        if (ability.id == LeaderAbilityCategories::get().criticalHit->id) {
+            result = true;
+            break;
+        }
+    }
+
+    categoryListApi.clear((CategoryList*)&abilities);
+    categoryListApi.freeNode((CategoryList*)&abilities, (CategoryListNode*)abilities.head);
+    return result;
 }
 
 std::string getNumberText(int value, bool percent)
