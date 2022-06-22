@@ -116,6 +116,8 @@ game::CMidRuin* getRuin(const game::IMidgardObjectMap* objectMap,
 const game::CMidRuin* getRuinByUnitId(const game::IMidgardObjectMap* objectMap,
                                       const game::CMidgardID* unitId);
 
+int getGroupXpKilled(const game::IMidgardObjectMap* objectMap, const game::CMidUnitGroup* group);
+
 } // namespace hooks
 
 #endif // GAMEUTILS_H
