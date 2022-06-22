@@ -48,6 +48,7 @@ bool isUnitSmall(const game::CMidUnit* unit);
 game::CMidgardID getGlobalUnitImplId(const game::CMidgardID* unitImplId);
 game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidUnit* unit);
 game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidgardID* globalUnitImplId);
+game::TUsUnitImpl* generateUnitImpl(const game::CMidgardID* globalUnitImplId, int level);
 game::TUsUnitImpl* getUnitImpl(const game::IUsUnit* unit);
 game::TUsSoldierImpl* getSoldierImpl(const game::IUsUnit* unit);
 game::TUsSoldierImpl* getSoldierImpl(const game::IUsSoldier* soldier);
