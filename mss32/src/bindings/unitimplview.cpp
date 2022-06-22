@@ -197,7 +197,7 @@ std::optional<UnitImplView> UnitImplView::getBaseUnit() const
     if (*baseUnitImplId == emptyId)
         return std::nullopt;
 
-    auto globalUnitImpl = hooks::getGlobalUnitImpl(baseUnitImplId);
+    auto globalUnitImpl = hooks::getUnitImpl(baseUnitImplId);
     if (!globalUnitImpl)
         return std::nullopt;
 

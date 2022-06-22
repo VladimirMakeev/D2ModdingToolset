@@ -146,7 +146,7 @@ bool __fastcall upgradeHooked(game::CMidUnit* thisptr,
     const auto& typeIdOperator = *rttiApi.typeIdOperator;
     const auto& typeInfoInequalityOperator = *rttiApi.typeInfoInequalityOperator;
 
-    auto upgradeUnitImpl = getGlobalUnitImpl(upgradeImplId);
+    auto upgradeUnitImpl = getUnitImpl(upgradeImplId);
     if (!upgradeUnitImpl)
         return false;
 
