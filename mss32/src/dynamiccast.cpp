@@ -188,7 +188,7 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)nullptr,
         (TypeDescriptor*)0x648b90,
         (TypeDescriptor*)0x656e08,
-        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)0x65bd20,
         (TypeDescriptor*)nullptr,
         (TypeDescriptor*)nullptr,
         (TypeDescriptor*)nullptr,
