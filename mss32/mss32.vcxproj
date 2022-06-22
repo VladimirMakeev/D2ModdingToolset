@@ -256,6 +256,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\editboxinterf.cpp" />
     <ClCompile Include="src\editor.cpp" />
     <ClCompile Include="src\interfaceutils.cpp" />
+    <ClCompile Include="src\enclayoutstack.cpp" />
     <ClCompile Include="src\scenedit.cpp" />
     <ClCompile Include="src\effectinterf.cpp" />
     <ClCompile Include="src\effectinterfhooks.cpp" />
@@ -606,6 +607,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\d2map.h" />
     <ClInclude Include="include\d2tree.h" />
     <ClInclude Include="include\enclayout.h" />
+    <ClInclude Include="include\enclayoutstack.h" />
     <ClInclude Include="include\enclayoutunithooks.h" />
     <ClInclude Include="include\enclayoutunit.h" />
     <ClInclude Include="include\imageptrvector.h" />
