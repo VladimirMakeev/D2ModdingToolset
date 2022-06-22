@@ -446,7 +446,8 @@ int getUnitRegen(const game::IMidgardObjectMap* objectMap, const game::CMidgardI
     int result = *soldier->vftable->getRegen(soldier);
     result += getLordRegenBonus(player);
     if (fort) {
-        result += getFortRegen(result, objectMap, fort);
+        // Total regen in fort can be zero in case of riot
+        result = getFortRegen(result, objectMap, fort);
     } else if (ruin) {
         // Units in ruins have fixed regen value, no other factors apply
         result = vars->regenRuin;
