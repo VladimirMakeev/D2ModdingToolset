@@ -66,6 +66,8 @@
 #include "editor.h"
 #include "effectinterfhooks.h"
 #include "effectresulthooks.h"
+#include "enclayoutstack.h"
+#include "enclayoutstackhooks.h"
 #include "enclayoutunithooks.h"
 #include "encparambase.h"
 #include "eventconditioncathooks.h"
@@ -588,6 +590,10 @@ Hooks getHooks()
     // Show effective HP in unit encyclopedia
     hooks.emplace_back(HookInfo{CEncLayoutUnitApi::get().update, encLayoutUnitUpdateHooked,
                                 (void**)&orig.encLayoutUnitUpdate});
+
+    // Show total xp-killed in stack encyclopedia
+    hooks.emplace_back(HookInfo{CEncLayoutStackApi::get().update, encLayoutStackUpdateHooked,
+                                (void**)&orig.encLayoutStackUpdate});
 
     // Support native modifiers
     hooks.emplace_back(HookInfo{CMidUnitApi::get().getModifiers, getModifiersHooked});

@@ -30,6 +30,7 @@
 #include "effectinterf.h"
 #include "effectresult.h"
 #include "enclayoutspell.h"
+#include "enclayoutstack.h"
 #include "enclayoutunit.h"
 #include "exchangeinterf.h"
 #include "game.h"
@@ -113,6 +114,8 @@ struct OriginalFunctions
 
     game::CEncLayoutUnitApi::Api::Initialize encLayoutUnitInitialize;
     game::CEncLayoutUnitApi::Api::Update encLayoutUnitUpdate;
+
+    game::CEncLayoutStackApi::Api::Update encLayoutStackUpdate;
 };
 
 OriginalFunctions& getOriginalFunctions();

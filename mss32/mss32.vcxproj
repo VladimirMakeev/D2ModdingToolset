@@ -213,6 +213,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\buildingbranch.cpp" />
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
+    <ClCompile Include="src\enclayoutstackhooks.cpp" />
     <ClCompile Include="src\intvector.cpp" />
     <ClCompile Include="src\button.cpp" />
     <ClCompile Include="src\campaignstream.cpp" />
@@ -608,6 +609,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\d2tree.h" />
     <ClInclude Include="include\enclayout.h" />
     <ClInclude Include="include\enclayoutstack.h" />
+    <ClInclude Include="include\enclayoutstackhooks.h" />
     <ClInclude Include="include\enclayoutunithooks.h" />
     <ClInclude Include="include\enclayoutunit.h" />
     <ClInclude Include="include\imageptrvector.h" />
