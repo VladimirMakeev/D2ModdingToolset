@@ -330,8 +330,7 @@ int getCityProtection(const game::IMidgardObjectMap* objectMap, const game::CMid
 
             vftable->getProtection(fortification, objectMap, &modifiers);
 
-            const auto protection{
-                applyModifiers(0, modifiers, ModifierElementTypeFlag::Armor, false)};
+            const auto protection{applyModifiers(0, modifiers, ModifierElementTypeFlag::Armor)};
             list.destructor(&modifiers);
 
             return protection;

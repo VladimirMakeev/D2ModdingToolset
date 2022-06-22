@@ -119,10 +119,8 @@ game::IAttack* wrapAltAttack(const game::IUsUnit* unit, game::IAttack* attack);
 
 void getEditorModifiers(const game::CMidUnit* unit, game::IdList* value);
 
-int applyModifiers(int base,
-                   const game::IdList& modifiers,
-                   game::ModifierElementTypeFlag type,
-                   bool percent);
+int applyModifiers(int base, const game::IdList& modifiers, game::ModifierElementTypeFlag type);
+
 bool isImmunityModifier(const game::CMidgardID* modifierId,
                         const game::LAttackSource* source,
                         game::ImmuneId immuneId);

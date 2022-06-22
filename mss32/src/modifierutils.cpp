@@ -498,10 +498,7 @@ void getEditorModifiers(const game::CMidUnit* unit, game::IdList* value)
     }
 }
 
-int applyModifiers(int base,
-                   const game::IdList& modifiers,
-                   game::ModifierElementTypeFlag type,
-                   bool percent)
+int applyModifiers(int base, const game::IdList& modifiers, game::ModifierElementTypeFlag type)
 {
     using namespace game;
 
@@ -513,13 +510,28 @@ int applyModifiers(int base,
         auto unitModifier{(TUnitModifier*)globalApi.findById(globalData->modifiers, &modifier)};
         auto umModifier{unitModifier->data->modifier};
 
-        if (umModifier->vftable->hasElement(umModifier, type)) {
-            int value = umModifier->vftable->getFirstElementValue(umModifier);
-            if (percent) {
-                result += result * value / 100;
-            } else {
-                result += value;
-            }
+        if (!umModifier->vftable->hasElement(umModifier, type)) {
+            continue;
+        }
+
+        bool percent = false;
+        switch (type) {
+        case ModifierElementTypeFlag::QtyDamage:
+        case ModifierElementTypeFlag::Power:
+        case ModifierElementTypeFlag::Initiative:
+            percent = true;
+            break;
+        case ModifierElementTypeFlag::Hp:
+            auto umUnit = castUmModifierToUmUnit(umModifier);
+            percent = umUnit && umUnit->data->isPercentHp;
+            break;
+        }
+
+        int value = umModifier->vftable->getFirstElementValue(umModifier);
+        if (percent) {
+            result += result * value / 100;
+        } else {
+            result += value;
         }
     }
 
