@@ -24,12 +24,24 @@
 
 namespace game {
 
+struct IEncLayoutVftable;
 struct CDialogInterf;
+struct IMidObject;
 
-struct IEncLayout : public CInterface
+struct IEncLayout : public CInterfaceT<IEncLayoutVftable>
 {
     CDialogInterf* dialog;
 };
+
+assert_size(IEncLayout, 12);
+
+struct IEncLayoutVftable : public CInterfaceVftable
+{
+    using Update = void(__thiscall*)(IEncLayout* thisptr, const IMidObject* obj);
+    Update update;
+};
+
+assert_vftable_size(IEncLayoutVftable, 35);
 
 namespace IEncLayoutApi {
 
