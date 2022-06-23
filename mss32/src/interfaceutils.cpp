@@ -204,7 +204,7 @@ static std::string getModifiedNumberTextTotal(int value, int base, bool percent,
         result = "%TOTAL% (%BONUS%)";
 
     replace(result, "%TOTAL%", getNumberText(value, percent));
-    replace(result, "%BONUS%", getBonusNumberText(bonus, percent, false));
+    replace(result, "%BONUS%", getBonusNumberText(bonus, percent, reverse));
     return result;
 }
 
