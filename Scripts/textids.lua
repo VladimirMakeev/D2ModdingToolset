@@ -67,6 +67,12 @@ textids = {
 		-- Fallback text is "%NUMBER% %BONUS%".
 		modifiedNumber = "",
 
+		-- Defines modified number with total representation in unit encyclopedia.
+		-- Used for HP and XP bonus display.
+		-- The text must contain keywords "%TOTAL%" and "%BONUS%".
+		-- Fallback text is "%TOTAL% (%BONUS%)".
+		modifiedNumberTotal = "",
+
 		-- Defines positive bonus number representation in unit encyclopedia.
 		-- The text must contain keywords "%NUMBER%" and "%SIGN%".
 		-- Note that sign can be either + or - depending on stat.

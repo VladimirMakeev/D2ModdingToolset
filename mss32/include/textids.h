@@ -40,6 +40,7 @@ struct TextIds
         std::string splitDamage;
         std::string modifiedValue;
         std::string modifiedNumber;
+        std::string modifiedNumberTotal;
         std::string positiveBonusNumber;
         std::string negativeBonusNumber;
         std::string modifiersCaption;

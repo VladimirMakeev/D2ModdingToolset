@@ -192,6 +192,32 @@ std::string getModifiedNumberTextReverseBonus(int value, int base, bool percent)
     return getModifiedNumberText(value, base, percent, true, false);
 }
 
+static std::string getModifiedNumberTextTotal(int value, int base, bool percent, bool reverse)
+{
+    int bonus = value - base;
+    if (!bonus) {
+        return getNumberText(base, percent);
+    }
+
+    auto result = getInterfaceText(textIds().interf.modifiedNumberTotal.c_str());
+    if (result.empty())
+        result = "%TOTAL% (%BONUS%)";
+
+    replace(result, "%TOTAL%", getNumberText(value, percent));
+    replace(result, "%BONUS%", getBonusNumberText(bonus, percent, false));
+    return result;
+}
+
+std::string getModifiedNumberTextTotal(int value, int base, bool percent)
+{
+    return getModifiedNumberTextTotal(value, base, percent, false);
+}
+
+std::string getModifiedNumberTextTotalReverseBonus(int value, int base, bool percent)
+{
+    return getModifiedNumberTextTotal(value, base, percent, true);
+}
+
 std::string getModifiedStringText(const std::string& value, bool modified)
 {
     if (!modified)

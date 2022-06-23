@@ -51,6 +51,8 @@ std::string addBonusNumberText(const std::string& base, int bonus, bool percent,
 std::string getModifiedNumberText(int value, int base, bool percent);
 std::string getModifiedNumberTextFull(int value, int base, bool percent);
 std::string getModifiedNumberTextReverseBonus(int value, int base, bool percent);
+std::string getModifiedNumberTextTotal(int value, int base, bool percent);
+std::string getModifiedNumberTextTotalReverseBonus(int value, int base, bool percent);
 std::string getModifiedStringText(const std::string& value, bool modified);
 
 std::string getAttackSourceText(const game::LAttackSource* source);
