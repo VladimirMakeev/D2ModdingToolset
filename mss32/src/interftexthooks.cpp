@@ -281,7 +281,7 @@ std::string getLowerDamageAttackDamageText(const utils::AttackDescriptor& actual
     auto result = getInterfaceText("X005TA0550"); // "-%LOWER%%"
     replace(result, "%LOWER%", getNumberText(lower, false));
 
-    return addBonusNumberText(result, actual.lower() - lower, true, true);
+    return addBonusNumberText(result, lower - actual.lower(), true, true);
 }
 
 std::string getLowerInitiativeAttackDamageText(const utils::AttackDescriptor& actual,
@@ -292,7 +292,7 @@ std::string getLowerInitiativeAttackDamageText(const utils::AttackDescriptor& ac
     auto result = getInterfaceText("X005TA0550"); // "-%LOWER%%"
     replace(result, "%LOWER%", getNumberText(lower, false));
 
-    return addBonusNumberText(result, actual.lowerIni() - lower, true, true);
+    return addBonusNumberText(result, lower - actual.lowerIni(), true, true);
 }
 
 std::string getAttackDamageText(const utils::AttackDescriptor& actual,
