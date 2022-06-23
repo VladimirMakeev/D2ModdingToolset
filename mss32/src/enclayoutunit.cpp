@@ -67,15 +67,15 @@ static std::array<Api, 4> functions = {{
     },
 }};
 
-static std::array<CEncLayoutUnitVftable*, 4> vftables = {{
+static std::array<IEncLayoutVftable*, 4> vftables = {{
     // Akella
-    (CEncLayoutUnitVftable*)0x6e7f7c,
+    (IEncLayoutVftable*)0x6e7f7c,
     // Russobit
-    (CEncLayoutUnitVftable*)0x6e7f7c,
+    (IEncLayoutVftable*)0x6e7f7c,
     // Gog
-    (CEncLayoutUnitVftable*)0x6e5f1c,
+    (IEncLayoutVftable*)0x6e5f1c,
     // Scenario Editor
-    (CEncLayoutUnitVftable*)0x5d72bc,
+    (IEncLayoutVftable*)0x5d72bc,
 }};
 // clang-format on
 
@@ -84,7 +84,7 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-CEncLayoutUnitVftable* vftable()
+IEncLayoutVftable* vftable()
 {
     return vftables[static_cast<int>(hooks::gameVersion())];
 }

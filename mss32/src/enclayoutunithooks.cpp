@@ -257,7 +257,7 @@ game::CEncLayoutUnit* __fastcall encLayoutUnitCtorHooked(game::CEncLayoutUnit* t
     thisptr->vftable = CEncLayoutUnitApi::vftable();
     thisptr->data = createData(objectMap, unitId, descriptor);
 
-    parent->vftable->addChild(parent, thisptr);
+    parent->vftable->addChild(parent, (CInterface*)thisptr);
 
     CEncLayoutUnitApi::get().initialize(thisptr, encParam);
     return thisptr;
@@ -277,7 +277,7 @@ game::CEncLayoutUnit* __fastcall encLayoutUnitCtor2Hooked(game::CEncLayoutUnit* 
     thisptr->vftable = CEncLayoutUnitApi::vftable();
     thisptr->data = createData(nullptr, &emptyId, descriptor);
 
-    parent->vftable->addChild(parent, thisptr);
+    parent->vftable->addChild(parent, (CInterface*)thisptr);
 
     CEncLayoutUnitApi::get().initialize(thisptr, encParam);
     return thisptr;

@@ -59,13 +59,6 @@ struct CEncLayoutUnit : public IEncLayout
 
 assert_size(CEncLayoutUnit, 16);
 
-struct CEncLayoutUnitVftable : CInterfaceVftable
-{
-    void* method35;
-};
-
-assert_vftable_size(CEncLayoutUnitVftable, 35);
-
 namespace CEncLayoutUnitApi {
 
 struct Api
@@ -113,7 +106,7 @@ struct Api
 
 Api& get();
 
-CEncLayoutUnitVftable* vftable();
+IEncLayoutVftable* vftable();
 
 } // namespace CEncLayoutUnitApi
 
