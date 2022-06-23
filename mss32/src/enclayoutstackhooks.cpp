@@ -29,14 +29,13 @@
 
 namespace hooks {
 
-static std::string getXpKilledField(game::CEncLayoutStack* layout,
-                                    const game::IMidgardObjectMap* objectMap,
+static std::string getXpKilledField(const game::IMidgardObjectMap* objectMap,
                                     const game::CMidStack* stack)
 {
     return getNumberText(getGroupXpKilled(objectMap, &stack->group), false);
 }
 
-static void setTxtXpKilled(game::CEncLayoutStack* layout,
+static void setTxtXpKilled(game::CDialogInterf* dialog,
                            const game::IMidgardObjectMap* objectMap,
                            const game::CMidStack* stack)
 {
@@ -49,18 +48,18 @@ static void setTxtXpKilled(game::CEncLayoutStack* layout,
     static const char controlName[]{"TXT_XP_KILLED"};
     const auto& dialogApi{CDialogInterfApi::get()};
 
-    if (!dialogApi.findControl(layout->dialog, controlName)) {
+    if (!dialogApi.findControl(dialog, controlName)) {
         return;
     }
 
-    auto textBox{dialogApi.findTextBox(layout->dialog, controlName)};
+    auto textBox{dialogApi.findTextBox(dialog, controlName)};
     if (!textBox) {
         return;
     }
 
     std::string text{textBox->data->text.string};
 
-    if (replace(text, "%XPKILL%", getXpKilledField(layout, objectMap, stack))) {
+    if (replace(text, "%XPKILL%", getXpKilledField(objectMap, stack))) {
         CTextBoxInterfApi::get().setString(textBox, text.c_str());
     }
 }
@@ -73,7 +72,7 @@ void __fastcall encLayoutStackUpdateHooked(game::CEncLayoutStack* thisptr,
 {
     getOriginalFunctions().encLayoutStackUpdate(thisptr, objectMap, stack, dialog);
 
-    setTxtXpKilled(thisptr, objectMap, stack);
+    setTxtXpKilled(thisptr->dialog, objectMap, stack);
 }
 
 } // namespace hooks
