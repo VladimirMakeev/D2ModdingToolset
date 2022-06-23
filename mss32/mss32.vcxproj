@@ -214,7 +214,9 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
     <ClCompile Include="src\enclayoutcity.cpp" />
+    <ClCompile Include="src\enclayoutcityhooks.cpp" />
     <ClCompile Include="src\enclayoutruin.cpp" />
+    <ClCompile Include="src\enclayoutruinhooks.cpp" />
     <ClCompile Include="src\enclayoutstackhooks.cpp" />
     <ClCompile Include="src\intvector.cpp" />
     <ClCompile Include="src\button.cpp" />
@@ -575,7 +577,9 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />
     <ClInclude Include="include\enclayoutcity.h" />
+    <ClInclude Include="include\enclayoutcityhooks.h" />
     <ClInclude Include="include\enclayoutruin.h" />
+    <ClInclude Include="include\enclayoutruinhooks.h" />
     <ClInclude Include="include\intvector.h" />
     <ClInclude Include="include\button.h" />
     <ClInclude Include="include\campaignstream.h" />

@@ -29,6 +29,8 @@
 #include "ddcarryoveritems.h"
 #include "effectinterf.h"
 #include "effectresult.h"
+#include "enclayoutcity.h"
+#include "enclayoutruin.h"
 #include "enclayoutspell.h"
 #include "enclayoutstack.h"
 #include "enclayoutunit.h"
@@ -116,6 +118,10 @@ struct OriginalFunctions
     game::CEncLayoutUnitApi::Api::Update encLayoutUnitUpdate;
 
     game::CEncLayoutStackApi::Api::Update encLayoutStackUpdate;
+
+    game::CEncLayoutCityApi::Api::Update encLayoutCityUpdate;
+
+    game::CEncLayoutRuinApi::Api::Update encLayoutRuinUpdate;
 };
 
 OriginalFunctions& getOriginalFunctions();

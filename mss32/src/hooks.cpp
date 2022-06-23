@@ -66,6 +66,8 @@
 #include "editor.h"
 #include "effectinterfhooks.h"
 #include "effectresulthooks.h"
+#include "enclayoutcityhooks.h"
+#include "enclayoutruinhooks.h"
 #include "enclayoutstack.h"
 #include "enclayoutstackhooks.h"
 #include "enclayoutunithooks.h"
@@ -591,9 +593,13 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{CEncLayoutUnitApi::get().update, encLayoutUnitUpdateHooked,
                                 (void**)&orig.encLayoutUnitUpdate});
 
-    // Show total xp-killed in stack encyclopedia
+    // Show total xp-killed in stack/city/ruin encyclopedia
     hooks.emplace_back(HookInfo{CEncLayoutStackApi::get().update, encLayoutStackUpdateHooked,
                                 (void**)&orig.encLayoutStackUpdate});
+    hooks.emplace_back(HookInfo{CEncLayoutCityApi::get().update, encLayoutCityUpdateHooked,
+                                (void**)&orig.encLayoutCityUpdate});
+    hooks.emplace_back(HookInfo{CEncLayoutRuinApi::get().update, encLayoutRuinUpdateHooked,
+                                (void**)&orig.encLayoutRuinUpdate});
 
     // Support native modifiers
     hooks.emplace_back(HookInfo{CMidUnitApi::get().getModifiers, getModifiersHooked});
