@@ -25,7 +25,6 @@
 namespace game {
 
 struct CEncLayoutStackData;
-struct IMidObject;
 struct IMidgardObjectMap;
 struct CMidStack;
 
@@ -43,14 +42,6 @@ struct CEncLayoutStackData
 
 assert_size(CEncLayoutStackData, 328);
 
-struct CEncLayoutStackVftable : CInterfaceVftable
-{
-    using Update = void(__thiscall*)(CEncLayoutStack* thisptr, const IMidObject* stackObj);
-    Update update;
-};
-
-assert_vftable_size(CEncLayoutStackVftable, 35);
-
 namespace CEncLayoutStackApi {
 
 struct Api
@@ -64,7 +55,7 @@ struct Api
 
 Api& get();
 
-CEncLayoutStackVftable* vftable();
+IEncLayoutVftable* vftable();
 
 } // namespace CEncLayoutStackApi
 
