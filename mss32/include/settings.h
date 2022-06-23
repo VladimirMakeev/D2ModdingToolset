@@ -83,6 +83,8 @@ struct Settings
         bool detailedUnitDescription;
         bool detailedAttackDescription;
         bool displayDynamicUpgradeValues;
+        bool displayBonusHp;
+        bool displayBonusXp;
     } unitEncyclopedia;
 
     struct Modifiers

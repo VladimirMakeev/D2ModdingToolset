@@ -96,6 +96,8 @@ static void readUnitEncyclopediaSettings(const sol::table& table, Settings::Unit
                                                   def.detailedAttackDescription);
     value.displayDynamicUpgradeValues = readSetting(category.value(), "displayDynamicUpgradeValues",
                                                     def.displayDynamicUpgradeValues);
+    value.displayBonusHp = readSetting(category.value(), "displayBonusHp", def.displayBonusHp);
+    value.displayBonusXp = readSetting(category.value(), "displayBonusXp", def.displayBonusXp);
 }
 
 static void readModifierSettings(const sol::table& table, Settings::Modifiers& value)
@@ -265,6 +267,8 @@ const Settings& baseSettings()
         settings.unitEncyclopedia.detailedUnitDescription = false;
         settings.unitEncyclopedia.detailedAttackDescription = false;
         settings.unitEncyclopedia.displayDynamicUpgradeValues = false;
+        settings.unitEncyclopedia.displayBonusHp = false;
+        settings.unitEncyclopedia.displayBonusXp = false;
         settings.fixEffectiveHpFormula = false;
         settings.modifiers.cumulativeUnitRegeneration = false;
         settings.allowBattleItems.onTransformOther = false;

@@ -490,7 +490,7 @@ static std::string getHp2Field(game::IEncUnitDescriptor* descriptor,
     const auto& restrictions = gameRestrictions();
 
     auto midUnitDescriptor = castToMidUnitDescriptor(descriptor);
-    if (!midUnitDescriptor) {
+    if (!midUnitDescriptor || !userSettings().unitEncyclopedia.displayBonusHp) {
         return getNumberText(descriptor->vftable->getHpMax(descriptor), false);
     }
 
@@ -517,7 +517,7 @@ static std::string getXp2Field(game::IEncUnitDescriptor* descriptor,
     const auto& fn = gameFunctions();
 
     auto midUnitDescriptor = castToMidUnitDescriptor(descriptor);
-    if (!midUnitDescriptor) {
+    if (!midUnitDescriptor || !userSettings().unitEncyclopedia.displayBonusXp) {
         return getNumberText(descriptor->vftable->getUnitXpNext(descriptor), false);
     }
 
