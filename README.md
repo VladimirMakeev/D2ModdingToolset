@@ -207,6 +207,24 @@
         ```
     - Specify text id from `TApp.dbf` and `TAppEdit.dbf` that contains key `%HP%`.
   </details>
+- <details>
+    <summary>Shows total XP for killing in stack/city/ruin encyclopedia;</summary>
+
+    - Add interface text to `TApp.dbf` and `TAppEdit.dbf` that contains `%XPKILL%` keyword, for example: `X015TA0011` `Bounty: %XPKILL%`;
+    - Add text box with name `TXT_XP_KILLED` to `DLG_R_C_STACK` in `Interf.dlg` and `ScenEdit.dlg` files, for example:
+        ```
+        TEXT	TXT_XP_KILLED,161,527,396,549,\hC;,"X015TA0011",""
+        ```
+    - Add text boxes with names `TXT_XP_KILLED` and `TXT_XP_KILLED_STACK` to `DLG_R_C_CITY` in `Interf.dlg` and `ScenEdit.dlg` files, for example:
+        ```
+        TEXT	TXT_XP_KILLED,444,531,619,553,\hC;,"X015TA0011",""
+        TEXT	TXT_XP_KILLED_STACK,165,531,339,553,\hC;,"X015TA0011",""
+        ```
+    - Add text box with name `TXT_XP_KILLED` to `DLG_R_C_RUIN` in `Interf.dlg` and `ScenEdit.dlg` files, for example:
+        ```
+        TEXT	TXT_XP_KILLED,130,486,360,508,\hC;,"X015TA0011",""
+        ```
+  </details>
 
 #### Strategic map
 - <details>
