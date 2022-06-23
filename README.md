@@ -127,34 +127,12 @@
     ```
   </details>
 - <details>
-    <summary>Adds missing unit information to unit encyclopedia;</summary>
+    <summary>Adds missing information to unit encyclopedia;</summary>
 
     - Enable `detailedUnitDescription` under `unitEncyclopedia` category in [settings.lua](Scripts/settings.lua) to add the following:
         - Modifier values for 'HP', 'Immunities' and 'Wards';
         - Custom unit modifiers.
-    - (Optional) Add extra stats panel:
-        - Add interface text to `TApp.dbf` and `TAppEdit.dbf` that contains `%XPKILL%`, `%EFFHP%` and `%REGEN%` (every keyword is optional), for example:
-            ```
-            \s50;\n\fMedbold;Bounty:\t\fNormal;%XPKILL%\n\fMedbold;Eff. HP:\t\fNormal;%EFFHP%\n\fMedbold;Regen:\t\fNormal;%REGEN%
-            ```
-        - Add text box with name `TXT_STATS_2` to `DLG_R_C_UNIT` in `Interf.dlg` and `ScenEdit.dlg`. Specify added interface text id. For example:
-            ```
-            TEXT	TXT_STATS_2,554,75,664,231,,"X015TA0003",""
-            ```
-        - Try extending the dialog bounds or otherwise rearrange its elements to properly accomodate the panel with its contents;
-        - Displayed regeneration value includes all the factors:
-            - Unit regeneration including modifiers;
-            - Warrior lord bonus;
-            - Race terrain bonus;
-            - Ruins bonus;
-            - Capital / village bonus;
-            - Rioting village penalty.
-    
-        ![image](https://user-images.githubusercontent.com/5180699/174579601-7ffa8103-69d7-4848-a3de-d53595bd9084.png)
-  </details>
-- <details>
-    <summary>Adds missing attack information to unit encyclopedia;</summary>
-
+    - Enable or disable `displayBonusHp` and `displayBonusXp` depending on whether you want to display corresponding bonuses or just total values;
     - Enable `detailedAttackDescription` under `unitEncyclopedia` category in [settings.lua](Scripts/settings.lua) to add the following:
         - Damage of secondary attack if its not either poison, blister or frostbite;
         - Power (if applicable) and source (if it matters) of alternative attack;
@@ -177,6 +155,7 @@
         - `splitDamage`
         - `modifiedValue`
         - `modifiedNumber`
+        - `modifiedNumberTotal`
         - `positiveBonusNumber`
         - `negativeBonusNumber`
         - `drainDescription`
@@ -186,38 +165,47 @@
         - `dynamicUpgradeLevel`
         - `dynamicUpgradeValues`
     - Add the specified interface text to `TApp.dbf` and `TAppEdit.dbf`;
-    - (Optional) Consider adding drain attack description:
+    - (Optional) Add drain attack description:
         - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;
         - Add `%DRAIN%` keyword where you like to put the description (propose to place it after damage field like `%DAMAGE%\n%DRAIN%`);
         - The keyword is replaced with empty string if attack has no drain effect;
         - Note that you can freely move content between `X005TA0787` and `X005TA0788` if you run out of length limit (because the two strings simply merged together in `X005TA0424`).
-  </details>
-- <details>
-    <summary>Adds dynamic upgrade values to unit encyclopedia;</summary>
+    - (Optional) Add extra stats panel:
+        - Add interface text to `TApp.dbf` and `TAppEdit.dbf` that contains `%XPKILL%`, `%EFFHP%` and `%REGEN%` (every keyword is optional), for example:
+            ```
+            \s50;\n\fMedbold;Bounty:\t\fNormal;%XPKILL%\n\fMedbold;Eff. HP:\t\fNormal;%EFFHP%\n\fMedbold;Regen:\t\fNormal;%REGEN%
+            ```
+        - Add text box with name `TXT_STATS_2` to `DLG_R_C_UNIT` in `Interf.dlg` and `ScenEdit.dlg`. Specify added interface text id. For example:
+            ```
+            TEXT	TXT_STATS_2,554,75,664,231,,"X015TA0003",""
+            ```
+        - Try extending the dialog bounds or otherwise rearrange its elements to properly accomodate the panel with its contents;
+        - Displayed regeneration value includes all the factors:
+            - Unit regeneration including modifiers;
+            - Warrior lord bonus;
+            - Race terrain bonus;
+            - Ruins bonus;
+            - Capital / village bonus;
+            - Rioting village penalty.    
+    - (Optional) Adds dynamic upgrade values to unit encyclopedia:
+        - Enable `displayDynamicUpgradeValues` under `unitEncyclopedia` category in [settings.lua](Scripts/settings.lua);
+        - Enable `detailedUnitDescription` and/or `detailedAttackDescription` to show upgrade values for corresponding stats;
+        - The values are only shown for unit types to avoid clutter:
+            - While browsing unit buildings in capital;
+            - While hiring from capital, villages or mencenaries;
+            - While adding units to groups (specific to Scenario Editor).    
 
-    See `unitEncyclopedia` category in [settings.lua](Scripts/settings.lua):
-    - Enable `displayDynamicUpgradeValues`, the values are only shown for unit types to avoid clutter:
-        - While browsing unit buildings in capital;
-        - While hiring from capital, villages or mencenaries;
-        - While adding units to groups (specific to Scenario Editor).
-    - Enable `detailedUnitDescription` and/or `detailedAttackDescription` to show upgrade values for corresponding stats;
-    - Specify the following interface text ids in [textids.lua](Scripts/textids.lua):
-        - `dynamicUpgradeLevel`
-        - `dynamicUpgradeValues`
-    - Add the specified interface text to `TApp.dbf` and `TAppEdit.dbf`.
-    
-    ![image](https://user-images.githubusercontent.com/5180699/174579973-2ef49d93-ac5a-4cae-9d6f-fb0825e82554.png)
+        ![image](https://user-images.githubusercontent.com/5180699/174579601-7ffa8103-69d7-4848-a3de-d53595bd9084.png)
+        ![image](https://user-images.githubusercontent.com/5180699/174579973-2ef49d93-ac5a-4cae-9d6f-fb0825e82554.png)
   </details>
 - <details>
     <summary>Shows effective HP in unit encyclopedia;</summary>
 
-    Add text box with name `TXT_EFFECTIVE_HP` to `DLG_R_C_UNIT` in `Interf.dlg` and `ScenEdit.dlg` files.<br />
-    Specify text id from `TApp.dbf` and `TAppEdit.dbf` that contains key `%HP%`.
-    
-    Example of text box description in Interf.dlg:
-    ```
-    TEXT	TXT_EFFECTIVE_HP,468,95,663,231,,"X015TA0002",""
-    ```
+    - Add text box with name `TXT_EFFECTIVE_HP` to `DLG_R_C_UNIT` in `Interf.dlg` and `ScenEdit.dlg` files, for example:
+        ```
+        TEXT	TXT_EFFECTIVE_HP,468,95,663,231,,"X015TA0002",""
+        ```
+    - Specify text id from `TApp.dbf` and `TAppEdit.dbf` that contains key `%HP%`.
   </details>
 
 #### Strategic map
