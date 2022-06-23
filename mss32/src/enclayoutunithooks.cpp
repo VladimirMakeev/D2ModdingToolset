@@ -506,7 +506,7 @@ static std::string getHp2Field(game::IEncUnitDescriptor* descriptor,
     auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
     auto actualHpMax = soldier->vftable->getHitPoints(soldier);
 
-    return getModifiedNumberText(actualHpMax, implHpMax, false);
+    return getModifiedNumberTextTotal(actualHpMax, implHpMax, false);
 }
 
 static std::string getXp2Field(game::IEncUnitDescriptor* descriptor,
@@ -526,7 +526,7 @@ static std::string getXp2Field(game::IEncUnitDescriptor* descriptor,
     auto soldier = fn.castUnitImplToSoldier(midUnitDescriptor->unit->unitImpl);
     auto actualXpNext = soldier->vftable->getXpNext(soldier);
 
-    return getModifiedNumberTextReverseBonus(actualXpNext, implXpNext, false);
+    return getModifiedNumberTextTotalReverseBonus(actualXpNext, implXpNext, false);
 }
 
 static std::string getArmorField(game::CEncLayoutUnit* layout,
