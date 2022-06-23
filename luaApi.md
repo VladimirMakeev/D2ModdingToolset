@@ -201,6 +201,10 @@ unit.impl
 -- Returns unit's base implementation.
 -- Base implementation is a record in GUnits.dbf that describes unit basic stats.
 unit.baseImpl
+-- Returns unit's leveled (generated) implementation.
+-- Leveled implementation is unit's current implementation without modifiers,
+-- or base implementation plus dynamic upgrades according to unit's level.
+unit.leveledImpl
 -- Returns leader maximum movement points (or 0 if unit is not a leader).
 unit.movement
 -- Returns leader scouting range (or 0 if unit is not a leader).
