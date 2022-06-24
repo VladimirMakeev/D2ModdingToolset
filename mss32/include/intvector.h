@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,49 +17,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ENCLAYOUT_H
-#define ENCLAYOUT_H
+#ifndef INTVECTOR_H
+#define INTVECTOR_H
 
-#include "interface.h"
+#include "d2vector.h"
 
 namespace game {
 
-struct IEncLayoutVftable;
-struct CDialogInterf;
-struct IMidObject;
+using IntVector = Vector<int>;
 
-struct IEncLayout : public CInterfaceT<IEncLayoutVftable>
-{
-    CDialogInterf* dialog;
-};
-
-assert_size(IEncLayout, 12);
-
-struct IEncLayoutVftable : public CInterfaceVftable
-{
-    using Update = void(__thiscall*)(IEncLayout* thisptr, const IMidObject* obj);
-    Update update;
-};
-
-assert_vftable_size(IEncLayoutVftable, 35);
-
-namespace IEncLayoutApi {
+namespace IntVectorApi {
 
 struct Api
 {
-    using Constructor = IEncLayout*(__thiscall*)(IEncLayout* thisptr,
-                                                 CInterface* parent,
-                                                 const CMqRect* area);
-    Constructor constructor;
-
-    using Destructor = void(__thiscall*)(IEncLayout* thisptr);
+    using Destructor = void(__thiscall*)(IntVector* thisptr);
     Destructor destructor;
+
+    using Reserve = void(__thiscall*)(IntVector* thisptr, unsigned int count);
+    Reserve reserve;
 };
 
 Api& get();
 
-} // namespace IEncLayoutApi
+} // namespace IntVectorApi
 
 } // namespace game
 
-#endif // ENCLAYOUT_H
+#endif // INTVECTOR_H

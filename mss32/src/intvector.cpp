@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "pictureinterf.h"
+#include "intvector.h"
 #include "version.h"
 #include <array>
 
-namespace game::CPictureInterfApi {
+namespace game::IntVectorApi {
 
 // clang-format off
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::SetImage)0x5318a0,
+        (Api::Destructor)0x67fb63,
+        (Api::Reserve)0x49f2e6,
     },
     // Russobit
     Api{
-        (Api::SetImage)0x5318a0,
+        (Api::Destructor)0x67fb63,
+        (Api::Reserve)0x49f2e6,
     },
     // Gog
     Api{
-        (Api::SetImage)0x530db8,
+        (Api::Destructor)0x51f68c,
+        (Api::Reserve)0x49eb55,
     },
     // Scenario Editor
     Api{
-        (Api::SetImage)0x494988,
-    },
+        (Api::Destructor)0x458779,
+        (Api::Reserve)0x4c8c99,
+    }
 }};
 // clang-format on
 
@@ -49,4 +53,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::CPictureInterfApi
+} // namespace game::IntVectorApi

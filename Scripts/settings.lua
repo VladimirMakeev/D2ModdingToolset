@@ -139,8 +139,25 @@ settings = {
 	-- instead of check against arithmetic mean of two random numbers
 	missChanceSingleRoll = false,
 
-	-- Adds missing attack information in unit encyclopedia
-	detailedAttackDescription = true,
+	unitEncyclopedia = {
+		-- Additional display of some stats bonuses, regeneration, xp reward for killing, etc.
+		detailedUnitDescription = true,
+
+		-- Additional display of some stats bonuses, drain, critical hit, custom attack ratios, etc.
+		detailedAttackDescription = true,
+
+		-- Additional display of dynamic upgrade values (only for unit type encyclopedia to avoid clutter)
+		-- Enable detailedUnitDescription and/or detailedAttackDescription to show upgrade values for corresponding stats
+		displayDynamicUpgradeValues = false,
+
+		-- Additional display of bonus hit points
+		-- Requires detailedUnitDescription
+		displayBonusHp = false,
+
+		-- Additional display of experience points reduction
+		-- Requires detailedUnitDescription
+		displayBonusXp = false,
+	},
 
 	-- Fix effective unit hp computation
 	-- Original formula: (hp * armor / 100) + hp

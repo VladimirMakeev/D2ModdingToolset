@@ -69,11 +69,11 @@ std::optional<UnitImplView> ItemBaseView::getUnitImpl() const
     if (unitImplId == emptyId)
         return std::nullopt;
 
-    auto globalUnitImpl = hooks::getGlobalUnitImpl(&unitImplId);
-    if (!globalUnitImpl)
+    auto unitImpl = hooks::getUnitImpl(&unitImplId);
+    if (!unitImpl)
         return std::nullopt;
 
-    return UnitImplView(globalUnitImpl);
+    return UnitImplView(unitImpl);
 }
 
 } // namespace bindings

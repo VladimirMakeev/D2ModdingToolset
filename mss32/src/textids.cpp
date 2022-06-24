@@ -128,6 +128,10 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.ratedDamageSeparator = interf.value().get_or("ratedDamageSeparator", std::string());
     value.splitDamage = interf.value().get_or("splitDamage", std::string());
     value.modifiedValue = interf.value().get_or("modifiedValue", std::string());
+    value.modifiedNumber = interf.value().get_or("modifiedNumber", std::string());
+    value.modifiedNumberTotal = interf.value().get_or("modifiedNumberTotal", std::string());
+    value.positiveBonusNumber = interf.value().get_or("positiveBonusNumber", std::string());
+    value.negativeBonusNumber = interf.value().get_or("negativeBonusNumber", std::string());
     value.modifiersCaption = interf.value().get_or("modifiersCaption", std::string());
     value.modifiersEmpty = interf.value().get_or("modifiersEmpty", std::string());
     value.modifierDescription = interf.value().get_or("modifierDescription", std::string());
@@ -137,6 +141,8 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.drainEffect = interf.value().get_or("drainEffect", std::string());
     value.overflowAttack = interf.value().get_or("overflowAttack", std::string());
     value.overflowText = interf.value().get_or("overflowText", std::string());
+    value.dynamicUpgradeLevel = interf.value().get_or("dynamicUpgradeLevel", std::string());
+    value.dynamicUpgradeValues = interf.value().get_or("dynamicUpgradeValues", std::string());
 }
 
 void initialize(TextIds& value)

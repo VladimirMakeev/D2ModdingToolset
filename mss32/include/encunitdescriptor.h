@@ -23,14 +23,16 @@
 #include "attackclasscat.h"
 #include "attacksourcecat.h"
 #include "d2list.h"
-#include "idvector.h"
+#include "d2vector.h"
 #include "leaderabilitycat.h"
 
 namespace game {
 
+struct CMidgardID;
 struct IEncUnitDescriptorVftable;
 struct LAttackReach;
 struct LLeaderAbility;
+struct TBuildingType;
 
 struct IEncUnitDescriptor
 {
@@ -42,31 +44,31 @@ struct IEncUnitDescriptorVftable
     using Destructor = void(__thiscall*)(IEncUnitDescriptor* thisptr, bool freeMemory);
     Destructor destructor;
 
-    using GetBool = bool(__thiscall*)(IEncUnitDescriptor* thisptr);
-    GetBool method1;
+    using GetBool = bool(__thiscall*)(const IEncUnitDescriptor* thisptr);
+    GetBool isUnitType;
 
-    using GetInt = int(__thiscall*)(IEncUnitDescriptor* thisptr);
+    using GetInt = int(__thiscall*)(const IEncUnitDescriptor* thisptr);
     GetInt getHp;
 
     GetInt getHpMax;
 
-    using GetId = CMidgardID*(__thiscall*)(IEncUnitDescriptor* thisptr, CMidgardID* value);
+    using GetId = CMidgardID*(__thiscall*)(const IEncUnitDescriptor* thisptr, CMidgardID* value);
     GetId getAttackId;
 
-    using GetAttackClass = const LAttackClass*(__thiscall*)(IEncUnitDescriptor* thisptr);
+    using GetAttackClass = const LAttackClass*(__thiscall*)(const IEncUnitDescriptor* thisptr);
     GetAttackClass getAttackClass;
 
-    using GetStr = const char*(__thiscall*)(IEncUnitDescriptor* thisptr);
+    using GetStr = const char*(__thiscall*)(const IEncUnitDescriptor* thisptr);
     GetStr getAttackName;
 
     GetInt getAttackPower;
 
     GetInt getAttackLevel;
 
-    using GetAttackSource = const LAttackSource*(__thiscall*)(IEncUnitDescriptor* thisptr);
+    using GetAttackSource = const LAttackSource*(__thiscall*)(const IEncUnitDescriptor* thisptr);
     GetAttackSource getAttackSource;
 
-    using GetAttackReach = const LAttackReach*(__thiscall*)(IEncUnitDescriptor* thisptr);
+    using GetAttackReach = const LAttackReach*(__thiscall*)(const IEncUnitDescriptor* thisptr);
     GetAttackReach getAttackReach;
 
     GetInt getAttackDamageOrHeal;
@@ -115,8 +117,8 @@ struct IEncUnitDescriptorVftable
 
     GetBool canUnitLevelUp;
 
-    using GetUnitRequiredBuildings = void(__thiscall*)(IEncUnitDescriptor* thisptr,
-                                                       IdVector* buildings);
+    using GetUnitRequiredBuildings = void(__thiscall*)(const IEncUnitDescriptor* thisptr,
+                                                       Vector<TBuildingType*>* buildings);
     GetUnitRequiredBuildings getUnitRequiredBuildings;
 
     GetBool getUnitDynLevel;
@@ -125,15 +127,15 @@ struct IEncUnitDescriptorVftable
 
     GetBool getLeaderFlyAbility;
 
-    using GetLeaderAbilities = void(__thiscall*)(IEncUnitDescriptor* thisptr,
+    using GetLeaderAbilities = void(__thiscall*)(const IEncUnitDescriptor* thisptr,
                                                  List<LLeaderAbility>* abilities);
     GetLeaderAbilities getLeaderAbilities;
 
-    using GetAttackClasses = void(__thiscall*)(IEncUnitDescriptor* thisptr,
+    using GetAttackClasses = void(__thiscall*)(const IEncUnitDescriptor* thisptr,
                                                List<LAttackClass>* attackClasses);
     GetAttackClasses getAttackClassesUnitIsImmuneTo;
 
-    using GetAttackSources = void(__thiscall*)(IEncUnitDescriptor* thisptr,
+    using GetAttackSources = void(__thiscall*)(const IEncUnitDescriptor* thisptr,
                                                List<LAttackSource>* attackSources);
     GetAttackSources getAttackSourcesUnitIsImmuneTo;
 

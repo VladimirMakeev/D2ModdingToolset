@@ -1067,6 +1067,15 @@
     <ClCompile Include="src\bindings\ruinview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\interfaceutils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\categorylist.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\intvector.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2682,6 +2691,21 @@
     </ClInclude>
     <ClInclude Include="include\bindings\ruinview.h">
       <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\interfaceutils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\categorylist.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\intvector.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\viewexportedleaderinterf.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\leaderunitdescriptor.h">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

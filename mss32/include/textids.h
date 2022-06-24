@@ -39,6 +39,10 @@ struct TextIds
         std::string ratedDamageSeparator;
         std::string splitDamage;
         std::string modifiedValue;
+        std::string modifiedNumber;
+        std::string modifiedNumberTotal;
+        std::string positiveBonusNumber;
+        std::string negativeBonusNumber;
         std::string modifiersCaption;
         std::string modifiersEmpty;
         std::string modifierDescription;
@@ -47,6 +51,8 @@ struct TextIds
         std::string drainEffect;
         std::string overflowAttack;
         std::string overflowText;
+        std::string dynamicUpgradeLevel;
+        std::string dynamicUpgradeValues;
     } interf;
 
     struct Events

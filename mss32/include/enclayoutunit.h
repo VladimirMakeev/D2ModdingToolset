@@ -37,12 +37,14 @@ struct CEncLayoutUnitData
 {
     CMidgardID unitId;
     const IMidgardObjectMap* objectMap;
-    int unknown;
-    int unknown2;
-    int unknown3;
-    int unknown4;
-    int unknown5;
-    int unknown6;
+    int boostDamageLevel;
+    int lowerDamageLevel;
+    int lowerInitiativeLevel;
+    bool unknown4;
+    char padding[3];
+    int shatteredArmor;
+    /** Unshatterable armor. Non-zero only during combat. */
+    int fortificationArmor;
     Vector<SmartPtr<IMqImage2>> leaderAbilityIcons;
     Vector<String> leaderAbilityTexts;
     IEncUnitDescriptor* unitDescriptor;
@@ -56,13 +58,6 @@ struct CEncLayoutUnit : public IEncLayout
 };
 
 assert_size(CEncLayoutUnit, 16);
-
-struct CEncLayoutUnitVftable : CInterfaceVftable
-{
-    void* method35;
-};
-
-assert_vftable_size(CEncLayoutUnitVftable, 35);
 
 namespace CEncLayoutUnitApi {
 
@@ -111,7 +106,7 @@ struct Api
 
 Api& get();
 
-CEncLayoutUnitVftable* vftable();
+IEncLayoutVftable* vftable();
 
 } // namespace CEncLayoutUnitApi
 

@@ -146,6 +146,10 @@ struct Api
     /** Returns icon image from Icons.ff by its name. */
     using GetIconImageByName = IMqImage2**(__stdcall*)(IMqImage2** value, const char* name);
     GetIconImageByName getIconImageByName;
+
+    /** Returns unit portrait from Events.ff. */
+    using GetUnitIcon = IMqImage2*(__stdcall*)(const CMidgardID* unitImplId);
+    GetUnitIcon getUnitIcon;
 };
 
 Api& get();

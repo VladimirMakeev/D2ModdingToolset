@@ -213,10 +213,12 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\buildingbranch.cpp" />
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
+    <ClCompile Include="src\intvector.cpp" />
     <ClCompile Include="src\button.cpp" />
     <ClCompile Include="src\campaignstream.cpp" />
     <ClCompile Include="src\capitaldata.cpp" />
     <ClCompile Include="src\capitaldatlist.cpp" />
+    <ClCompile Include="src\categorylist.cpp" />
     <ClCompile Include="src\citystackinterf.cpp" />
     <ClCompile Include="src\cmdbattlechooseactionmsg.cpp" />
     <ClCompile Include="src\cmdbattleendmsg.cpp" />
@@ -253,6 +255,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\dynamiccast.cpp" />
     <ClCompile Include="src\editboxinterf.cpp" />
     <ClCompile Include="src\editor.cpp" />
+    <ClCompile Include="src\interfaceutils.cpp" />
     <ClCompile Include="src\scenedit.cpp" />
     <ClCompile Include="src\effectinterf.cpp" />
     <ClCompile Include="src\effectinterfhooks.cpp" />
@@ -567,6 +570,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\buildingbranch.h" />
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />
+    <ClInclude Include="include\intvector.h" />
     <ClInclude Include="include\button.h" />
     <ClInclude Include="include\campaignstream.h" />
     <ClInclude Include="include\canselect.h" />
@@ -576,6 +580,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\catalogvalidate.h" />
     <ClInclude Include="include\categories.h" />
     <ClInclude Include="include\categoryids.h" />
+    <ClInclude Include="include\categorylist.h" />
     <ClInclude Include="include\citystackinterf.h" />
     <ClInclude Include="include\cmdbattlechooseactionmsg.h" />
     <ClInclude Include="include\cmdbattleendmsg.h" />
@@ -605,6 +610,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\enclayoutunit.h" />
     <ClInclude Include="include\imageptrvector.h" />
     <ClInclude Include="include\interfborderdisplay.h" />
+    <ClInclude Include="include\interfaceutils.h" />
+    <ClInclude Include="include\leaderunitdescriptor.h" />
     <ClInclude Include="include\scenedit.h" />
     <ClInclude Include="include\isoborder.h" />
     <ClInclude Include="include\isoenginegroundhooks.h" />
@@ -993,6 +1000,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\usunitimpl.h" />
     <ClInclude Include="include\utils.h" />
     <ClInclude Include="include\version.h" />
+    <ClInclude Include="include\viewexportedleaderinterf.h" />
     <ClInclude Include="include\visitors.h" />
     <ClInclude Include="include\widgetinterf.h" />
     <ClInclude Include="resource.h" />

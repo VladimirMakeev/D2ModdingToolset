@@ -34,6 +34,7 @@ struct LAttackSource;
 struct IAttack;
 struct IMidgardObjectMap;
 struct BattleMsgData;
+struct CDynUpgrade;
 } // namespace game
 
 namespace hooks {
@@ -46,7 +47,8 @@ void getSoldierAttackSourceImmunities(const game::LImmuneCat* immuneCat,
 bool isUnitSmall(const game::CMidUnit* unit);
 game::CMidgardID getGlobalUnitImplId(const game::CMidgardID* unitImplId);
 game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidUnit* unit);
-game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidgardID* globalUnitImplId);
+game::TUsUnitImpl* generateUnitImpl(const game::CMidgardID* globalUnitImplId, int level);
+game::TUsUnitImpl* getUnitImpl(const game::CMidgardID* unitImplId);
 game::TUsUnitImpl* getUnitImpl(const game::IUsUnit* unit);
 game::TUsSoldierImpl* getSoldierImpl(const game::IUsUnit* unit);
 game::TUsSoldierImpl* getSoldierImpl(const game::IUsSoldier* soldier);
@@ -56,11 +58,16 @@ int getArmor(const game::CMidgardID* unitId,
              const game::BattleMsgData* battleMsgData,
              bool includeShattered,
              bool includeFortification);
+const game::CDynUpgrade* getDynUpgrade(const game::IUsUnit* unit, int upgradeNumber);
 
 /** Returns unit bonus armor from city, if he is inside one. */
 int getCityProtection(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* unitId);
 
-int computeUnitEffectiveHp(const game::CMidUnit* unit, int armor);
+/** Returns unit including bonus regen from lord, fort/ruin and terrain. */
+int getUnitRegen(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* unitId);
+
+int computeUnitEffectiveHpForAi(int hp, int armor);
+int computeUnitEffectiveHp(int hp, int armor);
 int computeShatterDamage(const game::CMidgardID* unitId,
                          const game::IUsSoldier* soldier,
                          const game::BattleMsgData* battleMsgData,

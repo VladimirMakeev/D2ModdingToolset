@@ -205,9 +205,9 @@ void __stdcall beforeBattleTurnHooked(game::BattleMsgData* battleMsgData,
 
 void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const void* throwInfo);
 
-int __stdcall computeUnitEffectiveHpHooked(const game::IMidgardObjectMap* objectMap,
-                                           const game::CMidUnit* unit,
-                                           const game::BattleMsgData* battleMsgData);
+int __stdcall computeUnitEffectiveHpForAiHooked(const game::IMidgardObjectMap* objectMap,
+                                                const game::CMidUnit* unit,
+                                                const game::BattleMsgData* battleMsgData);
 
 void __stdcall applyDynUpgradeToAttackDataHooked(const game::CMidgardID* unitImplId,
                                                  game::CUnitGenerator* unitGenerator,

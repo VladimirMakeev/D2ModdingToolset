@@ -25,6 +25,8 @@
 #include "midclient.h"
 #include "midclientcore.h"
 #include "midgard.h"
+#include "midgardmap.h"
+#include "midgardmapblock.h"
 #include "midgardobjectmap.h"
 #include "midgardplan.h"
 #include "midgardscenariomap.h"
@@ -181,6 +183,22 @@ const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
     return getPlayer(objectMap, &playerId);
 }
 
+const game::CMidPlayer* getPlayerByUnitId(const game::IMidgardObjectMap* objectMap,
+                                          const game::CMidgardID* unitId)
+{
+    auto stack = getStackByUnitId(objectMap, unitId);
+    if (stack) {
+        return getPlayer(objectMap, &stack->ownerId);
+    }
+
+    auto fort = getFortByUnitId(objectMap, unitId);
+    if (fort) {
+        return getPlayer(objectMap, &fort->ownerId);
+    }
+
+    return nullptr;
+}
+
 const game::CMidScenVariables* getScenarioVariables(const game::IMidgardObjectMap* objectMap)
 {
     const auto id{createIdWithType(objectMap, game::IdType::ScenarioVariable)};
@@ -203,6 +221,64 @@ const game::CMidgardPlan* getMidgardPlan(const game::IMidgardObjectMap* objectMa
     }
 
     return static_cast<const game::CMidgardPlan*>(obj);
+}
+
+const game::CMidgardMap* getMidgardMap(const game::IMidgardObjectMap* objectMap)
+{
+    const auto id{createIdWithType(objectMap, game::IdType::Map)};
+
+    auto obj{objectMap->vftable->findScenarioObjectById(objectMap, &id)};
+    if (!obj) {
+        return nullptr;
+    }
+
+    return static_cast<const game::CMidgardMap*>(obj);
+}
+
+const game::CMidgardMapBlock* getMidgardMapBlock(const game::IMidgardObjectMap* objectMap,
+                                                 const game::CMidgardID* mapId,
+                                                 int mapSize,
+                                                 int x,
+                                                 int y)
+{
+    using namespace game;
+
+    const auto& id = CMidgardIDApi::get();
+
+    if (x < 0 || x >= mapSize || y < 0 || y >= mapSize) {
+        // Outside of map
+        return nullptr;
+    }
+
+    CMidgardID blockId{};
+    const std::uint32_t blockX = x / 8 * 8;
+    const std::uint32_t blockY = y / 4 * 4;
+    id.fromParts(&blockId, IdCategory::Scenario, id.getCategoryIndex(mapId), IdType::MapBlock,
+                 blockX | (blockY << 8));
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, &blockId);
+    return static_cast<const CMidgardMapBlock*>(obj);
+}
+
+const game::LTerrainCategory* getTerrainCategory(const game::LRaceCategory* raceCategory)
+{
+    using namespace game;
+
+    const auto& terrains = TerrainCategories::get();
+    switch (raceCategory->id) {
+    case RaceId::Human:
+        return terrains.human;
+    case RaceId::Heretic:
+        return terrains.heretic;
+    case RaceId::Undead:
+        return terrains.undead;
+    case RaceId::Dwarf:
+        return terrains.dwarf;
+    case RaceId::Elf:
+        return terrains.elf;
+    default:
+        return terrains.neutral;
+    }
 }
 
 game::CMidStack* getStack(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* stackId)

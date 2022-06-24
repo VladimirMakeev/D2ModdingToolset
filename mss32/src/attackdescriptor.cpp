@@ -22,8 +22,8 @@
 #include "attackutils.h"
 #include "customattacks.h"
 #include "customattackutils.h"
-#include "dynamiccast.h"
 #include "game.h"
+#include "interfaceutils.h"
 #include "midunit.h"
 #include "midunitdescriptor.h"
 #include "restrictions.h"
@@ -87,19 +87,13 @@ game::IAttack* getAttack(game::IEncUnitDescriptor* descriptor,
                          bool global,
                          bool* useDescriptor)
 {
-    using namespace game;
-
-    const auto& rtti = RttiApi::rtti();
-    const auto dynamicCast = RttiApi::get().dynamicCast;
-
     *useDescriptor = false;
 
     if (global) {
         return getGlobalAttack(descriptor, type);
     }
 
-    auto midUnitDescriptor = (const game::CMidUnitDescriptor*)
-        dynamicCast(descriptor, 0, rtti.IEncUnitDescriptorType, rtti.CMidUnitDescriptorType, 0);
+    auto midUnitDescriptor = hooks::castToMidUnitDescriptor(descriptor);
     if (midUnitDescriptor) {
         return getAttack(midUnitDescriptor->unit->unitImpl, type);
     } else {
@@ -198,9 +192,6 @@ AttackDescriptor::AttackDescriptor(game::IEncUnitDescriptor* descriptor,
 {
     using namespace hooks;
 
-    const auto& rtti = game::RttiApi::rtti();
-    const auto dynamicCast = game::RttiApi::get().dynamicCast;
-
     bool useDescriptor;
     auto attack = getAttack(descriptor, type, global, &useDescriptor);
     if (attack == nullptr) {
@@ -219,9 +210,10 @@ AttackDescriptor::AttackDescriptor(game::IEncUnitDescriptor* descriptor,
         data.initiative = descriptor->vftable->getAttackInitiative(descriptor);
         data.level = descriptor->vftable->getAttackLevel(descriptor);
 
-        if (attackHasDamage(data.classId) || attackHasHeal(data.classId)) {
+        if (attackHasDamage(data.classId)) {
             data.damage = descriptor->vftable->getAttackDamageOrHeal(descriptor);
-            data.heal = data.damage;
+        } else if (attackHasHeal(data.classId)) {
+            data.heal = descriptor->vftable->getAttackDamageOrHeal(descriptor);
         }
 
         if (attackHasPower(data.classId)) {
@@ -266,20 +258,17 @@ AttackDescriptor::AttackDescriptor(game::IEncUnitDescriptor* descriptor,
     data.drain = attackHasDrain(data.classId) ? attack->vftable->getDrain(attack, data.damage) : 0;
     data.power = computePower(data.power, modifiers, data.classId);
     data.infinite = attackHasInfinite(data.classId) ? attack->vftable->getInfinite(attack) : 0;
-    data.critHit = attackHasCritHit(data.classId) ? attack->vftable->getCritHit(attack) : false;
 
-    if (!data.critHit && attackHasCritHit(data.classId)) {
-        auto midUnitDescriptor = (const game::CMidUnitDescriptor*)
-            dynamicCast(descriptor, 0, rtti.IEncUnitDescriptorType, rtti.CMidUnitDescriptorType, 0);
-
-        if (global || !midUnitDescriptor) {
-            game::CMidgardID globalUnitImplId;
-            descriptor->vftable->getGlobalUnitImplId(descriptor, &globalUnitImplId);
-            auto globalUnitImpl = hooks::getGlobalUnitImpl(&globalUnitImplId);
-
-            data.critHit = hooks::hasCriticalHitLeaderAbility(globalUnitImpl);
-        } else {
-            data.critHit = hooks::hasCriticalHitLeaderAbility(midUnitDescriptor->unit->unitImpl);
+    data.critHit = false;
+    if (attackHasCritHit(data.classId)) {
+        data.critHit = attack->vftable->getCritHit(attack);
+        if (!data.critHit) {
+            if (global) {
+                auto unitImpl = getUnitImpl(descriptor);
+                data.critHit = hasCriticalHitLeaderAbility(unitImpl);
+            } else {
+                data.critHit = hasCriticalHitLeaderAbility(descriptor);
+            }
         }
     }
 

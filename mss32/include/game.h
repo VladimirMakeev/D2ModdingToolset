@@ -369,9 +369,9 @@ using GetAttackQtyDamageOrHeal = int(__stdcall*)(const IAttack* attack, int dama
  * Computes unit hp + (hp * armor).
  * Used for battle AI.
  */
-using ComputeUnitEffectiveHp = int(__stdcall*)(const IMidgardObjectMap* objectMap,
-                                               const CMidUnit* unit,
-                                               const BattleMsgData* battleMsgData);
+using ComputeUnitEffectiveHpForAi = int(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                    const CMidUnit* unit,
+                                                    const BattleMsgData* battleMsgData);
 
 /**
  * Calculates upgrade count for the specified unit level and applies upgrade values from
@@ -662,7 +662,7 @@ struct Functions
     GetAttackImplMagic getAttackImplMagic;
     GetUnitHealAttackNumber getUnitHealAttackNumber;
     GetAttackQtyDamageOrHeal getAttackQtyDamageOrHeal;
-    ComputeUnitEffectiveHp computeUnitEffectiveHp;
+    ComputeUnitEffectiveHpForAi computeUnitEffectiveHpForAi;
     ApplyDynUpgradeToAttackData applyDynUpgradeToAttackData;
     ComputeUnitDynUpgrade computeUnitDynUpgrade;
     ShowMovementPath showMovementPath;

@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,29 +17,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "pictureinterf.h"
+#include "categorylist.h"
 #include "version.h"
 #include <array>
 
-namespace game::CPictureInterfApi {
+namespace game::CategoryListApi {
 
 // clang-format off
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::SetImage)0x5318a0,
+        (Api::Constructor)0x424628,
+        (Api::Clear)0x40a549,
+        (Api::FreeNode)0x4c8755,
     },
     // Russobit
     Api{
-        (Api::SetImage)0x5318a0,
+        (Api::Constructor)0x424628,
+        (Api::Clear)0x40a549,
+        (Api::FreeNode)0x4c8755,
     },
     // Gog
     Api{
-        (Api::SetImage)0x530db8,
+        (Api::Constructor)0x42413b,
+        (Api::Clear)0x40a22b,
+        (Api::FreeNode)0x5215fc,
     },
     // Scenario Editor
     Api{
-        (Api::SetImage)0x494988,
+        (Api::Constructor)0x402fed,
+        (Api::Clear)0x43ee56,
+        (Api::FreeNode)0x4fd186,
     },
 }};
 // clang-format on
@@ -49,4 +57,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::CPictureInterfApi
+} // namespace game::CategoryListApi

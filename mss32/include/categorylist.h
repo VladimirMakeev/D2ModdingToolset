@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,49 +17,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ENCLAYOUT_H
-#define ENCLAYOUT_H
+#ifndef CATEGORYLIST_H
+#define CATEGORYLIST_H
 
-#include "interface.h"
+#include "categories.h"
+#include "d2list.h"
 
 namespace game {
 
-struct IEncLayoutVftable;
-struct CDialogInterf;
-struct IMidObject;
+using CategoryList = List<Category<int>>;
+using CategoryListNode = ListNode<Category<int>>;
 
-struct IEncLayout : public CInterfaceT<IEncLayoutVftable>
-{
-    CDialogInterf* dialog;
-};
-
-assert_size(IEncLayout, 12);
-
-struct IEncLayoutVftable : public CInterfaceVftable
-{
-    using Update = void(__thiscall*)(IEncLayout* thisptr, const IMidObject* obj);
-    Update update;
-};
-
-assert_vftable_size(IEncLayoutVftable, 35);
-
-namespace IEncLayoutApi {
+namespace CategoryListApi {
 
 struct Api
 {
-    using Constructor = IEncLayout*(__thiscall*)(IEncLayout* thisptr,
-                                                 CInterface* parent,
-                                                 const CMqRect* area);
+    using Constructor = CategoryList*(__thiscall*)(CategoryList* thisptr);
     Constructor constructor;
 
-    using Destructor = void(__thiscall*)(IEncLayout* thisptr);
-    Destructor destructor;
+    using Clear = void(__thiscall*)(CategoryList* thisptr);
+    Clear clear;
+
+    using FreeNode = void(__thiscall*)(CategoryList* thisptr, CategoryListNode* node);
+    FreeNode freeNode;
 };
 
 Api& get();
 
-} // namespace IEncLayoutApi
+} // namespace CategoryListApi
 
 } // namespace game
 
-#endif // ENCLAYOUT_H
+#endif // CATEGORYLIST_H

@@ -20,6 +20,7 @@
 #ifndef MODIFIERUTILS_H
 #define MODIFIERUTILS_H
 
+#include "idlist.h"
 #include "immunecat.h"
 #include "midgardid.h"
 #include <set>
@@ -37,6 +38,8 @@ struct LAttackSource;
 struct LAttackClass;
 struct IAttack;
 struct BattleMsgData;
+
+enum class ModifierElementTypeFlag : int;
 } // namespace game
 
 namespace hooks {
@@ -113,6 +116,18 @@ std::set<game::CMidgardID> getUnitModifierIds(game::UnitInfo* unitInfo,
                                               const game::CMidgardID* modifiedUnitId);
 
 game::IAttack* wrapAltAttack(const game::IUsUnit* unit, game::IAttack* attack);
+
+void getEditorModifiers(const game::CMidUnit* unit, game::IdList* value);
+
+int applyModifiers(int base, const game::IdList& modifiers, game::ModifierElementTypeFlag type);
+
+bool isImmunityModifier(const game::CMidgardID* modifierId,
+                        const game::LAttackSource* source,
+                        game::ImmuneId immuneId);
+
+bool isImmunityclassModifier(const game::CMidgardID* modifierId,
+                             const game::LAttackClass* class_,
+                             game::ImmuneId immuneId);
 
 } // namespace hooks
 
