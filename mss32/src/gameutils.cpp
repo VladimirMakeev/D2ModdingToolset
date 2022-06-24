@@ -36,8 +36,10 @@
 #include "midserver.h"
 #include "midserverlogic.h"
 #include "midstack.h"
+#include "midunit.h"
 #include "scenarioinfo.h"
 #include "scenedit.h"
+#include "ussoldier.h"
 #include "version.h"
 #include <thread>
 
@@ -383,6 +385,22 @@ const game::CMidRuin* getRuinByUnitId(const game::IMidgardObjectMap* objectMap,
     auto ruinId = gameFunctions().getRuinIdByUnitId(objectMap, unitId);
 
     return ruinId ? getRuin(objectMap, ruinId) : nullptr;
+}
+
+int getGroupXpKilled(const game::IMidgardObjectMap* objectMap, const game::CMidUnitGroup* group)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    int result = 0;
+    for (const game::CMidgardID* it = group->units.bgn; it != group->units.end; ++it) {
+        const auto unit = fn.findUnitById(objectMap, it);
+        const auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+        result += soldier->vftable->getXpKilled(soldier);
+    }
+
+    return result;
 }
 
 } // namespace hooks

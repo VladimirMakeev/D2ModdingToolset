@@ -213,6 +213,11 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\buildingbranch.cpp" />
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
+    <ClCompile Include="src\enclayoutcity.cpp" />
+    <ClCompile Include="src\enclayoutcityhooks.cpp" />
+    <ClCompile Include="src\enclayoutruin.cpp" />
+    <ClCompile Include="src\enclayoutruinhooks.cpp" />
+    <ClCompile Include="src\enclayoutstackhooks.cpp" />
     <ClCompile Include="src\intvector.cpp" />
     <ClCompile Include="src\button.cpp" />
     <ClCompile Include="src\campaignstream.cpp" />
@@ -256,6 +261,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\editboxinterf.cpp" />
     <ClCompile Include="src\editor.cpp" />
     <ClCompile Include="src\interfaceutils.cpp" />
+    <ClCompile Include="src\enclayoutstack.cpp" />
     <ClCompile Include="src\scenedit.cpp" />
     <ClCompile Include="src\effectinterf.cpp" />
     <ClCompile Include="src\effectinterfhooks.cpp" />
@@ -570,6 +576,10 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\buildingbranch.h" />
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />
+    <ClInclude Include="include\enclayoutcity.h" />
+    <ClInclude Include="include\enclayoutcityhooks.h" />
+    <ClInclude Include="include\enclayoutruin.h" />
+    <ClInclude Include="include\enclayoutruinhooks.h" />
     <ClInclude Include="include\intvector.h" />
     <ClInclude Include="include\button.h" />
     <ClInclude Include="include\campaignstream.h" />
@@ -606,6 +616,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\d2map.h" />
     <ClInclude Include="include\d2tree.h" />
     <ClInclude Include="include\enclayout.h" />
+    <ClInclude Include="include\enclayoutstack.h" />
+    <ClInclude Include="include\enclayoutstackhooks.h" />
     <ClInclude Include="include\enclayoutunithooks.h" />
     <ClInclude Include="include\enclayoutunit.h" />
     <ClInclude Include="include\imageptrvector.h" />

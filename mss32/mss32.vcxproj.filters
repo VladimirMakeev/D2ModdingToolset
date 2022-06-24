@@ -1076,6 +1076,24 @@
     <ClCompile Include="src\intvector.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\enclayoutstack.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enclayoutstackhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enclayoutruin.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enclayoutruinhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enclayoutcityhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enclayoutcity.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2705,6 +2723,24 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\leaderunitdescriptor.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\enclayoutstack.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\enclayoutstackhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\enclayoutruin.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\enclayoutruinhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\enclayoutcityhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\enclayoutcity.h">
       <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>

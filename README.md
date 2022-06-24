@@ -207,6 +207,28 @@
         ```
     - Specify text id from `TApp.dbf` and `TAppEdit.dbf` that contains key `%HP%`.
   </details>
+- <details>
+    <summary>Shows total XP for killing in stack/city/ruin encyclopedia;</summary>
+
+    - Add interface text to `TApp.dbf` and `TAppEdit.dbf` that contains `%XPKILL%` keyword, for example: `X015TA0011` `Bounty: %XPKILL%`;
+    - Add text box with name `TXT_XP_KILLED` to `DLG_R_C_STACK` in `Interf.dlg` and `ScenEdit.dlg` files, for example:
+        ```
+        TEXT	TXT_XP_KILLED,161,527,396,549,\hC;,"X015TA0011",""
+        ```
+    - Add text boxes with names `TXT_XP_KILLED` and `TXT_XP_KILLED_STACK` to `DLG_R_C_CITY` in `Interf.dlg` and `ScenEdit.dlg` files, for example:
+        ```
+        TEXT	TXT_XP_KILLED,444,531,619,553,\hC;,"X015TA0011",""
+        TEXT	TXT_XP_KILLED_STACK,165,531,339,553,\hC;,"X015TA0011",""
+        ```
+    - Add text box with name `TXT_XP_KILLED` to `DLG_R_C_RUIN` in `Interf.dlg` and `ScenEdit.dlg` files, for example:
+        ```
+        TEXT	TXT_XP_KILLED,130,486,360,508,\hC;,"X015TA0011",""
+        ```
+
+    ![image](https://user-images.githubusercontent.com/5180699/175406425-227b2df0-999d-47bb-9143-d4d17fe52b94.png)
+    ![image](https://user-images.githubusercontent.com/5180699/175406459-cdca2078-2737-4462-832f-5762ff92c623.png)
+    ![image](https://user-images.githubusercontent.com/5180699/175406488-1f3d64cc-ac32-4dfb-8603-2bc1c71bdcf9.png)
+</details>
 
 #### Strategic map
 - <details>
