@@ -55,6 +55,7 @@ void UnitView::bind(sol::state& lua)
     unit["hpMax"] = sol::property(&UnitView::getHpMax);
     unit["impl"] = sol::property(&UnitView::getImpl);
     unit["baseImpl"] = sol::property(&UnitView::getBaseImpl);
+    unit["leveledImpl"] = sol::property(&UnitView::getLeveledImpl);
     unit["modifiers"] = sol::property(&UnitView::getModifiers);
 
     // Leader properties for backward compatibility
@@ -74,6 +75,11 @@ std::optional<UnitImplView> UnitView::getImpl() const
 std::optional<UnitImplView> UnitView::getBaseImpl() const
 {
     return {hooks::getGlobalUnitImpl(unit)};
+}
+
+std::optional<UnitImplView> UnitView::getLeveledImpl() const
+{
+    return {hooks::getUnitImpl(&getUnitImpl()->id)};
 }
 
 IdView UnitView::getId() const

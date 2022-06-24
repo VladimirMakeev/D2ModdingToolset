@@ -50,6 +50,8 @@ public:
     std::optional<UnitImplView> getImpl() const;
     /** Returns unit base implementation. */
     std::optional<UnitImplView> getBaseImpl() const;
+    /** Returns unit leveled implementation (without modifiers). */
+    std::optional<UnitImplView> getLeveledImpl() const;
 
     std::vector<ModifierView> getModifiers() const;
 
