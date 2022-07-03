@@ -514,6 +514,8 @@ void excludeImmuneTargets(const game::IMidgardObjectMap* objectMap,
 
 void fillCustomAttackTargets(const game::IdList* targets)
 {
+    getCustomAttacks().damageRatios.clear();
+
     auto& result = getCustomAttacks().targets;
     result.clear();
 
