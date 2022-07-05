@@ -366,7 +366,7 @@ void addDynUpgradeLevelToField(std::string& text, const char* field, int level)
 
 void addDynUpgradeTextToField(std::string& text, const char* field, int upgrade1, int upgrade2)
 {
-    if (!upgrade1 || !upgrade2) {
+    if (!upgrade1 && !upgrade2) {
         return;
     }
 
