@@ -42,6 +42,7 @@
 #include "usunitimpl.h"
 #include "utils.h"
 #include "visitors.h"
+#include <fmt/format.h>
 
 namespace hooks {
 
@@ -54,9 +55,7 @@ static int getDrainLevel(const game::CMidUnit* unit,
 
     std::optional<sol::environment> env;
     const auto path{scriptsFolder() / "drainLevel.lua"};
-    using GetLevel = std::function<int(const bindings::UnitView&, const bindings::UnitView&,
-                                       const bindings::ItemView*)>;
-    auto getLevel = getScriptFunction<GetLevel>(path, "getLevel", env, true, true);
+    auto getLevel = getScriptFunction(path, "getLevel", env, true, true);
     if (!getLevel) {
         return 0;
     }

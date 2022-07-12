@@ -31,6 +31,7 @@
 #include "interfmanager.h"
 #include "iterators.h"
 #include "listbox.h"
+#include "log.h"
 #include "mempool.h"
 #include "midbag.h"
 #include "midevcondition.h"

@@ -18,7 +18,11 @@
  */
 
 #include "custommodifierfunctions.h"
+#include "currencyview.h"
+#include "idview.h"
 #include "scripts.h"
+#include "unitimplview.h"
+#include "unitview.h"
 #include "utils.h"
 
 namespace hooks {
@@ -29,7 +33,7 @@ void CustomModifierFunctions::initialize(const std::string& scriptFileName)
     if (!environment)
         return;
 
-#define FUNCTION(_NAME_) getScriptFunction(env, #_NAME_, &##_NAME_);
+#define FUNCTION(_NAME_) this->##_NAME_ = getScriptFunction(env, #_NAME_);
 
     const auto& env = *environment;
     FUNCTION(canApplyToUnit)

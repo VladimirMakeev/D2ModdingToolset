@@ -20,6 +20,7 @@
 #include "custommodifier.h"
 #include "attackimpl.h"
 #include "attackutils.h"
+#include "currencyview.h"
 #include "customattacks.h"
 #include "customattackutils.h"
 #include "custommodifierfunctions.h"
@@ -34,11 +35,13 @@
 #include "restrictions.h"
 #include "scriptutils.h"
 #include "unitcat.h"
+#include "unitimplview.h"
 #include "unitmodifier.h"
 #include "unitmodifierhooks.h"
 #include "unitutils.h"
 #include "ussoldierimpl.h"
 #include "utils.h"
+#include <fmt/format.h>
 #include <mutex>
 #include <set>
 

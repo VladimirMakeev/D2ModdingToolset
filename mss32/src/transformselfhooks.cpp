@@ -49,8 +49,7 @@ static int getTransformSelfLevel(const game::CMidUnit* unit, game::TUsUnitImpl* 
 {
     std::optional<sol::environment> env;
     const auto path{scriptsFolder() / "transformSelf.lua"};
-    using GetLevel = std::function<int(const bindings::UnitView&, const bindings::UnitImplView&)>;
-    auto getLevel = getScriptFunction<GetLevel>(path, "getLevel", env, true, true);
+    auto getLevel = getScriptFunction(path, "getLevel", env, true, true);
     if (!getLevel) {
         return 0;
     }
@@ -94,9 +93,8 @@ static int getTransformSelfFreeAttackNumber(int attacksDone,
                                             bool hasDoubleAttack)
 {
     std::optional<sol::environment> env;
-    using GetFreeAttackNumber = std::function<int(int, int, bool, bool)>;
-    auto f = getScriptFunction<GetFreeAttackNumber>(scriptsFolder() / "transformSelf.lua",
-                                                    "getFreeAttackNumber", env, false, true);
+    auto f = getScriptFunction(scriptsFolder() / "transformSelf.lua", "getFreeAttackNumber", env,
+                               false, true);
     if (!f)
         return getTransformSelfFreeAttackNumberDefault(attacksDone, attacksRemain, hadDoubleAttack,
                                                        hasDoubleAttack);
