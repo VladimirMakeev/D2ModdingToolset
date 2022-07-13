@@ -304,7 +304,11 @@ void __fastcall condScriptInterfOkButtonHandler(CCondScriptInterf* thisptr, int 
 
     auto editComment = dialogApi.findEditBox(dialog, "EDIT_COMMENT");
     if (editComment) {
-        condition->description = std::string(editComment->data->editBoxData.inputString.string);
+        // Condition description is optional
+        auto& comment = editComment->data->editBoxData.inputString;
+        if (comment.length) {
+            condition->description = std::string(comment.string);
+        }
     }
 
     auto midEvent = (CMidEvent*)objectMap->vftable
