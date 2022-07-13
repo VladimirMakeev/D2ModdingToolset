@@ -70,6 +70,50 @@ struct CMidgardScenarioMap : public IMidgardObjectMap
 
 assert_size(CMidgardScenarioMap, 368);
 
+struct ScenarioMapDataIterator
+{
+    bool unknown;
+    char padding[3];
+    ScenarioObjectRecord** records;
+    ScenarioObjectRecord* foundRecord;
+    int recordsTotal;
+};
+
+assert_size(ScenarioMapDataIterator, 16);
+
+struct CMidgardScenarioMapIter : public IMidgardObjectMap::Iterator
+{
+    ScenarioMapDataIterator iterator;
+};
+
+assert_size(CMidgardScenarioMapIter, 20);
+
+namespace CMidgardScenarioMapApi {
+
+struct Api
+{
+    using GetIterator = ScenarioMapDataIterator*(__thiscall*)(CMidgardScenarioMap* thisptr,
+                                                              ScenarioMapDataIterator* iterator);
+
+    /** Returns a raw iterator to the first record. */
+    GetIterator begin;
+
+    /** Returns a raw iterator to the record following the last one. */
+    GetIterator end;
+
+    /** Advances raw iterator. */
+    using Advance = void(__thiscall*)(ScenarioMapDataIterator* thisptr);
+    Advance advance;
+
+    /** Checks objects correctness and updates freeIdTypeIndices. */
+    using CheckObjects = bool(__thiscall*)(CMidgardScenarioMap* scenarioMap);
+    CheckObjects checkObjects;
+};
+
+Api& get();
+
+} // namespace CMidgardScenarioMapApi
+
 } // namespace game
 
 #endif // MIDGARDSCENARIOMAP_H

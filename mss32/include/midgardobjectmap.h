@@ -25,8 +25,42 @@
 
 namespace game {
 
-struct IMidgardObjectMap;
+struct IMidgardObjectMapVftable;
 struct IMidScenarioObject;
+
+struct IMidgardObjectMap
+{
+    struct IteratorVftable;
+
+    struct Iterator
+    {
+        IteratorVftable* vftable;
+    };
+
+    struct IteratorVftable
+    {
+        using Destructor = void(__thiscall*)(Iterator* thisptr, char flags);
+        Destructor destructor;
+
+        /** Returns true if iterator reached end. */
+        using End = bool(__thiscall*)(Iterator* thisptr, Iterator* endIterator);
+        End end;
+
+        /** Returns id of the object that the iterator is currently pointing. */
+        using GetObjectId = CMidgardID*(__thiscall*)(Iterator* thisptr);
+        GetObjectId getObjectId;
+
+        /** Advances iterator so it starts pointing to the next object or end. */
+        using Advance = void(__thiscall*)(Iterator* thisptr);
+        Advance advance;
+    };
+
+    const IMidgardObjectMapVftable* vftable;
+};
+
+assert_vftable_size(IMidgardObjectMap::IteratorVftable, 4);
+
+using IteratorPtr = SmartPtr<IMidgardObjectMap::Iterator>;
 
 struct IMidgardObjectMapVftable
 {
@@ -41,10 +75,14 @@ struct IMidgardObjectMapVftable
     using GetObjectsTotal = int(__thiscall*)(const IMidgardObjectMap* thisptr);
     GetObjectsTotal getObjectsTotal;
 
-    using CreateIterator = SmartPointer*(__thiscall*)(IMidgardObjectMap* thisptr,
-                                                      SmartPointer* iterator);
-    CreateIterator createIterator;
-    CreateIterator createIterator2;
+    using GetIterator = IteratorPtr*(__thiscall*)(IMidgardObjectMap* thisptr,
+                                                  IteratorPtr* iterator);
+
+    /** Returns an iterator to the first record. */
+    GetIterator begin;
+
+    /** Returns an iterator to the record following the last one. */
+    GetIterator end;
 
     /**
      * Finds scenario object by its id.
@@ -103,41 +141,6 @@ struct IMidgardObjectMapVftable
 };
 
 assert_vftable_size(IMidgardObjectMapVftable, 13);
-
-struct IMidgardObjectMap
-{
-    struct IteratorVftable;
-
-    struct Iterator
-    {
-        IteratorVftable* vftable;
-        SmartPointer iterator;
-        IMidgardObjectMap* objectMap;
-    };
-
-    struct IteratorVftable
-    {
-        using Destructor = void(__thiscall*)(Iterator* thisptr, char flags);
-        Destructor destructor;
-
-        /** Returns true if iterator reached end. */
-        using End = bool(__thiscall*)(Iterator* thisptr, Iterator* endIterator);
-        End end;
-
-        /** Returns id of the object that the iterator is currently pointing. */
-        using GetObjectId = CMidgardID*(__thiscall*)(Iterator* thisptr);
-        GetObjectId getObjectId;
-
-        /** Advances iterator so it starts pointing to the next object or end. */
-        using Advance = void(__thiscall*)(Iterator* thisptr);
-        Advance advance;
-    };
-
-    const IMidgardObjectMapVftable* vftable;
-};
-
-assert_size(IMidgardObjectMap::Iterator, 16);
-assert_vftable_size(IMidgardObjectMap::IteratorVftable, 4);
 
 } // namespace game
 

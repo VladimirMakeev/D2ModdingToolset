@@ -1094,6 +1094,9 @@
     <ClCompile Include="src\enclayoutcity.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\midgardscenariomap.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">

@@ -24,8 +24,6 @@
 
 namespace game {
 
-using IteratorPtr = SmartPtr<IMidgardObjectMap::Iterator>;
-
 namespace Iterators {
 
 struct Api
