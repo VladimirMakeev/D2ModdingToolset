@@ -98,6 +98,11 @@ void createTimerEvent(game::UiEvent* timerEvent,
 /** Computes MD5 hash of files in specified folder. */
 bool computeHash(const std::filesystem::path& folder, std::string& hash);
 
+/** Executes function for each scenario object with specified id type. */
+void forEachScenarioObject(game::IMidgardObjectMap* objectMap,
+                           game::IdType idType,
+                           const std::function<void(const game::IMidScenarioObject*)>& func);
+
 template <typename T>
 static inline void replaceRttiInfo(game::RttiInfo<T>& dst, const T* src, bool copyVftable = true)
 {

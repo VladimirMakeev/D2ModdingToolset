@@ -352,4 +352,34 @@ bool computeHash(const std::filesystem::path& folder, std::string& hash)
     return true;
 }
 
+void forEachScenarioObject(game::IMidgardObjectMap* objectMap,
+                           game::IdType idType,
+                           const std::function<void(const game::IMidScenarioObject*)>& func)
+{
+    using namespace game;
+
+    IteratorPtr current{};
+    objectMap->vftable->begin(objectMap, &current);
+
+    IteratorPtr end{};
+    objectMap->vftable->end(objectMap, &end);
+
+    const auto& getType{CMidgardIDApi::get().getType};
+
+    while (!current.data->vftable->end(current.data, end.data)) {
+        const auto* id{current.data->vftable->getObjectId(current.data)};
+
+        if (getType(id) == idType) {
+            func(objectMap->vftable->findScenarioObjectById(objectMap, id));
+        }
+
+        current.data->vftable->advance(current.data);
+    }
+
+    const auto& free{SmartPointerApi::get().createOrFree};
+
+    free((SmartPointer*)&current, nullptr);
+    free((SmartPointer*)&end, nullptr);
+}
+
 } // namespace hooks
