@@ -59,6 +59,7 @@ struct CUnitGenerator;
 struct CMenuPhase;
 struct NetPlayerInfo;
 struct LRaceCategory;
+struct CMidgardScenarioMap;
 }; // namespace game
 
 namespace hooks {
@@ -240,6 +241,8 @@ void __stdcall getCityIconImageNamesHooked(game::List<game::String>* imageNames,
                                            const void* iconsFF,
                                            const game::CMidgardID* fortificationId,
                                            const game::IMidgardObjectMap* objectMap);
+
+bool __fastcall checkMapObjectsHooked(game::CMidgardScenarioMap* scenarioMap, int /*%edx*/);
 
 } // namespace hooks
 

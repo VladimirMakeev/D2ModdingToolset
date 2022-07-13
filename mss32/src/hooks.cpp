@@ -103,6 +103,7 @@
 #include "mideventhooks.h"
 #include "midgardid.h"
 #include "midgardmsgbox.h"
+#include "midgardscenariomap.h"
 #include "midmsgboxbuttonhandlerstd.h"
 #include "midmusic.h"
 #include "midplayer.h"
@@ -451,6 +452,7 @@ static Hooks getScenarioEditorHooks()
         //{CMidEvEffectApi::get().getDescription, eventEffectGetDescriptionHooked, (void**)&orig.eventEffectGetDescription},
         //{CMidEvEffectApi::get().getBrief, eventEffectGetBriefHooked, (void**)&orig.eventEffectGetBrief},
         //{editor::CEffectInterfApi::get().createFromCategory, createEffectInterfFromCategoryHooked, (void**)&orig.createEffectInterfFromCategory},
+        {CMidgardScenarioMapApi::get().checkObjects, checkMapObjectsHooked},
     };
     // clang-format on
 
@@ -2049,6 +2051,45 @@ void __stdcall getCityIconImageNamesHooked(game::List<game::String>* imageNames,
         getOriginalFunctions().getCityIconImageNames(imageNames, iconsFF, fortificationId,
                                                      objectMap);
     }
+}
+
+bool __fastcall checkMapObjectsHooked(game::CMidgardScenarioMap* scenarioMap, int /*%edx*/)
+{
+    using namespace game;
+
+    std::memset(scenarioMap->freeIdTypeIndices, 0, sizeof(scenarioMap->freeIdTypeIndices));
+
+    const auto& api{CMidgardScenarioMapApi::get()};
+
+    ScenarioMapDataIterator current{};
+    api.begin(scenarioMap, &current);
+
+    ScenarioMapDataIterator end{};
+    api.end(scenarioMap, &end);
+
+    const auto& idApi{CMidgardIDApi::get()};
+
+    while (current.foundRecord != end.foundRecord) {
+        const auto* objectId{&current.foundRecord->objectId};
+
+        const auto type{static_cast<int>(idApi.getType(objectId))};
+        const auto typeIndex{idApi.getTypeIndex(objectId)};
+
+        if (scenarioMap->freeIdTypeIndices[type] <= typeIndex) {
+            scenarioMap->freeIdTypeIndices[type] = typeIndex + 1;
+        }
+
+        const auto* object{current.foundRecord->object.data};
+        if (!object->vftable->isValid(object, scenarioMap)) {
+            logError("mssProxyError.log",
+                     fmt::format("Scenario object {:s} is invalid", idToString(objectId)));
+            return false;
+        }
+
+        api.advance(&current);
+    }
+
+    return true;
 }
 
 } // namespace hooks
