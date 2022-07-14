@@ -6,9 +6,12 @@ function canApplyAsBoostSpell()
 	return true
 end
 
-function canApplyToUnit(unit)
-	-- Can apply on only on water unit
-	return unit.impl.waterOnly
+function canApplyToUnit(unitImpl)
+	-- The function is called when the game selects leader upgrades to offer (from GleaUpg.dbf).
+	-- Thus, you can filter which upgrades to provide depending on current unit implementation.
+
+	-- Can only apply on Rod-planter leader
+    return unitImpl.leaderType == Leader.Rod
 end
 
 function canApplyToUnitType(unitType)
