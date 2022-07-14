@@ -396,6 +396,10 @@ int getGroupXpKilled(const game::IMidgardObjectMap* objectMap, const game::CMidU
     int result = 0;
     for (const game::CMidgardID* it = group->units.bgn; it != group->units.end; ++it) {
         const auto unit = fn.findUnitById(objectMap, it);
+        if (unit->currentHp <= 0) {
+            continue;
+        }
+
         const auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
         result += soldier->vftable->getXpKilled(soldier);
     }
