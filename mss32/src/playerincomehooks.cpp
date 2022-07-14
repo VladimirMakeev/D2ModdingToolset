@@ -23,7 +23,6 @@
 #include "fortification.h"
 #include "game.h"
 #include "gameutils.h"
-#include "iterators.h"
 #include "log.h"
 #include "midgardid.h"
 #include "midgardobjectmap.h"
@@ -134,17 +133,8 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
         return income;
     }
 
-    IteratorPtr iteratorPtr;
-    Iterators::get().createFortificationsIterator(&iteratorPtr, objectMap);
-    IteratorPtr endIteratorPtr;
-    Iterators::get().createFortificationsEndIterator(&endIteratorPtr, objectMap);
-
-    auto iterator = iteratorPtr.data;
-
-    while (!iterator->vftable->end(iterator, endIteratorPtr.data)) {
-        auto id = iterator->vftable->getObjectId(iterator);
-        auto obj = objectMap->vftable->findScenarioObjectById(objectMap, id);
-        auto fortification = static_cast<CFortification*>(obj);
+    auto getVillageIncome = [playerId, income, &cityIncome](const IMidScenarioObject* obj) {
+        auto fortification = static_cast<const CFortification*>(obj);
 
         if (fortification->ownerId == *playerId) {
             auto vftable = static_cast<const CFortificationVftable*>(fortification->vftable);
@@ -157,17 +147,13 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
                 BankApi::get().set(income, CurrencyType::Gold, std::clamp(gold, 0, 9999));
             }
         }
+    };
 
-        iterator->vftable->advance(iterator);
-    }
+    forEachScenarioObject(objectMap, IdType::Fortification, getVillageIncome);
 
     // Custom capital city income
     const int gold{income->gold + cityIncome[0]};
     BankApi::get().set(income, CurrencyType::Gold, std::clamp(gold, 0, 9999));
-
-    auto& freeSmartPtr = SmartPointerApi::get().createOrFree;
-    freeSmartPtr((SmartPointer*)&iteratorPtr, nullptr);
-    freeSmartPtr((SmartPointer*)&endIteratorPtr, nullptr);
 
     return income;
 }

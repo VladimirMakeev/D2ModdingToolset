@@ -83,7 +83,6 @@
 #include "interftexthooks.h"
 #include "isoenginegroundhooks.h"
 #include "itemtransferhooks.h"
-#include "iterators.h"
 #include "leaderabilitycat.h"
 #include "listbox.h"
 #include "log.h"
@@ -1461,25 +1460,18 @@ game::CEncLayoutSpell* __fastcall encLayoutSpellCtorHooked(game::CEncLayoutSpell
                                                            void* a2,
                                                            game::CMidgardID* spellId,
                                                            game::CEncParamBase* encParam,
-                                                           game::CMidgardID* playerId)
+                                                           const game::CMidgardID* playerId)
 {
     using namespace game;
 
     if (!playerId) {
-        IteratorPtr iterator;
-        Iterators::get().createPlayersIterator(&iterator, objectMap);
-
-        IteratorPtr endIterator;
-        Iterators::get().createPlayersEndIterator(&endIterator, objectMap);
-
-        // Use id of the first found player to show spell info
-        if (!iterator.data->vftable->end(iterator.data, endIterator.data)) {
-            playerId = iterator.data->vftable->getObjectId(iterator.data);
-        }
-
-        auto& freeSmartPtr = SmartPointerApi::get().createOrFree;
-        freeSmartPtr((SmartPointer*)&iterator, nullptr);
-        freeSmartPtr((SmartPointer*)&endIterator, nullptr);
+        forEachScenarioObject(objectMap, IdType::Player,
+                              [&playerId](const IMidScenarioObject* obj) {
+                                  // Use id of the first found player to show spell info
+                                  if (!playerId) {
+                                      playerId = &obj->id;
+                                  }
+                              });
     }
 
     // Show spell price and casting cost

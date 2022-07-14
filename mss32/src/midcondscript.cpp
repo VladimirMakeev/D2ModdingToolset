@@ -29,12 +29,12 @@
 #include "eventconditioncathooks.h"
 #include "game.h"
 #include "interfmanager.h"
-#include "iterators.h"
 #include "listbox.h"
 #include "mempool.h"
 #include "midbag.h"
 #include "midevcondition.h"
 #include "midevent.h"
+#include "midgardobjectmap.h"
 #include "midgardstream.h"
 #include "radiobuttoninterf.h"
 #include "scripts.h"
@@ -497,34 +497,6 @@ void __fastcall condScriptInterfStackListBoxDisplayHandler(CCondScriptInterf* th
     StringApi::get().free(&tmp);
 }
 
-using CreateIterator = game::Iterators::Api::CreateIterator;
-
-static void getObjectIds(IdVector& ids,
-                         game::IMidgardObjectMap* objectMap,
-                         const CreateIterator& create,
-                         const CreateIterator& createEnd)
-{
-    using namespace game;
-
-    IteratorPtr iteratorPtr;
-    IteratorPtr endIteratorPtr;
-
-    create(&iteratorPtr, objectMap);
-    createEnd(&endIteratorPtr, objectMap);
-
-    auto iterator = iteratorPtr.data;
-
-    while (!iterator->vftable->end(iterator, endIteratorPtr.data)) {
-        ids.push_back(*iterator->vftable->getObjectId(iterator));
-
-        iterator->vftable->advance(iterator);
-    }
-
-    auto& freeSmartPtr = SmartPointerApi::get().createOrFree;
-    freeSmartPtr((SmartPointer*)&iteratorPtr, nullptr);
-    freeSmartPtr((SmartPointer*)&endIteratorPtr, nullptr);
-}
-
 game::editor::CCondInterf* createCondScriptInterf(game::ITask* task,
                                                   void* a2,
                                                   const game::CMidgardID* eventId)
@@ -565,29 +537,31 @@ game::editor::CCondInterf* createCondScriptInterf(game::ITask* task,
     thisptr->condition = nullptr;
 
     auto objectMap = CCondInterfApi::get().getObjectMap(thisptr->unknown);
-    auto iterators = Iterators::get();
 
     IdVector stacks;
-    getObjectIds(stacks, objectMap, iterators.createStacksIterator,
-                 iterators.createStacksEndIterator);
+    forEachScenarioObject(objectMap, IdType::Stack,
+                          [&stacks](const IMidScenarioObject* obj) { stacks.push_back(obj->id); });
     stacks.swap(thisptr->stacks);
 
     IdVector cities;
-    getObjectIds(cities, objectMap, iterators.createFortificationsIterator,
-                 iterators.createFortificationsEndIterator);
+    forEachScenarioObject(objectMap, IdType::Fortification,
+                          [&cities](const IMidScenarioObject* obj) { cities.push_back(obj->id); });
     cities.swap(thisptr->cities);
 
     IdVector ruins;
-    getObjectIds(ruins, objectMap, iterators.createRuinsIterator, iterators.createRuinsEndIterator);
+    forEachScenarioObject(objectMap, IdType::Ruin,
+                          [&ruins](const IMidScenarioObject* obj) { ruins.push_back(obj->id); });
     ruins.swap(thisptr->ruins);
 
     IdVector locations;
-    getObjectIds(locations, objectMap, iterators.createLocationsIterator,
-                 iterators.createLocationsEndIterator);
+    forEachScenarioObject(objectMap, IdType::Location, [&locations](const IMidScenarioObject* obj) {
+        locations.push_back(obj->id);
+    });
     locations.swap(thisptr->locations);
 
     IdVector bags;
-    getObjectIds(bags, objectMap, iterators.createBagsIterator, iterators.createBagsEndIterator);
+    forEachScenarioObject(objectMap, IdType::Bag,
+                          [&bags](const IMidScenarioObject* obj) { bags.push_back(obj->id); });
     bags.swap(thisptr->bags);
 
     auto dialog = thisptr->popupData->dialog;

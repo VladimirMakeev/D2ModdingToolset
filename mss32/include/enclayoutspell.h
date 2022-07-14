@@ -38,7 +38,7 @@ struct Api
                                                       void* a2,
                                                       CMidgardID* spellId,
                                                       CEncParamBase* encParam,
-                                                      CMidgardID* playerId);
+                                                      const CMidgardID* playerId);
     Constructor constructor;
 };
 

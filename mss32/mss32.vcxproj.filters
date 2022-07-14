@@ -244,9 +244,6 @@
     <ClCompile Include="src\enclayoutspell.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="src\iterators.cpp">
-      <Filter>game</Filter>
-    </ClCompile>
     <ClCompile Include="src\fortcategory.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -1585,9 +1582,6 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\enclayoutspell.h">
-      <Filter>game</Filter>
-    </ClInclude>
-    <ClInclude Include="include\iterators.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\fortcategory.h">

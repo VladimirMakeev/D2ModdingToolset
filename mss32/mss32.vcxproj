@@ -302,7 +302,6 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\itemcategory.cpp" />
     <ClCompile Include="src\itemtransferhooks.cpp" />
     <ClCompile Include="src\itemutils.cpp" />
-    <ClCompile Include="src\iterators.cpp" />
     <ClCompile Include="src\leaderabilitycat.cpp" />
     <ClCompile Include="src\listbox.cpp" />
     <ClCompile Include="src\idlistutils.cpp" />
@@ -747,7 +746,6 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\itemvaluable.h" />
     <ClInclude Include="include\itemwand.h" />
     <ClInclude Include="include\itemweapon.h" />
-    <ClInclude Include="include\iterators.h" />
     <ClInclude Include="include\landmark.h" />
     <ClInclude Include="include\landmarkcat.h" />
     <ClInclude Include="include\leaderabilitycat.h" />
