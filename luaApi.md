@@ -42,6 +42,7 @@ The function only accessible to scripts where scenario access is appropriate:
 - `drainLevel.lua`
 - custom attack reach scripts
 - custom unit modifier script
+
 `checkEventCondition` has `scenario` as its argument so `getScenario` is not bound to it.
 ```lua
 getScenario():getUnit(unitId)
@@ -288,7 +289,7 @@ impl.scout
 impl.leadership
 ```
 ##### id
-Returns unit [id](luaApi.md#id). `UNIT_ID` value from `GUnits.dbf`.
+Returns unit implementation [id](luaApi.md#id). `UNIT_ID` value from `GUnits.dbf`.
 ```lua
 impl.id
 ```
@@ -365,10 +366,10 @@ Returns group [units](luaApi.md#unit-1).
 group.units
 ```
 ##### hasUnit
-Returns true if group has specified [unit](luaApi.md#unit-1) or unit [id](luaApi.md#id).
+Returns true if group has specified [unit](luaApi.md#unit-1) or [unit id](luaApi.md#id-2).
 ```lua
 group:hasUnit(unit)
-group:hasUnit(unitId)
+group:hasUnit(Id.new('S143UN0001'))
 ```
 
 ---
@@ -690,9 +691,9 @@ if (player == nil) then
 end
 ```
 ##### getUnit
-Searches for [unit](luaApi.md#unit-1) by id string or [id](luaApi.md#id), returns nil if not found.
+Searches for [unit](luaApi.md#unit-1) by id string or [unit id](luaApi.md#id-2), returns nil if not found.
 ```lua
-local unit = scenario:getUnit('S143UU0001')
+local unit = scenario:getUnit('S143UN0001')
 if (unit == nil) then
     return
 end
