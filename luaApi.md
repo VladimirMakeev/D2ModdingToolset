@@ -206,33 +206,12 @@ unit.baseImpl
 -- Leveled implementation is unit's current implementation without modifiers,
 -- or base implementation plus dynamic upgrades according to unit's level.
 unit.leveledImpl
--- Returns leader maximum movement points (or 0 if unit is not a leader).
-unit.movement
--- Returns leader scouting range (or 0 if unit is not a leader).
-unit.scout
--- Returns current leadership value (or 0 if unit is not a leader).
-unit.leadership
 ```
 ##### id
 Returns unit [id](luaApi.md#id). This is different to id of [unit implementation](luaApi.md#unit-implementation).
 The value is unique for every unit on scenario map.
 ```lua
 unit.id
-```
-##### type
-Returns [leader](luaApi.md#leader) type (or -1 if unit is not a leader).
-```lua
-unit.type
-```
-##### hasAbility
-Returns true if leader has specified [ability](luaApi.md#ability) (or false if unit is not a leader).
-```lua
-unit:hasAbility(Ability.TalismanUse)
-```
-##### hasMoveBonus
-Returns true if leader has movement bonus on specified [ground](luaApi.md#ground) (or false if unit is not a leader).
-```lua
-unit:hasMoveBonus(Ground.Water)
 ```
 
 ---
