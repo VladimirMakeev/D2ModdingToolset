@@ -20,7 +20,9 @@
 #ifndef UNITIMPLVIEW_H
 #define UNITIMPLVIEW_H
 
+#include "idview.h"
 #include <optional>
+#include <vector>
 
 namespace sol {
 class state;
@@ -32,9 +34,9 @@ struct IUsUnit;
 
 namespace bindings {
 
-struct IdView;
 class DynUpgradeView;
 class AttackView;
+class ModifierView;
 
 class UnitImplView
 {
@@ -63,6 +65,10 @@ public:
     int getUnitCategory() const;
     /** Returns BASE_UNIT specified in Gunits.dbf. */
     std::optional<UnitImplView> getBaseUnit() const;
+
+    std::optional<UnitImplView> getGlobal() const;
+    std::optional<UnitImplView> getGenerated() const;
+    std::vector<ModifierView> getModifiers() const;
 
     /* Have to implement leader properties here because sol does not support down-casting
      * (https://sol2.readthedocs.io/en/latest/api/usertype.html#inheritance).

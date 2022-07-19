@@ -18,20 +18,11 @@
  */
 
 #include "unitview.h"
-#include "dynupgrade.h"
 #include "game.h"
-#include "globaldata.h"
-#include "idview.h"
-#include "log.h"
 #include "midunit.h"
 #include "modifierview.h"
-#include "ummodifier.h"
-#include "unitgenerator.h"
 #include "unitimplview.h"
-#include "unitutils.h"
 #include "ussoldier.h"
-#include "usunitimpl.h"
-#include <fmt/format.h>
 #include <sol/sol.hpp>
 
 namespace bindings {
@@ -56,9 +47,9 @@ void UnitView::bind(sol::state& lua)
     unit["impl"] = sol::property(&UnitView::getImpl);
     unit["baseImpl"] = sol::property(&UnitView::getBaseImpl);
     unit["leveledImpl"] = sol::property(&UnitView::getLeveledImpl);
-    unit["modifiers"] = sol::property(&UnitView::getModifiers);
 
-    // Leader properties for backward compatibility
+    // For backward compatibility
+    unit["modifiers"] = sol::property(&UnitView::getModifiers);
     unit["type"] = sol::property(&UnitView::getLeaderCategory);
     unit["movement"] = sol::property(&UnitView::getMovement);
     unit["scout"] = sol::property(&UnitView::getScout);
@@ -74,12 +65,12 @@ std::optional<UnitImplView> UnitView::getImpl() const
 
 std::optional<UnitImplView> UnitView::getBaseImpl() const
 {
-    return {hooks::getGlobalUnitImpl(unit)};
+    return getImpl()->getGlobal();
 }
 
 std::optional<UnitImplView> UnitView::getLeveledImpl() const
 {
-    return {hooks::getUnitImpl(&getUnitImpl()->id)};
+    return getImpl()->getGenerated();
 }
 
 IdView UnitView::getId() const
@@ -140,24 +131,7 @@ bool UnitView::hasMoveBonus(int groundId) const
 
 std::vector<ModifierView> UnitView::getModifiers() const
 {
-    using namespace game;
-
-    const auto& rtti = RttiApi::rtti();
-    const auto dynamicCast = RttiApi::get().dynamicCast;
-
-    std::vector<ModifierView> result;
-
-    CUmModifier* modifier = nullptr;
-    for (auto curr = unit->unitImpl; curr; curr = modifier->data->prev) {
-        modifier = (CUmModifier*)dynamicCast(curr, 0, rtti.IUsUnitType, rtti.CUmModifierType, 0);
-        if (!modifier)
-            break;
-
-        result.push_back(ModifierView{modifier});
-    }
-
-    std::reverse(result.begin(), result.end());
-    return result;
+    return getImpl()->getModifiers();
 }
 
 const game::IUsUnit* UnitView::getUnitImpl() const

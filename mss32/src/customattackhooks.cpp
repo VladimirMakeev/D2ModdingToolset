@@ -1095,7 +1095,7 @@ bool __stdcall findDoppelgangerAttackTargetHooked(const game::IMidgardObjectMap*
         auto targetUnit = static_cast<CMidUnit*>(
             objectMap->vftable->findScenarioObjectById(objectMap, &targetUnitId));
 
-        auto soldier = fn.castUnitImplToSoldier(getGlobalUnitImpl(targetUnit));
+        auto soldier = fn.castUnitImplToSoldier(getGlobalUnitImpl(&targetUnit->unitImpl->id));
 
         auto attack = soldier->vftable->getAttackById(soldier);
         if (!fn.isAttackEffectiveAgainstGroup(objectMap, attack, enemyGroup))

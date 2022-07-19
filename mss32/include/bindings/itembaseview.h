@@ -20,6 +20,8 @@
 #ifndef ITEMBASEVIEW_H
 #define ITEMBASEVIEW_H
 
+#include "currencyview.h"
+#include "idview.h"
 #include <optional>
 
 namespace sol {
@@ -32,8 +34,6 @@ struct CItemBase;
 
 namespace bindings {
 
-struct IdView;
-class CurrencyView;
 class UnitImplView;
 
 class ItemBaseView

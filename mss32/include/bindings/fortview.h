@@ -20,6 +20,10 @@
 #ifndef FORTVIEW_H
 #define FORTVIEW_H
 
+#include "groupview.h"
+#include "idview.h"
+#include "playerview.h"
+#include "point.h"
 #include <optional>
 #include <vector>
 
@@ -34,9 +38,6 @@ struct IMidgardObjectMap;
 
 namespace bindings {
 
-struct IdView;
-class PlayerView;
-class GroupView;
 class StackView;
 class ItemView;
 
@@ -48,6 +49,7 @@ public:
     static void bind(sol::state& lua);
 
     IdView getId() const;
+    Point getPosition() const;
     PlayerView getOwner() const;
     GroupView getGroup() const;
     std::optional<StackView> getVisitor() const;

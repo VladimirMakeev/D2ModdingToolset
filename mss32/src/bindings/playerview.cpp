@@ -18,9 +18,7 @@
  */
 
 #include "playerview.h"
-#include "currencyview.h"
 #include "globaldata.h"
-#include "idview.h"
 #include "lordtype.h"
 #include "midplayer.h"
 #include "racetype.h"

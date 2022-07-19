@@ -20,6 +20,8 @@
 #ifndef MODIFIERVIEW_H
 #define MODIFIERVIEW_H
 
+#include "idview.h"
+
 namespace sol {
 class state;
 }
@@ -29,8 +31,6 @@ struct CUmModifier;
 } // namespace game
 
 namespace bindings {
-
-struct IdView;
 
 class ModifierView
 {

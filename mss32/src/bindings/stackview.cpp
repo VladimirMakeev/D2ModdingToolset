@@ -21,13 +21,10 @@
 #include "fortview.h"
 #include "game.h"
 #include "gameutils.h"
-#include "groupview.h"
-#include "idview.h"
 #include "itemview.h"
 #include "midgardobjectmap.h"
 #include "midstack.h"
 #include "midsubrace.h"
-#include "playerview.h"
 #include "unitview.h"
 #include <sol/sol.hpp>
 
@@ -42,6 +39,7 @@ void StackView::bind(sol::state& lua)
 {
     auto stackView = lua.new_usertype<StackView>("StackView");
     stackView["id"] = sol::property(&StackView::getId);
+    stackView["position"] = sol::property(&StackView::getPosition);
     stackView["owner"] = sol::property(&StackView::getOwner);
     stackView["inside"] = sol::property(&StackView::getInside);
     stackView["group"] = sol::property(&StackView::getGroup);
@@ -57,6 +55,11 @@ void StackView::bind(sol::state& lua)
 IdView StackView::getId() const
 {
     return IdView{stack->id};
+}
+
+Point StackView::getPosition() const
+{
+    return Point{stack->position};
 }
 
 PlayerView StackView::getOwner() const

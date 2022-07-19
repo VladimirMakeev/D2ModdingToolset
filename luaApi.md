@@ -195,23 +195,6 @@ unit.xp
 unit.hp
 -- Returns unit's maximum hit points.
 unit.hpMax
--- Returns unit's current implementation.
--- Current implementation describes unit stats according to its levels
--- and possible transformations applied during battle.
-unit.impl
--- Returns unit's base implementation.
--- Base implementation is a record in GUnits.dbf that describes unit basic stats.
-unit.baseImpl
--- Returns unit's leveled (generated) implementation.
--- Leveled implementation is unit's current implementation without modifiers,
--- or base implementation plus dynamic upgrades according to unit's level.
-unit.leveledImpl
--- Returns leader maximum movement points (or 0 if unit is not a leader).
-unit.movement
--- Returns leader scouting range (or 0 if unit is not a leader).
-unit.scout
--- Returns current leadership value (or 0 if unit is not a leader).
-unit.leadership
 ```
 ##### id
 Returns unit [id](luaApi.md#id). This is different to id of [unit implementation](luaApi.md#unit-implementation).
@@ -219,31 +202,53 @@ The value is unique for every unit on scenario map.
 ```lua
 unit.id
 ```
-##### type
-Returns [leader](luaApi.md#leader) type (or -1 if unit is not a leader).
+##### impl
+Returns unit's current implementation.
+Current implementation describes unit stats according to its levels
+and possible transformations applied during battle.
 ```lua
-unit.type
+unit.impl
 ```
-##### hasAbility
-Returns true if leader has specified [ability](luaApi.md#ability) (or false if unit is not a leader).
+##### baseImpl
+Returns unit's base implementation.
+Base implementation is a record in GUnits.dbf that describes unit basic stats.
 ```lua
-unit:hasAbility(Ability.TalismanUse)
+unit.baseImpl
 ```
-##### hasMoveBonus
-Returns true if leader has movement bonus on specified [ground](luaApi.md#ground) (or false if unit is not a leader).
+##### leveledImpl
+Returns unit's leveled (generated) implementation.
+Leveled implementation is unit's current implementation without modifiers,
+or base implementation plus upgrades from GDynUpgr.dbf according to unit's level.
+This does not include leader upgrades from GleaUpg.dbf, because the upgrades are modifiers.
 ```lua
-unit:hasMoveBonus(Ground.Water)
-```
-##### modifiers
-Returns array of applied [modifiers](luaApi.md#modifier).
-```lua
-unit.modifiers
+unit.leveledImpl
 ```
 
 ---
 
 #### Unit implementation
 Represents unit template. Records in GUnits.dbf are unit implementations.
+
+##### How unit implementation works and why it is different to [unit](luaApi.md#unit-1)
+Unit implementation is a unit template that can be used by different individual units on scenario map. It is different to unit, because different unit instances can have the same implementation. For example, you can have 3 Squires of level 1 in your party, each having the same implementation.
+
+There are 3 different stages of unit implementation that build on top of each other:
+- `Global`, corresponds to a record from `GUnits.dbf`;
+  - Returned by [unit.baseImpl](luaApi.md#baseImpl) or [impl.global](luaApi.md#global);
+  - Its `id` corresponds to `UNIT_ID` from `GUnits.dbf`.
+- `Generated`, equals `Global` plus level upgrades from `GDynUpgr.dbf` (if any);
+  - Returned by [unit.leveledImpl](luaApi.md#leveledImpl) or [impl.generated](luaApi.md#generated);
+  - Its `id` is _different to_ `id` of inherited `Global` implementation;
+  - If unit has no level upgrades, `unit.leveledImpl`/`impl.generated` equals `unit.baseImpl`/`impl.global`.
+- `Modified`, equals `Generated` plus applied modifiers from `Gmodif.dbf` (if any).
+  - Returned by [unit.impl](luaApi.md#impl);
+  - Its `id` _equals to_ `id` of inherited `Generated` implementation;
+  - If unit has no modifiers, `unit.impl` equals `unit.leveledImpl`/`impl.generated`.
+
+Unit implementation changes when unit:
+- Gets an upgrade, does not matter if it transforms to higher tier unit or simply gets over-level;
+- Gets transformed: by Transform-Self, Transform-Other, Drain-Level, or Doppelganger attack;
+- Gets [modified](luaApi.md#modifier): when consuming a potion, affected by a spell, equipping an item, getting a leader upgrade, etc.;
 
 Methods:
 ```lua
@@ -317,6 +322,24 @@ impl:hasAbility(Ability.TalismanUse)
 Returns true if leader has movement bonus on specified [ground](luaApi.md#ground) (or false if unit is not a leader).
 ```lua
 impl:hasMoveBonus(Ground.Water)
+```
+##### global
+Returns global [unit implementation](luaApi.md#unit-implementation) - a record from `GUnits.dbf`.
+Same as `unit.baseImpl`.
+```lua
+impl.global
+```
+##### generated
+Returns generated [unit implementation](luaApi.md#unit-implementation).
+Equals `global` plus upgrades from `GDynUpgr.dbf` according to unit's level.
+Same as `unit.leveledImpl`.
+```lua
+impl.generated
+```
+##### modifiers
+Returns array of applied [modifiers](luaApi.md#modifier).
+```lua
+impl.modifiers
 ```
 
 ---
@@ -420,6 +443,11 @@ Returns stack [id](luaApi.md#id). The value is unique for every stack on scenari
 ```lua
 stack.id
 ```
+##### position
+Returns stack position as a [point](luaApi.md#point).
+```lua
+stack.position
+```
 ##### owner
 Returns [player](luaApi.md#player) that owns the stack. Neutral stacks are owned by neutral player.
 ```lua
@@ -474,6 +502,11 @@ Returns fort [id](luaApi.md#id). The value is unique for every fort on scenario 
 ```lua
 fort.id
 ```
+##### position
+Returns fort position as a [point](luaApi.md#point).
+```lua
+fort.position
+```
 ##### owner
 Returns [player](luaApi.md#player) that owns the fort. Neutral forts are owned by neutral player.
 ```lua
@@ -510,6 +543,11 @@ Methods:
 Returns ruin [id](luaApi.md#id). The value is unique for every ruin on scenario map.
 ```lua
 ruin.id
+```
+##### position
+Returns ruin position as a [point](luaApi.md#point).
+```lua
+ruin.position
 ```
 ##### looter
 Returns [player](luaApi.md#player) that looted the ruin, or nil if none.

@@ -139,9 +139,9 @@ game::CMidgardID getGlobalUnitImplId(const game::CMidgardID* unitImplId)
     return globalImplId;
 }
 
-game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidUnit* unit)
+game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidgardID* unitImplId)
 {
-    const game::CMidgardID globalImplId{getGlobalUnitImplId(&unit->unitImpl->id)};
+    const game::CMidgardID globalImplId{getGlobalUnitImplId(unitImplId)};
     return getUnitImpl(&globalImplId);
 }
 

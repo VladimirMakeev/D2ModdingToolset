@@ -20,6 +20,9 @@
 #ifndef PLAYERVIEW_H
 #define PLAYERVIEW_H
 
+#include "currencyview.h"
+#include "idview.h"
+
 namespace sol {
 class state;
 }
@@ -29,9 +32,6 @@ struct CMidPlayer;
 } // namespace game
 
 namespace bindings {
-
-struct IdView;
-class CurrencyView;
 
 class PlayerView
 {

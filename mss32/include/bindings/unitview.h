@@ -20,6 +20,7 @@
 #ifndef UNITVIEW_H
 #define UNITVIEW_H
 
+#include "idview.h"
 #include <optional>
 #include <vector>
 
@@ -34,7 +35,6 @@ struct CMidUnit;
 
 namespace bindings {
 
-struct IdView;
 class UnitImplView;
 class ModifierView;
 

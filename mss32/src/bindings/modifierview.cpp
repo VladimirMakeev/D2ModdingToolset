@@ -18,7 +18,6 @@
  */
 
 #include "modifierview.h"
-#include "idview.h"
 #include "ummodifier.h"
 #include <sol/sol.hpp>
 
