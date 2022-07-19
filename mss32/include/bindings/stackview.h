@@ -37,6 +37,7 @@ enum EquippedItemIdx;
 namespace bindings {
 
 struct IdView;
+struct Point;
 class PlayerView;
 class FortView;
 class GroupView;
@@ -51,6 +52,7 @@ public:
     static void bind(sol::state& lua);
 
     IdView getId() const;
+    Point getPosition() const;
     PlayerView getOwner() const;
     std::optional<FortView> getInside() const;
     /** Returns stack units as a group. */
@@ -61,7 +63,6 @@ public:
     int getMovement() const;
     /** Returns stack subrace category id. */
     int getSubrace() const;
-
     bool isInvisible() const;
 
     std::vector<ItemView> getInventoryItems() const;

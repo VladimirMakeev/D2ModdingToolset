@@ -413,6 +413,11 @@ Returns stack [id](luaApi.md#id). The value is unique for every stack on scenari
 ```lua
 stack.id
 ```
+##### position
+Returns stack position as a [point](luaApi.md#point).
+```lua
+stack.position
+```
 ##### owner
 Returns [player](luaApi.md#player) that owns the stack. Neutral stacks are owned by neutral player.
 ```lua
@@ -467,6 +472,11 @@ Returns fort [id](luaApi.md#id). The value is unique for every fort on scenario 
 ```lua
 fort.id
 ```
+##### position
+Returns fort position as a [point](luaApi.md#point).
+```lua
+fort.position
+```
 ##### owner
 Returns [player](luaApi.md#player) that owns the fort. Neutral forts are owned by neutral player.
 ```lua
@@ -503,6 +513,11 @@ Methods:
 Returns ruin [id](luaApi.md#id). The value is unique for every ruin on scenario map.
 ```lua
 ruin.id
+```
+##### position
+Returns ruin position as a [point](luaApi.md#point).
+```lua
+ruin.position
 ```
 ##### looter
 Returns [player](luaApi.md#player) that looted the ruin, or nil if none.

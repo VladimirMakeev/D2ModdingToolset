@@ -25,6 +25,7 @@
 #include "itemview.h"
 #include "midruin.h"
 #include "playerview.h"
+#include "point.h"
 #include <sol/sol.hpp>
 
 namespace bindings {
@@ -38,6 +39,7 @@ void RuinView::bind(sol::state& lua)
 {
     auto ruinView = lua.new_usertype<RuinView>("RuinView");
     ruinView["id"] = sol::property(&RuinView::getId);
+    ruinView["position"] = sol::property(&RuinView::getPosition);
     ruinView["looter"] = sol::property(&RuinView::getLooter);
     ruinView["group"] = sol::property(&RuinView::getGroup);
     ruinView["item"] = sol::property(&RuinView::getItem);
@@ -47,6 +49,11 @@ void RuinView::bind(sol::state& lua)
 IdView RuinView::getId() const
 {
     return IdView{ruin->id};
+}
+
+Point RuinView::getPosition() const
+{
+    return Point{ruin->mapElement.position};
 }
 
 std::optional<PlayerView> RuinView::getLooter() const

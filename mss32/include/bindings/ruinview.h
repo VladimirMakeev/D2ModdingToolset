@@ -34,6 +34,7 @@ struct IMidgardObjectMap;
 namespace bindings {
 
 struct IdView;
+struct Point;
 class PlayerView;
 class GroupView;
 class ItemView;
@@ -47,6 +48,7 @@ public:
     static void bind(sol::state& lua);
 
     IdView getId() const;
+    Point getPosition() const;
     std::optional<PlayerView> getLooter() const;
     GroupView getGroup() const;
     std::optional<ItemView> getItem() const;

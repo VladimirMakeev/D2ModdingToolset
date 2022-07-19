@@ -26,6 +26,7 @@
 #include "midgardobjectmap.h"
 #include "midsubrace.h"
 #include "playerview.h"
+#include "point.h"
 #include "stackview.h"
 #include <sol/sol.hpp>
 
@@ -40,6 +41,7 @@ void FortView::bind(sol::state& lua)
 {
     auto fortView = lua.new_usertype<FortView>("FortView");
     fortView["id"] = sol::property(&FortView::getId);
+    fortView["position"] = sol::property(&FortView::getPosition);
     fortView["owner"] = sol::property(&FortView::getOwner);
     fortView["group"] = sol::property(&FortView::getGroup);
     fortView["visitor"] = sol::property(&FortView::getVisitor);
@@ -50,6 +52,11 @@ void FortView::bind(sol::state& lua)
 IdView FortView::getId() const
 {
     return IdView{fort->id};
+}
+
+Point FortView::getPosition() const
+{
+    return Point{fort->mapElement.position};
 }
 
 PlayerView FortView::getOwner() const
