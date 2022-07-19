@@ -234,11 +234,6 @@ Returns true if leader has movement bonus on specified [ground](luaApi.md#ground
 ```lua
 unit:hasMoveBonus(Ground.Water)
 ```
-##### modifiers
-Returns array of applied [modifiers](luaApi.md#modifier).
-```lua
-unit.modifiers
-```
 
 ---
 
@@ -317,6 +312,11 @@ impl:hasAbility(Ability.TalismanUse)
 Returns true if leader has movement bonus on specified [ground](luaApi.md#ground) (or false if unit is not a leader).
 ```lua
 impl:hasMoveBonus(Ground.Water)
+```
+##### modifiers
+Returns array of applied [modifiers](luaApi.md#modifier).
+```lua
+impl.modifiers
 ```
 
 ---
