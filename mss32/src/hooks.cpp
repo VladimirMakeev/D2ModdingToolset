@@ -321,6 +321,8 @@ static Hooks getGameHooks()
         {CGroundTextureApi::isoEngineVftable()->render, isoEngineGroundRenderHooked},
         // Support native modifiers
         {CMidUnitApi::get().upgrade, upgradeHooked},
+        // Fix doppelganger attack using alternative attack when attacker is transformed (by doppelganger, drain-level, transform-self/other attacks)
+        {battle.cannotUseDoppelgangerAttack, cannotUseDoppelgangerAttackHooked},
     };
     // clang-format on
 

@@ -34,7 +34,7 @@ struct CBatAttackDoppelganger : public CBatAttackBase
     CMidgardID attackImplUnitId;
     int attackNumber; /**< 1 if this is a unit's primary attack, 2 for secondary. */
     IAttack* altAttackImpl;
-    bool canTransform;
+    bool hasTargetsToTransformInto;
     bool unknown2;
     char padding[2];
     IBatAttack* altAttack;
