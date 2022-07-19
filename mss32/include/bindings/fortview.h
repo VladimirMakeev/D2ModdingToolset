@@ -20,6 +20,10 @@
 #ifndef FORTVIEW_H
 #define FORTVIEW_H
 
+#include "groupview.h"
+#include "idview.h"
+#include "playerview.h"
+#include "point.h"
 #include <optional>
 #include <vector>
 
@@ -34,10 +38,6 @@ struct IMidgardObjectMap;
 
 namespace bindings {
 
-struct IdView;
-struct Point;
-class PlayerView;
-class GroupView;
 class StackView;
 class ItemView;
 

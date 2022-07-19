@@ -20,13 +20,9 @@
 #include "fortview.h"
 #include "fortification.h"
 #include "gameutils.h"
-#include "groupview.h"
-#include "idview.h"
 #include "itemview.h"
 #include "midgardobjectmap.h"
 #include "midsubrace.h"
-#include "playerview.h"
-#include "point.h"
 #include "stackview.h"
 #include <sol/sol.hpp>
 

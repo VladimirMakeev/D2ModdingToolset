@@ -19,7 +19,6 @@
 
 #include "unitview.h"
 #include "game.h"
-#include "idview.h"
 #include "midunit.h"
 #include "modifierview.h"
 #include "unitimplview.h"

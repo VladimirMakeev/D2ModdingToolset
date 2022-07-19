@@ -18,8 +18,6 @@
  */
 
 #include "itemview.h"
-#include "currencyview.h"
-#include "idview.h"
 #include "itembaseview.h"
 #include "itemutils.h"
 #include "miditem.h"

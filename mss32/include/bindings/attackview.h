@@ -20,6 +20,8 @@
 #ifndef ATTACKVIEW_H
 #define ATTACKVIEW_H
 
+#include "idview.h"
+
 namespace sol {
 class state;
 }
@@ -29,8 +31,6 @@ struct IAttack;
 }
 
 namespace bindings {
-
-struct IdView;
 
 class AttackView
 {

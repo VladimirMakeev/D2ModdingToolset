@@ -23,7 +23,6 @@
 #include "game.h"
 #include "globaldata.h"
 #include "groundcat.h"
-#include "idview.h"
 #include "leaderabilitycat.h"
 #include "leadercategory.h"
 #include "log.h"

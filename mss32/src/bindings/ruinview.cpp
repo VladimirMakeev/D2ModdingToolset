@@ -18,14 +18,10 @@
  */
 
 #include "ruinview.h"
-#include "currencyview.h"
 #include "gameutils.h"
-#include "groupview.h"
-#include "idview.h"
 #include "itemview.h"
 #include "midruin.h"
 #include "playerview.h"
-#include "point.h"
 #include <sol/sol.hpp>
 
 namespace bindings {

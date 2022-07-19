@@ -18,9 +18,7 @@
  */
 
 #include "locationview.h"
-#include "idview.h"
 #include "midlocation.h"
-#include "point.h"
 #include <sol/sol.hpp>
 
 namespace bindings {

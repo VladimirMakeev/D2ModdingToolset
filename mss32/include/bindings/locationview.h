@@ -20,6 +20,9 @@
 #ifndef LOCATIONVIEW_H
 #define LOCATIONVIEW_H
 
+#include "idview.h"
+#include "point.h"
+
 namespace sol {
 class state;
 }
@@ -29,9 +32,6 @@ struct CMidLocation;
 }
 
 namespace bindings {
-
-struct IdView;
-struct Point;
 
 class LocationView
 {

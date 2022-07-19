@@ -22,7 +22,6 @@
 #include "attackutils.h"
 #include "customattacks.h"
 #include "customattackutils.h"
-#include "idview.h"
 #include <sol/sol.hpp>
 
 namespace bindings {

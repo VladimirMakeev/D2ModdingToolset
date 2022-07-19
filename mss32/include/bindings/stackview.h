@@ -20,6 +20,10 @@
 #ifndef STACKVIEW_H
 #define STACKVIEW_H
 
+#include "groupview.h"
+#include "idview.h"
+#include "playerview.h"
+#include "point.h"
 #include <optional>
 #include <vector>
 
@@ -36,11 +40,7 @@ enum EquippedItemIdx;
 
 namespace bindings {
 
-struct IdView;
-struct Point;
-class PlayerView;
 class FortView;
-class GroupView;
 class UnitView;
 class ItemView;
 

@@ -20,6 +20,10 @@
 #ifndef RUINVIEW_H
 #define RUINVIEW_H
 
+#include "currencyview.h"
+#include "groupview.h"
+#include "idview.h"
+#include "point.h"
 #include <optional>
 
 namespace sol {
@@ -33,12 +37,8 @@ struct IMidgardObjectMap;
 
 namespace bindings {
 
-struct IdView;
-struct Point;
 class PlayerView;
-class GroupView;
 class ItemView;
-class CurrencyView;
 
 class RuinView
 {
