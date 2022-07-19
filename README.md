@@ -598,6 +598,7 @@
 - Fixes missing modifiers of alternative attacks (![demo video](https://user-images.githubusercontent.com/5180699/125460215-144ef648-5497-4674-b9d6-ac7d2fa95125.mp4));
 - Fixes unit transformation (doppelganger, drain-level, transform-self/other attacks) to include HP modifiers into current hp recalculation, thus unit is not getting "damaged" upon transforming (![demo video](https://user-images.githubusercontent.com/5180699/156921183-b1f4748d-cb4f-40c8-a9b1-b911e9cc91dd.mp4));
 - Fixes unit transformation (drain-level, transform-self/other and untransform-effect attacks) to update unit attack count for current battle round (for example, Holy Avenger transformed into Imp before its turn will no longer attack twice);
+- Fixes incorrect function of doppelganger attack where it uses alternative attack if the doppelganger is already transformed in any way (by doppelganger, drain-level or transform-self/other attacks);
 - <details>
     <summary>Fixes bestow-wards attack bugs and restrictions;</summary>
 

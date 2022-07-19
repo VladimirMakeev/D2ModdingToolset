@@ -312,9 +312,9 @@ struct Api
                                              const CMidgardID* ownerUnitId);
     SetSummonOwner setSummonOwner;
 
-    using IsUnitTransformed = bool(__stdcall*)(const CMidgardID* unitId,
-                                               const BattleMsgData* battleMsgData);
-    IsUnitTransformed isUnitTransformed;
+    using CannotUseDoppelgangerAttack = bool(__stdcall*)(const CMidgardID* unitId,
+                                                         const BattleMsgData* battleMsgData);
+    CannotUseDoppelgangerAttack cannotUseDoppelgangerAttack;
 
     using RemoveTransformStatuses = void(__stdcall*)(const CMidgardID* unitId,
                                                      const BattleMsgData* battleMsgData);

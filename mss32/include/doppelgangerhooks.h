@@ -49,6 +49,9 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
                                               game::CMidgardID* targetUnitId,
                                               game::BattleAttackInfo** attackInfo);
 
+bool __stdcall cannotUseDoppelgangerAttackHooked(const game::CMidgardID* unitId,
+                                                 const game::BattleMsgData* battleMsgData);
+
 } // namespace hooks
 
 #endif // DOPPELGANGERHOOKS_H

@@ -88,7 +88,8 @@ bool __fastcall doppelgangerAttackCanPerformHooked(game::CBatAttackDoppelganger*
     using namespace game;
 
     const auto& battle = BattleMsgDataApi::get();
-    if (battle.isUnitTransformed(&thisptr->unitId, battleMsgData) || !thisptr->canTransform) {
+    if (battle.cannotUseDoppelgangerAttack(&thisptr->unitId, battleMsgData)
+        || !thisptr->hasTargetsToTransformInto) {
         return thisptr->altAttack->vftable->canPerform(thisptr->altAttack, objectMap, battleMsgData,
                                                        targetUnitId);
     }
@@ -138,7 +139,8 @@ bool __fastcall doppelgangerAttackIsImmuneHooked(game::CBatAttackDoppelganger* t
     using namespace game;
 
     const auto& battle = BattleMsgDataApi::get();
-    if (battle.isUnitTransformed(&thisptr->unitId, battleMsgData) || !thisptr->canTransform) {
+    if (battle.cannotUseDoppelgangerAttack(&thisptr->unitId, battleMsgData)
+        || !thisptr->hasTargetsToTransformInto) {
         return thisptr->altAttack->vftable->isImmune(thisptr->altAttack, objectMap, battleMsgData,
                                                      unitId);
     }
@@ -195,7 +197,8 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
 
     const auto& battle = BattleMsgDataApi::get();
 
-    if (battle.isUnitTransformed(&thisptr->unitId, battleMsgData) || !thisptr->canTransform) {
+    if (battle.cannotUseDoppelgangerAttack(&thisptr->unitId, battleMsgData)
+        || !thisptr->hasTargetsToTransformInto) {
         thisptr->altAttack->vftable->onHit(thisptr->altAttack, objectMap, battleMsgData,
                                            targetUnitId, attackInfo);
         return;
@@ -230,6 +233,14 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
                          true);
 
     battle.setUnitHp(battleMsgData, &thisptr->unitId, unit->currentHp);
+}
+
+bool __stdcall cannotUseDoppelgangerAttackHooked(const game::CMidgardID* unitId,
+                                                 const game::BattleMsgData* battleMsgData)
+{
+    // The attack should always be available except when there are no targets to transform into,
+    // which is controlled by separate flag CBatAttackDoppelganger::hasTargetsToTransformInto
+    return false;
 }
 
 } // namespace hooks
