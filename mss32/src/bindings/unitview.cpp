@@ -18,19 +18,12 @@
  */
 
 #include "unitview.h"
-#include "dynupgrade.h"
 #include "game.h"
-#include "globaldata.h"
 #include "idview.h"
-#include "log.h"
 #include "midunit.h"
 #include "modifierview.h"
-#include "unitgenerator.h"
 #include "unitimplview.h"
-#include "unitutils.h"
 #include "ussoldier.h"
-#include "usunitimpl.h"
-#include <fmt/format.h>
 #include <sol/sol.hpp>
 
 namespace bindings {
@@ -73,12 +66,12 @@ std::optional<UnitImplView> UnitView::getImpl() const
 
 std::optional<UnitImplView> UnitView::getBaseImpl() const
 {
-    return {hooks::getGlobalUnitImpl(unit)};
+    return getImpl()->getGlobal();
 }
 
 std::optional<UnitImplView> UnitView::getLeveledImpl() const
 {
-    return {hooks::getUnitImpl(&getUnitImpl()->id)};
+    return getImpl()->getGenerated();
 }
 
 IdView UnitView::getId() const

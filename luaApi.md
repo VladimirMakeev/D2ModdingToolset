@@ -204,7 +204,8 @@ unit.impl
 unit.baseImpl
 -- Returns unit's leveled (generated) implementation.
 -- Leveled implementation is unit's current implementation without modifiers,
--- or base implementation plus dynamic upgrades according to unit's level.
+-- or base implementation plus upgrades from GDynUpgr.dbf according to unit's level.
+-- This does not include leader upgrades from GleaUpg.dbf, because the upgrades are modifiers.
 unit.leveledImpl
 ```
 ##### id
@@ -291,6 +292,19 @@ impl:hasAbility(Ability.TalismanUse)
 Returns true if leader has movement bonus on specified [ground](luaApi.md#ground) (or false if unit is not a leader).
 ```lua
 impl:hasMoveBonus(Ground.Water)
+```
+##### global
+Returns global [unit implementation](luaApi.md#unit-implementation) - a record from `GUnits.dbf`.
+Same as `unit.baseImpl`.
+```lua
+impl.global
+```
+##### generated
+Returns generated [unit implementation](luaApi.md#unit-implementation).
+Equals `global` plus upgrades from `GDynUpgr.dbf` according to unit's level.
+Same as `unit.leveledImpl`.
+```lua
+impl.generated
 ```
 ##### modifiers
 Returns array of applied [modifiers](luaApi.md#modifier).

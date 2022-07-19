@@ -66,6 +66,8 @@ public:
     /** Returns BASE_UNIT specified in Gunits.dbf. */
     std::optional<UnitImplView> getBaseUnit() const;
 
+    std::optional<UnitImplView> getGlobal() const;
+    std::optional<UnitImplView> getGenerated() const;
     std::vector<ModifierView> getModifiers() const;
 
     /* Have to implement leader properties here because sol does not support down-casting

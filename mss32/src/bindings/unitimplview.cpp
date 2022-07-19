@@ -69,6 +69,9 @@ void UnitImplView::bind(sol::state& lua)
     impl["attack1"] = sol::property(&UnitImplView::getAttack);
     impl["attack2"] = sol::property(&UnitImplView::getAttack2);
     impl["base"] = sol::property(&UnitImplView::getBaseUnit);
+
+    impl["global"] = sol::property(&UnitImplView::getGlobal);
+    impl["generated"] = sol::property(&UnitImplView::getGenerated);
     impl["modifiers"] = sol::property(&UnitImplView::getModifiers);
 
     impl["leaderType"] = sol::property(&UnitImplView::getLeaderCategory);
@@ -205,6 +208,16 @@ std::optional<UnitImplView> UnitImplView::getBaseUnit() const
         return std::nullopt;
 
     return {globalUnitImpl};
+}
+
+std::optional<UnitImplView> UnitImplView::getGlobal() const
+{
+    return {hooks::getGlobalUnitImpl(&impl->id)};
+}
+
+std::optional<UnitImplView> UnitImplView::getGenerated() const
+{
+    return {hooks::getUnitImpl(&impl->id)};
 }
 
 std::vector<ModifierView> UnitImplView::getModifiers() const
