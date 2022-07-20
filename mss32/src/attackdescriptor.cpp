@@ -136,23 +136,28 @@ int computeDamage(int base,
 
     const auto& restrictions = gameRestrictions();
 
+    int result = base;
     if (hooks::isNormalDamageAttack(classId)) {
         int boost = hooks::getBoostDamage(boostDamageLevel)
                     - hooks::getLowerDamage(lowerDamageLevel);
-        int damage = computeValue(base, restrictions.unitDamage->min, damageMax, boost, modifiers,
-                                  ModifierElementTypeFlag::QtyDamage);
+        result = computeValue(base, restrictions.unitDamage->min, damageMax, boost, modifiers,
+                              ModifierElementTypeFlag::QtyDamage);
 
         if (damageSplit) {
-            damage *= hooks::userSettings().splitDamageMultiplier;
+            result *= hooks::userSettings().splitDamageMultiplier;
         }
-
-        return damage;
     } else if (hooks::isModifiableDamageAttack(classId)) {
-        return computeValue(base, restrictions.unitDamage->min, damageMax, 0, modifiers,
-                            ModifierElementTypeFlag::QtyDamage);
+        result = computeValue(base, restrictions.unitDamage->min, damageMax, 0, modifiers,
+                              ModifierElementTypeFlag::QtyDamage);
     }
 
-    return base;
+    if (classId == AttackClassId::Shatter) {
+        if (result > hooks::userSettings().shatterDamageMax) {
+            result = hooks::userSettings().shatterDamageMax;
+        }
+    }
+
+    return result;
 }
 
 int computePower(int base, const game::IdList* modifiers, game::AttackClassId classId)
