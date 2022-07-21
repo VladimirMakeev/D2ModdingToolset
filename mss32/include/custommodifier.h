@@ -128,7 +128,8 @@ struct CCustomModifier
         try {
             if (function) {
                 bindings::UnitView unitView{unit, getPrev()};
-                return (*function)(unitView, prev).as<T>();
+                sol::table result = (*function)(unitView, prev);
+                return result.as<T>();
             }
         } catch (const std::exception& e) {
             showScriptErrorMessage(functionName, e.what());

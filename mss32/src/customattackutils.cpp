@@ -177,16 +177,14 @@ UnitSlots getTargetsToSelectOrAttack(const std::string& scriptFile,
 {
     std::optional<sol::environment> env;
     const auto path{scriptsFolder() / scriptFile};
-    using GetTargets = std::function<sol::table(const bindings::UnitSlotView&,
-                                                const bindings::UnitSlotView&, const UnitSlots&,
-                                                const UnitSlots&, bool)>;
-    auto getTargets = getScriptFunction<GetTargets>(path, "getTargets", env, true, true);
+    auto getTargets = getScriptFunction(path, "getTargets", env, true, true);
     if (!getTargets) {
         return UnitSlots();
     }
 
     try {
-        return (*getTargets)(attacker, selected, allies, targets, targetsAreAllies).as<UnitSlots>();
+        sol::table result = (*getTargets)(attacker, selected, allies, targets, targetsAreAllies);
+        return result.as<UnitSlots>();
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
                                         "Reason: '{:s}'",

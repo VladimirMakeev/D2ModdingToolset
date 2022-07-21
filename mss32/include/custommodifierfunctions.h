@@ -20,13 +20,10 @@
 #ifndef CUSTOMMODIFIERFUNCTIONS_H
 #define CUSTOMMODIFIERFUNCTIONS_H
 
-#include "currencyview.h"
-#include "idview.h"
-#include "unitimplview.h"
-#include "unitview.h"
 #include <lua.hpp>
 #include <optional>
 #include <sol/sol.hpp>
+#include <string>
 
 namespace hooks {
 
@@ -34,91 +31,75 @@ struct CustomModifierFunctions
 {
     void initialize(const std::string& scriptFileName);
 
-    using GetId = std::function<bindings::IdView(const bindings::UnitView&,
-                                                 const bindings::IdView&)>;
-    using GetIds = std::function<sol::table(const bindings::UnitView&,
-                                            const std::vector<bindings::IdView>&)>;
-    using GetInt = std::function<int(const bindings::UnitView&, int)>;
-    using GetIntParam = std::function<int(const bindings::UnitView&, int, int)>;
-    using GetUint8 = std::function<std::uint8_t(const bindings::UnitView&, std::uint8_t)>;
-    using GetBool = std::function<bool(const bindings::UnitView&, bool)>;
-    using GetBoolParam = std::function<bool(const bindings::UnitView&, int, bool)>;
-    using GetBank = std::function<bindings::CurrencyView(const bindings::UnitView&,
-                                                         const bindings::CurrencyView&)>;
-    using GetString = std::function<std::string(const bindings::UnitView&, const std::string&)>;
-    using CanApplyToUnit = std::function<bool(const bindings::UnitImplView&)>;
-    using CanApplyToUnitType = std::function<bool(int)>;
-    using IsLowerBoost = std::function<bool()>;
-
     std::optional<sol::environment> environment;
-    std::optional<CanApplyToUnit> canApplyToUnit;
-    std::optional<CanApplyToUnitType> canApplyToUnitType;
-    std::optional<IsLowerBoost> canApplyAsLowerSpell;
-    std::optional<IsLowerBoost> canApplyAsBoostSpell;
-    std::optional<GetBool> getModifierDisplay;
-    std::optional<GetId> getModifierDescTxt;
-    std::optional<GetString> getModifierIconName;
-    std::optional<GetId> getNameTxt;
-    std::optional<GetId> getDescTxt;
-    std::optional<GetInt> getHitPoint;
-    std::optional<GetInt> getArmor;
-    std::optional<GetInt> getDeathAnim;
-    std::optional<GetInt> getRegen;
-    std::optional<GetInt> getXpNext;
-    std::optional<GetInt> getXpKilled;
-    std::optional<GetIntParam> getImmuneToAttack;
-    std::optional<GetIntParam> getImmuneToSource;
-    std::optional<GetBool> getAtckTwice;
-    std::optional<GetBank> getEnrollCost;
-    std::optional<GetBank> getReviveCost;
-    std::optional<GetBank> getHealCost;
-    std::optional<GetBank> getTrainingCost;
-    std::optional<GetInt> getMovement;
-    std::optional<GetBoolParam> hasMovementBonus;
-    std::optional<GetInt> getScout;
-    std::optional<GetInt> getLeadership;
-    std::optional<GetInt> getNegotiate;
-    std::optional<GetBoolParam> hasAbility;
-    std::optional<GetBool> getFastRetreat;
-    std::optional<GetInt> getLowerCost;
-    std::optional<GetId> getAttackId;
-    std::optional<GetId> getAttack2Id;
-    std::optional<GetInt> getAttackReach;
-    std::optional<GetInt> getAttackInitiative;
-    std::optional<GetId> getAttackNameTxt;
-    std::optional<GetId> getAttack2NameTxt;
-    std::optional<GetId> getAttackDescTxt;
-    std::optional<GetId> getAttack2DescTxt;
-    std::optional<GetUint8> getAttackDamRatio;
-    std::optional<GetUint8> getAttack2DamRatio;
-    std::optional<GetBool> getAttackDrRepeat;
-    std::optional<GetBool> getAttack2DrRepeat;
-    std::optional<GetBool> getAttackDrSplit;
-    std::optional<GetBool> getAttack2DrSplit;
-    std::optional<GetUint8> getAttackCritDamage;
-    std::optional<GetUint8> getAttack2CritDamage;
-    std::optional<GetUint8> getAttackCritPower;
-    std::optional<GetUint8> getAttack2CritPower;
-    std::optional<GetInt> getAttackClass;
-    std::optional<GetInt> getAttack2Class;
-    std::optional<GetInt> getAttackSource;
-    std::optional<GetInt> getAttack2Source;
-    std::optional<GetInt> getAttackPower;
-    std::optional<GetInt> getAttack2Power;
-    std::optional<GetInt> getAttackDamage;
-    std::optional<GetInt> getAttack2Damage;
-    std::optional<GetInt> getAttackHeal;
-    std::optional<GetInt> getAttack2Heal;
-    std::optional<GetIntParam> getAttackDrain;
-    std::optional<GetIntParam> getAttack2Drain;
-    std::optional<GetInt> getAttackLevel;
-    std::optional<GetInt> getAttack2Level;
-    std::optional<GetBool> getAttackInfinite;
-    std::optional<GetBool> getAttack2Infinite;
-    std::optional<GetBool> getAttackCritHit;
-    std::optional<GetBool> getAttack2CritHit;
-    std::optional<GetIds> getAttackWards;
-    std::optional<GetIds> getAttack2Wards;
+    std::optional<sol::function> canApplyToUnit;
+    std::optional<sol::function> canApplyToUnitType;
+    std::optional<sol::function> canApplyAsLowerSpell;
+    std::optional<sol::function> canApplyAsBoostSpell;
+    std::optional<sol::function> getModifierDisplay;
+    std::optional<sol::function> getModifierDescTxt;
+    std::optional<sol::function> getModifierIconName;
+    std::optional<sol::function> getNameTxt;
+    std::optional<sol::function> getDescTxt;
+    std::optional<sol::function> getHitPoint;
+    std::optional<sol::function> getArmor;
+    std::optional<sol::function> getDeathAnim;
+    std::optional<sol::function> getRegen;
+    std::optional<sol::function> getXpNext;
+    std::optional<sol::function> getXpKilled;
+    std::optional<sol::function> getImmuneToAttack;
+    std::optional<sol::function> getImmuneToSource;
+    std::optional<sol::function> getAtckTwice;
+    std::optional<sol::function> getEnrollCost;
+    std::optional<sol::function> getReviveCost;
+    std::optional<sol::function> getHealCost;
+    std::optional<sol::function> getTrainingCost;
+    std::optional<sol::function> getMovement;
+    std::optional<sol::function> hasMovementBonus;
+    std::optional<sol::function> getScout;
+    std::optional<sol::function> getLeadership;
+    std::optional<sol::function> getNegotiate;
+    std::optional<sol::function> hasAbility;
+    std::optional<sol::function> getFastRetreat;
+    std::optional<sol::function> getLowerCost;
+    std::optional<sol::function> getAttackId;
+    std::optional<sol::function> getAttack2Id;
+    std::optional<sol::function> getAttackReach;
+    std::optional<sol::function> getAttackInitiative;
+    std::optional<sol::function> getAttackNameTxt;
+    std::optional<sol::function> getAttack2NameTxt;
+    std::optional<sol::function> getAttackDescTxt;
+    std::optional<sol::function> getAttack2DescTxt;
+    std::optional<sol::function> getAttackDamRatio;
+    std::optional<sol::function> getAttack2DamRatio;
+    std::optional<sol::function> getAttackDrRepeat;
+    std::optional<sol::function> getAttack2DrRepeat;
+    std::optional<sol::function> getAttackDrSplit;
+    std::optional<sol::function> getAttack2DrSplit;
+    std::optional<sol::function> getAttackCritDamage;
+    std::optional<sol::function> getAttack2CritDamage;
+    std::optional<sol::function> getAttackCritPower;
+    std::optional<sol::function> getAttack2CritPower;
+    std::optional<sol::function> getAttackClass;
+    std::optional<sol::function> getAttack2Class;
+    std::optional<sol::function> getAttackSource;
+    std::optional<sol::function> getAttack2Source;
+    std::optional<sol::function> getAttackPower;
+    std::optional<sol::function> getAttack2Power;
+    std::optional<sol::function> getAttackDamage;
+    std::optional<sol::function> getAttack2Damage;
+    std::optional<sol::function> getAttackHeal;
+    std::optional<sol::function> getAttack2Heal;
+    std::optional<sol::function> getAttackDrain;
+    std::optional<sol::function> getAttack2Drain;
+    std::optional<sol::function> getAttackLevel;
+    std::optional<sol::function> getAttack2Level;
+    std::optional<sol::function> getAttackInfinite;
+    std::optional<sol::function> getAttack2Infinite;
+    std::optional<sol::function> getAttackCritHit;
+    std::optional<sol::function> getAttack2CritHit;
+    std::optional<sol::function> getAttackWards;
+    std::optional<sol::function> getAttack2Wards;
 };
 
 } // namespace hooks

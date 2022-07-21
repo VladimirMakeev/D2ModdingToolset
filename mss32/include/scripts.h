@@ -20,9 +20,7 @@
 #ifndef SCRIPTS_H
 #define SCRIPTS_H
 
-#include "log.h"
 #include <filesystem>
-#include <fmt/format.h>
 #include <lua.hpp>
 #include <optional>
 #include <sol/sol.hpp>
@@ -41,73 +39,29 @@ std::optional<sol::environment> executeScriptFile(const std::filesystem::path& p
 
 /**
  * Returns function with specified name from lua environment to call from c++.
- * @tparam T expected script function signature.
+ * Return type is sol::function as std::function causes memory leaks in sol2 when function executes.
  * @param[in] environment lua environment where to search.
  * @param[in] name function name in lua script.
  * @param[in] alwaysExists true to show error message if the function does not exist.
  */
-template <typename T>
-static inline std::optional<T> getScriptFunction(const sol::environment& environment,
-                                                 const char* name,
-                                                 bool alwaysExists = false)
-{
-    const sol::object object = environment[name];
-    const sol::type objectType = object.get_type();
-
-    if (objectType != sol::type::function) {
-        if (alwaysExists) {
-            showErrorMessageBox(
-                fmt::format("'{:s}' is not a function, type: {:d}.", name, (int)objectType));
-        }
-        return std::nullopt;
-    }
-
-    if (!object.is<T>()) {
-        showErrorMessageBox(fmt::format("Function '{:s}' has wrong signature.", name));
-        return std::nullopt;
-    }
-
-    return static_cast<T>(object.as<sol::function>());
-}
-
-template <typename T>
-static inline void getScriptFunction(const sol::environment& environment,
-                                     const char* name,
-                                     std::optional<T>* value,
-                                     bool alwaysExists = false)
-{
-    *value = getScriptFunction<T>(environment, name, alwaysExists);
-}
+std::optional<sol::function> getScriptFunction(const sol::environment& environment,
+                                               const char* name,
+                                               bool alwaysExists = false);
 
 /**
  * Returns function with specified name from lua environment to call from c++.
- * @tparam T expected script function signature.
+ * Return type is sol::function as std::function causes memory leaks in sol2 when function executes.
  * @param[in] path filename of script source.
  * @param[in] name function name in lua script.
  * @param[out] environment lua environment where the function executes.
  * @param[in] alwaysExists true to show error message if the function does not exist.
  * @param[in] bindScenario true to bind global 'getScenario' function.
  */
-template <typename T>
-static inline std::optional<T> getScriptFunction(const std::filesystem::path& path,
-                                                 const char* name,
-                                                 std::optional<sol::environment>& environment,
-                                                 bool alwaysExists = false,
-                                                 bool bindScenario = false)
-{
-    environment = executeScriptFile(path, alwaysExists, bindScenario);
-    if (!environment)
-        return std::nullopt;
-
-    auto function = getScriptFunction<T>(*environment, name, false);
-    if (!function && alwaysExists) {
-        showErrorMessageBox(fmt::format("Could not find function '{:s}' in script '{:s}'.\n"
-                                        "Make sure function exists and has correct signature.",
-                                        name, path.string()));
-    }
-
-    return function;
-}
+std::optional<sol::function> getScriptFunction(const std::filesystem::path& path,
+                                               const char* name,
+                                               std::optional<sol::environment>& environment,
+                                               bool alwaysExists = false,
+                                               bool bindScenario = false);
 
 /**
  * Returns protected_function that is less performant than unsafe_function, but has error handling.

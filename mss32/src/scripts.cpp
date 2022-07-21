@@ -44,6 +44,7 @@
 #include "unitslotview.h"
 #include "unitview.h"
 #include "utils.h"
+#include <fmt/format.h>
 #include <map>
 #include <mutex>
 #include <thread>
@@ -345,6 +346,43 @@ std::optional<sol::environment> executeScriptFile(const std::filesystem::path& p
     return {std::move(env)};
 }
 
+std::optional<sol::function> getScriptFunction(const sol::environment& environment,
+                                               const char* name,
+                                               bool alwaysExists)
+{
+    const sol::object object = environment[name];
+    const sol::type objectType = object.get_type();
+
+    if (objectType != sol::type::function) {
+        if (alwaysExists) {
+            showErrorMessageBox(
+                fmt::format("'{:s}' is not a function, type: {:d}.", name, (int)objectType));
+        }
+        return std::nullopt;
+    }
+
+    return object.as<sol::function>();
+}
+
+std::optional<sol::function> getScriptFunction(const std::filesystem::path& path,
+                                               const char* name,
+                                               std::optional<sol::environment>& environment,
+                                               bool alwaysExists,
+                                               bool bindScenario)
+{
+    environment = executeScriptFile(path, alwaysExists, bindScenario);
+    if (!environment)
+        return std::nullopt;
+
+    auto function = getScriptFunction(*environment, name, false);
+    if (!function && alwaysExists) {
+        showErrorMessageBox(
+            fmt::format("Could not find function '{:s}' in script '{:s}'.", name, path.string()));
+    }
+
+    return function;
+}
+
 std::optional<sol::protected_function> getProtectedScriptFunction(
     const sol::environment& environment,
     const char* name,
@@ -361,7 +399,7 @@ std::optional<sol::protected_function> getProtectedScriptFunction(
         return std::nullopt;
     }
 
-    return {object.as<sol::protected_function>()};
+    return object.as<sol::protected_function>();
 }
 
 } // namespace hooks

@@ -30,6 +30,7 @@
 #include "game.h"
 #include "interfmanager.h"
 #include "listbox.h"
+#include "log.h"
 #include "mempool.h"
 #include "midbag.h"
 #include "midevcondition.h"
