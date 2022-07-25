@@ -350,6 +350,12 @@ Returns array of applied [modifiers](luaApi.md#modifier).
 ```lua
 impl.modifiers
 ```
+##### hasModifier
+Returns true if the implementation has [modifier](luaApi.md#modifier) specified by [id](luaApi.md#id-2) or id string.
+```lua
+impl:hasModifier("G000UM5021")
+impl:hasModifier(Id.new("G000UM5021"))
+```
 
 ---
 

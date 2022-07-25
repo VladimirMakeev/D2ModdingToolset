@@ -72,6 +72,8 @@ void UnitImplView::bind(sol::state& lua)
     impl["global"] = sol::property(&UnitImplView::getGlobal);
     impl["generated"] = sol::property(&UnitImplView::getGenerated);
     impl["modifiers"] = sol::property(&UnitImplView::getModifiers);
+    impl["hasModifier"] = sol::overload<>(&UnitImplView::hasModifier,
+                                          &UnitImplView::hasModifierById);
 
     impl["leaderType"] = sol::property(&UnitImplView::getLeaderCategory);
     impl["movement"] = sol::property(&UnitImplView::getMovement);
@@ -239,6 +241,32 @@ std::vector<ModifierView> UnitImplView::getModifiers() const
 
     std::reverse(result.begin(), result.end());
     return result;
+}
+
+bool UnitImplView::hasModifier(const std::string& id) const
+{
+    return hasModifierById(IdView{id});
+}
+
+bool UnitImplView::hasModifierById(const IdView& id) const
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    CUmModifier* modifier = nullptr;
+    for (auto curr = impl; curr; curr = modifier->data->prev) {
+        modifier = (CUmModifier*)dynamicCast(curr, 0, rtti.IUsUnitType, rtti.CUmModifierType, 0);
+        if (!modifier)
+            break;
+
+        if (modifier->data->modifierId == id.id) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 int UnitImplView::getLeaderCategory() const
