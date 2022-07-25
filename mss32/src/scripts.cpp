@@ -275,7 +275,7 @@ sol::state& getLua()
 
     auto& lua = states[key];
     lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::table,
-                       sol::lib::os);
+                       sol::lib::os, sol::lib::string);
     bindApi(lua);
     return lua;
 }
