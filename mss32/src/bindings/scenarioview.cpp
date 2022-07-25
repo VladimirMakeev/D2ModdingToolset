@@ -362,6 +362,10 @@ std::optional<PlayerView> ScenarioView::getPlayerById(const IdView& id) const
     }
 
     auto player = hooks::getPlayer(objectMap, &id.id);
+    if (!player) {
+        return std::nullopt;
+    }
+
     return {PlayerView{player}};
 }
 

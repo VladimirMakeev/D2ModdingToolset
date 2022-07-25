@@ -55,9 +55,13 @@ Point FortView::getPosition() const
     return Point{fort->mapElement.position};
 }
 
-PlayerView FortView::getOwner() const
+std::optional<PlayerView> FortView::getOwner() const
 {
     auto player = hooks::getPlayer(objectMap, &fort->ownerId);
+    if (!player) {
+        return std::nullopt;
+    }
+
     return PlayerView{player};
 }
 

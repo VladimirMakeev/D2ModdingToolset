@@ -70,6 +70,9 @@ public:
     std::optional<UnitImplView> getGenerated() const;
     std::vector<ModifierView> getModifiers() const;
 
+    bool hasModifier(const std::string& id) const;
+    bool hasModifierById(const IdView& id) const;
+
     /* Have to implement leader properties here because sol does not support down-casting
      * (https://sol2.readthedocs.io/en/latest/api/usertype.html#inheritance).
      * This means that derived class members cannot be accessed from base reference.
