@@ -48,6 +48,15 @@ The function only accessible to scripts where scenario access is appropriate:
 getScenario():getUnit(unitId)
 ```
 
+**Important note:** there is a known case when the scenario can be accessed while it still being loaded.
+The case is `getHitPoint` function of custom unit modifiers script: the game calls the function while it loads scenario units to determine its maximum health.
+During the loading process some objects can be unavailable, for example:
+- Imagine that you have a unit modifier that has `getHitPoint` function;
+- Now imagine that the function checks that the unit's player lord is Warrior - then it provides bonus 10 HP;
+- Since the scenario is still being loaded (and players are scenario objects), the player can be `nil`.
+
+Because of that, you have to check objects returned by [scenario](luaApi.md#scenario) object inside `getHitPoint` and exit the function if expected object is `nil`.
+
 ---
 
 #### Enumerations
