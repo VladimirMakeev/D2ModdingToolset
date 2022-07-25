@@ -62,9 +62,13 @@ Point StackView::getPosition() const
     return Point{stack->position};
 }
 
-PlayerView StackView::getOwner() const
+std::optional<PlayerView> StackView::getOwner() const
 {
     auto player = hooks::getPlayer(objectMap, &stack->ownerId);
+    if (!player) {
+        return std::nullopt;
+    }
+
     return PlayerView{player};
 }
 

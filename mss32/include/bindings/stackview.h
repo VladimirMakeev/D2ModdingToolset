@@ -53,7 +53,7 @@ public:
 
     IdView getId() const;
     Point getPosition() const;
-    PlayerView getOwner() const;
+    std::optional<PlayerView> getOwner() const;
     std::optional<FortView> getInside() const;
     /** Returns stack units as a group. */
     GroupView getGroup() const;
