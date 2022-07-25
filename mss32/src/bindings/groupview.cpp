@@ -56,7 +56,12 @@ GroupView::GroupSlots GroupView::getSlots() const
             continue;
         }
 
-        slots.emplace_back(UnitSlotView(fn.findUnitById(objectMap, &unitId), i, &groupId));
+        // Unit can be null in case where a map is in a state of loading, group object is already
+        // serialized, while some (or all) of its units are not (yet).
+        auto unit = fn.findUnitById(objectMap, &unitId);
+        if (unit) {
+            slots.emplace_back(UnitSlotView(unit, i, &groupId));
+        }
     }
 
     return slots;
@@ -68,7 +73,10 @@ GroupView::GroupUnits GroupView::getUnits() const
     GroupUnits units;
 
     for (const game::CMidgardID* it = group->units.bgn; it != group->units.end; ++it) {
-        units.emplace_back(UnitView(fn.findUnitById(objectMap, it)));
+        auto unit = fn.findUnitById(objectMap, it);
+        if (unit) {
+            units.emplace_back(UnitView(unit));
+        }
     }
 
     return units;
