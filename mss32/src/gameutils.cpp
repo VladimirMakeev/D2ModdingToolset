@@ -31,6 +31,7 @@
 #include "midgardplan.h"
 #include "midgardscenariomap.h"
 #include "midplayer.h"
+#include "midrod.h"
 #include "midruin.h"
 #include "midscenvariables.h"
 #include "midserver.h"
@@ -385,6 +386,14 @@ const game::CMidRuin* getRuinByUnitId(const game::IMidgardObjectMap* objectMap,
     auto ruinId = gameFunctions().getRuinIdByUnitId(objectMap, unitId);
 
     return ruinId ? getRuin(objectMap, ruinId) : nullptr;
+}
+
+game::CMidRod* getRod(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* rodId)
+{
+    using namespace game;
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, rodId);
+    return static_cast<CMidRod*>(obj);
 }
 
 int getGroupXpKilled(const game::IMidgardObjectMap* objectMap, const game::CMidUnitGroup* group)
