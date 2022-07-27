@@ -624,6 +624,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\interfborderdisplay.h" />
     <ClInclude Include="include\interfaceutils.h" />
     <ClInclude Include="include\leaderunitdescriptor.h" />
+    <ClInclude Include="include\midrod.h" />
     <ClInclude Include="include\scenedit.h" />
     <ClInclude Include="include\isoborder.h" />
     <ClInclude Include="include\isoenginegroundhooks.h" />
