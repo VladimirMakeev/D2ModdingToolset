@@ -29,6 +29,7 @@
 #include "midscenvariables.h"
 #include "playerview.h"
 #include "point.h"
+#include "rodview.h"
 #include "ruinview.h"
 #include "scenarioinfo.h"
 #include "scenvariablesview.h"
@@ -59,6 +60,9 @@ void ScenarioView::bind(sol::state& lua)
     scenario["getRuin"] = sol::overload<>(&ScenarioView::getRuin, &ScenarioView::getRuinById,
                                           &ScenarioView::getRuinByCoordinates,
                                           &ScenarioView::getRuinByPoint);
+    scenario["getRod"] = sol::overload<>(&ScenarioView::getRod, &ScenarioView::getRodById,
+                                         &ScenarioView::getRodByCoordinates,
+                                         &ScenarioView::getRodByPoint);
     scenario["getPlayer"] = sol::overload<>(&ScenarioView::getPlayer, &ScenarioView::getPlayerById);
     scenario["getUnit"] = sol::overload<>(&ScenarioView::getUnit, &ScenarioView::getUnitById);
     scenario["findStackByUnit"] = sol::overload<>(&ScenarioView::findStackByUnit,
@@ -317,6 +321,46 @@ std::optional<RuinView> ScenarioView::getRuinByCoordinates(int x, int y) const
 std::optional<RuinView> ScenarioView::getRuinByPoint(const Point& p) const
 {
     return getRuinByCoordinates(p.x, p.y);
+}
+
+std::optional<RodView> ScenarioView::getRod(const std::string& id) const
+{
+    return getRodById(IdView{id});
+}
+
+std::optional<RodView> ScenarioView::getRodById(const IdView& id) const
+{
+    using namespace game;
+
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    if (CMidgardIDApi::get().getType(&id.id) != IdType::Rod) {
+        return std::nullopt;
+    }
+
+    auto rod = hooks::getRod(objectMap, &id.id);
+    if (!rod) {
+        return std::nullopt;
+    }
+
+    return {RodView{rod, objectMap}};
+}
+
+std::optional<RodView> ScenarioView::getRodByCoordinates(int x, int y) const
+{
+    auto rodId = getObjectId(x, y, game::IdType::Rod);
+    if (!rodId) {
+        return std::nullopt;
+    }
+
+    return getRodById(IdView{rodId});
+}
+
+std::optional<RodView> ScenarioView::getRodByPoint(const Point& p) const
+{
+    return getRodByCoordinates(p.x, p.y);
 }
 
 std::optional<RuinView> ScenarioView::findRuinByUnit(const UnitView& unit) const

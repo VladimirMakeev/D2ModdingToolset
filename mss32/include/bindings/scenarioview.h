@@ -46,6 +46,7 @@ class FortView;
 class RuinView;
 class UnitView;
 class PlayerView;
+class RodView;
 
 /**
  * Returns stub values if objectMap is null.
@@ -97,6 +98,15 @@ public:
     std::optional<RuinView> getRuinByCoordinates(int x, int y) const;
     /** Searches for ruin at specified point. */
     std::optional<RuinView> getRuinByPoint(const Point& p) const;
+
+    /** Searches for rod by id string. */
+    std::optional<RodView> getRod(const std::string& id) const;
+    /** Searches for rod by id. */
+    std::optional<RodView> getRodById(const IdView& id) const;
+    /** Searches for rod by coordinate pair. */
+    std::optional<RodView> getRodByCoordinates(int x, int y) const;
+    /** Searches for rod at specified point. */
+    std::optional<RodView> getRodByPoint(const Point& p) const;
 
     /** Searches for player by id string. */
     std::optional<PlayerView> getPlayer(const std::string& id) const;

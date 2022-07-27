@@ -1094,6 +1094,9 @@
     <ClCompile Include="src\midgardscenariomap.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\rodview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2742,6 +2745,9 @@
     </ClInclude>
     <ClInclude Include="include\midrod.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\rodview.h">
+      <Filter>bindings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
