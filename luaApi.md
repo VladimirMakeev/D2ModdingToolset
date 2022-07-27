@@ -587,6 +587,28 @@ ruin.cash
 
 ---
 
+#### Rod
+Represents rod object in scenario. Rods are planted to transform terrain and capture resources.
+
+Methods:
+##### id
+Returns rod [id](luaApi.md#id). The value is unique for every rod on scenario map.
+```lua
+rod.id
+```
+##### position
+Returns copy of rod position as a [point](luaApi.md#point).
+```lua
+rod.position
+```
+##### owner
+Returns [player](luaApi.md#player) that planted the rod.
+```lua
+rod.owner
+```
+
+---
+
 #### Dynamic upgrade
 Represents rules that applied when unit makes its progress gaining levels. Records in GDynUpgr.dbf are dynamic upgrades.
 
@@ -732,6 +754,20 @@ Returns nil if not found.
 ```lua
 local ruin = scenario:getRuin(10, 15)
 if (ruin == nil) then
+    return
+end
+```
+##### getRod
+Searches for [rod](luaApi.md#rod) by:
+- id string
+- [id](luaApi.md#id)
+- pair of coordinates
+- [point](luaApi.md#point)
+
+Returns nil if not found.
+```lua
+local rod = scenario:getRod(10, 15)
+if (rod == nil) then
     return
 end
 ```
