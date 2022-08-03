@@ -99,6 +99,8 @@ public:
     std::optional<AttackView> getAttack() const;
     /** Returns secondary attack. */
     std::optional<AttackView> getAttack2() const;
+    /** Returns alternative attack. */
+    std::optional<AttackView> getAltAttack() const;
 
 protected:
     std::optional<DynUpgradeView> getDynUpgrade(int upgradeNumber) const;

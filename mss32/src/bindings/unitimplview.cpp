@@ -67,6 +67,7 @@ void UnitImplView::bind(sol::state& lua)
     impl["dynUpg2"] = sol::property(&UnitImplView::getDynUpgrade2);
     impl["attack1"] = sol::property(&UnitImplView::getAttack);
     impl["attack2"] = sol::property(&UnitImplView::getAttack2);
+    impl["altAttack"] = sol::property(&UnitImplView::getAltAttack);
     impl["base"] = sol::property(&UnitImplView::getBaseUnit);
 
     impl["global"] = sol::property(&UnitImplView::getGlobal);
@@ -411,6 +412,16 @@ std::optional<AttackView> UnitImplView::getAttack2() const
     }
 
     return AttackView{secondaryAttack};
+}
+
+std::optional<AttackView> UnitImplView::getAltAttack() const
+{
+    auto altAttack = hooks::getAltAttack(impl, true);
+    if (!altAttack) {
+        return std::nullopt;
+    }
+
+    return AttackView{altAttack};
 }
 
 std::optional<DynUpgradeView> UnitImplView::getDynUpgrade(int upgradeNumber) const
