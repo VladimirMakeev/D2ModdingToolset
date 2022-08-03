@@ -235,6 +235,17 @@ game::IAttack* getAttack(const game::IUsUnit* unit, bool primary, bool checkAltA
     return attack;
 }
 
+game::IAttack* getAltAttack(const game::IUsUnit* unit, bool primary)
+{
+    auto attack = getAttack(unit, primary, false);
+    auto altAttack = getGlobalAttack(attack->vftable->getAltAttackId(attack));
+    if (!altAttack) {
+        return nullptr;
+    }
+
+    return wrapAltAttack(unit, altAttack);
+}
+
 int getArmor(const game::CMidgardID* unitId,
              const game::IUsSoldier* soldier,
              const game::BattleMsgData* battleMsgData,

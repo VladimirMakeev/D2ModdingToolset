@@ -53,6 +53,7 @@ game::TUsUnitImpl* getUnitImpl(const game::IUsUnit* unit);
 game::TUsSoldierImpl* getSoldierImpl(const game::IUsUnit* unit);
 game::TUsSoldierImpl* getSoldierImpl(const game::IUsSoldier* soldier);
 game::IAttack* getAttack(const game::IUsUnit* unit, bool primary, bool checkAltAttack);
+game::IAttack* getAltAttack(const game::IUsUnit* unit, bool primary);
 int getArmor(const game::CMidgardID* unitId,
              const game::IUsSoldier* soldier,
              const game::BattleMsgData* battleMsgData,
