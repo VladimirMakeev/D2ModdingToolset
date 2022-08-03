@@ -232,6 +232,28 @@ This does not include leader upgrades from GleaUpg.dbf, because the upgrades are
 ```lua
 unit.leveledImpl
 ```
+##### original
+Returns original [unit dummy](luaApi.md#unit-dummy) that represents unit state before transformation,
+or nil if unit is not transformed.
+The state does not include any unit modifiers thus contains only [leveled implementation](luaApi.md#leveledImpl).
+Unit can be transformed by transform-self, transform-other, drain-level or doppelganger attack.
+```lua
+unit.original
+```
+##### originalModifiers
+Returns array of original [modifiers](luaApi.md#modifier) that were applied to unit before transformation,
+or empty array if unit is not transformed.
+Usually, modifiers are reapplied after transformation, but there are cases where some modifiers are incompatible with a new form,
+thus not getting applied to it.
+```lua
+unit.originalModifiers
+```
+
+---
+
+#### Unit dummy
+Represents preserved state of game unit. Used, for instance, to preserve unit state before transformation, so it can be restored later.
+Methods are identical to [unit](luaApi.md#unit-1), except that there is no [original](luaApi.md#original) and [originalModifiers](luaApi.md#originalModifiers).
 
 ---
 
