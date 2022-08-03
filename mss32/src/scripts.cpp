@@ -43,6 +43,7 @@
 #include "unitimplview.h"
 #include "unitslotview.h"
 #include "unitview.h"
+#include "unitviewdummy.h"
 #include "utils.h"
 #include <fmt/format.h>
 #include <map>
@@ -234,6 +235,7 @@ static void bindApi(sol::state& lua)
     // clang-format on
 
     bindings::UnitView::bind(lua);
+    bindings::UnitViewDummy::bind(lua);
     bindings::UnitImplView::bind(lua);
     bindings::UnitSlotView::bind(lua);
     bindings::DynUpgradeView::bind(lua);

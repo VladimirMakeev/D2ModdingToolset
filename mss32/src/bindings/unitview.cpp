@@ -18,11 +18,14 @@
  */
 
 #include "unitview.h"
-#include "game.h"
 #include "midunit.h"
+#include "modifierutils.h"
 #include "modifierview.h"
 #include "unitimplview.h"
-#include "ussoldier.h"
+#include "unitmodifier.h"
+#include "unitutils.h"
+#include "unitviewdummy.h"
+#include "usunitimpl.h"
 #include <sol/sol.hpp>
 
 namespace bindings {
@@ -47,6 +50,8 @@ void UnitView::bind(sol::state& lua)
     unit["impl"] = sol::property(&UnitView::getImpl);
     unit["baseImpl"] = sol::property(&UnitView::getBaseImpl);
     unit["leveledImpl"] = sol::property(&UnitView::getLeveledImpl);
+    unit["original"] = sol::property(&UnitView::getOriginal);
+    unit["originalModifiers"] = sol::property(&UnitView::getOriginalModifiers);
 
     // For backward compatibility
     unit["modifiers"] = sol::property(&UnitView::getModifiers);
@@ -58,85 +63,51 @@ void UnitView::bind(sol::state& lua)
     unit["hasMoveBonus"] = &UnitView::hasMoveBonus;
 }
 
-std::optional<UnitImplView> UnitView::getImpl() const
+std::optional<UnitViewDummy> UnitView::getOriginal() const
 {
-    return {getUnitImpl()};
+    if (!unit->transformed) {
+        return std::nullopt;
+    }
+
+    return UnitViewDummy{unit->id, hooks::getUnitImpl(&unit->origTypeId), unit->origXp,
+                         unit->hpBefore, unit->hpBefMax};
 }
 
-std::optional<UnitImplView> UnitView::getBaseImpl() const
+std::vector<ModifierView> UnitView::getOriginalModifiers() const
 {
-    return getImpl()->getGlobal();
+    std::vector<ModifierView> result;
+
+    for (auto modifierId : unit->origModifiers) {
+        auto modifier = hooks::getUnitModifier(&modifierId);
+        result.push_back(ModifierView{modifier->data->modifier});
+    }
+
+    return result;
 }
 
-std::optional<UnitImplView> UnitView::getLeveledImpl() const
+game::CMidgardID UnitView::getIdInternal() const
 {
-    return getImpl()->getGenerated();
+    return unit->id;
 }
 
-IdView UnitView::getId() const
+const game::IUsUnit* UnitView::getImplInternal() const
 {
-    return IdView{unit->id};
+    return unitImpl ? unitImpl : unit->unitImpl;
 }
 
-int UnitView::getXp() const
+int UnitView::getXpInternal() const
 {
     return unit->currentXp;
 }
 
-int UnitView::getHp() const
+int UnitView::getHpInternal() const
 {
     return unit->currentHp;
 }
 
-int UnitView::getHpMax() const
+int UnitView::getHpMaxInternal() const
 {
-    using namespace game;
-
-    if (unit->transformed && unit->keepHp)
-        return unit->hpBefMax;
-
-    auto soldier = gameFunctions().castUnitImplToSoldier(getUnitImpl());
-    return soldier->vftable->getHitPoints(soldier);
-}
-
-int UnitView::getLeaderCategory() const
-{
-    return getImpl()->getLeaderCategory();
-}
-
-int UnitView::getMovement() const
-{
-    return getImpl()->getMovement();
-}
-
-int UnitView::getScout() const
-{
-    return getImpl()->getScout();
-}
-
-int UnitView::getLeadership() const
-{
-    return getImpl()->getLeadership();
-}
-
-bool UnitView::hasAbility(int abilityId) const
-{
-    return getImpl()->hasAbility(abilityId);
-}
-
-bool UnitView::hasMoveBonus(int groundId) const
-{
-    return getImpl()->hasMoveBonus(groundId);
-}
-
-std::vector<ModifierView> UnitView::getModifiers() const
-{
-    return getImpl()->getModifiers();
-}
-
-const game::IUsUnit* UnitView::getUnitImpl() const
-{
-    return unitImpl ? unitImpl : unit->unitImpl;
+    return hooks::getUnitHpMax(unit);
 }
 
 } // namespace bindings

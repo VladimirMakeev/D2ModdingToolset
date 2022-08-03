@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UNITVIEW_H
-#define UNITVIEW_H
+#ifndef UNITVIEWDUMMY_H
+#define UNITVIEWDUMMY_H
 
 #include "unitviewbase.h"
 
@@ -26,24 +26,14 @@ namespace sol {
 class state;
 }
 
-namespace game {
-struct CMidUnit;
-} // namespace game
-
 namespace bindings {
 
-class UnitViewDummy;
-
-class UnitView : public UnitViewBase
+class UnitViewDummy : public UnitViewBase
 {
 public:
-    UnitView(const game::CMidUnit* unit);
-    UnitView(const game::CMidUnit* unit, const game::IUsUnit* unitImpl);
+    UnitViewDummy(const game::CMidgardID& id, const game::IUsUnit* impl, int xp, int hp, int hpMax);
 
     static void bind(sol::state& lua);
-
-    std::optional<UnitViewDummy> getOriginal() const;
-    std::vector<ModifierView> getOriginalModifiers() const;
 
 protected:
     game::CMidgardID getIdInternal() const;
@@ -52,10 +42,13 @@ protected:
     int getHpInternal() const;
     int getHpMaxInternal() const;
 
-    const game::CMidUnit* unit;
-    const game::IUsUnit* unitImpl;
+    const game::CMidgardID id;
+    const game::IUsUnit* impl;
+    int xp;
+    int hp;
+    int hpMax;
 };
 
 } // namespace bindings
 
-#endif // UNITVIEW_H
+#endif // UNITVIEWDUMMY_H

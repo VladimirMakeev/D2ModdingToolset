@@ -458,6 +458,17 @@ int getUnitRegen(const game::IMidgardObjectMap* objectMap, const game::CMidgardI
     return std::clamp(result, 0, 100);
 }
 
+int getUnitHpMax(const game::CMidUnit* unit)
+{
+    using namespace game;
+
+    if (unit->transformed && unit->keepHp)
+        return unit->hpBefMax;
+
+    auto soldier = gameFunctions().castUnitImplToSoldier(unit->unitImpl);
+    return soldier->vftable->getHitPoints(soldier);
+}
+
 int computeUnitEffectiveHpForAi(int hp, int armor)
 {
     if (userSettings().fixEffectiveHpFormula) {

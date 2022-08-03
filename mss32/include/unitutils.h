@@ -66,6 +66,8 @@ int getCityProtection(const game::IMidgardObjectMap* objectMap, const game::CMid
 /** Returns unit including bonus regen from lord, fort/ruin and terrain. */
 int getUnitRegen(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* unitId);
 
+int getUnitHpMax(const game::CMidUnit* unit);
+
 int computeUnitEffectiveHpForAi(int hp, int armor);
 int computeUnitEffectiveHp(int hp, int armor);
 int computeShatterDamage(const game::CMidgardID* unitId,
