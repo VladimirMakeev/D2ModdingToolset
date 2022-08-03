@@ -159,8 +159,8 @@ bool attackHasAltAttack(game::AttackClassId id)
 
 bool attackHasAltAttack(const game::IAttack* attack)
 {
-    const auto class_ = attack->vftable->getAttackClass(attack);
-    return attackHasAltAttack(class_->id);
+    const auto attackClass = attack->vftable->getAttackClass(attack);
+    return attackHasAltAttack(attackClass->id);
 }
 
 bool attackHasDrain(game::AttackClassId id)
