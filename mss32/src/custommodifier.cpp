@@ -239,10 +239,6 @@ game::IAttack* CCustomModifier::getAttack(bool primary)
     if (prevValue == nullptr)
         return nullptr;
 
-    // Return unwrapped attack - its alt attack should be wrapped instead
-    if (*prevValue->vftable->getAltAttackId(prevValue) != game::emptyId)
-        return prevValue;
-
     auto result = primary ? &attack : &attack2;
     result->id = prevValue->id;
     result->prev = prevValue;
@@ -1058,7 +1054,8 @@ const game::LAttackClass* __fastcall attackGetAttackClass(const game::IAttack* t
                          : THIZ_GET_VALUE(getAttack2Class, (int)prevValue->id);
 
     // Prevents infinite recursion since alt attack is wrapped instead of the primary
-    if (primary && attackHasAltAttack((AttackClassId)value)) {
+    if (primary && prevValue->id != (AttackClassId)value
+        && attackHasAltAttack((AttackClassId)value)) {
         thiz->showInvalidRetvalMessage(
             "getAttackClass",
             "Cannot change attack class to one with alt attack (Doppelganger, TransformSelf). Use 'getAttackId' for this purpose.");
@@ -1276,12 +1273,21 @@ int __fastcall attackGetLevel(const game::IAttack* thisptr, int /*%edx*/)
 
 const game::CMidgardID* __fastcall attackGetAltAttackId(const game::IAttack* thisptr, int /*%edx*/)
 {
-    // Modyfing this value has no effect because alt attack is wrapped instead of the primary
-
     auto thiz = castAttackToCustomModifier(thisptr);
     auto prev = thiz->getPrevAttack(thisptr);
 
-    return prev->vftable->getAltAttackId(prev);
+    auto prevValue = prev->vftable->getAltAttackId(prev);
+
+    bindings::IdView prevId{prevValue};
+    auto value = THIZ_GET_VALUE(getAltAttackId, prevId);
+    if (value != prevId) {
+        auto global = getGlobalAttack(&value.id);
+        if (global) {
+            return &global->id;
+        }
+    }
+
+    return prevValue;
 }
 
 bool __fastcall attackGetInfinite(const game::IAttack* thisptr, int /*%edx*/)
