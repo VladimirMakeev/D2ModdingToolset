@@ -42,6 +42,7 @@ bool attackHasHeal(game::AttackClassId id);
 bool attackHasInfinite(game::AttackClassId id);
 bool attackHasCritHit(game::AttackClassId id);
 bool attackHasAltAttack(game::AttackClassId id);
+bool attackHasAltAttack(const game::IAttack* attack);
 bool attackHasDrain(game::AttackClassId id); // Uses IAttack::getDrain
 bool isMeleeAttack(const game::IAttack* attack);
 bool isMeleeAttack(game::AttackReachId id);

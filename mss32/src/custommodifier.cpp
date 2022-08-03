@@ -1022,6 +1022,11 @@ void __fastcall attackDtor(game::IAttack* thisptr, int /*%edx*/, char flags)
 const char* __fastcall attackGetName(const game::IAttack* thisptr, int /*%edx*/)
 {
     auto thiz = castAttackToCustomModifier(thisptr);
+    auto prev = thiz->getPrevAttack(thisptr);
+
+    if (attackHasAltAttack(prev)) {
+        return prev->vftable->getName(prev);
+    }
 
     auto baseId = thiz->getAttackBaseNameTxt(thisptr);
     bool primary = thisptr != &thiz->attack2;
@@ -1031,6 +1036,11 @@ const char* __fastcall attackGetName(const game::IAttack* thisptr, int /*%edx*/)
 const char* __fastcall attackGetDescription(const game::IAttack* thisptr, int /*%edx*/)
 {
     auto thiz = castAttackToCustomModifier(thisptr);
+    auto prev = thiz->getPrevAttack(thisptr);
+
+    if (attackHasAltAttack(prev)) {
+        return prev->vftable->getDescription(prev);
+    }
 
     auto baseId = thiz->getAttackBaseDescTxt(thisptr);
     bool primary = thisptr != &thiz->attack2;
@@ -1048,6 +1058,9 @@ const game::LAttackClass* __fastcall attackGetAttackClass(const game::IAttack* t
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getAttackClass(prev);
+    if (attackHasAltAttack(prev)) {
+        return prevValue;
+    }
 
     bool primary = thisptr != &thiz->attack2;
     auto value = primary ? THIZ_GET_VALUE(getAttackClass, (int)prevValue->id)
@@ -1125,6 +1138,9 @@ const game::LAttackSource* __fastcall attackGetAttackSource(const game::IAttack*
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getAttackSource(prev);
+    if (attackHasAltAttack(prev)) {
+        return prevValue;
+    }
 
     bool primary = thisptr != &thiz->attack2;
     auto value = primary ? THIZ_GET_VALUE(getAttackSource, (int)prevValue->id)
@@ -1163,8 +1179,9 @@ int __fastcall attackGetInitiative(const game::IAttack* thisptr, int /*%edx*/)
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getInitiative(prev);
-    if (thisptr == &thiz->attack2)
+    if (thisptr == &thiz->attack2 || attackHasAltAttack(prev)) {
         return prevValue;
+    }
 
     auto value = THIZ_GET_VALUE(getAttackInitiative, prevValue);
     return std::clamp(value, restrictions.attackInitiative->min,
@@ -1178,11 +1195,14 @@ int* __fastcall attackGetPower(const game::IAttack* thisptr, int /*%edx*/, int* 
     auto thiz = castAttackToCustomModifier(thisptr);
     auto prev = thiz->getPrevAttack(thisptr);
 
-    auto prevValue = *prev->vftable->getPower(prev, power);
+    auto prevValue = prev->vftable->getPower(prev, power);
+    if (attackHasAltAttack(prev)) {
+        return prevValue;
+    }
 
     bool primary = thisptr != &thiz->attack2;
-    auto value = primary ? THIZ_GET_VALUE(getAttackPower, prevValue)
-                         : THIZ_GET_VALUE(getAttack2Power, prevValue);
+    auto value = primary ? THIZ_GET_VALUE(getAttackPower, *prevValue)
+                         : THIZ_GET_VALUE(getAttack2Power, *prevValue);
     *power = std::clamp(value, restrictions.attackPower->min, restrictions.attackPower->max);
     return power;
 }
@@ -1198,8 +1218,9 @@ const game::LAttackReach* __fastcall attackGetAttackReach(const game::IAttack* t
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getAttackReach(prev);
-    if (thisptr == &thiz->attack2)
+    if (thisptr == &thiz->attack2 || attackHasAltAttack(prev)) {
         return prevValue;
+    }
 
     auto value = THIZ_GET_VALUE(getAttackReach, (int)prevValue->id);
     switch ((AttackReachId)value) {
@@ -1227,6 +1248,9 @@ int __fastcall attackGetQtyDamage(const game::IAttack* thisptr, int /*%edx*/)
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getQtyDamage(prev);
+    if (attackHasAltAttack(prev)) {
+        return prevValue;
+    }
 
     bool primary = thisptr != &thiz->attack2;
     auto value = primary ? THIZ_GET_VALUE(getAttackDamage, prevValue)
@@ -1241,6 +1265,9 @@ int __fastcall attackGetQtyHeal(const game::IAttack* thisptr, int /*%edx*/)
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getQtyHeal(prev);
+    if (attackHasAltAttack(prev)) {
+        return prevValue;
+    }
 
     bool primary = thisptr != &thiz->attack2;
     return primary ? THIZ_GET_VALUE(getAttackHeal, prevValue)
@@ -1253,6 +1280,9 @@ int __fastcall attackGetDrain(const game::IAttack* thisptr, int /*%edx*/, int da
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getDrain(prev, damage);
+    if (attackHasAltAttack(prev)) {
+        return prevValue;
+    }
 
     bool primary = thisptr != &thiz->attack2;
     return primary ? THIZ_GET_VALUE_PARAM(getAttackDrain, damage, prevValue)
@@ -1265,6 +1295,9 @@ int __fastcall attackGetLevel(const game::IAttack* thisptr, int /*%edx*/)
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getLevel(prev);
+    if (attackHasAltAttack(prev)) {
+        return prevValue;
+    }
 
     bool primary = thisptr != &thiz->attack2;
     return primary ? THIZ_GET_VALUE(getAttackLevel, prevValue)
@@ -1277,6 +1310,9 @@ const game::CMidgardID* __fastcall attackGetAltAttackId(const game::IAttack* thi
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getAltAttackId(prev);
+    if (!attackHasAltAttack(prev)) {
+        return prevValue;
+    }
 
     bindings::IdView prevId{prevValue};
     auto value = THIZ_GET_VALUE(getAltAttackId, prevId);
@@ -1296,6 +1332,9 @@ bool __fastcall attackGetInfinite(const game::IAttack* thisptr, int /*%edx*/)
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getInfinite(prev);
+    if (attackHasAltAttack(prev)) {
+        return prevValue;
+    }
 
     bool primary = thisptr != &thiz->attack2;
     return primary ? THIZ_GET_VALUE(getAttackInfinite, prevValue)
@@ -1308,8 +1347,11 @@ game::IdVector* __fastcall attackGetWards(const game::IAttack* thisptr, int /*%e
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getWards(prev);
-    auto prevIds = IdVectorToIds(prevValue);
+    if (attackHasAltAttack(prev)) {
+        return prevValue;
+    }
 
+    auto prevIds = IdVectorToIds(prevValue);
     bool primary = thisptr != &thiz->attack2;
     auto value = primary ? THIZ_GET_VALUE_AS(getAttackWards, prevIds)
                          : THIZ_GET_VALUE_AS(getAttack2Wards, prevIds);
@@ -1328,6 +1370,9 @@ bool __fastcall attackGetCritHit(const game::IAttack* thisptr, int /*%edx*/)
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getCritHit(prev);
+    if (attackHasAltAttack(prev)) {
+        return prevValue;
+    }
 
     bool primary = thisptr != &thiz->attack2;
     return primary ? THIZ_GET_VALUE(getAttackCritHit, prevValue)
