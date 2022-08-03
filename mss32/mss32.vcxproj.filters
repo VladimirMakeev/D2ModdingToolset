@@ -1097,6 +1097,9 @@
     <ClCompile Include="src\bindings\rodview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\unitviewdummy.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
     <ClCompile Include="src\bindings\unitviewbase.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
@@ -2750,6 +2753,9 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\rodview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\unitviewdummy.h">
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\unitviewbase.h">
