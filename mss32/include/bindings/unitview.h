@@ -20,25 +20,21 @@
 #ifndef UNITVIEW_H
 #define UNITVIEW_H
 
-#include "idview.h"
-#include <optional>
-#include <vector>
+#include "unitviewbase.h"
 
 namespace sol {
 class state;
 }
 
 namespace game {
-struct IUsUnit;
 struct CMidUnit;
 } // namespace game
 
 namespace bindings {
 
-class UnitImplView;
-class ModifierView;
+class UnitViewDummy;
 
-class UnitView
+class UnitView : public UnitViewBase
 {
 public:
     UnitView(const game::CMidUnit* unit);
@@ -46,36 +42,15 @@ public:
 
     static void bind(sol::state& lua);
 
-    /** Returns unit current implementation. */
-    std::optional<UnitImplView> getImpl() const;
-    /** Returns unit base implementation. */
-    std::optional<UnitImplView> getBaseImpl() const;
-    /** Returns unit leveled implementation (without modifiers). */
-    std::optional<UnitImplView> getLeveledImpl() const;
-
-    std::vector<ModifierView> getModifiers() const;
-
-    IdView getId() const;
-    /** Returns unit's current experience points. */
-    int getXp() const;
-    int getHp() const;
-    int getHpMax() const;
-
-    /** Returns leader category id. */
-    int getLeaderCategory() const;
-    /** Returns leader maximum movement points. */
-    int getMovement() const;
-    /** Returns leader scouting range. */
-    int getScout() const;
-    /** Returns current leadership value. */
-    int getLeadership() const;
-    /** Returns true if leader has LLeaderAbility with specified id. */
-    bool hasAbility(int abilityId) const;
-    /** Returns true if leader has movement bonus on LGroundCategory with specified id. */
-    bool hasMoveBonus(int groundId) const;
+    std::optional<UnitViewDummy> getOriginal() const;
+    std::vector<ModifierView> getOriginalModifiers() const;
 
 protected:
-    const game::IUsUnit* getUnitImpl() const;
+    game::CMidgardID getIdInternal() const;
+    const game::IUsUnit* getImplInternal() const;
+    int getXpInternal() const;
+    int getHpInternal() const;
+    int getHpMaxInternal() const;
 
     const game::CMidUnit* unit;
     const game::IUsUnit* unitImpl;
