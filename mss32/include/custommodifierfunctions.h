@@ -64,6 +64,7 @@ struct CustomModifierFunctions
     std::optional<sol::function> getLowerCost;
     std::optional<sol::function> getAttackId;
     std::optional<sol::function> getAttack2Id;
+    std::optional<sol::function> getAltAttackId;
     std::optional<sol::function> getAttackReach;
     std::optional<sol::function> getAttackInitiative;
     std::optional<sol::function> getAttackNameTxt;

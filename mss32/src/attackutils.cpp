@@ -157,6 +157,12 @@ bool attackHasAltAttack(game::AttackClassId id)
     return id == classes.transformSelf->id || id == classes.doppelganger->id;
 }
 
+bool attackHasAltAttack(const game::IAttack* attack)
+{
+    const auto attackClass = attack->vftable->getAttackClass(attack);
+    return attackHasAltAttack(attackClass->id);
+}
+
 bool attackHasDrain(game::AttackClassId id)
 {
     return isNormalDamageAttack(id);

@@ -216,6 +216,10 @@ function getAttackId(unit, prev)
 	return Id.new("g000aa0164")
 end
 
+function getAltAttackId(unit, prev)
+	return unit.leveledImpl.attack1.id -- Leveled primary attack
+end
+
 function getAttackNameTxt(unit, prev)
 	return Id.new("x160tgc536")
 end

@@ -317,6 +317,8 @@ impl.dynUpg2
 impl.attack1
 -- Returns secondary attack or nil if no secondary attack used.
 impl.attack2
+-- Returns alternative attack or nil if no alternative attack used.
+impl.altAttack
 -- Returns leader maximum movement points (or 0 if unit is not a leader).
 impl.movement
 -- Returns leader scouting range (or 0 if unit is not a leader).
