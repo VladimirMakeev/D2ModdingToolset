@@ -22,6 +22,7 @@
 #include "attackimpl.h"
 #include "attackutils.h"
 #include "batattacktransformself.h"
+#include "batattackutils.h"
 #include "customattack.h"
 #include "customattacks.h"
 #include "customattackutils.h"
@@ -584,11 +585,6 @@ bool __stdcall getTargetsToAttackForAllOrCustomReach(game::IdList* value,
     if (transformSelfAttack && transformSelfAttack->unitId == *targetUnitId)
         return false;
 
-    // HACK: every attack in the game except CBatAttackTransformSelf has its unitId as a first
-    // field, but its not a part of CBatAttackBase.
-    CMidgardID* unitId = transformSelfAttack ? &transformSelfAttack->unitId
-                                             : (CMidgardID*)(batAttack + 1);
-
     CMidgardID targetGroupId{};
     batAttack->vftable->getTargetGroupId(batAttack, &targetGroupId, battleMsgData);
 
@@ -599,6 +595,8 @@ bool __stdcall getTargetsToAttackForAllOrCustomReach(game::IdList* value,
     } else if (attackReach->id != reaches.any->id && attackReach->id != reaches.adjacent->id) {
         for (const auto& custom : getCustomAttacks().reaches) {
             if (attackReach->id == custom.reach.id) {
+                const CMidgardID* unitId = getUnitId(batAttack);
+
                 CMidgardID unitGroupId{};
                 fn.getAllyOrEnemyGroupId(&unitGroupId, battleMsgData, unitId, true);
 
