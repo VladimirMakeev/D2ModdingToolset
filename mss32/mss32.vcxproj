@@ -541,6 +541,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batattacktransformother.h" />
     <ClInclude Include="include\batattacktransformself.h" />
     <ClInclude Include="include\batattackuntransformeffect.h" />
+    <ClInclude Include="include\batattackuseorb.h" />
     <ClInclude Include="include\batattackusepotion.h" />
     <ClInclude Include="include\batattackutils.h" />
     <ClInclude Include="include\batbigface.h" />

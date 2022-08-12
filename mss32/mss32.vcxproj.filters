@@ -2764,6 +2764,9 @@
     <ClInclude Include="include\batattackitem.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\batattackuseorb.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\batattackusepotion.h">
       <Filter>game</Filter>
     </ClInclude>
