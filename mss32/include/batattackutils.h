@@ -24,6 +24,12 @@
 #include "battlemsgdata.h"
 #include "midunit.h"
 
+namespace game {
+
+struct IBatAttack;
+
+} // namespace game
+
 namespace hooks {
 
 bool canHeal(game::IAttack* attack,
@@ -35,6 +41,8 @@ int heal(game::IMidgardObjectMap* objectMap,
          game::BattleMsgData* battleMsgData,
          game::CMidUnit* targetUnit,
          int qtyHeal);
+
+const game::CMidgardID* getUnitId(const game::IBatAttack* batAttack);
 
 } // namespace hooks
 
