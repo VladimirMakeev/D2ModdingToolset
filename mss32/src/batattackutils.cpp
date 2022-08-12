@@ -18,6 +18,10 @@
  */
 
 #include "batattackutils.h"
+#include "batattacktransformself.h"
+#include "batattackuseorb.h"
+#include "batattackusetalisman.h"
+#include "dynamiccast.h"
 #include "visitors.h"
 
 namespace hooks {
@@ -52,6 +56,36 @@ int heal(game::IMidgardObjectMap* objectMap,
     BattleMsgDataApi::get().setUnitHp(battleMsgData, &targetUnit->id, hpAfter);
 
     return hpAfter - hpBefore;
+}
+
+const game::CMidgardID* getUnitId(const game::IBatAttack* batAttack)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    auto transformSelfAttack = (CBatAttackTransformSelf*)
+        dynamicCast(batAttack, 0, rtti.IBatAttackType, rtti.CBatAttackTransformSelfType, 0);
+    if (transformSelfAttack) {
+        return &transformSelfAttack->unitId;
+    }
+
+    auto useOrbAttack = (CBatAttackUseOrb*)dynamicCast(batAttack, 0, rtti.IBatAttackType,
+                                                       rtti.CBatAttackUseOrbType, 0);
+    if (useOrbAttack) {
+        return &useOrbAttack->unitId;
+    }
+
+    auto useTalismanAttack = (CBatAttackUseTalisman*)dynamicCast(batAttack, 0, rtti.IBatAttackType,
+                                                                 rtti.CBatAttackUseTalismanType, 0);
+    if (useTalismanAttack) {
+        return &useTalismanAttack->unitId;
+    }
+
+    // HACK: every other attack in the game has its unitId as a first field, but its not a part
+    // of CBatAttackBase.
+    return (CMidgardID*)(batAttack + 1);
 }
 
 } // namespace hooks

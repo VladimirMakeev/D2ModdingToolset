@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Stanislav Egorov.
+ * Copyright (C) 2022 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,33 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BATATTACKUTILS_H
-#define BATATTACKUTILS_H
+#ifndef BATATTACKITEM_H
+#define BATATTACKITEM_H
 
-#include "attack.h"
-#include "battlemsgdata.h"
-#include "midunit.h"
+#include "batattack.h"
+#include "midgardid.h"
 
 namespace game {
 
-struct IBatAttack;
+struct CBatAttackItem : IBatAttack
+{
+    IBatAttack* batAttack; // Actual attack to be performed
+    CMidgardID itemId;
+};
+
+assert_size(CBatAttackItem, 12);
 
 } // namespace game
 
-namespace hooks {
-
-bool canHeal(game::IAttack* attack,
-             game::IMidgardObjectMap* objectMap,
-             game::BattleMsgData* battleMsgData,
-             game::CMidgardID* targetUnitId);
-
-int heal(game::IMidgardObjectMap* objectMap,
-         game::BattleMsgData* battleMsgData,
-         game::CMidUnit* targetUnit,
-         int qtyHeal);
-
-const game::CMidgardID* getUnitId(const game::IBatAttack* batAttack);
-
-} // namespace hooks
-
-#endif // BATATTACKUTILS_H
+#endif // BATATTACKITEM_H

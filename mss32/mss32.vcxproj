@@ -535,11 +535,15 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batattackdrainlevel.h" />
     <ClInclude Include="include\batattackdrainoverflow.h" />
     <ClInclude Include="include\batattackgiveattack.h" />
+    <ClInclude Include="include\batattackitem.h" />
     <ClInclude Include="include\batattackshatter.h" />
     <ClInclude Include="include\batattacksummon.h" />
     <ClInclude Include="include\batattacktransformother.h" />
     <ClInclude Include="include\batattacktransformself.h" />
     <ClInclude Include="include\batattackuntransformeffect.h" />
+    <ClInclude Include="include\batattackuseorb.h" />
+    <ClInclude Include="include\batattackusepotion.h" />
+    <ClInclude Include="include\batattackusetalisman.h" />
     <ClInclude Include="include\batattackutils.h" />
     <ClInclude Include="include\batbigface.h" />
     <ClInclude Include="include\batimagesloader.h" />

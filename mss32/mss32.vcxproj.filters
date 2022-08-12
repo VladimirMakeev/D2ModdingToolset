@@ -2761,6 +2761,18 @@
     <ClInclude Include="include\bindings\unitviewbase.h">
       <Filter>bindings</Filter>
     </ClInclude>
+    <ClInclude Include="include\batattackitem.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\batattackuseorb.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\batattackusetalisman.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\batattackusepotion.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
