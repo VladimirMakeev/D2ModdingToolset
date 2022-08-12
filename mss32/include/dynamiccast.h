@@ -153,6 +153,7 @@ struct Rtti
     TypeDescriptor* CUnitTypeDescriptorType;
     TypeDescriptor* CLeaderUnitDescriptorType;
     TypeDescriptor* CBatAttackUseOrbType;
+    TypeDescriptor* CBatAttackUseTalismanType;
 };
 
 const Rtti& rtti();
