@@ -19,6 +19,8 @@
 
 #include "itemutils.h"
 #include "globaldata.h"
+#include "itembattle.h"
+#include "itemequipment.h"
 #include "log.h"
 #include "midgardobjectmap.h"
 #include "miditem.h"
@@ -50,6 +52,27 @@ const game::CItemBase* getGlobalItemById(const game::IMidgardObjectMap* objectMa
     }
 
     return globalItem;
+}
+
+game::CMidgardID getAttackId(const game::IItem* item)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    auto itemBattle = (CItemBattle*)dynamicCast(item, 0, rtti.IItemType, rtti.CItemBattleType, 0);
+    if (itemBattle) {
+        return itemBattle->attackId;
+    }
+
+    auto itemEquipment = (CItemEquipment*)dynamicCast(item, 0, rtti.IItemType,
+                                                      rtti.CItemEquipmentType, 0);
+    if (itemEquipment) {
+        return itemEquipment->attackId;
+    }
+
+    return emptyId;
 }
 
 } // namespace hooks

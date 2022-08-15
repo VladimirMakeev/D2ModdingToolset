@@ -22,6 +22,7 @@
 
 namespace game {
 struct IMidgardObjectMap;
+struct IItem;
 struct CItemBase;
 struct CMidgardID;
 } // namespace game
@@ -30,6 +31,8 @@ namespace hooks {
 
 const game::CItemBase* getGlobalItemById(const game::IMidgardObjectMap* objectMap,
                                          const game::CMidgardID* itemId);
+
+game::CMidgardID getAttackId(const game::IItem* item);
 
 } // namespace hooks
 
