@@ -35,6 +35,7 @@ struct CItemBase;
 namespace bindings {
 
 class UnitImplView;
+class AttackView;
 
 class ItemBaseView
 {
@@ -47,6 +48,7 @@ public:
     int getCategory() const;
     CurrencyView getValue() const;
     std::optional<UnitImplView> getUnitImpl() const;
+    std::optional<AttackView> getAttack() const;
 
 private:
     const game::CItemBase* item;

@@ -18,8 +18,11 @@
  */
 
 #include "itembaseview.h"
+#include "attackutils.h"
+#include "attackview.h"
 #include "itembase.h"
 #include "itemcategory.h"
+#include "itemutils.h"
 #include "unitimplview.h"
 #include "unitutils.h"
 #include "usunitimpl.h"
@@ -38,6 +41,7 @@ void ItemBaseView::bind(sol::state& lua)
     view["type"] = sol::property(&getCategory);
     view["value"] = sol::property(&getValue);
     view["unitImpl"] = sol::property(&getUnitImpl);
+    view["attack"] = sol::property(&getAttack);
 }
 
 IdView ItemBaseView::getId() const
@@ -72,6 +76,23 @@ std::optional<UnitImplView> ItemBaseView::getUnitImpl() const
         return std::nullopt;
 
     return UnitImplView(unitImpl);
+}
+
+std::optional<AttackView> ItemBaseView::getAttack() const
+{
+    using namespace game;
+
+    auto attackId = hooks::getAttackId(item);
+    if (attackId == emptyId) {
+        return std::nullopt;
+    }
+
+    auto attack = hooks::getGlobalAttack(&attackId);
+    if (!attack) {
+        return std::nullopt;
+    }
+
+    return AttackView(attack);
 }
 
 } // namespace bindings
