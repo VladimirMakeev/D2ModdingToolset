@@ -44,6 +44,8 @@ int heal(game::IMidgardObjectMap* objectMap,
 
 const game::CMidgardID* getUnitId(const game::IBatAttack* batAttack);
 
+const game::CMidgardID* getItemId(const game::IBatAttack* batAttack);
+
 } // namespace hooks
 
 #endif // BATATTACKUTILS_H
