@@ -513,12 +513,12 @@ Returns stack [subrace](luaApi.md#subrace).
 stack.subrace
 ```
 ##### inventory
-Returns array of inventory [items](luaApi.md#item-1). This includes equipped items.
+Returns array of inventory [items](luaApi.md#item-2). This includes equipped items.
 ```lua
 stack.inventory
 ```
 ##### getEquippedItem
-Returns equipped [item](luaApi.md#item-1) by [equipment](luaApi.md#equipment) value.
+Returns equipped [item](luaApi.md#item-2) by [equipment](luaApi.md#equipment) value.
 ```lua
 stack:getEquippedItem(Equipment.Boots)
 ```
@@ -567,7 +567,7 @@ Returns fort [subrace](luaApi.md#subrace).
 fort.subrace
 ```
 ##### inventory
-Returns array of inventory [items](luaApi.md#item-1).
+Returns array of inventory [items](luaApi.md#item-2).
 ```lua
 fort.inventory
 ```
@@ -599,7 +599,7 @@ Returns ruin units as a [group](luaApi.md#group).
 ruin.group
 ```
 ##### item
-Returns [item](luaApi.md#item-1) reward for looting the ruin.
+Returns [item](luaApi.md#item-2) reward for looting the ruin.
 ```lua
 ruin.item
 ```
@@ -981,6 +981,8 @@ For instance: in case of "Angel Orb", Angel unit implementation is returned.
 base.unitImpl
 ```
 
+---
+
 #### Item
 Represents item object in the current scenario.
 
@@ -1041,7 +1043,7 @@ end
 #### transformOther.lua
 `attacker` and `target` has type [Unit](luaApi.md#unit-1).
 `transformImpl` is [Unit implementation](luaApi.md#unit-implementation).
-`item` is [Item](luaApi.md#item-1).
+`item` is [Item](luaApi.md#item-2).
 ```lua
 function getLevel(attacker, target, transformImpl, item)
     -- transform using target level with a minimum of transform impl level
@@ -1050,7 +1052,7 @@ end
 ```
 
 `attacker` and `target` has type [Unit](luaApi.md#unit-1).
-`item` is [Item](luaApi.md#item-1).
+`item` is [Item](luaApi.md#item-2).
 #### drainLevel.lua
 ```lua
 function getLevel(attacker, target, item)
@@ -1062,7 +1064,7 @@ end
 #### summon.lua
 `summoner` has type [Unit](luaApi.md#unit-1).
 `summonImpl` is [Unit implementation](luaApi.md#unit-implementation).
-`item` is [Item](luaApi.md#item-1).
+`item` is [Item](luaApi.md#item-2).
 ```lua
 function getLevel(summoner, summonImpl, item)
     -- Use base level of summon if cheap item is used to summon it
@@ -1089,21 +1091,20 @@ See [Scripts](Scripts) directory for additional examples.
 Targeting scripts are used to specify either selection or attack targets of custom attack reach:
 - **Selection** targets are targets that can be **selected (clicked)** (specified as SEL_SCRIPT in LAttR.dbf);
 - **Attack** targets are targets that will be **affected by attack** (specified as ATT_SCRIPT in LAttR.dbf).
-
 For instance, in case of "pierce" attack, you can only click adjacent targets, but the attack will not only affect the selected target but also the one behind it (if any).
-
 Thus the "pierce" attack uses **getAdjacentTargets.lua as selection** script and **getSelectedTargetAndOneBehindIt.lua as attack** script.
-#### getSelectedTargetAndOneBehindIt.lua
+
+Targeting scripts use uniform `getTargets` function for both selection and attack scripts with the following arguments:
+- `attacker` is the [unit slot](luaApi.md#unit-slot) of the attacker unit;
+- `selected` is the [unit slot](luaApi.md#unit-slot) of the unit that was selected (clicked), or `nil` if this is selection script (no target is clicked yet);
+- `allies` are [unit slots](luaApi.md#unit-slot) of all the allies on the battlefield (excluding the attacker);
+- `targets` are [unit slots](luaApi.md#unit-slot) of all the targets on the battlefield on which the attack can be performed. For instance, if targets are allies and the attack is Revive, then it will only include dead allies that can be revived;
+- `targetsAreAllies` specified whether targets are allies;
+- `item` specifies an [item](luaApi.md#item-2) (orb or talisman) used to perform the attack, or `nil` if no item is used.
+
+#### Example of attack script of pierce attack (getSelectedTargetAndOneBehindIt.lua)
 ```lua
---[[
-'attacker' is the unit slot of the attacker unit
-'selected' is the unit slot of the unit that was selected (clicked)
-'allies' are unit slots of all the allies on the battlefield (excluding the attacker)
-'targets' are unit slots of all the targets on the battlefield on which the attack can be performed (for instance,
-  if targets are allies and the attack is Revive, then it will only include dead allies that can be revived)
-'targetsAreAllies' specified whether targets are allies
---]]
-function getTargets(attacker, selected, allies, targets, targetsAreAllies)
+function getTargets(attacker, selected, allies, targets, targetsAreAllies, item)
 	-- Get the selected target and the one behind it (pierce attack)
 	local result = {selected}
 	for i = 1, #targets do
