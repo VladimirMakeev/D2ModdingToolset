@@ -24,6 +24,7 @@
 #include "idlist.h"
 #include "targetset.h"
 #include <filesystem>
+#include <optional>
 
 namespace game {
 struct CMidgardID;
@@ -34,6 +35,7 @@ struct IBatAttack;
 } // namespace game
 
 namespace bindings {
+class ItemView;
 class UnitSlotView;
 } // namespace bindings
 
@@ -53,7 +55,8 @@ UnitSlots getTargetsToSelectOrAttack(const std::string& scriptFile,
                                      const bindings::UnitSlotView& selected,
                                      const UnitSlots& allies,
                                      const UnitSlots& targets,
-                                     bool targetsAreAllies);
+                                     bool targetsAreAllies,
+                                     const std::optional<bindings::ItemView>& item);
 
 UnitSlots getTargets(const game::IMidgardObjectMap* objectMap,
                      const game::BattleMsgData* battleMsgData,
@@ -73,6 +76,7 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
                                          const game::CMidgardID* targetGroupId,
                                          const game::CMidgardID* unitGroupId,
                                          const game::CMidgardID* unitId,
+                                         const game::CMidgardID* attackUnitOrItemId,
                                          const CustomAttackReach& attackReach,
                                          game::TargetSet* value);
 

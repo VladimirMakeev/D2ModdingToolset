@@ -25,6 +25,7 @@
 #include "attackutils.h"
 #include "batattack.h"
 #include "batattacktransformself.h"
+#include "batattackutils.h"
 #include "battlemsgdata.h"
 #include "custommodifier.h"
 #include "dbffile.h"
@@ -33,6 +34,7 @@
 #include "gameutils.h"
 #include "idlistutils.h"
 #include "intset.h"
+#include "itemview.h"
 #include "log.h"
 #include "midgardobjectmap.h"
 #include "midplayer.h"
@@ -173,7 +175,8 @@ UnitSlots getTargetsToSelectOrAttack(const std::string& scriptFile,
                                      const bindings::UnitSlotView& selected,
                                      const UnitSlots& allies,
                                      const UnitSlots& targets,
-                                     bool targetsAreAllies)
+                                     bool targetsAreAllies,
+                                     const std::optional<bindings::ItemView>& item)
 {
     std::optional<sol::environment> env;
     const auto path{scriptsFolder() / scriptFile};
@@ -183,7 +186,8 @@ UnitSlots getTargetsToSelectOrAttack(const std::string& scriptFile,
     }
 
     try {
-        sol::table result = (*getTargets)(attacker, selected, allies, targets, targetsAreAllies);
+        sol::table result = (*getTargets)(attacker, selected, allies, targets, targetsAreAllies,
+                                          item ? &item.value() : nullptr);
         return result.as<UnitSlots>();
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
@@ -287,6 +291,7 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
                                          const game::CMidgardID* targetGroupId,
                                          const game::CMidgardID* unitGroupId,
                                          const game::CMidgardID* unitId,
+                                         const game::CMidgardID* attackUnitOrItemId,
                                          const CustomAttackReach& attackReach,
                                          game::TargetSet* value)
 {
@@ -295,6 +300,7 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
     const auto& fn = gameFunctions();
     const auto& intSetApi = IntSetApi::get();
     const auto& groupApi = CMidUnitGroupApi::get();
+    const auto& idApi = CMidgardIDApi::get();
 
     intSetApi.clear(value);
 
@@ -310,9 +316,14 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
     auto targets = getTargets(objectMap, battleMsgData, batAttack, targetGroupId, unitId, &emptyId);
     auto allies = getAllies(objectMap, battleMsgData, unitGroupId, unitId);
 
+    std::optional<bindings::ItemView> item;
+    if (idApi.getType(attackUnitOrItemId) == IdType::Item) {
+        item = bindings::ItemView(attackUnitOrItemId, objectMap);
+    }
+
     auto targetsToSelect = getTargetsToSelectOrAttack(attackReach.selectionScript, attacker,
                                                       selected, allies, targets,
-                                                      *unitGroupId == *targetGroupId);
+                                                      *unitGroupId == *targetGroupId, item);
 
     bool isSummonAttack = batAttack->vftable->method17(batAttack, battleMsgData);
     for (const auto& target : targetsToSelect) {
@@ -402,8 +413,14 @@ UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* 
                               targetUnitId);
     auto allies = getAllies(objectMap, battleMsgData, unitGroupId, unitId);
 
+    std::optional<bindings::ItemView> item;
+    auto itemId = getItemId(batAttack);
+    if (*itemId != emptyId) {
+        item = bindings::ItemView(itemId, objectMap);
+    }
+
     return getTargetsToSelectOrAttack(attackReach.attackScript, attacker, selected, allies, targets,
-                                      *unitGroupId == *targetGroupId);
+                                      *unitGroupId == *targetGroupId, item);
 }
 
 UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
