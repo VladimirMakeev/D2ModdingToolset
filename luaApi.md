@@ -980,6 +980,12 @@ For instance: in case of "Angel Orb", Angel unit implementation is returned.
 ```lua
 base.unitImpl
 ```
+##### attack
+Returns [Attack](luaApi.md#attack-1) that this item performs (in case of orb or talisman), or `nil` if no attack is associated with the item.
+For instance: in case of "Orb of Fire", corresponding attack from `Gattacks.dbf` is returned.
+```lua
+base.attack
+```
 
 ---
 
