@@ -670,8 +670,8 @@ void __stdcall fillTargetsListHooked(const game::IMidgardObjectMap* objectMap,
         for (const auto& custom : getCustomAttacks().reaches) {
             if (attackReach->id == custom.reach.id) {
                 fillTargetsListForCustomAttackReach(objectMap, battleMsgData, batAttack,
-                                                    &targetGroupId, &unitGroupId, unitId, custom,
-                                                    value);
+                                                    &targetGroupId, &unitGroupId, unitId,
+                                                    attackUnitOrItemId, custom, value);
                 break;
             }
         }

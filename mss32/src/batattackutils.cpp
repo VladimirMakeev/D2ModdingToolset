@@ -88,4 +88,26 @@ const game::CMidgardID* getUnitId(const game::IBatAttack* batAttack)
     return (CMidgardID*)(batAttack + 1);
 }
 
+const game::CMidgardID* getItemId(const game::IBatAttack* batAttack)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    auto useOrbAttack = (CBatAttackUseOrb*)dynamicCast(batAttack, 0, rtti.IBatAttackType,
+                                                       rtti.CBatAttackUseOrbType, 0);
+    if (useOrbAttack) {
+        return &useOrbAttack->itemId;
+    }
+
+    auto useTalismanAttack = (CBatAttackUseTalisman*)dynamicCast(batAttack, 0, rtti.IBatAttackType,
+                                                                 rtti.CBatAttackUseTalismanType, 0);
+    if (useTalismanAttack) {
+        return &useTalismanAttack->itemId;
+    }
+
+    return &emptyId;
+}
+
 } // namespace hooks
