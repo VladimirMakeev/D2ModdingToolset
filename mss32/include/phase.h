@@ -27,11 +27,12 @@ namespace game {
 struct CMidClient;
 struct IMidgardObjectMap;
 struct CMidgardID;
+struct CInterface;
 
 struct CPhaseData
 {
     CMidClient* midClient;
-    int unknown;
+    CInterface* encyclopediaPopup;
 };
 
 assert_size(CPhaseData, 8);

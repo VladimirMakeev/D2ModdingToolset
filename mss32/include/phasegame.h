@@ -31,22 +31,25 @@ namespace game {
 struct CMidObjectNotify;
 struct CMidObjectLock;
 struct CIsoChatDisplay;
+struct MapGraphics;
+struct IIsoCBScroll;
+struct CCityDisplay;
 
 struct CPhaseGameData
 {
     InterfManagerImplPtr interfManager;
     int unknown2;
-    int unknown3;
-    SmartPointer unknown4;
-    SmartPointer unknown5;
-    int unknown6;
+    CInterface* currentInterface;
+    SmartPtr<MapGraphics*> mapGraphics;
+    SmartPointer palMapIsoScroller;
+    IIsoCBScroll* audioRegionCtrl;
     CMidClient* midClient;
     int unknown8;
     CMidObjectNotify* midObjectNotify;
     int unknown10;
     void* listPtr;
-    int unknown11;
-    CMidgardID unknownId;
+    CCityDisplay* cityDisplay;
+    CMidgardID currentPlayerId;
     CMidObjectLock* midObjectLock;
     int unknown13;
     CIsoChatDisplay* isoChatDisplay;
