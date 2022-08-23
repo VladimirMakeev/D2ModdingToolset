@@ -25,15 +25,18 @@
 
 namespace game {
 
+struct CCommandMsg;
 struct CoreCommandUpdate;
 struct CCommandCanIgnore;
 struct NetMsgEntryData;
 
 struct CMidCommandQueue2
 {
+    struct INotifyCQVftable;
+
     struct INotifyCQ
     {
-        void* vftable;
+        INotifyCQVftable* vftable;
     };
 
     /** Net message map. */
@@ -46,19 +49,31 @@ struct CMidCommandQueue2
     CoreCommandUpdate* commandUpdate;
     CCommandCanIgnore* commandCanIgnore;
     CNMMap* netMessageMap;
-    IdList list;
-    int unknown6;
-    IdList list2;
-    int unknown11;
-    int unknown12;
-    int unknown13;
-    int unknown14;
+    List<CCommandMsg*> commandsList;
+    bool unknown6;
+    bool unknown7;
+    char padding[2];
+    List<INotifyCQ*> notifyList;
+    ListIterator<INotifyCQ*> currentNotify;
+    bool unknown14;
+    char padding2[3];
     unsigned int commandQueueMsgId;
     UiEvent commandQueueEvent;
 };
 
 assert_size(CMidCommandQueue2, 92);
 assert_size(CMidCommandQueue2::CNMMap, 8);
+
+struct CMidCommandQueue2::INotifyCQVftable
+{
+    using Destructor = void(__thiscall*)(CMidCommandQueue2::INotifyCQ* thisptr, char flags);
+    Destructor destructor;
+
+    using Notify = void(__thiscall*)(CMidCommandQueue2::INotifyCQ* thisptr);
+    Notify notify;
+};
+
+assert_vftable_size(CMidCommandQueue2::INotifyCQVftable, 2);
 
 } // namespace game
 
