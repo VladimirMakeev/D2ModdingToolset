@@ -20,12 +20,27 @@
 #ifndef MQANIMATION_H
 #define MQANIMATION_H
 
+#include "d2assert.h"
+
 namespace game {
+
+struct IMqAnimationVftable;
 
 struct IMqAnimation
 {
-    void* vftable;
+    IMqAnimationVftable* vftable;
 };
+
+struct IMqAnimationVftable
+{
+    using Destructor = void(__thiscall*)(IMqAnimation* thisptr, char flags);
+    Destructor destructor;
+
+    using Update = void(__stdcall*)(IMqAnimation* thisptr);
+    Update update;
+};
+
+assert_vftable_size(IMqAnimationVftable, 2);
 
 } // namespace game
 
