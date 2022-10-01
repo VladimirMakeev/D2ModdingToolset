@@ -93,6 +93,7 @@ enum class CommandMsgId : int
 };
 
 struct CCommandMsgVftable;
+struct IMidgardObjectMap;
 
 struct CCommandMsg : public CNetMsgT<CCommandMsgVftable>
 {
@@ -122,7 +123,12 @@ struct CCommandMsgVftable : public CNetMsgVftable
     using GetParam = CommandMsgParam(__thiscall*)(CCommandMsg* thisptr);
     GetParam getParam;
 
-    void* method5;
+    /** Returns true if command can be ignored by current player. */
+    using CanIgnore = bool(__thiscall*)(const CCommandMsg* thisptr,
+                                        const IMidgardObjectMap* objectMap,
+                                        const IdList* playerIds,
+                                        const CMidgardID* currentPlayerId);
+    CanIgnore canIgnore;
 };
 
 assert_vftable_size(CCommandMsgVftable, 5);

@@ -49,10 +49,17 @@ struct CMidCommandQueue2
     CoreCommandUpdate* commandUpdate;
     CCommandCanIgnore* commandCanIgnore;
     CNMMap* netMessageMap;
+    /** Command messages to process. */
     List<CCommandMsg*> commandsList;
-    bool unknown6;
-    bool unknown7;
+    /** There are commands in commandsList that needs to be processed. */
+    bool pendingCommands;
+    /** CoreCommandUpdate was applied to commandsList. */
+    bool commandUpdateApplied;
     char padding[2];
+    /**
+     * Subscribers that are notified about new commands.
+     * See CMidCommandQueue2OnMessage
+     */
     List<INotifyCQ*> notifyList;
     ListIterator<INotifyCQ*> currentNotify;
     bool unknown14;
