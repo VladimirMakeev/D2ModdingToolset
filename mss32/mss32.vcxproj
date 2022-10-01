@@ -987,6 +987,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\tooltip.h" />
     <ClInclude Include="include\transformotherhooks.h" />
     <ClInclude Include="include\transformselfhooks.h" />
+    <ClInclude Include="include\twospeedanimator.h" />
     <ClInclude Include="include\uievent.h" />
     <ClInclude Include="include\uimanager.h" />
     <ClInclude Include="include\umattack.h" />
