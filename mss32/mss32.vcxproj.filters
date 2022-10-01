@@ -2773,6 +2773,9 @@
     <ClInclude Include="include\batattackusepotion.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\midobjectlock.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
