@@ -34,6 +34,7 @@ struct CIsoChatDisplay;
 struct MapGraphics;
 struct IIsoCBScroll;
 struct CCityDisplay;
+struct CMidAnim2System;
 
 struct CPhaseGameData
 {
@@ -46,7 +47,7 @@ struct CPhaseGameData
     CMidClient* midClient;
     int unknown8;
     CMidObjectNotify* midObjectNotify;
-    int unknown10;
+    CMidAnim2System* animSystem;
     void* listPtr;
     CCityDisplay* cityDisplay;
     CMidgardID currentPlayerId;

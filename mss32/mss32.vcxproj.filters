@@ -2776,6 +2776,9 @@
     <ClInclude Include="include\midobjectlock.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\midanim2system.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\twospeedanimator.h">
       <Filter>game</Filter>
     </ClInclude>
