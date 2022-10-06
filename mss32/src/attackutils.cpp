@@ -159,8 +159,11 @@ bool attackHasAltAttack(game::AttackClassId id)
 
 bool attackHasAltAttack(const game::IAttack* attack)
 {
-    const auto attackClass = attack->vftable->getAttackClass(attack);
-    return attackHasAltAttack(attackClass->id);
+    // Using getAttackClass here results in a serious performance loss
+    // due to recursive calls inside of CCustomModifier::attackGetAttackClass in case of nested
+    // modifiers
+    const auto altAttackId = attack->vftable->getAltAttackId(attack);
+    return *altAttackId != game::emptyId;
 }
 
 bool attackHasDrain(game::AttackClassId id)
