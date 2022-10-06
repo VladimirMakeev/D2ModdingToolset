@@ -29,7 +29,7 @@ namespace hooks {
 
 struct CustomModifierFunctions
 {
-    void initialize(const std::string& scriptFileName);
+    CustomModifierFunctions(const std::string& scriptFileName);
 
     std::optional<sol::environment> environment;
     std::optional<sol::function> canApplyToUnit;

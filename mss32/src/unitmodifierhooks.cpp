@@ -27,36 +27,28 @@
 #include "mempool.h"
 #include "modifgroup.h"
 #include "unitmodifier.h"
-#include <map>
-#include <mutex>
 #include <thread>
 
-namespace hooks {
+extern std::thread::id mainThreadId;
 
-using CustomModifierFunctionsMap = std::map<std::thread::id, CustomModifierFunctions>;
+namespace hooks {
 
 struct TUnitModifierDataPatched : game::TUnitModifierData
 {
     std::string scriptFileName;
-    CustomModifierFunctionsMap functions;
-    std::mutex functionsMutex;
+    CustomModifierFunctions* main_thread_functions;
+    CustomModifierFunctions* worker_thread_functions;
 };
 
 const CustomModifierFunctions& getCustomModifierFunctions(const game::TUnitModifier* unitModifier)
 {
-    auto data = (TUnitModifierDataPatched*)unitModifier->data;
+    auto data = static_cast<TUnitModifierDataPatched*>(unitModifier->data);
 
-    const std::lock_guard<std::mutex> lock(data->functionsMutex);
-
-    auto& map = data->functions;
-    auto key = std::this_thread::get_id();
-    auto it = map.find(key);
-    if (it != map.end())
-        return it->second;
-
-    auto& result = map[key];
-    result.initialize(data->scriptFileName);
-    return result;
+    if (std::this_thread::get_id() == mainThreadId) {
+        return *data->main_thread_functions;
+    } else {
+        return *data->worker_thread_functions;
+    }
 }
 
 game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* thisptr,
@@ -83,8 +75,8 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
         data->group.vftable = LModifGroupApi::vftable();
         data->modifier = nullptr;
         new (&data->scriptFileName) std::string();
-        new (&data->functions) CustomModifierFunctionsMap();
-        new (&data->functionsMutex) std::mutex();
+        data->main_thread_functions = nullptr;
+        data->worker_thread_functions = nullptr;
     }
     thisptr->data = data;
 
@@ -110,6 +102,8 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
         bool display;
         dbApi.readBool(&display, dbTable, "DISPLAY");
 
+        data->main_thread_functions = new CustomModifierFunctions(data->scriptFileName);
+        data->worker_thread_functions = new CustomModifierFunctions(data->scriptFileName);
         data->modifier = createCustomModifier(thisptr, data->scriptFileName.c_str(), &descTxt,
                                               display, globalData);
     } else {
@@ -133,8 +127,12 @@ void __fastcall unitModifierDtorHooked(game::TUnitModifier* thisptr, int /*%edx*
             modifier->vftable->destructor(modifier, true);
 
         data->scriptFileName.~basic_string();
-        data->functions.~map();
-        data->functionsMutex.~mutex();
+        if (data->main_thread_functions) {
+            delete data->main_thread_functions;
+        }
+        if (data->worker_thread_functions) {
+            delete data->worker_thread_functions;
+        }
 
         memFree(data);
     }
