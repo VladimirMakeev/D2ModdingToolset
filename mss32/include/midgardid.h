@@ -52,11 +52,11 @@ enum class IdType : int
     ItemGlobal,      /**< 'IG', entries of GItem.dbf. */
     NobleAction,     /**< 'NA', entries of Gaction.dbf. */
     DynamicUpgrade,  /**< 'DU' */
-    // 15 for DA
-    // 16 for AL
-    // 17 for DC
-    // 18 for AC
-    CampaignFile = 19, /**< 'CC' */
+    DynamicAttack,     /**< 'DA', runtime-generated implementations of unit's primary attacks */
+    DynamicAltAttack,  /**< 'AL', runtime-generated implementations of unit's alternative attacks */
+    DynamicAttack2,    /**< 'DC', runtime-generated implementations of unit's secondary attacks */
+    DynamicAltAttack2, /**< 'AC', runtime-generated implementations of unit's alternative secondary attacks */
+    CampaignFile, /**< 'CC' */
     // 20 for CW
     // 21 for CO
     Plan = 22,         /**< 'PN' */
