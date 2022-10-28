@@ -46,9 +46,10 @@
 #include "unitviewdummy.h"
 #include "utils.h"
 #include <fmt/format.h>
-#include <map>
 #include <mutex>
 #include <thread>
+
+extern std::thread::id mainThreadId;
 
 namespace hooks {
 
@@ -265,21 +266,18 @@ static void bindApi(sol::state& lua)
 // Treat access and object handling like you were dealing with a raw int reference (int&).
 sol::state& getLua()
 {
-    static std::map<std::thread::id, sol::state> states;
-    static std::mutex statesMutex;
+    static std::unique_ptr<sol::state> mainThreadLua;
+    static std::unique_ptr<sol::state> workerThreadLua;
 
-    const std::lock_guard<std::mutex> lock(statesMutex);
+    auto& lua = std::this_thread::get_id() == mainThreadId ? mainThreadLua : workerThreadLua;
+    if (lua == nullptr) {
+        lua = std::make_unique<sol::state>();
+        lua->open_libraries(sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::table,
+                            sol::lib::os, sol::lib::string);
+        bindApi(*lua);
+    }
 
-    auto key = std::this_thread::get_id();
-    auto it = states.find(key);
-    if (it != states.end())
-        return it->second;
-
-    auto& lua = states[key];
-    lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::table,
-                       sol::lib::os, sol::lib::string);
-    bindApi(lua);
-    return lua;
+    return *lua;
 }
 
 const std::string& getSource(const std::filesystem::path& path)
