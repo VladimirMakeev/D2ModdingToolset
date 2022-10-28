@@ -25,6 +25,7 @@
 namespace game {
 struct CMidgardID;
 struct IMidgardObjectMap;
+struct IUsUnit;
 struct CMidUnit;
 struct CScenarioVisitor;
 } // namespace game
@@ -63,6 +64,8 @@ bool __stdcall addModifiersHooked(const game::IdList* value,
                                   game::CMidUnit* unit,
                                   char* errorBuffer,
                                   bool checkCanApply);
+
+bool __stdcall removeModifiersHooked(game::IUsUnit** unitImpl);
 
 } // namespace hooks
 

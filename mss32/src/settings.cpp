@@ -112,6 +112,10 @@ static void readModifierSettings(const sol::table& table, Settings::Modifiers& v
 
     value.cumulativeUnitRegeneration = readSetting(category.value(), "cumulativeUnitRegeneration",
                                                    def.cumulativeUnitRegeneration);
+    value.notifyModifierAdded = readSetting(category.value(), "notifyModifierAdded",
+                                            def.notifyModifierAdded);
+    value.notifyModifierRemoved = readSetting(category.value(), "notifyModifierRemoved",
+                                              def.notifyModifierRemoved);
 }
 
 static Color readColor(const sol::table& table, const Color& def)
@@ -271,6 +275,8 @@ const Settings& baseSettings()
         settings.unitEncyclopedia.displayBonusXp = false;
         settings.fixEffectiveHpFormula = false;
         settings.modifiers.cumulativeUnitRegeneration = false;
+        settings.modifiers.notifyModifierAdded = false;
+        settings.modifiers.notifyModifierRemoved = false;
         settings.allowBattleItems.onTransformOther = false;
         settings.allowBattleItems.onTransformSelf = false;
         settings.allowBattleItems.onDrainLevel = false;

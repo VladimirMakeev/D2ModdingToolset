@@ -96,6 +96,7 @@ struct CCustomModifier
                                        const game::CMidgardID& baseId) const;
     void showScriptErrorMessage(const char* functionName, const char* reason) const;
     void showInvalidRetvalMessage(const char* functionName, const char* reason) const;
+    void notifyModifierAddedRemoved(const game::CUmModifier* modifier, bool added) const;
 
     game::CMidgardID getUnitNameTxt() const;
     game::CMidgardID getUnitBaseNameTxt() const;

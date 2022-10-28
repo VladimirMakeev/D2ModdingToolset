@@ -605,4 +605,37 @@ bool isImmunityclassModifier(const game::CMidgardID* modifierId,
     return modifierClass.id == class_->id;
 }
 
+void notifyModifierAddedRemoved(const game::IUsUnit* unitImpl,
+                                const game::CUmModifier* mod,
+                                bool added)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    CUmModifier* modifier = nullptr;
+    for (auto curr = unitImpl; curr; curr = modifier->data->prev) {
+        modifier = (CUmModifier*)dynamicCast(curr, 0, rtti.IUsUnitType, rtti.CUmModifierType, 0);
+        if (!modifier) {
+            break;
+        }
+
+        auto customModifier = castModifierToCustomModifier(modifier);
+        if (customModifier) {
+            customModifier->notifyModifierAddedRemoved(mod, added);
+        }
+    }
+}
+
+void notifyModifierAdded(const game::IUsUnit* unitImpl, const game::CUmModifier* modifier)
+{
+    notifyModifierAddedRemoved(unitImpl, modifier, true);
+}
+
+void notifyModifierRemoved(const game::IUsUnit* unitImpl, const game::CUmModifier* modifier)
+{
+    notifyModifierAddedRemoved(unitImpl, modifier, false);
+}
+
 } // namespace hooks
