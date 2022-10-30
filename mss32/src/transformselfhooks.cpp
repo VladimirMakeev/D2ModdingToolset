@@ -116,6 +116,8 @@ void giveFreeTransformSelfAttack(game::IMidgardObjectMap* objectMap,
 {
     using namespace game;
 
+    const auto& battleApi = BattleMsgDataApi::get();
+
     auto& freeTransformSelf = getCustomAttacks().freeTransformSelf;
     if (freeTransformSelf.turnCount > 0) // Can be 0 if this is the very first turn in battle
         freeTransformSelf.turnCount--;   // Not counting transform action as a turn
@@ -125,6 +127,9 @@ void giveFreeTransformSelfAttack(game::IMidgardObjectMap* objectMap,
             return;
 
         // Prevents AI from falling into infinite transforming in case of targeting malfunction
+        if (battleApi.isAutoBattle(battleMsgData)) {
+            return;
+        }
         auto player = getPlayer(objectMap, battleMsgData, &unit->id);
         if (player && !player->isHuman)
             return;
