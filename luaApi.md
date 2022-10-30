@@ -798,7 +798,7 @@ end
 ##### getPlayer
 Searches for [player](luaApi.md#player) by id string or [id](luaApi.md#id), returns nil if not found.
 ```lua
-local player = scenario:getPlayer(stack)
+local player = scenario:getPlayer('S143PL0000')
 if (player == nil) then
     return
 end
