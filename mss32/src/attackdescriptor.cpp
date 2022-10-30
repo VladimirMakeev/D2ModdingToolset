@@ -45,7 +45,7 @@ game::IAttack* getAttack(game::IUsUnit* unitImpl, AttackType type)
         return hooks::getAttack(unitImpl, false, false);
     case AttackType::Alternative: {
         auto attack = hooks::getAttack(unitImpl, true, false);
-        if (*attack->vftable->getAltAttackId(attack) != emptyId)
+        if (hooks::attackHasAltAttack(attack))
             return attack;
     }
     }

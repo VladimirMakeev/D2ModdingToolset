@@ -1311,7 +1311,7 @@ const game::CMidgardID* __fastcall attackGetAltAttackId(const game::IAttack* thi
     auto prev = thiz->getPrevAttack(thisptr);
 
     auto prevValue = prev->vftable->getAltAttackId(prev);
-    if (!attackHasAltAttack(prev)) {
+    if (*prevValue == game::emptyId) {
         return prevValue;
     }
 
