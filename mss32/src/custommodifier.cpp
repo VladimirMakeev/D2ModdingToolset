@@ -272,7 +272,8 @@ game::CMidgardID CCustomModifier::getDescTxt() const
         return prevValue;
     }
 
-    return GET_VALUE(getModifierDescTxt, prevValue);
+    bindings::IdView prevId{prevValue};
+    return GET_VALUE(getModifierDescTxt, prevId);
 }
 
 std::string CCustomModifier::getIconName() const
