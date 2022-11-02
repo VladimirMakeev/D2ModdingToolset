@@ -27,36 +27,31 @@
 #include "mempool.h"
 #include "modifgroup.h"
 #include "unitmodifier.h"
-#include <map>
-#include <mutex>
 #include <thread>
 
-namespace hooks {
+extern std::thread::id mainThreadId;
 
-using CustomModifierFunctionsMap = std::map<std::thread::id, CustomModifierFunctions>;
+namespace hooks {
 
 struct TUnitModifierDataPatched : game::TUnitModifierData
 {
     std::string scriptFileName;
-    CustomModifierFunctionsMap functions;
-    std::mutex functionsMutex;
+    CustomModifierFunctions* mainThreadFunctions;
+    CustomModifierFunctions* workerThreadFunctions;
 };
 
 const CustomModifierFunctions& getCustomModifierFunctions(const game::TUnitModifier* unitModifier)
 {
-    auto data = (TUnitModifierDataPatched*)unitModifier->data;
+    auto data = static_cast<TUnitModifierDataPatched*>(unitModifier->data);
 
-    const std::lock_guard<std::mutex> lock(data->functionsMutex);
+    auto& functions = std::this_thread::get_id() == mainThreadId ? data->mainThreadFunctions
+                                                                 : data->workerThreadFunctions;
+    if (functions == nullptr) {
+        // Functions need to be initialized in a corresponding thread to use its own Lua instance
+        functions = new CustomModifierFunctions(data->scriptFileName);
+    }
 
-    auto& map = data->functions;
-    auto key = std::this_thread::get_id();
-    auto it = map.find(key);
-    if (it != map.end())
-        return it->second;
-
-    auto& result = map[key];
-    result.initialize(data->scriptFileName);
-    return result;
+    return *functions;
 }
 
 game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* thisptr,
@@ -83,8 +78,8 @@ game::TUnitModifier* __fastcall unitModifierCtorHooked(game::TUnitModifier* this
         data->group.vftable = LModifGroupApi::vftable();
         data->modifier = nullptr;
         new (&data->scriptFileName) std::string();
-        new (&data->functions) CustomModifierFunctionsMap();
-        new (&data->functionsMutex) std::mutex();
+        data->mainThreadFunctions = nullptr;
+        data->workerThreadFunctions = nullptr;
     }
     thisptr->data = data;
 
@@ -133,8 +128,12 @@ void __fastcall unitModifierDtorHooked(game::TUnitModifier* thisptr, int /*%edx*
             modifier->vftable->destructor(modifier, true);
 
         data->scriptFileName.~basic_string();
-        data->functions.~map();
-        data->functionsMutex.~mutex();
+        if (data->mainThreadFunctions) {
+            delete data->mainThreadFunctions;
+        }
+        if (data->workerThreadFunctions) {
+            delete data->workerThreadFunctions;
+        }
 
         memFree(data);
     }
