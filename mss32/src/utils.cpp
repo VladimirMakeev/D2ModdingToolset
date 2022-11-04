@@ -274,7 +274,7 @@ void createTimerEvent(game::UiEvent* timerEvent,
     SmartPointerApi::get().createOrFree((SmartPointer*)&uiManager, nullptr);
 }
 
-bool computeHash(const std::filesystem::path& folder, std::string& hash)
+bool computeHash(const std::vector<std::filesystem::path>& folders, std::string& hash)
 {
     struct HashGuard
     {
@@ -290,8 +290,12 @@ bool computeHash(const std::filesystem::path& folder, std::string& hash)
     };
 
     std::vector<std::filesystem::path> filenames;
-    for (const auto& entry : std::filesystem::directory_iterator(folder)) {
-        filenames.push_back(entry.path());
+    for (const auto& folder : folders) {
+        for (const auto& entry : std::filesystem::recursive_directory_iterator(folder)) {
+            if (entry.is_regular_file()) {
+                filenames.push_back(entry.path());
+            }
+        }
     }
 
     std::sort(filenames.begin(), filenames.end());

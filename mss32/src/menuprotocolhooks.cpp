@@ -134,7 +134,8 @@ void LobbyServerConnectionCallback::onPacketReceived(DefaultMessageIDTypes type,
 
     case ID_CONNECTION_REQUEST_ACCEPTED: {
         std::string hash;
-        if (!computeHash(globalsFolder(), hash)) {
+        std::vector<std::filesystem::path> folders = {globalsFolder(), scriptsFolder()};
+        if (!computeHash(folders, hash)) {
             auto message{getInterfaceText(textIds().lobby.computeHashFailed.c_str())};
             if (message.empty()) {
                 message = "Could not compute hash";

@@ -26,6 +26,7 @@
 #include <filesystem>
 #include <functional>
 #include <string>
+#include <vector>
 
 namespace game {
 struct CMidMsgBoxButtonHandler;
@@ -95,8 +96,8 @@ void createTimerEvent(game::UiEvent* timerEvent,
                       void* callback,
                       std::uint32_t timeoutMs);
 
-/** Computes MD5 hash of files in specified folder. */
-bool computeHash(const std::filesystem::path& folder, std::string& hash);
+/** Computes MD5 hash of files in the specified folders (recursively). */
+bool computeHash(const std::vector<std::filesystem::path>& folders, std::string& hash);
 
 /** Executes function for each scenario object with specified id type. */
 void forEachScenarioObject(game::IMidgardObjectMap* objectMap,
