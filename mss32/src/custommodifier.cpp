@@ -32,6 +32,7 @@
 #include "leaderabilitycat.h"
 #include "mempool.h"
 #include "midunit.h"
+#include "modifierview.h"
 #include "restrictions.h"
 #include "scriptutils.h"
 #include "unitcat.h"
@@ -319,6 +320,23 @@ void CCustomModifier::showInvalidRetvalMessage(const char* functionName, const c
                                     "Function: '{:s}'\n"
                                     "Reason: '{:s}'",
                                     scriptFileName, functionName, reason));
+}
+
+void CCustomModifier::notifyModifierAddedRemoved(const game::CUmModifier* modifier,
+                                                 bool added) const
+{
+    const auto& functions = getCustomModifierFunctions(unitModifier);
+
+    auto f = added ? functions.onModifierAdded : functions.onModifierRemoved;
+    try {
+        if (f) {
+            bindings::UnitView unitView{unit};
+            bindings::ModifierView modifierView{modifier};
+            (*f)(unitView, modifierView);
+        }
+    } catch (const std::exception& e) {
+        showScriptErrorMessage(added ? "onModifierAdded" : "onModifierRemoved", e.what());
+    }
 }
 
 game::CMidgardID CCustomModifier::getUnitNameTxt() const

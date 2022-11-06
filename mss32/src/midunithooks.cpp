@@ -23,6 +23,7 @@
 #include "dynamiccast.h"
 #include "modifierutils.h"
 #include "originalfunctions.h"
+#include "settings.h"
 #include "stringandid.h"
 #include "ummodifier.h"
 #include "unitmodifier.h"
@@ -56,6 +57,11 @@ bool __fastcall addModifierHooked(game::CMidUnit* thisptr,
         customModifier->setUnit(thisptr);
 
     thisptr->unitImpl = castUmModifierToUnit(modifier);
+
+    if (userSettings().modifiers.notifyModifierAdded) {
+        notifyModifierAdded(thisptr->unitImpl, modifier);
+    }
+
     return true;
 }
 
@@ -63,11 +69,45 @@ bool __fastcall removeModifierHooked(game::CMidUnit* thisptr,
                                      int /*%edx*/,
                                      const game::CMidgardID* modifierId)
 {
+    using namespace game;
+
+    const auto& umModifierApi = CUmModifierApi::get();
+
     if (!thisptr) {
         return false;
     }
 
-    return getOriginalFunctions().removeModifier(thisptr, modifierId);
+    CUmModifier* modifier = nullptr;
+    for (auto curr = thisptr->unitImpl; curr; curr = modifier->data->prev) {
+        modifier = castUnitToUmModifier(curr);
+        if (!modifier) {
+            break;
+        }
+
+        if (modifier->data->modifierId == *modifierId) {
+            auto prev = modifier->data->prev;
+            auto next = modifier->data->next;
+            if (next) {
+                umModifierApi.setPrev(next, prev);
+            } else {
+                thisptr->unitImpl = prev;
+            }
+
+            auto prevModifier = castUnitToUmModifier(prev);
+            if (prevModifier) {
+                prevModifier->data->next = next;
+            }
+
+            if (userSettings().modifiers.notifyModifierRemoved) {
+                notifyModifierRemoved(thisptr->unitImpl, modifier);
+            }
+
+            modifier->vftable->destructor(modifier, true);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool __fastcall transformHooked(game::CMidUnit* thisptr,
@@ -233,6 +273,34 @@ bool __stdcall addModifiersHooked(const game::IdList* value,
     }
 
     return getOriginalFunctions().addModifiers(value, unit, errorBuffer, checkCanApply);
+}
+
+bool __stdcall removeModifiersHooked(game::IUsUnit** unitImpl)
+{
+    using namespace game;
+
+    CUmModifier* modifier = nullptr;
+    for (auto curr = *unitImpl; curr; curr = *unitImpl) {
+        modifier = castUnitToUmModifier(curr);
+        if (!modifier) {
+            break;
+        }
+
+        *unitImpl = modifier->data->prev;
+
+        auto prevModifier = castUnitToUmModifier(*unitImpl);
+        if (prevModifier) {
+            prevModifier->data->next = nullptr;
+        }
+
+        if (userSettings().modifiers.notifyModifierRemoved) {
+            notifyModifierRemoved(*unitImpl, modifier);
+        }
+
+        modifier->vftable->destructor(modifier, true);
+    }
+
+    return true;
 }
 
 } // namespace hooks

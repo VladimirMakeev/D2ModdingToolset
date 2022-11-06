@@ -67,7 +67,6 @@ struct OriginalFunctions
     game::CDDCarryOverItemsApi::Api::Constructor carryOverItemsCtor;
     game::CEncLayoutSpellApi::Api::Constructor encLayoutSpellCtor;
     game::os_exceptionApi::Api::ThrowException throwException;
-    game::CMidUnitApi::Api::AddRemoveModifier removeModifier;
     game::BattleMsgDataApi::Api::FindAttackTarget findAttackTarget;
     game::BattleMsgDataApi::Api::Constructor battleMsgDataCtor;
     game::GetSoldierImmunityAiRating getSoldierImmunityAiRating;

@@ -175,7 +175,7 @@ static Hooks getGameHooks()
     // clang-format off
     Hooks hooks{
         // Fix game crash in battles with summoners
-        {CMidUnitApi::get().removeModifier, removeModifierHooked, (void**)&orig.removeModifier},
+        {CMidUnitApi::get().removeModifier, removeModifierHooked},
         // Fix unit transformation to include hp mods into current hp recalculation
         {CMidUnitApi::get().transform, transformHooked},
         // Show buildings with custom branch category on the 'other buildings' tab
@@ -608,6 +608,7 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{CMidUnitApi::get().getModifiers, getModifiersHooked});
     hooks.emplace_back(
         HookInfo{CMidUnitApi::get().addModifiers, addModifiersHooked, (void**)&orig.addModifiers});
+    hooks.emplace_back(HookInfo{CMidUnitApi::get().removeModifiers, removeModifiersHooked});
     hooks.emplace_back(HookInfo{CMidUnitApi::vftable()->initWithSoldierImpl,
                                 initWithSoldierImplHooked, (void**)&orig.initWithSoldierImpl});
 

@@ -90,6 +90,8 @@ struct Settings
     struct Modifiers
     {
         bool cumulativeUnitRegeneration;
+        bool notifyModifierAdded;
+        bool notifyModifierRemoved;
     } modifiers;
 
     struct AllowBattleItems
