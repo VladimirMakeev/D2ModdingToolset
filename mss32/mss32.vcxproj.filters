@@ -2788,6 +2788,12 @@
     <ClInclude Include="include\midanim2base.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\middropsource.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\middropsourceext.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
