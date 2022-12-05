@@ -2797,6 +2797,9 @@
     <ClInclude Include="include\middropsourceext.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\midunitext.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">

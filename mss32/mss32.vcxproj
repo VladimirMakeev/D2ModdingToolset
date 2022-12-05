@@ -642,6 +642,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\middroptarget.h" />
     <ClInclude Include="include\midobjectlock.h" />
     <ClInclude Include="include\midrod.h" />
+    <ClInclude Include="include\midunitext.h" />
     <ClInclude Include="include\scenedit.h" />
     <ClInclude Include="include\isoborder.h" />
     <ClInclude Include="include\isoenginegroundhooks.h" />
