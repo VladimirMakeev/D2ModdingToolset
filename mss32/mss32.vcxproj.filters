@@ -2812,6 +2812,9 @@
     <ClInclude Include="include\midunitgroupadapter.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\ddstackgroup.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
