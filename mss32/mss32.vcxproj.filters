@@ -2800,6 +2800,9 @@
     <ClInclude Include="include\midunitext.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\ddunitgroup.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\groupareamanagement.h">
       <Filter>game</Filter>
     </ClInclude>

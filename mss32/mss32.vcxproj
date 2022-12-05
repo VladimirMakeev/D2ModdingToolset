@@ -586,6 +586,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\buildingbranch.h" />
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />
+    <ClInclude Include="include\ddunitgroup.h" />
     <ClInclude Include="include\enclayoutcity.h" />
     <ClInclude Include="include\enclayoutcityhooks.h" />
     <ClInclude Include="include\enclayoutruin.h" />
