@@ -2806,6 +2806,9 @@
     <ClInclude Include="include\unitgroup.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\midunitgroupadapter.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
