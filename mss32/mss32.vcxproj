@@ -1004,6 +1004,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\unitbranchcat.h" />
     <ClInclude Include="include\unitcat.h" />
     <ClInclude Include="include\unitgenerator.h" />
+    <ClInclude Include="include\unitgroup.h" />
     <ClInclude Include="include\unitinfolist.h" />
     <ClInclude Include="include\unitmodifier.h" />
     <ClInclude Include="include\unitmodifierhooks.h" />
