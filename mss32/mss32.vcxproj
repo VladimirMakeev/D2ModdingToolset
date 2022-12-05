@@ -639,6 +639,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midanim2system.h" />
     <ClInclude Include="include\middropsource.h" />
     <ClInclude Include="include\middropsourceext.h" />
+    <ClInclude Include="include\middroptarget.h" />
     <ClInclude Include="include\midobjectlock.h" />
     <ClInclude Include="include\midrod.h" />
     <ClInclude Include="include\scenedit.h" />

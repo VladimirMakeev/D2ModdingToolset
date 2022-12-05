@@ -2791,6 +2791,9 @@
     <ClInclude Include="include\middropsource.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\middroptarget.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\middropsourceext.h">
       <Filter>game</Filter>
     </ClInclude>
