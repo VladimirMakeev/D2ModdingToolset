@@ -2815,6 +2815,9 @@
     <ClInclude Include="include\ddstackgroup.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\sitetrainingcampinterf.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">

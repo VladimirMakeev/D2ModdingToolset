@@ -950,6 +950,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\settings.h" />
     <ClInclude Include="include\sitecategories.h" />
     <ClInclude Include="include\sitemerchantinterf.h" />
+    <ClInclude Include="include\sitetrainingcampinterf.h" />
     <ClInclude Include="include\smartptr.h" />
     <ClInclude Include="include\capitalraceset.h" />
     <ClInclude Include="include\d2set.h" />
