@@ -1056,7 +1056,7 @@ Represents battle information.
 
 Methods:
 ##### getUnitStatus
-Returns whether a unit with a specified [id](luaApi.md#id) has a specified [battle status](luaApi.md#battle-status).
+Returns whether a unit with a specified [id](luaApi.md#id) has a specified [battle status](luaApi.md#battlestatus).
 ```lua
 if battle:getUnitStatus(unit.id, BattleStatus.Defend) then
   -- Do something scary
