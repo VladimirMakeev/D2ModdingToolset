@@ -140,39 +140,39 @@ DeathAnimation = { Human, Heretic, Dwarf, Undead, Neutral, Dragon, Ghost, Elf }
 ##### BattleStatus
 ```
 BattleStatus = {
-  XpCounted,             -- Unit was killed and its experience points were counted
-  Dead,                  -- Unit dead
-  Paralyze,              -- Unit paralyzed
-  Petrify,               -- Unit petrified
-  DisableLong,           -- Long disable applied (paralyze, petrify or fear)
-  BoostDamageLvl1,       -- 25% boost
-  BoostDamageLvl2,       -- 50% boost
-  BoostDamageLvl3,       -- 75% boost
-  BoostDamageLvl4,       -- 100% boost
-  BoostDamageLong,       -- Long damage boost (until battle is over or lower damage applied)
-  LowerDamageLvl1,       -- 50% lower damage
-  LowerDamageLvl2,       -- 33% lower damage
-  LowerDamageLong,       -- Long lower damage (until battle is over or removed)
-  LowerInitiative,       -- 50% lower initiative
-  LowerInitiativeLong,   -- Long lower initiative
-  Poison,                -- Poison dot
-  PoisonLong,            -- Long poison applied
-  Frostbite,             -- Frostbite dot
-  FrostbiteLong,         -- Long frostbite applied
-  Blister,               -- Blister dot
-  BlisterLong,           -- Long blister applied
-  Cured,                 -- Cure applied
-  Transform,             -- Unit transformed by another unit
-  TransformLong,         -- Long transformation applied by another unit
-  TransformSelf,         -- Unit transfomed himself
-  TransformDoppelganger, -- Doppelganger transformation
-  TransformDrainLevel,   -- Drain level applied
-  Summon,                -- Unit was summoned during battle
-  Retreated,             -- Unit retreated from battle
-  Retreat,               -- Unit is retreating
-  Hidden,                -- Unit is hidden. For example, while leader dueling a thief
-  Defend,                -- Defend was used in this round
-  Unsummoned             -- Unsummon effect applied
+    XpCounted,             -- Unit was killed and its experience points were counted
+    Dead,                  -- Unit dead
+    Paralyze,              -- Unit paralyzed
+    Petrify,               -- Unit petrified
+    DisableLong,           -- Long disable applied (paralyze, petrify or fear)
+    BoostDamageLvl1,       -- 25% boost
+    BoostDamageLvl2,       -- 50% boost
+    BoostDamageLvl3,       -- 75% boost
+    BoostDamageLvl4,       -- 100% boost
+    BoostDamageLong,       -- Long damage boost (until battle is over or lower damage applied)
+    LowerDamageLvl1,       -- 50% lower damage
+    LowerDamageLvl2,       -- 33% lower damage
+    LowerDamageLong,       -- Long lower damage (until battle is over or removed)
+    LowerInitiative,       -- 50% lower initiative
+    LowerInitiativeLong,   -- Long lower initiative
+    Poison,                -- Poison dot
+    PoisonLong,            -- Long poison applied
+    Frostbite,             -- Frostbite dot
+    FrostbiteLong,         -- Long frostbite applied
+    Blister,               -- Blister dot
+    BlisterLong,           -- Long blister applied
+    Cured,                 -- Cure applied
+    Transform,             -- Unit transformed by another unit
+    TransformLong,         -- Long transformation applied by another unit
+    TransformSelf,         -- Unit transfomed himself
+    TransformDoppelganger, -- Doppelganger transformation
+    TransformDrainLevel,   -- Drain level applied
+    Summon,                -- Unit was summoned during battle
+    Retreated,             -- Unit retreated from battle
+    Retreat,               -- Unit is retreating
+    Hidden,                -- Unit is hidden. For example, while leader dueling a thief
+    Defend,                -- Defend was used in this round
+    Unsummoned             -- Unsummon effect applied
 }
 ```
 
@@ -1059,7 +1059,7 @@ Methods:
 Returns whether a unit with a specified [id](luaApi.md#id) has a specified [battle status](luaApi.md#battlestatus).
 ```lua
 if battle:getUnitStatus(unit.id, BattleStatus.Defend) then
-  -- Do something scary
+    -- Do something scary
 end
 ```
 
