@@ -189,6 +189,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\batunitanim.cpp" />
     <ClCompile Include="src\batviewer2dengine.cpp" />
     <ClCompile Include="src\bindings\attackview.cpp" />
+    <ClCompile Include="src\bindings\battlemsgdataview.cpp" />
     <ClCompile Include="src\bindings\currencyview.cpp" />
     <ClCompile Include="src\bindings\unitviewdummy.cpp" />
     <ClCompile Include="src\bindings\dynupgradeview.cpp" />
@@ -558,6 +559,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batviewer2dengine.h" />
     <ClInclude Include="include\batviewerutils.h" />
     <ClInclude Include="include\bindings\attackview.h" />
+    <ClInclude Include="include\bindings\battlemsgdataview.h" />
     <ClInclude Include="include\bindings\currencyview.h" />
     <ClInclude Include="include\bindings\unitviewdummy.h" />
     <ClInclude Include="include\bindings\dynupgradeview.h" />

@@ -1103,6 +1103,9 @@
     <ClCompile Include="src\bindings\unitviewbase.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\battlemsgdataview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2817,6 +2820,9 @@
     </ClInclude>
     <ClInclude Include="include\sitetrainingcampinterf.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\battlemsgdataview.h">
+      <Filter>bindings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
