@@ -37,6 +37,7 @@ struct IBatAttack;
 namespace bindings {
 class ItemView;
 class UnitSlotView;
+class BattleMsgDataView;
 } // namespace bindings
 
 namespace hooks {
@@ -56,7 +57,8 @@ UnitSlots getTargetsToSelectOrAttack(const std::string& scriptFile,
                                      const UnitSlots& allies,
                                      const UnitSlots& targets,
                                      bool targetsAreAllies,
-                                     const std::optional<bindings::ItemView>& item);
+                                     const std::optional<bindings::ItemView>& item,
+                                     const bindings::BattleMsgDataView& battle);
 
 UnitSlots getTargets(const game::IMidgardObjectMap* objectMap,
                      const game::BattleMsgData* battleMsgData,
