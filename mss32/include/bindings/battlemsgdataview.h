@@ -30,7 +30,7 @@ struct BattleMsgData;
 
 namespace bindings {
 
-class IdView;
+struct IdView;
 
 class BattleMsgDataView
 {
