@@ -31,7 +31,7 @@ BattleMsgDataView::BattleMsgDataView(const game::BattleMsgData* battleMsgData)
 void BattleMsgDataView::bind(sol::state& lua)
 {
     auto view = lua.new_usertype<BattleMsgDataView>("BattleView");
-    view["getUnitStatus"] = sol::property(&BattleMsgDataView::getUnitStatus);
+    view["getUnitStatus"] = &BattleMsgDataView::getUnitStatus;
 }
 
 bool BattleMsgDataView::getUnitStatus(const IdView& unitId, int status) const
