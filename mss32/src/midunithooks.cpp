@@ -58,8 +58,8 @@ bool __fastcall addModifierHooked(game::CMidUnit* thisptr,
 
     thisptr->unitImpl = castUmModifierToUnit(modifier);
 
-    if (userSettings().modifiers.notifyModifierAdded) {
-        notifyModifierAdded(thisptr->unitImpl, modifier);
+    if (userSettings().modifiers.notifyModifiersChanged) {
+        notifyModifiersChanged(thisptr->unitImpl);
     }
 
     return true;
@@ -98,8 +98,8 @@ bool __fastcall removeModifierHooked(game::CMidUnit* thisptr,
                 prevModifier->data->next = next;
             }
 
-            if (userSettings().modifiers.notifyModifierRemoved) {
-                notifyModifierRemoved(thisptr->unitImpl, modifier);
+            if (userSettings().modifiers.notifyModifiersChanged) {
+                notifyModifiersChanged(thisptr->unitImpl);
             }
 
             modifier->vftable->destructor(modifier, true);
@@ -279,9 +279,8 @@ bool __stdcall removeModifiersHooked(game::IUsUnit** unitImpl)
 {
     using namespace game;
 
-    CUmModifier* modifier = nullptr;
     for (auto curr = *unitImpl; curr; curr = *unitImpl) {
-        modifier = castUnitToUmModifier(curr);
+        auto modifier = castUnitToUmModifier(curr);
         if (!modifier) {
             break;
         }
@@ -291,10 +290,6 @@ bool __stdcall removeModifiersHooked(game::IUsUnit** unitImpl)
         auto prevModifier = castUnitToUmModifier(*unitImpl);
         if (prevModifier) {
             prevModifier->data->next = nullptr;
-        }
-
-        if (userSettings().modifiers.notifyModifierRemoved) {
-            notifyModifierRemoved(*unitImpl, modifier);
         }
 
         modifier->vftable->destructor(modifier, true);
