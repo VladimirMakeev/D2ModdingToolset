@@ -245,6 +245,10 @@ function getAttackPower(unit, prev)
 end
 
 function getAttackDamage(unit, prev)
+	-- Note that Poison/Frostbite/Blister attack damage cannot be altered by modifiers.
+	-- This is by the game design.
+	-- Try using 'getAttackId' to replace such attacks with more/less powerful versions
+	-- if you want to boost/lower its damage.
 	return prev + 100
 end
 
@@ -319,6 +323,10 @@ function getAttack2Power(unit, prev)
 end
 
 function getAttack2Damage(unit, prev)
+	-- Note that Poison/Frostbite/Blister attack damage cannot be altered by modifiers.
+	-- This is by the game design.
+	-- Try using 'getAttack2Id' to replace such attacks with more/less powerful versions
+	-- if you want to boost/lower its damage.
 end
 
 function getAttack2Heal(unit, prev)
