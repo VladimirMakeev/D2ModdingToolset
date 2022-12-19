@@ -32,7 +32,6 @@
 #include "leaderabilitycat.h"
 #include "mempool.h"
 #include "midunit.h"
-#include "modifierview.h"
 #include "restrictions.h"
 #include "scriptutils.h"
 #include "unitcat.h"
@@ -322,20 +321,16 @@ void CCustomModifier::showInvalidRetvalMessage(const char* functionName, const c
                                     scriptFileName, functionName, reason));
 }
 
-void CCustomModifier::notifyModifierAddedRemoved(const game::CUmModifier* modifier,
-                                                 bool added) const
+void CCustomModifier::notifyModifiersChanged() const
 {
-    const auto& functions = getCustomModifierFunctions(unitModifier);
-
-    auto f = added ? functions.onModifierAdded : functions.onModifierRemoved;
+    auto f = getCustomModifierFunctions(unitModifier).modifiersChanged;
     try {
         if (f) {
             bindings::UnitView unitView{unit};
-            bindings::ModifierView modifierView{modifier};
-            (*f)(unitView, modifierView);
+            (*f)(unitView);
         }
     } catch (const std::exception& e) {
-        showScriptErrorMessage(added ? "onModifierAdded" : "onModifierRemoved", e.what());
+        showScriptErrorMessage("modifiersChanged", e.what());
     }
 }
 
