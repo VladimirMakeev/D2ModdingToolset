@@ -317,8 +317,9 @@ static Hooks getGameHooks()
         // Support grid toggle button
         {CMainView2Api::get().showIsoDialog, mainView2ShowIsoDialogHooked},
         // Reference ground rendering implementation
-        {CGroundTextureApi::vftable()->draw, groundTextureDrawHooked},
-        {CGroundTextureApi::isoEngineVftable()->render, isoEngineGroundRenderHooked},
+        // TODO: fix occasional magenta 'triangles' showing up after closing capital window
+        //{CGroundTextureApi::vftable()->draw, groundTextureDrawHooked},
+        //{CGroundTextureApi::isoEngineVftable()->render, isoEngineGroundRenderHooked},
         // Support native modifiers
         {CMidUnitApi::get().upgrade, upgradeHooked},
         // Fix doppelganger attack using alternative attack when attacker is transformed (by doppelganger, drain-level, transform-self/other attacks)
