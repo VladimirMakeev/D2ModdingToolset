@@ -24,6 +24,7 @@
 #include <ctime>
 #include <fstream>
 #include <iomanip>
+#include <thread>
 
 namespace hooks {
 
@@ -36,8 +37,9 @@ static void logAction(const std::string& logFile, const std::string& message)
     std::ofstream file(path.c_str(), std::ios_base::app);
     const std::time_t time{std::time(nullptr)};
     const std::tm tm = *std::localtime(&time);
+    const auto tid = std::this_thread::get_id();
 
-    file << "[" << std::put_time(&tm, "%c") << "] " << message << "\n";
+    file << "[" << std::put_time(&tm, "%c") << "] " << tid << " " << message << "\n";
 }
 
 void logDebug(const std::string& logFile, const std::string& message)
