@@ -19,6 +19,8 @@
 
 #include "scripts.h"
 #include "attackview.h"
+#include "battlemsgdata.h"
+#include "battlemsgdataview.h"
 #include "categoryids.h"
 #include "currencyview.h"
 #include "dynupgradeview.h"
@@ -233,6 +235,42 @@ static void bindApi(sol::state& lua)
         "Ghost", DeathAnimationId::Ghost,
         "Elf", DeathAnimationId::Elf
     );
+
+    lua.new_enum("BattleStatus",
+        "XpCounted", BattleStatus::XpCounted,
+        "Dead", BattleStatus::Dead,
+        "Paralyze", BattleStatus::Paralyze,
+        "Petrify", BattleStatus::Petrify,
+        "DisableLong", BattleStatus::DisableLong,
+        "BoostDamageLvl1", BattleStatus::BoostDamageLvl1,
+        "BoostDamageLvl2", BattleStatus::BoostDamageLvl2,
+        "BoostDamageLvl3", BattleStatus::BoostDamageLvl3,
+        "BoostDamageLvl4", BattleStatus::BoostDamageLvl4,
+        "BoostDamageLong", BattleStatus::BoostDamageLong,
+        "LowerDamageLvl1", BattleStatus::LowerDamageLvl1,
+        "LowerDamageLvl2", BattleStatus::LowerDamageLvl2,
+        "LowerDamageLong", BattleStatus::LowerDamageLong,
+        "LowerInitiative", BattleStatus::LowerInitiative,
+        "LowerInitiativeLong", BattleStatus::LowerInitiativeLong,
+        "Poison", BattleStatus::Poison,
+        "PoisonLong", BattleStatus::PoisonLong,
+        "Frostbite", BattleStatus::Frostbite,
+        "FrostbiteLong", BattleStatus::FrostbiteLong,
+        "Blister", BattleStatus::Blister,
+        "BlisterLong", BattleStatus::BlisterLong,
+        "Cured", BattleStatus::Cured,
+        "Transform", BattleStatus::Transform,
+        "TransformLong", BattleStatus::TransformLong,
+        "TransformSelf", BattleStatus::TransformSelf,
+        "TransformDoppelganger", BattleStatus::TransformDoppelganger,
+        "TransformDrainLevel", BattleStatus::TransformDrainLevel,
+        "Summon", BattleStatus::Summon,
+        "Retreated", BattleStatus::Retreated,
+        "Retreat", BattleStatus::Retreat,
+        "Hidden", BattleStatus::Hidden,
+        "Defend", BattleStatus::Defend,
+        "Unsummoned", BattleStatus::Unsummoned
+    );
     // clang-format on
 
     bindings::UnitView::bind(lua);
@@ -257,6 +295,7 @@ static void bindApi(sol::state& lua)
     bindings::ItemView::bind(lua);
     bindings::PlayerView::bind(lua);
     bindings::ModifierView::bind(lua);
+    bindings::BattleMsgDataView::bind(lua);
 
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }

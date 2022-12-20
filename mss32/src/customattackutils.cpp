@@ -27,6 +27,7 @@
 #include "batattacktransformself.h"
 #include "batattackutils.h"
 #include "battlemsgdata.h"
+#include "battlemsgdataview.h"
 #include "custommodifier.h"
 #include "dbffile.h"
 #include "dynamiccast.h"
@@ -176,7 +177,8 @@ UnitSlots getTargetsToSelectOrAttack(const std::string& scriptFile,
                                      const UnitSlots& allies,
                                      const UnitSlots& targets,
                                      bool targetsAreAllies,
-                                     const std::optional<bindings::ItemView>& item)
+                                     const std::optional<bindings::ItemView>& item,
+                                     const bindings::BattleMsgDataView& battle)
 {
     std::optional<sol::environment> env;
     const auto path{scriptsFolder() / scriptFile};
@@ -187,7 +189,7 @@ UnitSlots getTargetsToSelectOrAttack(const std::string& scriptFile,
 
     try {
         sol::table result = (*getTargets)(attacker, selected, allies, targets, targetsAreAllies,
-                                          item ? &item.value() : nullptr);
+                                          item ? &item.value() : nullptr, battle);
         return result.as<UnitSlots>();
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
@@ -323,7 +325,7 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
 
     auto targetsToSelect = getTargetsToSelectOrAttack(attackReach.selectionScript, attacker,
                                                       selected, allies, targets,
-                                                      *unitGroupId == *targetGroupId, item);
+                                                      *unitGroupId == *targetGroupId, item, battleMsgData);
 
     bool isSummonAttack = batAttack->vftable->method17(batAttack, battleMsgData);
     for (const auto& target : targetsToSelect) {
@@ -420,7 +422,7 @@ UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* 
     }
 
     return getTargetsToSelectOrAttack(attackReach.attackScript, attacker, selected, allies, targets,
-                                      *unitGroupId == *targetGroupId, item);
+                                      *unitGroupId == *targetGroupId, item, battleMsgData);
 }
 
 UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,

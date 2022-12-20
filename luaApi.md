@@ -137,6 +137,45 @@ Equipment = { Banner, Tome, Battle1, Battle2, Artifact1, Artifact2, Boots }
 DeathAnimation = { Human, Heretic, Dwarf, Undead, Neutral, Dragon, Ghost, Elf }
 ```
 
+##### BattleStatus
+```
+BattleStatus = {
+    XpCounted,             -- Unit was killed and its experience points were counted
+    Dead,                  -- Unit dead
+    Paralyze,              -- Unit paralyzed
+    Petrify,               -- Unit petrified
+    DisableLong,           -- Long disable applied (paralyze, petrify or fear)
+    BoostDamageLvl1,       -- 25% boost
+    BoostDamageLvl2,       -- 50% boost
+    BoostDamageLvl3,       -- 75% boost
+    BoostDamageLvl4,       -- 100% boost
+    BoostDamageLong,       -- Long damage boost (until battle is over or lower damage applied)
+    LowerDamageLvl1,       -- 50% lower damage
+    LowerDamageLvl2,       -- 33% lower damage
+    LowerDamageLong,       -- Long lower damage (until battle is over or removed)
+    LowerInitiative,       -- 50% lower initiative
+    LowerInitiativeLong,   -- Long lower initiative
+    Poison,                -- Poison dot
+    PoisonLong,            -- Long poison applied
+    Frostbite,             -- Frostbite dot
+    FrostbiteLong,         -- Long frostbite applied
+    Blister,               -- Blister dot
+    BlisterLong,           -- Long blister applied
+    Cured,                 -- Cure applied
+    Transform,             -- Unit transformed by another unit
+    TransformLong,         -- Long transformation applied by another unit
+    TransformSelf,         -- Unit transfomed himself
+    TransformDoppelganger, -- Doppelganger transformation
+    TransformDrainLevel,   -- Drain level applied
+    Summon,                -- Unit was summoned during battle
+    Retreated,             -- Unit retreated from battle
+    Retreat,               -- Unit is retreating
+    Hidden,                -- Unit is hidden. For example, while leader dueling a thief
+    Defend,                -- Defend was used in this round
+    Unsummoned             -- Unsummon effect applied
+}
+```
+
 ---
 
 #### Point
@@ -1012,6 +1051,20 @@ item.sellValue
 
 ---
 
+#### Battle
+Represents battle information.
+
+Methods:
+##### getUnitStatus
+Returns whether a unit with a specified [id](luaApi.md#id) has a specified [battle status](luaApi.md#battlestatus).
+```lua
+if battle:getUnitStatus(unit.id, BattleStatus.Defend) then
+    -- Do something scary
+end
+```
+
+---
+
 ### Examples
 
 #### doppelganger.lua
@@ -1106,11 +1159,12 @@ Targeting scripts use uniform `getTargets` function for both selection and attac
 - `allies` are [unit slots](luaApi.md#unit-slot) of all the allies on the battlefield (excluding the attacker);
 - `targets` are [unit slots](luaApi.md#unit-slot) of all the targets on the battlefield on which the attack can be performed. For instance, if targets are allies and the attack is Revive, then it will only include dead allies that can be revived;
 - `targetsAreAllies` specified whether targets are allies;
-- `item` specifies an [item](luaApi.md#item-2) (orb or talisman) used to perform the attack, or `nil` if no item is used.
+- `item` specifies an [item](luaApi.md#item-2) (orb or talisman) used to perform the attack, or `nil` if no item is used;
+- `battle` specifies an information about current [battle](luaApi.md#battle).
 
 #### Example of attack script of pierce attack (getSelectedTargetAndOneBehindIt.lua)
 ```lua
-function getTargets(attacker, selected, allies, targets, targetsAreAllies, item)
+function getTargets(attacker, selected, allies, targets, targetsAreAllies, item, battle)
 	-- Get the selected target and the one behind it (pierce attack)
 	local result = {selected}
 	for i = 1, #targets do
