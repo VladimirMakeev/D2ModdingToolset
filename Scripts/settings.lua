@@ -180,10 +180,9 @@ settings = {
 		-- Allow unit regeneration modifiers to stack.
 		-- By default, the game picks single highest value, then sums it with lord, terrain and city bonuses.
 		cumulativeUnitRegeneration = false,
-		-- Enables 'onModifierAdded' / 'onModifierRemoved' notifications for custom-modifiers scripts.
-		-- Keep it disabled if you don't need it - to improve general performance.
-		notifyModifierAdded = false,
-		notifyModifierRemoved = false,
+		-- Enables 'onModifiersChanged' notification for custom modifier scripts.
+		-- Keep it disabled if you don't need it to improve general performance.
+		notifyModifiersChanged = false,
 	},
 
 	-- Create mss32 proxy dll log files with debug info

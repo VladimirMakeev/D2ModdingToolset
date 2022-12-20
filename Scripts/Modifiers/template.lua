@@ -354,16 +354,10 @@ end
 function getAttack2Wards(unit, prev)
 end
 
-function onModifierAdded(unit, modifier)
-	-- Called when this modifier is applied to the unit, and the unit gets the specified modifier added.
+function onModifiersChanged(unit)
+	-- Called when this modifier is applied to the unit, and the unit gets the its modifiers changed.
 	-- Note that, on client's side, changed units are constantly getting rebuilt when a server sends updated data,
-	-- thus all of such unit's modifiers are getting 'reapplied' (removed and added again).
-	-- Also note that the modifier is notified about its own addition (because its already applied at this moment).
-end
-
-function onModifierRemoved(unit, modifier)
-	-- Called when this modifier is applied to the unit, and the unit gets the specified modifier removed.
-	-- Note that, on client's side, changed units are constantly getting rebuilt when a server sends updated data,
-	-- thus all of such unit's modifiers are getting 'reapplied' (removed and added again).
-	-- Also note that the modifier is *not* notified about its own removal (because its already un-applied at this moment).
+	-- thus all of such unit's modifiers are getting re-applied (removed and added again).
+	-- Also note that the modifier is notified about its own addition (because it is already applied),
+	-- but is *not* notified about its own removal (because it is already un-applied).
 end

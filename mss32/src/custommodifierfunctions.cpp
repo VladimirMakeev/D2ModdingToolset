@@ -36,8 +36,7 @@ CustomModifierFunctions::CustomModifierFunctions(const std::string& scriptFileNa
 #define FUNCTION(_NAME_) this->##_NAME_ = getScriptFunction(env, #_NAME_);
 
     const auto& env = *environment;
-    FUNCTION(onModifierAdded)
-    FUNCTION(onModifierRemoved)
+    FUNCTION(onModifiersChanged)
     FUNCTION(canApplyToUnit)
     FUNCTION(canApplyToUnitType)
     FUNCTION(canApplyAsLowerSpell)

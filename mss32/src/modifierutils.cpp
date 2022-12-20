@@ -605,9 +605,7 @@ bool isImmunityclassModifier(const game::CMidgardID* modifierId,
     return modifierClass.id == class_->id;
 }
 
-void notifyModifierAddedRemoved(const game::IUsUnit* unitImpl,
-                                const game::CUmModifier* mod,
-                                bool added)
+void notifyModifiersChanged(const game::IUsUnit* unitImpl)
 {
     using namespace game;
 
@@ -623,19 +621,9 @@ void notifyModifierAddedRemoved(const game::IUsUnit* unitImpl,
 
         auto customModifier = castModifierToCustomModifier(modifier);
         if (customModifier) {
-            customModifier->notifyModifierAddedRemoved(mod, added);
+            customModifier->notifyModifiersChanged();
         }
     }
-}
-
-void notifyModifierAdded(const game::IUsUnit* unitImpl, const game::CUmModifier* modifier)
-{
-    notifyModifierAddedRemoved(unitImpl, modifier, true);
-}
-
-void notifyModifierRemoved(const game::IUsUnit* unitImpl, const game::CUmModifier* modifier)
-{
-    notifyModifierAddedRemoved(unitImpl, modifier, false);
 }
 
 } // namespace hooks

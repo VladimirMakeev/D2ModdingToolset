@@ -32,8 +32,7 @@ struct CustomModifierFunctions
     CustomModifierFunctions(const std::string& scriptFileName);
 
     std::optional<sol::environment> environment;
-    std::optional<sol::function> onModifierAdded;
-    std::optional<sol::function> onModifierRemoved;
+    std::optional<sol::function> onModifiersChanged;
     std::optional<sol::function> canApplyToUnit;
     std::optional<sol::function> canApplyToUnitType;
     std::optional<sol::function> canApplyAsLowerSpell;
