@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "game.h"
 #include "unitview.h"
 #include "midunit.h"
 #include "modifierutils.h"
@@ -25,6 +26,7 @@
 #include "unitmodifier.h"
 #include "unitutils.h"
 #include "unitviewdummy.h"
+#include "ussoldier.h"
 #include "usunitimpl.h"
 #include <sol/sol.hpp>
 
@@ -107,7 +109,13 @@ int UnitView::getHpInternal() const
 
 int UnitView::getHpMaxInternal() const
 {
-    return hooks::getUnitHpMax(unit);
+    using namespace game;
+
+    if (unit->transformed && unit->keepHp)
+        return unit->hpBefMax;
+
+    auto soldier = gameFunctions().castUnitImplToSoldier(getImplInternal());
+    return soldier->vftable->getHitPoints(soldier);
 }
 
 } // namespace bindings
