@@ -273,7 +273,7 @@ unit.leveledImpl
 ```
 ##### original
 Returns original [unit dummy](luaApi.md#unit-dummy) that represents unit state before transformation,
-or nil if unit is not transformed.
+or `nil` if unit is not transformed.
 The state does not include any unit modifiers thus contains only [leveled implementation](luaApi.md#leveledImpl).
 Unit can be transformed by transform-self, transform-other, drain-level or doppelganger attack.
 ```lua
@@ -532,7 +532,7 @@ Returns [player](luaApi.md#player) that owns the stack. Neutral stacks are owned
 stack.owner
 ```
 ##### inside
-Returns [fort](luaApi.md#fort) that this stack is visiting or nil if none.
+Returns [fort](luaApi.md#fort) that this stack is visiting or `nil` if none.
 ```lua
 stack.inside
 ```
@@ -596,7 +596,7 @@ Returns fort units as a [group](luaApi.md#group).
 fort.group
 ```
 ##### visitor
-Returns visitor [stack](luaApi.md#stack), or nil if none.
+Returns visitor [stack](luaApi.md#stack), or `nil` if none.
 ```lua
 fort.visitor
 ```
@@ -628,7 +628,7 @@ Returns ruin position as a [point](luaApi.md#point).
 ruin.position
 ```
 ##### looter
-Returns [player](luaApi.md#player) that looted the ruin, or nil if none.
+Returns [player](luaApi.md#player) that looted the ruin, or `nil` if none.
 ```lua
 ruin.looter
 ```
@@ -723,7 +723,7 @@ Stores scenario variables, allows searching them by name.
 
 Methods:
 ##### getVariable
-Searches for [ScenarioVariable](luaApi.md#scenariovariable) by its name, reeturns nil if not found.
+Searches for [ScenarioVariable](luaApi.md#scenariovariable) by its name, reeturns `nil` if not found.
 ```lua
 local variable = variables:getVariable('VAR1')
 if (variable == nil) then
@@ -755,7 +755,7 @@ Represents scenario map with all its objects and state.
 
 Methods:
 ##### getLocation
-Searches for [Location](luaApi.md#location) by id string or [Id](luaApi.md#id), returns nil if not found.
+Searches for [Location](luaApi.md#location) by id string or [Id](luaApi.md#id), returns `nil` if not found.
 ```lua
 local location = scenario:getLocation('S143LO0001')
 if (location == nil) then
@@ -763,7 +763,7 @@ if (location == nil) then
 end
 ```
 ##### variables
-Returns [ScenarioVariables](luaApi.md#scenariovariables). If scenario has no variables defined, returns nil.
+Returns [ScenarioVariables](luaApi.md#scenariovariables). If scenario has no variables defined, returns `nil`.
 ```lua
 local variables = scenario.variables
 if (variables == nil) then
@@ -771,7 +771,7 @@ if (variables == nil) then
 end
 ```
 ##### getTile
-Searches for [Tile](luaApi.md#tile) by pair of coordinates or [Point](luaApi.md#point), returns nil if not found.
+Searches for [Tile](luaApi.md#tile) by pair of coordinates or [Point](luaApi.md#point), returns `nil` if not found.
 ```lua
 local tile = scenario:getTile(3, 5)
 if (tile == nil) then
@@ -785,7 +785,7 @@ Searches for [stack](luaApi.md#stack) by:
 - pair of coordinates
 - [point](luaApi.md#point)
 
-Returns nil if not found.
+Returns `nil` if not found.
 ```lua
 local stack = scenario:getStack(10, 15)
 if (stack == nil) then
@@ -799,7 +799,7 @@ Searches for [fort](luaApi.md#fort) by:
 - pair of coordinates
 - [point](luaApi.md#point)
 
-Returns nil if not found.
+Returns `nil` if not found.
 ```lua
 local fort = scenario:getFort(10, 15)
 if (fort == nil) then
@@ -813,7 +813,7 @@ Searches for [ruin](luaApi.md#ruin) by:
 - pair of coordinates
 - [point](luaApi.md#point)
 
-Returns nil if not found.
+Returns `nil` if not found.
 ```lua
 local ruin = scenario:getRuin(10, 15)
 if (ruin == nil) then
@@ -827,7 +827,7 @@ Searches for [rod](luaApi.md#rod) by:
 - pair of coordinates
 - [point](luaApi.md#point)
 
-Returns nil if not found.
+Returns `nil` if not found.
 ```lua
 local rod = scenario:getRod(10, 15)
 if (rod == nil) then
@@ -835,7 +835,7 @@ if (rod == nil) then
 end
 ```
 ##### getPlayer
-Searches for [player](luaApi.md#player) by id string or [id](luaApi.md#id), returns nil if not found.
+Searches for [player](luaApi.md#player) by id string or [id](luaApi.md#id), returns `nil` if not found.
 ```lua
 local player = scenario:getPlayer('S143PL0000')
 if (player == nil) then
@@ -843,7 +843,7 @@ if (player == nil) then
 end
 ```
 ##### getUnit
-Searches for [unit](luaApi.md#unit-1) by id string or [unit id](luaApi.md#id-2), returns nil if not found.
+Searches for [unit](luaApi.md#unit-1) by id string or [unit id](luaApi.md#id-2), returns `nil` if not found.
 ```lua
 local unit = scenario:getUnit('S143UN0001')
 if (unit == nil) then
@@ -853,7 +853,7 @@ end
 ##### findStackByUnit
 Searches for [stack](luaApi.md#stack) that has specified [unit](luaApi.md#unit-1) among all the stacks in the whole [scenario](luaApi.md#scenario).
 You can also use unit id string or [id](luaApi.md#id).
-Returns nil if not found.
+Returns `nil` if not found.
 ```lua
 local stack = scenario:findStackByUnit(unit)
 if stack == nil then
@@ -865,7 +865,7 @@ end
 Searches for [fort](luaApi.md#fort) that has specified [unit](luaApi.md#unit-1) in its garrison among all the forts in the whole [scenario](luaApi.md#scenario).
 Only garrison units are counted, visiting stack is ignored.
 You can also use unit id string or [id](luaApi.md#id).
-Returns nil if not found.
+Returns `nil` if not found.
 ```lua
 local fort = scenario:findFortByUnit(unit)
 if fort == nil then
@@ -876,7 +876,7 @@ end
 ##### findRuinByUnit
 Searches for [ruin](luaApi.md#ruin) that has specified [unit](luaApi.md#unit-1) among all the ruins in the whole [scenario](luaApi.md#scenario).
 You can also use unit id string or [id](luaApi.md#id).
-Returns nil if not found.
+Returns `nil` if not found.
 ```lua
 local ruin = scenario:findRuinByUnit(unit)
 if ruin == nil then
@@ -1148,33 +1148,34 @@ See [Scripts](Scripts) directory for additional examples.
 
 ### Targeting scripts (custom attack reaches, specified via Globals\LAttR.dbf)
 Targeting scripts are used to specify either selection or attack targets of custom attack reach:
-- **Selection** targets are targets that can be **selected (clicked)** (specified as SEL_SCRIPT in LAttR.dbf);
-- **Attack** targets are targets that will be **affected by attack** (specified as ATT_SCRIPT in LAttR.dbf).
+- **Selection** targets are targets that can be **selected (clicked)** (specified as `SEL_SCRIPT` in `LAttR.dbf`);
+- **Attack** targets are targets that will be **affected by attack** (specified as `ATT_SCRIPT` in `LAttR.dbf`).
 For instance, in case of "pierce" attack, you can only click adjacent targets, but the attack will not only affect the selected target but also the one behind it (if any).
 Thus the "pierce" attack uses **getAdjacentTargets.lua as selection** script and **getSelectedTargetAndOneBehindIt.lua as attack** script.
 
 Targeting scripts use uniform `getTargets` function for both selection and attack scripts with the following arguments:
 - `attacker` is the [unit slot](luaApi.md#unit-slot) of the attacker unit;
-- `selected` is the [unit slot](luaApi.md#unit-slot) of the unit that was selected (clicked), or `nil` if this is selection script (no target is clicked yet);
+- `selected` is the [unit slot](luaApi.md#unit-slot) of the unit that was selected (clicked). `selected.position == -1` and `selected.unit == nil` if this is selection script (no target is clicked yet);
 - `allies` are [unit slots](luaApi.md#unit-slot) of all the allies on the battlefield (excluding the attacker);
 - `targets` are [unit slots](luaApi.md#unit-slot) of all the targets on the battlefield on which the attack can be performed. For instance, if targets are allies and the attack is Revive, then it will only include dead allies that can be revived;
 - `targetsAreAllies` specified whether targets are allies;
 - `item` specifies an [item](luaApi.md#item-2) (orb or talisman) used to perform the attack, or `nil` if no item is used;
-- `battle` specifies an information about current [battle](luaApi.md#battle).
+- `battle` specifies an information about current [battle](luaApi.md#battle);
+- `isMarking` specified whether the script is being called to mark targets visually on the battlefield. Can be used to provide consistent visual representation for randomized scripts, as soft alternative to `MRK_TARGTS` flag in `LAttR.dbf`. Always `false` if this is selection script.
 
 #### Example of attack script of pierce attack (getSelectedTargetAndOneBehindIt.lua)
 ```lua
-function getTargets(attacker, selected, allies, targets, targetsAreAllies, item, battle)
-	-- Get the selected target and the one behind it (pierce attack)
-	local result = {selected}
-	for i = 1, #targets do
-		local target = targets[i]
-		if target.backline and target.position == selected.position + 1 then
-			table.insert(result, target)
-			break
-		end
-	end
-	return result
+function getTargets(attacker, selected, allies, targets, targetsAreAllies, item, battle, isMarking)
+    -- Get the selected target and the one behind it (pierce attack)
+    local result = {selected}
+    for i = 1, #targets do
+        local target = targets[i]
+        if target.backline and target.position == selected.position + 1 then
+            table.insert(result, target)
+            break
+        end
+    end
+    return result
 end
 ```
 
@@ -1195,7 +1196,7 @@ local forEachTile = function (location, f)
     
     for x = startX,endX,1 do
         for y = startY,endY,1 do
-	    f(x, y)
+            f(x, y)
         end
     end
 end

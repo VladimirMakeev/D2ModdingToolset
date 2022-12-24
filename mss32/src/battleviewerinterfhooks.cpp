@@ -121,11 +121,11 @@ void markCustomAttackTargets(game::CBattleViewerInterf* viewer,
                              true);
 
     CMidgardID attackUnitId = isItemAttack ? viewer->data->itemId : viewer->data->unitId;
-    auto targets = getTargetsToAttackForCustomAttackReach(viewer->data->objectMap,
-                                                          &viewer->data->battleMsgData, attack,
-                                                          targetGroupId, selectedUnitId,
-                                                          &unitGroupId, &viewer->data->unitId,
-                                                          &attackUnitId, attackReach);
+    auto targets = getTargetsToMarkForCustomAttackReach(viewer->data->objectMap,
+                                                        &viewer->data->battleMsgData, attack,
+                                                        targetGroupId, selectedUnitId, &unitGroupId,
+                                                        &viewer->data->unitId, &attackUnitId,
+                                                        attackReach);
     for (const auto& target : targets) {
         CMidgardID targetId = target.getUnitId();
         markAttackTarget(viewer, &targetId, targetInfo->unitFlags.parts.attacker,

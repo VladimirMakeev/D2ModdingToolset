@@ -58,7 +58,8 @@ UnitSlots getTargetsToSelectOrAttack(const std::string& scriptFile,
                                      const UnitSlots& targets,
                                      bool targetsAreAllies,
                                      const std::optional<bindings::ItemView>& item,
-                                     const bindings::BattleMsgDataView& battle);
+                                     const bindings::BattleMsgDataView& battle,
+                                     bool isMarking);
 
 UnitSlots getTargets(const game::IMidgardObjectMap* objectMap,
                      const game::BattleMsgData* battleMsgData,
@@ -90,6 +91,16 @@ void getTargetsToAttackForAllAttackReach(const game::IMidgardObjectMap* objectMa
                                          const game::CMidgardID* targetUnitId,
                                          game::IdList* value);
 
+UnitSlots getTargetsToMarkOrAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
+                                                       const game::BattleMsgData* battleMsgData,
+                                                       const game::IBatAttack* batAttack,
+                                                       const game::CMidgardID* targetGroupId,
+                                                       const game::CMidgardID* targetUnitId,
+                                                       const game::CMidgardID* unitGroupId,
+                                                       const game::CMidgardID* unitId,
+                                                       const CustomAttackReach& attackReach,
+                                                       bool isMarking);
+
 UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
                                                  const game::BattleMsgData* battleMsgData,
                                                  const game::IBatAttack* batAttack,
@@ -99,15 +110,15 @@ UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* 
                                                  const game::CMidgardID* unitId,
                                                  const CustomAttackReach& attackReach);
 
-UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
-                                                 const game::BattleMsgData* battleMsgData,
-                                                 const game::IAttack* attack,
-                                                 const game::CMidgardID* targetGroupId,
-                                                 const game::CMidgardID* targetUnitId,
-                                                 const game::CMidgardID* unitGroupId,
-                                                 const game::CMidgardID* unitId,
-                                                 const game::CMidgardID* attackUnitId,
-                                                 const CustomAttackReach& attackReach);
+UnitSlots getTargetsToMarkForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
+                                               const game::BattleMsgData* battleMsgData,
+                                               const game::IAttack* attack,
+                                               const game::CMidgardID* targetGroupId,
+                                               const game::CMidgardID* targetUnitId,
+                                               const game::CMidgardID* unitGroupId,
+                                               const game::CMidgardID* unitId,
+                                               const game::CMidgardID* attackUnitId,
+                                               const CustomAttackReach& attackReach);
 
 void getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
                                             const game::BattleMsgData* battleMsgData,

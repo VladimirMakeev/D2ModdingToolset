@@ -178,7 +178,8 @@ UnitSlots getTargetsToSelectOrAttack(const std::string& scriptFile,
                                      const UnitSlots& targets,
                                      bool targetsAreAllies,
                                      const std::optional<bindings::ItemView>& item,
-                                     const bindings::BattleMsgDataView& battle)
+                                     const bindings::BattleMsgDataView& battle,
+                                     bool isMarking)
 {
     std::optional<sol::environment> env;
     const auto path{scriptsFolder() / scriptFile};
@@ -189,7 +190,7 @@ UnitSlots getTargetsToSelectOrAttack(const std::string& scriptFile,
 
     try {
         sol::table result = (*getTargets)(attacker, selected, allies, targets, targetsAreAllies,
-                                          item ? &item.value() : nullptr, battle);
+                                          item ? &item.value() : nullptr, battle, isMarking);
         return result.as<UnitSlots>();
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
@@ -325,7 +326,8 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
 
     auto targetsToSelect = getTargetsToSelectOrAttack(attackReach.selectionScript, attacker,
                                                       selected, allies, targets,
-                                                      *unitGroupId == *targetGroupId, item, battleMsgData);
+                                                      *unitGroupId == *targetGroupId, item,
+                                                      battleMsgData, false);
 
     bool isSummonAttack = batAttack->vftable->method17(batAttack, battleMsgData);
     for (const auto& target : targetsToSelect) {
@@ -381,14 +383,15 @@ void getTargetsToAttackForAllAttackReach(const game::IMidgardObjectMap* objectMa
     listApi.shuffle(value);
 }
 
-UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
-                                                 const game::BattleMsgData* battleMsgData,
-                                                 const game::IBatAttack* batAttack,
-                                                 const game::CMidgardID* targetGroupId,
-                                                 const game::CMidgardID* targetUnitId,
-                                                 const game::CMidgardID* unitGroupId,
-                                                 const game::CMidgardID* unitId,
-                                                 const CustomAttackReach& attackReach)
+UnitSlots getTargetsToMarkOrAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
+                                                       const game::BattleMsgData* battleMsgData,
+                                                       const game::IBatAttack* batAttack,
+                                                       const game::CMidgardID* targetGroupId,
+                                                       const game::CMidgardID* targetUnitId,
+                                                       const game::CMidgardID* unitGroupId,
+                                                       const game::CMidgardID* unitId,
+                                                       const CustomAttackReach& attackReach,
+                                                       bool isMarking)
 {
     using namespace game;
 
@@ -422,18 +425,33 @@ UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* 
     }
 
     return getTargetsToSelectOrAttack(attackReach.attackScript, attacker, selected, allies, targets,
-                                      *unitGroupId == *targetGroupId, item, battleMsgData);
+                                      *unitGroupId == *targetGroupId, item, battleMsgData,
+                                      isMarking);
 }
 
 UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
                                                  const game::BattleMsgData* battleMsgData,
-                                                 const game::IAttack* attack,
+                                                 const game::IBatAttack* batAttack,
                                                  const game::CMidgardID* targetGroupId,
                                                  const game::CMidgardID* targetUnitId,
                                                  const game::CMidgardID* unitGroupId,
                                                  const game::CMidgardID* unitId,
-                                                 const game::CMidgardID* attackUnitId,
                                                  const CustomAttackReach& attackReach)
+{
+    return getTargetsToMarkOrAttackForCustomAttackReach(objectMap, battleMsgData, batAttack,
+                                                        targetGroupId, targetUnitId, unitGroupId,
+                                                        unitId, attackReach, false);
+}
+
+UnitSlots getTargetsToMarkForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
+                                               const game::BattleMsgData* battleMsgData,
+                                               const game::IAttack* attack,
+                                               const game::CMidgardID* targetGroupId,
+                                               const game::CMidgardID* targetUnitId,
+                                               const game::CMidgardID* unitGroupId,
+                                               const game::CMidgardID* unitId,
+                                               const game::CMidgardID* attackUnitId,
+                                               const CustomAttackReach& attackReach)
 {
     using namespace game;
 
@@ -443,9 +461,10 @@ UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* 
     const auto batAttack = fn.createBatAttack(objectMap, battleMsgData, unitId, attackUnitId, 1,
                                               attackClass, false);
 
-    auto result = getTargetsToAttackForCustomAttackReach(objectMap, battleMsgData, batAttack,
-                                                         targetGroupId, targetUnitId, unitGroupId,
-                                                         unitId, attackReach);
+    auto result = getTargetsToMarkOrAttackForCustomAttackReach(objectMap, battleMsgData, batAttack,
+                                                               targetGroupId, targetUnitId,
+                                                               unitGroupId, unitId, attackReach,
+                                                               true);
 
     batAttack->vftable->destructor(batAttack, true);
     return result;
