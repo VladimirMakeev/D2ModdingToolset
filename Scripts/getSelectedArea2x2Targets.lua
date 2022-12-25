@@ -16,12 +16,16 @@ function getTargets(attacker, selected, allies, targets, targetsAreAllies)
 	local result = {selected}
 	for i = 1, #targets do
 		local target = targets[i]
-		if target ~= selected and target.column == selected.column then
+		if target.column == selected.column and target ~= selected then
 			table.insert(result, target)
-		elseif target.column - selected.column == 1 then
-			table.insert(result, target)
-		elseif target.column == 1 and selected.column == 2 then
-			table.insert(result, target)
+		elseif math.abs(target.column - selected.column) == 1 then
+			if target.column == 1 then
+				table.insert(result, target)
+			elseif target.column == attacker.column then
+				table.insert(result, target)
+			elseif target.column == 2 and attacker.column == 1 then
+				table.insert(result, target)
+			end
 		end
 	end
 	return result
