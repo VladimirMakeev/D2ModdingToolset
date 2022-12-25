@@ -445,6 +445,7 @@
     ![Demo video](https://user-images.githubusercontent.com/5180699/122282606-46cb4200-cef4-11eb-9774-e479edc00d21.mp4). Customizable via Lua scripting and additional columns in LAttR.dbf.<br />
     [Scripts](Scripts) includes example targeting scripts demonstrated in the video above.<br />
     [Examples](Examples) includes an example of LAttR.dbf.<br />
+    [luaApi](luaApi.md) contains a complete script Api reference to help you create your own scripts.<br />
 
     Additional columns of LAttR.dbf:
     - `REACH_TXT` (Character, size 10) specifies an id for 'Reach' encyclopedia description from `TApp.dbf` and `TAppEdit.dbf`. For example 'X005TA0201' is the standard 'Adjacent units';
@@ -523,6 +524,7 @@
     ![Demo video](https://user-images.githubusercontent.com/5180699/169149545-9f6e8284-6325-4ccd-a555-5db8851569e4.mp4). Customizable via Lua scripting.<br />
     [Scripts/Modifiers](Scripts/Modifiers) includes example modifier scripts.<br />
     [template.lua](Scripts/Modifiers/template.lua) contains a complete list of available functions.<br />
+    [luaApi](luaApi.md) contains a complete script Api reference to help you create your own scripts.<br />
 
     - Add `L_CUSTOM` category to `LModifS.dbf` or simply copy the file from [Examples](Examples);
     - Add `SCRIPT` (Character, size 40) column to `Gmodif.dbf`;
