@@ -418,6 +418,7 @@
   </details>
 - <details>
     <summary>Supports custom attack sources;</summary>
+    **Note** that the total number of attack sources (including the base 8) cannot exceed 32 due to game limitations.<br />
 
     - Add a name for a custom source to `TApp.dbf` and `TAppEdit.dbf`;
     - Add `NAME_TXT` (Character, size 10) and `IMMU_AI_R` (Numeric, size 2) columns to `LattS.dbf`;

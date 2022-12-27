@@ -63,7 +63,7 @@ void fillCustomAttackSources(const std::filesystem::path& dbfFilePath)
         return;
     }
 
-    static const std::uint32_t lastBaseSourceWardFlagPosition = 7;
+    static const std::uint32_t lastBaseSourceWardFlagPosition = 7; // 0-based bit flag index
     static const std::array<const char*, 8> baseSources = {
         {"L_WEAPON", "L_MIND", "L_LIFE", "L_DEATH", "L_FIRE", "L_WATER", "L_AIR", "L_EARTH"}};
 
@@ -71,6 +71,14 @@ void fillCustomAttackSources(const std::filesystem::path& dbfFilePath)
     std::uint32_t wardFlagPosition = lastBaseSourceWardFlagPosition;
     const auto recordsTotal{dbf.recordsTotal()};
     for (std::uint32_t i = 0; i < recordsTotal; ++i) {
+        if (wardFlagPosition >= 31) {
+            // UnitInfo::AttackSourceImmunityStatusesPatched can only contain 32 different bit flags
+            showErrorMessageBox(
+                "Total number of attack sources cannot exceed 32.\n"
+                "The rest are ignored, this will likely result in game crash later.");
+            break;
+        }
+
         utils::DbfRecord record;
         if (!dbf.record(record, i)) {
             logError("mssProxyError.log", fmt::format("Could not read record {:d} from {:s}", i,
