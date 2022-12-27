@@ -525,6 +525,7 @@
     [Scripts/Modifiers](Scripts/Modifiers) includes example modifier scripts.<br />
     [template.lua](Scripts/Modifiers/template.lua) contains a complete list of available functions.<br />
     [luaApi](luaApi.md) contains a complete script Api reference to help you create your own scripts.<br />
+    **Note** that Bestow Wards attack does not reset wards granted by custom modifiers (because the attack cannot predict the behavior of your custom script). Use standard modifiers for this purpose.<br />
 
     - Add `L_CUSTOM` category to `LModifS.dbf` or simply copy the file from [Examples](Examples);
     - Add `SCRIPT` (Character, size 40) column to `Gmodif.dbf`;
