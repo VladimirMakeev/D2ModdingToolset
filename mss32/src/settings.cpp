@@ -178,6 +178,20 @@ static void readLobbySettings(const sol::table& table, Settings::Lobby& value)
     }
 }
 
+static void readDebugSettings(const sol::table& table, Settings::Debug& value)
+{
+    const auto& def = defaultSettings().debug;
+
+    auto category = table.get<sol::optional<sol::table>>("debugging"); // 'debug' is reserved to Lua standard debug library
+    if (!category.has_value()) {
+        value = def;
+        return;
+    }
+
+    value.sendObjectsChangesTreshold = readSetting(category.value(), "sendObjectsChangesTreshold",
+                                                   def.sendObjectsChangesTreshold);
+}
+
 static void readSettings(const sol::table& table, Settings& settings)
 {
     // clang-format off
@@ -222,6 +236,7 @@ static void readSettings(const sol::table& table, Settings& settings)
     readModifierSettings(table, settings.modifiers);
     readMovementCostSettings(table, settings.movementCost);
     readLobbySettings(table, settings.lobby);
+    readDebugSettings(table, settings.debug);
 }
 
 const Settings& baseSettings()
