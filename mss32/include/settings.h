@@ -122,6 +122,12 @@ struct Settings
         } client;
     } lobby;
 
+    // Do not expose these settings in public 'settings.lua' template so poor souls won't suffer from their own ignorance
+    struct Debug
+    {
+        std::uint32_t sendObjectsChangesTreshold{0};
+    } debug;
+
     bool debugMode;
 };
 

@@ -1106,6 +1106,9 @@
     <ClCompile Include="src\bindings\battlemsgdataview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\midserverlogichooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2823,6 +2826,9 @@
     </ClInclude>
     <ClInclude Include="include\bindings\battlemsgdataview.h">
       <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midserverlogichooks.h">
+      <Filter>hooks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

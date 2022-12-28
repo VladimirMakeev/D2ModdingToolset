@@ -267,6 +267,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\interfaceutils.cpp" />
     <ClCompile Include="src\enclayoutstack.cpp" />
     <ClCompile Include="src\midgardscenariomap.cpp" />
+    <ClCompile Include="src\midserverlogichooks.cpp" />
     <ClCompile Include="src\scenedit.cpp" />
     <ClCompile Include="src\effectinterf.cpp" />
     <ClCompile Include="src\effectinterfhooks.cpp" />
@@ -647,6 +648,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\middroptarget.h" />
     <ClInclude Include="include\midobjectlock.h" />
     <ClInclude Include="include\midrod.h" />
+    <ClInclude Include="include\midserverlogichooks.h" />
     <ClInclude Include="include\midunitext.h" />
     <ClInclude Include="include\midunitgroupadapter.h" />
     <ClInclude Include="include\scenedit.h" />

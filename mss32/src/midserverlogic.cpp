@@ -38,11 +38,34 @@ static std::array<Api, 3> functions = {{
         (Api::GetObjectMap)0x5a77e8,
     },
 }};
+
+static std::array<Vftable, 3> vftables = {{
+    // Akella
+    Vftable{
+        (void*)0x6d00ec,
+        (IMidMsgSenderVftable*)0x6d00bc,
+    },
+    // Russobit
+    Vftable{
+        (void*)0x6d00ec,
+        (IMidMsgSenderVftable*)0x6d00bc,
+    },
+    // Gog
+    Vftable{
+        (void*)0x6ce08c,
+        (IMidMsgSenderVftable*)0x6ce05c,
+    },
+}};
 // clang-format on
 
 Api& get()
 {
     return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+Vftable& vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::CMidServerLogicApi

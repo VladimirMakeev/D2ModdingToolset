@@ -104,15 +104,29 @@ assert_offset(CMidServerLogic, unknown11, 272);
 assert_offset(CMidServerLogic, list2, 300);
 assert_offset(CMidServerLogic, unknown17, 316);
 
+static inline CMidServerLogic* castMidMsgSenderToMidServerLogic(const IMidMsgSender* sender)
+{
+    return reinterpret_cast<CMidServerLogic*>(
+        (uintptr_t)sender - offsetof(CMidServerLogic, CMidServerLogic::IMidMsgSender::vftable));
+}
+
 namespace CMidServerLogicApi {
 
 struct Api
 {
-    using GetObjectMap = IMidgardObjectMap*(__thiscall*)(CMidServerLogic* thisptr);
+    using GetObjectMap = IMidgardObjectMap*(__thiscall*)(const CMidServerLogic* thisptr);
     GetObjectMap getObjectMap;
 };
 
 Api& get();
+
+struct Vftable
+{
+    const void* mqNetTraffic;
+    const IMidMsgSenderVftable* midMsgSender;
+};
+
+Vftable& vftable();
 
 } // namespace CMidServerLogicApi
 

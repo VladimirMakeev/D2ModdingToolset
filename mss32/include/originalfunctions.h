@@ -45,6 +45,7 @@
 #include "midevcondition.h"
 #include "mideveffect.h"
 #include "midevent.h"
+#include "midmsgsender.h"
 #include "midunit.h"
 #include "netmsg.h"
 #include "pickupdropinterf.h"
@@ -121,6 +122,8 @@ struct OriginalFunctions
     game::CEncLayoutCityApi::Api::Update encLayoutCityUpdate;
 
     game::CEncLayoutRuinApi::Api::Update encLayoutRuinUpdate;
+
+    game::IMidMsgSenderVftable::SendObjectsChanges midServerLogicSendObjectsChanges;
 };
 
 OriginalFunctions& getOriginalFunctions();
