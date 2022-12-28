@@ -107,6 +107,8 @@
 #include "midmusic.h"
 #include "midplayer.h"
 #include "midscenvariables.h"
+#include "midserverlogic.h"
+#include "midserverlogichooks.h"
 #include "midstack.h"
 #include "midunitdescriptor.h"
 #include "midunitdescriptorhooks.h"
@@ -420,6 +422,15 @@ static Hooks getGameHooks()
         hooks.emplace_back(HookInfo{CMenuNewSkirmishMultiApi::get().createServer, menuNewSkirmishMultiCreateServerHooked, (void**)&orig.menuNewSkirmishMultiCreateServer});
         hooks.emplace_back(HookInfo{CMenuLoadApi::get().buttonLoadCallback, menuLoadSkirmishMultiLoadScenarioHooked, (void**)&orig.menuLoadSkirmishMultiLoadScenario});
         hooks.emplace_back(HookInfo{CMenuLoadApi::get().createHostPlayer, menuLoadSkirmishMultiCreateHostPlayerHooked, (void**)&orig.menuLoadSkirmishMultiCreateHostPlayer});
+        // clang-format on
+    }
+
+    if (userSettings().debugMode) {
+        // clang-format off
+        // Log changed objects ids being send by server to serverLogicSendObjects.log
+        if (userSettings().debug.sendObjectsChangesTreshold > 0) {
+            hooks.emplace_back(HookInfo{CMidServerLogicApi::vftable().midMsgSender->sendObjectsChanges, midServerLogicSendObjectsChangesHooked, (void**)&orig.midServerLogicSendObjectsChanges});
+        }
         // clang-format on
     }
 
