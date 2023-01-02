@@ -2830,6 +2830,9 @@
     <ClInclude Include="include\midserverlogichooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
+    <ClInclude Include="include\aiblockingstats.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\aistate.h">
       <Filter>game</Filter>
     </ClInclude>
