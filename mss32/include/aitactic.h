@@ -20,7 +20,10 @@
 #ifndef AITACTIC_H
 #define AITACTIC_H
 
+#include "aireactionnull.h"
 #include "aistate.h"
+#include "currency.h"
+#include "d2set.h"
 #include "idlist.h"
 
 namespace game {
@@ -30,6 +33,19 @@ struct IMidgardObjectMap;
 struct CMidServerLogicData;
 struct CAiReactionTactic;
 struct CAiReactionNull;
+struct CAiBlockingStacks;
+struct CAiLog;
+struct AiLogicUnknown;
+struct CAiTacticData;
+struct CMidServerLogicData2;
+
+struct MapSizeBigArrayPair
+{
+    int mapSize;
+    char array[144][144];
+};
+
+assert_size(MapSizeBigArrayPair, 20740);
 
 struct IAiTacticInternal
 {
@@ -45,9 +61,9 @@ struct CAiTactic
     CMidServerLogicData* serverLogic;
     CAiReactionTactic* reactionTactic;
     CAiReactionNull reactionNull;
-    SortedIntList list;
+    Set<int> list;
     MapSizeBigArrayPair pair;
-    SortedIntList list2;
+    Set<int> list2;
     CAiBlockingStacks* blockingStacks;
     Bank bank;
     AiLogicUnknown* logicUnknown;
@@ -66,10 +82,13 @@ struct CAiTactic
     bool unknown5;
     bool unknown6;
     char padding[2];
-    SortedIntList list8;
+    Set<int> list8;
     IdList* list9;
     IdList* list10;
 };
+
+assert_size(CAiTactic, 20992);
+assert_offset(CAiTactic, list2, 20796);
 
 } // namespace game
 
