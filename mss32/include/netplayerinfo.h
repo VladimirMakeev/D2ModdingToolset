@@ -33,8 +33,8 @@ struct NetPlayerInfo
 {
     std::uint32_t playerNetId;
     CMidgardID playerId;
-    /** Assumption: true if player has already completed its game turn. */
-    bool turnFinished;
+    /** Assumption: true if player controlled by human, not AI. */
+    bool controlledByHuman;
     char padding[3];
     int face;
     LRaceCategory raceCategory;
@@ -42,7 +42,8 @@ struct NetPlayerInfo
     char name[65];
     char unknown5[3];
     SmartPtr<void> importLeaderStore;
-    char unknown6[8];
+    bool leaderImportDisabled;
+    char unknown6[7];
 };
 
 assert_size(NetPlayerInfo, 124);
