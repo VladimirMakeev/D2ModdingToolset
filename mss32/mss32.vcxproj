@@ -522,6 +522,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\aireactionstrat.h" />
     <ClInclude Include="include\aispellcat.h" />
     <ClInclude Include="include\aistate.h" />
+    <ClInclude Include="include\aistrategic.h" />
     <ClInclude Include="include\aistratplayer.h" />
     <ClInclude Include="include\animations.h" />
     <ClInclude Include="include\attack.h" />
