@@ -27,6 +27,8 @@
 namespace game {
 
 struct CMidServer;
+struct CStreamBits;
+struct AiLogic;
 
 struct CMidServerLogicData
 {
@@ -68,10 +70,10 @@ struct CMidServerLogic
     int unknown2;
     int unknown3;
     CMidServerLogicData data;
-    Vector<void*> array;
-    int unknown5;
+    Vector<AiLogic*> aiLogic;
+    AiLogic* currentAi;
     List<CMidgardID> playersIdList;
-    int unknown6;
+    CStreamBits* streamBits;
     int unknown7;
     CMidServerLogicData2 data2;
     int unknown8;
@@ -96,7 +98,7 @@ struct CMidServerLogic
 assert_size(CMidServerLogic, 324);
 assert_offset(CMidServerLogic, CMidServerLogic::IMidMsgSender::vftable, 8);
 assert_offset(CMidServerLogic, data, 24);
-assert_offset(CMidServerLogic, array, 36);
+assert_offset(CMidServerLogic, aiLogic, 36);
 assert_offset(CMidServerLogic, playersIdList, 56);
 assert_offset(CMidServerLogic, data2, 80);
 assert_offset(CMidServerLogic, unknown8, 244);
