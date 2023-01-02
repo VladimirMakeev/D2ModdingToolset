@@ -318,7 +318,6 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mainview2.cpp" />
     <ClCompile Include="src\mainview2hooks.cpp" />
-    <ClCompile Include="src\mapgen.cpp" />
     <ClCompile Include="src\mapgraphics.cpp" />
     <ClCompile Include="src\mapinterf.cpp" />
     <ClCompile Include="src\mempool.cpp" />
@@ -800,7 +799,6 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\lordcat.h" />
     <ClInclude Include="include\lordtype.h" />
     <ClInclude Include="include\mapelement.h" />
-    <ClInclude Include="include\mapgen.h" />
     <ClInclude Include="include\mapgraphics.h" />
     <ClInclude Include="include\mapinterf.h" />
     <ClInclude Include="include\mempool.h" />

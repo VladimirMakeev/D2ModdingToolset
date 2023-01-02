@@ -119,9 +119,6 @@
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\mapgen.cpp">
-      <Filter>game</Filter>
-    </ClCompile>
     <ClCompile Include="src\mempool.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -1229,9 +1226,6 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mapelement.h">
-      <Filter>game</Filter>
-    </ClInclude>
-    <ClInclude Include="include\mapgen.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mempool.h">
