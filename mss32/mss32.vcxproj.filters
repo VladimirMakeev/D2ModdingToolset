@@ -2857,6 +2857,12 @@
     <ClInclude Include="include\aistratplayer.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\aistratplayerneutral.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\aistratplayerrace.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\aitactic.h">
       <Filter>game</Filter>
     </ClInclude>
