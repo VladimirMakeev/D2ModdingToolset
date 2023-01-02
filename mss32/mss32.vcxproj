@@ -524,6 +524,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\aistate.h" />
     <ClInclude Include="include\aistrategic.h" />
     <ClInclude Include="include\aistratplayer.h" />
+    <ClInclude Include="include\aitactic.h" />
     <ClInclude Include="include\animations.h" />
     <ClInclude Include="include\attack.h" />
     <ClInclude Include="include\attackclasscat.h" />
