@@ -520,6 +520,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\aireactionoper.h" />
     <ClInclude Include="include\aireactionstrat.h" />
     <ClInclude Include="include\aispellcat.h" />
+    <ClInclude Include="include\aistratplayer.h" />
     <ClInclude Include="include\animations.h" />
     <ClInclude Include="include\attack.h" />
     <ClInclude Include="include\attackclasscat.h" />

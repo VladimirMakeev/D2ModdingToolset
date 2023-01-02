@@ -2842,6 +2842,9 @@
     <ClInclude Include="include\aireactionstrat.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\aistratplayer.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
