@@ -30,8 +30,6 @@ struct TextIds
     {
         std::string sellAllValuables;
         std::string sellAllItems;
-        std::string infiniteAttack;
-        std::string infiniteText;
         std::string critHitAttack;
         std::string critHitDamage;
         std::string ratedDamage;
@@ -53,6 +51,12 @@ struct TextIds
         std::string overflowText;
         std::string dynamicUpgradeLevel;
         std::string dynamicUpgradeValues;
+        std::string durationDescription;
+        std::string durationText;
+        std::string instantDurationText;
+        std::string randomDurationText;
+        std::string singleTurnDurationText;
+        std::string wholeBattleDurationText;
     } interf;
 
     struct Events

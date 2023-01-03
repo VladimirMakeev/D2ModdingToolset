@@ -139,16 +139,21 @@
         - Value of boost/lower damage if its secondary attack;
         - Value of lower initiative;
         - Critical hit indication;
-        - Infinite effect indication;
+        - Effect duration;
         - Drain attack description;
         - Custom attack sources;
         - Custom attack reaches;
         - Custom attack damage ratios;
         - Custom unit modifiers.
     - Specify the following interface text ids in [textids.lua](Scripts/textids.lua):
-        - `infiniteAttack`
         - `critHitAttack`
         - `critHitDamage`
+        - `durationDescription`
+        - `durationText`
+        - `instantDurationText`
+        - `randomDurationText`
+        - `singleTurnDurationText`
+        - `wholeBattleDurationText`
         - `ratedDamage`
         - `ratedDamageEqual`
         - `ratedDamageSeparator`
@@ -169,6 +174,11 @@
         - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;
         - Add `%DRAIN%` keyword where you like to put the description (propose to place it after damage field like `%DAMAGE%\n%DRAIN%`);
         - The keyword is replaced with empty string if attack has no drain effect;
+        - Note that you can freely move content between `X005TA0787` and `X005TA0788` if you run out of length limit (because the two strings simply merged together in `X005TA0424`).
+    - (Optional) Add effect duration description:
+        - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;
+        - Add `%DURATION%` keyword where you like to put the description (propose to place it after damage field like `%DAMAGE%\n%DURATION%`);
+        - The keyword is replaced with empty string if attack has instant effect;
         - Note that you can freely move content between `X005TA0787` and `X005TA0788` if you run out of length limit (because the two strings simply merged together in `X005TA0424`).
     - (Optional) Add extra stats panel:
         - Add interface text to `TApp.dbf` and `TAppEdit.dbf` that contains `%XPKILL%`, `%EFFHP%` and `%REGEN%` (every keyword is optional), for example:

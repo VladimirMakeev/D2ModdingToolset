@@ -98,13 +98,49 @@ std::string addCritHitText(const std::string& base, const std::string& value, bo
     return text;
 }
 
-std::string getInfiniteText()
+std::string getDurationText()
 {
-    auto text = getInterfaceText(textIds().interf.infiniteAttack.c_str());
+    auto text = getInterfaceText(textIds().interf.durationText.c_str());
     if (text.length())
         return text;
 
-    return "Lasting";
+    return "Duration";
+}
+
+std::string getInstantDurationText()
+{
+    auto text = getInterfaceText(textIds().interf.instantDurationText.c_str());
+    if (text.length())
+        return text;
+
+    return "Instant";
+}
+
+std::string getRandomDurationText()
+{
+    auto text = getInterfaceText(textIds().interf.randomDurationText.c_str());
+    if (text.length())
+        return text;
+
+    return "Random";
+}
+
+std::string getSingleTurnDurationText()
+{
+    auto text = getInterfaceText(textIds().interf.singleTurnDurationText.c_str());
+    if (text.length())
+        return text;
+
+    return "Single turn";
+}
+
+std::string getWholeBattleDurationText()
+{
+    auto text = getInterfaceText(textIds().interf.wholeBattleDurationText.c_str());
+    if (text.length())
+        return text;
+
+    return "Whole battle";
 }
 
 std::string getOverflowText()
@@ -116,20 +152,32 @@ std::string getOverflowText()
     return "Overflow";
 }
 
-std::string addInfiniteText(const std::string& base,
-                            const utils::AttackDescriptor& actual,
-                            const utils::AttackDescriptor& global)
+std::string getAttackDurationText(const utils::AttackDescriptor& actual,
+                                  const utils::AttackDescriptor& global)
 {
-    if (!actual.infinite())
-        return base;
+    using namespace game;
 
-    auto text = getInterfaceText(textIds().interf.infiniteText.c_str());
-    if (text.empty())
-        text = "%ATTACK% (%INFINITE%)";
+    const auto& classes = AttackClassCategories::get();
 
-    replace(text, "%ATTACK%", base);
-    replace(text, "%INFINITE%", getModifiedStringText(getInfiniteText(), !global.infinite()));
-    return text;
+    if (actual.classId() == classes.paralyze->id || actual.classId() == classes.petrify->id
+        || actual.classId() == classes.poison->id || actual.classId() == classes.frostbite->id
+        || actual.classId() == classes.blister->id) {
+        return getModifiedStringText(actual.infinite() ? getRandomDurationText()
+                                                       : getSingleTurnDurationText(),
+                                     actual.infinite() != global.infinite());
+    } else if (actual.classId() == classes.boostDamage->id
+               || actual.classId() == classes.lowerDamage->id
+               || actual.classId() == classes.lowerInitiative->id) {
+        return getModifiedStringText(actual.infinite() ? getWholeBattleDurationText()
+                                                       : getSingleTurnDurationText(),
+                                     actual.infinite() != global.infinite());
+    } else if (actual.classId() == classes.transformOther->id) {
+        return getModifiedStringText(actual.infinite() ? getRandomDurationText()
+                                                       : getWholeBattleDurationText(),
+                                     actual.infinite() != global.infinite());
+    } else {
+        return getInstantDurationText();
+    }
 }
 
 std::string addOverflowText(const std::string& base,
@@ -304,27 +352,24 @@ std::string getAttackDamageText(const utils::AttackDescriptor& actual,
 
     const auto& classes = AttackClassCategories::get();
 
-    std::string result;
     if (actual.classId() == classes.boostDamage->id) {
-        result = getBoostDamageAttackDamageText(actual, global);
+        return getBoostDamageAttackDamageText(actual, global);
     } else if (actual.classId() == classes.lowerDamage->id) {
-        result = getLowerDamageAttackDamageText(actual, global);
+        return getLowerDamageAttackDamageText(actual, global);
     } else if (actual.classId() == classes.lowerInitiative->id) {
-        result = getLowerInitiativeAttackDamageText(actual, global);
+        return getLowerInitiativeAttackDamageText(actual, global);
     } else if (actual.classId() == classes.damage->id || actual.classId() == classes.drain->id
                || actual.classId() == classes.drainOverflow->id) {
-        result = getDamageDrainAttackDamageText(actual, global, maxTargets, damageMax);
+        return getDamageDrainAttackDamageText(actual, global, maxTargets, damageMax);
     } else if (actual.classId() == classes.heal->id
                || actual.classId() == classes.bestowWards->id) {
-        result = getModifiedNumberText(actual.heal(), global.heal(), false);
+        return getModifiedNumberText(actual.heal(), global.heal(), false);
     } else if (actual.classId() == classes.poison->id || actual.classId() == classes.frostbite->id
                || actual.classId() == classes.blister->id) {
-        result = getNumberText(global.damage(), false);
+        return getNumberText(global.damage(), false);
     } else {
-        result = getDamageText(actual.damage(), global.damage(), damageMax);
+        return getDamageText(actual.damage(), global.damage(), damageMax);
     }
-
-    return addInfiniteText(result, actual, global);
 }
 
 std::string getAttackDrainText(const utils::AttackDescriptor& actual,
@@ -543,6 +588,35 @@ std::string getDrainField(const utils::AttackDescriptor& actual,
     return result;
 }
 
+std::string getDurationField(const utils::AttackDescriptor& actual,
+                             const utils::AttackDescriptor& global,
+                             const utils::AttackDescriptor& actual2,
+                             const utils::AttackDescriptor& global2)
+{
+    using namespace game;
+
+    const auto& classes = AttackClassCategories::get();
+
+    if (!actual.hasInfinite() && !actual2.hasInfinite()) {
+        return "";
+    }
+
+    auto result = getInterfaceText(textIds().interf.durationDescription.c_str());
+    if (result.empty()) {
+        result = "\\fMedBold;%DURATION%:\\t\\fNormal;%DURATIONVALUE%\\n";
+    }
+
+    auto duration = getAttackDurationText(actual, global);
+    if (!actual2.empty()) {
+        duration = addAttack2Text(duration, getAttackDurationText(actual2, global2));
+    }
+
+    replace(result, "%DURATION%", getDurationText());
+    replace(result, "%DURATIONVALUE%", duration);
+
+    return result;
+}
+
 std::string getSourceField(const utils::AttackDescriptor& actual,
                            const utils::AttackDescriptor& global,
                            const utils::AttackDescriptor& actualAlt,
@@ -631,6 +705,7 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
     replace(description, "%HIT%", getHitField(actual, global));
     replace(description, "%HIT2%", getHit2Field(actual2, global2));
     replace(description, "%EFFECT%", getEffectField(actual));
+    replace(description, "%DURATION%", getDurationField(actual, global, actual2, global2));
     replace(description, "%DAMAGE%", getDamageField(actual, global, actual2, global2, damageMax));
     replace(description, "%DRAIN%", getDrainField(actual, global, actual2, global2));
     replace(description, "%SOURCE%", getSourceField(actual, global, actualAlt, globalAlt));

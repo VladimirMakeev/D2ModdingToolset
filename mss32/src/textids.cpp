@@ -119,8 +119,6 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
 
     value.sellAllValuables = interf.value().get_or("sellAllValuables", std::string());
     value.sellAllItems = interf.value().get_or("sellAllItems", std::string());
-    value.infiniteAttack = interf.value().get_or("infiniteAttack", std::string());
-    value.infiniteText = interf.value().get_or("infiniteText", std::string());
     value.critHitAttack = interf.value().get_or("critHitAttack", std::string());
     value.critHitDamage = interf.value().get_or("critHitDamage", std::string());
     value.ratedDamage = interf.value().get_or("ratedDamage", std::string());
@@ -143,6 +141,12 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.overflowText = interf.value().get_or("overflowText", std::string());
     value.dynamicUpgradeLevel = interf.value().get_or("dynamicUpgradeLevel", std::string());
     value.dynamicUpgradeValues = interf.value().get_or("dynamicUpgradeValues", std::string());
+    value.durationDescription = interf.value().get_or("durationDescription", std::string());
+    value.durationText = interf.value().get_or("durationText", std::string());
+    value.instantDurationText = interf.value().get_or("instantDurationText", std::string());
+    value.randomDurationText = interf.value().get_or("randomDurationText", std::string());
+    value.singleTurnDurationText = interf.value().get_or("singleTurnDurationText", std::string());
+    value.wholeBattleDurationText = interf.value().get_or("wholeBattleDurationText", std::string());
 }
 
 void initialize(TextIds& value)
