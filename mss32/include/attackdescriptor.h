@@ -90,6 +90,7 @@ public:
     int boost() const;
     int lower() const;
     int lowerIni() const;
+    bool hasInfinite() const;
     bool infinite() const;
     bool critHit() const;
     std::uint8_t critDamage() const;

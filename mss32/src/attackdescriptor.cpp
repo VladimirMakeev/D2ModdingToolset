@@ -362,6 +362,11 @@ int AttackDescriptor::lowerIni() const
     return hooks::getLowerInitiative(data.level);
 }
 
+bool AttackDescriptor::hasInfinite() const
+{
+    return hooks::attackHasInfinite(data.classId);
+}
+
 bool AttackDescriptor::infinite() const
 {
     return data.infinite;

@@ -18,14 +18,30 @@ textids = {
 		-- Fallback text is "Do you want to sell all items? Revenue will be:\n%PRICE%"
 		sellAllItems = "",
 
-		-- Defines text id to mark Infinite attacks in unit encyclopedia.
-		-- Fallback text is "Lasting".
-		infiniteAttack = "",
+		-- Defines format id for effect duration description in unit encyclopedia.
+		-- The text must contain keywords "%DURATION%" and "%DURATIONVALUE%".
+		-- Fallback text is "\fMedBold;%DURATION%:\t\fNormal;%DURATIONVALUE%\n"
+		durationDescription = "",
 
-		-- Defines text id to format Infinite text in unit encyclopedia.
-		-- The text must contain keywords "%ATTACK%" and "%INFINITE%".
-		-- Fallback text is "%ATTACK% (%INFINITE%)".
-		infiniteText = "",
+		-- Defines text id of effect duration in unit encyclopedia.
+		-- Fallback text is "Duration".
+		durationText = "",
+
+		-- Defines text id of instant effect duration in unit encyclopedia.
+		-- Fallback text is "Instant".
+		instantDurationText = "",
+
+		-- Defines text id of random effect duration in unit encyclopedia.
+		-- Fallback text is "Random".
+		randomDurationText = "",
+
+		-- Defines text id of single-turn effect duration in unit encyclopedia.
+		-- Fallback text is "Single turn".
+		singleTurnDurationText = "",
+
+		-- Defines text id of whole-battle effect duration in unit encyclopedia.
+		-- Fallback text is "Whole battle".
+		wholeBattleDurationText = "",
 
 		-- Defines text id to mark Critical Hit attacks in unit encyclopedia.
 		-- Fallback text id is the standard "X160TA0017".
