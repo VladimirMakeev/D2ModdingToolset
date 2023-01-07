@@ -160,7 +160,7 @@ bool __stdcall isUnitSuitableForAiNobleDuelHooked(const game::IMidgardObjectMap*
                                                   const game::CMidgardID* unitId);
 
 bool __stdcall findAttackTargetHooked(const game::IMidgardObjectMap* objectMap,
-                                      const game::CMidgardID* unitId,
+                                      const game::CMidgardID* unitOrItemId,
                                       const game::IAttack* attack,
                                       const game::CMidUnitGroup* targetGroup,
                                       const game::TargetSet* targets,
