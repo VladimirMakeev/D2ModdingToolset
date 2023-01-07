@@ -32,6 +32,7 @@ namespace game {
 struct IUsUnit;
 struct CScenarioVisitor;
 struct CMidUnitVftable;
+struct IMidgardStream;
 
 /** Holds unit related data in scenario file and game. */
 struct CMidUnit : public IMidScenarioObject
@@ -124,6 +125,14 @@ struct Api
 
     using ReplaceImpl = bool(__stdcall*)(IUsUnit** unitImpl, IUsUnit* value);
     ReplaceImpl replaceImpl;
+
+    using StreamImpl = void(__stdcall*)(IMidgardStream** stream, IUsUnit** value);
+    StreamImpl streamImpl;
+
+    using StreamModifiers = void(__stdcall*)(IMidgardStream** stream,
+                                             const CMidgardID* unitId,
+                                             CMidUnit* unit);
+    StreamModifiers streamModifiers;
 };
 
 Api& get();
