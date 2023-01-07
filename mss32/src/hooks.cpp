@@ -2104,41 +2104,22 @@ bool __fastcall checkMapObjectsHooked(game::CMidgardScenarioMap* scenarioMap, in
     return true;
 }
 
-void validateUnit(game::CMidUnit* unit)
+void validateUnits(game::CMidgardScenarioMap* scenarioMap)
 {
     using namespace game;
 
     const auto& fn = gameFunctions();
 
-    IUsUnit* origImpl;
-    if (unit->transformed) {
-        origImpl = hooks::getUnitImpl(&unit->origTypeId);
-    } else {
-        origImpl = unit->unitImpl;
-    }
+    forEachScenarioObject(scenarioMap, IdType::Unit, [&fn](const IMidScenarioObject* obj) {
+        auto unit = (CMidUnit*)obj;
 
-    auto soldier = fn.castUnitImplToSoldier(origImpl);
-    unit->currentXp = std::clamp(unit->currentXp, 0, soldier->vftable->getXpNext(soldier));
+        IUsUnit* origImpl = unit->transformed ? hooks::getUnitImpl(&unit->origTypeId)
+                                              : unit->unitImpl;
+        auto soldier = fn.castUnitImplToSoldier(origImpl);
 
-    unit->currentHp = std::clamp(unit->currentHp, 0, getUnitHpMax(unit));
-}
-
-void validateUnits(game::CMidgardScenarioMap* scenarioMap)
-{
-    using namespace game;
-
-    const auto& scenarioMapApi = CMidgardScenarioMapApi::get();
-    const auto& idApi = CMidgardIDApi::get();
-
-    ScenarioMapDataIterator it{};
-    ScenarioMapDataIterator end{};
-    for (scenarioMapApi.begin(scenarioMap, &it), scenarioMapApi.end(scenarioMap, &end);
-         it.foundRecord != end.foundRecord; scenarioMapApi.advance(&it)) {
-        if (idApi.getType(&it.foundRecord->objectId) == IdType::Unit) {
-            auto unit = static_cast<CMidUnit*>(it.foundRecord->object.data);
-            validateUnit(unit);
-        }
-    }
+        unit->currentXp = std::clamp(unit->currentXp, 0, soldier->vftable->getXpNext(soldier));
+        unit->currentHp = std::clamp(unit->currentHp, 0, getUnitHpMax(unit));
+    });
 }
 
 int __stdcall loadScenarioMapHooked(int a1,
