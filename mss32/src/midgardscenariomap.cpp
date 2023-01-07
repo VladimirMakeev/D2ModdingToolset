@@ -31,6 +31,7 @@ std::array<Api, 4> functions = {{
         (Api::GetIterator)0x5ef664,
         (Api::Advance)0x5f0222,
         (Api::CheckObjects)0x5efcd1,
+        (Api::Stream)0x5efd6c,
     },
     // Russobit
     Api{
@@ -38,6 +39,7 @@ std::array<Api, 4> functions = {{
         (Api::GetIterator)0x5ef664,
         (Api::Advance)0x5f0222,
         (Api::CheckObjects)0x5efcd1,
+        (Api::Stream)0x5efd6c,
     },
     // Gog
     Api{
@@ -45,6 +47,7 @@ std::array<Api, 4> functions = {{
         (Api::GetIterator)0x5ee329,
         (Api::Advance)0x410884,
         (Api::CheckObjects)0x5ee996,
+        (Api::Stream)0x5eea31,
     },
     // Scenario Editor
     Api{
@@ -52,6 +55,7 @@ std::array<Api, 4> functions = {{
         (Api::GetIterator)0x4dbdff,
         (Api::Advance)0x4dc693,
         (Api::CheckObjects)0x4dc157,
+        (Api::Stream)0x4dc1f2,
     },
 }};
 // clang-format on
