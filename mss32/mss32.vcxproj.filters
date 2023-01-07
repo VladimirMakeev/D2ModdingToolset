@@ -1109,6 +1109,9 @@
     <ClCompile Include="src\midserverlogichooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="src\streamutils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2868,6 +2871,9 @@
     </ClInclude>
     <ClInclude Include="include\aitactic.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\streamutils.h">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
