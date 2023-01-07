@@ -326,6 +326,8 @@ static Hooks getGameHooks()
         {CMidUnitApi::get().upgrade, upgradeHooked},
         // Fix doppelganger attack using alternative attack when attacker is transformed (by doppelganger, drain-level, transform-self/other attacks)
         {battle.cannotUseDoppelgangerAttack, cannotUseDoppelgangerAttackHooked},
+        // Support custom modifiers
+        {fn.loadScenarioMap, loadScenarioMapHooked, (void**)&orig.loadScenarioMap},
     };
     // clang-format on
 
@@ -466,6 +468,8 @@ static Hooks getScenarioEditorHooks()
         //{CMidEvEffectApi::get().getBrief, eventEffectGetBriefHooked, (void**)&orig.eventEffectGetBrief},
         //{editor::CEffectInterfApi::get().createFromCategory, createEffectInterfFromCategoryHooked, (void**)&orig.createEffectInterfFromCategory},
         {CMidgardScenarioMapApi::get().checkObjects, checkMapObjectsHooked},
+        // Support custom modifiers
+        {CMidgardScenarioMapApi::get().stream, scenarioMapStreamHooked, (void**)&orig.scenarioMapStream},
     };
     // clang-format on
 
@@ -593,6 +597,7 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{TUnitModifierApi::get().constructor, unitModifierCtorHooked});
     hooks.emplace_back(HookInfo{TUnitModifierApi::vftable()->destructor, unitModifierDtorHooked});
     hooks.emplace_back(HookInfo{CMidUnitApi::get().addModifier, addModifierHooked});
+    hooks.emplace_back(HookInfo{CMidUnitApi::vftable()->stream, midUnitStreamHooked});
 
     // Support custom modifiers display for unit encyclopedia
     hooks.emplace_back(HookInfo{CEncLayoutUnitApi::get().constructor, encLayoutUnitCtorHooked});
@@ -2097,6 +2102,66 @@ bool __fastcall checkMapObjectsHooked(game::CMidgardScenarioMap* scenarioMap, in
     }
 
     return true;
+}
+
+void validateUnit(game::CMidUnit* unit)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    IUsUnit* origImpl;
+    if (unit->transformed) {
+        origImpl = hooks::getUnitImpl(&unit->origTypeId);
+    } else {
+        origImpl = unit->unitImpl;
+    }
+
+    auto soldier = fn.castUnitImplToSoldier(origImpl);
+    unit->currentXp = std::clamp(unit->currentXp, 0, soldier->vftable->getXpNext(soldier));
+
+    unit->currentHp = std::clamp(unit->currentHp, 0, getUnitHpMax(unit));
+}
+
+void validateUnits(game::CMidgardScenarioMap* scenarioMap)
+{
+    using namespace game;
+
+    const auto& scenarioMapApi = CMidgardScenarioMapApi::get();
+    const auto& idApi = CMidgardIDApi::get();
+
+    ScenarioMapDataIterator it{};
+    ScenarioMapDataIterator end{};
+    for (scenarioMapApi.begin(scenarioMap, &it), scenarioMapApi.end(scenarioMap, &end);
+         it.foundRecord != end.foundRecord; scenarioMapApi.advance(&it)) {
+        if (idApi.getType(&it.foundRecord->objectId) == IdType::Unit) {
+            auto unit = static_cast<CMidUnit*>(it.foundRecord->object.data);
+            validateUnit(unit);
+        }
+    }
+}
+
+int __stdcall loadScenarioMapHooked(int a1,
+                                    game::CMidStreamEnvFile* streamEnv,
+                                    game::CMidgardScenarioMap* scenarioMap)
+{
+    int result = getOriginalFunctions().loadScenarioMap(a1, streamEnv, scenarioMap);
+
+    validateUnits(scenarioMap);
+
+    return result;
+}
+
+bool __fastcall scenarioMapStreamHooked(game::CMidgardScenarioMap* scenarioMap,
+                                        int /*%edx*/,
+                                        game::IMidgardStreamEnv* streamEnv)
+{
+    bool result = getOriginalFunctions().scenarioMapStream(scenarioMap, streamEnv);
+    if (result) {
+        validateUnits(scenarioMap);
+    }
+
+    return result;
 }
 
 } // namespace hooks
