@@ -60,6 +60,8 @@ struct CMenuPhase;
 struct NetPlayerInfo;
 struct LRaceCategory;
 struct CMidgardScenarioMap;
+struct IMidgardStreamEnv;
+struct CMidStreamEnvFile;
 }; // namespace game
 
 namespace hooks {
@@ -243,6 +245,14 @@ void __stdcall getCityIconImageNamesHooked(game::List<game::String>* imageNames,
                                            const game::IMidgardObjectMap* objectMap);
 
 bool __fastcall checkMapObjectsHooked(game::CMidgardScenarioMap* scenarioMap, int /*%edx*/);
+
+int __stdcall loadScenarioMapHooked(int a1,
+                                    game::CMidStreamEnvFile* streamEnv,
+                                    game::CMidgardScenarioMap* scenarioMap);
+
+bool __fastcall scenarioMapStreamHooked(game::CMidgardScenarioMap* scenarioMap,
+                                        int /*%edx*/,
+                                        game::IMidgardStreamEnv* streamEnv);
 
 } // namespace hooks
 

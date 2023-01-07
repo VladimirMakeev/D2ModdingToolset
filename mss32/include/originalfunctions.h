@@ -45,6 +45,7 @@
 #include "midevcondition.h"
 #include "mideveffect.h"
 #include "midevent.h"
+#include "midgardscenariomap.h"
 #include "midmsgsender.h"
 #include "midunit.h"
 #include "netmsg.h"
@@ -61,6 +62,10 @@ struct OriginalFunctions
     game::GetAttackClassWardFlagPosition getAttackClassWardFlagPosition;
     game::AttackClassToString attackClassToString;
     game::MarkMapPosition markMapPosition;
+    game::LoadScenarioMap loadScenarioMap;
+
+    game::CMidgardScenarioMapApi::Api::Stream scenarioMapStream;
+
     game::CCityStackInterfApi::Api::Constructor cityStackInterfCtor;
     game::CExchangeInterfApi::Api::Constructor exchangeInterfCtor;
     game::CPickUpDropInterfApi::Api::Constructor pickupDropInterfCtor;

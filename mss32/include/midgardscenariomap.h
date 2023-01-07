@@ -26,6 +26,8 @@
 
 namespace game {
 
+struct IMidgardStreamEnv;
+
 struct ScenarioObjectRecord
 {
     CMidgardID objectId;
@@ -108,6 +110,10 @@ struct Api
     /** Checks objects correctness and updates freeIdTypeIndices. */
     using CheckObjects = bool(__thiscall*)(CMidgardScenarioMap* scenarioMap);
     CheckObjects checkObjects;
+
+    using Stream = bool(__thiscall*)(CMidgardScenarioMap* scenarioMap,
+                                     IMidgardStreamEnv* streamEnv);
+    Stream stream;
 };
 
 Api& get();

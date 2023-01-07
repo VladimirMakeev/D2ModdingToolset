@@ -418,6 +418,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\pointset.cpp" />
     <ClCompile Include="src\raceset.cpp" />
     <ClCompile Include="src\stackbattleactionmsg.cpp" />
+    <ClCompile Include="src\streamutils.cpp" />
     <ClCompile Include="src\stringandid.cpp" />
     <ClCompile Include="src\stringarray.cpp" />
     <ClCompile Include="src\stringintlist.cpp" />
@@ -979,6 +980,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\stackbattleactionmsg.h" />
     <ClInclude Include="include\stdfileimpl.h" />
     <ClInclude Include="include\strategicspell.h" />
+    <ClInclude Include="include\streamutils.h" />
     <ClInclude Include="include\stringandid.h" />
     <ClInclude Include="include\stringarray.h" />
     <ClInclude Include="include\stringintlist.h" />

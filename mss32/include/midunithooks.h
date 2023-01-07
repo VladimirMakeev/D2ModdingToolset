@@ -25,6 +25,7 @@
 namespace game {
 struct CMidgardID;
 struct IMidgardObjectMap;
+struct IMidgardStreamEnv;
 struct IUsUnit;
 struct CMidUnit;
 struct CScenarioVisitor;
@@ -57,6 +58,11 @@ bool __fastcall initWithSoldierImplHooked(game::CMidUnit* thisptr,
                                           const game::IMidgardObjectMap* objectMap,
                                           const game::CMidgardID* unitImplId,
                                           const int* turn);
+
+void __fastcall midUnitStreamHooked(game::CMidUnit* thisptr,
+                                    int /*%edx*/,
+                                    const game::IMidgardObjectMap* objectMap,
+                                    game::IMidgardStreamEnv* streamEnv);
 
 bool __stdcall getModifiersHooked(game::IdList* value, const game::CMidUnit* unit);
 

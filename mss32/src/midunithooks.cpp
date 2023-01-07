@@ -18,13 +18,17 @@
  */
 
 #include "midunithooks.h"
+#include "campaignstream.h"
 #include "custommodifier.h"
 #include "custommodifiers.h"
 #include "dynamiccast.h"
+#include "midgardstream.h"
 #include "modifierutils.h"
 #include "originalfunctions.h"
 #include "settings.h"
+#include "streamutils.h"
 #include "stringandid.h"
+#include "stringpairarrayptr.h"
 #include "ummodifier.h"
 #include "unitmodifier.h"
 #include "unitutils.h"
@@ -227,6 +231,72 @@ bool __fastcall initWithSoldierImplHooked(game::CMidUnit* thisptr,
     }
 
     return true;
+}
+
+void __fastcall midUnitStreamHooked(game::CMidUnit* thisptr,
+                                    int /*%edx*/,
+                                    const game::IMidgardObjectMap* objectMap,
+                                    game::IMidgardStreamEnv* streamEnv)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& stringPairArrayPtrApi = StringPairArrayPtrApi::get();
+    const auto& campaignStreamApi = CampaignStreamApi::get();
+    const auto& midUnitApi = CMidUnitApi::get();
+
+    StringPairArrayPtr arrayPtr;
+    stringPairArrayPtrApi.constructor(&arrayPtr);
+
+    CampaignStream campaignStream;
+    static const char* dbfFileName = "SUnit.dbf";
+    campaignStreamApi.constructor(&campaignStream, streamEnv, &dbfFileName, &arrayPtr);
+    stringPairArrayPtrApi.setData(&arrayPtr, nullptr);
+    if (campaignStreamApi.hasErrors(&campaignStream)) {
+        fn.throwScenarioException("", "Invalid Stream");
+    }
+
+    auto& stream = campaignStream.stream;
+    auto& streamVPtr = stream->vftable;
+    streamVPtr->enterRecord(stream);
+    streamVPtr->streamId(stream, "UNIT_ID", &thisptr->id);
+    midUnitApi.streamImpl(&stream, &thisptr->unitImpl);
+    midUnitApi.streamModifiers(&stream, &thisptr->id, thisptr);
+    streamTurn(stream, "CREATION", &thisptr->creation);
+    streamVPtr->streamText(stream, "NAME_TXT", &thisptr->name, 0);
+    streamVPtr->streamBool(stream, "TRANSF", &thisptr->transformed);
+
+    if (thisptr->transformed) {
+        streamVPtr->streamId(stream, "ORIGTYPEID", &thisptr->origTypeId);
+        streamVPtr->streamBool(stream, "KEEP_HP", &thisptr->keepHp);
+        streamVPtr->streamInt(stream, "ORIG_XP", &thisptr->origXp);
+        streamVPtr->streamInt(stream, "HP_BEFORE", &thisptr->hpBefore);
+        streamVPtr->streamInt(stream, "HP_BEF_MAX", &thisptr->hpBefMax);
+    }
+
+    if (streamVPtr->hasValue(stream, "DYNLEVEL")) {
+        streamVPtr->streamBool(stream, "DYNLEVEL", &thisptr->dynLevel);
+    } else {
+        thisptr->dynLevel = false;
+    }
+
+    streamVPtr->streamInt(stream, "HP", &thisptr->currentHp);
+    if (thisptr->currentHp < 0) {
+        thisptr->currentHp = 0;
+    }
+
+    streamVPtr->streamInt(stream, "XP", &thisptr->currentXp);
+    if (thisptr->currentXp < 0) {
+        thisptr->currentXp = 0;
+    }
+
+    // Moved calls of soldier->getHitPoints / getXpNext to later phase of scenario load
+    // (see loadScenarioMapHooked and scenarioMapStreamHooked), because of an issue with custom
+    // modifiers where corresponding scripts are trying to access unit stack or other scenario
+    // objects while the scenario is being loaded and expected objects are not accessible yet.
+
+    streamVPtr->leaveRecord(stream);
+    campaignStreamApi.destructor(&campaignStream);
 }
 
 bool __stdcall getModifiersHooked(game::IdList* value, const game::CMidUnit* unit)

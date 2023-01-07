@@ -37,6 +37,8 @@ static std::array<Api, 4> functions = {{
         (Api::AddModifiers)0x5eb1df,
         (Api::RemoveModifiers)0x5ea9ea,
         (Api::ReplaceImpl)0x5eb4fc,
+        (Api::StreamImpl)0x5eaf8d,
+        (Api::StreamModifiers)0x5eb010,
     },
     // Russobit
     Api{
@@ -50,6 +52,8 @@ static std::array<Api, 4> functions = {{
         (Api::AddModifiers)0x5eb1df,
         (Api::RemoveModifiers)0x5ea9ea,
         (Api::ReplaceImpl)0x5eb4fc,
+        (Api::StreamImpl)0x5eaf8d,
+        (Api::StreamModifiers)0x5eb010,
     },
     // Gog
     Api{
@@ -63,6 +67,8 @@ static std::array<Api, 4> functions = {{
         (Api::AddModifiers)0x5e9ee2,
         (Api::RemoveModifiers)0x5e96e9,
         (Api::ReplaceImpl)0x5ea1ff,
+        (Api::StreamImpl)0x5e9c90,
+        (Api::StreamModifiers)0x5e9d13,
     },
     // Scenario Editor
     Api{
@@ -76,6 +82,8 @@ static std::array<Api, 4> functions = {{
         (Api::AddModifiers)0x4edf15,
         (Api::RemoveModifiers)0x4ed77b,
         (Api::ReplaceImpl)nullptr,
+        (Api::StreamImpl)0x4edcc3,
+        (Api::StreamModifiers)0x4edd46,
     },
 }};
 
