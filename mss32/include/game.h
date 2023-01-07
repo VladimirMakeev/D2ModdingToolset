@@ -72,6 +72,8 @@ struct NetPlayerInfo;
 struct LBuildingCategory;
 struct IUsLeader;
 struct LDeathAnimCategory;
+struct CMidStreamEnvFile;
+struct CMidgardScenarioMap;
 
 enum class ModifierElementTypeFlag : int;
 
@@ -614,6 +616,13 @@ using UnitHasDoppelgangerAttack = bool(__stdcall*)(const IMidgardObjectMap* obje
 using GetDeathAnimationByUnitOrItemId =
     LDeathAnimCategory*(__stdcall*)(const CMidgardID* unitOrItemId);
 
+/** Throws CMidScenException with specified param name and message. */
+using ThrowScenarioException = void(__stdcall*)(const char* paramName, const char* message);
+
+using LoadScenarioMap = int(__stdcall*)(int a1,
+                                        CMidStreamEnvFile* streamEnv,
+                                        CMidgardScenarioMap* scenarioMap);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -724,6 +733,8 @@ struct Functions
     GetAltAttackIdCheckClass getAltAttackIdCheckClass;
     UnitHasDoppelgangerAttack unitHasDoppelgangerAttack;
     GetDeathAnimationByUnitOrItemId getDeathAnimationByUnitOrItemId;
+    ThrowScenarioException throwScenarioException;
+    LoadScenarioMap loadScenarioMap;
 };
 
 /** Global variables used in game. */
