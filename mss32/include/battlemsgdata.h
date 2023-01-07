@@ -418,7 +418,7 @@ struct Api
 
     /** Used by AI to determine attack target depending on attack class. */
     using FindAttackTarget = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
-                                              const CMidgardID* unitId,
+                                              const CMidgardID* unitOrItemId,
                                               const IAttack* attack,
                                               const CMidUnitGroup* targetGroup,
                                               const TargetSet* targets,
