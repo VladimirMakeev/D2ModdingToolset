@@ -290,6 +290,11 @@ void __fastcall midUnitStreamHooked(game::CMidUnit* thisptr,
         thisptr->currentXp = 0;
     }
 
+    // Moved calls of soldier->getHitPoints / getXpNext to later phase of scenario load
+    // (see loadScenarioMapHooked and scenarioMapStreamHooked), because of an issue with custom
+    // modifiers where corresponding scripts are trying to access unit stack or other scenario
+    // objects while the scenario is being loaded and expected objects are not accessible yet.
+
     streamVPtr->leaveRecord(stream);
     campaignStreamApi.destructor(&campaignStream);
 }
