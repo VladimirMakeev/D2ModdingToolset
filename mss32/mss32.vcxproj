@@ -267,6 +267,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\interfaceutils.cpp" />
     <ClCompile Include="src\enclayoutstack.cpp" />
     <ClCompile Include="src\midgardscenariomap.cpp" />
+    <ClCompile Include="src\midserver.cpp" />
     <ClCompile Include="src\midserverlogichooks.cpp" />
     <ClCompile Include="src\scenedit.cpp" />
     <ClCompile Include="src\effectinterf.cpp" />

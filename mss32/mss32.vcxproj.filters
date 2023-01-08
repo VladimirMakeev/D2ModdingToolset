@@ -1112,6 +1112,9 @@
     <ClCompile Include="src\streamutils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\midserver.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">

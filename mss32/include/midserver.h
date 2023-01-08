@@ -33,6 +33,7 @@ struct CMidServerBuilderFull;
 struct CMidServerLogic;
 struct NetMsgCallbacks;
 struct NetMsgEntryData;
+struct CNetMsg;
 
 struct CMidServerData
 {
@@ -59,6 +60,20 @@ assert_size(CMidServer, 16);
 assert_offset(CMidServer, CMidServer::CMqThread::vftable, 0);
 assert_offset(CMidServer, CMidServer::IMqNetSystem::vftable, 8);
 assert_offset(CMidServer, data, 12);
+
+namespace CMidServerApi {
+
+struct Api
+{
+    using SendNetMsg = bool(__thiscall*)(const CMidServer* thisptr,
+                                         const CNetMsg* netMsg,
+                                         std::uint32_t playerNetId);
+    SendNetMsg sendNetMsg;
+};
+
+Api& get();
+
+} // namespace CMidServerApi
 
 } // namespace game
 
