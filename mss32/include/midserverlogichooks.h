@@ -20,13 +20,22 @@
 #ifndef MIDSERVERLOGICHOOKS_H
 #define MIDSERVERLOGICHOOKS_H
 
+#include "d2set.h"
+
 namespace game {
 struct IMidMsgSender;
+struct CMidServerLogic;
+struct CMidgardID;
 } // namespace game
 
 namespace hooks {
 
 bool __fastcall midServerLogicSendObjectsChangesHooked(game::IMidMsgSender* thisptr, int /*%edx*/);
+
+bool __fastcall midServerLogicSendRefreshInfoHooked(const game::CMidServerLogic* thisptr,
+                                                    int /*%edx*/,
+                                                    const game::Set<game::CMidgardID>* objectsList,
+                                                    std::uint32_t playerNetId);
 
 } // namespace hooks
 

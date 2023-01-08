@@ -328,6 +328,8 @@ static Hooks getGameHooks()
         {battle.cannotUseDoppelgangerAttack, cannotUseDoppelgangerAttackHooked},
         // Support custom modifiers
         {fn.loadScenarioMap, loadScenarioMapHooked, (void**)&orig.loadScenarioMap},
+        // Fix incomplete scenario loading when its object size exceed network message buffer size of 512 KB
+        {CMidServerLogicApi::get().sendRefreshInfo, midServerLogicSendRefreshInfoHooked},
     };
     // clang-format on
 
