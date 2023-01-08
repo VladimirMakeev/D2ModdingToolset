@@ -122,11 +122,20 @@ struct Settings
         } client;
     } lobby;
 
-    // Do not expose these settings in public 'settings.lua' template so poor souls won't suffer from their own ignorance
+    // Do not expose these settings in public 'settings.lua' template so poor souls won't suffer
+    // from their own ignorance
     struct Debug
     {
         std::uint32_t sendObjectsChangesTreshold{0};
     } debug;
+
+    struct Engine
+    {
+        // This is needed to split single CRefreshInfo into several instances when loading large
+        // scenario, because it needs to fit to the network message buffer of 512 KB.
+        // The default value of 1024 objects provides room for average object size of 512 bytes.
+        std::uint32_t sendRefreshInfoObjectCountLimit{1024};
+    } engine;
 
     bool debugMode;
 };
