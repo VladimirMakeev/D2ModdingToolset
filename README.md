@@ -172,12 +172,12 @@
     - Add the specified interface text to `TApp.dbf` and `TAppEdit.dbf`;
     - (Optional) Add drain attack description:
         - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;
-        - Add `%DRAIN%` keyword where you like to put the description (propose to place it after damage field like `%DAMAGE%\n%DRAIN%`);
+        - Add `%DRAIN%` keyword where you like to put the description (propose to place it after damage field like `...%DAMAGE%\n%DRAIN%...`);
         - The keyword is replaced with empty string if attack has no drain effect;
         - Note that you can freely move content between `X005TA0787` and `X005TA0788` if you run out of length limit (because the two strings simply merged together in `X005TA0424`).
     - (Optional) Add effect duration description:
         - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;
-        - Add `%DURATION%` keyword where you like to put the description (propose to place it after damage field like `%DAMAGE%\n%DURATION%`);
+        - Add `%DURATION%` keyword where you like to put the description (propose to place it after attack-name field like `...%ATTACK%%SECOND%\p0;\n%DURATION%...`);
         - The keyword is replaced with empty string if attack has instant effect;
         - Note that you can freely move content between `X005TA0787` and `X005TA0788` if you run out of length limit (because the two strings simply merged together in `X005TA0424`).
     - (Optional) Add extra stats panel:
