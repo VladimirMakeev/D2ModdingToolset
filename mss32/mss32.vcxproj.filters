@@ -1112,6 +1112,9 @@
     <ClCompile Include="src\streamutils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\refreshinfo.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
     <ClCompile Include="src\midserver.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -2877,6 +2880,9 @@
     </ClInclude>
     <ClInclude Include="include\streamutils.h">
       <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\refreshinfo.h">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

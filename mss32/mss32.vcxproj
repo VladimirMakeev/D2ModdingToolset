@@ -269,6 +269,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\midgardscenariomap.cpp" />
     <ClCompile Include="src\midserver.cpp" />
     <ClCompile Include="src\midserverlogichooks.cpp" />
+    <ClCompile Include="src\refreshinfo.cpp" />
     <ClCompile Include="src\scenedit.cpp" />
     <ClCompile Include="src\effectinterf.cpp" />
     <ClCompile Include="src\effectinterfhooks.cpp" />
@@ -666,6 +667,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midserverlogichooks.h" />
     <ClInclude Include="include\midunitext.h" />
     <ClInclude Include="include\midunitgroupadapter.h" />
+    <ClInclude Include="include\refreshinfo.h" />
     <ClInclude Include="include\scenedit.h" />
     <ClInclude Include="include\isoborder.h" />
     <ClInclude Include="include\isoenginegroundhooks.h" />
