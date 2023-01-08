@@ -55,7 +55,8 @@ struct CMidServerLogicCoreData
     Map<std::uint32_t /* netId */, String /* playerName */>* sessionPlayers;
     int startingGold;
     int startingMana;
-    char unknown8[4];
+    bool unknown8;
+    char padding2[3];
 };
 
 assert_size(CMidServerLogicCoreData, 72);
