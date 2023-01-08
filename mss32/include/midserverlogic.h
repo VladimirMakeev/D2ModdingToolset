@@ -29,6 +29,7 @@ namespace game {
 struct CMidServer;
 struct CStreamBits;
 struct AiLogic;
+struct CMidgardScenarioMap;
 
 struct CMidServerLogicData
 {
@@ -116,8 +117,13 @@ namespace CMidServerLogicApi {
 
 struct Api
 {
-    using GetObjectMap = IMidgardObjectMap*(__thiscall*)(const CMidServerLogic* thisptr);
+    using GetObjectMap = CMidgardScenarioMap*(__thiscall*)(const CMidServerLogic* thisptr);
     GetObjectMap getObjectMap;
+
+    using SendRefreshInfo = bool(__thiscall*)(const CMidServerLogic* thisptr,
+                                              const Set<CMidgardID>* objectsList,
+                                              std::uint32_t playerNetId);
+    SendRefreshInfo sendRefreshInfo;
 };
 
 Api& get();

@@ -28,14 +28,17 @@ static std::array<Api, 3> functions = {{
     // Akella
     Api{
         (Api::GetObjectMap)0x4298aa,
+        (Api::SendRefreshInfo)0x42972f,
     },
     // Russobit
     Api{
         (Api::GetObjectMap)0x4298aa,
+        (Api::SendRefreshInfo)0x42972f,
     },
     // Gog
     Api{
         (Api::GetObjectMap)0x5a77e8,
+        (Api::SendRefreshInfo)0x42915a,
     },
 }};
 
