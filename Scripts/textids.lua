@@ -105,7 +105,7 @@ textids = {
 		-- Fallback text is "\fMedBold;Effects:\fNormal;"
 		modifiersCaption = "",
 
-		-- Defines modifiers list caption in unit encyclopedia.
+		-- Defines empty modifiers list content in unit encyclopedia.
 		-- Fallback text id is "X005TA0676" (empty leader abilities).
 		modifiersEmpty = "",
 
