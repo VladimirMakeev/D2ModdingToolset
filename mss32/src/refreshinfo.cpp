@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Stanislav Egorov.
+ * Copyright (C) 2023 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,46 +17,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "midserverlogic.h"
+#include "refreshinfo.h"
 #include "version.h"
 #include <array>
 
-namespace game::CMidServerLogicApi {
+namespace game::CRefreshInfoApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::GetObjectMap)0x4298aa,
-        (Api::SendRefreshInfo)0x42972f,
+        (Api::Constructor)0x47c3c7,
+        (Api::Constructor2)0x47c3fd,
+        (Api::Destructor)0x415c08,
+        (Api::AddObject)0x47c471,
     },
     // Russobit
     Api{
-        (Api::GetObjectMap)0x4298aa,
-        (Api::SendRefreshInfo)0x42972f,
+        (Api::Constructor)0x47c3c7,
+        (Api::Constructor2)0x47c3fd,
+        (Api::Destructor)0x415c08,
+        (Api::AddObject)0x47c471,
     },
     // Gog
     Api{
-        (Api::GetObjectMap)0x5a77e8,
-        (Api::SendRefreshInfo)0x42915a,
+        (Api::Constructor)0x47bf45,
+        (Api::Constructor2)0x47bf7b,
+        (Api::Destructor)0x4158ee,
+        (Api::AddObject)0x47bfef,
     },
-}};
-
-static std::array<Vftable, 3> vftables = {{
-    // Akella
-    Vftable{
-        (void*)0x6d00ec,
-        (IMidMsgSenderVftable*)0x6d00bc,
-    },
-    // Russobit
-    Vftable{
-        (void*)0x6d00ec,
-        (IMidMsgSenderVftable*)0x6d00bc,
-    },
-    // Gog
-    Vftable{
-        (void*)0x6ce08c,
-        (IMidMsgSenderVftable*)0x6ce05c,
+    // Scenario Editor
+    Api{
+        (Api::Constructor)nullptr,
+        (Api::Constructor2)nullptr,
+        (Api::Destructor)nullptr,
+        (Api::AddObject)nullptr,
     },
 }};
 // clang-format on
@@ -66,9 +61,22 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-Vftable& vftable()
+// clang-format off
+static std::array<CNetMsgVftable*, 4> vftables = {{
+    // Akella
+    (CNetMsgVftable*)0x6d4f64,
+    // Russobit
+    (CNetMsgVftable*)0x6d4f64,
+    // Gog
+    (CNetMsgVftable*)0x6d2f04,
+    // Scenario Editor
+    (CNetMsgVftable*)nullptr,
+}};
+// clang-format on
+
+CNetMsgVftable* vftable()
 {
     return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::CMidServerLogicApi
+} // namespace game::CRefreshInfoApi

@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Stanislav Egorov.
+ * Copyright (C) 2023 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,26 +17,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MIDSERVERLOGICHOOKS_H
-#define MIDSERVERLOGICHOOKS_H
+#include "midserver.h"
+#include "version.h"
+#include <array>
 
-#include "d2set.h"
+namespace game::CMidServerApi {
 
-namespace game {
-struct IMidMsgSender;
-struct CMidServerLogic;
-struct CMidgardID;
-} // namespace game
+// clang-format off
+static std::array<Api, 3> functions = {{
+    // Akella
+    Api{
+        (Api::SendNetMsg)0x4336dc,
+    },
+    // Russobit
+    Api{
+        (Api::SendNetMsg)0x4336dc,
+    },
+    // Gog
+    Api{
+        (Api::SendNetMsg)0x4331a1,
+    },
+}};
+// clang-format on
 
-namespace hooks {
+Api& get()
+{
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-bool __fastcall midServerLogicSendObjectsChangesHooked(game::IMidMsgSender* thisptr, int /*%edx*/);
-
-bool __fastcall midServerLogicSendRefreshInfoHooked(const game::CMidServerLogic* thisptr,
-                                                    int /*%edx*/,
-                                                    const game::Set<game::CMidgardID>* objectsList,
-                                                    std::uint32_t playerNetId);
-
-} // namespace hooks
-
-#endif // MIDSERVERLOGICHOOKS_H
+} // namespace game::CMidServerApi

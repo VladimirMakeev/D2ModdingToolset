@@ -20,8 +20,10 @@
 #include "midserverlogichooks.h"
 #include "log.h"
 #include "midgardscenariomap.h"
+#include "midserver.h"
 #include "midserverlogic.h"
 #include "originalfunctions.h"
+#include "refreshinfo.h"
 #include "settings.h"
 #include "utils.h"
 #include <fmt/format.h>
@@ -33,15 +35,16 @@ bool __fastcall midServerLogicSendObjectsChangesHooked(game::IMidMsgSender* this
     using namespace game;
 
     const auto serverLogic = castMidMsgSenderToMidServerLogic(thisptr);
-    const auto scenarioMap = (CMidgardScenarioMap*)CMidServerLogicApi::get().getObjectMap(
-        serverLogic);
+    const auto scenarioMap = CMidServerLogicApi::get().getObjectMap(serverLogic);
     const auto& addedObjects = scenarioMap->addedObjects;
     const auto& changedObjects = scenarioMap->changedObjects;
 
     logDebug("serverLogicSendObjects.log",
              fmt::format("Sending scenario objects changes, added: {:d}, changed: {:d}",
                          addedObjects.length, changedObjects.length));
-    if (addedObjects.length + changedObjects.length > userSettings().debug.sendObjectsChangesTreshold) {
+
+    auto totalLength = addedObjects.length + changedObjects.length;
+    if (totalLength > userSettings().debug.sendObjectsChangesTreshold) {
         for (auto obj : addedObjects) {
             logDebug("serverLogicSendObjects.log",
                      fmt::format("Sending added scenario object {:s}", idToString(&obj)));
@@ -53,6 +56,52 @@ bool __fastcall midServerLogicSendObjectsChangesHooked(game::IMidMsgSender* this
     }
 
     return getOriginalFunctions().midServerLogicSendObjectsChanges(thisptr);
+}
+
+bool __fastcall midServerLogicSendRefreshInfoHooked(const game::CMidServerLogic* thisptr,
+                                                    int /*%edx*/,
+                                                    const game::Set<game::CMidgardID>* objectsList,
+                                                    std::uint32_t playerNetId)
+{
+    using namespace game;
+
+    const auto& refreshInfoApi = CRefreshInfoApi::get();
+
+    const auto scenarioMap = CMidServerLogicApi::get().getObjectMap(thisptr);
+
+    auto limit = userSettings().engine.sendRefreshInfoObjectCountLimit;
+
+    auto it = objectsList->begin();
+    const auto end = objectsList->end();
+    auto sendRefreshInfo = [&](bool& proceed) {
+        CRefreshInfo refreshInfo{};
+        refreshInfoApi.constructor2(&refreshInfo, &scenarioMap->scenarioFileId,
+                                    thisptr->coreData->unknown8);
+
+        proceed = false;
+        std::uint32_t count = 0;
+        for (; it != end; ++it) {
+            refreshInfoApi.addObject(&refreshInfo, scenarioMap, &(*it));
+            if (++count >= limit) {
+                proceed = true;
+                break;
+            }
+        }
+
+        auto server = thisptr->coreData->server;
+        bool result = CMidServerApi::get().sendNetMsg(server, &refreshInfo, playerNetId);
+
+        refreshInfoApi.destructor(&refreshInfo);
+        return result;
+    };
+
+    for (bool proceed = true; proceed;) {
+        if (!sendRefreshInfo(proceed)) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 } // namespace hooks
