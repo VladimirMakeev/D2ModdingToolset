@@ -81,7 +81,7 @@
 - <details>
     <summary>Buttons for bulk item transfer: transfer all items, potions, scrolls/wands or valuables between inventories with single click;</summary>
 
-    Add buttons with predefined names to `DLG_CITY_STACK`, `DLG_EXCHANGE` or `DLG_PICKUP_DROP` dialogs in Interf.dlg file.<br />
+    Add buttons with predefined names to `DLG_CITY_STACK`, `DLG_EXCHANGE` or `DLG_PICKUP_DROP` dialogs in `Interf.dlg` file.<br />
     Every button is optional and can be ignored.<br />
     Buttons and their meaning:
     - Transfer all items to the left inventory: `BTN_TRANSF_L_ALL`;
