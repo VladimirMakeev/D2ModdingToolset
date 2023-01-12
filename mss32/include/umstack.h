@@ -57,6 +57,19 @@ struct CUmStackData
 
 assert_size(CUmStackData, 60);
 
+namespace CUmStackApi {
+
+struct Vftable
+{
+    const IUsUnitVftable* usUnit;
+    const IUsStackLeaderVftable* usStackLeader;
+    const CUmModifierVftable* umModifier;
+};
+
+Vftable& vftable();
+
+} // namespace CUmStackApi
+
 } // namespace game
 
 #endif // UMSTACK_H
