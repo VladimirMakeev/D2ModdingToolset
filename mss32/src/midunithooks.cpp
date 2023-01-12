@@ -35,6 +35,7 @@
 #include "ussoldier.h"
 #include "usunit.h"
 #include "usunitimpl.h"
+#include <fmt/format.h>
 
 namespace hooks {
 
@@ -42,31 +43,7 @@ bool __fastcall addModifierHooked(game::CMidUnit* thisptr,
                                   int /*%edx*/,
                                   const game::CMidgardID* modifierId)
 {
-    using namespace game;
-
-    const auto unitModifier = getUnitModifier(modifierId);
-    if (!unitModifier || !unitModifier->vftable->canApplyToUnit(unitModifier, thisptr->unitImpl))
-        return false;
-
-    auto modifier = unitModifier->vftable->createModifier(unitModifier);
-
-    auto prevModifier = castUnitToUmModifier(thisptr->unitImpl);
-    if (prevModifier)
-        prevModifier->data->next = modifier;
-
-    CUmModifierApi::get().setPrev(modifier, thisptr->unitImpl);
-
-    auto customModifier = castModifierToCustomModifier(modifier);
-    if (customModifier)
-        customModifier->setUnit(thisptr);
-
-    thisptr->unitImpl = castUmModifierToUnit(modifier);
-
-    if (userSettings().modifiers.notifyModifiersChanged) {
-        notifyModifiersChanged(thisptr->unitImpl);
-    }
-
-    return true;
+    return addModifier(thisptr, modifierId, true);
 }
 
 bool __fastcall removeModifierHooked(game::CMidUnit* thisptr,
@@ -331,6 +308,32 @@ bool __stdcall getModifiersHooked(game::IdList* value, const game::CMidUnit* uni
     return true;
 }
 
+bool canReapplyModifier(const game::CMidUnit* unit, const game::TUnitModifier* unitModifier)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    // Fix exception while streaming, copying or untransforming unit when previously applied
+    // modifier suddenly becomes inapplicable ("sudden death of leader" issue). The cause is
+    // custom modifier that can grant different bonuses at different times, causing standard
+    // modifiers to become inapplicable (CUmStack granting leader abilities), or the custom
+    // modifier itself suddenly returning false on 'canApplyToUnit' check when it is already
+    // applied.
+    auto modifier = unitModifier->data->modifier;
+    if (castModifierToCustomModifier(modifier)) {
+        return true;
+    }
+    else if (castUmModifierToUmStack(modifier)) {
+        // Do only minimal check for CUmStack - skip checking of IUsStackLeader::hasAbility.
+        // Cannot patch CUmStack::canApplyToUnit directly - otherwise leaders can be offered
+        // duplicated upgrades on level-up.
+        return fn.castUnitImplToStackLeader(unit->unitImpl) != nullptr;
+    }
+
+    return false;
+}
+
 bool __stdcall addModifiersHooked(const game::IdList* value,
                                   game::CMidUnit* unit,
                                   char* errorBuffer,
@@ -342,7 +345,29 @@ bool __stdcall addModifiersHooked(const game::IdList* value,
         CMidUnitApi::get().addModifier(unit, &modifierId);
     }
 
-    return getOriginalFunctions().addModifiers(value, unit, errorBuffer, skipInapplicable);
+    for (const auto& modifierId : *value) {
+        const auto unitModifier = getUnitModifier(&modifierId);
+        if (!unitModifier) {
+            return false;
+        }
+
+        if (!unitModifier->vftable->canApplyToUnit(unitModifier, unit->unitImpl)) {
+            if (skipInapplicable) {
+                continue;
+            }
+
+            if (!canReapplyModifier(unit, unitModifier)) {
+                fmt::format("MidUnit: Invalid modifier '{:s}', unit '{:s}'",
+                            idToString(&modifierId), idToString(&unit->id))
+                    .copy(errorBuffer, 128);
+                return false;
+            }
+        }
+
+        addModifier(unit, &modifierId, false);
+    }
+
+    return true;
 }
 
 bool __stdcall removeModifiersHooked(game::IUsUnit** unitImpl)

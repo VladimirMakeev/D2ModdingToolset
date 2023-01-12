@@ -635,4 +635,38 @@ void notifyModifiersChanged(const game::IUsUnit* unitImpl)
     }
 }
 
+bool addModifier(game::CMidUnit* unit, const game::CMidgardID* modifierId, bool checkCanApply)
+{
+    using namespace game;
+
+    const auto unitModifier = getUnitModifier(modifierId);
+    if (!unitModifier) {
+        return false;
+    }
+
+    if (checkCanApply && !unitModifier->vftable->canApplyToUnit(unitModifier, unit->unitImpl)) {
+        return false;
+    }
+
+    auto modifier = unitModifier->vftable->createModifier(unitModifier);
+
+    auto prevModifier = castUnitToUmModifier(unit->unitImpl);
+    if (prevModifier)
+        prevModifier->data->next = modifier;
+
+    CUmModifierApi::get().setPrev(modifier, unit->unitImpl);
+
+    auto customModifier = castModifierToCustomModifier(modifier);
+    if (customModifier)
+        customModifier->setUnit(unit);
+
+    unit->unitImpl = castUmModifierToUnit(modifier);
+
+    if (userSettings().modifiers.notifyModifiersChanged) {
+        notifyModifiersChanged(unit->unitImpl);
+    }
+
+    return true;
+}
+
 } // namespace hooks

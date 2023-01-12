@@ -134,6 +134,8 @@ bool isImmunityclassModifier(const game::CMidgardID* modifierId,
 
 void notifyModifiersChanged(const game::IUsUnit* unitImpl);
 
+bool addModifier(game::CMidUnit* unit, const game::CMidgardID* modifierId, bool checkCanApply);
+
 } // namespace hooks
 
 #endif // MODIFIERUTILS_H
