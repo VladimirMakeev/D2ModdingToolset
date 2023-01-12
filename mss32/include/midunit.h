@@ -117,7 +117,7 @@ struct Api
     using AddModifiers = bool(__stdcall*)(const IdList* value,
                                           CMidUnit* unit,
                                           char* errorBuffer,
-                                          bool checkCanApply);
+                                          bool skipInapplicable);
     AddModifiers addModifiers;
 
     using RemoveModifiers = bool(__stdcall*)(IUsUnit** unitImpl);

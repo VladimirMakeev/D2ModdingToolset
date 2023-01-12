@@ -69,7 +69,7 @@ bool __stdcall getModifiersHooked(game::IdList* value, const game::CMidUnit* uni
 bool __stdcall addModifiersHooked(const game::IdList* value,
                                   game::CMidUnit* unit,
                                   char* errorBuffer,
-                                  bool checkCanApply);
+                                  bool skipInapplicable);
 
 bool __stdcall removeModifiersHooked(game::IUsUnit** unitImpl);
 
