@@ -45,8 +45,17 @@ bool __fastcall addModifierHooked(game::CMidUnit* thisptr,
     using namespace game;
 
     const auto unitModifier = getUnitModifier(modifierId);
-    if (!unitModifier || !unitModifier->vftable->canApplyToUnit(unitModifier, thisptr->unitImpl))
+    if (!unitModifier)
         return false;
+
+    // Fix exception while streaming unit (and in similar cases) when previously applied modifier
+    // suddenly becomes inapplicable ("sudden death of leader" issue).
+    // The cause is custom modifier that can grant different bonuses at different times, causing
+    // standard modifiers to become inapplicable (CUmStack granting leader abilities),
+    // or the custom modifier itself suddenly returning false on 'canApplyToUnit' check when it is
+    // already applied.
+    // (!unitModifier->vftable->canApplyToUnit(unitModifier, thisptr->unitImpl))
+    //    return false;
 
     auto modifier = unitModifier->vftable->createModifier(unitModifier);
 

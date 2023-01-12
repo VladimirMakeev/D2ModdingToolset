@@ -155,6 +155,7 @@ struct Rtti
     TypeDescriptor* CBatAttackUseOrbType;
     TypeDescriptor* CBatAttackUseTalismanType;
     TypeDescriptor* CItemEquipmentType;
+    TypeDescriptor* CUmStackType;
 };
 
 const Rtti& rtti();
