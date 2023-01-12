@@ -72,6 +72,15 @@ game::CUmAttack* castUmModifierToUmAttack(game::CUmModifier* modifier)
     return (CUmAttack*)dynamicCast(modifier, 0, rtti.CUmModifierType, rtti.CUmAttackType, 0);
 }
 
+game::CUmStack* castUmModifierToUmStack(game::CUmModifier* modifier)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    return (CUmStack*)dynamicCast(modifier, 0, rtti.CUmModifierType, rtti.CUmStackType, 0);
+}
+
 game::IUsUnit* castUmModifierToUnit(game::CUmModifier* modifier)
 {
     using namespace game;
