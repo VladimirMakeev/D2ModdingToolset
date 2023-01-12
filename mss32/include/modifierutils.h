@@ -34,6 +34,7 @@ struct TUnitModifier;
 struct CUmModifier;
 struct CUmUnit;
 struct CUmAttack;
+struct CUmStack;
 struct LAttackSource;
 struct LAttackClass;
 struct IAttack;
@@ -49,6 +50,8 @@ bool unitCanBeModified(game::BattleMsgData* battleMsgData, game::CMidgardID* tar
 game::CUmUnit* castUmModifierToUmUnit(game::CUmModifier* modifier);
 
 game::CUmAttack* castUmModifierToUmAttack(game::CUmModifier* modifier);
+
+game::CUmStack* castUmModifierToUmStack(game::CUmModifier* modifier);
 
 game::IUsUnit* castUmModifierToUnit(game::CUmModifier* modifier);
 
@@ -130,6 +133,8 @@ bool isImmunityclassModifier(const game::CMidgardID* modifierId,
                              game::ImmuneId immuneId);
 
 void notifyModifiersChanged(const game::IUsUnit* unitImpl);
+
+bool addModifier(game::CMidUnit* unit, const game::CMidgardID* modifierId, bool checkCanApply);
 
 } // namespace hooks
 
