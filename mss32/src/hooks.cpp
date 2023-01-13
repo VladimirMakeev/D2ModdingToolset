@@ -625,8 +625,7 @@ Hooks getHooks()
 
     // Support native modifiers
     hooks.emplace_back(HookInfo{CMidUnitApi::get().getModifiers, getModifiersHooked});
-    hooks.emplace_back(
-        HookInfo{CMidUnitApi::get().addModifiers, addModifiersHooked, (void**)&orig.addModifiers});
+    hooks.emplace_back(HookInfo{CMidUnitApi::get().addModifiers, addModifiersHooked});
     hooks.emplace_back(HookInfo{CMidUnitApi::get().removeModifiers, removeModifiersHooked});
     hooks.emplace_back(HookInfo{CMidUnitApi::vftable()->initWithSoldierImpl,
                                 initWithSoldierImplHooked, (void**)&orig.initWithSoldierImpl});

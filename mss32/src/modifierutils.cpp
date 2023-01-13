@@ -72,6 +72,15 @@ game::CUmAttack* castUmModifierToUmAttack(game::CUmModifier* modifier)
     return (CUmAttack*)dynamicCast(modifier, 0, rtti.CUmModifierType, rtti.CUmAttackType, 0);
 }
 
+game::CUmStack* castUmModifierToUmStack(game::CUmModifier* modifier)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    return (CUmStack*)dynamicCast(modifier, 0, rtti.CUmModifierType, rtti.CUmStackType, 0);
+}
+
 game::IUsUnit* castUmModifierToUnit(game::CUmModifier* modifier)
 {
     using namespace game;
@@ -624,6 +633,40 @@ void notifyModifiersChanged(const game::IUsUnit* unitImpl)
             customModifier->notifyModifiersChanged();
         }
     }
+}
+
+bool addModifier(game::CMidUnit* unit, const game::CMidgardID* modifierId, bool checkCanApply)
+{
+    using namespace game;
+
+    const auto unitModifier = getUnitModifier(modifierId);
+    if (!unitModifier) {
+        return false;
+    }
+
+    if (checkCanApply && !unitModifier->vftable->canApplyToUnit(unitModifier, unit->unitImpl)) {
+        return false;
+    }
+
+    auto modifier = unitModifier->vftable->createModifier(unitModifier);
+
+    auto prevModifier = castUnitToUmModifier(unit->unitImpl);
+    if (prevModifier)
+        prevModifier->data->next = modifier;
+
+    CUmModifierApi::get().setPrev(modifier, unit->unitImpl);
+
+    auto customModifier = castModifierToCustomModifier(modifier);
+    if (customModifier)
+        customModifier->setUnit(unit);
+
+    unit->unitImpl = castUmModifierToUnit(modifier);
+
+    if (userSettings().modifiers.notifyModifiersChanged) {
+        notifyModifiersChanged(unit->unitImpl);
+    }
+
+    return true;
 }
 
 } // namespace hooks
