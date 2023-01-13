@@ -323,8 +323,7 @@ bool canReapplyModifier(const game::CMidUnit* unit, const game::TUnitModifier* u
     auto modifier = unitModifier->data->modifier;
     if (castModifierToCustomModifier(modifier)) {
         return true;
-    }
-    else if (castUmModifierToUmStack(modifier)) {
+    } else if (castUmModifierToUmStack(modifier)) {
         // Do only minimal check for CUmStack - skip checking of IUsStackLeader::hasAbility.
         // Cannot patch CUmStack::canApplyToUnit directly - otherwise leaders can be offered
         // duplicated upgrades on level-up.
@@ -334,37 +333,49 @@ bool canReapplyModifier(const game::CMidUnit* unit, const game::TUnitModifier* u
     return false;
 }
 
+bool addModifier(game::CMidUnit* unit,
+                 const game::CMidgardID* modifierId,
+                 char* errorBuffer,
+                 bool skipInapplicable)
+{
+    using namespace game;
+
+    const auto unitModifier = getUnitModifier(modifierId);
+    if (!unitModifier) {
+        return false;
+    }
+
+    if (!unitModifier->vftable->canApplyToUnit(unitModifier, unit->unitImpl)) {
+        if (skipInapplicable) {
+            return true;
+        }
+
+        if (!canReapplyModifier(unit, unitModifier)) {
+            fmt::format("MidUnit: Invalid modifier '{:s}', unit '{:s}'", idToString(modifierId),
+                        idToString(&unit->id))
+                .copy(errorBuffer, 128);
+            return false;
+        }
+    }
+
+    return addModifier(unit, modifierId, false);
+}
+
 bool __stdcall addModifiersHooked(const game::IdList* value,
                                   game::CMidUnit* unit,
                                   char* errorBuffer,
                                   bool skipInapplicable)
 {
-    using namespace game;
-
     for (const auto& modifierId : getNativeModifiers(unit->unitImpl->id)) {
-        CMidUnitApi::get().addModifier(unit, &modifierId);
+        if (!addModifier(unit, &modifierId, errorBuffer, skipInapplicable)) {
+            return false;
+        }
     }
 
     for (const auto& modifierId : *value) {
-        const auto unitModifier = getUnitModifier(&modifierId);
-        if (!unitModifier) {
+        if (!addModifier(unit, &modifierId, errorBuffer, skipInapplicable)) {
             return false;
         }
-
-        if (!unitModifier->vftable->canApplyToUnit(unitModifier, unit->unitImpl)) {
-            if (skipInapplicable) {
-                continue;
-            }
-
-            if (!canReapplyModifier(unit, unitModifier)) {
-                fmt::format("MidUnit: Invalid modifier '{:s}', unit '{:s}'",
-                            idToString(&modifierId), idToString(&unit->id))
-                    .copy(errorBuffer, 128);
-                return false;
-            }
-        }
-
-        addModifier(unit, &modifierId, false);
     }
 
     return true;
