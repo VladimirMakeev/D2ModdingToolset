@@ -147,6 +147,11 @@ textids = {
 		-- The text must contain keywords "%STAT%", %UPG1% and %UPG2%.
 		-- Fallback text is "%STAT% (%UPG1% | %UPG2% per level)".
 		dynamicUpgradeValues = "",
+		
+		-- Defines text id to format broken (removed) wards in unit encyclopedia.
+		-- The text must contain keyword "%WARD%", or it can be an empty string to not display broken wards at all.
+		-- Fallback text is "\fMedBold;\c100;000;000;%WARD%\c000;000;000;\fNormal;".
+		removedAttackWard = "",
 	},
 
 	-- Text ids related to events logic

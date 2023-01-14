@@ -1124,6 +1124,9 @@
     <ClCompile Include="src\encparambase.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\encparambasehooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2892,6 +2895,9 @@
     </ClInclude>
     <ClInclude Include="include\encparamidplayer.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\encparambasehooks.h">
+      <Filter>hooks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

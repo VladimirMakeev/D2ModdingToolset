@@ -156,6 +156,7 @@
         - Value of lower initiative;
         - Critical hit indication;
         - Effect duration;
+        - Broken (removed) wards indication;
         - Drain attack description;
         - Custom attack sources;
         - Custom attack reaches;
@@ -185,6 +186,7 @@
         - `overflowText`
         - `dynamicUpgradeLevel`
         - `dynamicUpgradeValues`
+        - `removedAttackWard`
     - Add the specified interface text to `TApp.dbf` and `TAppEdit.dbf`;
     - (Optional) Add drain attack description:
         - Find text constants with ids `X005TA0787` and `X005TA0788` in `TApp.dbf` and `TAppEdit.dbf`;

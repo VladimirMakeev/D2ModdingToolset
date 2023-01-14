@@ -59,6 +59,10 @@ enum class CEncParamBaseDataKey : int
     FortificationArmor = 2,
     // Used by CDDMageInventory, CDDMageInvDisplay, CDDMerchantInventory, CDDMerchantInvDisplay
     LowerCost = ShatteredArmor,
+    // Used by encParamBaseAddUnitBattleInfoHooked
+    // Correspond to BattleMsgData::UnitInfo immunity statuses
+    AttackSourceImmunityStatuses = 3,
+    AttackClassImmunityStatuses = 4,
 };
 
 struct CEncParamBaseData

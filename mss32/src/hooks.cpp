@@ -72,6 +72,7 @@
 #include "enclayoutstackhooks.h"
 #include "enclayoutunithooks.h"
 #include "encparambase.h"
+#include "encparambasehooks.h"
 #include "eventconditioncathooks.h"
 #include "eventeffectcathooks.h"
 #include "fortcategory.h"
@@ -327,6 +328,8 @@ static Hooks getGameHooks()
         {fn.loadScenarioMap, loadScenarioMapHooked, (void**)&orig.loadScenarioMap},
         // Fix incomplete scenario loading when its object size exceed network message buffer size of 512 KB
         {CMidServerLogicApi::get().sendRefreshInfo, midServerLogicSendRefreshInfoHooked},
+        // Show broken (removed) wards in unit encyclopedia
+        {CEncParamBaseApi::get().addUnitBattleInfo, encParamBaseAddUnitBattleInfoHooked},
     };
     // clang-format on
 
