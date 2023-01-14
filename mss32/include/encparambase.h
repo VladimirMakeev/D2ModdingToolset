@@ -79,6 +79,28 @@ struct CEncParamBase : public IEncParam
 
 assert_size(CEncParamBase, 8);
 
+namespace CEncParamBaseApi {
+
+struct Api
+{
+    using AddUnitBattleInfo = void(__stdcall*)(CEncParamBase* param,
+                                               const CMidgardID* unitId,
+                                               const BattleMsgData* battleMsgData);
+    AddUnitBattleInfo addUnitBattleInfo;
+
+    using GetData = int(__thiscall*)(const CEncParamBase* thisptr,
+                                     CEncParamBaseDataKey key,
+                                     int def);
+    GetData getData;
+
+    using SetData = void(__thiscall*)(CEncParamBase* thisptr, CEncParamBaseDataKey key, int value);
+    SetData setData;
+};
+
+Api& get();
+
+} // namespace CEncParamBaseApi
+
 } // namespace game
 
 #endif // ENCPARAMBASE_H

@@ -1121,6 +1121,9 @@
     <ClCompile Include="src\umstack.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\encparambase.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">

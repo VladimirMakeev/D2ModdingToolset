@@ -222,6 +222,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\enclayoutruin.cpp" />
     <ClCompile Include="src\enclayoutruinhooks.cpp" />
     <ClCompile Include="src\enclayoutstackhooks.cpp" />
+    <ClCompile Include="src\encparambase.cpp" />
     <ClCompile Include="src\intvector.cpp" />
     <ClCompile Include="src\button.cpp" />
     <ClCompile Include="src\campaignstream.cpp" />
