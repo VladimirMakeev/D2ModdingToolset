@@ -253,9 +253,6 @@ static Hooks getGameHooks()
         {battle.isUnitAttackSourceWardRemoved, isUnitAttackSourceWardRemovedHooked},
         {battle.removeUnitAttackSourceWard, removeUnitAttackSourceWardHooked},
         {battle.addUnitToBattleMsgData, addUnitToBattleMsgDataHooked, (void**)&orig.addUnitToBattleMsgData},
-        {fn.getUnitAttackSourceImmunities, getUnitAttackSourceImmunitiesHooked},
-        {battle.isUnitAttackSourceWardRemoved, isUnitAttackSourceWardRemovedHooked},
-        {battle.removeUnitAttackSourceWard, removeUnitAttackSourceWardHooked},
         // Support custom attack reaches
         {battle.fillTargetsList, fillTargetsListHooked},
         {battle.fillEmptyTargetsList, fillEmptyTargetsListHooked},
