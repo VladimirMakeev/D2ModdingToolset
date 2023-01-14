@@ -613,6 +613,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\enclayoutcityhooks.h" />
     <ClInclude Include="include\enclayoutruin.h" />
     <ClInclude Include="include\enclayoutruinhooks.h" />
+    <ClInclude Include="include\encparamidplayer.h" />
     <ClInclude Include="include\groupareamanagement.h" />
     <ClInclude Include="include\intvector.h" />
     <ClInclude Include="include\button.h" />
