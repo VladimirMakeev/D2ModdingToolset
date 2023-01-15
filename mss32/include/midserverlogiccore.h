@@ -55,7 +55,17 @@ struct CMidServerLogicCoreData
     Map<std::uint32_t /* netId */, String /* playerName */>* sessionPlayers;
     int startingGold;
     int startingMana;
-    bool unknown8;
+    /** Determines whether expansion-only (RotE) fields of midgard objects should be serialized.
+     * Namely, when this is true, the following additional fields are serialized:
+     * - CMidPlayer::alwaysAi
+     * - CMidStackTemplate::aiPriority
+     * - CMidEffectUnfog::unfog
+     * - CMidEffectDiplomacy::alwaysAtWar
+     * - CMidEffectAlly::permanentAlliance
+     * Also, when the flag is set, the special id 'G25500FFFF' is getting serialized at the start of
+     * CRefreshInfo stream.
+     */
+    bool isExpansionContent;
     char padding2[3];
 };
 

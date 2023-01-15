@@ -31,7 +31,7 @@ struct CMidgardScenarioMap;
 struct CRefreshInfo : CNetMsg
 {
     CMidgardScenarioMap* scenarioMap;
-    bool unknown;
+    bool isExpansionContent;
 };
 
 assert_size(CRefreshInfo, 12);
@@ -45,7 +45,7 @@ struct Api
 
     using Constructor2 = CRefreshInfo*(__thiscall*)(CRefreshInfo* thisptr,
                                                     CMidgardID* scenarioFileId,
-                                                    bool a3);
+                                                    bool isExpansionContent);
     Constructor2 constructor2;
 
     using Destructor = void(__thiscall*)(CRefreshInfo* thisptr);

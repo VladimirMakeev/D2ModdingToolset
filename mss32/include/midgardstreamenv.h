@@ -48,7 +48,8 @@ struct IMidgardStreamEnvVftable
     GetBool writeMode;
     GetBool readMode;
 
-    GetBool getUnknown;
+    // See description of CMidServerLogicCoreData::isExpansionContent
+    GetBool isExpansionContent;
 
     using GetError = const char*(__thiscall*)(const IMidgardStreamEnv* thisptr);
     GetError getError;
