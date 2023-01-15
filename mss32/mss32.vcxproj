@@ -268,10 +268,12 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\editor.cpp" />
     <ClCompile Include="src\interfaceutils.cpp" />
     <ClCompile Include="src\enclayoutstack.cpp" />
+    <ClCompile Include="src\logutils.cpp" />
     <ClCompile Include="src\midgardscenariomap.cpp" />
     <ClCompile Include="src\midserver.cpp" />
     <ClCompile Include="src\midserverlogichooks.cpp" />
     <ClCompile Include="src\netsingleplayer.cpp" />
+    <ClCompile Include="src\netsingleplayerhooks.cpp" />
     <ClCompile Include="src\refreshinfo.cpp" />
     <ClCompile Include="src\scenedit.cpp" />
     <ClCompile Include="src\effectinterf.cpp" />
@@ -662,6 +664,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\interfborderdisplay.h" />
     <ClInclude Include="include\interfaceutils.h" />
     <ClInclude Include="include\leaderunitdescriptor.h" />
+    <ClInclude Include="include\logutils.h" />
     <ClInclude Include="include\midanim2.h" />
     <ClInclude Include="include\midanim2base.h" />
     <ClInclude Include="include\midanim2system.h" />
@@ -674,6 +677,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midunitext.h" />
     <ClInclude Include="include\midunitgroupadapter.h" />
     <ClInclude Include="include\netsingleplayer.h" />
+    <ClInclude Include="include\netsingleplayerhooks.h" />
     <ClInclude Include="include\refreshinfo.h" />
     <ClInclude Include="include\scenedit.h" />
     <ClInclude Include="include\isoborder.h" />
