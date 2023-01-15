@@ -23,7 +23,7 @@
 
 namespace hooks {
 
-std::string getNetPlayerIdDesc(int netPlayerId)
+const char* getNetPlayerIdDesc(int netPlayerId)
 {
     using namespace game;
 
@@ -37,11 +37,13 @@ std::string getNetPlayerIdDesc(int netPlayerId)
     }
 }
 
-std::string getMidgardIdTypeDesc(const game::CMidgardID* id)
+const char* getMidgardIdTypeDesc(const game::CMidgardID* id)
 {
     using namespace game;
 
-    auto type = CMidgardIDApi::get().getType(id);
+    const auto& idApi = CMidgardIDApi::get();
+
+    auto type = idApi.getType(id);
 
 #define RETURN_TYPE_DESC(TYPE)                                                                     \
     if (type == IdType::##TYPE)                                                                    \
@@ -67,6 +69,8 @@ std::string getMidgardIdTypeDesc(const game::CMidgardID* id)
     RETURN_TYPE_DESC(DynamicAttack2)
     RETURN_TYPE_DESC(DynamicAltAttack2)
     RETURN_TYPE_DESC(CampaignFile)
+    // 20 for CW
+    // 21 for CO
     RETURN_TYPE_DESC(Plan)
     RETURN_TYPE_DESC(ObjectCount)
     RETURN_TYPE_DESC(ScenarioFile)
@@ -97,14 +101,17 @@ std::string getMidgardIdTypeDesc(const game::CMidgardID* id)
     RETURN_TYPE_DESC(Event)
     RETURN_TYPE_DESC(StackDestroyed)
     RETURN_TYPE_DESC(TalismanCharges)
+    // 52 for MT
     RETURN_TYPE_DESC(Mountains)
     RETURN_TYPE_DESC(SubRace)
+    // 55 for BR
     RETURN_TYPE_DESC(QuestLog)
     RETURN_TYPE_DESC(TurnSummary)
     RETURN_TYPE_DESC(ScenarioVariable)
     RETURN_TYPE_DESC(Invalid)
 
-    return "";
+    const char* result = nullptr;
+    return idApi.idTypeToString(&result, &type) ? result : "UNKNOWN ID TYPE";
 }
 
 } // namespace hooks

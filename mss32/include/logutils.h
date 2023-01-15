@@ -28,8 +28,8 @@ struct CMidgardID;
 
 namespace hooks {
 
-std::string getNetPlayerIdDesc(int netPlayerId);
-std::string getMidgardIdTypeDesc(const game::CMidgardID* id);
+const char* getNetPlayerIdDesc(int netPlayerId);
+const char* getMidgardIdTypeDesc(const game::CMidgardID* id);
 
 } // namespace hooks
 
