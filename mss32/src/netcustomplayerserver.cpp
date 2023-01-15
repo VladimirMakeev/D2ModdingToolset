@@ -217,8 +217,7 @@ static bool __fastcall playerServerSendMessage(CNetCustomPlayerServer* thisptr,
     const auto& connectedIds{thisptr->connectedIds};
     SLNet::BitStream stream((unsigned char*)message, message->length, false);
 
-    // if idTo == 0, send broadcast message.
-    if (idTo == 0) {
+    if (idTo == game::broadcastNetPlayerId) {
         playerLog("CNetCustomPlayerServer sendMessage broadcast");
 
         // Do not use broadcast Send() because player server is also connected to lobby server

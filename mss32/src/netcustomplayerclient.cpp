@@ -186,7 +186,7 @@ bool __fastcall playerClientSendMessage(CNetCustomPlayerClient* thisptr,
                     thisptr->player.name, message->messageClassName, std::uint32_t(idTo),
                     serverId));
 
-    if (idTo != 1) {
+    if (idTo != game::serverNetPlayerId) {
         playerLog("CNetCustomPlayerClient should send messages only to server ???");
         // Only send messages to server
         return false;
