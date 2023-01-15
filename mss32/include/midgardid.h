@@ -35,31 +35,32 @@ enum class IdCategory : int
 
 enum class IdType : int
 {
-    Empty = 0,       /**< Type of empty id 'g000000000' when converted from string.
-                      * Can not be used to construct id from parts.
-                      */
-    ApplicationText, /**< 'TA', entries of TApp.dbf and TAppEdit.dbf. */
-    Building,        /**< 'BB', entries of Gbuild.dbf. */
-    Race,            /**< 'RR' */
-    Lord,            /**< 'LR' */
-    Spell,           /**< 'SS' */
-    UnitGlobal,      /**< 'UU', units implementations, entries of Gunits.dbf. */
-    UnitGenerated,   /**< 'UG', runtime-generated units implementations. */
-    UnitModifier,    /**< 'UM' */
-    Attack,          /**< 'AA' */
-    TextGlobal,      /**< 'TG', entries of Tglobal.dbf. */
-    LandmarkGlobal,  /**< 'MG', entries of GLmark.dbf. */
-    ItemGlobal,      /**< 'IG', entries of GItem.dbf. */
-    NobleAction,     /**< 'NA', entries of Gaction.dbf. */
-    DynamicUpgrade,  /**< 'DU' */
+    Empty = 0,         /**< Type of empty id 'g000000000' when converted from string.
+                        * Can not be used to construct id from parts.
+                        */
+    ApplicationText,   /**< 'TA', entries of TApp.dbf and TAppEdit.dbf. */
+    Building,          /**< 'BB', entries of Gbuild.dbf. */
+    Race,              /**< 'RR' */
+    Lord,              /**< 'LR' */
+    Spell,             /**< 'SS' */
+    UnitGlobal,        /**< 'UU', units implementations, entries of Gunits.dbf. */
+    UnitGenerated,     /**< 'UG', runtime-generated units implementations. */
+    UnitModifier,      /**< 'UM' */
+    Attack,            /**< 'AA' */
+    TextGlobal,        /**< 'TG', entries of Tglobal.dbf. */
+    LandmarkGlobal,    /**< 'MG', entries of GLmark.dbf. */
+    ItemGlobal,        /**< 'IG', entries of GItem.dbf. */
+    NobleAction,       /**< 'NA', entries of Gaction.dbf. */
+    DynamicUpgrade,    /**< 'DU' */
     DynamicAttack,     /**< 'DA', runtime-generated implementations of unit's primary attacks */
     DynamicAltAttack,  /**< 'AL', runtime-generated implementations of unit's alternative attacks */
     DynamicAttack2,    /**< 'DC', runtime-generated implementations of unit's secondary attacks */
-    DynamicAltAttack2, /**< 'AC', runtime-generated implementations of unit's alternative secondary attacks */
-    CampaignFile, /**< 'CC' */
-    // 20 for CW
-    // 21 for CO
-    Plan = 22,         /**< 'PN' */
+    DynamicAltAttack2, /**< 'AC', runtime-generated implementations of unit's alternative secondary
+                          attacks */
+    CampaignFile,      /**< 'CC' */
+    CW,                /**< TODO: figure out what is this */
+    CO,                /**< TODO: figure out what is this */
+    Plan,              /**< 'PN' */
     ObjectCount,       /**< 'OB', number of objects in scenario file. */
     ScenarioFile,      /**< 'SC' */
     Map,               /**< 'MP' */
@@ -89,14 +90,14 @@ enum class IdType : int
     Event,             /**< 'EV' */
     StackDestroyed,    /**< 'SD' */
     TalismanCharges,   /**< 'TC' */
-    // 52 for MT
-    Mountains = 53, /**< 'ML' */
-    SubRace,        /**< 'SR' */
-    // 55 for BR
-    QuestLog = 56,    /**< 'QL' */
-    TurnSummary,      /**< 'TS' */
-    ScenarioVariable, /**< 'SV' */
-    Invalid = 59
+    MT,                /**< TODO: figure out what is this */
+    Mountains,         /**< 'ML' */
+    SubRace,           /**< 'SR' */
+    BR,                /**< TODO: figure out what is this */
+    QuestLog,          /**< 'QL' */
+    TurnSummary,       /**< 'TS' */
+    ScenarioVariable,  /**< 'SV' */
+    Invalid,
 };
 
 /**
