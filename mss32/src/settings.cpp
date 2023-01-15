@@ -191,6 +191,8 @@ static void readDebugSettings(const sol::table& table, Settings::Debug& value)
 
     value.sendObjectsChangesTreshold = readSetting(category.value(), "sendObjectsChangesTreshold",
                                                    def.sendObjectsChangesTreshold);
+    value.logSinglePlayerMessages = readSetting(category.value(), "logSinglePlayerMessages",
+                                                def.logSinglePlayerMessages);
 }
 
 static void readEngineSettings(const sol::table& table, Settings::Engine& value)

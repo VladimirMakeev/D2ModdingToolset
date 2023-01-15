@@ -48,6 +48,7 @@
 #include "midgardscenariomap.h"
 #include "midmsgsender.h"
 #include "midunit.h"
+#include "mqnetplayer.h"
 #include "netmsg.h"
 #include "pickupdropinterf.h"
 #include "sitemerchantinterf.h"
@@ -128,6 +129,8 @@ struct OriginalFunctions
     game::CEncLayoutRuinApi::Api::Update encLayoutRuinUpdate;
 
     game::IMidMsgSenderVftable::SendObjectsChanges midServerLogicSendObjectsChanges;
+
+    game::IMqNetPlayerVftable::SendNetMessage netSinglePlayerSendMessage;
 };
 
 OriginalFunctions& getOriginalFunctions();

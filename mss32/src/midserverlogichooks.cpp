@@ -19,6 +19,7 @@
 
 #include "midserverlogichooks.h"
 #include "log.h"
+#include "logutils.h"
 #include "midgardscenariomap.h"
 #include "midserver.h"
 #include "midserverlogic.h"
@@ -27,6 +28,7 @@
 #include "settings.h"
 #include "utils.h"
 #include <fmt/format.h>
+#include <process.h>
 
 namespace hooks {
 
@@ -38,20 +40,27 @@ bool __fastcall midServerLogicSendObjectsChangesHooked(game::IMidMsgSender* this
     const auto scenarioMap = CMidServerLogicApi::get().getObjectMap(serverLogic);
     const auto& addedObjects = scenarioMap->addedObjects;
     const auto& changedObjects = scenarioMap->changedObjects;
+    const auto& objectsToErase = scenarioMap->objectsToErase;
 
-    logDebug("serverLogicSendObjects.log",
-             fmt::format("Sending scenario objects changes, added: {:d}, changed: {:d}",
-                         addedObjects.length, changedObjects.length));
+    auto logFileName = fmt::format("netMessages{:d}.log", _getpid());
+    logDebug(
+        logFileName,
+        fmt::format("Sending scenario objects changes, added: {:d}, changed: {:d}, erased: {:d}",
+                    addedObjects.length, changedObjects.length, objectsToErase.length));
 
-    auto totalLength = addedObjects.length + changedObjects.length;
-    if (totalLength > userSettings().debug.sendObjectsChangesTreshold) {
+    auto totalLength = addedObjects.length + changedObjects.length + objectsToErase.length;
+    if (totalLength >= userSettings().debug.sendObjectsChangesTreshold) {
         for (auto obj : addedObjects) {
-            logDebug("serverLogicSendObjects.log",
-                     fmt::format("Sending added scenario object {:s}", idToString(&obj)));
+            logDebug(logFileName, fmt::format("Added\t{:s}\t{:s}", idToString(&obj),
+                                                    getMidgardIdTypeDesc(&obj)));
         }
         for (auto obj : changedObjects) {
-            logDebug("serverLogicSendObjects.log",
-                     fmt::format("Sending changed scenario object {:s}", idToString(&obj)));
+            logDebug(logFileName, fmt::format("Changed\t{:s}\t{:s}", idToString(&obj),
+                                                    getMidgardIdTypeDesc(&obj)));
+        }
+        for (auto obj : objectsToErase) {
+            logDebug(logFileName, fmt::format("Erased\t{:s}\t{:s}", idToString(&obj),
+                                                    getMidgardIdTypeDesc(&obj)));
         }
     }
 

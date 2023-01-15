@@ -45,6 +45,7 @@ static std::array<Api, 4> functions = {{
         (Api::SummonUnitIdToPosition)0x645b37,
         (Api::ChangeType)0x599e59,
         (Api::ValidateId)0x57fb6f,
+        (Api::IdTypeToString)0x57fc80,
     },
     // Russobit
     Api{
@@ -61,6 +62,7 @@ static std::array<Api, 4> functions = {{
         (Api::SummonUnitIdToPosition)0x645b37,
         (Api::ChangeType)0x599e59,
         (Api::ValidateId)0x57fb6f,
+        (Api::IdTypeToString)0x57fc80,
     },
     // Gog
     Api{
@@ -77,6 +79,7 @@ static std::array<Api, 4> functions = {{
         (Api::SummonUnitIdToPosition)0x644367,
         (Api::ChangeType)0x598fe3,
         (Api::ValidateId)0x57f227,
+        (Api::IdTypeToString)0x57f338,
     },
     // Scenario Editor
     Api{
@@ -93,6 +96,7 @@ static std::array<Api, 4> functions = {{
         (Api::SummonUnitIdToPosition)nullptr,
         (Api::ChangeType)0x544a43,
         (Api::ValidateId)0x52747d,
+        (Api::IdTypeToString)0x52758e,
     },
 }};
 // clang-format on

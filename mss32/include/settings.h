@@ -127,6 +127,7 @@ struct Settings
     struct Debug
     {
         std::uint32_t sendObjectsChangesTreshold{0};
+        bool logSinglePlayerMessages{false};
     } debug;
 
     struct Engine

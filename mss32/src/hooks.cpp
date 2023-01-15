@@ -122,6 +122,8 @@
 #include "musichooks.h"
 #include "netmsghooks.h"
 #include "netplayerinfo.h"
+#include "netsingleplayer.h"
+#include "netsingleplayerhooks.h"
 #include "originalfunctions.h"
 #include "phasegame.h"
 #include "playerbuildings.h"
@@ -431,9 +433,13 @@ static Hooks getGameHooks()
 
     if (userSettings().debugMode) {
         // clang-format off
-        // Log changed objects ids being send by server to serverLogicSendObjects.log
+        // Log added/changed/erased objects ids being sent by server to netMessages<PID>.log
         if (userSettings().debug.sendObjectsChangesTreshold > 0) {
             hooks.emplace_back(HookInfo{CMidServerLogicApi::vftable().midMsgSender->sendObjectsChanges, midServerLogicSendObjectsChangesHooked, (void**)&orig.midServerLogicSendObjectsChanges});
+        }
+        // Log all net messages being sent by single player (both client and server) to netMessages<PID>.log
+        if (userSettings().debug.logSinglePlayerMessages) {
+            hooks.emplace_back(HookInfo{CNetSinglePlayerApi::vftable()->sendMessage, netSinglePlayerSendMessageHooked, (void**)&orig.netSinglePlayerSendMessage});
         }
         // clang-format on
     }
