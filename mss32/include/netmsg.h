@@ -55,6 +55,11 @@ static constexpr std::uint32_t netMessageNormalType{0xffff};
 /** Maximum allowed net message length in bytes. */
 static constexpr std::uint32_t netMessageMaxLength{0x80000};
 
+/** Used for sending messages between players in single, DPlay and Lobby sessions. */
+static constexpr std::uint32_t broadcastNetPlayerId{0};
+static constexpr std::uint32_t serverNetPlayerId{1};
+static constexpr std::uint32_t singleNetPlayerId{0xffffff};
+
 template <typename T = CNetMsgVftable>
 struct CNetMsgT
 {
