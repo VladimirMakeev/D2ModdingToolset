@@ -20,6 +20,7 @@
 #include "logutils.h"
 #include "midgardid.h"
 #include "netmsg.h"
+#include <array>
 
 namespace hooks {
 
@@ -41,77 +42,71 @@ const char* getMidgardIdTypeDesc(const game::CMidgardID* id)
 {
     using namespace game;
 
-    const auto& idApi = CMidgardIDApi::get();
+    static std::array<const char*, (size_t)IdType::Invalid + 1> descriptions = {{
+        "Empty",
+        "ApplicationText",
+        "Building",
+        "Race",
+        "Lord",
+        "Spell",
+        "UnitGlobal",
+        "UnitGenerated",
+        "UnitModifier",
+        "Attack",
+        "TextGlobal",
+        "LandmarkGlobal",
+        "ItemGlobal",
+        "NobleAction",
+        "DynamicUpgrade",
+        "DynamicAttack",
+        "DynamicAltAttack",
+        "DynamicAttack2",
+        "DynamicAltAttack2",
+        "CampaignFile",
+        "CW",
+        "CO",
+        "Plan",
+        "ObjectCount",
+        "ScenarioFile",
+        "Map",
+        "MapBlock",
+        "ScenarioInfo",
+        "SpellEffects",
+        "Fortification",
+        "Player",
+        "PlayerKnownSpells",
+        "Fog",
+        "PlayerBuildings",
+        "Road",
+        "Stack",
+        "Unit",
+        "Landmark",
+        "Item",
+        "Bag",
+        "Site",
+        "Ruin",
+        "Tomb",
+        "Rod",
+        "Crystal",
+        "Diplomacy",
+        "SpellCast",
+        "Location",
+        "StackTemplate",
+        "Event",
+        "StackDestroyed",
+        "TalismanCharges",
+        "MT",
+        "Mountains",
+        "SubRace",
+        "BR",
+        "QuestLog",
+        "TurnSummary",
+        "ScenarioVariable",
+        "Invalid",
+    }};
 
-    auto type = idApi.getType(id);
-
-#define RETURN_TYPE_DESC(TYPE)                                                                     \
-    if (type == IdType::##TYPE)                                                                    \
-        return #TYPE;
-
-    RETURN_TYPE_DESC(Empty)
-    RETURN_TYPE_DESC(ApplicationText)
-    RETURN_TYPE_DESC(Building)
-    RETURN_TYPE_DESC(Race)
-    RETURN_TYPE_DESC(Lord)
-    RETURN_TYPE_DESC(Spell)
-    RETURN_TYPE_DESC(UnitGlobal)
-    RETURN_TYPE_DESC(UnitGenerated)
-    RETURN_TYPE_DESC(UnitModifier)
-    RETURN_TYPE_DESC(Attack)
-    RETURN_TYPE_DESC(TextGlobal)
-    RETURN_TYPE_DESC(LandmarkGlobal)
-    RETURN_TYPE_DESC(ItemGlobal)
-    RETURN_TYPE_DESC(NobleAction)
-    RETURN_TYPE_DESC(DynamicUpgrade)
-    RETURN_TYPE_DESC(DynamicAttack)
-    RETURN_TYPE_DESC(DynamicAltAttack)
-    RETURN_TYPE_DESC(DynamicAttack2)
-    RETURN_TYPE_DESC(DynamicAltAttack2)
-    RETURN_TYPE_DESC(CampaignFile)
-    // 20 for CW
-    // 21 for CO
-    RETURN_TYPE_DESC(Plan)
-    RETURN_TYPE_DESC(ObjectCount)
-    RETURN_TYPE_DESC(ScenarioFile)
-    RETURN_TYPE_DESC(Map)
-    RETURN_TYPE_DESC(MapBlock)
-    RETURN_TYPE_DESC(ScenarioInfo)
-    RETURN_TYPE_DESC(SpellEffects)
-    RETURN_TYPE_DESC(Fortification)
-    RETURN_TYPE_DESC(Player)
-    RETURN_TYPE_DESC(PlayerKnownSpells)
-    RETURN_TYPE_DESC(Fog)
-    RETURN_TYPE_DESC(PlayerBuildings)
-    RETURN_TYPE_DESC(Road)
-    RETURN_TYPE_DESC(Stack)
-    RETURN_TYPE_DESC(Unit)
-    RETURN_TYPE_DESC(Landmark)
-    RETURN_TYPE_DESC(Item)
-    RETURN_TYPE_DESC(Bag)
-    RETURN_TYPE_DESC(Site)
-    RETURN_TYPE_DESC(Ruin)
-    RETURN_TYPE_DESC(Tomb)
-    RETURN_TYPE_DESC(Rod)
-    RETURN_TYPE_DESC(Crystal)
-    RETURN_TYPE_DESC(Diplomacy)
-    RETURN_TYPE_DESC(SpellCast)
-    RETURN_TYPE_DESC(Location)
-    RETURN_TYPE_DESC(StackTemplate)
-    RETURN_TYPE_DESC(Event)
-    RETURN_TYPE_DESC(StackDestroyed)
-    RETURN_TYPE_DESC(TalismanCharges)
-    // 52 for MT
-    RETURN_TYPE_DESC(Mountains)
-    RETURN_TYPE_DESC(SubRace)
-    // 55 for BR
-    RETURN_TYPE_DESC(QuestLog)
-    RETURN_TYPE_DESC(TurnSummary)
-    RETURN_TYPE_DESC(ScenarioVariable)
-    RETURN_TYPE_DESC(Invalid)
-
-    const char* result = nullptr;
-    return idApi.idTypeToString(&result, &type) ? result : "UNKNOWN ID TYPE";
+    auto type = (std::uint32_t)CMidgardIDApi::get().getType(id);
+    return type < descriptions.size() ? descriptions[type] : "UNKNOWN ID TYPE";
 }
 
 } // namespace hooks
