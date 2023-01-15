@@ -76,7 +76,7 @@ bool __fastcall midServerLogicSendRefreshInfoHooked(const game::CMidServerLogic*
     auto sendRefreshInfo = [&](bool& proceed) {
         CRefreshInfo refreshInfo{};
         refreshInfoApi.constructor2(&refreshInfo, &scenarioMap->scenarioFileId,
-                                    thisptr->coreData->unknown8);
+                                    thisptr->coreData->isExpansionContent);
 
         proceed = false;
         std::uint32_t count = 0;
