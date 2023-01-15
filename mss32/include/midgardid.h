@@ -245,6 +245,9 @@ struct Api
      */
     using ValidateId = CMidgardID*(__stdcall*)(CMidgardID* value, CMidgardID id);
     ValidateId validateId;
+
+    using IdTypeToString = bool(__stdcall*)(const char** result, IdType* idType);
+    IdTypeToString idTypeToString;
 };
 
 Api& get();
