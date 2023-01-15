@@ -20,6 +20,7 @@
 #ifndef MODIFIERUTILS_H
 #define MODIFIERUTILS_H
 
+#include "battlemsgdata.h"
 #include "idlist.h"
 #include "immunecat.h"
 #include "midgardid.h"
@@ -38,7 +39,6 @@ struct CUmStack;
 struct LAttackSource;
 struct LAttackClass;
 struct IAttack;
-struct BattleMsgData;
 
 enum class ModifierElementTypeFlag : int;
 } // namespace game
@@ -65,9 +65,15 @@ void getModifierAttackSource(game::CUmUnit* modifier, game::LAttackSource* value
 
 void getModifierAttackClass(game::CUmUnit* modifier, game::LAttackClass* value);
 
+bool isUnitAttackSourceWardRemoved(game::AttackSourceImmunityStatusesPatched immunityStatuses,
+                                   const game::LAttackSource* attackSource);
+
 void resetUnitAttackSourceWard(game::BattleMsgData* battleMsgData,
                                const game::CMidgardID* unitId,
                                game::CUmUnit* modifier);
+
+bool isUnitAttackClassWardRemoved(std::uint32_t immunityStatuses,
+                                  const game::LAttackClass* attackClass);
 
 void resetUnitAttackClassWard(game::BattleMsgData* battleMsgData,
                               const game::CMidgardID* unitId,

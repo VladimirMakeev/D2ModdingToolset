@@ -57,6 +57,7 @@ struct TextIds
         std::string randomDurationText;
         std::string singleTurnDurationText;
         std::string wholeBattleDurationText;
+        std::string removedAttackWard;
     } interf;
 
     struct Events

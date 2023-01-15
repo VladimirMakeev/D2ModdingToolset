@@ -25,6 +25,7 @@
 #include "dialoginterf.h"
 #include "dynupgrade.h"
 #include "enclayoutunit.h"
+#include "encparambase.h"
 #include "encunitdescriptor.h"
 #include "gameimages.h"
 #include "gameutils.h"
@@ -60,6 +61,9 @@ struct CEncLayoutUnitDataPatched : game::CEncLayoutUnitData
 {
     game::Vector<game::SmartPtr<game::IMqImage2>> modifierIcons;
     game::Vector<game::String> modifierTexts;
+
+    game::AttackSourceImmunityStatusesPatched attackSourceImmunityStatuses;
+    std::uint32_t attackClassImmunityStatuses;
 };
 
 game::IEncUnitDescriptor* createUnitDescriptor(const game::IMidgardObjectMap* objectMap,
@@ -308,6 +312,9 @@ game::CEncLayoutUnitData* __fastcall encLayoutUnitDataCtorHooked(game::CEncLayou
     patched->modifierTexts = {};
     stringArrayApi.reserve(&patched->modifierTexts, 1);
 
+    patched->attackSourceImmunityStatuses.patched = 0;
+    patched->attackClassImmunityStatuses = 0;
+
     return thisptr;
 }
 
@@ -338,6 +345,14 @@ void __fastcall encLayoutUnitInitializeHooked(game::CEncLayoutUnit* thisptr,
     using namespace game;
 
     const auto& dialogApi = CDialogInterfApi::get();
+    const auto& encParamBaseApi = CEncParamBaseApi::get();
+
+    auto data = (CEncLayoutUnitDataPatched*)thisptr->data;
+    data->attackSourceImmunityStatuses
+        .patched = encParamBaseApi.getData(encParam,
+                                           CEncParamBaseDataKey::AttackSourceImmunityStatuses, 0);
+    data->attackClassImmunityStatuses = encParamBaseApi.getData(
+        encParam, CEncParamBaseDataKey::AttackClassImmunityStatuses, 0);
 
     getOriginalFunctions().encLayoutUnitInitialize(thisptr, encParam);
 
@@ -364,7 +379,100 @@ void __fastcall encLayoutUnitInitializeHooked(game::CEncLayoutUnit* thisptr,
     addModifiersInfo(thisptr);
 }
 
-static std::string getImmuOrWardField(game::IEncUnitDescriptor* descriptor,
+static bool isModifiedImmunityToAttackSource(const game::IUsSoldier* soldierImpl,
+                                             const game::LAttackSource* attackSource,
+                                             const game::IdList& editorModifiers,
+                                             game::ImmuneId immuneId)
+{
+    using namespace game;
+
+    auto immune = soldierImpl->vftable->getImmuneByAttackSource(soldierImpl, attackSource);
+    if (immune->id == immuneId) {
+        return false;
+    }
+
+    for (auto modifierId : editorModifiers) {
+        if (isImmunityModifier(&modifierId, attackSource, immuneId)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+static void addAttackSourceImmunityText(std::string& result,
+                                        const game::IUsSoldier* soldierImpl,
+                                        game::ImmuneId immuneId,
+                                        const game::IdList& editorModifiers,
+                                        const game::List<game::LAttackSource>& sources,
+                                        game::AttackSourceImmunityStatusesPatched immunityStatuses)
+{
+    using namespace game;
+
+    for (const auto& source : sources) {
+        auto text = getAttackSourceText(&source);
+        if (immuneId == ImmuneId::Once
+            && isUnitAttackSourceWardRemoved(immunityStatuses, &source)) {
+            text = getRemovedAttackWardText(text);
+        } else if (isModifiedImmunityToAttackSource(soldierImpl, &source, editorModifiers,
+                                                    immuneId)) {
+            text = getModifiedStringText(text, true);
+        }
+
+        if (!result.empty() && !text.empty()) {
+            result += ", ";
+        }
+        result += text;
+    }
+}
+
+static bool isModifiedImmunityToAttackClass(const game::IUsSoldier* soldierImpl,
+                                            const game::LAttackClass* attackClass,
+                                            const game::IdList& editorModifiers,
+                                            game::ImmuneId immuneId)
+{
+    using namespace game;
+
+    auto immune = soldierImpl->vftable->getImmuneByAttackClass(soldierImpl, attackClass);
+    if (immune->id == immuneId) {
+        return false;
+    }
+
+    for (auto modifierId : editorModifiers) {
+        if (isImmunityclassModifier(&modifierId, attackClass, immuneId)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+static void addAttackClassImmunityText(std::string& result,
+                                       const game::IUsSoldier* soldierImpl,
+                                       game::ImmuneId immuneId,
+                                       const game::IdList& editorModifiers,
+                                       const game::List<game::LAttackClass>& classes,
+                                       std::uint32_t immunityStatuses)
+{
+    using namespace game;
+
+    for (const auto& class_ : classes) {
+        auto text = getAttackClassText(class_.id);
+        if (immuneId == ImmuneId::Once && isUnitAttackClassWardRemoved(immunityStatuses, &class_)) {
+            text = getRemovedAttackWardText(text);
+        } else if (isModifiedImmunityToAttackClass(soldierImpl, &class_, editorModifiers,
+                                                   immuneId)) {
+            text = getModifiedStringText(text, true);
+        }
+
+        if (!result.empty() && !text.empty()) {
+            result += ", ";
+        }
+        result += text;
+    }
+}
+
+static std::string getImmuOrWardField(const game::CEncLayoutUnit* layout,
                                       const game::IUsSoldier* soldierImpl,
                                       game::IEncUnitDescriptorVftable::GetAttackSources getSources,
                                       game::IEncUnitDescriptorVftable::GetAttackClasses getClasses,
@@ -375,6 +483,9 @@ static std::string getImmuOrWardField(game::IEncUnitDescriptor* descriptor,
 
     const auto& categoryListApi = CategoryListApi::get();
 
+    auto data = (CEncLayoutUnitDataPatched*)layout->data;
+    auto descriptor = data->unitDescriptor;
+
     List<LAttackSource> sources{};
     categoryListApi.constructor((CategoryList*)&sources);
     getSources(descriptor, &sources);
@@ -384,48 +495,10 @@ static std::string getImmuOrWardField(game::IEncUnitDescriptor* descriptor,
     getClasses(descriptor, &classes);
 
     std::string result;
-    for (const auto& source : sources) {
-        if (!result.empty()) {
-            result += ", ";
-        }
-
-        auto immune = soldierImpl->vftable->getImmuneByAttackSource(soldierImpl, &source);
-
-        bool modified = immune->id != immuneId;
-        if (modified) {
-            for (auto modifierId : editorModifiers) {
-                if (isImmunityModifier(&modifierId, &source, immuneId)) {
-                    modified = false;
-                    break;
-                }
-            }
-        }
-
-        auto text = getAttackSourceText(&source);
-        result += getModifiedStringText(text, modified);
-    }
-
-    for (const auto& class_ : classes) {
-        if (!result.empty()) {
-            result += ", ";
-        }
-
-        auto immune = soldierImpl->vftable->getImmuneByAttackClass(soldierImpl, &class_);
-
-        bool modified = immune->id != immuneId;
-        if (modified) {
-            for (auto modifierId : editorModifiers) {
-                if (isImmunityclassModifier(&modifierId, &class_, immuneId)) {
-                    modified = false;
-                    break;
-                }
-            }
-        }
-
-        auto text = getAttackClassText(class_.id);
-        result += getModifiedStringText(text, modified);
-    }
-
+    addAttackSourceImmunityText(result, soldierImpl, immuneId, editorModifiers, sources,
+                                data->attackSourceImmunityStatuses);
+    addAttackClassImmunityText(result, soldierImpl, immuneId, editorModifiers, classes,
+                               data->attackClassImmunityStatuses);
     if (result.empty()) {
         // "None"
         result = getInterfaceText("X005TA0469");
@@ -438,21 +511,27 @@ static std::string getImmuOrWardField(game::IEncUnitDescriptor* descriptor,
     return result;
 }
 
-static std::string getImmuField(game::IEncUnitDescriptor* descriptor,
+static std::string getImmuField(const game::CEncLayoutUnit* layout,
                                 const game::IUsSoldier* soldierImpl,
                                 const game::IdList& editorModifiers)
 {
-    return getImmuOrWardField(descriptor, soldierImpl,
+    auto data = layout->data;
+    auto descriptor = data->unitDescriptor;
+
+    return getImmuOrWardField(layout, soldierImpl,
                               descriptor->vftable->getAttackSourcesUnitIsImmuneTo,
                               descriptor->vftable->getAttackClassesUnitIsImmuneTo,
                               game::ImmuneId::Always, editorModifiers);
 }
 
-static std::string getWardField(game::IEncUnitDescriptor* descriptor,
+static std::string getWardField(const game::CEncLayoutUnit* layout,
                                 const game::IUsSoldier* soldierImpl,
                                 const game::IdList& editorModifiers)
 {
-    return getImmuOrWardField(descriptor, soldierImpl,
+    auto data = layout->data;
+    auto descriptor = data->unitDescriptor;
+
+    return getImmuOrWardField(layout, soldierImpl,
                               descriptor->vftable->getAttackSourcesUnitIsResistantTo,
                               descriptor->vftable->getAttackClassesUnitIsResistantTo,
                               game::ImmuneId::Once, editorModifiers);
@@ -766,8 +845,8 @@ static void setTxtStats(game::CEncLayoutUnit* layout,
     replace(text, "%HP2%", getHp2Field(descriptor, soldierImpl, editorModifiers));
     replace(text, "%ARMOR%", getArmorField(layout, soldierImpl, editorModifiers));
     replace(text, "%XP%", getXpField(descriptor, soldierImpl));
-    replace(text, "%IMMU%", getImmuField(descriptor, soldierImpl, editorModifiers));
-    replace(text, "%WARD%", getWardField(descriptor, soldierImpl, editorModifiers));
+    replace(text, "%IMMU%", getImmuField(layout, soldierImpl, editorModifiers));
+    replace(text, "%WARD%", getWardField(layout, soldierImpl, editorModifiers));
 
     auto textBox = CDialogInterfApi::get().findTextBox(layout->dialog, "TXT_STATS");
     CTextBoxInterfApi::get().setString(textBox, text.c_str());

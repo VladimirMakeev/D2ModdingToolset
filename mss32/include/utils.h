@@ -59,6 +59,9 @@ std::string idToString(const game::CMidgardID* id, bool lowercase = false);
 /** Returns interface text by specified id string. */
 std::string getInterfaceText(const char* textIdString);
 
+/** Returns interface text. Default value is used when textIdString is empty. */
+std::string getInterfaceText(const char* textIdString, const char* def);
+
 /** Returns global text by specified id. */
 const char* getGlobalText(const game::CMidgardID& textId);
 const char* getGlobalText(const std::string& textIdString);

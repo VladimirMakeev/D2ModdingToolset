@@ -119,6 +119,20 @@ std::string getInterfaceText(const char* textIdString)
     return {gameFunctions().getInterfaceText(&textId)};
 }
 
+std::string getInterfaceText(const char* textIdString, const char* def)
+{
+    using namespace game;
+
+    if (textIdString == nullptr || strlen(textIdString) == 0) {
+        return def;
+    }
+
+    CMidgardID textId{};
+    CMidgardIDApi::get().fromString(&textId, textIdString);
+
+    return {gameFunctions().getInterfaceText(&textId)};
+}
+
 const char* getGlobalText(const game::CMidgardID& textId)
 {
     using namespace game;

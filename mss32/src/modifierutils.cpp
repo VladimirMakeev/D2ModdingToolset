@@ -144,6 +144,15 @@ void getModifierAttackClass(game::CUmUnit* modifier, game::LAttackClass* value)
     LAttackClassTableApi::get().findCategoryById(attackClassTable, value, &attackClassId);
 }
 
+bool isUnitAttackSourceWardRemoved(game::AttackSourceImmunityStatusesPatched immunityStatuses,
+                                   const game::LAttackSource* attackSource)
+{
+    using namespace game;
+
+    std::uint32_t flag = 1 << gameFunctions().getAttackSourceWardFlagPosition(attackSource);
+    return immunityStatuses.patched & flag;
+}
+
 void resetUnitAttackSourceWard(game::BattleMsgData* battleMsgData,
                                const game::CMidgardID* unitId,
                                game::CUmUnit* modifier)
@@ -157,6 +166,15 @@ void resetUnitAttackSourceWard(game::BattleMsgData* battleMsgData,
 
     std::uint32_t flag = 1 << gameFunctions().getAttackSourceWardFlagPosition(&attackSource);
     unitInfo->attackSourceImmunityStatuses.patched &= ~flag;
+}
+
+bool isUnitAttackClassWardRemoved(std::uint32_t immunityStatuses,
+                                  const game::LAttackClass* attackClass)
+{
+    using namespace game;
+
+    std::uint32_t flag = 1 << gameFunctions().getAttackClassWardFlagPosition(attackClass);
+    return immunityStatuses & flag;
 }
 
 void resetUnitAttackClassWard(game::BattleMsgData* battleMsgData,

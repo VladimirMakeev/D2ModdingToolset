@@ -231,6 +231,15 @@ std::string getModifiedStringText(const std::string& value, bool modified)
     return result;
 }
 
+std::string getRemovedAttackWardText(const std::string& value)
+{
+    auto result = getInterfaceText(textIds().interf.removedAttackWard.c_str(),
+                                   "\\fMedBold;\\c100;000;000;%WARD%\\c000;000;000;\\fNormal;");
+
+    replace(result, "%WARD%", value);
+    return result;
+}
+
 std::string getAttackSourceText(const game::LAttackSource* source)
 {
     // Spell can have no source
