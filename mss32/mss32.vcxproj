@@ -416,6 +416,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\capitalraceset.cpp" />
     <ClCompile Include="src\pointset.cpp" />
     <ClCompile Include="src\raceset.cpp" />
+    <ClCompile Include="src\spinbuttoninterf.cpp" />
     <ClCompile Include="src\stackbattleactionmsg.cpp" />
     <ClCompile Include="src\stringandid.cpp" />
     <ClCompile Include="src\stringarray.cpp" />

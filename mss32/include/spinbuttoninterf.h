@@ -21,17 +21,20 @@
 #define SPINBUTTONINTERF_H
 
 #include "d2string.h"
+#include "functordispatch1.h"
 #include "interface.h"
 
 namespace game {
 
 struct CButtonInterf;
 struct CImage2TextBackground;
+struct CSpinButtonInterf;
+struct CDialogInterf;
 
 struct CSpinButtonInterfData
 {
     int textBoxChildIndex;
-    SmartPointer ptr;
+    SmartPtr<CBFunctorDispatch1<CSpinButtonInterf*>> onOptionChanged;
     Vector<String> options;
     int selectedOption;
     /**
@@ -61,6 +64,38 @@ struct CSpinButtonInterf : public CInterface
 };
 
 assert_size(CSpinButtonInterf, 12);
+
+namespace CSpinButtonInterfApi {
+
+struct Api
+{
+    /** Sets up specified integer values as spin button options. */
+    using SetValues = void(__thiscall*)(CSpinButtonInterf* thisptr, const Vector<int>* values);
+    SetValues setValues;
+
+    /** Sets up specified string as spin button options. */
+    using SetOptions = void(__thiscall*)(CSpinButtonInterf* thisptr, const Vector<String>* options);
+    SetOptions setOptions;
+
+    /** Sets up option with specified index as currently selected. */
+    using SetSelectedOption = void(__thiscall*)(CSpinButtonInterf* thisptr, int option);
+    SetSelectedOption setSelectedOption;
+
+    /**
+     * Assigns functor that is called each time selected spin button option is changed.
+     * Searches for spin button by its name in the provided dialog.
+     * @returns found spin button with bound callback set or nullptr if not found.
+     */
+    using AssignFunctor = CSpinButtonInterf*(__stdcall*)(CDialogInterf* dialog,
+                                                         const char* buttonName,
+                                                         const char* dialogName,
+                                                         SmartPointer* functor);
+    AssignFunctor assignFunctor;
+};
+
+Api& get();
+
+} // namespace CSpinButtonInterfApi
 
 } // namespace game
 
