@@ -86,6 +86,9 @@ namespace CMenuPhaseApi {
 
 struct Api
 {
+    using Constructor = CMenuPhase*(__thiscall*)(CMenuPhase* thisptr, int a2, int a3);
+    Constructor constructor;
+
     /** Sets menu transition index, implements menu screen transitions logic. */
     using SetTransition = void(__thiscall*)(CMenuPhase* thisptr, int transition);
     SetTransition setTransition;
@@ -188,6 +191,8 @@ struct Api
 };
 
 Api& get();
+
+IMqNetSystemVftable* vftable();
 
 } // namespace CMenuPhaseApi
 
