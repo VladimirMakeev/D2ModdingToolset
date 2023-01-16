@@ -23,17 +23,22 @@
 #include "imagepointlist.h"
 #include "interffullscreen.h"
 #include "smartptr.h"
+#include "uievent.h"
 #include <cstddef>
 
 namespace game {
 
 struct CDialogInterf;
 struct CMenuPhase;
+struct CSpinButtonInterf;
 
 struct CMenuBaseData
 {
     CMenuPhase* menuPhase;
-    char unknown[44];
+    CDialogInterf* menuDialog;
+    UiEvent uiEvent;
+    SmartPtr<IMqImage2> transitionAnimation;
+    CMqPoint animationCenter;
 };
 
 assert_size(CMenuBaseData, 48);
@@ -93,6 +98,18 @@ struct Api
                                                                   CMenuBase* menu,
                                                                   ListBoxDisplayCallback* callback);
     CreateListBoxDisplayFunctor createListBoxDisplayFunctor;
+
+    using SpinButtonCallback = void(__thiscall*)(CMenuBase* thisptr, CSpinButtonInterf* spinButton);
+
+    /**
+     * Creates functor for spin buttons of CMenuBase and its childs.
+     * Reused from CMenuLobbyHost.
+     */
+    using CreateSpinButtonFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                              int a2,
+                                                              CMenuBase* menu,
+                                                              const SpinButtonCallback* callback);
+    CreateSpinButtonFunctor createSpinButtonFunctor;
 };
 
 Api& get();
