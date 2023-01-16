@@ -26,6 +26,7 @@
 namespace game {
 
 struct String;
+struct CMenuPhase;
 
 /** Represents base class for different skirmish menus. */
 struct CMenuNewSkirmish : public CMenuBase
@@ -39,12 +40,12 @@ struct Api
      * Initializes CMenuNewSkirmish object, creates menu based on dialogName.
      * Creates menu ui elements and assigns functors and hotkeys to them.
      * @param[in] thisptr pointer to existing CMenuNewSkirmish object.
-     * @param a1 meaning unknown.
+     * @param[in] menuPhase menu phase object.
      * @param[in] dialogName name of dialog to create menu and ui elements from.
      * @returns thisptr.
      */
     using Constructor = CMenuNewSkirmish*(__thiscall*)(CMenuNewSkirmish* thisptr,
-                                                       int a1,
+                                                       CMenuPhase* menuPhase,
                                                        const char* dialogName);
     Constructor constructor;
 
