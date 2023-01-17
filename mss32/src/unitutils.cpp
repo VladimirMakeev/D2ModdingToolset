@@ -590,4 +590,17 @@ bool hasCriticalHitLeaderAbility(const game::IUsUnit* unitImpl)
     return stackLeader->vftable->hasAbility(stackLeader, abilities.criticalHit);
 }
 
+void validateUnit(game::CMidUnit* unit)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    IUsUnit* origImpl = unit->transformed ? hooks::getUnitImpl(&unit->origTypeId) : unit->unitImpl;
+    auto soldier = fn.castUnitImplToSoldier(origImpl);
+
+    unit->currentXp = std::clamp(unit->currentXp, 0, soldier->vftable->getXpNext(soldier));
+    unit->currentHp = std::clamp(unit->currentHp, 0, getUnitHpMax(unit));
+}
+
 } // namespace hooks
