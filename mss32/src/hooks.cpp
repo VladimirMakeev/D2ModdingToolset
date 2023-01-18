@@ -607,6 +607,8 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{TUnitModifierApi::vftable()->destructor, unitModifierDtorHooked});
     hooks.emplace_back(HookInfo{CMidUnitApi::get().addModifier, addModifierHooked});
     hooks.emplace_back(HookInfo{CMidUnitApi::vftable()->stream, midUnitStreamHooked});
+    hooks.emplace_back(
+        HookInfo{fn.getStackFortRuinGroupForChange, getStackFortRuinGroupForChangeHooked});
 
     // Support custom modifiers display for unit encyclopedia
     hooks.emplace_back(HookInfo{CEncLayoutUnitApi::get().constructor, encLayoutUnitCtorHooked});
@@ -2143,6 +2145,28 @@ bool __fastcall scenarioMapStreamHooked(game::CMidgardScenarioMap* scenarioMap,
     }
 
     return result;
+}
+
+void __stdcall getStackFortRuinGroupForChangeHooked(game::IMidgardObjectMap* objectMap,
+                                                    const game::CMidgardID* objectId,
+                                                    game::CMidUnitGroup** result)
+{
+    using namespace game;
+
+    auto group = getGroup(objectMap, objectId, true);
+    if (group) {
+        const auto& units = group->units;
+        for (auto it = units.bgn; it != units.end; it++) {
+            // Fix unit stats (hp/xp) validation on group changes with custom modifiers applied
+            // ("aura" hp overflow issues and alike)
+            // Unable to check if a unit really requires validation because the group changes come
+            // *after* this method is called.
+            // The validation itself will be performed in CMidUnitStreamHooked.
+            objectMap->vftable->findScenarioObjectByIdForChange(objectMap, it);
+        }
+    }
+
+    *result = group;
 }
 
 } // namespace hooks
