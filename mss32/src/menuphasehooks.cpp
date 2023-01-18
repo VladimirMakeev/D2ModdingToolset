@@ -22,9 +22,30 @@
 #include "menucustomlobby.h"
 #include "menuphase.h"
 #include "midgard.h"
+#include "originalfunctions.h"
+#include "scenariotemplates.h"
 #include <fmt/format.h>
 
 namespace hooks {
+
+game::CMenuPhase* __fastcall menuPhaseCtorHooked(game::CMenuPhase* thisptr,
+                                                 int /*%edx*/,
+                                                 int a2,
+                                                 int a3)
+{
+    getOriginalFunctions().menuPhaseCtor(thisptr, a2, a3);
+
+    loadScenarioTemplates();
+
+    return thisptr;
+}
+
+void __fastcall menuPhaseDtorHooked(game::CMenuPhase* thisptr, int /*%edx*/, char flags)
+{
+    freeScenarioTemplates();
+
+    getOriginalFunctions().menuPhaseDtor(thisptr, flags);
+}
 
 void __fastcall menuPhaseSetTransitionHooked(game::CMenuPhase* thisptr,
                                              int /*%edx*/,

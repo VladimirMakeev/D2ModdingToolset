@@ -101,6 +101,8 @@ struct OriginalFunctions
 
     game::IEffectResultApi::Api::Create createEffectResult;
 
+    game::CMenuPhaseApi::Api::Constructor menuPhaseCtor;
+    game::IMqNetSystemVftable::Destructor menuPhaseDtor;
     game::CMenuPhaseApi::Api::SetTransition menuPhaseSetTransition;
     game::CMenuProtocolApi::Api::DisplayCallback menuProtocolDisplayCallback;
     game::CMenuProtocolApi::Api::ButtonHandler menuProtocolContinueHandler;

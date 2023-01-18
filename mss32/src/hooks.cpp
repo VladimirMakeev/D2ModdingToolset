@@ -183,8 +183,9 @@ static Hooks getGameHooks()
         {CBuildingBranchApi::get().constructor, buildingBranchCtorHooked},
         // Allow alchemists to buff retreating units
         {CBatAttackGiveAttackApi::vftable()->canPerform, giveAttackCanPerformHooked},
-        // Random map generation
-        //HookInfo{CMenuNewSkirmishSingleApi::get().constructor, menuNewSkirmishSingleCtorHooked},
+        // Random scenario generator templates
+        {CMenuPhaseApi::get().constructor, menuPhaseCtorHooked, (void**)&orig.menuPhaseCtor},
+        {CMenuPhaseApi::vftable()->destructor, menuPhaseDtorHooked, (void**)&orig.menuPhaseDtor},
         // Support custom battle attack objects
         {fn.createBatAttack, createBatAttackHooked, (void**)&orig.createBatAttack},
         // Support immunity bitmask in BattleMsgData
@@ -325,6 +326,8 @@ static Hooks getGameHooks()
         {CMidUnitApi::get().upgrade, upgradeHooked},
         // Fix doppelganger attack using alternative attack when attacker is transformed (by doppelganger, drain-level, transform-self/other attacks)
         {battle.cannotUseDoppelgangerAttack, cannotUseDoppelgangerAttackHooked},
+        // Support new menu windows
+        {CMenuPhaseApi::get().setTransition, menuPhaseSetTransitionHooked, (void**)&orig.menuPhaseSetTransition},
     };
     // clang-format on
 
@@ -411,8 +414,6 @@ static Hooks getGameHooks()
 
     if (isLobbySupported()) {
         // clang-format off
-        // Support new menu windows
-        hooks.emplace_back(HookInfo{CMenuPhaseApi::get().setTransition, menuPhaseSetTransitionHooked, (void**)&orig.menuPhaseSetTransition});
         // Support custom lobby server
         hooks.emplace_back(HookInfo{CMenuProtocolApi::get().createMenu, menuProtocolCreateMenuHooked});
         hooks.emplace_back(HookInfo{CMenuProtocolApi::get().continueHandler, menuProtocolContinueHandlerHooked, (void**)&orig.menuProtocolContinueHandler});

@@ -27,10 +27,17 @@ struct CMenuPhase;
 
 namespace hooks {
 
+game::CMenuPhase* __fastcall menuPhaseCtorHooked(game::CMenuPhase* thisptr,
+                                                 int /*%edx*/,
+                                                 int a2,
+                                                 int a3);
+
+void __fastcall menuPhaseDtorHooked(game::CMenuPhase* thisptr, int /*%edx*/, char flags);
+
 void __fastcall menuPhaseSetTransitionHooked(game::CMenuPhase* thisptr,
                                              int /*%edx*/,
                                              int transition);
 
-}
+} // namespace hooks
 
 #endif // MENUPHASEHOOKS_H
