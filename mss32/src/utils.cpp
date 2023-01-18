@@ -77,6 +77,12 @@ const std::filesystem::path& modifiersFolder()
     return folder;
 }
 
+const std::filesystem::path& templatesFolder()
+{
+    static const std::filesystem::path folder{gameFolder() / "Templates"};
+    return folder;
+}
+
 const std::filesystem::path& exePath()
 {
     static std::filesystem::path exe{};

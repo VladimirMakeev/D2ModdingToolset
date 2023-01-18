@@ -1112,6 +1112,9 @@
     <ClCompile Include="src\spinbuttoninterf.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\scenariotemplates.cpp">
+      <Filter>features\random scenario generator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2868,6 +2871,9 @@
     </ClInclude>
     <ClInclude Include="include\aitactic.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scenariotemplates.h">
+      <Filter>features\random scenario generator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
