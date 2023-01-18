@@ -62,6 +62,10 @@ struct Api
                                        IMqImage2* image,
                                        const CMqPoint* offset);
     SetImage setImage;
+
+    /** Assigns mouse button press functor. */
+    using AssignFunctor = void(__thiscall*)(CPictureInterf* thisptr, SmartPointer* functor);
+    AssignFunctor assignFunctor;
 };
 
 Api& get();
