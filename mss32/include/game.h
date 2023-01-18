@@ -57,6 +57,8 @@ struct CUnitGenerator;
 struct CAttackData;
 struct CDynUpgrade;
 struct CMidStack;
+struct CFortification;
+struct CMidRuin;
 struct CMidgardPlan;
 struct IMqImage2;
 struct IEncUnitDescriptor;
@@ -196,6 +198,16 @@ using GetAttackSourceWardFlagPosition =
 using GetStackFortRuinGroup = CMidUnitGroup*(__thiscall*)(void* thisptr,
                                                           const IMidgardObjectMap* objectMap,
                                                           const CMidgardID* objectId);
+
+using GetStackFortRuinGroupForChange = void(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                        const CMidgardID* objectId,
+                                                        CMidUnitGroup** result);
+
+using GetStackFortRuinForChange = void(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                   const CMidgardID* objectId,
+                                                   CMidStack** stack,
+                                                   CFortification** fort,
+                                                   CMidRuin** ruin);
 
 /**
  * Returns id of the object with the group the unit belongs to.
@@ -647,6 +659,8 @@ struct Functions
     AttackClassToString attackClassToString;
     GetAttackSourceWardFlagPosition getAttackSourceWardFlagPosition;
     GetStackFortRuinGroup getStackFortRuinGroup;
+    GetStackFortRuinGroupForChange getStackFortRuinGroupForChange;
+    GetStackFortRuinForChange getStackFortRuinForChange;
     GetStackFortRuinId getStackFortRuinId;
     GetStackIdByUnitId getStackIdByUnitId;
     GetFortIdByUnitId getFortIdByUnitId;
