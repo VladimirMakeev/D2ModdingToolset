@@ -47,6 +47,9 @@
     <Filter Include="features\custom event conditions">
       <UniqueIdentifier>{a12ec29a-1852-47f8-bff4-1fa0ceca32e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\random scenario generator">
+      <UniqueIdentifier>{54ad4f5d-bf7a-487f-9a3c-94547ca33f44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\fmt\src\format.cc">

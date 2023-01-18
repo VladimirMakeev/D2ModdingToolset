@@ -61,7 +61,7 @@
       <ConformanceMode>false</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\Detours\src;$(ProjectDir)..\GSL\include;$(ProjectDir)..\fmt\include;$(ProjectDir)include;$(ProjectDir)include\dbf;$(ProjectDir)..\lua;$(ProjectDir)..\sol2\single\include;$(ProjectDir)include\bindings;$(ProjectDir)..\SLikeNet\Source;$(ProjectDir)..\SLikeNet\DependentExtensions\Lobby2;$(ProjectDir)..\SLikeNet\DependentExtensions\Lobby2\Rooms;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Detours\src;$(ProjectDir)..\GSL\include;$(ProjectDir)..\fmt\include;$(ProjectDir)include;$(ProjectDir)include\dbf;$(ProjectDir)..\lua;$(ProjectDir)..\sol2\single\include;$(ProjectDir)include\bindings;$(ProjectDir)..\SLikeNet\Source;$(ProjectDir)..\SLikeNet\DependentExtensions\Lobby2;$(ProjectDir)..\SLikeNet\DependentExtensions\Lobby2\Rooms;$(ProjectDir)..\D2RSG\ScenarioGenerator\src;$(ProjectDir)..\D2RSG\ScenarioGenerator\src\scenario;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -69,7 +69,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <ModuleDefinitionFile>module.def</ModuleDefinitionFile>
-      <AdditionalDependencies>$(SolutionDir)Lib\SLikeNet_LibStatic_Debug_Win32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Lib\SLikeNet_LibStatic_Debug_Win32.lib;ws2_32.lib;$(SolutionDir)$(Configuration)\ScenarioGenerator.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>if not exist detours.lib (
@@ -90,7 +90,7 @@ call ..\buildDetours.bat ..\Detours
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\Detours\src;$(ProjectDir)..\GSL\include;$(ProjectDir)..\fmt\include;$(ProjectDir)include;$(ProjectDir)include\dbf;$(ProjectDir)..\lua;$(ProjectDir)..\sol2\single\include;$(ProjectDir)include\bindings;$(ProjectDir)..\SLikeNet\Source;$(ProjectDir)..\SLikeNet\DependentExtensions\Lobby2;$(ProjectDir)..\SLikeNet\DependentExtensions\Lobby2\Rooms;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Detours\src;$(ProjectDir)..\GSL\include;$(ProjectDir)..\fmt\include;$(ProjectDir)include;$(ProjectDir)include\dbf;$(ProjectDir)..\lua;$(ProjectDir)..\sol2\single\include;$(ProjectDir)include\bindings;$(ProjectDir)..\SLikeNet\Source;$(ProjectDir)..\SLikeNet\DependentExtensions\Lobby2;$(ProjectDir)..\SLikeNet\DependentExtensions\Lobby2\Rooms;$(ProjectDir)..\D2RSG\ScenarioGenerator\src;$(ProjectDir)..\D2RSG\ScenarioGenerator\src\scenario;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -100,7 +100,7 @@ call ..\buildDetours.bat ..\Detours
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <ModuleDefinitionFile>module.def</ModuleDefinitionFile>
-      <AdditionalDependencies>$(SolutionDir)Lib\SLikeNet_LibStatic_Release_Win32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Lib\SLikeNet_LibStatic_Release_Win32.lib;ws2_32.lib;$(SolutionDir)$(Configuration)\ScenarioGenerator.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>if not exist detours.lib (
