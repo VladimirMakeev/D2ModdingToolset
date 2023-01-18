@@ -104,8 +104,9 @@ const game::IMidgardObjectMap* getObjectMap()
     }
 }
 
-const game::CMidUnitGroup* getGroup(const game::IMidgardObjectMap* objectMap,
-                                    const game::CMidgardID* groupId)
+game::CMidUnitGroup* getGroup(game::IMidgardObjectMap* objectMap,
+                              const game::CMidgardID* groupId,
+                              bool forChange)
 {
     using namespace game;
 
@@ -113,23 +114,30 @@ const game::CMidUnitGroup* getGroup(const game::IMidgardObjectMap* objectMap,
     const auto& rtti = RttiApi::rtti();
     const auto dynamicCast = RttiApi::get().dynamicCast;
 
-    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, groupId);
+    auto obj = forChange ? objectMap->vftable->findScenarioObjectByIdForChange(objectMap, groupId)
+                         : objectMap->vftable->findScenarioObjectById(objectMap, groupId);
     switch (CMidgardIDApi::get().getType(groupId)) {
     case IdType::Stack: {
-        auto stack = (const CMidStack*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType,
-                                                   rtti.CMidStackType, 0);
+        auto stack = (CMidStack*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType,
+                                             rtti.CMidStackType, 0);
         return stack ? &stack->group : nullptr;
     }
     case IdType::Fortification: {
-        auto fortification = static_cast<const CFortification*>(obj);
+        auto fortification = static_cast<CFortification*>(obj);
         return fortification ? &fortification->group : nullptr;
     }
     case IdType::Ruin:
-        auto ruin = static_cast<const CMidRuin*>(obj);
+        auto ruin = static_cast<CMidRuin*>(obj);
         return ruin ? &ruin->group : nullptr;
     }
 
     return nullptr;
+}
+
+const game::CMidUnitGroup* getGroup(const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* groupId)
+{
+    return getGroup(const_cast<game::IMidgardObjectMap*>(objectMap), groupId, false);
 }
 
 const game::CMidUnitGroup* getAllyOrEnemyGroup(const game::IMidgardObjectMap* objectMap,
