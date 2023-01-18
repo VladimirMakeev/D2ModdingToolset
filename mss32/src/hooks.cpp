@@ -93,6 +93,7 @@
 #include "menuloadskirmishmultihooks.h"
 #include "menunewskirmishhooks.h"
 #include "menunewskirmishsingle.h"
+#include "menunewskirmishsinglehooks.h"
 #include "menuphasehooks.h"
 #include "menuprotocolhooks.h"
 #include "middatacache.h"
@@ -183,6 +184,8 @@ static Hooks getGameHooks()
         {CBuildingBranchApi::get().constructor, buildingBranchCtorHooked},
         // Allow alchemists to buff retreating units
         {CBatAttackGiveAttackApi::vftable()->canPerform, giveAttackCanPerformHooked},
+        // Random scenario generator
+        {CMenuNewSkirmishSingleApi::get().constructor, menuNewSkirmishSingleCtorHooked, (void**)&orig.menuNewSkirmishSingleCtor},
         // Random scenario generator templates
         {CMenuPhaseApi::get().constructor, menuPhaseCtorHooked, (void**)&orig.menuPhaseCtor},
         {CMenuPhaseApi::vftable()->destructor, menuPhaseDtorHooked, (void**)&orig.menuPhaseDtor},

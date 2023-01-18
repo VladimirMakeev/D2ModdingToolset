@@ -21,6 +21,7 @@
 #include "log.h"
 #include "menucustomlobby.h"
 #include "menuphase.h"
+#include "menurandomscenariosingle.h"
 #include "midgard.h"
 #include "originalfunctions.h"
 #include "scenariotemplates.h"
@@ -160,9 +161,29 @@ void __fastcall menuPhaseSetTransitionHooked(game::CMenuPhase* thisptr,
             logDebug("transitions.log", "current is 27");
             menuPhase.switchToNewSkirmish(thisptr);
             break;
-        case 6:
+        case 6: {
             logDebug("transitions.log", "current is 6");
-            menuPhase.switchTo15Or28(thisptr);
+            if (next == 0) {
+                logDebug("transitions.log", "switch to 15 or 28");
+                menuPhase.switchTo15Or28(thisptr);
+            } else if (next == 1) {
+                // Create random scenario single menu window during fullscreen animation
+                auto data = thisptr->data;
+                CMenuPhaseApi::Api::CreateMenuCallback tmp = createMenuRandomScenarioSingle;
+                CMenuPhaseApi::Api::CreateMenuCallback* callback = &tmp;
+                logDebug("transitions.log", "Try to transition to 37");
+                menuPhase.doTransition(thisptr, &data->transitionNumber, &data->interfManager,
+                                       &data->currentMenu, &data->transitionAnimation, 37, nullptr,
+                                       &callback);
+            } else {
+                logError("mssProxyError.log", "Invalid next transition from state 6");
+                return;
+            }
+            break;
+        }
+        case 37:
+            // CMenuRandomScenarioSingle state
+            logDebug("transitions.log", "current is 37");
             break;
         case 28:
             logDebug("transitions.log", "current is 28");

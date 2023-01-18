@@ -40,6 +40,7 @@
 #include "menubase.h"
 #include "menuload.h"
 #include "menunewskirmishmulti.h"
+#include "menunewskirmishsingle.h"
 #include "menuphase.h"
 #include "menuprotocol.h"
 #include "midevcondition.h"
@@ -126,6 +127,8 @@ struct OriginalFunctions
     game::CEncLayoutRuinApi::Api::Update encLayoutRuinUpdate;
 
     game::IMidMsgSenderVftable::SendObjectsChanges midServerLogicSendObjectsChanges;
+
+    game::CMenuNewSkirmishSingleApi::Api::Constructor menuNewSkirmishSingleCtor;
 };
 
 OriginalFunctions& getOriginalFunctions();

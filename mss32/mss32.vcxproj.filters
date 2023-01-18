@@ -1109,6 +1109,12 @@
     <ClCompile Include="src\midserverlogichooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="src\menurandomscenariosingle.cpp">
+      <Filter>features\random scenario generator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\menunewskirmishsinglehooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
     <ClCompile Include="src\spinbuttoninterf.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -2871,6 +2877,12 @@
     </ClInclude>
     <ClInclude Include="include\aitactic.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menurandomscenariosingle.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menunewskirmishsinglehooks.h">
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\scenariotemplates.h">
       <Filter>features\random scenario generator</Filter>

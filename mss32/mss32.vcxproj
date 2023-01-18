@@ -266,6 +266,8 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\editor.cpp" />
     <ClCompile Include="src\interfaceutils.cpp" />
     <ClCompile Include="src\enclayoutstack.cpp" />
+    <ClCompile Include="src\menunewskirmishsinglehooks.cpp" />
+    <ClCompile Include="src\menurandomscenariosingle.cpp" />
     <ClCompile Include="src\midgardscenariomap.cpp" />
     <ClCompile Include="src\midserverlogichooks.cpp" />
     <ClCompile Include="src\scenariotemplates.cpp" />
@@ -654,6 +656,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\interfborderdisplay.h" />
     <ClInclude Include="include\interfaceutils.h" />
     <ClInclude Include="include\leaderunitdescriptor.h" />
+    <ClInclude Include="include\menunewskirmishsinglehooks.h" />
+    <ClInclude Include="include\menurandomscenariosingle.h" />
     <ClInclude Include="include\midanim2.h" />
     <ClInclude Include="include\midanim2base.h" />
     <ClInclude Include="include\midanim2system.h" />
