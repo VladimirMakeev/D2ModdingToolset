@@ -53,6 +53,10 @@ bool isGreaterPickRandomIfEqual(int first, int second);
  */
 const game::IMidgardObjectMap* getObjectMap();
 
+game::CMidUnitGroup* getGroup(game::IMidgardObjectMap* objectMap,
+                              const game::CMidgardID* groupId,
+                              bool forChange);
+
 /** Analogue of GetStackFortRuinGroup that is absent in Scenario Editor. */
 const game::CMidUnitGroup* getGroup(const game::IMidgardObjectMap* objectMap,
                                     const game::CMidgardID* groupId);
