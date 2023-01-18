@@ -33,7 +33,11 @@ static std::array<Api, 3> functions = {{
         (Api::ButtonCallback)0x4dcf9e,
         (Api::CreateButtonFunctor)0x4ea842,
         (Api::CreateListBoxDisplayFunctor)0x4e563f,
-        (Api::CreateSpinButtonFunctor)0x4E5867,
+        (Api::CreateListBoxDisplayTextFunctor)0x4ea88e,
+        (Api::ListBoxCallback)0x4e9cb3,
+        (Api::CreateListBoxFunctor)0x4ea8da,
+        (Api::CreateSpinButtonFunctor)0x4e5867,
+        (Api::CreatePictureFunctor)0x492cb0,
     },
     // Russobit
     Api{
@@ -43,7 +47,11 @@ static std::array<Api, 3> functions = {{
         (Api::ButtonCallback)0x4dcf9e,
         (Api::CreateButtonFunctor)0x4ea842,
         (Api::CreateListBoxDisplayFunctor)0x4e563f,
-        (Api::CreateSpinButtonFunctor)0x4E5867,
+        (Api::CreateListBoxDisplayTextFunctor)0x4ea88e,
+        (Api::ListBoxCallback)0x4e9cb3,
+        (Api::CreateListBoxFunctor)0x4ea8da,
+        (Api::CreateSpinButtonFunctor)0x4e5867,
+        (Api::CreatePictureFunctor)0x492cb0,
     },
     // Gog
     Api{
@@ -53,7 +61,11 @@ static std::array<Api, 3> functions = {{
         (Api::ButtonCallback)0x4dbeae,
         (Api::CreateButtonFunctor)0x4e9cdd,
         (Api::CreateListBoxDisplayFunctor)0x4e4d4c,
+        (Api::CreateListBoxDisplayTextFunctor)0x4e9d29,
+        (Api::ListBoxCallback)0x4e914e,
+        (Api::CreateListBoxFunctor)0x4e9d75,
         (Api::CreateSpinButtonFunctor)0x4e4f74,
+        (Api::CreatePictureFunctor)0x492766,
     },
 }};
 // clang-format on

@@ -31,6 +31,8 @@ namespace game {
 struct CDialogInterf;
 struct CMenuPhase;
 struct CSpinButtonInterf;
+struct String;
+struct CPictureInterf;
 
 struct CMenuBaseData
 {
@@ -99,6 +101,51 @@ struct Api
                                                                   ListBoxDisplayCallback* callback);
     CreateListBoxDisplayFunctor createListBoxDisplayFunctor;
 
+    struct ListBoxDisplayTextCallback
+    {
+        using Callback = void(__thiscall*)(CMenuBase* thisptr,
+                                           String* string,
+                                           bool,
+                                           int selectedIndex);
+        Callback callback;
+        int unknown;
+    };
+
+    /**
+     * Creates functor for list box with text display.
+     * Reused from CMenuNewSkirmish.
+     * @param[in] functor pointer to existing functor to initialize.
+     * @param a2 meaning unknown.
+     * @param[in] menu
+     * @param[in] pointer to list box display text callback.
+     * @returns initialized functor.
+     */
+    using CreateListBoxDisplayTextFunctor =
+        SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                  int a2,
+                                  CMenuBase* menu,
+                                  const ListBoxDisplayTextCallback* callback);
+    CreateListBoxDisplayTextFunctor createListBoxDisplayTextFunctor;
+
+    /** Callback function signature for list box. */
+    using ListBoxCallback = void(__thiscall*)(CMenuBase* thisptr, int selectedIndex);
+    ListBoxCallback listBoxCallback;
+
+    /**
+     * Creates functor for list box.
+     * Reused from CMenuNewSkirmish.
+     * @param[in] functor pointer to existing functor to initialize.
+     * @param a2 meaning unknown.
+     * @param[in] menu
+     * @param[in] pointer to list box callback.
+     * @returns initialized functor.
+     */
+    using CreateListBoxFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                           int a2,
+                                                           CMenuBase* menu,
+                                                           const ListBoxCallback* callback);
+    CreateListBoxFunctor createListBoxFunctor;
+
     using SpinButtonCallback = void(__thiscall*)(CMenuBase* thisptr, CSpinButtonInterf* spinButton);
 
     /**
@@ -110,6 +157,25 @@ struct Api
                                                               CMenuBase* menu,
                                                               const SpinButtonCallback* callback);
     CreateSpinButtonFunctor createSpinButtonFunctor;
+
+    struct PictureCallback
+    {
+        using Callback = void(__thiscall*)(CMenuBase* thisptr,
+                                           std::uint32_t mouseButton,
+                                           CPictureInterf* picture);
+        Callback callback;
+        int unknown;
+    };
+
+    /**
+     * Creates functor for picture that will handle mouse press events.
+     * Reused from CStratInterf. We don't care if it is direct child of CInterface or not.
+     */
+    using CreatePictureFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                           int a2,
+                                                           CMenuBase* menu,
+                                                           const PictureCallback* callback);
+    CreatePictureFunctor createPictureFunctor;
 };
 
 Api& get();
