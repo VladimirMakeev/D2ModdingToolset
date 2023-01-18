@@ -52,15 +52,15 @@ bool __fastcall midServerLogicSendObjectsChangesHooked(game::IMidMsgSender* this
     if (totalLength >= userSettings().debug.sendObjectsChangesTreshold) {
         for (auto obj : addedObjects) {
             logDebug(logFileName, fmt::format("Added\t{:s}\t{:s}", idToString(&obj),
-                                                    getMidgardIdTypeDesc(&obj)));
+                                              getMidgardIdTypeDesc(&obj)));
         }
         for (auto obj : changedObjects) {
             logDebug(logFileName, fmt::format("Changed\t{:s}\t{:s}", idToString(&obj),
-                                                    getMidgardIdTypeDesc(&obj)));
+                                              getMidgardIdTypeDesc(&obj)));
         }
         for (auto obj : objectsToErase) {
             logDebug(logFileName, fmt::format("Erased\t{:s}\t{:s}", idToString(&obj),
-                                                    getMidgardIdTypeDesc(&obj)));
+                                              getMidgardIdTypeDesc(&obj)));
         }
     }
 
