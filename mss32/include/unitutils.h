@@ -83,6 +83,8 @@ bool isStackLeaderAndAllowedToUseBattleItems(const game::IMidgardObjectMap* obje
                                              const game::BattleMsgData* battleMsgData);
 bool hasCriticalHitLeaderAbility(const game::IUsUnit* unitImpl);
 
+void validateUnit(game::CMidUnit* unit);
+
 } // namespace hooks
 
 #endif // UNITUTILS_H

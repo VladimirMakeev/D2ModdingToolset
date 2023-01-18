@@ -23,6 +23,7 @@
 #include "custommodifiers.h"
 #include "dynamiccast.h"
 #include "midgardstream.h"
+#include "midgardstreamenv.h"
 #include "modifierutils.h"
 #include "originalfunctions.h"
 #include "settings.h"
@@ -231,6 +232,16 @@ void __fastcall midUnitStreamHooked(game::CMidUnit* thisptr,
     stringPairArrayPtrApi.setData(&arrayPtr, nullptr);
     if (campaignStreamApi.hasErrors(&campaignStream)) {
         fn.throwScenarioException("", "Invalid Stream");
+    }
+
+    // Fixes issues with current hp/xp being higher than maximum values when corresponding modifiers
+    // are added/removed. Only validates in write mode (game server or editor) to have actual
+    // scenario map available to custom mod scripts.
+    // TODO: implement efficient scheme of keeping current hp, xp and move points aligned with
+    // its max values, given that custom modifiers scripts can alter it freely (not only upon
+    // modifier addition or removal).
+    if (streamEnv->vftable->writeMode(streamEnv)) {
+        validateUnit(thisptr);
     }
 
     auto& stream = campaignStream.stream;

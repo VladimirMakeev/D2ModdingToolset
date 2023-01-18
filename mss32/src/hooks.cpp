@@ -104,6 +104,7 @@
 #include "midgardid.h"
 #include "midgardmsgbox.h"
 #include "midgardscenariomap.h"
+#include "midgardstreamenv.h"
 #include "midmsgboxbuttonhandlerstd.h"
 #include "midmusic.h"
 #include "midplayer.h"
@@ -2115,18 +2116,8 @@ void validateUnits(game::CMidgardScenarioMap* scenarioMap)
 {
     using namespace game;
 
-    const auto& fn = gameFunctions();
-
-    forEachScenarioObject(scenarioMap, IdType::Unit, [&fn](const IMidScenarioObject* obj) {
-        auto unit = (CMidUnit*)obj;
-
-        IUsUnit* origImpl = unit->transformed ? hooks::getUnitImpl(&unit->origTypeId)
-                                              : unit->unitImpl;
-        auto soldier = fn.castUnitImplToSoldier(origImpl);
-
-        unit->currentXp = std::clamp(unit->currentXp, 0, soldier->vftable->getXpNext(soldier));
-        unit->currentHp = std::clamp(unit->currentHp, 0, getUnitHpMax(unit));
-    });
+    forEachScenarioObject(scenarioMap, IdType::Unit,
+                          [](const IMidScenarioObject* obj) { validateUnit((CMidUnit*)obj); });
 }
 
 int __stdcall loadScenarioMapHooked(int a1,
@@ -2135,6 +2126,7 @@ int __stdcall loadScenarioMapHooked(int a1,
 {
     int result = getOriginalFunctions().loadScenarioMap(a1, streamEnv, scenarioMap);
 
+    // Write-mode validation is done in midUnitStreamHooked
     validateUnits(scenarioMap);
 
     return result;
@@ -2145,7 +2137,8 @@ bool __fastcall scenarioMapStreamHooked(game::CMidgardScenarioMap* scenarioMap,
                                         game::IMidgardStreamEnv* streamEnv)
 {
     bool result = getOriginalFunctions().scenarioMapStream(scenarioMap, streamEnv);
-    if (result) {
+    if (result && streamEnv->vftable->readMode(streamEnv)) {
+        // Write-mode validation is done in midUnitStreamHooked
         validateUnits(scenarioMap);
     }
 
