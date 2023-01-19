@@ -21,6 +21,7 @@
 #define IDSET_H
 
 #include "d2set.h"
+#include "d2pair.h"
 #include "midgardid.h"
 
 namespace game {
@@ -32,6 +33,11 @@ namespace IdSetApi {
 
 struct Api
 {
+    using Insert = Pair<IdSetIterator, bool>*(__thiscall*)(IdSet* thisptr,
+                                                           Pair<IdSetIterator, bool>* result,
+                                                           const CMidgardID* value);
+    Insert insert;
+
     /**
      * Searches for specified id.
      * @returns iterator pointing to the found node or end node if nothing found.
