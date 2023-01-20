@@ -2887,6 +2887,9 @@
     <ClInclude Include="include\scenariotemplates.h">
       <Filter>features\random scenario generator</Filter>
     </ClInclude>
+    <ClInclude Include="include\itemtypelist.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
