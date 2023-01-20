@@ -31,14 +31,23 @@ namespace game {
 
 struct GlobalData;
 
-/**
- * Holds leader names read from TLeader.dbf.
- * Must be 24 bytes according to TRaceType constructor.
- */
+struct LeaderName
+{
+    char name[31];
+    bool male;
+};
+
+assert_size(LeaderName, 32);
+
+/** Holds leader names read from TLeader.dbf. */
 struct CRaceLeaderNames
 {
-    char unknown[24];
+    void* vftable;
+    CMidgardID raceId;
+    Vector<LeaderName> names;
 };
+
+assert_size(CRaceLeaderNames, 24);
 
 /**
  * Holds player descriptions read from TPlayer.dbf.
