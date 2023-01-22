@@ -134,6 +134,7 @@ static std::array<Functions, 4> functions = {{
         (GetAltAttackIdCheckClass)0x59a965,
         (UnitHasDoppelgangerAttack)0x62a88c,
         (GetDeathAnimationByUnitOrItemId)0x6492e3,
+        (OemToCharA)0x6ce410,
     },
     // Russobit
     Functions{
@@ -244,6 +245,7 @@ static std::array<Functions, 4> functions = {{
         (GetAltAttackIdCheckClass)0x59a965,
         (UnitHasDoppelgangerAttack)0x62a88c,
         (GetDeathAnimationByUnitOrItemId)0x6492e3,
+        (OemToCharA)0x6ce410,
     },
     // Gog
     Functions{
@@ -354,6 +356,7 @@ static std::array<Functions, 4> functions = {{
         (GetAltAttackIdCheckClass)0x599aef,
         (UnitHasDoppelgangerAttack)0x6293cc,
         (GetDeathAnimationByUnitOrItemId)0x647b63,
+        (OemToCharA)0x6cc40c,
     },
     // Scenario Editor
     Functions{
@@ -464,6 +467,7 @@ static std::array<Functions, 4> functions = {{
         (GetAltAttackIdCheckClass)0x54554f,
         (UnitHasDoppelgangerAttack)nullptr,
         (GetDeathAnimationByUnitOrItemId)nullptr,
+        (OemToCharA)0x5ca344,
     },
 }};
 

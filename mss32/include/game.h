@@ -614,6 +614,17 @@ using UnitHasDoppelgangerAttack = bool(__stdcall*)(const IMidgardObjectMap* obje
 using GetDeathAnimationByUnitOrItemId =
     LDeathAnimCategory*(__stdcall*)(const CMidgardID* unitOrItemId);
 
+/**
+ * Translates a string from the OEM-defined character set
+ * into either an ANSI or a wide-character string.
+ * This is import from user32.dll used by game executable.
+ * If Verok's DisciplesGL wrapper is present function will be hooked,
+ * otherwise it remains the same.
+ * We don't care and always use it through a function pointer.
+ * DO NOT hook this function from mss32!
+ */
+using OemToCharA = int(__stdcall**)(const char* pSrc, char* pDst);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -724,6 +735,7 @@ struct Functions
     GetAltAttackIdCheckClass getAltAttackIdCheckClass;
     UnitHasDoppelgangerAttack unitHasDoppelgangerAttack;
     GetDeathAnimationByUnitOrItemId getDeathAnimationByUnitOrItemId;
+    OemToCharA oemToCharA;
 };
 
 /** Global variables used in game. */
