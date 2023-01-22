@@ -60,7 +60,7 @@ struct CMenuRandomScenarioSingle : public game::CMenuBase
     using RaceIndices = std::array<std::pair<game::CButtonInterf*, int /* index */>, 4>;
     RaceIndices raceIndices;
 
-    game::CInterface* popupMenu{};
+    game::CInterface* popup{};
     GenerationStatus generationStatus{GenerationStatus::NotStarted};
 };
 

@@ -61,6 +61,7 @@ struct CMenuPhaseData
     char* scenarioName;
     char* scenarioDescription;
     int suggestedLevel;
+    // Assumption: flag indicating singleplayer game
     bool unknown8;
     char padding[3];
     HANDLE scenarioFileHandle;
@@ -188,6 +189,16 @@ struct Api
     SwitchToMenu switchToLobbyHostJoin;
     // 16
     SwitchToMenu switchToWait;
+
+    using SetString = void(__thiscall*)(CMenuPhase* thisptr, const char* string);
+
+    SetString setScenarioFilePath;
+
+    using SetCampaignId = void(__thiscall*)(CMenuPhase* thisptr, const CMidgardID* campaignId);
+    SetCampaignId setCampaignId;
+
+    SetString setScenarioName;
+    SetString setScenarioDescription;
 };
 
 Api& get();

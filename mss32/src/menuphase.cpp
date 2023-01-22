@@ -61,6 +61,10 @@ std::array<Api, 3> functions = {{
         (Api::SwitchToMenu)0x4ec037,
         (Api::SwitchToMenu)0x4ec4e0,
         (Api::SwitchToMenu)0x4ebbf4,
+        (Api::SetString)0x4eba33,
+        (Api::SetCampaignId)0x4ebb97,
+        (Api::SetString)0x4ebbac,
+        (Api::SetString)0x4ebbd0,
     },
     // Russobit
     Api{
@@ -98,6 +102,10 @@ std::array<Api, 3> functions = {{
         (Api::SwitchToMenu)0x4ec037,
         (Api::SwitchToMenu)0x4ec4e0,
         (Api::SwitchToMenu)0x4ebbf4,
+        (Api::SetString)0x4eba33,
+        (Api::SetCampaignId)0x4ebb97,
+        (Api::SetString)0x4ebbac,
+        (Api::SetString)0x4ebbd0,
     },
     // Gog
     Api{
@@ -135,6 +143,10 @@ std::array<Api, 3> functions = {{
         (Api::SwitchToMenu)0x4eb4f7,
         (Api::SwitchToMenu)0x4eb9a0,
         (Api::SwitchToMenu)0x4eb0b4,
+        (Api::SetString)0x4eaeec,
+        (Api::SetCampaignId)0x4eb050,
+        (Api::SetString)0x4eb06c,
+        (Api::SetString)0x4eb090,
     },
 }};
 

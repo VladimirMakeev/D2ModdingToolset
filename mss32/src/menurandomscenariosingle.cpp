@@ -24,12 +24,14 @@
 #include "dynamiccast.h"
 #include "enums.h"
 #include "exceptions.h"
+#include "globaldata.h"
 #include "image2outline.h"
 #include "listbox.h"
 #include "log.h"
 #include "maptemplatereader.h"
 #include "mempool.h"
 #include "menuflashwait.h"
+#include "menuphase.h"
 #include "multilayerimg.h"
 #include "nativegameinfo.h"
 #include "scenariotemplates.h"
@@ -288,6 +290,68 @@ static void raceButtonSetImages(game::CButtonInterf* button, rsg::RaceType race)
     button->vftable->setImage(button, nullptr, ButtonState::Disabled);
 }
 
+static void removePopup(CMenuRandomScenarioSingle* menu)
+{
+    if (menu->popup) {
+        hideInterface(menu->popup);
+        menu->popup->vftable->destructor(menu->popup, 1);
+        menu->popup = nullptr;
+    }
+}
+
+static void serializeAndLoadScenario(CMenuRandomScenarioSingle* menu)
+{
+    const auto scenarioFilePath{exportsFolder() / "Random scenario.sg"};
+    // Serialize scenario so it can be read from disk later by game
+    menu->scenario->serialize(scenarioFilePath);
+
+    using namespace game;
+
+    const auto& menuPhaseApi{CMenuPhaseApi::get()};
+    CMenuPhase* menuPhase{menu->menuBaseData->menuPhase};
+
+    // Set special (skirmish) campaign id
+    CMidgardID campaignId;
+    CMidgardIDApi::get().fromString(&campaignId, "C000CC0001");
+    menuPhaseApi.setCampaignId(menuPhase, &campaignId);
+
+    const rsg::MapHeader* header{menu->scenario.get()};
+
+    menuPhaseApi.setScenarioFilePath(menuPhase, scenarioFilePath.string().c_str());
+    menuPhaseApi.setScenarioName(menuPhase, header->name.c_str());
+    menuPhaseApi.setScenarioDescription(menuPhase, header->description.c_str());
+
+    const auto& settings{menu->scenarioTemplate.settings};
+    const auto& listApi{RaceCategoryListApi::get()};
+
+    const GlobalData* globalData{*GlobalDataApi::get().getGlobalData()};
+    auto racesTable{globalData->raceCategories};
+    auto& findRaceById{LRaceCategoryTableApi::get().findCategoryById};
+
+    RaceCategoryList* races{&menuPhase->data->races};
+    listApi.freeNodes(races);
+
+    // Template settings contain only playable races at this point
+    for (const auto& race : settings.races) {
+        const int raceId{static_cast<int>(race)};
+
+        LRaceCategory category{};
+        findRaceById(racesTable, &category, &raceId);
+
+        listApi.add(races, &category);
+    }
+
+    // We don't load saved game, but starting a new one
+    menuPhase->data->loadScenario = false;
+    // Singleplayer mode?
+    menuPhase->data->unknown8 = true;
+    menuPhase->data->suggestedLevel = 1;
+    menuPhase->data->maxPlayers = static_cast<int>(settings.races.size());
+
+    // Switch to race selection menu
+    menuPhaseApi.switchTo15Or28(menuPhase);
+}
+
 /** Updates menu UI according to selected index in templates list box. */
 static void updateMenuUi(CMenuRandomScenarioSingle* menu, int selectedIndex)
 {
@@ -467,6 +531,9 @@ static void generateScenario(CMenuRandomScenarioSingle* menu, std::time_t seed)
     // because single generation attempt could finish faster than second passes
     for (std::uint32_t attempt = 0; attempt < generationAttemptsMax; ++attempt, ++seed) {
         try {
+            // TODO: rework MapGenOptions, pass name and description only at serialization step
+            // Use only necessary options (size, races, seed), or maybe template itself!
+            // This will help with scenario loading
             auto options{createGeneratorOptions(menu->scenarioTemplate, seed)};
             rsg::MapGenerator generator{options, seed};
 
@@ -510,27 +577,22 @@ static void __fastcall waitGenerationResults(CMenuRandomScenarioSingle* menu, in
 
     // Disable event first so we don't handle it twice
     game::UiEventApi::get().destructor(&menu->uiEvent);
+
     // Make sure generator thread completely finished
     if (menu->generatorThread.joinable()) {
         menu->generatorThread.join();
     }
 
-    // Hide popup menu
-    if (menu->popupMenu) {
-        hideInterface(menu->popupMenu);
-        menu->popupMenu->vftable->destructor(menu->popupMenu, 1);
-        menu->popupMenu = nullptr;
-    }
+    removePopup(menu);
 
     if (status == GenerationStatus::Done) {
-        // Serialize scenario
-        if (menu->scenario) {
-            menu->scenario->serialize(exportsFolder() / "Random scenario.sg");
-
-            showMessageBox("Random scenario map generated");
+        if (!menu->scenario) {
+            // This should never happen
+            showMessageBox("BUG!\nGeneration completed, but no scenario was created");
+            return;
         }
 
-        // TODO: Load game
+        serializeAndLoadScenario(menu);
         return;
     }
 
@@ -624,7 +686,7 @@ static void __fastcall buttonGenerateHandler(CMenuRandomScenarioSingle* thisptr,
         auto* waitMenu = (CMenuFlashWait*)game::Memory::get().allocate(sizeof(CMenuFlashWait));
         CMenuFlashWaitApi::get().constructor(waitMenu);
 
-        thisptr->popupMenu = waitMenu;
+        thisptr->popup = waitMenu;
         showInterface(waitMenu);
 
         thisptr->generationStatus = GenerationStatus::NotStarted;
@@ -790,10 +852,7 @@ CMenuRandomScenarioSingle::~CMenuRandomScenarioSingle()
 
     game::UiEventApi::get().destructor(&uiEvent);
 
-    if (popupMenu) {
-        hideInterface(popupMenu);
-        popupMenu->vftable->destructor(popupMenu, 1);
-    }
+    removePopup(this);
 }
 
 game::CMenuBase* __stdcall createMenuRandomScenarioSingle(game::CMenuPhase* menuPhase)
