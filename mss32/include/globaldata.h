@@ -121,7 +121,7 @@ struct GlobalData
     RacesMap** races;
     mq_c_s<Pair<CMidgardID, TSubRaceType*>>* subRaces;
     mq_c_s<Pair<CMidgardID, TLordType*>>* lords;
-    mq_c_s<Pair<CMidgardID, TStrategicSpell*>>* spells;
+    mq_c_s<Pair<CMidgardID, TStrategicSpell*>>** spells;
     mq_c_s<Pair<CMidgardID, TUsUnitImpl*>>** units;
     mq_c_s<Pair<CMidgardID, TUnitModifier*>>* modifiers;
     AttackMap* attacks;

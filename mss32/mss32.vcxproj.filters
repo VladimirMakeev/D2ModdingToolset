@@ -1121,6 +1121,9 @@
     <ClCompile Include="src\scenariotemplates.cpp">
       <Filter>features\random scenario generator</Filter>
     </ClCompile>
+    <ClCompile Include="src\nativegameinfo.cpp">
+      <Filter>features\random scenario generator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2887,8 +2890,26 @@
     <ClInclude Include="include\scenariotemplates.h">
       <Filter>features\random scenario generator</Filter>
     </ClInclude>
+    <ClInclude Include="include\nativegameinfo.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\nativeunitinfo.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\nativeraceinfo.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\nativeiteminfo.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
     <ClInclude Include="include\itemtypelist.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\nativespellinfo.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\nativelandmarkinfo.h">
+      <Filter>features\random scenario generator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
