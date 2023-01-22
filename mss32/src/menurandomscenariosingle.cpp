@@ -23,21 +23,26 @@
 #include "dialoginterf.h"
 #include "dynamiccast.h"
 #include "enums.h"
+#include "exceptions.h"
 #include "image2outline.h"
 #include "listbox.h"
 #include "log.h"
+#include "maptemplatereader.h"
 #include "mempool.h"
+#include "menuflashwait.h"
 #include "multilayerimg.h"
+#include "nativegameinfo.h"
 #include "scenariotemplates.h"
 #include "spinbuttoninterf.h"
 #include "stringarray.h"
 #include "textboxinterf.h"
 #include "utils.h"
 #include <algorithm>
+#include <chrono>
 #include <cstring>
+#include <fmt/format.h>
 #include <set>
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <sol/sol.hpp>
 
 namespace hooks {
 
@@ -58,6 +63,11 @@ static const int manaSpinStep{50};
 
 static game::RttiInfo<game::CInterfaceVftable> menuRttiInfo;
 static game::CInterfaceVftable::Destructor menuBaseDtor{nullptr};
+
+static std::unique_ptr<NativeGameInfo> gameInfo;
+
+/** Maximum number of attempts to generate scenario map. */
+static constexpr const std::uint32_t generationAttemptsMax{50};
 
 static const char* getRaceImage(rsg::RaceType race)
 {
@@ -116,6 +126,50 @@ static rsg::RaceType imageIndexToRace(int index)
     case 0:
         return rsg::RaceType::Random;
     }
+}
+
+static int spinSizeOptionToScenarioSize(const game::CSpinButtonInterf* spinButton,
+                                        int sizeMin,
+                                        int sizeMax)
+{
+    const int size{sizeMin + spinButton->data->selectedOption * 24};
+    return std::clamp(size, sizeMin, sizeMax);
+}
+
+static void raceIndicesToRaces(std::vector<rsg::RaceType>& races,
+                               const CMenuRandomScenarioSingle::RaceIndices& indices)
+{
+    for (int i = 0; i < 4; ++i) {
+        const auto& pair{indices[i]};
+        const game::CButtonInterf* raceButton{pair.first};
+
+        if (!raceButton->vftable->isEnabled(raceButton)) {
+            // Stop processing on first disabled button,
+            // it means current and later race indices are not used
+            return;
+        }
+
+        races.push_back(imageIndexToRace(pair.second));
+    }
+}
+
+static rsg::MapGenOptions createGeneratorOptions(const rsg::MapTemplate& mapTemplate,
+                                                 std::time_t seed)
+{
+    const auto& settings{mapTemplate.settings};
+    const std::string seedString{std::to_string(seed)};
+
+    rsg::MapGenOptions options;
+    options.mapTemplate = &mapTemplate;
+    options.size = settings.size;
+    options.name = std::string{"Random scenario "} + seedString;
+    options.description = std::string{"Random scenario based on template '"} + settings.name
+                          + "'. Seed: " + seedString
+                          + ". Starting gold: " + std::to_string(settings.startingGold)
+                          + ". Roads: " + std::to_string(settings.roads)
+                          + "%. Forest: " + std::to_string(settings.forest) + "%.";
+
+    return options;
 }
 
 static void setupSpinButtonOptions(game::CSpinButtonInterf* spinButton,
@@ -400,6 +454,192 @@ static void __fastcall button4Handler(CMenuRandomScenarioSingle* thisptr, int /*
     raceButtonHandler(thisptr, thisptr->raceIndices[3].first);
 }
 
+static void generateScenario(CMenuRandomScenarioSingle* menu, std::time_t seed)
+{
+    menu->generationStatus = GenerationStatus::InProcess;
+
+    using clock = std::chrono::high_resolution_clock;
+    using ms = std::chrono::milliseconds;
+    const auto start{clock::now()};
+
+    // Make sure we use different seed for each attempt.
+    // Do not use std::time() for seed generation
+    // because single generation attempt could finish faster than second passes
+    for (std::uint32_t attempt = 0; attempt < generationAttemptsMax; ++attempt, ++seed) {
+        try {
+            auto options{createGeneratorOptions(menu->scenarioTemplate, seed)};
+            rsg::MapGenerator generator{options, seed};
+
+            const auto beforeGeneration{clock::now()};
+
+            rsg::MapPtr scenario{generator.generate()};
+            // Successfully generated, save results
+            menu->scenario = std::move(scenario);
+
+            const auto end{clock::now()};
+            const auto genTime = std::chrono::duration_cast<ms>(end - beforeGeneration);
+            const auto total = std::chrono::duration_cast<ms>(end - start);
+
+            logDebug("mss32Proxy.log", fmt::format("Random scenario generation done in {:d} ms. "
+                                                   "Made {:d} attempts, {:d} ms total.",
+                                                   genTime.count(), attempt + 1, total.count()));
+
+            // Report success only after saving results
+            menu->generationStatus = GenerationStatus::Done;
+            return;
+        } catch (const rsg::LackOfSpaceException&) {
+            // Try to generate again with a new seed
+            continue;
+        } catch (const std::exception& e) {
+            // Critical error, abort generation
+            logError("mssProxyError.log", e.what());
+            menu->generationStatus = GenerationStatus::Error;
+            return;
+        }
+    }
+
+    menu->generationStatus = GenerationStatus::LimitExceeded;
+}
+
+static void __fastcall waitGenerationResults(CMenuRandomScenarioSingle* menu, int /*%edx*/)
+{
+    const auto status{menu->generationStatus};
+    if (status == GenerationStatus::NotStarted || status == GenerationStatus::InProcess) {
+        return;
+    }
+
+    // Disable event first so we don't handle it twice
+    game::UiEventApi::get().destructor(&menu->uiEvent);
+    // Make sure generator thread completely finished
+    if (menu->generatorThread.joinable()) {
+        menu->generatorThread.join();
+    }
+
+    // Hide popup menu
+    if (menu->popupMenu) {
+        hideInterface(menu->popupMenu);
+        menu->popupMenu->vftable->destructor(menu->popupMenu, 1);
+        menu->popupMenu = nullptr;
+    }
+
+    if (status == GenerationStatus::Done) {
+        // Serialize scenario
+        if (menu->scenario) {
+            menu->scenario->serialize(exportsFolder() / "Random scenario.sg");
+
+            showMessageBox("Random scenario map generated");
+        }
+
+        // TODO: Load game
+        return;
+    }
+
+    if (status == GenerationStatus::Error) {
+        showMessageBox("Error during random scenario map generation.\n"
+                       "See mssProxyError.log for details");
+        return;
+    }
+
+    if (status == GenerationStatus::LimitExceeded) {
+        showMessageBox(fmt::format("Could not generate scenario map after {:d} attempts\n"
+                                   "Please, adjust template contents or settings",
+                                   generationAttemptsMax));
+        return;
+    }
+}
+
+static void __fastcall buttonGenerateHandler(CMenuRandomScenarioSingle* thisptr, int /*%edx*/)
+{
+    using namespace game;
+
+    const auto& menuBase{CMenuBaseApi::get()};
+    const auto& dialogApi{CDialogInterfApi::get()};
+
+    CDialogInterf* dialog{menuBase.getDialogInterface(thisptr)};
+
+    CListBoxInterf* templatesList{dialogApi.findListBox(dialog, templatesListName)};
+    if (!templatesList) {
+        return;
+    }
+
+    const CSpinButtonInterf* sizeSpin{dialogApi.findSpinButton(dialog, sizeSpinName)};
+    const CSpinButtonInterf* forestSpin{dialogApi.findSpinButton(dialog, forestSpinName)};
+    const CSpinButtonInterf* roadsSpin{dialogApi.findSpinButton(dialog, roadsSpinName)};
+    const CSpinButtonInterf* goldSpin{dialogApi.findSpinButton(dialog, goldSpinName)};
+    if (!sizeSpin || !forestSpin || !roadsSpin || !goldSpin) {
+        return;
+    }
+
+    const int selectedIndex{CListBoxInterfApi::get().selectedIndex(templatesList)};
+
+    const auto& templates{getScenarioTemplates()};
+    if (selectedIndex < 0 || selectedIndex >= (int)templates.size()) {
+        return;
+    }
+
+    // Load and set game info the first time player generates scenario
+    if (!gameInfo) {
+        try {
+            gameInfo = std::make_unique<NativeGameInfo>(gameFolder());
+            rsg::setGameInfo(gameInfo.get());
+        } catch (const std::exception&) {
+            showMessageBox("Could not read game data needed for scenario generator.\n"
+                           "See mssProxyError.log for details");
+            return;
+        }
+    }
+
+    try {
+        thisptr->scenarioTemplate = rsg::MapTemplate();
+
+        auto& settings{thisptr->scenarioTemplate.settings};
+        // Make sure we start with a fresh settings
+        settings = templates[selectedIndex].settings;
+
+        // Update settings using player choices in UI
+        settings.size = spinSizeOptionToScenarioSize(sizeSpin, settings.sizeMin, settings.sizeMax);
+        raceIndicesToRaces(settings.races, thisptr->raceIndices);
+
+        settings.forest = forestSpin->data->selectedOption * forestSpinStep;
+        settings.roads = roadsSpin->data->selectedOption * roadsSpinStep;
+        settings.startingGold = goldSpin->data->selectedOption * goldSpinStep;
+
+        rsg::RandomGenerator rnd;
+
+        std::time_t seed{std::time(nullptr)};
+        rnd.setSeed(static_cast<std::size_t>(seed));
+
+        // Roll actual races instead of random
+        settings.replaceRandomRaces(rnd);
+
+        // TODO: handle this in a better way
+        sol::state lua;
+        rsg::bindLuaApi(lua);
+        rsg::readTemplateSettings(templates[selectedIndex].filename, lua);
+        // Create template contents depending on size and races
+        rsg::readTemplateContents(thisptr->scenarioTemplate, lua);
+
+        // Show 'wait' menu
+        // TODO: use custom menu with proper text and cancel button
+        auto* waitMenu = (CMenuFlashWait*)game::Memory::get().allocate(sizeof(CMenuFlashWait));
+        CMenuFlashWaitApi::get().constructor(waitMenu);
+
+        thisptr->popupMenu = waitMenu;
+        showInterface(waitMenu);
+
+        thisptr->generationStatus = GenerationStatus::NotStarted;
+        createTimerEvent(&thisptr->uiEvent, thisptr, waitGenerationResults, 50);
+
+        // Start generation in another thread and wait until its done
+        thisptr->generatorThread = std::thread(
+            [thisptr, seed]() { generateScenario(thisptr, seed); });
+    } catch (const std::exception& e) {
+        logError("mssProxyError.log", e.what());
+        showMessageBox(e.what());
+        return;
+    }
+}
+
 static void setupMenuUi(CMenuRandomScenarioSingle* menu)
 {
     using namespace game;
@@ -416,6 +656,14 @@ static void setupMenuUi(CMenuRandomScenarioSingle* menu)
     const auto& button{CButtonInterfApi::get()};
     button.assignFunctor(dialog, "BTN_BACK", dialogName, &functor, 0);
 
+    freeFunctor(&functor, nullptr);
+
+    using ButtonCallback = CMenuBaseApi::Api::ButtonCallback;
+
+    auto buttonCallback = (ButtonCallback)buttonGenerateHandler;
+    menuBase.createButtonFunctor(&functor, 0, menu, &buttonCallback);
+
+    button.assignFunctor(dialog, "BTN_GENERATE", dialogName, &functor, 0);
     freeFunctor(&functor, nullptr);
 
     // Create spin button options, template selection will only change currently selected option
@@ -440,7 +688,6 @@ static void setupMenuUi(CMenuRandomScenarioSingle* menu)
     }
 
     // Cache race buttons, assign initial indices and setup callbacks
-    using ButtonCallback = CMenuBaseApi::Api::ButtonCallback;
     // clang-format off
     std::array<ButtonCallback, 4> buttonCallbacks{{
         (ButtonCallback)button1Handler, (ButtonCallback)button2Handler,
@@ -523,7 +770,7 @@ static void menuRandomScenarioSingleCtor(CMenuRandomScenarioSingle* menu,
     menuBase.createMenu(menu, dialogName);
 
     setupMenuUi(menu);
-    // TODO: show additional debug buttons when debug mode is enabled
+    // TODO: show additional debug UI when debug mode is enabled
 }
 
 CMenuRandomScenarioSingle::CMenuRandomScenarioSingle(game::CMenuPhase* menuPhase)
@@ -531,11 +778,29 @@ CMenuRandomScenarioSingle::CMenuRandomScenarioSingle(game::CMenuPhase* menuPhase
     menuRandomScenarioSingleCtor(this, menuPhase);
 }
 
+CMenuRandomScenarioSingle::~CMenuRandomScenarioSingle()
+{
+    if (generatorThread.joinable()) {
+        generatorThread.join();
+    }
+
+    if (scenario) {
+        scenario.reset(nullptr);
+    }
+
+    game::UiEventApi::get().destructor(&uiEvent);
+
+    if (popupMenu) {
+        hideInterface(popupMenu);
+        popupMenu->vftable->destructor(popupMenu, 1);
+    }
+}
+
 game::CMenuBase* __stdcall createMenuRandomScenarioSingle(game::CMenuPhase* menuPhase)
 {
-    auto menu = (CMenuRandomScenarioSingle*)game::Memory::get().allocate(
-        sizeof(CMenuRandomScenarioSingle));
+    const auto& allocateMem{game::Memory::get().allocate};
 
+    auto menu = (CMenuRandomScenarioSingle*)allocateMem(sizeof(CMenuRandomScenarioSingle));
     new (menu) CMenuRandomScenarioSingle(menuPhase);
 
     return menu;

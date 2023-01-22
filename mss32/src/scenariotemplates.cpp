@@ -54,7 +54,7 @@ bool loadScenarioTemplates()
             sol::state lua;
             rsg::bindLuaApi(lua);
 
-            scenarioTemplates.emplace_back(templateFile.stem().string(),
+            scenarioTemplates.emplace_back(templateFile.string(),
                                            rsg::readTemplateSettings(templateFile, lua));
         } catch (const std::exception&) {
             // Silently ignore lua files that are not templates
