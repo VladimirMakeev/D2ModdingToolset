@@ -98,6 +98,15 @@ void createTimerEvent(game::UiEvent* timerEvent,
                       void* callback,
                       std::uint32_t timeoutMs);
 
+/**
+ * Registers message with specified name and creates message event.
+ * @returns registered message id associated with event.
+ */
+std::uint32_t createMessageEvent(game::UiEvent* messageEvent,
+                                 void* userData,
+                                 void* callback,
+                                 const char* messageName);
+
 /** Computes MD5 hash of files in specified folder. */
 bool computeHash(const std::filesystem::path& folder, std::string& hash);
 
