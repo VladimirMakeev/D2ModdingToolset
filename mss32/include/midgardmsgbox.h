@@ -21,16 +21,26 @@
 #define MIDGARDMSGBOX_H
 
 #include "popupdialoginterf.h"
+#include "uievent.h"
 
 namespace game {
 
 struct CMidMsgBoxButtonHandler;
+struct CMidMsgBoxActHandler;
 
-/** Must be 48 bytes according to CMidgardMsgBox constructor. */
 struct CMidgardMsgBoxData
 {
-    char unknown[48];
+    CDialogInterf* dialog;
+    UiEvent updateEvent;
+    int unknown;
+    void* userData;
+    bool confirmButtonOnly;
+    char padding[3];
+    CMidMsgBoxButtonHandler* buttonHandler;
+    CMidMsgBoxActHandler* actHandler;
 };
+
+assert_size(CMidgardMsgBoxData, 48);
 
 /**
  * Message box ui element.
@@ -55,7 +65,7 @@ struct Api
      * @param showCancelButton if set to 1, creates message box with cancel button.
      * @param[in] buttonHandler handler logic to execute upon message box closing.
      * Handler object destroyed and its memory freed in message box destructor.
-     * @param a4 unknown.
+     * @param[in] actHandler action handler logic. Used in Scenario Editor for map import/export.
      * @param dialogName name of the custom dialog ui element to show instead of default,
      * or nullptr. Default dialog is 'DLG_MESSAGE_BOX' from Interf.dlg.
      */
@@ -63,7 +73,7 @@ struct Api
                                                      const char* message,
                                                      int showCancelButton,
                                                      CMidMsgBoxButtonHandler* buttonHandler,
-                                                     int a4,
+                                                     CMidMsgBoxActHandler* actHandler,
                                                      const char* dialogName);
     Constructor constructor;
 };

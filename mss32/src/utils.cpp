@@ -247,8 +247,8 @@ void showMessageBox(const std::string& message,
     }
 
     CMidgardMsgBox* msgBox = (CMidgardMsgBox*)memAlloc(sizeof(CMidgardMsgBox));
-    CMidgardMsgBoxApi::get().constructor(msgBox, message.c_str(), showCancel, buttonHandler, 0,
-                                         nullptr);
+    CMidgardMsgBoxApi::get().constructor(msgBox, message.c_str(), showCancel, buttonHandler,
+                                         nullptr, nullptr);
 
     showInterface(msgBox);
 }
