@@ -47,6 +47,7 @@ void StackView::bind(sol::state& lua)
     stackView["movement"] = sol::property(&StackView::getMovement);
     stackView["subrace"] = sol::property(&StackView::getSubrace);
     stackView["invisible"] = sol::property(&StackView::isInvisible);
+    stackView["battlesWon"] = sol::property(&StackView::getBattlesWon);
 
     stackView["inventory"] = sol::property(&StackView::getInventoryItems);
     stackView["getEquippedItem"] = &StackView::getLeaderEquippedItem;
@@ -113,6 +114,11 @@ int StackView::getSubrace() const
 bool StackView::isInvisible() const
 {
     return stack->invisible;
+}
+
+int StackView::getBattlesWon() const
+{
+    return stack->nbBattle;
 }
 
 std::vector<ItemView> StackView::getInventoryItems() const
