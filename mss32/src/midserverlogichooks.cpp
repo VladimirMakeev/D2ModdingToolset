@@ -77,8 +77,7 @@ bool __fastcall midServerLogicSendRefreshInfoHooked(const game::CMidServerLogic*
     const auto& refreshInfoApi = CRefreshInfoApi::get();
 
     const auto scenarioMap = CMidServerLogicApi::get().getObjectMap(thisptr);
-
-    auto limit = userSettings().engine.sendRefreshInfoObjectCountLimit;
+    const auto limit = userSettings().engine.sendRefreshInfoObjectCountLimit;
 
     auto it = objectsList->begin();
     const auto end = objectsList->end();
@@ -90,11 +89,11 @@ bool __fastcall midServerLogicSendRefreshInfoHooked(const game::CMidServerLogic*
         proceed = false;
         std::uint32_t count = 0;
         for (; it != end; ++it) {
-            refreshInfoApi.addObject(&refreshInfo, scenarioMap, &(*it));
-            if (++count >= limit) {
+            if (++count > limit) {
                 proceed = true;
                 break;
             }
+            refreshInfoApi.addObject(&refreshInfo, scenarioMap, &(*it));
         }
 
         auto server = thisptr->coreData->server;

@@ -329,12 +329,17 @@ static Hooks getGameHooks()
         {battle.cannotUseDoppelgangerAttack, cannotUseDoppelgangerAttackHooked},
         // Support custom modifiers
         {fn.loadScenarioMap, loadScenarioMapHooked, (void**)&orig.loadScenarioMap},
-        // Fix incomplete scenario loading when its object size exceed network message buffer size of 512 KB
-        {CMidServerLogicApi::get().sendRefreshInfo, midServerLogicSendRefreshInfoHooked},
         // Show broken (removed) wards in unit encyclopedia
         {CEncParamBaseApi::get().addUnitBattleInfo, encParamBaseAddUnitBattleInfoHooked},
     };
     // clang-format on
+
+    if (userSettings().engine.sendRefreshInfoObjectCountLimit) {
+        // Fix incomplete scenario loading when its object size exceed network message buffer size
+        // of 512 KB
+        hooks.emplace_back(HookInfo{CMidServerLogicApi::get().sendRefreshInfo,
+                                    midServerLogicSendRefreshInfoHooked});
+    }
 
     if (userSettings().shatteredArmorMax != baseSettings().shatteredArmorMax) {
         // Allow users to customize total armor shatter damage
