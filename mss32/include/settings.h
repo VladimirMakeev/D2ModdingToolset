@@ -134,8 +134,7 @@ struct Settings
     {
         // This is needed to split single CRefreshInfo into several instances when loading large
         // scenario, because it needs to fit to the network message buffer of 512 KB.
-        // The default value of 1024 objects provides room for average object size of 512 bytes.
-        std::uint32_t sendRefreshInfoObjectCountLimit{1024};
+        std::uint32_t sendRefreshInfoObjectCountLimit{0};
     } engine;
 
     bool debugMode;
