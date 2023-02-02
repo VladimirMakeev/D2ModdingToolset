@@ -1275,6 +1275,8 @@ int __fastcall attackGetQtyDamage(const game::IAttack* thisptr, int /*%edx*/)
 
 int __fastcall attackGetQtyHeal(const game::IAttack* thisptr, int /*%edx*/)
 {
+    const auto& restrictions = game::gameRestrictions();
+
     auto thiz = castAttackToCustomModifier(thisptr);
     auto prev = thiz->getPrevAttack(thisptr);
 
@@ -1284,8 +1286,9 @@ int __fastcall attackGetQtyHeal(const game::IAttack* thisptr, int /*%edx*/)
     }
 
     bool primary = thisptr != &thiz->attack2;
-    return primary ? THIZ_GET_VALUE(getAttackHeal, prevValue)
-                   : THIZ_GET_VALUE(getAttack2Heal, prevValue);
+    auto value = primary ? THIZ_GET_VALUE(getAttackHeal, prevValue)
+                         : THIZ_GET_VALUE(getAttack2Heal, prevValue);
+    return std::clamp(value, restrictions.unitHeal.min, restrictions.unitHeal.max);
 }
 
 int __fastcall attackGetDrain(const game::IAttack* thisptr, int /*%edx*/, int damage)
