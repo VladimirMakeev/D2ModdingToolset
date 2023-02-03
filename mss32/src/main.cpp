@@ -99,7 +99,7 @@ static void adjustGameRestrictions()
     writeProtectedMemory(&restrictions.unitLevel->max, 10);
 
     if (userSettings().unitMaxDamage != baseSettings().unitMaxDamage) {
-        adjustRestrictionMax(restrictions.unitDamage, userSettings().unitMaxDamage,
+        adjustRestrictionMax(restrictions.attackDamage, userSettings().unitMaxDamage,
                              "UnitMaxDamage");
     }
 

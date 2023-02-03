@@ -36,7 +36,7 @@ struct GameRestrictions
 {
     Restriction<int>* spellLevel;
     Restriction<int>* unitLevel;
-    Restriction<int>* unitDamage;
+    Restriction<int>* attackDamage;
     Restriction<int>* unitArmor;
     Restriction<int>* unitHp;
     Restriction<int>* stackScoutRange;
@@ -49,7 +49,7 @@ struct GameRestrictions
     std::uint8_t* mageLeaderAttackPowerReduction;
 
     // No dedicated game variable for this, see implementation of CDBTableApi::readHeal
-    Restriction<int> unitHeal;
+    Restriction<int> attackHeal;
     // No dedicated game variable for this, see implementation of DBReadRegenFieldWithBoundsCheck
     // (Akella 0x5A7EB0)
     Restriction<int> unitRegen;
