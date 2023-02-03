@@ -177,6 +177,8 @@ const CCustomModifier* CCustomModifier::getPrevCustomModifier() const
 
 CustomAttackData CCustomModifier::getCustomAttackData(const game::IAttack* thisptr) const
 {
+    const auto& restrictions = game::gameRestrictions();
+
     auto prev = getPrevAttack(thisptr);
 
     auto value = hooks::getCustomAttackData(prev);
@@ -185,15 +187,17 @@ CustomAttackData CCustomModifier::getCustomAttackData(const game::IAttack* thisp
         value.damageRatioPerTarget = GET_VALUE(getAttackDrRepeat, value.damageRatioPerTarget);
         value.damageSplit = GET_VALUE(getAttackDrSplit, value.damageSplit);
         value.critDamage = GET_VALUE(getAttackCritDamage, value.critDamage);
-        value.critPower = std::clamp(GET_VALUE(getAttackCritPower, value.critPower), (uint8_t)0,
-                                     (uint8_t)100);
+        value.critPower = std::clamp(GET_VALUE(getAttackCritPower, value.critPower),
+                                     (uint8_t)restrictions.attackPower->min,
+                                     (uint8_t)restrictions.attackPower->max);
     } else {
         value.damageRatio = GET_VALUE(getAttack2DamRatio, value.damageRatio);
         value.damageRatioPerTarget = GET_VALUE(getAttack2DrRepeat, value.damageRatioPerTarget);
         value.damageSplit = GET_VALUE(getAttack2DrSplit, value.damageSplit);
         value.critDamage = GET_VALUE(getAttack2CritDamage, value.critDamage);
-        value.critPower = std::clamp(GET_VALUE(getAttack2CritPower, value.critPower), (uint8_t)0,
-                                     (uint8_t)100);
+        value.critPower = std::clamp(GET_VALUE(getAttack2CritPower, value.critPower),
+                                     (uint8_t)restrictions.attackPower->min,
+                                     (uint8_t)restrictions.attackPower->max);
     }
 
     return value;
@@ -621,13 +625,15 @@ const game::LDeathAnimCategory* __fastcall soldierGetDeathAnim(const game::IUsSo
 
 int* __fastcall soldierGetRegen(const game::IUsSoldier* thisptr, int /*%edx*/)
 {
+    const auto& restrictions = game::gameRestrictions();
+
     auto thiz = castSoldierToCustomModifier(thisptr);
     auto prev = thiz->getPrevSoldier();
 
     auto value = THIZ_GET_VALUE(getRegen, *prev->vftable->getRegen(prev));
 
     auto& regen = thiz->getData().regen;
-    regen = std::clamp(value, 0, 100);
+    regen = std::clamp(value, restrictions.unitRegen.min, restrictions.unitRegen.max);
     return &regen;
 }
 
@@ -1020,11 +1026,14 @@ bool __fastcall stackLeaderGetFastRetreat(const game::IUsStackLeader* thisptr, i
 
 int __fastcall stackLeaderGetLowerCost(const game::IUsStackLeader* thisptr, int /*%edx*/)
 {
+    const auto& restrictions = game::gameRestrictions();
+
     auto thiz = castStackLeaderToCustomModifier(thisptr);
     auto prev = thiz->getPrevStackLeader();
 
+    // Treated as percentValue, see implementation of DBReadCUmStackData (Akella 0x5A3F36)
     auto value = THIZ_GET_VALUE(getLowerCost, prev->vftable->getLowerCost(prev));
-    return std::clamp(value, 0, 100);
+    return std::clamp(value, restrictions.percentValue.min, restrictions.percentValue.max);
 }
 
 void __fastcall attackDtor(game::IAttack* thisptr, int /*%edx*/, char flags)

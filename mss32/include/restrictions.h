@@ -48,8 +48,14 @@ struct GameRestrictions
     std::uint8_t* criticalHitDamage;
     std::uint8_t* mageLeaderAttackPowerReduction;
 
-    // No dedicated game variable for this (see implementation of CDBTableApi::readHeal)
+    // No dedicated game variable for this, see implementation of CDBTableApi::readHeal
     Restriction<int> unitHeal;
+    // No dedicated game variable for this, see implementation of DBReadRegenFieldWithBoundsCheck
+    // (Akella 0x5A7EB0)
+    Restriction<int> unitRegen;
+    // No dedicated game variable for this, see implementation of DBReadPercentFieldWithBoundsCheck
+    // (Akella 0x596A86)
+    Restriction<int> percentValue;
 };
 
 GameRestrictions& gameRestrictions();
