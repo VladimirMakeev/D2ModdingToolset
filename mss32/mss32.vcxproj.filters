@@ -1142,6 +1142,9 @@
     <ClCompile Include="src\managestkinterfhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="src\exchangeinterfhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2927,6 +2930,9 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\managestkinterfhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exchangeinterfhooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
   </ItemGroup>

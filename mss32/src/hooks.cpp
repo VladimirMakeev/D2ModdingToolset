@@ -75,6 +75,8 @@
 #include "encparambasehooks.h"
 #include "eventconditioncathooks.h"
 #include "eventeffectcathooks.h"
+#include "exchangeinterf.h"
+#include "exchangeinterfhooks.h"
 #include "fortcategory.h"
 #include "fortification.h"
 #include "gameutils.h"
@@ -337,6 +339,7 @@ static Hooks getGameHooks()
         {CEncParamBaseApi::get().addUnitBattleInfo, encParamBaseAddUnitBattleInfoHooked},
         // Fix crash on drag&drop when INotify::OnObjectChanged is processed between mouse down and up
         {CManageStkInterfApi::vftable().notify->onObjectChanged, manageStkInterfOnObjectChangedHooked, (void**)&orig.manageStkInterfOnObjectChanged},
+        {CExchangeInterfApi::vftable().notify->onObjectChanged, exchangeInterfOnObjectChangedHooked, (void**)&orig.exchangeInterfOnObjectChanged},
     };
     // clang-format on
 

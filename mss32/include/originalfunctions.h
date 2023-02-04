@@ -133,6 +133,8 @@ struct OriginalFunctions
     game::IMqNetPlayerVftable::SendNetMessage netSinglePlayerSendMessage;
 
     game::CMidDataCache2::INotifyVftable::OnObjectChanged manageStkInterfOnObjectChanged;
+
+    game::CMidDataCache2::INotifyVftable::OnObjectChanged exchangeInterfOnObjectChanged;
 };
 
 OriginalFunctions& getOriginalFunctions();
