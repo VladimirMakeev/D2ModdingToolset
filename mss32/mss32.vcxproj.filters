@@ -1136,6 +1136,9 @@
     <ClCompile Include="src\logutils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\managestkinterf.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2916,6 +2919,9 @@
     </ClInclude>
     <ClInclude Include="include\logutils.h">
       <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\managestkinterf.h">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
