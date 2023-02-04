@@ -1139,6 +1139,9 @@
     <ClCompile Include="src\managestkinterf.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\managestkinterfhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2922,6 +2925,9 @@
     </ClInclude>
     <ClInclude Include="include\managestkinterf.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\managestkinterfhooks.h">
+      <Filter>hooks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

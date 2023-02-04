@@ -270,6 +270,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\enclayoutstack.cpp" />
     <ClCompile Include="src\logutils.cpp" />
     <ClCompile Include="src\managestkinterf.cpp" />
+    <ClCompile Include="src\managestkinterfhooks.cpp" />
     <ClCompile Include="src\midgardscenariomap.cpp" />
     <ClCompile Include="src\midserver.cpp" />
     <ClCompile Include="src\midserverlogichooks.cpp" />
@@ -667,6 +668,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\leaderunitdescriptor.h" />
     <ClInclude Include="include\logutils.h" />
     <ClInclude Include="include\managestkinterf.h" />
+    <ClInclude Include="include\managestkinterfhooks.h" />
     <ClInclude Include="include\midanim2.h" />
     <ClInclude Include="include\midanim2base.h" />
     <ClInclude Include="include\midanim2system.h" />

@@ -90,6 +90,8 @@
 #include "lordtype.h"
 #include "mainview2.h"
 #include "mainview2hooks.h"
+#include "managestkinterf.h"
+#include "managestkinterfhooks.h"
 #include "mapgen.h"
 #include "mempool.h"
 #include "menuloadskirmishmultihooks.h"
@@ -333,6 +335,8 @@ static Hooks getGameHooks()
         {CMidServerLogicApi::get().sendRefreshInfo, midServerLogicSendRefreshInfoHooked},
         // Show broken (removed) wards in unit encyclopedia
         {CEncParamBaseApi::get().addUnitBattleInfo, encParamBaseAddUnitBattleInfoHooked},
+        // Fix crash on drag&drop when INotify::OnObjectChanged is processed between mouse down and up
+        {CManageStkInterfApi::vftable().notify->onObjectChanged, manageStkInterfOnObjectChangedHooked, (void**)&orig.manageStkInterfOnObjectChanged},
     };
     // clang-format on
 
