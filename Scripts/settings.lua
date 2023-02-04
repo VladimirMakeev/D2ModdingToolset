@@ -182,7 +182,11 @@ settings = {
 		cumulativeUnitRegeneration = false,
 		-- Enables 'onModifiersChanged' notification for custom modifier scripts.
 		-- Keep it disabled if you don't need it to improve general performance.
-		notifyModifiersChanged = false,
+		notifyModifiersChanged = false,		
+		-- Validate current HP / XP of units when their group changes (units added, removed, rearranged, etc.)
+		-- to resolve issues with custom HP / XP modifiers, that depend on other units (like auras in MNS mod).
+		-- Keep it disabled if you don't need it to improve general performance.
+		validateUnitsOnGroupChanged = false,
 	},
 
 	-- Create mss32 proxy dll log files with debug info

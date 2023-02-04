@@ -91,6 +91,7 @@ struct Settings
     {
         bool cumulativeUnitRegeneration;
         bool notifyModifiersChanged;
+        bool validateUnitsOnGroupChanged;
     } modifiers;
 
     struct AllowBattleItems
