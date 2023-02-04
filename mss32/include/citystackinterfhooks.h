@@ -17,22 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "exchangeinterfhooks.h"
-#include "exchangeinterf.h"
-#include "middragdropinterfhooks.h"
-#include "originalfunctions.h"
+#ifndef CITYSTACKINTERFHOOKS_H
+#define CITYSTACKINTERFHOOKS_H
+
+namespace game {
+struct CCityStackInterf;
+struct IMidScenarioObject;
+} // namespace game
 
 namespace hooks {
 
-void __fastcall exchangeInterfOnObjectChangedHooked(game::CExchangeInterf* thisptr,
-                                                    int /*%edx*/,
-                                                    game::IMidScenarioObject* obj)
-{
-    using namespace game;
-
-    getOriginalFunctions().exchangeInterfOnObjectChanged(thisptr, obj);
-
-    midDragDropInterfResetCurrentSource(&thisptr->dragDropInterf);
-}
+void __fastcall cityStackInterfOnObjectChangedHooked(game::CCityStackInterf* thisptr,
+                                                     int /*%edx*/,
+                                                     game::IMidScenarioObject* obj);
 
 } // namespace hooks
+
+#endif // CITYSTACKINTERFHOOKS_H

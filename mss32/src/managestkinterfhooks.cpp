@@ -19,6 +19,7 @@
 
 #include "managestkinterfhooks.h"
 #include "managestkinterf.h"
+#include "middragdropinterfhooks.h"
 #include "originalfunctions.h"
 
 namespace hooks {
@@ -31,12 +32,7 @@ void __fastcall manageStkInterfOnObjectChangedHooked(game::CManageStkInterf* thi
 
     getOriginalFunctions().manageStkInterfOnObjectChanged(thisptr, obj);
 
-    if (thisptr->dragAndDropInterfData->currentSource) {
-        thisptr->dragAndDropInterfData->currentSource = nullptr;
-
-        auto dropManager = &thisptr->dropManager;
-        dropManager->vftable->resetDropSource(dropManager);
-    }
+    midDragDropInterfResetCurrentSource(thisptr);
 }
 
 } // namespace hooks

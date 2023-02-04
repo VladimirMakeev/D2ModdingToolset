@@ -17,22 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "exchangeinterfhooks.h"
-#include "exchangeinterf.h"
 #include "middragdropinterfhooks.h"
-#include "originalfunctions.h"
+#include "middragdropinterf.h"
 
 namespace hooks {
 
-void __fastcall exchangeInterfOnObjectChangedHooked(game::CExchangeInterf* thisptr,
-                                                    int /*%edx*/,
-                                                    game::IMidScenarioObject* obj)
+void midDragDropInterfResetCurrentSource(game::CMidDragDropInterf* dragDropInterf)
 {
     using namespace game;
 
-    getOriginalFunctions().exchangeInterfOnObjectChanged(thisptr, obj);
+    auto data = dragDropInterf->dragAndDropInterfData;
+    if (data->currentSource) {
+        data->currentSource = nullptr;
 
-    midDragDropInterfResetCurrentSource(&thisptr->dragDropInterf);
+        auto dropManager = &dragDropInterf->dropManager;
+        dropManager->vftable->resetDropSource(dropManager);
+    }
 }
 
 } // namespace hooks

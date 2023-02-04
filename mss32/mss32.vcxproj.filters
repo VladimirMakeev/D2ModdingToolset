@@ -1145,6 +1145,12 @@
     <ClCompile Include="src\exchangeinterfhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="src\citystackinterfhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\middragdropinterfhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2933,6 +2939,12 @@
       <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\exchangeinterfhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\citystackinterfhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\middragdropinterfhooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
   </ItemGroup>

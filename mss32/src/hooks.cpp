@@ -42,6 +42,8 @@
 #include "buildingbranch.h"
 #include "buildingtype.h"
 #include "button.h"
+#include "citystackinterf.h"
+#include "citystackinterfhooks.h"
 #include "cmdbattlechooseactionmsg.h"
 #include "cmdbattleendmsg.h"
 #include "cmdbattleresultmsg.h"
@@ -340,6 +342,7 @@ static Hooks getGameHooks()
         // Fix crash on drag&drop when INotify::OnObjectChanged is processed between mouse down and up
         {CManageStkInterfApi::vftable().notify->onObjectChanged, manageStkInterfOnObjectChangedHooked, (void**)&orig.manageStkInterfOnObjectChanged},
         {CExchangeInterfApi::vftable().notify->onObjectChanged, exchangeInterfOnObjectChangedHooked, (void**)&orig.exchangeInterfOnObjectChanged},
+        {CCityStackInterfApi::vftable().notify->onObjectChanged, cityStackInterfOnObjectChangedHooked, (void**)&orig.cityStackInterfOnObjectChanged},
     };
     // clang-format on
 

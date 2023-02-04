@@ -217,6 +217,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\buildingbranch.cpp" />
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
+    <ClCompile Include="src\citystackinterfhooks.cpp" />
     <ClCompile Include="src\enclayoutcity.cpp" />
     <ClCompile Include="src\enclayoutcityhooks.cpp" />
     <ClCompile Include="src\enclayoutruin.cpp" />
@@ -272,6 +273,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\logutils.cpp" />
     <ClCompile Include="src\managestkinterf.cpp" />
     <ClCompile Include="src\managestkinterfhooks.cpp" />
+    <ClCompile Include="src\middragdropinterfhooks.cpp" />
     <ClCompile Include="src\midgardscenariomap.cpp" />
     <ClCompile Include="src\midserver.cpp" />
     <ClCompile Include="src\midserverlogichooks.cpp" />
@@ -614,6 +616,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\buildingbranch.h" />
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />
+    <ClInclude Include="include\citystackinterfhooks.h" />
     <ClInclude Include="include\ddstackgroup.h" />
     <ClInclude Include="include\ddunitgroup.h" />
     <ClInclude Include="include\enclayoutcity.h" />
@@ -674,6 +677,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midanim2.h" />
     <ClInclude Include="include\midanim2base.h" />
     <ClInclude Include="include\midanim2system.h" />
+    <ClInclude Include="include\middragdropinterfhooks.h" />
     <ClInclude Include="include\middropsource.h" />
     <ClInclude Include="include\middropsourceext.h" />
     <ClInclude Include="include\middroptarget.h" />
