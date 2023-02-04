@@ -140,14 +140,14 @@ int computeDamage(int base,
     if (hooks::isNormalDamageAttack(classId)) {
         int boost = hooks::getBoostDamage(boostDamageLevel)
                     - hooks::getLowerDamage(lowerDamageLevel);
-        result = computeValue(base, restrictions.unitDamage->min, damageMax, boost, modifiers,
+        result = computeValue(base, restrictions.attackDamage->min, damageMax, boost, modifiers,
                               ModifierElementTypeFlag::QtyDamage);
 
         if (damageSplit) {
             result *= hooks::userSettings().splitDamageMultiplier;
         }
     } else if (hooks::isModifiableDamageAttack(classId)) {
-        result = computeValue(base, restrictions.unitDamage->min, damageMax, 0, modifiers,
+        result = computeValue(base, restrictions.attackDamage->min, damageMax, 0, modifiers,
                               ModifierElementTypeFlag::QtyDamage);
     }
 

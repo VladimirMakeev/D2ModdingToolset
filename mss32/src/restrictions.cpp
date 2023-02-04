@@ -40,6 +40,9 @@ std::array<GameRestrictions, 4> restrictions = {{
         (std::uint32_t*)0x6eb780,
         (std::uint8_t*)0x65cefe,
         (std::uint8_t*)0x626726,
+        {1, INT_MAX},
+        {0, 100},
+        {-100, 100},
     },
     // Russobit
     GameRestrictions{
@@ -56,6 +59,9 @@ std::array<GameRestrictions, 4> restrictions = {{
         (std::uint32_t*)0x6eb780,
         (std::uint8_t*)0x65cefe,
         (std::uint8_t*)0x626726,
+        {1, INT_MAX},
+        {0, 100},
+        {-100, 100},
     },
     // Gog
     GameRestrictions{
@@ -72,6 +78,9 @@ std::array<GameRestrictions, 4> restrictions = {{
         (std::uint32_t*)0x6e9720,
         (std::uint8_t*)0x65b97e,
         (std::uint8_t*)0x625266,
+        {1, INT_MAX},
+        {0, 100},
+        {-100, 100},
     },
     // Scenario Editor
     GameRestrictions{
@@ -88,6 +97,9 @@ std::array<GameRestrictions, 4> restrictions = {{
         (std::uint32_t*)0x5df498,
         (std::uint8_t*)nullptr,
         (std::uint8_t*)nullptr,
+        {1, INT_MAX},
+        {0, 100},
+        {-100, 100},
     }
 }};
 // clang-format on
