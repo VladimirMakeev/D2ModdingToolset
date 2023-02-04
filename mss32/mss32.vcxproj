@@ -424,6 +424,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\scriptutils.cpp" />
     <ClCompile Include="src\settings.cpp" />
     <ClCompile Include="src\sitemerchantinterf.cpp" />
+    <ClCompile Include="src\sitemerchantinterfhooks.cpp" />
     <ClCompile Include="src\smartptr.cpp" />
     <ClCompile Include="src\movepathhooks.cpp" />
     <ClCompile Include="src\capitalraceset.cpp" />
@@ -992,6 +993,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\settings.h" />
     <ClInclude Include="include\sitecategories.h" />
     <ClInclude Include="include\sitemerchantinterf.h" />
+    <ClInclude Include="include\sitemerchantinterfhooks.h" />
     <ClInclude Include="include\sitetrainingcampinterf.h" />
     <ClInclude Include="include\smartptr.h" />
     <ClInclude Include="include\capitalraceset.h" />

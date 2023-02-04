@@ -28,8 +28,6 @@ void __fastcall manageStkInterfOnObjectChangedHooked(game::CManageStkInterf* thi
                                                      int /*%edx*/,
                                                      game::IMidScenarioObject* obj)
 {
-    using namespace game;
-
     getOriginalFunctions().manageStkInterfOnObjectChanged(thisptr, obj);
 
     midDragDropInterfResetCurrentSource(thisptr);

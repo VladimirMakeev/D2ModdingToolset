@@ -28,8 +28,6 @@ void __fastcall cityStackInterfOnObjectChangedHooked(game::CCityStackInterf* thi
                                                      int /*%edx*/,
                                                      game::IMidScenarioObject* obj)
 {
-    using namespace game;
-
     getOriginalFunctions().cityStackInterfOnObjectChanged(thisptr, obj);
 
     midDragDropInterfResetCurrentSource(&thisptr->dragDropInterf);

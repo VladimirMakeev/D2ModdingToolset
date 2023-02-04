@@ -137,6 +137,8 @@ struct OriginalFunctions
     game::CMidDataCache2::INotifyVftable::OnObjectChanged exchangeInterfOnObjectChanged;
 
     game::CMidDataCache2::INotifyVftable::OnObjectChanged cityStackInterfOnObjectChanged;
+
+    game::CMidDataCache2::INotifyVftable::OnObjectChanged siteMerchantInterfOnObjectChanged;
 };
 
 OriginalFunctions& getOriginalFunctions();

@@ -142,6 +142,8 @@
 #include "scenariodataarray.h"
 #include "scenarioinfo.h"
 #include "settings.h"
+#include "sitemerchantinterf.h"
+#include "sitemerchantinterfhooks.h"
 #include "smartptr.h"
 #include "stackbattleactionmsg.h"
 #include "summonhooks.h"
@@ -343,6 +345,7 @@ static Hooks getGameHooks()
         {CManageStkInterfApi::vftable().notify->onObjectChanged, manageStkInterfOnObjectChangedHooked, (void**)&orig.manageStkInterfOnObjectChanged},
         {CExchangeInterfApi::vftable().notify->onObjectChanged, exchangeInterfOnObjectChangedHooked, (void**)&orig.exchangeInterfOnObjectChanged},
         {CCityStackInterfApi::vftable().notify->onObjectChanged, cityStackInterfOnObjectChangedHooked, (void**)&orig.cityStackInterfOnObjectChanged},
+        {CSiteMerchantInterfApi::vftable().notify->onObjectChanged, siteMerchantInterfOnObjectChangedHooked, (void**)&orig.siteMerchantInterfOnObjectChanged},
     };
     // clang-format on
 
