@@ -22,10 +22,25 @@
 
 namespace game {
 
+struct IResetStackExtVftable;
+
 struct IResetStackExt
 {
-    void* vftable;
+    IResetStackExtVftable* vftable;
 };
+
+struct IResetStackExtVftable
+{
+    using Destructor = void(__thiscall*)(IResetStackExt* thisptr, bool freeMemory);
+    Destructor destructor;
+
+    void* methods[4];
+
+    using GetStackId = CMidgardID*(__thiscall*)(IResetStackExt* thisptr, CMidgardID* value);
+    GetStackId getStackId;
+};
+
+assert_vftable_size(IResetStackExtVftable, 6);
 
 } // namespace game
 
