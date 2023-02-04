@@ -83,7 +83,7 @@ struct Vftable
 {
     const CMidDataCache2::INotifyVftable* notify;
     const IResetStackExtVftable* resetStackExt;
-    const CInterfaceVftable* interface;
+    const CInterfaceVftable* dragDropInterf;
     const ITaskManagerHolderVftable* taskManagerHolder;
     const IMidDropManagerVftable* dropManager;
 };
