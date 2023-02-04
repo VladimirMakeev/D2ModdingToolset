@@ -39,8 +39,8 @@ struct CMidDataCache2 : public IMidgardObjectMap
 
     struct INotifyVftable
     {
-        using Notify = void(__thiscall*)(INotify* thisptr, IMidScenarioObject* obj);
-        Notify notify;
+        using OnObjectChanged = void(__thiscall*)(INotify* thisptr, IMidScenarioObject* obj);
+        OnObjectChanged onObjectChanged;
     };
 
     assert_vftable_size(INotifyVftable, 1);
