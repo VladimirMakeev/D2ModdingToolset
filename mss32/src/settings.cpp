@@ -337,6 +337,9 @@ const Settings& defaultSettings()
         settings.unitEncyclopedia.detailedAttackDescription = true;
         settings.fixEffectiveHpFormula = true;
 
+        // The default value of 1024 objects provides room for average object size of 512 bytes.
+        settings.engine.sendRefreshInfoObjectCountLimit = 1024;
+
         initialized = true;
     }
 

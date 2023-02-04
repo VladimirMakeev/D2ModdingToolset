@@ -665,6 +665,7 @@
     ```
   </details>
 - Fixes inability to 'Defend' as second attack if no other action except 'Instant resolve' and 'Auto battle' is available (the bug generally avoided by toggling 'Auto battle');
+- Fixes an issue with incomplete loading of scenario file causing some objects to be missing (if scenario contains too many objects, it caused in-game internal buffer to overflow over its limit of 512 KB);
 
 ### Scripting:
 The toolset uses Lua for settings and advanced game mechanics. See [luaApi](luaApi.md) for detailed information.
