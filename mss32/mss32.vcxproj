@@ -465,6 +465,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\unitpositionlist.cpp" />
     <ClCompile Include="src\unitpositionmap.cpp" />
     <ClCompile Include="src\unitsforhire.cpp" />
+    <ClCompile Include="src\unitstovalidate.cpp" />
     <ClCompile Include="src\unittypedescriptor.cpp" />
     <ClCompile Include="src\unitutils.cpp" />
     <ClCompile Include="src\untransformeffecthooks.cpp" />
@@ -1050,6 +1051,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\unitpositionmap.h" />
     <ClInclude Include="include\unitpositionpair.h" />
     <ClInclude Include="include\unitsforhire.h" />
+    <ClInclude Include="include\unitstovalidate.h" />
     <ClInclude Include="include\unittypedescriptor.h" />
     <ClInclude Include="include\unitutils.h" />
     <ClInclude Include="include\untransformeffecthooks.h" />

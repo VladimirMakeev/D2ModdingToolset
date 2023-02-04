@@ -151,6 +151,7 @@
 #include "unitmodifier.h"
 #include "unitmodifierhooks.h"
 #include "unitsforhire.h"
+#include "unitstovalidate.h"
 #include "unitutils.h"
 #include "untransformeffecthooks.h"
 #include "usracialsoldier.h"
@@ -439,15 +440,26 @@ static Hooks getGameHooks()
 
     if (userSettings().debugMode) {
         // clang-format off
-        // Log added/changed/erased objects ids being sent by server to netMessages<PID>.log
-        if (userSettings().debug.sendObjectsChangesTreshold > 0) {
-            hooks.emplace_back(HookInfo{CMidServerLogicApi::vftable().midMsgSender->sendObjectsChanges, midServerLogicSendObjectsChangesHooked, (void**)&orig.midServerLogicSendObjectsChanges});
-        }
         // Log all net messages being sent by single player (both client and server) to netMessages<PID>.log
         if (userSettings().debug.logSinglePlayerMessages) {
             hooks.emplace_back(HookInfo{CNetSinglePlayerApi::vftable()->sendMessage, netSinglePlayerSendMessageHooked, (void**)&orig.netSinglePlayerSendMessage});
         }
         // clang-format on
+    }
+
+    if (userSettings().modifiers.validateUnitsOnGroupChanged) {
+        // Validate current HP / XP of units when their group changes (units added, removed,
+        // rearranged, etc.) to resolve issues with custom HP / XP modifiers, that depend on other
+        // units (like auras in MNS mod).
+        hooks.emplace_back(
+            HookInfo{fn.getStackFortRuinGroupForChange, getStackFortRuinGroupForChangeHooked});
+    }
+
+    if (userSettings().modifiers.validateUnitsOnGroupChanged || userSettings().debugMode) {
+        // Log added/changed/erased objects ids being sent by server to netMessages<PID>.log
+        hooks.emplace_back(HookInfo{CMidServerLogicApi::vftable().midMsgSender->sendObjectsChanges,
+                                    midServerLogicSendObjectsChangesHooked,
+                                    (void**)&orig.midServerLogicSendObjectsChanges});
     }
 
     return hooks;
@@ -2148,6 +2160,25 @@ bool __fastcall scenarioMapStreamHooked(game::CMidgardScenarioMap* scenarioMap,
     }
 
     return result;
+}
+
+void __stdcall getStackFortRuinGroupForChangeHooked(game::IMidgardObjectMap* objectMap,
+                                                    const game::CMidgardID* objectId,
+                                                    game::CMidUnitGroup** result)
+{
+    using namespace game;
+
+    auto group = getGroup(objectMap, objectId, true);
+    if (group) {
+        // The validation itself will be performed in midServerLogicSendObjectsChangesHooked
+        auto& unitsToValidate = getUnitsToValidate();
+        const auto& units = group->units;
+        for (auto it = units.bgn; it != units.end; it++) {
+            unitsToValidate.insert(*it);
+        }
+    }
+
+    *result = group;
 }
 
 } // namespace hooks

@@ -254,6 +254,10 @@ bool __fastcall scenarioMapStreamHooked(game::CMidgardScenarioMap* scenarioMap,
                                         int /*%edx*/,
                                         game::IMidgardStreamEnv* streamEnv);
 
+void __stdcall getStackFortRuinGroupForChangeHooked(game::IMidgardObjectMap* objectMap,
+                                                    const game::CMidgardID* objectId,
+                                                    game::CMidUnitGroup** result);
+
 } // namespace hooks
 
 #endif // HOOKS_H
