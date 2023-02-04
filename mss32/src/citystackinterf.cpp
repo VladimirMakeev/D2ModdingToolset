@@ -41,11 +41,48 @@ static std::array<Api, 3> functions = {{
         (Api::CreateButtonFunctor)0x4b4263
     }
 }};
+
+static std::array<Vftable, 4> vftables = {{
+    // Akella
+    Vftable{
+        (CMidDataCache2::INotifyVftable*)0x6d96e4,
+        (CMidCommandQueue2::INotifyCQVftable*)0x6d96d4,
+        (IResetStackExtVftable*)0x6d96b4,
+        (CInterfaceVftable*)0x6d9624,
+        (ITaskManagerHolderVftable*)0x6d9614,
+        (IMidDropManagerVftable*)0x6d95d4,
+    },
+    // Russobit
+    Vftable{
+        (CMidDataCache2::INotifyVftable*)0x6d96e4,
+        (CMidCommandQueue2::INotifyCQVftable*)0x6d96d4,
+        (IResetStackExtVftable*)0x6d96b4,
+        (CInterfaceVftable*)0x6d9624,
+        (ITaskManagerHolderVftable*)0x6d9614,
+        (IMidDropManagerVftable*)0x6d95d4,
+    },
+    // Gog
+    Vftable{
+        (CMidDataCache2::INotifyVftable*)0x6d7684,
+        (CMidCommandQueue2::INotifyCQVftable*)0x6d7674,
+        (IResetStackExtVftable*)0x6d7654,
+        (CInterfaceVftable*)0x6d75c4,
+        (ITaskManagerHolderVftable*)0x6d75b4,
+        (IMidDropManagerVftable*)0x6d7574,
+    },
+    // Scenario Editor
+    Vftable{},
+}};
 // clang-format on
 
 Api& get()
 {
     return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+Vftable& vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::CCityStackInterfApi
