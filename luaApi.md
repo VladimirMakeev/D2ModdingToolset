@@ -557,6 +557,8 @@ stack:getEquippedItem(Equipment.Boots)
 stack.movement
 --- Returns true if stack is invisible.
 stack.invisible
+--- Returns number of battles won by the stack.
+stack.battlesWon
 ```
 
 ---

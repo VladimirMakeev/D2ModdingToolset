@@ -64,6 +64,7 @@ public:
     /** Returns stack subrace category id. */
     int getSubrace() const;
     bool isInvisible() const;
+    int getBattlesWon() const;
 
     std::vector<ItemView> getInventoryItems() const;
     std::optional<ItemView> getLeaderEquippedItem(const game::EquippedItemIdx& idx) const;
