@@ -25,6 +25,7 @@
 namespace game {
 
 struct IMidDropManagerVftable;
+struct IMidDropSource;
 
 struct IMidDropManager
 {
@@ -36,10 +37,20 @@ struct IMidDropManagerVftable
     using Destructor = void(__thiscall*)(IMidDropManager* thisptr, char flags);
     Destructor destructor;
 
-    using Method1 = int(__thiscall*)(IMidDropManager* thisptr);
-    Method1 method1;
+    using GetDropSource = IMidDropSource*(__thiscall*)(IMidDropManager* thisptr);
+    GetDropSource getDropSource;
 
-    void* methods[12];
+    using SetDropSource = void(__thiscall*)(IMidDropManager* thisptr,
+                                            IMidDropSource* value,
+                                            bool a3);
+    SetDropSource setDropSource;
+
+    void* method4;
+
+    using ResetDropSource = void(__thiscall*)(IMidDropManager* thisptr);
+    ResetDropSource resetDropSource;
+
+    void* methods[9];
 };
 
 assert_vftable_size(IMidDropManagerVftable, 14);

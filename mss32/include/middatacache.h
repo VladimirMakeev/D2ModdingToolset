@@ -26,13 +26,24 @@
 namespace game {
 
 struct CMidgardScenarioMap;
+struct IMidScenarioObject;
 
 struct CMidDataCache2 : public IMidgardObjectMap
 {
+    struct INotifyVftable;
+
     struct INotify
     {
-        void* vftable;
+        INotifyVftable* vftable;
     };
+
+    struct INotifyVftable
+    {
+        using OnObjectChanged = void(__thiscall*)(INotify* thisptr, IMidScenarioObject* obj);
+        OnObjectChanged onObjectChanged;
+    };
+
+    assert_vftable_size(INotifyVftable, 1);
 
     CMidgardScenarioMap** scenarioMap;
     IdList list;

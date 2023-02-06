@@ -217,6 +217,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\buildingbranch.cpp" />
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
+    <ClCompile Include="src\citystackinterfhooks.cpp" />
     <ClCompile Include="src\enclayoutcity.cpp" />
     <ClCompile Include="src\enclayoutcityhooks.cpp" />
     <ClCompile Include="src\enclayoutruin.cpp" />
@@ -224,6 +225,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\enclayoutstackhooks.cpp" />
     <ClCompile Include="src\encparambase.cpp" />
     <ClCompile Include="src\encparambasehooks.cpp" />
+    <ClCompile Include="src\exchangeinterfhooks.cpp" />
     <ClCompile Include="src\intvector.cpp" />
     <ClCompile Include="src\button.cpp" />
     <ClCompile Include="src\campaignstream.cpp" />
@@ -269,6 +271,9 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\interfaceutils.cpp" />
     <ClCompile Include="src\enclayoutstack.cpp" />
     <ClCompile Include="src\logutils.cpp" />
+    <ClCompile Include="src\managestkinterf.cpp" />
+    <ClCompile Include="src\managestkinterfhooks.cpp" />
+    <ClCompile Include="src\middragdropinterfhooks.cpp" />
     <ClCompile Include="src\midgardscenariomap.cpp" />
     <ClCompile Include="src\midserver.cpp" />
     <ClCompile Include="src\midserverlogichooks.cpp" />
@@ -419,6 +424,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\scriptutils.cpp" />
     <ClCompile Include="src\settings.cpp" />
     <ClCompile Include="src\sitemerchantinterf.cpp" />
+    <ClCompile Include="src\sitemerchantinterfhooks.cpp" />
     <ClCompile Include="src\smartptr.cpp" />
     <ClCompile Include="src\movepathhooks.cpp" />
     <ClCompile Include="src\capitalraceset.cpp" />
@@ -611,6 +617,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\buildingbranch.h" />
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />
+    <ClInclude Include="include\citystackinterfhooks.h" />
     <ClInclude Include="include\ddstackgroup.h" />
     <ClInclude Include="include\ddunitgroup.h" />
     <ClInclude Include="include\enclayoutcity.h" />
@@ -619,6 +626,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\enclayoutruinhooks.h" />
     <ClInclude Include="include\encparamidplayer.h" />
     <ClInclude Include="include\encparambasehooks.h" />
+    <ClInclude Include="include\exchangeinterfhooks.h" />
     <ClInclude Include="include\groupareamanagement.h" />
     <ClInclude Include="include\intvector.h" />
     <ClInclude Include="include\button.h" />
@@ -665,9 +673,12 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\interfaceutils.h" />
     <ClInclude Include="include\leaderunitdescriptor.h" />
     <ClInclude Include="include\logutils.h" />
+    <ClInclude Include="include\managestkinterf.h" />
+    <ClInclude Include="include\managestkinterfhooks.h" />
     <ClInclude Include="include\midanim2.h" />
     <ClInclude Include="include\midanim2base.h" />
     <ClInclude Include="include\midanim2system.h" />
+    <ClInclude Include="include\middragdropinterfhooks.h" />
     <ClInclude Include="include\middropsource.h" />
     <ClInclude Include="include\middropsourceext.h" />
     <ClInclude Include="include\middroptarget.h" />
@@ -982,6 +993,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\settings.h" />
     <ClInclude Include="include\sitecategories.h" />
     <ClInclude Include="include\sitemerchantinterf.h" />
+    <ClInclude Include="include\sitemerchantinterfhooks.h" />
     <ClInclude Include="include\sitetrainingcampinterf.h" />
     <ClInclude Include="include\smartptr.h" />
     <ClInclude Include="include\capitalraceset.h" />

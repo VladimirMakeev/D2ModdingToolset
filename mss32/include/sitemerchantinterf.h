@@ -79,6 +79,17 @@ struct Api
 
 Api& get();
 
+struct Vftable
+{
+    const CMidDataCache2::INotifyVftable* notify;
+    const IResetStackExtVftable* resetStackExt;
+    const CInterfaceVftable* dragDropInterf;
+    const ITaskManagerHolderVftable* taskManagerHolder;
+    const IMidDropManagerVftable* dropManager;
+};
+
+Vftable& vftable();
+
 } // namespace CSiteMerchantInterfApi
 
 } // namespace game

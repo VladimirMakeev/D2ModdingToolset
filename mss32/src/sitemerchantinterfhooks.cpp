@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2023 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,31 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef RESETSTACKEXT_H
-#define RESETSTACKEXT_H
+#include "sitemerchantinterfhooks.h"
+#include "middragdropinterfhooks.h"
+#include "originalfunctions.h"
+#include "sitemerchantinterf.h"
 
-namespace game {
+namespace hooks {
 
-struct IResetStackExtVftable;
-
-struct IResetStackExt
+void __fastcall siteMerchantInterfOnObjectChangedHooked(game::CSiteMerchantInterf* thisptr,
+                                                        int /*%edx*/,
+                                                        game::IMidScenarioObject* obj)
 {
-    IResetStackExtVftable* vftable;
-};
+    getOriginalFunctions().siteMerchantInterfOnObjectChanged(thisptr, obj);
 
-struct IResetStackExtVftable
-{
-    using Destructor = void(__thiscall*)(IResetStackExt* thisptr, bool freeMemory);
-    Destructor destructor;
+    midDragDropInterfResetCurrentSource(&thisptr->dragDropInterf);
+}
 
-    void* methods[4];
-
-    using GetStackId = CMidgardID*(__thiscall*)(IResetStackExt* thisptr, CMidgardID* value);
-    GetStackId getStackId;
-};
-
-assert_vftable_size(IResetStackExtVftable, 6);
-
-} // namespace game
-
-#endif // RESETSTACKEXT_H
+} // namespace hooks
