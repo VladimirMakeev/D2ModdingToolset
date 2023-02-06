@@ -41,11 +41,45 @@ static std::array<Api, 3> functions = {{
         (Api::CreateButtonFunctor)0x49a649
     }
 }};
+
+static std::array<Vftable, 4> vftables = {{
+    // Akella
+    Vftable{
+        (CMidDataCache2::INotifyVftable*)0x6d7914,
+        (IResetStackExtVftable*)0x6d78f4,
+        (CInterfaceVftable*)0x6d7864,
+        (ITaskManagerHolderVftable*)0x6d7854,
+        (IMidDropManagerVftable*)0x6d7814,
+    },
+    // Russobit
+    Vftable{
+        (CMidDataCache2::INotifyVftable*)0x6d7914,
+        (IResetStackExtVftable*)0x6d78f4,
+        (CInterfaceVftable*)0x6d7864,
+        (ITaskManagerHolderVftable*)0x6d7854,
+        (IMidDropManagerVftable*)0x6d7814,
+    },
+    // Gog
+    Vftable{
+        (CMidDataCache2::INotifyVftable*)0x6d58b4,
+        (IResetStackExtVftable*)0x6d5894,
+        (CInterfaceVftable*)0x6d5804,
+        (ITaskManagerHolderVftable*)0x6d57f4,
+        (IMidDropManagerVftable*)0x6d57b4,
+    },
+    // Scenario Editor
+    Vftable{},
+}};
 // clang-format on
 
 Api& get()
 {
     return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+Vftable& vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::CSiteMerchantInterfApi

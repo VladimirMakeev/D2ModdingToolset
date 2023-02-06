@@ -20,18 +20,33 @@
 #ifndef DRAGANDDROPINTERF_H
 #define DRAGANDDROPINTERF_H
 
+#include "d2list.h"
 #include "fullscreeninterf.h"
 #include "middropmanager.h"
+#include "mqpoint.h"
+#include "smartptr.h"
 
 namespace game {
 
+struct IMidDropSource;
+struct IMidDropTarget;
 struct CDialogInterf;
+struct CInterfManagerImpl;
+struct ITask;
 
 struct CDragAndDropInterfData
 {
-    char unknown[60];
+    bool unknown;
+    char padding[3];
+    IMidDropSource* currentSource;
+    char unknown8[4];
+    SmartPtr<CInterfManagerImpl> interfManager;
+    List<IMidDropSource*> dropSources;
+    List<IMidDropTarget*> dropTargets;
+    CMqPoint mousePosition;
     CDialogInterf* dialogInterf;
-    char unknown2[8];
+    ITask* task;
+    char unknown68[4];
 };
 
 assert_size(CDragAndDropInterfData, 72);

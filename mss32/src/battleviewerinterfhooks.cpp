@@ -328,7 +328,7 @@ bool __fastcall markAttackTargetsHooked(game::CBattleViewerInterf* thisptr,
     if (thisptr->data->unitId == emptyId)
         return false;
 
-    if (thisptr->dropManager.vftable->method1(&thisptr->dropManager) > 0) {
+    if (thisptr->dropManager.vftable->getDropSource(&thisptr->dropManager)) {
         if (thisptr->data->itemId == emptyId)
             return false;
 

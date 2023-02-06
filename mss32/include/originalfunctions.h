@@ -131,6 +131,14 @@ struct OriginalFunctions
     game::IMidMsgSenderVftable::SendObjectsChanges midServerLogicSendObjectsChanges;
 
     game::IMqNetPlayerVftable::SendNetMessage netSinglePlayerSendMessage;
+
+    game::CMidDataCache2::INotifyVftable::OnObjectChanged manageStkInterfOnObjectChanged;
+
+    game::CMidDataCache2::INotifyVftable::OnObjectChanged exchangeInterfOnObjectChanged;
+
+    game::CMidDataCache2::INotifyVftable::OnObjectChanged cityStackInterfOnObjectChanged;
+
+    game::CMidDataCache2::INotifyVftable::OnObjectChanged siteMerchantInterfOnObjectChanged;
 };
 
 OriginalFunctions& getOriginalFunctions();

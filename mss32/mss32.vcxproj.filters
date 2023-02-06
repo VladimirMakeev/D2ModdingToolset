@@ -1139,6 +1139,24 @@
     <ClCompile Include="src\unitstovalidate.cpp">
       <Filter>features</Filter>
     </ClCompile>
+    <ClCompile Include="src\managestkinterf.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\managestkinterfhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\exchangeinterfhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\citystackinterfhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\middragdropinterfhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sitemerchantinterfhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2922,6 +2940,24 @@
     </ClInclude>
     <ClInclude Include="include\unitstovalidate.h">
       <Filter>features</Filter>
+    </ClInclude>
+    <ClInclude Include="include\managestkinterf.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\managestkinterfhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exchangeinterfhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\citystackinterfhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\middragdropinterfhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sitemerchantinterfhooks.h">
+      <Filter>hooks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

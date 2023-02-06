@@ -42,6 +42,8 @@
 #include "buildingbranch.h"
 #include "buildingtype.h"
 #include "button.h"
+#include "citystackinterf.h"
+#include "citystackinterfhooks.h"
 #include "cmdbattlechooseactionmsg.h"
 #include "cmdbattleendmsg.h"
 #include "cmdbattleresultmsg.h"
@@ -75,6 +77,8 @@
 #include "encparambasehooks.h"
 #include "eventconditioncathooks.h"
 #include "eventeffectcathooks.h"
+#include "exchangeinterf.h"
+#include "exchangeinterfhooks.h"
 #include "fortcategory.h"
 #include "fortification.h"
 #include "gameutils.h"
@@ -90,6 +94,8 @@
 #include "lordtype.h"
 #include "mainview2.h"
 #include "mainview2hooks.h"
+#include "managestkinterf.h"
+#include "managestkinterfhooks.h"
 #include "mapgen.h"
 #include "mempool.h"
 #include "menuloadskirmishmultihooks.h"
@@ -136,6 +142,8 @@
 #include "scenariodataarray.h"
 #include "scenarioinfo.h"
 #include "settings.h"
+#include "sitemerchantinterf.h"
+#include "sitemerchantinterfhooks.h"
 #include "smartptr.h"
 #include "stackbattleactionmsg.h"
 #include "summonhooks.h"
@@ -332,6 +340,11 @@ static Hooks getGameHooks()
         {fn.loadScenarioMap, loadScenarioMapHooked, (void**)&orig.loadScenarioMap},
         // Show broken (removed) wards in unit encyclopedia
         {CEncParamBaseApi::get().addUnitBattleInfo, encParamBaseAddUnitBattleInfoHooked},
+        // Fix crash on drag&drop when INotify::OnObjectChanged is processed between mouse down and up
+        {CManageStkInterfApi::vftable().notify->onObjectChanged, manageStkInterfOnObjectChangedHooked, (void**)&orig.manageStkInterfOnObjectChanged},
+        {CExchangeInterfApi::vftable().notify->onObjectChanged, exchangeInterfOnObjectChangedHooked, (void**)&orig.exchangeInterfOnObjectChanged},
+        {CCityStackInterfApi::vftable().notify->onObjectChanged, cityStackInterfOnObjectChangedHooked, (void**)&orig.cityStackInterfOnObjectChanged},
+        {CSiteMerchantInterfApi::vftable().notify->onObjectChanged, siteMerchantInterfOnObjectChangedHooked, (void**)&orig.siteMerchantInterfOnObjectChanged},
     };
     // clang-format on
 
