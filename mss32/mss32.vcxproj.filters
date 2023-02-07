@@ -2977,6 +2977,9 @@
     <ClInclude Include="include\imgstore2.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\fffactory.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\imgstore2texture.h">
       <Filter>game</Filter>
     </ClInclude>
