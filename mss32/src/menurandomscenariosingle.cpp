@@ -34,6 +34,7 @@
 #include "menuphase.h"
 #include "multilayerimg.h"
 #include "nativegameinfo.h"
+#include "popupdialoginterf.h"
 #include "scenariotemplates.h"
 #include "spinbuttoninterf.h"
 #include "stringarray.h"
@@ -70,6 +71,45 @@ static std::unique_ptr<NativeGameInfo> gameInfo;
 
 /** Maximum number of attempts to generate scenario map. */
 static constexpr const std::uint32_t generationAttemptsMax{50};
+
+using OnGenerationCanceled = void (*)(CMenuRandomScenarioSingle* thisptr);
+
+struct WaitGenerationInterf : public game::CPopupDialogInterf
+{
+    OnGenerationCanceled onCanceled;
+    CMenuRandomScenarioSingle* menu;
+};
+
+static void __fastcall waitCancelButtonHandler(WaitGenerationInterf* thisptr, int /*%edx*/)
+{
+    thisptr->onCanceled(thisptr->menu);
+}
+
+static WaitGenerationInterf* createWaitGenerationInterf(CMenuRandomScenarioSingle* menu,
+                                                        OnGenerationCanceled onCanceled)
+{
+    using namespace game;
+
+    static const char waitDialogName[] = "DLG_WAIT_GENERATION";
+
+    const auto& allocateMem{game::Memory::get().allocate};
+
+    auto* interf = (WaitGenerationInterf*)allocateMem(sizeof(WaitGenerationInterf));
+    CPopupDialogInterfApi::get().constructor(interf, waitDialogName, nullptr);
+
+    interf->onCanceled = onCanceled;
+    interf->menu = menu;
+
+    CDialogInterf* dialog{*interf->dialog};
+
+    SmartPointer functor;
+    auto callback = (CMenuBaseApi::Api::ButtonCallback)waitCancelButtonHandler;
+    CMenuBaseApi::get().createButtonFunctor(&functor, 0, (CMenuBase*)interf, &callback);
+    CButtonInterfApi::get().assignFunctor(dialog, "BTN_CANCEL", waitDialogName, &functor, 0);
+    SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
+
+    return interf;
+}
 
 static const char* getRaceImage(rsg::RaceType race)
 {
@@ -537,9 +577,21 @@ static void generateScenario(CMenuRandomScenarioSingle* menu, std::time_t seed)
             auto options{createGeneratorOptions(menu->scenarioTemplate, seed)};
             rsg::MapGenerator generator{options, seed};
 
+            // Check for cancel before and after generation because its the longest part
+            if (menu->cancelGeneration) {
+                menu->generationStatus = GenerationStatus::Canceled;
+                return;
+            }
+
             const auto beforeGeneration{clock::now()};
 
             rsg::MapPtr scenario{generator.generate()};
+
+            if (menu->cancelGeneration) {
+                menu->generationStatus = GenerationStatus::Canceled;
+                return;
+            }
+
             // Successfully generated, save results
             menu->scenario = std::move(scenario);
 
@@ -608,6 +660,20 @@ static void __fastcall waitGenerationResults(CMenuRandomScenarioSingle* menu, in
                                    generationAttemptsMax));
         return;
     }
+}
+
+static void onGenerationCanceled(CMenuRandomScenarioSingle* menu)
+{
+    WaitGenerationInterf* popup{menu->popup};
+    if (!popup) {
+        return;
+    }
+
+    // Remove cancel button so player won't click it twice while waiting for generator thread
+    game::CDialogInterf* dialog{*popup->dialog};
+    game::CDialogInterfApi::get().hideControl(dialog, "BTN_CANCEL");
+
+    menu->cancelGeneration = true;
 }
 
 static void __fastcall buttonGenerateHandler(CMenuRandomScenarioSingle* thisptr, int /*%edx*/)
@@ -681,15 +747,11 @@ static void __fastcall buttonGenerateHandler(CMenuRandomScenarioSingle* thisptr,
         // Create template contents depending on size and races
         rsg::readTemplateContents(thisptr->scenarioTemplate, lua);
 
-        // Show 'wait' menu
-        // TODO: use custom menu with proper text and cancel button
-        auto* waitMenu = (CMenuFlashWait*)game::Memory::get().allocate(sizeof(CMenuFlashWait));
-        CMenuFlashWaitApi::get().constructor(waitMenu);
-
-        thisptr->popup = waitMenu;
-        showInterface(waitMenu);
+        thisptr->popup = createWaitGenerationInterf(thisptr, onGenerationCanceled);
+        showInterface(thisptr->popup);
 
         thisptr->generationStatus = GenerationStatus::NotStarted;
+        thisptr->cancelGeneration = false;
         createTimerEvent(&thisptr->uiEvent, thisptr, waitGenerationResults, 50);
 
         // Start generation in another thread and wait until its done

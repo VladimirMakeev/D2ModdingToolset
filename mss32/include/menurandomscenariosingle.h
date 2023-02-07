@@ -36,10 +36,13 @@ struct CMenuPhase;
 
 namespace hooks {
 
+struct WaitGenerationInterf;
+
 enum class GenerationStatus : int
 {
     NotStarted,    /**< Random scenario generation has not started yet. */
     InProcess,     /**< Generation is in process, generator thread is running. */
+    Canceled,      /**< Generation was canceled by player. */
     Done,          /**< Generation successfully done, scenario can be serialized. */
     LimitExceeded, /**< Generation could not succeed in specified number of attempts. */
     Error,         /**< Generation was aborted with an error. */
@@ -60,8 +63,9 @@ struct CMenuRandomScenarioSingle : public game::CMenuBase
     using RaceIndices = std::array<std::pair<game::CButtonInterf*, int /* index */>, 4>;
     RaceIndices raceIndices;
 
-    game::CInterface* popup{};
+    WaitGenerationInterf* popup{};
     GenerationStatus generationStatus{GenerationStatus::NotStarted};
+    bool cancelGeneration{false};
 };
 
 game::CMenuBase* __stdcall createMenuRandomScenarioSingle(game::CMenuPhase* menuPhase);
