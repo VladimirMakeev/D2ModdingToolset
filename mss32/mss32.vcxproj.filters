@@ -2953,6 +2953,9 @@
     <ClInclude Include="include\sitemerchantinterfhooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
+    <ClInclude Include="include\mqdb.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
