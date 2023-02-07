@@ -630,6 +630,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\factoryimage2.h" />
     <ClInclude Include="include\factoryimagestill.h" />
     <ClInclude Include="include\fffactory.h" />
+    <ClInclude Include="include\ffimg.h" />
     <ClInclude Include="include\groupareamanagement.h" />
     <ClInclude Include="include\imgpacker.h" />
     <ClInclude Include="include\imgpackerloader.h" />

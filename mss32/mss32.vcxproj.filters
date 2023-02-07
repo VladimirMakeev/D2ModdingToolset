@@ -2980,6 +2980,9 @@
     <ClInclude Include="include\fffactory.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\ffimg.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\imgstore2texture.h">
       <Filter>game</Filter>
     </ClInclude>
