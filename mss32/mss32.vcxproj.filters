@@ -2962,6 +2962,9 @@
     <ClInclude Include="include\factoryimage2.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\imgpackerstoreloader.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\imgpacker.h">
       <Filter>game</Filter>
     </ClInclude>
