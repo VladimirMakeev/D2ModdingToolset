@@ -2971,6 +2971,9 @@
     <ClInclude Include="include\imgpackerloader.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\imgstore2loader.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\imgstore2.h">
       <Filter>game</Filter>
     </ClInclude>
