@@ -2956,6 +2956,9 @@
     <ClInclude Include="include\mqdb.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\gameimagedata.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\factoryimagestill.h">
       <Filter>game</Filter>
     </ClInclude>
