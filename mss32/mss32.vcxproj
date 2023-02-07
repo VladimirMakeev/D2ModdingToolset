@@ -631,6 +631,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\factoryimagestill.h" />
     <ClInclude Include="include\groupareamanagement.h" />
     <ClInclude Include="include\imgpacker.h" />
+    <ClInclude Include="include\imgpackerloader.h" />
     <ClInclude Include="include\intvector.h" />
     <ClInclude Include="include\button.h" />
     <ClInclude Include="include\campaignstream.h" />

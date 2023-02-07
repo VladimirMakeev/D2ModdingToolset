@@ -2965,6 +2965,9 @@
     <ClInclude Include="include\imgpacker.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\imgpackerloader.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
