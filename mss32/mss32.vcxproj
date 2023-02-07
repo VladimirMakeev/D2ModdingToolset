@@ -627,6 +627,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\encparamidplayer.h" />
     <ClInclude Include="include\encparambasehooks.h" />
     <ClInclude Include="include\exchangeinterfhooks.h" />
+    <ClInclude Include="include\factoryimage2.h" />
     <ClInclude Include="include\groupareamanagement.h" />
     <ClInclude Include="include\intvector.h" />
     <ClInclude Include="include\button.h" />
