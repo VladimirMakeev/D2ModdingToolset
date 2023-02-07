@@ -635,6 +635,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\imgpackerstoreloader.h" />
     <ClInclude Include="include\imgstore2.h" />
     <ClInclude Include="include\imgstore2loader.h" />
+    <ClInclude Include="include\imgstore2texture.h" />
     <ClInclude Include="include\intvector.h" />
     <ClInclude Include="include\button.h" />
     <ClInclude Include="include\campaignstream.h" />
