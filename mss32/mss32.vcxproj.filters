@@ -1154,6 +1154,9 @@
     <ClCompile Include="src\sitemerchantinterfhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="src\encyclopediapopup.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2987,6 +2990,9 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\imgstore2texture.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\encyclopediapopup.h">
       <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
