@@ -157,6 +157,7 @@ struct Rtti
     TypeDescriptor* CItemEquipmentType;
     TypeDescriptor* CUmStackType;
     TypeDescriptor* CFortificationType;
+    TypeDescriptor* IMidObjectType;
 };
 
 const Rtti& rtti();
