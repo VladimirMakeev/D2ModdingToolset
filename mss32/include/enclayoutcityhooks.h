@@ -25,6 +25,7 @@ struct IMidgardObjectMap;
 struct CDialogInterf;
 struct CFortification;
 struct CEncLayoutCity;
+struct IMidObject;
 } // namespace game
 
 namespace hooks {
@@ -34,6 +35,10 @@ void __fastcall encLayoutCityUpdateHooked(game::CEncLayoutCity* thisptr,
                                           const game::IMidgardObjectMap* objectMap,
                                           const game::CFortification* fort,
                                           game::CDialogInterf* dialog);
+
+void __fastcall encLayoutCityOnObjectChangedHooked(game::CEncLayoutCity* thisptr,
+                                                   int /*%edx*/,
+                                                   const game::IMidObject* obj);
 
 } // namespace hooks
 

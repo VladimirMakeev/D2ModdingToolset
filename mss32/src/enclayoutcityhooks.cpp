@@ -19,6 +19,7 @@
 
 #include "enclayoutcityhooks.h"
 #include "dialoginterf.h"
+#include "dynamiccast.h"
 #include "fortification.h"
 #include "gameutils.h"
 #include "interfaceutils.h"
@@ -118,6 +119,36 @@ void __fastcall encLayoutCityUpdateHooked(game::CEncLayoutCity* thisptr,
 
     setTxtXpKilled(dialog, objectMap, fort);
     setTxtXpKilledStack(dialog, objectMap, fort);
+}
+
+void __fastcall encLayoutCityOnObjectChangedHooked(game::CEncLayoutCity* thisptr,
+                                                   int /*%edx*/,
+                                                   const game::IMidObject* obj)
+{
+    using namespace game;
+
+    const auto& api = CEncLayoutCityApi::get();
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    auto objectMap = thisptr->data->objectMap;
+    auto fortification = (CFortification*)dynamicCast(obj, 0, rtti.IMidObjectType,
+                                                      rtti.CFortificationType, 0);
+    if (fortification) {
+        if (fortification->id == thisptr->data->fortificationId) {
+            api.update(thisptr, objectMap, fortification, thisptr->dialog);
+        }
+    } else {
+        auto stack = (CMidStack*)dynamicCast(obj, 0, rtti.IMidObjectType, rtti.CMidStackType, 0);
+        if (stack) {
+            fortification = (CFortification*)objectMap->vftable
+                                ->findScenarioObjectById(objectMap,
+                                                         &thisptr->data->fortificationId);
+            if (fortification && fortification->stackId == stack->id) {
+                api.update(thisptr, objectMap, fortification, thisptr->dialog);
+            }
+        }
+    }
 }
 
 } // namespace hooks

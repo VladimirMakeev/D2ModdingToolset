@@ -655,6 +655,10 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{CMidUnitApi::vftable()->initWithSoldierImpl,
                                 initWithSoldierImplHooked, (void**)&orig.initWithSoldierImpl});
 
+    // Update city encyclopedia on visiting stack changes
+    hooks.emplace_back(HookInfo{CEncLayoutCityApi::vftable()->onObjectChanged,
+                                encLayoutCityOnObjectChangedHooked});
+
     return hooks;
 }
 
