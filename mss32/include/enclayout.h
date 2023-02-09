@@ -37,8 +37,8 @@ assert_size(IEncLayout, 12);
 
 struct IEncLayoutVftable : public CInterfaceVftable
 {
-    using Update = void(__thiscall*)(IEncLayout* thisptr, const IMidObject* obj);
-    Update update;
+    using OnObjectChanged = void(__thiscall*)(IEncLayout* thisptr, const IMidObject* obj);
+    OnObjectChanged onObjectChanged;
 };
 
 assert_vftable_size(IEncLayoutVftable, 35);
