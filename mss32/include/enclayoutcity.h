@@ -29,6 +29,7 @@ namespace game {
 struct CEncLayoutCityData;
 struct IMidgardObjectMap;
 struct CFortification;
+struct CMidUnitGroup;
 struct IMqImage2;
 
 struct CEncLayoutCity : public IEncLayout
@@ -81,6 +82,14 @@ struct Api
                                      const CFortification* fort,
                                      CDialogInterf* dialog);
     Update update;
+
+    using UpdateGroupUi = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                           const CMidUnitGroup* group,
+                                           CDialogInterf* dialog,
+                                           const char* txtStackNameFormat,
+                                           const char* imgStackNameFormat,
+                                           bool isStackGroup);
+    UpdateGroupUi updateGroupUi;
 };
 
 Api& get();
