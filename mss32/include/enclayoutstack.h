@@ -21,12 +21,14 @@
 #define ENCLAYOUTSTACK_H
 
 #include "enclayout.h"
+#include "midgardid.h"
 
 namespace game {
 
 struct CEncLayoutStackData;
 struct IMidgardObjectMap;
 struct CMidStack;
+struct IMqImage2;
 
 struct CEncLayoutStack : public IEncLayout
 {
@@ -35,9 +37,37 @@ struct CEncLayoutStack : public IEncLayout
 
 assert_size(CEncLayoutStack, 16);
 
+// Similar to GroupAdapterUnitData
+struct CEncLayoutStackGroupData
+{
+    bool unknown;
+    bool unknown1;
+    bool boostApplied[6];
+    bool lowerApplied[6];
+    bool potionApplied[6];
+    bool canLevelUp[6];
+    bool hasHighLevel[6];
+    int highLevel[6];
+};
+
+assert_size(CEncLayoutStackGroupData, 56);
+
 struct CEncLayoutStackData
 {
-    char unknown[328];
+    IMidgardObjectMap* objectMap;
+    CMidgardID stackId;
+    CMidgardID playerId;
+    SmartPointer functor;
+    IMqImage2* spellBoostIcon;
+    IMqImage2* spellLowerIcon;
+    IMqImage2* potionBoostIcon;
+    IMqImage2* upgrageIcon;
+    IMqImage2* highLevelIcons[3];
+    CMqRect imgLowerArea;
+    CMqRect imgBoostArea;
+    CEncLayoutStackGroupData group;
+    CMqRect unitTxtAreas[6];
+    CMqRect unitImgAreas[6];
 };
 
 assert_size(CEncLayoutStackData, 328);
