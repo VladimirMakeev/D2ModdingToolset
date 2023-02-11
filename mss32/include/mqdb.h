@@ -21,11 +21,12 @@
 #define MQDB_H
 
 #include "d2list.h"
+#include "d2pair.h"
 #include "d2set.h"
+#include "d2string.h"
+#include "d2unorderedmap.h"
 #include "d2vector.h"
 #include "mq_c_s.h"
-#include <d2pair.h>
-#include <d2string.h>
 
 namespace game {
 
@@ -44,36 +45,10 @@ struct MQDBTocRecord
 
 assert_size(MQDBTocRecord, 16);
 
-struct MQDBDataRecord
-{
-    Pair<std::uint32_t /* record id */, MQDBTocRecord> idRecordPair;
-    std::uint32_t hash;
-    MQDBDataRecord* next;
-};
-
-assert_size(MQDBDataRecord, 28);
-
 /** Implementation of std::unordered_map<std::uint32_t, MQDBTocRecord> used in game */
-struct MQDBRecordMap
-{
-    char unkown;
-    char padding[3];
-    std::uint32_t recordsTotal;
-    MQDBDataRecord** records;
-    std::uint32_t recordsAllocated;
-    int unknown2;
-    int unknown3;
-    char unknown4;
-    char unknown5;
-    char unknown6;
-    char unknown7;
-    char unknown8;
-    char padding2[3];
-    int unknown9;
-    int unknown10;
-    void* allocator;
-};
-
+using MQDBRecordMap = UnorderedMap<std::uint32_t /* record id */,
+                                   MQDBTocRecord,
+                                   Pair<Pair<char, char[3]>, int>>;
 assert_size(MQDBRecordMap, 44);
 
 struct MQDBFile

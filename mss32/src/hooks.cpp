@@ -2108,7 +2108,7 @@ bool __fastcall checkMapObjectsHooked(game::CMidgardScenarioMap* scenarioMap, in
     const auto& idApi{CMidgardIDApi::get()};
 
     while (current.foundRecord != end.foundRecord) {
-        const auto* objectId{&current.foundRecord->objectId};
+        const auto* objectId{&current.foundRecord->key};
 
         const auto type{static_cast<int>(idApi.getType(objectId))};
         const auto typeIndex{idApi.getTypeIndex(objectId)};
@@ -2117,7 +2117,7 @@ bool __fastcall checkMapObjectsHooked(game::CMidgardScenarioMap* scenarioMap, in
             scenarioMap->freeIdTypeIndices[type] = typeIndex + 1;
         }
 
-        const auto* object{current.foundRecord->object.data};
+        const auto* object{current.foundRecord->value.data};
         if (!object->vftable->isValid(object, scenarioMap)) {
             logError("mssProxyError.log",
                      fmt::format("Scenario object {:s} is invalid", idToString(objectId)));

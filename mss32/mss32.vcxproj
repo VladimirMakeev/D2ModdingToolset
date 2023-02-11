@@ -618,6 +618,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />
     <ClInclude Include="include\citystackinterfhooks.h" />
+    <ClInclude Include="include\d2unorderedmap.h" />
     <ClInclude Include="include\ddstackgroup.h" />
     <ClInclude Include="include\ddunitgroup.h" />
     <ClInclude Include="include\enclayoutcity.h" />
