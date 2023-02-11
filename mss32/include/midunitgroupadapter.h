@@ -34,7 +34,7 @@ struct GroupAdapterUnitData
     bool unknown2;
     bool unknown3;
     char padding;
-    int strengthTier;
+    int highLevel;
     bool boostApplied;
     bool lowerApplied;
     bool potionApplied;

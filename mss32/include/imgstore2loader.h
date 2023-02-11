@@ -20,8 +20,8 @@
 #ifndef IMGSTORE2LOADER_H
 #define IMGSTORE2LOADER_H
 
-#include "d2assert.h"
 #include "d2pair.h"
+#include "d2unorderedmap.h"
 #include "imgstore2.h"
 #include "smartptr.h"
 #include <cstdint>
@@ -46,20 +46,10 @@ struct ImgStore2LoaderUnordMapData
 
 assert_size(ImgStore2LoaderUnordMapData, 32);
 
-struct ImgStore2LoaderUnordMapRecordData
-{
-    Pair<int /* imageId */, bool /* Assumption: flipped image flag */> keyPair;
-    ImgStore2LoaderUnordMapData data;
-};
+using ImageIdFlippedFlagPair = Pair<int /* imageId */, bool /* Assumption: flipped image flag */>;
 
-assert_size(ImgStore2LoaderUnordMapRecordData, 40);
-
-struct ImgStore2LoaderUnordMapRecord
-{
-    ImgStore2LoaderUnordMapRecordData data;
-    std::uint32_t hash;
-    ImgStore2LoaderUnordMapRecord* next;
-};
+using ImgStore2LoaderUnordMapRecord = UnorderedMapBucket<ImageIdFlippedFlagPair,
+                                                         ImgStore2LoaderUnordMapData>;
 
 assert_size(ImgStore2LoaderUnordMapRecord, 48);
 
@@ -76,32 +66,12 @@ struct ImgStore2LoaderUnordMapIterator
 
 assert_size(ImgStore2LoaderUnordMapIterator, 20);
 
-struct ImgStore2LoaderUnordMap
-{
-    char unknown;
-    char padding[3];
-    std::uint32_t recordsTotal;
-    ImgStore2LoaderUnordMapRecord** records;
-    std::uint32_t recordsAllocated;
-    int unknown2;
-    int unknown3;
-    char unknown4;
-    char unknown5;
-    char unknown6;
-    char unknown7;
-    int unknown8;
-    int unknown9;
-    void* allocator;
-};
-
-assert_size(ImgStore2LoaderUnordMap, 40);
-
 struct ImgStore2Loader
 {
     SmartPtr<CMqPresentationManager> presentationManager;
     void* memPool;
     CImgStore2LoaderWeakDup* store2Loader;
-    ImgStore2LoaderUnordMap unordered_map;
+    UnorderedMap<ImageIdFlippedFlagPair, ImgStore2LoaderUnordMapData> unordered_map;
     int unknown; /**< Maybe part of unordered_map */
 };
 

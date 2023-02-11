@@ -18,6 +18,7 @@
  */
 
 #include "midserverlogichooks.h"
+#include "idset.h"
 #include "log.h"
 #include "logutils.h"
 #include "midgardscenariomap.h"
@@ -26,18 +27,35 @@
 #include "originalfunctions.h"
 #include "refreshinfo.h"
 #include "settings.h"
+#include "unitstovalidate.h"
+#include "unitutils.h"
 #include "utils.h"
 #include <fmt/format.h>
 #include <process.h>
 
 namespace hooks {
 
-bool __fastcall midServerLogicSendObjectsChangesHooked(game::IMidMsgSender* thisptr, int /*%edx*/)
+void addValidatedUnitsToChangedObjects(game::CMidgardScenarioMap* scenarioMap)
 {
     using namespace game;
 
-    const auto serverLogic = castMidMsgSenderToMidServerLogic(thisptr);
-    const auto scenarioMap = CMidServerLogicApi::get().getObjectMap(serverLogic);
+    const auto& idSetApi = IdSetApi::get();
+
+    auto& changedObjects = scenarioMap->changedObjects;
+
+    auto& unitsToValidate = getUnitsToValidate();
+    for (const auto& unitId : unitsToValidate) {
+        auto unit = (CMidUnit*)scenarioMap->vftable->findScenarioObjectById(scenarioMap, &unitId);
+        if (unit && validateUnit(unit)) {
+            Pair<IdSetIterator, bool> tmp;
+            idSetApi.insert(&changedObjects, &tmp, &unitId);
+        }
+    }
+    unitsToValidate.clear();
+}
+
+void logObjectsToSend(const game::CMidgardScenarioMap* scenarioMap)
+{
     const auto& addedObjects = scenarioMap->addedObjects;
     const auto& changedObjects = scenarioMap->changedObjects;
     const auto& objectsToErase = scenarioMap->objectsToErase;
@@ -62,6 +80,22 @@ bool __fastcall midServerLogicSendObjectsChangesHooked(game::IMidMsgSender* this
             logDebug(logFileName, fmt::format("Erased\t{:s}\t{:s}", idToString(&obj),
                                               getMidgardIdTypeDesc(&obj)));
         }
+    }
+}
+
+bool __fastcall midServerLogicSendObjectsChangesHooked(game::IMidMsgSender* thisptr, int /*%edx*/)
+{
+    using namespace game;
+
+    const auto serverLogic = castMidMsgSenderToMidServerLogic(thisptr);
+    auto scenarioMap = CMidServerLogicApi::get().getObjectMap(serverLogic);
+
+    if (userSettings().modifiers.validateUnitsOnGroupChanged) {
+        addValidatedUnitsToChangedObjects(scenarioMap);
+    }
+
+    if (userSettings().debugMode) {
+        logObjectsToSend(scenarioMap);
     }
 
     return getOriginalFunctions().midServerLogicSendObjectsChanges(thisptr);
