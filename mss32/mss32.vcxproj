@@ -225,6 +225,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\enclayoutstackhooks.cpp" />
     <ClCompile Include="src\encparambase.cpp" />
     <ClCompile Include="src\encparambasehooks.cpp" />
+    <ClCompile Include="src\encyclopediapopup.cpp" />
     <ClCompile Include="src\exchangeinterfhooks.cpp" />
     <ClCompile Include="src\intvector.cpp" />
     <ClCompile Include="src\button.cpp" />
@@ -628,6 +629,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\enclayoutruinhooks.h" />
     <ClInclude Include="include\encparamidplayer.h" />
     <ClInclude Include="include\encparambasehooks.h" />
+    <ClInclude Include="include\encyclopediapopup.h" />
     <ClInclude Include="include\exchangeinterfhooks.h" />
     <ClInclude Include="include\factoryimage2.h" />
     <ClInclude Include="include\factoryimagestill.h" />
