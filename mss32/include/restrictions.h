@@ -31,6 +31,9 @@ struct Restriction
     T max;
 };
 
+/** Determines a number of unit over-levels to display colored swords on top of its icon. */
+typedef std::uint32_t UnitHighLevels[3];
+
 /** Addresses of global variables representing game restrictions. */
 struct GameRestrictions
 {
@@ -47,6 +50,7 @@ struct GameRestrictions
     std::uint32_t* fighterExplorerLeaderBonusMaxDamage;
     std::uint8_t* criticalHitDamage;
     std::uint8_t* mageLeaderAttackPowerReduction;
+    UnitHighLevels* unitHighLevels;
 
     // No dedicated game variable for this, see implementation of CDBTableApi::readHeal
     Restriction<int> attackHeal;
