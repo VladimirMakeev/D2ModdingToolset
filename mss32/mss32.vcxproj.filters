@@ -1136,6 +1136,9 @@
     <ClCompile Include="src\logutils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\unitstovalidate.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
     <ClCompile Include="src\managestkinterf.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -2934,6 +2937,9 @@
     </ClInclude>
     <ClInclude Include="include\logutils.h">
       <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\unitstovalidate.h">
+      <Filter>features</Filter>
     </ClInclude>
     <ClInclude Include="include\managestkinterf.h">
       <Filter>game</Filter>
