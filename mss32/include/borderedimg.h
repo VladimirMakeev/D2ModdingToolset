@@ -38,7 +38,7 @@ assert_size(CBorderedImg, 8);
 struct CBorderedImgData
 {
     CMqPoint borderSize;
-    Vector<IMqImage2> images;
+    Vector<IMqImage2*> images;
 };
 
 assert_size(CBorderedImgData, 24);
