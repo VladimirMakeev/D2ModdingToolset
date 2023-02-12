@@ -368,7 +368,8 @@ static void serializeAndLoadScenario(CMenuRandomScenarioSingle* menu)
     auto racesTable{globalData->raceCategories};
     auto& findRaceById{LRaceCategoryTableApi::get().findCategoryById};
 
-    RaceCategoryList* races{&menuPhase->data->races};
+    CMenuPhaseData* data = menuPhase->data;
+    RaceCategoryList* races{&data->races};
     listApi.freeNodes(races);
 
     // Template settings contain only playable races at this point
@@ -382,14 +383,15 @@ static void serializeAndLoadScenario(CMenuRandomScenarioSingle* menu)
     }
 
     // We don't load saved game, but starting a new one
-    menuPhase->data->loadScenario = false;
+    data->loadScenario = false;
     // Singleplayer mode?
-    menuPhase->data->unknown8 = true;
-    menuPhase->data->suggestedLevel = 1;
-    menuPhase->data->maxPlayers = static_cast<int>(settings.races.size());
+    data->unknown8 = true;
+    data->suggestedLevel = 1;
+    data->maxPlayers = static_cast<int>(settings.races.size());
 
     // Switch to race selection menu
-    menuPhaseApi.switchTo15Or28(menuPhase);
+    menuPhaseApi.showFullScreenAnimation(menuPhase, &data->transitionNumber, &data->interfManager,
+                                         &data->currentMenu, 28, "TRANS_RNDSINGLE2GOD");
 }
 
 /** Updates menu UI according to selected index in templates list box. */
