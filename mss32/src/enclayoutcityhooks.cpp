@@ -18,15 +18,22 @@
  */
 
 #include "enclayoutcityhooks.h"
+#include "borderedimg.h"
 #include "dialoginterf.h"
 #include "dynamiccast.h"
+#include "faceimg.h"
 #include "fortification.h"
 #include "gameutils.h"
 #include "interfaceutils.h"
 #include "midstack.h"
+#include "mqimage2.h"
 #include "originalfunctions.h"
+#include "pictureinterf.h"
 #include "textboxinterf.h"
+#include "unitutils.h"
+#include "usunit.h"
 #include "utils.h"
+#include <fmt/format.h>
 #include <string>
 
 namespace hooks {
@@ -147,6 +154,159 @@ void __fastcall encLayoutCityOnObjectChangedHooked(game::CEncLayoutCity* thisptr
             if (fortification && fortification->stackId == stack->id) {
                 api.update(thisptr, objectMap, fortification, thisptr->dialog);
             }
+        }
+    }
+}
+
+std::string getUnitUiControlName(int unitPosition, const char* nameFormat)
+{
+    std::string result = nameFormat;
+    replace(result, "%d", fmt::format("{:d}", unitPosition));
+    return result;
+}
+
+void resizeUnitUiControl(game::CInterface* control,
+                         const game::CInterface* relative,
+                         bool isUnitSmall)
+{
+    using namespace game;
+
+    auto relativeArea = relative->vftable->getArea(relative);
+    CMqRect area = *control->vftable->getArea(control);
+    if (isUnitSmall) {
+        if (relativeArea->left > area.left) {
+            area.right = area.left + (relativeArea->right - relativeArea->left);
+        } else {
+            area.left = area.right - (relativeArea->right - relativeArea->left);
+        }
+    } else {
+        if (relativeArea->left > area.left) {
+            area.right = relativeArea->right;
+        } else {
+            area.left = relativeArea->left;
+        }
+    }
+    control->vftable->setArea(control, &area);
+}
+
+game::IMqImage2* createUnitFaceImage(const game::CMidUnit* unit, bool isStackGroup)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    auto faceImage = fn.createUnitFaceImage(&unit->unitImpl->id, false);
+    if (unit->currentHp > 0) {
+        auto percentHp = 100 * unit->currentHp / getUnitHpMax(unit);
+        faceImage->vftable->setPercentHp(faceImage, percentHp);
+        faceImage->vftable->setUnknown68(faceImage, 0);
+    } else {
+        faceImage->vftable->setUnknown68(faceImage, 10);
+    }
+    faceImage->vftable->setLeftSide(faceImage, isStackGroup);
+
+    return (IMqImage2*)faceImage;
+}
+
+void updateTxtStack(game::CDialogInterf* dialog,
+                    const game::CMidUnit* unit,
+                    int unitPosition,
+                    const char* txtStackNameFormat,
+                    bool isUnitSmall)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& dialogApi = CDialogInterfApi::get();
+
+    auto txtStackName = getUnitUiControlName(unitPosition, txtStackNameFormat);
+    auto txtStack = dialogApi.findTextBox(dialog, txtStackName.c_str());
+
+    if (unitPosition % 2 == 0) {
+        auto txtStack2Name = getUnitUiControlName(unitPosition + 1, txtStackNameFormat);
+        dialogApi.showControl(dialog, dialog->data->dialogName, txtStack2Name.c_str());
+        auto txtStack2 = dialogApi.findTextBox(dialog, txtStack2Name.c_str());
+
+        resizeUnitUiControl(txtStack, txtStack2, isUnitSmall);
+
+        if (!isUnitSmall) {
+            dialogApi.hideControl(dialog, txtStack2Name.c_str());
+        }
+    }
+
+    std::string unitName;
+    if (unit) {
+        if (fn.castUnitImplToStackLeader(unit->unitImpl)) {
+            unitName = getInterfaceText("X005TA0784");
+        } else {
+            unitName = getInterfaceText("X005TA0783");
+        }
+        replace(unitName, "%NAME%", getUnitName(unit));
+    }
+
+    CTextBoxInterfApi::get().setString(txtStack, unitName.c_str());
+}
+
+void updateImgStack(game::CDialogInterf* dialog,
+                    const game::CMidUnit* unit,
+                    int unitPosition,
+                    const char* imgStackNameFormat,
+                    bool isUnitSmall,
+                    bool isStackGroup)
+{
+    using namespace game;
+
+    const auto& dialogApi = CDialogInterfApi::get();
+
+    auto imgStackName = getUnitUiControlName(unitPosition, imgStackNameFormat);
+    auto imgStack = dialogApi.findPicture(dialog, imgStackName.c_str());
+
+    if (unitPosition % 2 == 0) {
+        auto imgStack2Name = getUnitUiControlName(unitPosition + 1, imgStackNameFormat);
+        dialogApi.showControl(dialog, dialog->data->dialogName, imgStack2Name.c_str());
+        auto imgStack2 = dialogApi.findPicture(dialog, imgStack2Name.c_str());
+
+        resizeUnitUiControl(imgStack, imgStack2, isUnitSmall);
+
+        if (!isUnitSmall) {
+            dialogApi.hideControl(dialog, imgStack2Name.c_str());
+        }
+    }
+
+    auto faceImage = unit ? createUnitFaceImage(unit, isStackGroup) : nullptr;
+    auto borderedFaceImage = createBorderedImage(faceImage, isUnitSmall ? BorderType::UnitSmall
+                                                                        : BorderType::UnitLarge);
+
+    setCenteredImage(imgStack, borderedFaceImage);
+}
+
+void __stdcall encLayoutCityUpdateGroupUiHooked(const game::IMidgardObjectMap* objectMap,
+                                                const game::CMidUnitGroup* group,
+                                                game::CDialogInterf* dialog,
+                                                const char* txtStackNameFormat,
+                                                const char* imgStackNameFormat,
+                                                bool isStackGroup)
+{
+    using namespace game;
+
+    const auto& groupApi = CMidUnitGroupApi::get();
+
+    for (int unitPosition = 0; unitPosition < 6; ++unitPosition) {
+        auto unitId = group ? *groupApi.getUnitIdByPosition(group, unitPosition) : emptyId;
+        if (unitId != emptyId) {
+            auto unit = static_cast<const CMidUnit*>(
+                objectMap->vftable->findScenarioObjectById(objectMap, &unitId));
+
+            bool isUnitSmall = hooks::isUnitSmall(unit);
+            updateTxtStack(dialog, unit, unitPosition, txtStackNameFormat, isUnitSmall);
+            updateImgStack(dialog, unit, unitPosition, imgStackNameFormat, isUnitSmall,
+                           isStackGroup);
+            if (!isUnitSmall) {
+                ++unitPosition;
+            }
+        } else {
+            updateTxtStack(dialog, nullptr, unitPosition, txtStackNameFormat, true);
+            updateImgStack(dialog, nullptr, unitPosition, imgStackNameFormat, true, isStackGroup);
         }
     }
 }
