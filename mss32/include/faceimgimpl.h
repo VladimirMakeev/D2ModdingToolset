@@ -21,6 +21,7 @@
 #define FACEIMGIMPL_H
 
 #include "faceimg.h"
+#include "imagedatadescriptor.h"
 #include "mqtexture.h"
 #include "smartptr.h"
 #include "texturehandle.h"
@@ -28,7 +29,6 @@
 namespace game {
 
 struct CMqPresentationManager;
-struct ImageDataDescriptor;
 
 struct CFaceImgImpl
     : public CFaceImg::IFaceImg
@@ -36,8 +36,7 @@ struct CFaceImgImpl
 {
     SmartPtr<CMqPresentationManager> presentationManager;
     TextureHandle textureHandle;
-    ImageDataDescriptor* imageDataDescriptor;
-    char unknown36[32];
+    ImageDataDescriptor imageDataDescriptor;
     int unknown68;
     int percentHp;
     bool leftSide;
@@ -47,7 +46,7 @@ struct CFaceImgImpl
 };
 
 assert_size(CFaceImgImpl, 80);
-assert_offset(CFaceImgImpl, unknown36, 36);
+assert_offset(CFaceImgImpl, imageDataDescriptor, 32);
 assert_offset(CFaceImgImpl, unknown68, 68);
 
 } // namespace game
