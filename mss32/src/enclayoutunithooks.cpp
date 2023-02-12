@@ -792,15 +792,7 @@ static void setImgUnitIcon(game::CEncLayoutUnit* layout)
         CMqPoint offset{};
         pictureApi.setImage(picture, nullptr, &offset);
     } else {
-        auto pictureArea = picture->vftable->getArea(picture);
-        CMqPoint pictureSize{pictureArea->right - pictureArea->left,
-                             pictureArea->bottom - pictureArea->top};
-
-        CMqPoint imageSize{};
-        image->vftable->getSize(image, &imageSize);
-
-        CMqPoint offset{(pictureSize.x - imageSize.x) / 2, (pictureSize.y - imageSize.y) / 2};
-        pictureApi.setImage(picture, image, &offset);
+        setCenteredImage(picture, image);
     }
 }
 
