@@ -35,6 +35,8 @@ struct IAttack;
 struct IMidgardObjectMap;
 struct BattleMsgData;
 struct CDynUpgrade;
+struct IUsUnitExtension;
+struct TypeDescriptor;
 } // namespace game
 
 namespace hooks {
@@ -68,6 +70,12 @@ int getCityProtection(const game::IMidgardObjectMap* objectMap, const game::CMid
 int getUnitRegen(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* unitId);
 
 int getUnitHpMax(const game::CMidUnit* unit);
+
+const char* getUnitName(const game::CMidUnit* unit);
+
+/** Analogue of game::CastUnitImplTo* functions. */
+game::IUsUnitExtension* castUnitImpl(const game::IUsUnit* unitImpl,
+                                     const game::TypeDescriptor* type);
 
 int computeUnitEffectiveHpForAi(int hp, int armor);
 int computeUnitEffectiveHp(int hp, int armor);

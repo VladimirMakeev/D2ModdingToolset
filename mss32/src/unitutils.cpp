@@ -480,6 +480,32 @@ int getUnitHpMax(const game::CMidUnit* unit)
     return soldier->vftable->getHitPoints(soldier);
 }
 
+const char* getUnitName(const game::CMidUnit* unit)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+
+    auto impl = unit->unitImpl;
+    if (castUnitImpl(impl, rtti.IUsStackLeaderType) && !castUnitImpl(impl, rtti.IUsNobleType)
+        && !castUnitImpl(impl, rtti.IUsSummonType)) {
+        return unit->name.string ? unit->name.string : "";
+    }
+
+    auto soldier = (IUsSoldier*)castUnitImpl(impl, rtti.IUsSoldierType);
+    return soldier->vftable->getName(soldier);
+}
+
+game::IUsUnitExtension* castUnitImpl(const game::IUsUnit* unitImpl,
+                                     const game::TypeDescriptor* type)
+{
+    using namespace game;
+
+    auto& typeInfoRawName = *RttiApi::get().typeInfoRawName;
+
+    return unitImpl ? unitImpl->vftable->cast(unitImpl, typeInfoRawName(type)) : nullptr;
+}
+
 int computeUnitEffectiveHpForAi(int hp, int armor)
 {
     if (userSettings().fixEffectiveHpFormula) {
