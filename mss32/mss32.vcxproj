@@ -641,6 +641,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\ffimg.h" />
     <ClInclude Include="include\gameimagedata.h" />
     <ClInclude Include="include\groupareamanagement.h" />
+    <ClInclude Include="include\imagedatadescriptor.h" />
     <ClInclude Include="include\imgpacker.h" />
     <ClInclude Include="include\imgpackerloader.h" />
     <ClInclude Include="include\imgpackerstoreloader.h" />
