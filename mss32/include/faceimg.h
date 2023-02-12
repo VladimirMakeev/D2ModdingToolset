@@ -24,34 +24,34 @@
 
 namespace game {
 
-namespace CFaceImg {
-
 struct IFaceImgVftable;
 
-struct IFaceImg : public IMqImage2T<IFaceImgVftable>
-{ };
+struct CFaceImg
+{
 
-assert_size(IFaceImg, 4);
+    struct IFaceImg : public IMqImage2T<IFaceImgVftable>
+    { };
+
+    assert_size(IFaceImg, 4);
+};
 
 /** Unknown names map to CFaceImgImpl fields. */
 struct IFaceImgVftable : public IMqImage2Vftable
 {
     /** Probably image index. */
-    using SetInt = void(__thiscall*)(IFaceImg* thisptr, int value);
+    using SetInt = void(__thiscall*)(CFaceImg::IFaceImg* thisptr, int value);
     SetInt setUnknown68;
 
-    using GetInt = int(__thiscall*)(IFaceImg* thisptr);
+    using GetInt = int(__thiscall*)(CFaceImg::IFaceImg* thisptr);
     GetInt getUnknown68;
 
     SetInt setPercentHp;
 
-    using SetBool = void(__thiscall*)(IFaceImg* thisptr, bool value);
+    using SetBool = void(__thiscall*)(CFaceImg::IFaceImg* thisptr, bool value);
     SetBool setLeftSide;
 };
 
 assert_vftable_size(IFaceImgVftable, 13);
-
-} // namespace CFaceImg
 
 } // namespace game
 

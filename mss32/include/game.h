@@ -21,6 +21,7 @@
 #define GAME_H
 
 #include "attacktypepairvector.h"
+#include "faceimg.h"
 #include "globaldata.h"
 #include "idlist.h"
 #include "mqpoint.h"
@@ -76,9 +77,6 @@ struct IUsLeader;
 struct LDeathAnimCategory;
 struct CMidStreamEnvFile;
 struct CMidgardScenarioMap;
-namespace CFaceImg {
-struct IFaceImg;
-}
 
 enum class ModifierElementTypeFlag : int;
 
