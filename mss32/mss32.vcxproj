@@ -226,6 +226,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\enclayoutstackhooks.cpp" />
     <ClCompile Include="src\encparambase.cpp" />
     <ClCompile Include="src\encparambasehooks.cpp" />
+    <ClCompile Include="src\encyclopediapopup.cpp" />
     <ClCompile Include="src\exchangeinterfhooks.cpp" />
     <ClCompile Include="src\intvector.cpp" />
     <ClCompile Include="src\button.cpp" />
@@ -472,6 +473,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\unitpositionlist.cpp" />
     <ClCompile Include="src\unitpositionmap.cpp" />
     <ClCompile Include="src\unitsforhire.cpp" />
+    <ClCompile Include="src\unitstovalidate.cpp" />
     <ClCompile Include="src\unittypedescriptor.cpp" />
     <ClCompile Include="src\unitutils.cpp" />
     <ClCompile Include="src\untransformeffecthooks.cpp" />
@@ -620,6 +622,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />
     <ClInclude Include="include\citystackinterfhooks.h" />
+    <ClInclude Include="include\d2unorderedmap.h" />
     <ClInclude Include="include\ddstackgroup.h" />
     <ClInclude Include="include\ddunitgroup.h" />
     <ClInclude Include="include\enclayoutcity.h" />
@@ -628,6 +631,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\enclayoutruinhooks.h" />
     <ClInclude Include="include\encparamidplayer.h" />
     <ClInclude Include="include\encparambasehooks.h" />
+    <ClInclude Include="include\encyclopediapopup.h" />
     <ClInclude Include="include\exchangeinterfhooks.h" />
     <ClInclude Include="include\faceimg.h" />
     <ClInclude Include="include\faceimgimpl.h" />
@@ -703,6 +707,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midunitext.h" />
     <ClInclude Include="include\midunitgroupadapter.h" />
     <ClInclude Include="include\mqdb.h" />
+    <ClInclude Include="include\mqdbpackedimage.h" />
     <ClInclude Include="include\netsingleplayer.h" />
     <ClInclude Include="include\netsingleplayerhooks.h" />
     <ClInclude Include="include\refreshinfo.h" />
@@ -1078,6 +1083,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\unitpositionmap.h" />
     <ClInclude Include="include\unitpositionpair.h" />
     <ClInclude Include="include\unitsforhire.h" />
+    <ClInclude Include="include\unitstovalidate.h" />
     <ClInclude Include="include\unittypedescriptor.h" />
     <ClInclude Include="include\unitutils.h" />
     <ClInclude Include="include\untransformeffecthooks.h" />

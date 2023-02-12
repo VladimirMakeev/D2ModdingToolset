@@ -21,6 +21,7 @@
 #define MIDGARDSCENARIOMAP_H
 
 #include "d2set.h"
+#include "d2unorderedmap.h"
 #include "midgardobjectmap.h"
 #include <cstdint>
 
@@ -28,41 +29,14 @@ namespace game {
 
 struct IMidgardStreamEnv;
 
-struct ScenarioObjectRecord
-{
-    CMidgardID objectId;
-    SmartPtr<IMidScenarioObject> object;
-    std::uint32_t partialId; /**< objectId.value & 0x7fffffff */
-    ScenarioObjectRecord* next;
-};
-
+using ScenarioObjectRecord = UnorderedMapBucket<CMidgardID, SmartPtr<IMidScenarioObject>>;
 assert_size(ScenarioObjectRecord, 20);
-
-struct CMidgardScenarioMapData
-{
-    char unknown;
-    char padding[3];
-    std::uint32_t objectsTotal;
-    ScenarioObjectRecord** records;
-    std::uint32_t recordsTotal;
-    int unknown2;
-    int unknown3;
-    char unknown4;
-    char unknown5;
-    char unknown6;
-    char unknown7;
-    int unknown8;
-    int unknown9;
-    void* allocator;
-};
-
-assert_size(CMidgardScenarioMapData, 40);
 
 /** Stores scenario objects. */
 struct CMidgardScenarioMap : public IMidgardObjectMap
 {
     CMidgardID scenarioFileId;
-    CMidgardScenarioMapData data;
+    UnorderedMap<CMidgardID, SmartPtr<IMidScenarioObject>> data;
     /** Used to keep track of last free CMidgardID type index for each IdType. */
     int freeIdTypeIndices[59];
     Set<CMidgardID> addedObjects;

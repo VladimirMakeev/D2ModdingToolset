@@ -21,6 +21,7 @@
 #define GAMEIMAGES_H
 
 #include "d2assert.h"
+#include "mqdb.h"
 #include "smartptr.h"
 #include "stringintlist.h"
 
@@ -31,7 +32,6 @@ struct IMqImage2;
 struct LRaceCategory;
 struct CMidgardID;
 struct IMidgardObjectMap;
-struct MQDBRecordMap;
 struct MQDBDataWrapper;
 struct GameImageDataWrapper;
 

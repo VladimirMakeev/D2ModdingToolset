@@ -91,7 +91,8 @@ bool isStackLeaderAndAllowedToUseBattleItems(const game::IMidgardObjectMap* obje
                                              const game::BattleMsgData* battleMsgData);
 bool hasCriticalHitLeaderAbility(const game::IUsUnit* unitImpl);
 
-void validateUnit(game::CMidUnit* unit);
+/** Returns true if the unit is changed during validation. */
+bool validateUnit(game::CMidUnit* unit);
 
 } // namespace hooks
 

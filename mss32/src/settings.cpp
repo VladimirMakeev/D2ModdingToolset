@@ -114,6 +114,8 @@ static void readModifierSettings(const sol::table& table, Settings::Modifiers& v
                                                    def.cumulativeUnitRegeneration);
     value.notifyModifiersChanged = readSetting(category.value(), "notifyModifiersChanged",
                                                def.notifyModifiersChanged);
+    value.validateUnitsOnGroupChanged = readSetting(category.value(), "validateUnitsOnGroupChanged",
+                                                    def.validateUnitsOnGroupChanged);
 }
 
 static Color readColor(const sol::table& table, const Color& def)
@@ -308,6 +310,7 @@ const Settings& baseSettings()
         settings.fixEffectiveHpFormula = false;
         settings.modifiers.cumulativeUnitRegeneration = false;
         settings.modifiers.notifyModifiersChanged = false;
+        settings.modifiers.validateUnitsOnGroupChanged = false;
         settings.allowBattleItems.onTransformOther = false;
         settings.allowBattleItems.onTransformSelf = false;
         settings.allowBattleItems.onDrainLevel = false;
