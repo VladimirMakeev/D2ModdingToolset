@@ -189,6 +189,29 @@ void resizeUnitUiControl(game::CInterface* control,
     control->vftable->setArea(control, &area);
 }
 
+void alignUnitUiControls(game::CDialogInterf* dialog,
+                         game::CInterface* control,
+                         int unitPosition,
+                         const char* controlNameFormat,
+                         bool isUnitSmall)
+{
+    using namespace game;
+
+    const auto& dialogApi = CDialogInterfApi::get();
+
+    if (unitPosition % 2 == 0) {
+        auto control2Name = getUnitUiControlName(unitPosition + 1, controlNameFormat);
+        dialogApi.showControl(dialog, dialog->data->dialogName, control2Name.c_str());
+        auto control2 = dialogApi.findControl(dialog, control2Name.c_str());
+
+        resizeUnitUiControl(control, control2, isUnitSmall);
+
+        if (!isUnitSmall) {
+            dialogApi.hideControl(dialog, control2Name.c_str());
+        }
+    }
+}
+
 game::IMqImage2* createUnitFaceImage(const game::CMidUnit* unit, bool isStackGroup)
 {
     using namespace game;
@@ -222,17 +245,7 @@ void updateTxtStack(game::CDialogInterf* dialog,
     auto txtStackName = getUnitUiControlName(unitPosition, txtStackNameFormat);
     auto txtStack = dialogApi.findTextBox(dialog, txtStackName.c_str());
 
-    if (unitPosition % 2 == 0) {
-        auto txtStack2Name = getUnitUiControlName(unitPosition + 1, txtStackNameFormat);
-        dialogApi.showControl(dialog, dialog->data->dialogName, txtStack2Name.c_str());
-        auto txtStack2 = dialogApi.findTextBox(dialog, txtStack2Name.c_str());
-
-        resizeUnitUiControl(txtStack, txtStack2, isUnitSmall);
-
-        if (!isUnitSmall) {
-            dialogApi.hideControl(dialog, txtStack2Name.c_str());
-        }
-    }
+    alignUnitUiControls(dialog, txtStack, unitPosition, txtStackNameFormat, isUnitSmall);
 
     std::string unitName;
     if (unit) {
@@ -261,17 +274,7 @@ void updateImgStack(game::CDialogInterf* dialog,
     auto imgStackName = getUnitUiControlName(unitPosition, imgStackNameFormat);
     auto imgStack = dialogApi.findPicture(dialog, imgStackName.c_str());
 
-    if (unitPosition % 2 == 0) {
-        auto imgStack2Name = getUnitUiControlName(unitPosition + 1, imgStackNameFormat);
-        dialogApi.showControl(dialog, dialog->data->dialogName, imgStack2Name.c_str());
-        auto imgStack2 = dialogApi.findPicture(dialog, imgStack2Name.c_str());
-
-        resizeUnitUiControl(imgStack, imgStack2, isUnitSmall);
-
-        if (!isUnitSmall) {
-            dialogApi.hideControl(dialog, imgStack2Name.c_str());
-        }
-    }
+    alignUnitUiControls(dialog, imgStack, unitPosition, imgStackNameFormat, isUnitSmall);
 
     auto faceImage = unit ? createUnitFaceImage(unit, isStackGroup) : nullptr;
     auto borderedFaceImage = createBorderedImage(faceImage, isUnitSmall ? BorderType::UnitSmall
