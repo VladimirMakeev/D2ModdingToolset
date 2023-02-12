@@ -76,6 +76,9 @@ struct IUsLeader;
 struct LDeathAnimCategory;
 struct CMidStreamEnvFile;
 struct CMidgardScenarioMap;
+namespace CFaceImg {
+struct IFaceImg;
+}
 
 enum class ModifierElementTypeFlag : int;
 
@@ -635,6 +638,11 @@ using LoadScenarioMap = int(__stdcall*)(int a1,
                                         CMidStreamEnvFile* streamEnv,
                                         CMidgardScenarioMap* scenarioMap);
 
+/** big determines whether "*FACEB" (round) instead of "*FACE" (rectangle) image from Faces.ff
+ * should be used.
+ */
+using CreateUnitFaceImage = CFaceImg::IFaceImg*(__stdcall*)(CMidgardID* unitImplId, bool big);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -749,6 +757,7 @@ struct Functions
     GetDeathAnimationByUnitOrItemId getDeathAnimationByUnitOrItemId;
     ThrowScenarioException throwScenarioException;
     LoadScenarioMap loadScenarioMap;
+    CreateUnitFaceImage createUnitFaceImage;
 };
 
 /** Global variables used in game. */
