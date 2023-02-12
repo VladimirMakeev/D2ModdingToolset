@@ -147,13 +147,11 @@ void __fastcall encLayoutCityOnObjectChangedHooked(game::CEncLayoutCity* thisptr
         }
     } else {
         auto stack = (CMidStack*)dynamicCast(obj, 0, rtti.IMidObjectType, rtti.CMidStackType, 0);
-        if (stack) {
+        if (stack && stack->insideId == thisptr->data->fortificationId) {
             fortification = (CFortification*)objectMap->vftable
                                 ->findScenarioObjectById(objectMap,
                                                          &thisptr->data->fortificationId);
-            if (fortification && fortification->stackId == stack->id) {
-                api.update(thisptr, objectMap, fortification, thisptr->dialog);
-            }
+            api.update(thisptr, objectMap, fortification, thisptr->dialog);
         }
     }
 }
