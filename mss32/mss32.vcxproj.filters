@@ -1154,6 +1154,9 @@
     <ClCompile Include="src\sitemerchantinterfhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="src\borderedimg.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2993,6 +2996,9 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\faceimg.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\borderedimg.h">
       <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>

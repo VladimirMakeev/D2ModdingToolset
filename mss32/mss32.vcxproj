@@ -214,6 +214,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\bindings\unitview.cpp" />
     <ClCompile Include="src\bestowwardshooks.cpp" />
     <ClCompile Include="src\bindings\unitviewbase.cpp" />
+    <ClCompile Include="src\borderedimg.cpp" />
     <ClCompile Include="src\buildingbranch.cpp" />
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
@@ -613,6 +614,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\bindings\unitview.h" />
     <ClInclude Include="include\bestowwardshooks.h" />
     <ClInclude Include="include\bindings\unitviewbase.h" />
+    <ClInclude Include="include\borderedimg.h" />
     <ClInclude Include="include\bordertile.h" />
     <ClInclude Include="include\buildingbranch.h" />
     <ClInclude Include="include\buildingcat.h" />
