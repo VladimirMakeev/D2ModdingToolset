@@ -21,14 +21,16 @@
 #define MQDB_H
 
 #include "d2list.h"
+#include "d2map.h"
 #include "d2pair.h"
-#include "d2set.h"
 #include "d2string.h"
 #include "d2unorderedmap.h"
 #include "d2vector.h"
 #include "mq_c_s.h"
 
 namespace game {
+
+struct MQDBPackedImage;
 
 /** Table of contents (ToC) record inside of .ff file. */
 struct MQDBTocRecord
@@ -92,6 +94,8 @@ assert_size(MQDBDataWrapper, 4);
 
 using IndexOptOffsetSizePair = Pair<std::uint32_t /* offset */, std::uint32_t /* size */>;
 
+using IndexOptRecordIdFlippedPair = Pair<std::uint32_t /* record id */, bool /* flipped */>;
+
 struct MQDBImageData
 {
     MQDBDataWrapper* imagesData;
@@ -118,8 +122,8 @@ struct MQDBImageData
     Vector<String> indexOptStringsNoIdx;
     Vector<IndexOptOffsetSizePair> indexOptPairsNoIdx;
 
-    Set<char[16]> sortedList;
-    List<char[8]> list;
+    Map<IndexOptRecordIdFlippedPair, SmartPtr<MQDBPackedImage>> loadedImages;
+    List<Pair<int /* indexOptRecordId */, int /* flipped */>> list;
     char unknown5[72];
 };
 
