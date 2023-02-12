@@ -102,6 +102,8 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)0x7b0108, // CUmStackType
         (TypeDescriptor*)0x78ee68, // CFortificationType
         (TypeDescriptor*)0x799ec0, // IMidObjectType
+        (TypeDescriptor*)0x793d90, // IUsNobleType
+        (TypeDescriptor*)0x7974b8, // IUsSummonType
     },
     // Russobit
     Rtti{
@@ -149,6 +151,8 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)0x7b0108, // CUmStackType
         (TypeDescriptor*)0x78ee68, // CFortificationType
         (TypeDescriptor*)0x799ec0, // IMidObjectType
+        (TypeDescriptor*)0x793d90, // IUsNobleType
+        (TypeDescriptor*)0x7974b8, // IUsSummonType
     },
     // Gog
     Rtti{
@@ -196,6 +200,8 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)0x7ae0c0, // CUmStackType
         (TypeDescriptor*)0x78ce10, // CFortificationType
         (TypeDescriptor*)0x797e68, // IMidObjectType
+        (TypeDescriptor*)0x791d38, // IUsNobleType
+        (TypeDescriptor*)0x795460, // IUsSummonType
     },
     // Scenario Editor
     Rtti{
@@ -243,6 +249,8 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)0x65bd08, // CUmStackType
         (TypeDescriptor*)0x648e20, // CFortificationType
         (TypeDescriptor*)0x649438, // IMidObjectType
+        (TypeDescriptor*)0x64c3d0, // IUsNobleType
+        (TypeDescriptor*)0x64f068, // IUsSummonType
     },
 }};
 // clang-format on

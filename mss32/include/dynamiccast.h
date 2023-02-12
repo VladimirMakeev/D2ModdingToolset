@@ -158,6 +158,8 @@ struct Rtti
     TypeDescriptor* CUmStackType;
     TypeDescriptor* CFortificationType;
     TypeDescriptor* IMidObjectType;
+    TypeDescriptor* IUsNobleType;
+    TypeDescriptor* IUsSummonType;
 };
 
 const Rtti& rtti();
