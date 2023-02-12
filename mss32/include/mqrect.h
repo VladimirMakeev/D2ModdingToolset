@@ -28,13 +28,10 @@ struct CMqPoint;
 
 struct CMqRect
 {
-    struct
-    {
-        int left;
-        int top;
-        int right;
-        int bottom;
-    };
+    int left;
+    int top;
+    int right;
+    int bottom;
 };
 
 assert_size(CMqRect, 16);
