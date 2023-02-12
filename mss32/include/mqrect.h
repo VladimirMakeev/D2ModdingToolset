@@ -21,14 +21,20 @@
 #define MQRECT_H
 
 #include "d2assert.h"
-#include "mqpoint.h"
 
 namespace game {
 
+struct CMqPoint;
+
 struct CMqRect
 {
-    CMqPoint p1; /**< Top-left point. */
-    CMqPoint p2; /**< Bottom-right point.*/
+    struct
+    {
+        int left;
+        int top;
+        int right;
+        int bottom;
+    };
 };
 
 assert_size(CMqRect, 16);

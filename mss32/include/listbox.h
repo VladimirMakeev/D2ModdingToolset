@@ -22,6 +22,7 @@
 
 #include "functordispatch1.h"
 #include "interface.h"
+#include "mqpoint.h"
 #include "smartptr.h"
 #include <cstddef>
 

@@ -21,6 +21,7 @@
 #define CURSORHANDLE_H
 
 #include "d2list.h"
+#include "mqpoint.h"
 #include "mqrect.h"
 #include "smartptr.h"
 

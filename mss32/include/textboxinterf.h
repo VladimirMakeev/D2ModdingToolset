@@ -22,6 +22,7 @@
 
 #include "d2string.h"
 #include "interface.h"
+#include "mqpoint.h"
 
 namespace game {
 
