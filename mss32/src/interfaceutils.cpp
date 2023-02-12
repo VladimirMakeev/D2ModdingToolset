@@ -20,12 +20,16 @@
 #include "interfaceutils.h"
 #include "attackclasscat.h"
 #include "attacksourcecat.h"
+#include "borderedimg.h"
 #include "categorylist.h"
 #include "customattacks.h"
 #include "encunitdescriptor.h"
 #include "leaderunitdescriptor.h"
+#include "mempool.h"
 #include "midunit.h"
 #include "midunitdescriptor.h"
+#include "mqimage2.h"
+#include "pictureinterf.h"
 #include "settings.h"
 #include "textids.h"
 #include "unittypedescriptor.h"
@@ -389,6 +393,37 @@ void addDynUpgradeTextToField(std::string& text, const char* field, int upgrade1
     replace(result, "%UPG2%", fmt::format("{:+d}", upgrade2));
 
     replace(text, field, result);
+}
+
+void setCenteredImage(game::CPictureInterf* picture, game::IMqImage2* image)
+{
+    using namespace game;
+
+    const auto& pictureApi = CPictureInterfApi::get();
+
+    auto pictureArea = picture->vftable->getArea(picture);
+    CMqPoint pictureSize{pictureArea->right - pictureArea->left,
+                         pictureArea->bottom - pictureArea->top};
+
+    CMqPoint imageSize{};
+    image->vftable->getSize(image, &imageSize);
+
+    CMqPoint offset{(pictureSize.x - imageSize.x) / 2, (pictureSize.y - imageSize.y) / 2};
+    pictureApi.setImage(picture, image, &offset);
+}
+
+game::CBorderedImg* createBorderedImage(game::IMqImage2* image, game::BorderType borderType)
+{
+    using namespace game;
+
+    const auto& borderedImgApi = CBorderedImgApi::get();
+    auto memAlloc = Memory::get().allocate;
+
+    auto result = (CBorderedImg*)memAlloc(sizeof(CBorderedImg));
+    borderedImgApi.constructor(result, borderType);
+    borderedImgApi.addImage(result, image);
+
+    return result;
 }
 
 } // namespace hooks
