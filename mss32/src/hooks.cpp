@@ -451,11 +451,16 @@ static Hooks getGameHooks()
         // clang-format on
     }
 
+    bool hookSendObjectsChanges = false;
     if (userSettings().debugMode) {
         // clang-format off
         // Log all net messages being sent by single player (both client and server) to netMessages<PID>.log
         if (userSettings().debug.logSinglePlayerMessages) {
             hooks.emplace_back(HookInfo{CNetSinglePlayerApi::vftable()->sendMessage, netSinglePlayerSendMessageHooked, (void**)&orig.netSinglePlayerSendMessage});
+        }
+        // Log added/changed/erased objects ids being sent by server to netMessages<PID>.log
+        if (userSettings().debug.sendObjectsChangesTreshold) {
+            hookSendObjectsChanges = true;
         }
         // clang-format on
     }
@@ -466,10 +471,10 @@ static Hooks getGameHooks()
         // units (like auras in MNS mod).
         hooks.emplace_back(
             HookInfo{fn.getStackFortRuinGroupForChange, getStackFortRuinGroupForChangeHooked});
+        hookSendObjectsChanges = true;
     }
 
-    if (userSettings().modifiers.validateUnitsOnGroupChanged || userSettings().debugMode) {
-        // Log added/changed/erased objects ids being sent by server to netMessages<PID>.log
+    if (hookSendObjectsChanges) {
         hooks.emplace_back(HookInfo{CMidServerLogicApi::vftable().midMsgSender->sendObjectsChanges,
                                     midServerLogicSendObjectsChangesHooked,
                                     (void**)&orig.midServerLogicSendObjectsChanges});
