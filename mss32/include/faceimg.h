@@ -28,7 +28,6 @@ struct IFaceImgVftable;
 
 struct CFaceImg
 {
-
     struct IFaceImg : public IMqImage2T<IFaceImgVftable>
     { };
 
