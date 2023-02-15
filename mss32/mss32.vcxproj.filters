@@ -1160,6 +1160,9 @@
     <ClCompile Include="src\encyclopediapopup.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\custombuildingcategories.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3006,6 +3009,9 @@
     </ClInclude>
     <ClInclude Include="include\mqdbpackedimage.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\custombuildingcategories.h">
+      <Filter>features</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
