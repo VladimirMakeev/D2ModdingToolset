@@ -37,10 +37,20 @@ struct CPhaseGame;
  */
 using BuildingBranchMap = Map<int, int>;
 
+/** Correspond to separate capital building tabs. */
+enum class BuildingBranchNumber : int
+{
+    Fighter = 0,
+    Mage,
+    Archer,
+    Other,
+    Special,
+};
+
 struct CBuildingBranchData
 {
     BuildingBranchMap map;
-    int branchNumber;
+    BuildingBranchNumber branchNumber;
     LRaceCategory raceCategory;
     String branchDialogName;
 };
@@ -60,7 +70,7 @@ struct Api
     /** Creates CBuildingBranch for specified branchNumber. */
     using Constructor = CBuildingBranch*(__thiscall*)(CBuildingBranch* thisptr,
                                                       int phaseGame,
-                                                      int* branchNumber);
+                                                      BuildingBranchNumber* branchNumber);
     Constructor constructor;
 
     /** Initializes CBuildingBranchData with default values. */
