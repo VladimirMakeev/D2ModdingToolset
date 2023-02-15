@@ -19,7 +19,7 @@
     
     ![Demo video](https://user-images.githubusercontent.com/5180699/218980554-b2eae5dd-efac-4b96-9eb8-918333da5487.mp4)
 
-    - Create custom category records `L_FIGHTER`, `L_MAGE`, `L_ARCHER` and `L_SPECIAL` to `Lbuild.dbf`;
+    - Create custom category records `L_FIGHTER`, `L_MAGE`, `L_ARCHER`, `L_SPECIAL` and `L_CUSTOM` ('Other buildings') in `Lbuild.dbf`;
     - Set corresponding category number in `CATEGORY` field and empty id `g000000000` in `REQUIRED` field for desired sideshow buildings in `Gbuild.dbf`;
   </details>
 - <details>
