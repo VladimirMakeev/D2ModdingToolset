@@ -27,6 +27,7 @@
 #include "d2unorderedmap.h"
 #include "d2vector.h"
 #include "mq_c_s.h"
+#include "smartptr.h"
 
 namespace game {
 
