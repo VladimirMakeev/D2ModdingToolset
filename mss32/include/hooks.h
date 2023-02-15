@@ -62,6 +62,8 @@ struct LRaceCategory;
 struct CMidgardScenarioMap;
 struct IMidgardStreamEnv;
 struct CMidStreamEnvFile;
+
+enum class BuildingBranchNumber : int;
 }; // namespace game
 
 namespace hooks {
@@ -110,10 +112,11 @@ game::LBuildingCategoryTable* __fastcall buildingCategoryTableCtorHooked(
     const char* globalsFolderPath,
     void* codeBaseEnvProxy);
 
-game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch* thisptr,
-                                                           int /*%edx*/,
-                                                           game::CPhaseGame* phaseGame,
-                                                           int* branchNumber);
+game::CBuildingBranch* __fastcall buildingBranchCtorHooked(
+    game::CBuildingBranch* thisptr,
+    int /*%edx*/,
+    game::CPhaseGame* phaseGame,
+    game::BuildingBranchNumber* branchNumber);
 
 int __stdcall chooseUnitLaneHooked(const game::IUsSoldier* soldier);
 
