@@ -1163,6 +1163,9 @@
     <ClCompile Include="src\encyclopediapopup.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\intintmap.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3017,6 +3020,9 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mqdbpackedimage.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\intintmap.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\imagedatadescriptor.h">

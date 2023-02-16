@@ -228,6 +228,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\encparambasehooks.cpp" />
     <ClCompile Include="src\encyclopediapopup.cpp" />
     <ClCompile Include="src\exchangeinterfhooks.cpp" />
+    <ClCompile Include="src\intintmap.cpp" />
     <ClCompile Include="src\intvector.cpp" />
     <ClCompile Include="src\button.cpp" />
     <ClCompile Include="src\campaignstream.cpp" />
@@ -648,6 +649,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\imgstore2.h" />
     <ClInclude Include="include\imgstore2loader.h" />
     <ClInclude Include="include\imgstore2texture.h" />
+    <ClInclude Include="include\intintmap.h" />
     <ClInclude Include="include\intvector.h" />
     <ClInclude Include="include\button.h" />
     <ClInclude Include="include\campaignstream.h" />
