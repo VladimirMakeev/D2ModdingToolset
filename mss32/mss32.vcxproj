@@ -695,6 +695,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\imageptrvector.h" />
     <ClInclude Include="include\interfborderdisplay.h" />
     <ClInclude Include="include\interfaceutils.h" />
+    <ClInclude Include="include\itemextension.h" />
     <ClInclude Include="include\leaderunitdescriptor.h" />
     <ClInclude Include="include\logutils.h" />
     <ClInclude Include="include\managestkinterf.h" />
