@@ -80,6 +80,18 @@ struct CMidgardScenarioMap;
 
 enum class ModifierElementTypeFlag : int;
 
+enum class CanApplyPotionResult : int
+{
+    Ok = 0,
+    NoItemInInventory = 1,
+    AlreadyAtFullHp = 3,
+    AlreadyAlive = 5,
+    NotAPotion = 8,
+    AlreadyApplied = 9,
+    CannotBoostDead = 10,
+    CannotHealDead = 11,
+};
+
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
 
@@ -641,6 +653,11 @@ using LoadScenarioMap = int(__stdcall*)(int a1,
  */
 using CreateUnitFaceImage = CFaceImg::IFaceImg*(__stdcall*)(CMidgardID* unitImplId, bool big);
 
+using CanApplyPotionToUnit = CanApplyPotionResult(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                              const CMidgardID* unitId,
+                                                              const CMidgardID* groupId,
+                                                              const CMidgardID* itemId);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -756,6 +773,7 @@ struct Functions
     ThrowScenarioException throwScenarioException;
     LoadScenarioMap loadScenarioMap;
     CreateUnitFaceImage createUnitFaceImage;
+    CanApplyPotionToUnit canApplyPotionToUnit;
 };
 
 /** Global variables used in game. */
