@@ -56,15 +56,15 @@ struct CMidInventoryVftable
     AllItemsExist allItemsExist;
 
     /** Returns number of items in inventory. */
-    using GetItemsCount = int(__thiscall*)(CMidInventory* thisptr);
+    using GetItemsCount = int(__thiscall*)(const CMidInventory* thisptr);
     GetItemsCount getItemsCount;
 
     /** Returns item id at specified index. */
-    using GetItem = CMidgardID*(__thiscall*)(CMidInventory* thisptr, int index);
+    using GetItem = const CMidgardID*(__thiscall*)(const CMidInventory* thisptr, int index);
     GetItem getItem;
 
     /** Returns index of specified item id or -1 if item not found. */
-    using GetItemIndex = int(__thiscall*)(CMidInventory* thisptr, const CMidgardID* itemId);
+    using GetItemIndex = int(__thiscall*)(const CMidInventory* thisptr, const CMidgardID* itemId);
     GetItemIndex getItemIndex;
 
     /** Adds item id to inventory. Returns true if added successfully. */
