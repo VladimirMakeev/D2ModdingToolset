@@ -21,12 +21,16 @@
 #define ENCLAYOUTCITY_H
 
 #include "enclayout.h"
+#include "midgardid.h"
+#include "smartptr.h"
 
 namespace game {
 
 struct CEncLayoutCityData;
 struct IMidgardObjectMap;
 struct CFortification;
+struct CMidUnitGroup;
+struct IMqImage2;
 
 struct CEncLayoutCity : public IEncLayout
 {
@@ -35,13 +39,39 @@ struct CEncLayoutCity : public IEncLayout
 
 assert_size(CEncLayoutCity, 16);
 
+// Similar to GroupAdapterUnitData
+struct CEncLayoutCityGroupData
+{
+    bool boostApplied[6];
+    bool lowerApplied[6];
+    bool potionApplied[6];
+    bool canLevelUp[6];
+    bool hasHighLevel[6];
+    char padding[2];
+    int highLevel[6];
+};
+
+assert_size(CEncLayoutCityGroupData, 56);
+
+// Similar to CDDUnitGroupData
 struct CEncLayoutCityData
 {
     const IMidgardObjectMap* objectMap;
-    char unknown[156];
+    CMidgardID* playerId;
+    CMidgardID fortificationId;
+    SmartPointer buttonFunctor;
+    IMqImage2* spellBoostIcon;
+    IMqImage2* spellLowerIcon;
+    IMqImage2* potionBoostIcon;
+    IMqImage2* upgrageIcon;
+    IMqImage2* highLevelIcons[3];
+    CEncLayoutCityGroupData stackGroup;
+    CEncLayoutCityGroupData fortGroup;
 };
 
 assert_size(CEncLayoutCityData, 160);
+assert_offset(CEncLayoutCityData, stackGroup.highLevel, 80);
+assert_offset(CEncLayoutCityData, fortGroup.highLevel, 136);
 
 namespace CEncLayoutCityApi {
 
@@ -52,6 +82,14 @@ struct Api
                                      const CFortification* fort,
                                      CDialogInterf* dialog);
     Update update;
+
+    using UpdateGroupUi = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                           const CMidUnitGroup* group,
+                                           CDialogInterf* dialog,
+                                           const char* txtStackNameFormat,
+                                           const char* imgStackNameFormat,
+                                           bool isStackGroup);
+    UpdateGroupUi updateGroupUi;
 };
 
 Api& get();

@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Stanislav Egorov.
+ * Copyright (C) 2023 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,45 +17,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "enclayoutcity.h"
+#include "borderedimg.h"
 #include "version.h"
 #include <array>
 
-namespace game::CEncLayoutCityApi {
+namespace game::CBorderedImgApi {
 
 // clang-format off
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::Update)0x57b21a,
-        (Api::UpdateGroupUi)0x57ba69,
+        (Api::Constructor)0x5b7353,
+        (Api::AddImage)0x5b74c2,
     },
     // Russobit
     Api{
-        (Api::Update)0x57b21a,
-        (Api::UpdateGroupUi)0x57ba69,
+        (Api::Constructor)0x5b7353,
+        (Api::AddImage)0x5b74c2,
     },
     // Gog
     Api{
-        (Api::Update)0x57a8d5,
-        (Api::UpdateGroupUi)0x57b124,
+        (Api::Constructor)0x5b6559,
+        (Api::AddImage)0x5b66c8,
     },
     // Scenario Editor
     Api{
-        (Api::Update)0x4cc638,
-        (Api::UpdateGroupUi)0x4cce87,
+        (Api::Constructor)0x55a699,
+        (Api::AddImage)0x55a808,
     },
-}};
-
-static std::array<IEncLayoutVftable*, 4> vftables = {{
-    // Akella
-    (IEncLayoutVftable*)0x6e8c64,
-    // Russobit
-    (IEncLayoutVftable*)0x6e8c64,
-    // Gog
-    (IEncLayoutVftable*)0x6e6c04,
-    // Scenario Editor
-    (IEncLayoutVftable*)0x5d801c,
 }};
 // clang-format on
 
@@ -64,9 +53,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-IEncLayoutVftable* vftable()
-{
-    return vftables[static_cast<int>(hooks::gameVersion())];
-}
-
-} // namespace game::CEncLayoutCityApi
+} // namespace game::CBorderedImgApi

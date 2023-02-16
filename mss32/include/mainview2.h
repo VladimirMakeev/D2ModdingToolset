@@ -22,6 +22,7 @@
 
 #include "fullscreeninterf.h"
 #include "middatacache.h"
+#include "mqpoint.h"
 #include "smartptr.h"
 
 namespace game {

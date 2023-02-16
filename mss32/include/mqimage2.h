@@ -30,11 +30,15 @@ struct CMqPoint;
 struct CMqRect;
 struct IMqRenderer2;
 
-/** Assumption: base class for all images. */
-struct IMqImage2
+template <typename T>
+struct IMqImage2T
 {
-    IMqImage2Vftable* vftable;
+    T* vftable;
 };
+
+/** Assumption: base class for all images. */
+struct IMqImage2 : public IMqImage2T<IMqImage2Vftable>
+{ };
 
 struct IMqImage2Vftable
 {

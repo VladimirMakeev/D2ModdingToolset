@@ -53,6 +53,8 @@ struct GameRestrictions
     UnitHighLevels* unitHighLevels;
 
     // No dedicated game variable for this, see implementation of CDBTableApi::readHeal
+    // Note that the default minimum of 1 is reduced to 0 due to optional healing added for Bestow
+    // Wards (see attackImplCtorHooked)
     Restriction<int> attackHeal;
     // No dedicated game variable for this, see implementation of DBReadRegenFieldWithBoundsCheck
     // (Akella 0x5A7EB0)

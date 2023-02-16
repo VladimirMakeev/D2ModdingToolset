@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2023 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,43 +17,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MQRECT_H
-#define MQRECT_H
+#ifndef INTINTMAP_H
+#define INTINTMAP_H
 
-#include "d2assert.h"
+#include "d2map.h"
+#include "d2pair.h"
 
 namespace game {
 
-struct CMqPoint;
+using IntIntMap = Map<int, int>;
+using IntIntMapNode = MapNode<int, int>;
+using IntIntMapIterator = MapIterator<int, int>;
 
-struct CMqRect
-{
-    int left;
-    int top;
-    int right;
-    int bottom;
-};
-
-assert_size(CMqRect, 16);
-
-namespace MqRectApi {
+namespace IntIntMapApi {
 
 struct Api
 {
-    using Constructor = CMqRect*(__thiscall*)(CMqRect* thisptr);
-    Constructor constructor;
+    using Insert =
+        Pair<IntIntMapIterator, bool>*(__thiscall*)(IntIntMap* thisptr,
+                                                    Pair<IntIntMapIterator, bool>* result,
+                                                    Pair<int, int>* value);
+    Insert insert;
 
-    using PtInRect = bool(__thiscall*)(const CMqRect* thisptr, const CMqPoint* pt);
-    PtInRect ptInRect;
-
-    using GetCenter = CMqPoint*(__thiscall*)(const CMqRect* thisptr, CMqPoint* value);
-    GetCenter getCenter;
+    using Find = IntIntMapIterator*(__thiscall*)(const IntIntMap* thisptr,
+                                                 IntIntMapIterator* result,
+                                                 const int* value);
+    Find find;
 };
 
 Api& get();
 
-} // namespace MqRectApi
+} // namespace IntIntMapApi
 
 } // namespace game
 
-#endif // MQRECT_H
+#endif // INTINTMAP_H
