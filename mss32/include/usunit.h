@@ -33,6 +33,10 @@ struct IUsUnit : public IMidObjectT<IUsUnitVftable>
 
 struct IUsUnitVftable : public IMidObjectVftable
 {
+    /** Most of the time it works like dynamic_cast calculating offset of extension interface.
+     * However, if this is a unit modifier (CUmUnit, CUmAttack or CUmStack), an aggregate object can
+     * be returned instead (the method functions like queryInterface), so dynamic_cast is no fit.
+     */
     using Cast = IUsUnitExtension*(__thiscall*)(const IUsUnit* thisptr, const char* rawTypeName);
     Cast cast;
 
