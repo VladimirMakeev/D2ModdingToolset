@@ -20,12 +20,23 @@
 #ifndef ITEMEXPOTIONBOOST_H
 #define ITEMEXPOTIONBOOST_H
 
+#include "itemextension.h"
+
 namespace game {
 
-struct IItemExPotionBoost
+struct IItemExPotionBoostVftable;
+struct CMidgardID;
+
+struct IItemExPotionBoost : IItemExtensionT<IItemExPotionBoostVftable>
+{ };
+
+struct IItemExPotionBoostVftable : IItemExtensionVftable
 {
-    void* vftable;
+    using GetModifierId = const CMidgardID*(__thiscall*)(const IItemExPotionBoost* thisptr);
+    GetModifierId getModifierId;
 };
+
+assert_vftable_size(IItemExPotionBoostVftable, 2);
 
 } // namespace game
 
