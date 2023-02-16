@@ -81,7 +81,7 @@ void markAttackTarget(game::CBattleViewerInterf* viewer,
     CMqPoint unitCenter{};
     rectApi.getCenter(&unitRect, &unitCenter);
 
-    CMqPoint imagePosition{unitCenter.x - imageSize.x / 2, unitRect.p2.y - imageSize.y / 2};
+    CMqPoint imagePosition{unitCenter.x - imageSize.x / 2, unitRect.bottom - imageSize.y / 2};
     engineApi.drawTargetMark(viewer->data->batViewer2dEngine, image, &imagePosition,
                              isUnitOnTheLeft, targetPosition);
 }
@@ -623,8 +623,8 @@ void __fastcall battleViewerInterfUpdateHooked(game::IBatViewer* thisptr,
 
     CMqPoint mousePosition;
     getMousePosition(&mousePosition);
-    mousePosition.x -= viewer->data->dialogInterfArea.p1.x;
-    mousePosition.y -= viewer->data->dialogInterfArea.p1.y;
+    mousePosition.x -= viewer->data->dialogInterfArea.left;
+    mousePosition.y -= viewer->data->dialogInterfArea.top;
 
     viewerApi.markAttackTargets(viewer, &mousePosition, false);
     viewerApi.updateCursor(viewer, &mousePosition);
@@ -793,8 +793,8 @@ void batBigFaceUpdateUnitData(game::CBatBigFace* thisptr, const game::CMidgardID
     if (unitData->textImage.data == nullptr) {
         auto textImage = (CImage2Text*)Memory::get().allocate(sizeof(CImage2Text));
         const auto& textArea = thisptr->data->bigFaceTextArea;
-        image2TextApi.constructor(textImage, textArea.p2.x - textArea.p1.x,
-                                  textArea.p2.y - textArea.p1.y);
+        image2TextApi.constructor(textImage, textArea.right - textArea.left,
+                                  textArea.bottom - textArea.top);
         smartPtrApi.createOrFree((SmartPointer*)&unitData->textImage, textImage);
     }
 

@@ -287,8 +287,8 @@ static void __fastcall menuListBoxDisplayHandler(CMenuCustomLobby* thisptr,
     auto& createFreePtr = SmartPointerApi::get().createOrFree;
     auto& imageApi = CImage2TextApi::get();
 
-    const auto width = lineArea->p2.x - lineArea->p1.x;
-    const auto height = lineArea->p2.y - lineArea->p1.y;
+    const auto width = lineArea->right - lineArea->left;
+    const auto height = lineArea->bottom - lineArea->top;
     const auto& room = thisptr->rooms[(size_t)index % thisptr->rooms.size()];
 
     // Width of table column border image in pixels

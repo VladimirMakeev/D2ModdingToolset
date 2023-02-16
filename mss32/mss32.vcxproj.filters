@@ -1157,6 +1157,9 @@
     <ClCompile Include="src\sitemerchantinterfhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="src\borderedimg.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
     <ClCompile Include="src\encyclopediapopup.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -3001,6 +3004,15 @@
     <ClInclude Include="include\imgstore2texture.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\faceimgimpl.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\faceimg.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\borderedimg.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\encyclopediapopup.h">
       <Filter>game</Filter>
     </ClInclude>
@@ -3011,6 +3023,9 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\intintmap.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imagedatadescriptor.h">
       <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>

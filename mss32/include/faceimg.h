@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2023 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,43 +17,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MQRECT_H
-#define MQRECT_H
+#ifndef FACEIMG_H
+#define FACEIMG_H
 
-#include "d2assert.h"
+#include "mqimage2.h"
 
 namespace game {
 
-struct CMqPoint;
+struct IFaceImgVftable;
 
-struct CMqRect
+struct CFaceImg
 {
-    int left;
-    int top;
-    int right;
-    int bottom;
+    struct IFaceImg : public IMqImage2T<IFaceImgVftable>
+    { };
+
+    assert_size(IFaceImg, 4);
 };
 
-assert_size(CMqRect, 16);
-
-namespace MqRectApi {
-
-struct Api
+/** Unknown names map to CFaceImgImpl fields. */
+struct IFaceImgVftable : public IMqImage2Vftable
 {
-    using Constructor = CMqRect*(__thiscall*)(CMqRect* thisptr);
-    Constructor constructor;
+    /** Probably image index. */
+    using SetInt = void(__thiscall*)(CFaceImg::IFaceImg* thisptr, int value);
+    SetInt setUnknown68;
 
-    using PtInRect = bool(__thiscall*)(const CMqRect* thisptr, const CMqPoint* pt);
-    PtInRect ptInRect;
+    using GetInt = int(__thiscall*)(CFaceImg::IFaceImg* thisptr);
+    GetInt getUnknown68;
 
-    using GetCenter = CMqPoint*(__thiscall*)(const CMqRect* thisptr, CMqPoint* value);
-    GetCenter getCenter;
+    SetInt setPercentHp;
+
+    using SetBool = void(__thiscall*)(CFaceImg::IFaceImg* thisptr, bool value);
+    SetBool setLeftSide;
 };
 
-Api& get();
-
-} // namespace MqRectApi
+assert_vftable_size(IFaceImgVftable, 13);
 
 } // namespace game
 
-#endif // MQRECT_H
+#endif // FACEIMG_H
