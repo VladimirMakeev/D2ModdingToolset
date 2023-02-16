@@ -27,6 +27,7 @@
 #include "leadercategory.h"
 #include "log.h"
 #include "midsubrace.h"
+#include "modifierutils.h"
 #include "modifierview.h"
 #include "racecategory.h"
 #include "racetype.h"
@@ -251,23 +252,7 @@ bool UnitImplView::hasModifier(const std::string& id) const
 
 bool UnitImplView::hasModifierById(const IdView& id) const
 {
-    using namespace game;
-
-    const auto& rtti = RttiApi::rtti();
-    const auto dynamicCast = RttiApi::get().dynamicCast;
-
-    CUmModifier* modifier = nullptr;
-    for (auto curr = impl; curr; curr = modifier->data->prev) {
-        modifier = (CUmModifier*)dynamicCast(curr, 0, rtti.IUsUnitType, rtti.CUmModifierType, 0);
-        if (!modifier)
-            break;
-
-        if (modifier->data->modifierId == id.id) {
-            return true;
-        }
-    }
-
-    return false;
+    return hooks::hasModifier(impl, &id.id);
 }
 
 int UnitImplView::getLeaderCategory() const

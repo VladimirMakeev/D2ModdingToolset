@@ -687,4 +687,26 @@ bool addModifier(game::CMidUnit* unit, const game::CMidgardID* modifierId, bool 
     return true;
 }
 
+bool hasModifier(const game::IUsUnit* unitImpl, const game::CMidgardID* modifierId)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    const CUmModifier* modifier = nullptr;
+    for (auto curr = unitImpl; curr; curr = modifier->data->prev) {
+        modifier = static_cast<const CUmModifier*>(
+            dynamicCast(curr, 0, rtti.IUsUnitType, rtti.CUmModifierType, 0));
+        if (!modifier)
+            break;
+
+        if (modifier->data->modifierId == *modifierId) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 } // namespace hooks
