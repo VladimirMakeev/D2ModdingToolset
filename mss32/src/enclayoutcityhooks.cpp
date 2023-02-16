@@ -134,24 +134,31 @@ void __fastcall encLayoutCityOnObjectChangedHooked(game::CEncLayoutCity* thisptr
 {
     using namespace game;
 
+    if (!obj) {
+        return;
+    }
+
     const auto& api = CEncLayoutCityApi::get();
+    const auto& idApi = CMidgardIDApi::get();
     const auto& rtti = RttiApi::rtti();
     const auto dynamicCast = RttiApi::get().dynamicCast;
 
-    auto objectMap = thisptr->data->objectMap;
-    auto fortification = (CFortification*)dynamicCast(obj, 0, rtti.IMidObjectType,
-                                                      rtti.CFortificationType, 0);
-    if (fortification) {
-        if (fortification->id == thisptr->data->fortificationId) {
-            api.update(thisptr, objectMap, fortification, thisptr->dialog);
+    auto idType = idApi.getType(&obj->id);
+    if (idType == IdType::Fortification) {
+        auto fort = static_cast<const CFortification*>(
+            dynamicCast(obj, 0, rtti.IMidObjectType, rtti.CFortificationType, 0));
+        if (fort && fort->id == thisptr->data->fortificationId) {
+            api.update(thisptr, thisptr->data->objectMap, fort, thisptr->dialog);
         }
-    } else {
-        auto stack = (CMidStack*)dynamicCast(obj, 0, rtti.IMidObjectType, rtti.CMidStackType, 0);
+    } else if (idType == IdType::Stack) {
+        auto stack = static_cast<const CMidStack*>(
+            dynamicCast(obj, 0, rtti.IMidObjectType, rtti.CMidStackType, 0));
         if (stack && stack->insideId == thisptr->data->fortificationId) {
-            fortification = (CFortification*)objectMap->vftable
-                                ->findScenarioObjectById(objectMap,
-                                                         &thisptr->data->fortificationId);
-            api.update(thisptr, objectMap, fortification, thisptr->dialog);
+            auto objectMap = thisptr->data->objectMap;
+            auto fort = static_cast<const CFortification*>(
+                objectMap->vftable->findScenarioObjectById(objectMap,
+                                                           &thisptr->data->fortificationId));
+            api.update(thisptr, objectMap, fort, thisptr->dialog);
         }
     }
 }
