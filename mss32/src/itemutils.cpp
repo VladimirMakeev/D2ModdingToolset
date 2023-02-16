@@ -75,4 +75,22 @@ game::CMidgardID getAttackId(const game::IItem* item)
     return emptyId;
 }
 
+game::IItemExtension* castItem(const game::IItem* item, const game::TypeDescriptor* type)
+{
+    using namespace game;
+
+    auto& typeInfoRawName = *RttiApi::get().typeInfoRawName;
+
+    return item ? item->vftable->cast(item, typeInfoRawName(type)) : nullptr;
+}
+
+game::IItemExPotionBoost* castItemToPotionBoost(const game::IItem* item)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+
+    return (IItemExPotionBoost*)castItem(item, rtti.IItemExPotionBoostType);
+}
+
 } // namespace hooks
