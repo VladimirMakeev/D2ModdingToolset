@@ -213,10 +213,10 @@ void __fastcall modifiersListBoxDisplayCallback(const game::CEncLayoutUnit* this
     auto data = (CEncLayoutUnitDataPatched*)thisptr->data;
 
     CMqRect textClientArea = *lineArea;
-    textClientArea.p2.x -= textClientArea.p1.x;
-    textClientArea.p2.y -= textClientArea.p1.y;
-    textClientArea.p1.x = 31; // Width of modifier icon
-    textClientArea.p1.y = 0;
+    textClientArea.right -= textClientArea.left;
+    textClientArea.bottom -= textClientArea.top;
+    textClientArea.left = 31; // Width of modifier icon
+    textClientArea.top = 0;
 
     auto length = data->modifierTexts.end - data->modifierTexts.bgn;
     if (length == 0 && index == 0) {
@@ -224,7 +224,7 @@ void __fastcall modifiersListBoxDisplayCallback(const game::CEncLayoutUnit* this
         if (text.empty())
             text = getInterfaceText("X005TA0676");
 
-        textClientArea.p1.x = 0;
+        textClientArea.left = 0;
         imagePointListApi.addText(contents, lineArea, text.c_str(), &textClientArea, false, 0);
         return;
     }
@@ -792,15 +792,7 @@ static void setImgUnitIcon(game::CEncLayoutUnit* layout)
         CMqPoint offset{};
         pictureApi.setImage(picture, nullptr, &offset);
     } else {
-        auto pictureArea = picture->vftable->getArea(picture);
-        CMqPoint pictureSize{pictureArea->p2.x - pictureArea->p1.x,
-                             pictureArea->p2.y - pictureArea->p1.y};
-
-        CMqPoint imageSize{};
-        image->vftable->getSize(image, &imageSize);
-
-        CMqPoint offset{(pictureSize.x - imageSize.x) / 2, (pictureSize.y - imageSize.y) / 2};
-        pictureApi.setImage(picture, image, &offset);
+        setCenteredImage(picture, image);
     }
 }
 

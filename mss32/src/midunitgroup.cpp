@@ -24,7 +24,7 @@
 namespace game::CMidUnitGroupApi {
 
 // clang-format off
-std::array<Api, 3> functions = {{
+std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::GetUnitId)0x5f57f1,
@@ -48,6 +48,14 @@ std::array<Api, 3> functions = {{
         (Api::GetUnitIdByPosition)0x5f4537,
         (Api::AddUnitIdsAvailableForSummons)0x627542,
         (Api::UnknownFunction)0x630690,
+    },
+    // Scenario Editor
+    Api{
+        (Api::GetUnitId)0x4f03e8,
+        (Api::GetUnitPosition)0x4f0444,
+        (Api::GetUnitIdByPosition)0x4f041c,
+        (Api::AddUnitIdsAvailableForSummons)nullptr,
+        (Api::UnknownFunction)nullptr,
     },
 }};
 // clang-format on

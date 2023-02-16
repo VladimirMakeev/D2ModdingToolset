@@ -30,9 +30,13 @@ struct CUnitTypeDescriptor;
 struct CLeaderUnitDescriptor;
 struct CDynUpgrade;
 struct TUsUnitImpl;
+struct CPictureInterf;
+struct IMqImage2;
+struct CBorderedImg;
 
 enum class AttackSourceId : int;
 enum class AttackClassId : int;
+enum class BorderType : int;
 } // namespace game
 
 namespace hooks {
@@ -65,6 +69,9 @@ bool getDynUpgradesToDisplay(game::IEncUnitDescriptor* descriptor,
                              const game::CDynUpgrade** upgrade2);
 void addDynUpgradeLevelToField(std::string& text, const char* field, int level);
 void addDynUpgradeTextToField(std::string& text, const char* field, int upgrade1, int upgrade2);
+
+void setCenteredImage(game::CPictureInterf* picture, game::IMqImage2* image);
+game::CBorderedImg* createBorderedImage(game::IMqImage2* image, game::BorderType borderType);
 
 } // namespace hooks
 

@@ -214,6 +214,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\bindings\unitview.cpp" />
     <ClCompile Include="src\bestowwardshooks.cpp" />
     <ClCompile Include="src\bindings\unitviewbase.cpp" />
+    <ClCompile Include="src\borderedimg.cpp" />
     <ClCompile Include="src\buildingbranch.cpp" />
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
@@ -615,6 +616,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\bindings\unitview.h" />
     <ClInclude Include="include\bestowwardshooks.h" />
     <ClInclude Include="include\bindings\unitviewbase.h" />
+    <ClInclude Include="include\borderedimg.h" />
     <ClInclude Include="include\bordertile.h" />
     <ClInclude Include="include\buildingbranch.h" />
     <ClInclude Include="include\buildingcat.h" />
@@ -631,12 +633,15 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\encparambasehooks.h" />
     <ClInclude Include="include\encyclopediapopup.h" />
     <ClInclude Include="include\exchangeinterfhooks.h" />
+    <ClInclude Include="include\faceimg.h" />
+    <ClInclude Include="include\faceimgimpl.h" />
     <ClInclude Include="include\factoryimage2.h" />
     <ClInclude Include="include\factoryimagestill.h" />
     <ClInclude Include="include\fffactory.h" />
     <ClInclude Include="include\ffimg.h" />
     <ClInclude Include="include\gameimagedata.h" />
     <ClInclude Include="include\groupareamanagement.h" />
+    <ClInclude Include="include\imagedatadescriptor.h" />
     <ClInclude Include="include\imgpacker.h" />
     <ClInclude Include="include\imgpackerloader.h" />
     <ClInclude Include="include\imgpackerstoreloader.h" />

@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Stanislav Egorov.
+ * Copyright (C) 2023 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,57 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTBOXINTERFACE_H
-#define TEXTBOXINTERFACE_H
+#ifndef IMAGEDATADESCRIPTOR_H
+#define IMAGEDATADESCRIPTOR_H
 
+#include "d2assert.h"
 #include "d2string.h"
-#include "interface.h"
 #include "mqpoint.h"
+#include "smartptr.h"
 
 namespace game {
 
-struct CImage2Text;
-
-struct CTextBoxInterfData
+struct ImageDataDescriptor
 {
-    int widgetChildIndex;
-    CImage2Text* image2Text;
-    CMqPoint pos;
-    int unknown;
-    String text;
-    int unknown2;
-    int unknown3;
-    String format;
+    String imageFilepath;
+    CMqPoint imageSize;
+    void* processedImage;
     SmartPointer ptr;
-    void* unknown4;
-    void* unknown5;
 };
 
-assert_size(CTextBoxInterfData, 76);
-
-/**
- * Text ui element.
- * Represents TEXT from Interf.dlg or ScenEdit.dlg files.
- */
-struct CTextBoxInterf : public CInterface
-{
-    CTextBoxInterfData* data;
-};
-
-assert_size(CTextBoxInterf, 12);
-
-namespace CTextBoxInterfApi {
-
-struct Api
-{
-    using SetString = void(__thiscall*)(CTextBoxInterf* thisptr, const char* value);
-    SetString setString;
-};
-
-Api& get();
-
-} // namespace CTextBoxInterfApi
+assert_size(ImageDataDescriptor, 36);
 
 } // namespace game
 
-#endif // TEXTBOXINTERFACE_H
+#endif // IMAGEDATADESCRIPTOR_H

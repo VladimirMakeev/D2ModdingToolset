@@ -21,6 +21,7 @@
 #define GAME_H
 
 #include "attacktypepairvector.h"
+#include "faceimg.h"
 #include "globaldata.h"
 #include "idlist.h"
 #include "mqpoint.h"
@@ -635,6 +636,11 @@ using LoadScenarioMap = int(__stdcall*)(int a1,
                                         CMidStreamEnvFile* streamEnv,
                                         CMidgardScenarioMap* scenarioMap);
 
+/** big determines whether "*FACEB" (round) instead of "*FACE" (rectangle) image from Faces.ff
+ * should be used.
+ */
+using CreateUnitFaceImage = CFaceImg::IFaceImg*(__stdcall*)(CMidgardID* unitImplId, bool big);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -749,6 +755,7 @@ struct Functions
     GetDeathAnimationByUnitOrItemId getDeathAnimationByUnitOrItemId;
     ThrowScenarioException throwScenarioException;
     LoadScenarioMap loadScenarioMap;
+    CreateUnitFaceImage createUnitFaceImage;
 };
 
 /** Global variables used in game. */

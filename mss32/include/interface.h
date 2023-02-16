@@ -134,7 +134,7 @@ struct CInterfaceVftable
     using Method11 = int(__thiscall*)(CInterface* thisptr);
     Method11 method11;
 
-    using GetArea = CMqRect*(__thiscall*)(CInterface* thisptr);
+    using GetArea = CMqRect*(__thiscall*)(const CInterface* thisptr);
     GetArea getArea;
 
     using SetArea = bool(__thiscall*)(CInterface* thisptr, const CMqRect* area);

@@ -667,6 +667,14 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{CMidUnitApi::vftable()->initWithSoldierImpl,
                                 initWithSoldierImplHooked, (void**)&orig.initWithSoldierImpl});
 
+    // Update city encyclopedia on visiting stack changes
+    hooks.emplace_back(HookInfo{CEncLayoutCityApi::vftable()->onObjectChanged,
+                                encLayoutCityOnObjectChangedHooked});
+
+    // Fix infamous crash in multiplayer with city encyclopedia when observing other player's cities
+    hooks.emplace_back(
+        HookInfo{CEncLayoutCityApi::get().updateGroupUi, encLayoutCityUpdateGroupUiHooked});
+
     return hooks;
 }
 

@@ -666,6 +666,9 @@
   </details>
 - Fixes inability to 'Defend' as second attack if no other action except 'Instant resolve' and 'Auto battle' is available (the bug generally avoided by toggling 'Auto battle');
 - Fixes an issue with incomplete loading of scenario file causing some objects to be missing (if scenario contains too many objects, it caused in-game internal buffer to overflow over its limit of 512 KB);
+- Fixes rare crash while using drag'n'drop on inventory items if game server update arrives between mouse button press and release;
+- Fixes missing update of city encyclopedia popup dialog on visiting stack changes;
+- Fixes infamous crash in multiplayer games when observing other player's cities using encyclopedia popup dialog while the player performs unit reordering or summoning units in battle;
 
 ### Scripting:
 The toolset uses Lua for settings and advanced game mechanics. See [luaApi](luaApi.md) for detailed information.
