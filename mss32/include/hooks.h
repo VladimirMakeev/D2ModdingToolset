@@ -64,6 +64,7 @@ struct IMidgardStreamEnv;
 struct CMidStreamEnvFile;
 
 enum class BuildingBranchNumber : int;
+enum class CanApplyPotionResult : int;
 }; // namespace game
 
 namespace hooks {
@@ -260,6 +261,12 @@ bool __fastcall scenarioMapStreamHooked(game::CMidgardScenarioMap* scenarioMap,
 void __stdcall getStackFortRuinGroupForChangeHooked(game::IMidgardObjectMap* objectMap,
                                                     const game::CMidgardID* objectId,
                                                     game::CMidUnitGroup** result);
+
+game::CanApplyPotionResult __stdcall canApplyPotionToUnitHooked(
+    const game::IMidgardObjectMap* objectMap,
+    const game::CMidgardID* unitId,
+    const game::CMidgardID* groupId,
+    const game::CMidgardID* itemId);
 
 } // namespace hooks
 

@@ -88,7 +88,11 @@
 #include "interfmanager.h"
 #include "interftexthooks.h"
 #include "isoenginegroundhooks.h"
+#include "itembase.h"
+#include "itemcategory.h"
+#include "itemexpotionboost.h"
 #include "itemtransferhooks.h"
+#include "itemutils.h"
 #include "leaderabilitycat.h"
 #include "listbox.h"
 #include "log.h"
@@ -346,6 +350,9 @@ static Hooks getGameHooks()
         {CExchangeInterfApi::vftable().notify->onObjectChanged, exchangeInterfOnObjectChangedHooked, (void**)&orig.exchangeInterfOnObjectChanged},
         {CCityStackInterfApi::vftable().notify->onObjectChanged, cityStackInterfOnObjectChangedHooked, (void**)&orig.cityStackInterfOnObjectChanged},
         {CSiteMerchantInterfApi::vftable().notify->onObjectChanged, siteMerchantInterfOnObjectChangedHooked, (void**)&orig.siteMerchantInterfOnObjectChanged},
+        // Fix inability to use heal potion on transformed unit if its current hp is greater than maximum hp of unit it is transformed to
+        // (most common case is a unit transformed to Imp by a Witch while retaining his original hp)
+        {fn.canApplyPotionToUnit, canApplyPotionToUnitHooked},
     };
     // clang-format on
 
@@ -2221,6 +2228,53 @@ void __stdcall getStackFortRuinGroupForChangeHooked(game::IMidgardObjectMap* obj
     }
 
     *result = group;
+}
+
+game::CanApplyPotionResult __stdcall canApplyPotionToUnitHooked(
+    const game::IMidgardObjectMap* objectMap,
+    const game::CMidgardID* unitId,
+    const game::CMidgardID* groupId,
+    const game::CMidgardID* itemId)
+{
+    using namespace game;
+
+    const auto& itemCategories = ItemCategories::get();
+
+    auto inventory = getInventory(objectMap, groupId);
+    if (inventory->vftable->getItemIndex(inventory, itemId) == -1) {
+        return CanApplyPotionResult::NoItemInInventory;
+    }
+
+    auto unit = static_cast<const CMidUnit*>(
+        objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+
+    auto itemBase = getGlobalItemById(objectMap, itemId);
+    auto itemCategory = itemBase->vftable->getCategory(itemBase);
+    if (itemCategory->id == itemCategories.potionBoost->id
+        || itemCategory->id == itemCategories.potionPermanent->id) {
+        if (unit->currentHp <= 0) {
+            return CanApplyPotionResult::CannotBoostDead;
+        }
+
+        auto potionBoost = castItemToPotionBoost(itemBase);
+        if (hasModifier(unit->unitImpl, potionBoost->vftable->getModifierId(potionBoost))) {
+            return CanApplyPotionResult::AlreadyApplied;
+        }
+    } else if (itemCategory->id == itemCategories.potionHeal->id) {
+        if (unit->currentHp <= 0) {
+            return CanApplyPotionResult::CannotHealDead;
+        } else if (unit->currentHp >= getUnitHpMax(unit)) {
+            return CanApplyPotionResult::AlreadyAtFullHp;
+        }
+    } else if (itemCategory->id == itemCategories.potionRevive->id) {
+        if (unit->currentHp > 0) {
+            return CanApplyPotionResult::AlreadyAlive;
+        }
+    } else {
+        return CanApplyPotionResult::NotAPotion;
+    }
+
+    return CanApplyPotionResult::Ok;
 }
 
 } // namespace hooks
