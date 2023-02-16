@@ -94,7 +94,7 @@ bool __fastcall midServerLogicSendObjectsChangesHooked(game::IMidMsgSender* this
         addValidatedUnitsToChangedObjects(scenarioMap);
     }
 
-    if (userSettings().debugMode) {
+    if (userSettings().debugMode && userSettings().debug.sendObjectsChangesTreshold) {
         logObjectsToSend(scenarioMap);
     }
 
