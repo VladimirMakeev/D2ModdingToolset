@@ -1163,6 +1163,9 @@
     <ClCompile Include="src\encyclopediapopup.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\custombuildingcategories.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
     <ClCompile Include="src\intintmap.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -3021,6 +3024,9 @@
     </ClInclude>
     <ClInclude Include="include\mqdbpackedimage.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\custombuildingcategories.h">
+      <Filter>features</Filter>
     </ClInclude>
     <ClInclude Include="include\intintmap.h">
       <Filter>game</Filter>

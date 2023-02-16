@@ -54,6 +54,7 @@
 #include "customattackhooks.h"
 #include "customattacks.h"
 #include "customattackutils.h"
+#include "custombuildingcategories.h"
 #include "d2string.h"
 #include "dbfaccess.h"
 #include "dbtable.h"
@@ -1109,9 +1110,6 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
     return true;
 }
 
-static game::LBuildingCategory custom;
-static bool customCategoryExists{false};
-
 void __stdcall createBuildingTypeHooked(const game::CDBTable* dbTable,
                                         void* a2,
                                         const game::GlobalData** globalData)
@@ -1130,8 +1128,7 @@ void __stdcall createBuildingTypeHooked(const game::CDBTable* dbTable,
     TBuildingType* buildingType = nullptr;
 
     auto& buildingCategories = BuildingCategories::get();
-    if (category.id == buildingCategories.unit->id
-        || (customCategoryExists && (category.id == custom.id))) {
+    if (category.id == buildingCategories.unit->id || isCustomBuildingCategory(&category)) {
         // This is TBuildingUnitUpgType constructor
         // without TBuildingTypeData::category validity check
         TBuildingUnitUpgType* unitBuilding = (TBuildingUnitUpgType*)memAlloc(
@@ -1162,16 +1159,19 @@ game::LBuildingCategoryTable* __fastcall buildingCategoryTableCtorHooked(
     const char* globalsFolderPath,
     void* codeBaseEnvProxy)
 {
+    using namespace game;
+
     static const char dbfFileName[] = "LBuild.dbf";
 
     logDebug("newBuildingType.log", "Hook started");
 
     const auto dbfFilePath{std::filesystem::path(globalsFolderPath) / dbfFileName};
-    customCategoryExists = utils::dbValueExists(dbfFilePath, "TEXT", "L_CUSTOM");
-    if (customCategoryExists)
-        logDebug("newBuildingType.log", "Found custom building category");
+    addCustomBuildingCategory(dbfFilePath, BuildingBranchNumber::Fighter, "L_FIGHTER");
+    addCustomBuildingCategory(dbfFilePath, BuildingBranchNumber::Mage, "L_MAGE");
+    addCustomBuildingCategory(dbfFilePath, BuildingBranchNumber::Archer, "L_ARCHER");
+    addCustomBuildingCategory(dbfFilePath, BuildingBranchNumber::Other, "L_CUSTOM");
+    addCustomBuildingCategory(dbfFilePath, BuildingBranchNumber::Special, "L_SPECIAL");
 
-    using namespace game;
     auto& table = LBuildingCategoryTableApi::get();
     auto& categories = BuildingCategories::get();
 
@@ -1186,21 +1186,70 @@ game::LBuildingCategoryTable* __fastcall buildingCategoryTableCtorHooked(
     table.readCategory(categories.heal, thisptr, "L_HEAL", dbfFileName);
     table.readCategory(categories.magic, thisptr, "L_MAGIC", dbfFileName);
     table.readCategory(categories.unit, thisptr, "L_UNIT", dbfFileName);
-
-    if (customCategoryExists) {
-        table.readCategory(&custom, thisptr, "L_CUSTOM", dbfFileName);
+    for (auto& custom : getCustomBuildingCategories()) {
+        table.readCategory(&custom.second, thisptr, custom.second.text.c_str(), dbfFileName);
     }
-
     table.initDone(thisptr);
 
     logDebug("newBuildingType.log", "Hook finished");
     return thisptr;
 }
 
+static void addUnitBuilding(game::BuildingBranchMap* branchMap,
+                            const game::TBuildingType* buildingType,
+                            game::BuildingBranchNumber branchNumber,
+                            game::CPhaseGame* phaseGame)
+{
+    using namespace game;
+
+    const auto& buildingBranch = CBuildingBranchApi::get();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+    const auto& branches = UnitBranchCategories::get();
+
+    const TBuildingUnitUpgType* unitUpg = (const TBuildingUnitUpgType*)
+        dynamicCast(buildingType, 0, rtti.TBuildingTypeType, rtti.TBuildingUnitUpgTypeType, 0);
+
+    auto branchId = unitUpg->branch.id;
+    if (branchId == branches.sideshow->id) {
+        buildingBranch.addSideshowUnitBuilding(branchMap, unitUpg);
+        return;
+    }
+
+    if (branchId == branches.fighter->id && branchNumber == BuildingBranchNumber::Fighter
+        || branchId == branches.mage->id && branchNumber == BuildingBranchNumber::Mage
+        || branchId == branches.archer->id && branchNumber == BuildingBranchNumber::Archer
+        || branchId == branches.special->id && branchNumber == BuildingBranchNumber::Special) {
+        buildingBranch.addUnitBuilding(phaseGame, branchMap, unitUpg);
+    }
+}
+
+static void addBuilding(game::BuildingBranchMap* branchMap,
+                        const game::TBuildingType* buildingType,
+                        game::BuildingBranchNumber branchNumber,
+                        game::CPhaseGame* phaseGame)
+{
+    using namespace game;
+
+    const auto& buildingBranch = CBuildingBranchApi::get();
+    const auto& categories = BuildingCategories::get();
+
+    const LBuildingCategory* category = &buildingType->data->category;
+    if (category->id == categories.unit->id) {
+        addUnitBuilding(branchMap, buildingType, branchNumber, phaseGame);
+    } else if ((category->id == categories.guild->id || category->id == categories.heal->id
+                || category->id == categories.magic->id)
+               && branchNumber == BuildingBranchNumber::Other) {
+        buildingBranch.addBuilding(phaseGame, branchMap, buildingType);
+    } else if (category->id == getCustomBuildingCategoryId(branchNumber)) {
+        buildingBranch.addBuilding(phaseGame, branchMap, buildingType);
+    }
+}
+
 game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch* thisptr,
                                                            int /*%edx*/,
                                                            game::CPhaseGame* phaseGame,
-                                                           int* branchNumber)
+                                                           game::BuildingBranchNumber* branchNumber)
 {
     using namespace game;
 
@@ -1245,45 +1294,12 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
     auto lord = fn.getLordByPlayer(player);
     auto buildList = lord->data->buildList;
 
-    const auto globalData = GlobalDataApi::get().getGlobalData();
-    auto buildings = (*globalData)->buildings;
+    const auto& globalApi = GlobalDataApi::get();
+    auto buildings = (*globalApi.getGlobalData())->buildings;
 
     for (const auto& id : buildList->data) {
-        const auto findById = GlobalDataApi::get().findById;
-        const TBuildingType* buildingType = (const TBuildingType*)findById(buildings, &id);
-
-        const LBuildingCategory* buildingCategory = &buildingType->data->category;
-        const auto& buildingCategories = BuildingCategories::get();
-
-        if (buildingCategory->id == buildingCategories.unit->id) {
-            const TBuildingUnitUpgType* unitUpg = (const TBuildingUnitUpgType*)
-                dynamicCast(buildingType, 0, rtti.TBuildingTypeType, rtti.TBuildingUnitUpgTypeType,
-                            0);
-
-            LUnitBranch unitBranch;
-            unitBranch.table = unitUpg->branch.table;
-            unitBranch.id = unitUpg->branch.id;
-            unitBranch.vftable = UnitBranchCategories::vftable();
-
-            const auto& unitBranchCategories = UnitBranchCategories::get();
-            const int num = *branchNumber;
-
-            if (unitBranch.id == unitBranchCategories.sideshow->id) {
-                buildingBranch.addSideshowUnitBuilding(&thisptr->data->map, unitUpg);
-            } else if (unitBranch.id == unitBranchCategories.fighter->id && num == 0
-                       || unitBranch.id == unitBranchCategories.mage->id && num == 1
-                       || unitBranch.id == unitBranchCategories.archer->id && num == 2
-                       || unitBranch.id == unitBranchCategories.special->id && num == 4) {
-                buildingBranch.addUnitBuilding(phaseGame, &thisptr->data->map, unitUpg);
-            }
-
-        } else if ((buildingCategory->id == buildingCategories.guild->id
-                    || buildingCategory->id == buildingCategories.heal->id
-                    || buildingCategory->id == buildingCategories.magic->id
-                    || (customCategoryExists && (buildingCategory->id == custom.id)))
-                   && *branchNumber == 3) {
-            buildingBranch.addBuilding(phaseGame, &thisptr->data->map, buildingType);
-        }
+        auto buildingType = (const TBuildingType*)globalApi.findById(buildings, &id);
+        addBuilding(&thisptr->data->map, buildingType, *branchNumber, phaseGame);
     }
 
     logDebug("newBuildingType.log", "Ctor finished");

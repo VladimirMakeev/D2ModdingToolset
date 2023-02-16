@@ -15,6 +15,14 @@
     - Create custom category by adding `L_CUSTOM` record to `LBuild.dbf`.
   </details>
 - <details>
+    <summary>Allows sideshow buildings (Ruined Temple, Snow Den and such) to have no required prerequisite building;</summary>
+    
+    ![Demo video](https://user-images.githubusercontent.com/5180699/218980554-b2eae5dd-efac-4b96-9eb8-918333da5487.mp4)
+
+    - Create custom category records `L_FIGHTER`, `L_MAGE`, `L_ARCHER`, `L_SPECIAL` and `L_CUSTOM` ('Other buildings') in `Lbuild.dbf`;
+    - Set corresponding category number in `CATEGORY` field and empty id `g000000000` in `REQUIRED` field for desired sideshow buildings in `Gbuild.dbf`;
+  </details>
+- <details>
     <summary>Allows each race to hire up to 10 new tier-1 units in cities and capital;</summary>
 
     - For each new unit, add a new column `SOLDIER_N` to `Grace.dbf`, where N starts from 6;
