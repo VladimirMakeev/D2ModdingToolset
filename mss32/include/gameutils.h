@@ -37,6 +37,7 @@ struct CFortification;
 struct LRaceCategory;
 struct LTerrainCategory;
 struct CMidRod;
+struct CMidInventory;
 } // namespace game
 
 namespace hooks {
@@ -124,6 +125,9 @@ const game::CMidRuin* getRuinByUnitId(const game::IMidgardObjectMap* objectMap,
 game::CMidRod* getRod(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* rodId);
 
 int getGroupXpKilled(const game::IMidgardObjectMap* objectMap, const game::CMidUnitGroup* group);
+
+game::CMidInventory* getInventory(const game::IMidgardObjectMap* objectMap,
+                                  const game::CMidgardID* groupId);
 
 } // namespace hooks
 

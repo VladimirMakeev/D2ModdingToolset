@@ -424,4 +424,27 @@ int getGroupXpKilled(const game::IMidgardObjectMap* objectMap, const game::CMidU
     return result;
 }
 
+game::CMidInventory* getInventory(const game::IMidgardObjectMap* objectMap,
+                                  const game::CMidgardID* groupId)
+{
+    using namespace game;
+
+    const auto& idApi = CMidgardIDApi::get();
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    auto groupObj = objectMap->vftable->findScenarioObjectById(objectMap, groupId);
+    if (idApi.getType(groupId) == IdType::Stack) {
+        auto stack = static_cast<CMidStack*>(
+            dynamicCast(groupObj, 0, rtti.IMidScenarioObjectType, rtti.CMidStackType, 0));
+        return &stack->inventory;
+    } else if (idApi.getType(groupId) == IdType::Fortification) {
+        auto fort = static_cast<CFortification*>(
+            dynamicCast(groupObj, 0, rtti.IMidScenarioObjectType, rtti.CFortificationType, 0));
+        return &fort->inventory;
+    }
+
+    return nullptr;
+}
+
 } // namespace hooks
