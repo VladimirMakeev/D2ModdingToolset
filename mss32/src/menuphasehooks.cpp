@@ -93,22 +93,38 @@ void __fastcall menuPhaseSetTransitionHooked(game::CMenuPhase* thisptr,
             thisptr->data->transitionNumber = 21;
             [[fallthrough]];
         case 21:
+            // Creates CMenuMain, sets transition to 0
             logDebug("transitions.log", "current is 21");
             menuPhase.switchToMain(thisptr);
             break;
         case 0:
+            // CMenuMain state.
+            // next 0: shows 'TRANS_MAIN2SINGLE' animation, sets transition to 22
+            // next 1: shows 'TRANS_MAIN2PROTO' animation, sets transition to 23
+            // next 2: shows 'intro' animation, sets transition to 17
+            // next 3: shows 'credits' animation, sets transition to 18
             logDebug("transitions.log", "current is 0");
             menuPhase.transitionFromMain(thisptr, next);
             break;
         case 22:
+            // CMenuMain -> CMenuSingle animation state.
+            // Creates CMenuSingle, sets transition to 1
             logDebug("transitions.log", "current is 22");
             menuPhase.switchToSingle(thisptr);
             break;
         case 1:
+            // CMenuSingle state.
+            // next 0: shows 'TRANS_SINGLE2GOD' animation, sets transition to 26
+            // next 1: shows 'TRANS_SINGLE2LOAD' animation, sets transition to 34
+            // next 2: shows 'TRANS_SINGLE2NEW' animation, sets transition to 27
+            // next 3: shows 'TRANS_SINGLE2LOAD' animation, sets transition to 33
+            // next 4: shows 'TRANS_SINGLE2NEW' animation, sets transition to 29
+            // next 5: shows 'TRANS_SINGLE2NEW' animation, sets transition to 32
             logDebug("transitions.log", "current is 1");
             menuPhase.transitionFromSingle(thisptr, next);
             break;
         case 2: {
+            // CMenuProtocol state
             logDebug("transitions.log", "current is 2");
             if (next == 2) {
                 // Show new fullscreen animation
@@ -138,6 +154,9 @@ void __fastcall menuPhaseSetTransitionHooked(game::CMenuPhase* thisptr,
             break;
         }
         case 3:
+            // CMenuHotseat state.
+            // next 0: shows 'TRANS_HOTSEAT2NEW' animation, sets transition to 9
+            // next 1: shows 'TRANS_HOTSEAT2LOAD' animation, sets transition to 10
             logDebug("transitions.log", "current is 3");
             menuPhase.transitionFromHotseat(thisptr, next);
             break;
@@ -208,6 +227,10 @@ void __fastcall menuPhaseSetTransitionHooked(game::CMenuPhase* thisptr,
             menuPhase.switchToLord(thisptr);
             break;
         case 33:
+            // CMenuMulti -> CMenuLoad animation state.
+            // For GameSpy creates CMenuLoadSkirmishGameSpy, sets transition to 15
+            // If loading scenario, creates CMenuLoadSkirmishMulti, sets transition to 15
+            // Otherwise, creates CMenuLoad, sets transition to 16
             logDebug("transitions.log", "current is 33");
             menuPhase.switchToLoadSkirmish(thisptr);
             break;
@@ -220,6 +243,7 @@ void __fastcall menuPhaseSetTransitionHooked(game::CMenuPhase* thisptr,
             menuPhase.switchToLoadCustomCampaign(thisptr);
             break;
         case 17:
+            // Shows 'TRANS_INTRO2MAIN', sets transition to 20
             logDebug("transitions.log", "current is 17");
             menuPhase.switchIntroToMain(thisptr);
             break;
@@ -232,30 +256,45 @@ void __fastcall menuPhaseSetTransitionHooked(game::CMenuPhase* thisptr,
             menuPhase.switchIntroToMain(thisptr);
             break;
         case 23:
+            // CMenuMain -> CMenuProtocol animation state.
+            // Creates CMenuProtocol, sets transition to 2
             logDebug("transitions.log", "current is 23");
             menuPhase.switchToProtocol(thisptr);
             break;
         case 25:
+            // CMenuProtocol -> CMenuMulti animation state.
+            // Creates CMenuMulti, sets transition to 4.
             logDebug("transitions.log", "current is 25");
             menuPhase.switchToMulti(thisptr);
             break;
         case 4:
+            // CMenuMulti state.
+            // next 0: shows 'TRANS_MULTI2HOST' animation, sets transition to 27
+            // next 1: shows 'TRANS_MULTI2JOIN' animation, sets transition to 11
+            // next 2: shows 'TRANS_MULTI2LOAD' animation, sets transition to 33
             logDebug("transitions.log", "current is 4");
             menuPhase.transitionFromMulti(thisptr, next);
             break;
         case 24:
+            // CMenuProtocol -> CMenuHotseat animation state.
+            // Creates CMenuHotseat, sets transition to 3.
             logDebug("transitions.log", "current is 24");
             menuPhase.switchToHotseat(thisptr);
             break;
         case 9:
+            // CMenuHotseat -> CMenuNewSkirmishHotseat animation state.
+            // Creates CMenuNewSkirmishHotseat, sets transition to 30
             logDebug("transitions.log", "current is 9");
             menuPhase.switchToNewSkirmishHotseat(thisptr);
             break;
         case 10:
+            // CMenuHotseat -> CMenuLoadSkirmishHotseat animation state.
+            // Creates CMenuLoadSkirmishHotseat, sets transition to 16
             logDebug("transitions.log", "current is 10");
             menuPhase.switchToLoadSkirmishHotseat(thisptr);
             break;
         case 30:
+            // CMenuNewSkirmishHotseat state.
             logDebug("transitions.log", "current is 30");
             menuPhase.transitionFromNewSkirmishHotseat(thisptr);
             break;
@@ -272,6 +311,7 @@ void __fastcall menuPhaseSetTransitionHooked(game::CMenuPhase* thisptr,
             menuPhase.switchToLobbyHostJoin(thisptr);
             break;
         case 16:
+            // Creates CMidClient, deletes CMenuPhase
             logDebug("transitions.log", "current is 16");
             menuPhase.switchToWait(thisptr);
             break;
