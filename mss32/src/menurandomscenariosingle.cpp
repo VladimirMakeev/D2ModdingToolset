@@ -28,8 +28,11 @@
 #include "image2outline.h"
 #include "listbox.h"
 #include "log.h"
+#include "mapgenerator.h"
+#include "maptemplate.h"
 #include "maptemplatereader.h"
 #include "mempool.h"
+#include "menubase.h"
 #include "menuflashwait.h"
 #include "menuphase.h"
 #include "multilayerimg.h"
@@ -39,13 +42,17 @@
 #include "spinbuttoninterf.h"
 #include "stringarray.h"
 #include "textboxinterf.h"
+#include "uievent.h"
 #include "utils.h"
 #include <algorithm>
+#include <array>
 #include <chrono>
 #include <cstring>
 #include <fmt/format.h>
 #include <set>
 #include <sol/sol.hpp>
+#include <thread>
+#include <utility>
 
 namespace hooks {
 
@@ -71,6 +78,38 @@ static std::unique_ptr<NativeGameInfo> gameInfo;
 
 /** Maximum number of attempts to generate scenario map. */
 static constexpr const std::uint32_t generationAttemptsMax{50};
+
+struct WaitGenerationInterf;
+
+enum class GenerationStatus : int
+{
+    NotStarted,    /**< Random scenario generation has not started yet. */
+    InProcess,     /**< Generation is in process, generator thread is running. */
+    Canceled,      /**< Generation was canceled by player. */
+    Done,          /**< Generation successfully done, scenario can be serialized. */
+    LimitExceeded, /**< Generation could not succeed in specified number of attempts. */
+    Error,         /**< Generation was aborted with an error. */
+};
+
+/** Menu for single-player random scenario generation. */
+struct CMenuRandomScenarioSingle : public game::CMenuBase
+{
+    CMenuRandomScenarioSingle(game::CMenuPhase* menuPhase);
+    ~CMenuRandomScenarioSingle();
+
+    game::UiEvent uiEvent{};
+    std::thread generatorThread;
+    rsg::MapTemplate scenarioTemplate;
+    rsg::MapPtr scenario;
+
+    // Tracks which button shows which race image
+    using RaceIndices = std::array<std::pair<game::CButtonInterf*, int /* index */>, 4>;
+    RaceIndices raceIndices;
+
+    WaitGenerationInterf* popup{};
+    GenerationStatus generationStatus{GenerationStatus::NotStarted};
+    bool cancelGeneration{false};
+};
 
 using OnGenerationCanceled = void (*)(CMenuRandomScenarioSingle* thisptr);
 
