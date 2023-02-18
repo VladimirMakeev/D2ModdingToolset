@@ -423,14 +423,12 @@ static void serializeAndLoadScenario(CMenuRandomScenarioSingle* menu)
 
     // We don't load saved game, but starting a new one
     data->loadScenario = false;
-    // Singleplayer mode?
     data->unknown8 = true;
     data->suggestedLevel = 1;
     data->maxPlayers = static_cast<int>(settings.races.size());
 
-    // Switch to race selection menu
-    menuPhaseApi.showFullScreenAnimation(menuPhase, &data->transitionNumber, &data->interfManager,
-                                         &data->currentMenu, 28, "TRANS_RNDSINGLE2GOD");
+    // Switch to the next menu
+    CMenuPhaseApi::get().setTransition(menuPhase, 0);
 }
 
 /** Updates menu UI according to selected index in templates list box. */

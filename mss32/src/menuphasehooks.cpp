@@ -54,7 +54,11 @@ void __fastcall menuPhaseSetTransitionHooked(game::CMenuPhase* thisptr,
 {
     using namespace game;
 
-    auto transitionPtr = &thisptr->data->transitionNumber;
+    using CreateMenuCallback = CMenuPhaseApi::Api::CreateMenuCallback;
+
+    CMenuPhaseData* data = thisptr->data;
+
+    auto transitionPtr = &data->transitionNumber;
     int current = *transitionPtr;
     int next = transition;
 
@@ -128,7 +132,6 @@ void __fastcall menuPhaseSetTransitionHooked(game::CMenuPhase* thisptr,
             logDebug("transitions.log", "current is 2");
             if (next == 2) {
                 // Show new fullscreen animation
-                auto data = thisptr->data;
                 logDebug("transitions.log", "Try to transition to 35 while playing animation");
                 menuPhase.showFullScreenAnimation(thisptr, &data->transitionNumber,
                                                   &data->interfManager, &data->currentMenu, 35,
@@ -140,9 +143,8 @@ void __fastcall menuPhaseSetTransitionHooked(game::CMenuPhase* thisptr,
         }
         case 35: {
             // Create custom lobby menu window during fullscreen animation
-            auto data = thisptr->data;
-            CMenuPhaseApi::Api::CreateMenuCallback tmp = createCustomLobbyMenu;
-            CMenuPhaseApi::Api::CreateMenuCallback* callback = &tmp;
+            CreateMenuCallback tmp = createCustomLobbyMenu;
+            CreateMenuCallback* callback = &tmp;
             logDebug("transitions.log", "Try to transition to 36");
             menuPhase.doTransition(thisptr, &data->transitionNumber, &data->interfManager,
                                    &data->currentMenu, &data->transitionAnimation, 36, nullptr,
@@ -186,7 +188,6 @@ void __fastcall menuPhaseSetTransitionHooked(game::CMenuPhase* thisptr,
                 logDebug("transitions.log", "switch to 15 or 28");
                 menuPhase.switchTo15Or28(thisptr);
             } else if (next == 1) {
-                auto data = thisptr->data;
                 menuPhase.showFullScreenAnimation(thisptr, &data->transitionNumber,
                                                   &data->interfManager, &data->currentMenu, 37,
                                                   "TRANS_NEWQUEST2RNDSINGLE");
@@ -201,19 +202,22 @@ void __fastcall menuPhaseSetTransitionHooked(game::CMenuPhase* thisptr,
 
             logDebug("transitions.log", "current is 37");
             // Create random scenario single menu window during fullscreen animation
-            auto data = thisptr->data;
-            CMenuPhaseApi::Api::CreateMenuCallback tmp = createMenuRandomScenarioSingle;
-            CMenuPhaseApi::Api::CreateMenuCallback* callback = &tmp;
+            CreateMenuCallback tmp = createMenuRandomScenarioSingle;
+            CreateMenuCallback* callback = &tmp;
             logDebug("transitions.log", "Try to transition to 38");
             menuPhase.doTransition(thisptr, &data->transitionNumber, &data->interfManager,
                                    &data->currentMenu, &data->transitionAnimation, 38, nullptr,
                                    &callback);
             break;
         }
-        case 38:
+        case 38: {
             // CMenuRandomScenarioSingle state
             logDebug("transitions.log", "current is 38");
+            menuPhase.showFullScreenAnimation(thisptr, &data->transitionNumber,
+                                              &data->interfManager, &data->currentMenu, 28,
+                                              "TRANS_RNDSINGLE2GOD");
             break;
+        }
         case 28:
             logDebug("transitions.log", "current is 28");
             menuPhase.switchToRaceSkirmish(thisptr);
@@ -293,12 +297,52 @@ void __fastcall menuPhaseSetTransitionHooked(game::CMenuPhase* thisptr,
             logDebug("transitions.log", "current is 10");
             menuPhase.switchToLoadSkirmishHotseat(thisptr);
             break;
-        case 30:
+        case 30: {
             // CMenuNewSkirmishHotseat state.
             logDebug("transitions.log", "current is 30");
-            menuPhase.transitionFromNewSkirmishHotseat(thisptr);
+
+            if (next == 0) {
+                // Shows 'TRANS_NEW2HSLOBBY' animation, sets transition to 14
+                menuPhase.showFullScreenAnimation(thisptr, &data->transitionNumber,
+                                                  &data->interfManager, &data->currentMenu, 14,
+                                                  "TRANS_NEW2HSLOBBY");
+            } else if (next == 1) {
+                // Reuse animation when transitioning from CMenuNewSkirmishHotseat
+                // to CMenuRandomScenarioSingle
+                menuPhase.showFullScreenAnimation(thisptr, &data->transitionNumber,
+                                                  &data->interfManager, &data->currentMenu, 39,
+                                                  "TRANS_NEWQUEST2RNDSINGLE");
+            } else {
+                logError("mssProxyError.log", "Invalid next transition from state 30");
+                return;
+            }
+
             break;
+        }
+        case 39: {
+            // CMenuNewSkirmishHotseat -> CMenuRandomScenarioSingle animation state.
+            // Create random scenario single menu window during fullscreen animation.
+            // Reuse CMenuRandomScenarioSingle for hotseat games
+            CreateMenuCallback tmp = createMenuRandomScenarioSingle;
+            CreateMenuCallback* callback = &tmp;
+            logDebug("transitions.log", "current is 39, try to transition to 40");
+            menuPhase.doTransition(thisptr, &data->transitionNumber, &data->interfManager,
+                                   &data->currentMenu, &data->transitionAnimation, 40, nullptr,
+                                   &callback);
+            break;
+        }
+        case 40: {
+            // CMenuRandomScenarioSingle state for hotseat game mode.
+            // Creates CMenuHotseatLobby, sets transition to 14
+            logDebug("transitions.log", "current is 40");
+            menuPhase.showFullScreenAnimation(thisptr, &data->transitionNumber,
+                                              &data->interfManager, &data->currentMenu, 14,
+                                              "TRANS_RND2HSLOBBY");
+            break;
+        }
         case 14:
+            // CMenuNewSkirmishHotseat -> CMenuHotseatLobby animation state.
+            // Creates CMenuHotseatLobby, sets transition to 16
             logDebug("transitions.log", "current is 14");
             menuPhase.switchToHotseatLobby(thisptr);
             break;

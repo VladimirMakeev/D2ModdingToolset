@@ -61,7 +61,6 @@ struct CMenuPhaseData
     char* scenarioName;
     char* scenarioDescription;
     int suggestedLevel;
-    // Assumption: flag indicating singleplayer game
     bool unknown8;
     char padding[3];
     HANDLE scenarioFileHandle;

@@ -39,6 +39,7 @@
 #include "gameimages.h"
 #include "menubase.h"
 #include "menuload.h"
+#include "menunewskirmishhotseat.h"
 #include "menunewskirmishmulti.h"
 #include "menunewskirmishsingle.h"
 #include "menuphase.h"
@@ -129,6 +130,7 @@ struct OriginalFunctions
     game::IMidMsgSenderVftable::SendObjectsChanges midServerLogicSendObjectsChanges;
 
     game::CMenuNewSkirmishSingleApi::Api::Constructor menuNewSkirmishSingleCtor;
+    game::CMenuNewSkirmishHotseatApi::Api::Constructor menuNewSkirmishHotseatCtor;
 };
 
 OriginalFunctions& getOriginalFunctions();
