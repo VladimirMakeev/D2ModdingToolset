@@ -1124,6 +1124,9 @@
     <ClCompile Include="src\nativegameinfo.cpp">
       <Filter>features\random scenario generator</Filter>
     </ClCompile>
+    <ClCompile Include="src\menunewskirmishhotseat.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2910,6 +2913,9 @@
     </ClInclude>
     <ClInclude Include="include\nativelandmarkinfo.h">
       <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menunewskirmishhotseat.h">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
