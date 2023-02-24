@@ -1130,6 +1130,9 @@
     <ClCompile Include="src\menunewskirmishhotseathooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="src\waitgenerationinterf.cpp">
+      <Filter>features\random scenario generator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2922,6 +2925,9 @@
     </ClInclude>
     <ClInclude Include="include\menunewskirmishhotseathooks.h">
       <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\waitgenerationinterf.h">
+      <Filter>features\random scenario generator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

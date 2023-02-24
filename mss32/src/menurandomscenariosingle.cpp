@@ -44,6 +44,7 @@
 #include "textboxinterf.h"
 #include "uievent.h"
 #include "utils.h"
+#include "waitgenerationinterf.h"
 #include <algorithm>
 #include <array>
 #include <chrono>
@@ -79,8 +80,6 @@ static std::unique_ptr<NativeGameInfo> gameInfo;
 /** Maximum number of attempts to generate scenario map. */
 static constexpr const std::uint32_t generationAttemptsMax{50};
 
-struct WaitGenerationInterf;
-
 enum class GenerationStatus : int
 {
     NotStarted,    /**< Random scenario generation has not started yet. */
@@ -112,43 +111,6 @@ struct CMenuRandomScenarioSingle : public game::CMenuBase
 };
 
 using OnGenerationCanceled = void (*)(CMenuRandomScenarioSingle* thisptr);
-
-struct WaitGenerationInterf : public game::CPopupDialogInterf
-{
-    OnGenerationCanceled onCanceled;
-    CMenuRandomScenarioSingle* menu;
-};
-
-static void __fastcall waitCancelButtonHandler(WaitGenerationInterf* thisptr, int /*%edx*/)
-{
-    thisptr->onCanceled(thisptr->menu);
-}
-
-static WaitGenerationInterf* createWaitGenerationInterf(CMenuRandomScenarioSingle* menu,
-                                                        OnGenerationCanceled onCanceled)
-{
-    using namespace game;
-
-    static const char waitDialogName[] = "DLG_WAIT_GENERATION";
-
-    const auto& allocateMem{game::Memory::get().allocate};
-
-    auto* interf = (WaitGenerationInterf*)allocateMem(sizeof(WaitGenerationInterf));
-    CPopupDialogInterfApi::get().constructor(interf, waitDialogName, nullptr);
-
-    interf->onCanceled = onCanceled;
-    interf->menu = menu;
-
-    CDialogInterf* dialog{*interf->dialog};
-
-    SmartPointer functor;
-    auto callback = (CMenuBaseApi::Api::ButtonCallback)waitCancelButtonHandler;
-    CMenuBaseApi::get().createButtonFunctor(&functor, 0, (CMenuBase*)interf, &callback);
-    CButtonInterfApi::get().assignFunctor(dialog, "BTN_CANCEL", waitDialogName, &functor, 0);
-    SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
-
-    return interf;
-}
 
 static const char* getRaceImage(rsg::RaceType race)
 {

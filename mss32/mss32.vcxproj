@@ -471,6 +471,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\utils.cpp" />
     <ClCompile Include="src\version.cpp" />
     <ClCompile Include="src\visitors.cpp" />
+    <ClCompile Include="src\waitgenerationinterf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def" />
@@ -1073,6 +1074,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\version.h" />
     <ClInclude Include="include\viewexportedleaderinterf.h" />
     <ClInclude Include="include\visitors.h" />
+    <ClInclude Include="include\waitgenerationinterf.h" />
     <ClInclude Include="include\widgetinterf.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
