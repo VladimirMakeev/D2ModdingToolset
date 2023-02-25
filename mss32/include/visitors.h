@@ -73,6 +73,19 @@ struct Api
                                           int apply);
     ChangeUnitHp changeUnitHp;
 
+    using ChangeUnitXp = bool(__stdcall*)(const CMidgardID* unitId,
+                                          int amount,
+                                          IMidgardObjectMap* objectMap,
+                                          int apply);
+    ChangeUnitHp changeUnitXp;
+
+    using UpgradeUnit = bool(__stdcall*)(const CMidgardID* unitId,
+                                         const CMidgardID* upgradeUnitImplId,
+                                         const CMidgardID* groupId,
+                                         IMidgardObjectMap* objectMap,
+                                         int apply);
+    UpgradeUnit upgradeUnit;
+
     /**
      * Sets maximum allowed units count for a specific group.
      * Uses CVisitorForceUnitMax.
