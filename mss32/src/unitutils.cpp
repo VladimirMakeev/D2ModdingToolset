@@ -602,18 +602,23 @@ bool isStackLeaderAndAllowedToUseBattleItems(const game::IMidgardObjectMap* obje
     return true;
 }
 
-bool hasCriticalHitLeaderAbility(const game::IUsUnit* unitImpl)
+bool hasLeaderAbility(const game::IUsUnit* unitImpl, const game::LLeaderAbility* ability)
 {
     using namespace game;
-
-    const auto& abilities{LeaderAbilityCategories::get()};
 
     auto stackLeader{gameFunctions().castUnitImplToStackLeader(unitImpl)};
     if (!stackLeader) {
         return false;
     }
 
-    return stackLeader->vftable->hasAbility(stackLeader, abilities.criticalHit);
+    return stackLeader->vftable->hasAbility(stackLeader, ability);
+}
+
+bool hasCriticalHitLeaderAbility(const game::IUsUnit* unitImpl)
+{
+    using namespace game;
+
+    return hasLeaderAbility(unitImpl, LeaderAbilityCategories::get().criticalHit);
 }
 
 bool validateUnit(game::CMidUnit* unit)
