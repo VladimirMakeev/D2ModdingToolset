@@ -646,4 +646,13 @@ bool validateUnit(game::CMidUnit* unit)
     return result;
 }
 
+bool canUnitGainXp(const game::IUsUnit* unitImpl)
+{
+    using namespace game;
+
+    auto unitCategory = unitImpl->vftable->getCategory(unitImpl);
+    return unitCategory->id != UnitId::Noble && unitCategory->id != UnitId::Summon
+           && unitCategory->id != UnitId::Illusion && unitCategory->id != UnitId::Guardian;
+}
+
 } // namespace hooks
