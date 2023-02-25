@@ -185,6 +185,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\battleattackinfo.cpp" />
     <ClCompile Include="src\battlemsgdata.cpp" />
     <ClCompile Include="src\battlemsgdatahooks.cpp" />
+    <ClCompile Include="src\battleutils.cpp" />
     <ClCompile Include="src\battleviewerinterf.cpp" />
     <ClCompile Include="src\battleviewerinterfhooks.cpp" />
     <ClCompile Include="src\batunitanim.cpp" />
@@ -588,6 +589,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\battleattackinfo.h" />
     <ClInclude Include="include\battlemsgdata.h" />
     <ClInclude Include="include\battlemsgdatahooks.h" />
+    <ClInclude Include="include\battleutils.h" />
     <ClInclude Include="include\battleviewerinterf.h" />
     <ClInclude Include="include\battleviewerinterfhooks.h" />
     <ClInclude Include="include\batunitanim.h" />
