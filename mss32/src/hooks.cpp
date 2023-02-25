@@ -1098,19 +1098,7 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
             continue;
         }
 
-        auto buildingType = (const TBuildingType*)global.findById(globalData->buildings,
-                                                                  upgradeBuildingId);
-        if (!buildingType) {
-            continue;
-        }
-
-        auto upgBuilding = (const TBuildingUnitUpgType*)
-            dynamicCast(buildingType, 0, rtti.TBuildingTypeType, rtti.TBuildingUnitUpgTypeType, 0);
-        if (!upgBuilding) {
-            continue;
-        }
-
-        if (upgBuilding->level <= hireTierMax) {
+        if (getBuildingLevel(upgradeBuildingId) <= hireTierMax) {
             list.pushBack(hireList, &current->first);
         }
     }
