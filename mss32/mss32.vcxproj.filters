@@ -1169,6 +1169,9 @@
     <ClCompile Include="src\intintmap.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\battleutils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
     <ClCompile Include="src\batattackgroupupgrade.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -3039,6 +3042,9 @@
     </ClInclude>
     <ClInclude Include="include\itemextension.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\battleutils.h">
+      <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="include\batattackgroupupgrade.h">
       <Filter>game</Filter>
