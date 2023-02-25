@@ -1062,8 +1062,9 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
         return true;
     }
 
-    const auto units = *globalData->units;
-    for (auto current = units->data.bgn, end = units->data.end; current != end; ++current) {
+    const auto units = globalData->units;
+    for (auto current = units->map->data.bgn, end = units->map->data.end; current != end;
+         ++current) {
         const auto unitImpl = current->second;
         auto soldier = fn.castUnitImplToSoldier(unitImpl);
         if (!soldier) {
