@@ -47,6 +47,9 @@ struct GameRestrictions
     Restriction<int>* stackLeadership;
     Restriction<int>* attackInitiative;
     Restriction<int>* attackPower;
+    Restriction<int>* unitTier;
+    Restriction<int>* leaderLevel;
+    int* unitMaxLevel;
     std::uint32_t* fighterExplorerLeaderBonusMaxDamage;
     std::uint8_t* criticalHitDamage;
     std::uint8_t* mageLeaderAttackPowerReduction;
