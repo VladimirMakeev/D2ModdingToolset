@@ -49,7 +49,7 @@ void getSoldierAttackSourceImmunities(const game::LImmuneCat* immuneCat,
 bool isUnitSmall(const game::CMidUnit* unit);
 game::CMidgardID getGlobalUnitImplId(const game::CMidgardID* unitImplId);
 game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidgardID* unitImplId);
-game::TUsUnitImpl* generateUnitImpl(const game::CMidgardID* globalUnitImplId, int level);
+game::TUsUnitImpl* generateUnitImpl(const game::CMidgardID* unitImplId, int level);
 game::TUsUnitImpl* getUnitImpl(const game::CMidgardID* unitImplId);
 game::TUsUnitImpl* getUnitImpl(const game::IUsUnit* unit);
 game::TUsSoldierImpl* getSoldierImpl(const game::IUsUnit* unit);
