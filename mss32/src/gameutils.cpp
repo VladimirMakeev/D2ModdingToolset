@@ -509,7 +509,7 @@ int getEasyDifficultyBonusXpPercent(const game::IMidgardObjectMap* objectMap,
     const auto& difficulties = DifficultyLevelCategories::get();
 
     auto player = getPlayer(objectMap, playerId);
-    if (player->isHuman) {
+    if (player && player->isHuman) {
         auto scenarioInfo = getScenarioInfo(objectMap);
         if (scenarioInfo->gameDifficulty.id == difficulties.easy->id) {
             return 20;

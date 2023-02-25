@@ -231,6 +231,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\encparambasehooks.cpp" />
     <ClCompile Include="src\encyclopediapopup.cpp" />
     <ClCompile Include="src\exchangeinterfhooks.cpp" />
+    <ClCompile Include="src\groupupgradehooks.cpp" />
     <ClCompile Include="src\intintmap.cpp" />
     <ClCompile Include="src\intvector.cpp" />
     <ClCompile Include="src\button.cpp" />
@@ -648,6 +649,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\ffimg.h" />
     <ClInclude Include="include\gameimagedata.h" />
     <ClInclude Include="include\groupareamanagement.h" />
+    <ClInclude Include="include\groupupgradehooks.h" />
     <ClInclude Include="include\imagedatadescriptor.h" />
     <ClInclude Include="include\imgpacker.h" />
     <ClInclude Include="include\imgpackerloader.h" />

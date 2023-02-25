@@ -744,7 +744,7 @@ bool requiresUpgradeBuilding(const game::IMidgardObjectMap* objectMap,
         return false;
     }
 
-    return playerHasBuilding(objectMap, player, upgradeBuildingId) == false;
+    return !player || !playerHasBuilding(objectMap, player, upgradeBuildingId);
 }
 
 const game::TUsUnitImpl* __stdcall getUpgradeUnitImpl(const game::IMidgardObjectMap* objectMap,
@@ -758,7 +758,8 @@ const game::TUsUnitImpl* __stdcall getUpgradeUnitImpl(const game::IMidgardObject
     const auto& globalApi = GlobalDataApi::get();
 
     auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
-    bool dynLevel = unit->dynLevel || player->raceId != *soldier->vftable->getRaceId(soldier);
+    bool dynLevel = unit->dynLevel || !player
+                    || player->raceId != *soldier->vftable->getRaceId(soldier);
 
     bool requiresBuilding = false;
     const auto globalData = *globalApi.getGlobalData();
