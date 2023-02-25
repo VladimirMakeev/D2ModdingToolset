@@ -96,6 +96,8 @@ bool hasCriticalHitLeaderAbility(const game::IUsUnit* unitImpl);
 /** Returns true if the unit is changed during validation. */
 bool validateUnit(game::CMidUnit* unit);
 
+bool canUnitGainXp(const game::IUsUnit* unitImpl);
+
 } // namespace hooks
 
 #endif // UNITUTILS_H
