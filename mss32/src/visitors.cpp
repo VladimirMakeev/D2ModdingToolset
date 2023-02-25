@@ -28,6 +28,8 @@ std::array<Api, 3> functions = {{
     // Akella
     Api{
         (Api::ChangeUnitHp)0x5e88f4,
+        (Api::ChangeUnitXp)0x5e8942,
+        (Api::UpgradeUnit)0x5e963d,
         (Api::ForceUnitMax)0x5e972a,
         (Api::AddUnitToGroup)0x5e8bf8,
         (Api::ExchangeItem)0x5e86cc,
@@ -38,6 +40,8 @@ std::array<Api, 3> functions = {{
     // Russobit
     Api{
         (Api::ChangeUnitHp)0x5e88f4,
+        (Api::ChangeUnitXp)0x5e8942,
+        (Api::UpgradeUnit)0x5e963d,
         (Api::ForceUnitMax)0x5e972a,
         (Api::AddUnitToGroup)0x5e8bf8,
         (Api::ExchangeItem)0x5e86cc,
@@ -48,6 +52,8 @@ std::array<Api, 3> functions = {{
     // Gog
     Api{
         (Api::ChangeUnitHp)0x5e75f3,
+        (Api::ChangeUnitXp)0x5e7641,
+        (Api::UpgradeUnit)0x5e833c,
         (Api::ForceUnitMax)0x5e8429,
         (Api::AddUnitToGroup)0x5e78f7,
         (Api::ExchangeItem)0x5e73cb,
