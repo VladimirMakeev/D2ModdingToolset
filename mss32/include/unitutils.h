@@ -38,6 +38,7 @@ struct CDynUpgrade;
 struct IUsUnitExtension;
 struct TypeDescriptor;
 struct LLeaderAbility;
+struct CMidPlayer;
 } // namespace game
 
 namespace hooks {
@@ -97,6 +98,23 @@ bool hasCriticalHitLeaderAbility(const game::IUsUnit* unitImpl);
 bool validateUnit(game::CMidUnit* unit);
 
 bool canUnitGainXp(const game::IUsUnit* unitImpl);
+
+bool isNextUnitImpl(const game::IUsUnit* unitImpl, const game::IUsUnit* prevImpl);
+
+bool hasNextTierUnitImpl(const game::IUsUnit* unitImpl);
+
+bool hasMaxTierUpgradeBuilding(const game::IMidgardObjectMap* objectMap,
+                               const game::IUsUnit* unitImpl);
+
+bool requiresUpgradeBuilding(const game::IMidgardObjectMap* objectMap,
+                             const game::CMidPlayer* player,
+                             const game::IUsUnit* unitImpl);
+
+const game::TUsUnitImpl* __stdcall getUpgradeUnitImpl(const game::IMidgardObjectMap* objectMap,
+                                                      const game::CMidPlayer* player,
+                                                      const game::CMidUnit* unit);
+
+int getGeneratedUnitImplLevelMax();
 
 } // namespace hooks
 
