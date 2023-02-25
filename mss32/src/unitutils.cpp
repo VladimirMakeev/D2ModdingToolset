@@ -145,19 +145,19 @@ game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidgardID* unitImplId)
     return getUnitImpl(&globalImplId);
 }
 
-game::TUsUnitImpl* generateUnitImpl(const game::CMidgardID* globalUnitImplId, int level)
+game::TUsUnitImpl* generateUnitImpl(const game::CMidgardID* unitImplId, int level)
 {
     using namespace game;
 
-    CMidgardID unitImplId;
+    CMidgardID generatedId;
     CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
-    unitGenerator->vftable->generateUnitImplId(unitGenerator, &unitImplId, globalUnitImplId, level);
+    unitGenerator->vftable->generateUnitImplId(unitGenerator, &generatedId, unitImplId, level);
 
-    if (unitGenerator->vftable->isUnitGenerated(unitGenerator, &unitImplId)) {
-        unitGenerator->vftable->generateUnitImpl(unitGenerator, &unitImplId);
+    if (unitGenerator->vftable->isUnitGenerated(unitGenerator, &generatedId)) {
+        unitGenerator->vftable->generateUnitImpl(unitGenerator, &generatedId);
     }
 
-    return getUnitImpl(&unitImplId);
+    return getUnitImpl(&generatedId);
 }
 
 game::TUsUnitImpl* getUnitImpl(const game::CMidgardID* unitImplId)
