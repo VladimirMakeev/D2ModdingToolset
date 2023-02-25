@@ -38,7 +38,7 @@ typedef std::uint32_t UnitHighLevels[3];
 struct GameRestrictions
 {
     Restriction<int>* spellLevel;
-    Restriction<int>* unitLevel;
+    Restriction<int>* unitTier;
     Restriction<int>* attackDamage;
     Restriction<int>* unitArmor;
     Restriction<int>* unitHp;
@@ -47,6 +47,8 @@ struct GameRestrictions
     Restriction<int>* stackLeadership;
     Restriction<int>* attackInitiative;
     Restriction<int>* attackPower;
+    Restriction<int>* leaderLevel;
+    int* unitMaxLevel;
     std::uint32_t* fighterExplorerLeaderBonusMaxDamage;
     std::uint8_t* criticalHitDamage;
     std::uint8_t* mageLeaderAttackPowerReduction;

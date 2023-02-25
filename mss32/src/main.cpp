@@ -96,7 +96,7 @@ static void adjustGameRestrictions()
     // set to zero, disabling usage of magic in scenario
     writeProtectedMemory(&restrictions.spellLevel->min, 0);
     // Allow using units with tier higher than 5
-    writeProtectedMemory(&restrictions.unitLevel->max, 10);
+    writeProtectedMemory(&restrictions.unitTier->max, 10);
 
     if (userSettings().unitMaxDamage != baseSettings().unitMaxDamage) {
         adjustRestrictionMax(restrictions.attackDamage, userSettings().unitMaxDamage,
