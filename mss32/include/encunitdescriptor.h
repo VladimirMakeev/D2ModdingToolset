@@ -115,7 +115,7 @@ struct IEncUnitDescriptorVftable
 
     GetInt getUnitXpNext;
 
-    GetBool canUnitLevelUp;
+    GetBool isUnitUpgradePending;
 
     using GetUnitRequiredBuildings = void(__thiscall*)(const IEncUnitDescriptor* thisptr,
                                                        Vector<TBuildingType*>* buildings);

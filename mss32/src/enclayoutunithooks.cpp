@@ -952,7 +952,7 @@ static void setTxtNeedUpgrade(game::CEncLayoutUnit* layout, bool* needUpgrade)
     *needUpgrade = false;
 
     std::string text;
-    if (descriptor->vftable->canUnitLevelUp(descriptor)) {
+    if (descriptor->vftable->isUnitUpgradePending(descriptor)) {
         auto unit = fn.findUnitById(objectMap, &data->unitId);
         auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
         auto player = getPlayerByUnitId(objectMap, &data->unitId);
