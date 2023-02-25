@@ -132,6 +132,22 @@ int getGroupXpKilled(const game::IMidgardObjectMap* objectMap, const game::CMidU
 game::CMidInventory* getInventory(const game::IMidgardObjectMap* objectMap,
                                   const game::CMidgardID* groupId);
 
+bool canGroupGainXp(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* groupId);
+
+int getWeaponMasterBonusXpPercent(const game::IMidgardObjectMap* objectMap,
+                                  const game::CMidgardID* groupId);
+
+int getEasyDifficultyBonusXpPercent(const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* playerId);
+
+int getAiBonusXpPercent(const game::IMidgardObjectMap* objectMap);
+
+int getBuildingLevel(const game::CMidgardID* buildingId);
+
+bool playerHasBuilding(const game::IMidgardObjectMap* objectMap,
+                       const game::CMidPlayer* player,
+                       const game::CMidgardID* buildingId);
+
 } // namespace hooks
 
 #endif // GAMEUTILS_H

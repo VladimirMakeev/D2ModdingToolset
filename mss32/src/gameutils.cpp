@@ -19,9 +19,12 @@
 
 #include "gameutils.h"
 #include "battlemsgdata.h"
+#include "buildingtype.h"
 #include "dynamiccast.h"
 #include "fortification.h"
 #include "game.h"
+#include "globalvariables.h"
+#include "leaderabilitycat.h"
 #include "midclient.h"
 #include "midclientcore.h"
 #include "midgard.h"
@@ -38,8 +41,10 @@
 #include "midserverlogic.h"
 #include "midstack.h"
 #include "midunit.h"
+#include "playerbuildings.h"
 #include "scenarioinfo.h"
 #include "scenedit.h"
+#include "unitutils.h"
 #include "ussoldier.h"
 #include "version.h"
 #include <thread>
@@ -456,6 +461,134 @@ game::CMidInventory* getInventory(const game::IMidgardObjectMap* objectMap,
     }
 
     return nullptr;
+}
+
+bool canGroupGainXp(const game::IMidgardObjectMap* objectMap, const game::CMidgardID* groupId)
+{
+    using namespace game;
+
+    const auto& idApi = CMidgardIDApi::get();
+
+    if (idApi.getType(groupId) == IdType::Stack) {
+        auto stack = getStack(objectMap, groupId);
+        auto leader = static_cast<const CMidUnit*>(
+            objectMap->vftable->findScenarioObjectById(objectMap, &stack->leaderId));
+        if (!canUnitGainXp(leader->unitImpl)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+int getWeaponMasterBonusXpPercent(const game::IMidgardObjectMap* objectMap,
+                                  const game::CMidgardID* groupId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& idApi = CMidgardIDApi::get();
+
+    if (idApi.getType(groupId) == IdType::Stack) {
+        auto stack = getStack(objectMap, groupId);
+        auto leader = fn.findUnitById(objectMap, &stack->leaderId);
+        if (hasLeaderAbility(leader->unitImpl, LeaderAbilityCategories::get().weaponMaster)) {
+            const auto vars = *(*GlobalDataApi::get().getGlobalData())->globalVariables;
+            return vars->weaponMaster;
+        }
+    }
+
+    return 0;
+}
+
+int getEasyDifficultyBonusXpPercent(const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* playerId)
+{
+    using namespace game;
+
+    const auto& difficulties = DifficultyLevelCategories::get();
+
+    auto player = getPlayer(objectMap, playerId);
+    if (player->isHuman) {
+        auto scenarioInfo = getScenarioInfo(objectMap);
+        if (scenarioInfo->gameDifficulty.id == difficulties.easy->id) {
+            return 20;
+        }
+    }
+
+    return 0;
+}
+
+int getAiBonusXpPercent(const game::IMidgardObjectMap* objectMap)
+{
+    using namespace game;
+
+    const auto& difficulties = DifficultyLevelCategories::get();
+
+    auto scenarioInfo = getScenarioInfo(objectMap);
+    if (scenarioInfo->suggestedLevel >= 10) {
+        auto difficultyId = scenarioInfo->gameDifficulty.id;
+        if (difficultyId == difficulties.average->id) {
+            return 25;
+        } else if (difficultyId == difficulties.hard->id) {
+            return 50;
+        } else if (difficultyId == difficulties.veryHard->id) {
+            return 100;
+        }
+    }
+
+    return 0;
+}
+
+int getBuildingLevel(const game::CMidgardID* buildingId)
+{
+    using namespace game;
+
+    const auto& globalApi = GlobalDataApi::get();
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    const auto globalData = *globalApi.getGlobalData();
+    auto buildingType = (const TBuildingType*)globalApi.findById(globalData->buildings, buildingId);
+    if (!buildingType) {
+        return 0;
+    }
+
+    auto upgBuildingType = (const TBuildingUnitUpgType*)
+        dynamicCast(buildingType, 0, rtti.TBuildingTypeType, rtti.TBuildingUnitUpgTypeType, 0);
+    return upgBuildingType ? upgBuildingType->level : 0;
+}
+
+bool playerHasBuilding(const game::IMidgardObjectMap* objectMap,
+                       const game::CMidPlayer* player,
+                       const game::CMidgardID* buildingId)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    auto buildingsObject = objectMap->vftable->findScenarioObjectById(objectMap,
+                                                                      &player->buildingsId);
+    if (!buildingsObject) {
+        return false;
+    }
+
+    auto playerBuildings = (const CPlayerBuildings*)dynamicCast(buildingsObject, 0,
+                                                                rtti.IMidScenarioObjectType,
+                                                                rtti.CPlayerBuildingsType, 0);
+    if (!playerBuildings) {
+        return false;
+    }
+
+    const auto& buildings = playerBuildings->buildings;
+    for (auto node = buildings.head->next; node != buildings.head; node = node->next) {
+        if (node->data == *buildingId) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 } // namespace hooks
