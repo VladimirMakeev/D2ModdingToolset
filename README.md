@@ -677,6 +677,7 @@
 - Fixes rare crash while using drag'n'drop on inventory items if game server update arrives between mouse button press and release;
 - Fixes missing update of city encyclopedia popup dialog on visiting stack changes;
 - Fixes infamous crash in multiplayer games when observing other player's cities using encyclopedia popup dialog while the player performs unit reordering or summoning units in battle;
+- Fixes inability to use heal potion on transformed unit if its current hp is greater than maximum hp of unit it is transformed to (most common case is a unit transformed to Imp by a Witch while retaining his original hp);
 
 ### Scripting:
 The toolset uses Lua for settings and advanced game mechanics. See [luaApi](luaApi.md) for detailed information.

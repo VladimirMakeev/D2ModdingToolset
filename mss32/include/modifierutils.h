@@ -142,6 +142,8 @@ void notifyModifiersChanged(const game::IUsUnit* unitImpl);
 
 bool addModifier(game::CMidUnit* unit, const game::CMidgardID* modifierId, bool checkCanApply);
 
+bool hasModifier(const game::IUsUnit* unitImpl, const game::CMidgardID* modifierId);
+
 } // namespace hooks
 
 #endif // MODIFIERUTILS_H

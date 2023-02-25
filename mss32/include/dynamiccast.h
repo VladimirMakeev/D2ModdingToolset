@@ -160,6 +160,7 @@ struct Rtti
     TypeDescriptor* IMidObjectType;
     TypeDescriptor* IUsNobleType;
     TypeDescriptor* IUsSummonType;
+    TypeDescriptor* IItemExPotionBoostType;
 };
 
 const Rtti& rtti();

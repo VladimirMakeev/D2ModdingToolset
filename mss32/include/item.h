@@ -28,8 +28,10 @@ struct IItemVftable;
 struct LItemCategory;
 struct Bank;
 struct CMidgardID;
+struct IItemExtension;
+struct GlobalData;
 
-/** Iterface for all items read from GItem.dbf. */
+/** Interface for all items read from GItem.dbf. */
 struct IItem
 {
     IItemVftable* vftable;
@@ -54,15 +56,17 @@ struct IItemVftable
     using GetUnitId = const CMidgardID*(__thiscall*)(const IItem* thisptr);
     GetUnitId getUnitId;
 
-    /**
-     * Tries to cast base type to derived specified by name.
-     * Return type depends on base. Should not be called directly.
+    /** Functions just like IUsUnit::Cast. However, all items implementations simply return
+     * extension interface offset, so it is not clear why this is used instead of dynamic_cast.
      */
-    using CastBaseToDerived = void*(__thiscall*)(const IItem* thisptr,
-                                                 const char* derivedTypeRawName);
-    CastBaseToDerived castBaseToDerived;
+    using Cast = IItemExtension*(__thiscall*)(const IItem* thisptr, const char* rawTypeName);
+    Cast cast;
 
-    void* unknown;
+    /** Validates item data like modEquipId and attackId.
+     * Throws exceptions like "ItemEquipment: Invalid modifier..." if invalid.
+     */
+    using Validate = void(__thiscall*)(const IItem* thisptr, const GlobalData** globalData);
+    Validate validate;
 };
 
 assert_vftable_size(IItemVftable, 8);

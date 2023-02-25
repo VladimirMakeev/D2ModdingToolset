@@ -25,6 +25,9 @@ struct IMidgardObjectMap;
 struct IItem;
 struct CItemBase;
 struct CMidgardID;
+struct IItemExtension;
+struct IItemExPotionBoost;
+struct TypeDescriptor;
 } // namespace game
 
 namespace hooks {
@@ -33,6 +36,11 @@ const game::CItemBase* getGlobalItemById(const game::IMidgardObjectMap* objectMa
                                          const game::CMidgardID* itemId);
 
 game::CMidgardID getAttackId(const game::IItem* item);
+
+/** Analogue of game::IItemCastTo* functions. */
+game::IItemExtension* castItem(const game::IItem* item, const game::TypeDescriptor* type);
+
+game::IItemExPotionBoost* castItemToPotionBoost(const game::IItem* item);
 
 } // namespace hooks
 

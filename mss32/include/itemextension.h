@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2023 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,33 +17,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef USUNIT_H
-#define USUNIT_H
-
-#include "midobject.h"
-#include "usunitextension.h"
+#ifndef ITEMEXTENSION_H
+#define ITEMEXTENSION_H
 
 namespace game {
 
-struct IUsUnitVftable;
-struct LUnitCategory;
+struct IItemExtensionVftable;
 
-struct IUsUnit : public IMidObjectT<IUsUnitVftable>
+template <typename T = IItemExtensionVftable>
+struct IItemExtensionT
+{
+    const T* vftable;
+};
+
+struct IItemExtension : public IItemExtensionT<>
 { };
 
-struct IUsUnitVftable : public IMidObjectVftable
-{
-    /** Most of the time it works like dynamic_cast calculating offset of extension interface.
-     * However, if this is a unit modifier (CUmUnit, CUmAttack or CUmStack), an aggregate object can
-     * be returned instead (the method functions like queryInterface), so dynamic_cast is no fit.
-     */
-    using Cast = IUsUnitExtension*(__thiscall*)(const IUsUnit* thisptr, const char* rawTypeName);
-    Cast cast;
+assert_size(IItemExtension, 4);
 
-    using GetCategory = const LUnitCategory*(__thiscall*)(const IUsUnit* thisptr);
-    GetCategory getCategory;
+struct IItemExtensionVftable
+{
+    using Destructor = void(__thiscall*)(IItemExtension* thisptr, char flags);
+    Destructor destructor;
 };
+
+assert_vftable_size(IItemExtensionVftable, 1);
 
 } // namespace game
 
-#endif // USUNIT_H
+#endif // ITEMEXTENSION_H
