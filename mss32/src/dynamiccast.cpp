@@ -210,9 +210,9 @@ static const std::array<Rtti, 4> types = {{
     Rtti{
         (TypeDescriptor*)0x648b48,
         (TypeDescriptor*)0x649788,
-        (TypeDescriptor*)nullptr,
-        (TypeDescriptor*)nullptr,
-        (TypeDescriptor*)nullptr,
+        (TypeDescriptor*)0x6561a8, // CPlayerBuildingsType
+        (TypeDescriptor*)0x655d40, // TBuildingTypeType
+        (TypeDescriptor*)0x6561e8, // TBuildingUnitUpgTypeType
         (TypeDescriptor*)0x648b90,
         (TypeDescriptor*)0x656e08,
         (TypeDescriptor*)0x65bd20,
