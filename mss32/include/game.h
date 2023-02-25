@@ -648,7 +648,8 @@ using LoadScenarioMap = int(__stdcall*)(int a1,
                                         CMidStreamEnvFile* streamEnv,
                                         CMidgardScenarioMap* scenarioMap);
 
-/** big determines whether "*FACEB" (round) instead of "*FACE" (rectangle) image from Faces.ff
+/**
+ * 'big' determines whether '*FACEB' (round) instead of '*FACE' (rectangle) image from Faces.ff
  * should be used.
  */
 using CreateUnitFaceImage = CFaceImg::IFaceImg*(__stdcall*)(CMidgardID* unitImplId, bool big);
@@ -657,6 +658,29 @@ using CanApplyPotionToUnit = CanApplyPotionResult(__stdcall*)(const IMidgardObje
                                                               const CMidgardID* unitId,
                                                               const CMidgardID* groupId,
                                                               const CMidgardID* itemId);
+
+/** Returns either next tier (if available) or next level implementation if unit xp is enough. */
+using GetUpgradeUnitImplCheckXp = const TUsUnitImpl*(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                                 const CMidUnit* unit);
+
+/** Runs ChangeUnitXP visitor, if unit has no upgrade - decreases the amount by 1. */
+using ChangeUnitXpCheckUpgrade = bool(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                  const CMidgardID* playerId,
+                                                  const CMidgardID* unitId,
+                                                  int amount);
+
+using IsUnitTierMax = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                       const CMidgardID* playerId,
+                                       const CMidgardID* unitId);
+
+using IsUnitLevelNotMax = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                           const CMidgardID* playerId,
+                                           const CMidgardID* unitId);
+
+using IsUnitUpgradePending = bool(__stdcall*)(const CMidgardID* unitId,
+                                              const IMidgardObjectMap* objectMap);
+
+using GetUnitImplIdForIsoUnitImage = const CMidgardID*(__stdcall*)(const CMidgardID* unitImplId);
 
 /** Game and editor functions that can be hooked. */
 struct Functions
@@ -774,6 +798,12 @@ struct Functions
     LoadScenarioMap loadScenarioMap;
     CreateUnitFaceImage createUnitFaceImage;
     CanApplyPotionToUnit canApplyPotionToUnit;
+    GetUpgradeUnitImplCheckXp getUpgradeUnitImplCheckXp;
+    ChangeUnitXpCheckUpgrade changeUnitXpCheckUpgrade;
+    IsUnitTierMax isUnitTierMax;
+    IsUnitLevelNotMax isUnitLevelNotMax;
+    IsUnitUpgradePending isUnitUpgradePending;
+    GetUnitImplIdForIsoUnitImage getUnitImplIdForIsoUnitImage;
 };
 
 /** Global variables used in game. */
