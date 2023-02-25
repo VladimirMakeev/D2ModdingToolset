@@ -197,17 +197,28 @@ const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
 const game::CMidPlayer* getPlayerByUnitId(const game::IMidgardObjectMap* objectMap,
                                           const game::CMidgardID* unitId)
 {
+    using namespace game;
+
+    auto playerId = getPlayerIdByUnitId(objectMap, unitId);
+    return playerId != emptyId ? getPlayer(objectMap, &playerId) : nullptr;
+}
+
+const game::CMidgardID getPlayerIdByUnitId(const game::IMidgardObjectMap* objectMap,
+                                           const game::CMidgardID* unitId)
+{
+    using namespace game;
+
     auto stack = getStackByUnitId(objectMap, unitId);
     if (stack) {
-        return getPlayer(objectMap, &stack->ownerId);
+        return stack->ownerId;
     }
 
     auto fort = getFortByUnitId(objectMap, unitId);
     if (fort) {
-        return getPlayer(objectMap, &fort->ownerId);
+        return fort->ownerId;
     }
 
-    return nullptr;
+    return emptyId;
 }
 
 const game::CMidScenVariables* getScenarioVariables(const game::IMidgardObjectMap* objectMap)

@@ -79,6 +79,9 @@ const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
 const game::CMidPlayer* getPlayerByUnitId(const game::IMidgardObjectMap* objectMap,
                                           const game::CMidgardID* unitId);
 
+const game::CMidgardID getPlayerIdByUnitId(const game::IMidgardObjectMap* objectMap,
+                                           const game::CMidgardID* unitId);
+
 const game::CMidScenVariables* getScenarioVariables(const game::IMidgardObjectMap* objectMap);
 
 const game::CMidgardPlan* getMidgardPlan(const game::IMidgardObjectMap* objectMap);
