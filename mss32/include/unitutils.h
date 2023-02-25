@@ -37,6 +37,7 @@ struct BattleMsgData;
 struct CDynUpgrade;
 struct IUsUnitExtension;
 struct TypeDescriptor;
+struct LLeaderAbility;
 } // namespace game
 
 namespace hooks {
@@ -89,6 +90,7 @@ void updateAttackCountAfterTransformation(game::BattleMsgData* battleMsgData,
 bool isStackLeaderAndAllowedToUseBattleItems(const game::IMidgardObjectMap* objectMap,
                                              const game::CMidgardID* unitId,
                                              const game::BattleMsgData* battleMsgData);
+bool hasLeaderAbility(const game::IUsUnit* unitImpl, const game::LLeaderAbility* ability);
 bool hasCriticalHitLeaderAbility(const game::IUsUnit* unitImpl);
 
 /** Returns true if the unit is changed during validation. */
