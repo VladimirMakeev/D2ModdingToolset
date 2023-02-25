@@ -1081,7 +1081,7 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
         }
 
         auto upgradeBuildingId = racialSoldier->vftable->getUpgradeBuildingId(racialSoldier);
-        if (!upgradeBuildingId) {
+        if (*upgradeBuildingId == emptyId) {
             continue;
         }
 
