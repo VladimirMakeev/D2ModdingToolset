@@ -57,6 +57,8 @@ struct TextIds
         std::string randomDurationText;
         std::string singleTurnDurationText;
         std::string wholeBattleDurationText;
+        std::string infiniteAttack;
+        std::string infiniteText;
         std::string removedAttackWard;
     } interf;
 

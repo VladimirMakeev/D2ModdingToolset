@@ -157,6 +157,10 @@ settings = {
 		-- Additional display of experience points reduction
 		-- Requires detailedUnitDescription
 		displayBonusXp = false,
+		
+		-- Display infinite effect indicator along with attack name (alternative to effect duration)
+		-- Requires detailedUnitDescription
+		displayInfiniteAttackIndicator = false,
 	},
 
 	-- Fix effective unit hp computation
