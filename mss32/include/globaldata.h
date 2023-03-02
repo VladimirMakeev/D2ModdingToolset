@@ -161,7 +161,7 @@ struct Api
     GetGlobalData getGlobalData;
 
     /** Searches an entity by its id. */
-    using FindById = void*(__thiscall*)(void* entityCollection, const CMidgardID* id);
+    using FindById = void*(__thiscall*)(const void* entityCollection, const CMidgardID* id);
     FindById findById;
 
     using FindItemById = const CItemBase*(__thiscall*)(TItemTypeList* thisptr,
