@@ -721,9 +721,11 @@ bool hasMaxTierUpgradeBuilding(const game::IMidgardObjectMap* objectMap,
     return getBuildingLevel(upgradeBuildingId) >= scenarioInfo->unitMaxTier;
 }
 
-bool requiresUpgradeBuilding(const game::IMidgardObjectMap* objectMap,
-                             const game::CMidPlayer* player,
-                             const game::IUsUnit* unitImpl)
+bool isNextTierUnitImpl(const game::IMidgardObjectMap* objectMap,
+                        const game::CMidPlayer* player,
+                        const game::CMidUnit* unit,
+                        const game::TUsUnitImpl* unitImpl,
+                        bool* requiresBuilding)
 {
     using namespace game;
 
@@ -734,52 +736,55 @@ bool requiresUpgradeBuilding(const game::IMidgardObjectMap* objectMap,
         return false;
     }
 
+    if (!isNextUnitImpl(unitImpl, unit->unitImpl)) {
+        return false;
+    }
+
     auto racialSoldier = fn.castUnitImplToRacialSoldier(unitImpl);
-    if (!racialSoldier) {
-        return false;
+    if (racialSoldier) {
+        auto upgradeBuildingId = *racialSoldier->vftable->getUpgradeBuildingId(racialSoldier);
+        if (upgradeBuildingId != emptyId) {
+            if (!player || !lordHasBuilding(&player->lordId, &upgradeBuildingId)) {
+                return false;
+            }
+
+            *requiresBuilding = !playerHasBuilding(objectMap, player, &upgradeBuildingId);
+            return true;
+        }
     }
 
-    auto upgradeBuildingId = racialSoldier->vftable->getUpgradeBuildingId(racialSoldier);
-    if (*upgradeBuildingId == emptyId) {
-        return false;
-    }
-
-    return !player || !playerHasBuilding(objectMap, player, upgradeBuildingId);
+    *requiresBuilding = false;
+    return true;
 }
 
-const game::TUsUnitImpl* __stdcall getUpgradeUnitImpl(const game::IMidgardObjectMap* objectMap,
-                                                      const game::CMidPlayer* player,
-                                                      const game::CMidUnit* unit)
+const game::TUsUnitImpl* getUpgradeUnitImpl(const game::IMidgardObjectMap* objectMap,
+                                            const game::CMidPlayer* player,
+                                            const game::CMidUnit* unit)
 {
     using namespace game;
 
     const auto& fn = gameFunctions();
-    const auto& idApi = CMidgardIDApi::get();
     const auto& globalApi = GlobalDataApi::get();
+    const auto& idApi = CMidgardIDApi::get();
 
-    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
-    bool dynLevel = unit->dynLevel || !player
-                    || player->raceId != *soldier->vftable->getRaceId(soldier);
-
-    bool requiresBuilding = false;
-    const auto globalData = *globalApi.getGlobalData();
-    const auto& units = globalData->units->map->data;
-    for (auto it = units.bgn; it != units.end; ++it) {
-        if (!dynLevel || idApi.getType(&it->first) == IdType::UnitGenerated) {
-            if (isNextUnitImpl(it->second, unit->unitImpl)) {
-                if (requiresUpgradeBuilding(objectMap, player, it->second)) {
-                    requiresBuilding = true;
-                } else {
+    if (!unit->dynLevel && idApi.getType(&unit->unitImpl->id) != IdType::UnitGenerated) {
+        bool requiresBuilding = false;
+        const auto globalData = *globalApi.getGlobalData();
+        const auto& units = globalData->units->map->data;
+        for (auto it = units.bgn; it != units.end; ++it) {
+            if (isNextTierUnitImpl(objectMap, player, unit, it->second, &requiresBuilding)) {
+                if (!requiresBuilding) {
                     return it->second;
                 }
             }
         }
+
+        if (requiresBuilding && !hasMaxTierUpgradeBuilding(objectMap, unit->unitImpl)) {
+            return nullptr;
+        }
     }
 
-    if (requiresBuilding && !hasMaxTierUpgradeBuilding(objectMap, unit->unitImpl)) {
-        return nullptr;
-    }
-
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
     return generateUnitImpl(&unit->unitImpl->id, soldier->vftable->getLevel(soldier) + 1);
 }
 
