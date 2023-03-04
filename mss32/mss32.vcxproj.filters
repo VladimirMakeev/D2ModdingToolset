@@ -3055,6 +3055,9 @@
     <ClInclude Include="include\batattackgroupupgrade.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\subracetype.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
