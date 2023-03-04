@@ -24,7 +24,9 @@
 #include "fortification.h"
 #include "game.h"
 #include "globalvariables.h"
+#include "idset.h"
 #include "leaderabilitycat.h"
+#include "lordtype.h"
 #include "midclient.h"
 #include "midclientcore.h"
 #include "midgard.h"
@@ -589,6 +591,24 @@ bool playerHasBuilding(const game::IMidgardObjectMap* objectMap,
     }
 
     return false;
+}
+
+bool lordHasBuilding(const game::CMidgardID* lordId, const game::CMidgardID* buildingId)
+{
+    using namespace game;
+
+    const auto& globalApi = GlobalDataApi::get();
+    const auto& idSetApi = IdSetApi::get();
+
+    const GlobalData* globalData = *globalApi.getGlobalData();
+    auto lord = static_cast<const TLordType*>(globalApi.findById(globalData->lords, lordId));
+    if (!lord) {
+        return false;
+    }
+
+    IdSetIterator it;
+    auto buildings = lord->data->buildList->data;
+    return *idSetApi.find(&buildings, &it, buildingId) != buildings.end();
 }
 
 } // namespace hooks

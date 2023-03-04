@@ -148,6 +148,8 @@ bool playerHasBuilding(const game::IMidgardObjectMap* objectMap,
                        const game::CMidPlayer* player,
                        const game::CMidgardID* buildingId);
 
+bool lordHasBuilding(const game::CMidgardID* lordId, const game::CMidgardID* buildingId);
+
 } // namespace hooks
 
 #endif // GAMEUTILS_H
