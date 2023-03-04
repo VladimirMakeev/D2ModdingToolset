@@ -35,6 +35,9 @@ struct Api
 
     using Reserve = void(__thiscall*)(IntVector* thisptr, unsigned int count);
     Reserve reserve;
+
+    using PushBack = void(__thiscall*)(IntVector* thisptr, int* value);
+    PushBack pushBack;
 };
 
 Api& get();
