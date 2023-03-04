@@ -93,7 +93,7 @@ enum class IdType : int
     MT,                /**< TODO: figure out what is this */
     Mountains,         /**< 'ML' */
     SubRace,           /**< 'SR' */
-    BR,                /**< TODO: figure out what is this */
+    SubRaceType,       /**< 'BR', entries of GSubRace.dbf. */
     QuestLog,          /**< 'QL' */
     TurnSummary,       /**< 'TS' */
     ScenarioVariable,  /**< 'SV' */
