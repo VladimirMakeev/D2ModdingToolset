@@ -62,6 +62,8 @@ struct LRaceCategory;
 struct CMidgardScenarioMap;
 struct IMidgardStreamEnv;
 struct CMidStreamEnvFile;
+struct IUsUnit;
+struct TBuildingType;
 
 enum class BuildingBranchNumber : int;
 enum class CanApplyPotionResult : int;
@@ -267,6 +269,11 @@ game::CanApplyPotionResult __stdcall canApplyPotionToUnitHooked(
     const game::CMidgardID* unitId,
     const game::CMidgardID* groupId,
     const game::CMidgardID* itemId);
+
+void __stdcall getUnitRequiredBuildingsHooked(const game::IMidgardObjectMap* objectMap,
+                                              const game::CMidgardID* playerId,
+                                              const game::IUsUnit* unitImpl,
+                                              game::Vector<game::TBuildingType*>* result);
 
 } // namespace hooks
 
