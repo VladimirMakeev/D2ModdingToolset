@@ -77,6 +77,7 @@ struct IUsLeader;
 struct LDeathAnimCategory;
 struct CMidStreamEnvFile;
 struct CMidgardScenarioMap;
+struct TBuildingType;
 
 enum class ModifierElementTypeFlag : int;
 
@@ -682,6 +683,11 @@ using IsUnitUpgradePending = bool(__stdcall*)(const CMidgardID* unitId,
 
 using GetUnitImplIdForIsoUnitImage = const CMidgardID*(__stdcall*)(const CMidgardID* unitImplId);
 
+using GetUnitRequiredBuildings = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                  const CMidgardID* playerId,
+                                                  const IUsUnit* unitImpl,
+                                                  Vector<TBuildingType*>* result);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -804,6 +810,7 @@ struct Functions
     IsUnitLevelNotMax isUnitLevelNotMax;
     IsUnitUpgradePending isUnitUpgradePending;
     GetUnitImplIdForIsoUnitImage getUnitImplIdForIsoUnitImage;
+    GetUnitRequiredBuildings getUnitRequiredBuildings;
 };
 
 /** Global variables used in game. */
