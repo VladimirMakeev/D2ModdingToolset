@@ -89,6 +89,7 @@
 #include "idlist.h"
 #include "interfmanager.h"
 #include "interftexthooks.h"
+#include "intvector.h"
 #include "isoenginegroundhooks.h"
 #include "itembase.h"
 #include "itemcategory.h"
@@ -699,6 +700,9 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{fn.isUnitTierMax, isUnitTierMaxHooked});
     hooks.emplace_back(HookInfo{fn.isUnitLevelNotMax, isUnitLevelNotMaxHooked});
     hooks.emplace_back(HookInfo{fn.isUnitUpgradePending, isUnitUpgradePendingHooked});
+
+    // Fix display of required buildings when multiple units have the same upgrade building
+    hooks.emplace_back(HookInfo{fn.getUnitRequiredBuildings, getUnitRequiredBuildingsHooked});
 
     return hooks;
 }
@@ -2404,6 +2408,41 @@ bool __stdcall isUnitUpgradePendingHooked(const game::CMidgardID* unitId,
     }
 
     return false;
+}
+
+void __stdcall getUnitRequiredBuildingsHooked(const game::IMidgardObjectMap* objectMap,
+                                              const game::CMidgardID* playerId,
+                                              const game::IUsUnit* unitImpl,
+                                              game::Vector<game::TBuildingType*>* result)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& globalDataApi = GlobalDataApi::get();
+    const auto& intVectorApi = IntVectorApi::get();
+
+    const GlobalData* globalData = *globalDataApi.getGlobalData();
+    auto player = getPlayer(objectMap, playerId);
+
+    const auto& units = globalData->units->map->data;
+    const auto& buildings = (*globalData->buildings)->data;
+    for (auto building = buildings.bgn; building != buildings.end; ++building) {
+        for (auto unit = units.bgn; unit != units.end; ++unit) {
+            auto racialSoldier = fn.castUnitImplToRacialSoldier(unit->second);
+            if (racialSoldier) {
+                auto upgradeBuildingId = racialSoldier->vftable->getUpgradeBuildingId(
+                    racialSoldier);
+                if (*upgradeBuildingId == building->first) {
+                    auto prevUnitImplId = racialSoldier->vftable->getPrevUnitImplId(racialSoldier);
+                    if (*prevUnitImplId == unitImpl->id) {
+                        if (!player || lordHasBuilding(&player->lordId, &building->first)) {
+                            intVectorApi.pushBack((IntVector*)result, (int*)&building->second);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 } // namespace hooks

@@ -63,6 +63,8 @@ struct CMidgardScenarioMap;
 struct IMidgardStreamEnv;
 struct CMidStreamEnvFile;
 struct TUsUnitImpl;
+struct IUsUnit;
+struct TBuildingType;
 
 enum class BuildingBranchNumber : int;
 enum class CanApplyPotionResult : int;
@@ -288,6 +290,11 @@ bool __stdcall isUnitLevelNotMaxHooked(const game::IMidgardObjectMap* objectMap,
 
 bool __stdcall isUnitUpgradePendingHooked(const game::CMidgardID* unitId,
                                           const game::IMidgardObjectMap* objectMap);
+
+void __stdcall getUnitRequiredBuildingsHooked(const game::IMidgardObjectMap* objectMap,
+                                              const game::CMidgardID* playerId,
+                                              const game::IUsUnit* unitImpl,
+                                              game::Vector<game::TBuildingType*>* result);
 
 } // namespace hooks
 

@@ -680,6 +680,7 @@
 - Fixes inability to use heal potion on transformed unit if its current hp is greater than maximum hp of unit it is transformed to (most common case is a unit transformed to Imp by a Witch while retaining his original hp);
 - Fixes stuck upgrades of foreign race mercenaries ('This unit is ready to upgrade but can not because it needs a building that is only accessible to the %RACE%'). It will now function as if 'Lock unit type' is applied;
 - Fixes errornous logic that allowed retreated units to upgrade under certain conditions. The behavior is now controllable via `battle.allowRetreatedUnitsToUpgrade` setting;
+- Fixes display of required buildings when multiple units have the same upgrade building;
 
 ### Scripting:
 The toolset uses Lua for settings and advanced game mechanics. See [luaApi](luaApi.md) for detailed information.
