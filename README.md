@@ -44,6 +44,16 @@
     ```
   </details>
 - <details>
+    <summary>Allows foreign race units (including neutral) to be upgraded using capital buildings;</summary>
+    
+    ![Demo video](https://user-images.githubusercontent.com/5180699/222949835-0217ddd2-5ccc-4ee6-82b8-9b265f1d9b7e.mp4)
+
+    - Use existing or create a new unit to be used as upgrade in `GUnits.dbf`;
+    - Specify a building to upgrade in `UPGRADE_B` (the game does not allow to do free upgrades without a building);
+    - Refer to the previous unit in `PREV_ID` (if you want different previous units to be upgraded into one single unit, you will have to make copies of the latter using `BASE_UNIT`);
+    - The `LEVEL` of the upgrade unit must be equal to the level of the previous unit + 1;
+  </details>
+- <details>
     <summary>Allows scenarios with prebuilt capital cities;</summary>
 
     - Enable `preserveCapitalBuildings` in [settings.lua](Scripts/settings.lua);
