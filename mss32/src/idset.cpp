@@ -27,21 +27,29 @@ namespace game::IdSetApi {
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
+        (Api::Constructor)0x407b06,
+        (Api::Destructor)0x407ce9,
         (Api::Insert)0x525755,
         (Api::Find)0x59f52d,
     },
     // Russobit
     Api{
+        (Api::Constructor)0x407b06,
+        (Api::Destructor)0x407ce9,
         (Api::Insert)0x525755,
         (Api::Find)0x59f52d,
     },
     // Gog
     Api{
+        (Api::Constructor)0x40778d,
+        (Api::Destructor)0x407995,
         (Api::Insert)0x524c35,
         (Api::Find)0x53207e,
     },
     // Scenario Editor
     Api{
+        (Api::Constructor)0x408512,
+        (Api::Destructor)0x408635,
         (Api::Insert)0x408551,
         (Api::Find)0x54770d,
     },
