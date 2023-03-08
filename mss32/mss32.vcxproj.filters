@@ -3037,6 +3037,9 @@
     <ClInclude Include="include\itemextension.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\aitacticaction.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
