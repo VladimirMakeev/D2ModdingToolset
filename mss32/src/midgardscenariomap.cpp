@@ -58,11 +58,27 @@ std::array<Api, 4> functions = {{
         (Api::Stream)0x4dc1f2,
     },
 }};
+
+static std::array<IMidgardObjectMapVftable*, 4> vftables = {{
+    // Akella
+    (IMidgardObjectMapVftable*)0x6f0c14,
+    // Russobit
+    (IMidgardObjectMapVftable*)0x6f0c14,
+    // Gog
+    (IMidgardObjectMapVftable*)0x6eebb4,
+    // Scenario Editor
+    (IMidgardObjectMapVftable*)0x5d9354,
+}};
 // clang-format on
 
 Api& get()
 {
     return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+IMidgardObjectMapVftable* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::CMidgardScenarioMapApi
