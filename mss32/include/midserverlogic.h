@@ -26,17 +26,24 @@
 
 namespace game {
 
+struct CMidServerLogic;
 struct CMidServer;
 struct CStreamBits;
 struct AiLogic;
 struct CMidgardScenarioMap;
 
+/*
+ * All the fields initially point to the same parent logic. Is this some kind of enumerable
+ * collection pattern?
+ */
 struct CMidServerLogicData
 {
-    int unknown;
-    int unknown2;
-    int unknown3;
+    CMidServerLogic* logic;
+    CMidServerLogic** logic2;
+    CMidServerLogic** logic3;
 };
+
+assert_size(CMidServerLogicData, 12);
 
 struct CMidServerLogicData2
 {
