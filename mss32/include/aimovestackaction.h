@@ -47,6 +47,18 @@ struct CAiMoveStackAction : CAiTacticActionSimple
 assert_size(CAiMoveStackAction, 84);
 assert_offset(CAiMoveStackAction, unknown36, sizeof(CAiTacticActionSimple) + 36);
 
+namespace CAiMoveStackActionApi {
+
+struct Vftable
+{
+    const IAiTacticActionVftable* action;
+    const IAiReactionVftable* reaction;
+};
+
+const Vftable& vftable();
+
+} // namespace CAiMoveStackActionApi
+
 } // namespace game
 
 #endif // AIMOVESTACKACTION_H

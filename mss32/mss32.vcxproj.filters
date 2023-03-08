@@ -1172,6 +1172,9 @@
     <ClCompile Include="src\aigiveitemsaction.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\aimovestackaction.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
