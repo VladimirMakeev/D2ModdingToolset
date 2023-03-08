@@ -21,6 +21,7 @@
 #define MIDSERVERLOGIC_H
 
 #include "d2set.h"
+#include "idset.h"
 #include "midmsgsender.h"
 #include "midserverlogiccore.h"
 
@@ -131,6 +132,13 @@ struct Api
                                               const Set<CMidgardID>* objectsList,
                                               std::uint32_t playerNetId);
     SendRefreshInfo sendRefreshInfo;
+
+    using StackExchangeItem = void(__thiscall*)(CMidServerLogicData* thisptr,
+                                                const CMidgardID* playerId,
+                                                const CMidgardID* fromStackId,
+                                                const CMidgardID* toStackId,
+                                                const IdSet* itemIds);
+    StackExchangeItem stackExchangeItem;
 };
 
 Api& get();

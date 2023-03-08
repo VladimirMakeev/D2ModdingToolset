@@ -29,16 +29,19 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::GetObjectMap)0x4298aa,
         (Api::SendRefreshInfo)0x42972f,
+        (Api::StackExchangeItem)0x41f5dc,
     },
     // Russobit
     Api{
         (Api::GetObjectMap)0x4298aa,
         (Api::SendRefreshInfo)0x42972f,
+        (Api::StackExchangeItem)0x41f5dc,
     },
     // Gog
     Api{
         (Api::GetObjectMap)0x5a77e8,
         (Api::SendRefreshInfo)0x42915a,
+        (Api::StackExchangeItem)0x41f0c4,
     },
 }};
 
