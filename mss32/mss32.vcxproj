@@ -536,6 +536,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\2dengine.h" />
     <ClInclude Include="include\2denginemap.h" />
     <ClInclude Include="include\2denginemapimpl.h" />
+    <ClInclude Include="include\aiattitudes.h" />
     <ClInclude Include="include\aiblockingstats.h" />
     <ClInclude Include="include\aigiveitemsaction.h" />
     <ClInclude Include="include\ailogic.h" />

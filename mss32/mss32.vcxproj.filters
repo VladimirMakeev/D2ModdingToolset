@@ -3061,6 +3061,9 @@
     <ClInclude Include="include\aistackgeneric.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\aiattitudes.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
