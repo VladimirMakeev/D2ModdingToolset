@@ -18,6 +18,8 @@
  */
 
 #include "hooks.h"
+#include "aigiveitemsaction.h"
+#include "aigiveitemsactionhooks.h"
 #include "attackimpl.h"
 #include "attackreachcat.h"
 #include "attackutils.h"
@@ -353,6 +355,8 @@ static Hooks getGameHooks()
         // Fix inability to use heal potion on transformed unit if its current hp is greater than maximum hp of unit it is transformed to
         // (most common case is a unit transformed to Imp by a Witch while retaining his original hp)
         {fn.canApplyPotionToUnit, canApplyPotionToUnitHooked},
+        // Fix crash on AI turn when it tries to exchange items and a source stack is destroyed in battle/event while moving to destination
+        {CAiGiveItemsActionApi::vftable().action->execute, aiGiveItemsActionExecuteHooked},
     };
     // clang-format on
 

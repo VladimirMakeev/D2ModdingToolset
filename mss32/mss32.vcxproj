@@ -156,6 +156,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsPlugin.cpp" />
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomTypes.cpp" />
     <ClCompile Include="src\aigiveitemsaction.cpp" />
+    <ClCompile Include="src\aigiveitemsactionhooks.cpp" />
     <ClCompile Include="src\aimovestackaction.cpp" />
     <ClCompile Include="src\attack.cpp" />
     <ClCompile Include="src\attackclasscat.cpp" />
@@ -539,6 +540,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\aiattitudes.h" />
     <ClInclude Include="include\aiblockingstats.h" />
     <ClInclude Include="include\aigiveitemsaction.h" />
+    <ClInclude Include="include\aigiveitemsactionhooks.h" />
     <ClInclude Include="include\ailogic.h" />
     <ClInclude Include="include\aimovestackaction.h" />
     <ClInclude Include="include\aioperational.h" />
