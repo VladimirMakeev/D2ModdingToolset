@@ -550,6 +550,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\aistratplayerrace.h" />
     <ClInclude Include="include\aitactic.h" />
     <ClInclude Include="include\aitacticaction.h" />
+    <ClInclude Include="include\aitacticactionsimple.h" />
     <ClInclude Include="include\animations.h" />
     <ClInclude Include="include\attack.h" />
     <ClInclude Include="include\attackclasscat.h" />
