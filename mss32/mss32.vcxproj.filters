@@ -1169,6 +1169,9 @@
     <ClCompile Include="src\intintmap.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\aigiveitemsaction.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">

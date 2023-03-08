@@ -155,6 +155,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsErrorCodes.cpp" />
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsPlugin.cpp" />
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomTypes.cpp" />
+    <ClCompile Include="src\aigiveitemsaction.cpp" />
     <ClCompile Include="src\attack.cpp" />
     <ClCompile Include="src\attackclasscat.cpp" />
     <ClCompile Include="src\attackdescriptor.cpp" />

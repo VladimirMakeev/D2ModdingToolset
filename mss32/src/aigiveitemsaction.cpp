@@ -17,35 +17,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AIGIVEITEMSACTION_H
-#define AIGIVEITEMSACTION_H
+#include "aigiveitemsaction.h"
+#include "version.h"
+#include <array>
 
-#include "aimovestackaction.h"
+namespace game::CAiGiveItemsActionApi {
 
-namespace game {
+// clang-format off
+static std::array<Vftable, 4> vftables = {{
+    // Akella
+    Vftable{
+        (IAiTacticActionVftable*)0x6d2a24,
+        (IAiReactionVftable*)0x6d29b4,
+    },
+    // Russobit
+    Vftable{
+        (IAiTacticActionVftable*)0x6d2a24,
+        (IAiReactionVftable*)0x6d29b4,
+    },
+    // Gog
+    Vftable{
+        (IAiTacticActionVftable*)0x6d09c4,
+        (IAiReactionVftable*)0x6d0954,
+    },
+    // Scenario Editor
+    Vftable{
+        (IAiTacticActionVftable*)nullptr,
+        (IAiReactionVftable*)nullptr,
+    },
+}};
+// clang-format on
 
-struct CAiStackGeneric;
-
-struct CAiGiveItemsAction : CAiMoveStackAction
+const Vftable& vftable()
 {
-    int unknown;
-    CAiStackGeneric* stack;
-};
+    return vftables[static_cast<int>(hooks::gameVersion())];
+}
 
-assert_size(CAiGiveItemsAction, 92);
-
-namespace CAiGiveItemsActionApi {
-
-struct Vftable
-{
-    const IAiTacticActionVftable* action;
-    const IAiReactionVftable* reaction;
-};
-
-const Vftable& vftable();
-
-} // namespace CAiGiveItemsActionApi
-
-} // namespace game
-
-#endif // AIGIVEITEMSACTION_H
+} // namespace game::CAiGiveItemsActionApi
