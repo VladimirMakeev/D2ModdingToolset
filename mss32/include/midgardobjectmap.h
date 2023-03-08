@@ -106,7 +106,7 @@ struct IMidgardObjectMapVftable
      * Returns true if object was deleted.
      */
     using DeleteScenarioObjectById = bool(__thiscall*)(IMidgardObjectMap* thisptr,
-                                                       const CMidgardID* id);
+                                                       const CMidgardID id);
     DeleteScenarioObjectById deleteScenarioObjectById;
 
     /**
