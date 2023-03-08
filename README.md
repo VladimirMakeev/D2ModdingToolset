@@ -76,6 +76,7 @@
     Enable `debugHooks` in [settings.lua](Scripts/settings.lua).<br />
     **Don't forget to turn it off in release package of your mod to avoid cluttering and improve performance.**
   </details>
+- Provides recommended game settings: add contents of [Disciple.ini](Examples/Disciple.ini) to `Disciple.ini`;
 
 #### User interface
 - <details>
