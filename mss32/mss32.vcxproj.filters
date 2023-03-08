@@ -3043,6 +3043,9 @@
     <ClInclude Include="include\aitacticactionsimple.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\aimovestackaction.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
