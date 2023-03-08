@@ -3049,6 +3049,9 @@
     <ClInclude Include="include\aigiveitemsaction.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\aistack.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
