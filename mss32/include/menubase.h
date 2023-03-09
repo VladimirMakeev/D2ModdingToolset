@@ -23,6 +23,7 @@
 #include "imagepointlist.h"
 #include "interffullscreen.h"
 #include "smartptr.h"
+#include "taskmanagerholder.h"
 #include <cstddef>
 
 namespace game {
@@ -98,6 +99,20 @@ struct Api
 Api& get();
 
 } // namespace CMenuBaseApi
+
+namespace editor {
+
+struct CMenuBase : game::CInterfFullScreen
+{
+    game::ITaskManagerHolder taskManagerHolder;
+    int unknown12;
+    int unknown16; // constructor argument, probably CMenuPhase*
+};
+
+assert_size(CMenuBase, 20);
+assert_offset(CMenuBase, unknown16, 16);
+
+} // namespace editor
 
 } // namespace game
 
