@@ -28,6 +28,7 @@ static std::array<Api, 3> functions = {{
     // Akella
     Api{
         (Api::Constructor)0x4db5ea,
+        (Api::Destructor)0x4db6f7,
         (Api::CreateMenu)0x4db76a,
         (Api::GetDialogInterface)0x40306a,
         (Api::ButtonCallback)0x4dcf9e,
@@ -37,6 +38,7 @@ static std::array<Api, 3> functions = {{
     // Russobit
     Api{
         (Api::Constructor)0x4db5ea,
+        (Api::Destructor)0x4db6f7,
         (Api::CreateMenu)0x4db76a,
         (Api::GetDialogInterface)0x40306a,
         (Api::ButtonCallback)0x4dcf9e,
@@ -46,6 +48,7 @@ static std::array<Api, 3> functions = {{
     // Gog
     Api{
         (Api::Constructor)0x4dac4f,
+        (Api::Destructor)0x4dad5c,
         (Api::CreateMenu)0x4dadcf,
         (Api::GetDialogInterface)0x402db0,
         (Api::ButtonCallback)0x4dbeae,

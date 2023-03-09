@@ -61,6 +61,9 @@ struct Api
     using Constructor = CMenuBase*(__thiscall*)(CMenuBase* thisptr, CMenuPhase* menuPhase);
     Constructor constructor;
 
+    using Destructor = void(__thiscall*)(CMenuBase* thisptr);
+    Destructor destructor;
+
     /** Creates ui elements of specified dialog to be used in menu. */
     using CreateMenu = int(__thiscall*)(CMenuBase* thisptr, const char* dialogName);
     CreateMenu createMenu;
