@@ -128,6 +128,8 @@ void __fastcall menuDestructor(CMenuCustomLobby* thisptr, int /*%edx*/, char fla
 
     thisptr->rooms.~vector();
 
+    CMenuBaseApi::get().destructor(thisptr);
+
     if (flags & 1) {
         logDebug("transitions.log", "Free custom menu memory");
         Memory::get().freeNonZero(thisptr);
