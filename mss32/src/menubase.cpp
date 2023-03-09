@@ -56,11 +56,25 @@ static std::array<Api, 3> functions = {{
         (Api::CreateListBoxDisplayFunctor)0x4e4d4c,
     },
 }};
+
+static std::array<CInterfaceVftable*, 3> vftables = {{
+    // Akella
+    (CInterfaceVftable*)0x6dd294,
+    // Russobit
+    (CInterfaceVftable*)0x6dd294,
+    // Gog
+    (CInterfaceVftable*)0x6db234,
+}};
 // clang-format on
 
 Api& get()
 {
     return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+const CInterfaceVftable* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::CMenuBaseApi

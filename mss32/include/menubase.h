@@ -101,6 +101,8 @@ struct Api
 
 Api& get();
 
+const CInterfaceVftable* vftable();
+
 } // namespace CMenuBaseApi
 
 namespace editor {
