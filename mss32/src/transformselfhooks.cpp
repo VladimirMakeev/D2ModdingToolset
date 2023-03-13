@@ -131,7 +131,7 @@ void giveFreeTransformSelfAttack(game::IMidgardObjectMap* objectMap,
             return;
         }
         auto player = getPlayer(objectMap, battleMsgData, &unit->id);
-        if (player && !player->isHuman)
+        if (!player || !player->isHuman)
             return;
     }
     freeTransformSelf.used = true;
