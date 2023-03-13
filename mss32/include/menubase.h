@@ -23,6 +23,7 @@
 #include "imagepointlist.h"
 #include "interffullscreen.h"
 #include "smartptr.h"
+#include "taskmanagerholder.h"
 #include <cstddef>
 
 namespace game {
@@ -59,6 +60,9 @@ struct Api
      */
     using Constructor = CMenuBase*(__thiscall*)(CMenuBase* thisptr, CMenuPhase* menuPhase);
     Constructor constructor;
+
+    using Destructor = void(__thiscall*)(CMenuBase* thisptr);
+    Destructor destructor;
 
     /** Creates ui elements of specified dialog to be used in menu. */
     using CreateMenu = int(__thiscall*)(CMenuBase* thisptr, const char* dialogName);
@@ -97,7 +101,23 @@ struct Api
 
 Api& get();
 
+const CInterfaceVftable* vftable();
+
 } // namespace CMenuBaseApi
+
+namespace editor {
+
+struct CMenuBase : game::CInterfFullScreen
+{
+    game::ITaskManagerHolder taskManagerHolder;
+    int unknown12;
+    int unknown16; // constructor argument, probably CMenuPhase*
+};
+
+assert_size(CMenuBase, 20);
+assert_offset(CMenuBase, unknown16, 16);
+
+} // namespace editor
 
 } // namespace game
 

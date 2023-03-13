@@ -28,6 +28,7 @@ static std::array<Api, 3> functions = {{
     // Akella
     Api{
         (Api::Constructor)0x4db5ea,
+        (Api::Destructor)0x4db6f7,
         (Api::CreateMenu)0x4db76a,
         (Api::GetDialogInterface)0x40306a,
         (Api::ButtonCallback)0x4dcf9e,
@@ -37,6 +38,7 @@ static std::array<Api, 3> functions = {{
     // Russobit
     Api{
         (Api::Constructor)0x4db5ea,
+        (Api::Destructor)0x4db6f7,
         (Api::CreateMenu)0x4db76a,
         (Api::GetDialogInterface)0x40306a,
         (Api::ButtonCallback)0x4dcf9e,
@@ -46,6 +48,7 @@ static std::array<Api, 3> functions = {{
     // Gog
     Api{
         (Api::Constructor)0x4dac4f,
+        (Api::Destructor)0x4dad5c,
         (Api::CreateMenu)0x4dadcf,
         (Api::GetDialogInterface)0x402db0,
         (Api::ButtonCallback)0x4dbeae,
@@ -53,11 +56,25 @@ static std::array<Api, 3> functions = {{
         (Api::CreateListBoxDisplayFunctor)0x4e4d4c,
     },
 }};
+
+static std::array<CInterfaceVftable*, 3> vftables = {{
+    // Akella
+    (CInterfaceVftable*)0x6dd294,
+    // Russobit
+    (CInterfaceVftable*)0x6dd294,
+    // Gog
+    (CInterfaceVftable*)0x6db234,
+}};
 // clang-format on
 
 Api& get()
 {
     return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+const CInterfaceVftable* vftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::CMenuBaseApi
