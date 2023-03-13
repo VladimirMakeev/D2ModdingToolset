@@ -22,6 +22,7 @@
 #include "custommodifier.h"
 #include "custommodifiers.h"
 #include "dynamiccast.h"
+#include "log.h"
 #include "midgardstream.h"
 #include "midgardstreamenv.h"
 #include "modifierutils.h"
@@ -31,6 +32,7 @@
 #include "stringandid.h"
 #include "stringpairarrayptr.h"
 #include "ummodifier.h"
+#include "unitgenerator.h"
 #include "unitmodifier.h"
 #include "unitutils.h"
 #include "ussoldier.h"
@@ -413,6 +415,60 @@ bool __stdcall removeModifiersHooked(game::IUsUnit** unitImpl)
     }
 
     return true;
+}
+
+void __stdcall midUnitStreamImplIdAndLevelHooked(game::IMidgardStream** stream,
+                                                 game::CMidgardID* unitImplId,
+                                                 const char* idName,
+                                                 const char* levelName)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& globalApi = GlobalDataApi::get();
+
+    auto streamPtr = *stream;
+    const GlobalUnits* units = (*globalApi.getGlobalData())->units;
+    auto unitGenerator = (*globalApi.getGlobalData())->unitGenerator;
+
+    int unitLevel = 0;
+    CMidgardID globalUnitImplId = emptyId;
+    if (streamPtr->vftable->writeMode(streamPtr) && *unitImplId != emptyId) {
+        unitGenerator->vftable->getGlobalUnitImplId(unitGenerator, &globalUnitImplId, unitImplId);
+
+        auto unitImpl = static_cast<TUsUnitImpl*>(globalApi.findById(units, unitImplId));
+        auto soldier = fn.castUnitImplToSoldier(unitImpl);
+        unitLevel = soldier->vftable->getLevel(soldier);
+    }
+
+    streamPtr->vftable->streamId(streamPtr, idName, &globalUnitImplId);
+    streamPtr->vftable->streamInt(streamPtr, levelName, &unitLevel);
+
+    if (streamPtr->vftable->readMode(streamPtr)) {
+        if (globalUnitImplId == emptyId) {
+            *unitImplId = emptyId;
+        } else {
+            unitGenerator->vftable->generateUnitImplId(unitGenerator, unitImplId, &globalUnitImplId,
+                                                       unitLevel);
+            if (*unitImplId == emptyId) {
+                // Clamp only on failed generation for better performance
+                int levelMin = fn.getUnitLevelByImplId(&globalUnitImplId);
+                int levelMax = unitGenerator->vftable->getGeneratedUnitImplLevelMax(unitGenerator);
+                unitLevel = std::clamp(unitLevel, levelMin, levelMax);
+                logDebug("scenario.log", fmt::format("Adjusted level of unit impl '{:s}' to {:d}",
+                                                     idToString(&globalUnitImplId), unitLevel));
+                unitGenerator->vftable->generateUnitImplId(unitGenerator, unitImplId,
+                                                           &globalUnitImplId, unitLevel);
+            }
+
+            if (!unitGenerator->vftable->generateUnitImpl(unitGenerator, unitImplId)) {
+                auto message = fmt::format(
+                    "Unable to generate unit impl with id '{:s}' and level {:d}",
+                    idToString(&globalUnitImplId), unitLevel);
+                fn.throwScenarioException("MidUnit", message.c_str());
+            }
+        }
+    }
 }
 
 } // namespace hooks

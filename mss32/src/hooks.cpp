@@ -688,6 +688,12 @@ Hooks getHooks()
     hooks.emplace_back(
         HookInfo{CEncLayoutCityApi::get().updateGroupUi, encLayoutCityUpdateGroupUiHooked});
 
+    // Fixes crash on scenario loading when level of any unit is below its template from
+    // `GUnits.dbf`, or above maximum level for generated units (restricted by total count of unit
+    // templates)
+    hooks.emplace_back(
+        HookInfo{CMidUnitApi::get().streamImplIdAndLevel, midUnitStreamImplIdAndLevelHooked});
+
     return hooks;
 }
 
@@ -1062,8 +1068,9 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
         return true;
     }
 
-    const auto units = *globalData->units;
-    for (auto current = units->data.bgn, end = units->data.end; current != end; ++current) {
+    const auto units = globalData->units;
+    for (auto current = units->map->data.bgn, end = units->map->data.end; current != end;
+         ++current) {
         const auto unitImpl = current->second;
         auto soldier = fn.castUnitImplToSoldier(unitImpl);
         if (!soldier) {
