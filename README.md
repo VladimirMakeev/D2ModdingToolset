@@ -164,6 +164,7 @@
         - Value of lower initiative;
         - Critical hit indication;
         - Effect duration;
+        - Infinite effect indication (alternative to effect duration);
         - Broken (removed) wards indication;
         - Drain attack description;
         - Custom attack sources;
@@ -179,6 +180,8 @@
         - `randomDurationText`
         - `singleTurnDurationText`
         - `wholeBattleDurationText`
+        - `infiniteAttack`
+        - `infiniteText`
         - `ratedDamage`
         - `ratedDamageEqual`
         - `ratedDamageSeparator`
@@ -206,6 +209,7 @@
         - Add `%DURATION%` keyword where you like to put the description (propose to place it after attack-name field like `...%ATTACK%%SECOND%\p0;\n%DURATION%...`);
         - The keyword is replaced with empty string if attack has instant effect;
         - Note that you can freely move content between `X005TA0787` and `X005TA0788` if you run out of length limit (because the two strings simply merged together in `X005TA0424`).
+    - (Optional) Add infinite effect indication (alternative to effect duration): enable setting 'unitEncyclopedia.displayInfiniteAttackIndicator';
     - (Optional) Add extra stats panel:
         - Add interface text to `TApp.dbf` and `TAppEdit.dbf` that contains `%XPKILL%`, `%EFFHP%` and `%REGEN%` (every keyword is optional), for example:
             ```
