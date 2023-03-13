@@ -26,6 +26,7 @@
     <summary>Allows each race to hire up to 10 new tier-1 units in cities and capital;</summary>
 
     - For each new unit, add a new column `SOLDIER_N` to `Grace.dbf`, where N starts from 6;
+    - You can specify either an unit id from `GUnits.dbf`, or the empty id `g000000000` as the column value;
     - Add scroll buttons `BTN_PG_DN`, `BTN_PG_UP`, `BTN_LIST_UP` and `BTN_LIST_DN` to unit hire dialog `DLG_HIRE_LEADER_2` in `Interf.dlg`:
     ```
     DIALOG	DLG_HIRE_LEADER_2,0,0,533,600,DLG_HIRE_LEADER_2_PHIRELEADER,_CUDEFAUL,0,0,77,3,455,551,0

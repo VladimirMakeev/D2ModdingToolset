@@ -109,6 +109,11 @@ bool loadUnitsForHire()
                 return false;
             }
 
+            // Allow different races to have different number of units to hire
+            if (soldierId == game::emptyId) {
+                continue;
+            }
+
             tmpUnits[raceIndex].push_back(soldierId);
         }
     }
