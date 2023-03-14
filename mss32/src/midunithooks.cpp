@@ -355,6 +355,9 @@ bool addModifier(game::CMidUnit* unit,
 
     const auto unitModifier = getUnitModifier(modifierId);
     if (!unitModifier) {
+        auto message = fmt::format("MidUnit: Missing modifier '{:s}', unit '{:s}'",
+                                   idToString(modifierId), idToString(&unit->id));
+        errorBuffer[message.copy(errorBuffer, 128)] = 0;
         return false;
     }
 
@@ -364,9 +367,9 @@ bool addModifier(game::CMidUnit* unit,
         }
 
         if (!canReapplyModifier(unit, unitModifier)) {
-            fmt::format("MidUnit: Invalid modifier '{:s}', unit '{:s}'", idToString(modifierId),
-                        idToString(&unit->id))
-                .copy(errorBuffer, 128);
+            auto message = fmt::format("MidUnit: Invalid modifier '{:s}', unit '{:s}'",
+                                       idToString(modifierId), idToString(&unit->id));
+            errorBuffer[message.copy(errorBuffer, 128)] = 0;
             return false;
         }
     }
