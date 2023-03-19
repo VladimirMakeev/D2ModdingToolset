@@ -140,6 +140,13 @@ static std::array<Functions, 4> functions = {{
         (LoadScenarioMap)0x429dc6,
         (CreateUnitFaceImage)0x5b18e9,
         (CanApplyPotionToUnit)0x5df760,
+        (GetUpgradeUnitImplCheckXp)0x5d9e09,
+        (ChangeUnitXpCheckUpgrade)0x5d8704,
+        (IsUnitTierMax)0x5da04a,
+        (IsUnitLevelNotMax)0x5da1bc,
+        (IsUnitUpgradePending)0x61fb9d,
+        (GetUnitImplIdForIsoUnitImage)0x684101,
+        (GetUnitRequiredBuildings)0x61f7fe,
     },
     // Russobit
     Functions{
@@ -256,6 +263,13 @@ static std::array<Functions, 4> functions = {{
         (LoadScenarioMap)0x429dc6,
         (CreateUnitFaceImage)0x5b18e9,
         (CanApplyPotionToUnit)0x5df760,
+        (GetUpgradeUnitImplCheckXp)0x5d9e09,
+        (ChangeUnitXpCheckUpgrade)0x5d8704,
+        (IsUnitTierMax)0x5da04a,
+        (IsUnitLevelNotMax)0x5da1bc,
+        (IsUnitUpgradePending)0x61fb9d,
+        (GetUnitImplIdForIsoUnitImage)0x684101,
+        (GetUnitRequiredBuildings)0x61f7fe,
     },
     // Gog
     Functions{
@@ -372,6 +386,13 @@ static std::array<Functions, 4> functions = {{
         (LoadScenarioMap)0x4297e3,
         (CreateUnitFaceImage)0x5b0bdd,
         (CanApplyPotionToUnit)0x5de495,
+        (GetUpgradeUnitImplCheckXp)0x5d8b17,
+        (ChangeUnitXpCheckUpgrade)0x5d7412,
+        (IsUnitTierMax)0x5d8d58,
+        (IsUnitLevelNotMax)0x5d8eca,
+        (IsUnitUpgradePending)0x61e6d9,
+        (GetUnitImplIdForIsoUnitImage)0x682a8b,
+        (GetUnitRequiredBuildings)0x61e33a,
     },
     // Scenario Editor
     Functions{
@@ -488,6 +509,13 @@ static std::array<Functions, 4> functions = {{
         (LoadScenarioMap)nullptr,
         (CreateUnitFaceImage)0x558cd6,
         (CanApplyPotionToUnit)nullptr,
+        (GetUpgradeUnitImplCheckXp)nullptr,
+        (ChangeUnitXpCheckUpgrade)nullptr,
+        (IsUnitTierMax)0x4d585b,
+        (IsUnitLevelNotMax)0x4d59cd,
+        (IsUnitUpgradePending)0x523370,
+        (GetUnitImplIdForIsoUnitImage)0x59acea,
+        (GetUnitRequiredBuildings)0x52314a,
     },
 }};
 

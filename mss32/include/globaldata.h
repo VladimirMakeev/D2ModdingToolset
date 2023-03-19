@@ -82,6 +82,18 @@ using RacesMap = mq_c_s<Pair<CMidgardID, TRaceType*>>;
 using DynUpgradeList = List<SmartPtr<CDynUpgrade>>;
 using TextMap = mq_c_s<Pair<CMidgardID, char*>>;
 using AttackMap = mq_c_s<Pair<CMidgardID, CAttackImpl*>>;
+using BuildingMap = mq_c_s<Pair<CMidgardID, TBuildingType*>>;
+
+struct GlobalUnits
+{
+    mq_c_s<Pair<CMidgardID, TUsUnitImpl*>>* map;
+    /** Used to calculate typeIndex offset for ids of generated instances. */
+    Map<CMidgardID, std::uint32_t> indexMap;
+    /** Only counts items read from GUnits.dbf, thus excluding generated instances. */
+    std::uint32_t baseCount;
+};
+
+assert_size(GlobalUnits, 36);
 
 struct GlobalUnits
 {
@@ -129,7 +141,7 @@ struct GlobalData
     LEventEffectCategoryTable* eventEffectCategories;
     LLandmarkCategoryTable* landmarkCategories;
     LDeathAnimCategoryTable* deathAnimCategories;
-    mq_c_s<Pair<CMidgardID, TBuildingType*>>* buildings;
+    BuildingMap** buildings;
     RacesMap** races;
     mq_c_s<Pair<CMidgardID, TSubRaceType*>>* subRaces;
     mq_c_s<Pair<CMidgardID, TLordType*>>* lords;

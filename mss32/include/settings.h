@@ -139,6 +139,11 @@ struct Settings
         std::uint32_t sendRefreshInfoObjectCountLimit{0};
     } engine;
 
+    struct Battle
+    {
+        bool allowRetreatedUnitsToUpgrade{false};
+    } battle;
+
     bool debugMode;
 };
 

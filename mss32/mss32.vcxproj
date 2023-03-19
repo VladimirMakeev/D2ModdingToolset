@@ -173,6 +173,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\batattackdrainlevel.cpp" />
     <ClCompile Include="src\batattackdrainoverflow.cpp" />
     <ClCompile Include="src\batattackgiveattack.cpp" />
+    <ClCompile Include="src\batattackgroupupgrade.cpp" />
     <ClCompile Include="src\batattackshatter.cpp" />
     <ClCompile Include="src\batattacksummon.cpp" />
     <ClCompile Include="src\batattacktransformother.cpp" />
@@ -184,6 +185,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\battleattackinfo.cpp" />
     <ClCompile Include="src\battlemsgdata.cpp" />
     <ClCompile Include="src\battlemsgdatahooks.cpp" />
+    <ClCompile Include="src\battleutils.cpp" />
     <ClCompile Include="src\battleviewerinterf.cpp" />
     <ClCompile Include="src\battleviewerinterfhooks.cpp" />
     <ClCompile Include="src\batunitanim.cpp" />
@@ -229,6 +231,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\encparambasehooks.cpp" />
     <ClCompile Include="src\encyclopediapopup.cpp" />
     <ClCompile Include="src\exchangeinterfhooks.cpp" />
+    <ClCompile Include="src\groupupgradehooks.cpp" />
     <ClCompile Include="src\intintmap.cpp" />
     <ClCompile Include="src\intvector.cpp" />
     <ClCompile Include="src\button.cpp" />
@@ -570,6 +573,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batattackdrainlevel.h" />
     <ClInclude Include="include\batattackdrainoverflow.h" />
     <ClInclude Include="include\batattackgiveattack.h" />
+    <ClInclude Include="include\batattackgroupupgrade.h" />
     <ClInclude Include="include\batattackitem.h" />
     <ClInclude Include="include\batattackshatter.h" />
     <ClInclude Include="include\batattacksummon.h" />
@@ -586,6 +590,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\battleattackinfo.h" />
     <ClInclude Include="include\battlemsgdata.h" />
     <ClInclude Include="include\battlemsgdatahooks.h" />
+    <ClInclude Include="include\battleutils.h" />
     <ClInclude Include="include\battleviewerinterf.h" />
     <ClInclude Include="include\battleviewerinterfhooks.h" />
     <ClInclude Include="include\batunitanim.h" />
@@ -644,6 +649,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\ffimg.h" />
     <ClInclude Include="include\gameimagedata.h" />
     <ClInclude Include="include\groupareamanagement.h" />
+    <ClInclude Include="include\groupupgradehooks.h" />
     <ClInclude Include="include\imagedatadescriptor.h" />
     <ClInclude Include="include\imgpacker.h" />
     <ClInclude Include="include\imgpackerloader.h" />
@@ -1039,6 +1045,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\stringintlist.h" />
     <ClInclude Include="include\stringpairarrayptr.h" />
     <ClInclude Include="include\subracecat.h" />
+    <ClInclude Include="include\subracetype.h" />
     <ClInclude Include="include\summonhooks.h" />
     <ClInclude Include="include\surfacedecompressdata.h" />
     <ClInclude Include="include\intset.h" />

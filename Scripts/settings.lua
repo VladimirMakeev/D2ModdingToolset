@@ -193,6 +193,11 @@ settings = {
 		validateUnitsOnGroupChanged = false,
 	},
 
+	battle = {
+		-- Allows retreated units to upgrade (the behavior is bugged in vanilla causing non-constant and opaque behaviour)
+		allowRetreatedUnitsToUpgrade = false,
+	},
+
 	-- Create mss32 proxy dll log files with debug info
 	debugHooks = false,
 }

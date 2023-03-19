@@ -1169,6 +1169,15 @@
     <ClCompile Include="src\intintmap.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\battleutils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\groupupgradehooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\batattackgroupupgrade.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3035,6 +3044,18 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\itemextension.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\battleutils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\groupupgradehooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\batattackgroupupgrade.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\subracetype.h">
       <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>

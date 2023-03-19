@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Stanislav Egorov.
+ * Copyright (C) 2023 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,33 +17,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INTVECTOR_H
-#define INTVECTOR_H
+#ifndef SUBRACETYPE_H
+#define SUBRACETYPE_H
 
-#include "d2vector.h"
+#include "midobject.h"
+#include "subracecat.h"
+#include "textandid.h"
 
 namespace game {
 
-using IntVector = Vector<int>;
+struct TSubRaceTypeVftable;
+struct TSubRaceTypeData;
 
-namespace IntVectorApi {
-
-struct Api
+/** Holds subrace information read from GSubRace.dbf. */
+struct TSubRaceType : public IMidObjectT<TSubRaceTypeVftable>
 {
-    using Destructor = void(__thiscall*)(IntVector* thisptr);
-    Destructor destructor;
-
-    using Reserve = void(__thiscall*)(IntVector* thisptr, unsigned int count);
-    Reserve reserve;
-
-    using PushBack = void(__thiscall*)(IntVector* thisptr, int* value);
-    PushBack pushBack;
+    TSubRaceTypeData* data;
 };
 
-Api& get();
+assert_size(TSubRaceType, 12);
 
-} // namespace IntVectorApi
+struct TRaceTypeVftable : public IMidObjectVftable
+{
+    /** Assumption: can be Validate method, similar to TRaceType::Validate. */
+    void* method1;
+};
+
+assert_vftable_size(TRaceTypeVftable, 2);
+
+struct TSubRaceTypeData
+{
+    LSubRaceCategory category;
+    TextAndId name;
+};
+
+assert_size(TSubRaceTypeData, 20);
 
 } // namespace game
 
-#endif // INTVECTOR_H
+#endif // SUBRACETYPE_H

@@ -45,10 +45,13 @@
 #include "midvillage.h"
 #include "modifierutils.h"
 #include "racetype.h"
+#include "scenarioinfo.h"
 #include "settings.h"
 #include "ummodifier.h"
 #include "unitgenerator.h"
 #include "unitmodifier.h"
+#include "usleader.h"
+#include "usracialsoldier.h"
 #include "ussoldier.h"
 #include "ussoldierimpl.h"
 #include "usstackleader.h"
@@ -145,19 +148,19 @@ game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidgardID* unitImplId)
     return getUnitImpl(&globalImplId);
 }
 
-game::TUsUnitImpl* generateUnitImpl(const game::CMidgardID* globalUnitImplId, int level)
+game::TUsUnitImpl* generateUnitImpl(const game::CMidgardID* unitImplId, int level)
 {
     using namespace game;
 
-    CMidgardID unitImplId;
+    CMidgardID generatedId;
     CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
-    unitGenerator->vftable->generateUnitImplId(unitGenerator, &unitImplId, globalUnitImplId, level);
+    unitGenerator->vftable->generateUnitImplId(unitGenerator, &generatedId, unitImplId, level);
 
-    if (unitGenerator->vftable->isUnitGenerated(unitGenerator, &unitImplId)) {
-        unitGenerator->vftable->generateUnitImpl(unitGenerator, &unitImplId);
+    if (unitGenerator->vftable->isUnitGenerated(unitGenerator, &generatedId)) {
+        unitGenerator->vftable->generateUnitImpl(unitGenerator, &generatedId);
     }
 
-    return getUnitImpl(&unitImplId);
+    return getUnitImpl(&generatedId);
 }
 
 game::TUsUnitImpl* getUnitImpl(const game::CMidgardID* unitImplId)
@@ -602,18 +605,23 @@ bool isStackLeaderAndAllowedToUseBattleItems(const game::IMidgardObjectMap* obje
     return true;
 }
 
-bool hasCriticalHitLeaderAbility(const game::IUsUnit* unitImpl)
+bool hasLeaderAbility(const game::IUsUnit* unitImpl, const game::LLeaderAbility* ability)
 {
     using namespace game;
-
-    const auto& abilities{LeaderAbilityCategories::get()};
 
     auto stackLeader{gameFunctions().castUnitImplToStackLeader(unitImpl)};
     if (!stackLeader) {
         return false;
     }
 
-    return stackLeader->vftable->hasAbility(stackLeader, abilities.criticalHit);
+    return stackLeader->vftable->hasAbility(stackLeader, ability);
+}
+
+bool hasCriticalHitLeaderAbility(const game::IUsUnit* unitImpl)
+{
+    using namespace game;
+
+    return hasLeaderAbility(unitImpl, LeaderAbilityCategories::get().criticalHit);
 }
 
 bool validateUnit(game::CMidUnit* unit)
@@ -639,6 +647,157 @@ bool validateUnit(game::CMidUnit* unit)
     }
 
     return result;
+}
+
+bool canUnitGainXp(const game::IUsUnit* unitImpl)
+{
+    using namespace game;
+
+    auto unitCategory = unitImpl->vftable->getCategory(unitImpl);
+    return unitCategory->id != UnitId::Noble && unitCategory->id != UnitId::Summon
+           && unitCategory->id != UnitId::Illusion && unitCategory->id != UnitId::Guardian;
+}
+
+bool isNextUnitImpl(const game::IUsUnit* unitImpl, const game::IUsUnit* currImpl)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    if (fn.castUnitImplToLeader(currImpl)) {
+        auto leader = fn.castUnitImplToLeader(unitImpl);
+        if (leader) {
+            return *leader->vftable->getPrevUnitImplId(leader) == currImpl->id;
+        }
+    } else {
+        auto racialSoldier = fn.castUnitImplToRacialSoldier(unitImpl);
+        if (racialSoldier) {
+            return *racialSoldier->vftable->getPrevUnitImplId(racialSoldier) == currImpl->id;
+        }
+    }
+
+    return false;
+}
+
+bool hasNextTierUnitImpl(const game::IUsUnit* unitImpl)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& idApi = CMidgardIDApi::get();
+    const auto& globalApi = GlobalDataApi::get();
+
+    const auto globalData = *globalApi.getGlobalData();
+    const auto& units = globalData->units->map->data;
+    for (auto it = units.bgn; it != units.end; ++it) {
+        if (idApi.getType(&it->first) != IdType::UnitGenerated) {
+            if (isNextUnitImpl(it->second, unitImpl)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool hasMaxTierUpgradeBuilding(const game::IMidgardObjectMap* objectMap,
+                               const game::IUsUnit* unitImpl)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    auto racialSoldier = fn.castUnitImplToRacialSoldier(unitImpl);
+    if (!racialSoldier) {
+        return false;
+    }
+
+    auto upgradeBuildingId = racialSoldier->vftable->getUpgradeBuildingId(racialSoldier);
+    if (*upgradeBuildingId == emptyId) {
+        return false;
+    }
+
+    auto scenarioInfo = getScenarioInfo(objectMap);
+    return getBuildingLevel(upgradeBuildingId) >= scenarioInfo->unitMaxTier;
+}
+
+bool isNextTierUnitImpl(const game::IMidgardObjectMap* objectMap,
+                        const game::CMidPlayer* player,
+                        const game::CMidUnit* unit,
+                        const game::TUsUnitImpl* unitImpl,
+                        bool* requiresBuilding)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& idApi = CMidgardIDApi::get();
+
+    if (idApi.getType(&unitImpl->id) == IdType::UnitGenerated) {
+        return false;
+    }
+
+    if (!isNextUnitImpl(unitImpl, unit->unitImpl)) {
+        return false;
+    }
+
+    auto racialSoldier = fn.castUnitImplToRacialSoldier(unitImpl);
+    if (racialSoldier) {
+        auto upgradeBuildingId = *racialSoldier->vftable->getUpgradeBuildingId(racialSoldier);
+        if (upgradeBuildingId != emptyId) {
+            if (!player || !lordHasBuilding(&player->lordId, &upgradeBuildingId)) {
+                return false;
+            }
+
+            *requiresBuilding = !playerHasBuilding(objectMap, player, &upgradeBuildingId);
+            return true;
+        }
+    }
+
+    *requiresBuilding = false;
+    return true;
+}
+
+const game::TUsUnitImpl* getUpgradeUnitImpl(const game::IMidgardObjectMap* objectMap,
+                                            const game::CMidPlayer* player,
+                                            const game::CMidUnit* unit)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& globalApi = GlobalDataApi::get();
+    const auto& idApi = CMidgardIDApi::get();
+
+    if (!unit->dynLevel && idApi.getType(&unit->unitImpl->id) != IdType::UnitGenerated) {
+        bool requiresBuilding = false;
+        const auto globalData = *globalApi.getGlobalData();
+        const auto& units = globalData->units->map->data;
+        for (auto it = units.bgn; it != units.end; ++it) {
+            if (isNextTierUnitImpl(objectMap, player, unit, it->second, &requiresBuilding)) {
+                if (!requiresBuilding) {
+                    return it->second;
+                }
+            }
+        }
+
+        if (requiresBuilding && !hasMaxTierUpgradeBuilding(objectMap, unit->unitImpl)) {
+            return nullptr;
+        }
+    }
+
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+    return generateUnitImpl(&unit->unitImpl->id, soldier->vftable->getLevel(soldier) + 1);
+}
+
+int getGeneratedUnitImplLevelMax()
+{
+    using namespace game;
+
+    const auto& globalApi = GlobalDataApi::get();
+
+    const auto globalData = *globalApi.getGlobalData();
+    const auto units = globalData->units;
+
+    return 0xffff / units->baseCount;
 }
 
 } // namespace hooks
