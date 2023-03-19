@@ -133,6 +133,12 @@ struct Api
                                              const CMidgardID* unitId,
                                              CMidUnit* unit);
     StreamModifiers streamModifiers;
+
+    using StreamImplIdAndLevel = void(__stdcall*)(IMidgardStream** stream,
+                                                  CMidgardID* unitImplId,
+                                                  const char* idName,
+                                                  const char* levelName);
+    StreamImplIdAndLevel streamImplIdAndLevel;
 };
 
 Api& get();

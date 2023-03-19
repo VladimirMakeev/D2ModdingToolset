@@ -147,6 +147,8 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.randomDurationText = interf.value().get_or("randomDurationText", std::string());
     value.singleTurnDurationText = interf.value().get_or("singleTurnDurationText", std::string());
     value.wholeBattleDurationText = interf.value().get_or("wholeBattleDurationText", std::string());
+    value.infiniteAttack = interf.value().get_or("infiniteAttack", std::string());
+    value.infiniteText = interf.value().get_or("infiniteText", std::string());
     value.removedAttackWard = interf.value().get_or("removedAttackWard", std::string());
 }
 

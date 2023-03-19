@@ -26,6 +26,7 @@
     <summary>Allows each race to hire up to 10 new tier-1 units in cities and capital;</summary>
 
     - For each new unit, add a new column `SOLDIER_N` to `Grace.dbf`, where N starts from 6;
+    - You can specify either an unit id from `GUnits.dbf`, or the empty id `g000000000` as the column value;
     - Add scroll buttons `BTN_PG_DN`, `BTN_PG_UP`, `BTN_LIST_UP` and `BTN_LIST_DN` to unit hire dialog `DLG_HIRE_LEADER_2` in `Interf.dlg`:
     ```
     DIALOG	DLG_HIRE_LEADER_2,0,0,533,600,DLG_HIRE_LEADER_2_PHIRELEADER,_CUDEFAUL,0,0,77,3,455,551,0
@@ -86,6 +87,7 @@
     Enable `debugHooks` in [settings.lua](Scripts/settings.lua).<br />
     **Don't forget to turn it off in release package of your mod to avoid cluttering and improve performance.**
   </details>
+- Provides recommended game settings: add contents of [Disciple.ini](Examples/Disciple.ini) to `Disciple.ini`;
 
 #### User interface
 - <details>
@@ -174,6 +176,7 @@
         - Value of lower initiative;
         - Critical hit indication;
         - Effect duration;
+        - Infinite effect indication (alternative to effect duration);
         - Broken (removed) wards indication;
         - Drain attack description;
         - Custom attack sources;
@@ -189,6 +192,8 @@
         - `randomDurationText`
         - `singleTurnDurationText`
         - `wholeBattleDurationText`
+        - `infiniteAttack`
+        - `infiniteText`
         - `ratedDamage`
         - `ratedDamageEqual`
         - `ratedDamageSeparator`
@@ -216,6 +221,7 @@
         - Add `%DURATION%` keyword where you like to put the description (propose to place it after attack-name field like `...%ATTACK%%SECOND%\p0;\n%DURATION%...`);
         - The keyword is replaced with empty string if attack has instant effect;
         - Note that you can freely move content between `X005TA0787` and `X005TA0788` if you run out of length limit (because the two strings simply merged together in `X005TA0424`).
+    - (Optional) Add infinite effect indication (alternative to effect duration): enable setting 'unitEncyclopedia.displayInfiniteAttackIndicator';
     - (Optional) Add extra stats panel:
         - Add interface text to `TApp.dbf` and `TAppEdit.dbf` that contains `%XPKILL%`, `%EFFHP%` and `%REGEN%` (every keyword is optional), for example:
             ```
@@ -691,6 +697,7 @@
 - Fixes display of required buildings when multiple units have the same upgrade building;
 - Fixes stuck upgrades of foreign race mercenaries ('This unit is ready to upgrade but can not because it needs a building that is only accessible to the %RACE%'). It will now function as if 'Lock unit type' is applied;
 - Fixes errornous logic that allowed retreated units to upgrade under certain conditions. The behavior is now controllable via `battle.allowRetreatedUnitsToUpgrade` setting;
+- Fixes crash on scenario loading when level of any unit is below its template from `GUnits.dbf`, or above maximum level for generated units (restricted by total count of unit templates);
 
 ### Scripting:
 The toolset uses Lua for settings and advanced game mechanics. See [luaApi](luaApi.md) for detailed information.

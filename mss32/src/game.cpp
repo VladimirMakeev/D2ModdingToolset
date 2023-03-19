@@ -431,7 +431,7 @@ static std::array<Functions, 4> functions = {{
         (ComputeDamageWithBuffs)nullptr,
         (ComputeArmor)nullptr,
         (MarkMapPosition)nullptr,
-        (GetUnitLevelByImplId)nullptr,
+        (GetUnitLevelByImplId)0x54416b,
         (GetAttackPower)nullptr,
         (IsGroupOwnerPlayerHuman)nullptr,
         (AttackShouldMiss)nullptr,

@@ -79,9 +79,8 @@ struct CUnitGeneratorVftable
                                                          const CMidgardID* unitImplId);
     GetGlobalUnitImplId getGlobalUnitImplId;
 
-    /** Assumption: returns number of existing unit implementations. */
-    using GetUnitImplsTotal = int(__thiscall*)(CUnitGenerator* thisptr);
-    GetUnitImplsTotal getUnitImplsTotal;
+    using GetGeneratedUnitImplLevelMax = int(__thiscall*)(CUnitGenerator* thisptr);
+    GetGeneratedUnitImplLevelMax getGeneratedUnitImplLevelMax;
 };
 
 assert_vftable_size(CUnitGeneratorVftable, 6);

@@ -706,6 +706,12 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{fn.isUnitLevelNotMax, isUnitLevelNotMaxHooked});
     hooks.emplace_back(HookInfo{fn.isUnitUpgradePending, isUnitUpgradePendingHooked});
 
+    // Fixes crash on scenario loading when level of any unit is below its template from
+    // `GUnits.dbf`, or above maximum level for generated units (restricted by total count of unit
+    // templates)
+    hooks.emplace_back(
+        HookInfo{CMidUnitApi::get().streamImplIdAndLevel, midUnitStreamImplIdAndLevelHooked});
+
     return hooks;
 }
 

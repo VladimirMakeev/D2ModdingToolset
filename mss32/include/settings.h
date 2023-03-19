@@ -85,6 +85,7 @@ struct Settings
         bool displayDynamicUpgradeValues;
         bool displayBonusHp;
         bool displayBonusXp;
+        bool displayInfiniteAttackIndicator;
     } unitEncyclopedia;
 
     struct Modifiers
