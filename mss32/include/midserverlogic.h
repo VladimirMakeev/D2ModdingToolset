@@ -21,22 +21,30 @@
 #define MIDSERVERLOGIC_H
 
 #include "d2set.h"
+#include "idset.h"
 #include "midmsgsender.h"
 #include "midserverlogiccore.h"
 
 namespace game {
 
+struct CMidServerLogic;
 struct CMidServer;
 struct CStreamBits;
 struct AiLogic;
 struct CMidgardScenarioMap;
 
+/*
+ * All the fields initially point to the same parent logic. Is this some kind of enumerable
+ * collection pattern?
+ */
 struct CMidServerLogicData
 {
-    int unknown;
-    int unknown2;
-    int unknown3;
+    CMidServerLogic* logic;
+    CMidServerLogic** logic2;
+    CMidServerLogic** logic3;
 };
+
+assert_size(CMidServerLogicData, 12);
 
 struct CMidServerLogicData2
 {
@@ -124,6 +132,13 @@ struct Api
                                               const Set<CMidgardID>* objectsList,
                                               std::uint32_t playerNetId);
     SendRefreshInfo sendRefreshInfo;
+
+    using StackExchangeItem = void(__thiscall*)(CMidServerLogicData* thisptr,
+                                                const CMidgardID* playerId,
+                                                const CMidgardID* fromStackId,
+                                                const CMidgardID* toStackId,
+                                                const IdSet* itemIds);
+    StackExchangeItem stackExchangeItem;
 };
 
 Api& get();

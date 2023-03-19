@@ -453,7 +453,7 @@ static std::array<Functions, 4> functions = {{
         (GetFortOrRuinEntrance)nullptr,
         (StackCanMoveToPosition)nullptr,
         (IsWaterTileSurroundedByWater)nullptr,
-        (GetStackPositionById)nullptr,
+        (GetStackPositionById)0x4f227f,
         (ApplyPercentModifiers)0x4c7fb1,
         (GenerateAttackDescription)0x4c6fc7,
         (CreateMenuAnimation)nullptr,

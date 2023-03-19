@@ -20,8 +20,8 @@
 #ifndef IDSET_H
 #define IDSET_H
 
-#include "d2set.h"
 #include "d2pair.h"
+#include "d2set.h"
 #include "midgardid.h"
 
 namespace game {
@@ -33,6 +33,12 @@ namespace IdSetApi {
 
 struct Api
 {
+    using Constructor = IdSet*(__thiscall*)(IdSet* thisptr);
+    Constructor constructor;
+
+    using Destructor = void(__thiscall*)(IdSet* thisptr);
+    Destructor destructor;
+
     using Insert = Pair<IdSetIterator, bool>*(__thiscall*)(IdSet* thisptr,
                                                            Pair<IdSetIterator, bool>* result,
                                                            const CMidgardID* value);

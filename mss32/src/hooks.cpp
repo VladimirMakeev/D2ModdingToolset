@@ -18,6 +18,8 @@
  */
 
 #include "hooks.h"
+#include "aigiveitemsaction.h"
+#include "aigiveitemsactionhooks.h"
 #include "attackimpl.h"
 #include "attackreachcat.h"
 #include "attackutils.h"
@@ -356,6 +358,8 @@ static Hooks getGameHooks()
         // Fix inability to use heal potion on transformed unit if its current hp is greater than maximum hp of unit it is transformed to
         // (most common case is a unit transformed to Imp by a Witch while retaining his original hp)
         {fn.canApplyPotionToUnit, canApplyPotionToUnitHooked},
+        // Fix crash on AI turn when it tries to exchange items and a source stack is destroyed in battle/event while moving to destination
+        {CAiGiveItemsActionApi::vftable().action->execute, aiGiveItemsActionExecuteHooked},
         // Allow foreign race units to upgrade even if its race capital is present in scenario (functions as if the unit type is locked)
         // Allow foreign race units (including neutral) to be upgraded using capital buildings
         // Fix errornous logic that allowed retreated units to upgrade under certain conditions (introduce setting battle.allowRetreatedUnitsToUpgrade)

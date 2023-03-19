@@ -694,6 +694,7 @@
 - Fixes missing update of city encyclopedia popup dialog on visiting stack changes;
 - Fixes infamous crash in multiplayer games when observing other player's cities using encyclopedia popup dialog while the player performs unit reordering or summoning units in battle;
 - Fixes inability to use heal potion on transformed unit if its current hp is greater than maximum hp of unit it is transformed to (most common case is a unit transformed to Imp by a Witch while retaining his original hp);
+- Fixes crash on AI turn when it tries to exchange items and a source stack is destroyed in battle/event while moving to destination;
 - Fixes display of required buildings when multiple units have the same upgrade building;
 - Fixes stuck upgrades of foreign race mercenaries ('This unit is ready to upgrade but can not because it needs a building that is only accessible to the %RACE%'). It will now function as if 'Lock unit type' is applied;
 - Fixes errornous logic that allowed retreated units to upgrade under certain conditions. The behavior is now controllable via `battle.allowRetreatedUnitsToUpgrade` setting;

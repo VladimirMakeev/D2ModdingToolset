@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Stanislav Egorov.
+ * Copyright (C) 2023 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,61 +17,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "midserverlogic.h"
+#include "aimovestackaction.h"
 #include "version.h"
 #include <array>
 
-namespace game::CMidServerLogicApi {
+namespace game::CAiMoveStackActionApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
-    // Akella
-    Api{
-        (Api::GetObjectMap)0x4298aa,
-        (Api::SendRefreshInfo)0x42972f,
-        (Api::StackExchangeItem)0x41f5dc,
-    },
-    // Russobit
-    Api{
-        (Api::GetObjectMap)0x4298aa,
-        (Api::SendRefreshInfo)0x42972f,
-        (Api::StackExchangeItem)0x41f5dc,
-    },
-    // Gog
-    Api{
-        (Api::GetObjectMap)0x5a77e8,
-        (Api::SendRefreshInfo)0x42915a,
-        (Api::StackExchangeItem)0x41f0c4,
-    },
-}};
-
-static std::array<Vftable, 3> vftables = {{
+static std::array<Vftable, 4> vftables = {{
     // Akella
     Vftable{
-        (void*)0x6d00ec,
-        (IMidMsgSenderVftable*)0x6d00bc,
+        (IAiTacticActionVftable*)0x6d31e4,
+        (IAiReactionVftable*)0x6d3174,
     },
     // Russobit
     Vftable{
-        (void*)0x6d00ec,
-        (IMidMsgSenderVftable*)0x6d00bc,
+        (IAiTacticActionVftable*)0x6d31e4,
+        (IAiReactionVftable*)0x6d3174,
     },
     // Gog
     Vftable{
-        (void*)0x6ce08c,
-        (IMidMsgSenderVftable*)0x6ce05c,
+        (IAiTacticActionVftable*)0x6d1184,
+        (IAiReactionVftable*)0x6d1114,
+    },
+    // Scenario Editor
+    Vftable{
+        (IAiTacticActionVftable*)nullptr,
+        (IAiReactionVftable*)nullptr,
     },
 }};
 // clang-format on
 
-Api& get()
-{
-    return functions[static_cast<int>(hooks::gameVersion())];
-}
-
-Vftable& vftable()
+const Vftable& vftable()
 {
     return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::CMidServerLogicApi
+} // namespace game::CAiMoveStackActionApi

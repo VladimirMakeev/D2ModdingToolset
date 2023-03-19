@@ -1169,6 +1169,15 @@
     <ClCompile Include="src\intintmap.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\aigiveitemsaction.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aimovestackaction.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aigiveitemsactionhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
     <ClCompile Include="src\battleutils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -3045,6 +3054,30 @@
     </ClInclude>
     <ClInclude Include="include\itemextension.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\aitacticaction.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\aitacticactionsimple.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\aimovestackaction.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\aigiveitemsaction.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\aistack.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\aistackgeneric.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\aiattitudes.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\aigiveitemsactionhooks.h">
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\battleutils.h">
       <Filter>utils</Filter>

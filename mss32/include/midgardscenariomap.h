@@ -92,6 +92,8 @@ struct Api
 
 Api& get();
 
+IMidgardObjectMapVftable* vftable();
+
 } // namespace CMidgardScenarioMapApi
 
 } // namespace game
