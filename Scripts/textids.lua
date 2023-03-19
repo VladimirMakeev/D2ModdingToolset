@@ -152,6 +152,15 @@ textids = {
 		-- The text must contain keyword "%WARD%", or it can be an empty string to not display broken wards at all.
 		-- Fallback text is "\fMedBold;\c100;000;000;%WARD%\c000;000;000;\fNormal;".
 		removedAttackWard = "",
+
+		-- Defines text id to mark Infinite attacks in unit encyclopedia.
+		-- Fallback text is "Lasting".
+		infiniteAttack = "",
+
+		-- Defines text id to format Infinite text in unit encyclopedia.
+		-- The text must contain keywords "%ATTACK%" and "%INFINITE%".
+		-- Fallback text is "%ATTACK% (%INFINITE%)".
+		infiniteText = "",
 	},
 
 	-- Text ids related to events logic

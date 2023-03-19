@@ -21,6 +21,7 @@
 #define GLOBALDATA_H
 
 #include "d2list.h"
+#include "d2map.h"
 #include "d2pair.h"
 #include "midgardid.h"
 #include "mq_c_s.h"
@@ -81,6 +82,29 @@ using RacesMap = mq_c_s<Pair<CMidgardID, TRaceType*>>;
 using DynUpgradeList = List<SmartPtr<CDynUpgrade>>;
 using TextMap = mq_c_s<Pair<CMidgardID, char*>>;
 using AttackMap = mq_c_s<Pair<CMidgardID, CAttackImpl*>>;
+using BuildingMap = mq_c_s<Pair<CMidgardID, TBuildingType*>>;
+
+struct GlobalUnits
+{
+    mq_c_s<Pair<CMidgardID, TUsUnitImpl*>>* map;
+    /** Used to calculate typeIndex offset for ids of generated instances. */
+    Map<CMidgardID, std::uint32_t> indexMap;
+    /** Only counts items read from GUnits.dbf, thus excluding generated instances. */
+    std::uint32_t baseCount;
+};
+
+assert_size(GlobalUnits, 36);
+
+struct GlobalUnits
+{
+    mq_c_s<Pair<CMidgardID, TUsUnitImpl*>>* map;
+    /** Used to calculate typeIndex offset for ids of generated instances. */
+    Map<CMidgardID, std::uint32_t> indexMap;
+    /** Only counts items read from GUnits.dbf, thus excluding generated instances. */
+    std::uint32_t baseCount;
+};
+
+assert_size(GlobalUnits, 36);
 
 /** Holds global game information. */
 struct GlobalData
@@ -117,12 +141,12 @@ struct GlobalData
     LEventEffectCategoryTable* eventEffectCategories;
     LLandmarkCategoryTable* landmarkCategories;
     LDeathAnimCategoryTable* deathAnimCategories;
-    mq_c_s<Pair<CMidgardID, TBuildingType*>>* buildings;
+    BuildingMap** buildings;
     RacesMap** races;
     mq_c_s<Pair<CMidgardID, TSubRaceType*>>* subRaces;
     mq_c_s<Pair<CMidgardID, TLordType*>>* lords;
     mq_c_s<Pair<CMidgardID, TStrategicSpell*>>* spells;
-    mq_c_s<Pair<CMidgardID, TUsUnitImpl*>>** units;
+    GlobalUnits* units;
     mq_c_s<Pair<CMidgardID, TUnitModifier*>>* modifiers;
     AttackMap* attacks;
     mq_c_s<Pair<CMidgardID, TLandmark*>>** landmarks;
@@ -149,7 +173,7 @@ struct Api
     GetGlobalData getGlobalData;
 
     /** Searches an entity by its id. */
-    using FindById = void*(__thiscall*)(void* entityCollection, const CMidgardID* id);
+    using FindById = void*(__thiscall*)(const void* entityCollection, const CMidgardID* id);
     FindById findById;
 
     using FindItemById = const CItemBase*(__thiscall*)(TItemTypeList* thisptr,

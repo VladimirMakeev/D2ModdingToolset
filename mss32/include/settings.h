@@ -85,6 +85,7 @@ struct Settings
         bool displayDynamicUpgradeValues;
         bool displayBonusHp;
         bool displayBonusXp;
+        bool displayInfiniteAttackIndicator;
     } unitEncyclopedia;
 
     struct Modifiers
@@ -137,6 +138,11 @@ struct Settings
         // scenario, because it needs to fit to the network message buffer of 512 KB.
         std::uint32_t sendRefreshInfoObjectCountLimit{0};
     } engine;
+
+    struct Battle
+    {
+        bool allowRetreatedUnitsToUpgrade{false};
+    } battle;
 
     bool debugMode;
 };

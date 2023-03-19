@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Stanislav Egorov.
+ * Copyright (C) 2023 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,33 +17,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INTVECTOR_H
-#define INTVECTOR_H
-
-#include "d2vector.h"
+#ifndef BATATTACKGROUPUPGRADE_H
+#define BATATTACKGROUPUPGRADE_H
 
 namespace game {
 
-using IntVector = Vector<int>;
+struct CMidgardID;
+struct IMidgardObjectMap;
+struct BattleMsgData;
+struct BattleAttackInfo;
 
-namespace IntVectorApi {
+namespace CBatAttackGroupUpgradeApi {
 
 struct Api
 {
-    using Destructor = void(__thiscall*)(IntVector* thisptr);
-    Destructor destructor;
-
-    using Reserve = void(__thiscall*)(IntVector* thisptr, unsigned int count);
-    Reserve reserve;
-
-    using PushBack = void(__thiscall*)(IntVector* thisptr, int* value);
-    PushBack pushBack;
+    using UpgradeGroup = void(__stdcall*)(game::IMidgardObjectMap* objectMap,
+                                          game::BattleMsgData* battleMsgData,
+                                          const game::CMidgardID* groupId,
+                                          game::BattleAttackInfo** attackInfo,
+                                          bool playableRaceAi);
+    UpgradeGroup upgradeGroup;
 };
 
 Api& get();
 
-} // namespace IntVectorApi
+} // namespace CBatAttackGroupUpgradeApi
 
 } // namespace game
 
-#endif // INTVECTOR_H
+#endif // BATATTACKGROUPUPGRADE_H

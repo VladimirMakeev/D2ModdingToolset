@@ -152,6 +152,15 @@ std::string getOverflowText()
     return "Overflow";
 }
 
+std::string getInfiniteText()
+{
+    auto text = getInterfaceText(textIds().interf.infiniteAttack.c_str());
+    if (text.length())
+        return text;
+
+    return "Lasting";
+}
+
 std::string getAttackDurationText(const utils::AttackDescriptor& actual,
                                   const utils::AttackDescriptor& global)
 {
@@ -432,7 +441,18 @@ std::string getAttackTargetsText(game::AttackReachId id)
 std::string getAttackNameText(const utils::AttackDescriptor& actual,
                               const utils::AttackDescriptor& global)
 {
-    return getModifiedStringText(actual.name(), actual.name() != global.name());
+    auto name = getModifiedStringText(actual.name(), actual.name() != global.name());
+    if (!actual.infinite() || !userSettings().unitEncyclopedia.displayInfiniteAttackIndicator) {
+        return name;
+    }
+
+    auto result = getInterfaceText(textIds().interf.infiniteText.c_str());
+    if (result.empty())
+        result = "%ATTACK% (%INFINITE%)";
+
+    replace(result, "%ATTACK%", name);
+    replace(result, "%INFINITE%", getModifiedStringText(getInfiniteText(), !global.infinite()));
+    return result;
 }
 
 void addDynUpgradeText(std::string& description,

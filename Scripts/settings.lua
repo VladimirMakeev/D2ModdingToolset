@@ -157,6 +157,10 @@ settings = {
 		-- Additional display of experience points reduction
 		-- Requires detailedUnitDescription
 		displayBonusXp = false,
+		
+		-- Display infinite effect indicator along with attack name (alternative to effect duration)
+		-- Requires detailedUnitDescription
+		displayInfiniteAttackIndicator = false,
 	},
 
 	-- Fix effective unit hp computation
@@ -187,6 +191,11 @@ settings = {
 		-- to resolve issues with custom HP / XP modifiers, that depend on other units (like auras in MNS mod).
 		-- Keep it disabled if you don't need it to improve general performance.
 		validateUnitsOnGroupChanged = false,
+	},
+
+	battle = {
+		-- Allows retreated units to upgrade (the behavior is bugged in vanilla causing non-constant and opaque behaviour)
+		allowRetreatedUnitsToUpgrade = false,
 	},
 
 	-- Create mss32 proxy dll log files with debug info

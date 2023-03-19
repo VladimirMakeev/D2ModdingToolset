@@ -25,6 +25,7 @@
 namespace game {
 struct CMidgardID;
 struct IMidgardObjectMap;
+struct IMidgardStream;
 struct IMidgardStreamEnv;
 struct IUsUnit;
 struct CMidUnit;
@@ -72,6 +73,11 @@ bool __stdcall addModifiersHooked(const game::IdList* value,
                                   bool skipInapplicable);
 
 bool __stdcall removeModifiersHooked(game::IUsUnit** unitImpl);
+
+void __stdcall midUnitStreamImplIdAndLevelHooked(game::IMidgardStream** stream,
+                                                 game::CMidgardID* unitImplId,
+                                                 const char* idName,
+                                                 const char* levelName);
 
 } // namespace hooks
 

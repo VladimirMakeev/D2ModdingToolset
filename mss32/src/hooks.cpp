@@ -30,6 +30,7 @@
 #include "batattackdrainlevel.h"
 #include "batattackdrainoverflow.h"
 #include "batattackgiveattack.h"
+#include "batattackgroupupgrade.h"
 #include "batattackshatter.h"
 #include "batattacksummon.h"
 #include "batattacktransformother.h"
@@ -86,9 +87,11 @@
 #include "fortification.h"
 #include "gameutils.h"
 #include "globaldata.h"
+#include "groupupgradehooks.h"
 #include "idlist.h"
 #include "interfmanager.h"
 #include "interftexthooks.h"
+#include "intvector.h"
 #include "isoenginegroundhooks.h"
 #include "itembase.h"
 #include "itemcategory.h"
@@ -357,6 +360,12 @@ static Hooks getGameHooks()
         {fn.canApplyPotionToUnit, canApplyPotionToUnitHooked},
         // Fix crash on AI turn when it tries to exchange items and a source stack is destroyed in battle/event while moving to destination
         {CAiGiveItemsActionApi::vftable().action->execute, aiGiveItemsActionExecuteHooked},
+        // Allow foreign race units to upgrade even if its race capital is present in scenario (functions as if the unit type is locked)
+        // Allow foreign race units (including neutral) to be upgraded using capital buildings
+        // Fix errornous logic that allowed retreated units to upgrade under certain conditions (introduce setting battle.allowRetreatedUnitsToUpgrade)
+        {CBatAttackGroupUpgradeApi::get().upgradeGroup, upgradeGroupHooked},
+        {fn.getUpgradeUnitImplCheckXp, getUpgradeUnitImplCheckXpHooked},
+        {fn.changeUnitXpCheckUpgrade, changeUnitXpCheckUpgradeHooked},
     };
     // clang-format on
 
@@ -691,6 +700,21 @@ Hooks getHooks()
     // Fix infamous crash in multiplayer with city encyclopedia when observing other player's cities
     hooks.emplace_back(
         HookInfo{CEncLayoutCityApi::get().updateGroupUi, encLayoutCityUpdateGroupUiHooked});
+
+    // Fix display of required buildings when multiple units have the same upgrade building
+    hooks.emplace_back(HookInfo{fn.getUnitRequiredBuildings, getUnitRequiredBuildingsHooked});
+
+    // Allow foreign race units to upgrade even if its race capital is present in scenario (functions as if the unit type is locked)
+    // Allow foreign race units (including neutral) to be upgraded using capital buildings
+    hooks.emplace_back(HookInfo{fn.isUnitTierMax, isUnitTierMaxHooked});
+    hooks.emplace_back(HookInfo{fn.isUnitLevelNotMax, isUnitLevelNotMaxHooked});
+    hooks.emplace_back(HookInfo{fn.isUnitUpgradePending, isUnitUpgradePendingHooked});
+
+    // Fixes crash on scenario loading when level of any unit is below its template from
+    // `GUnits.dbf`, or above maximum level for generated units (restricted by total count of unit
+    // templates)
+    hooks.emplace_back(
+        HookInfo{CMidUnitApi::get().streamImplIdAndLevel, midUnitStreamImplIdAndLevelHooked});
 
     return hooks;
 }
@@ -1066,8 +1090,9 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
         return true;
     }
 
-    const auto units = *globalData->units;
-    for (auto current = units->data.bgn, end = units->data.end; current != end; ++current) {
+    const auto units = globalData->units;
+    for (auto current = units->map->data.bgn, end = units->map->data.end; current != end;
+         ++current) {
         const auto unitImpl = current->second;
         auto soldier = fn.castUnitImplToSoldier(unitImpl);
         if (!soldier) {
@@ -1084,7 +1109,7 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
         }
 
         auto upgradeBuildingId = racialSoldier->vftable->getUpgradeBuildingId(racialSoldier);
-        if (!upgradeBuildingId) {
+        if (*upgradeBuildingId == emptyId) {
             continue;
         }
 
@@ -1101,19 +1126,7 @@ bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
             continue;
         }
 
-        auto buildingType = (const TBuildingType*)global.findById(globalData->buildings,
-                                                                  upgradeBuildingId);
-        if (!buildingType) {
-            continue;
-        }
-
-        auto upgBuilding = (const TBuildingUnitUpgType*)
-            dynamicCast(buildingType, 0, rtti.TBuildingTypeType, rtti.TBuildingUnitUpgTypeType, 0);
-        if (!upgBuilding) {
-            continue;
-        }
-
-        if (upgBuilding->level <= hireTierMax) {
+        if (getBuildingLevel(upgradeBuildingId) <= hireTierMax) {
             list.pushBack(hireList, &current->first);
         }
     }
@@ -2279,6 +2292,169 @@ game::CanApplyPotionResult __stdcall canApplyPotionToUnitHooked(
     }
 
     return CanApplyPotionResult::Ok;
+}
+
+void __stdcall getUnitRequiredBuildingsHooked(const game::IMidgardObjectMap* objectMap,
+                                              const game::CMidgardID* playerId,
+                                              const game::IUsUnit* unitImpl,
+                                              game::Vector<game::TBuildingType*>* result)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& globalDataApi = GlobalDataApi::get();
+    const auto& intVectorApi = IntVectorApi::get();
+
+    const GlobalData* globalData = *globalDataApi.getGlobalData();
+    auto player = getPlayer(objectMap, playerId);
+
+    const auto& units = globalData->units->map->data;
+    const auto& buildings = (*globalData->buildings)->data;
+    for (auto building = buildings.bgn; building != buildings.end; ++building) {
+        for (auto unit = units.bgn; unit != units.end; ++unit) {
+            auto racialSoldier = fn.castUnitImplToRacialSoldier(unit->second);
+            if (racialSoldier) {
+                auto upgradeBuildingId = racialSoldier->vftable->getUpgradeBuildingId(
+                    racialSoldier);
+                if (*upgradeBuildingId == building->first) {
+                    auto prevUnitImplId = racialSoldier->vftable->getPrevUnitImplId(racialSoldier);
+                    if (*prevUnitImplId == unitImpl->id) {
+                        if (!player || lordHasBuilding(&player->lordId, &building->first)) {
+                            intVectorApi.pushBack((IntVector*)result, (int*)&building->second);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+const game::TUsUnitImpl* __stdcall getUpgradeUnitImplCheckXpHooked(
+    const game::IMidgardObjectMap* objectMap,
+    const game::CMidUnit* unit)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+    if (unit->currentXp < soldier->vftable->getXpNext(soldier)) {
+        return nullptr;
+    }
+
+    return getUpgradeUnitImpl(objectMap, getPlayerByUnitId(objectMap, &unit->id), unit);
+}
+
+bool __stdcall changeUnitXpCheckUpgradeHooked(game::IMidgardObjectMap* objectMap,
+                                              const game::CMidgardID* playerId,
+                                              const game::CMidgardID* unitId,
+                                              int amount)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& visitors = VisitorApi::get();
+
+    auto unit = static_cast<const CMidUnit*>(
+        objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+    int xpNext = soldier->vftable->getXpNext(soldier);
+
+    int xpAmount = amount;
+    if (unit->currentXp + xpAmount >= xpNext) {
+        if (!getUpgradeUnitImpl(objectMap, getPlayer(objectMap, playerId), unit)) {
+            xpAmount = xpNext - unit->currentXp - 1;
+        }
+    }
+
+    return visitors.changeUnitXp(unitId, xpAmount, objectMap, 1);
+}
+
+bool __stdcall isUnitTierMaxHooked(const game::IMidgardObjectMap* objectMap,
+                                   const game::CMidgardID* playerId,
+                                   const game::CMidgardID* unitId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    if (fn.isPlayerRaceUnplayable(playerId, objectMap)) {
+        return true;
+    }
+
+    auto unit = static_cast<const CMidUnit*>(
+        objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+    if (unit->dynLevel) {
+        return true;
+    }
+
+    if (!canUnitGainXp(unit->unitImpl)) {
+        return true;
+    }
+
+    if (hasMaxTierUpgradeBuilding(objectMap, unit->unitImpl)) {
+        return true;
+    }
+
+    return hasNextTierUnitImpl(unit->unitImpl) == false;
+}
+
+bool __stdcall isUnitLevelNotMaxHooked(const game::IMidgardObjectMap* objectMap,
+                                       const game::CMidgardID* playerId,
+                                       const game::CMidgardID* unitId)
+{
+    // Originally calls isUnitTierMax, but it is already getting called before this function
+    // everywhere in the game code, so the excessive call is removed from here.
+
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    auto unit = static_cast<const CMidUnit*>(
+        objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+    if (!canUnitGainXp(unit->unitImpl)) {
+        return false;
+    }
+
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+    auto soldierLevel = soldier->vftable->getLevel(soldier);
+    if (soldierLevel == getGeneratedUnitImplLevelMax()) {
+        return false;
+    }
+
+    auto stackLeader = fn.castUnitImplToStackLeader(unit->unitImpl);
+    if (stackLeader) {
+        auto scenarioInfo = getScenarioInfo(objectMap);
+        if (!scenarioInfo) {
+            return false;
+        }
+
+        return soldierLevel < scenarioInfo->leaderMaxLevel;
+    }
+
+    return soldierLevel < *gameRestrictions().unitMaxLevel;
+}
+
+bool __stdcall isUnitUpgradePendingHooked(const game::CMidgardID* unitId,
+                                          const game::IMidgardObjectMap* objectMap)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    auto unit = static_cast<const CMidUnit*>(
+        objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+
+    auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
+    if (unit->currentXp == soldier->vftable->getXpNext(soldier) - 1) {
+        auto playerId = getPlayerIdByUnitId(objectMap, unitId);
+        if (fn.isUnitLevelNotMax(objectMap, &playerId, unitId)) {
+            return getUpgradeUnitImpl(objectMap, getPlayer(objectMap, &playerId), unit) == nullptr;
+        }
+    }
+
+    return false;
 }
 
 } // namespace hooks

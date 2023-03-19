@@ -31,24 +31,11 @@
 
 namespace game {
 
-using BuildListDataNode = SetNode<CMidgardID>;
-
-assert_size(BuildListDataNode, 20);
-
-using BuildListData = Set<CMidgardID>;
-
-assert_size(BuildListData, 28);
-
-/** Name and meaning were assumed. */
-using BuildListIterator = SetIterator<CMidgardID>;
-
-assert_size(BuildListIterator, 12);
-
 /** Holds information read from GBuiList.dbf. */
 struct TLordTypeBuildList
 {
-    CMidgardID buildingId;
-    BuildListData data;
+    CMidgardID lordId;
+    Set<CMidgardID> data;
 };
 
 assert_size(TLordTypeBuildList, 32);

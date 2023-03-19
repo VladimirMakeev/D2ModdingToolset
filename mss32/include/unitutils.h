@@ -37,6 +37,8 @@ struct BattleMsgData;
 struct CDynUpgrade;
 struct IUsUnitExtension;
 struct TypeDescriptor;
+struct LLeaderAbility;
+struct CMidPlayer;
 } // namespace game
 
 namespace hooks {
@@ -49,7 +51,7 @@ void getSoldierAttackSourceImmunities(const game::LImmuneCat* immuneCat,
 bool isUnitSmall(const game::CMidUnit* unit);
 game::CMidgardID getGlobalUnitImplId(const game::CMidgardID* unitImplId);
 game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidgardID* unitImplId);
-game::TUsUnitImpl* generateUnitImpl(const game::CMidgardID* globalUnitImplId, int level);
+game::TUsUnitImpl* generateUnitImpl(const game::CMidgardID* unitImplId, int level);
 game::TUsUnitImpl* getUnitImpl(const game::CMidgardID* unitImplId);
 game::TUsUnitImpl* getUnitImpl(const game::IUsUnit* unit);
 game::TUsSoldierImpl* getSoldierImpl(const game::IUsUnit* unit);
@@ -89,10 +91,32 @@ void updateAttackCountAfterTransformation(game::BattleMsgData* battleMsgData,
 bool isStackLeaderAndAllowedToUseBattleItems(const game::IMidgardObjectMap* objectMap,
                                              const game::CMidgardID* unitId,
                                              const game::BattleMsgData* battleMsgData);
+bool hasLeaderAbility(const game::IUsUnit* unitImpl, const game::LLeaderAbility* ability);
 bool hasCriticalHitLeaderAbility(const game::IUsUnit* unitImpl);
 
 /** Returns true if the unit is changed during validation. */
 bool validateUnit(game::CMidUnit* unit);
+
+bool canUnitGainXp(const game::IUsUnit* unitImpl);
+
+bool isNextUnitImpl(const game::IUsUnit* unitImpl, const game::IUsUnit* prevImpl);
+
+bool hasNextTierUnitImpl(const game::IUsUnit* unitImpl);
+
+bool hasMaxTierUpgradeBuilding(const game::IMidgardObjectMap* objectMap,
+                               const game::IUsUnit* unitImpl);
+
+bool isNextTierUnitImpl(const game::IMidgardObjectMap* objectMap,
+                        const game::CMidPlayer* player,
+                        const game::CMidUnit* unit,
+                        const game::TUsUnitImpl* unitImpl,
+                        bool* requiresBuilding);
+
+const game::TUsUnitImpl* getUpgradeUnitImpl(const game::IMidgardObjectMap* objectMap,
+                                            const game::CMidPlayer* player,
+                                            const game::CMidUnit* unit);
+
+int getGeneratedUnitImplLevelMax();
 
 } // namespace hooks
 

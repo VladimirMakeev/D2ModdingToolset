@@ -734,6 +734,25 @@ static std::string getNbbatField(game::IEncUnitDescriptor* descriptor)
     return result;
 }
 
+static bool lordHasAnyRequiredBuilding(game::IEncUnitDescriptor* descriptor,
+                                       const game::CMidgardID* lordId)
+{
+    using namespace game;
+
+    Vector<TBuildingType*> buildings{};
+    IntVectorApi::get().reserve((IntVector*)&buildings, 1);
+    descriptor->vftable->getUnitRequiredBuildings(descriptor, &buildings);
+
+    for (auto it = buildings.bgn; it != buildings.end; ++it) {
+        auto buildingId = (*it)->id;
+        if (lordHasBuilding(lordId, &buildingId)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 static std::string getBuildingField(game::IEncUnitDescriptor* descriptor)
 {
     using namespace game;
@@ -952,12 +971,12 @@ static void setTxtNeedUpgrade(game::CEncLayoutUnit* layout, bool* needUpgrade)
     *needUpgrade = false;
 
     std::string text;
-    if (descriptor->vftable->canUnitLevelUp(descriptor)) {
+    if (descriptor->vftable->isUnitUpgradePending(descriptor)) {
         auto unit = fn.findUnitById(objectMap, &data->unitId);
         auto soldier = fn.castUnitImplToSoldier(unit->unitImpl);
         auto player = getPlayerByUnitId(objectMap, &data->unitId);
 
-        if (player->raceId == *soldier->vftable->getRaceId(soldier)) {
+        if (player && lordHasAnyRequiredBuilding(descriptor, &player->lordId)) {
             // You must build the %BUILDING% in your capital to upgrade this unit.
             text = getInterfaceText("X005TA0513");
             replace(text, "%BUILDING%", getBuildingField(descriptor));

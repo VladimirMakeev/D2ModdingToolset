@@ -62,6 +62,9 @@ struct LRaceCategory;
 struct CMidgardScenarioMap;
 struct IMidgardStreamEnv;
 struct CMidStreamEnvFile;
+struct IUsUnit;
+struct TBuildingType;
+struct TUsUnitImpl;
 
 enum class BuildingBranchNumber : int;
 enum class CanApplyPotionResult : int;
@@ -267,6 +270,31 @@ game::CanApplyPotionResult __stdcall canApplyPotionToUnitHooked(
     const game::CMidgardID* unitId,
     const game::CMidgardID* groupId,
     const game::CMidgardID* itemId);
+
+void __stdcall getUnitRequiredBuildingsHooked(const game::IMidgardObjectMap* objectMap,
+                                              const game::CMidgardID* playerId,
+                                              const game::IUsUnit* unitImpl,
+                                              game::Vector<game::TBuildingType*>* result);
+
+const game::TUsUnitImpl* __stdcall getUpgradeUnitImplCheckXpHooked(
+    const game::IMidgardObjectMap* objectMap,
+    const game::CMidUnit* unit);
+
+bool __stdcall changeUnitXpCheckUpgradeHooked(game::IMidgardObjectMap* objectMap,
+                                              const game::CMidgardID* playerId,
+                                              const game::CMidgardID* unitId,
+                                              int amount);
+
+bool __stdcall isUnitTierMaxHooked(const game::IMidgardObjectMap* objectMap,
+                                   const game::CMidgardID* playerId,
+                                   const game::CMidgardID* unitId);
+
+bool __stdcall isUnitLevelNotMaxHooked(const game::IMidgardObjectMap* objectMap,
+                                       const game::CMidgardID* playerId,
+                                       const game::CMidgardID* unitId);
+
+bool __stdcall isUnitUpgradePendingHooked(const game::CMidgardID* unitId,
+                                          const game::IMidgardObjectMap* objectMap);
 
 } // namespace hooks
 

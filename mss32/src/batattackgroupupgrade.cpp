@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Stanislav Egorov.
+ * Copyright (C) 2023 Stanislav Egorov.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,33 +17,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INTVECTOR_H
-#define INTVECTOR_H
+#include "batattackgroupupgrade.h"
+#include "version.h"
+#include <array>
 
-#include "d2vector.h"
+namespace game::CBatAttackGroupUpgradeApi {
 
-namespace game {
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::UpgradeGroup)0x666797,
+    },
+    // Russobit
+    Api{
+        (Api::UpgradeGroup)0x666797,
+    },
+    // Gog
+    Api{
+        (Api::UpgradeGroup)0x665217,
+    },
+    // Scenario Editor
+    Api{
+    },
+}};
+// clang-format on
 
-using IntVector = Vector<int>;
-
-namespace IntVectorApi {
-
-struct Api
+Api& get()
 {
-    using Destructor = void(__thiscall*)(IntVector* thisptr);
-    Destructor destructor;
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
 
-    using Reserve = void(__thiscall*)(IntVector* thisptr, unsigned int count);
-    Reserve reserve;
-
-    using PushBack = void(__thiscall*)(IntVector* thisptr, int* value);
-    PushBack pushBack;
-};
-
-Api& get();
-
-} // namespace IntVectorApi
-
-} // namespace game
-
-#endif // INTVECTOR_H
+} // namespace game::CBatAttackGroupUpgradeApi

@@ -98,6 +98,9 @@ static void readUnitEncyclopediaSettings(const sol::table& table, Settings::Unit
                                                     def.displayDynamicUpgradeValues);
     value.displayBonusHp = readSetting(category.value(), "displayBonusHp", def.displayBonusHp);
     value.displayBonusXp = readSetting(category.value(), "displayBonusXp", def.displayBonusXp);
+    value.displayInfiniteAttackIndicator = readSetting(category.value(),
+                                                       "displayInfiniteAttackIndicator",
+                                                       def.displayInfiniteAttackIndicator);
 }
 
 static void readModifierSettings(const sol::table& table, Settings::Modifiers& value)
@@ -212,6 +215,21 @@ static void readEngineSettings(const sol::table& table, Settings::Engine& value)
                                                         def.sendRefreshInfoObjectCountLimit);
 }
 
+static void readBattleSettings(const sol::table& table, Settings::Battle& value)
+{
+    const auto& def = defaultSettings().battle;
+
+    auto category = table.get<sol::optional<sol::table>>("battle");
+    if (!category.has_value()) {
+        value = def;
+        return;
+    }
+
+    value.allowRetreatedUnitsToUpgrade = readSetting(category.value(),
+                                                     "allowRetreatedUnitsToUpgrade",
+                                                     def.allowRetreatedUnitsToUpgrade);
+}
+
 static void readSettings(const sol::table& table, Settings& settings)
 {
     // clang-format off
@@ -258,6 +276,7 @@ static void readSettings(const sol::table& table, Settings& settings)
     readLobbySettings(table, settings.lobby);
     readDebugSettings(table, settings.debug);
     readEngineSettings(table, settings.engine);
+    readBattleSettings(table, settings.battle);
 }
 
 const Settings& baseSettings()
@@ -307,6 +326,7 @@ const Settings& baseSettings()
         settings.unitEncyclopedia.displayDynamicUpgradeValues = false;
         settings.unitEncyclopedia.displayBonusHp = false;
         settings.unitEncyclopedia.displayBonusXp = false;
+        settings.unitEncyclopedia.displayInfiniteAttackIndicator = false;
         settings.fixEffectiveHpFormula = false;
         settings.modifiers.cumulativeUnitRegeneration = false;
         settings.modifiers.notifyModifiersChanged = false;
