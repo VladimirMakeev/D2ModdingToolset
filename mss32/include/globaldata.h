@@ -95,17 +95,6 @@ struct GlobalUnits
 
 assert_size(GlobalUnits, 36);
 
-struct GlobalUnits
-{
-    mq_c_s<Pair<CMidgardID, TUsUnitImpl*>>* map;
-    /** Used to calculate typeIndex offset for ids of generated instances. */
-    Map<CMidgardID, std::uint32_t> indexMap;
-    /** Only counts items read from GUnits.dbf, thus excluding generated instances. */
-    std::uint32_t baseCount;
-};
-
-assert_size(GlobalUnits, 36);
-
 /** Holds global game information. */
 struct GlobalData
 {
