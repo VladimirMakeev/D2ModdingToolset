@@ -20,7 +20,7 @@
     ![Demo video](https://user-images.githubusercontent.com/5180699/218980554-b2eae5dd-efac-4b96-9eb8-918333da5487.mp4)
 
     - Create custom category records `L_FIGHTER`, `L_MAGE`, `L_ARCHER`, `L_SPECIAL` and `L_CUSTOM` ('Other buildings') in `Lbuild.dbf`;
-    - Set corresponding category number in `CATEGORY` field and empty id `g000000000` in `REQUIRED` field for desired sideshow buildings in `Gbuild.dbf`;
+    - Set corresponding category number in `CATEGORY` field and empty id `g000000000` in `REQUIRED` field for desired sideshow buildings in `Gbuild.dbf`. *Note* that you only need to change the first building in a tree: for example, in case of the 'Elven Alliance', you only need these changes for 'Aviary' building that enlists 'Griffins', while 'Volary' should be left unchanged.
   </details>
 - <details>
     <summary>Allows each race to hire up to 10 new tier-1 units in cities and capital;</summary>
