@@ -24,6 +24,8 @@
 #include "game.h"
 #include "gameutils.h"
 #include "midunit.h"
+#include "settings.h"
+#include "unitutils.h"
 #include "usunitimpl.h"
 #include "visitors.h"
 
@@ -88,12 +90,15 @@ bool changeUnitXpTryUpgrade(game::IMidgardObjectMap* objectMap,
 
     auto previousXp = unit->currentXp;
     fn.changeUnitXpCheckUpgrade(objectMap, playerId, &unitId, xpReceived);
-    xpReceived = unit->currentXp - previousXp;
+    int xpAdded = unit->currentXp - previousXp;
 
     if (upgradeUnit(objectMap, unit, groupId, attackInfo)) {
         unitInfo->unitHp = unit->currentHp;
+        if (userSettings().battle.carryXpOverUpgrade) {
+            xpAdded += addUnitXpNoUpgrade(objectMap, unit, xpReceived - xpAdded);
+        }
     }
-    unitInfo->unitXp = xpReceived;
+    unitInfo->unitXp = xpAdded;
     return true;
 }
 

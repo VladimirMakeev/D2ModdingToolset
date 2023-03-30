@@ -228,6 +228,8 @@ static void readBattleSettings(const sol::table& table, Settings::Battle& value)
     value.allowRetreatedUnitsToUpgrade = readSetting(category.value(),
                                                      "allowRetreatedUnitsToUpgrade",
                                                      def.allowRetreatedUnitsToUpgrade);
+    value.carryXpOverUpgrade = readSetting(category.value(), "carryXpOverUpgrade",
+                                           def.carryXpOverUpgrade);
 }
 
 static void readSettings(const sol::table& table, Settings& settings)
