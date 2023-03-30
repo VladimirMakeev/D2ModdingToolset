@@ -469,6 +469,13 @@
     Note that this also works in pure vanilla version.
   </details>
 - <details>
+    <summary>Allows to carry extra XP received over unit's upgrade (limited to value required for the next upgrade minus 1);</summary>
+    
+    ![Demo video](https://user-images.githubusercontent.com/5180699/228959454-8535959d-e617-41b0-9e0f-e6220112ba6b.mp4)
+    
+    - Enable `battle.carryXpOverUpgrade` in [settings.lua](Scripts/settings.lua).
+  </details>
+- <details>
     <summary>Supports custom attack sources;</summary>
     **Note** that the total number of attack sources (including the base 8) cannot exceed 32 due to game limitations.<br />
 
