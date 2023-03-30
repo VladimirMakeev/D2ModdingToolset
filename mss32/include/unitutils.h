@@ -118,6 +118,8 @@ const game::TUsUnitImpl* getUpgradeUnitImpl(const game::IMidgardObjectMap* objec
 
 int getGeneratedUnitImplLevelMax();
 
+int addUnitXpNoUpgrade(game::IMidgardObjectMap* objectMap, game::CMidUnit* unit, int value);
+
 } // namespace hooks
 
 #endif // UNITUTILS_H

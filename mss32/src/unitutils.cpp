@@ -57,6 +57,7 @@
 #include "usstackleader.h"
 #include "usunitimpl.h"
 #include "utils.h"
+#include "visitors.h"
 #include <fmt/format.h>
 
 namespace hooks {
@@ -798,6 +799,25 @@ int getGeneratedUnitImplLevelMax()
     const auto units = globalData->units;
 
     return 0xffff / units->baseCount;
+}
+
+int addUnitXpNoUpgrade(game::IMidgardObjectMap* objectMap, game::CMidUnit* unit, int value)
+{
+    using namespace game;
+
+    if (value == 0) {
+        return 0;
+    }
+
+    auto soldier = gameFunctions().castUnitImplToSoldier(unit->unitImpl);
+    auto xpNext = soldier->vftable->getXpNext(soldier);
+
+    auto xpAmount = value < xpNext ? value : xpNext - 1;
+    if (!VisitorApi::get().changeUnitXp(&unit->id, xpAmount, objectMap, 1)) {
+        return 0;
+    }
+
+    return xpAmount;
 }
 
 } // namespace hooks
