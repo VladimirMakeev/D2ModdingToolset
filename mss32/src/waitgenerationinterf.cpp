@@ -29,7 +29,7 @@ static void __fastcall waitCancelButtonHandler(WaitGenerationInterf* thisptr, in
     thisptr->onCanceled(thisptr->menu);
 }
 
-WaitGenerationInterf* createWaitGenerationInterf(CMenuRandomScenarioSingle* menu,
+WaitGenerationInterf* createWaitGenerationInterf(CMenuRandomScenario* menu,
                                                  OnGenerationCanceled onCanceled)
 {
     using namespace game;

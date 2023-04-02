@@ -48,7 +48,7 @@ struct CMenuPhaseData
     ScenarioDataArrayWrapped* scenarios;
     SmartPtr<IMqImage2> transitionAnimation;
     int maxPlayers;
-    bool loadScenario;
+    bool networkGame;
     bool host;
     bool useGameSpy;
     char padding2;

@@ -17,27 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef WAITGENERATIONINTERF_H
-#define WAITGENERATIONINTERF_H
+#ifndef MENURANDOMSCENARIOMULTI_H
+#define MENURANDOMSCENARIOMULTI_H
 
-#include "popupdialoginterf.h"
+namespace game {
+struct CMenuBase;
+struct CMenuPhase;
+} // namespace game
 
 namespace hooks {
 
-struct CMenuRandomScenario;
+game::CMenuBase* __stdcall createMenuRandomScenarioMulti(game::CMenuPhase* menuPhase);
 
-using OnGenerationCanceled = void (*)(CMenuRandomScenario* thisptr);
+}
 
-/** Represents 'DLG_WAIT_GENERATION' from Interf.dlg */
-struct WaitGenerationInterf : public game::CPopupDialogInterf
-{
-    OnGenerationCanceled onCanceled;
-    CMenuRandomScenario* menu;
-};
-
-WaitGenerationInterf* createWaitGenerationInterf(CMenuRandomScenario* menu,
-                                                 OnGenerationCanceled onCanceled);
-
-} // namespace hooks
-
-#endif // WAITGENERATIONINTERF_H
+#endif // MENURANDOMSCENARIOMULTI_H

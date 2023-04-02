@@ -21,6 +21,7 @@
 #include "log.h"
 #include "menucustomlobby.h"
 #include "menuphase.h"
+#include "menurandomscenariomulti.h"
 #include "menurandomscenariosingle.h"
 #include "midgard.h"
 #include "originalfunctions.h"
@@ -191,10 +192,34 @@ void __fastcall menuPhaseSetTransitionHooked(game::CMenuPhase* thisptr,
                 menuPhase.showFullScreenAnimation(thisptr, &data->transitionNumber,
                                                   &data->interfManager, &data->currentMenu, 37,
                                                   "TRANS_NEWQUEST2RNDSINGLE");
+            } else if (next == 2) {
+                // CMenuNewSkirmishMulti -> CMenuRandomScenarioMulti
+                menuPhase.showFullScreenAnimation(thisptr, &data->transitionNumber,
+                                                  &data->interfManager, &data->currentMenu, 41,
+                                                  "TRANS_HOST2RNDMULTI");
             } else {
                 logError("mssProxyError.log", "Invalid next transition from state 6");
                 return;
             }
+            break;
+        }
+        case 41: {
+            // CMenuRandomScenarioMulti animation state
+            logDebug("transitions.log", "current is 41");
+
+            // Create random scenario multi menu window during fullscreen animaation
+            CreateMenuCallback tmp = createMenuRandomScenarioMulti;
+            CreateMenuCallback* callback = &tmp;
+            logDebug("transitions.log", "Try to transition to 42");
+            menuPhase.doTransition(thisptr, &data->transitionNumber, &data->interfManager,
+                                   &data->currentMenu, &data->transitionAnimation, 42, nullptr,
+                                   &callback);
+            break;
+        }
+        case 42: {
+            // CMenuRandomScenarioMulti state
+            logDebug("transitions.log", "current is 42, switch to 15");
+            menuPhase.switchTo15Or28(thisptr);
             break;
         }
         case 37: {
