@@ -93,6 +93,7 @@
 #include "menuloadskirmishmultihooks.h"
 #include "menunewskirmishhooks.h"
 #include "menunewskirmishhotseathooks.h"
+#include "menunewskirmishmultihooks.h"
 #include "menunewskirmishsingle.h"
 #include "menunewskirmishsinglehooks.h"
 #include "menuphasehooks.h"
@@ -188,6 +189,7 @@ static Hooks getGameHooks()
         // Random scenario generator
         {CMenuNewSkirmishSingleApi::get().constructor, menuNewSkirmishSingleCtorHooked, (void**)&orig.menuNewSkirmishSingleCtor},
         {CMenuNewSkirmishHotseatApi::get().constructor, menuNewSkirmishHotseatCtorHooked, (void**)&orig.menuNewSkirmishHotseatCtor},
+        {CMenuNewSkirmishMultiApi::get().constructor, menuNewSkirmishMultiCtorHooked, (void**)&orig.menuNewSkirmishMultiCtor},
         // Random scenario generator templates
         {CMenuPhaseApi::get().constructor, menuPhaseCtorHooked, (void**)&orig.menuPhaseCtor},
         {CMenuPhaseApi::vftable()->destructor, menuPhaseDtorHooked, (void**)&orig.menuPhaseDtor},

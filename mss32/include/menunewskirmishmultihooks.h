@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Vladimir Makeev.
+ * Copyright (C) 2023 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,35 +17,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "menunewskirmishmulti.h"
-#include "version.h"
-#include <array>
+#ifndef MENUNEWSKIRMISHMULTIHOOKS_H
+#define MENUNEWSKIRMISHMULTIHOOKS_H
 
-namespace game::CMenuNewSkirmishMultiApi {
+namespace game {
+struct CMenuNewSkirmishMulti;
+struct CMenuPhase;
+} // namespace game
 
-// clang-format off
-static std::array<Api, 3> functions = {{
-    // Akella
-    Api{
-        (Api::CreateServer)0x4ea31b,
-        (Api::Constructor)0x4ea0d6,
-    },
-    // Russobit
-    Api{
-        (Api::CreateServer)0x4ea31b,
-        (Api::Constructor)0x4ea0d6,
-    },
-    // Gog
-    Api{
-        (Api::CreateServer)0x4e97b6,
-        (Api::Constructor)0x4e9571,
-    },
-}};
-// clang-format on
+namespace hooks {
 
-Api& get()
-{
-    return functions[static_cast<int>(hooks::gameVersion())];
-}
+bool __fastcall menuNewSkirmishMultiCreateServerHooked(game::CMenuNewSkirmishMulti* thisptr,
+                                                       int /*%edx*/);
 
-} // namespace game::CMenuNewSkirmishMultiApi
+game::CMenuNewSkirmishMulti* __fastcall menuNewSkirmishMultiCtorHooked(
+    game::CMenuNewSkirmishMulti* thisptr,
+    int /*%edx*/,
+    game::CMenuPhase* menuPhase);
+
+} // namespace hooks
+
+#endif // MENUNEWSKIRMISHMULTIHOOKS_H

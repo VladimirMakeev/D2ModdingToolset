@@ -131,6 +131,7 @@ struct OriginalFunctions
 
     game::CMenuNewSkirmishSingleApi::Api::Constructor menuNewSkirmishSingleCtor;
     game::CMenuNewSkirmishHotseatApi::Api::Constructor menuNewSkirmishHotseatCtor;
+    game::CMenuNewSkirmishMultiApi::Api::Constructor menuNewSkirmishMultiCtor;
 };
 
 OriginalFunctions& getOriginalFunctions();

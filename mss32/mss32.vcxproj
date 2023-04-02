@@ -268,6 +268,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\enclayoutstack.cpp" />
     <ClCompile Include="src\menunewskirmishhotseat.cpp" />
     <ClCompile Include="src\menunewskirmishhotseathooks.cpp" />
+    <ClCompile Include="src\menunewskirmishmultihooks.cpp" />
     <ClCompile Include="src\menunewskirmishsinglehooks.cpp" />
     <ClCompile Include="src\menurandomscenariosingle.cpp" />
     <ClCompile Include="src\midgardscenariomap.cpp" />
@@ -663,6 +664,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\leaderunitdescriptor.h" />
     <ClInclude Include="include\menunewskirmishhotseat.h" />
     <ClInclude Include="include\menunewskirmishhotseathooks.h" />
+    <ClInclude Include="include\menunewskirmishmultihooks.h" />
     <ClInclude Include="include\menunewskirmishsinglehooks.h" />
     <ClInclude Include="include\menurandomscenariosingle.h" />
     <ClInclude Include="include\midanim2.h" />

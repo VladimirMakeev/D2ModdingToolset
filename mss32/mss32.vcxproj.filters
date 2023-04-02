@@ -1133,6 +1133,9 @@
     <ClCompile Include="src\waitgenerationinterf.cpp">
       <Filter>features\random scenario generator</Filter>
     </ClCompile>
+    <ClCompile Include="src\menunewskirmishmultihooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -2928,6 +2931,9 @@
     </ClInclude>
     <ClInclude Include="include\waitgenerationinterf.h">
       <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menunewskirmishmultihooks.h">
+      <Filter>hooks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
