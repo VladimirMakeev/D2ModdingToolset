@@ -805,14 +805,14 @@ int addUnitXpNoUpgrade(game::IMidgardObjectMap* objectMap, game::CMidUnit* unit,
 {
     using namespace game;
 
-    if (value == 0) {
-        return 0;
-    }
-
     auto soldier = gameFunctions().castUnitImplToSoldier(unit->unitImpl);
     auto xpNext = soldier->vftable->getXpNext(soldier);
 
-    auto xpAmount = value < xpNext ? value : xpNext - 1;
+    int xpAmount = value;
+    if (xpAmount >= xpNext - unit->currentXp) {
+        xpAmount = xpNext - unit->currentXp - 1;
+    }
+
     if (!VisitorApi::get().changeUnitXp(&unit->id, xpAmount, objectMap, 1)) {
         return 0;
     }
