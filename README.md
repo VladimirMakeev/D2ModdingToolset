@@ -476,6 +476,13 @@
     - Enable `battle.carryXpOverUpgrade` in [settings.lua](Scripts/settings.lua).
   </details>
 - <details>
+    <summary>Allows units to receive multiple upgrades per single battle;</summary>
+    
+    ![Demo video](https://user-images.githubusercontent.com/5180699/229345630-62b31034-d94f-4370-bec5-5f5d63172a7f.mp4)
+    
+    - Enable `battle.allowMultiUpgrade` in [settings.lua](Scripts/settings.lua).
+  </details>
+- <details>
     <summary>Supports custom attack sources;</summary>
     **Note** that the total number of attack sources (including the base 8) cannot exceed 32 due to game limitations.<br />
 
