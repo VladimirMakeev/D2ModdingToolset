@@ -37,6 +37,7 @@
 #include "spinbuttoninterf.h"
 #include "stringarray.h"
 #include "textboxinterf.h"
+#include "textids.h"
 #include "utils.h"
 #include <chrono>
 #include <fmt/format.h>
@@ -161,11 +162,24 @@ static rsg::MapGenOptions createGeneratorOptions(const rsg::MapTemplate& mapTemp
     options.mapTemplate = &mapTemplate;
     options.size = settings.size;
     options.name = std::string{"Random scenario "} + seedString;
-    options.description = std::string{"Random scenario based on template '"} + settings.name
-                          + "'. Seed: " + seedString
-                          + ". Starting gold: " + std::to_string(settings.startingGold)
-                          + ". Roads: " + std::to_string(settings.roads)
-                          + "%. Forest: " + std::to_string(settings.forest) + "%.";
+
+    auto description{getInterfaceText(textIds().rsg.description.c_str())};
+    if (!description.empty()) {
+        replace(description, "%TMPL%", settings.name);
+        replace(description, "%SEED%", seedString);
+        replace(description, "%GOLD%", std::to_string(settings.startingGold));
+        replace(description, "%ROADS%", std::to_string(settings.roads));
+        replace(description, "%FOREST%", std::to_string(settings.forest));
+        options.description = std::move(description);
+    } else {
+        options.description = fmt::format("Random scenario based on template '{:s}'. "
+                                          "Seed: {:d}. "
+                                          "Starting gold: {:d}. "
+                                          "Roads: {:d}%. "
+                                          "Forest: {:d}%.",
+                                          settings.name, seed, settings.startingGold,
+                                          settings.roads, settings.forest);
+    }
 
     return options;
 }
@@ -358,9 +372,7 @@ static void updateMenuUi(CMenuRandomScenario* menu, int selectedIndex)
     }
 }
 
-static void __fastcall menuRandomScenarioSingleDtor(CMenuRandomScenario* menu,
-                                                    int /*%edx*/,
-                                                    char flags)
+static void __fastcall menuRandomScenarioDtor(CMenuRandomScenario* menu, int /*%edx*/, char flags)
 {
     logDebug("mss32Proxy.log", "CMenuRandomScenario d-tor called");
     menu->~CMenuRandomScenario();
@@ -554,15 +566,27 @@ static void __fastcall waitGenerationResults(CMenuRandomScenario* menu, int /*%e
     }
 
     if (status == GenerationStatus::Error) {
-        showMessageBox("Error during random scenario map generation.\n"
-                       "See mssProxyError.log for details");
+        auto message{getInterfaceText(textIds().rsg.generationError.c_str())};
+        if (message.empty()) {
+            message = "Error during random scenario map generation.\n"
+                      "See mssProxyError.log for details";
+        }
+
+        showMessageBox(message);
         return;
     }
 
     if (status == GenerationStatus::LimitExceeded) {
-        showMessageBox(fmt::format("Could not generate scenario map after {:d} attempts\n"
-                                   "Please, adjust template contents or settings",
-                                   generationAttemptsMax));
+        auto message{getInterfaceText(textIds().rsg.limitExceeded.c_str())};
+        if (!message.empty()) {
+            replace(message, "%NUM%", std::to_string(generationAttemptsMax));
+        } else {
+            message = fmt::format("Could not generate scenario map after {:d} attempts.\n"
+                                  "Please, adjust template contents or settings",
+                                  generationAttemptsMax);
+        }
+
+        showMessageBox(message);
         return;
     }
 }
@@ -616,8 +640,13 @@ static void __fastcall buttonGenerateHandler(CMenuRandomScenario* thisptr, int /
             gameInfo = std::make_unique<NativeGameInfo>(gameFolder());
             rsg::setGameInfo(gameInfo.get());
         } catch (const std::exception&) {
-            showMessageBox("Could not read game data needed for scenario generator.\n"
-                           "See mssProxyError.log for details");
+            auto message{getInterfaceText(textIds().rsg.wrongGameData.c_str())};
+            if (message.empty()) {
+                message = "Could not read game data needed for scenario generator.\n"
+                          "See mssProxyError.log for details";
+            }
+
+            showMessageBox(message);
             return;
         }
     }
@@ -791,7 +820,7 @@ static void menuRandomScenarioCtor(CMenuRandomScenario* menu,
         // Remember base class destructor
         menuBaseDtor = menu->vftable->destructor;
         // Make sure our vftable uses our own destructor
-        vftable->destructor = (CInterfaceVftable::Destructor)&menuRandomScenarioSingleDtor;
+        vftable->destructor = (CInterfaceVftable::Destructor)&menuRandomScenarioDtor;
     }
 
     // Use our vftable

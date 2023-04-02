@@ -223,4 +223,20 @@ textids = {
 		-- Fallback text "Wrong room password"
 		wrongRoomPassword = "",
 	},
+    
+    generator = {
+        -- Description text for randomly generated scenarios
+        -- Fallback text "Random scenario based on template '%TMPL%'. Seed: %SEED%. Starting gold: %GOLD%. Roads: %ROADS%%. Forest: %FOREST%%."
+        description = "",
+        -- Generator could not process game data from dbf tables or .ff files
+        -- Error details are logged in mssProxyError.log
+        -- Fallback text "Could not read game data needed for scenario generator.\nSee mssProxyError.log for details"
+        wrongGameData = "",
+        -- Error occured during scenario generation
+        -- Fallback text "Error during random scenario map generation.\nSee mssProxyError.log for details".
+        generationError = "",
+        -- Generator failed to create scenario after specified number of attempts
+        -- Fallback text "Could not generate scenario map after %NUM% attempts.\nPlease, adjust template contents or settings"
+        limitExceeded = "",
+    },
 }

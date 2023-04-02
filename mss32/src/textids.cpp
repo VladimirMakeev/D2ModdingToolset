@@ -111,6 +111,19 @@ void readLobbyTextIds(const sol::table& table, TextIds::Lobby& value)
     value.wrongRoomPassword = lobby.get_or("wrongRoomPassword", std::string());
 }
 
+void readGeneratorTextIds(const sol::table& table, TextIds::ScenarioGenerator& value)
+{
+    auto rsgTable = table.get<sol::optional<sol::table>>("generator");
+    if (!rsgTable.has_value())
+        return;
+
+    auto& rsg = rsgTable.value();
+    value.description = rsg.get_or("description", std::string());
+    value.wrongGameData = rsg.get_or("wrongGameData", std::string());
+    value.generationError = rsg.get_or("generationError", std::string());
+    value.limitExceeded = rsg.get_or("limitExceeded", std::string());
+}
+
 void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
 {
     auto interf = table.get<sol::optional<sol::table>>("interf");
@@ -157,6 +170,7 @@ void initialize(TextIds& value)
         readInterfTextIds(table, value.interf);
         readEventsTextIds(table, value.events);
         readLobbyTextIds(table, value.lobby);
+        readGeneratorTextIds(table, value.rsg);
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to read script '{:s}'.\n"
                                         "Reason: '{:s}'",
