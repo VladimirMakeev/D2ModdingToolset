@@ -32,6 +32,6 @@
 
 #define assert_offset(type, field, offset)                                                         \
     static_assert(offsetof(type, field) == (offset),                                               \
-                  #type "::" #field "offset must be " #offset " bytes")
+                  #type "::" #field " offset must be " #offset " bytes")
 
 #endif // D2ASSERT_H
