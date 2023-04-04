@@ -22,6 +22,7 @@
 #include "button.h"
 #include "dialoginterf.h"
 #include "dynamiccast.h"
+#include "editboxinterf.h"
 #include "exceptions.h"
 #include "globaldata.h"
 #include "image2outline.h"
@@ -150,6 +151,30 @@ static void raceIndicesToRaces(std::vector<rsg::RaceType>& races,
 
         races.push_back(imageIndexToRace(pair.second));
     }
+}
+
+static bool isRoomAndPlayerNamesValid(CMenuRandomScenario* menu)
+{
+    using namespace game;
+
+    const auto& dialogApi{CDialogInterfApi::get()};
+    CDialogInterf* dialog{CMenuBaseApi::get().getDialogInterface(menu)};
+
+    if (dialogApi.findControl(dialog, "EDIT_GAME")) {
+        CEditBoxInterf* editGame{dialogApi.findEditBox(dialog, "EDIT_GAME")};
+        if (!editGame || !std::strlen(editGame->data->editBoxData.inputString.string)) {
+            return false;
+        }
+    }
+
+    if (dialogApi.findControl(dialog, "EDIT_NAME")) {
+        CEditBoxInterf* editName{dialogApi.findEditBox(dialog, "EDIT_NAME")};
+        if (!editName || !std::strlen(editName->data->editBoxData.inputString.string)) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 static rsg::MapGenOptions createGeneratorOptions(const rsg::MapTemplate& mapTemplate,
@@ -354,6 +379,11 @@ static void updateMenuUi(CMenuRandomScenario* menu, int selectedIndex)
         setupSizeSpinOptions(sizeSpin, settings.sizeMin, settings.sizeMax);
         // Select smallest scenario size by default
         CSpinButtonInterfApi::get().setSelectedOption(sizeSpin, 0);
+    }
+
+    if (dialogApi.findControl(dialog, "EDIT_GAME")) {
+        CEditBoxInterf* editGame{dialogApi.findEditBox(dialog, "EDIT_GAME")};
+        CEditBoxInterfApi::get().setString(editGame, settings.name.c_str());
     }
 
     // Setup initial race buttons state: random race image and index
@@ -631,6 +661,12 @@ static void __fastcall buttonGenerateHandler(CMenuRandomScenario* thisptr, int /
 
     const auto& templates{getScenarioTemplates()};
     if (selectedIndex < 0 || selectedIndex >= (int)templates.size()) {
+        return;
+    }
+
+    if (!isRoomAndPlayerNamesValid(thisptr)) {
+        // Please enter valid game and player names
+        showMessageBox(getInterfaceText("X005ta0867"));
         return;
     }
 
