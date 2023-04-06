@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2020 Vladimir Makeev.
+ * Copyright (C) 2023 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,20 +17,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MAPGEN_H
-#define MAPGEN_H
+#ifndef SCENARIOTEMPLATES_H
+#define SCENARIOTEMPLATES_H
 
-#include <string>
+#include "maptemplate.h"
 
 namespace hooks {
 
-/**
- * Tries to load and run dll that implements map generation dialog.
- * @param[inout] errorMessage message set in case of errors.
- * @returns false in case of errors.
- */
-bool showMapGeneratorDialog(std::string& errorMessage);
+/** Cached info about random scenario generator template. */
+struct ScenarioTemplate
+{
+    ScenarioTemplate(std::string&& filename, rsg::MapTemplateSettings&& settings)
+        : filename{std::move(filename)}
+        , settings{std::move(settings)}
+    { }
+
+    std::string filename;
+    rsg::MapTemplateSettings settings;
+};
+
+using ScenarioTemplates = std::vector<ScenarioTemplate>;
+
+/** Tries to load templates for random scenario generator. */
+bool loadScenarioTemplates();
+
+/** Frees previously loaded random scenario generator templates data. */
+void freeScenarioTemplates();
+
+const ScenarioTemplates& getScenarioTemplates();
 
 } // namespace hooks
 
-#endif // MAPGEN_H
+#endif // SCENARIOTEMPLATES_H

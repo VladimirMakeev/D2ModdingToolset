@@ -37,8 +37,15 @@ namespace CMenuNewSkirmishMultiApi {
 
 struct Api
 {
-    using CreateServer = bool(__thiscall*)(CMenuNewSkirmishMulti* thisptr);
+    // Declare thisptr here as CMenuBase
+    // to simplify loading random scenarios for multiplayer games.
+    // This function doesn't access data from CMenuNewSkirmishMulti or CMenuNewSkirmish
+    using CreateServer = bool(__thiscall*)(CMenuBase* thisptr);
     CreateServer createServer;
+
+    using Constructor = CMenuNewSkirmishMulti*(__thiscall*)(CMenuNewSkirmishMulti* thisptr,
+                                                            CMenuPhase* menuPhase);
+    Constructor constructor;
 };
 
 Api& get();

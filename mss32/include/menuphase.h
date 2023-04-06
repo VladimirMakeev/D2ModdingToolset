@@ -48,7 +48,7 @@ struct CMenuPhaseData
     ScenarioDataArrayWrapped* scenarios;
     SmartPtr<IMqImage2> transitionAnimation;
     int maxPlayers;
-    bool loadScenario;
+    bool networkGame;
     bool host;
     bool useGameSpy;
     char padding2;
@@ -86,6 +86,9 @@ namespace CMenuPhaseApi {
 
 struct Api
 {
+    using Constructor = CMenuPhase*(__thiscall*)(CMenuPhase* thisptr, int a2, int a3);
+    Constructor constructor;
+
     /** Sets menu transition index, implements menu screen transitions logic. */
     using SetTransition = void(__thiscall*)(CMenuPhase* thisptr, int transition);
     SetTransition setTransition;
@@ -185,9 +188,21 @@ struct Api
     SwitchToMenu switchToLobbyHostJoin;
     // 16
     SwitchToMenu switchToWait;
+
+    using SetString = void(__thiscall*)(CMenuPhase* thisptr, const char* string);
+
+    SetString setScenarioFilePath;
+
+    using SetCampaignId = void(__thiscall*)(CMenuPhase* thisptr, const CMidgardID* campaignId);
+    SetCampaignId setCampaignId;
+
+    SetString setScenarioName;
+    SetString setScenarioDescription;
 };
 
 Api& get();
+
+IMqNetSystemVftable* vftable();
 
 } // namespace CMenuPhaseApi
 

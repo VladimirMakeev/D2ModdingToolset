@@ -47,6 +47,9 @@
     <Filter Include="features\custom event conditions">
       <UniqueIdentifier>{a12ec29a-1852-47f8-bff4-1fa0ceca32e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\random scenario generator">
+      <UniqueIdentifier>{54ad4f5d-bf7a-487f-9a3c-94547ca33f44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\fmt\src\format.cc">
@@ -119,9 +122,6 @@
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\mapgen.cpp">
-      <Filter>game</Filter>
-    </ClCompile>
     <ClCompile Include="src\mempool.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -1112,35 +1112,68 @@
     <ClCompile Include="src\streamutils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\menurandomscenariosingle.cpp">
+      <Filter>features\random scenario generator</Filter>
+    </ClCompile>
     <ClCompile Include="src\refreshinfo.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\menunewskirmishsinglehooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
     <ClCompile Include="src\midserver.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\spinbuttoninterf.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\umstack.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\scenariotemplates.cpp">
+      <Filter>features\random scenario generator</Filter>
+    </ClCompile>
     <ClCompile Include="src\encparambase.cpp">
       <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nativegameinfo.cpp">
+      <Filter>features\random scenario generator</Filter>
     </ClCompile>
     <ClCompile Include="src\encparambasehooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="src\menunewskirmishhotseat.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
     <ClCompile Include="src\netsingleplayer.cpp">
       <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\menunewskirmishhotseathooks.cpp">
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\netsingleplayerhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="src\waitgenerationinterf.cpp">
+      <Filter>features\random scenario generator</Filter>
+    </ClCompile>
     <ClCompile Include="src\logutils.cpp">
       <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\menunewskirmishmultihooks.cpp">
+      <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="src\unitstovalidate.cpp">
       <Filter>features</Filter>
     </ClCompile>
+    <ClCompile Include="src\menurandomscenariomulti.cpp">
+      <Filter>features\random scenario generator</Filter>
+    </ClCompile>
     <ClCompile Include="src\managestkinterf.cpp">
       <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\menurandomscenario.cpp">
+      <Filter>features\random scenario generator</Filter>
     </ClCompile>
     <ClCompile Include="src\managestkinterfhooks.cpp">
       <Filter>hooks</Filter>
@@ -1307,9 +1340,6 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mapelement.h">
-      <Filter>game</Filter>
-    </ClInclude>
-    <ClInclude Include="include\mapgen.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\mempool.h">
@@ -3090,6 +3120,54 @@
     </ClInclude>
     <ClInclude Include="include\subracetype.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menurandomscenariosingle.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menunewskirmishsinglehooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scenariotemplates.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\nativegameinfo.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\nativeunitinfo.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\nativeraceinfo.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\nativeiteminfo.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\itemtypelist.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\nativespellinfo.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\nativelandmarkinfo.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menunewskirmishhotseat.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menunewskirmishhotseathooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\waitgenerationinterf.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menunewskirmishmultihooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menurandomscenariomulti.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menurandomscenario.h">
+      <Filter>features\random scenario generator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

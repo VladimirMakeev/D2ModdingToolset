@@ -174,7 +174,7 @@ static void __fastcall menuLoadBtnHandler(CMenuCustomLobby* thisptr, int /*%edx*
     // Pretend we are in CMenuMulti, transition to CMenuLoadSkirmishMulti
     auto menuPhase = thisptr->menuBaseData->menuPhase;
     menuPhase->data->transitionNumber = 4;
-    menuPhase->data->loadScenario = true;
+    menuPhase->data->networkGame = true;
 
     logDebug("transitions.log",
              "Create room, pretend we are in CMenuMulti, transition to CMenuLoadSkirmishMulti");

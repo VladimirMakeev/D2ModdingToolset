@@ -106,11 +106,13 @@
 #include "mainview2hooks.h"
 #include "managestkinterf.h"
 #include "managestkinterfhooks.h"
-#include "mapgen.h"
 #include "mempool.h"
 #include "menuloadskirmishmultihooks.h"
 #include "menunewskirmishhooks.h"
+#include "menunewskirmishhotseathooks.h"
+#include "menunewskirmishmultihooks.h"
 #include "menunewskirmishsingle.h"
+#include "menunewskirmishsinglehooks.h"
 #include "menuphasehooks.h"
 #include "menuprotocolhooks.h"
 #include "middatacache.h"
@@ -207,8 +209,13 @@ static Hooks getGameHooks()
         {CBuildingBranchApi::get().constructor, buildingBranchCtorHooked},
         // Allow alchemists to buff retreating units
         {CBatAttackGiveAttackApi::vftable()->canPerform, giveAttackCanPerformHooked},
-        // Random map generation
-        //HookInfo{CMenuNewSkirmishSingleApi::get().constructor, menuNewSkirmishSingleCtorHooked},
+        // Random scenario generator
+        {CMenuNewSkirmishSingleApi::get().constructor, menuNewSkirmishSingleCtorHooked, (void**)&orig.menuNewSkirmishSingleCtor},
+        {CMenuNewSkirmishHotseatApi::get().constructor, menuNewSkirmishHotseatCtorHooked, (void**)&orig.menuNewSkirmishHotseatCtor},
+        {CMenuNewSkirmishMultiApi::get().constructor, menuNewSkirmishMultiCtorHooked, (void**)&orig.menuNewSkirmishMultiCtor},
+        // Random scenario generator templates
+        {CMenuPhaseApi::get().constructor, menuPhaseCtorHooked, (void**)&orig.menuPhaseCtor},
+        {CMenuPhaseApi::vftable()->destructor, menuPhaseDtorHooked, (void**)&orig.menuPhaseDtor},
         // Support custom battle attack objects
         {fn.createBatAttack, createBatAttackHooked, (void**)&orig.createBatAttack},
         // Support immunity bitmask in BattleMsgData
@@ -346,6 +353,8 @@ static Hooks getGameHooks()
         {CMidUnitApi::get().upgrade, upgradeHooked},
         // Fix doppelganger attack using alternative attack when attacker is transformed (by doppelganger, drain-level, transform-self/other attacks)
         {battle.cannotUseDoppelgangerAttack, cannotUseDoppelgangerAttackHooked},
+        // Support new menu windows
+        {CMenuPhaseApi::get().setTransition, menuPhaseSetTransitionHooked, (void**)&orig.menuPhaseSetTransition},
         // Support custom modifiers
         {fn.loadScenarioMap, loadScenarioMapHooked, (void**)&orig.loadScenarioMap},
         // Show broken (removed) wards in unit encyclopedia
@@ -459,8 +468,6 @@ static Hooks getGameHooks()
 
     if (isLobbySupported()) {
         // clang-format off
-        // Support new menu windows
-        hooks.emplace_back(HookInfo{CMenuPhaseApi::get().setTransition, menuPhaseSetTransitionHooked, (void**)&orig.menuPhaseSetTransition});
         // Support custom lobby server
         hooks.emplace_back(HookInfo{CMenuProtocolApi::get().createMenu, menuProtocolCreateMenuHooked});
         hooks.emplace_back(HookInfo{CMenuProtocolApi::get().continueHandler, menuProtocolContinueHandlerHooked, (void**)&orig.menuProtocolContinueHandler});
@@ -763,230 +770,6 @@ void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/)
     ptr[1] = 0;
 
     logDebug("mss32Proxy.log", "Show banners hook finished");
-    return thisptr;
-}
-
-using ScriptLines = std::vector<std::string>;
-
-ScriptLines::iterator addDialogUiElements(ScriptLines& script,
-                                          const std::string& dialogName,
-                                          const ScriptLines& newElements)
-{
-    const std::string dialogStr{std::string{"DIALOG\t"} + dialogName};
-
-    auto line = std::find_if(script.begin(), script.end(), [&dialogStr](const std::string& line) {
-        return line.find(dialogStr) != std::string::npos;
-    });
-
-    if (line == script.end()) {
-        return line;
-    }
-
-    // Skip DIALOG and BEGIN lines
-    std::advance(line, 2);
-    return script.insert(line, newElements.begin(), newElements.end());
-}
-
-void addRandomMapGeneratorUi(ScriptLines& script)
-{
-    const ScriptLines uiElements{
-        "\tBUTTON\tBINKW_PROXY_BTN_GEN_MAP,212,122,422,142,,,,,\"\",0",
-        "\tTEXT\tBINKW_PROXY_TXT_GEN_MAP,212,122,422,142,\\hC;\\vC;,\"Generate random map\",\"Open map generation menu\""};
-
-    addDialogUiElements(script, "DLG_CHOOSE_SKIRMISH", uiElements);
-}
-
-void changeHireDialogUi(ScriptLines& script)
-{
-    const std::string btnPgUpName{"BINKW_PROXY_BTN_PG_UP"};
-    const std::string btnPgDownName{"BINKW_PROXY_BTN_PG_DN"};
-    const std::string btnUpName{"BINKW_PROXY_BTN_LIST_UP"};
-    const std::string btnDownName{"BINKW_PROXY_BTN_LIST_DN"};
-
-    const std::string buttonImageName{"DLG_UPGRADE_LEADER_ARROW"};
-    const std::string btnDownImageName{fmt::format("{:s}_DOWN_", buttonImageName)};
-    const std::string btnUpImageName{fmt::format("{:s}_UP_", buttonImageName)};
-
-    const int buttonSize{26};
-    const int buttonX{415};
-    const int buttonUpY{30};
-    const int buttonDownY{480};
-
-    const ScriptLines uiElements{
-        // Page up and page down hotkeys
-        fmt::format("\tBUTTON\t{0},0,0,10,10,,,,,\"\",0,34", btnPgDownName),
-        fmt::format("\tBUTTON\t{0},10,0,20,10,,,,,\"\",0,33", btnPgUpName),
-        // Up and down keys, this also enables list scrolling with mouse wheel
-        fmt::format("\tBUTTON\t{0},{1},{2},{3},{4},{5}N,{5}H,{5}C,{5}N,\"\",1,38", btnUpName,
-                    buttonX, buttonUpY, buttonX + buttonSize, buttonUpY + buttonSize,
-                    btnUpImageName),
-        fmt::format("\tBUTTON\t{0},{1},{2},{3},{4},{5}N,{5}H,{5}C,{5}N,\"\",1,40", btnDownName,
-                    buttonX, buttonDownY, buttonX + buttonSize, buttonDownY + buttonSize,
-                    btnDownImageName)};
-
-    auto line = addDialogUiElements(script, "DLG_HIRE_LEADER_2", uiElements);
-    auto lboxLine = std::find_if(line, script.end(), [](const std::string& scriptLine) {
-        return scriptLine.find("\tLBOX\tLBOX_LEADER") != std::string::npos;
-    });
-
-    if (lboxLine != script.end()) {
-        *lboxLine = fmt::format(
-            "\tLBOX\tLBOX_LEADER,125,43,410,503,285,85,0,7,{0},{1},,,{2},{3},BTN_HIRE_LEADER,,,0,\"\",0",
-            btnUpName, btnDownName, btnPgUpName, btnPgDownName);
-    }
-}
-
-game::DialogScriptData* __fastcall loadScriptFileHooked(game::DialogScriptData* thisptr,
-                                                        int /*%edx*/,
-                                                        const char* filePath,
-                                                        int /*unknown*/)
-{
-    const auto& stringApi = game::StringApi::get();
-
-    thisptr->initialized = false;
-    thisptr->unknown = 0;
-
-    game::StringArray* array = &thisptr->lines;
-    std::memset(array, 0, sizeof(game::StringArray));
-
-    stringApi.initFromString(&thisptr->scriptPath, filePath);
-
-    ScriptLines scriptLines;
-
-    {
-        std::ifstream stream(filePath);
-        if (!stream) {
-            logError("mssProxyError.log", "Failed to open AutoDialog script file");
-            return thisptr;
-        }
-
-        for (std::string line; std::getline(stream, line);) {
-            scriptLines.push_back(line);
-        }
-    }
-
-    // As for now, it is easier to add new ui elements to AutoDialog script
-    // and let the game do processing, than reverse-engineer all CDlgPrototype class hierarchy.
-    // Use uncommon names to avoid collisions.
-    // addRandomMapGeneratorUi(scriptLines);
-
-    if (!unitsForHire().empty()) {
-        changeHireDialogUi(scriptLines);
-    }
-
-    for (auto& line : scriptLines) {
-        if (line.empty()) {
-            continue;
-        }
-
-        const auto lastCharacter = line.length() - 1;
-        if (line[lastCharacter] == '\n') {
-            line.erase(lastCharacter);
-        }
-
-        game::String str;
-        stringApi.initFromString(&str, line.c_str());
-        game::StringArrayApi::get().pushBack(array, &str);
-        stringApi.free(&str);
-    }
-
-    thisptr->initialized = true;
-    return thisptr;
-}
-
-static int* sub_6804ae(void* thisptr)
-{
-    return *(int**)(((int*)thisptr)[2]);
-}
-
-/**
- * Returns ScenarioDataArrayWrapped, actual meaning and types are unknown.
- * @param[in] unknown parameter is a pointer returned from sub_6804ae().
- */
-static game::ScenarioDataArrayWrapped* sub_573134(int* unknown)
-{
-    return *(game::ScenarioDataArrayWrapped**)(*(unknown + 2) + 20);
-}
-
-static size_t getScenariosTotal(const game::ScenarioDataArray& data)
-{
-    const auto bgn = reinterpret_cast<size_t>(data.bgn);
-    const auto end = reinterpret_cast<size_t>(data.end);
-
-    return (end - bgn) / sizeof(game::ScenarioData);
-}
-
-static void __fastcall buttonGenerateMapCallback(game::CMenuNewSkirmish* thisptr, int /*%edx*/)
-{
-    std::string errorMessage;
-    if (!showMapGeneratorDialog(errorMessage)) {
-        showMessageBox(errorMessage);
-    }
-}
-
-static void menuNewSkirmishCtor(game::CMenuNewSkirmish* thisptr,
-                                game::CMenuPhase* menuPhase,
-                                const char* dialogName)
-{
-    using namespace game;
-
-    const auto& menuBase = CMenuBaseApi::get();
-    menuBase.constructor(thisptr, menuPhase);
-    thisptr->vftable = (game::CInterfaceVftable*)CMenuNewSkirmishApi::vftable();
-    menuBase.createMenu(thisptr, dialogName);
-
-    const auto dialog = menuBase.getDialogInterface(thisptr);
-    const auto& menu = CMenuNewSkirmishApi::get();
-    const auto& button = CButtonInterfApi::get();
-    const auto freeFunctor = SmartPointerApi::get().createOrFreeNoDtor;
-    SmartPointer functor;
-
-    menuBase.createButtonFunctor(&functor, 0, thisptr, &menuBase.buttonBackCallback);
-    button.assignFunctor(dialog, "BTN_BACK", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
-
-    menuBase.createButtonFunctor(&functor, 0, thisptr, &menu.loadScenarioCallback);
-    CButtonInterf* loadButton = button.assignFunctor(dialog, "BTN_LOAD", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
-
-    void* callback = buttonGenerateMapCallback;
-    menuBase.createButtonFunctor(&functor, 0, thisptr,
-                                 (CMenuBaseApi::Api::ButtonCallback*)&callback);
-    button.assignFunctor(dialog, "BINKW_PROXY_BTN_GEN_MAP", dialogName, &functor, 0);
-    freeFunctor(&functor, nullptr);
-
-    const auto& listBox = CListBoxInterfApi::get();
-    menu.createListBoxDisplayTextFunctor(&functor, 0, thisptr, &menu.displayTextCallback);
-    listBox.assignDisplayTextFunctor(dialog, "TLBOX_GAME_SLOT", dialogName, &functor, true);
-    freeFunctor(&functor, nullptr);
-
-    menu.createListBoxFunctor(&functor, 0, thisptr, &menu.listBoxCallback);
-    listBox.assignFunctor(dialog, "TLBOX_GAME_SLOT", dialogName, &functor);
-    freeFunctor(&functor, nullptr);
-
-    int* unknown = sub_6804ae(thisptr);
-    ScenarioDataArrayWrapped* scenarios = sub_573134(unknown);
-
-    const size_t scenariosTotal = getScenariosTotal(scenarios->data);
-    if (!scenariosTotal) {
-        // Nothing to load
-        loadButton->vftable->setEnabled(loadButton, false);
-        return;
-    }
-
-    CListBoxInterf* lBox = CDialogInterfApi::get().findListBox(dialog, "TLBOX_GAME_SLOT");
-    listBox.setElementsTotal(lBox, scenariosTotal);
-    menu.updateScenarioUi(unknown, dialog, listBox.selectedIndex(lBox));
-}
-
-game::CMenuNewSkirmishSingle* __fastcall menuNewSkirmishSingleCtorHooked(
-    game::CMenuNewSkirmishSingle* thisptr,
-    int /*%edx*/,
-    game::CMenuPhase* menuPhase)
-{
-    menuNewSkirmishCtor(thisptr, menuPhase, "DLG_CHOOSE_SKIRMISH");
-    thisptr->vftable = (game::CInterfaceVftable*)game::CMenuNewSkirmishSingleApi::vftable();
-
     return thisptr;
 }
 

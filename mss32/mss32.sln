@@ -5,10 +5,13 @@ VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mss32", "mss32.vcxproj", "{26E9486E-25D9-4FD1-8C41-B389880BBCFF}"
 	ProjectSection(ProjectDependencies) = postProject
+		{52C087C5-50AB-47D9-BFE2-3870A3C66FF8} = {52C087C5-50AB-47D9-BFE2-3870A3C66FF8}
 		{6533BDAE-0F0C-45E4-8FE7-ADD0F37FE063} = {6533BDAE-0F0C-45E4-8FE7-ADD0F37FE063}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibStatic", "..\SLikeNet\Lib\LibStatic\LibStatic.vcxproj", "{6533BDAE-0F0C-45E4-8FE7-ADD0F37FE063}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScenarioGenerator", "..\D2RSG\ScenarioGenerator\ScenarioGenerator.vcxproj", "{52C087C5-50AB-47D9-BFE2-3870A3C66FF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +27,10 @@ Global
 		{6533BDAE-0F0C-45E4-8FE7-ADD0F37FE063}.Debug|x86.Build.0 = Debug|Win32
 		{6533BDAE-0F0C-45E4-8FE7-ADD0F37FE063}.Release|x86.ActiveCfg = Release|Win32
 		{6533BDAE-0F0C-45E4-8FE7-ADD0F37FE063}.Release|x86.Build.0 = Release|Win32
+		{52C087C5-50AB-47D9-BFE2-3870A3C66FF8}.Debug|x86.ActiveCfg = Debug|Win32
+		{52C087C5-50AB-47D9-BFE2-3870A3C66FF8}.Debug|x86.Build.0 = Debug|Win32
+		{52C087C5-50AB-47D9-BFE2-3870A3C66FF8}.Release|x86.ActiveCfg = Release|Win32
+		{52C087C5-50AB-47D9-BFE2-3870A3C66FF8}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

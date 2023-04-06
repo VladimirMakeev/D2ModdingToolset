@@ -87,16 +87,6 @@ Hooks getVftableHooks();
 void respopupInitHooked(void);
 void* __fastcall toggleShowBannersInitHooked(void* thisptr, int /*%edx*/);
 
-game::DialogScriptData* __fastcall loadScriptFileHooked(game::DialogScriptData* thisptr,
-                                                        int /*%edx*/,
-                                                        const char* filePath,
-                                                        int /*unknown*/);
-
-game::CMenuNewSkirmishSingle* __fastcall menuNewSkirmishSingleCtorHooked(
-    game::CMenuNewSkirmishSingle* thisptr,
-    int /*%edx*/,
-    game::CMenuPhase* menuPhase);
-
 bool __stdcall addPlayerUnitsToHireListHooked(game::CMidDataCache2* dataCache,
                                               const game::CMidgardID* playerId,
                                               const game::CMidgardID* a3,

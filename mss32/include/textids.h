@@ -110,6 +110,14 @@ struct TextIds
         std::string wrongHash;
         std::string wrongRoomPassword;
     } lobby;
+
+    struct ScenarioGenerator
+    {
+        std::string description;
+        std::string wrongGameData;
+        std::string generationError;
+        std::string limitExceeded;
+    } rsg;
 };
 
 const TextIds& textIds();

@@ -739,8 +739,17 @@ struct SellItemsMsgBoxHandler : public game::CMidMsgBoxButtonHandler
     game::CSiteMerchantInterf* merchantInterf;
 };
 
-void __fastcall sellItemsMsgBoxHandlerDtor(SellItemsMsgBoxHandler*, int /*%edx*/, char)
-{ }
+void __fastcall sellItemsMsgBoxHandlerDtor(SellItemsMsgBoxHandler* thisptr,
+                                           int /*%edx*/,
+                                           char flags)
+{
+    if (flags & 1) {
+        // We can skip a call to CMidMsgBoxButtonHandler destructor
+        // since we know it does not have any members and does not free anything except its memory.
+        // Free our memory here
+        game::Memory::get().freeNonZero(thisptr);
+    }
+}
 
 static void sellItemsToMerchant(game::CPhaseGame* phaseGame,
                                 const game::CMidgardID* merchantId,

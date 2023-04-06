@@ -56,6 +56,12 @@ struct Api
     using Get = UIManagerPtr*(__stdcall*)(UIManagerPtr* managerPtr);
     Get get;
 
+    template <typename Callback>
+    using CreateEventFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                         int zero,
+                                                         void* userData,
+                                                         Callback* callback);
+
     struct TimerEventCallback
     {
         using Callback = void(__thiscall*)(void* thisptr);
@@ -68,10 +74,7 @@ struct Api
      * All functor creating functions here are reused since they implement the same logic.
      * The only difference is the template arguments that were used in the original game code.
      */
-    using CreateTimerEventFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
-                                                              int zero,
-                                                              void* userData,
-                                                              TimerEventCallback* callback);
+    using CreateTimerEventFunctor = CreateEventFunctor<TimerEventCallback>;
     CreateTimerEventFunctor createTimerEventFunctor;
 
     /**
@@ -96,10 +99,7 @@ struct Api
     };
 
     /** Creates functor to be used in update event. */
-    using CreateUpdateEventFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
-                                                               int zero,
-                                                               void* userData,
-                                                               UpdateEventCallback* callback);
+    using CreateUpdateEventFunctor = CreateEventFunctor<UpdateEventCallback>;
     CreateUpdateEventFunctor createUpdateEventFunctor;
 
     using CreateUiEvent = UiEvent*(__thiscall*)(CUIManager* thisptr,
@@ -172,9 +172,15 @@ struct Api
      */
     CreateUiEvent createCloseEvent;
 
+    using MessageEventCallback = void(__thiscall*)(void* thisptr, unsigned int, long);
+
+    /** Creates functor to be used in message event. */
+    using CreateMessageEventFunctor = CreateEventFunctor<MessageEventCallback>;
+    CreateMessageEventFunctor createMessageEventFunctor;
+
     /**
      * Creates event with user callback that is called when message previously created by
-     * RegisterWindowMessage is received.
+     * RegisterMessage is received.
      * Creates uiEvent with type UiEventType::Message.
      * @param[inout] uiEvent event structure to store result. Caller is responsible to call
      * destructor.
@@ -191,6 +197,15 @@ struct Api
 
     using GetMousePosition = CMqPoint*(__thiscall*)(const CUIManager* thisptr, CMqPoint* value);
     GetMousePosition getMousePosition;
+
+    /**
+     * Registers message with specified name for use in message events.
+     * @param[in] messageName name of message to register.
+     * @returns message identifier.
+     */
+    using RegisterMessage = std::uint32_t(__thiscall*)(CUIManager* thisptr,
+                                                       const char* messageName);
+    RegisterMessage registerMessage;
 };
 
 Api& get();

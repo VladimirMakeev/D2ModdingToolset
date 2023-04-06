@@ -77,6 +77,18 @@ const std::filesystem::path& modifiersFolder()
     return folder;
 }
 
+const std::filesystem::path& templatesFolder()
+{
+    static const std::filesystem::path folder{gameFolder() / "Templates"};
+    return folder;
+}
+
+const std::filesystem::path& exportsFolder()
+{
+    static const std::filesystem::path folder{gameFolder() / "Exports"};
+    return folder;
+}
+
 const std::filesystem::path& exePath()
 {
     static std::filesystem::path exe{};
@@ -249,8 +261,8 @@ void showMessageBox(const std::string& message,
     }
 
     CMidgardMsgBox* msgBox = (CMidgardMsgBox*)memAlloc(sizeof(CMidgardMsgBox));
-    CMidgardMsgBoxApi::get().constructor(msgBox, message.c_str(), showCancel, buttonHandler, 0,
-                                         nullptr);
+    CMidgardMsgBoxApi::get().constructor(msgBox, message.c_str(), showCancel, buttonHandler,
+                                         nullptr, nullptr);
 
     showInterface(msgBox);
 }
@@ -286,6 +298,35 @@ void createTimerEvent(game::UiEvent* timerEvent,
 
     freeFunctor(&functor, nullptr);
     SmartPointerApi::get().createOrFree((SmartPointer*)&uiManager, nullptr);
+}
+
+std::uint32_t createMessageEvent(game::UiEvent* messageEvent,
+                                 void* userData,
+                                 void* callback,
+                                 const char* messageName)
+{
+    using namespace game;
+
+    const auto freeFunctor = SmartPointerApi::get().createOrFreeNoDtor;
+    const auto& uiManagerApi = CUIManagerApi::get();
+
+    using MessageCallback = CUIManagerApi::Api::MessageEventCallback;
+
+    MessageCallback messageCallback = (MessageCallback)callback;
+
+    SmartPointer functor;
+    uiManagerApi.createMessageEventFunctor(&functor, 0, userData, &messageCallback);
+
+    UIManagerPtr uiManager;
+    uiManagerApi.get(&uiManager);
+
+    std::uint32_t messageId = uiManagerApi.registerMessage(uiManager.data, messageName);
+    uiManagerApi.createMessageEvent(uiManager.data, messageEvent, &functor, messageId);
+
+    freeFunctor(&functor, nullptr);
+    SmartPointerApi::get().createOrFree((SmartPointer*)&uiManager, nullptr);
+
+    return messageId;
 }
 
 bool computeHash(const std::filesystem::path& folder, std::string& hash)

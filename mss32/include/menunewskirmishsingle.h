@@ -44,7 +44,7 @@ struct Api
      * @returns thisptr.
      */
     using Constructor = CMenuNewSkirmishSingle*(__thiscall*)(CMenuNewSkirmishSingle* thisptr,
-                                                             int a1);
+                                                             CMenuPhase* menuPhase);
     Constructor constructor;
 };
 

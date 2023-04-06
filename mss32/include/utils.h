@@ -50,6 +50,12 @@ const std::filesystem::path& scriptsFolder();
 /** Returns full path to the modifier scripts folder. */
 const std::filesystem::path& modifiersFolder();
 
+/** Returns full path to the scenario generator templates folder. */
+const std::filesystem::path& templatesFolder();
+
+/** Returns full path to the exports folder. */
+const std::filesystem::path& exportsFolder();
+
 /** Returns full path to the executable that is currently running. */
 const std::filesystem::path& exePath();
 
@@ -97,6 +103,15 @@ void createTimerEvent(game::UiEvent* timerEvent,
                       void* userData,
                       void* callback,
                       std::uint32_t timeoutMs);
+
+/**
+ * Registers message with specified name and creates message event.
+ * @returns registered message id associated with event.
+ */
+std::uint32_t createMessageEvent(game::UiEvent* messageEvent,
+                                 void* userData,
+                                 void* callback,
+                                 const char* messageName);
 
 /** Computes MD5 hash of files in specified folder. */
 bool computeHash(const std::filesystem::path& folder, std::string& hash);
