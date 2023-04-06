@@ -18,14 +18,11 @@
  */
 
 #include "battleutils.h"
-#include "battleattackinfo.h"
 #include "battlemsgdata.h"
 #include "game.h"
 #include "midunit.h"
 #include "settings.h"
 #include "ussoldier.h"
-#include "usunit.h"
-#include "visitors.h"
 
 namespace hooks {
 

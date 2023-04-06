@@ -142,6 +142,8 @@ struct Settings
     struct Battle
     {
         bool allowRetreatedUnitsToUpgrade{false};
+        bool carryXpOverUpgrade{false};
+        bool allowMultiUpgrade{false};
     } battle;
 
     bool debugMode;

@@ -24,33 +24,69 @@
 #include "game.h"
 #include "gameutils.h"
 #include "midunit.h"
+#include "settings.h"
+#include "unitutils.h"
 #include "usunitimpl.h"
 #include "visitors.h"
 
 namespace hooks {
 
-bool upgradeUnit(game::IMidgardObjectMap* objectMap,
-                 game::CMidUnit* unit,
-                 const game::CMidgardID* groupId,
-                 game::BattleAttackInfo** attackInfo)
+int changeUnitXpAndUpgrade(game::IMidgardObjectMap* objectMap,
+                           game::CMidUnit* unit,
+                           const game::CMidgardID* groupId,
+                           const game::CMidgardID* playerId,
+                           game::BattleAttackInfo** attackInfo,
+                           int xpReceived)
 {
     using namespace game;
 
-    auto upgradeUnitImpl = gameFunctions().getUpgradeUnitImplCheckXp(objectMap, unit);
-    if (!upgradeUnitImpl) {
-        return false;
+    const auto& fn = gameFunctions();
+
+    int xpAdded = 0;
+    bool infoAdded = false;
+    while (xpReceived - xpAdded > 0) {
+        if (fn.isUnitTierMax(objectMap, playerId, &unit->id)
+            && !fn.isUnitLevelNotMax(objectMap, playerId, &unit->id)) {
+            break;
+        }
+
+        auto previousXp = unit->currentXp;
+        if (!fn.changeUnitXpCheckUpgrade(objectMap, playerId, &unit->id, xpReceived - xpAdded)) {
+            break;
+        }
+        xpAdded += unit->currentXp - previousXp;
+
+        auto upgradeUnitImpl = fn.getUpgradeUnitImplCheckXp(objectMap, unit);
+        if (!upgradeUnitImpl) {
+            break;
+        }
+
+        if (!infoAdded) {
+            infoAdded = true;
+            BattleAttackUnitInfo info{};
+            info.unitId = unit->id;
+            info.unitImplId = unit->unitImpl->id;
+            BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
+        }
+
+        if (!VisitorApi::get().upgradeUnit(&unit->id, &upgradeUnitImpl->id, groupId, objectMap,
+                                           1)) {
+            break;
+        }
+
+        if (!userSettings().battle.allowMultiUpgrade) {
+            break;
+        }
     }
 
-    BattleAttackUnitInfo info{};
-    info.unitId = unit->id;
-    info.unitImplId = unit->unitImpl->id;
-    BattleAttackInfoApi::get().addUnitInfo(&(*attackInfo)->unitsInfo, &info);
+    if (userSettings().battle.carryXpOverUpgrade) {
+        xpAdded += addUnitXpNoUpgrade(objectMap, unit, xpReceived - xpAdded);
+    }
 
-    VisitorApi::get().upgradeUnit(&unit->id, &upgradeUnitImpl->id, groupId, objectMap, 1);
-    return true;
+    return xpAdded;
 }
 
-bool changeUnitXpTryUpgrade(game::IMidgardObjectMap* objectMap,
+void changeUnitXpAndUpgrade(game::IMidgardObjectMap* objectMap,
                             game::BattleMsgData* battleMsgData,
                             game::UnitInfo* unitInfo,
                             const game::CMidgardID* groupId,
@@ -64,7 +100,8 @@ bool changeUnitXpTryUpgrade(game::IMidgardObjectMap* objectMap,
     const auto& battleApi = BattleMsgDataApi::get();
 
     if (!unitXp) {
-        return false;
+        unitInfo->unitXp = 0;
+        return;
     }
 
     const auto unitId = unitInfo->unitId1;
@@ -72,29 +109,15 @@ bool changeUnitXpTryUpgrade(game::IMidgardObjectMap* objectMap,
         || battleApi.getUnitStatus(battleMsgData, &unitId, BattleStatus::Hidden)
         || battleApi.getUnitStatus(battleMsgData, &unitId, BattleStatus::Unsummoned)
         || battleApi.getUnitStatus(battleMsgData, &unitId, BattleStatus::Summon)) {
-        return false;
-    }
-
-    if (fn.isUnitTierMax(objectMap, playerId, &unitId)
-        && !fn.isUnitLevelNotMax(objectMap, playerId, &unitId)) {
-        return false;
+        unitInfo->unitXp = 0;
+        return;
     }
 
     auto unit = fn.findUnitById(objectMap, &unitId);
     int xpReceived = adjustUnitXpReceived(battleMsgData, unit, unitXp);
-    if (xpReceived <= 0) {
-        return false;
-    }
-
-    auto previousXp = unit->currentXp;
-    fn.changeUnitXpCheckUpgrade(objectMap, playerId, &unitId, xpReceived);
-    xpReceived = unit->currentXp - previousXp;
-
-    if (upgradeUnit(objectMap, unit, groupId, attackInfo)) {
-        unitInfo->unitHp = unit->currentHp;
-    }
-    unitInfo->unitXp = xpReceived;
-    return true;
+    unitInfo->unitXp = changeUnitXpAndUpgrade(objectMap, unit, groupId, playerId, attackInfo,
+                                              xpReceived);
+    unitInfo->unitHp = unit->currentHp;
 }
 
 int getXpPercent(game::IMidgardObjectMap* objectMap,
@@ -131,10 +154,8 @@ void __stdcall upgradeGroupHooked(game::IMidgardObjectMap* objectMap,
     for (auto& unitInfo : battleMsgData->unitsInfo) {
         if (unitInfo.unitId1 != invalidId && !unitInfo.unknown2
             && unitInfo.unitFlags.parts.attacker == isAttacker) {
-            if (!changeUnitXpTryUpgrade(objectMap, battleMsgData, &unitInfo, groupId, &playerId,
-                                        unitInfo.unitXp * xpPercent / 100, attackInfo)) {
-                unitInfo.unitXp = 0;
-            }
+            changeUnitXpAndUpgrade(objectMap, battleMsgData, &unitInfo, groupId, &playerId,
+                                   unitInfo.unitXp * xpPercent / 100, attackInfo);
         }
     }
 }

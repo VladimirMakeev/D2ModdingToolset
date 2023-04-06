@@ -196,6 +196,10 @@ settings = {
 	battle = {
 		-- Allows retreated units to upgrade (the behavior is bugged in vanilla causing non-constant and opaque behaviour)
 		allowRetreatedUnitsToUpgrade = false,
+		-- Allows to carry extra XP received over unit's upgrade (limited to value required for the next upgrade minus 1)
+		carryXpOverUpgrade = false,
+		-- Allows units to receive multiple upgrades per single battle
+		allowMultiUpgrade = false,
 	},
 
 	-- Create mss32 proxy dll log files with debug info
