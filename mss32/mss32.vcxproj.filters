@@ -3175,6 +3175,9 @@
     <ClInclude Include="include\quickstring.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\soundsystemsample.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
