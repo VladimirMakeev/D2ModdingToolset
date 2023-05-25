@@ -1156,6 +1156,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\viewexportedleaderinterf.h" />
     <ClInclude Include="include\visitors.h" />
     <ClInclude Include="include\waitgenerationinterf.h" />
+    <ClInclude Include="include\wdb.h" />
     <ClInclude Include="include\widgetinterf.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
