@@ -4,7 +4,27 @@
 
 #### General
 - Can be used on vanilla version or with other mods installed;
-- Allows players to search and create PvP matches without external software using custom lobby server. Currently only for [Motlin's mod](https://dis2modding.fandom.com/ru/wiki/Мод_Мотлина).
+- Allows players to search and create PvP matches without external software using custom lobby server. Currently only for [Motlin's mod](https://dis2modding.fandom.com/ru/wiki/Мод_Мотлина);
+- <details>
+    <summary>Adds random scenario map generator;</summary>
+    
+    - Add `generatorSettings.lua` into `Scripts` forlder;
+    - Create `Templates` folder inside game folder and place template files here;
+    - Add buttons `BTN_RANDOM_MAP` to `DLG_CHOOSE_SKIRMISH`, `DLG_HOST` and `DLG_HOTSEAT_NEW` in `Interf.dlg`:
+    ```
+    BUTTON	BTN_RANDOM_MAP,27,541,336,592,BTN_GENERATE_N,BTN_GENERATE_H,BTN_GENERATE_C,BTN_GENERATE_D,"",0
+	TEXT	TXT_RANDOM_MAP,27,541,336,592,\hC;\vC;\fMenu;,"X015TA0022","X015TA0023"
+    ```
+    - Add two new menu screens: for random multiplayer maps and local play (singleplayer or hotseat) maps. Add `DLG_RANDOM_SCENARIO_SINGLE` and `DLG_RANDOM_SCENARIO_MULTI` in `Interf.dlg`;
+    - Add popup menu that will be displayed during scenario map generation process, add `DLG_WAIT_GENERATION` in `Interf.dlg`;
+    - Add transition animations for new menu screens in `MenuAnim.ff`:
+        - `TRANS_HOST2RNDMULTI.BIK` - transition from multiplayer host to generator menu;
+        - `TRANS_NEWQUEST2RNDSINGLE.BIK` - transition from local game to generator menu;
+        - `TRANS_RND2HSLOBBY.BIK` - transition from generator menu to hotseat lobby;
+        - `TRANS_RNDSINGLE2GOD.BIK` - transition from generator menu to race selection menu;
+    - Add race preview images as well as 'random race' to `Interf.ff`. Images should be named as `GOD_EMPIRE`, `GOD_CLANS`, `GOD_UNDEAD`, `GOD_LEGIONS`, `GOD_ELVES`, `GOD_RANDOM`;
+    - Add translated text ids to `TApp.dbf` and into `generator` section of `Scripts/textids.lua`.
+  </details>
 - Increases maximum game turn to 9999;
 - Allows to load and create scenarios with no magic (maximum spell level set to 0);
 - Buildings up to tier 10 are supported in editor and game;
