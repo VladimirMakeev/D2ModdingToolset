@@ -1071,6 +1071,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\pointset.h" />
     <ClInclude Include="include\raceset.h" />
     <ClInclude Include="include\soundsystemsample.h" />
+    <ClInclude Include="include\wavstore.h" />
     <ClInclude Include="include\spellcat.h" />
     <ClInclude Include="include\spinbuttoninterf.h" />
     <ClInclude Include="include\stackbattleactionmsg.h" />
