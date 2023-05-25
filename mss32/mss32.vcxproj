@@ -751,6 +751,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mqdbpackedimage.h" />
     <ClInclude Include="include\netsingleplayer.h" />
     <ClInclude Include="include\netsingleplayerhooks.h" />
+    <ClInclude Include="include\quickstring.h" />
     <ClInclude Include="include\refreshinfo.h" />
     <ClInclude Include="include\nativegameinfo.h" />
     <ClInclude Include="include\nativeiteminfo.h" />

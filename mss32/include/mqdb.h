@@ -27,6 +27,7 @@
 #include "d2unorderedmap.h"
 #include "d2vector.h"
 #include "mq_c_s.h"
+#include "quickstring.h"
 #include "smartptr.h"
 
 namespace game {
@@ -68,14 +69,10 @@ struct MQDBFile
 
 assert_size(MQDBFile, 136);
 
-struct quick_string
-{
-    char string[257]; /**< 256 characters + null terminator */
-    char padding[3];
-};
+using RecordNameIdPair = Pair<quick_string<256u> /* record name */, std::uint32_t /* record id */>;
+assert_size(RecordNameIdPair, 264);
 
-using mq_o_c_s = mq_c_s<Pair<quick_string /* record name */, std::uint32_t /* record id */>>;
-
+using mq_o_c_s = mq_c_s<RecordNameIdPair>;
 assert_size(mq_o_c_s, 20);
 
 struct MQDBData
