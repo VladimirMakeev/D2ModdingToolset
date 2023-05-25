@@ -3169,6 +3169,9 @@
     <ClInclude Include="include\menurandomscenario.h">
       <Filter>features\random scenario generator</Filter>
     </ClInclude>
+    <ClInclude Include="include\sounds.h">
+      <Filter>game</Filter>
+    </ClInclude>
     <ClInclude Include="include\wdb.h">
       <Filter>game</Filter>
     </ClInclude>

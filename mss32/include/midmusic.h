@@ -28,13 +28,14 @@ namespace game {
 
 struct CLogFile;
 struct CSoundSystemStream;
+struct CStreamHolder;
 
 struct CMidMusicData
 {
     char musicFolder[260];
     char customMusicFolder[260];
     CLogFile* logFile;
-    int unknown;
+    CStreamHolder* streamHolder;
     SmartPtr<CSoundSystemStream> soundSystemStream;
     int unknown2;
     int unknown3;
