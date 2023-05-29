@@ -1,4 +1,4 @@
-function getLevel(unit, transformImpl)
+function getLevel(unit, transformImpl, item)
 	-- transform using current level
 	return math.max(unit.impl.level, transformImpl.level);
 end

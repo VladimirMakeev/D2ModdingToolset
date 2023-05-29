@@ -27,6 +27,7 @@
 #include "gameutils.h"
 #include "globaldata.h"
 #include "intset.h"
+#include "itemview.h"
 #include "log.h"
 #include "midgardobjectmap.h"
 #include "midplayer.h"
@@ -45,8 +46,13 @@
 
 namespace hooks {
 
-static int getTransformSelfLevel(const game::CMidUnit* unit, game::TUsUnitImpl* transformImpl)
+static int getTransformSelfLevel(const game::CMidUnit* unit,
+                                 game::TUsUnitImpl* transformImpl,
+                                 const game::IMidgardObjectMap* objectMap,
+                                 const game::CMidgardID* unitOrItemId)
 {
+    using namespace game;
+
     std::optional<sol::environment> env;
     const auto path{scriptsFolder() / "transformSelf.lua"};
     auto getLevel = getScriptFunction(path, "getLevel", env, true, true);
@@ -58,7 +64,12 @@ static int getTransformSelfLevel(const game::CMidUnit* unit, game::TUsUnitImpl* 
         const bindings::UnitView attacker{unit};
         const bindings::UnitImplView impl{transformImpl};
 
-        return (*getLevel)(attacker, impl);
+        if (CMidgardIDApi::get().getType(unitOrItemId) == IdType::Item) {
+            const bindings::ItemView itemView{unitOrItemId, objectMap};
+            return (*getLevel)(attacker, impl, &itemView);
+        }
+
+        return (*getLevel)(attacker, impl, nullptr);
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
                                         "Reason: '{:s}'",
@@ -194,7 +205,8 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
         auto transformImpl = static_cast<TUsUnitImpl*>(
             global.findById(globalData->units, &transformImplId));
 
-        const auto transformLevel = getTransformSelfLevel(targetUnit, transformImpl);
+        const auto transformLevel = getTransformSelfLevel(targetUnit, transformImpl, objectMap,
+                                                          &thisptr->id2);
 
         CUnitGenerator* unitGenerator = globalData->unitGenerator;
 

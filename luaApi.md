@@ -1085,8 +1085,9 @@ end
 #### transformSelf.lua
 `unit` has type [Unit](luaApi.md#unit-1).
 `transformImpl` is [Unit implementation](luaApi.md#unit-implementation).
+`item` is [Item](luaApi.md#item-2).
 ```lua
-function getLevel(unit, transformImpl)
+function getLevel(unit, transformImpl, item)
     -- Transform into current level or level of resulting unit's template, whichever is bigger.
     return math.max(unit.impl.level, transformImpl.level)
 end
