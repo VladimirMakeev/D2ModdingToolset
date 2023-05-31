@@ -365,6 +365,7 @@
     If daily income of gold is specified in scenario variables, then the values from that variables is used.
 
     Specify values inside `economy.cityGoldIncome` and `economy.cityManaIncome` in [settings.lua](Scripts/settings.lua):
+
       - capital - income from capital city;
       - tierN - income from tier N city, N = [1 : 5];
   </details>
