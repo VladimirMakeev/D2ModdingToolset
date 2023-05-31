@@ -234,6 +234,50 @@ static void readBattleSettings(const sol::table& table, Settings::Battle& value)
                                           def.allowMultiUpgrade);
 }
 
+static void readEconomySettings(const sol::table& table, Settings::Economy& value)
+{
+    const auto& def = defaultSettings().economy;
+
+    value.cityGoldIncome.capital = def.cityGoldIncome.capital;
+    value.cityGoldIncome.tier1 = def.cityGoldIncome.tier1;
+    value.cityGoldIncome.tier2 = def.cityGoldIncome.tier2;
+    value.cityGoldIncome.tier3 = def.cityGoldIncome.tier3;
+    value.cityGoldIncome.tier4 = def.cityGoldIncome.tier4;
+    value.cityGoldIncome.tier5 = def.cityGoldIncome.tier5;
+
+    value.cityManaIncome.capital = def.cityManaIncome.capital;
+    value.cityManaIncome.tier1 = def.cityManaIncome.tier1;
+    value.cityManaIncome.tier2 = def.cityManaIncome.tier2;
+    value.cityManaIncome.tier3 = def.cityManaIncome.tier3;
+    value.cityManaIncome.tier4 = def.cityManaIncome.tier4;
+    value.cityManaIncome.tier5 = def.cityManaIncome.tier5;
+
+    auto economy = table.get<sol::optional<sol::table>>("economy");
+    if (!economy.has_value()) {
+        return;
+    }
+
+    auto cityGoldIncome = economy.value().get<sol::optional<sol::table>>("cityGoldIncome");
+    if (cityGoldIncome.has_value()) {
+        value.cityGoldIncome.capital = readSetting(cityGoldIncome.value(), "capital", def.cityGoldIncome.capital);
+        value.cityGoldIncome.tier1 = readSetting(cityGoldIncome.value(), "tier1", def.cityGoldIncome.tier1);
+        value.cityGoldIncome.tier2 = readSetting(cityGoldIncome.value(), "tier2", def.cityGoldIncome.tier2);
+        value.cityGoldIncome.tier3 = readSetting(cityGoldIncome.value(), "tier3", def.cityGoldIncome.tier3);
+        value.cityGoldIncome.tier4 = readSetting(cityGoldIncome.value(), "tier4", def.cityGoldIncome.tier4);
+        value.cityGoldIncome.tier5 = readSetting(cityGoldIncome.value(), "tier5", def.cityGoldIncome.tier5);
+    }
+
+    auto cityManaIncome = economy.value().get<sol::optional<sol::table>>("cityManaIncome");
+    if (cityManaIncome.has_value()) {
+        value.cityManaIncome.capital = readSetting(cityManaIncome.value(), "capital", def.cityManaIncome.capital);
+        value.cityManaIncome.tier1 = readSetting(cityManaIncome.value(), "tier1", def.cityManaIncome.tier1);
+        value.cityManaIncome.tier2 = readSetting(cityManaIncome.value(), "tier2", def.cityManaIncome.tier2);
+        value.cityManaIncome.tier3 = readSetting(cityManaIncome.value(), "tier3", def.cityManaIncome.tier3);
+        value.cityManaIncome.tier4 = readSetting(cityManaIncome.value(), "tier4", def.cityManaIncome.tier4);
+        value.cityManaIncome.tier5 = readSetting(cityManaIncome.value(), "tier5", def.cityManaIncome.tier5);
+    }
+}
+
 static void readSettings(const sol::table& table, Settings& settings)
 {
     // clang-format off
@@ -281,6 +325,7 @@ static void readSettings(const sol::table& table, Settings& settings)
     readDebugSettings(table, settings.debug);
     readEngineSettings(table, settings.engine);
     readBattleSettings(table, settings.battle);
+    readEconomySettings(table, settings.economy);
 }
 
 const Settings& baseSettings()

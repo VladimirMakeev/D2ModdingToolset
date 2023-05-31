@@ -202,6 +202,28 @@ settings = {
 		allowMultiUpgrade = false,
 	},
 
+	economy = {
+		-- Additional gold income from your cities
+		cityGoldIncome = {
+			capital = 0,
+			tier1 = 5,
+			tier2 = 10,
+			tier3 = 20,
+			tier4 = 35,
+			tier5 = 50
+		},
+		-- Additional mana income from your cities
+		-- Produced mana type depends from your race
+		cityManaIncome = {
+			capital = 25,
+			tier1 = 1,
+			tier2 = 2,
+			tier3 = 4,
+			tier4 = 7,
+			tier5 = 10
+		}
+	},
+
 	-- Create mss32 proxy dll log files with debug info
 	debugHooks = false,
 }

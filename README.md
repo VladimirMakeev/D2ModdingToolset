@@ -359,6 +359,16 @@
       - ELVES .. - Elven Alliance;
   </details>
 - <details>
+    <summary>Cities can generate daily gold and mana income depending on the values in settings;</summary>
+
+    Values affect all races, excluding neutrals race. Produced mana type depends from current player's race.
+    If daily income of gold is specified in scenario variables, then the values from that variables is used.
+
+    Specify values inside `economy.cityGoldIncome` and `economy.cityManaIncome` in [settings.lua](Scripts/settings.lua):
+      - capital - income from capital city;
+      - tierN - income from tier N city, N = [1 : 5];
+  </details>
+- <details>
     <summary>Neutral cities can use race-specific graphics;</summary>
 
     Add cities graphics with names `G000FT0000NE<tier><race>` to isoAnim.ff and isoStill.ff.<br />

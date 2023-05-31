@@ -146,6 +146,29 @@ struct Settings
         bool allowMultiUpgrade{false};
     } battle;
 
+    struct Economy
+    {
+        struct CityGoldIncome
+        {
+            std::int16_t capital;
+            std::int16_t tier1;
+            std::int16_t tier2;
+            std::int16_t tier3;
+            std::int16_t tier4;
+            std::int16_t tier5;
+        } cityGoldIncome;
+
+        struct CityManaIncome
+        {
+            std::int16_t capital;
+            std::int16_t tier1;
+            std::int16_t tier2;
+            std::int16_t tier3;
+            std::int16_t tier4;
+            std::int16_t tier5;
+        } cityManaIncome;
+    } economy;
+
     bool debugMode;
 };
 

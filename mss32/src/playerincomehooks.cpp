@@ -32,6 +32,7 @@
 #include "originalfunctions.h"
 #include "racecategory.h"
 #include "racetype.h"
+#include "settings.h"
 #include "utils.h"
 #include <algorithm>
 #include <array>
@@ -56,30 +57,34 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
 
     const auto& races = RaceCategories::get();
     auto player = static_cast<const CMidPlayer*>(playerObj);
-    if (player->raceType->data->raceType.id == races.neutral->id) {
-        // Skip neutrals
-        return income;
-    }
-
-    auto variables{getScenarioVariables(objectMap)};
-    if (!variables || !variables->variables.length) {
-        // No variables defined, skip
-        return income;
-    }
-
     const auto raceId = player->raceType->data->raceType.id;
     const char* racePrefix{};
+    CurrencyType manaType;
+    std::int32_t manaIncome;
 
     if (raceId == races.human->id) {
         racePrefix = "EMPIRE_";
+        manaType = CurrencyType::LifeMana;
+        manaIncome = income->lifeMana;
     } else if (raceId == races.heretic->id) {
         racePrefix = "LEGIONS_";
+        manaType = CurrencyType::InfernalMana;
+        manaIncome = income->infernalMana;
     } else if (raceId == races.dwarf->id) {
         racePrefix = "CLANS_";
+        manaType = CurrencyType::RunicMana;
+        manaIncome = income->runicMana;
     } else if (raceId == races.undead->id) {
         racePrefix = "HORDES_";
+        manaType = CurrencyType::DeathMana;
+        manaIncome = income->deathMana;
     } else if (raceId == races.elf->id) {
         racePrefix = "ELVES_";
+        manaType = CurrencyType::GroveMana;
+        manaIncome = income->groveMana;
+    } else if (raceId == races.neutral->id) {
+        // Skip neutrals
+        return income;
     }
 
     if (!racePrefix) {
@@ -90,50 +95,80 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
         return income;
     }
 
-    std::array<int, 6> cityIncome = {0, 0, 0, 0, 0, 0};
+    std::array<int, 6> cityGoldIncome = {0, 0, 0, 0, 0, 0};
+    std::array<int, 6> cityManaIncome = {0, 0, 0, 0, 0, 0};
 
-    logDebug("cityIncome.log",
-             fmt::format("Loop through {:d} scenario variables", variables->variables.length));
+    // No variables implemented for mana, get incomes from settings
+    const auto& economy = userSettings().economy;
+    cityManaIncome[0] = economy.cityManaIncome.capital;
+    cityManaIncome[1] = economy.cityManaIncome.tier1;
+    cityManaIncome[2] = economy.cityManaIncome.tier2;
+    cityManaIncome[3] = economy.cityManaIncome.tier3;
+    cityManaIncome[4] = economy.cityManaIncome.tier4;
+    cityManaIncome[5] = economy.cityManaIncome.tier5;
 
-    std::uint32_t listIndex{};
-    for (const auto& variable : variables->variables) {
-        const auto& name = variable.second.name;
+    auto variables{getScenarioVariables(objectMap)};
+    if (variables && variables->variables.length) {
 
-        // Additional income for specific race
-        if (!strncmp(name, racePrefix, std::strlen(racePrefix))) {
-            for (int i = 0; i < 6; ++i) {
-                const auto expectedName{fmt::format("{:s}TIER_{:d}_CITY_INCOME", racePrefix, i)};
+        logDebug("cityIncome.log",
+                 fmt::format("Loop through {:d} scenario variables", variables->variables.length));
 
-                if (!strncmp(name, expectedName.c_str(), sizeof(name))) {
-                    cityIncome[i] += variable.second.value;
-                    break;
+        std::uint32_t listIndex{};
+        for (const auto& variable : variables->variables) {
+            const auto& name = variable.second.name;
+
+            // Additional income for specific race
+            if (!strncmp(name, racePrefix, std::strlen(racePrefix))) {
+                for (int i = 0; i < 6; ++i) {
+                    const auto expectedName{
+                        fmt::format("{:s}TIER_{:d}_CITY_INCOME", racePrefix, i)};
+
+                    if (!strncmp(name, expectedName.c_str(), sizeof(name))) {
+                        cityGoldIncome[i] += variable.second.value;
+                        break;
+                    }
                 }
             }
-        }
 
-        // Additional income for all races
-        if (!strncmp(name, "TIER", 4)) {
-            for (int i = 0; i < 6; ++i) {
-                const auto expectedName{fmt::format("TIER_{:d}_CITY_INCOME", i)};
+            // Additional income for all races
+            if (!strncmp(name, "TIER", 4)) {
+                for (int i = 0; i < 6; ++i) {
+                    const auto expectedName{fmt::format("TIER_{:d}_CITY_INCOME", i)};
 
-                if (!strncmp(name, expectedName.c_str(), sizeof(name))) {
-                    cityIncome[i] += variable.second.value;
-                    break;
+                    if (!strncmp(name, expectedName.c_str(), sizeof(name))) {
+                        cityGoldIncome[i] += variable.second.value;
+                        break;
+                    }
                 }
             }
+
+            listIndex++;
         }
 
-        listIndex++;
+        logDebug("cityIncome.log", fmt::format("Loop done in {:d} iterations", listIndex));
     }
 
-    logDebug("cityIncome.log", fmt::format("Loop done in {:d} iterations", listIndex));
-
-    if (std::all_of(std::begin(cityIncome), std::end(cityIncome),
+    // No variables defined for gold, get incomes from settings
+    if (std::all_of(std::begin(cityGoldIncome), std::end(cityGoldIncome),
                     [](int value) { return value == 0; })) {
+        cityGoldIncome[0] = economy.cityGoldIncome.capital;
+        cityGoldIncome[1] = economy.cityGoldIncome.tier1;
+        cityGoldIncome[2] = economy.cityGoldIncome.tier2;
+        cityGoldIncome[3] = economy.cityGoldIncome.tier3;
+        cityGoldIncome[4] = economy.cityGoldIncome.tier4;
+        cityGoldIncome[5] = economy.cityGoldIncome.tier5;
+    }
+
+    // No incomes defined, skip
+    if (std::all_of(std::begin(cityGoldIncome), std::end(cityGoldIncome),
+                    [](int value) { return value == 0; }) && 
+        std::all_of(std::begin(cityManaIncome), std::end(cityManaIncome),
+                       [](int value) { return value == 0; })) {
         return income;
     }
 
-    auto getVillageIncome = [playerId, income, &cityIncome](const IMidScenarioObject* obj) {
+    auto getVillageIncome = [playerId, income, &cityGoldIncome, &cityManaIncome,
+                            manaType, &manaIncome](const IMidScenarioObject* obj) {
         auto fortification = static_cast<const CFortification*>(obj);
 
         if (fortification->ownerId == *playerId) {
@@ -143,17 +178,22 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
             if (category->id == FortCategories::get().village->id) {
                 auto village = static_cast<const CMidVillage*>(fortification);
 
-                const int gold{income->gold + cityIncome[village->tierLevel]};
+                const int gold{income->gold + cityGoldIncome[village->tierLevel]};
                 BankApi::get().set(income, CurrencyType::Gold, std::clamp(gold, 0, 9999));
+
+                manaIncome += cityManaIncome[village->tierLevel];
+                BankApi::get().set(income, manaType, std::clamp(manaIncome, 0, 9999));
             }
         }
     };
 
     forEachScenarioObject(objectMap, IdType::Fortification, getVillageIncome);
 
-    // Custom capital city income
-    const int gold{income->gold + cityIncome[0]};
+    // Additional gold and mana income for capital city
+    const int gold{income->gold + cityGoldIncome[0]};
     BankApi::get().set(income, CurrencyType::Gold, std::clamp(gold, 0, 9999));
+    manaIncome += cityManaIncome[0];
+    BankApi::get().set(income, manaType, std::clamp(manaIncome, 0, 9999));
 
     return income;
 }
