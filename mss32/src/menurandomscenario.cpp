@@ -24,6 +24,7 @@
 #include "dynamiccast.h"
 #include "editboxinterf.h"
 #include "exceptions.h"
+#include "generationresultinterf.h"
 #include "globaldata.h"
 #include "image2outline.h"
 #include "listbox.h"
@@ -40,12 +41,15 @@
 #include "textboxinterf.h"
 #include "textids.h"
 #include "utils.h"
+#include "waitgenerationinterf.h"
 #include <chrono>
 #include <fmt/format.h>
 #include <set>
 #include <sol/sol.hpp>
 
 namespace hooks {
+
+static void __fastcall buttonGenerateHandler(CMenuRandomScenario* thisptr, int /*%edx*/);
 
 static const char templatesListName[] = "TLBOX_TEMPLATES";
 static const char sizeSpinName[] = "SPIN_SIZE";
@@ -539,6 +543,7 @@ static void generateScenario(CMenuRandomScenario* menu, std::time_t seed)
 
             // Successfully generated, save results
             menu->scenario = std::move(scenario);
+            menu->generator = std::make_unique<rsg::MapGenerator>(std::move(generator));
 
             const auto end{clock::now()};
             const auto genTime = std::chrono::duration_cast<ms>(end - beforeGeneration);
@@ -565,6 +570,35 @@ static void generateScenario(CMenuRandomScenario* menu, std::time_t seed)
     menu->generationStatus = GenerationStatus::LimitExceeded;
 }
 
+static void onGenerationResultAccepted(CMenuRandomScenario* menu)
+{
+    // Player is satisfied with generation results, start scenario
+    removePopup(menu);
+
+    if (menu->startScenario) {
+        menu->startScenario(menu);
+    }
+}
+
+static void onGenerationResultRejected(CMenuRandomScenario* menu)
+{
+    // Player rejected generation results, generate again
+    menu->scenario.reset(nullptr);
+    menu->generator.reset(nullptr);
+
+    removePopup(menu);
+    buttonGenerateHandler(menu, 0);
+}
+
+static void onGenerationResultCanceled(CMenuRandomScenario* menu)
+{
+    // Player decided return back to random scenario menu
+    menu->scenario.reset(nullptr);
+    menu->generator.reset(nullptr);
+
+    removePopup(menu);
+}
+
 static void __fastcall waitGenerationResults(CMenuRandomScenario* menu, int /*%edx*/)
 {
     const auto status{menu->generationStatus};
@@ -589,9 +623,10 @@ static void __fastcall waitGenerationResults(CMenuRandomScenario* menu, int /*%e
             return;
         }
 
-        if (menu->startScenario) {
-            menu->startScenario(menu);
-        }
+        menu->popup = createGenerationResultInterf(menu, onGenerationResultAccepted,
+                                                   onGenerationResultRejected,
+                                                   onGenerationResultCanceled);
+        showInterface(menu->popup);
         return;
     }
 
@@ -623,7 +658,7 @@ static void __fastcall waitGenerationResults(CMenuRandomScenario* menu, int /*%e
 
 static void onGenerationCanceled(CMenuRandomScenario* menu)
 {
-    WaitGenerationInterf* popup{menu->popup};
+    game::CPopupDialogInterf* popup{menu->popup};
     if (!popup) {
         return;
     }
@@ -884,6 +919,10 @@ CMenuRandomScenario::~CMenuRandomScenario()
 
     if (scenario) {
         scenario.reset(nullptr);
+    }
+
+    if (generator) {
+        generator.reset(nullptr);
     }
 
     game::UiEventApi::get().destructor(&uiEvent);

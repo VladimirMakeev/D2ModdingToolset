@@ -21,16 +21,17 @@
 #define MENURANDOMSCENARIO_H
 
 #include "map.h"
+#include "mapgenerator.h"
 #include "maptemplate.h"
 #include "menubase.h"
-#include "waitgenerationinterf.h"
 #include <array>
 #include <thread>
 #include <utility>
 
 namespace game {
 struct CButtonInterf;
-}
+struct CPopupDialogInterf;
+} // namespace game
 
 namespace hooks {
 
@@ -58,12 +59,13 @@ struct CMenuRandomScenario : public game::CMenuBase
     std::thread generatorThread;
     rsg::MapTemplate scenarioTemplate;
     rsg::MapPtr scenario;
+    std::unique_ptr<rsg::MapGenerator> generator;
 
     // Tracks which button shows which race image
     using RaceIndices = std::array<std::pair<game::CButtonInterf*, int /* image index */>, 4>;
     RaceIndices raceIndices;
 
-    WaitGenerationInterf* popup{};
+    game::CPopupDialogInterf* popup{};
     GenerationStatus generationStatus{GenerationStatus::NotStarted};
     StartScenario startScenario{};
     bool cancelGeneration{false};

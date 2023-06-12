@@ -1226,6 +1226,9 @@
     <ClCompile Include="src\image2memory.cpp">
       <Filter>features</Filter>
     </ClCompile>
+    <ClCompile Include="src\generationresultinterf.cpp">
+      <Filter>features\random scenario generator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3198,6 +3201,9 @@
     </ClInclude>
     <ClInclude Include="include\image2memory.h">
       <Filter>features</Filter>
+    </ClInclude>
+    <ClInclude Include="include\generationresultinterf.h">
+      <Filter>features\random scenario generator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
