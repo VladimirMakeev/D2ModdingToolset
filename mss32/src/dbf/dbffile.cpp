@@ -44,10 +44,6 @@ bool DbfFile::open(const std::filesystem::path& file)
     }
 
     const auto recordsDataLength = recordsTotal() * header.recordLength;
-    const auto recordsEnd = header.headerLength + recordsDataLength;
-    if (recordsEnd + 1 != fileSize) {
-        return false;
-    }
 
     if (!readColumns(stream)) {
         return false;
