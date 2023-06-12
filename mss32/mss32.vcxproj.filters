@@ -1220,6 +1220,12 @@
     <ClCompile Include="src\batattackgroupupgrade.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\mqimage2surface16.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\image2memory.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3189,6 +3195,9 @@
     </ClInclude>
     <ClInclude Include="include\streamholder.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\image2memory.h">
+      <Filter>features</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
