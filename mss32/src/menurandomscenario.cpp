@@ -688,7 +688,8 @@ static void __fastcall buttonGenerateHandler(CMenuRandomScenario* thisptr, int /
     const CSpinButtonInterf* forestSpin{dialogApi.findSpinButton(dialog, forestSpinName)};
     const CSpinButtonInterf* roadsSpin{dialogApi.findSpinButton(dialog, roadsSpinName)};
     const CSpinButtonInterf* goldSpin{dialogApi.findSpinButton(dialog, goldSpinName)};
-    if (!sizeSpin || !forestSpin || !roadsSpin || !goldSpin) {
+    const CSpinButtonInterf* manaSpin{dialogApi.findSpinButton(dialog, manaSpinName)};
+    if (!sizeSpin || !forestSpin || !roadsSpin || !goldSpin || !manaSpin) {
         return;
     }
 
@@ -736,6 +737,7 @@ static void __fastcall buttonGenerateHandler(CMenuRandomScenario* thisptr, int /
         settings.forest = forestSpin->data->selectedOption * forestSpinStep;
         settings.roads = roadsSpin->data->selectedOption * roadsSpinStep;
         settings.startingGold = goldSpin->data->selectedOption * goldSpinStep;
+        settings.startingNativeMana = manaSpin->data->selectedOption * manaSpinStep;
 
         rsg::RandomGenerator rnd;
 
