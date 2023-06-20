@@ -17,12 +17,14 @@
     ```
     - Add two new menu screens: for random multiplayer maps and local play (singleplayer or hotseat) maps. Add `DLG_RANDOM_SCENARIO_SINGLE` and `DLG_RANDOM_SCENARIO_MULTI` in `Interf.dlg`;
     - Add popup menu that will be displayed during scenario map generation process, add `DLG_WAIT_GENERATION` in `Interf.dlg`;
+    - Add popup menu that will show zones placement preview after map generation, add `DLG_GENERATION_RESULT` in `Interf.dlg`;
     - Add transition animations for new menu screens in `MenuAnim.ff`:
         - `TRANS_HOST2RNDMULTI.BIK` - transition from multiplayer host to generator menu;
         - `TRANS_NEWQUEST2RNDSINGLE.BIK` - transition from local game to generator menu;
         - `TRANS_RND2HSLOBBY.BIK` - transition from generator menu to hotseat lobby;
         - `TRANS_RNDSINGLE2GOD.BIK` - transition from generator menu to race selection menu;
     - Add race preview images as well as 'random race' to `Interf.ff`. Images should be named as `GOD_EMPIRE`, `GOD_CLANS`, `GOD_UNDEAD`, `GOD_LEGIONS`, `GOD_ELVES`, `GOD_RANDOM`;
+    - Add `ZONE_BORDER` image for zones placement preview to `Interf.ff`;
     - Add translated text ids to `TApp.dbf` and into `generator` section of `Scripts/textids.lua`.
   </details>
 - Increases maximum game turn to 9999;
