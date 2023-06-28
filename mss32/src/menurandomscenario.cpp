@@ -373,6 +373,11 @@ static void updateMenuUi(CMenuRandomScenario* menu, int selectedIndex)
         spinBox.setSelectedOption(goldSpin, settings.startingGold / goldSpinStep);
     }
 
+    CSpinButtonInterf* manaSpin{dialogApi.findSpinButton(dialog, manaSpinName)};
+    if (manaSpin) {
+        spinBox.setSelectedOption(manaSpin, settings.startingNativeMana / manaSpinStep);
+    }
+
     CTextBoxInterf* descText{dialogApi.findTextBox(dialog, descTextName)};
     if (descText) {
         textBox.setString(descText, settings.description.c_str());
