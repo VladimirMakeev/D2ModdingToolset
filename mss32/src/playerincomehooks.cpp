@@ -19,10 +19,12 @@
 
 #include "playerincomehooks.h"
 #include "currency.h"
+#include "difficultylevel.h"
 #include "fortcategory.h"
 #include "fortification.h"
 #include "game.h"
 #include "gameutils.h"
+#include "globalvariables.h"
 #include "log.h"
 #include "midgardid.h"
 #include "midgardobjectmap.h"
@@ -32,6 +34,7 @@
 #include "originalfunctions.h"
 #include "racecategory.h"
 #include "racetype.h"
+#include "scenarioinfo.h"
 #include "settings.h"
 #include "utils.h"
 #include <algorithm>
@@ -167,8 +170,11 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
         return income;
     }
 
-    auto getVillageIncome = [playerId, income, &cityGoldIncome, &cityManaIncome,
-                            manaType, &manaIncome](const IMidScenarioObject* obj) {
+    int goldIncomeTotal = 0;
+    int manaIncomeTotal = 0;
+
+    auto getVillageIncome = [playerId, &cityGoldIncome, &cityManaIncome, &goldIncomeTotal, 
+                            &manaIncomeTotal](const IMidScenarioObject* obj) {
         auto fortification = static_cast<const CFortification*>(obj);
 
         if (fortification->ownerId == *playerId) {
@@ -177,12 +183,8 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
 
             if (category->id == FortCategories::get().village->id) {
                 auto village = static_cast<const CMidVillage*>(fortification);
-
-                const int gold{income->gold + cityGoldIncome[village->tierLevel]};
-                BankApi::get().set(income, CurrencyType::Gold, std::clamp(gold, 0, 9999));
-
-                manaIncome += cityManaIncome[village->tierLevel];
-                BankApi::get().set(income, manaType, std::clamp(manaIncome, 0, 9999));
+                goldIncomeTotal += cityGoldIncome[village->tierLevel];
+                manaIncomeTotal += cityManaIncome[village->tierLevel];
             }
         }
     };
@@ -190,10 +192,35 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
     forEachScenarioObject(objectMap, IdType::Fortification, getVillageIncome);
 
     // Additional gold and mana income for capital city
-    const int gold{income->gold + cityGoldIncome[0]};
+    goldIncomeTotal += cityGoldIncome[0];
+    manaIncomeTotal += cityManaIncome[0];
+
+    // Income increase based on current game difficulty
+    int incomeBonus = 0;
+    const auto& globalApi = GlobalDataApi::get();
+    const auto globalData = *globalApi.getGlobalData();
+    const auto globalVars = *globalData->globalVariables;
+    const auto& difficulties = DifficultyLevelCategories::get();
+    const auto difficultyId = getScenarioInfo(objectMap)->gameDifficulty.id;
+    if (difficultyId == difficulties.easy->id) {
+        incomeBonus = globalVars->incomeEasy;
+    } else if (difficultyId == difficulties.average->id) {
+        incomeBonus = globalVars->incomeAverage;
+    } else if (difficultyId == difficulties.hard->id) {
+        incomeBonus = globalVars->incomeHard;
+    } else if (difficultyId == difficulties.veryHard->id) {
+        incomeBonus = globalVars->incomeVeryHard;
+    }
+    if (incomeBonus != 0) {
+        goldIncomeTotal = goldIncomeTotal * (100 + incomeBonus) / 100;
+        manaIncomeTotal = manaIncomeTotal * (100 + incomeBonus) / 100;
+    }
+
+    // Sum additional city incomes with original ones
+    const int gold{income->gold + goldIncomeTotal};
+    const int mana{manaIncome + manaIncomeTotal};
     BankApi::get().set(income, CurrencyType::Gold, std::clamp(gold, 0, 9999));
-    manaIncome += cityManaIncome[0];
-    BankApi::get().set(income, manaType, std::clamp(manaIncome, 0, 9999));
+    BankApi::get().set(income, manaType, std::clamp(mana, 0, 9999));
 
     return income;
 }
