@@ -161,6 +161,12 @@ textids = {
 		-- The text must contain keywords "%ATTACK%" and "%INFINITE%".
 		-- Fallback text is "%ATTACK% (%INFINITE%)".
 		infiniteText = "",
+
+		-- Defines text id, which will be added to original "X005TA0423" unit stats description text.
+		-- It can be used to show additional unit info if you run out of "X005TA0423" length limit.
+		-- For example, you can add a text with "X015TA0005" id to `TApp.dbf` and `TAppEdit.dbf` and
+		-- move part of the text from "X005TA0423" to "X015TA0005", which will be merged together.
+		extraUnitStats = "",
 	},
 
 	-- Text ids related to events logic

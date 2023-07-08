@@ -60,6 +60,7 @@ struct TextIds
         std::string infiniteAttack;
         std::string infiniteText;
         std::string removedAttackWard;
+        std::string extraUnitStats;
     } interf;
 
     struct Events

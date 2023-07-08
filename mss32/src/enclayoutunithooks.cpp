@@ -833,6 +833,20 @@ static void addStatsDynUpgradeText(std::string& text,
     addDynUpgradeTextToField(text, "%XP%", upgrade1->xpNext, upgrade2->xpNext);
 }
 
+static void addStats2DynUpgradeText(std::string& text, game::IEncUnitDescriptor* descriptor)
+{
+    using namespace game;
+
+    const CDynUpgrade* upgrade1 = nullptr;
+    const CDynUpgrade* upgrade2 = nullptr;
+    if (!getDynUpgradesToDisplay(descriptor, &upgrade1, &upgrade2)) {
+        return;
+    }
+
+    addDynUpgradeTextToField(text, "%REGEN%", upgrade1->regen, upgrade2->regen);
+    addDynUpgradeTextToField(text, "%XPKILL%", upgrade1->xpKilled, upgrade2->xpKilled);
+}
+
 static void setTxtStats(game::CEncLayoutUnit* layout,
                         const game::IUsSoldier* soldierImpl,
                         const game::IdList& editorModifiers)
@@ -850,7 +864,12 @@ static void setTxtStats(game::CEncLayoutUnit* layout,
     // \fMedbold;Immunities:\t\fNormal;\p110;%IMMU%\mL0;
     // \fMedbold;Wards:\t\fNormal;\p110;%WARD%
     auto text = getInterfaceText("X005TA0423");
+    auto text2 = getInterfaceText(textIds().interf.extraUnitStats.c_str());
+    if (!text2.empty()) {
+        text += text2;
+    }
     addStatsDynUpgradeText(text, descriptor, soldierImpl);
+    addStats2DynUpgradeText(text, descriptor);
     replace(text, "%LEVEL%", getNumberText(descriptor->vftable->getUnitLevel(descriptor), false));
     replace(text, "%HP1%", getNumberText(descriptor->vftable->getHp(descriptor), false));
     replace(text, "%HP2%", getHp2Field(descriptor, soldierImpl, editorModifiers));
@@ -858,23 +877,12 @@ static void setTxtStats(game::CEncLayoutUnit* layout,
     replace(text, "%XP%", getXpField(descriptor, soldierImpl));
     replace(text, "%IMMU%", getImmuField(layout, soldierImpl, editorModifiers));
     replace(text, "%WARD%", getWardField(layout, soldierImpl, editorModifiers));
+    replace(text, "%EFFHP%", getEffhpField(layout));
+    replace(text, "%REGEN%", getRegenField(layout, soldierImpl));
+    replace(text, "%XPKILL%", getXpKillField(descriptor, soldierImpl));
 
     auto textBox = CDialogInterfApi::get().findTextBox(layout->dialog, "TXT_STATS");
     CTextBoxInterfApi::get().setString(textBox, text.c_str());
-}
-
-static void addStats2DynUpgradeText(std::string& text, game::IEncUnitDescriptor* descriptor)
-{
-    using namespace game;
-
-    const CDynUpgrade* upgrade1 = nullptr;
-    const CDynUpgrade* upgrade2 = nullptr;
-    if (!getDynUpgradesToDisplay(descriptor, &upgrade1, &upgrade2)) {
-        return;
-    }
-
-    addDynUpgradeTextToField(text, "%REGEN%", upgrade1->regen, upgrade2->regen);
-    addDynUpgradeTextToField(text, "%XPKILL%", upgrade1->xpKilled, upgrade2->xpKilled);
 }
 
 static void setTxtStats2(game::CEncLayoutUnit* layout,
@@ -899,7 +907,13 @@ static void setTxtStats2(game::CEncLayoutUnit* layout,
     }
 
     std::string text{textBox->data->text.string};
+    addStatsDynUpgradeText(text, descriptor, soldierImpl);
     addStats2DynUpgradeText(text, descriptor);
+    replace(text, "%LEVEL%", getNumberText(descriptor->vftable->getUnitLevel(descriptor), false));
+    replace(text, "%HP1%", getNumberText(descriptor->vftable->getHp(descriptor), false));
+    replace(text, "%HP2%", getHp2Field(descriptor, soldierImpl, editorModifiers));
+    replace(text, "%ARMOR%", getArmorField(layout, soldierImpl, editorModifiers));
+    replace(text, "%XP%", getXpField(descriptor, soldierImpl));
     replace(text, "%EFFHP%", getEffhpField(layout));
     replace(text, "%REGEN%", getRegenField(layout, soldierImpl));
     replace(text, "%XPKILL%", getXpKillField(descriptor, soldierImpl));
