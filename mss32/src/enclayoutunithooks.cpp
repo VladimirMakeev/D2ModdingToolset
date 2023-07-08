@@ -881,6 +881,17 @@ static void setTxtStats(game::CEncLayoutUnit* layout,
     replace(text, "%REGEN%", getRegenField(layout, soldierImpl));
     replace(text, "%XPKILL%", getXpKillField(descriptor, soldierImpl));
 
+    const CDynUpgrade* upgrade1 = nullptr;
+    const CDynUpgrade* upgrade2 = nullptr;
+    if (getDynamicUpgrades(descriptor, &upgrade1, &upgrade2)) {
+        writeDynUpgradeLevel(text, "%UPGLEVEL%", soldierImpl->vftable->getDynUpgLvl(soldierImpl));
+        writeDynUpgradeText(text, "%UPGXP%", upgrade1->xpNext, upgrade2->xpNext);
+        writeDynUpgradeText(text, "%UPGHP%", upgrade1->hp, upgrade2->hp);
+        writeDynUpgradeText(text, "%UPGARMOR%", upgrade1->armor, upgrade2->armor);
+        writeDynUpgradeText(text, "%UPGREGEN%", upgrade1->regen, upgrade2->regen);
+        writeDynUpgradeText(text, "%UPGXPKILL%", upgrade1->xpKilled, upgrade2->xpKilled);
+    }
+
     auto textBox = CDialogInterfApi::get().findTextBox(layout->dialog, "TXT_STATS");
     CTextBoxInterfApi::get().setString(textBox, text.c_str());
 }
@@ -917,6 +928,17 @@ static void setTxtStats2(game::CEncLayoutUnit* layout,
     replace(text, "%EFFHP%", getEffhpField(layout));
     replace(text, "%REGEN%", getRegenField(layout, soldierImpl));
     replace(text, "%XPKILL%", getXpKillField(descriptor, soldierImpl));
+
+    const CDynUpgrade* upgrade1 = nullptr;
+    const CDynUpgrade* upgrade2 = nullptr;
+    if (getDynamicUpgrades(descriptor, &upgrade1, &upgrade2)) {
+        writeDynUpgradeLevel(text, "%UPGLEVEL%", soldierImpl->vftable->getDynUpgLvl(soldierImpl));
+        writeDynUpgradeText(text, "%UPGXP%", upgrade1->xpNext, upgrade2->xpNext);
+        writeDynUpgradeText(text, "%UPGHP%", upgrade1->hp, upgrade2->hp);
+        writeDynUpgradeText(text, "%UPGARMOR%", upgrade1->armor, upgrade2->armor);
+        writeDynUpgradeText(text, "%UPGREGEN%", upgrade1->regen, upgrade2->regen);
+        writeDynUpgradeText(text, "%UPGXPKILL%", upgrade1->xpKilled, upgrade2->xpKilled);
+    }
 
     CTextBoxInterfApi::get().setString(textBox, text.c_str());
 }

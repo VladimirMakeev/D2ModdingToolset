@@ -64,9 +64,14 @@ std::string getAttackSourceText(const game::LAttackSource* source);
 std::string getAttackSourceText(game::AttackSourceId id);
 std::string getAttackClassText(game::AttackClassId id);
 
+bool getDynamicUpgrades(game::IEncUnitDescriptor* descriptor,
+                        const game::CDynUpgrade** upgrade1,
+                        const game::CDynUpgrade** upgrade2);
 bool getDynUpgradesToDisplay(game::IEncUnitDescriptor* descriptor,
                              const game::CDynUpgrade** upgrade1,
                              const game::CDynUpgrade** upgrade2);
+void writeDynUpgradeLevel(std::string& text, const char* field, int level);
+void writeDynUpgradeText(std::string& text, const char* field, int upgrade1, int upgrade2);
 void addDynUpgradeLevelToField(std::string& text, const char* field, int level);
 void addDynUpgradeTextToField(std::string& text, const char* field, int upgrade1, int upgrade2);
 

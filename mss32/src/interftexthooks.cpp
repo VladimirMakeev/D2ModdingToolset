@@ -734,6 +734,24 @@ void __stdcall generateAttackDescriptionHooked(game::IEncUnitDescriptor* descrip
     replace(description, "%REACH%", getReachField(actual, global));
     replace(description, "%TARGETS%", getTargetsField(actual, global));
 
+    const game::CDynUpgrade* upgrade1 = nullptr;
+    const game::CDynUpgrade* upgrade2 = nullptr;
+    if (getDynamicUpgrades(descriptor, &upgrade1, &upgrade2)) {
+        writeDynUpgradeText(description, "%UPGINIT%", upgrade1->initiative, upgrade2->initiative);
+        if (actual.damage() || actual2.damage()) {
+            writeDynUpgradeText(description, "%UPGDAMAGE%", upgrade1->damage, upgrade2->damage);
+        } else if (actual.heal() || actual2.heal()) {
+            writeDynUpgradeText(description, "%UPGDAMAGE%", upgrade1->heal, upgrade2->heal);
+        } else {
+            writeDynUpgradeText(description, "%UPGDAMAGE%", 0, 0);
+        }
+        if (actual.hasPower() || actual2.hasPower()) {
+            writeDynUpgradeText(description, "%UPGHIT%", upgrade1->power, upgrade2->power);
+        } else {
+            writeDynUpgradeText(description, "%UPGHIT%", 0, 0);
+        }
+    }
+
     auto textBox = game::CDialogInterfApi::get().findTextBox(dialog, "TXT_ATTACK_INFO");
     game::CTextBoxInterfApi::get().setString(textBox, description.c_str());
 }

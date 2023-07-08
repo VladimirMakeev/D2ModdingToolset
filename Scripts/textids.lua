@@ -137,17 +137,24 @@ textids = {
 		-- Fallback text is "%ATTACK% (%OVERFLOW%)".
 		overflowText = "",
 
-		-- Defines text id to format dynamic upgrade level in unit encyclopedia.
+		-- Defines text id to format dynamic upgrade level in unit type encyclopedia.
 		-- The text must contain keyword %STAT%.
 		-- "%UPGLV%" is optional and can be ommited if you don't want to display upgrade level.
 		-- Fallback text is "%STAT% (level-ups weaken at %UPGLV%)".
 		dynamicUpgradeLevel = "",
 
-		-- Defines text id to format dynamic upgrades text in unit encyclopedia.
+		-- Defines text id to format dynamic upgrades text in unit type encyclopedia.
 		-- The text must contain keywords "%STAT%", %UPG1% and %UPG2%.
 		-- Fallback text is "%STAT% (%UPG1% | %UPG2% per level)".
 		dynamicUpgradeValues = "",
 		
+		-- Defines text id to format dynamic upgrades text in unit encyclopedia for stats and attacks.
+		-- The text must contain keywords %UPG1% and %UPG2%. Fallback text is " [%UPG1% | %UPG2%]".
+		-- Used to format upgrade values placed in "X005TA0423", "X005TA0787", "X005TA0788" texts of
+		-- "TApp.dbf" and "TAppEdit.dbf" by special keywords: %UPGLEVEL%, %UPGXP%, %UPGHP%, %UPGARMOR%,
+		-- %UPGREGEN%, %UPGXPKILL%, %UPGDAMAGE%, %UPGHIT%, %UPGINIT%.
+		dynamicUpgradesFormat = "",
+
 		-- Defines text id to format broken (removed) wards in unit encyclopedia.
 		-- The text must contain keyword "%WARD%", or it can be an empty string to not display broken wards at all.
 		-- Fallback text is "\fMedBold;\c100;000;000;%WARD%\c000;000;000;\fNormal;".

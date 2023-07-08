@@ -229,6 +229,7 @@
         - `overflowText`
         - `dynamicUpgradeLevel`
         - `dynamicUpgradeValues`
+        - `dynamicUpgradesFormat`
         - `removedAttackWard`
         - `extraUnitStats`
     - Add the specified interface text to `TApp.dbf` and `TAppEdit.dbf`;
@@ -244,13 +245,16 @@
         - Note that you can freely move content between `X005TA0787` and `X005TA0788` if you run out of length limit (because the two strings simply merged together in `X005TA0424`).
     - (Optional) Add infinite effect indication (alternative to effect duration): enable setting 'unitEncyclopedia.displayInfiniteAttackIndicator';
     - (Optional) Add extra stats to original unit description interface:
-        - Add `%XPKILL%`, `%EFFHP%` and `%REGEN%` (every keyword is optional) in unit interface text with id `X005TA0423` to `TApp.dbf` and `TAppEdit.dbf`;
+        - Add `%XPKILL%`, `%EFFHP%` and `%REGEN%` unit stats (every keyword is optional) in unit interface text with id `X005TA0423` to `TApp.dbf` and `TAppEdit.dbf`;
+	- Add `%UPGLEVEL%`, `%UPGXP%`, `%UPGHP%`, `%UPGARMOR%`, `%UPGREGEN%` and `%UPGXPKILL%` stat upgrades (every keyword is optional) in unit interface text with id `X005TA0423` to `TApp.dbf` and `TAppEdit.dbf`. Upgrades can be formatted using `dynamicUpgradesFormat` parameter in [textids.lua](Scripts/textids.lua);
+	- Add `%UPGDAMAGE%`, `%UPGHIT%`, `%UPGINIT%` attack upgrades (every keyword is optional) in unit interface texts with id `X005TA0787` and `X005TA0788` to `TApp.dbf` and `TAppEdit.dbf`. Upgrades can be formatted using `dynamicUpgradesFormat` parameter in [textids.lua](Scripts/textids.lua);
         - Note that you can add extra interface text id to `TApp.dbf` and `TAppEdit.dbf` (for example, `X015TA0005`) and specify it in `extraUnitStats` parameter in [textids.lua](Scripts/textids.lua). Then you will be able to move content between `X005TA0423` and this new `X015TA0005` text if you run out of length limit (because the two strings will be merged together).
     - (Optional) Add extra stats panel:
         - Add interface text to `TApp.dbf` and `TAppEdit.dbf` that contains `%LEVEL%`, `%XP%`, `%HP1%`, `%HP2%`, `%ARMOR%`, `%XPKILL%`, `%EFFHP%` and `%REGEN%` (every keyword is optional), for example:
             ```
             \s50;\n\fMedbold;Bounty:\t\fNormal;%XPKILL%\n\fMedbold;Eff. HP:\t\fNormal;%EFFHP%\n\fMedbold;Regen:\t\fNormal;%REGEN%
             ```
+        - Add `%UPGLEVEL%`, `%UPGXP%`, `%UPGHP%`, `%UPGARMOR%`, `%UPGREGEN%` and `%UPGXPKILL%` stat upgrades (every keyword is optional) in interface text, previously added to `TApp.dbf` and `TAppEdit.dbf`. Upgrades can be formatted using `dynamicUpgradesFormat` parameter in [textids.lua](Scripts/textids.lua);
         - Add text box with name `TXT_STATS_2` to `DLG_R_C_UNIT` in `Interf.dlg` and `ScenEdit.dlg`. Specify added interface text id. For example:
             ```
             TEXT	TXT_STATS_2,554,75,664,231,,"X015TA0003",""

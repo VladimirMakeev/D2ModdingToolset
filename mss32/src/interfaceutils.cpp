@@ -341,19 +341,11 @@ std::string getAttackClassText(game::AttackClassId id)
     return "";
 }
 
-bool getDynUpgradesToDisplay(game::IEncUnitDescriptor* descriptor,
-                             const game::CDynUpgrade** upgrade1,
-                             const game::CDynUpgrade** upgrade2)
+bool getDynamicUpgrades(game::IEncUnitDescriptor* descriptor,
+                        const game::CDynUpgrade** upgrade1,
+                        const game::CDynUpgrade** upgrade2)
 {
     using namespace game;
-
-    if (!userSettings().unitEncyclopedia.displayDynamicUpgradeValues) {
-        return false;
-    }
-
-    if (!descriptor->vftable->isUnitType(descriptor)) {
-        return false;
-    }
 
     CMidgardID globalUnitImplId;
     descriptor->vftable->getGlobalUnitImplId(descriptor, &globalUnitImplId);
@@ -362,6 +354,40 @@ bool getDynUpgradesToDisplay(game::IEncUnitDescriptor* descriptor,
     *upgrade1 = getDynUpgrade(globalUnitImpl, 1);
     *upgrade2 = getDynUpgrade(globalUnitImpl, 2);
     return *upgrade1 && *upgrade2;
+}
+
+bool getDynUpgradesToDisplay(game::IEncUnitDescriptor* descriptor,
+                             const game::CDynUpgrade** upgrade1,
+                             const game::CDynUpgrade** upgrade2)
+{
+    using namespace game;
+    if (!userSettings().unitEncyclopedia.displayDynamicUpgradeValues) {
+        return false;
+    }
+    if (!descriptor->vftable->isUnitType(descriptor)) {
+        return false;
+    }
+    return getDynamicUpgrades(descriptor, upgrade1, upgrade2);
+}
+
+void writeDynUpgradeLevel(std::string& text, const char* field, int level)
+{
+    replace(text, field, fmt::format("{:d}", level));
+}
+
+void writeDynUpgradeText(std::string& text, const char* field, int upgrade1, int upgrade2)
+{
+    if (!upgrade1 && !upgrade2) {
+        replace(text, field, "");
+        return;
+    }
+    auto result = getInterfaceText(textIds().interf.dynamicUpgradesFormat.c_str());
+    if (result.empty()) {
+        result = " [%UPG1% | %UPG2%]";
+    }
+    replace(result, "%UPG1%", fmt::format("{:+d}", upgrade1));
+    replace(result, "%UPG2%", fmt::format("{:+d}", upgrade2));
+    replace(text, field, result);
 }
 
 void addDynUpgradeLevelToField(std::string& text, const char* field, int level)

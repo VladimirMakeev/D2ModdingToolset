@@ -154,6 +154,7 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.overflowText = interf.value().get_or("overflowText", std::string());
     value.dynamicUpgradeLevel = interf.value().get_or("dynamicUpgradeLevel", std::string());
     value.dynamicUpgradeValues = interf.value().get_or("dynamicUpgradeValues", std::string());
+    value.dynamicUpgradesFormat = interf.value().get_or("dynamicUpgradesFormat", std::string());
     value.durationDescription = interf.value().get_or("durationDescription", std::string());
     value.durationText = interf.value().get_or("durationText", std::string());
     value.instantDurationText = interf.value().get_or("instantDurationText", std::string());

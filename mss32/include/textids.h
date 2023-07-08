@@ -51,6 +51,7 @@ struct TextIds
         std::string overflowText;
         std::string dynamicUpgradeLevel;
         std::string dynamicUpgradeValues;
+        std::string dynamicUpgradesFormat;
         std::string durationDescription;
         std::string durationText;
         std::string instantDurationText;
