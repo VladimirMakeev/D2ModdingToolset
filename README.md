@@ -594,7 +594,7 @@
     The main purpose is to complement custom attack reaches.<br />
     Allows to reduce or increase incoming damage for additional attack targets:
     - Add `DAM_RATIO` (Numeric, size 3), `DR_REPEAT` (Logical) and `DAM_SPLIT` (Logical) columns to `Gattacks.dbf`;
-    - `DAM_RATIO` specifies a portion of the attack damage received by additional targets (0-255%). 100 or empty is the vanilla behavior;
+    - `DAM_RATIO` specifies a portion of the attack damage received by additional targets (0-255%). 100 is the vanilla behavior;
     - `DR_REPEAT` specifies whether the `DAM_RATIO` should be applied for every consequent target;
     - `DAM_SPLIT` specifies whether the attack damage (`QTY_DAM`) is split between all the affected targets;
     - `splitDamageMultiplier` in [settings.lua](Scripts/settings.lua) specifies multiplier for `DAM_SPLIT` damage for better late-game scaling (default of 300 max damage split among 6 targets is miserable);

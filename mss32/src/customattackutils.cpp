@@ -596,7 +596,7 @@ const CustomAttackDamageRatios& getCustomDamageRatios(const game::IAttack* attac
 
 int applyAttackDamageRatio(int damage, double ratio)
 {
-    if (damage == 0)
+    if (damage == 0 || ratio == 0)
         return 0;
 
     int result = lround(ratio * damage);
