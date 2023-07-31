@@ -1232,6 +1232,9 @@
     <ClCompile Include="src\chatinterf.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\formattedtext.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3224,6 +3227,9 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\playerlistentry.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\formattedtext.h">
       <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>

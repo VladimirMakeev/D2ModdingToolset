@@ -235,6 +235,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\encparambasehooks.cpp" />
     <ClCompile Include="src\encyclopediapopup.cpp" />
     <ClCompile Include="src\exchangeinterfhooks.cpp" />
+    <ClCompile Include="src\formattedtext.cpp" />
     <ClCompile Include="src\generationresultinterf.cpp" />
     <ClCompile Include="src\groupupgradehooks.cpp" />
     <ClCompile Include="src\image2memory.cpp" />
@@ -673,6 +674,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\factoryimagestill.h" />
     <ClInclude Include="include\fffactory.h" />
     <ClInclude Include="include\ffimg.h" />
+    <ClInclude Include="include\formattedtext.h" />
     <ClInclude Include="include\gameimagedata.h" />
     <ClInclude Include="include\generationresultinterf.h" />
     <ClInclude Include="include\groupareamanagement.h" />
