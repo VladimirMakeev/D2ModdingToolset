@@ -223,6 +223,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\buildingbranch.cpp" />
     <ClCompile Include="src\buildingcat.cpp" />
     <ClCompile Include="src\buildingtype.cpp" />
+    <ClCompile Include="src\chatinterf.cpp" />
     <ClCompile Include="src\citystackinterfhooks.cpp" />
     <ClCompile Include="src\custombuildingcategories.cpp" />
     <ClCompile Include="src\enclayoutcity.cpp" />
@@ -652,6 +653,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\buildingbranch.h" />
     <ClInclude Include="include\buildingcat.h" />
     <ClInclude Include="include\buildingtype.h" />
+    <ClInclude Include="include\chatinterf.h" />
     <ClInclude Include="include\citystackinterfhooks.h" />
     <ClInclude Include="include\custombuildingcategories.h" />
     <ClInclude Include="include\d2unorderedmap.h" />
@@ -731,6 +733,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\itemtypelist.h" />
     <ClInclude Include="include\leaderunitdescriptor.h" />
     <ClInclude Include="include\logutils.h" />
+    <ClInclude Include="include\lovechat.h" />
     <ClInclude Include="include\managestkinterf.h" />
     <ClInclude Include="include\managestkinterfhooks.h" />
     <ClInclude Include="include\menunewskirmishhotseat.h" />
@@ -748,6 +751,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\middropsourceext.h" />
     <ClInclude Include="include\middroptarget.h" />
     <ClInclude Include="include\midobjectlock.h" />
+    <ClInclude Include="include\midpopupinterf.h" />
     <ClInclude Include="include\midrod.h" />
     <ClInclude Include="include\midserverlogichooks.h" />
     <ClInclude Include="include\midunitext.h" />
@@ -756,6 +760,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\mqdbpackedimage.h" />
     <ClInclude Include="include\netsingleplayer.h" />
     <ClInclude Include="include\netsingleplayerhooks.h" />
+    <ClInclude Include="include\notifyplayerlist.h" />
+    <ClInclude Include="include\playerlistentry.h" />
     <ClInclude Include="include\quickstring.h" />
     <ClInclude Include="include\refreshinfo.h" />
     <ClInclude Include="include\nativegameinfo.h" />
@@ -1079,6 +1085,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\soundsystemsample.h" />
     <ClInclude Include="include\soundsystemstream.h" />
     <ClInclude Include="include\streamholder.h" />
+    <ClInclude Include="include\textmessage.h" />
     <ClInclude Include="include\wavstore.h" />
     <ClInclude Include="include\spellcat.h" />
     <ClInclude Include="include\spinbuttoninterf.h" />
