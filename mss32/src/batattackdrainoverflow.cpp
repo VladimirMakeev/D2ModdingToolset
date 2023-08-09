@@ -29,20 +29,26 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::HealDataConstructor)0x668910,
         (Api::HealDataDestructor)0x668990,
-        (Api::ComputeDrainOverflowGroupHeal)0x661138
+        (Api::ComputeDrainOverflowGroupHeal)0x661138,
+        (Api::IsUnitNotAtFullHp)0x66137a,
+        (Api::UpdateUnitHealFromDrainOverflow)0x661255,
     },
     // Russobit
     Api{
         (Api::HealDataConstructor)0x668910,
         (Api::HealDataDestructor)0x668990,
-        (Api::ComputeDrainOverflowGroupHeal)0x661138
+        (Api::ComputeDrainOverflowGroupHeal)0x661138,
+        (Api::IsUnitNotAtFullHp)0x66137a,
+        (Api::UpdateUnitHealFromDrainOverflow)0x661255,
     },
     // Gog
     Api{
         (Api::HealDataConstructor)0x667360,
         (Api::HealDataDestructor)0x6673e0,
-        (Api::ComputeDrainOverflowGroupHeal)0x65fbb8
-    }
+        (Api::ComputeDrainOverflowGroupHeal)0x65fbb8,
+        (Api::IsUnitNotAtFullHp)0x65fdfa,
+        (Api::UpdateUnitHealFromDrainOverflow)0x65fcd5,
+    },
 }};
 
 static std::array<IBatAttackVftable*, 4> vftables = {{

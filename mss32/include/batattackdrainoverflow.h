@@ -28,6 +28,7 @@ namespace game {
 
 struct IAttack;
 struct IMidgardObjectMap;
+struct CMidUnit;
 
 /** Represents vampiric attacks that can heal allies. */
 struct CBatAttackDrainOverflow : public CBatAttackBase
@@ -40,7 +41,7 @@ struct CBatAttackDrainOverflow : public CBatAttackBase
 
 assert_size(CBatAttackDrainOverflow, 20);
 
-/** Maps heal ammount to unit id. */
+/** Maps unit id to heal amount. */
 using DrainOverflowHealData = Map<CMidgardID, int>;
 using DrainOverflowHealIterator = MapIterator<CMidgardID, int>;
 
@@ -72,6 +73,18 @@ struct Api
                                                           const CMidgardID* attackerUnitId,
                                                           int drainOverflow);
     ComputeDrainOverflowGroupHeal computeDrainOverflowGroupHeal;
+
+    /** Returns true if unit is not at full health with respect to drain overflow. */
+    using IsUnitNotAtFullHp = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                               const CMidgardID* unitId,
+                                               DrainOverflowHealData* healData);
+    IsUnitNotAtFullHp isUnitNotAtFullHp;
+
+    /** Updates heal for specified unit according to drain overflow and single unit heal amount. */
+    using UpdateUnitHealFromDrainOverflow = int(__stdcall*)(DrainOverflowHealData* healData,
+                                                            const CMidUnit* unit,
+                                                            int healAmount);
+    UpdateUnitHealFromDrainOverflow updateUnitHealFromDrainOverflow;
 };
 
 Api& get();

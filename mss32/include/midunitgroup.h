@@ -111,6 +111,10 @@ struct Api
                                              CMidUnitGroup* group2,
                                              UnitPositionMap* positions);
     UnknownFunction unknownFunction;
+
+    /** Returns number of units in group. */
+    using GetUnitsCount = int(__thiscall*)(const CMidUnitGroup* group);
+    GetUnitsCount getUnitsCount;
 };
 
 Api& get();
