@@ -1055,6 +1055,11 @@ if battle:getUnitStatus(unit.id, BattleStatus.Defend) then
     -- Do something scary
 end
 ```
+##### currentRound
+Returns current round in battle. Round counting starts from 1, but there is a special round 0 when units with 'Doppelganger' [attacks](luaApi.md#attack) present.
+```lua
+battle.currentRound
+```
 
 ---
 

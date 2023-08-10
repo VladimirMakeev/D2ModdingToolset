@@ -41,6 +41,8 @@ public:
 
     bool getUnitStatus(const IdView& unitId, int status) const;
 
+    int getCurrentRound() const;
+
 private:
     const game::BattleMsgData* battleMsgData;
 };
