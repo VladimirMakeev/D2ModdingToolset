@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Stanislav Egorov.
+ * Copyright (C) 2023 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BATTLEMSGDATAVIEW_H
-#define BATTLEMSGDATAVIEW_H
+#ifndef LOVECHAT_H
+#define LOVECHAT_H
 
-namespace sol {
-class state;
-}
+#include "d2assert.h"
 
 namespace game {
-struct BattleMsgData;
-} // namespace game
 
-namespace bindings {
+struct TextMessage;
+struct ILoveChatVftable;
 
-struct IdView;
-
-class BattleMsgDataView
+// Yes, this name was used in original game source code
+struct ILoveChat
 {
-public:
-    BattleMsgDataView(const game::BattleMsgData* battleMsgData);
-
-    static void bind(sol::state& lua);
-
-    bool getUnitStatus(const IdView& unitId, int status) const;
-
-    int getCurrentRound() const;
-
-private:
-    const game::BattleMsgData* battleMsgData;
+    ILoveChatVftable* vftable;
 };
 
-} // namespace bindings
+struct ILoveChatVftable
+{
+    using Destructor = void(__thiscall*)(ILoveChat* thisptr, char flags);
+    Destructor destructor;
 
-#endif // BATTLEMSGDATAVIEW_H
+    using Method1 = void(__thiscall*)(ILoveChat* thisptr,
+                                      const TextMessage* chatMessage,
+                                      const char* messageText,
+                                      bool a4);
+    Method1 method1;
+};
+
+assert_vftable_size(ILoveChatVftable, 2);
+
+} // namespace game
+
+#endif // LOVECHAT_H

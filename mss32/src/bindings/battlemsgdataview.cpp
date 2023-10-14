@@ -32,6 +32,7 @@ void BattleMsgDataView::bind(sol::state& lua)
 {
     auto view = lua.new_usertype<BattleMsgDataView>("BattleView");
     view["getUnitStatus"] = &BattleMsgDataView::getUnitStatus;
+    view["currentRound"] = sol::property(&BattleMsgDataView::getCurrentRound);
 }
 
 bool BattleMsgDataView::getUnitStatus(const IdView& unitId, int status) const
@@ -39,6 +40,11 @@ bool BattleMsgDataView::getUnitStatus(const IdView& unitId, int status) const
     using namespace game;
 
     return BattleMsgDataApi::get().getUnitStatus(battleMsgData, &unitId.id, (BattleStatus)status);
+}
+
+int BattleMsgDataView::getCurrentRound() const
+{
+    return battleMsgData->currentRound;
 }
 
 } // namespace bindings

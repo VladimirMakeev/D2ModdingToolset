@@ -1220,6 +1220,21 @@
     <ClCompile Include="src\batattackgroupupgrade.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\mqimage2surface16.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\image2memory.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
+    <ClCompile Include="src\generationresultinterf.cpp">
+      <Filter>features\random scenario generator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\chatinterf.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\formattedtext.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3188,6 +3203,33 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\streamholder.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\image2memory.h">
+      <Filter>features</Filter>
+    </ClInclude>
+    <ClInclude Include="include\generationresultinterf.h">
+      <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\chatinterf.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lovechat.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\notifyplayerlist.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midpopupinterf.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\textmessage.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\playerlistentry.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\formattedtext.h">
       <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Stanislav Egorov.
+ * Copyright (C) 2023 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BATTLEMSGDATAVIEW_H
-#define BATTLEMSGDATAVIEW_H
+#ifndef IMAGE2MEMORY_H
+#define IMAGE2MEMORY_H
 
-namespace sol {
-class state;
-}
+#include "d2color.h"
+#include "mqimage2surface16.h"
+#include <vector>
 
-namespace game {
-struct BattleMsgData;
-} // namespace game
+namespace hooks {
 
-namespace bindings {
-
-struct IdView;
-
-class BattleMsgDataView
+/** Represents image in memory that does not depend on .ff files. */
+struct CImage2Memory : public game::CMqImage2Surface16
 {
-public:
-    BattleMsgDataView(const game::BattleMsgData* battleMsgData);
+    CImage2Memory(std::uint32_t width, std::uint32_t height);
 
-    static void bind(sol::state& lua);
-
-    bool getUnitStatus(const IdView& unitId, int status) const;
-
-    int getCurrentRound() const;
-
-private:
-    const game::BattleMsgData* battleMsgData;
+    std::vector<game::Color> pixels;
 };
 
-} // namespace bindings
+CImage2Memory* createImage2Memory(std::uint32_t width, std::uint32_t height);
 
-#endif // BATTLEMSGDATAVIEW_H
+} // namespace hooks
+
+#endif // IMAGE2MEMORY_H

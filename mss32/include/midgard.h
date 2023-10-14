@@ -48,6 +48,8 @@ struct IMqNetSystem;
 struct CMidgardMsgBox;
 struct NetMsgCallbacks;
 struct CNetMsg;
+struct GameImageDataWrapper;
+struct MQDBDataWrapper;
 
 using NetClientPtrIdPair = Pair<SmartPtr<IMqNetPlayerClient>, CMidgardID>;
 
@@ -75,10 +77,10 @@ struct CMidgardData
     void* midStart;
     CMenuPhase* menuPhase;
     GameSettings** settings;
-    void* interfImages;
+    GameImageDataWrapper* interfImages;
     CAutoDialog* autoDialog;
-    void* menuAnimations;
-    void* menuImages;
+    MQDBDataWrapper* menuAnimations;
+    GameImageDataWrapper* menuImages;
     SmartPtr<CUIManager> uiManager;
     char unknown12[4];
     std::uint32_t startMenuMessageId;

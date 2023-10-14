@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Stanislav Egorov.
+ * Copyright (C) 2023 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BATTLEMSGDATAVIEW_H
-#define BATTLEMSGDATAVIEW_H
+#ifndef TEXTMESSAGE_H
+#define TEXTMESSAGE_H
 
-namespace sol {
-class state;
-}
+#include "d2assert.h"
 
 namespace game {
-struct BattleMsgData;
-} // namespace game
 
-namespace bindings {
+struct LRaceCategory;
 
-struct IdView;
-
-class BattleMsgDataView
+struct TextMessage
 {
-public:
-    BattleMsgDataView(const game::BattleMsgData* battleMsgData);
-
-    static void bind(sol::state& lua);
-
-    bool getUnitStatus(const IdView& unitId, int status) const;
-
-    int getCurrentRound() const;
-
-private:
-    const game::BattleMsgData* battleMsgData;
+    const LRaceCategory* race;
+    const char* message;
+    int time;
 };
 
-} // namespace bindings
+assert_size(TextMessage, 12);
 
-#endif // BATTLEMSGDATAVIEW_H
+} // namespace game
+
+#endif // TEXTMESSAGE_H

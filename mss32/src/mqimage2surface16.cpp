@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Stanislav Egorov.
+ * Copyright (C) 2023 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BATTLEMSGDATAVIEW_H
-#define BATTLEMSGDATAVIEW_H
+#include "mqimage2surface16.h"
+#include "version.h"
+#include <array>
 
-namespace sol {
-class state;
+namespace game::CMqImage2Surface16Api {
+
+// clang-format off
+std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)0x6704f0,
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)0x6704f0,
+    },
+    // Gog
+    Api{
+        (Api::Constructor)0x66ed90,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x4af530,
+    },
+}};
+// clang-format on
+
+Api& get()
+{
+    return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-namespace game {
-struct BattleMsgData;
-} // namespace game
-
-namespace bindings {
-
-struct IdView;
-
-class BattleMsgDataView
-{
-public:
-    BattleMsgDataView(const game::BattleMsgData* battleMsgData);
-
-    static void bind(sol::state& lua);
-
-    bool getUnitStatus(const IdView& unitId, int status) const;
-
-    int getCurrentRound() const;
-
-private:
-    const game::BattleMsgData* battleMsgData;
-};
-
-} // namespace bindings
-
-#endif // BATTLEMSGDATAVIEW_H
+} // namespace game::CMqImage2Surface16Api

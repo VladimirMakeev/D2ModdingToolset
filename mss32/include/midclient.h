@@ -25,21 +25,12 @@
 #include "midclientcore.h"
 #include "midcommandqueue2.h"
 #include "midgardid.h"
+#include "textmessage.h"
 #include "uievent.h"
 
 namespace game {
 
 struct CPhase;
-struct LRaceCategory;
-
-struct TextMessage
-{
-    const LRaceCategory* race;
-    const char* message;
-    int time;
-};
-
-assert_size(TextMessage, 12);
 
 struct CMidClientData
 {

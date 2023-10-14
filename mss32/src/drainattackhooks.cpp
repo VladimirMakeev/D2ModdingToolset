@@ -28,6 +28,7 @@
 #include "log.h"
 #include "midgardobjectmap.h"
 #include "midunit.h"
+#include "midunitgroup.h"
 #include "settings.h"
 #include "usunitimpl.h"
 #include "utils.h"
@@ -117,6 +118,103 @@ static int drainAttack(game::IMidgardObjectMap* objectMap,
     return drainDamage - attackerHpDiff;
 }
 
+static int countUnitsNeedHealing(const game::BattleMsgData* battleMsgData,
+                                 const game::IMidgardObjectMap* objectMap,
+                                 const game::CMidUnitGroup* group,
+                                 const game::CMidgardID* attackerId,
+                                 game::DrainOverflowHealData* healData)
+{
+    using namespace game;
+
+    const auto& groupApi = CMidUnitGroupApi::get();
+
+    int unitsNeedHealing = 0;
+
+    const int unitsTotal = groupApi.getUnitsCount(group);
+    for (int index = 0; index < unitsTotal; ++index) {
+        const CMidgardID* unitId = groupApi.getUnitId(group, index);
+
+        // Drain overflow does not apply to attacker itself
+        if (*unitId == *attackerId) {
+            continue;
+        }
+
+        // Don't count units that have already retreated from the battle
+        if (BattleMsgDataApi::get().getUnitStatus(battleMsgData, unitId, BattleStatus::Retreated)) {
+            continue;
+        }
+
+        const auto& attack = CBatAttackDrainOverflowApi::get();
+        if (attack.isUnitNotAtFullHp(objectMap, unitId, healData)) {
+            ++unitsNeedHealing;
+        }
+    }
+
+    return unitsNeedHealing;
+}
+
+static void computeDrainOverflowGroupHeal(game::DrainOverflowHealData* healData,
+                                          const game::BattleMsgData* battleMsgData,
+                                          const game::IMidgardObjectMap* objectMap,
+                                          const game::CMidgardID* groupId,
+                                          const game::CMidgardID* attackerId,
+                                          int drainOverflow)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    void* tmp = nullptr;
+    const CMidUnitGroup* group = fn.getStackFortRuinGroup(tmp, objectMap, groupId);
+
+    const int unitsNeedHealing = countUnitsNeedHealing(battleMsgData, objectMap, group, attackerId,
+                                                       healData);
+    if (!unitsNeedHealing) {
+        return;
+    }
+
+    int remainingDrainOverflow = drainOverflow;
+    int singleUnitHeal = drainOverflow / unitsNeedHealing;
+
+    if (!singleUnitHeal && drainOverflow > 0) {
+        singleUnitHeal = 1;
+    }
+
+    const auto& groupApi = CMidUnitGroupApi::get();
+    const auto& attackApi = CBatAttackDrainOverflowApi::get();
+
+    const int unitsCount = groupApi.getUnitsCount(group);
+
+    for (int index = 0; index < unitsCount && remainingDrainOverflow > 0; ++index) {
+        const CMidgardID* unitId = groupApi.getUnitId(group, index);
+
+        // Drain overflow does not apply to attacker itself
+        if (*unitId == *attackerId) {
+            continue;
+        }
+
+        // Don't count units that have already retreated from the battle
+        if (BattleMsgDataApi::get().getUnitStatus(battleMsgData, unitId, BattleStatus::Retreated)) {
+            continue;
+        }
+
+        if (!attackApi.isUnitNotAtFullHp(objectMap, unitId, healData)) {
+            continue;
+        }
+
+        const CMidUnit* unit = static_cast<const CMidUnit*>(
+            objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+
+        remainingDrainOverflow -= attackApi.updateUnitHealFromDrainOverflow(healData, unit,
+                                                                            singleUnitHeal);
+    }
+
+    if (remainingDrainOverflow > 0) {
+        computeDrainOverflowGroupHeal(healData, battleMsgData, objectMap, groupId, attackerId,
+                                      remainingDrainOverflow);
+    }
+}
+
 void __fastcall drainAttackOnHitHooked(game::CBatAttackDrain* thisptr,
                                        int /*%edx*/,
                                        game::IMidgardObjectMap* objectMap,
@@ -154,8 +252,8 @@ void __fastcall drainOverflowAttackOnHitHooked(game::CBatAttackDrainOverflow* th
     DrainOverflowHealData healData{};
     attack.healDataCtor(&healData);
 
-    attack.computeDrainOverflowGroupHeal(&healData, objectMap, &unitGroupId, &thisptr->unitId,
-                                         drainOverflow);
+    computeDrainOverflowGroupHeal(&healData, battleMsgData, objectMap, &unitGroupId,
+                                  &thisptr->unitId, drainOverflow);
 
     const auto& visitors = VisitorApi::get();
     const auto& battle = BattleMsgDataApi::get();

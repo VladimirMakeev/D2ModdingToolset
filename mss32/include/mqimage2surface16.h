@@ -44,6 +44,22 @@ struct CMqImage2Surface16
 assert_size(CMqImage2Surface16, 44);
 assert_offset(CMqImage2Surface16, size, 32);
 
+namespace CMqImage2Surface16Api {
+
+struct Api
+{
+    using Constructor = CMqImage2Surface16*(__thiscall*)(CMqImage2Surface16* thisptr,
+                                                         std::uint32_t width,
+                                                         std::uint32_t height,
+                                                         int hint,
+                                                         int opacity);
+    Constructor constructor;
+};
+
+Api& get();
+
+} // namespace CMqImage2Surface16Api
+
 } // namespace game
 
 #endif // MQIMAGE2SURFACE16_H

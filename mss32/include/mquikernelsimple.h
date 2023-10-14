@@ -22,6 +22,7 @@
 
 #include "d2list.h"
 #include "d2pair.h"
+#include "mqpoint.h"
 #include "mqrect.h"
 #include "mquikernel.h"
 
