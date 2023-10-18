@@ -161,6 +161,10 @@ settings = {
 		-- Display infinite effect indicator along with attack name (alternative to effect duration)
 		-- Requires detailedUnitDescription
 		displayInfiniteAttackIndicator = false,
+
+		-- Display Critical Hit text in Attack section instead of Damage and Power sections
+		-- Requires detailedAttackDescription
+		displayCriticalHitTextInAttackName = false,
 	},
 
 	-- Fix effective unit hp computation
