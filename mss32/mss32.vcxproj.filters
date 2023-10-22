@@ -1229,6 +1229,9 @@
     <ClCompile Include="src\generationresultinterf.cpp">
       <Filter>features\random scenario generator</Filter>
     </ClCompile>
+    <ClCompile Include="src\displayd3d.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
     <ClCompile Include="src\chatinterf.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -3213,6 +3216,9 @@
     </ClInclude>
     <ClInclude Include="include\generationresultinterf.h">
       <Filter>features\random scenario generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\displayd3d.h">
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\chatinterf.h">
       <Filter>game</Filter>
