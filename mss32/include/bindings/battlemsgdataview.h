@@ -20,31 +20,49 @@
 #ifndef BATTLEMSGDATAVIEW_H
 #define BATTLEMSGDATAVIEW_H
 
+#include <optional>
+
 namespace sol {
 class state;
 }
 
 namespace game {
 struct BattleMsgData;
+struct IMidgardObjectMap;
+struct CMidgardID;
 } // namespace game
 
 namespace bindings {
 
 struct IdView;
+class PlayerView;
+class StackView;
+class GroupView;
 
 class BattleMsgDataView
 {
 public:
-    BattleMsgDataView(const game::BattleMsgData* battleMsgData);
+    BattleMsgDataView(const game::BattleMsgData* battleMsgData,
+                      const game::IMidgardObjectMap* objectMap);
 
     static void bind(sol::state& lua);
 
     bool getUnitStatus(const IdView& unitId, int status) const;
 
     int getCurrentRound() const;
+    bool getAutoBattle() const;
+
+    std::optional<PlayerView> getAttackerPlayer() const;
+    std::optional<PlayerView> getDefenderPlayer() const;
+
+    std::optional<StackView> getAttacker() const;
+    std::optional<GroupView> getDefender() const;
 
 private:
+    std::optional<PlayerView> getPlayer(const game::CMidgardID& playerId) const;
+
     const game::BattleMsgData* battleMsgData;
+    const game::IMidgardObjectMap* objectMap;
 };
 
 } // namespace bindings

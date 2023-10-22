@@ -1128,6 +1128,34 @@ Returns current round in battle. Round counting starts from 1, but there is a sp
 ```lua
 battle.currentRound
 ```
+##### autoBattle
+Returns true if autobattle mode is turned on.
+```lua
+battle.autoBattle
+```
+##### attackerPlayer
+Returns [player](luaApi.md#player) that started battle.
+```lua
+battle.attackerPlayer
+```
+##### defenderPlayer
+Returns [player](luaApi.md#player) that was attacked.
+```lua
+battle.defenderPlayer
+```
+##### attacker
+Returns [stack](luaApi.md#stack) that started battle.
+Only stacks can initiate battles.
+```lua
+battle.attacker
+```
+##### defender
+Returns [group](luaApi.md#group) that was attacked.
+Defender group can represent units of a [stack](luaApi.md#stack), [fort](luaApi.md#fort) or [ruin](luaApi.md#ruin).
+Use `group.id` to get actual type of a group.
+```lua
+battle.defender
+```
 
 ---
 

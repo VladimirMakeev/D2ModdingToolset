@@ -332,10 +332,11 @@ void fillTargetsListForCustomAttackReach(const game::IMidgardObjectMap* objectMa
         item = bindings::ItemView(attackUnitOrItemId, objectMap);
     }
 
+    bindings::BattleMsgDataView battleView{battleMsgData, objectMap};
     auto targetsToSelect = getTargetsToSelectOrAttack(attackReach.selectionScript, attacker,
                                                       selected, allies, targets,
                                                       *unitGroupId == *targetGroupId, item,
-                                                      battleMsgData, false);
+                                                      battleView, false);
 
     bool isSummonAttack = batAttack->vftable->method17(batAttack, battleMsgData);
     for (const auto& target : targetsToSelect) {
@@ -432,9 +433,9 @@ UnitSlots getTargetsToMarkOrAttackForCustomAttackReach(const game::IMidgardObjec
         item = bindings::ItemView(itemId, objectMap);
     }
 
+    bindings::BattleMsgDataView battleView{battleMsgData, objectMap};
     return getTargetsToSelectOrAttack(attackReach.attackScript, attacker, selected, allies, targets,
-                                      *unitGroupId == *targetGroupId, item, battleMsgData,
-                                      isMarking);
+                                      *unitGroupId == *targetGroupId, item, battleView, isMarking);
 }
 
 UnitSlots getTargetsToAttackForCustomAttackReach(const game::IMidgardObjectMap* objectMap,
