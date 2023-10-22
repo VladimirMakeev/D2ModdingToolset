@@ -46,8 +46,7 @@ struct IFaceImgVftable : public IMqImage2Vftable
 
     SetInt setPercentHp;
 
-    using SetBool = void(__thiscall*)(CFaceImg::IFaceImg* thisptr, bool value);
-    SetBool setLeftSide;
+    SetInt setLeftSide;
 };
 
 assert_vftable_size(IFaceImgVftable, 13);
