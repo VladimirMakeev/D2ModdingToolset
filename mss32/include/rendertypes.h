@@ -29,11 +29,12 @@
 #include <Windows.h>
 #include <cstdint>
 
+struct IDirectDrawSurface7;
+struct IDirectDrawPalette;
+
 namespace game {
 
 struct IMqTexture;
-struct IDirectDrawSurface7;
-struct IDirectDrawPalette;
 
 struct RenderData22
 {

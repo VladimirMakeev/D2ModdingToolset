@@ -24,14 +24,15 @@
 #include <cstdint>
 #include <windows.h>
 
+struct IDirectDrawSurface7;
+struct IDirectDrawPalette;
+
 namespace game {
 
 struct IMqRasterizerVftable;
 struct DisplaySettings;
 struct CMqPoint;
 struct SurfaceDecompressData;
-struct IDirectDrawSurface7;
-struct IDirectDrawPalette;
 struct CMqRect;
 
 struct IMqRasterizer
