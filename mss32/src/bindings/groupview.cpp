@@ -38,9 +38,15 @@ GroupView::GroupView(const game::CMidUnitGroup* group,
 void GroupView::bind(sol::state& lua)
 {
     auto group = lua.new_usertype<GroupView>("GroupView");
+    group["id"] = sol::property(&GroupView::getId);
     group["slots"] = sol::property(&GroupView::getSlots);
     group["units"] = sol::property(&GroupView::getUnits);
     group["hasUnit"] = sol::overload<>(&GroupView::hasUnit, &GroupView::hasUnitById);
+}
+
+IdView GroupView::getId() const
+{
+    return IdView{groupId};
 }
 
 GroupView::GroupSlots GroupView::getSlots() const

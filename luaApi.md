@@ -452,6 +452,11 @@ slot.distance(otherSlot)
 Represents 6 unit slots.
 
 Methods:
+##### id
+Returns group [id](luaApi.md#id).
+```lua
+group.id
+```
 ##### slots
 Returns group as array of 6 [unit slots](luaApi.md#unit-slot).
 ```lua

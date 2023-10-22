@@ -20,7 +20,7 @@
 #ifndef GROUPVIEW_H
 #define GROUPVIEW_H
 
-#include "midgardid.h"
+#include "idview.h"
 #include <vector>
 
 namespace sol {
@@ -34,7 +34,6 @@ struct IMidgardObjectMap;
 
 namespace bindings {
 
-struct IdView;
 class UnitView;
 class UnitSlotView;
 
@@ -50,6 +49,7 @@ public:
 
     static void bind(sol::state& lua);
 
+    IdView getId() const;
     /** Returns group as array of 6 unit slots. */
     GroupSlots getSlots() const;
 
