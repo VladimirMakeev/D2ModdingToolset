@@ -22,6 +22,7 @@
 
 #include "d2map.h"
 #include "functordispatch0.h"
+#include "functordispatch2.h"
 #include "smartptr.h"
 
 #define WIN32_LEAN_AND_MEAN
@@ -31,12 +32,17 @@
 
 namespace game {
 
+using ThreadMessageIdCallbackPair = Pair<std::uint32_t /* message id */,
+                                         SmartPtr<CBFunctorDispatch2<std::uint32_t, long>>>;
+
 struct CMqThreadData
 {
     HANDLE windowHandle;
-    Map<std::uint32_t /* timerId */, SmartPtr<CBFunctorDispatch0>> callbacks;
+    Map<std::uint32_t /* timer id */, SmartPtr<CBFunctorDispatch0>> timerCallbacks;
     std::uint32_t freeTimerId;
-    char unknown[44];
+    Map<std::uint32_t /* callback id */, ThreadMessageIdCallbackPair> messageCallbacks;
+    std::uint32_t freeMessageCallbackId;
+    MapIterator<std::uint32_t /* callback id */, ThreadMessageIdCallbackPair> msgCallbackIterator;
     HANDLE threadHandle;
     std::uint32_t threadId;
     HANDLE eventHandle;
