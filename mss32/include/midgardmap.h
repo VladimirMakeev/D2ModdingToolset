@@ -29,6 +29,7 @@ namespace game {
 struct CVisitorAddPlayer;
 struct LTerrainCategory;
 struct IMidgardObjectMap;
+struct LGroundCategory;
 
 struct CMidgardMap : public IMidScenarioObject
 {
@@ -48,6 +49,13 @@ struct Api
                                             PointSet* unknown,
                                             IMidgardObjectMap* objectMap);
     ChangeTerrain changeTerrain;
+
+    /** Returns ground type of map tile at specified position. */
+    using GetGround = bool(__thiscall*)(const CMidgardMap* thisptr,
+                                        LGroundCategory* ground,
+                                        const CMqPoint* position,
+                                        const IMidgardObjectMap* objectMap);
+    GetGround getGround;
 };
 
 Api& get();
