@@ -62,6 +62,13 @@ struct Api
                                                        const CMqPoint* mapPosition,
                                                        const IdType* type);
     GetObjectId getObjectId;
+
+    /** Returns true if plan contains object of one of the specified types at position. */
+    using IsPositionContainsObjects = bool(__thiscall*)(const CMidgardPlan* thisptr,
+                                                        const CMqPoint* mapPosition,
+                                                        const IdType* objectTypes,
+                                                        std::uint32_t typesTotal);
+    IsPositionContainsObjects isPositionContainsObjects;
 };
 
 Api& get();
