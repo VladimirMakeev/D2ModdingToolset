@@ -453,7 +453,7 @@ static std::array<Functions, 4> functions = {{
         (ApplyDynUpgradeToAttackData)0x545355,
         (ComputeUnitDynUpgrade)0x5444e6,
         (ShowMovementPath)nullptr,
-        (GetMidgardPlan)nullptr,
+        (GetMidgardPlan)0x4e5752,
         (CastUnitImplToNoble)0x4296d0,
         (GetBlockingPathNearbyStackId)nullptr,
         (GetFortOrRuinEntrance)nullptr,
