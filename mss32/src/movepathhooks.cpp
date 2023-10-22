@@ -22,13 +22,16 @@
 #include "game.h"
 #include "gameimages.h"
 #include "gamesettings.h"
+#include "groundcat.h"
 #include "image2text.h"
 #include "isolayers.h"
 #include "log.h"
 #include "mapgraphics.h"
 #include "mempool.h"
 #include "midgard.h"
+#include "midgardmap.h"
 #include "midgardobjectmap.h"
+#include "midgardplan.h"
 #include "midstack.h"
 #include "midunit.h"
 #include "multilayerimg.h"
@@ -36,10 +39,25 @@
 #include "settings.h"
 #include "ussoldier.h"
 #include "utils.h"
+#include <array>
 #include <cmath>
 #include <fmt/format.h>
 
 namespace hooks {
+
+static bool isIdsEqualOrBothNull(const game::CMidgardID* id1, const game::CMidgardID* id2)
+{
+    if (!id1 && !id2) {
+        // Both null, treat as equal
+        return true;
+    }
+
+    if (id1 && id2) {
+        return *id1 == *id2;
+    }
+
+    return false;
+};
 
 void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
                                       const game::CMidgardID* stackId,
@@ -269,6 +287,142 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
 
     pathApi.freeNodes(&pathInfo);
     pathApi.freeNode(&pathInfo, pathInfo.head);
+}
+
+int __stdcall computeMovementCostHooked(const game::CMqPoint* mapPosition,
+                                        const game::IMidgardObjectMap* objectMap,
+                                        const game::CMidgardMap* midgardMap,
+                                        const game::CMidgardPlan* plan,
+                                        const game::CMidgardID* stackId,
+                                        const char* a6,
+                                        const char* a7,
+                                        bool leaderAlive,
+                                        bool plainsBonus,
+                                        bool forestBonus,
+                                        bool waterBonus,
+                                        bool waterOnly,
+                                        bool forbidWaterOnlyOnLand)
+{
+    using namespace game;
+
+    constexpr int movementForbidden = 0;
+
+    const int x = mapPosition->x;
+    const int y = mapPosition->y;
+
+    if (x < 0 || x >= midgardMap->mapSize || y < 0 || y >= midgardMap->mapSize) {
+        // Outside of map
+        return movementForbidden;
+    }
+
+    const bool pred1 = !a6 || !((1 << (x & 7)) & a6[18 * y + (x >> 3)]);
+    if (!pred1) {
+        return movementForbidden;
+    }
+
+    // clang-format off
+    static const std::array<IdType, 6> interactiveObjectTypes{{
+        IdType::Fortification,
+        IdType::Landmark,
+        IdType::Site,
+        IdType::Ruin,
+        IdType::Rod,
+        IdType::Crystal
+    }};
+    // clang-format on
+
+    const auto& planApi = CMidgardPlanApi::get();
+
+    if (planApi.isPositionContainsObjects(plan, mapPosition, interactiveObjectTypes.data(),
+                                          std::size(interactiveObjectTypes))) {
+        // Interactive object is in the way
+        return movementForbidden;
+    }
+
+    const IdType bagType = IdType::Bag;
+    const CMidgardID* bagId = planApi.getObjectId(plan, mapPosition, &bagType);
+
+    const bool pred2 = a7 && ((1 << (x & 7)) & a7[18 * y + (x >> 3)]);
+
+    if (!(!bagId || pred2)) {
+        return movementForbidden;
+    }
+
+    const IdType stackType = IdType::Stack;
+    const CMidgardID* stackAtPosition = planApi.getObjectId(plan, mapPosition, &stackType);
+
+    if (!(!stackAtPosition || isIdsEqualOrBothNull(stackAtPosition, stackId) || pred2)) {
+        return movementForbidden;
+    }
+
+    const IdType roadType = IdType::Road;
+    const bool road = planApi.getObjectId(plan, mapPosition, &roadType) != nullptr;
+
+    LGroundCategory ground{};
+    if (!CMidgardMapApi::get().getGround(midgardMap, &ground, mapPosition, objectMap)) {
+        return movementForbidden;
+    }
+
+    const auto& groundTypes = GroundCategories::get();
+
+    if (ground.id == groundTypes.water->id) {
+        const auto& water = userSettings().movementCost.water;
+
+        if (!waterOnly) {
+            if (leaderAlive) {
+                return waterBonus ? water.withBonus : water.dflt;
+            }
+
+            return water.deadLeader;
+        }
+
+        // Check deep waters
+        if (gameFunctions().isWaterTileSurroundedByWater(mapPosition, objectMap)) {
+            return water.waterOnly;
+        }
+    } else if (ground.id == groundTypes.forest->id) {
+        const auto& forest = userSettings().movementCost.forest;
+
+        if (!waterOnly) {
+            if (leaderAlive) {
+                return forestBonus ? forest.withBonus : forest.dflt;
+            }
+
+            return forest.deadLeader;
+        }
+    } else if (ground.id == groundTypes.plain->id) {
+        const auto& plain = userSettings().movementCost.plain;
+
+        if (!waterOnly) {
+            if (!leaderAlive) {
+                return plain.deadLeader;
+            }
+
+            if (!plainsBonus && road) {
+                return plain.onRoad;
+            }
+
+            return plain.dflt;
+        }
+    } else {
+        // Mountain ground type
+        return movementForbidden;
+    }
+
+    // This is the case when water-only stack tries to move on shore or land.
+    // We don't care about ground type here.
+    // Forbid movement so move points will not be wasted in attempt to perform illegal move
+    if (forbidWaterOnlyOnLand) {
+        return movementForbidden;
+    }
+
+    // Assumption:
+    // Unreachable big value used by the game
+    // to compute and show movement path on land for water-only stacks.
+    // This logic is only to properly show movement path on land
+    // while marking it as forbidden
+    constexpr int moveCostWaterOnlyOnLand = 1000;
+    return moveCostWaterOnlyOnLand;
 }
 
 } // namespace hooks

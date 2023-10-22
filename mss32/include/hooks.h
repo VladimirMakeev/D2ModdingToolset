@@ -156,7 +156,7 @@ bool __stdcall buildLordSpecificBuildingsHooked(game::IMidgardObjectMap* objectM
 game::CEncLayoutSpell* __fastcall encLayoutSpellCtorHooked(game::CEncLayoutSpell* thisptr,
                                                            int /*%edx*/,
                                                            game::IMidgardObjectMap* objectMap,
-                                                           game::CInterface* interface,
+                                                           game::CInterface* interf,
                                                            void* a2,
                                                            game::CMidgardID* spellId,
                                                            game::CEncParamBase* encParam,

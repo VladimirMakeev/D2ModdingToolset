@@ -699,6 +699,20 @@ using GetUnitRequiredBuildings = void(__stdcall*)(const IMidgardObjectMap* objec
                                                   const IUsUnit* unitImpl,
                                                   Vector<TBuildingType*>* result);
 
+using ComputeMovementCost = int(__stdcall*)(const CMqPoint* mapPosition,
+                                            const IMidgardObjectMap* objectMap,
+                                            const CMidgardMap* midgardMap,
+                                            const CMidgardPlan* plan,
+                                            const CMidgardID* stackId,
+                                            const char* a6,
+                                            const char* a7,
+                                            bool leaderAlive,
+                                            bool plainsBonus,
+                                            bool forestBonus,
+                                            bool waterBonus,
+                                            bool waterOnly,
+                                            bool forbidWaterOnlyOnLand);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -823,6 +837,7 @@ struct Functions
     IsUnitUpgradePending isUnitUpgradePending;
     GetUnitImplIdForIsoUnitImage getUnitImplIdForIsoUnitImage;
     GetUnitRequiredBuildings getUnitRequiredBuildings;
+    ComputeMovementCost computeMovementCost;
 };
 
 /** Global variables used in game. */

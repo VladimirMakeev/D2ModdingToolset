@@ -148,6 +148,7 @@ static std::array<Functions, 4> functions = {{
         (IsUnitUpgradePending)0x61fb9d,
         (GetUnitImplIdForIsoUnitImage)0x684101,
         (GetUnitRequiredBuildings)0x61f7fe,
+        (ComputeMovementCost)0x603bc6,
     },
     // Russobit
     Functions{
@@ -272,6 +273,7 @@ static std::array<Functions, 4> functions = {{
         (IsUnitUpgradePending)0x61fb9d,
         (GetUnitImplIdForIsoUnitImage)0x684101,
         (GetUnitRequiredBuildings)0x61f7fe,
+        (ComputeMovementCost)0x603bc6,
     },
     // Gog
     Functions{
@@ -396,6 +398,7 @@ static std::array<Functions, 4> functions = {{
         (IsUnitUpgradePending)0x61e6d9,
         (GetUnitImplIdForIsoUnitImage)0x682a8b,
         (GetUnitRequiredBuildings)0x61e33a,
+        (ComputeMovementCost)0x6027f3,
     },
     // Scenario Editor
     Functions{
@@ -455,7 +458,7 @@ static std::array<Functions, 4> functions = {{
         (GetBlockingPathNearbyStackId)nullptr,
         (GetFortOrRuinEntrance)nullptr,
         (StackCanMoveToPosition)nullptr,
-        (IsWaterTileSurroundedByWater)nullptr,
+        (IsWaterTileSurroundedByWater)0x4e41cf,
         (GetStackPositionById)0x4f227f,
         (ApplyPercentModifiers)0x4c7fb1,
         (GenerateAttackDescription)0x4c6fc7,
@@ -520,6 +523,7 @@ static std::array<Functions, 4> functions = {{
         (IsUnitUpgradePending)0x523370,
         (GetUnitImplIdForIsoUnitImage)0x59acea,
         (GetUnitRequiredBuildings)0x52314a,
+        (ComputeMovementCost)nullptr,
     },
 }};
 

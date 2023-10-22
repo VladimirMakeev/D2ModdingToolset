@@ -26,6 +26,8 @@
 namespace game {
 struct IMidgardObjectMap;
 struct CMidgardID;
+struct CMidgardMap;
+struct CMidgardPlan;
 } // namespace game
 
 namespace hooks {
@@ -36,6 +38,20 @@ void __stdcall showMovementPathHooked(const game::IMidgardObjectMap* objectMap,
                                       const game::CMqPoint* lastReachablePoint,
                                       const game::CMqPoint* pathEnd,
                                       bool a6);
+
+int __stdcall computeMovementCostHooked(const game::CMqPoint* mapPosition,
+                                        const game::IMidgardObjectMap* objectMap,
+                                        const game::CMidgardMap* midgardMap,
+                                        const game::CMidgardPlan* plan,
+                                        const game::CMidgardID* stackId,
+                                        const char* a6,
+                                        const char* a7,
+                                        bool leaderAlive,
+                                        bool plainsBonus,
+                                        bool forestBonus,
+                                        bool waterBonus,
+                                        bool waterOnly,
+                                        bool forbidWaterOnlyOnLand);
 
 } // namespace hooks
 
