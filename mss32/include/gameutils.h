@@ -38,6 +38,7 @@ struct LRaceCategory;
 struct LTerrainCategory;
 struct CMidRod;
 struct CMidInventory;
+struct CMidDiplomacy;
 } // namespace game
 
 namespace hooks {
@@ -149,6 +150,8 @@ bool playerHasBuilding(const game::IMidgardObjectMap* objectMap,
                        const game::CMidgardID* buildingId);
 
 bool lordHasBuilding(const game::CMidgardID* lordId, const game::CMidgardID* buildingId);
+
+const game::CMidDiplomacy* getDiplomacy(const game::IMidgardObjectMap* objectMap);
 
 } // namespace hooks
 

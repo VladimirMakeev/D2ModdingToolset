@@ -92,11 +92,11 @@ struct GlobalVariables
     /** Bonus per day regeneration for fighter leader. 'REGEN_LWAR' */
     int fighterLeaderRegen;
     /** Diplomacy level representing peace. 'D_PEACE' */
-    int diplomacyPeace;
+    std::uint32_t diplomacyPeace;
     /** Diplomacy level representing war. 'D_WAR' */
-    int diplomacyWar;
+    std::uint32_t diplomacyWar;
     /** Diplomacy level representing neutrality. 'D_NEUTRAL' */
-    int diplomacyNeutral;
+    std::uint32_t diplomacyNeutral;
     /** 'D_GOLD' */
     int dGold;
     /** 'D_MK_ALLY' */

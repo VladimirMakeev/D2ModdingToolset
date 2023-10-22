@@ -1244,6 +1244,15 @@
     <ClCompile Include="src\displayddraw.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\middiplomacy.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\diplomacyhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\diplomacyview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3246,6 +3255,15 @@
     </ClInclude>
     <ClInclude Include="include\displayddraw.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\middiplomacy.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\diplomacyhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\diplomacyview.h">
+      <Filter>bindings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

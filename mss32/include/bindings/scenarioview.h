@@ -47,6 +47,7 @@ class RuinView;
 class UnitView;
 class PlayerView;
 class RodView;
+class DiplomacyView;
 
 /**
  * Returns stub values if objectMap is null.
@@ -138,6 +139,8 @@ public:
 
     int getCurrentDay() const;
     int getSize() const;
+
+    std::optional<DiplomacyView> getDiplomacy() const;
 
 private:
     const game::CMidgardID* getObjectId(int x, int y, game::IdType type) const;

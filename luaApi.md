@@ -167,6 +167,11 @@ BattleStatus = {
 }
 ```
 
+##### Relation
+```
+Relation = { War, Neutral, Peace }
+```
+
 ---
 
 #### Point
@@ -743,6 +748,53 @@ tile.ground
 
 ---
 
+#### Diplomacy
+Represents diplomacy relations between [races](luaApi.md#race) in [scenario](luaApi.md#scenario).
+
+Methods:
+##### getCurrentRelation
+Returns current diplomacy relations value between two [races](luaApi.md#race) in range \[0 : 100\].
+```lua
+local current = diplomacy:getCurrentRelation(race1, race2)
+```
+##### getPreviousRelation
+Returns previous diplomacy relations value between two [races](luaApi.md#race) in range \[0 : 100\].
+```lua
+local prev = diplomacy:getPreviousRelation(race1, race2)
+```
+##### getAlliance
+Returns true if two [races](luaApi.md#race) are in alliance.
+```lua
+local allies = diplomacy:getAlliance(race1, race2)
+```
+##### getAllianceTurn
+Returns turn number when two [races](luaApi.md#race) made an alliance.
+Returns zero if races are not in alliance.
+```lua
+local turn = diplomacy:getAllianceTurn(race1, race2)
+```
+##### getAlwaysAtWar
+Returns true if two [races](luaApi.md#race) are always at war.
+```lua
+local atWar = diplomacy:getAlwaysAtWar(race1, race2)
+```
+##### getAiCouldNotBreakAlliance
+Returns true if diplomacy relations prohibit AI-controlled [races](luaApi.md#race) from breaking alliance.
+```lua
+local couldNotBreak = diplomacy:getAiCouldNotBreakAlliance(race1, race2)
+```
+##### getRelationType
+Returns [relation type](luaApi.md#relation) according to diplomacy relations value.
+```lua
+-- Value to type mapping (D_WAR and D_NEUTRAL can be found in GVars.dbf):
+-- 0       D_WAR           D_NEUTRAL         100
+-- |   War   |     Neutral     |     Peace    |
+--
+local relation = diplomacy:getRelationType(relationValue)
+```
+
+---
+
 #### Scenario
 Represents scenario map with all its objects and state.
 
@@ -886,6 +938,15 @@ scenario.day
 Returns scenario map size.
 ```lua
 scenario.size
+```
+##### diplomacy
+Returns object that holds [diplomacy](luaApi.md#diplomacy) relations between races.
+Fully loaded scenario always have diplomacy relations. During scenario loading this property can return `nil`.
+```lua
+local diplomacy = scenario.diplomacy
+if diplomacy == nil then
+    return
+end
 ```
 
 ---

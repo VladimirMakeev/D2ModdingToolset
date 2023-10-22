@@ -23,6 +23,7 @@
 #include "battlemsgdataview.h"
 #include "categoryids.h"
 #include "currencyview.h"
+#include "diplomacyview.h"
 #include "dynupgradeview.h"
 #include "fortview.h"
 #include "gameutils.h"
@@ -296,6 +297,7 @@ static void bindApi(sol::state& lua)
     bindings::PlayerView::bind(lua);
     bindings::ModifierView::bind(lua);
     bindings::BattleMsgDataView::bind(lua);
+    bindings::DiplomacyView::bind(lua);
 
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }

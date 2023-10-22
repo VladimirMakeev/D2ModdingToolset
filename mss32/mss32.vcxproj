@@ -196,6 +196,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\bindings\attackview.cpp" />
     <ClCompile Include="src\bindings\battlemsgdataview.cpp" />
     <ClCompile Include="src\bindings\currencyview.cpp" />
+    <ClCompile Include="src\bindings\diplomacyview.cpp" />
     <ClCompile Include="src\bindings\unitviewdummy.cpp" />
     <ClCompile Include="src\bindings\dynupgradeview.cpp" />
     <ClCompile Include="src\bindings\fortview.cpp" />
@@ -226,6 +227,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\chatinterf.cpp" />
     <ClCompile Include="src\citystackinterfhooks.cpp" />
     <ClCompile Include="src\custombuildingcategories.cpp" />
+    <ClCompile Include="src\diplomacyhooks.cpp" />
     <ClCompile Include="src\displayd3d.cpp" />
     <ClCompile Include="src\displayddraw.cpp" />
     <ClCompile Include="src\enclayoutcity.cpp" />
@@ -289,6 +291,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\logutils.cpp" />
     <ClCompile Include="src\managestkinterf.cpp" />
     <ClCompile Include="src\managestkinterfhooks.cpp" />
+    <ClCompile Include="src\middiplomacy.cpp" />
     <ClCompile Include="src\middragdropinterfhooks.cpp" />
     <ClCompile Include="src\menunewskirmishhotseat.cpp" />
     <ClCompile Include="src\menunewskirmishhotseathooks.cpp" />
@@ -629,6 +632,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\bindings\attackview.h" />
     <ClInclude Include="include\bindings\battlemsgdataview.h" />
     <ClInclude Include="include\bindings\currencyview.h" />
+    <ClInclude Include="include\bindings\diplomacyview.h" />
     <ClInclude Include="include\bindings\unitviewdummy.h" />
     <ClInclude Include="include\bindings\dynupgradeview.h" />
     <ClInclude Include="include\bindings\fortview.h" />
@@ -663,6 +667,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\d2unorderedmap.h" />
     <ClInclude Include="include\ddstackgroup.h" />
     <ClInclude Include="include\ddunitgroup.h" />
+    <ClInclude Include="include\diplomacyhooks.h" />
+    <ClInclude Include="include\middiplomacy.h" />
     <ClInclude Include="include\displayd3d.h" />
     <ClInclude Include="include\displayddraw.h" />
     <ClInclude Include="include\enclayoutcity.h" />
