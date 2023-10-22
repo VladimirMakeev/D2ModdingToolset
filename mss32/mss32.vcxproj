@@ -226,6 +226,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\chatinterf.cpp" />
     <ClCompile Include="src\citystackinterfhooks.cpp" />
     <ClCompile Include="src\custombuildingcategories.cpp" />
+    <ClCompile Include="src\displayddraw.cpp" />
     <ClCompile Include="src\enclayoutcity.cpp" />
     <ClCompile Include="src\enclayoutcityhooks.cpp" />
     <ClCompile Include="src\enclayoutruin.cpp" />
@@ -660,6 +661,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\d2unorderedmap.h" />
     <ClInclude Include="include\ddstackgroup.h" />
     <ClInclude Include="include\ddunitgroup.h" />
+    <ClInclude Include="include\displayddraw.h" />
     <ClInclude Include="include\enclayoutcity.h" />
     <ClInclude Include="include\enclayoutcityhooks.h" />
     <ClInclude Include="include\enclayoutruin.h" />

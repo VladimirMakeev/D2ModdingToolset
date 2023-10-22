@@ -1235,6 +1235,9 @@
     <ClCompile Include="src\formattedtext.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\displayddraw.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3230,6 +3233,9 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\formattedtext.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\displayddraw.h">
       <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
