@@ -1238,6 +1238,9 @@
     <ClCompile Include="src\formattedtext.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\mqpresentationmanager.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
     <ClCompile Include="src\displayddraw.cpp">
       <Filter>game</Filter>
     </ClCompile>

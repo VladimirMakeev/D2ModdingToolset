@@ -301,6 +301,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\midserver.cpp" />
     <ClCompile Include="src\midserverlogichooks.cpp" />
     <ClCompile Include="src\mqimage2surface16.cpp" />
+    <ClCompile Include="src\mqpresentationmanager.cpp" />
     <ClCompile Include="src\netsingleplayer.cpp" />
     <ClCompile Include="src\netsingleplayerhooks.cpp" />
     <ClCompile Include="src\nativegameinfo.cpp" />

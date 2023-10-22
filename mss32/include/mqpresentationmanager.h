@@ -45,6 +45,8 @@ struct CMqPresentationManager
 
 assert_size(CMqPresentationManager, 4);
 
+using PresentationMgrPtr = SmartPtr<CMqPresentationManager>;
+
 struct CMqPresentationManagerData
 {
     UiEvent updateEvent;
@@ -75,6 +77,24 @@ struct CMqPresentationManager::IPresentationVftable
 };
 
 assert_vftable_size(CMqPresentationManager::IPresentationVftable, 2);
+
+namespace CMqPresentationManagerApi {
+
+struct Api
+{
+    /** Returns CMqPresentationManager instance using smart pointer. */
+    using GetPresentationManager = PresentationMgrPtr*(__stdcall*)(PresentationMgrPtr* manager);
+    GetPresentationManager getPresentationManager;
+
+    /** Sets or resets smart pointer holding CMqPresentationManager instance. */
+    using PresentationMgrPtrSetData = void(__thiscall*)(PresentationMgrPtr* thisptr,
+                                                        CMqPresentationManager* data);
+    PresentationMgrPtrSetData presentationMgrPtrSetData;
+};
+
+Api& get();
+
+} // namespace CMqPresentationManagerApi
 
 } // namespace game
 
