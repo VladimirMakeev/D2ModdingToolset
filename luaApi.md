@@ -1007,6 +1007,8 @@ attack.damageRatio
 attack.damageRatioPerTarget
 --- Returns true if damage is split among targets.
 attack.damageSplit
+--- Returns level for boost damage, lower damage and lower initiative attacks.
+attack.level
 ```
 
 ---

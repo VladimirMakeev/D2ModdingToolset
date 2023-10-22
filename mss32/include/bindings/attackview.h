@@ -67,6 +67,9 @@ public:
     bool damageRatioPerTarget() const;
     bool damageSplit() const;
 
+    /** Returns level for boost damage, lower damage and lower initiative attacks. */
+    int getLevel() const;
+
 private:
     const game::IAttack* attack;
 };

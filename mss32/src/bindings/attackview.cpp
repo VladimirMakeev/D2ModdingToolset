@@ -51,6 +51,7 @@ void AttackView::bind(sol::state& lua)
     attackView["damageRatio"] = sol::property(&AttackView::damageRatio);
     attackView["damageRatioPerTarget"] = sol::property(&AttackView::damageRatioPerTarget);
     attackView["damageSplit"] = sol::property(&AttackView::damageSplit);
+    attackView["level"] = sol::property(&AttackView::getLevel);
 }
 
 IdView AttackView::getId() const
@@ -155,6 +156,11 @@ bool AttackView::damageRatioPerTarget() const
 bool AttackView::damageSplit() const
 {
     return hooks::getCustomAttackData(attack).damageSplit;
+}
+
+int AttackView::getLevel() const
+{
+    return attack->vftable->getLevel(attack);
 }
 
 } // namespace bindings
