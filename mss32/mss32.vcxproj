@@ -239,6 +239,8 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\encparambasehooks.cpp" />
     <ClCompile Include="src\encyclopediapopup.cpp" />
     <ClCompile Include="src\exchangeinterfhooks.cpp" />
+    <ClCompile Include="src\fonts.cpp" />
+    <ClCompile Include="src\fontshooks.cpp" />
     <ClCompile Include="src\formattedtext.cpp" />
     <ClCompile Include="src\generationresultinterf.cpp" />
     <ClCompile Include="src\groupupgradehooks.cpp" />
@@ -668,6 +670,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\ddstackgroup.h" />
     <ClInclude Include="include\ddunitgroup.h" />
     <ClInclude Include="include\diplomacyhooks.h" />
+    <ClInclude Include="include\fonts.h" />
+    <ClInclude Include="include\fontshooks.h" />
     <ClInclude Include="include\middiplomacy.h" />
     <ClInclude Include="include\displayd3d.h" />
     <ClInclude Include="include\displayddraw.h" />

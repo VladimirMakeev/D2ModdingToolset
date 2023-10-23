@@ -83,6 +83,8 @@
 #include "eventeffectcathooks.h"
 #include "exchangeinterf.h"
 #include "exchangeinterfhooks.h"
+#include "fonts.h"
+#include "fontshooks.h"
 #include "fortcategory.h"
 #include "fortification.h"
 #include "gameutils.h"
@@ -725,6 +727,10 @@ Hooks getHooks()
     // templates)
     hooks.emplace_back(
         HookInfo{CMidUnitApi::get().streamImplIdAndLevel, midUnitStreamImplIdAndLevelHooked});
+
+    // Support custom fonts
+    hooks.emplace_back(HookInfo{FontCacheApi::get().loadFontFiles, loadFontFilesHooked});
+    hooks.emplace_back(HookInfo{FontCacheApi::get().dataDestructor, fontCacheDataDtorHooked});
 
     return hooks;
 }
