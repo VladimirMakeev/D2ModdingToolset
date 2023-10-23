@@ -62,7 +62,7 @@ std::optional<PlayerView> FortView::getOwner() const
         return std::nullopt;
     }
 
-    return PlayerView{player};
+    return PlayerView{player, objectMap};
 }
 
 GroupView FortView::getGroup() const

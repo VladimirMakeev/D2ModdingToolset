@@ -59,7 +59,7 @@ std::optional<PlayerView> RuinView::getLooter() const
         return std::nullopt;
     }
 
-    return {PlayerView{player}};
+    return {PlayerView{player, objectMap}};
 }
 
 GroupView RuinView::getGroup() const

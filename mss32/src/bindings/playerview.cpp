@@ -18,6 +18,8 @@
  */
 
 #include "playerview.h"
+#include "fogview.h"
+#include "gameutils.h"
 #include "globaldata.h"
 #include "lordtype.h"
 #include "midplayer.h"
@@ -26,19 +28,21 @@
 
 namespace bindings {
 
-PlayerView::PlayerView(const game::CMidPlayer* player)
+PlayerView::PlayerView(const game::CMidPlayer* player, const game::IMidgardObjectMap* objectMap)
     : player{player}
+    , objectMap{objectMap}
 { }
 
 void PlayerView::bind(sol::state& lua)
 {
     auto view = lua.new_usertype<PlayerView>("PlayerView");
-    view["id"] = sol::property(&getId);
-    view["race"] = sol::property(&getRaceCategoryId);
-    view["lord"] = sol::property(&getLordCategoryId);
-    view["bank"] = sol::property(&getBank);
-    view["human"] = sol::property(&isHuman);
-    view["alwaysAi"] = sol::property(&isAlwaysAi);
+    view["id"] = sol::property(&PlayerView::getId);
+    view["race"] = sol::property(&PlayerView::getRaceCategoryId);
+    view["lord"] = sol::property(&PlayerView::getLordCategoryId);
+    view["bank"] = sol::property(&PlayerView::getBank);
+    view["human"] = sol::property(&PlayerView::isHuman);
+    view["alwaysAi"] = sol::property(&PlayerView::isAlwaysAi);
+    view["fog"] = sol::property(&PlayerView::getFog);
 }
 
 IdView PlayerView::getId() const
@@ -82,6 +86,16 @@ bool PlayerView::isHuman() const
 bool PlayerView::isAlwaysAi() const
 {
     return player->alwaysAi;
+}
+
+std::optional<FogView> PlayerView::getFog() const
+{
+    const auto fog{hooks::getFog(objectMap, player)};
+    if (!fog) {
+        return std::nullopt;
+    }
+
+    return FogView{fog};
 }
 
 } // namespace bindings

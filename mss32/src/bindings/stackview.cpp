@@ -70,7 +70,7 @@ std::optional<PlayerView> StackView::getOwner() const
         return std::nullopt;
     }
 
-    return PlayerView{player};
+    return PlayerView{player, objectMap};
 }
 
 std::optional<FortView> StackView::getInside() const

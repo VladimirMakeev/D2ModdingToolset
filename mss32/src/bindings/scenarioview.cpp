@@ -412,7 +412,7 @@ std::optional<PlayerView> ScenarioView::getPlayerById(const IdView& id) const
         return std::nullopt;
     }
 
-    return {PlayerView{player}};
+    return {PlayerView{player, objectMap}};
 }
 
 std::optional<UnitView> ScenarioView::getUnit(const std::string& id) const

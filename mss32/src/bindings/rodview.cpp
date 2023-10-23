@@ -55,7 +55,7 @@ std::optional<PlayerView> RodView::getOwner() const
         return std::nullopt;
     }
 
-    return {PlayerView{player}};
+    return {PlayerView{player, objectMap}};
 }
 
 } // namespace bindings

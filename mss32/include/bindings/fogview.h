@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Stanislav Egorov.
+ * Copyright (C) 2023 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,47 +17,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLAYERVIEW_H
-#define PLAYERVIEW_H
+#ifndef FOGVIEW_H
+#define FOGVIEW_H
 
-#include "currencyview.h"
 #include "idview.h"
-#include <optional>
 
 namespace sol {
 class state;
 }
 
 namespace game {
-struct CMidPlayer;
-struct IMidgardObjectMap;
-} // namespace game
+struct CMidgardMapFog;
+}
 
 namespace bindings {
 
-class FogView;
+struct Point;
 
-class PlayerView
+class FogView
 {
 public:
-    PlayerView(const game::CMidPlayer* player, const game::IMidgardObjectMap* objectMap);
+    FogView(const game::CMidgardMapFog* mapFog);
 
     static void bind(sol::state& lua);
 
     IdView getId() const;
-    int getRaceCategoryId() const;
-    int getLordCategoryId() const;
-    CurrencyView getBank() const;
-    bool isHuman() const;
-    bool isAlwaysAi() const;
 
-    std::optional<FogView> getFog() const;
+    bool getFogByCoordinates(int x, int y) const;
+    bool getFogByPoint(const Point& p) const;
 
 private:
-    const game::CMidPlayer* player;
-    const game::IMidgardObjectMap* objectMap;
+    const game::CMidgardMapFog* mapFog;
 };
 
 } // namespace bindings
 
-#endif // PLAYERVIEW_H
+#endif // FOGVIEW_H

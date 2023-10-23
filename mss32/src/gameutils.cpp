@@ -33,6 +33,7 @@
 #include "midgard.h"
 #include "midgardmap.h"
 #include "midgardmapblock.h"
+#include "midgardmapfog.h"
 #include "midgardobjectmap.h"
 #include "midgardplan.h"
 #include "midgardscenariomap.h"
@@ -624,6 +625,19 @@ const game::CMidDiplomacy* getDiplomacy(const game::IMidgardObjectMap* objectMap
     }
 
     return static_cast<const game::CMidDiplomacy*>(obj);
+}
+
+const game::CMidgardMapFog* getFog(const game::IMidgardObjectMap* objectMap,
+                                   const game::CMidPlayer* player)
+{
+    using namespace game;
+
+    auto obj{objectMap->vftable->findScenarioObjectById(objectMap, &player->fogId)};
+    if (!obj) {
+        return nullptr;
+    }
+
+    return static_cast<const CMidgardMapFog*>(obj);
 }
 
 } // namespace hooks

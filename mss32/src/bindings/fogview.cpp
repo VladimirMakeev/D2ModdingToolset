@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Stanislav Egorov.
+ * Copyright (C) 2023 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,47 +17,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLAYERVIEW_H
-#define PLAYERVIEW_H
-
-#include "currencyview.h"
-#include "idview.h"
-#include <optional>
-
-namespace sol {
-class state;
-}
-
-namespace game {
-struct CMidPlayer;
-struct IMidgardObjectMap;
-} // namespace game
+#include "fogview.h"
+#include "midgardmapfog.h"
+#include "point.h"
+#include <sol/sol.hpp>
 
 namespace bindings {
 
-class FogView;
+FogView::FogView(const game::CMidgardMapFog* mapFog)
+    : mapFog(mapFog)
+{ }
 
-class PlayerView
+void FogView::bind(sol::state& lua)
 {
-public:
-    PlayerView(const game::CMidPlayer* player, const game::IMidgardObjectMap* objectMap);
+    auto view = lua.new_usertype<FogView>("FogView");
+    view["getFog"] = sol::overload<>(&FogView::getFogByCoordinates, &FogView::getFogByPoint);
+}
 
-    static void bind(sol::state& lua);
+IdView FogView::getId() const
+{
+    return IdView{mapFog->id};
+}
 
-    IdView getId() const;
-    int getRaceCategoryId() const;
-    int getLordCategoryId() const;
-    CurrencyView getBank() const;
-    bool isHuman() const;
-    bool isAlwaysAi() const;
+bool FogView::getFogByCoordinates(int x, int y) const
+{
+    const game::CMqPoint mapPosition{x, y};
 
-    std::optional<FogView> getFog() const;
+    bool fog = false;
+    if (game::CMidgardMapFogApi::get().getFog(mapFog, &fog, &mapPosition)) {
+        return fog;
+    }
 
-private:
-    const game::CMidPlayer* player;
-    const game::IMidgardObjectMap* objectMap;
-};
+    return false;
+}
+
+bool FogView::getFogByPoint(const Point& p) const
+{
+    return getFogByCoordinates(p.x, p.y);
+}
 
 } // namespace bindings
-
-#endif // PLAYERVIEW_H

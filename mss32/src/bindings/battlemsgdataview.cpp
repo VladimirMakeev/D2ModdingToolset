@@ -99,7 +99,7 @@ std::optional<PlayerView> BattleMsgDataView::getPlayer(const game::CMidgardID& p
         return std::nullopt;
     }
 
-    return PlayerView{player};
+    return PlayerView{player, objectMap};
 }
 
 } // namespace bindings

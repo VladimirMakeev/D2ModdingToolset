@@ -1259,6 +1259,12 @@
     <ClCompile Include="src\fontshooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="src\midgardmapfog.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\fogview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3276,6 +3282,12 @@
     </ClInclude>
     <ClInclude Include="include\fontshooks.h">
       <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midgardmapfog.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\fogview.h">
+      <Filter>bindings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

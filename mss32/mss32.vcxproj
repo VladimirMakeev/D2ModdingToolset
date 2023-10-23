@@ -197,6 +197,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\bindings\battlemsgdataview.cpp" />
     <ClCompile Include="src\bindings\currencyview.cpp" />
     <ClCompile Include="src\bindings\diplomacyview.cpp" />
+    <ClCompile Include="src\bindings\fogview.cpp" />
     <ClCompile Include="src\bindings\unitviewdummy.cpp" />
     <ClCompile Include="src\bindings\dynupgradeview.cpp" />
     <ClCompile Include="src\bindings\fortview.cpp" />
@@ -302,6 +303,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\menurandomscenario.cpp" />
     <ClCompile Include="src\menurandomscenariomulti.cpp" />
     <ClCompile Include="src\menurandomscenariosingle.cpp" />
+    <ClCompile Include="src\midgardmapfog.cpp" />
     <ClCompile Include="src\midgardscenariomap.cpp" />
     <ClCompile Include="src\midserver.cpp" />
     <ClCompile Include="src\midserverlogichooks.cpp" />
@@ -635,6 +637,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\bindings\battlemsgdataview.h" />
     <ClInclude Include="include\bindings\currencyview.h" />
     <ClInclude Include="include\bindings\diplomacyview.h" />
+    <ClInclude Include="include\bindings\fogview.h" />
     <ClInclude Include="include\bindings\unitviewdummy.h" />
     <ClInclude Include="include\bindings\dynupgradeview.h" />
     <ClInclude Include="include\bindings\fortview.h" />
@@ -673,6 +676,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\fonts.h" />
     <ClInclude Include="include\fontshooks.h" />
     <ClInclude Include="include\middiplomacy.h" />
+    <ClInclude Include="include\midgardmapfog.h" />
     <ClInclude Include="include\displayd3d.h" />
     <ClInclude Include="include\displayddraw.h" />
     <ClInclude Include="include\enclayoutcity.h" />
