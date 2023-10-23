@@ -102,6 +102,11 @@ public:
     /** Returns alternative attack. */
     std::optional<AttackView> getAltAttack() const;
 
+    /** Returns immune category id for specified attack class id. */
+    int getImmuneToAttackClass(int attackClassId) const;
+    /** Returns immune category id for specified attack source id. */
+    int getImmuneToAttackSource(int attackSourceId) const;
+
 protected:
     std::optional<DynUpgradeView> getDynUpgrade(int upgradeNumber) const;
 

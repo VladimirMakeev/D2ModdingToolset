@@ -415,6 +415,16 @@ Returns true if the implementation has [modifier](luaApi.md#modifier) specified 
 impl:hasModifier("G000UM5021")
 impl:hasModifier(Id.new("G000UM5021"))
 ```
+##### getImmuneToAttackClass
+Returns [immune type](luaApi.md#immune) for specified [attack type](luaApi.md#attack).
+```lua
+impl:getImmuneToAttackClass(Attack.Paralyze)
+```
+##### getImmuneToAttackSource
+Returns [immune type](luaApi.md#immune) for specified [attack source](luaApi.md#source).
+```lua
+impl:getImmuneToAttackSource(Source.Water)
+```
 
 ---
 
@@ -476,6 +486,19 @@ group:hasUnit(Id.new('S143UN0001'))
 
 ---
 
+#### Fog
+Represents player's fog of war.
+
+Methods:
+##### getFog
+Returns true if specified map position is covered by fog of war.
+Map position can be specified by pair of coordinates or a [point](luaApi.md#point).
+```lua
+local hidden = fog:getFog(3, 7)
+```
+
+---
+
 #### Player
 Represents game player including AI and neutrals.
 
@@ -509,6 +532,15 @@ player.human
 Returns true if player is always AI.
 ```lua
 player.alwaysAi
+```
+##### fog
+Returns player's [fog of war](luaApi.md#fog).
+In fully loaded scenario, player objects always have fog of war. During scenario loading this property can return `nil`.
+```lua
+local fog = player.fog
+if fog == nil then
+    return
+end
 ```
 
 ---

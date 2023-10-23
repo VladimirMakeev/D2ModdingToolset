@@ -18,7 +18,10 @@
  */
 
 #include "unitimplview.h"
+#include "attackclasscat.h"
+#include "attacksourcecat.h"
 #include "attackview.h"
+#include "customattacks.h"
 #include "dynupgradeview.h"
 #include "game.h"
 #include "globaldata.h"
@@ -83,6 +86,8 @@ void UnitImplView::bind(sol::state& lua)
     impl["leadership"] = sol::property(&UnitImplView::getLeadership);
     impl["hasAbility"] = &UnitImplView::hasAbility;
     impl["hasMoveBonus"] = &UnitImplView::hasMoveBonus;
+    impl["getImmuneToAttackClass"] = &UnitImplView::getImmuneToAttackClass;
+    impl["getImmuneToAttackSource"] = &UnitImplView::getImmuneToAttackSource;
 }
 
 IdView UnitImplView::getId() const
@@ -407,6 +412,157 @@ std::optional<AttackView> UnitImplView::getAltAttack() const
     }
 
     return AttackView{altAttack};
+}
+
+int UnitImplView::getImmuneToAttackClass(int attackClassId) const
+{
+    using namespace game;
+
+    auto soldier{hooks::castUnitImplToSoldierWithLogging(impl)};
+    if (!soldier) {
+        return emptyCategoryId;
+    }
+
+    const auto& attackClasses{AttackClassCategories::get()};
+    auto getImmune{soldier->vftable->getImmuneByAttackClass};
+    const LImmuneCat* immuneCategory = nullptr;
+
+    switch (static_cast<AttackClassId>(attackClassId)) {
+    default:
+        return emptyCategoryId;
+    case AttackClassId::Damage:
+        immuneCategory = getImmune(soldier, attackClasses.damage);
+        break;
+    case AttackClassId::Drain:
+        immuneCategory = getImmune(soldier, attackClasses.drain);
+        break;
+    case AttackClassId::Paralyze:
+        immuneCategory = getImmune(soldier, attackClasses.paralyze);
+        break;
+    case AttackClassId::Heal:
+        immuneCategory = getImmune(soldier, attackClasses.heal);
+        break;
+    case AttackClassId::Fear:
+        immuneCategory = getImmune(soldier, attackClasses.fear);
+        break;
+    case AttackClassId::BoostDamage:
+        immuneCategory = getImmune(soldier, attackClasses.boostDamage);
+        break;
+    case AttackClassId::Petrify:
+        immuneCategory = getImmune(soldier, attackClasses.petrify);
+        break;
+    case AttackClassId::LowerDamage:
+        immuneCategory = getImmune(soldier, attackClasses.lowerDamage);
+        break;
+    case AttackClassId::LowerInitiative:
+        immuneCategory = getImmune(soldier, attackClasses.lowerInitiative);
+        break;
+    case AttackClassId::Poison:
+        immuneCategory = getImmune(soldier, attackClasses.poison);
+        break;
+    case AttackClassId::Frostbite:
+        immuneCategory = getImmune(soldier, attackClasses.frostbite);
+        break;
+    case AttackClassId::Revive:
+        immuneCategory = getImmune(soldier, attackClasses.revive);
+        break;
+    case AttackClassId::DrainOverflow:
+        immuneCategory = getImmune(soldier, attackClasses.drainOverflow);
+        break;
+    case AttackClassId::Cure:
+        immuneCategory = getImmune(soldier, attackClasses.cure);
+        break;
+    case AttackClassId::Summon:
+        immuneCategory = getImmune(soldier, attackClasses.summon);
+        break;
+    case AttackClassId::DrainLevel:
+        immuneCategory = getImmune(soldier, attackClasses.drainLevel);
+        break;
+    case AttackClassId::GiveAttack:
+        immuneCategory = getImmune(soldier, attackClasses.giveAttack);
+        break;
+    case AttackClassId::Doppelganger:
+        immuneCategory = getImmune(soldier, attackClasses.doppelganger);
+        break;
+    case AttackClassId::TransformSelf:
+        immuneCategory = getImmune(soldier, attackClasses.transformSelf);
+        break;
+    case AttackClassId::TransformOther:
+        immuneCategory = getImmune(soldier, attackClasses.transformOther);
+        break;
+    case AttackClassId::Blister:
+        immuneCategory = getImmune(soldier, attackClasses.blister);
+        break;
+    case AttackClassId::BestowWards:
+        immuneCategory = getImmune(soldier, attackClasses.bestowWards);
+        break;
+    case AttackClassId::Shatter:
+        immuneCategory = getImmune(soldier, attackClasses.shatter);
+        break;
+    }
+
+    return immuneCategory ? static_cast<int>(immuneCategory->id) : emptyCategoryId;
+}
+
+int UnitImplView::getImmuneToAttackSource(int attackSourceId) const
+{
+    using namespace game;
+
+    auto soldier{hooks::castUnitImplToSoldierWithLogging(impl)};
+    if (!soldier) {
+        return emptyCategoryId;
+    }
+
+    const auto& attackSources{AttackSourceCategories::get()};
+    auto getImmune{soldier->vftable->getImmuneByAttackSource};
+    const LImmuneCat* immuneCategory = nullptr;
+
+    const AttackSourceId srcId{static_cast<AttackSourceId>(attackSourceId)};
+    switch (srcId) {
+    default: {
+        // Check custom attack sources first
+        const auto& customSources = hooks::getCustomAttacks().sources;
+        for (const auto& customSource : customSources) {
+            if (customSource.source.id == srcId) {
+                immuneCategory = getImmune(soldier, &customSource.source);
+                break;
+            }
+        }
+
+        if (immuneCategory == nullptr) {
+            // Could not find source id even in custom sources
+            return emptyCategoryId;
+        }
+
+        break;
+    }
+    case AttackSourceId::Weapon:
+        immuneCategory = getImmune(soldier, attackSources.weapon);
+        break;
+    case AttackSourceId::Mind:
+        immuneCategory = getImmune(soldier, attackSources.mind);
+        break;
+    case AttackSourceId::Life:
+        immuneCategory = getImmune(soldier, attackSources.life);
+        break;
+    case AttackSourceId::Death:
+        immuneCategory = getImmune(soldier, attackSources.death);
+        break;
+    case AttackSourceId::Fire:
+        immuneCategory = getImmune(soldier, attackSources.fire);
+        break;
+    case AttackSourceId::Water:
+        immuneCategory = getImmune(soldier, attackSources.water);
+        break;
+    case AttackSourceId::Earth:
+        immuneCategory = getImmune(soldier, attackSources.earth);
+        break;
+    case AttackSourceId::Air:
+        immuneCategory = getImmune(soldier, attackSources.air);
+        break;
+    }
+
+    return immuneCategory ? static_cast<int>(immuneCategory->id) : emptyCategoryId;
 }
 
 std::optional<DynUpgradeView> UnitImplView::getDynUpgrade(int upgradeNumber) const
