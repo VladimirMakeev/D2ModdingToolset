@@ -101,6 +101,9 @@ static void readUnitEncyclopediaSettings(const sol::table& table, Settings::Unit
     value.displayInfiniteAttackIndicator = readSetting(category.value(),
                                                        "displayInfiniteAttackIndicator",
                                                        def.displayInfiniteAttackIndicator);
+    value.displayCriticalHitTextInAttackName = readSetting(category.value(),
+                                                           "displayCriticalHitTextInAttackName",
+                                                           def.displayCriticalHitTextInAttackName);
 }
 
 static void readModifierSettings(const sol::table& table, Settings::Modifiers& value)

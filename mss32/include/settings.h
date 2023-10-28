@@ -86,6 +86,7 @@ struct Settings
         bool displayBonusHp;
         bool displayBonusXp;
         bool displayInfiniteAttackIndicator;
+        bool displayCriticalHitTextInAttackName;
     } unitEncyclopedia;
 
     struct Modifiers

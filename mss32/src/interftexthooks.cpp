@@ -218,7 +218,7 @@ std::string getRatedAttackDamageText(int damage, int critDamage, double ratio)
     if (critDamage) {
         result = addCritHitText(result,
                                 getNumberText(applyAttackDamageRatio(critDamage, ratio), false),
-                                false);
+                                !userSettings().unitEncyclopedia.displayCriticalHitTextInAttackName);
     }
 
     return result;
@@ -288,7 +288,7 @@ std::string getAttackPowerText(const utils::AttackDescriptor& actual,
     if (actual.critHit()) {
         result = addCritHitText(result,
                                 getModifiedNumberText(actual.critPower(), global.critPower(), true),
-                                true);
+                                !userSettings().unitEncyclopedia.displayCriticalHitTextInAttackName);
     }
 
     return result;
@@ -307,7 +307,7 @@ std::string getDamageDrainAttackDamageText(const utils::AttackDescriptor& actual
                                 getModifiedNumberText(actual.damage() * actual.critDamage() / 100,
                                                       actual.damage() * global.critDamage() / 100,
                                                       false),
-                                true);
+                                !userSettings().unitEncyclopedia.displayCriticalHitTextInAttackName);
     }
 
     if (maxTargets < 2)
@@ -442,6 +442,11 @@ std::string getAttackNameText(const utils::AttackDescriptor& actual,
                               const utils::AttackDescriptor& global)
 {
     auto name = getModifiedStringText(actual.name(), actual.name() != global.name());
+    if (actual.critHit() && userSettings().unitEncyclopedia.displayCriticalHitTextInAttackName) {
+        return addCritHitText(name,
+                              getModifiedStringText(getCritHitText(), !global.critHit()),
+                              false);
+    }
     if (!actual.infinite() || !userSettings().unitEncyclopedia.displayInfiniteAttackIndicator) {
         return name;
     }
