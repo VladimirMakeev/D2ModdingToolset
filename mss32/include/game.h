@@ -61,6 +61,7 @@ struct CMidStack;
 struct CFortification;
 struct CMidRuin;
 struct CMidgardPlan;
+struct CMidgardMap;
 struct IMqImage2;
 struct IEncUnitDescriptor;
 struct CDialogInterf;
