@@ -749,6 +749,11 @@ bool isNextTierUnitImpl(const game::IMidgardObjectMap* objectMap,
                 return false;
             }
 
+            auto scenarioInfo = getScenarioInfo(objectMap);
+            if (getBuildingLevel(&upgradeBuildingId) > scenarioInfo->unitMaxTier) {
+                return false;
+            }
+
             *requiresBuilding = !playerHasBuilding(objectMap, player, &upgradeBuildingId);
             return true;
         }
@@ -780,7 +785,7 @@ const game::TUsUnitImpl* getUpgradeUnitImpl(const game::IMidgardObjectMap* objec
             }
         }
 
-        if (requiresBuilding && !hasMaxTierUpgradeBuilding(objectMap, unit->unitImpl)) {
+        if (requiresBuilding) {
             return nullptr;
         }
     }
