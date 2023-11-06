@@ -635,7 +635,7 @@ bool validateUnit(game::CMidUnit* unit)
     auto soldier = fn.castUnitImplToSoldier(origImpl);
 
     bool result = false;
-    auto validXp = std::clamp(unit->currentXp, 0, soldier->vftable->getXpNext(soldier));
+    auto validXp = std::clamp(unit->currentXp, 0, soldier->vftable->getXpNext(soldier) - 1);
     if (unit->currentXp != validXp) {
         unit->currentXp = validXp;
         result = true;

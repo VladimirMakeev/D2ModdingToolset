@@ -172,8 +172,8 @@ struct UnitInfo
     AttackSourceImmunityStatusesPatched attackSourceImmunityStatuses;
     /** Bitmask with values for each of LAttackClass. */
     std::uint32_t attackClassImmunityStatuses;
-    std::int16_t unitHp;
-    std::int16_t unitXp;
+    std::uint16_t unitHp;
+    std::uint16_t unitXp;
     UnitFlags unitFlags;
     char unknown2;
     /** Round when paralyze, petrify or fear was applied. */

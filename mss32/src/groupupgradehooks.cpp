@@ -115,8 +115,9 @@ void changeUnitXpAndUpgrade(game::IMidgardObjectMap* objectMap,
 
     auto unit = fn.findUnitById(objectMap, &unitId);
     int xpReceived = adjustUnitXpReceived(battleMsgData, unit, unitXp);
-    unitInfo->unitXp = changeUnitXpAndUpgrade(objectMap, unit, groupId, playerId, attackInfo,
-                                              xpReceived);
+    int xpAdded = changeUnitXpAndUpgrade(objectMap, unit, groupId, playerId, attackInfo,
+                                         xpReceived);
+    unitInfo->unitXp = xpAdded > 0 ? xpAdded : 0; // Negative xpAdded overflows unsigned unitXp
     unitInfo->unitHp = unit->currentHp;
 }
 
