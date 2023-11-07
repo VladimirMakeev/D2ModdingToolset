@@ -218,7 +218,7 @@ std::string getRatedAttackDamageText(int damage, int critDamage, double ratio)
     if (critDamage) {
         result = addCritHitText(result,
                                 getNumberText(applyAttackDamageRatio(critDamage, ratio), false),
-                                !userSettings().unitEncyclopedia.displayCriticalHitTextInAttackName);
+                                false);
     }
 
     return result;
