@@ -286,9 +286,10 @@ std::string getAttackPowerText(const utils::AttackDescriptor& actual,
     }
 
     if (actual.critHit()) {
+        bool full = !userSettings().unitEncyclopedia.displayCriticalHitTextInAttackName;
         result = addCritHitText(result,
                                 getModifiedNumberText(actual.critPower(), global.critPower(), true),
-                                !userSettings().unitEncyclopedia.displayCriticalHitTextInAttackName);
+                                full);
     }
 
     return result;
@@ -303,11 +304,12 @@ std::string getDamageDrainAttackDamageText(const utils::AttackDescriptor& actual
     auto result = getDamageText(actual.damage(), global.damage(), damageMax * multiplier);
 
     if (actual.critHit()) {
+        bool full = !userSettings().unitEncyclopedia.displayCriticalHitTextInAttackName;
         result = addCritHitText(result,
                                 getModifiedNumberText(actual.damage() * actual.critDamage() / 100,
                                                       actual.damage() * global.critDamage() / 100,
                                                       false),
-                                !userSettings().unitEncyclopedia.displayCriticalHitTextInAttackName);
+                                full);
     }
 
     if (maxTargets < 2)
