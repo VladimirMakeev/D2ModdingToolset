@@ -211,6 +211,23 @@ std::string addOverflowText(const std::string& base,
     return text;
 }
 
+std::string addInfiniteText(const std::string& base,
+                            const utils::AttackDescriptor& actual,
+                            const utils::AttackDescriptor& global)
+{
+    if (!actual.infinite()) {
+        return base;
+    }
+
+    auto result = getInterfaceText(textIds().interf.infiniteText.c_str());
+    if (result.empty())
+        result = "%ATTACK% (%INFINITE%)";
+
+    replace(result, "%ATTACK%", base);
+    replace(result, "%INFINITE%", getModifiedStringText(getInfiniteText(), !global.infinite()));
+    return result;
+}
+
 std::string getRatedAttackDamageText(int damage, int critDamage, double ratio)
 {
     auto result = getNumberText(applyAttackDamageRatio(damage, ratio), false);
