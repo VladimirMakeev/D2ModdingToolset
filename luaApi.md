@@ -1255,9 +1255,10 @@ end
 #### summon.lua
 `summoner` has type [Unit](luaApi.md#unit-1).
 `summonImpl` is [Unit implementation](luaApi.md#unit-implementation).
-`item` is [Item](luaApi.md#item-2).
+`item` is [Item](luaApi.md#item-2) used to perform the attack.
+`battle` specifies an information about current [battle](luaApi.md#battle).
 ```lua
-function getLevel(summoner, summonImpl, item)
+function getLevel(summoner, summonImpl, item, battle)
     -- Use base level of summon if cheap item is used to summon it
     if item and item.base.value.gold < 500 then
         return summonImpl.level

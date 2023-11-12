@@ -22,6 +22,7 @@
 #include "batattacksummon.h"
 #include "battleattackinfo.h"
 #include "battlemsgdata.h"
+#include "battlemsgdataview.h"
 #include "game.h"
 #include "globaldata.h"
 #include "itemview.h"
@@ -44,7 +45,8 @@ namespace hooks {
 static int getSummonLevel(const game::CMidUnit* summoner,
                           game::TUsUnitImpl* summonImpl,
                           const game::IMidgardObjectMap* objectMap,
-                          const game::CMidgardID* unitOrItemId)
+                          const game::CMidgardID* unitOrItemId,
+                          const game::BattleMsgData* battleMsgData)
 {
     using namespace game;
 
@@ -58,12 +60,13 @@ static int getSummonLevel(const game::CMidUnit* summoner,
     try {
         const bindings::UnitView summonerUnit{summoner};
         const bindings::UnitImplView impl{summonImpl};
+        const bindings::BattleMsgDataView battleView{battleMsgData, objectMap};
 
         if (CMidgardIDApi::get().getType(unitOrItemId) == IdType::Item) {
             const bindings::ItemView itemView{unitOrItemId, objectMap};
-            return (*getLevel)(summonerUnit, impl, &itemView);
+            return (*getLevel)(summonerUnit, impl, &itemView, battleView);
         } else
-            return (*getLevel)(summonerUnit, impl, nullptr);
+            return (*getLevel)(summonerUnit, impl, nullptr, battleView);
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
                                         "Reason: '{:s}'",
@@ -138,8 +141,8 @@ void __fastcall summonAttackOnHitHooked(game::CBatAttackSummon* thisptr,
 
     auto summoner = fn.findUnitById(objectMap, &thisptr->unitId);
     auto summonImpl = static_cast<TUsUnitImpl*>(global.findById(globalData->units, &summonImplId));
-    const auto summonLevel = getSummonLevel(summoner, summonImpl, objectMap,
-                                            &thisptr->unitOrItemId);
+    const auto summonLevel = getSummonLevel(summoner, summonImpl, objectMap, &thisptr->unitOrItemId,
+                                            battleMsgData);
 
     CUnitGenerator* unitGenerator = globalData->unitGenerator;
 
