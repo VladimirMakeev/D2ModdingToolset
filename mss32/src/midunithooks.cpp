@@ -188,9 +188,11 @@ bool __fastcall upgradeHooked(game::CMidUnit* thisptr,
     }
     listApi.destructor(&modifierIds);
 
+    // Reset XP first, because getHitPoints can return different values depending on current XP in
+    // case of custom modifiers (has real examples in MNS)
     auto soldier = fn.castUnitImplToSoldier(thisptr->unitImpl);
-    thisptr->currentHp = soldier->vftable->getHitPoints(soldier);
     thisptr->currentXp = 0;
+    thisptr->currentHp = soldier->vftable->getHitPoints(soldier);
     return true;
 }
 
