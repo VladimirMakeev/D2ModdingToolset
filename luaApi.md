@@ -1012,6 +1012,11 @@ Returns attack [reach](luaApi.md#reach).
 ```lua
 attack.reach
 ```
+##### wards
+Returns array of [modifiers](luaApi.md#modifier) applied by bestow wards attack.
+```lua
+unit.wards
+```
 ```lua
 --- Returns attack initiative value.
 attack.initiative
@@ -1025,6 +1030,8 @@ attack.heal
 attack.infinite
 --- Returns true if attack can inflict critical damage.
 attack.crit
+--- Returns level for boost damage, lower damage and lower initiative attacks.
+attack.level
 --- Returns true if attack is melee (L_ADJACENT or custom reach marked as MELEE in LAttR.dbf).
 attack.melee
 --- Returns maximum number of targets (1, 6 or MAX_TARGTS value for custom reach in LAttR.dbf).
@@ -1039,8 +1046,6 @@ attack.damageRatio
 attack.damageRatioPerTarget
 --- Returns true if damage is split among targets.
 attack.damageSplit
---- Returns level for boost damage, lower damage and lower initiative attacks.
-attack.level
 ```
 
 ---
