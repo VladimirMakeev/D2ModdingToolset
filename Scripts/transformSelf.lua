@@ -1,4 +1,4 @@
-function getLevel(unit, transformImpl, item)
+function getLevel(unit, transformImpl, item, battle)
 	-- transform using current level
 	return math.max(unit.impl.level, transformImpl.level);
 end

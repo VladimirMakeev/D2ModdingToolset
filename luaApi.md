@@ -1220,9 +1220,10 @@ end
 #### transformSelf.lua
 `unit` has type [Unit](luaApi.md#unit-1).
 `transformImpl` is [Unit implementation](luaApi.md#unit-implementation).
-`item` is [Item](luaApi.md#item-2).
+`item` is [Item](luaApi.md#item-2) used to perform the attack.
+`battle` specifies an information about current [battle](luaApi.md#battle).
 ```lua
-function getLevel(unit, transformImpl, item)
+function getLevel(unit, transformImpl, item, battle)
     -- Transform into current level or level of resulting unit's template, whichever is bigger.
     return math.max(unit.impl.level, transformImpl.level)
 end
