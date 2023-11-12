@@ -55,9 +55,13 @@ static int getDrainLevel(const game::CMidUnit* unit,
 {
     using namespace game;
 
-    std::optional<sol::environment> env;
+    // The function is only accessed by the server thread - the single instance is enough.
+    static std::optional<sol::environment> env;
+    static std::optional<sol::function> getLevel;
     const auto path{scriptsFolder() / "drainLevel.lua"};
-    auto getLevel = getScriptFunction(path, "getLevel", env, true, true);
+    if (!env && !getLevel) {
+        getLevel = getScriptFunction(path, "getLevel", env, true, true);
+    }
     if (!getLevel) {
         return 0;
     }
