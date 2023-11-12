@@ -1015,7 +1015,7 @@ attack.reach
 ##### wards
 Returns array of [modifiers](luaApi.md#modifier) applied by bestow wards attack.
 ```lua
-unit.wards
+attack.wards
 ```
 ```lua
 --- Returns attack initiative value.
