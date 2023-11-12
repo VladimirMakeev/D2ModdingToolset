@@ -22,6 +22,7 @@
 #include "batattacktransformother.h"
 #include "battleattackinfo.h"
 #include "battlemsgdata.h"
+#include "battlemsgdataview.h"
 #include "game.h"
 #include "gameutils.h"
 #include "globaldata.h"
@@ -47,7 +48,8 @@ static int getTransformOtherLevel(const game::CMidUnit* unit,
                                   const game::CMidUnit* targetUnit,
                                   game::TUsUnitImpl* transformImpl,
                                   const game::IMidgardObjectMap* objectMap,
-                                  const game::CMidgardID* unitOrItemId)
+                                  const game::CMidgardID* unitOrItemId,
+                                  const game::BattleMsgData* battleMsgData)
 {
     using namespace game;
 
@@ -62,12 +64,13 @@ static int getTransformOtherLevel(const game::CMidUnit* unit,
         const bindings::UnitView attacker{unit};
         const bindings::UnitView target{targetUnit};
         const bindings::UnitImplView impl{transformImpl};
+        const bindings::BattleMsgDataView battleView{battleMsgData, objectMap};
 
         if (CMidgardIDApi::get().getType(unitOrItemId) == IdType::Item) {
             const bindings::ItemView itemView{unitOrItemId, objectMap};
-            return (*getLevel)(attacker, target, impl, &itemView);
+            return (*getLevel)(attacker, target, impl, &itemView, battleView);
         } else
-            return (*getLevel)(attacker, target, impl, nullptr);
+            return (*getLevel)(attacker, target, impl, nullptr, battleView);
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
                                         "Reason: '{:s}'",
@@ -112,7 +115,8 @@ void __fastcall transformOtherAttackOnHitHooked(game::CBatAttackTransformOther* 
 
         const CMidUnit* unit = fn.findUnitById(objectMap, &thisptr->unitId);
         const auto transformLevel = getTransformOtherLevel(unit, targetUnit, transformImpl,
-                                                           objectMap, &thisptr->unitOrItemId);
+                                                           objectMap, &thisptr->unitOrItemId,
+                                                           battleMsgData);
 
         CUnitGenerator* unitGenerator = globalData->unitGenerator;
 
