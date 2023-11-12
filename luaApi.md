@@ -1194,9 +1194,11 @@ battle.defender
 ### Examples
 
 #### doppelganger.lua
+`doppelganger` and `target` have type [Unit](luaApi.md#unit-1).
+`item` is [Item](luaApi.md#item-2) used to perform the attack.
+`battle` specifies an information about current [battle](luaApi.md#battle).
 ```lua
--- 'doppelganger' and 'target' are both of type Unit.
-function getLevel(doppelganger, target)
+function getLevel(doppelganger, target, item, battle)
     -- Get current doppelganger implementation
     local impl = doppelganger.impl
     -- Get target unit implementation
