@@ -1199,9 +1199,11 @@ battle.defender
 ### Examples
 
 #### doppelganger.lua
+`doppelganger` and `target` have type [Unit](luaApi.md#unit-1).
+`item` is [Item](luaApi.md#item-2) used to perform the attack.
+`battle` specifies an information about current [battle](luaApi.md#battle).
 ```lua
--- 'doppelganger' and 'target' are both of type Unit.
-function getLevel(doppelganger, target)
+function getLevel(doppelganger, target, item, battle)
     -- Get current doppelganger implementation
     local impl = doppelganger.impl
     -- Get target unit implementation
@@ -1223,30 +1225,33 @@ end
 #### transformSelf.lua
 `unit` has type [Unit](luaApi.md#unit-1).
 `transformImpl` is [Unit implementation](luaApi.md#unit-implementation).
-`item` is [Item](luaApi.md#item-2).
+`item` is [Item](luaApi.md#item-2) used to perform the attack.
+`battle` specifies an information about current [battle](luaApi.md#battle).
 ```lua
-function getLevel(unit, transformImpl, item)
+function getLevel(unit, transformImpl, item, battle)
     -- Transform into current level or level of resulting unit's template, whichever is bigger.
     return math.max(unit.impl.level, transformImpl.level)
 end
 ```
 
 #### transformOther.lua
-`attacker` and `target` has type [Unit](luaApi.md#unit-1).
+`attacker` and `target` have type [Unit](luaApi.md#unit-1).
 `transformImpl` is [Unit implementation](luaApi.md#unit-implementation).
-`item` is [Item](luaApi.md#item-2).
+`item` is [Item](luaApi.md#item-2) used to perform the attack.
+`battle` specifies an information about current [battle](luaApi.md#battle).
 ```lua
-function getLevel(attacker, target, transformImpl, item)
+function getLevel(attacker, target, transformImpl, item, battle)
     -- transform using target level with a minimum of transform impl level
     return math.max(target.impl.level, transformImpl.level);
 end
 ```
 
-`attacker` and `target` has type [Unit](luaApi.md#unit-1).
-`item` is [Item](luaApi.md#item-2).
+`attacker` and `target` have type [Unit](luaApi.md#unit-1).
+`item` is [Item](luaApi.md#item-2) used to perform the attack.
+`battle` specifies an information about current [battle](luaApi.md#battle).
 #### drainLevel.lua
 ```lua
-function getLevel(attacker, target, item)
+function getLevel(attacker, target, item, battle)
     -- transform into unit with its level minus 1 and minus attacker over-level
     return math.max(1, target.impl.level - 1 - attacker.impl.level + attacker.baseImpl.level);
 end
@@ -1255,9 +1260,10 @@ end
 #### summon.lua
 `summoner` has type [Unit](luaApi.md#unit-1).
 `summonImpl` is [Unit implementation](luaApi.md#unit-implementation).
-`item` is [Item](luaApi.md#item-2).
+`item` is [Item](luaApi.md#item-2) used to perform the attack.
+`battle` specifies an information about current [battle](luaApi.md#battle).
 ```lua
-function getLevel(summoner, summonImpl, item)
+function getLevel(summoner, summonImpl, item, battle)
     -- Use base level of summon if cheap item is used to summon it
     if item and item.base.value.gold < 500 then
         return summonImpl.level

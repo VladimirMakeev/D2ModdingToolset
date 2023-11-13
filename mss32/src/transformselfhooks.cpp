@@ -22,6 +22,7 @@
 #include "batattacktransformself.h"
 #include "battleattackinfo.h"
 #include "battlemsgdata.h"
+#include "battlemsgdataview.h"
 #include "customattacks.h"
 #include "game.h"
 #include "gameutils.h"
@@ -49,13 +50,18 @@ namespace hooks {
 static int getTransformSelfLevel(const game::CMidUnit* unit,
                                  game::TUsUnitImpl* transformImpl,
                                  const game::IMidgardObjectMap* objectMap,
-                                 const game::CMidgardID* unitOrItemId)
+                                 const game::CMidgardID* unitOrItemId,
+                                 const game::BattleMsgData* battleMsgData)
 {
     using namespace game;
 
-    std::optional<sol::environment> env;
+    // The function is only accessed by the server thread - the single instance is enough.
+    static std::optional<sol::environment> env;
+    static std::optional<sol::function> getLevel;
     const auto path{scriptsFolder() / "transformSelf.lua"};
-    auto getLevel = getScriptFunction(path, "getLevel", env, true, true);
+    if (!env && !getLevel) {
+        getLevel = getScriptFunction(path, "getLevel", env, true, true);
+    }
     if (!getLevel) {
         return 0;
     }
@@ -63,13 +69,13 @@ static int getTransformSelfLevel(const game::CMidUnit* unit,
     try {
         const bindings::UnitView attacker{unit};
         const bindings::UnitImplView impl{transformImpl};
+        const bindings::BattleMsgDataView battleView{battleMsgData, objectMap};
 
         if (CMidgardIDApi::get().getType(unitOrItemId) == IdType::Item) {
             const bindings::ItemView itemView{unitOrItemId, objectMap};
-            return (*getLevel)(attacker, impl, &itemView);
-        }
-
-        return (*getLevel)(attacker, impl, nullptr);
+            return (*getLevel)(attacker, impl, &itemView, battleView);
+        } else
+            return (*getLevel)(attacker, impl, nullptr, battleView);
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
                                         "Reason: '{:s}'",
@@ -206,7 +212,7 @@ void __fastcall transformSelfAttackOnHitHooked(game::CBatAttackTransformSelf* th
             global.findById(globalData->units, &transformImplId));
 
         const auto transformLevel = getTransformSelfLevel(targetUnit, transformImpl, objectMap,
-                                                          &thisptr->id2);
+                                                          &thisptr->id2, battleMsgData);
 
         CUnitGenerator* unitGenerator = globalData->unitGenerator;
 

@@ -23,6 +23,7 @@
 #include "batattackutils.h"
 #include "battleattackinfo.h"
 #include "battlemsgdata.h"
+#include "battlemsgdataview.h"
 #include "game.h"
 #include "gameutils.h"
 #include "globaldata.h"
@@ -49,13 +50,18 @@ namespace hooks {
 static int getDrainLevel(const game::CMidUnit* unit,
                          const game::CMidUnit* targetUnit,
                          const game::IMidgardObjectMap* objectMap,
-                         const game::CMidgardID* unitOrItemId)
+                         const game::CMidgardID* unitOrItemId,
+                         const game::BattleMsgData* battleMsgData)
 {
     using namespace game;
 
-    std::optional<sol::environment> env;
+    // The function is only accessed by the server thread - the single instance is enough.
+    static std::optional<sol::environment> env;
+    static std::optional<sol::function> getLevel;
     const auto path{scriptsFolder() / "drainLevel.lua"};
-    auto getLevel = getScriptFunction(path, "getLevel", env, true, true);
+    if (!env && !getLevel) {
+        getLevel = getScriptFunction(path, "getLevel", env, true, true);
+    }
     if (!getLevel) {
         return 0;
     }
@@ -63,12 +69,13 @@ static int getDrainLevel(const game::CMidUnit* unit,
     try {
         const bindings::UnitView attacker{unit};
         const bindings::UnitView target{targetUnit};
+        const bindings::BattleMsgDataView battleView{battleMsgData, objectMap};
 
         if (CMidgardIDApi::get().getType(unitOrItemId) == IdType::Item) {
             const bindings::ItemView itemView{unitOrItemId, objectMap};
-            return (*getLevel)(attacker, target, &itemView);
+            return (*getLevel)(attacker, target, &itemView, battleView);
         } else
-            return (*getLevel)(attacker, target, nullptr);
+            return (*getLevel)(attacker, target, nullptr, battleView);
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
                                         "Reason: '{:s}'",
@@ -102,7 +109,8 @@ void __fastcall drainLevelAttackOnHitHooked(game::CBatAttackDrainLevel* thisptr,
     int drainLevel = targetLevel - 1;
     if (userSettings().leveledDrainLevelAttack) {
         const CMidUnit* unit = fn.findUnitById(objectMap, &thisptr->unitId);
-        drainLevel = getDrainLevel(unit, targetUnit, objectMap, &thisptr->unitOrItemId);
+        drainLevel = getDrainLevel(unit, targetUnit, objectMap, &thisptr->unitOrItemId,
+                                   battleMsgData);
     }
 
     const auto& global = GlobalDataApi::get();

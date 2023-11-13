@@ -1,4 +1,4 @@
-function getLevel(doppelganger, target)
+function getLevel(doppelganger, target, item, battle)
     -- Get current doppelganger implementation
     local impl = doppelganger.impl
     -- Get target unit implementation

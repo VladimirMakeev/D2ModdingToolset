@@ -22,9 +22,11 @@
 #include "batattackdoppelganger.h"
 #include "battleattackinfo.h"
 #include "battlemsgdata.h"
+#include "battlemsgdataview.h"
 #include "game.h"
 #include "globaldata.h"
 #include "immunecat.h"
+#include "itemview.h"
 #include "log.h"
 #include "midgardobjectmap.h"
 #include "midunit.h"
@@ -41,11 +43,20 @@
 namespace hooks {
 
 static int getDoppelgangerTransformLevel(const game::CMidUnit* doppelganger,
-                                         const game::CMidUnit* targetUnit)
+                                         const game::CMidUnit* targetUnit,
+                                         const game::IMidgardObjectMap* objectMap,
+                                         const game::CMidgardID* unitOrItemId,
+                                         const game::BattleMsgData* battleMsgData)
 {
-    std::optional<sol::environment> env;
+    using namespace game;
+
+    // The function is only accessed by the server thread - the single instance is enough.
+    static std::optional<sol::environment> env;
+    static std::optional<sol::function> getLevel;
     const auto path{scriptsFolder() / "doppelganger.lua"};
-    auto getLevel = getScriptFunction(path, "getLevel", env, true, true);
+    if (!env && !getLevel) {
+        getLevel = getScriptFunction(path, "getLevel", env, true, true);
+    }
     if (!getLevel) {
         return 0;
     }
@@ -53,8 +64,13 @@ static int getDoppelgangerTransformLevel(const game::CMidUnit* doppelganger,
     try {
         const bindings::UnitView attacker{doppelganger};
         const bindings::UnitView target{targetUnit};
+        const bindings::BattleMsgDataView battleView{battleMsgData, objectMap};
 
-        return (*getLevel)(attacker, target);
+        if (CMidgardIDApi::get().getType(unitOrItemId) == IdType::Item) {
+            const bindings::ItemView itemView{unitOrItemId, objectMap};
+            return (*getLevel)(attacker, target, &itemView, battleView);
+        } else
+            return (*getLevel)(attacker, target, nullptr, battleView);
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to run '{:s}' script.\n"
                                         "Reason: '{:s}'",
@@ -209,7 +225,9 @@ void __fastcall doppelgangerAttackOnHitHooked(game::CBatAttackDoppelganger* this
     CMidgardID targetUnitImplId = targetUnit->unitImpl->id;
 
     const CMidUnit* unit = fn.findUnitById(objectMap, &thisptr->unitId);
-    const auto transformLevel = getDoppelgangerTransformLevel(unit, targetUnit);
+    const auto transformLevel = getDoppelgangerTransformLevel(unit, targetUnit, objectMap,
+                                                              &thisptr->attackImplUnitId,
+                                                              battleMsgData);
 
     CMidgardID transformUnitImplId{targetUnit->unitImpl->id};
     CUnitGenerator* unitGenerator = (*(GlobalDataApi::get().getGlobalData()))->unitGenerator;
