@@ -22,6 +22,9 @@
 #include "attackutils.h"
 #include "customattacks.h"
 #include "customattackutils.h"
+#include "modifierutils.h"
+#include "modifierview.h"
+#include "unitmodifier.h"
 #include <sol/sol.hpp>
 
 namespace bindings {
@@ -43,15 +46,16 @@ void AttackView::bind(sol::state& lua)
     attackView["heal"] = sol::property(&AttackView::getHeal);
     attackView["infinite"] = sol::property(&AttackView::isInfinite);
     attackView["crit"] = sol::property(&AttackView::canCrit);
+    attackView["level"] = sol::property(&AttackView::getLevel);
+    attackView["wards"] = sol::property(&AttackView::getWards);
+
     attackView["melee"] = sol::property(&AttackView::isMelee);
     attackView["maxTargets"] = sol::property(&AttackView::maxTargets);
-
     attackView["critDamage"] = sol::property(&AttackView::critDamage);
     attackView["critPower"] = sol::property(&AttackView::critPower);
     attackView["damageRatio"] = sol::property(&AttackView::damageRatio);
     attackView["damageRatioPerTarget"] = sol::property(&AttackView::damageRatioPerTarget);
     attackView["damageSplit"] = sol::property(&AttackView::damageSplit);
-    attackView["level"] = sol::property(&AttackView::getLevel);
 }
 
 IdView AttackView::getId() const
@@ -122,6 +126,24 @@ bool AttackView::canCrit() const
     return attack->vftable->getCritHit(attack);
 }
 
+int AttackView::getLevel() const
+{
+    return attack->vftable->getLevel(attack);
+}
+
+std::vector<ModifierView> AttackView::getWards() const
+{
+    std::vector<ModifierView> result;
+
+    const auto wards = attack->vftable->getWards(attack);
+    for (const game::CMidgardID* modifierId = wards->bgn; modifierId != wards->end; modifierId++) {
+        auto modifier = hooks::getUnitModifier(modifierId);
+        result.push_back(ModifierView{modifier->data->modifier});
+    }
+
+    return result;
+}
+
 bool AttackView::isMelee() const
 {
     return hooks::isMeleeAttack(attack);
@@ -156,11 +178,6 @@ bool AttackView::damageRatioPerTarget() const
 bool AttackView::damageSplit() const
 {
     return hooks::getCustomAttackData(attack).damageSplit;
-}
-
-int AttackView::getLevel() const
-{
-    return attack->vftable->getLevel(attack);
 }
 
 } // namespace bindings
