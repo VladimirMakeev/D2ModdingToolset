@@ -121,6 +121,18 @@ void changeUnitXpAndUpgrade(game::IMidgardObjectMap* objectMap,
     unitInfo->unitHp = unit->currentHp;
 }
 
+void validateUnitAndUpdateInfo(game::IMidgardObjectMap* objectMap, game::UnitInfo* unitInfo)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    auto unit = fn.findUnitById(objectMap, &unitInfo->unitId1);
+    if (validateUnit(unit)) {
+        unitInfo->unitHp = unit->currentHp;
+    }
+}
+
 int getXpPercent(game::IMidgardObjectMap* objectMap,
                  const game::CMidgardID* groupId,
                  const game::CMidgardID* playerId,
@@ -157,6 +169,13 @@ void __stdcall upgradeGroupHooked(game::IMidgardObjectMap* objectMap,
             && unitInfo.unitFlags.parts.attacker == isAttacker) {
             changeUnitXpAndUpgrade(objectMap, battleMsgData, &unitInfo, groupId, &playerId,
                                    unitInfo.unitXp * xpPercent / 100, attackInfo);
+        }
+    }
+
+    for (auto& unitInfo : battleMsgData->unitsInfo) {
+        if (unitInfo.unitId1 != invalidId && !unitInfo.unknown2
+            && unitInfo.unitFlags.parts.attacker == isAttacker) {
+            validateUnitAndUpdateInfo(objectMap, &unitInfo);
         }
     }
 }
