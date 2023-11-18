@@ -241,6 +241,25 @@ union BattleStateFlags
 
 assert_size(BattleStateFlags, 1);
 
+union BattleStateFlags2
+{
+    struct
+    {
+        /** Special zero round for doppelgangers was handled. */
+        bool doppelgangerRoundWasHandled : 1;
+        /** Negative and retreat effects on units needs to be updated. */
+        bool shouldUpdateUnitEffects : 1;
+        /** Attacker stack leader original position before duel. */
+        std::uint8_t attackerLeaderOriginalPos : 3;
+        /** Defender stack leader original position before duel. */
+        std::uint8_t defenderLeaderOriginalPos : 3;
+    } parts;
+
+    std::uint8_t value;
+};
+
+assert_size(BattleStateFlags2, 1);
+
 /**
  * Common part of the network messages that is being sent during battle.
  */
@@ -268,13 +287,10 @@ struct BattleMsgData
     std::int8_t currentRound;
     char padding[3];
     int unknown3;
-    int unknown4;
-    int unknown5;
-    int unknown6;
-    int unknown7;
+    double attackerGroupCoefficient;
+    double defenderGroupCoefficient;
     BattleStateFlags battleStateFlags;
-    /** Holds leaders positions before duel. */
-    char unknown9;
+    BattleStateFlags2 battleStateFlags2;
     /**
      * Indicates that battle is a duel.
      * Before duel starts, group leaders change their positions to 2, so they face each other.
@@ -289,6 +305,7 @@ struct BattleMsgData
 assert_size(BattleMsgData, 3920);
 assert_offset(BattleMsgData, turnsOrder, 3696);
 assert_offset(BattleMsgData, attackerStackUnitIds, 3816);
+assert_offset(BattleMsgData, battleStateFlags2, 3913);
 
 namespace BattleMsgDataApi {
 
