@@ -99,7 +99,7 @@ bool validateUnit(game::CMidUnit* unit);
 
 bool canUnitGainXp(const game::IUsUnit* unitImpl);
 
-bool isNextUnitImpl(const game::IUsUnit* unitImpl, const game::IUsUnit* prevImpl);
+bool isNextUnitImpl(const game::IUsUnit* unitImpl, const game::IUsUnit* currImpl);
 
 bool isNextTierUnitImpl(const game::IUsUnit* unitImpl, const game::IUsUnit* currImpl);
 
