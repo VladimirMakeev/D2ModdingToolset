@@ -118,6 +118,8 @@ const game::TUsUnitImpl* getUpgradeUnitImpl(const game::IMidgardObjectMap* objec
                                             const game::CMidPlayer* player,
                                             const game::CMidUnit* unit);
 
+game::CMidgardID getUpgradeBuildingId(const game::IUsUnit* unitImpl);
+
 int getGeneratedUnitImplLevelMax();
 
 int addUnitXpNoUpgrade(game::IMidgardObjectMap* objectMap, game::CMidUnit* unit, int value);

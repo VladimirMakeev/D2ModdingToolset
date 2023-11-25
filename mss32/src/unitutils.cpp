@@ -803,6 +803,16 @@ const game::TUsUnitImpl* getUpgradeUnitImpl(const game::IMidgardObjectMap* objec
     return generateUnitImpl(&unit->unitImpl->id, soldier->vftable->getLevel(soldier) + 1);
 }
 
+game::CMidgardID getUpgradeBuildingId(const game::IUsUnit* unitImpl)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+
+    auto racialSoldier = fn.castUnitImplToRacialSoldier(unitImpl);
+    return racialSoldier ? *racialSoldier->vftable->getUpgradeBuildingId(racialSoldier) : emptyId;
+}
+
 int getGeneratedUnitImplLevelMax()
 {
     using namespace game;
