@@ -101,6 +101,8 @@ bool canUnitGainXp(const game::IUsUnit* unitImpl);
 
 bool isNextUnitImpl(const game::IUsUnit* unitImpl, const game::IUsUnit* prevImpl);
 
+bool isNextTierUnitImpl(const game::IUsUnit* unitImpl, const game::IUsUnit* currImpl);
+
 bool hasNextTierUnitImpl(const game::IUsUnit* unitImpl);
 
 bool hasMaxTierUpgradeBuilding(const game::IMidgardObjectMap* objectMap,

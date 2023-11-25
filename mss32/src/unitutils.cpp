@@ -680,6 +680,19 @@ bool isNextUnitImpl(const game::IUsUnit* unitImpl, const game::IUsUnit* currImpl
     return false;
 }
 
+bool isNextTierUnitImpl(const game::IUsUnit* unitImpl, const game::IUsUnit* currImpl)
+{
+    using namespace game;
+
+    const auto& idApi = CMidgardIDApi::get();
+
+    if (idApi.getType(&unitImpl->id) == IdType::UnitGenerated) {
+        return false;
+    }
+
+    return isNextUnitImpl(unitImpl, currImpl);
+}
+
 bool hasNextTierUnitImpl(const game::IUsUnit* unitImpl)
 {
     using namespace game;
