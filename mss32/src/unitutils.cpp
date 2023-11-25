@@ -731,47 +731,6 @@ bool hasMaxTierUpgradeBuilding(const game::IMidgardObjectMap* objectMap,
     return getBuildingLevel(upgradeBuildingId) >= scenarioInfo->unitMaxTier;
 }
 
-bool isNextTierUnitImpl(const game::IMidgardObjectMap* objectMap,
-                        const game::CMidPlayer* player,
-                        const game::CMidUnit* unit,
-                        const game::TUsUnitImpl* unitImpl,
-                        bool* requiresBuilding)
-{
-    using namespace game;
-
-    const auto& fn = gameFunctions();
-    const auto& idApi = CMidgardIDApi::get();
-
-    if (idApi.getType(&unitImpl->id) == IdType::UnitGenerated) {
-        return false;
-    }
-
-    if (!isNextUnitImpl(unitImpl, unit->unitImpl)) {
-        return false;
-    }
-
-    auto racialSoldier = fn.castUnitImplToRacialSoldier(unitImpl);
-    if (racialSoldier) {
-        auto upgradeBuildingId = *racialSoldier->vftable->getUpgradeBuildingId(racialSoldier);
-        if (upgradeBuildingId != emptyId) {
-            if (!player || !lordHasBuilding(&player->lordId, &upgradeBuildingId)) {
-                return false;
-            }
-
-            auto scenarioInfo = getScenarioInfo(objectMap);
-            if (getBuildingLevel(&upgradeBuildingId) > scenarioInfo->unitMaxTier) {
-                return false;
-            }
-
-            *requiresBuilding = !playerHasBuilding(objectMap, player, &upgradeBuildingId);
-            return true;
-        }
-    }
-
-    *requiresBuilding = false;
-    return true;
-}
-
 const game::TUsUnitImpl* getUpgradeUnitImpl(const game::IMidgardObjectMap* objectMap,
                                             const game::CMidPlayer* player,
                                             const game::CMidUnit* unit)
@@ -787,11 +746,28 @@ const game::TUsUnitImpl* getUpgradeUnitImpl(const game::IMidgardObjectMap* objec
         const auto globalData = *globalApi.getGlobalData();
         const auto& units = globalData->units->map->data;
         for (auto it = units.bgn; it != units.end; ++it) {
-            if (isNextTierUnitImpl(objectMap, player, unit, it->second, &requiresBuilding)) {
-                if (!requiresBuilding) {
-                    return it->second;
+            if (!isNextTierUnitImpl(it->second, unit->unitImpl)) {
+                continue;
+            }
+
+            auto upgradeBuildingId = getUpgradeBuildingId(it->second);
+            if (upgradeBuildingId != emptyId) {
+                if (!player || !lordHasBuilding(&player->lordId, &upgradeBuildingId)) {
+                    continue;
+                }
+
+                auto scenarioInfo = getScenarioInfo(objectMap);
+                if (getBuildingLevel(&upgradeBuildingId) > scenarioInfo->unitMaxTier) {
+                    continue;
+                }
+
+                requiresBuilding = !playerHasBuilding(objectMap, player, &upgradeBuildingId);
+                if (requiresBuilding) {
+                    continue;
                 }
             }
+
+            return it->second;
         }
 
         if (requiresBuilding) {
