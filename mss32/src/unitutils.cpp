@@ -697,17 +697,13 @@ bool hasNextTierUnitImpl(const game::IUsUnit* unitImpl)
 {
     using namespace game;
 
-    const auto& fn = gameFunctions();
-    const auto& idApi = CMidgardIDApi::get();
     const auto& globalApi = GlobalDataApi::get();
 
     const auto globalData = *globalApi.getGlobalData();
     const auto& units = globalData->units->map->data;
     for (auto it = units.bgn; it != units.end; ++it) {
-        if (idApi.getType(&it->first) != IdType::UnitGenerated) {
-            if (isNextUnitImpl(it->second, unitImpl)) {
-                return true;
-            }
+        if (isNextTierUnitImpl(it->second, unitImpl)) {
+            return true;
         }
     }
 
