@@ -94,6 +94,17 @@ enum class CanApplyPotionResult : int
     CannotHealDead = 11,
 };
 
+enum class BuildingStatus : int
+{
+    CanBeBuilt = 0,
+    InsufficientBank = 3,
+    ExceedsMaxLevel = 5,
+    PlayerAlreadyBuiltThisDay = 6,
+    AlreadyBuilt = 8,
+    PlayerHasNoRequiredBuilding = 9,
+    PlayerHasSiblingUnitBuilding = 10,
+};
+
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */
 using RespopupInitFunc = void (*)(void);
 
@@ -714,6 +725,11 @@ using ComputeMovementCost = int(__stdcall*)(const CMqPoint* mapPosition,
                                             bool waterOnly,
                                             bool forbidWaterOnlyOnLand);
 
+using GetBuildingStatus = BuildingStatus(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                     const CMidgardID* playerId,
+                                                     const CMidgardID* buildingId,
+                                                     bool ignoreBuildTurnAndCost);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -839,6 +855,7 @@ struct Functions
     GetUnitImplIdForIsoUnitImage getUnitImplIdForIsoUnitImage;
     GetUnitRequiredBuildings getUnitRequiredBuildings;
     ComputeMovementCost computeMovementCost;
+    GetBuildingStatus getBuildingStatus;
 };
 
 /** Global variables used in game. */
