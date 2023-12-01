@@ -103,6 +103,7 @@ enum class BuildingStatus : int
     AlreadyBuilt = 8,
     PlayerHasNoRequiredBuilding = 9,
     PlayerHasSiblingUnitBuilding = 10,
+    LordHasNoBuilding = 11, // Custom value, compatible with all occurrences of getBuildingStatus
 };
 
 /** Sets initial values for 'show resources' and 'minimap mode' toggle buttons. */

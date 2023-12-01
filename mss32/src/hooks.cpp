@@ -732,6 +732,9 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{FontCacheApi::get().loadFontFiles, loadFontFilesHooked});
     hooks.emplace_back(HookInfo{FontCacheApi::get().dataDestructor, fontCacheDataDtorHooked});
 
+    // Fixes incorrect order of building status checks along with missing lordHasBuilding condition
+    hooks.emplace_back(HookInfo{fn.getBuildingStatus, getBuildingStatusHooked});
+
     return hooks;
 }
 
@@ -2236,6 +2239,52 @@ bool __stdcall isUnitUpgradePendingHooked(const game::CMidgardID* unitId,
     }
 
     return false;
+}
+
+// Conditions should be checked from most critical to less critical to provide correct flow of unit
+// upgrades, AI building decisions and UI messages
+game::BuildingStatus __stdcall getBuildingStatusHooked(const game::IMidgardObjectMap* objectMap,
+                                                       const game::CMidgardID* playerId,
+                                                       const game::CMidgardID* buildingId,
+                                                       bool ignoreBuildTurnAndCost)
+{
+    using namespace game;
+
+    auto player = getPlayer(objectMap, playerId);
+    if (playerHasBuilding(objectMap, player, buildingId)) {
+        return BuildingStatus::AlreadyBuilt;
+    }
+
+    auto building = getBuilding(buildingId);
+    auto scenarioInfo = getScenarioInfo(objectMap);
+    if (getBuildingLevel(building) > scenarioInfo->unitMaxTier) {
+        return BuildingStatus::ExceedsMaxLevel;
+    }
+
+    if (!lordHasBuilding(&player->lordId, buildingId)) {
+        return BuildingStatus::LordHasNoBuilding;
+    }
+
+    if (playerHasSiblingUnitBuilding(objectMap, player, building)) {
+        return BuildingStatus::PlayerHasSiblingUnitBuilding;
+    }
+
+    auto requiredId = building->data->requiredId;
+    if (requiredId != emptyId && !playerHasBuilding(objectMap, player, &requiredId)) {
+        return BuildingStatus::PlayerHasNoRequiredBuilding;
+    }
+
+    if (!ignoreBuildTurnAndCost) {
+        if (player->bank < building->data->cost) {
+            return BuildingStatus::InsufficientBank;
+        }
+
+        if (player->constructionTurn == scenarioInfo->currentTurn) {
+            return BuildingStatus::PlayerAlreadyBuiltThisDay;
+        }
+    }
+
+    return BuildingStatus::CanBeBuilt;
 }
 
 } // namespace hooks

@@ -68,6 +68,7 @@ struct TUsUnitImpl;
 
 enum class BuildingBranchNumber : int;
 enum class CanApplyPotionResult : int;
+enum class BuildingStatus : int;
 }; // namespace game
 
 namespace hooks {
@@ -285,6 +286,11 @@ bool __stdcall isUnitLevelNotMaxHooked(const game::IMidgardObjectMap* objectMap,
 
 bool __stdcall isUnitUpgradePendingHooked(const game::CMidgardID* unitId,
                                           const game::IMidgardObjectMap* objectMap);
+
+game::BuildingStatus __stdcall getBuildingStatusHooked(const game::IMidgardObjectMap* objectMap,
+                                                       const game::CMidgardID* playerId,
+                                                       const game::CMidgardID* buildingId,
+                                                       bool ignoreBuildTurnAndCost);
 
 } // namespace hooks
 
