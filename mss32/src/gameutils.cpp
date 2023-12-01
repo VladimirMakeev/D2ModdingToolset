@@ -544,6 +544,16 @@ int getAiBonusXpPercent(const game::IMidgardObjectMap* objectMap)
     return 0;
 }
 
+const game::TBuildingType* getBuilding(const game::CMidgardID* buildingId)
+{
+    using namespace game;
+
+    const auto& globalApi = GlobalDataApi::get();
+
+    const auto globalData = *globalApi.getGlobalData();
+    return (const TBuildingType*)globalApi.findById(globalData->buildings, buildingId);
+}
+
 int getBuildingLevel(const game::CMidgardID* buildingId)
 {
     using namespace game;

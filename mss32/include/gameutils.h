@@ -40,6 +40,7 @@ struct CMidRod;
 struct CMidInventory;
 struct CMidDiplomacy;
 struct CMidgardMapFog;
+struct TBuildingType;
 } // namespace game
 
 namespace hooks {
@@ -143,6 +144,8 @@ int getEasyDifficultyBonusXpPercent(const game::IMidgardObjectMap* objectMap,
                                     const game::CMidgardID* playerId);
 
 int getAiBonusXpPercent(const game::IMidgardObjectMap* objectMap);
+
+const game::TBuildingType* getBuilding(const game::CMidgardID* buildingId);
 
 int getBuildingLevel(const game::CMidgardID* buildingId);
 
