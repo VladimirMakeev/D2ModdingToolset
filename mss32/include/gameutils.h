@@ -165,6 +165,10 @@ bool playerHasSiblingUnitBuilding(const game::IMidgardObjectMap* objectMap,
 
 bool lordHasBuilding(const game::CMidgardID* lordId, const game::CMidgardID* buildingId);
 
+bool isBuildingBuildable(const game::IMidgardObjectMap* objectMap,
+                         const game::CMidgardID* playerId,
+                         const game::CMidgardID* buildingId);
+
 const game::CMidDiplomacy* getDiplomacy(const game::IMidgardObjectMap* objectMap);
 
 const game::CMidgardMapFog* getFog(const game::IMidgardObjectMap* objectMap,

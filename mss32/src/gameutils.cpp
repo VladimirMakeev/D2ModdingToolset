@@ -50,7 +50,9 @@
 #include "scenedit.h"
 #include "unitutils.h"
 #include "ussoldier.h"
+#include "utils.h"
 #include "version.h"
+#include <fmt/format.h>
 #include <thread>
 
 extern std::thread::id mainThreadId;
@@ -659,6 +661,49 @@ bool lordHasBuilding(const game::CMidgardID* lordId, const game::CMidgardID* bui
     IdSetIterator it;
     auto buildings = lord->data->buildList->data;
     return *idSetApi.find(&buildings, &it, buildingId) != buildings.end();
+}
+
+bool isBuildingBuildable(const game::IMidgardObjectMap* objectMap,
+                         const game::CMidgardID* playerId,
+                         const game::CMidgardID* buildingId)
+{
+    using namespace game;
+
+    const auto& fn = gameFunctions();
+    const auto& globalApi = GlobalDataApi::get();
+    const auto globalData = *globalApi.getGlobalData();
+
+    const TBuildingType* building = nullptr;
+    for (auto currentId = *buildingId; currentId != emptyId;
+         currentId = building->data->requiredId) {
+        building = (const TBuildingType*)globalApi.findById(globalData->buildings, &currentId);
+        if (!building) {
+            return false;
+        }
+
+        auto status = fn.getBuildingStatus(objectMap, playerId, &currentId, true);
+        switch (status) {
+        case BuildingStatus::CanBeBuilt:
+            return true;
+        case BuildingStatus::AlreadyBuilt:
+            return currentId != *buildingId ? true : false;
+        case BuildingStatus::PlayerHasNoRequiredBuilding:
+            break;
+        case BuildingStatus::ExceedsMaxLevel:
+        case BuildingStatus::LordHasNoBuilding:
+        case BuildingStatus::PlayerHasSiblingUnitBuilding:
+            return false;
+        case BuildingStatus::InsufficientBank:
+        case BuildingStatus::PlayerAlreadyBuiltThisDay:
+            showErrorMessageBox(fmt::format("Unexpected building status {:d}.", status));
+            return false;
+        default:
+            showErrorMessageBox(fmt::format("Unknown building status {:d}.", status));
+            return false;
+        }
+    }
+
+    return false;
 }
 
 const game::CMidDiplomacy* getDiplomacy(const game::IMidgardObjectMap* objectMap)
