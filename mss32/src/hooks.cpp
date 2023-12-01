@@ -1773,18 +1773,7 @@ bool __stdcall enableUnitInHireListUiHooked(const game::CMidPlayer* player,
 
     auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
 
-    auto buildingsObject = objectMap->vftable->findScenarioObjectById(objectMap,
-                                                                      &player->buildingsId);
-    if (!buildingsObject) {
-        return false;
-    }
-
-    const auto dynamicCast = RttiApi::get().dynamicCast;
-    const auto& rtti = RttiApi::rtti();
-
-    auto playerBuildings = (CPlayerBuildings*)dynamicCast(buildingsObject, 0,
-                                                          rtti.IMidScenarioObjectType,
-                                                          rtti.CPlayerBuildingsType, 0);
+    auto playerBuildings = getPlayerBuildings(objectMap, player);
     if (!playerBuildings) {
         return false;
     }

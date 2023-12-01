@@ -41,6 +41,7 @@ struct CMidInventory;
 struct CMidDiplomacy;
 struct CMidgardMapFog;
 struct TBuildingType;
+struct CPlayerBuildings;
 } // namespace game
 
 namespace hooks {
@@ -150,6 +151,9 @@ const game::TBuildingType* getBuilding(const game::CMidgardID* buildingId);
 int getBuildingLevel(const game::CMidgardID* buildingId);
 
 int getBuildingLevel(const game::TBuildingType* building);
+
+const game::CPlayerBuildings* getPlayerBuildings(const game::IMidgardObjectMap* objectMap,
+                                                 const game::CMidPlayer* player);
 
 bool playerHasBuilding(const game::IMidgardObjectMap* objectMap,
                        const game::CMidPlayer* player,

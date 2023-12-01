@@ -573,24 +573,24 @@ int getBuildingLevel(const game::TBuildingType* building)
     return unitBuilding ? unitBuilding->level : 0;
 }
 
-bool playerHasBuilding(const game::IMidgardObjectMap* objectMap,
-                       const game::CMidPlayer* player,
-                       const game::CMidgardID* buildingId)
+const game::CPlayerBuildings* getPlayerBuildings(const game::IMidgardObjectMap* objectMap,
+                                                 const game::CMidPlayer* player)
 {
     using namespace game;
 
     const auto& rtti = RttiApi::rtti();
     const auto dynamicCast = RttiApi::get().dynamicCast;
 
-    auto buildingsObject = objectMap->vftable->findScenarioObjectById(objectMap,
-                                                                      &player->buildingsId);
-    if (!buildingsObject) {
-        return false;
-    }
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, &player->buildingsId);
+    return (const CPlayerBuildings*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType,
+                                                rtti.CPlayerBuildingsType, 0);
+}
 
-    auto playerBuildings = (const CPlayerBuildings*)dynamicCast(buildingsObject, 0,
-                                                                rtti.IMidScenarioObjectType,
-                                                                rtti.CPlayerBuildingsType, 0);
+bool playerHasBuilding(const game::IMidgardObjectMap* objectMap,
+                       const game::CMidPlayer* player,
+                       const game::CMidgardID* buildingId)
+{
+    auto playerBuildings = getPlayerBuildings(objectMap, player);
     if (!playerBuildings) {
         return false;
     }
