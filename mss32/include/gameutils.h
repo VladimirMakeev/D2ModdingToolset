@@ -149,6 +149,8 @@ const game::TBuildingType* getBuilding(const game::CMidgardID* buildingId);
 
 int getBuildingLevel(const game::CMidgardID* buildingId);
 
+int getBuildingLevel(const game::TBuildingType* building);
+
 bool playerHasBuilding(const game::IMidgardObjectMap* objectMap,
                        const game::CMidPlayer* player,
                        const game::CMidgardID* buildingId);

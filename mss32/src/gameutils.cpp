@@ -556,21 +556,21 @@ const game::TBuildingType* getBuilding(const game::CMidgardID* buildingId)
 
 int getBuildingLevel(const game::CMidgardID* buildingId)
 {
+    auto building = getBuilding(buildingId);
+    return building ? getBuildingLevel(building) : 0;
+}
+
+int getBuildingLevel(const game::TBuildingType* building)
+{
     using namespace game;
 
-    const auto& globalApi = GlobalDataApi::get();
     const auto& rtti = RttiApi::rtti();
     const auto dynamicCast = RttiApi::get().dynamicCast;
 
-    const auto globalData = *globalApi.getGlobalData();
-    auto buildingType = (const TBuildingType*)globalApi.findById(globalData->buildings, buildingId);
-    if (!buildingType) {
-        return 0;
-    }
-
-    auto upgBuildingType = (const TBuildingUnitUpgType*)
-        dynamicCast(buildingType, 0, rtti.TBuildingTypeType, rtti.TBuildingUnitUpgTypeType, 0);
-    return upgBuildingType ? upgBuildingType->level : 0;
+    auto unitBuilding = (const TBuildingUnitUpgType*)dynamicCast(building, 0,
+                                                                 rtti.TBuildingTypeType,
+                                                                 rtti.TBuildingUnitUpgTypeType, 0);
+    return unitBuilding ? unitBuilding->level : 0;
 }
 
 bool playerHasBuilding(const game::IMidgardObjectMap* objectMap,
