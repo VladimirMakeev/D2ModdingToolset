@@ -742,35 +742,32 @@ const game::TUsUnitImpl* getUpgradeUnitImpl(const game::IMidgardObjectMap* objec
     const auto& idApi = CMidgardIDApi::get();
 
     if (!unit->dynLevel && idApi.getType(&unit->unitImpl->id) != IdType::UnitGenerated) {
-        bool requiresBuilding = false;
+        bool hasBuildableNextTier = false;
         const auto globalData = *globalApi.getGlobalData();
         const auto& units = globalData->units->map->data;
         for (auto it = units.bgn; it != units.end; ++it) {
-            if (!isNextTierUnitImpl(it->second, unit->unitImpl)) {
-                continue;
+            if (isNextTierUnitImpl(it->second, unit->unitImpl)) {
+                auto upgradeBuildingId = getUpgradeBuildingId(it->second);
+                if (upgradeBuildingId == emptyId) {
+                    return it->second;
+                }
+
+                // capturedById explicit check is required because captured players still have their
+                // CPlayerBuildings untouched, allowing their units to use upgrade buildings from
+                // captured capital
+                if (player && player->capturedById == emptyId) {
+                    if (playerHasBuilding(objectMap, player, &upgradeBuildingId)) {
+                        return it->second;
+                    }
+
+                    if (isBuildingBuildable(objectMap, &player->id, &upgradeBuildingId)) {
+                        hasBuildableNextTier = true;
+                    }
+                }
             }
-
-            auto upgradeBuildingId = getUpgradeBuildingId(it->second);
-            if (upgradeBuildingId != emptyId) {
-                if (!player || !lordHasBuilding(&player->lordId, &upgradeBuildingId)) {
-                    continue;
-                }
-
-                auto scenarioInfo = getScenarioInfo(objectMap);
-                if (getBuildingLevel(&upgradeBuildingId) > scenarioInfo->unitMaxTier) {
-                    continue;
-                }
-
-                requiresBuilding = !playerHasBuilding(objectMap, player, &upgradeBuildingId);
-                if (requiresBuilding) {
-                    continue;
-                }
-            }
-
-            return it->second;
         }
 
-        if (requiresBuilding) {
+        if (hasBuildableNextTier) {
             return nullptr;
         }
     }
