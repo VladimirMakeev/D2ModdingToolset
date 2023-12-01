@@ -605,6 +605,44 @@ bool playerHasBuilding(const game::IMidgardObjectMap* objectMap,
     return false;
 }
 
+bool playerHasSiblingUnitBuilding(const game::IMidgardObjectMap* objectMap,
+                                  const game::CMidPlayer* player,
+                                  const game::TBuildingType* building)
+{
+    using namespace game;
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    auto unitBuilding = (const TBuildingUnitUpgType*)dynamicCast(building, 0,
+                                                                 rtti.TBuildingTypeType,
+                                                                 rtti.TBuildingUnitUpgTypeType, 0);
+    if (!unitBuilding) {
+        return false;
+    }
+
+    auto playerBuildings = getPlayerBuildings(objectMap, player);
+    if (!playerBuildings) {
+        return false;
+    }
+
+    const auto& buildings = playerBuildings->buildings;
+    for (auto node = buildings.head->next; node != buildings.head; node = node->next) {
+        auto otherBuilding = getBuilding(&node->data);
+        if (otherBuilding->data->category.id == building->data->category.id) {
+            auto otherUnitBuilding = (const TBuildingUnitUpgType*)
+                dynamicCast(otherBuilding, 0, rtti.TBuildingTypeType, rtti.TBuildingUnitUpgTypeType,
+                            0);
+            if (otherUnitBuilding && otherUnitBuilding->level == unitBuilding->level
+                && otherUnitBuilding->branch.id == unitBuilding->branch.id) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 bool lordHasBuilding(const game::CMidgardID* lordId, const game::CMidgardID* buildingId)
 {
     using namespace game;
