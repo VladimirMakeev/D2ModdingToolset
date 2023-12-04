@@ -1585,7 +1585,7 @@ void __stdcall afterBattleTurnHooked(game::BattleMsgData* battleMsgData,
     using namespace game;
 
     if (*unitId != *nextUnitId) {
-        battleMsgData->unknown9 |= 2;
+        battleMsgData->battleStateFlags2.parts.shouldUpdateUnitEffects = true;
         BattleMsgDataApi::get().removeFiniteBoostLowerDamage(battleMsgData, unitId);
     }
 
