@@ -99,22 +99,20 @@ bool validateUnit(game::CMidUnit* unit);
 
 bool canUnitGainXp(const game::IUsUnit* unitImpl);
 
-bool isNextUnitImpl(const game::IUsUnit* unitImpl, const game::IUsUnit* prevImpl);
+bool isNextUnitImpl(const game::IUsUnit* unitImpl, const game::IUsUnit* currImpl);
+
+bool isNextTierUnitImpl(const game::IUsUnit* unitImpl, const game::IUsUnit* currImpl);
 
 bool hasNextTierUnitImpl(const game::IUsUnit* unitImpl);
 
 bool hasMaxTierUpgradeBuilding(const game::IMidgardObjectMap* objectMap,
                                const game::IUsUnit* unitImpl);
 
-bool isNextTierUnitImpl(const game::IMidgardObjectMap* objectMap,
-                        const game::CMidPlayer* player,
-                        const game::CMidUnit* unit,
-                        const game::TUsUnitImpl* unitImpl,
-                        bool* requiresBuilding);
-
 const game::TUsUnitImpl* getUpgradeUnitImpl(const game::IMidgardObjectMap* objectMap,
                                             const game::CMidPlayer* player,
                                             const game::CMidUnit* unit);
+
+game::CMidgardID getUpgradeBuildingId(const game::IUsUnit* unitImpl);
 
 int getGeneratedUnitImplLevelMax();
 

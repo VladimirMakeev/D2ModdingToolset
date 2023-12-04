@@ -40,6 +40,8 @@ struct CMidRod;
 struct CMidInventory;
 struct CMidDiplomacy;
 struct CMidgardMapFog;
+struct TBuildingType;
+struct CPlayerBuildings;
 } // namespace game
 
 namespace hooks {
@@ -144,13 +146,28 @@ int getEasyDifficultyBonusXpPercent(const game::IMidgardObjectMap* objectMap,
 
 int getAiBonusXpPercent(const game::IMidgardObjectMap* objectMap);
 
+const game::TBuildingType* getBuilding(const game::CMidgardID* buildingId);
+
 int getBuildingLevel(const game::CMidgardID* buildingId);
+
+int getBuildingLevel(const game::TBuildingType* building);
+
+const game::CPlayerBuildings* getPlayerBuildings(const game::IMidgardObjectMap* objectMap,
+                                                 const game::CMidPlayer* player);
 
 bool playerHasBuilding(const game::IMidgardObjectMap* objectMap,
                        const game::CMidPlayer* player,
                        const game::CMidgardID* buildingId);
 
+bool playerHasSiblingUnitBuilding(const game::IMidgardObjectMap* objectMap,
+                                  const game::CMidPlayer* player,
+                                  const game::TBuildingType* building);
+
 bool lordHasBuilding(const game::CMidgardID* lordId, const game::CMidgardID* buildingId);
+
+bool isBuildingBuildable(const game::IMidgardObjectMap* objectMap,
+                         const game::CMidgardID* playerId,
+                         const game::CMidgardID* buildingId);
 
 const game::CMidDiplomacy* getDiplomacy(const game::IMidgardObjectMap* objectMap);
 
