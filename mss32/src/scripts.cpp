@@ -318,7 +318,7 @@ sol::state& getLua()
     if (lua == nullptr) {
         lua = std::make_unique<sol::state>();
         lua->open_libraries(sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::table,
-                            sol::lib::os, sol::lib::string);
+                            sol::lib::os, sol::lib::string, sol::lib::debug);
         bindApi(*lua);
     }
 
