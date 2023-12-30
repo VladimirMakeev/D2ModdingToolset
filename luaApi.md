@@ -736,9 +736,85 @@ rod.owner
 Represents rules that applied when unit makes its progress gaining levels. Records in GDynUpgr.dbf are dynamic upgrades.
 
 Methods:
+##### id
+Returns upgrade [identifier](luaApi.md#id).
 ```lua
--- Returns number of experience points added with each dynamic upgrade. XP_NEXT value from GDynUpgr.dbf.
+dynUpgrade.id
+```
+##### enrollCost
+Returns [value](luaApi.md#currency) added to enroll cost with each dynamic upgrade. `ENROLL_C` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.enrollCost
+```
+##### hp
+Returns hp added with each dynamic upgrade. `HIT_POINT` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.hp
+```
+##### armor
+Returns armor added with each dynamic upgrade. `ARMOR` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.armor
+```
+##### regen
+Returns regen added with each dynamic upgrade. `REGEN` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.regen
+```
+##### reviveCost
+Returns [value](luaApi.md#currency) added to revive cost with each dynamic upgrade. `REVIVE_C` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.reviveCost
+```
+##### healCost
+Returns [value](luaApi.md#currency) added to heal cost with each dynamic upgrade. `HEAL_C` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.healCost
+```
+##### trainingCost
+Returns [value](luaApi.md#currency) added to training cost with each dynamic upgrade. `TRAINING_C` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.trainingCost
+```
+##### xpKilled
+Returns xp for killing added with each dynamic upgrade. `XP_KILLED` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.xpKilled
+```
+##### xpNext
+Returns xp for level-up added with each dynamic upgrade. `XP_NEXT` value from `GDynUpgr.dbf`.
+```lua
 dynUpgrade.xpNext
+```
+##### move
+Returns move points added with each dynamic upgrade. `MOVE` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.move
+```
+##### negotiate
+Returns negotiate points added with each dynamic upgrade. `NEGOTIATE` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.negotiate
+```
+##### initiative
+Returns attack initiative added with each dynamic upgrade. `INITIATIVE` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.initiative
+```
+##### power
+Returns attack power added with each dynamic upgrade. `POWER` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.power
+```
+##### damage
+Returns attack damage added with each dynamic upgrade. `DAMAGE` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.damage
+```
+##### heal
+Returns attack heal added with each dynamic upgrade. `HEAL` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.heal
 ```
 
 ---

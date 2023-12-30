@@ -20,6 +20,9 @@
 #ifndef DYNUPGRADEVIEW_H
 #define DYNUPGRADEVIEW_H
 
+#include "currencyview.h"
+#include "idview.h"
+
 namespace sol {
 class state;
 }
@@ -37,8 +40,22 @@ public:
 
     static void bind(sol::state& lua);
 
-    /** Returns number of experience points added with each dynamic upgrade. */
+    IdView getId() const;
+    CurrencyView getEnrollCost() const;
+    int getHp() const;
+    int getArmor() const;
+    int getRegen() const;
+    CurrencyView getReviveCost() const;
+    CurrencyView getHealCost() const;
+    CurrencyView getTrainingCost() const;
+    int getXpKilled() const;
     int getXpNext() const;
+    int getMove() const;
+    int getNegotiate() const;
+    int getInitiative() const;
+    int getPower() const;
+    int getDamage() const;
+    int getHeal() const;
 
 private:
     const game::CDynUpgrade* upgrade;
