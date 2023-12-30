@@ -77,6 +77,12 @@ const game::CLeaderUnitDescriptor* castToLeaderUnitDescriptor(
                                                            rtti.CLeaderUnitDescriptorType, 0);
 }
 
+const game::CMidUnit* getUnit(const game::IEncUnitDescriptor* descriptor)
+{
+    auto midUnitDescriptor = castToMidUnitDescriptor(descriptor);
+    return midUnitDescriptor ? midUnitDescriptor->unit : nullptr;
+}
+
 const game::TUsUnitImpl* getUnitImpl(const game::IEncUnitDescriptor* descriptor)
 {
     auto midUnitDescriptor = castToMidUnitDescriptor(descriptor);
