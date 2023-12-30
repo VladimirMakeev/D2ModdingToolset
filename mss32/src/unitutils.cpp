@@ -149,6 +149,16 @@ game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidgardID* unitImplId)
     return getUnitImpl(&globalImplId);
 }
 
+game::TUsUnitImpl* getGlobalUnitImplByAttackId(const game::CMidgardID* attackId)
+{
+    using namespace game;
+
+    CMidgardID unitImplId;
+    CMidgardIDApi::get().changeType(&unitImplId, attackId, IdType::UnitGenerated);
+
+    return getGlobalUnitImpl(&unitImplId);
+}
+
 game::TUsUnitImpl* generateUnitImpl(const game::CMidgardID* unitImplId, int level)
 {
     using namespace game;

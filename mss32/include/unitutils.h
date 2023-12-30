@@ -53,6 +53,8 @@ bool isUnitSmall(const game::CMidUnit* unit);
 game::CMidgardID getGlobalUnitImplId(const game::CMidgardID* unitImplId);
 /** Returns global unit implementation (from Gunits.dbf). */
 game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidgardID* unitImplId);
+/** Returns global unit implementation (from Gunits.dbf) by global/generated attack id. */
+game::TUsUnitImpl* getGlobalUnitImplByAttackId(const game::CMidgardID* attackId);
 game::TUsUnitImpl* generateUnitImpl(const game::CMidgardID* unitImplId, int level);
 /** Returns either global (from Gunits.dbf) or generated (leveled) unit implementation. */
 game::TUsUnitImpl* getUnitImpl(const game::CMidgardID* unitImplId);
