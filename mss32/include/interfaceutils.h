@@ -46,6 +46,7 @@ const game::CUnitTypeDescriptor* castToUnitTypeDescriptor(
     const game::IEncUnitDescriptor* descriptor);
 const game::CLeaderUnitDescriptor* castToLeaderUnitDescriptor(
     const game::IEncUnitDescriptor* descriptor);
+/** Returns either global (from Gunits.dbf) or generated (leveled) unit implementation. */
 const game::TUsUnitImpl* getUnitImpl(const game::IEncUnitDescriptor* descriptor);
 bool hasCriticalHitLeaderAbility(const game::IEncUnitDescriptor* descriptor);
 
