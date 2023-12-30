@@ -228,6 +228,8 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\chatinterf.cpp" />
     <ClCompile Include="src\citystackinterfhooks.cpp" />
     <ClCompile Include="src\custombuildingcategories.cpp" />
+    <ClCompile Include="src\customunitencyclopedia.cpp" />
+    <ClCompile Include="src\customunitencyclopediafunctions.cpp" />
     <ClCompile Include="src\diplomacyhooks.cpp" />
     <ClCompile Include="src\displayd3d.cpp" />
     <ClCompile Include="src\displayddraw.cpp" />
@@ -669,6 +671,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\chatinterf.h" />
     <ClInclude Include="include\citystackinterfhooks.h" />
     <ClInclude Include="include\custombuildingcategories.h" />
+    <ClInclude Include="include\customunitencyclopedia.h" />
+    <ClInclude Include="include\customunitencyclopediafunctions.h" />
     <ClInclude Include="include\d2unorderedmap.h" />
     <ClInclude Include="include\ddstackgroup.h" />
     <ClInclude Include="include\ddunitgroup.h" />

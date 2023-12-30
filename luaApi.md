@@ -22,7 +22,8 @@ Scripts folder itself should be placed in the game folder.
 - getSelectedTargetAndTwoChainedRandom.lua - contains attack targeting logic for random chain attack reach
 - getSelectedTargetAndOneRandom.lua - contains attack targeting logic for additional random target
 - getWoundedFemaleGreenskinTargets.lua - contains targeting logic that only allows to reach wounded female greenskins
-- [Scripts/Modifiers](Scripts/Modifiers) contain custom modifier script examples
+- [Scripts/Modifiers](Scripts/Modifiers) - contains custom modifier script examples
+- unitEncyclopedia.lua - contains custom display functions for unit encyclopedia
 
 ### API reference
 
