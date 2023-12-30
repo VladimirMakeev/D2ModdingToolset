@@ -48,7 +48,7 @@ enum class CEncParamBaseDataStatus : int
     LowerInitiative = 0b0000001000000000,
 
     Unknown4        = 0b0000010000000000,
-    Unknown5        = 0b0000100000000000,
+    IsInBattle      = 0b0000100000000000,
 };
 // clang-format on
 

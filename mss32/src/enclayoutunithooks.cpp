@@ -548,7 +548,7 @@ static int getUnitArmor(game::CEncLayoutUnit* layout)
     auto objectMap = data->objectMap;
 
     int result = descriptor->vftable->getUnitArmor(descriptor);
-    if (!data->unknown4 && objectMap && !descriptor->vftable->isUnitType(descriptor)) {
+    if (!data->isInBattle && objectMap && !descriptor->vftable->isUnitType(descriptor)) {
         result += getCityProtection(objectMap, &data->unitId);
     }
 

@@ -40,7 +40,7 @@ struct CEncLayoutUnitData
     int boostDamageLevel;
     int lowerDamageLevel;
     int lowerInitiativeLevel;
-    bool unknown4;
+    bool isInBattle;
     char padding[3];
     int shatteredArmor;
     /** Unshatterable armor. Non-zero only during combat. */
