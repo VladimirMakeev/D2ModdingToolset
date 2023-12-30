@@ -49,10 +49,14 @@ void getSoldierAttackSourceImmunities(const game::LImmuneCat* immuneCat,
                                       const game::IUsSoldier* soldier,
                                       game::List<game::LAttackSource>* value);
 bool isUnitSmall(const game::CMidUnit* unit);
+/** Returns global unit implementation id (from Gunits.dbf). */
 game::CMidgardID getGlobalUnitImplId(const game::CMidgardID* unitImplId);
+/** Returns global unit implementation (from Gunits.dbf). */
 game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidgardID* unitImplId);
 game::TUsUnitImpl* generateUnitImpl(const game::CMidgardID* unitImplId, int level);
+/** Returns either global (from Gunits.dbf) or generated (leveled) unit implementation. */
 game::TUsUnitImpl* getUnitImpl(const game::CMidgardID* unitImplId);
+/** Returns either global (from Gunits.dbf) or generated (leveled) unit implementation. */
 game::TUsUnitImpl* getUnitImpl(const game::IUsUnit* unit);
 game::TUsSoldierImpl* getSoldierImpl(const game::IUsUnit* unit);
 game::TUsSoldierImpl* getSoldierImpl(const game::IUsSoldier* soldier);
