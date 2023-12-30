@@ -46,7 +46,7 @@ enum class IdType : int
     UnitGlobal,        /**< 'UU', units implementations, entries of Gunits.dbf. */
     UnitGenerated,     /**< 'UG', runtime-generated units implementations. */
     UnitModifier,      /**< 'UM' */
-    Attack,            /**< 'AA' */
+    AttackGlobal,      /**< 'AA', attack implementations, entries of Gattacks.dbf. */
     TextGlobal,        /**< 'TG', entries of Tglobal.dbf. */
     LandmarkGlobal,    /**< 'MG', entries of GLmark.dbf. */
     ItemGlobal,        /**< 'IG', entries of GItem.dbf. */
