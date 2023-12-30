@@ -425,6 +425,31 @@ Returns [immune type](luaApi.md#immune) for specified [attack source](luaApi.md#
 ```lua
 impl:getImmuneToAttackSource(Source.Water)
 ```
+##### damageMax
+Returns maximum damage that this implementation is allowed to inflict by a single attack. For example, fighter leader in vanilla can inflict 400 damage while any other unit has a maximum of 300.
+```lua
+impl.damageMax
+```
+##### negotiate
+Returns negotiate value (always 0 if unit is not a leader) that is a factor of resistance from Thief's actions.
+```lua
+impl.negotiate
+```
+##### fastRetreat
+Returns whether this implementation can instantly retreat from battle (always false if unit is not a leader).
+```lua
+impl.fastRetreat
+```
+##### lowerCost
+Returns a percentage value (always 0 if unit is not a leader) of discount that this implementation gets from merchants.
+```lua
+impl.lowerCost
+```
+##### abilityName
+Returns an ability name (always an empty string if unit is not a leader). `ABIL_TXT` from `Gunits.dbf`.
+```lua
+impl.abilityName
+```
 
 ---
 

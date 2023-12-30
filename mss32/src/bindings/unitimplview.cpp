@@ -66,6 +66,7 @@ void UnitImplView::bind(sol::state& lua)
     impl["waterOnly"] = sol::property(&UnitImplView::isWaterOnly);
     impl["attacksTwice"] = sol::property(&UnitImplView::attacksTwice);
     impl["type"] = sol::property(&UnitImplView::getUnitCategory);
+    impl["damageMax"] = sol::property(&UnitImplView::getDamageMax);
     impl["dynUpgLvl"] = sol::property(&UnitImplView::getDynUpgLevel);
     impl["dynUpg1"] = sol::property(&UnitImplView::getDynUpgrade1);
     impl["dynUpg2"] = sol::property(&UnitImplView::getDynUpgrade2);
@@ -73,6 +74,8 @@ void UnitImplView::bind(sol::state& lua)
     impl["attack2"] = sol::property(&UnitImplView::getAttack2);
     impl["altAttack"] = sol::property(&UnitImplView::getAltAttack);
     impl["base"] = sol::property(&UnitImplView::getBaseUnit);
+    impl["getImmuneToAttackClass"] = &UnitImplView::getImmuneToAttackClass;
+    impl["getImmuneToAttackSource"] = &UnitImplView::getImmuneToAttackSource;
 
     impl["global"] = sol::property(&UnitImplView::getGlobal);
     impl["generated"] = sol::property(&UnitImplView::getGenerated);
@@ -86,8 +89,10 @@ void UnitImplView::bind(sol::state& lua)
     impl["leadership"] = sol::property(&UnitImplView::getLeadership);
     impl["hasAbility"] = &UnitImplView::hasAbility;
     impl["hasMoveBonus"] = &UnitImplView::hasMoveBonus;
-    impl["getImmuneToAttackClass"] = &UnitImplView::getImmuneToAttackClass;
-    impl["getImmuneToAttackSource"] = &UnitImplView::getImmuneToAttackSource;
+    impl["negotiate"] = sol::property(&UnitImplView::getNegotiate);
+    impl["fastRetreat"] = sol::property(&UnitImplView::getFastRetreat);
+    impl["lowerCost"] = sol::property(&UnitImplView::getLowerCost);
+    impl["abilityName"] = sol::property(&UnitImplView::getAbilityName);
 }
 
 IdView UnitImplView::getId() const
@@ -197,6 +202,11 @@ int UnitImplView::getUnitCategory() const
     }
 
     return static_cast<int>(category->id);
+}
+
+int UnitImplView::getDamageMax() const
+{
+    return game::gameFunctions().getUnitImplDamageMax(&impl->id);
 }
 
 std::optional<UnitImplView> UnitImplView::getBaseUnit() const
@@ -362,6 +372,30 @@ bool UnitImplView::hasMoveBonus(int groundId) const
     }
 
     return false;
+}
+
+int UnitImplView::getNegotiate() const
+{
+    auto leader{game::gameFunctions().castUnitImplToStackLeader(impl)};
+    return leader ? leader->vftable->getNegotiate(leader) : 0;
+}
+
+bool UnitImplView::getFastRetreat() const
+{
+    auto leader{game::gameFunctions().castUnitImplToStackLeader(impl)};
+    return leader ? leader->vftable->getFastRetreat(leader) : false;
+}
+
+int UnitImplView::getLowerCost() const
+{
+    auto leader{game::gameFunctions().castUnitImplToStackLeader(impl)};
+    return leader ? leader->vftable->getLowerCost(leader) : 0;
+}
+
+std::string UnitImplView::getAbilityName() const
+{
+    auto leader{game::gameFunctions().castUnitImplToStackLeader(impl)};
+    return leader ? leader->vftable->getAbilityName(leader) : "";
 }
 
 std::optional<DynUpgradeView> UnitImplView::getDynUpgrade1() const
