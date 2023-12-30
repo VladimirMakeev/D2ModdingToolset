@@ -1022,6 +1022,16 @@ Returns attack [id](luaApi.md#id). This is different for every dynamic upgrade u
 ```lua
 attack.id
 ```
+##### name
+Returns attack name. A string from `Tglobal.dbf` reffered by `NAME_TXT` from `Gattacks.dbf`.
+```lua
+attack.name
+```
+##### description
+Returns attack description. A string from `Tglobal.dbf` reffered by `DESC_TXT` from `Gattacks.dbf`.
+```lua
+attack.description
+```
 ##### type
 Returns attack [type](luaApi.md#attack).
 ```lua
@@ -1041,6 +1051,22 @@ attack.reach
 Returns array of [modifiers](luaApi.md#modifier) applied by bestow wards attack.
 ```lua
 attack.wards
+```
+##### getDrain
+Returns a portion of the specified damage that will be returned as health to attacker. Does not count additional drain from Drain or DrainOverflow attacks.
+```lua
+attack:getDrain(damage)
+```
+##### global
+Returns global [attack](luaApi.md#attack-1) - a record from `Gattacks.dbf`.
+```lua
+attack.global
+```
+##### generated
+Returns generated [attack](luaApi.md#attack-1).
+Equals `global` plus upgrades from `GDynUpgr.dbf` according to unit's level.
+```lua
+attack.generated
 ```
 ```lua
 --- Returns attack initiative value.
