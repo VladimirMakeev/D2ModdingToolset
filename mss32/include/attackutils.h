@@ -32,6 +32,7 @@ enum class AttackReachId : int;
 namespace hooks {
 
 game::IAttack* getGlobalAttack(const game::CMidgardID* attackId);
+/** Returns either global (from Gattacks.dbf) or generated (leveled) attack implementation. */
 game::CAttackImpl* getAttackImpl(const game::IAttack* attack);
 int getBoostDamage(int level);
 int getLowerDamage(int level);
