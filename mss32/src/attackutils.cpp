@@ -30,7 +30,7 @@
 
 namespace hooks {
 
-game::IAttack* getGlobalAttack(const game::CMidgardID* attackId)
+game::CAttackImpl* getAttackImpl(const game::CMidgardID* attackId)
 {
     using namespace game;
 
@@ -40,7 +40,7 @@ game::IAttack* getGlobalAttack(const game::CMidgardID* attackId)
     const auto& global = GlobalDataApi::get();
     const auto attacks = (*global.getGlobalData())->attacks;
 
-    return (IAttack*)global.findById(attacks, attackId);
+    return (CAttackImpl*)global.findById(attacks, attackId);
 }
 
 game::CAttackImpl* getAttackImpl(const game::IAttack* attack)

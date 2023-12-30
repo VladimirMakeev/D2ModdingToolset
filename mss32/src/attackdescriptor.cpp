@@ -18,7 +18,7 @@
  */
 
 #include "attackdescriptor.h"
-#include "attack.h"
+#include "attackimpl.h"
 #include "attackutils.h"
 #include "customattacks.h"
 #include "customattackutils.h"
@@ -53,7 +53,7 @@ game::IAttack* getAttack(game::IUsUnit* unitImpl, AttackType type)
     return nullptr;
 }
 
-game::IAttack* getGlobalAttack(game::IEncUnitDescriptor* descriptor, AttackType type)
+game::CAttackImpl* getAttackImpl(game::IEncUnitDescriptor* descriptor, AttackType type)
 {
     using namespace game;
 
@@ -73,10 +73,10 @@ game::IAttack* getGlobalAttack(game::IEncUnitDescriptor* descriptor, AttackType 
     if (attackId == emptyId)
         return nullptr;
 
-    auto attack = hooks::getGlobalAttack(&attackId);
+    auto attack = hooks::getAttackImpl(&attackId);
     if (attack == nullptr && type == AttackType::Primary) {
         hooks::generateUnitImplByAttackId(&attackId);
-        attack = hooks::getGlobalAttack(&attackId);
+        attack = hooks::getAttackImpl(&attackId);
     }
 
     return attack;
@@ -90,7 +90,7 @@ game::IAttack* getAttack(game::IEncUnitDescriptor* descriptor,
     *useDescriptor = false;
 
     if (global) {
-        return getGlobalAttack(descriptor, type);
+        return getAttackImpl(descriptor, type);
     }
 
     auto midUnitDescriptor = hooks::castToMidUnitDescriptor(descriptor);
@@ -98,7 +98,7 @@ game::IAttack* getAttack(game::IEncUnitDescriptor* descriptor,
         return getAttack(midUnitDescriptor->unit->unitImpl, type);
     } else {
         *useDescriptor = true;
-        return getGlobalAttack(descriptor, type);
+        return getAttackImpl(descriptor, type);
     }
 }
 
