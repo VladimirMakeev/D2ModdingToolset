@@ -932,9 +932,10 @@ function getSource2Field(unitImpl)
 	return replace(getInterfaceText("X005TA0816"), "%SOURCE%", getAttackSourceText(unitImpl.attack2))
 end
 
-function getInitField(unitImpl)
+function getInitField(unitImpl, lowerInitiativeLevel)
 	local attack = unitImpl.attack1
-	return getModifiedNumberText(attack.initiative, attack.generated.initiative, false)
+	local initiative = attack.initiative
+	return getModifiedNumberText(initiative - initiative * getLowerInitiative(lowerInitiativeLevel) / 100, attack.generated.initiative, false)
 end
 
 function getReachField(unitImpl)
@@ -1024,7 +1025,7 @@ function doGetTxtAttackInfoText(unit, unitImpl, boostDamageLevel, lowerDamageLev
 	text = replace(text, "%DRAIN%", getDrainField(unitImpl, boostDamageLevel, lowerDamageLevel))
 	text = replace(text, "%SOURCE%", getSourceField(unitImpl))
 	text = replace(text, "%SOURCE2%", getSource2Field(unitImpl))
-	text = replace(text, "%INIT%", getInitField(unitImpl))
+	text = replace(text, "%INIT%", getInitField(unitImpl, lowerInitiativeLevel))
 	text = replace(text, "%REACH%", getReachField(unitImpl))
 	text = replace(text, "%TARGETS%", getTargetsField(unitImpl))	
 	return text
