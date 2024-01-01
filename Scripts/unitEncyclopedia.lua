@@ -36,6 +36,7 @@ Helper functions:
 	Returns description of targets for the specified custom attack reach.
 --]]
 
+package.path = package.path .. ";.\\Scripts\\?.lua"
 require("settings")
 require("textids")
 
