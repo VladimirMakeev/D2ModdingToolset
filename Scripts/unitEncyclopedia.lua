@@ -36,6 +36,34 @@ Helper functions:
 	Returns description of targets for the specified custom attack reach.
 --]]
 
+require("settings")
+require("textids")
+
+function getSetting(name, default)
+	if settings then
+		local value = settings[name]
+		if value ~= nil then
+			return value
+		end
+	end
+
+	return default
+end
+
+function getCustomInterfaceText(name, default)
+	if textids then
+		local interf = textids["interf"]
+		if interf then
+			local id = interf[name]
+			if id then
+				return getInterfaceText(id)
+			end
+		end
+	end
+
+	return default
+end
+
 function contains(array, value)
 	for _, item in ipairs(array) do
 		if item == value then
@@ -78,6 +106,10 @@ function attackHasPower(attack)
 	end
 
 	local attackType = attack.type
+	if attackType == Attack.Shatter and getSetting("allowShatterAttackToMiss", true) == false then
+		return false
+	end
+
 	return
 		attackType == Attack.Paralyze or
 		attackType == Attack.Petrify or
@@ -90,7 +122,6 @@ function attackHasPower(attack)
 		attackType == Attack.Poison or
 		attackType == Attack.Frostbite or
 		attackType == Attack.Blister or
-		-- Don't forget to remove Attack.Shatter if you have allowShatterAttackToMiss = false in your settings.lua
 		attackType == Attack.Shatter or
 		attackType == Attack.DrainLevel or
 		attackType == Attack.TransformOther
@@ -297,8 +328,7 @@ function getImmunityAttackClasses(unitImpl, immune)
 end
 
 function getSplitDamageMultiplier(attack)
-	-- Replace '1' with your splitDamageMultiplier from settings.lua (no script access to settings just yet)
-	local splitDamageMultiplier = 1
+	local splitDamageMultiplier = getSetting("splitDamageMultiplier", 1)
 
 	local attackType = attack.type
 	if
@@ -327,11 +357,9 @@ function getAttackDrain(unitImpl, attack, boostDamageLevel, lowerDamageLevel)
 	local damage = getAttackDamage(unitImpl, attack, boostDamageLevel, lowerDamageLevel)
 	local attackType = attack.type
 	if attackType == Attack.Drain then
-		-- Replace '0.5' with your drainAttackHeal from settings.lua (no script access to settings just yet)
-		return attack:getDrain(damage) + damage * 0.5
+		return attack:getDrain(damage) + damage * getSetting("drainAttackHeal", 50) / 100
 	elseif attackType == Attack.DrainOverflow then
-		-- Replace '0.5' with your drainOverflowHeal from settings.lua (no script access to settings just yet)
-		return attack:getDrain(damage) + damage * 0.5
+		return attack:getDrain(damage) + damage * getSetting("drainOverflowHeal", 50) / 100
 	else
 		return attack:getDrain(damage)
 	end
@@ -357,11 +385,11 @@ function getBonusNumberText(bonus, percent, negative)
 	local numberText = getNumberText(math.abs(bonus), percent)
 	local signText = bonus >= 0 and "+" or "-"
 	if bonus >= 0 or negative then
-		-- Replace hard-coded string with getInterfaceText of your positiveBonusNumber from textids.lua
-		return replace(replace("\\c025;090;000;%SIGN% %NUMBER%\\c000;000;000;", "%SIGN%", signText), "%NUMBER%", numberText)
+		local pattern = getCustomInterfaceText("positiveBonusNumber", "\\c025;090;000;%SIGN% %NUMBER%\\c000;000;000;")
+		return replace(replace(pattern, "%SIGN%", signText), "%NUMBER%", numberText)
 	else
-		-- Replace hard-coded string with getInterfaceText of your negativeBonusNumber from textids.lua
-		return replace(replace("\\c100;000;000;%SIGN% %NUMBER%\\c000;000;000;", "%SIGN%", signText), "%NUMBER%", numberText)
+		local pattern = getCustomInterfaceText("negativeBonusNumber", "\\c100;000;000;%SIGN% %NUMBER%\\c000;000;000;")
+		return replace(replace(pattern, "%SIGN%", signText), "%NUMBER%", numberText)
 	end
 end
 
@@ -370,8 +398,8 @@ function getNumberWithBonusText(numberText, bonus, percent, negative)
 		return numberText
 	end
 
-	-- Replace hard-coded string with getInterfaceText of your modifiedNumber from textids.lua
-	return replace(replace("%NUMBER% %BONUS%", "%NUMBER%", numberText), "%BONUS%", getBonusNumberText(bonus, percent, negative))
+	local pattern = getCustomInterfaceText("modifiedNumber", "%NUMBER% %BONUS%")
+	return replace(replace(pattern, "%NUMBER%", numberText), "%BONUS%", getBonusNumberText(bonus, percent, negative))
 end
 
 function getModifiedNumberText(value, base, percent, negative, full)
@@ -392,13 +420,13 @@ function getModifiedStringText(value, modified)
 		return value
 	end
 
-	-- Replace hard-coded string with getInterfaceText of your modifiedValue from textids.lua
-	return replace("\\c025;090;000;%VALUE%\\c000;000;000;", "%VALUE%", value)
+	local pattern = getCustomInterfaceText("modifiedValue", "\\c025;090;000;%VALUE%\\c000;000;000;")
+	return replace(pattern, "%VALUE%", value)
 end
 
 function getTextWithCritText(text, critText)
-	-- Replace hard-coded string with getInterfaceText of your critHitDamage from textids.lua
-	return replace(replace("%DMG% (%CRIT%)", "%DMG%", text), "%CRIT%", critText)
+	local pattern = getCustomInterfaceText("critHitDamage", "%DMG% (%CRIT%)")
+	return replace(replace(pattern, "%DMG%", text), "%CRIT%", critText)
 end
 
 function getTextWithFullCritText(text, critText)
@@ -417,8 +445,8 @@ function getDamageText(value, base, maximum)
 end
 
 function getSplitDamageText(damageText)
-	-- Replace hard-coded string with getInterfaceText of your splitDamage from textids.lua
-	return replace("%DMG% split between targets", "%DMG%", damageText)
+	local pattern = getCustomInterfaceText("splitDamage", "%DMG% split between targets")
+	return replace(pattern, "%DMG%", damageText)
 end
 
 function getRatedDamageText(damage, critDamage, ratio)
@@ -442,20 +470,19 @@ function getRatedDamageTextForMaxTargets(damageText, attack, damage, critDamage,
 		local targetsText = getNumberText(#ratios - 1, false)
 		local ratedText = getRatedDamageText(damage, critDamage, ratios[2])
 
-		-- Replace hard-coded string with getInterfaceText of your ratedDamageEqual from textids.lua
-		return replace(replace(replace("%DMG%, (%TARGETS%x) %RATED%", "%DMG%", damageText), "%TARGETS%", targetsText), "%RATED%", ratedText)
+		local pattern = getCustomInterfaceText("ratedDamageEqual", "%DMG%, (%TARGETS%x) %RATED%")
+		return replace(replace(replace(pattern, "%DMG%", damageText), "%TARGETS%", targetsText), "%RATED%", ratedText)
 	else
 		local ratedText = ""
 		for i = 2, #ratios do
 			if ratedText ~= "" then
-				-- Replace hard-coded string with getInterfaceText of your ratedDamageSeparator from textids.lua
-				ratedText = ratedText .. ", "
+				ratedText = ratedText .. getCustomInterfaceText("ratedDamageSeparator", ", ")
 			end
 			ratedText = ratedText .. getRatedDamageText(damage, critDamage, ratios[i])
 		end
 
-		-- Replace hard-coded string with getInterfaceText of your ratedDamage from textids.lua
-		return replace(replace("%DMG%, %RATED%", "%DMG%", damageText), "%RATED%", ratedText)
+		local pattern = getCustomInterfaceText("ratedDamage", "%DMG%, %RATED%")
+		return replace(replace(pattern, "%DMG%", damageText), "%RATED%", ratedText)
 	end
 end
 
@@ -494,10 +521,6 @@ function getAttackPowerText(unitImpl, attack)
 end
 
 function getAttackDurationText(attack)
-	-- Replace hard-coded string with getInterfaceText of your instantDurationText from textids.lua
-	-- Replace hard-coded string with getInterfaceText of your randomDurationText from textids.lua
-	-- Replace hard-coded string with getInterfaceText of your singleTurnDurationText from textids.lua
-	-- Replace hard-coded string with getInterfaceText of your wholeBattleDurationText from textids.lua
 	local modified = attack.infinite ~= attack.generated.infinite
 	local attackType = attack.type
 	if
@@ -506,16 +529,16 @@ function getAttackDurationText(attack)
 		attackType == Attack.Poison or
 		attackType == Attack.Frostbite or
 		attackType == Attack.Blister then
-		return getModifiedStringText(attack.infinite and "Random" or "Single turn", modified)
+		return getModifiedStringText(attack.infinite and getCustomInterfaceText("randomDurationText", "Random") or getCustomInterfaceText("singleTurnDurationText", "Single turn"), modified)
 	elseif
 		attackType == Attack.BoostDamage or
 		attackType == Attack.LowerDamage or
 		attackType == Attack.LowerInitiative then
-		return getModifiedStringText(attack.infinite and "Whole battle" or "Single turn", modified)
+		return getModifiedStringText(attack.infinite and getCustomInterfaceText("wholeBattleDurationText", "Whole battle") or getCustomInterfaceText("singleTurnDurationText", "Single turn"), modified)
 	elseif attackType == Attack.TransformOther then
-		return getModifiedStringText(attack.infinite and "Random" or "Whole battle", modified)
+		return getModifiedStringText(attack.infinite and getCustomInterfaceText("randomDurationText", "Random") or getCustomInterfaceText("wholeBattleDurationText", "Whole battle"), modified)
 	else
-		return "Instant"
+		return getCustomInterfaceText("instantDurationText", "Instant")
 	end
 end
 
@@ -595,8 +618,7 @@ function getAttackDamageText(unitImpl, attack, boostDamageLevel, lowerDamageLeve
 		local damage = attack.generated.damage
 		return getDamageText(damage, damage, unitImpl.damageMax)
 	elseif attackType == Attack.Shatter then
-		-- Replace '100' with your shatterDamageMax from settings.lua (no script access to settings just yet)
-		return getDamageText(attack.damage, attack.generated.damage, math.min(100, unitImpl.damageMax))
+		return getDamageText(attack.damage, attack.generated.damage, math.min(getSetting("shatterDamageMax", 100), unitImpl.damageMax))
 	else
 		return getNumberText(0, false)
 	end
@@ -610,9 +632,8 @@ function getAttackDrainText(unitImpl, attack, boostDamageLevel, lowerDamageLevel
 
 	local attackType = attack.type
 	if attackType == Attack.DrainOverflow then
-		-- Replace hard-coded string with getInterfaceText of your overflowText from textids.lua
-		-- Replace hard-coded string with getInterfaceText of your overflowAttack from textids.lua
-		return replace(replace("%ATTACK% (%OVERFLOW%)", "%ATTACK%", result), "%OVERFLOW%", getModifiedStringText("Overflow", attackType ~= generated.type))
+		local pattern = getCustomInterfaceText("overflowText", "%ATTACK% (%OVERFLOW%)")
+		return replace(replace(pattern, "%ATTACK%", result), "%OVERFLOW%", getModifiedStringText(getCustomInterfaceText("overflowAttack", "Overflow"), attackType ~= generated.type))
 	else
 		return result
 	end
@@ -626,8 +647,8 @@ function getDynUpgradeText(field, upgrade1, upgrade2, percent)
 	local upgrade1Text = getSignedNumberText(upgrade1, percent)
 	local upgrade2Text = getSignedNumberText(upgrade2, percent)
 
-	-- Replace hard-coded string with getInterfaceText of your dynamicUpgradeValues from textids.lua
-	return replace(replace(replace("%STAT% (%UPG1% | %UPG2% per level)", "%STAT%", field), "%UPG1%", upgrade1Text), "%UPG2%", upgrade2Text)
+	local pattern = getCustomInterfaceText("dynamicUpgradeValues", "%STAT% (%UPG1% | %UPG2% per level)")
+	return replace(replace(replace(pattern, "%STAT%", field), "%UPG1%", upgrade1Text), "%UPG2%", upgrade2Text)
 end
 
 function getTxtStatsWithDynUpgradeText(text, unitImpl)
@@ -637,8 +658,8 @@ function getTxtStatsWithDynUpgradeText(text, unitImpl)
 		return text
 	end
 
-	-- Replace hard-coded string with getInterfaceText of your dynamicUpgradeLevel from textids.lua
-	local result = replace(text, "%LEVEL%", replace("%LEVEL% (before | after %UPGLV%)", "%UPGLV%", getNumberText(unitImpl.dynUpgLvl, false)))
+	local pattern = getCustomInterfaceText("dynamicUpgradeLevel", "%STAT% (before | after %UPGLV%)")
+	local result = replace(text, "%LEVEL%", replace(replace(pattern, "%STAT%", "%LEVEL%"), "%UPGLV%", getNumberText(unitImpl.dynUpgLvl, false)))
 	result = replace(result, "%HP2%", getDynUpgradeText("%HP2%", upg1.hp, upg2.hp, false))
 	result = replace(result, "%ARMOR%", getDynUpgradeText("%ARMOR%", upg1.armor, upg2.armor, false))
 	result = replace(result, "%XP%", getDynUpgradeText("%XP%", upg1.xpNext, upg2.xpNext, false))
@@ -728,8 +749,8 @@ function getImmuOrWardField(unitImpl, immune, removedSourceWards, removedClassWa
 	for _, source in ipairs(sources) do
 		local sourceText = getAttackSourceName(source)
 		if immune == Immune.Once and contains(removedSourceWards, source) then
-			-- Replace hard-coded string with getInterfaceText of your removedAttackWard from textids.lua
-			sourceText = replace("\\fMedBold;\\c100;000;000;%WARD%\\c000;000;000;\\fNormal;", "%WARD%", sourceText)
+			local pattern = getCustomInterfaceText("removedAttackWard", "\\fMedBold;\\c100;000;000;%WARD%\\c000;000;000;\\fNormal;")
+			sourceText = replace(pattern, "%WARD%", sourceText)
 		else
 			sourceText = getModifiedStringText(sourceText, immune ~= unitImpl.generated:getImmuneToAttackSource(source))
 		end
@@ -744,8 +765,8 @@ function getImmuOrWardField(unitImpl, immune, removedSourceWards, removedClassWa
 	for _, class in ipairs(classes) do
 		local classText = getAttackClassName(class)
 		if immune == Immune.Once and contains(removedClassWards, class) then
-			-- Replace hard-coded string with getInterfaceText of your removedAttackWard from textids.lua
-			classText = replace("\\fMedBold;\\c100;000;000;%WARD%\\c000;000;000;\\fNormal;", "%WARD%", classText)
+			local pattern = getCustomInterfaceText("removedAttackWard", "\\fMedBold;\\c100;000;000;%WARD%\\c000;000;000;\\fNormal;")
+			classText = replace(pattern, "%WARD%", classText)
 		else
 			classText = getModifiedStringText(classText, immune ~= unitImpl.generated:getImmuneToAttackClass(class))
 		end
@@ -884,9 +905,8 @@ function getDurationField(unitImpl)
 		duration = duration .. replace(getInterfaceText("X005TA0785"), "%ATTACK%", getAttackDurationText(unitImpl.attack2))
 	end
 
-	-- Replace hard-coded string with getInterfaceText of your durationText from textids.lua
-	-- Replace hard-coded string with getInterfaceText of your durationDescription from textids.lua
-	return replace(replace("\\fMedBold%DURATION%:\\t\\fNormal%DURATIONVALUE%\\n", "%DURATION%", "Duration"), "%DURATIONVALUE%", duration)
+	local pattern = getCustomInterfaceText("durationDescription", "\\fMedBold%DURATION%:\\t\\fNormal%DURATIONVALUE%\\n")
+	return replace(replace(pattern, "%DURATION%", getCustomInterfaceText("durationText", "Duration")), "%DURATIONVALUE%", duration)
 end
 
 function getDamageField(unitImpl, boostDamageLevel, lowerDamageLevel)
@@ -909,8 +929,8 @@ function getDrainField(unitImpl, boostDamageLevel, lowerDamageLevel)
 		drain = getAttackWithAttack2NumberText(drain, getAttackDrainText(unitImpl, unitImpl.attack2, boostDamageLevel, lowerDamageLevel))
 	end
 
-	-- Replace hard-coded string with getInterfaceText of your drainDescription from textids.lua
-	return replace(replace("\\fMedBold%DRAINEFFECT%:\\t\\fNormal%DRAIN%\\n", "%DRAINEFFECT%", getInterfaceText("X005TA0792")), "%DRAIN%", drain)
+	local pattern = getCustomInterfaceText("drainDescription", "\\fMedBold%DRAINEFFECT%:\\t\\fNormal%DRAIN%\\n")
+	return replace(replace(pattern, "%DRAINEFFECT%", getInterfaceText("X005TA0792")), "%DRAIN%", drain)
 end
 
 function getSourceField(unitImpl)
