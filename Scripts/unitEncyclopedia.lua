@@ -34,6 +34,12 @@ Helper functions:
 	Returns display name of the specified custom attack reach.
 - getCustomAttackTargetsName(reach)
 	Returns description of targets for the specified custom attack reach.
+- isShiftKeyPressed()
+	Returns true if SHIFT key is pressed (either left or right).
+- isCtrlKeyPressed()
+	Returns true if CTRL key is pressed (either left or right).
+- isAltKeyPressed()
+	Returns true if ALT key is pressed (either left or right).
 --]]
 
 package.path = package.path .. ";.\\Scripts\\?.lua"

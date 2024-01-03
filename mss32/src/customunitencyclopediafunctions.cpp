@@ -26,6 +26,7 @@
 #include "idview.h"
 #include "scripts.h"
 #include "utils.h"
+#include <windows.h>
 
 namespace hooks {
 
@@ -84,6 +85,15 @@ CustomUnitEncyclopediaFunctions::CustomUnitEncyclopediaFunctions(const std::stri
                 return getInterfaceText(custom.targetsTxt.c_str());
         }
         return std::string();
+    };
+    env["isShiftKeyPressed"] = []() {
+        return (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+    };
+    env["isCtrlKeyPressed"] = []() {
+        return (GetAsyncKeyState(VK_CONTROL) & 0x8000) != 0;
+    };
+    env["isAltKeyPressed"] = []() {
+        return (GetAsyncKeyState(VK_MENU) & 0x8000) != 0;
     };
 
 #define FUNCTION(_NAME_) this->##_NAME_ = getScriptFunction(env, #_NAME_);
