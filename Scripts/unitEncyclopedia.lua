@@ -353,7 +353,7 @@ end
 function getAttackDamage(unitImpl, attack, boostDamageLevel, lowerDamageLevel)
 	local damage = attack.damage
 	local boost = getBoostDamage(boostDamageLevel) - getLowerDamage(lowerDamageLevel)
-	return math.min(damage + damage * boost / 100, unitImpl.damageMax) * getSplitDamageMultiplier(attack)
+	return math.min(damage + math.floor(damage * boost / 100), unitImpl.damageMax) * getSplitDamageMultiplier(attack)
 end
 
 function getAttackDrain(unitImpl, attack, boostDamageLevel, lowerDamageLevel)
@@ -364,9 +364,9 @@ function getAttackDrain(unitImpl, attack, boostDamageLevel, lowerDamageLevel)
 	local damage = getAttackDamage(unitImpl, attack, boostDamageLevel, lowerDamageLevel)
 	local attackType = attack.type
 	if attackType == Attack.Drain then
-		return attack:getDrain(damage) + damage * getSetting("drainAttackHeal", 50) / 100
+		return attack:getDrain(damage) + math.floor(damage * getSetting("drainAttackHeal", 50) / 100)
 	elseif attackType == Attack.DrainOverflow then
-		return attack:getDrain(damage) + damage * getSetting("drainOverflowHeal", 50) / 100
+		return attack:getDrain(damage) +  math.floor(damage * getSetting("drainOverflowHeal", 50) / 100)
 	else
 		return attack:getDrain(damage)
 	end
@@ -586,8 +586,8 @@ function getDamageDrainAttackDamageText(unitImpl, attack, boostDamageLevel, lowe
 
 	local critDamage = 0
 	if attackHasCrit(unitImpl, attack) then
-		critDamage = damage * attack.critDamage / 100
-		local baseCritDamage = attackHasCrit(unitImpl.generated, generated) and damage * generated.critDamage / 100 or 0
+		critDamage = math.floor(damage * attack.critDamage / 100)
+		local baseCritDamage = attackHasCrit(unitImpl.generated, generated) and math.floor(damage * generated.critDamage / 100) or 0
 		result = getTextWithFullCritText(result, getModifiedNumberText(critDamage, baseCritDamage, false))
 	end
 
@@ -962,7 +962,7 @@ end
 function getInitField(unitImpl, lowerInitiativeLevel)
 	local attack = unitImpl.attack1
 	local initiative = attack.initiative
-	return getModifiedNumberText(initiative - initiative * getLowerInitiative(lowerInitiativeLevel) / 100, attack.generated.initiative, false)
+	return getModifiedNumberText(initiative - math.floor(initiative * getLowerInitiative(lowerInitiativeLevel) / 100), attack.generated.initiative, false)
 end
 
 function getReachField(unitImpl)
