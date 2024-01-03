@@ -18,6 +18,7 @@
  */
 
 #include "itembaseview.h"
+#include "attackimpl.h"
 #include "attackutils.h"
 #include "attackview.h"
 #include "itembase.h"
@@ -87,7 +88,7 @@ std::optional<AttackView> ItemBaseView::getAttack() const
         return std::nullopt;
     }
 
-    auto attack = hooks::getGlobalAttack(&attackId);
+    auto attack = hooks::getAttackImpl(&attackId);
     if (!attack) {
         return std::nullopt;
     }

@@ -29,6 +29,8 @@ struct CMidUnitDescriptor;
 struct CUnitTypeDescriptor;
 struct CLeaderUnitDescriptor;
 struct CDynUpgrade;
+struct CMidUnit;
+struct IUsUnit;
 struct TUsUnitImpl;
 struct CPictureInterf;
 struct IMqImage2;
@@ -46,6 +48,10 @@ const game::CUnitTypeDescriptor* castToUnitTypeDescriptor(
     const game::IEncUnitDescriptor* descriptor);
 const game::CLeaderUnitDescriptor* castToLeaderUnitDescriptor(
     const game::IEncUnitDescriptor* descriptor);
+const game::CMidUnit* getUnit(const game::IEncUnitDescriptor* descriptor);
+/** Returns either global (from Gunits.dbf), generated (leveled) or modified unit implementation. */
+const game::IUsUnit* getModifiedUnitImpl(const game::IEncUnitDescriptor* descriptor);
+/** Returns either global (from Gunits.dbf) or generated (leveled) unit implementation. */
 const game::TUsUnitImpl* getUnitImpl(const game::IEncUnitDescriptor* descriptor);
 bool hasCriticalHitLeaderAbility(const game::IEncUnitDescriptor* descriptor);
 

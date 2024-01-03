@@ -18,7 +18,7 @@
  */
 
 #include "unitutils.h"
-#include "attack.h"
+#include "attackimpl.h"
 #include "attacksourcecat.h"
 #include "attacksourcelist.h"
 #include "attackutils.h"
@@ -149,6 +149,16 @@ game::TUsUnitImpl* getGlobalUnitImpl(const game::CMidgardID* unitImplId)
     return getUnitImpl(&globalImplId);
 }
 
+game::TUsUnitImpl* getGlobalUnitImplByAttackId(const game::CMidgardID* attackId)
+{
+    using namespace game;
+
+    CMidgardID unitImplId;
+    CMidgardIDApi::get().changeType(&unitImplId, attackId, IdType::UnitGenerated);
+
+    return getGlobalUnitImpl(&unitImplId);
+}
+
 game::TUsUnitImpl* generateUnitImpl(const game::CMidgardID* unitImplId, int level)
 {
     using namespace game;
@@ -231,7 +241,7 @@ game::IAttack* getAttack(const game::IUsUnit* unit, bool primary, bool checkAltA
                           : soldier->vftable->getSecondAttackById(soldier);
 
     if (attack && checkAltAttack) {
-        auto altAttack = getGlobalAttack(attack->vftable->getAltAttackId(attack));
+        auto altAttack = getAttackImpl(attack->vftable->getAltAttackId(attack));
         if (altAttack)
             return wrapAltAttack(unit, altAttack);
     }
@@ -242,7 +252,7 @@ game::IAttack* getAttack(const game::IUsUnit* unit, bool primary, bool checkAltA
 game::IAttack* getAltAttack(const game::IUsUnit* unit, bool primary)
 {
     auto attack = getAttack(unit, primary, false);
-    auto altAttack = getGlobalAttack(attack->vftable->getAltAttackId(attack));
+    auto altAttack = getAttackImpl(attack->vftable->getAltAttackId(attack));
     if (!altAttack) {
         return nullptr;
     }

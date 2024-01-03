@@ -1168,7 +1168,7 @@ bool __stdcall isAttackBetterThanItemUsageHooked(const game::IItem* item,
 
     auto itemBattle = (CItemBattle*)dynamicCast(item, 0, rtti.IItemType, rtti.CItemBattleType, 0);
 
-    auto itemAttack = getGlobalAttack(&itemBattle->attackId);
+    auto itemAttack = getAttackImpl(&itemBattle->attackId);
     if (itemAttack->vftable->getQtyDamage(itemAttack) == 0)
         return false;
 

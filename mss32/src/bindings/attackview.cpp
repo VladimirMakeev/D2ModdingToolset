@@ -19,6 +19,7 @@
 
 #include "attackview.h"
 #include "attack.h"
+#include "attackimpl.h"
 #include "attackutils.h"
 #include "customattacks.h"
 #include "customattackutils.h"
@@ -37,6 +38,8 @@ void AttackView::bind(sol::state& lua)
 {
     auto attackView = lua.new_usertype<AttackView>("AttackView");
     attackView["id"] = sol::property(&AttackView::getId);
+    attackView["name"] = sol::property(&AttackView::getName);
+    attackView["description"] = sol::property(&AttackView::getDescription);
     attackView["type"] = sol::property(&AttackView::getAttackClass);
     attackView["source"] = sol::property(&AttackView::getAttackSource);
     attackView["initiative"] = sol::property(&AttackView::getInitiative);
@@ -48,6 +51,10 @@ void AttackView::bind(sol::state& lua)
     attackView["crit"] = sol::property(&AttackView::canCrit);
     attackView["level"] = sol::property(&AttackView::getLevel);
     attackView["wards"] = sol::property(&AttackView::getWards);
+    attackView["getDrain"] = &AttackView::getDrain;
+
+    attackView["global"] = sol::property(&AttackView::getGlobal);
+    attackView["generated"] = sol::property(&AttackView::getGenerated);
 
     attackView["melee"] = sol::property(&AttackView::isMelee);
     attackView["maxTargets"] = sol::property(&AttackView::maxTargets);
@@ -61,6 +68,16 @@ void AttackView::bind(sol::state& lua)
 IdView AttackView::getId() const
 {
     return attack->id;
+}
+
+std::string AttackView::getName() const
+{
+    return attack->vftable->getName(attack);
+}
+
+std::string AttackView::getDescription() const
+{
+    return attack->vftable->getDescription(attack);
 }
 
 int AttackView::getAttackClass() const
@@ -144,6 +161,21 @@ std::vector<ModifierView> AttackView::getWards() const
     return result;
 }
 
+int AttackView::getDrain(int damage) const
+{
+    return attack->vftable->getDrain(attack, damage);
+}
+
+AttackView AttackView::getGlobal() const
+{
+    return hooks::getGlobalAttackImpl(&attack->id);
+}
+
+AttackView AttackView::getGenerated() const
+{
+    return hooks::getAttackImpl(&attack->id);
+}
+
 bool AttackView::isMelee() const
 {
     return hooks::isMeleeAttack(attack);
@@ -178,6 +210,11 @@ bool AttackView::damageRatioPerTarget() const
 bool AttackView::damageSplit() const
 {
     return hooks::getCustomAttackData(attack).damageSplit;
+}
+
+const game::IAttack* AttackView::getAttack() const
+{
+    return attack;
 }
 
 } // namespace bindings

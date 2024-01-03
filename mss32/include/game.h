@@ -640,7 +640,7 @@ using GetBaseUnitImplId = CMidgardID*(__stdcall*)(CMidgardID* value,
                                                   const CMidgardID* unitId,
                                                   bool original);
 
-using GetUnitImplDamageMax = int(__stdcall*)(CMidgardID* unitImplId);
+using GetUnitImplDamageMax = int(__stdcall*)(const CMidgardID* unitImplId);
 
 using ReadGlobalAttacks = AttackMap**(__thiscall*)(AttackMap** thisptr,
                                                    const char* globalsFolderPath,

@@ -42,6 +42,8 @@ public:
     static void bind(sol::state& lua);
 
     IdView getId() const;
+    std::string getName() const;
+    std::string getDescription() const;
     /** Returns attack class id. */
     int getAttackClass() const;
     /** Returns attack source id. */
@@ -64,6 +66,11 @@ public:
     int getLevel() const;
     /** Returns list of modifiers applied by bestow wards attack. */
     std::vector<ModifierView> getWards() const;
+    /** Returns which portion of the specified damage is returned as drain. */
+    int getDrain(int damage) const;
+
+    AttackView getGlobal() const;
+    AttackView getGenerated() const;
 
     /** Custom attack data. */
     bool isMelee() const;
@@ -73,6 +80,8 @@ public:
     int damageRatio() const;
     bool damageRatioPerTarget() const;
     bool damageSplit() const;
+
+    const game::IAttack* getAttack() const;
 
 private:
     const game::IAttack* attack;

@@ -25,6 +25,7 @@
 #include "immunecat.h"
 #include "midgardid.h"
 #include <set>
+#include <vector>
 
 namespace game {
 struct IMidgardObjectMap;
@@ -72,12 +73,17 @@ void resetUnitAttackSourceWard(game::BattleMsgData* battleMsgData,
                                const game::CMidgardID* unitId,
                                game::CUmUnit* modifier);
 
+std::vector<game::AttackSourceId> getRemovedAttackSourceWards(
+    game::AttackSourceImmunityStatusesPatched immunityStatuses);
+
 bool isUnitAttackClassWardRemoved(std::uint32_t immunityStatuses,
                                   const game::LAttackClass* attackClass);
 
 void resetUnitAttackClassWard(game::BattleMsgData* battleMsgData,
                               const game::CMidgardID* unitId,
                               game::CUmUnit* modifier);
+
+std::vector<game::AttackClassId> getRemovedAttackClassWards(std::uint32_t immunityStatuses);
 
 bool canApplyImmunityModifier(game::BattleMsgData* battleMsgData,
                               const game::CMidUnit* targetUnit,

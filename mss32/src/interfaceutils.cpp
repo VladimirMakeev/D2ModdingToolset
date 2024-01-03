@@ -77,6 +77,29 @@ const game::CLeaderUnitDescriptor* castToLeaderUnitDescriptor(
                                                            rtti.CLeaderUnitDescriptorType, 0);
 }
 
+const game::CMidUnit* getUnit(const game::IEncUnitDescriptor* descriptor)
+{
+    auto midUnitDescriptor = castToMidUnitDescriptor(descriptor);
+    return midUnitDescriptor ? midUnitDescriptor->unit : nullptr;
+}
+
+const game::IUsUnit* getModifiedUnitImpl(const game::IEncUnitDescriptor* descriptor)
+{
+    auto midUnitDescriptor = castToMidUnitDescriptor(descriptor);
+    if (midUnitDescriptor) {
+        return midUnitDescriptor->unit->unitImpl;
+    }
+
+    auto unitTypeDescriptor = castToUnitTypeDescriptor(descriptor);
+    if (unitTypeDescriptor) {
+        return getUnitImpl(&unitTypeDescriptor->unitImplId);
+    }
+
+    // Modified implementation is unavailable for CLeaderUnitDescriptor because it retains modified
+    // unit stats in its fields.
+    return nullptr;
+}
+
 const game::TUsUnitImpl* getUnitImpl(const game::IEncUnitDescriptor* descriptor)
 {
     auto midUnitDescriptor = castToMidUnitDescriptor(descriptor);

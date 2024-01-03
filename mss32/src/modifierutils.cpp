@@ -21,6 +21,7 @@
 #include "attack.h"
 #include "attackmodified.h"
 #include "battlemsgdata.h"
+#include "customattacks.h"
 #include "custommodifier.h"
 #include "dynamiccast.h"
 #include "game.h"
@@ -168,6 +169,36 @@ void resetUnitAttackSourceWard(game::BattleMsgData* battleMsgData,
     unitInfo->attackSourceImmunityStatuses.patched &= ~flag;
 }
 
+std::vector<game::AttackSourceId> getRemovedAttackSourceWards(
+    game::AttackSourceImmunityStatusesPatched immunityStatuses)
+{
+    using namespace game;
+
+    std::vector<AttackSourceId> result;
+    const auto& sourceCategories = AttackSourceCategories::get();
+    for (auto source : {
+             sourceCategories.weapon,
+             sourceCategories.mind,
+             sourceCategories.life,
+             sourceCategories.death,
+             sourceCategories.fire,
+             sourceCategories.water,
+             sourceCategories.earth,
+             sourceCategories.air,
+         }) {
+        if (isUnitAttackSourceWardRemoved(immunityStatuses, source)) {
+            result.push_back(source->id);
+        }
+    }
+    for (const auto& custom : getCustomAttacks().sources) {
+        if (isUnitAttackSourceWardRemoved(immunityStatuses, &custom.source)) {
+            result.push_back(custom.source.id);
+        }
+    }
+
+    return result;
+}
+
 bool isUnitAttackClassWardRemoved(std::uint32_t immunityStatuses,
                                   const game::LAttackClass* attackClass)
 {
@@ -190,6 +221,45 @@ void resetUnitAttackClassWard(game::BattleMsgData* battleMsgData,
 
     std::uint32_t flag = 1 << gameFunctions().getAttackClassWardFlagPosition(&attackClass);
     unitInfo->attackClassImmunityStatuses &= ~flag;
+}
+
+std::vector<game::AttackClassId> getRemovedAttackClassWards(std::uint32_t immunityStatuses)
+{
+    using namespace game;
+
+    std::vector<AttackClassId> result;
+    const auto& classCategories = AttackClassCategories::get();
+    for (auto class_ : {
+             classCategories.paralyze,
+             classCategories.petrify,
+             classCategories.damage,
+             classCategories.drain,
+             classCategories.heal,
+             classCategories.fear,
+             classCategories.boostDamage,
+             classCategories.lowerDamage,
+             classCategories.lowerInitiative,
+             classCategories.poison,
+             classCategories.frostbite,
+             classCategories.revive,
+             classCategories.drainOverflow,
+             classCategories.cure,
+             classCategories.summon,
+             classCategories.drainLevel,
+             classCategories.giveAttack,
+             classCategories.doppelganger,
+             classCategories.transformSelf,
+             classCategories.transformOther,
+             classCategories.blister,
+             classCategories.bestowWards,
+             classCategories.shatter,
+         }) {
+        if (isUnitAttackClassWardRemoved(immunityStatuses, class_)) {
+            result.push_back(class_->id);
+        }
+    }
+
+    return result;
 }
 
 bool canApplyImmunityModifier(game::BattleMsgData* battleMsgData,

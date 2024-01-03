@@ -234,9 +234,9 @@ game::IAttack* CCustomModifier::getAttack(bool primary)
             if (!primary) // Allow to remove secondary attack
                 prevValue = nullptr;
         } else {
-            auto global = getGlobalAttack(&value.id);
-            if (global)
-                prevValue = global;
+            auto attackImpl = getAttackImpl(&value.id);
+            if (attackImpl)
+                prevValue = attackImpl;
         }
     }
 
@@ -1343,9 +1343,9 @@ const game::CMidgardID* __fastcall attackGetAltAttackId(const game::IAttack* thi
     bindings::IdView prevId{prevValue};
     auto value = THIZ_GET_VALUE(getAltAttackId, prevId);
     if (value != prevId) {
-        auto global = getGlobalAttack(&value.id);
-        if (global) {
-            return &global->id;
+        auto attackImpl = getAttackImpl(&value.id);
+        if (attackImpl) {
+            return &attackImpl->id;
         }
     }
 

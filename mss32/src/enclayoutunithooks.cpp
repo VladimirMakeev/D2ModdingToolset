@@ -18,10 +18,12 @@
  */
 
 #include "enclayoutunithooks.h"
+#include "attackutils.h"
 #include "buildingtype.h"
 #include "categorylist.h"
 #include "custommodifier.h"
 #include "custommodifiers.h"
+#include "customunitencyclopedia.h"
 #include "dialoginterf.h"
 #include "dynupgrade.h"
 #include "enclayoutunit.h"
@@ -537,7 +539,24 @@ static std::string getWardField(const game::CEncLayoutUnit* layout,
                               game::ImmuneId::Once, editorModifiers);
 }
 
-static int getUnitArmor(game::CEncLayoutUnit* layout)
+static int getFortificationArmor(const game::CEncLayoutUnit* layout)
+{
+    auto data = layout->data;
+    auto descriptor = data->unitDescriptor;
+    auto objectMap = data->objectMap;
+
+    if (data->fortificationArmor) {
+        return data->fortificationArmor;
+    }
+
+    if (!data->isInBattle && objectMap && !descriptor->vftable->isUnitType(descriptor)) {
+        return getCityProtection(objectMap, &data->unitId);
+    }
+
+    return 0;
+}
+
+static int getUnitArmor(const game::CEncLayoutUnit* layout)
 {
     using namespace game;
 
@@ -548,7 +567,7 @@ static int getUnitArmor(game::CEncLayoutUnit* layout)
     auto objectMap = data->objectMap;
 
     int result = descriptor->vftable->getUnitArmor(descriptor);
-    if (!data->unknown4 && objectMap && !descriptor->vftable->isUnitType(descriptor)) {
+    if (!data->isInBattle && objectMap && !descriptor->vftable->isUnitType(descriptor)) {
         result += getCityProtection(objectMap, &data->unitId);
     }
 
@@ -557,6 +576,22 @@ static int getUnitArmor(game::CEncLayoutUnit* layout)
         result = data->fortificationArmor;
 
     return std::clamp(result, restrictions.unitArmor->min, restrictions.unitArmor->max);
+}
+
+static int getUnitRegen(const game::CEncLayoutUnit* layout, const game::IUsSoldier* soldierImpl)
+{
+    using namespace game;
+
+    auto data = layout->data;
+    auto descriptor = data->unitDescriptor;
+    auto objectMap = data->objectMap;
+
+    auto midUnitDescriptor = castToMidUnitDescriptor(descriptor);
+    if (midUnitDescriptor) {
+        return getUnitRegen(objectMap, &data->unitId);
+    }
+
+    return *soldierImpl->vftable->getRegen(soldierImpl);
 }
 
 static std::string getHp2Field(game::IEncUnitDescriptor* descriptor,
@@ -659,8 +694,6 @@ static std::string getEffhpField(game::CEncLayoutUnit* layout)
 static std::string getRegenField(game::CEncLayoutUnit* layout, const game::IUsSoldier* soldierImpl)
 {
     using namespace game;
-
-    const auto& fn = gameFunctions();
 
     auto data = layout->data;
     auto descriptor = data->unitDescriptor;
@@ -833,12 +866,10 @@ static void addStatsDynUpgradeText(std::string& text,
     addDynUpgradeTextToField(text, "%XP%", upgrade1->xpNext, upgrade2->xpNext);
 }
 
-static void setTxtStats(game::CEncLayoutUnit* layout,
-                        const game::IUsSoldier* soldierImpl,
-                        const game::IdList& editorModifiers)
+static std::string getTxtStatsText(game::CEncLayoutUnit* layout,
+                                   const game::IUsSoldier* soldierImpl,
+                                   const game::IdList& editorModifiers)
 {
-    using namespace game;
-
     auto data = layout->data;
     auto descriptor = data->unitDescriptor;
 
@@ -858,6 +889,27 @@ static void setTxtStats(game::CEncLayoutUnit* layout,
     replace(text, "%XP%", getXpField(descriptor, soldierImpl));
     replace(text, "%IMMU%", getImmuField(layout, soldierImpl, editorModifiers));
     replace(text, "%WARD%", getWardField(layout, soldierImpl, editorModifiers));
+    return text;
+}
+
+static void setTxtStats(game::CEncLayoutUnit* layout,
+                        const game::IUsSoldier* soldierImpl,
+                        const game::IdList& editorModifiers)
+{
+    using namespace game;
+
+    auto data = (const CEncLayoutUnitDataPatched*)layout->data;
+    auto descriptor = data->unitDescriptor;
+
+    bool isMaxLevel = descriptor->vftable->isUnitAtMaxLevel(descriptor);
+    auto text = getCustomUnitEncyclopedia().getTxtStatsText(
+        getUnit(descriptor), getModifiedUnitImpl(descriptor), isMaxLevel, data->isInBattle,
+        getFortificationArmor(layout), data->shatteredArmor,
+        getRemovedAttackSourceWards(data->attackSourceImmunityStatuses),
+        getRemovedAttackClassWards(data->attackClassImmunityStatuses));
+    if (text.empty()) {
+        text = getTxtStatsText(layout, soldierImpl, editorModifiers);
+    }
 
     auto textBox = CDialogInterfApi::get().findTextBox(layout->dialog, "TXT_STATS");
     CTextBoxInterfApi::get().setString(textBox, text.c_str());
@@ -877,9 +929,22 @@ static void addStats2DynUpgradeText(std::string& text, game::IEncUnitDescriptor*
     addDynUpgradeTextToField(text, "%XPKILL%", upgrade1->xpKilled, upgrade2->xpKilled);
 }
 
-static void setTxtStats2(game::CEncLayoutUnit* layout,
-                         const game::IUsSoldier* soldierImpl,
-                         const game::IdList& editorModifiers)
+static std::string getTxtStats2Text(game::CEncLayoutUnit* layout,
+                                    const game::IUsSoldier* soldierImpl,
+                                    const std::string& pattern)
+{
+    auto data = layout->data;
+    auto descriptor = data->unitDescriptor;
+
+    auto text = pattern;
+    addStats2DynUpgradeText(text, descriptor);
+    replace(text, "%EFFHP%", getEffhpField(layout));
+    replace(text, "%REGEN%", getRegenField(layout, soldierImpl));
+    replace(text, "%XPKILL%", getXpKillField(descriptor, soldierImpl));
+    return text;
+}
+
+static void setTxtStats2(game::CEncLayoutUnit* layout, const game::IUsSoldier* soldierImpl)
 {
     using namespace game;
 
@@ -898,11 +963,17 @@ static void setTxtStats2(game::CEncLayoutUnit* layout,
         return;
     }
 
-    std::string text{textBox->data->text.string};
-    addStats2DynUpgradeText(text, descriptor);
-    replace(text, "%EFFHP%", getEffhpField(layout));
-    replace(text, "%REGEN%", getRegenField(layout, soldierImpl));
-    replace(text, "%XPKILL%", getXpKillField(descriptor, soldierImpl));
+    std::string pattern{textBox->data->text.string};
+    auto text = getCustomUnitEncyclopedia().getTxtStats2Text(getUnit(descriptor),
+                                                             getModifiedUnitImpl(descriptor),
+                                                             data->isInBattle,
+                                                             getFortificationArmor(layout),
+                                                             data->shatteredArmor,
+                                                             getUnitRegen(layout, soldierImpl),
+                                                             pattern);
+    if (text.empty()) {
+        text = getTxtStats2Text(layout, soldierImpl, pattern);
+    }
 
     CTextBoxInterfApi::get().setString(textBox, text.c_str());
 }
@@ -937,6 +1008,19 @@ static void setTxtUnitInfo(game::CEncLayoutUnit* layout)
     CTextBoxInterfApi::get().setString(textBox, text.c_str());
 }
 
+static std::string getTxtLeaderInfoText(game::CEncLayoutUnit* layout)
+{
+    auto data = layout->data;
+    auto descriptor = data->unitDescriptor;
+
+    // \c000;000;000;%LDRSHP%%AP%%NBBAT%
+    auto text = getInterfaceText("X005TA0809");
+    replace(text, "%AP%", getApField(descriptor));
+    replace(text, "%LDRSHP%", getLdrshpField(descriptor));
+    replace(text, "%NBBAT%", getNbbatField(descriptor));
+    return text;
+}
+
 static void setTxtLeaderInfo(game::CEncLayoutUnit* layout)
 {
     using namespace game;
@@ -948,11 +1032,11 @@ static void setTxtLeaderInfo(game::CEncLayoutUnit* layout)
         return;
     }
 
-    // \c000;000;000;%LDRSHP%%AP%%NBBAT%
-    auto text = getInterfaceText("X005TA0809");
-    replace(text, "%AP%", getApField(descriptor));
-    replace(text, "%LDRSHP%", getLdrshpField(descriptor));
-    replace(text, "%NBBAT%", getNbbatField(descriptor));
+    auto text = getCustomUnitEncyclopedia().getTxtLeaderInfoText(getUnit(descriptor),
+                                                                 getModifiedUnitImpl(descriptor));
+    if (text.empty()) {
+        text = getTxtLeaderInfoText(layout);
+    }
 
     auto textBox = CDialogInterfApi::get().findTextBox(layout->dialog, "TXT_LEADER_INFO");
     CTextBoxInterfApi::get().setString(textBox, text.c_str());
@@ -1034,6 +1118,17 @@ static void setTxtAttackInfo(game::CEncLayoutUnit* layout, const game::IdList& e
     auto data = layout->data;
     auto descriptor = data->unitDescriptor;
 
+    auto text = getCustomUnitEncyclopedia().getTxtAttackInfoText(getUnit(descriptor),
+                                                                 getModifiedUnitImpl(descriptor),
+                                                                 data->boostDamageLevel,
+                                                                 data->lowerDamageLevel,
+                                                                 data->lowerInitiativeLevel);
+    if (!text.empty()) {
+        auto textBox = CDialogInterfApi::get().findTextBox(layout->dialog, "TXT_ATTACK_INFO");
+        CTextBoxInterfApi::get().setString(textBox, text.c_str());
+        return;
+    }
+
     CMidgardID globalUnitImplId;
     descriptor->vftable->getGlobalUnitImplId(descriptor, &globalUnitImplId);
 
@@ -1098,7 +1193,7 @@ void __fastcall encLayoutUnitUpdateHooked(game::CEncLayoutUnit* thisptr, int /*%
     setTxtUnitName(thisptr);
     setTxtUnitInfo(thisptr);
     setTxtStats(thisptr, soldierImpl, editorModifiers);
-    setTxtStats2(thisptr, soldierImpl, editorModifiers);
+    setTxtStats2(thisptr, soldierImpl);
     setTxtLeaderInfo(thisptr);
     setTxtNeedUpgrade(thisptr, &needUpgrade);
     setImgUpgrade(thisptr, needUpgrade);
@@ -1106,6 +1201,31 @@ void __fastcall encLayoutUnitUpdateHooked(game::CEncLayoutUnit* thisptr, int /*%
     setTxtEffectiveHp(thisptr);
 
     idListApi.destructor(&editorModifiers);
+}
+
+int __fastcall encLayoutUnitHandleKeyboardHooked(game::CInterface* thisptr,
+                                                 int /*%edx*/,
+                                                 int key,
+                                                 int a3)
+{
+    using namespace game;
+
+    switch (key) {
+    case VK_SHIFT:
+        if (userSettings().unitEncyclopedia.updateOnShiftKeyPress)
+            CEncLayoutUnitApi::get().update((CEncLayoutUnit*)thisptr);
+        break;
+    case VK_CONTROL:
+        if (userSettings().unitEncyclopedia.updateOnCtrlKeyPress)
+            CEncLayoutUnitApi::get().update((CEncLayoutUnit*)thisptr);
+        break;
+    case VK_MENU:
+        if (userSettings().unitEncyclopedia.updateOnAltKeyPress)
+            CEncLayoutUnitApi::get().update((CEncLayoutUnit*)thisptr);
+        break;
+    }
+
+    return getOriginalFunctions().encLayoutUnitHandleKeyboard(thisptr, key, a3);
 }
 
 } // namespace hooks

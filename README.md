@@ -282,6 +282,11 @@
     - Specify text id from `TApp.dbf` and `TAppEdit.dbf` that contains key `%HP%`.
   </details>
 - <details>
+    <summary>Allows to customize unit encyclopedia contents via script;</summary>
+
+    See [unitEncyclopedia.lua](Scripts/unitEncyclopedia.lua) for default implementation and detailed description.
+  </details>
+- <details>
     <summary>Shows total XP for killing in stack/city/ruin encyclopedia;</summary>
 
     - Add interface text to `TApp.dbf` and `TAppEdit.dbf` that contains `%XPKILL%` keyword, for example: `X015TA0011` `Bounty: %XPKILL%`;

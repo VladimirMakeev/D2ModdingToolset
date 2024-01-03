@@ -26,11 +26,33 @@
 #include "globaldata.h"
 #include "globalvariables.h"
 #include "midgardid.h"
+#include "unitutils.h"
+#include "usunitimpl.h"
 #include <array>
 
 namespace hooks {
 
-game::IAttack* getGlobalAttack(const game::CMidgardID* attackId)
+game::CAttackImpl* getGlobalAttackImpl(const game::CMidgardID* attackId)
+{
+    using namespace game;
+
+    switch (CMidgardIDApi::get().getType(attackId)) {
+    case IdType::AttackGlobal:
+        return getAttackImpl(attackId);
+    case IdType::DynamicAttack:
+        return (CAttackImpl*)getAttack(getGlobalUnitImplByAttackId(attackId), true, false);
+    case IdType::DynamicAttack2:
+        return (CAttackImpl*)getAttack(getGlobalUnitImplByAttackId(attackId), false, false);
+    case IdType::DynamicAltAttack:
+        return (CAttackImpl*)getAltAttack(getGlobalUnitImplByAttackId(attackId), true);
+    case IdType::DynamicAltAttack2:
+        return (CAttackImpl*)getAltAttack(getGlobalUnitImplByAttackId(attackId), false);
+    default:
+        return nullptr;
+    }
+}
+
+game::CAttackImpl* getAttackImpl(const game::CMidgardID* attackId)
 {
     using namespace game;
 
@@ -40,7 +62,7 @@ game::IAttack* getGlobalAttack(const game::CMidgardID* attackId)
     const auto& global = GlobalDataApi::get();
     const auto attacks = (*global.getGlobalData())->attacks;
 
-    return (IAttack*)global.findById(attacks, attackId);
+    return (CAttackImpl*)global.findById(attacks, attackId);
 }
 
 game::CAttackImpl* getAttackImpl(const game::IAttack* attack)

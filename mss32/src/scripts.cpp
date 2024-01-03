@@ -55,6 +55,11 @@
 
 extern std::thread::id mainThreadId;
 
+// Global static variables ensure that it will be destroyed after local static variables that depend
+// on Lua (such as CustomUnitEncyclopedia).
+static std::unique_ptr<sol::state> mainThreadLua;
+static std::unique_ptr<sol::state> workerThreadLua;
+
 namespace hooks {
 
 struct PathHash
@@ -309,14 +314,11 @@ static void bindApi(sol::state& lua)
 // Treat access and object handling like you were dealing with a raw int reference (int&).
 sol::state& getLua()
 {
-    static std::unique_ptr<sol::state> mainThreadLua;
-    static std::unique_ptr<sol::state> workerThreadLua;
-
     auto& lua = std::this_thread::get_id() == mainThreadId ? mainThreadLua : workerThreadLua;
     if (lua == nullptr) {
         lua = std::make_unique<sol::state>();
         lua->open_libraries(sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::table,
-                            sol::lib::os, sol::lib::string);
+                            sol::lib::os, sol::lib::string, sol::lib::debug);
         bindApi(*lua);
     }
 

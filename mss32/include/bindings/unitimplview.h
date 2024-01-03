@@ -63,6 +63,7 @@ public:
     bool isWaterOnly() const;
     bool attacksTwice() const;
     int getUnitCategory() const;
+    int getDamageMax() const;
     /** Returns BASE_UNIT specified in Gunits.dbf. */
     std::optional<UnitImplView> getBaseUnit() const;
 
@@ -90,6 +91,11 @@ public:
     bool hasAbility(int abilityId) const;
     /** Returns true if leader has movement bonus on LGroundCategory with specified id. */
     bool hasMoveBonus(int groundId) const;
+    int getNegotiate() const;
+    bool getFastRetreat() const;
+    int getLowerCost() const;
+    /** Returns leader ability name (ABIL_TXT in Gunits.dbf). */
+    std::string getAbilityName() const;
 
     /** Returns dynamic upgrade 1. */
     std::optional<DynUpgradeView> getDynUpgrade1() const;

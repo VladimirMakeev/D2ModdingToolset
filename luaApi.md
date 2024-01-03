@@ -22,7 +22,8 @@ Scripts folder itself should be placed in the game folder.
 - getSelectedTargetAndTwoChainedRandom.lua - contains attack targeting logic for random chain attack reach
 - getSelectedTargetAndOneRandom.lua - contains attack targeting logic for additional random target
 - getWoundedFemaleGreenskinTargets.lua - contains targeting logic that only allows to reach wounded female greenskins
-- [Scripts/Modifiers](Scripts/Modifiers) contain custom modifier script examples
+- [Scripts/Modifiers](Scripts/Modifiers) - contains custom modifier script examples
+- unitEncyclopedia.lua - contains custom display functions for unit encyclopedia
 
 ### API reference
 
@@ -425,6 +426,31 @@ Returns [immune type](luaApi.md#immune) for specified [attack source](luaApi.md#
 ```lua
 impl:getImmuneToAttackSource(Source.Water)
 ```
+##### damageMax
+Returns maximum damage that this implementation is allowed to inflict by a single attack. For example, fighter leader in vanilla can inflict 400 damage while any other unit has a maximum of 300.
+```lua
+impl.damageMax
+```
+##### negotiate
+Returns negotiate value (always 0 if unit is not a leader) that is a factor of resistance from Thief's actions.
+```lua
+impl.negotiate
+```
+##### fastRetreat
+Returns whether this implementation can instantly retreat from battle (always false if unit is not a leader).
+```lua
+impl.fastRetreat
+```
+##### lowerCost
+Returns a percentage value (always 0 if unit is not a leader) of discount that this implementation gets from merchants.
+```lua
+impl.lowerCost
+```
+##### abilityName
+Returns an ability name (always an empty string if unit is not a leader). `ABIL_TXT` from `Gunits.dbf`.
+```lua
+impl.abilityName
+```
 
 ---
 
@@ -711,9 +737,85 @@ rod.owner
 Represents rules that applied when unit makes its progress gaining levels. Records in GDynUpgr.dbf are dynamic upgrades.
 
 Methods:
+##### id
+Returns upgrade [identifier](luaApi.md#id).
 ```lua
--- Returns number of experience points added with each dynamic upgrade. XP_NEXT value from GDynUpgr.dbf.
+dynUpgrade.id
+```
+##### enrollCost
+Returns [value](luaApi.md#currency) added to enroll cost with each dynamic upgrade. `ENROLL_C` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.enrollCost
+```
+##### hp
+Returns hp added with each dynamic upgrade. `HIT_POINT` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.hp
+```
+##### armor
+Returns armor added with each dynamic upgrade. `ARMOR` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.armor
+```
+##### regen
+Returns regen added with each dynamic upgrade. `REGEN` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.regen
+```
+##### reviveCost
+Returns [value](luaApi.md#currency) added to revive cost with each dynamic upgrade. `REVIVE_C` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.reviveCost
+```
+##### healCost
+Returns [value](luaApi.md#currency) added to heal cost with each dynamic upgrade. `HEAL_C` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.healCost
+```
+##### trainingCost
+Returns [value](luaApi.md#currency) added to training cost with each dynamic upgrade. `TRAINING_C` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.trainingCost
+```
+##### xpKilled
+Returns xp for killing added with each dynamic upgrade. `XP_KILLED` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.xpKilled
+```
+##### xpNext
+Returns xp for level-up added with each dynamic upgrade. `XP_NEXT` value from `GDynUpgr.dbf`.
+```lua
 dynUpgrade.xpNext
+```
+##### move
+Returns move points added with each dynamic upgrade. `MOVE` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.move
+```
+##### negotiate
+Returns negotiate points added with each dynamic upgrade. `NEGOTIATE` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.negotiate
+```
+##### initiative
+Returns attack initiative added with each dynamic upgrade. `INITIATIVE` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.initiative
+```
+##### power
+Returns attack power added with each dynamic upgrade. `POWER` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.power
+```
+##### damage
+Returns attack damage added with each dynamic upgrade. `DAMAGE` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.damage
+```
+##### heal
+Returns attack heal added with each dynamic upgrade. `HEAL` value from `GDynUpgr.dbf`.
+```lua
+dynUpgrade.heal
 ```
 
 ---
@@ -997,6 +1099,16 @@ Returns attack [id](luaApi.md#id). This is different for every dynamic upgrade u
 ```lua
 attack.id
 ```
+##### name
+Returns attack name. A string from `Tglobal.dbf` reffered by `NAME_TXT` from `Gattacks.dbf`.
+```lua
+attack.name
+```
+##### description
+Returns attack description. A string from `Tglobal.dbf` reffered by `DESC_TXT` from `Gattacks.dbf`.
+```lua
+attack.description
+```
 ##### type
 Returns attack [type](luaApi.md#attack).
 ```lua
@@ -1016,6 +1128,22 @@ attack.reach
 Returns array of [modifiers](luaApi.md#modifier) applied by bestow wards attack.
 ```lua
 attack.wards
+```
+##### getDrain
+Returns a portion of the specified damage that will be returned as health to attacker. Does not count additional drain from Drain or DrainOverflow attacks.
+```lua
+attack:getDrain(damage)
+```
+##### global
+Returns global [attack](luaApi.md#attack-1) - a record from `Gattacks.dbf`.
+```lua
+attack.global
+```
+##### generated
+Returns generated [attack](luaApi.md#attack-1).
+Equals `global` plus upgrades from `GDynUpgr.dbf` according to unit's level.
+```lua
+attack.generated
 ```
 ```lua
 --- Returns attack initiative value.

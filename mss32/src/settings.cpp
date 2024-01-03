@@ -104,6 +104,12 @@ static void readUnitEncyclopediaSettings(const sol::table& table, Settings::Unit
     value.displayCriticalHitTextInAttackName = readSetting(category.value(),
                                                            "displayCriticalHitTextInAttackName",
                                                            def.displayCriticalHitTextInAttackName);
+    value.updateOnShiftKeyPress = readSetting(category.value(), "updateOnShiftKeyPress",
+                                              def.updateOnShiftKeyPress);
+    value.updateOnCtrlKeyPress = readSetting(category.value(), "updateOnCtrlKeyPress",
+                                             def.updateOnCtrlKeyPress);
+    value.updateOnAltKeyPress = readSetting(category.value(), "updateOnAltKeyPress",
+                                            def.updateOnAltKeyPress);
 }
 
 static void readModifierSettings(const sol::table& table, Settings::Modifiers& value)
@@ -378,6 +384,10 @@ const Settings& baseSettings()
         settings.unitEncyclopedia.displayBonusHp = false;
         settings.unitEncyclopedia.displayBonusXp = false;
         settings.unitEncyclopedia.displayInfiniteAttackIndicator = false;
+        settings.unitEncyclopedia.displayCriticalHitTextInAttackName = false;
+        settings.unitEncyclopedia.updateOnShiftKeyPress = false;
+        settings.unitEncyclopedia.updateOnCtrlKeyPress = false;
+        settings.unitEncyclopedia.updateOnAltKeyPress = false;
         settings.fixEffectiveHpFormula = false;
         settings.modifiers.cumulativeUnitRegeneration = false;
         settings.modifiers.notifyModifiersChanged = false;
