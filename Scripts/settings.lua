@@ -197,6 +197,12 @@ settings = {
 		-- Display Critical Hit text in Attack section instead of Damage and Power sections
 		-- Requires detailedAttackDescription
 		displayCriticalHitTextInAttackName = false,
+
+		-- Allows to update encyclopedia content on the fly by pressing specified keys.
+		-- Used in combination with isShift/Ctrl/AltKeyPressed from unitEncyclopedia.lua
+		updateOnShiftKeyPress = false,
+		updateOnCtrlKeyPress = false,
+		updateOnAltKeyPress = false,
 	},
 
 	-- Fix effective unit hp computation

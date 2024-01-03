@@ -60,6 +60,11 @@ void __fastcall encLayoutUnitInitializeHooked(game::CEncLayoutUnit* thisptr,
 
 void __fastcall encLayoutUnitUpdateHooked(game::CEncLayoutUnit* thisptr, int /*%edx*/);
 
+int __fastcall encLayoutUnitHandleKeyboardHooked(game::CInterface* thisptr,
+                                                 int /*%edx*/,
+                                                 int key,
+                                                 int a3);
+
 } // namespace hooks
 
 #endif // ENCLAYOUTUNITHOOKS_H

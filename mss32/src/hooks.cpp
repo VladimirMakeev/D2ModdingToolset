@@ -742,6 +742,8 @@ Hooks getVftableHooks()
 {
     using namespace game;
 
+    auto& orig = getOriginalFunctions();
+
     Hooks hooks;
 
     if (CBatAttackBestowWardsApi::vftable())
@@ -755,6 +757,13 @@ Hooks getVftableHooks()
             // Fix an issue where shatter attack always hits regardless of its power value
             hooks.emplace_back(
                 HookInfo{&CBatAttackShatterApi::vftable()->canMiss, shatterCanMissHooked});
+    }
+
+    if (CEncLayoutUnitApi::vftable()) {
+        // Support unit encyclopedia update on shift/ctrl/alt press (for custom unit encyclopedia)
+        hooks.emplace_back(HookInfo{&CEncLayoutUnitApi::vftable()->handleKeyboard,
+                                    encLayoutUnitHandleKeyboardHooked,
+                                    (void**)&orig.encLayoutUnitHandleKeyboard});
     }
 
     return hooks;

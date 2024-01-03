@@ -125,6 +125,7 @@ struct OriginalFunctions
 
     game::CEncLayoutUnitApi::Api::Initialize encLayoutUnitInitialize;
     game::CEncLayoutUnitApi::Api::Update encLayoutUnitUpdate;
+    game::CInterfaceVftable::HandleKeyboard encLayoutUnitHandleKeyboard;
 
     game::CEncLayoutStackApi::Api::Update encLayoutStackUpdate;
 

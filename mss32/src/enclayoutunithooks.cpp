@@ -1203,4 +1203,29 @@ void __fastcall encLayoutUnitUpdateHooked(game::CEncLayoutUnit* thisptr, int /*%
     idListApi.destructor(&editorModifiers);
 }
 
+int __fastcall encLayoutUnitHandleKeyboardHooked(game::CInterface* thisptr,
+                                                 int /*%edx*/,
+                                                 int key,
+                                                 int a3)
+{
+    using namespace game;
+
+    switch (key) {
+    case VK_SHIFT:
+        if (userSettings().unitEncyclopedia.updateOnShiftKeyPress)
+            CEncLayoutUnitApi::get().update((CEncLayoutUnit*)thisptr);
+        break;
+    case VK_CONTROL:
+        if (userSettings().unitEncyclopedia.updateOnCtrlKeyPress)
+            CEncLayoutUnitApi::get().update((CEncLayoutUnit*)thisptr);
+        break;
+    case VK_MENU:
+        if (userSettings().unitEncyclopedia.updateOnAltKeyPress)
+            CEncLayoutUnitApi::get().update((CEncLayoutUnit*)thisptr);
+        break;
+    }
+
+    return getOriginalFunctions().encLayoutUnitHandleKeyboard(thisptr, key, a3);
+}
+
 } // namespace hooks
