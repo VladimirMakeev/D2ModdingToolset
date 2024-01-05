@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <filesystem>
 #include <string>
+#include <array>
 
 namespace hooks {
 
@@ -77,6 +78,8 @@ struct Settings
     bool freeTransformSelfAttack;
     bool freeTransformSelfAttackInfinite;
     bool fixEffectiveHpFormula;
+    
+    std::array<int, 3> additionalLordIncome {}; 
 
     struct UnitEncyclopedia
     {

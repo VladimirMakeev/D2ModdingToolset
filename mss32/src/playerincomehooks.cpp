@@ -24,6 +24,7 @@
 #include "game.h"
 #include "gameutils.h"
 #include "log.h"
+#include "lordtype.h"
 #include "midgardid.h"
 #include "midgardobjectmap.h"
 #include "midplayer.h"
@@ -32,6 +33,7 @@
 #include "originalfunctions.h"
 #include "racecategory.h"
 #include "racetype.h"
+#include "settings.h"
 #include "utils.h"
 #include <algorithm>
 #include <array>
@@ -60,6 +62,13 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
         // Skip neutrals
         return income;
     }
+    
+    //additional income for lord type
+    const auto& globalApi = GlobalDataApi::get();
+    const auto lords = (*globalApi.getGlobalData())->lords;
+    const auto lordType = (TLordType*)globalApi.findById(lords, &player->lordId);
+    const int goldLord{income->gold + userSettings().additionalLordIncome[static_cast<int>(lordType->data->lordCategory.id)]};
+    BankApi::get().set(income, CurrencyType::Gold, std::clamp(goldLord, 0, 9999));
 
     auto variables{getScenarioVariables(objectMap)};
     if (!variables || !variables->variables.length) {
