@@ -69,6 +69,7 @@
 #include "drainlevelhooks.h"
 #include "dynamiccast.h"
 #include "dynupgrade.h"
+#include "editboxinterf.h"
 #include "editor.h"
 #include "effectinterfhooks.h"
 #include "effectresulthooks.h"
@@ -734,6 +735,8 @@ Hooks getHooks()
 
     // Fixes incorrect order of building status checks along with missing lordHasBuilding condition
     hooks.emplace_back(HookInfo{fn.getBuildingStatus, getBuildingStatusHooked});
+    // Fix input of 'io' (U+0451) and 'IO' (U+0401)
+    hooks.emplace_back(HookInfo{CEditBoxInterfApi::get().isCharValid, editBoxIsCharValidHooked});
 
     return hooks;
 }
@@ -2236,6 +2239,112 @@ bool __stdcall isUnitUpgradePendingHooked(const game::CMidgardID* unitId,
         if (fn.isUnitLevelNotMax(objectMap, &playerId, unitId)) {
             return getUpgradeUnitImpl(objectMap, getPlayer(objectMap, &playerId), unit) == nullptr;
         }
+    }
+
+    return false;
+}
+
+bool __fastcall editBoxIsCharValidHooked(const game::EditBoxData* thisptr,
+                                         int /*%edx*/,
+                                         char character)
+{
+    using namespace game;
+
+    // Cast to int using unsigned char
+    // so extended symbols (>= 127) are handled correctly by isalpha()
+    const int ch = static_cast<unsigned char>(character);
+
+    if (!(ch && ch != VK_ESCAPE && (thisptr->allowEnter || ch != '\n' && ch != '\r'))) {
+        return false;
+    }
+
+    // clang-format off
+    // These characters are language specific and depend on actual code page being used.
+    // For example, in cp-1251 they will represent Russian alphabet.
+    // They are hardcoded in game and should work fine on different code pages
+    // such as cp-1250, cp-1251
+    static const unsigned char languageSpecific[] = {
+        0xE0, 0xE1, 0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0xE7, 0xE8,
+        0xE9, 0xEA, 0xEB, 0xEC, 0xED, 0xEE, 0xEF, 0xF0, 0xF1,
+        0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA,
+        0xFB, 0xFC, 0xFD, 0xFE, 0xFF, 0xC0, 0xC1, 0xC2, 0xC3,
+        0xC4, 0xC5, 0xC6, 0xC7, 0xC8, 0xC9, 0xCA, 0xCB, 0xCC,
+        0xCD, 0xCE, 0xCF, 0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0xD5,
+        0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xDB, 0xDC, 0xDD, 0xDE,
+        0xDF,
+        0xA8, 0xB8, // This allows players to enter 'io' (U+0451) and 'IO' (U+0401) in cp-1251 
+        0
+    };
+    // clang-format on
+
+    if (thisptr->filter == EditFilter::TextOnly) {
+        if (isalpha(ch) || isspace(ch)) {
+            return true;
+        }
+
+        // Check if ch is language specific character
+        if (strchr(reinterpret_cast<const char*>(languageSpecific), ch)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    if (thisptr->filter >= EditFilter::AlphaNum) {
+        if (thisptr->filter == EditFilter::DigitsOnly) {
+            return isdigit(ch) != 0;
+        }
+
+        if (thisptr->filter >= EditFilter::AlphaNumNoSlash) {
+            if (thisptr->filter >= EditFilter::NamesDot) {
+                if (thisptr->filter == EditFilter::NamesDot) {
+                    return true;
+                }
+
+                if ((ch < 'a' || ch > 'z') && (ch < 'A' || ch > 'Z') && (ch < '0' || ch > '9')
+                    && ch != ' ' && ch != '\\' && ch != '_' && ch != '-') {
+                    return false;
+                }
+
+                return true;
+            }
+
+            if (iscntrl(ch)) {
+                return false;
+            }
+
+            if (!strchr("/?*\"<>|+':\\", ch)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        if (iscntrl(ch)) {
+            return false;
+        }
+
+        if (!strchr("/?*\"<>|+'", ch)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    // Remove two symbols from forbidden list.
+    // This allows players to enter 'io' (U+0451) and 'IO' (U+0401) in cp-1251
+    static const char forbiddenSymbols[] = {'`', '^', '~', /* 0xA8, 0xB8, */ 0};
+
+    if (!strchr(forbiddenSymbols, ch)) {
+        if (isalpha(ch) || isdigit(ch) || isspace(ch) || ispunct(ch)) {
+            return true;
+        }
+
+        if (strchr(reinterpret_cast<const char*>(languageSpecific), ch)) {
+            return true;
+        }
+
+        return false;
     }
 
     return false;
