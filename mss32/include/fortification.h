@@ -72,7 +72,8 @@ struct CFortificationVftable : public IMidScenarioObjectVftable
                                        const IMidgardObjectMap* objectMap);
     GetRegen getRegen;
 
-    using GetInt = int(__thiscall*)(CFortification* thisptr, IMidgardObjectMap* objectMap);
+    using GetInt = int(__thiscall*)(const CFortification* thisptr,
+                                    const IMidgardObjectMap* objectMap);
     GetInt getMaxUnitsInGarrison;
     GetInt getTier;
 
