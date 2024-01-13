@@ -784,6 +784,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\netsingleplayer.h" />
     <ClInclude Include="include\netsingleplayerhooks.h" />
     <ClInclude Include="include\notifyplayerlist.h" />
+    <ClInclude Include="include\objectinterf.h" />
     <ClInclude Include="include\playerlistentry.h" />
     <ClInclude Include="include\quickstring.h" />
     <ClInclude Include="include\refreshinfo.h" />
