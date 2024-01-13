@@ -21,39 +21,17 @@
 #define SCENEDIT_H
 
 #include "d2assert.h"
+#include "smartptr.h"
 #include <cstddef>
 
 namespace game {
 
-struct CScenEditData;
-struct CScenEditDataUnknown;
-struct CScenEditDataUnknownData;
 struct CMidgardScenarioMap;
-
-struct CScenEdit
-{
-    CScenEditData* data;
-};
-
-assert_size(CScenEdit, 4);
-
-struct CScenEditData
-{
-    bool initialized;
-    char unknown[23];
-    CScenEditDataUnknown* unknown2;
-    char unknown3[1080];
-};
-
-assert_size(CScenEditData, 1108);
-assert_offset(CScenEditData, unknown2, 24);
-
-struct CScenEditDataUnknown
-{
-    CScenEditDataUnknownData* data;
-};
-
-assert_size(CScenEditDataUnknown, 4);
+struct GameSettings;
+struct GameImageDataWrapper;
+struct CAutoDialog;
+struct CInterfManagerImpl;
+struct CMqFps;
 
 struct CScenEditDataUnknownData
 {
@@ -66,6 +44,49 @@ struct CScenEditDataUnknownData
 };
 
 assert_size(CScenEditDataUnknownData, 24);
+
+struct CScenEditDataUnknown
+{
+    CScenEditDataUnknownData* data;
+};
+
+assert_size(CScenEditDataUnknown, 4);
+
+struct CScenEditData
+{
+    bool initialized;
+    char padding[3];
+    GameSettings** gameSettings;
+    GameImageDataWrapper* interfImages;
+    CAutoDialog* autoDialog;
+    char unknown[8];
+    CScenEditDataUnknown* unknown2;
+    int unknown3;
+    void* cityNames;
+    void* ruinNames;
+    void* merchantNames;
+    void* trainerNames;
+    void* mercCampNames;
+    void* mageNames;
+    void* rndUnits;
+    void* rndItems;
+    SmartPtr<CInterfManagerImpl> interfManager;
+    char unknown4[1028];
+    CMqFps* fps;
+    bool showFullSystemInfo;
+    char padding2[3];
+};
+
+assert_size(CScenEditData, 1108);
+assert_offset(CScenEditData, unknown2, 24);
+assert_offset(CScenEditData, interfManager, 64);
+
+struct CScenEdit
+{
+    CScenEditData* data;
+};
+
+assert_size(CScenEdit, 4);
 
 namespace CScenEditApi {
 
