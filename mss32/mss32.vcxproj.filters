@@ -1265,6 +1265,9 @@
     <ClCompile Include="src\bindings\fogview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\sitecategories.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">

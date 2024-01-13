@@ -30,6 +30,34 @@ struct LSiteCategoryTable : public CEnumConstantTable<SiteId>
 struct LSiteCategory : public Category<SiteId>
 { };
 
+namespace SiteCategories {
+
+struct Categories
+{
+    LSiteCategory* merchant;
+    LSiteCategory* mageTower;
+    LSiteCategory* mercenaries;
+    LSiteCategory* trainer;
+};
+
+Categories& get();
+
+/** Returns address of LSiteCategory::vftable used in game. */
+const void* vftable();
+
+} // namespace SiteCategories
+
+namespace LSiteCategoryTableApi {
+
+using Api = CategoryTableApi::Api<LSiteCategoryTable, LSiteCategory>;
+
+Api& get();
+
+/** Returns address of LSiteCategoryTable::vftable used in game. */
+const void* vftable();
+
+} // namespace LSiteCategoryTableApi
+
 } // namespace game
 
 #endif // SITECATEGORIES_H

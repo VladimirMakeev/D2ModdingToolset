@@ -456,6 +456,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\scripts.cpp" />
     <ClCompile Include="src\scriptutils.cpp" />
     <ClCompile Include="src\settings.cpp" />
+    <ClCompile Include="src\sitecategories.cpp" />
     <ClCompile Include="src\sitemerchantinterf.cpp" />
     <ClCompile Include="src\sitemerchantinterfhooks.cpp" />
     <ClCompile Include="src\smartptr.cpp" />
