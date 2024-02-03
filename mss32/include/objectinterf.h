@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2024 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,47 +17,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SITECATEGORIES_H
-#define SITECATEGORIES_H
+#ifndef OBJECTINTERF_H
+#define OBJECTINTERF_H
 
-#include "categories.h"
+#include "isoview.h"
 
 namespace game {
 
-struct LSiteCategoryTable : public CEnumConstantTable<SiteId>
-{ };
+namespace editor {
 
-struct LSiteCategory : public Category<SiteId>
-{ };
-
-namespace SiteCategories {
-
-struct Categories
+struct CObjectInterfData
 {
-    LSiteCategory* merchant;
-    LSiteCategory* mageTower;
-    LSiteCategory* mercenaries;
-    LSiteCategory* trainer;
+    int selectedMode;
 };
 
-Categories& get();
+assert_size(CObjectInterfData, 4);
 
-/** Returns address of LSiteCategory::vftable used in game. */
-const void* vftable();
+/** Represents DLG_OBJECTS from ScenEdit.dlg. */
+struct CObjectInterf : public CIsoView
+{
+    CObjectInterfData* objInterfData;
+};
 
-} // namespace SiteCategories
+assert_size(CObjectInterf, 24);
 
-namespace LSiteCategoryTableApi {
-
-using Api = CategoryTableApi::Api<LSiteCategoryTable, LSiteCategory>;
-
-Api& get();
-
-/** Returns address of LSiteCategoryTable::vftable used in game. */
-const void* vftable();
-
-} // namespace LSiteCategoryTableApi
+} // namespace editor
 
 } // namespace game
 
-#endif // SITECATEGORIES_H
+#endif // OBJECTINTERF_H

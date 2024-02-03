@@ -25,18 +25,37 @@
 namespace game {
 
 struct CDialogInterf;
+struct CPalMapInterf;
+struct CImage2Text;
 
 namespace editor {
 
 struct CIsoViewData
 {
-    char unknown[16];
+    int unknown;
+    CDialogInterf* dlgIsoView;
+    CDialogInterf* dlgIso;
+    CDialogInterf* dlgIsoPal;
     CDialogInterf* dialogInterf;
-    char unknown2[72];
+    CPalMapInterf* palMap;
+    char unknown5[24];
+    CImage2Text* image2Text;
+    int unknown2;
+    int unknown3;
+    int unknown4;
+    int unknown5;
+    int unknown6;
+    int unknown7;
+    int unknown8;
+    int unknown9;
+    int unknown10;
+    bool showPalMap;
+    char padding[3];
 };
 
 assert_size(CIsoViewData, 92);
 assert_offset(CIsoViewData, dialogInterf, 16);
+assert_offset(CIsoViewData, unknown3, 56);
 
 /** Represents DLG_ISO_VIEW from ScenEdit.dlg. */
 struct CIsoView : public CFullScreenInterf

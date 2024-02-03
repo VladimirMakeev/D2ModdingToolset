@@ -39,7 +39,21 @@ struct alignas(8) TypeDescriptor
     char name[0]; /**< Mangled type name. */
 };
 
-struct BaseClassDescriptor;
+struct PMD
+{
+    int mdisp; /**< Member displacement. */
+    int pdisp; /**< Vbtable displacement. */
+    int vdisp; /**< Displacement inside vbtable. */
+};
+
+struct BaseClassDescriptor
+{
+    TypeDescriptor* typeDescriptor; /**< Type descriptor of the class. */
+    /** Number of nested classes following in the Base Class Array. */
+    std::uint32_t numContainedBases;
+    PMD where;                /**< Pointer-to-member displacement info. */
+    std::uint32_t attributes; /**< Flags, usually 0. */
+};
 
 struct BaseClassArray
 {

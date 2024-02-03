@@ -645,6 +645,16 @@ Returns array of inventory [items](luaApi.md#item-2).
 ```lua
 fort.inventory
 ```
+##### capital
+Returns true if fort is a capital city.
+```lua
+fort.capital
+```
+##### tier
+Returns fort tier (level). Tiers are in range \[1 : 6\]. Tier 6 corresponds to the capital city.
+```lua
+fort.tier
+```
 
 ---
 

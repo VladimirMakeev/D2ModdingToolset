@@ -1265,6 +1265,12 @@
     <ClCompile Include="src\bindings\fogview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\sitecategories.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenarioobjectstreams.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3288,6 +3294,15 @@
     </ClInclude>
     <ClInclude Include="include\bindings\fogview.h">
       <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scenarioobjectstreams.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\streamregister.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\objectinterf.h">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

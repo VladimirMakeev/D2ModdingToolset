@@ -65,6 +65,7 @@ struct CMidStreamEnvFile;
 struct IUsUnit;
 struct TBuildingType;
 struct TUsUnitImpl;
+struct EditBoxData;
 
 enum class BuildingBranchNumber : int;
 enum class CanApplyPotionResult : int;
@@ -286,6 +287,8 @@ bool __stdcall isUnitLevelNotMaxHooked(const game::IMidgardObjectMap* objectMap,
 
 bool __stdcall isUnitUpgradePendingHooked(const game::CMidgardID* unitId,
                                           const game::IMidgardObjectMap* objectMap);
+
+bool __fastcall editBoxIsCharValidHooked(const game::EditBoxData* thisptr, int /*%edx*/, char ch);
 
 game::BuildingStatus __stdcall getBuildingStatusHooked(const game::IMidgardObjectMap* objectMap,
                                                        const game::CMidgardID* playerId,

@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2024 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,49 +17,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "editboxinterf.h"
+#include "scenarioobjectstreams.h"
 #include "version.h"
 #include <array>
 
-namespace game::CEditBoxInterfApi {
+namespace game::ScenarioObjectStreamsApi {
 
 // clang-format off
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::SetFilterAndLength)0x5c9c86,
-        (Api::SetInputLength)0x5390dc,
-        (Api::SetString)0x5391f9,
-        (Api::Update)0x539468,
-        (Api::UpdateFocus)0x5389e6,
-        (Api::IsCharValid)0x538471,
+        (Api::AddStreamRegister)0x616064,
     },
     // Russobit
     Api{
-        (Api::SetFilterAndLength)0x5c9c86,
-        (Api::SetInputLength)0x5390dc,
-        (Api::SetString)0x5391f9,
-        (Api::Update)0x539468,
-        (Api::UpdateFocus)0x5389e6,
-        (Api::IsCharValid)0x538471,
+        (Api::AddStreamRegister)0x616064,
     },
     // Gog
     Api{
-        (Api::SetFilterAndLength)0x5c8c54,
-        (Api::SetInputLength)0x5386e4,
-        (Api::SetString)0x538801,
-        (Api::Update)0x538a8e,
-        (Api::UpdateFocus)0x537fee,
-        (Api::IsCharValid)0x537a79,
+        (Api::AddStreamRegister)0x614b6f,
     },
     // Scenario Editor
     Api{
-        (Api::SetFilterAndLength)0x4d18b8,
-        (Api::SetInputLength)0x492cb3,
-        (Api::SetString)0x492ddb,
-        (Api::Update)0x493068,
-        (Api::UpdateFocus)0x4925bd,
-        (Api::IsCharValid)0x492048,
+        (Api::AddStreamRegister)0x501f39,
     },
 }};
 // clang-format on
@@ -69,4 +49,4 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::CEditBoxInterfApi
+} // namespace game::ScenarioObjectStreamsApi

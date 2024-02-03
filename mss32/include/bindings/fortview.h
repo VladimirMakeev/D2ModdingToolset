@@ -56,6 +56,9 @@ public:
     int getSubrace() const;
     std::vector<ItemView> getInventoryItems() const;
 
+    bool isCapital() const;
+    int getTier() const;
+
 private:
     const game::CFortification* fort;
     const game::IMidgardObjectMap* objectMap;
