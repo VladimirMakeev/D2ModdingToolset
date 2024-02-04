@@ -38,8 +38,8 @@ struct CIsoViewData
     CDialogInterf* dlgIsoPal;
     CDialogInterf* dialogInterf;
     CPalMapInterf* palMap;
-    char unknown5[24];
-    CImage2Text* image2Text;
+    char unknown11[24];
+    CImage2Text* selectedTileInfo;
     int unknown2;
     int unknown3;
     int unknown4;
@@ -55,6 +55,7 @@ struct CIsoViewData
 
 assert_size(CIsoViewData, 92);
 assert_offset(CIsoViewData, dialogInterf, 16);
+assert_offset(CIsoViewData, selectedTileInfo, 48);
 assert_offset(CIsoViewData, unknown3, 56);
 
 /** Represents DLG_ISO_VIEW from ScenEdit.dlg. */
