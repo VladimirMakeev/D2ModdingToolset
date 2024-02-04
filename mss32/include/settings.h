@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <filesystem>
 #include <string>
+#include <array>
 
 namespace hooks {
 
@@ -77,6 +78,13 @@ struct Settings
     bool freeTransformSelfAttack;
     bool freeTransformSelfAttackInfinite;
     bool fixEffectiveHpFormula;
+    
+    struct AdditionalLordIncome
+    {
+        int warrior = 0;
+        int mage = 0;
+        int guildmaster = 0;
+    } additionalLordIncome;
 
     struct UnitEncyclopedia
     {

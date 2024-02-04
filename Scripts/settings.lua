@@ -95,6 +95,13 @@ settings = {
 	-- Change accuracy reduction for mage leaders per each additional target
 	mageLeaderAccuracyReduction = 10,
 
+	-- set additional income for each lord type
+	additionalLordIncome = {
+		warrior = 0,
+		mage = 0,
+		guildmaster = 0
+	},
+
 	aiAccuracyBonus = {
 		-- Treat AI accuracy bonus as absolute value or as percentage.
 		-- Absolute: accuracy += bonus;

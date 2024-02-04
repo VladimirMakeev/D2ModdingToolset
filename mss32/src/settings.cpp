@@ -281,6 +281,21 @@ static void readBattleSettings(const sol::table& table, Settings::Battle& value)
                                           def.allowMultiUpgrade);
 }
 
+static void readAdditionalLordIncomeSettings(const sol::table& table, Settings::AdditionalLordIncome& value)
+{
+    const auto& def = defaultSettings().additionalLordIncome;
+
+    auto income = table.get<sol::optional<sol::table>>("additionalLordIncome");
+    if (!income.has_value()) {
+        value = def;
+        return;
+    }
+
+    value.warrior = readSetting(income.value(), "warrior", def.warrior);
+    value.mage = readSetting(income.value(), "mage", def.mage);
+    value.guildmaster = readSetting(income.value(), "guildmaster", def.guildmaster);
+}
+
 static void readSettings(const sol::table& table, Settings& settings)
 {
     // clang-format off
@@ -328,6 +343,7 @@ static void readSettings(const sol::table& table, Settings& settings)
     readDebugSettings(table, settings.debug);
     readEngineSettings(table, settings.engine);
     readBattleSettings(table, settings.battle);
+    readAdditionalLordIncomeSettings(table, settings.additionalLordIncome);
 }
 
 const Settings& baseSettings()
