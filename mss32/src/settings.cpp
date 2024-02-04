@@ -281,6 +281,21 @@ static void readBattleSettings(const sol::table& table, Settings::Battle& value)
                                           def.allowMultiUpgrade);
 }
 
+static void readAdditionalLordIncomeSettings(const sol::table& table, Settings::AdditionalLordIncome& value)
+{
+    const auto& def = defaultSettings().additionalLordIncome;
+
+    auto income = table.get<sol::optional<sol::table>>("additionalLordIncome");
+    if (!income.has_value()) {
+        value = def;
+        return;
+    }
+
+    value.warrior = readSetting(income.value(), "warrior", def.warrior);
+    value.mage = readSetting(income.value(), "mage", def.mage);
+    value.guildmaster = readSetting(income.value(), "guildmaster", def.guildmaster);
+}
+
 static void readSettings(const sol::table& table, Settings& settings)
 {
     // clang-format off
@@ -316,9 +331,6 @@ static void readSettings(const sol::table& table, Settings& settings)
     settings.freeTransformSelfAttack = readSetting(table, "freeTransformSelfAttack", defaultSettings().freeTransformSelfAttack);
     settings.freeTransformSelfAttackInfinite = readSetting(table, "freeTransformSelfAttackInfinite", defaultSettings().freeTransformSelfAttackInfinite);
     settings.fixEffectiveHpFormula = readSetting(table, "fixEffectiveHpFormula", defaultSettings().fixEffectiveHpFormula);
-    settings.additionalLordIncome[0] = readSetting(table, "additionalIncomeMage", defaultSettings().additionalLordIncome[0]);
-    settings.additionalLordIncome[1] = readSetting(table, "additionalIncomeWarrior", defaultSettings().additionalLordIncome[1]);
-    settings.additionalLordIncome[2] = readSetting(table, "additionalIncomeGuildmaster", defaultSettings().additionalLordIncome[2]);
     settings.debugMode = readSetting(table, "debugHooks", defaultSettings().debugMode);
     // clang-format on
 
@@ -331,6 +343,7 @@ static void readSettings(const sol::table& table, Settings& settings)
     readDebugSettings(table, settings.debug);
     readEngineSettings(table, settings.engine);
     readBattleSettings(table, settings.battle);
+    readAdditionalLordIncomeSettings(table, settings.additionalLordIncome);
 }
 
 const Settings& baseSettings()

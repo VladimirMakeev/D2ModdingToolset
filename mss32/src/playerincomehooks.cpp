@@ -67,8 +67,22 @@ game::Bank* __stdcall computePlayerDailyIncomeHooked(game::Bank* income,
     const auto& globalApi = GlobalDataApi::get();
     const auto lords = (*globalApi.getGlobalData())->lords;
     const auto lordType = (TLordType*)globalApi.findById(lords, &player->lordId);
-    const int goldLord{income->gold + userSettings().additionalLordIncome[static_cast<int>(lordType->data->lordCategory.id)]};
-    BankApi::get().set(income, CurrencyType::Gold, std::clamp(goldLord, 0, 9999));
+    const auto lordId = lordType->data->lordCategory.id;
+    int additionalLordIncome {};
+    switch (lordId)
+    {
+        case LordId::Warrior: 
+            additionalLordIncome = userSettings().additionalLordIncome.warrior;
+            break;
+        case LordId::Mage:
+            additionalLordIncome = userSettings().additionalLordIncome.mage;
+            break;
+        case LordId::Diplomat:
+            additionalLordIncome = userSettings().additionalLordIncome.guildmaster;
+            break;
+    }
+    const int goldLordIncome{income->gold + additionalLordIncome};
+    BankApi::get().set(income, CurrencyType::Gold, std::clamp(goldLordIncome, 0, 9999));
 
     auto variables{getScenarioVariables(objectMap)};
     if (!variables || !variables->variables.length) {

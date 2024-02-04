@@ -79,7 +79,12 @@ struct Settings
     bool freeTransformSelfAttackInfinite;
     bool fixEffectiveHpFormula;
     
-    std::array<int, 3> additionalLordIncome {}; 
+    struct AdditionalLordIncome
+    {
+        int warrior = 0;
+        int mage = 0;
+        int guildmaster = 0;
+    } additionalLordIncome;
 
     struct UnitEncyclopedia
     {
