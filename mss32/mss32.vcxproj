@@ -199,6 +199,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\bindings\diplomacyview.cpp" />
     <ClCompile Include="src\bindings\fogview.cpp" />
     <ClCompile Include="src\bindings\globalvariablesview.cpp" />
+    <ClCompile Include="src\bindings\globalview.cpp" />
     <ClCompile Include="src\bindings\unitviewdummy.cpp" />
     <ClCompile Include="src\bindings\dynupgradeview.cpp" />
     <ClCompile Include="src\bindings\fortview.cpp" />
@@ -642,6 +643,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\bindings\diplomacyview.h" />
     <ClInclude Include="include\bindings\fogview.h" />
     <ClInclude Include="include\bindings\globalvariablesview.h" />
+    <ClInclude Include="include\bindings\globalview.h" />
     <ClInclude Include="include\bindings\unitviewdummy.h" />
     <ClInclude Include="include\bindings\dynupgradeview.h" />
     <ClInclude Include="include\bindings\fortview.h" />

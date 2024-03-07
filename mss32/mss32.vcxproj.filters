@@ -1274,6 +1274,9 @@
     <ClCompile Include="src\scenarioobjectstreams.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\globalview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3309,6 +3312,9 @@
     </ClInclude>
     <ClInclude Include="include\objectinterf.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\globalview.h">
+      <Filter>bindings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

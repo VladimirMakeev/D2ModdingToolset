@@ -29,6 +29,7 @@
 #include "fortview.h"
 #include "gameutils.h"
 #include "globalvariablesview.h"
+#include "globalview.h"
 #include "groupview.h"
 #include "idview.h"
 #include "itembaseview.h"
@@ -302,6 +303,7 @@ static void bindApi(sol::state& lua)
     bindings::DiplomacyView::bind(lua);
     bindings::FogView::bind(lua);
     bindings::GlobalVariablesView::bind(lua);
+    bindings::GlobalView::bind(lua);
 
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }
@@ -346,6 +348,11 @@ bindings::ScenarioView getScenario()
     return {getObjectMap()};
 }
 
+bindings::GlobalView getGlobal()
+{
+    return bindings::GlobalView();
+}
+
 sol::environment executeScript(const std::string& source,
                                sol::protected_function_result& result,
                                bool bindScenario)
@@ -358,6 +365,7 @@ sol::environment executeScript(const std::string& source,
     result = lua.safe_script(source, env,
                              [](lua_State*, sol::protected_function_result pfr) { return pfr; });
 
+    env["getGlobal"] = &getGlobal;
     if (bindScenario) {
         env["getScenario"] = &getScenario;
     }
