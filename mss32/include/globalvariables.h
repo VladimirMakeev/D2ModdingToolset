@@ -83,8 +83,8 @@ struct GlobalVariables
     int rodRange;
     /** Profit per mana crystal or gold mine per turn. 'CRYSTAL_P' */
     int crystalProfit;
-    /** 'CONST_UPG' */
-    int constUpg;
+    /** 'CONST_URG' */
+    int constUrg;
     /** Change to get spells with capture of a capital. 'GAIN_SPELL' */
     int gainSpellChance;
     /** Bonus per day regeneration for units in ruins. 'REGEN_RUIN' */
