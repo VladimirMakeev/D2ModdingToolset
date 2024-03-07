@@ -1268,6 +1268,9 @@
     <ClCompile Include="src\bindings\globalvariablesview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\gameview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
     <ClCompile Include="src\sitecategories.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -3302,6 +3305,9 @@
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\globalvariablesview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\gameview.h">
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\scenarioobjectstreams.h">
