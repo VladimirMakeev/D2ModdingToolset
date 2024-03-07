@@ -28,6 +28,7 @@
 #include "fogview.h"
 #include "fortview.h"
 #include "gameutils.h"
+#include "globalvariablesview.h"
 #include "groupview.h"
 #include "idview.h"
 #include "itembaseview.h"
@@ -300,6 +301,7 @@ static void bindApi(sol::state& lua)
     bindings::BattleMsgDataView::bind(lua);
     bindings::DiplomacyView::bind(lua);
     bindings::FogView::bind(lua);
+    bindings::GlobalVariablesView::bind(lua);
 
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
 }
