@@ -69,6 +69,10 @@ public:
     std::vector<ItemView> getInventoryItems() const;
     std::optional<ItemView> getLeaderEquippedItem(const game::EquippedItemIdx& idx) const;
 
+    int getOrder() const;
+    IdView getOrderTargetId() const;
+    int getAiOrder() const;
+
 private:
     const game::CMidStack* stack;
     const game::IMidgardObjectMap* objectMap;
