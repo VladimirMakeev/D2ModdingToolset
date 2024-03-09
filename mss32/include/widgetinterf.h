@@ -26,6 +26,7 @@
 #include "functordispatch3.h"
 #include "functordispatch4.h"
 #include "interface.h"
+#include "mqpoint.h"
 #include "uievent.h"
 
 namespace game {
