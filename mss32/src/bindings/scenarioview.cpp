@@ -20,14 +20,20 @@
 #include "scenarioview.h"
 #include "diplomacyview.h"
 #include "dynamiccast.h"
+#include "fortification.h"
 #include "fortview.h"
 #include "gameutils.h"
 #include "idview.h"
+#include "itemview.h"
 #include "locationview.h"
 #include "midgardmapblock.h"
 #include "midgardobjectmap.h"
 #include "midgardplan.h"
+#include "midplayer.h"
+#include "midrod.h"
+#include "midruin.h"
 #include "midscenvariables.h"
+#include "midunit.h"
 #include "playerview.h"
 #include "point.h"
 #include "rodview.h"
@@ -66,6 +72,8 @@ void ScenarioView::bind(sol::state& lua)
                                          &ScenarioView::getRodByPoint);
     scenario["getPlayer"] = sol::overload<>(&ScenarioView::getPlayer, &ScenarioView::getPlayerById);
     scenario["getUnit"] = sol::overload<>(&ScenarioView::getUnit, &ScenarioView::getUnitById);
+    scenario["getItem"] = sol::overload<>(&ScenarioView::getItem, &ScenarioView::getItemById);
+
     scenario["findStackByUnit"] = sol::overload<>(&ScenarioView::findStackByUnit,
                                                   &ScenarioView::findStackByUnitId,
                                                   &ScenarioView::findStackByUnitIdString);
@@ -78,6 +86,13 @@ void ScenarioView::bind(sol::state& lua)
     scenario["day"] = sol::property(&ScenarioView::getCurrentDay);
     scenario["size"] = sol::property(&ScenarioView::getSize);
     scenario["diplomacy"] = sol::property(&ScenarioView::getDiplomacy);
+    scenario["forEachStack"] = &ScenarioView::forEachStack;
+    scenario["forEachLocation"] = &ScenarioView::forEachLocation;
+    scenario["forEachFort"] = &ScenarioView::forEachFort;
+    scenario["forEachRuin"] = &ScenarioView::forEachRuin;
+    scenario["forEachRod"] = &ScenarioView::forEachRod;
+    scenario["forEachPlayer"] = &ScenarioView::forEachPlayer;
+    scenario["forEachUnit"] = &ScenarioView::forEachUnit;
 }
 
 std::optional<LocationView> ScenarioView::getLocation(const std::string& id) const
@@ -440,6 +455,31 @@ std::optional<UnitView> ScenarioView::getUnitById(const IdView& id) const
     return {UnitView{(const CMidUnit*)obj}};
 }
 
+std::optional<ItemView> ScenarioView::getItem(const std::string& id) const
+{
+    return getItemById(IdView{id});
+}
+
+std::optional<ItemView> ScenarioView::getItemById(const IdView& id) const
+{
+    using namespace game;
+
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    if (CMidgardIDApi::get().getType(&id.id) != IdType::Item) {
+        return std::nullopt;
+    }
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, &id.id);
+    if (!obj) {
+        return std::nullopt;
+    }
+
+    return {ItemView{&id.id, objectMap}};
+}
+
 int ScenarioView::getCurrentDay() const
 {
     if (!objectMap) {
@@ -467,6 +507,140 @@ std::optional<DiplomacyView> ScenarioView::getDiplomacy() const
     }
 
     return DiplomacyView{hooks::getDiplomacy(objectMap)};
+}
+
+void ScenarioView::forEachStack(const std::function<void(const StackView&)>& callback) const
+{
+    if (!objectMap) {
+        return;
+    }
+
+    using namespace game;
+
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+
+    auto runCallback = [this, &callback, &dynamicCast, &rtti](const IMidScenarioObject* obj) {
+        auto* stack = (const CMidStack*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType,
+                                                    rtti.CMidStackType, 0);
+
+        const StackView stackView{stack, objectMap};
+        callback(stackView);
+    };
+
+    hooks::forEachScenarioObject(objectMap, IdType::Stack, runCallback);
+}
+
+void ScenarioView::forEachLocation(const std::function<void(const LocationView&)>& callback) const
+{
+    if (!objectMap) {
+        return;
+    }
+
+    using namespace game;
+
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+
+    auto runCallback = [&callback, &dynamicCast, &rtti](const IMidScenarioObject* obj) {
+        auto* location = (const CMidLocation*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType,
+                                                          rtti.CMidLocationType, 0);
+
+        const LocationView locationView{location};
+        callback(locationView);
+    };
+
+    hooks::forEachScenarioObject(objectMap, IdType::Location, runCallback);
+}
+
+void ScenarioView::forEachFort(const std::function<void(const FortView&)>& callback) const
+{
+    if (!objectMap) {
+        return;
+    }
+
+    using namespace game;
+
+    auto runCallback = [this, &callback](const IMidScenarioObject* obj) {
+        auto* fort{static_cast<const CFortification*>(obj)};
+
+        const FortView fortView{fort, objectMap};
+        callback(fortView);
+    };
+
+    hooks::forEachScenarioObject(objectMap, IdType::Fortification, runCallback);
+}
+
+void ScenarioView::forEachRuin(const std::function<void(const RuinView&)>& callback) const
+{
+    if (!objectMap) {
+        return;
+    }
+
+    using namespace game;
+
+    auto runCallback = [this, &callback](const IMidScenarioObject* obj) {
+        auto* ruin{static_cast<const CMidRuin*>(obj)};
+
+        const RuinView ruinView{ruin, objectMap};
+        callback(ruinView);
+    };
+
+    hooks::forEachScenarioObject(objectMap, IdType::Ruin, runCallback);
+}
+
+void ScenarioView::forEachRod(const std::function<void(const RodView&)>& callback) const
+{
+    if (!objectMap) {
+        return;
+    }
+
+    using namespace game;
+
+    auto runCallback = [this, &callback](const IMidScenarioObject* obj) {
+        auto* rod{static_cast<const CMidRod*>(obj)};
+
+        const RodView rodView{rod, objectMap};
+        callback(rodView);
+    };
+
+    hooks::forEachScenarioObject(objectMap, IdType::Rod, runCallback);
+}
+
+void ScenarioView::forEachPlayer(const std::function<void(const PlayerView&)>& callback) const
+{
+    if (!objectMap) {
+        return;
+    }
+
+    using namespace game;
+
+    auto runCallback = [this, &callback](const IMidScenarioObject* obj) {
+        auto* player{static_cast<const CMidPlayer*>(obj)};
+
+        const PlayerView playerView{player, objectMap};
+        callback(playerView);
+    };
+
+    hooks::forEachScenarioObject(objectMap, IdType::Player, runCallback);
+}
+
+void ScenarioView::forEachUnit(const std::function<void(const UnitView&)>& callback) const
+{
+    if (!objectMap) {
+        return;
+    }
+
+    using namespace game;
+
+    auto runCallback = [&callback](const IMidScenarioObject* obj) {
+        auto* unit{static_cast<const CMidUnit*>(obj)};
+
+        const UnitView unitView{unit};
+        callback(unitView);
+    };
+
+    hooks::forEachScenarioObject(objectMap, IdType::Unit, runCallback);
 }
 
 const game::CMidgardID* ScenarioView::getObjectId(int x, int y, game::IdType type) const

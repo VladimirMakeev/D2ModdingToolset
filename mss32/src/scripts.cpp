@@ -41,6 +41,7 @@
 #include "modifierview.h"
 #include "playerview.h"
 #include "point.h"
+#include "rodview.h"
 #include "ruinview.h"
 #include "scenariovariableview.h"
 #include "scenarioview.h"
@@ -366,6 +367,7 @@ static void bindApi(sol::state& lua)
     bindings::BattleMsgDataView::bind(lua);
     bindings::DiplomacyView::bind(lua);
     bindings::FogView::bind(lua);
+    bindings::RodView::bind(lua);
     bindings::GlobalVariablesView::bind(lua);
     bindings::GlobalView::bind(lua);
     bindings::GameView::bind(lua);

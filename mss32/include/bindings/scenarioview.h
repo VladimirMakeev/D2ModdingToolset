@@ -20,6 +20,7 @@
 #ifndef SCENARIOVIEW_H
 #define SCENARIOVIEW_H
 
+#include <functional>
 #include <optional>
 #include <string>
 
@@ -48,6 +49,7 @@ class UnitView;
 class PlayerView;
 class RodView;
 class DiplomacyView;
+class ItemView;
 
 /**
  * Returns stub values if objectMap is null.
@@ -119,6 +121,11 @@ public:
     /** Searches for unit by id. */
     std::optional<UnitView> getUnitById(const IdView& id) const;
 
+    /** Searches for item by id string. */
+    std::optional<ItemView> getItem(const std::string& id) const;
+    /** Searches for item by id. */
+    std::optional<ItemView> getItemById(const IdView& id) const;
+
     /** Searches for stack that has specified unit among all the stacks in the whole scenario. */
     std::optional<StackView> findStackByUnit(const UnitView& unit) const;
     std::optional<StackView> findStackByUnitId(const IdView& unitId) const;
@@ -141,6 +148,14 @@ public:
     int getSize() const;
 
     std::optional<DiplomacyView> getDiplomacy() const;
+
+    void forEachStack(const std::function<void(const StackView&)>& callback) const;
+    void forEachLocation(const std::function<void(const LocationView&)>& callback) const;
+    void forEachFort(const std::function<void(const FortView&)>& callback) const;
+    void forEachRuin(const std::function<void(const RuinView&)>& callback) const;
+    void forEachRod(const std::function<void(const RodView&)>& callback) const;
+    void forEachPlayer(const std::function<void(const PlayerView&)>& callback) const;
+    void forEachUnit(const std::function<void(const UnitView&)>& callback) const;
 
 private:
     const game::CMidgardID* getObjectId(int x, int y, game::IdType type) const;
