@@ -315,6 +315,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\netsingleplayer.cpp" />
     <ClCompile Include="src\netsingleplayerhooks.cpp" />
     <ClCompile Include="src\nativegameinfo.cpp" />
+    <ClCompile Include="src\resourcetype.cpp" />
     <ClCompile Include="src\scenarioobjectstreams.cpp" />
     <ClCompile Include="src\scenariotemplates.cpp" />
     <ClCompile Include="src\refreshinfo.cpp" />
@@ -683,6 +684,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\diplomacyhooks.h" />
     <ClInclude Include="include\fonts.h" />
     <ClInclude Include="include\fontshooks.h" />
+    <ClInclude Include="include\midcrystal.h" />
     <ClInclude Include="include\middiplomacy.h" />
     <ClInclude Include="include\midgardmapfog.h" />
     <ClInclude Include="include\displayd3d.h" />
@@ -800,6 +802,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\nativeraceinfo.h" />
     <ClInclude Include="include\nativespellinfo.h" />
     <ClInclude Include="include\nativeunitinfo.h" />
+    <ClInclude Include="include\resourcetype.h" />
     <ClInclude Include="include\scenarioobjectstreams.h" />
     <ClInclude Include="include\scenariotemplates.h" />
     <ClInclude Include="include\scenedit.h" />

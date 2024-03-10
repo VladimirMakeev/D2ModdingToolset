@@ -1280,6 +1280,9 @@
     <ClCompile Include="src\bindings\globalview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\resourcetype.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3321,6 +3324,12 @@
     </ClInclude>
     <ClInclude Include="include\bindings\globalview.h">
       <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midcrystal.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\resourcetype.h">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

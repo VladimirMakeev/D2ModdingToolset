@@ -404,6 +404,17 @@ enum class AiSpellId : int
     Dwarf,
 };
 
+/** Resource ids from Lres.dbf. */
+enum class ResourceId : int
+{
+    Gold,
+    InfernalMana, /**< L_RED */
+    LifeMana,     /**< L_YELLOW */
+    DeathMana,    /**< L_ORANGE */
+    RunicMana,    /**< L_WHITE */
+    GroveMana,    /**< L_BLUE */
+};
+
 } // namespace game
 
 #endif // CATEGORYIDS_H
