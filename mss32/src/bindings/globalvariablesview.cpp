@@ -348,8 +348,12 @@ int GlobalVariablesView::getDBkaTurn() const
 
 int GlobalVariablesView::getProt(int tier) const
 {
-    if (tier < 1 || tier > 5) {
+    if (tier < 1 || tier > 6) {
         return 0;
+    }
+
+    if (tier == 6) {
+        return getProtCap();
     }
 
     return variables->cityProtection[tier - 1];
