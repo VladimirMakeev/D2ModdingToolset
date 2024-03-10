@@ -50,6 +50,7 @@ class PlayerView;
 class RodView;
 class DiplomacyView;
 class ItemView;
+class CrystalView;
 
 /**
  * Returns stub values if objectMap is null.
@@ -126,6 +127,15 @@ public:
     /** Searches for item by id. */
     std::optional<ItemView> getItemById(const IdView& id) const;
 
+    /** Searches for crystal by id string. */
+    std::optional<CrystalView> getCrystal(const std::string& id) const;
+    /** Searches for crystal by id. */
+    std::optional<CrystalView> getCrystalById(const IdView& id) const;
+    /** Searches for crystal by coordinate pair. */
+    std::optional<CrystalView> getCrystalByCoordinates(int x, int y) const;
+    /** Searches for crystal at specified point. */
+    std::optional<CrystalView> getCrystalByPoint(const Point& p) const;
+
     /** Searches for stack that has specified unit among all the stacks in the whole scenario. */
     std::optional<StackView> findStackByUnit(const UnitView& unit) const;
     std::optional<StackView> findStackByUnitId(const IdView& unitId) const;
@@ -156,6 +166,7 @@ public:
     void forEachRod(const std::function<void(const RodView&)>& callback) const;
     void forEachPlayer(const std::function<void(const PlayerView&)>& callback) const;
     void forEachUnit(const std::function<void(const UnitView&)>& callback) const;
+    void forEachCrystal(const std::function<void(const CrystalView&)>& callback) const;
 
 private:
     const game::CMidgardID* getObjectId(int x, int y, game::IdType type) const;

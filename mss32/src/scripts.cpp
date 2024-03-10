@@ -22,6 +22,7 @@
 #include "battlemsgdata.h"
 #include "battlemsgdataview.h"
 #include "categoryids.h"
+#include "crystalview.h"
 #include "currencyview.h"
 #include "diplomacyview.h"
 #include "dynupgradeview.h"
@@ -340,6 +341,15 @@ static void bindApi(sol::state& lua)
         "TurnSummary", IdType::TurnSummary,
         "ScenarioVariable", IdType::ScenarioVariable
     );
+
+    lua.new_enum("Resource",
+        "Gold", ResourceId::Gold,
+        "InfernalMana", ResourceId::InfernalMana,
+        "LifeMana", ResourceId::LifeMana,
+        "DeathMana", ResourceId::DeathMana,
+        "RunicMana", ResourceId::RunicMana,
+        "GroveMana", ResourceId::GroveMana
+    );
     // clang-format on
 
     bindings::UnitView::bind(lua);
@@ -368,6 +378,7 @@ static void bindApi(sol::state& lua)
     bindings::DiplomacyView::bind(lua);
     bindings::FogView::bind(lua);
     bindings::RodView::bind(lua);
+    bindings::CrystalView::bind(lua);
     bindings::GlobalVariablesView::bind(lua);
     bindings::GlobalView::bind(lua);
     bindings::GameView::bind(lua);

@@ -18,6 +18,7 @@
  */
 
 #include "scenarioview.h"
+#include "crystalview.h"
 #include "diplomacyview.h"
 #include "dynamiccast.h"
 #include "fortification.h"
@@ -26,6 +27,7 @@
 #include "idview.h"
 #include "itemview.h"
 #include "locationview.h"
+#include "midcrystal.h"
 #include "midgardmapblock.h"
 #include "midgardobjectmap.h"
 #include "midgardplan.h"
@@ -73,6 +75,10 @@ void ScenarioView::bind(sol::state& lua)
     scenario["getPlayer"] = sol::overload<>(&ScenarioView::getPlayer, &ScenarioView::getPlayerById);
     scenario["getUnit"] = sol::overload<>(&ScenarioView::getUnit, &ScenarioView::getUnitById);
     scenario["getItem"] = sol::overload<>(&ScenarioView::getItem, &ScenarioView::getItemById);
+    scenario["getCrystal"] = sol::overload<>(&ScenarioView::getCrystal,
+                                             &ScenarioView::getCrystalById,
+                                             &ScenarioView::getCrystalByCoordinates,
+                                             &ScenarioView::getCrystalByPoint);
 
     scenario["findStackByUnit"] = sol::overload<>(&ScenarioView::findStackByUnit,
                                                   &ScenarioView::findStackByUnitId,
@@ -93,6 +99,7 @@ void ScenarioView::bind(sol::state& lua)
     scenario["forEachRod"] = &ScenarioView::forEachRod;
     scenario["forEachPlayer"] = &ScenarioView::forEachPlayer;
     scenario["forEachUnit"] = &ScenarioView::forEachUnit;
+    scenario["forEachCrystal"] = &ScenarioView::forEachCrystal;
 }
 
 std::optional<LocationView> ScenarioView::getLocation(const std::string& id) const
@@ -480,6 +487,46 @@ std::optional<ItemView> ScenarioView::getItemById(const IdView& id) const
     return {ItemView{&id.id, objectMap}};
 }
 
+std::optional<CrystalView> ScenarioView::getCrystal(const std::string& id) const
+{
+    return getCrystalById(IdView{id});
+}
+
+std::optional<CrystalView> ScenarioView::getCrystalById(const IdView& id) const
+{
+    using namespace game;
+
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    if (CMidgardIDApi::get().getType(&id.id) != IdType::Crystal) {
+        return std::nullopt;
+    }
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, &id.id);
+    if (!obj) {
+        return std::nullopt;
+    }
+
+    return {CrystalView{static_cast<const CMidCrystal*>(obj)}};
+}
+
+std::optional<CrystalView> ScenarioView::getCrystalByCoordinates(int x, int y) const
+{
+    auto crystalId = getObjectId(x, y, game::IdType::Crystal);
+    if (!crystalId) {
+        return std::nullopt;
+    }
+
+    return getCrystalById(IdView{crystalId});
+}
+
+std::optional<CrystalView> ScenarioView::getCrystalByPoint(const Point& p) const
+{
+    return getCrystalByCoordinates(p.x, p.y);
+}
+
 int ScenarioView::getCurrentDay() const
 {
     if (!objectMap) {
@@ -641,6 +688,24 @@ void ScenarioView::forEachUnit(const std::function<void(const UnitView&)>& callb
     };
 
     hooks::forEachScenarioObject(objectMap, IdType::Unit, runCallback);
+}
+
+void ScenarioView::forEachCrystal(const std::function<void(const CrystalView&)>& callback) const
+{
+    if (!objectMap) {
+        return;
+    }
+
+    using namespace game;
+
+    auto runCallback = [&callback](const IMidScenarioObject* obj) {
+        auto* crystal{static_cast<const CMidCrystal*>(obj)};
+
+        const CrystalView crystalView{crystal};
+        callback(crystalView);
+    };
+
+    hooks::forEachScenarioObject(objectMap, IdType::Crystal, runCallback);
 }
 
 const game::CMidgardID* ScenarioView::getObjectId(int x, int y, game::IdType type) const
