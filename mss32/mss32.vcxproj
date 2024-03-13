@@ -202,6 +202,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\bindings\gameview.cpp" />
     <ClCompile Include="src\bindings\globalvariablesview.cpp" />
     <ClCompile Include="src\bindings\globalview.cpp" />
+    <ClCompile Include="src\bindings\merchantview.cpp" />
     <ClCompile Include="src\bindings\siteview.cpp" />
     <ClCompile Include="src\bindings\unitviewdummy.cpp" />
     <ClCompile Include="src\bindings\dynupgradeview.cpp" />
@@ -650,6 +651,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\bindings\gameview.h" />
     <ClInclude Include="include\bindings\globalvariablesview.h" />
     <ClInclude Include="include\bindings\globalview.h" />
+    <ClInclude Include="include\bindings\merchantview.h" />
     <ClInclude Include="include\bindings\siteview.h" />
     <ClInclude Include="include\bindings\unitviewdummy.h" />
     <ClInclude Include="include\bindings\dynupgradeview.h" />

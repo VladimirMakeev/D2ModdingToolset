@@ -38,6 +38,7 @@
 #include "itemview.h"
 #include "locationview.h"
 #include "log.h"
+#include "merchantview.h"
 #include "midstack.h"
 #include "modifierview.h"
 #include "playerview.h"
@@ -381,6 +382,8 @@ static void bindApi(sol::state& lua)
     bindings::RodView::bind(lua);
     bindings::CrystalView::bind(lua);
     bindings::SiteView::bind(lua);
+    bindings::MerchantItemView::bind(lua);
+    bindings::MerchantView::bind(lua);
     bindings::GlobalVariablesView::bind(lua);
     bindings::GlobalView::bind(lua);
     bindings::GameView::bind(lua);
