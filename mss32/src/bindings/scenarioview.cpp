@@ -27,6 +27,8 @@
 #include "idview.h"
 #include "itemview.h"
 #include "locationview.h"
+#include "merchantview.h"
+#include "mercsview.h"
 #include "midcrystal.h"
 #include "midgardmapblock.h"
 #include "midgardobjectmap.h"
@@ -35,6 +37,9 @@
 #include "midrod.h"
 #include "midruin.h"
 #include "midscenvariables.h"
+#include "midsitemerchant.h"
+#include "midsitemercs.h"
+#include "midsitetrainer.h"
 #include "midunit.h"
 #include "playerview.h"
 #include "point.h"
@@ -44,6 +49,7 @@
 #include "scenvariablesview.h"
 #include "stackview.h"
 #include "tileview.h"
+#include "trainerview.h"
 #include "unitview.h"
 #include <sol/sol.hpp>
 
@@ -79,6 +85,17 @@ void ScenarioView::bind(sol::state& lua)
                                              &ScenarioView::getCrystalById,
                                              &ScenarioView::getCrystalByCoordinates,
                                              &ScenarioView::getCrystalByPoint);
+    scenario["getMerchant"] = sol::overload<>(&ScenarioView::getMerchant,
+                                              &ScenarioView::getMerchantById,
+                                              &ScenarioView::getMerchantByCoordinates,
+                                              &ScenarioView::getMerchantByPoint);
+    scenario["getMercenary"] = sol::overload<>(&ScenarioView::getMercs, &ScenarioView::getMercsById,
+                                               &ScenarioView::getMercsByCoordinates,
+                                               &ScenarioView::getMercsByPoint);
+    scenario["getTrainer"] = sol::overload<>(&ScenarioView::getTrainer,
+                                             &ScenarioView::getTrainerById,
+                                             &ScenarioView::getTrainerByCoordinates,
+                                             &ScenarioView::getTrainerByPoint);
 
     scenario["findStackByUnit"] = sol::overload<>(&ScenarioView::findStackByUnit,
                                                   &ScenarioView::findStackByUnitId,
@@ -100,6 +117,9 @@ void ScenarioView::bind(sol::state& lua)
     scenario["forEachPlayer"] = &ScenarioView::forEachPlayer;
     scenario["forEachUnit"] = &ScenarioView::forEachUnit;
     scenario["forEachCrystal"] = &ScenarioView::forEachCrystal;
+    scenario["forEachMerchant"] = &ScenarioView::forEachMerchant;
+    scenario["forEachMercenary"] = &ScenarioView::forEachMercenary;
+    scenario["forEachTrainer"] = &ScenarioView::forEachTrainer;
 }
 
 std::optional<LocationView> ScenarioView::getLocation(const std::string& id) const
@@ -527,6 +547,141 @@ std::optional<CrystalView> ScenarioView::getCrystalByPoint(const Point& p) const
     return getCrystalByCoordinates(p.x, p.y);
 }
 
+std::optional<MerchantView> ScenarioView::getMerchant(const std::string& id) const
+{
+    return getMerchantById(IdView{id});
+}
+
+std::optional<MerchantView> ScenarioView::getMerchantById(const IdView& id) const
+{
+    using namespace game;
+
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    if (CMidgardIDApi::get().getType(&id.id) != IdType::Site) {
+        return std::nullopt;
+    }
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, &id.id);
+    if (!obj) {
+        return std::nullopt;
+    }
+
+    auto site = static_cast<const CMidSite*>(obj);
+    if (site->siteCategory.id != SiteCategories::get().merchant->id) {
+        return std::nullopt;
+    }
+
+    return MerchantView{static_cast<const CMidSiteMerchant*>(site), objectMap};
+}
+
+std::optional<MerchantView> ScenarioView::getMerchantByCoordinates(int x, int y) const
+{
+    auto merchantId = getObjectId(x, y, game::IdType::Site);
+    if (!merchantId) {
+        return std::nullopt;
+    }
+
+    return getMerchantById(IdView{merchantId});
+}
+
+std::optional<MerchantView> ScenarioView::getMerchantByPoint(const Point& p) const
+{
+    return getMerchantByCoordinates(p.x, p.y);
+}
+
+std::optional<MercsView> ScenarioView::getMercs(const std::string& id) const
+{
+    return getMercsById(IdView{id});
+}
+
+std::optional<MercsView> ScenarioView::getMercsById(const IdView& id) const
+{
+    using namespace game;
+
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    if (CMidgardIDApi::get().getType(&id.id) != IdType::Site) {
+        return std::nullopt;
+    }
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, &id.id);
+    if (!obj) {
+        return std::nullopt;
+    }
+
+    auto site = static_cast<const CMidSite*>(obj);
+    if (site->siteCategory.id != SiteCategories::get().mercenaries->id) {
+        return std::nullopt;
+    }
+
+    return MercsView{static_cast<const CMidSiteMercs*>(site), objectMap};
+}
+
+std::optional<MercsView> ScenarioView::getMercsByCoordinates(int x, int y) const
+{
+    auto mercenariesId = getObjectId(x, y, game::IdType::Site);
+    if (!mercenariesId) {
+        return std::nullopt;
+    }
+
+    return getMercsById(IdView{mercenariesId});
+}
+
+std::optional<MercsView> ScenarioView::getMercsByPoint(const Point& p) const
+{
+    return getMercsByCoordinates(p.x, p.y);
+}
+
+std::optional<TrainerView> ScenarioView::getTrainer(const std::string& id) const
+{
+    return getTrainerById(IdView{id});
+}
+
+std::optional<TrainerView> ScenarioView::getTrainerById(const IdView& id) const
+{
+    using namespace game;
+
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    if (CMidgardIDApi::get().getType(&id.id) != IdType::Site) {
+        return std::nullopt;
+    }
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, &id.id);
+    if (!obj) {
+        return std::nullopt;
+    }
+
+    auto site = static_cast<const CMidSite*>(obj);
+    if (site->siteCategory.id != SiteCategories::get().trainer->id) {
+        return std::nullopt;
+    }
+
+    return TrainerView{static_cast<const CMidSiteTrainer*>(site), objectMap};
+}
+
+std::optional<TrainerView> ScenarioView::getTrainerByCoordinates(int x, int y) const
+{
+    auto trainerId = getObjectId(x, y, game::IdType::Site);
+    if (!trainerId) {
+        return std::nullopt;
+    }
+
+    return getTrainerById(IdView{trainerId});
+}
+
+std::optional<TrainerView> ScenarioView::getTrainerByPoint(const Point& p) const
+{
+    return getTrainerByCoordinates(p.x, p.y);
+}
+
 int ScenarioView::getCurrentDay() const
 {
     if (!objectMap) {
@@ -706,6 +861,75 @@ void ScenarioView::forEachCrystal(const std::function<void(const CrystalView&)>&
     };
 
     hooks::forEachScenarioObject(objectMap, IdType::Crystal, runCallback);
+}
+
+void ScenarioView::forEachMerchant(const std::function<void(const MerchantView&)>& callback) const
+{
+    if (!objectMap) {
+        return;
+    }
+
+    using namespace game;
+
+    const auto merchantId{SiteCategories::get().merchant->id};
+
+    auto runCallback = [this, &callback, &merchantId](const IMidScenarioObject* obj) {
+        const auto* site{static_cast<const CMidSite*>(obj)};
+        if (site->siteCategory.id != merchantId) {
+            return;
+        }
+
+        const MerchantView view{static_cast<const CMidSiteMerchant*>(site), objectMap};
+        callback(view);
+    };
+
+    hooks::forEachScenarioObject(objectMap, IdType::Site, runCallback);
+}
+
+void ScenarioView::forEachMercenary(const std::function<void(const MercsView&)>& callback) const
+{
+    if (!objectMap) {
+        return;
+    }
+
+    using namespace game;
+
+    const auto mercsId{SiteCategories::get().mercenaries->id};
+
+    auto runCallback = [this, &callback, &mercsId](const IMidScenarioObject* obj) {
+        const auto* site{static_cast<const CMidSite*>(obj)};
+        if (site->siteCategory.id != mercsId) {
+            return;
+        }
+
+        const MercsView view{static_cast<const CMidSiteMercs*>(site), objectMap};
+        callback(view);
+    };
+
+    hooks::forEachScenarioObject(objectMap, IdType::Site, runCallback);
+}
+
+void ScenarioView::forEachTrainer(const std::function<void(const TrainerView&)>& callback) const
+{
+    if (!objectMap) {
+        return;
+    }
+
+    using namespace game;
+
+    const auto trainerId{SiteCategories::get().trainer->id};
+
+    auto runCallback = [this, &callback, &trainerId](const IMidScenarioObject* obj) {
+        const auto* site{static_cast<const CMidSite*>(obj)};
+        if (site->siteCategory.id != trainerId) {
+            return;
+        }
+
+        const TrainerView view{static_cast<const CMidSiteTrainer*>(site), objectMap};
+        callback(view);
+    };
+
+    hooks::forEachScenarioObject(objectMap, IdType::Site, runCallback);
 }
 
 const game::CMidgardID* ScenarioView::getObjectId(int x, int y, game::IdType type) const

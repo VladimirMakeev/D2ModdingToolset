@@ -51,6 +51,9 @@ class RodView;
 class DiplomacyView;
 class ItemView;
 class CrystalView;
+class MerchantView;
+class MercsView;
+class TrainerView;
 
 /**
  * Returns stub values if objectMap is null.
@@ -136,6 +139,33 @@ public:
     /** Searches for crystal at specified point. */
     std::optional<CrystalView> getCrystalByPoint(const Point& p) const;
 
+    /** Searches for merchant by id string. */
+    std::optional<MerchantView> getMerchant(const std::string& id) const;
+    /** Searches for merchant by id. */
+    std::optional<MerchantView> getMerchantById(const IdView& id) const;
+    /** Searches for merchant by coordinate pair. */
+    std::optional<MerchantView> getMerchantByCoordinates(int x, int y) const;
+    /** Searches for merchant at specified point. */
+    std::optional<MerchantView> getMerchantByPoint(const Point& p) const;
+
+    /** Searches for mercenaries by id string. */
+    std::optional<MercsView> getMercs(const std::string& id) const;
+    /** Searches for mercenaries by id. */
+    std::optional<MercsView> getMercsById(const IdView& id) const;
+    /** Searches for mercenaries by coordinate pair. */
+    std::optional<MercsView> getMercsByCoordinates(int x, int y) const;
+    /** Searches for mercenaries at specified point. */
+    std::optional<MercsView> getMercsByPoint(const Point& p) const;
+
+    /** Searches for trainer by id string. */
+    std::optional<TrainerView> getTrainer(const std::string& id) const;
+    /** Searches for trainer by id. */
+    std::optional<TrainerView> getTrainerById(const IdView& id) const;
+    /** Searches for trainer by coordinate pair. */
+    std::optional<TrainerView> getTrainerByCoordinates(int x, int y) const;
+    /** Searches for trainer at specified point. */
+    std::optional<TrainerView> getTrainerByPoint(const Point& p) const;
+
     /** Searches for stack that has specified unit among all the stacks in the whole scenario. */
     std::optional<StackView> findStackByUnit(const UnitView& unit) const;
     std::optional<StackView> findStackByUnitId(const IdView& unitId) const;
@@ -167,6 +197,9 @@ public:
     void forEachPlayer(const std::function<void(const PlayerView&)>& callback) const;
     void forEachUnit(const std::function<void(const UnitView&)>& callback) const;
     void forEachCrystal(const std::function<void(const CrystalView&)>& callback) const;
+    void forEachMerchant(const std::function<void(const MerchantView&)>& callback) const;
+    void forEachMercenary(const std::function<void(const MercsView&)>& callback) const;
+    void forEachTrainer(const std::function<void(const TrainerView&)>& callback) const;
 
 private:
     const game::CMidgardID* getObjectId(int x, int y, game::IdType type) const;
