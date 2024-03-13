@@ -3343,6 +3343,9 @@
     <ClInclude Include="include\midsitemage.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="include\midsitemercs.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">

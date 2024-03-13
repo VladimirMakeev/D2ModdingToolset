@@ -789,6 +789,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midserverlogichooks.h" />
     <ClInclude Include="include\midsitemage.h" />
     <ClInclude Include="include\midsitemerchant.h" />
+    <ClInclude Include="include\midsitemercs.h" />
     <ClInclude Include="include\midunitext.h" />
     <ClInclude Include="include\midunitgroupadapter.h" />
     <ClInclude Include="include\mqdb.h" />
