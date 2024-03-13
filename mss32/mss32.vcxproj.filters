@@ -1295,6 +1295,9 @@
     <ClCompile Include="src\bindings\mercsview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\trainerview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3365,6 +3368,9 @@
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\bindings\mercsview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\trainerview.h">
       <Filter>bindings</Filter>
     </ClInclude>
   </ItemGroup>
