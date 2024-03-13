@@ -3337,6 +3337,9 @@
     <ClInclude Include="include\bindings\crystalview.h">
       <Filter>bindings</Filter>
     </ClInclude>
+    <ClInclude Include="include\midsitemerchant.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
