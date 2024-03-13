@@ -47,6 +47,7 @@
 #include "scenariovariableview.h"
 #include "scenarioview.h"
 #include "scenvariablesview.h"
+#include "siteview.h"
 #include "stackview.h"
 #include "tileview.h"
 #include "unitimplview.h"
@@ -379,6 +380,7 @@ static void bindApi(sol::state& lua)
     bindings::FogView::bind(lua);
     bindings::RodView::bind(lua);
     bindings::CrystalView::bind(lua);
+    bindings::SiteView::bind(lua);
     bindings::GlobalVariablesView::bind(lua);
     bindings::GlobalView::bind(lua);
     bindings::GameView::bind(lua);
