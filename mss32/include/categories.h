@@ -52,12 +52,6 @@ struct Category
     T id;
 };
 
-struct LAttitudesCategoryTable : CEnumConstantTable<AiAttitudeId>
-{ };
-
-struct LAttitudesCategory : public Category<AiAttitudeId>
-{ };
-
 static const int emptyCategoryId = -1;
 
 namespace CategoryTableApi {
@@ -99,7 +93,7 @@ struct Api
 
     /** Looks for category with the specified id, otherwise initializes the value with null table
      * and id = -1. */
-    using FindCategoryById = Category*(__thiscall*)(Table* thisptr,
+    using FindCategoryById = Category*(__thiscall*)(const Table* thisptr,
                                                     Category* value,
                                                     const int* categoryId);
     FindCategoryById findCategoryById;
