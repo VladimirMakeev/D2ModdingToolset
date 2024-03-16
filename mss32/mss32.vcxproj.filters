@@ -1298,6 +1298,9 @@
     <ClCompile Include="src\bindings\trainerview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\scenpropinterf.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
     <ClCompile Include="src\aiattitudescat.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -3378,6 +3381,9 @@
     </ClInclude>
     <ClInclude Include="include\bindings\trainerview.h">
       <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scenpropinterf.h">
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\aiattitudescat.h">
       <Filter>game</Filter>
