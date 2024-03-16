@@ -156,6 +156,7 @@
 #include "scenariodata.h"
 #include "scenariodataarray.h"
 #include "scenarioinfo.h"
+#include "scenpropinterfhooks.h"
 #include "settings.h"
 #include "sitemerchantinterf.h"
 #include "sitemerchantinterfhooks.h"
@@ -547,6 +548,8 @@ static Hooks getScenarioEditorHooks()
         {CMidgardScenarioMapApi::get().checkObjects, checkMapObjectsHooked},
         // Support custom modifiers
         {CMidgardScenarioMapApi::get().stream, scenarioMapStreamHooked, (void**)&orig.scenarioMapStream},
+        // Allow changing Netrals attitude from scenario properties menu
+        {editor::CScenPropInterfApi::get().constructor, scenPropInterfCtorHooked, (void**)&orig.scenPropInterfCtor},
     };
     // clang-format on
 

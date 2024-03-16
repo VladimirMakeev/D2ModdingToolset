@@ -53,6 +53,7 @@
 #include "mqnetplayer.h"
 #include "netmsg.h"
 #include "pickupdropinterf.h"
+#include "scenpropinterf.h"
 #include "sitemerchantinterf.h"
 #include "testcondition.h"
 
@@ -146,6 +147,8 @@ struct OriginalFunctions
     game::CMidDataCache2::INotifyVftable::OnObjectChanged cityStackInterfOnObjectChanged;
 
     game::CMidDataCache2::INotifyVftable::OnObjectChanged siteMerchantInterfOnObjectChanged;
+
+    game::editor::CScenPropInterfApi::Api::Constructor scenPropInterfCtor;
 };
 
 OriginalFunctions& getOriginalFunctions();
