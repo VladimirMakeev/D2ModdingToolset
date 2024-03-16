@@ -20,7 +20,7 @@
 #ifndef AIATTITUDES_H
 #define AIATTITUDES_H
 
-#include "categories.h"
+#include "aiattitudescat.h"
 #include "d2assert.h"
 #include "textandid.h"
 

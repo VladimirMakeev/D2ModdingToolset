@@ -77,6 +77,7 @@ struct CUnitGenerator;
 struct CItemBase;
 struct CDynUpgrade;
 struct CTileVariation;
+struct CAiAttitudesTable;
 
 using RacesMap = mq_c_s<Pair<CMidgardID, TRaceType*>>;
 using DynUpgradeList = List<SmartPtr<CDynUpgrade>>;
@@ -144,7 +145,7 @@ struct GlobalData
     int* transf;
     DynUpgradeList* dynUpgrade;
     CTileVariation* tileVariation;
-    int* aiAttitudes;
+    CAiAttitudesTable* aiAttitudes;
     int* aiMessages;
     GlobalVariables** globalVariables;
     CUnitGenerator* unitGenerator;
