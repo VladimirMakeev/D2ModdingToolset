@@ -32,7 +32,7 @@ void GlobalVariablesView::bind(sol::state& lua)
     auto view = lua.new_usertype<GlobalVariablesView>("GlobalVariablesView");
 
     view["morale"] = &GlobalVariablesView::getMorale;
-    view["weapnMstr"] = sol::property(&GlobalVariablesView::getMorale);
+    view["weapnMstr"] = sol::property(&GlobalVariablesView::getWeapnMstr);
 
     view["batInit"] = sol::property(&GlobalVariablesView::getBatInit);
     view["batDamage"] = sol::property(&GlobalVariablesView::getBatDamage);
