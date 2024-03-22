@@ -1313,6 +1313,9 @@
     <ClCompile Include="src\aiattitudestable.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\customaibattle.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3402,6 +3405,9 @@
     </ClInclude>
     <ClInclude Include="include\aiattitudestable.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\customaibattle.h">
+      <Filter>features</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
