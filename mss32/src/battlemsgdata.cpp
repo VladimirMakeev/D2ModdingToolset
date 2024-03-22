@@ -61,6 +61,7 @@ static std::array<Api, 3> functions = {{
         (Api::FindAttackTargetWithAllReach)0x5d0ee1,
         (Api::FindSpecificAttackTarget)0x5d19e9,
         (Api::FindSpecificAttackTarget)0x5d3079,
+        (Api::FindSpecificAttackTarget)0x5d130b,
         (Api::FindDoppelgangerAttackTarget)0x5d2409,
         (Api::FindDamageAttackTargetWithNonAllReach)0x5d0a1b,
         (Api::FindDamageAttackTargetWithAnyReach)0x5d0cf1,
@@ -94,6 +95,12 @@ static std::array<Api, 3> functions = {{
         (Api::UpdateBattleActions)0x625253,
         (Api::GetItemAttackTargets)0x62571b,
         (Api::BeforeBattleRound)0x623440,
+        (Api::AiChooseBattleAction)0x5CF388,
+        (Api::GetRetreatStatus)0x624f37,
+        (Api::SetRetreatStatus)0x624f77,
+        (Api::IsRetreatDecisionWasMade)0x624f01,
+        (Api::SetRetreatDecisionWasMade)0x624f17,
+        (Api::IsAfterBattle)0x622b4b,
     },
     // Russobit
     Api{
@@ -131,6 +138,7 @@ static std::array<Api, 3> functions = {{
         (Api::FindAttackTargetWithAllReach)0x5d0ee1,
         (Api::FindSpecificAttackTarget)0x5d19e9,
         (Api::FindSpecificAttackTarget)0x5d3079,
+        (Api::FindSpecificAttackTarget)0x5d130b,
         (Api::FindDoppelgangerAttackTarget)0x5d2409,
         (Api::FindDamageAttackTargetWithNonAllReach)0x5d0a1b,
         (Api::FindDamageAttackTargetWithAnyReach)0x5d0cf1,
@@ -164,6 +172,12 @@ static std::array<Api, 3> functions = {{
         (Api::UpdateBattleActions)0x625253,
         (Api::GetItemAttackTargets)0x62571b,
         (Api::BeforeBattleRound)0x623440,
+        (Api::AiChooseBattleAction)0x5CF388,
+        (Api::GetRetreatStatus)0x624f37,
+        (Api::SetRetreatStatus)0x624f77,
+        (Api::IsRetreatDecisionWasMade)0x624f01,
+        (Api::SetRetreatDecisionWasMade)0x624f17,
+        (Api::IsAfterBattle)0x622b4b,
     },
     // Gog
     Api{
@@ -201,6 +215,7 @@ static std::array<Api, 3> functions = {{
         (Api::FindAttackTargetWithAllReach)0x5cfe12,
         (Api::FindSpecificAttackTarget)0x5d091a,
         (Api::FindSpecificAttackTarget)0x5d1faa,
+        (Api::FindSpecificAttackTarget)0x5d023c,
         (Api::FindDoppelgangerAttackTarget)0x5d133a,
         (Api::FindDamageAttackTargetWithNonAllReach)0x5cf94c,
         (Api::FindDamageAttackTargetWithAnyReach)0x5cfc22,
@@ -234,6 +249,12 @@ static std::array<Api, 3> functions = {{
         (Api::UpdateBattleActions)0x623d93,
         (Api::GetItemAttackTargets)0x62425b,
         (Api::BeforeBattleRound)0x621fd0,
+        (Api::AiChooseBattleAction)0x5ce2b9,
+        (Api::GetRetreatStatus)0x623ac7,
+        (Api::SetRetreatStatus)0x623b07,
+        (Api::IsRetreatDecisionWasMade)0x623a91,
+        (Api::SetRetreatDecisionWasMade)0x623aa7,
+        (Api::IsAfterBattle)0x6216db,
     },
 }};
 // clang-format on

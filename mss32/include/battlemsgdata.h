@@ -307,6 +307,20 @@ assert_offset(BattleMsgData, turnsOrder, 3696);
 assert_offset(BattleMsgData, attackerStackUnitIds, 3816);
 assert_offset(BattleMsgData, battleStateFlags2, 3913);
 
+struct PossibleTargets
+{
+    const CMidgardID* attackTargetGroupId;
+    const TargetSet* attackTargets;
+
+    const CMidgardID* item1TargetGroupId;
+    const TargetSet* item1Targets;
+
+    const CMidgardID* item2TargetGroupId;
+    const TargetSet* item2Targets;
+};
+
+assert_size(PossibleTargets, 24);
+
 namespace BattleMsgDataApi {
 
 struct Api
@@ -402,7 +416,7 @@ struct Api
                          const CMidgardID* unitId);
     CanPerformAttackOnUnitWithStatusCheck canPerformAttackOnUnitWithStatusCheck;
 
-    using IsUnitAttackSourceWardRemoved = bool(__thiscall*)(BattleMsgData* thisptr,
+    using IsUnitAttackSourceWardRemoved = bool(__thiscall*)(const BattleMsgData* thisptr,
                                                             const CMidgardID* unitId,
                                                             const LAttackSource* attackSource);
     IsUnitAttackSourceWardRemoved isUnitAttackSourceWardRemoved;
@@ -412,7 +426,7 @@ struct Api
                                                          const LAttackSource* attackSource);
     RemoveUnitAttackSourceWard removeUnitAttackSourceWard;
 
-    using IsUnitAttackClassWardRemoved = bool(__thiscall*)(BattleMsgData* thisptr,
+    using IsUnitAttackClassWardRemoved = bool(__thiscall*)(const BattleMsgData* thisptr,
                                                            const CMidgardID* unitId,
                                                            const LAttackClass* attackClass);
     IsUnitAttackClassWardRemoved isUnitAttackClassWardRemoved;
@@ -489,6 +503,8 @@ struct Api
     FindSpecificAttackTarget findBoostAttackTarget;
     /** Used by AI to determine fear attack target. */
     FindSpecificAttackTarget findFearAttackTarget;
+    /** Used by AI to determine heal attack target. */
+    FindSpecificAttackTarget findHealAttackTarget;
 
     using FindDoppelgangerAttackTarget = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
                                                           const CMidgardID* unitId,
@@ -693,6 +709,39 @@ struct Api
 
     using BeforeBattleRound = void(__thiscall*)(BattleMsgData* thisptr);
     BeforeBattleRound beforeBattleRound;
+
+    using AiChooseBattleAction = void(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                  BattleMsgData* battleMsgData,
+                                                  const CMidgardID* unitId,
+                                                  const Set<BattleAction>* possibleActions,
+                                                  const PossibleTargets* possibleTargets,
+                                                  BattleAction* battleAction,
+                                                  CMidgardID* targetUnitId,
+                                                  CMidgardID* attackerUnitId);
+    AiChooseBattleAction aiChooseBattleAction;
+
+    /** Returns retreat status for attacker or defender group. */
+    using GetRetreatStatus = RetreatStatus(__thiscall*)(const BattleMsgData* thisptr,
+                                                        bool attacker);
+    GetRetreatStatus getRetreatStatus;
+
+    /** Sets retreat status for attacker or defender group. */
+    using SetRetreatStatus = void(__thiscall*)(BattleMsgData* thisptr,
+                                               bool attacker,
+                                               RetreatStatus status);
+    SetRetreatStatus setRetreatStatus;
+
+    /** Returns true if decision about group retreat was made and should not be reconsidered. */
+    using IsRetreatDecisionWasMade = bool(__thiscall*)(const BattleMsgData* thisptr);
+    IsRetreatDecisionWasMade isRetreatDecisionWasMade;
+
+    /** Sets flag to hint that retreat decision was made and should not be reconsidered. */
+    using SetRetreatDecisionWasMade = void(__thiscall*)(BattleMsgData* thisptr);
+    SetRetreatDecisionWasMade setRetreatDecisionWasMade;
+
+    /** Returns true if battle is over but healers can make one more turn. */
+    using IsAfterBattle = bool(__thiscall*)(const BattleMsgData* thisptr);
+    IsAfterBattle isAfterBattle;
 };
 
 Api& get();
