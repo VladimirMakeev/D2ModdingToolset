@@ -381,6 +381,8 @@ static Hooks getGameHooks()
         {fn.changeUnitXpCheckUpgrade, changeUnitXpCheckUpgradeHooked},
         // Allow player to customize movement cost
         {fn.computeMovementCost, computeMovementCostHooked},
+        // Support custom scripts for AI battle actions
+        {battle.aiChooseBattleAction, aiChooseBattleActionHooked, (void**)&orig.aiChooseBattleAction},
     };
     // clang-format on
 

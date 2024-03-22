@@ -28,6 +28,7 @@
 #include "dynupgradeview.h"
 #include "fogview.h"
 #include "fortview.h"
+#include "game.h"
 #include "gameutils.h"
 #include "gameview.h"
 #include "globalvariablesview.h"
@@ -428,6 +429,9 @@ static void bindApi(sol::state& lua)
     bindings::GameView::bind(lua);
 
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
+    lua.set_function("randomNumber", [](std::uint32_t maxValue) {
+        return game::gameFunctions().generateRandomNumber(maxValue);
+    });
 }
 
 // https://sol2.readthedocs.io/en/latest/threading.html
