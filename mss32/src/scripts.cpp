@@ -20,7 +20,7 @@
 #include "scripts.h"
 #include "attackview.h"
 #include "battlemsgdata.h"
-#include "battlemsgdataview.h"
+#include "battlemsgdataviewmutable.h"
 #include "categoryids.h"
 #include "crystalview.h"
 #include "currencyview.h"
@@ -283,6 +283,23 @@ static void bindApi(sol::state& lua)
         "Unsummoned", BattleStatus::Unsummoned
     );
 
+    lua.new_enum("BattleAction",
+        "Attack", BattleAction::Attack,
+        "Skip", BattleAction::Skip,
+        "Retreat", BattleAction::Retreat,
+        "Wait", BattleAction::Wait,
+        "Defend", BattleAction::Defend,
+        "Auto", BattleAction::Auto,
+        "UseItem", BattleAction::UseItem
+        // Restrict access to Resolve action from scripts
+    );
+
+    lua.new_enum("Retreat",
+        "NoRetreat", RetreatStatus::NoRetreat,
+        "CoverAndRetreat", RetreatStatus::CoverAndRetreat,
+        "FullRetreat", RetreatStatus::FullRetreat
+    );
+
     lua.new_enum("IdType",
         "Empty", IdType::Empty,
         "ApplicationText", IdType::ApplicationText,
@@ -346,6 +363,22 @@ static void bindApi(sol::state& lua)
         "ScenarioVariable", IdType::ScenarioVariable
     );
 
+    lua.new_enum("Order",
+        "Normal", OrderId::Normal,
+        "Stand", OrderId::Stand,
+        "Guard", OrderId::Guard,
+        "AttackStack", OrderId::AttackStack,
+        "DefendStack", OrderId::DefendStack,
+        "SecureCity", OrderId::SecureCity,
+        "Roam", OrderId::Roam,
+        "MoveToLocation", OrderId::MoveToLocation,
+        "DefendLocation", OrderId::DefendLocation,
+        "Bezerk", OrderId::Bezerk,
+        "Assist", OrderId::Assist,
+        "Steal", OrderId::Steal,
+        "DefendCity", OrderId::DefendCity
+    );
+
     lua.new_enum("Resource",
         "Gold", ResourceId::Gold,
         "InfernalMana", ResourceId::InfernalMana,
@@ -379,6 +412,7 @@ static void bindApi(sol::state& lua)
     bindings::PlayerView::bind(lua);
     bindings::ModifierView::bind(lua);
     bindings::BattleMsgDataView::bind(lua);
+    bindings::BattleMsgDataViewMutable::bind(lua);
     bindings::DiplomacyView::bind(lua);
     bindings::FogView::bind(lua);
     bindings::RodView::bind(lua);

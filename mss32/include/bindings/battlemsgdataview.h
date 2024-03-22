@@ -21,6 +21,8 @@
 #define BATTLEMSGDATAVIEW_H
 
 #include <optional>
+#include <tuple>
+#include <vector>
 
 namespace sol {
 class state;
@@ -30,6 +32,8 @@ namespace game {
 struct BattleMsgData;
 struct IMidgardObjectMap;
 struct CMidgardID;
+enum class BattleAction : int;
+enum class RetreatStatus : std::uint8_t;
 } // namespace game
 
 namespace bindings {
@@ -38,6 +42,7 @@ struct IdView;
 class PlayerView;
 class StackView;
 class GroupView;
+class UnitView;
 
 class BattleMsgDataView
 {
@@ -57,6 +62,72 @@ public:
 
     std::optional<StackView> getAttacker() const;
     std::optional<GroupView> getDefender() const;
+
+    game::RetreatStatus getRetreatStatus(bool attacker) const;
+    bool isRetreatDecisionWasMade() const;
+
+    bool isUnitAttacker(const UnitView& unit) const;
+    bool isUnitAttackerId(const IdView& unitId) const;
+    bool isAfterBattle() const;
+
+    using UnitActions = std::tuple<std::vector<game::BattleAction>, // Possible unit actions
+                                   std::optional<GroupView>,        // Attack target group
+                                   std::vector<int>,                // Attack targets
+                                   std::optional<GroupView>,        // Item 1 target group
+                                   std::vector<int>,                // Item 1 targets
+                                   std::optional<GroupView>,        // Item 2 target group
+                                   std::vector<int>>;               // Item 2 targets
+
+    UnitActions getUnitActions(const UnitView& unit) const;
+    UnitActions getUnitActionsById(const IdView& unitId) const;
+
+    int getUnitShatteredArmor(const UnitView& unit) const;
+    int getUnitShatteredArmorById(const IdView& unitId) const;
+
+    int getUnitFortificationArmor(const UnitView& unit) const;
+    int getUnitFortificationArmorById(const IdView& unitId) const;
+
+    bool isUnitResistantToSource(const UnitView& unit, int sourceId) const;
+    bool isUnitResistantToSourceById(const IdView& unitId, int sourceId) const;
+
+    bool isUnitResistantToClass(const UnitView& unit, int classId) const;
+    bool isUnitResistantToClassById(const IdView& unitId, int classId) const;
+
+protected:
+    template <typename T>
+    static void bindAccessMethods(T& view)
+    {
+        view["getUnitStatus"] = &BattleMsgDataView::getUnitStatus;
+        view["currentRound"] = sol::property(&BattleMsgDataView::getCurrentRound);
+        view["autoBattle"] = sol::property(&BattleMsgDataView::getAutoBattle);
+        view["attackerPlayer"] = sol::property(&BattleMsgDataView::getAttackerPlayer);
+        view["defenderPlayer"] = sol::property(&BattleMsgDataView::getDefenderPlayer);
+        view["attacker"] = sol::property(&BattleMsgDataView::getAttacker);
+        view["defender"] = sol::property(&BattleMsgDataView::getDefender);
+        view["isUnitAttacker"] = sol::overload<>(&BattleMsgDataView::isUnitAttacker,
+                                                 &BattleMsgDataView::isUnitAttackerId);
+        view["getUnitActions"] = sol::overload<>(&BattleMsgDataView::getUnitActions,
+                                                 &BattleMsgDataView::getUnitActionsById);
+        view["getRetreatStatus"] = &BattleMsgDataView::getRetreatStatus;
+        view["decidedToRetreat"] = sol::property(&BattleMsgDataView::isRetreatDecisionWasMade);
+        view["afterBattle"] = sol::property(&BattleMsgDataView::isAfterBattle);
+
+        view["getUnitShatteredArmor"] = sol::overload<>(
+            &BattleMsgDataView::getUnitShatteredArmor,
+            &BattleMsgDataView::getUnitShatteredArmorById);
+
+        view["getUnitFortificationArmor"] = sol::overload<>(
+            &BattleMsgDataView::getUnitFortificationArmor,
+            &BattleMsgDataView::getUnitFortificationArmorById);
+
+        view["isUnitResistantToSource"] = sol::overload<>(
+            &BattleMsgDataView::isUnitResistantToSource,
+            &BattleMsgDataView::isUnitResistantToSourceById);
+
+        view["isUnitResistantToClass"] = sol::overload<>(
+            &BattleMsgDataView::isUnitResistantToClass,
+            &BattleMsgDataView::isUnitResistantToClassById);
+    }
 
 private:
     std::optional<PlayerView> getPlayer(const game::CMidgardID& playerId) const;
