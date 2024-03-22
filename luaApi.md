@@ -343,113 +343,113 @@ Allows to access contents of `GVars.dbf`.
 Methods:
 ```lua
 -- Instructor skill bonus experience, 'WEAPN_MSTR'
-weapnMstr
+variables.weapnMstr
 -- Max additional initiative points that randomly added to unit in battle. 'BAT_INIT'
-batInit
+variables.batInit
 -- Max additional damage points that randomly added to unit damage in battle. 'BAT_DAMAGE'
-batDamage
+variables.batDamage
 -- 'BAT_ROUND'
-batRound
+variables.batRound
 -- 'BAT_BREAK'
-batBreak
+variables.batBreak
 -- 'BAT_BMODIF'
-batBModif
+variables.batBModif
 -- Initiative debuff. 'BATLOWERI'
-batLoweri
+variables.batLoweri
 -- Maximum number of abilities leader can learn. 'LDRMAXABIL'
-ldrMaxAbil
+variables.ldrMaxAbil
 -- Spy discovery chance per turn. 'SPY_DISCOV'
-spyDiscov
+variables.spyDiscov
 -- Damage from thief action 'poison city'. 'POISON_C'
-poisonC
+variables.poisonC
 -- Damage from thief action 'poison stack'. 'POISON_S'
-poisonS
+variables.poisonS
 -- Bribe multiplier. 'BRIBE'
-bribe
+variables.bribe
 -- 'STEAL_RACE'
-stealRace
+variables.stealRace
 -- 'STEAL_NEUT'
-stealNeut
+variables.stealNeut
 -- Minimal riot duration in days. 'RIOT_MIN'
-riotMin
+variables.riotMin
 -- Maximal riot duration in days. 'RIOT_MAX'
-riotMax
+variables.riotMax
 -- Percentage of riot damage. 'RIOT_DMG'
-riotDmg
+variables.riotDmg
 -- Percentage of the original price of the items at sale. 'SELL_RATIO'
-sellRatio
+variables.sellRatio
 -- Land transformation after city capture. 'T_CAPTURE'
-tCapture
+variables.tCapture
 -- Land transformation per turn by capital. 'T_CAPITAL'
-tCapital
+variables.tCapital
 -- Range of land transformation by rod per turn. 'ROD_RANGE'
-rodRange
+variables.rodRange
 -- Profit per mana crystal or gold mine per turn. 'CRYSTAL_P'
-crystalP
+variables.crystalP
 -- 'CONST_URG'
-constUrg
+variables.constUrg
 -- Bonus per day regeneration for fighter leader. 'REGEN_LWAR'
-regenLwar
+variables.regenLwar
 -- Bonus per day regeneration for units in ruins. 'REGEN_RUIN'
-regenRuin
+variables.regenRuin
 -- Diplomacy level representing peace. 'D_PEACE'
-dPeace
+variables.dPeace
 -- Diplomacy level representing war. 'D_WAR'
-dWar
+variables.dWar
 -- Diplomacy level representing neutrality. 'D_NEUTRAL'
-dNeutral
+variables.dNeutral
 -- 'D_GOLD'
-dGold
+variables.dGold
 -- 'D_MK_ALLY'
-dMkAlly
+variables.dMkAlly
 -- 'D_ATTACK_SC'
-dAttakSc
+variables.dAttakSc
 -- 'D_ATTACK_FO'
-dAttakFo
+variables.dAttakFo
 -- 'D_ATTACK_PC'
-dAttakPc
+variables.dAttakPc
 -- 'D_ROD'
-dRod
+variables.dRod
 -- 'D_REF_ALLY'
-dRefAlly
+variables.dRefAlly
 -- 'D_BK_ALLY'
-dBkAlly
+variables.dBkAlly
 -- 'D_NOBLE'
-dNoble
+variables.dNoble
 -- 'D_BKA_CHANCE'
-dBkaChnc
+variables.dBkaChnc
 -- 'D_BKA_TURN'
-dBkaTurn
+variables.dBkaTurn
 -- Capital protection. 'PROT_CAP'
-protCap
+variables.protCap
 -- Additional gold on easy difficulty. 'BONUS_E'
-bonusE
+variables.bonusE
 -- Additional gold on average difficulty. 'BONUS_A'
-bonusA
+variables.bonusA
 -- Additional gold on hard difficulty. 'BONUS_H'
-bonusH
+variables.bonusH
 -- Additional gold on very hard difficulty. 'BONUS_V'
-bonusV
+variables.bonusV
 -- Income increase on easy difficulty. 'INCOME_E'
-incomeE
+variables.incomeE
 -- Income increase on average difficulty. 'INCOME_A'
-incomeA
+variables.incomeA
 -- Income increase on hard difficulty. 'INCOME_H'
-incomeH
+variables.incomeH
 -- Income increase on very hard difficulty. 'INCOME_V'
-incomeV
+variables.incomeV
 -- 'GU_RANGE'
-guRange
+variables.guRange
 -- 'PA_RANGE'
-paRange
+variables.paRange
 -- 'LO_RANGE'
-loRange
+variables.loRange
 -- Armor bonus when unit uses defend in battle. 'DFENDBONUS'
-defendBonus
+variables.defendBonus
 -- 'TALIS_CHRG'
-talisChrg
+variables.talisChrg
 -- Chance to get spells with capture of a capital. 'GAIN_SPELL'
-gainSpell
+variables.gainSpell
 ```
 ##### rodCost
 Rod placement [cost](luaApi.md#currency). `ROD_COST`
@@ -964,7 +964,7 @@ Represents item sold by [merchant](luaApi.md#merchant).
 
 Methods:
 ##### base
-Returns [base item](luaApi.md#itembase).
+Returns [base item](luaApi.md#item-base).
 ```lua
 merchantItem.base
 ```
@@ -1411,7 +1411,7 @@ Searches for [merchant](luaApi.md#merchant) by:
 
 Returns `nil` if not found.
 ```lua
-local merchant = scenario:getCrystal('S143SI0001')
+local merchant = scenario:getMerchant('S143SI0001')
 if not merchant then
   return
 end
@@ -1425,7 +1425,7 @@ Searches for [mercenary camp](luaApi.md#mercenary) by:
 
 Returns `nil` if not found.
 ```lua
-local mercenary = scenario:getCrystal('S143SI0002')
+local mercenary = scenario:getMercenary('S143SI0002')
 if not mercenary then
   return
 end
@@ -1439,7 +1439,7 @@ Searches for [trainer](luaApi.md#trainer) by:
 
 Returns `nil` if not found.
 ```lua
-local trainer = scenario:getCrystal('S143SI0005')
+local trainer = scenario:getTrainer('S143SI0005')
 if not trainer then
   return
 end
