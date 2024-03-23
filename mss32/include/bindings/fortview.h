@@ -50,6 +50,7 @@ public:
 
     IdView getId() const;
     Point getPosition() const;
+    Point getEntrance() const;
     std::optional<PlayerView> getOwner() const;
     GroupView getGroup() const;
     std::optional<StackView> getVisitor() const;

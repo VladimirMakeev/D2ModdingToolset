@@ -921,6 +921,11 @@ Returns fort position as a [point](luaApi.md#point).
 ```lua
 fort.position
 ```
+##### entrance
+Return fort entrance coordinates as a [point](luaApi.md#point).
+```lua
+fort.entrance
+```
 ##### owner
 Returns [player](luaApi.md#player) that owns the fort. Neutral forts are owned by neutral player.
 ```lua
