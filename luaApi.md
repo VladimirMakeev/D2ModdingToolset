@@ -42,6 +42,7 @@ The function only accessible to scripts where scenario access is appropriate:
 - `drainLevel.lua`
 - custom attack reach scripts
 - custom unit modifier script
+- AI battle actions script
 
 `checkEventCondition` has `scenario` as its argument so `getScenario` is not bound to it.
 ```lua
@@ -57,6 +58,11 @@ Returns [global data storage](luaApi.md#global) used by game.
 ```lua
 local data = getGlobal()
 local variables = data.variables
+```
+##### getGame
+Returns [game](luaApi.md#game) restrictions and constants.
+```lua
+getGame().unitMaxDamage
 ```
 
 ---
@@ -205,7 +211,7 @@ Order = { Normal, Stand, Guard, AttackStack, DefendStack, SecureCity,
 IdType = {
     Empty,              -- Empty id
     ApplicationText,    -- Entries of TApp.dbf and TAppEdit.dbf
-    Building,           -- Entries of Guild.dbf
+    Building,           -- Entries of GBuild.dbf
     Race,               -- Entries of GRace.dbf
     Lord,               -- Entries of GLord.dbf
     Spell,              -- Entries of GSpells.dbf
@@ -320,6 +326,34 @@ Creates special id for summoning units in battle using specified position in gro
 Position in group should be in \[0 : 5\] range.
 ```lua
 Id.summonId(possibleTarget)
+```
+
+---
+
+#### Game
+Represents game restrictions and constants.
+Allows to access `settings.lua`.
+
+Methods:
+##### unitMaxDamage
+Maximum damage unit attack can inflict in battle. `unitMaxDamage` from `settings.lua`.
+```lua
+game.unitMaxDamage
+```
+##### unitMinDamage
+Minimum damage unit attack can inflict in battle. Currently 1.
+```lua
+game.unitMinDamage
+```
+##### unitMaxArmor
+Maximum armor unit can have. `unitMaxArmor` from `settings.lua`.
+```lua
+game.unitMaxArmor
+```
+##### leaderAdditionalDamage
+Additional damage granted by leader ability `Heavy strike`. Currently 100.
+```lua
+game.leaderAdditionalDamage
 ```
 
 ---

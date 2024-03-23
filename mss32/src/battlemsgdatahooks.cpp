@@ -447,23 +447,6 @@ void __stdcall aiChooseBattleActionHooked(const game::IMidgardObjectMap* objectM
         return;
     }
 
-    // This should never happen
-    if (allyPlayer->isHuman) {
-        const auto message{
-            fmt::format("Player that owns unit {:s} in group {:s} is not controlled by AI",
-                        idToString(unitId), idToString(&allyGroupId))};
-
-        if (userSettings().battle.debugAi) {
-            showErrorMessageBox(message);
-        } else {
-            logError("mssProxyError.log", message);
-        }
-
-        chooseBattleAction(objectMap, battleMsgData, unitId, possibleActions, possibleTargets,
-                           battleAction, targetUnitId, attackerUnitId);
-        return;
-    }
-
     const auto& battleLogicMap{customBattleLogic.attitudeBattleLogic};
     const auto it{battleLogicMap.find(allyPlayer->attitude.id)};
     if (it == battleLogicMap.cend()) {

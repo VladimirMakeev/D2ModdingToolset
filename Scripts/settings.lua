@@ -244,7 +244,7 @@ settings = {
 		-- Allows units to receive multiple upgrades per single battle
 		allowMultiUpgrade = false,
         -- Debug battle AI action script
-        debugAi = true,
+        debugAi = false,
         -- Fallback action for AI controlled units in case of script errors
         fallbackAction = BattleAction.Defend,
 	},
