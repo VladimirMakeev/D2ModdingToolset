@@ -88,6 +88,7 @@ public:
     bool isUnitAttacker(const UnitView& unit) const;
     bool isUnitAttackerId(const IdView& unitId) const;
     bool isAfterBattle() const;
+    bool isDuel() const;
 
     using UnitActions = std::tuple<std::vector<game::BattleAction>, // Possible unit actions
                                    std::optional<GroupView>,        // Attack target group
@@ -114,6 +115,24 @@ public:
 
     std::vector<BattleTurnView> getTurnsOrder() const;
 
+    bool isUnitRevived(const UnitView& unit) const;
+    bool isUnitRevivedById(const IdView& unitId) const;
+
+    int getUnitDisableRound(const UnitView& unit) const;
+    int getUnitDisableRoundById(const IdView& unitId) const;
+
+    int getUnitPoisonRound(const UnitView& unit) const;
+    int getUnitPoisonRoundById(const IdView& unitId) const;
+
+    int getUnitFrostbiteRound(const UnitView& unit) const;
+    int getUnitFrostbiteRoundById(const IdView& unitId) const;
+
+    int getUnitBlisterRound(const UnitView& unit) const;
+    int getUnitBlisterRoundById(const IdView& unitId) const;
+
+    int getUnitTransformRound(const UnitView& unit) const;
+    int getUnitTransformRoundById(const IdView& unitId) const;
+
 protected:
     template <typename T>
     static void bindAccessMethods(T& view)
@@ -133,7 +152,10 @@ protected:
         view["getRetreatStatus"] = &BattleMsgDataView::getRetreatStatus;
         view["decidedToRetreat"] = sol::property(&BattleMsgDataView::isRetreatDecisionWasMade);
         view["afterBattle"] = sol::property(&BattleMsgDataView::isAfterBattle);
+        view["duel"] = sol::property(&BattleMsgDataView::isDuel);
         view["turnsOrder"] = sol::property(&BattleMsgDataView::getTurnsOrder);
+        view["isUnitRevived"] = sol::overload<>(&BattleMsgDataView::isUnitRevived,
+                                                &BattleMsgDataView::isUnitRevivedById);
 
         view["getUnitShatteredArmor"] = sol::overload<>(
             &BattleMsgDataView::getUnitShatteredArmor,
@@ -150,6 +172,23 @@ protected:
         view["isUnitResistantToClass"] = sol::overload<>(
             &BattleMsgDataView::isUnitResistantToClass,
             &BattleMsgDataView::isUnitResistantToClassById);
+
+        view["getUnitDisableRound"] = sol::overload<>(&BattleMsgDataView::getUnitDisableRound,
+                                                      &BattleMsgDataView::getUnitDisableRoundById);
+
+        view["getUnitPoisonRound"] = sol::overload<>(&BattleMsgDataView::getUnitPoisonRound,
+                                                     &BattleMsgDataView::getUnitPoisonRoundById);
+
+        view["getUnitFrostbiteRound"] = sol::overload<>(
+            &BattleMsgDataView::getUnitFrostbiteRound,
+            &BattleMsgDataView::getUnitFrostbiteRoundById);
+
+        view["getUnitBlisterRound"] = sol::overload<>(&BattleMsgDataView::getUnitBlisterRound,
+                                                      &BattleMsgDataView::getUnitBlisterRoundById);
+
+        view["getUnitTransformRound"] = sol::overload<>(
+            &BattleMsgDataView::getUnitTransformRound,
+            &BattleMsgDataView::getUnitTransformRoundById);
     }
 
 private:

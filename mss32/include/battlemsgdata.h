@@ -297,7 +297,7 @@ struct BattleMsgData
      * Original positions are saved and restored when duel ends.
      * Non-leader units in both groups are marked with BattleStatus::Hidden.
      */
-    bool duel;
+    std::uint8_t duel;
     char padding2;
     char unknown11[4];
 };

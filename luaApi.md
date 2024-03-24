@@ -1889,12 +1889,24 @@ Returns true if battle is over but healers can make one more turn to heal allies
 ```lua
 battle.afterBattle
 ```
+##### duel
+Returns true if battle is a duel between thief and a stack leader.
+All units except leaders are marked with `Hidden` [battle status](luaApi.md#battlestatus).
+```lua
+battle.duel
+```
 ##### turnsOrder
 Returns list of [battle turns](luaApi.md#battle-turn) remaining in the current round of battle.
 Position of elements in the list corresponds to order of remaining turns in current round.
 In other words, at the start of a round, battle turns in the list are sorted according to units initiative, including an additional random initiative.
 ```lua
 battle.turnsOrder
+```
+##### isUnitRevived
+Returns true if specified [unit](luaApi.md#unit-1) was revived during battle.
+Method also accepts unit [ids](luaApi.md#id).
+```lua
+battle:isUnitRevived(unit)
 ```
 ##### getUnitShatteredArmor
 Returns amount of unit armor shattered in battle so far.
@@ -1923,6 +1935,36 @@ Returns true if specified unit is resistant to [attack class](luaApi.md#attack).
 Method also accepts unit [ids](luaApi.md#id).
 ```lua
 battle:isUnitResistantToClass(unit, attackSource)
+```
+##### getUnitDisableRound
+Returns round when paralyze, petrify or fear was applied to [unit](luaApi.md#unit-1). Returns 0 if unit is not disabled.
+Method also accepts unit [ids](luaApi.md#id).
+```lua
+battle:getUnitDisableRound(unit.id)
+```
+##### getUnitPoisonRound
+Returns round when long poison was applied to [unit](luaApi.md#unit-1). Returns 0 if unit is not poisoned.
+Method also accepts unit [ids](luaApi.md#id).
+```lua
+battle:getUnitPoisonRound(unit)
+```
+##### getUnitFrostbiteRound
+Returns round when long frostbite was applied to [unit](luaApi.md#unit-1). Returns 0 if unit is not frozen.
+Method also accepts unit [ids](luaApi.md#id).
+```lua
+battle:getUnitFrostbiteRound(unit)
+```
+##### getUnitBlisterRound
+Returns round when long blister was applied to [unit](luaApi.md#unit-1). Returns 0 if unit is not burning.
+Method also accepts unit [ids](luaApi.md#id).
+```lua
+battle:getUnitBlisterRound(unit)
+```
+##### getUnitTransformRound
+Returns round when long transform was applied to [unit](luaApi.md#unit-1). Returns 0 if unit is not transfomed.
+Method also accepts unit [ids](luaApi.md#id).
+```lua
+battle:getUnitTransformRound(unit)
 ```
 ##### setRetreatStatus
 Sets [retreat status](luaApi.md#Retreat) of attacker or defender group.

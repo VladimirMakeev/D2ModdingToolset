@@ -144,6 +144,11 @@ bool BattleMsgDataView::isAfterBattle() const
     return game::BattleMsgDataApi::get().isAfterBattle(battleMsgData);
 }
 
+bool BattleMsgDataView::isDuel() const
+{
+    return battleMsgData->duel & 1u;
+}
+
 BattleMsgDataView::UnitActions BattleMsgDataView::getUnitActions(const UnitView& unit) const
 {
     return getUnitActionsById(unit.getId());
@@ -412,6 +417,96 @@ std::vector<BattleTurnView> BattleMsgDataView::getTurnsOrder() const
     }
 
     return turns;
+}
+
+bool BattleMsgDataView::isUnitRevived(const UnitView& unit) const
+{
+    return isUnitRevivedById(unit.getId());
+}
+
+bool BattleMsgDataView::isUnitRevivedById(const IdView& unitId) const
+{
+    const auto* info{game::BattleMsgDataApi::get().getUnitInfoById(battleMsgData, &unitId.id)};
+    if (!info) {
+        return false;
+    }
+
+    return info->unitFlags.parts.revived;
+}
+
+int BattleMsgDataView::getUnitDisableRound(const UnitView& unit) const
+{
+    return getUnitDisableRoundById(unit.getId());
+}
+
+int BattleMsgDataView::getUnitDisableRoundById(const IdView& unitId) const
+{
+    const auto* info{game::BattleMsgDataApi::get().getUnitInfoById(battleMsgData, &unitId.id)};
+    if (!info) {
+        return 0;
+    }
+
+    return info->disableAppliedRound;
+}
+
+int BattleMsgDataView::getUnitPoisonRound(const UnitView& unit) const
+{
+    return getUnitPoisonRoundById(unit.getId());
+}
+
+int BattleMsgDataView::getUnitPoisonRoundById(const IdView& unitId) const
+{
+    const auto* info{game::BattleMsgDataApi::get().getUnitInfoById(battleMsgData, &unitId.id)};
+    if (!info) {
+        return 0;
+    }
+
+    return info->poisonAppliedRound;
+}
+
+int BattleMsgDataView::getUnitFrostbiteRound(const UnitView& unit) const
+{
+    return getUnitFrostbiteRoundById(unit.getId());
+}
+
+int BattleMsgDataView::getUnitFrostbiteRoundById(const IdView& unitId) const
+{
+    const auto* info{game::BattleMsgDataApi::get().getUnitInfoById(battleMsgData, &unitId.id)};
+    if (!info) {
+        return 0;
+    }
+
+    return info->frostbiteAppliedRound;
+}
+
+int BattleMsgDataView::getUnitBlisterRound(const UnitView& unit) const
+{
+    return getUnitBlisterRoundById(unit.getId());
+}
+
+int BattleMsgDataView::getUnitBlisterRoundById(const IdView& unitId) const
+{
+    const auto* info{game::BattleMsgDataApi::get().getUnitInfoById(battleMsgData, &unitId.id)};
+    if (!info) {
+        return 0;
+    }
+
+    return info->blisterAppliedRound;
+}
+
+int BattleMsgDataView::getUnitTransformRound(const UnitView& unit) const
+{
+    return getUnitTransformRoundById(unit.getId());
+}
+
+int BattleMsgDataView::getUnitTransformRoundById(const IdView& unitId) const
+{
+    const auto* info{game::BattleMsgDataApi::get().getUnitInfoById(battleMsgData, &unitId.id)};
+    if (!info) {
+        return 0;
+    }
+
+    return info->transformAppliedRound;
 }
 
 std::optional<PlayerView> BattleMsgDataView::getPlayer(const game::CMidgardID& playerId) const
