@@ -59,6 +59,11 @@ bool BattleMsgDataView::getAutoBattle() const
     return game::BattleMsgDataApi::get().isAutoBattle(battleMsgData);
 }
 
+bool BattleMsgDataView::getFastBattle() const
+{
+    return game::BattleMsgDataApi::get().isFastBattle(battleMsgData);
+}
+
 std::optional<PlayerView> BattleMsgDataView::getAttackerPlayer() const
 {
     return getPlayer(battleMsgData->attackerPlayerId);

@@ -668,6 +668,9 @@ struct Api
     using IsAutoBattle = bool(__thiscall*)(const BattleMsgData* thisptr);
     IsAutoBattle isAutoBattle;
 
+    using IsFastBattle = bool(__thiscall*)(const BattleMsgData* thisptr);
+    IsFastBattle isFastBattle;
+
     using AlliesNotPreventingAdjacentAttack = bool(__stdcall*)(const BattleMsgData* battleMsgData,
                                                                const CMidUnitGroup* unitGroup,
                                                                int unitPosition,

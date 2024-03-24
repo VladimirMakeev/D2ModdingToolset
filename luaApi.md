@@ -1798,6 +1798,12 @@ Returns true if autobattle mode is turned on.
 ```lua
 battle.autoBattle
 ```
+##### fastBattle
+Returns true if fast battle is turned on.
+When fast battle is active, [auto battle](luaApi.md#autobattle) is active too.
+```lua
+battle.fastBattle
+```
 ##### attackerPlayer
 Returns [player](luaApi.md#player) that started battle or `nil` if not found.
 ```lua

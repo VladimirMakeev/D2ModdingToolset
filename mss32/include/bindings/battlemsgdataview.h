@@ -56,6 +56,7 @@ public:
 
     int getCurrentRound() const;
     bool getAutoBattle() const;
+    bool getFastBattle() const;
 
     std::optional<PlayerView> getAttackerPlayer() const;
     std::optional<PlayerView> getDefenderPlayer() const;
@@ -100,6 +101,7 @@ protected:
         view["getUnitStatus"] = &BattleMsgDataView::getUnitStatus;
         view["currentRound"] = sol::property(&BattleMsgDataView::getCurrentRound);
         view["autoBattle"] = sol::property(&BattleMsgDataView::getAutoBattle);
+        view["fastBattle"] = sol::property(&BattleMsgDataView::getFastBattle);
         view["attackerPlayer"] = sol::property(&BattleMsgDataView::getAttackerPlayer);
         view["defenderPlayer"] = sol::property(&BattleMsgDataView::getDefenderPlayer);
         view["attacker"] = sol::property(&BattleMsgDataView::getAttacker);
