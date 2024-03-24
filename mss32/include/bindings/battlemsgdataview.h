@@ -20,6 +20,7 @@
 #ifndef BATTLEMSGDATAVIEW_H
 #define BATTLEMSGDATAVIEW_H
 
+#include "unitview.h"
 #include <optional>
 #include <tuple>
 #include <vector>
@@ -42,7 +43,24 @@ struct IdView;
 class PlayerView;
 class StackView;
 class GroupView;
-class UnitView;
+
+class BattleTurnView
+{
+public:
+    BattleTurnView(const game::CMidgardID& unitId,
+                   char attackCount,
+                   const game::IMidgardObjectMap* objectMap);
+
+    static void bind(sol::state& lua);
+
+    UnitView getUnit() const;
+    int getAttackCount() const;
+
+private:
+    game::CMidgardID unitId;
+    const game::IMidgardObjectMap* objectMap;
+    char attackCount;
+};
 
 class BattleMsgDataView
 {
@@ -94,6 +112,8 @@ public:
     bool isUnitResistantToClass(const UnitView& unit, int classId) const;
     bool isUnitResistantToClassById(const IdView& unitId, int classId) const;
 
+    std::vector<BattleTurnView> getTurnsOrder() const;
+
 protected:
     template <typename T>
     static void bindAccessMethods(T& view)
@@ -113,6 +133,7 @@ protected:
         view["getRetreatStatus"] = &BattleMsgDataView::getRetreatStatus;
         view["decidedToRetreat"] = sol::property(&BattleMsgDataView::isRetreatDecisionWasMade);
         view["afterBattle"] = sol::property(&BattleMsgDataView::isAfterBattle);
+        view["turnsOrder"] = sol::property(&BattleMsgDataView::getTurnsOrder);
 
         view["getUnitShatteredArmor"] = sol::overload<>(
             &BattleMsgDataView::getUnitShatteredArmor,

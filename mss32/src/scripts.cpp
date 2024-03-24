@@ -412,6 +412,7 @@ static void bindApi(sol::state& lua)
     bindings::ItemView::bind(lua);
     bindings::PlayerView::bind(lua);
     bindings::ModifierView::bind(lua);
+    bindings::BattleTurnView::bind(lua);
     bindings::BattleMsgDataView::bind(lua);
     bindings::BattleMsgDataViewMutable::bind(lua);
     bindings::DiplomacyView::bind(lua);

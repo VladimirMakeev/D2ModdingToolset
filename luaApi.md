@@ -1777,6 +1777,24 @@ item.sellValue
 
 ---
 
+#### Battle Turn
+Represents unit action inside battle round.
+
+Methods:
+##### unit
+Returns [unit](luaApi.md#unit-1) that performs the turn.
+```lua
+turn.unit
+```
+##### attackCount
+Returns number of attacks unit can perform in its turn.
+Units with double attack (`turn.unit.impl.attacksTwice`) will have 2 in `attackCount`.
+```lua
+turn.attackCount
+```
+
+---
+
 #### Battle
 Represents battle information.
 
@@ -1870,6 +1888,13 @@ battle.decidedToRetreat
 Returns true if battle is over but healers can make one more turn to heal allies.
 ```lua
 battle.afterBattle
+```
+##### turnsOrder
+Returns list of [battle turns](luaApi.md#battle-turn) remaining in the current round of battle.
+Position of elements in the list corresponds to order of remaining turns in current round.
+In other words, at the start of a round, battle turns in the list are sorted according to units initiative, including an additional random initiative.
+```lua
+battle.turnsOrder
 ```
 ##### getUnitShatteredArmor
 Returns amount of unit armor shattered in battle so far.

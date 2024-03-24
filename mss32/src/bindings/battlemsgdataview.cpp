@@ -21,14 +21,39 @@
 #include "attackclasscat.h"
 #include "battlemsgdata.h"
 #include "customattacks.h"
+#include "game.h"
 #include "gameutils.h"
 #include "idview.h"
 #include "playerview.h"
 #include "stackview.h"
-#include "unitview.h"
 #include <sol/sol.hpp>
 
 namespace bindings {
+
+BattleTurnView::BattleTurnView(const game::CMidgardID& unitId,
+                               char attackCount,
+                               const game::IMidgardObjectMap* objectMap)
+    : unitId{unitId}
+    , objectMap{objectMap}
+    , attackCount{attackCount}
+{ }
+
+void BattleTurnView::bind(sol::state& lua)
+{
+    auto view = lua.new_usertype<BattleTurnView>("BattleTurnView");
+    view["unit"] = sol::property(&BattleTurnView::getUnit);
+    view["attackCount"] = sol::property(&BattleTurnView::getAttackCount);
+}
+
+UnitView BattleTurnView::getUnit() const
+{
+    return UnitView{game::gameFunctions().findUnitById(objectMap, &unitId)};
+}
+
+int BattleTurnView::getAttackCount() const
+{
+    return attackCount;
+}
 
 BattleMsgDataView::BattleMsgDataView(const game::BattleMsgData* battleMsgData,
                                      const game::IMidgardObjectMap* objectMap)
@@ -372,6 +397,21 @@ bool BattleMsgDataView::isUnitResistantToClassById(const IdView& unitId, int cla
 
     return BattleMsgDataApi::get().isUnitAttackClassWardRemoved(battleMsgData, &unitId.id,
                                                                 attackClass);
+}
+
+std::vector<BattleTurnView> BattleMsgDataView::getTurnsOrder() const
+{
+    std::vector<BattleTurnView> turns;
+
+    for (const auto& battleTurn : battleMsgData->turnsOrder) {
+        if (battleTurn.unitId == game::invalidId) {
+            break;
+        }
+
+        turns.emplace_back(battleTurn.unitId, battleTurn.attackCount, objectMap);
+    }
+
+    return turns;
 }
 
 std::optional<PlayerView> BattleMsgDataView::getPlayer(const game::CMidgardID& playerId) const
