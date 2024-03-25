@@ -106,6 +106,10 @@ void ScenarioView::bind(sol::state& lua)
     scenario["findRuinByUnit"] = sol::overload<>(&ScenarioView::findRuinByUnit,
                                                  &ScenarioView::findRuinByUnitId,
                                                  &ScenarioView::findRuinByUnitIdString);
+    scenario["name"] = sol::property(&ScenarioView::getName);
+    scenario["description"] = sol::property(&ScenarioView::getDescription);
+    scenario["author"] = sol::property(&ScenarioView::getAuthor);
+    scenario["seed"] = sol::property(&ScenarioView::getSeed);
     scenario["day"] = sol::property(&ScenarioView::getCurrentDay);
     scenario["size"] = sol::property(&ScenarioView::getSize);
     scenario["diplomacy"] = sol::property(&ScenarioView::getDiplomacy);
@@ -680,6 +684,46 @@ std::optional<TrainerView> ScenarioView::getTrainerByCoordinates(int x, int y) c
 std::optional<TrainerView> ScenarioView::getTrainerByPoint(const Point& p) const
 {
     return getTrainerByCoordinates(p.x, p.y);
+}
+
+std::string ScenarioView::getName() const
+{
+    if (!objectMap) {
+        return "";
+    }
+
+    auto info = hooks::getScenarioInfo(objectMap);
+    return info->name ? info->name : "";
+}
+
+std::string ScenarioView::getDescription() const
+{
+    if (!objectMap) {
+        return "";
+    }
+
+    auto info = hooks::getScenarioInfo(objectMap);
+    return info->description ? info->description : "";
+}
+
+std::string ScenarioView::getAuthor() const
+{
+    if (!objectMap) {
+        return "";
+    }
+
+    auto info = hooks::getScenarioInfo(objectMap);
+    return info->creator ? info->creator : "";
+}
+
+std::uint32_t ScenarioView::getSeed() const
+{
+    if (!objectMap) {
+        return 0u;
+    }
+
+    auto info = hooks::getScenarioInfo(objectMap);
+    return static_cast<std::uint32_t>(info->mapSeed);
 }
 
 int ScenarioView::getCurrentDay() const

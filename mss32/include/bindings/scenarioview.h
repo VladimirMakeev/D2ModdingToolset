@@ -184,6 +184,10 @@ public:
     std::optional<RuinView> findRuinByUnitId(const IdView& unitId) const;
     std::optional<RuinView> findRuinByUnitIdString(const std::string& unitId) const;
 
+    std::string getName() const;
+    std::string getDescription() const;
+    std::string getAuthor() const;
+    std::uint32_t getSeed() const;
     int getCurrentDay() const;
     int getSize() const;
 

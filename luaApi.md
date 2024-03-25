@@ -1517,6 +1517,26 @@ if ruin == nil then
 end
 ```
 **Note** that this search is heavy in terms of performance, so you probably want to minimize excessive calls and use variables to store its results.
+##### name
+Returns scenario name or empty string if scenario is unnamed.
+```lua
+scenario.name
+```
+##### description
+Returns scenario description or empty string if scenario has no description.
+```lua
+scenario.description
+```
+##### author
+Returns scenario author or empty string if no author specified.
+```lua
+scenario.author
+```
+##### seed
+Returns scenario initial seed used by random generator.
+```lua
+scenario.seed
+```
 ##### day
 Returns number of current day in game.
 ```lua
@@ -1961,7 +1981,7 @@ Method also accepts unit [ids](luaApi.md#id).
 battle:getUnitBlisterRound(unit)
 ```
 ##### getUnitTransformRound
-Returns round when long transform was applied to [unit](luaApi.md#unit-1). Returns 0 if unit is not transfomed.
+Returns round when long transform was applied to [unit](luaApi.md#unit-1). Returns 0 if unit is not transformed.
 Method also accepts unit [ids](luaApi.md#id).
 ```lua
 battle:getUnitTransformRound(unit)
