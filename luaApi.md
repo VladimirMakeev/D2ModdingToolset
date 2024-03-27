@@ -1928,6 +1928,12 @@ Method also accepts unit [ids](luaApi.md#id).
 ```lua
 battle:isUnitRevived(unit)
 ```
+##### isUnitWaiting
+Returns true if specified [unit](luaApi.md#unit-1) skipped its turn and waiting.
+Method also accepts unit [ids](luaApi.md#id).
+```lua
+battle:isUnitWaiting(battle.attacker.leader)
+```
 ##### getUnitShatteredArmor
 Returns amount of unit armor shattered in battle so far.
 Method also accepts unit [ids](luaApi.md#id).

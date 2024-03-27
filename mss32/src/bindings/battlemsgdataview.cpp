@@ -434,6 +434,21 @@ bool BattleMsgDataView::isUnitRevivedById(const IdView& unitId) const
     return info->unitFlags.parts.revived;
 }
 
+bool BattleMsgDataView::isUnitWaiting(const UnitView& unit) const
+{
+    return isUnitWaitingById(unit.getId());
+}
+
+bool BattleMsgDataView::isUnitWaitingById(const IdView& unitId) const
+{
+    const auto* info{ game::BattleMsgDataApi::get().getUnitInfoById(battleMsgData, &unitId.id) };
+    if (!info) {
+        return false;
+    }
+
+    return info->unitFlags.parts.waited;
+}
+
 int BattleMsgDataView::getUnitDisableRound(const UnitView& unit) const
 {
     return getUnitDisableRoundById(unit.getId());

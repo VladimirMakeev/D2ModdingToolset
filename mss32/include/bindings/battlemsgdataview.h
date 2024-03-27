@@ -118,6 +118,9 @@ public:
     bool isUnitRevived(const UnitView& unit) const;
     bool isUnitRevivedById(const IdView& unitId) const;
 
+    bool isUnitWaiting(const UnitView& unit) const;
+    bool isUnitWaitingById(const IdView& unitId) const;
+
     int getUnitDisableRound(const UnitView& unit) const;
     int getUnitDisableRoundById(const IdView& unitId) const;
 
@@ -156,6 +159,8 @@ protected:
         view["turnsOrder"] = sol::property(&BattleMsgDataView::getTurnsOrder);
         view["isUnitRevived"] = sol::overload<>(&BattleMsgDataView::isUnitRevived,
                                                 &BattleMsgDataView::isUnitRevivedById);
+        view["isUnitWaiting"] = sol::overload<>(&BattleMsgDataView::isUnitWaiting,
+                                                &BattleMsgDataView::isUnitWaitingById);
 
         view["getUnitShatteredArmor"] = sol::overload<>(
             &BattleMsgDataView::getUnitShatteredArmor,
