@@ -46,6 +46,7 @@
 #include "midstack.h"
 #include "midunit.h"
 #include "playerbuildings.h"
+#include "racetype.h"
 #include "scenarioinfo.h"
 #include "scenedit.h"
 #include "unitutils.h"
@@ -230,6 +231,39 @@ const game::CMidgardID getPlayerIdByUnitId(const game::IMidgardObjectMap* object
     }
 
     return emptyId;
+}
+
+const game::CMidPlayer* getGroupOwner(const game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* groupId)
+{
+    using namespace game;
+
+    switch (CMidgardIDApi::get().getType(groupId)) {
+    case IdType::Stack: {
+        const CMidStack* allyStack{getStack(objectMap, groupId)};
+        return getPlayer(objectMap, &allyStack->ownerId);
+    }
+    case IdType::Fortification: {
+        const CFortification* allyFort{getFort(objectMap, groupId)};
+        return getPlayer(objectMap, &allyFort->ownerId);
+    }
+    case IdType::Ruin: {
+        const RaceId neutralRaceId{RaceCategories::get().neutral->id};
+
+        const CMidPlayer* ownerPlayer{};
+        auto checkNeutralPlayer = [neutralRaceId, &ownerPlayer](const IMidScenarioObject* obj) {
+            auto player{static_cast<const CMidPlayer*>(obj)};
+            if (player->raceType->data->raceType.id == neutralRaceId) {
+                ownerPlayer = player;
+            }
+        };
+
+        forEachScenarioObject(objectMap, IdType::Player, checkNeutralPlayer);
+        return ownerPlayer;
+    }
+    }
+
+    return nullptr;
 }
 
 const game::CMidScenVariables* getScenarioVariables(const game::IMidgardObjectMap* objectMap)

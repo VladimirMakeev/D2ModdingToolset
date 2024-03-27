@@ -20,10 +20,14 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <array>
 #include <cstdint>
 #include <filesystem>
 #include <string>
-#include <array>
+
+namespace game {
+enum class BattleAction : int;
+}
 
 namespace hooks {
 
@@ -78,7 +82,7 @@ struct Settings
     bool freeTransformSelfAttack;
     bool freeTransformSelfAttackInfinite;
     bool fixEffectiveHpFormula;
-    
+
     struct AdditionalLordIncome
     {
         int warrior = 0;
@@ -172,6 +176,8 @@ struct Settings
 
     struct Battle
     {
+        game::BattleAction fallbackAction;
+        bool debugAi{false};
         bool allowRetreatedUnitsToUpgrade{false};
         bool carryXpOverUpgrade{false};
         bool allowMultiUpgrade{false};

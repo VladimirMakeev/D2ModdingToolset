@@ -53,6 +53,7 @@
 #include "mqnetplayer.h"
 #include "netmsg.h"
 #include "pickupdropinterf.h"
+#include "scenpropinterf.h"
 #include "sitemerchantinterf.h"
 #include "testcondition.h"
 
@@ -98,6 +99,7 @@ struct OriginalFunctions
     game::ITestConditionApi::Api::Create createTestCondition;
     game::CMidEventApi::Api::CheckValid checkEventValid;
     game::BattleMsgDataApi::Api::BeforeBattleRound beforeBattleRound;
+    game::BattleMsgDataApi::Api::AiChooseBattleAction aiChooseBattleAction;
     game::CMidUnitVftable::InitWithSoldierImpl initWithSoldierImpl;
 
     game::CMidEvEffectApi::Api::CreateFromCategory createEventEffectFromCategory;
@@ -146,6 +148,8 @@ struct OriginalFunctions
     game::CMidDataCache2::INotifyVftable::OnObjectChanged cityStackInterfOnObjectChanged;
 
     game::CMidDataCache2::INotifyVftable::OnObjectChanged siteMerchantInterfOnObjectChanged;
+
+    game::editor::CScenPropInterfApi::Api::Constructor scenPropInterfCtor;
 };
 
 OriginalFunctions& getOriginalFunctions();

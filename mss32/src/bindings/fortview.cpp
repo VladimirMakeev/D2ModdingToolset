@@ -38,6 +38,7 @@ void FortView::bind(sol::state& lua)
     auto fortView = lua.new_usertype<FortView>("FortView");
     fortView["id"] = sol::property(&FortView::getId);
     fortView["position"] = sol::property(&FortView::getPosition);
+    fortView["entrance"] = sol::property(&FortView::getEntrance);
     fortView["owner"] = sol::property(&FortView::getOwner);
     fortView["group"] = sol::property(&FortView::getGroup);
     fortView["visitor"] = sol::property(&FortView::getVisitor);
@@ -55,6 +56,14 @@ IdView FortView::getId() const
 Point FortView::getPosition() const
 {
     return Point{fort->mapElement.position};
+}
+
+Point FortView::getEntrance() const
+{
+    const auto& mapElement{fort->mapElement};
+    const auto& position{mapElement.position};
+
+    return Point(position.x + mapElement.sizeX - 1, position.y + mapElement.sizeY - 1);
 }
 
 std::optional<PlayerView> FortView::getOwner() const

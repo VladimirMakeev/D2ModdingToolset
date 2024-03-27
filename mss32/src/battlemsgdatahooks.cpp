@@ -18,15 +18,30 @@
  */
 
 #include "battlemsgdatahooks.h"
+#include "attackview.h"
 #include "batattack.h"
+#include "bindings/battlemsgdataviewmutable.h"
+#include "bindings/groupview.h"
+#include "bindings/idview.h"
+#include "bindings/unitview.h"
+#include "customaibattle.h"
 #include "customattacks.h"
+#include "fortification.h"
 #include "gameutils.h"
+#include "groupview.h"
 #include "intset.h"
 #include "log.h"
+#include "midplayer.h"
 #include "midstack.h"
 #include "modifierutils.h"
 #include "originalfunctions.h"
+#include "racetype.h"
+#include "scripts.h"
+#include "settings.h"
+#include "unitimplview.h"
 #include "unitutils.h"
+#include "usunitimpl.h"
+#include "utils.h"
 #include <atomic>
 #include <fmt/format.h>
 
@@ -390,6 +405,160 @@ void __fastcall beforeBattleRoundHooked(game::BattleMsgData* thisptr, int /*%edx
     freeTransformSelf.unitId = emptyId;
     freeTransformSelf.turnCount = 0;
     freeTransformSelf.used = false;
+}
+
+void __stdcall aiChooseBattleActionHooked(const game::IMidgardObjectMap* objectMap,
+                                          game::BattleMsgData* battleMsgData,
+                                          const game::CMidgardID* unitId,
+                                          const game::Set<game::BattleAction>* possibleActions,
+                                          const game::PossibleTargets* possibleTargets,
+                                          game::BattleAction* battleAction,
+                                          game::CMidgardID* targetUnitId,
+                                          game::CMidgardID* attackerUnitId)
+{
+    using namespace game;
+
+    const auto& chooseBattleAction{getOriginalFunctions().aiChooseBattleAction};
+
+    const auto& customBattleLogic{getCustomAiBattleLogic()};
+    if (!customBattleLogic.customBattleLogicEnabled) {
+        // Custom battle action logic disabled, use original
+        chooseBattleAction(objectMap, battleMsgData, unitId, possibleActions, possibleTargets,
+                           battleAction, targetUnitId, attackerUnitId);
+        return;
+    }
+
+    CMidgardID allyGroupId{};
+    gameFunctions().getAllyOrEnemyGroupId(&allyGroupId, battleMsgData, unitId, true);
+
+    const CMidPlayer* allyPlayer{getGroupOwner(objectMap, &allyGroupId)};
+    if (!allyPlayer) {
+        const auto message{fmt::format("Could not find player that owns unit {:s} in group {:s}",
+                                       idToString(unitId), idToString(&allyGroupId))};
+
+        if (userSettings().battle.debugAi) {
+            showErrorMessageBox(message);
+        } else {
+            logError("mssProxyError.log", message);
+        }
+
+        chooseBattleAction(objectMap, battleMsgData, unitId, possibleActions, possibleTargets,
+                           battleAction, targetUnitId, attackerUnitId);
+        return;
+    }
+
+    const auto& battleLogicMap{customBattleLogic.attitudeBattleLogic};
+    const auto it{battleLogicMap.find(allyPlayer->attitude.id)};
+    if (it == battleLogicMap.cend()) {
+        const auto message{fmt::format("Could not find battle action script by attitude {:d}",
+                                       static_cast<int>(allyPlayer->attitude.id))};
+
+        if (userSettings().battle.debugAi) {
+            showErrorMessageBox(message);
+        } else {
+            logError("mssProxyError.log", message);
+        }
+
+        chooseBattleAction(objectMap, battleMsgData, unitId, possibleActions, possibleTargets,
+                           battleAction, targetUnitId, attackerUnitId);
+        return;
+    }
+
+    const auto& actionScript{it->second};
+
+    std::optional<sol::environment> env;
+    const auto path{scriptsFolder() / actionScript};
+    auto chooseAction = getScriptFunction(path, "chooseAction", env, true, true);
+    if (!chooseAction) {
+        const auto message{
+            fmt::format("Could not find 'chooseAction' function. Script '{:s}'", path.string())};
+
+        if (userSettings().battle.debugAi) {
+            showErrorMessageBox(message);
+        } else {
+            logError("mssProxyError.log", message);
+        }
+
+        chooseBattleAction(objectMap, battleMsgData, unitId, possibleActions, possibleTargets,
+                           battleAction, targetUnitId, attackerUnitId);
+        return;
+    }
+
+    try {
+        const bindings::BattleMsgDataViewMutable battleView{battleMsgData, objectMap};
+
+        const CMidUnit* unit = static_cast<const CMidUnit*>(
+            objectMap->vftable->findScenarioObjectById(objectMap, unitId));
+        const bindings::UnitView activeUnitView{unit};
+
+        std::vector<BattleAction> actions;
+        actions.reserve(possibleActions->length);
+        for (auto& v : *possibleActions) {
+            actions.push_back(v);
+        }
+
+        const CMidgardID* attTargGroupId{possibleTargets->attackTargetGroupId};
+        std::optional<bindings::GroupView> attackTargetGroupView;
+        if (const auto* group = getGroup(objectMap, attTargGroupId)) {
+            attackTargetGroupView = bindings::GroupView{group, objectMap, attTargGroupId};
+        }
+
+        std::vector<int> attackTargets;
+        attackTargets.reserve(possibleTargets->attackTargets->length);
+        for (auto& v : *possibleTargets->attackTargets) {
+            attackTargets.push_back(v);
+        }
+
+        const CMidgardID* item1TargGroupId{possibleTargets->item1TargetGroupId};
+        std::optional<bindings::GroupView> item1TargetGroupView;
+        if (const auto* group = getGroup(objectMap, item1TargGroupId)) {
+            item1TargetGroupView = bindings::GroupView{group, objectMap, item1TargGroupId};
+        }
+
+        std::vector<int> item1Targets;
+        item1Targets.reserve(possibleTargets->item1Targets->length);
+        for (auto& v : *possibleTargets->item1Targets) {
+            item1Targets.push_back(v);
+        }
+
+        const CMidgardID* item2TargGroupId{possibleTargets->item2TargetGroupId};
+        std::optional<bindings::GroupView> item2TargetGroupView;
+        if (const auto* group = getGroup(objectMap, item2TargGroupId)) {
+            item2TargetGroupView = bindings::GroupView{group, objectMap, item2TargGroupId};
+        }
+
+        std::vector<int> item2Targets;
+        item2Targets.reserve(possibleTargets->item2Targets->length);
+        for (auto& v : *possibleTargets->item2Targets) {
+            item2Targets.push_back(v);
+        }
+
+        int chosenAction = 0;
+        bindings::IdView chosenTargetId{(CMidgardID*)nullptr};
+        bindings::IdView chosenAttackerId{(CMidgardID*)nullptr};
+        sol::tie(chosenAction, chosenTargetId,
+                 chosenAttackerId) = (*chooseAction)(battleView, activeUnitView, actions,
+                                                     attackTargetGroupView, attackTargets,
+                                                     item1TargetGroupView, item1Targets,
+                                                     item2TargetGroupView, item2Targets);
+
+        *targetUnitId = chosenTargetId.id;
+        *attackerUnitId = chosenAttackerId.id;
+        *battleAction = static_cast<BattleAction>(chosenAction);
+    } catch (const std::exception& e) {
+        const auto message{
+            fmt::format("Failed to run '{:s}' script. Reason: {:s}", path.string(), e.what())};
+
+        if (userSettings().battle.debugAi) {
+            showErrorMessageBox(message);
+        } else {
+            logError("mssProxyError.log", message);
+        }
+
+        *targetUnitId = *unitId;
+        *attackerUnitId = *unitId;
+        *battleAction = userSettings().battle.fallbackAction;
+    }
 }
 
 } // namespace hooks

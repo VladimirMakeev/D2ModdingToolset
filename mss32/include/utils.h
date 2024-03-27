@@ -117,7 +117,7 @@ std::uint32_t createMessageEvent(game::UiEvent* messageEvent,
 bool computeHash(const std::filesystem::path& folder, std::string& hash);
 
 /** Executes function for each scenario object with specified id type. */
-void forEachScenarioObject(game::IMidgardObjectMap* objectMap,
+void forEachScenarioObject(const game::IMidgardObjectMap* objectMap,
                            game::IdType idType,
                            const std::function<void(const game::IMidScenarioObject*)>& func);
 

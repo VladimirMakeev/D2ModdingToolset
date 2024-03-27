@@ -24,7 +24,7 @@
 namespace game::VisitorApi {
 
 // clang-format off
-std::array<Api, 3> functions = {{
+std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::ChangeUnitHp)0x5e88f4,
@@ -36,6 +36,7 @@ std::array<Api, 3> functions = {{
         (Api::TransformUnit)0x5e968e,
         (Api::UndoTransformUnit)0x5e96df,
         (Api::ExtractUnitFromGroup)0x5e8d72,
+        (Api::PlayerSetAttitude)0,
     },
     // Russobit
     Api{
@@ -48,6 +49,7 @@ std::array<Api, 3> functions = {{
         (Api::TransformUnit)0x5e968e,
         (Api::UndoTransformUnit)0x5e96df,
         (Api::ExtractUnitFromGroup)0x5e8d72,
+        (Api::PlayerSetAttitude)0,
     },
     // Gog
     Api{
@@ -60,7 +62,21 @@ std::array<Api, 3> functions = {{
         (Api::TransformUnit)0x5e838d,
         (Api::UndoTransformUnit)0x5e83de,
         (Api::ExtractUnitFromGroup)0x5e7a71,
-    }
+        (Api::PlayerSetAttitude)0,
+    },
+    // Scenario Editor
+    Api{
+        (Api::ChangeUnitHp)0,
+        (Api::ChangeUnitXp)0,
+        (Api::UpgradeUnit)0,
+        (Api::ForceUnitMax)0,
+        (Api::AddUnitToGroup)0,
+        (Api::ExchangeItem)0,
+        (Api::TransformUnit)0,
+        (Api::UndoTransformUnit)0,
+        (Api::ExtractUnitFromGroup)0,
+        (Api::PlayerSetAttitude)0x4e9baa,
+    },
 }};
 // clang-format on
 

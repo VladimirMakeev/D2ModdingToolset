@@ -155,6 +155,8 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsErrorCodes.cpp" />
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomsPlugin.cpp" />
     <ClCompile Include="..\SLikeNet\DependentExtensions\Lobby2\Rooms\RoomTypes.cpp" />
+    <ClCompile Include="src\aiattitudescat.cpp" />
+    <ClCompile Include="src\aiattitudestable.cpp" />
     <ClCompile Include="src\aigiveitemsaction.cpp" />
     <ClCompile Include="src\aigiveitemsactionhooks.cpp" />
     <ClCompile Include="src\aimovestackaction.cpp" />
@@ -195,9 +197,18 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\batviewer2dengine.cpp" />
     <ClCompile Include="src\bindings\attackview.cpp" />
     <ClCompile Include="src\bindings\battlemsgdataview.cpp" />
+    <ClCompile Include="src\bindings\battlemsgdataviewmutable.cpp" />
+    <ClCompile Include="src\bindings\crystalview.cpp" />
     <ClCompile Include="src\bindings\currencyview.cpp" />
     <ClCompile Include="src\bindings\diplomacyview.cpp" />
     <ClCompile Include="src\bindings\fogview.cpp" />
+    <ClCompile Include="src\bindings\gameview.cpp" />
+    <ClCompile Include="src\bindings\globalvariablesview.cpp" />
+    <ClCompile Include="src\bindings\globalview.cpp" />
+    <ClCompile Include="src\bindings\merchantview.cpp" />
+    <ClCompile Include="src\bindings\mercsview.cpp" />
+    <ClCompile Include="src\bindings\siteview.cpp" />
+    <ClCompile Include="src\bindings\trainerview.cpp" />
     <ClCompile Include="src\bindings\unitviewdummy.cpp" />
     <ClCompile Include="src\bindings\dynupgradeview.cpp" />
     <ClCompile Include="src\bindings\fortview.cpp" />
@@ -227,6 +238,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\buildingtype.cpp" />
     <ClCompile Include="src\chatinterf.cpp" />
     <ClCompile Include="src\citystackinterfhooks.cpp" />
+    <ClCompile Include="src\customaibattle.cpp" />
     <ClCompile Include="src\custombuildingcategories.cpp" />
     <ClCompile Include="src\diplomacyhooks.cpp" />
     <ClCompile Include="src\displayd3d.cpp" />
@@ -312,6 +324,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\netsingleplayer.cpp" />
     <ClCompile Include="src\netsingleplayerhooks.cpp" />
     <ClCompile Include="src\nativegameinfo.cpp" />
+    <ClCompile Include="src\resourcetype.cpp" />
     <ClCompile Include="src\scenarioobjectstreams.cpp" />
     <ClCompile Include="src\scenariotemplates.cpp" />
     <ClCompile Include="src\refreshinfo.cpp" />
@@ -454,6 +467,8 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\scenariodata.cpp" />
     <ClCompile Include="src\scenariodataarray.cpp" />
     <ClCompile Include="src\scenarioheader.cpp" />
+    <ClCompile Include="src\scenpropinterf.cpp" />
+    <ClCompile Include="src\scenpropinterfhooks.cpp" />
     <ClCompile Include="src\scripts.cpp" />
     <ClCompile Include="src\scriptutils.cpp" />
     <ClCompile Include="src\settings.cpp" />
@@ -568,6 +583,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\2denginemap.h" />
     <ClInclude Include="include\2denginemapimpl.h" />
     <ClInclude Include="include\aiattitudes.h" />
+    <ClInclude Include="include\aiattitudescat.h" />
+    <ClInclude Include="include\aiattitudestable.h" />
     <ClInclude Include="include\aiblockingstats.h" />
     <ClInclude Include="include\aigiveitemsaction.h" />
     <ClInclude Include="include\aigiveitemsactionhooks.h" />
@@ -637,9 +654,18 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\batviewerutils.h" />
     <ClInclude Include="include\bindings\attackview.h" />
     <ClInclude Include="include\bindings\battlemsgdataview.h" />
+    <ClInclude Include="include\bindings\battlemsgdataviewmutable.h" />
+    <ClInclude Include="include\bindings\crystalview.h" />
     <ClInclude Include="include\bindings\currencyview.h" />
     <ClInclude Include="include\bindings\diplomacyview.h" />
     <ClInclude Include="include\bindings\fogview.h" />
+    <ClInclude Include="include\bindings\gameview.h" />
+    <ClInclude Include="include\bindings\globalvariablesview.h" />
+    <ClInclude Include="include\bindings\globalview.h" />
+    <ClInclude Include="include\bindings\merchantview.h" />
+    <ClInclude Include="include\bindings\mercsview.h" />
+    <ClInclude Include="include\bindings\siteview.h" />
+    <ClInclude Include="include\bindings\trainerview.h" />
     <ClInclude Include="include\bindings\unitviewdummy.h" />
     <ClInclude Include="include\bindings\dynupgradeview.h" />
     <ClInclude Include="include\bindings\fortview.h" />
@@ -670,6 +696,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\buildingtype.h" />
     <ClInclude Include="include\chatinterf.h" />
     <ClInclude Include="include\citystackinterfhooks.h" />
+    <ClInclude Include="include\customaibattle.h" />
     <ClInclude Include="include\custombuildingcategories.h" />
     <ClInclude Include="include\d2unorderedmap.h" />
     <ClInclude Include="include\ddstackgroup.h" />
@@ -677,6 +704,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\diplomacyhooks.h" />
     <ClInclude Include="include\fonts.h" />
     <ClInclude Include="include\fontshooks.h" />
+    <ClInclude Include="include\midcrystal.h" />
     <ClInclude Include="include\middiplomacy.h" />
     <ClInclude Include="include\midgardmapfog.h" />
     <ClInclude Include="include\displayd3d.h" />
@@ -777,6 +805,10 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midpopupinterf.h" />
     <ClInclude Include="include\midrod.h" />
     <ClInclude Include="include\midserverlogichooks.h" />
+    <ClInclude Include="include\midsitemage.h" />
+    <ClInclude Include="include\midsitemerchant.h" />
+    <ClInclude Include="include\midsitemercs.h" />
+    <ClInclude Include="include\midsitetrainer.h" />
     <ClInclude Include="include\midunitext.h" />
     <ClInclude Include="include\midunitgroupadapter.h" />
     <ClInclude Include="include\mqdb.h" />
@@ -794,6 +826,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\nativeraceinfo.h" />
     <ClInclude Include="include\nativespellinfo.h" />
     <ClInclude Include="include\nativeunitinfo.h" />
+    <ClInclude Include="include\resourcetype.h" />
     <ClInclude Include="include\scenarioobjectstreams.h" />
     <ClInclude Include="include\scenariotemplates.h" />
     <ClInclude Include="include\scenedit.h" />
@@ -1093,6 +1126,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\scenariodataarray.h" />
     <ClInclude Include="include\scenarioheader.h" />
     <ClInclude Include="include\scenarioinfo.h" />
+    <ClInclude Include="include\scenpropinterf.h" />
+    <ClInclude Include="include\scenpropinterfhooks.h" />
     <ClInclude Include="include\scripts.h" />
     <ClInclude Include="include\scriptutils.h" />
     <ClInclude Include="include\settings.h" />

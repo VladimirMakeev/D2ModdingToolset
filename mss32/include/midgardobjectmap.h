@@ -75,7 +75,7 @@ struct IMidgardObjectMapVftable
     using GetObjectsTotal = int(__thiscall*)(const IMidgardObjectMap* thisptr);
     GetObjectsTotal getObjectsTotal;
 
-    using GetIterator = IteratorPtr*(__thiscall*)(IMidgardObjectMap* thisptr,
+    using GetIterator = IteratorPtr*(__thiscall*)(const IMidgardObjectMap* thisptr,
                                                   IteratorPtr* iterator);
 
     /** Returns an iterator to the first record. */

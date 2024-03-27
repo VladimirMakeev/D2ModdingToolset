@@ -56,9 +56,11 @@ struct IdView
 
     // For Lua hash table
     int getValue() const;
+    int getType() const;
     int getTypeIndex() const;
 
     static IdView getEmptyId();
+    static IdView getSummonId(int position);
 
     game::CMidgardID id;
 };

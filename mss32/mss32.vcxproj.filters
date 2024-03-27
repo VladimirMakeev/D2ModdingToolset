@@ -1265,11 +1265,56 @@
     <ClCompile Include="src\bindings\fogview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\globalvariablesview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\gameview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\battlemsgdataviewmutable.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
     <ClCompile Include="src\sitecategories.cpp">
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\scenarioobjectstreams.cpp">
       <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\globalview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resourcetype.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\crystalview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\siteview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\merchantview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\mercsview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bindings\trainerview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenpropinterf.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenpropinterfhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aiattitudescat.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aiattitudestable.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\customaibattle.cpp">
+      <Filter>features</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3295,6 +3340,15 @@
     <ClInclude Include="include\bindings\fogview.h">
       <Filter>bindings</Filter>
     </ClInclude>
+    <ClInclude Include="include\bindings\globalvariablesview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\gameview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\battlemsgdataviewmutable.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
     <ClInclude Include="include\scenarioobjectstreams.h">
       <Filter>game</Filter>
     </ClInclude>
@@ -3303,6 +3357,57 @@
     </ClInclude>
     <ClInclude Include="include\objectinterf.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\globalview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midcrystal.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\resourcetype.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\crystalview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midsitemerchant.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midsitemage.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midsitemercs.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midsitetrainer.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\siteview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\merchantview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\mercsview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\trainerview.h">
+      <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scenpropinterf.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scenpropinterfhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\aiattitudescat.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\aiattitudestable.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\customaibattle.h">
+      <Filter>features</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

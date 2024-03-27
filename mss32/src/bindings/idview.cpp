@@ -55,13 +55,20 @@ void IdView::bind(sol::state& lua)
         sol::constructors<IdView(const char*), IdView(const std::string&),
                           IdView(const game::CMidgardID*), IdView(const game::CMidgardID&)>());
     id["value"] = sol::property(&IdView::getValue);
+    id["type"] = sol::property(&IdView::getType);
     id["typeIndex"] = sol::property(&IdView::getTypeIndex);
     id["emptyId"] = IdView::getEmptyId;
+    id["summonId"] = IdView::getSummonId;
 }
 
 int IdView::getValue() const
 {
     return id.value;
+}
+
+int IdView::getType() const
+{
+    return static_cast<int>(game::CMidgardIDApi::get().getType(&id));
 }
 
 int IdView::getTypeIndex() const
@@ -73,6 +80,16 @@ int IdView::getTypeIndex() const
 IdView IdView::getEmptyId()
 {
     return IdView{game::emptyId};
+}
+
+IdView IdView::getSummonId(int position)
+{
+    using namespace game;
+
+    CMidgardID summonId = emptyId;
+    CMidgardIDApi::get().summonUnitIdFromPosition(&summonId, position);
+
+    return IdView{summonId};
 }
 
 } // namespace bindings

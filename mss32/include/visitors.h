@@ -25,6 +25,7 @@ namespace game {
 struct CMidgardID;
 struct IMidgardObjectMap;
 struct CScenarioVisitorVftable;
+struct LAttitudesCategory;
 
 /**
  * Base for all visitor classes.
@@ -188,6 +189,23 @@ struct Api
                                                   IMidgardObjectMap* objectMap,
                                                   int apply);
     ExtractUnitFromGroup extractUnitFromGroup;
+
+    /**
+     * Changes player attitude.
+     * Uses CVisitorPlayerSetAttitude.
+     * Can be used only in Scenario Editor.
+     * @param[in] playerId id of player to change.
+     * @param[in] attitude new attitude category to set.
+     * @param[in] objectMap interface used for objects search.
+     * @param apply specifies whether attitude should be changed.
+     * @returns true if player attitude was changed when apply set to 1. If apply set to 0, returns
+     * whether visitor can be applied.
+     */
+    using PlayerSetAttitude = bool(__stdcall*)(const CMidgardID* playerId,
+                                               const LAttitudesCategory* attitude,
+                                               IMidgardObjectMap* objectMap,
+                                               int apply);
+    PlayerSetAttitude playerSetAttitude;
 };
 
 Api& get();

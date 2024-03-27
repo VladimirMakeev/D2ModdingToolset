@@ -86,6 +86,10 @@ const game::CMidPlayer* getPlayerByUnitId(const game::IMidgardObjectMap* objectM
 const game::CMidgardID getPlayerIdByUnitId(const game::IMidgardObjectMap* objectMap,
                                            const game::CMidgardID* unitId);
 
+/** Returns player that controls specified unit group. In case of ruins, returns Neutrals player. */
+const game::CMidPlayer* getGroupOwner(const game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* groupId);
+
 const game::CMidScenVariables* getScenarioVariables(const game::IMidgardObjectMap* objectMap);
 
 const game::CMidgardPlan* getMidgardPlan(const game::IMidgardObjectMap* objectMap);

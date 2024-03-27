@@ -51,7 +51,7 @@ struct GlobalVariables
     int batBmodif;
     /** Max abilities leader can learn. 'LDRMAXABIL' */
     int maxLeaderAbilities;
-    /** Spy discovery change per turn. 'SPY_DISCOV' */
+    /** Spy discovery chance per turn. 'SPY_DISCOV' */
     int spyDiscoveryChance;
     /** 'POISON_S' */
     int poisonStackDamage;
@@ -83,9 +83,9 @@ struct GlobalVariables
     int rodRange;
     /** Profit per mana crystal or gold mine per turn. 'CRYSTAL_P' */
     int crystalProfit;
-    /** 'CONST_UPG' */
-    int constUpg;
-    /** Change to get spells with capture of a capital. 'GAIN_SPELL' */
+    /** 'CONST_URG' */
+    int constUrg;
+    /** Chance to get spells with capture of a capital. 'GAIN_SPELL' */
     int gainSpellChance;
     /** Bonus per day regeneration for units in ruins. 'REGEN_RUIN' */
     int regenRuin;
