@@ -242,6 +242,10 @@ game::IAttack* getAttack(const game::IUsUnit* unit, bool primary, bool checkAltA
 game::IAttack* getAltAttack(const game::IUsUnit* unit, bool primary)
 {
     auto attack = getAttack(unit, primary, false);
+    if (!attack) {
+        return nullptr;
+    }
+
     auto altAttack = getGlobalAttack(attack->vftable->getAltAttackId(attack));
     if (!altAttack) {
         return nullptr;
