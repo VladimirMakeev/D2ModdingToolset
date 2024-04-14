@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2021 Vladimir Makeev.
+ * Copyright (C) 2024 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,38 +17,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "raceset.h"
-#include "version.h"
-#include <array>
+#ifndef TESTLEADERTOZONEHOOKS_H
+#define TESTLEADERTOZONEHOOKS_H
 
-namespace game::RaceSetApi {
+namespace game {
+struct CTestLeaderToZone;
+struct IMidgardObjectMap;
+struct CMidgardID;
+} // namespace game
 
-// clang-format off
-static std::array<Api, 3> functions = {{
-    // Akella
-    Api{
-        (Api::Clear)0x424879,
-        (Api::Add)0x4246d4,
-        (Api::Find)0x442d2d,
-    },
-    // Russobit
-    Api{
-        (Api::Clear)0x424879,
-        (Api::Add)0x4246d4,
-        (Api::Find)0x442d2d,
-    },
-    // Gog
-    Api{
-        (Api::Clear)0x42434a,
-        (Api::Add)0x4241e7,
-        (Api::Find)0x442992,
-    }
-}};
-// clang-format on
+namespace hooks {
 
-Api& get()
-{
-    return functions[static_cast<int>(hooks::gameVersion())];
+bool __fastcall testLeaderToZoneHooked(const game::CTestLeaderToZone* thisptr,
+                                       int /*%edx*/,
+                                       const game::IMidgardObjectMap* objectMap,
+                                       const game::CMidgardID* playerId,
+                                       const game::CMidgardID* eventId);
+
 }
 
-} // namespace game::RaceSetApi
+#endif // TESTLEADERTOZONEHOOKS_H

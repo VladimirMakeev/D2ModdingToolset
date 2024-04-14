@@ -21,6 +21,7 @@
 #define MIDSERVERLOGIC_H
 
 #include "d2set.h"
+#include "idlist.h"
 #include "idset.h"
 #include "midmsgsender.h"
 #include "midserverlogiccore.h"
@@ -32,6 +33,8 @@ struct CMidServer;
 struct CStreamBits;
 struct AiLogic;
 struct CMidgardScenarioMap;
+struct IEventEffect;
+struct CMqPoint;
 
 /*
  * All the fields initially point to the same parent logic. Is this some kind of enumerable
@@ -85,7 +88,7 @@ struct CMidServerLogic
     CStreamBits* streamBits;
     int unknown7;
     CMidServerLogicData2 data2;
-    int unknown8;
+    int currentPlayerIndex;
     int unknown9;
     bool turnNumberIsZero;
     char padding[3];
@@ -110,7 +113,7 @@ assert_offset(CMidServerLogic, data, 24);
 assert_offset(CMidServerLogic, aiLogic, 36);
 assert_offset(CMidServerLogic, playersIdList, 56);
 assert_offset(CMidServerLogic, data2, 80);
-assert_offset(CMidServerLogic, unknown8, 244);
+assert_offset(CMidServerLogic, currentPlayerIndex, 244);
 assert_offset(CMidServerLogic, unknown11, 272);
 assert_offset(CMidServerLogic, list2, 300);
 assert_offset(CMidServerLogic, unknown17, 316);
@@ -139,6 +142,67 @@ struct Api
                                                 const CMidgardID* toStackId,
                                                 const IdSet* itemIds);
     StackExchangeItem stackExchangeItem;
+
+    using ApplyEventEffectsAndCheckMidEventTriggerers =
+        bool(__thiscall*)(CMidServerLogic** thisptr,
+                          List<IEventEffect*>* effectsList,
+                          const CMidgardID* triggererId,
+                          const CMidgardID* playingStackId);
+    ApplyEventEffectsAndCheckMidEventTriggerers applyEventEffectsAndCheckMidEventTriggerers;
+
+    using StackMove = bool(__thiscall*)(CMidServerLogic** thisptr,
+                                        const CMidgardID* playerId,
+                                        List<Pair<CMqPoint, int>>* movementPath,
+                                        const CMidgardID* stackId,
+                                        const CMqPoint* startingPoint,
+                                        const CMqPoint* endPoint);
+    StackMove stackMove;
+
+    using FilterAndProcessEventsNoPlayer = bool(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                            List<CMidEvent*>* eventObjectList,
+                                                            List<IEventEffect*>* effectsList,
+                                                            bool* stopProcessing,
+                                                            IdList* executedEvents,
+                                                            const CMidgardID* triggererStackId,
+                                                            const CMidgardID* playingStackId);
+    FilterAndProcessEventsNoPlayer filterAndProcessEventsNoPlayer;
+
+    using CheckAndExecuteEvent = bool(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                  List<IEventEffect*>* effectsList,
+                                                  bool* stopProcessing,
+                                                  const CMidgardID* eventId,
+                                                  const CMidgardID* playerId,
+                                                  const CMidgardID* stackTriggererId,
+                                                  const CMidgardID* playingStackId,
+                                                  int samePlayer);
+    CheckAndExecuteEvent checkAndExecuteEvent;
+
+    using ExecuteEventEffects = void(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                 List<IEventEffect*>* effectsList,
+                                                 bool* stopProcessing,
+                                                 const CMidgardID* eventId,
+                                                 const CMidgardID* playerId,
+                                                 const CMidgardID* stackTriggererId,
+                                                 const CMidgardID* playingStackId);
+    ExecuteEventEffects executeEventEffects;
+
+    using FilterAndProcessEvents = bool(__stdcall*)(IMidgardObjectMap* objectMap,
+                                                    List<CMidEvent*>* eventObjectList,
+                                                    List<IEventEffect*>* effectsList,
+                                                    bool* stopProcessing,
+                                                    IdList* executedEvents,
+                                                    const CMidgardID* playerId,
+                                                    const CMidgardID* triggererStackId,
+                                                    const CMidgardID* playingStackId);
+    FilterAndProcessEvents filterAndProcessEvents;
+
+    using CheckEventConditions = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                                  List<IEventEffect*>* effectsList,
+                                                  const CMidgardID* playerId,
+                                                  const CMidgardID* stackTriggererId,
+                                                  int samePlayer,
+                                                  const CMidgardID* eventId);
+    CheckEventConditions checkEventConditions;
 };
 
 Api& get();

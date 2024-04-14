@@ -767,4 +767,21 @@ const game::CMidgardMapFog* getFog(const game::IMidgardObjectMap* objectMap,
     return static_cast<const CMidgardMapFog*>(obj);
 }
 
+const game::CMidLocation* getLocation(const game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* locationId)
+{
+    using namespace game;
+
+    auto obj{objectMap->vftable->findScenarioObjectById(objectMap, locationId)};
+    if (!obj) {
+        return nullptr;
+    }
+
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+
+    return (const CMidLocation*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType,
+                                            rtti.CMidLocationType, 0);
+}
+
 } // namespace hooks

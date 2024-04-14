@@ -18,22 +18,37 @@
  */
 
 #include "midserverlogichooks.h"
+#include "gameutils.h"
 #include "idset.h"
 #include "log.h"
 #include "logutils.h"
 #include "midgardscenariomap.h"
+#include "midplayer.h"
 #include "midserver.h"
 #include "midserverlogic.h"
+#include "midstack.h"
 #include "originalfunctions.h"
+#include "racetype.h"
 #include "refreshinfo.h"
 #include "settings.h"
+#include "timer.h"
 #include "unitstovalidate.h"
 #include "unitutils.h"
 #include "utils.h"
+#include <chrono>
 #include <fmt/format.h>
 #include <process.h>
+#include <string_view>
+#include <unordered_map>
+#include <unordered_set>
 
 namespace hooks {
+
+extern const std::string_view eventsPerformanceLog{"eventsPerformance.log"};
+
+long long conditionsTotalTime = 0;
+long long conditionsSystemTime = 0;
+long long effectsTime = 0;
 
 void addValidatedUnitsToChangedObjects(game::CMidgardScenarioMap* scenarioMap)
 {
@@ -144,6 +159,411 @@ bool __fastcall midServerLogicSendRefreshInfoHooked(const game::CMidServerLogic*
     }
 
     return true;
+}
+
+bool __fastcall applyEventEffectsAndCheckMidEventTriggerersHooked(
+    game::CMidServerLogic** thisptr,
+    int /*%edx*/,
+    game::List<game::IEventEffect*>* effectsList,
+    const game::CMidgardID* triggererId,
+    const game::CMidgardID* playingStackId)
+{
+#if 0
+    const ScopedTimer timer{"Apply event effects and check triggerers", eventsPerformanceLog};
+#endif
+
+    return getOriginalFunctions().applyEventEffectsAndCheckMidEventTriggerers(thisptr, effectsList,
+                                                                              triggererId,
+                                                                              playingStackId);
+}
+
+bool __fastcall stackMoveHooked(game::CMidServerLogic** thisptr,
+                                int /*%edx*/,
+                                const game::CMidgardID* playerId,
+                                game::List<game::Pair<game::CMqPoint, int>>* movementPath,
+                                const game::CMidgardID* stackId,
+                                const game::CMqPoint* startingPoint,
+                                const game::CMqPoint* endPoint)
+{
+    using namespace game;
+
+#if 0
+    char message[256];
+    const auto result{fmt::format_to_n(message, sizeof(message) - 1u,
+                                       "Stack move from ({:d}, {:d}) to ({:d}, {:d})",
+                                       startingPoint->x, startingPoint->y, endPoint->x,
+                                       endPoint->y)};
+    message[result.size] = 0;
+
+    const ScopedTimer timer{std::string_view{message, result.size}, eventsPerformanceLog};
+#endif
+
+    return getOriginalFunctions().stackMove(thisptr, playerId, movementPath, stackId, startingPoint,
+                                            endPoint);
+}
+
+bool __stdcall filterAndProcessEventsNoPlayerHooked(game::IMidgardObjectMap* objectMap,
+                                                    game::List<game::CMidEvent*>* eventObjectList,
+                                                    game::List<game::IEventEffect*>* effectsList,
+                                                    bool* stopProcessing,
+                                                    game::IdList* executedEvents,
+                                                    const game::CMidgardID* triggererStackId,
+                                                    const game::CMidgardID* playingStackId)
+{
+    using namespace game;
+
+#if 0
+    const ScopedTimer timer{"Filter and process events (no player)", eventsPerformanceLog};
+#endif
+
+    return CMidServerLogicApi::get().filterAndProcessEvents(objectMap, eventObjectList, effectsList,
+                                                            stopProcessing, executedEvents,
+                                                            &emptyId, triggererStackId,
+                                                            playingStackId);
+}
+
+bool __stdcall filterAndProcessEventsHooked(game::IMidgardObjectMap* objectMap,
+                                            game::List<game::CMidEvent*>* eventObjectList,
+                                            game::List<game::IEventEffect*>* effectsList,
+                                            bool* stopProcessing,
+                                            game::IdList* executedEvents,
+                                            const game::CMidgardID* playerId,
+                                            const game::CMidgardID* triggererStackId,
+                                            const game::CMidgardID* playingStackId)
+{
+    using namespace game;
+
+#if 0
+    const ScopedTimer timer{"Filter and process events", eventsPerformanceLog};
+#endif
+
+    if (*playerId != emptyId && gameFunctions().ignorePlayerEvents(playerId, objectMap)) {
+        return false;
+    }
+
+    CMidgardID triggererId{*triggererStackId};
+    const CMidStack* triggererStack{};
+
+    if (triggererId != emptyId) {
+        triggererStack = getStack(objectMap, &triggererId);
+        if (!triggererStack && triggererId != emptyId) {
+            triggererId = emptyId;
+        }
+    }
+
+    // Use unordered set for fast lookup of executed events
+    std::unordered_set<CMidgardID, CMidgardIDHash> executedEventsSet(executedEvents->length);
+    for (const CMidgardID& id : *executedEvents) {
+        executedEventsSet.insert(id);
+    }
+
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+
+    // Cache players so we won't waste time searching them every time
+    std::unordered_map<RaceId, CMidgardID /* player id */> racePlayerMap;
+
+    auto cachePlayer = [triggererStack, &racePlayerMap, &rtti, &dynamicCast](const auto* obj) {
+        auto* player = (const CMidPlayer*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType,
+                                                      rtti.CMidPlayerType, 0);
+
+        if (!triggererStack || player->id == triggererStack->ownerId) {
+            const RaceId raceId{player->raceType->data->raceType.id};
+            racePlayerMap[raceId] = player->id;
+        }
+    };
+
+    forEachScenarioObject(objectMap, IdType::Player, cachePlayer);
+
+    const auto& raceSetFind{RaceSetApi::get().find};
+    const auto& checkAndExecuteEvent{CMidServerLogicApi::get().checkAndExecuteEvent};
+
+    for (const CMidEvent* evt : *eventObjectList) {
+        if (!evt->enabled) {
+            // Event disabled, don't waste time checking anything
+            continue;
+        }
+
+        if (executedEventsSet.find(evt->id) != executedEventsSet.end()) {
+            // Event already executed, skip
+            continue;
+        }
+
+        const auto end{evt->racesCanTrigger.end()};
+
+        bool eventExecuted = false;
+        LRaceCategory raceCategory{};
+        SetIterator<LRaceCategory> it{};
+        for (const auto& [raceId, playerCanTriggerId] : racePlayerMap) {
+            // Only category id is checked during search. Don't bother setting other fields
+            raceCategory.id = raceId;
+            raceSetFind(&evt->racesCanTrigger, &it, &raceCategory);
+
+            if (it == end) {
+                // Race can't trigger
+                continue;
+            }
+
+#ifdef D2_MEASURE_EVENTS_TIME
+            conditionsTotalTime = 0;
+            conditionsSystemTime = 0;
+            effectsTime = 0;
+
+            char message[256];
+            const auto result{fmt::format_to_n(message, sizeof(message) - 1u, "  Event '{:s}'",
+                                               evt->name.string ? evt->name.string : "?")};
+            message[result.size] = 0;
+
+            {
+                const ScopedTimer eventTimer{std::string_view{message, result.size},
+                                             eventsPerformanceLog};
+#endif
+
+                const bool samePlayer = *playerId == playerCanTriggerId;
+                // Player can trigger, check event conditions and execute effects
+                if (checkAndExecuteEvent(objectMap, effectsList, stopProcessing, &evt->id,
+                                         &playerCanTriggerId, &triggererId, playingStackId,
+                                         samePlayer)) {
+                    eventExecuted = true;
+                }
+
+#ifdef D2_MEASURE_EVENTS_TIME
+            }
+
+            const auto overhead{conditionsSystemTime - conditionsTotalTime};
+            logDebug("eventsPerformance.log",
+                     fmt::format("{:s} conditions time {:d} us, "
+                                 "conditions system time {:d} us (overhead {:d} us), "
+                                 "effects time {:d} us",
+                                 message, conditionsTotalTime, conditionsSystemTime, overhead,
+                                 effectsTime));
+#endif
+        }
+
+        if (eventExecuted) {
+            IdListApi::get().pushBack(executedEvents, &evt->id);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool __stdcall checkEventConditionsHooked(const game::IMidgardObjectMap* objectMap,
+                                          game::List<game::IEventEffect*>* effectsList,
+                                          const game::CMidgardID* playerId,
+                                          const game::CMidgardID* stackTriggererId,
+                                          int samePlayer,
+                                          const game::CMidgardID* eventId)
+{
+    using namespace game;
+
+#ifdef D2_MEASURE_EVENTS_TIME
+    const ScopedValueTimer timer{conditionsSystemTime};
+#endif
+
+    return getOriginalFunctions().checkEventConditions(objectMap, effectsList, playerId,
+                                                       stackTriggererId, samePlayer, eventId);
+}
+
+void __stdcall executeEventEffectsHooked(game::IMidgardObjectMap* objectMap,
+                                         game::List<game::IEventEffect*>* effectsList,
+                                         bool* stopProcessing,
+                                         const game::CMidgardID* eventId,
+                                         const game::CMidgardID* playerId,
+                                         const game::CMidgardID* stackTriggererId,
+                                         const game::CMidgardID* playingStackId)
+{
+    using namespace game;
+
+#ifdef D2_MEASURE_EVENTS_TIME
+    const ScopedValueTimer timer{effectsTime};
+#endif
+
+    getOriginalFunctions().executeEventEffects(objectMap, effectsList, stopProcessing, eventId,
+                                               playerId, stackTriggererId, playingStackId);
+}
+
+static bool doTestHooked(game::ITestConditionVftable::Test testFunc,
+                         const char* name,
+                         const game::ITestCondition* thisptr,
+                         const game::IMidgardObjectMap* objectMap,
+                         const game::CMidgardID* playerId,
+                         const game::CMidgardID* eventId)
+{
+    using namespace game;
+
+#ifdef D2_MEASURE_EVENTS_TIME
+    char message[256];
+    const auto result{
+        fmt::format_to_n(message, sizeof(message) - 1u, "    Test condition '{:s}'", name)};
+    message[result.size] = 0;
+
+    const ScopedTimer conditionTimer{std::string_view{message, result.size}, eventsPerformanceLog};
+    const ScopedValueTimer timer{conditionsTotalTime};
+#endif
+
+    return testFunc(thisptr, objectMap, playerId, eventId);
+}
+
+bool __fastcall testFreqHooked(const game::ITestCondition* thisptr,
+                               int /*%edx*/,
+                               const game::IMidgardObjectMap* objectMap,
+                               const game::CMidgardID* playerId,
+                               const game::CMidgardID* eventId)
+{
+    return doTestHooked(getOriginalFunctions().testFrequency, "frequency", thisptr, objectMap,
+                        playerId, eventId);
+}
+
+bool __fastcall testLocationHooked(const game::ITestCondition* thisptr,
+                                   int /*%edx*/,
+                                   const game::IMidgardObjectMap* objectMap,
+                                   const game::CMidgardID* playerId,
+                                   const game::CMidgardID* eventId)
+{
+    return doTestHooked(getOriginalFunctions().testLocation, "location", thisptr, objectMap,
+                        playerId, eventId);
+}
+
+bool __fastcall testEnterCityHooked(const game::ITestCondition* thisptr,
+                                    int /*%edx*/,
+                                    const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* playerId,
+                                    const game::CMidgardID* eventId)
+{
+    return doTestHooked(getOriginalFunctions().testEnterCity, "enter city", thisptr, objectMap,
+                        playerId, eventId);
+}
+
+bool __fastcall testLeaderToCityHooked(const game::ITestCondition* thisptr,
+                                       int /*%edx*/,
+                                       const game::IMidgardObjectMap* objectMap,
+                                       const game::CMidgardID* playerId,
+                                       const game::CMidgardID* eventId)
+{
+    return doTestHooked(getOriginalFunctions().testLeaderToCity, "leader to city", thisptr,
+                        objectMap, playerId, eventId);
+}
+
+bool __fastcall testOwnCityHooked(const game::ITestCondition* thisptr,
+                                  int /*%edx*/,
+                                  const game::IMidgardObjectMap* objectMap,
+                                  const game::CMidgardID* playerId,
+                                  const game::CMidgardID* eventId)
+{
+    return doTestHooked(getOriginalFunctions().testOwnCity, "own city", thisptr, objectMap,
+                        playerId, eventId);
+}
+
+bool __fastcall testKillStackHooked(const game::ITestCondition* thisptr,
+                                    int /*%edx*/,
+                                    const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* playerId,
+                                    const game::CMidgardID* eventId)
+{
+    return doTestHooked(getOriginalFunctions().testKillStack, "kill stack", thisptr, objectMap,
+                        playerId, eventId);
+}
+
+bool __fastcall testOwnItemHooked(const game::ITestCondition* thisptr,
+                                  int /*%edx*/,
+                                  const game::IMidgardObjectMap* objectMap,
+                                  const game::CMidgardID* playerId,
+                                  const game::CMidgardID* eventId)
+{
+    return doTestHooked(getOriginalFunctions().testOwnItem, "own item", thisptr, objectMap,
+                        playerId, eventId);
+}
+
+bool __fastcall testLeaderOwnItemHooked(const game::ITestCondition* thisptr,
+                                        int /*%edx*/,
+                                        const game::IMidgardObjectMap* objectMap,
+                                        const game::CMidgardID* playerId,
+                                        const game::CMidgardID* eventId)
+{
+    return doTestHooked(getOriginalFunctions().testLeaderOwnItem, "leader own item", thisptr,
+                        objectMap, playerId, eventId);
+}
+
+bool __fastcall testDiplomacyHooked(const game::ITestCondition* thisptr,
+                                    int /*%edx*/,
+                                    const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* playerId,
+                                    const game::CMidgardID* eventId)
+{
+    return doTestHooked(getOriginalFunctions().testDiplomacy, "diplomacy", thisptr, objectMap,
+                        playerId, eventId);
+}
+
+bool __fastcall testAllianceHooked(const game::ITestCondition* thisptr,
+                                   int /*%edx*/,
+                                   const game::IMidgardObjectMap* objectMap,
+                                   const game::CMidgardID* playerId,
+                                   const game::CMidgardID* eventId)
+{
+    return doTestHooked(getOriginalFunctions().testAlliance, "alliance", thisptr, objectMap,
+                        playerId, eventId);
+}
+
+bool __fastcall testLootRuinHooked(const game::ITestCondition* thisptr,
+                                   int /*%edx*/,
+                                   const game::IMidgardObjectMap* objectMap,
+                                   const game::CMidgardID* playerId,
+                                   const game::CMidgardID* eventId)
+{
+    return doTestHooked(getOriginalFunctions().testLootRuin, "loot ruin", thisptr, objectMap,
+                        playerId, eventId);
+}
+
+bool __fastcall testTransformLandHooked(const game::ITestCondition* thisptr,
+                                        int /*%edx*/,
+                                        const game::IMidgardObjectMap* objectMap,
+                                        const game::CMidgardID* playerId,
+                                        const game::CMidgardID* eventId)
+{
+    return doTestHooked(getOriginalFunctions().testTransformLand, "transform land", thisptr,
+                        objectMap, playerId, eventId);
+}
+
+bool __fastcall testVisitSiteHooked(const game::ITestCondition* thisptr,
+                                    int /*%edx*/,
+                                    const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* playerId,
+                                    const game::CMidgardID* eventId)
+{
+    return doTestHooked(getOriginalFunctions().testVisitSite, "visit site", thisptr, objectMap,
+                        playerId, eventId);
+}
+
+bool __fastcall testItemToLocationHooked(const game::ITestCondition* thisptr,
+                                         int /*%edx*/,
+                                         const game::IMidgardObjectMap* objectMap,
+                                         const game::CMidgardID* playerId,
+                                         const game::CMidgardID* eventId)
+{
+    return doTestHooked(getOriginalFunctions().testItemToLocation, "item to location", thisptr,
+                        objectMap, playerId, eventId);
+}
+
+bool __fastcall testStackExistsHooked(const game::ITestCondition* thisptr,
+                                      int /*%edx*/,
+                                      const game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* playerId,
+                                      const game::CMidgardID* eventId)
+{
+    return doTestHooked(getOriginalFunctions().testStackExists, "stack exists", thisptr, objectMap,
+                        playerId, eventId);
+}
+
+bool __fastcall testVarInRangeHooked(const game::ITestCondition* thisptr,
+                                     int /*%edx*/,
+                                     const game::IMidgardObjectMap* objectMap,
+                                     const game::CMidgardID* playerId,
+                                     const game::CMidgardID* eventId)
+{
+    return doTestHooked(getOriginalFunctions().testVarInRange, "var in range", thisptr, objectMap,
+                        playerId, eventId);
 }
 
 } // namespace hooks

@@ -35,6 +35,7 @@ struct CMidServer;
 struct IMidgardObjectMap;
 struct NetMsgEntryData;
 struct NetPlayerInfo;
+struct CMidEvent;
 
 struct CMidServerLogicCoreData
 {
@@ -47,7 +48,7 @@ struct CMidServerLogicCoreData
     int gameVersion;
     NetMsgEntryData** netMsgEntryData;
     IMidgardObjectMap* objectMap;
-    List<void*> list;
+    List<CMidEvent*> eventObjectsList;
     int unknown4;
     std::uint32_t playerNetId;
     Vector<NetPlayerInfo>* players;
@@ -70,7 +71,7 @@ struct CMidServerLogicCoreData
 };
 
 assert_size(CMidServerLogicCoreData, 72);
-assert_offset(CMidServerLogicCoreData, list, 24);
+assert_offset(CMidServerLogicCoreData, eventObjectsList, 24);
 assert_offset(CMidServerLogicCoreData, players, 48);
 
 struct CMidServerLogicCore : public IMqNetTraffic

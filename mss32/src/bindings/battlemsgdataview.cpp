@@ -441,7 +441,7 @@ bool BattleMsgDataView::isUnitWaiting(const UnitView& unit) const
 
 bool BattleMsgDataView::isUnitWaitingById(const IdView& unitId) const
 {
-    const auto* info{ game::BattleMsgDataApi::get().getUnitInfoById(battleMsgData, &unitId.id) };
+    const auto* info{game::BattleMsgDataApi::get().getUnitInfoById(battleMsgData, &unitId.id)};
     if (!info) {
         return false;
     }

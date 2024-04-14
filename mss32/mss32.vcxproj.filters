@@ -1316,6 +1316,9 @@
     <ClCompile Include="src\customaibattle.cpp">
       <Filter>features</Filter>
     </ClCompile>
+    <ClCompile Include="src\testleadertozonehooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3408,6 +3411,15 @@
     </ClInclude>
     <ClInclude Include="include\customaibattle.h">
       <Filter>features</Filter>
+    </ClInclude>
+    <ClInclude Include="include\testleadertozone.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\testleadertozonehooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\timer.h">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

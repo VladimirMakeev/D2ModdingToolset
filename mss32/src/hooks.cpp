@@ -96,6 +96,7 @@
 #include "interftexthooks.h"
 #include "intvector.h"
 #include "isoenginegroundhooks.h"
+#include "isoview.h"
 #include "itembase.h"
 #include "itemcategory.h"
 #include "itemexpotionboost.h"
@@ -164,6 +165,8 @@
 #include "stackbattleactionmsg.h"
 #include "summonhooks.h"
 #include "testconditionhooks.h"
+#include "testleadertozone.h"
+#include "testleadertozonehooks.h"
 #include "transformotherhooks.h"
 #include "transformselfhooks.h"
 #include "umattack.h"
@@ -202,6 +205,8 @@ static Hooks getGameHooks()
     auto& fn = gameFunctions();
     auto& battle = BattleMsgDataApi::get();
     auto& orig = getOriginalFunctions();
+    auto& serverLogic{CMidServerLogicApi::get()};
+    auto& eventConditions{ITestConditionApi::get()};
 
     // clang-format off
     Hooks hooks{
@@ -282,6 +287,7 @@ static Hooks getGameHooks()
         // Fix AI not being able to find target for lower damage/ini attack
         // Fix incorrect AI prioritization of shatter attack targets
         {battle.findAttackTarget, findAttackTargetHooked, (void**)&orig.findAttackTarget},
+        {battle.findHealAttackTarget, findHealAttackTargetHooked},
         // Support custom attack sources
         {fn.getUnitAttackSourceImmunities, getUnitAttackSourceImmunitiesHooked},
         {battle.isUnitAttackSourceWardRemoved, isUnitAttackSourceWardRemovedHooked},
@@ -330,7 +336,7 @@ static Hooks getGameHooks()
         // Fix missing modifiers of alternative attacks
         {fn.getUnitAttacks, getUnitAttacksHooked},
         // Support custom event conditions
-        {ITestConditionApi::get().create, createTestConditionHooked, (void**)&orig.createTestCondition},
+        {eventConditions.create, createTestConditionHooked, (void**)&orig.createTestCondition},
         // Support custom event effects
         //{IEffectResultApi::get().create, createEffectResultHooked, (void**)&orig.createEffectResult},
         // Support additional as well as high tier units in hire list
@@ -383,6 +389,30 @@ static Hooks getGameHooks()
         {fn.computeMovementCost, computeMovementCostHooked},
         // Support custom scripts for AI battle actions
         {battle.aiChooseBattleAction, aiChooseBattleActionHooked, (void**)&orig.aiChooseBattleAction},
+        // Profile events
+        {serverLogic.applyEventEffectsAndCheckMidEventTriggerers, applyEventEffectsAndCheckMidEventTriggerersHooked, (void**)&orig.applyEventEffectsAndCheckMidEventTriggerers},
+        {serverLogic.stackMove, stackMoveHooked, (void**)&orig.stackMove},
+        {serverLogic.filterAndProcessEventsNoPlayer, filterAndProcessEventsNoPlayerHooked, (void**)&orig.filterAndProcessEventsNoPlayer},
+        {serverLogic.filterAndProcessEvents, filterAndProcessEventsHooked, (void**)&orig.filterAndProcessEvents},
+        {serverLogic.checkEventConditions, checkEventConditionsHooked, (void**)&orig.checkEventConditions},
+        {serverLogic.executeEventEffects, executeEventEffectsHooked, (void**)&orig.executeEventEffects},
+        {eventConditions.testFrequency, testFreqHooked, (void**)&orig.testFrequency},
+        {eventConditions.testLocation, testLocationHooked, (void**)&orig.testLocation},
+        {eventConditions.testLeaderToZone, testLeaderToZoneHooked, (void**)&orig.testLeaderToZone},
+        {eventConditions.testEnterCity, testEnterCityHooked, (void**)&orig.testEnterCity},
+        {eventConditions.testLeaderToCity, testLeaderToCityHooked, (void**)&orig.testLeaderToCity},
+        {eventConditions.testOwnCity, testOwnCityHooked, (void**)&orig.testOwnCity},
+        {eventConditions.testKillStack, testKillStackHooked, (void**)&orig.testKillStack},
+        {eventConditions.testOwnItem, testOwnItemHooked, (void**)&orig.testOwnItem},
+        {eventConditions.testLeaderOwnItem, testLeaderOwnItemHooked, (void**)&orig.testLeaderOwnItem},
+        {eventConditions.testDiplomacy, testDiplomacyHooked, (void**)&orig.testDiplomacy},
+        {eventConditions.testAlliance, testAllianceHooked, (void**)&orig.testAlliance},
+        {eventConditions.testLootRuin, testLootRuinHooked, (void**)&orig.testLootRuin},
+        {eventConditions.testTransformLand, testTransformLandHooked, (void**)&orig.testTransformLand},
+        {eventConditions.testVisitSite, testVisitSiteHooked, (void**)&orig.testVisitSite},
+        {eventConditions.testItemToLocation, testItemToLocationHooked, (void**)&orig.testItemToLocation},
+        {eventConditions.testStackExists, testStackExistsHooked, (void**)&orig.testStackExists},
+        {eventConditions.testVarInRange, testVarInRangeHooked, (void**)&orig.testVarInRange},
     };
     // clang-format on
 
@@ -1635,7 +1665,7 @@ void __stdcall beforeBattleTurnHooked(game::BattleMsgData* battleMsgData,
         // Fix free transform-self to disable Wait/Defend/Retreat
         auto unitInfo = battle.getUnitInfoById(battleMsgData, unitId);
         if (unitInfo)
-            unitInfo->unitFlags.parts.attackedOnceOfTwice = 1;
+            unitInfo->unitFlags.parts.attackedOnceOfTwice = true;
     }
     freeTransformSelf.turnCount++;
 }

@@ -41,6 +41,7 @@
 #include "scripts.h"
 #include "testcondition.h"
 #include "textboxinterf.h"
+#include "timer.h"
 #include "utils.h"
 #include <Windows.h>
 #include <fmt/format.h>
@@ -718,6 +719,14 @@ bool __fastcall testScriptDoTest(const CTestScript* thisptr,
                                  const game::CMidgardID* playerId,
                                  const game::CMidgardID* eventId)
 {
+#ifdef D2_MEASURE_EVENTS_TIME
+    extern const std::string_view eventsPerformanceLog;
+    ScopedTimer timer{"    Test condition 'script'", eventsPerformanceLog};
+
+    extern long long conditionsTotalTime;
+    ScopedValueTimer valueTimer{conditionsTotalTime};
+#endif
+
     const auto& body = thisptr->condition->code;
     if (body.empty()) {
         return false;

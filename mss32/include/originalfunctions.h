@@ -40,6 +40,7 @@
 #include "menubase.h"
 #include "menuload.h"
 #include "menunewskirmishhotseat.h"
+#include "testcondition.h"
 #include "menunewskirmishmulti.h"
 #include "menunewskirmishsingle.h"
 #include "menuphase.h"
@@ -48,6 +49,7 @@
 #include "mideveffect.h"
 #include "midevent.h"
 #include "midgardscenariomap.h"
+#include "midserverlogic.h"
 #include "midmsgsender.h"
 #include "midunit.h"
 #include "mqnetplayer.h"
@@ -150,6 +152,32 @@ struct OriginalFunctions
     game::CMidDataCache2::INotifyVftable::OnObjectChanged siteMerchantInterfOnObjectChanged;
 
     game::editor::CScenPropInterfApi::Api::Constructor scenPropInterfCtor;
+
+    game::CMidServerLogicApi::Api::ApplyEventEffectsAndCheckMidEventTriggerers applyEventEffectsAndCheckMidEventTriggerers;
+    game::CMidServerLogicApi::Api::StackMove stackMove;
+    game::CMidServerLogicApi::Api::FilterAndProcessEventsNoPlayer filterAndProcessEventsNoPlayer;
+    game::CMidServerLogicApi::Api::CheckAndExecuteEvent checkAndExecuteEvent;
+    game::CMidServerLogicApi::Api::FilterAndProcessEvents filterAndProcessEvents;
+    game::CMidServerLogicApi::Api::CheckEventConditions checkEventConditions;
+    game::CMidServerLogicApi::Api::ExecuteEventEffects executeEventEffects;
+
+    game::ITestConditionVftable::Test testFrequency;
+    game::ITestConditionVftable::Test testLocation;
+    game::ITestConditionVftable::Test testLeaderToZone;
+    game::ITestConditionVftable::Test testEnterCity;
+    game::ITestConditionVftable::Test testLeaderToCity;
+    game::ITestConditionVftable::Test testOwnCity;
+    game::ITestConditionVftable::Test testKillStack;
+    game::ITestConditionVftable::Test testOwnItem;
+    game::ITestConditionVftable::Test testLeaderOwnItem;
+    game::ITestConditionVftable::Test testDiplomacy;
+    game::ITestConditionVftable::Test testAlliance;
+    game::ITestConditionVftable::Test testLootRuin;
+    game::ITestConditionVftable::Test testTransformLand;
+    game::ITestConditionVftable::Test testVisitSite;
+    game::ITestConditionVftable::Test testItemToLocation;
+    game::ITestConditionVftable::Test testStackExists;
+    game::ITestConditionVftable::Test testVarInRange;
 };
 
 OriginalFunctions& getOriginalFunctions();

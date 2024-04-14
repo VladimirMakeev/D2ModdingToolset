@@ -28,14 +28,65 @@ static std::array<Api, 3> functions = {{
     // Akella
     Api{
         (Api::Create)0x4422b7,
+        (ITestConditionVftable::Test)0x444d8f, // frequency
+        (ITestConditionVftable::Test)0x444e22, // location
+        (ITestConditionVftable::Test)0x44521f, // enter city
+        (ITestConditionVftable::Test)0x4453d1, // own city
+        (ITestConditionVftable::Test)0x4454cd, // kill stack
+        (ITestConditionVftable::Test)0x44564a, // own item 
+        (ITestConditionVftable::Test)0x445755, // leader own item
+        (ITestConditionVftable::Test)0x4458fa, // diplomacy
+        (ITestConditionVftable::Test)0x445a77, // alliance
+        (ITestConditionVftable::Test)0x445b0a, // loot ruin
+        (ITestConditionVftable::Test)0x445bbf, // transform land
+        (ITestConditionVftable::Test)0x445d74, // visit site
+        (ITestConditionVftable::Test)0x445044, // leader to zone
+        (ITestConditionVftable::Test)0x4452d5, // leader to city
+        (ITestConditionVftable::Test)0x445e9b, // item to location
+        (ITestConditionVftable::Test)0x44609a, // stack exists
+        (ITestConditionVftable::Test)0x446239, // var in range
     },
     // Russobit
     Api{
         (Api::Create)0x4422b7,
+        (ITestConditionVftable::Test)0x444d8f, // frequency
+        (ITestConditionVftable::Test)0x444e22, // location
+        (ITestConditionVftable::Test)0x44521f, // enter city
+        (ITestConditionVftable::Test)0x4453d1, // own city
+        (ITestConditionVftable::Test)0x4454cd, // kill stack
+        (ITestConditionVftable::Test)0x44564a, // own item 
+        (ITestConditionVftable::Test)0x445755, // leader own item
+        (ITestConditionVftable::Test)0x4458fa, // diplomacy
+        (ITestConditionVftable::Test)0x445a77, // alliance
+        (ITestConditionVftable::Test)0x445b0a, // loot ruin
+        (ITestConditionVftable::Test)0x445bbf, // transform land
+        (ITestConditionVftable::Test)0x445d74, // visit site
+        (ITestConditionVftable::Test)0x445044, // leader to zone
+        (ITestConditionVftable::Test)0x4452d5, // leader to city
+        (ITestConditionVftable::Test)0x445e9b, // item to location
+        (ITestConditionVftable::Test)0x44609a, // stack exists
+        (ITestConditionVftable::Test)0x446239, // var in range
     },
     // Gog
     Api{
         (Api::Create)0x441f1c,
+        (ITestConditionVftable::Test)0x444993, // frequency
+        (ITestConditionVftable::Test)0x6fd6b8, // location
+        (ITestConditionVftable::Test)0x444e23, // enter city
+        (ITestConditionVftable::Test)0x444fd5, // own city
+        (ITestConditionVftable::Test)0x4450d1, // kill stack
+        (ITestConditionVftable::Test)0x44524e, // own item 
+        (ITestConditionVftable::Test)0x445359, // leader own item
+        (ITestConditionVftable::Test)0x4454fe, // diplomacy
+        (ITestConditionVftable::Test)0x44567b, // alliance
+        (ITestConditionVftable::Test)0x44570e, // loot ruin
+        (ITestConditionVftable::Test)0x4457c3, // transform land
+        (ITestConditionVftable::Test)0x445978, // visit site
+        (ITestConditionVftable::Test)0x444c48, // leader to zone
+        (ITestConditionVftable::Test)0x444ed9, // leader to city
+        (ITestConditionVftable::Test)0x445a9f, // item to location
+        (ITestConditionVftable::Test)0x445c9e, // stack exists
+        (ITestConditionVftable::Test)0x445e3d, // var in range
     },
 }};
 // clang-format on
