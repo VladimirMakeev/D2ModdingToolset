@@ -1319,6 +1319,9 @@
     <ClCompile Include="src\testleadertozonehooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="src\testkillstackhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3420,6 +3423,15 @@
     </ClInclude>
     <ClInclude Include="include\timer.h">
       <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midstackdestroyed.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\testkillstack.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\testkillstackhooks.h">
+      <Filter>hooks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

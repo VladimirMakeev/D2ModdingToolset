@@ -37,6 +37,7 @@
 #include "midgardobjectmap.h"
 #include "midgardplan.h"
 #include "midgardscenariomap.h"
+#include "midlocation.h"
 #include "midplayer.h"
 #include "midrod.h"
 #include "midruin.h"
@@ -44,6 +45,7 @@
 #include "midserver.h"
 #include "midserverlogic.h"
 #include "midstack.h"
+#include "midstackdestroyed.h"
 #include "midunit.h"
 #include "playerbuildings.h"
 #include "racetype.h"
@@ -233,6 +235,25 @@ const game::CMidgardID getPlayerIdByUnitId(const game::IMidgardObjectMap* object
     return emptyId;
 }
 
+const game::CMidPlayer* getNeutralPlayer(const game::IMidgardObjectMap* objectMap)
+{
+    using namespace game;
+
+    const auto neutralRaceId{RaceCategories::get().neutral->id};
+    const CMidPlayer* neutrals{};
+
+    auto getNeutrals = [neutralRaceId, &neutrals](const IMidScenarioObject* obj) {
+        auto player{static_cast<const CMidPlayer*>(obj)};
+
+        if (neutralRaceId == player->raceType->data->raceType.id) {
+            neutrals = player;
+        }
+    };
+
+    forEachScenarioObject(objectMap, IdType::Player, getNeutrals);
+    return neutrals;
+}
+
 const game::CMidPlayer* getGroupOwner(const game::IMidgardObjectMap* objectMap,
                                       const game::CMidgardID* groupId)
 {
@@ -247,20 +268,8 @@ const game::CMidPlayer* getGroupOwner(const game::IMidgardObjectMap* objectMap,
         const CFortification* allyFort{getFort(objectMap, groupId)};
         return getPlayer(objectMap, &allyFort->ownerId);
     }
-    case IdType::Ruin: {
-        const RaceId neutralRaceId{RaceCategories::get().neutral->id};
-
-        const CMidPlayer* ownerPlayer{};
-        auto checkNeutralPlayer = [neutralRaceId, &ownerPlayer](const IMidScenarioObject* obj) {
-            auto player{static_cast<const CMidPlayer*>(obj)};
-            if (player->raceType->data->raceType.id == neutralRaceId) {
-                ownerPlayer = player;
-            }
-        };
-
-        forEachScenarioObject(objectMap, IdType::Player, checkNeutralPlayer);
-        return ownerPlayer;
-    }
+    case IdType::Ruin:
+        return getNeutralPlayer(objectMap);
     }
 
     return nullptr;
@@ -782,6 +791,20 @@ const game::CMidLocation* getLocation(const game::IMidgardObjectMap* objectMap,
 
     return (const CMidLocation*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType,
                                             rtti.CMidLocationType, 0);
+}
+
+const game::CMidStackDestroyed* getStackDestroyed(const game::IMidgardObjectMap* objectMap)
+{
+    using namespace game;
+
+    const auto id{createIdWithType(objectMap, game::IdType::StackDestroyed)};
+
+    auto obj{objectMap->vftable->findScenarioObjectById(objectMap, &id)};
+    if (!obj) {
+        return nullptr;
+    }
+
+    return static_cast<const game::CMidStackDestroyed*>(obj);
 }
 
 } // namespace hooks

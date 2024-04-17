@@ -40,7 +40,6 @@
 #include "menubase.h"
 #include "menuload.h"
 #include "menunewskirmishhotseat.h"
-#include "testcondition.h"
 #include "menunewskirmishmulti.h"
 #include "menunewskirmishsingle.h"
 #include "menuphase.h"
@@ -49,8 +48,8 @@
 #include "mideveffect.h"
 #include "midevent.h"
 #include "midgardscenariomap.h"
-#include "midserverlogic.h"
 #include "midmsgsender.h"
+#include "midserverlogic.h"
 #include "midunit.h"
 #include "mqnetplayer.h"
 #include "netmsg.h"
@@ -153,7 +152,8 @@ struct OriginalFunctions
 
     game::editor::CScenPropInterfApi::Api::Constructor scenPropInterfCtor;
 
-    game::CMidServerLogicApi::Api::ApplyEventEffectsAndCheckMidEventTriggerers applyEventEffectsAndCheckMidEventTriggerers;
+    game::CMidServerLogicApi::Api::ApplyEventEffectsAndCheckMidEventTriggerers
+        applyEventEffectsAndCheckMidEventTriggerers;
     game::CMidServerLogicApi::Api::StackMove stackMove;
     game::CMidServerLogicApi::Api::FilterAndProcessEventsNoPlayer filterAndProcessEventsNoPlayer;
     game::CMidServerLogicApi::Api::CheckAndExecuteEvent checkAndExecuteEvent;
@@ -167,7 +167,6 @@ struct OriginalFunctions
     game::ITestConditionVftable::Test testEnterCity;
     game::ITestConditionVftable::Test testLeaderToCity;
     game::ITestConditionVftable::Test testOwnCity;
-    game::ITestConditionVftable::Test testKillStack;
     game::ITestConditionVftable::Test testOwnItem;
     game::ITestConditionVftable::Test testLeaderOwnItem;
     game::ITestConditionVftable::Test testDiplomacy;

@@ -165,6 +165,7 @@
 #include "stackbattleactionmsg.h"
 #include "summonhooks.h"
 #include "testconditionhooks.h"
+#include "testkillstackhooks.h"
 #include "testleadertozone.h"
 #include "testleadertozonehooks.h"
 #include "transformotherhooks.h"
@@ -398,11 +399,11 @@ static Hooks getGameHooks()
         {serverLogic.executeEventEffects, executeEventEffectsHooked, (void**)&orig.executeEventEffects},
         {eventConditions.testFrequency, testFreqHooked, (void**)&orig.testFrequency},
         {eventConditions.testLocation, testLocationHooked, (void**)&orig.testLocation},
-        {eventConditions.testLeaderToZone, testLeaderToZoneHooked, (void**)&orig.testLeaderToZone},
+        {eventConditions.testLeaderToZone, testLeaderToZoneHooked},
         {eventConditions.testEnterCity, testEnterCityHooked, (void**)&orig.testEnterCity},
         {eventConditions.testLeaderToCity, testLeaderToCityHooked, (void**)&orig.testLeaderToCity},
         {eventConditions.testOwnCity, testOwnCityHooked, (void**)&orig.testOwnCity},
-        {eventConditions.testKillStack, testKillStackHooked, (void**)&orig.testKillStack},
+        {eventConditions.testKillStack, testKillStackHooked},
         {eventConditions.testOwnItem, testOwnItemHooked, (void**)&orig.testOwnItem},
         {eventConditions.testLeaderOwnItem, testLeaderOwnItemHooked, (void**)&orig.testLeaderOwnItem},
         {eventConditions.testDiplomacy, testDiplomacyHooked, (void**)&orig.testDiplomacy},

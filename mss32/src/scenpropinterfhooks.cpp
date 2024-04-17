@@ -21,6 +21,7 @@
 #include "aiattitudes.h"
 #include "aiattitudestable.h"
 #include "dialoginterf.h"
+#include "gameutils.h"
 #include "globaldata.h"
 #include "midgardscenariomap.h"
 #include "midplayer.h"
@@ -35,26 +36,6 @@
 #include "visitors.h"
 
 namespace hooks {
-
-static const game::CMidPlayer* getNeutralPlayer(const game::IMidgardObjectMap* objectMap)
-{
-    using namespace game;
-
-    const auto neutralRaceId{RaceCategories::get().neutral->id};
-    const CMidPlayer* neutrals{};
-
-    auto checkNeutralPlayer = [neutralRaceId, &neutrals](const IMidScenarioObject* obj) {
-        const auto* player{static_cast<const CMidPlayer*>(obj)};
-        const auto raceCatId{player->raceType->data->raceType.id};
-
-        if (raceCatId == neutralRaceId) {
-            neutrals = player;
-        }
-    };
-
-    forEachScenarioObject(objectMap, IdType::Player, checkNeutralPlayer);
-    return neutrals;
-}
 
 static void __fastcall onSpinButtonSelectionChanged(game::editor::CScenPropInterf* thisptr,
                                                     int /*%edx*/,

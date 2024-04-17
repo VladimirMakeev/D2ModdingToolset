@@ -42,6 +42,8 @@ struct CMidDiplomacy;
 struct CMidgardMapFog;
 struct TBuildingType;
 struct CPlayerBuildings;
+struct CMidLocation;
+struct CMidStackDestroyed;
 } // namespace game
 
 namespace hooks {
@@ -85,6 +87,8 @@ const game::CMidPlayer* getPlayerByUnitId(const game::IMidgardObjectMap* objectM
 
 const game::CMidgardID getPlayerIdByUnitId(const game::IMidgardObjectMap* objectMap,
                                            const game::CMidgardID* unitId);
+
+const game::CMidPlayer* getNeutralPlayer(const game::IMidgardObjectMap* objectMap);
 
 /** Returns player that controls specified unit group. In case of ruins, returns Neutrals player. */
 const game::CMidPlayer* getGroupOwner(const game::IMidgardObjectMap* objectMap,
@@ -177,6 +181,11 @@ const game::CMidDiplomacy* getDiplomacy(const game::IMidgardObjectMap* objectMap
 
 const game::CMidgardMapFog* getFog(const game::IMidgardObjectMap* objectMap,
                                    const game::CMidPlayer* player);
+
+const game::CMidLocation* getLocation(const game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* locationId);
+
+const game::CMidStackDestroyed* getStackDestroyed(const game::IMidgardObjectMap* objectMap);
 
 } // namespace hooks
 

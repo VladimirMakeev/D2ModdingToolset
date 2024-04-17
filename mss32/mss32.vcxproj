@@ -498,6 +498,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\terrainnamemap.cpp" />
     <ClCompile Include="src\testcondition.cpp" />
     <ClCompile Include="src\testconditionhooks.cpp" />
+    <ClCompile Include="src\testkillstackhooks.cpp" />
     <ClCompile Include="src\testleadertozonehooks.cpp" />
     <ClCompile Include="src\textboxinterf.cpp" />
     <ClCompile Include="src\textids.cpp" />
@@ -810,6 +811,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\midsitemerchant.h" />
     <ClInclude Include="include\midsitemercs.h" />
     <ClInclude Include="include\midsitetrainer.h" />
+    <ClInclude Include="include\midstackdestroyed.h" />
     <ClInclude Include="include\midunitext.h" />
     <ClInclude Include="include\midunitgroupadapter.h" />
     <ClInclude Include="include\mqdb.h" />
@@ -1147,6 +1149,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\soundsystemstream.h" />
     <ClInclude Include="include\streamholder.h" />
     <ClInclude Include="include\streamregister.h" />
+    <ClInclude Include="include\testkillstack.h" />
+    <ClInclude Include="include\testkillstackhooks.h" />
     <ClInclude Include="include\testleadertozone.h" />
     <ClInclude Include="include\testleadertozonehooks.h" />
     <ClInclude Include="include\textmessage.h" />

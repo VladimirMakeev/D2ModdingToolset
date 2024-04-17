@@ -456,16 +456,6 @@ bool __fastcall testOwnCityHooked(const game::ITestCondition* thisptr,
                         playerId, eventId);
 }
 
-bool __fastcall testKillStackHooked(const game::ITestCondition* thisptr,
-                                    int /*%edx*/,
-                                    const game::IMidgardObjectMap* objectMap,
-                                    const game::CMidgardID* playerId,
-                                    const game::CMidgardID* eventId)
-{
-    return doTestHooked(getOriginalFunctions().testKillStack, "kill stack", thisptr, objectMap,
-                        playerId, eventId);
-}
-
 bool __fastcall testOwnItemHooked(const game::ITestCondition* thisptr,
                                   int /*%edx*/,
                                   const game::IMidgardObjectMap* objectMap,
