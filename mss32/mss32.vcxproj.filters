@@ -1322,6 +1322,9 @@
     <ClCompile Include="src\testkillstackhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="src\testownitemhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3431,6 +3434,12 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\testkillstackhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\testownitem.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\testownitemhooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
   </ItemGroup>

@@ -120,12 +120,6 @@ bool __fastcall testOwnCityHooked(const game::ITestCondition* thisptr,
                                   const game::CMidgardID* playerId,
                                   const game::CMidgardID* eventId);
 
-bool __fastcall testOwnItemHooked(const game::ITestCondition* thisptr,
-                                  int /*%edx*/,
-                                  const game::IMidgardObjectMap* objectMap,
-                                  const game::CMidgardID* playerId,
-                                  const game::CMidgardID* eventId);
-
 bool __fastcall testLeaderOwnItemHooked(const game::ITestCondition* thisptr,
                                         int /*%edx*/,
                                         const game::IMidgardObjectMap* objectMap,

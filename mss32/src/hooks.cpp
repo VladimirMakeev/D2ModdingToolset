@@ -168,6 +168,7 @@
 #include "testkillstackhooks.h"
 #include "testleadertozone.h"
 #include "testleadertozonehooks.h"
+#include "testownitemhooks.h"
 #include "transformotherhooks.h"
 #include "transformselfhooks.h"
 #include "umattack.h"
@@ -404,7 +405,7 @@ static Hooks getGameHooks()
         {eventConditions.testLeaderToCity, testLeaderToCityHooked, (void**)&orig.testLeaderToCity},
         {eventConditions.testOwnCity, testOwnCityHooked, (void**)&orig.testOwnCity},
         {eventConditions.testKillStack, testKillStackHooked},
-        {eventConditions.testOwnItem, testOwnItemHooked, (void**)&orig.testOwnItem},
+        {eventConditions.testOwnItem, testOwnItemHooked},
         {eventConditions.testLeaderOwnItem, testLeaderOwnItemHooked, (void**)&orig.testLeaderOwnItem},
         {eventConditions.testDiplomacy, testDiplomacyHooked, (void**)&orig.testDiplomacy},
         {eventConditions.testAlliance, testAllianceHooked, (void**)&orig.testAlliance},

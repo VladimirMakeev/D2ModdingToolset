@@ -163,11 +163,9 @@ struct OriginalFunctions
 
     game::ITestConditionVftable::Test testFrequency;
     game::ITestConditionVftable::Test testLocation;
-    game::ITestConditionVftable::Test testLeaderToZone;
     game::ITestConditionVftable::Test testEnterCity;
     game::ITestConditionVftable::Test testLeaderToCity;
     game::ITestConditionVftable::Test testOwnCity;
-    game::ITestConditionVftable::Test testOwnItem;
     game::ITestConditionVftable::Test testLeaderOwnItem;
     game::ITestConditionVftable::Test testDiplomacy;
     game::ITestConditionVftable::Test testAlliance;
