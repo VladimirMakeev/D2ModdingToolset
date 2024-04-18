@@ -39,13 +39,35 @@ assert_size(MidgardPlanElement, 8);
 
 using PlanElements = Vector<MidgardPlanElement>;
 
+/**
+ * Element flags packing:
+ *
+ * +--+--+--+--+--+--+--+--+
+ * |S3|D3|S2|D2|S1|D1|S0|D0|
+ * +--+--+--+--+--+--+--+--+
+ *   7  6  5  4  3  2  1  0
+ *
+ * DN - bit indicating presence of a dynamic element on a tile with relative X position of N.
+ * SN - bit indicating presence of a static element on a tile with relative X position of N.
+ *
+ * Relative X position: (X & 3)
+ */
+
+/** Utility object used for mapping IMapElements coordinates to scenario object ids. */
 struct CMidgardPlan : public IMidScenarioObject
 {
     CMidgardID unknownId;
     int mapSize;
-    char data[5184]; /**< 144 * 36. Accessed as: 36 * posY + (posX >> 2) */
-    PlanElements elements;
-    PlanElements elements2;
+    /**
+     * 36 x 144 array of bit flags indicating presence of a static or dynamic elements on a tile.
+     * Each array element stores flags of 4 adjacent tiles along X axis.
+     * Accessed as: 36 * Y + X / 4.
+     */
+    std::uint8_t elementFlags[5184];
+    /** Static map objects such as: Fort, Road, Landmark, Site, Ruin, Crystal, Location. */
+    PlanElements staticElements;
+    /** Dynamic objects: Stack, Bag, Tomb, Rod. */
+    PlanElements dynamicElements;
 };
 
 assert_size(CMidgardPlan, 5232);
