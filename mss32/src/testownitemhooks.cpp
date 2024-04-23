@@ -32,26 +32,6 @@
 
 namespace hooks {
 
-static bool inventoryContainsItem(const game::IMidgardObjectMap* objectMap,
-                                  const game::CMidInventory& inventory,
-                                  const game::CMidgardID& globalItemId)
-{
-    using namespace game;
-
-    const int itemsTotal{inventory.vftable->getItemsCount(&inventory)};
-    for (int i = 0; i < itemsTotal; ++i) {
-        const CMidgardID* id{inventory.vftable->getItem(&inventory, i)};
-
-        auto obj{objectMap->vftable->findScenarioObjectById(objectMap, id)};
-        auto item{static_cast<const CMidItem*>(obj)};
-        if (item->globalItemId == globalItemId) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 bool __fastcall testOwnItemHooked(const game::CTestOwnItem* thisptr,
                                   int /*%edx*/,
                                   const game::IMidgardObjectMap* objectMap,
@@ -88,9 +68,6 @@ bool __fastcall testOwnItemHooked(const game::CTestOwnItem* thisptr,
     objectMap->vftable->end(objectMap, &end);
 
     const auto& getType{CMidgardIDApi::get().getType};
-
-    auto& rtti{RttiApi::rtti()};
-    auto& dynamicCast{RttiApi::get().dynamicCast};
     const auto& free{SmartPointerApi::get().createOrFree};
 
     while (!current.data->vftable->end(current.data, end.data)) {
@@ -101,7 +78,7 @@ bool __fastcall testOwnItemHooked(const game::CTestOwnItem* thisptr,
             const CMidStack* stack{getStack(objectMap, id)};
 
             if (affectedPlayers.find(stack->ownerId) != affectedPlayers.cend()) {
-                if (inventoryContainsItem(objectMap, stack->inventory, *itemId)) {
+                if (isInventoryContainsItem(objectMap, stack->inventory, *itemId)) {
                     free((SmartPointer*)&current, nullptr);
                     free((SmartPointer*)&end, nullptr);
                     return true;
@@ -111,7 +88,7 @@ bool __fastcall testOwnItemHooked(const game::CTestOwnItem* thisptr,
             const CFortification* fort{getFort(objectMap, id)};
 
             if (affectedPlayers.find(fort->ownerId) != affectedPlayers.cend()) {
-                if (inventoryContainsItem(objectMap, fort->inventory, *itemId)) {
+                if (isInventoryContainsItem(objectMap, fort->inventory, *itemId)) {
                     free((SmartPointer*)&current, nullptr);
                     free((SmartPointer*)&end, nullptr);
                     return true;

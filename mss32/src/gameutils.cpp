@@ -37,6 +37,7 @@
 #include "midgardobjectmap.h"
 #include "midgardplan.h"
 #include "midgardscenariomap.h"
+#include "miditem.h"
 #include "midlocation.h"
 #include "midplayer.h"
 #include "midrod.h"
@@ -805,6 +806,26 @@ const game::CMidStackDestroyed* getStackDestroyed(const game::IMidgardObjectMap*
     }
 
     return static_cast<const game::CMidStackDestroyed*>(obj);
+}
+
+bool isInventoryContainsItem(const game::IMidgardObjectMap* objectMap,
+                             const game::CMidInventory& inventory,
+                             const game::CMidgardID& globalItemId)
+{
+    using namespace game;
+
+    const int itemsTotal{inventory.vftable->getItemsCount(&inventory)};
+    for (int i = 0; i < itemsTotal; ++i) {
+        const CMidgardID* id{inventory.vftable->getItem(&inventory, i)};
+
+        auto obj{objectMap->vftable->findScenarioObjectById(objectMap, id)};
+        auto item{static_cast<const CMidItem*>(obj)};
+        if (item->globalItemId == globalItemId) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 } // namespace hooks

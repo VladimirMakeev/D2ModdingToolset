@@ -167,6 +167,7 @@
 #include "summonhooks.h"
 #include "testconditionhooks.h"
 #include "testkillstackhooks.h"
+#include "testleaderownitemhooks.h"
 #include "testleadertozone.h"
 #include "testleadertozonehooks.h"
 #include "testownitemhooks.h"
@@ -407,7 +408,7 @@ static Hooks getGameHooks()
         {eventConditions.testOwnCity, testOwnCityHooked, (void**)&orig.testOwnCity},
         {eventConditions.testKillStack, testKillStackHooked},
         {eventConditions.testOwnItem, testOwnItemHooked},
-        {eventConditions.testLeaderOwnItem, testLeaderOwnItemHooked, (void**)&orig.testLeaderOwnItem},
+        {eventConditions.testLeaderOwnItem, testLeaderOwnItemHooked},
         {eventConditions.testDiplomacy, testDiplomacyHooked, (void**)&orig.testDiplomacy},
         {eventConditions.testAlliance, testAllianceHooked, (void**)&orig.testAlliance},
         {eventConditions.testLootRuin, testLootRuinHooked, (void**)&orig.testLootRuin},
@@ -2478,4 +2479,5 @@ bool __stdcall setStackSrcTemplateHooked(const game::CMidgardID* stackId,
 
     return result;
 }
+
 } // namespace hooks

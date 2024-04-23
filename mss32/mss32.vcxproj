@@ -500,6 +500,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\testcondition.cpp" />
     <ClCompile Include="src\testconditionhooks.cpp" />
     <ClCompile Include="src\testkillstackhooks.cpp" />
+    <ClCompile Include="src\testleaderownitemhooks.cpp" />
     <ClCompile Include="src\testleadertozonehooks.cpp" />
     <ClCompile Include="src\testownitemhooks.cpp" />
     <ClCompile Include="src\textboxinterf.cpp" />
@@ -1154,6 +1155,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\streamregister.h" />
     <ClInclude Include="include\testkillstack.h" />
     <ClInclude Include="include\testkillstackhooks.h" />
+    <ClInclude Include="include\testleaderownitem.h" />
+    <ClInclude Include="include\testleaderownitemhooks.h" />
     <ClInclude Include="include\testleadertozone.h" />
     <ClInclude Include="include\testleadertozonehooks.h" />
     <ClInclude Include="include\testownitem.h" />

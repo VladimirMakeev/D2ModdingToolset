@@ -187,6 +187,10 @@ const game::CMidLocation* getLocation(const game::IMidgardObjectMap* objectMap,
 
 const game::CMidStackDestroyed* getStackDestroyed(const game::IMidgardObjectMap* objectMap);
 
+bool isInventoryContainsItem(const game::IMidgardObjectMap* objectMap,
+                             const game::CMidInventory& inventory,
+                             const game::CMidgardID& globalItemId);
+
 } // namespace hooks
 
 #endif // GAMEUTILS_H
