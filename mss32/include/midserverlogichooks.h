@@ -156,12 +156,6 @@ bool __fastcall testItemToLocationHooked(const game::ITestCondition* thisptr,
                                          const game::CMidgardID* playerId,
                                          const game::CMidgardID* eventId);
 
-bool __fastcall testStackExistsHooked(const game::ITestCondition* thisptr,
-                                      int /*%edx*/,
-                                      const game::IMidgardObjectMap* objectMap,
-                                      const game::CMidgardID* playerId,
-                                      const game::CMidgardID* eventId);
-
 bool __fastcall testVarInRangeHooked(const game::ITestCondition* thisptr,
                                      int /*%edx*/,
                                      const game::IMidgardObjectMap* objectMap,

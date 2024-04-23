@@ -1328,6 +1328,9 @@
     <ClCompile Include="src\stacktemplatecache.cpp">
       <Filter>features</Filter>
     </ClCompile>
+    <ClCompile Include="src\teststackexistshooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
     <ClCompile Include="src\testleaderownitemhooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
@@ -3450,6 +3453,12 @@
     </ClInclude>
     <ClInclude Include="include\stacktemplatecache.h">
       <Filter>features</Filter>
+    </ClInclude>
+    <ClInclude Include="include\teststackexists.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\teststackexistshooks.h">
+      <Filter>hooks</Filter>
     </ClInclude>
     <ClInclude Include="include\testleaderownitem.h">
       <Filter>game</Filter>

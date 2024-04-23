@@ -173,7 +173,6 @@ struct OriginalFunctions
     game::ITestConditionVftable::Test testTransformLand;
     game::ITestConditionVftable::Test testVisitSite;
     game::ITestConditionVftable::Test testItemToLocation;
-    game::ITestConditionVftable::Test testStackExists;
     game::ITestConditionVftable::Test testVarInRange;
 
     game::RemoveStack removeStack;

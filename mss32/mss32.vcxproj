@@ -503,6 +503,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\testleaderownitemhooks.cpp" />
     <ClCompile Include="src\testleadertozonehooks.cpp" />
     <ClCompile Include="src\testownitemhooks.cpp" />
+    <ClCompile Include="src\teststackexistshooks.cpp" />
     <ClCompile Include="src\textboxinterf.cpp" />
     <ClCompile Include="src\textids.cpp" />
     <ClCompile Include="src\tileindices.cpp" />
@@ -1161,6 +1162,8 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\testleadertozonehooks.h" />
     <ClInclude Include="include\testownitem.h" />
     <ClInclude Include="include\testownitemhooks.h" />
+    <ClInclude Include="include\teststackexists.h" />
+    <ClInclude Include="include\teststackexistshooks.h" />
     <ClInclude Include="include\textmessage.h" />
     <ClInclude Include="include\timer.h" />
     <ClInclude Include="include\wavstore.h" />
