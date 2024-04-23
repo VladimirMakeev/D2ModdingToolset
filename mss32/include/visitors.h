@@ -206,6 +206,22 @@ struct Api
                                                IMidgardObjectMap* objectMap,
                                                int apply);
     PlayerSetAttitude playerSetAttitude;
+
+    /**
+     * Sets source template id for a stack.
+     * Uses CVisitorSetStackSrcTemplate.
+     * @param[in] stackId id of stack to change.
+     * @param[in] stackTemplateId source template id to set.
+     * @param[in] objectMap interface used for objects search.
+     * @param apply specifies whether stack source template should be changed.
+     * @returns true if source template was set when apply set to 1. If apply set to 0, returns
+     * whether visitor can be applied.
+     */
+    using SetStackSrcTemplate = bool(__stdcall*)(const CMidgardID* stackId,
+                                                 const CMidgardID* stackTemplateId,
+                                                 IMidgardObjectMap* objectMap,
+                                                 int apply);
+    SetStackSrcTemplate setStackSrcTemplate;
 };
 
 Api& get();

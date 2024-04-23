@@ -66,6 +66,8 @@ struct IUsUnit;
 struct TBuildingType;
 struct TUsUnitImpl;
 struct EditBoxData;
+struct CMidgardPlan;
+struct CScenarioVisitor;
 
 enum class BuildingBranchNumber : int;
 enum class CanApplyPotionResult : int;
@@ -294,6 +296,16 @@ game::BuildingStatus __stdcall getBuildingStatusHooked(const game::IMidgardObjec
                                                        const game::CMidgardID* playerId,
                                                        const game::CMidgardID* buildingId,
                                                        bool ignoreBuildTurnAndCost);
+
+bool __stdcall removeStackHooked(const game::CMidgardID* stackId,
+                                 game::CMidgardPlan* plan,
+                                 game::IMidgardObjectMap* objectMap,
+                                 game::CScenarioVisitor* visitor);
+
+bool __stdcall setStackSrcTemplateHooked(const game::CMidgardID* stackId,
+                                         const game::CMidgardID* stackTemplateId,
+                                         game::IMidgardObjectMap* objectMap,
+                                         int apply);
 
 } // namespace hooks
 

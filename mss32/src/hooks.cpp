@@ -163,6 +163,7 @@
 #include "sitemerchantinterfhooks.h"
 #include "smartptr.h"
 #include "stackbattleactionmsg.h"
+#include "stacktemplatecache.h"
 #include "summonhooks.h"
 #include "testconditionhooks.h"
 #include "testkillstackhooks.h"
@@ -2031,11 +2032,26 @@ int __stdcall loadScenarioMapHooked(int a1,
                                     game::CMidStreamEnvFile* streamEnv,
                                     game::CMidgardScenarioMap* scenarioMap)
 {
-    int result = getOriginalFunctions().loadScenarioMap(a1, streamEnv, scenarioMap);
+    stackTemplateCacheClear();
 
+    const int result = getOriginalFunctions().loadScenarioMap(a1, streamEnv, scenarioMap);
     // Write-mode validation is done in midUnitStreamHooked
     validateUnits(scenarioMap);
 
+    using namespace game;
+
+    const auto& dynamicCast{RttiApi::get().dynamicCast};
+    const auto& rtti{RttiApi::rtti()};
+
+    auto addStackFromTemplateToCache = [&dynamicCast, &rtti](const IMidScenarioObject* obj) {
+        auto stack{(const CMidStack*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType,
+                                                 rtti.CMidStackType, 0)};
+        if (stack->sourceTemplateId != emptyId) {
+            stackTemplateCacheAdd(stack->sourceTemplateId, stack->id);
+        }
+    };
+
+    forEachScenarioObject(scenarioMap, IdType::Stack, addStackFromTemplateToCache);
     return result;
 }
 
@@ -2433,4 +2449,33 @@ game::BuildingStatus __stdcall getBuildingStatusHooked(const game::IMidgardObjec
     return BuildingStatus::CanBeBuilt;
 }
 
+bool __stdcall removeStackHooked(const game::CMidgardID* stackId,
+                                 game::CMidgardPlan* plan,
+                                 game::IMidgardObjectMap* objectMap,
+                                 game::CScenarioVisitor* visitor)
+{
+    using namespace game;
+
+    const CMidStack* stack{getStack(objectMap, stackId)};
+    if (stack && stack->sourceTemplateId != emptyId) {
+        stackTemplateCacheRemove(stack->sourceTemplateId, stack->id);
+    }
+
+    return getOriginalFunctions().removeStack(stackId, plan, objectMap, visitor);
+}
+
+bool __stdcall setStackSrcTemplateHooked(const game::CMidgardID* stackId,
+                                         const game::CMidgardID* stackTemplateId,
+                                         game::IMidgardObjectMap* objectMap,
+                                         int apply)
+{
+    const bool result{
+        getOriginalFunctions().setStackSrcTemplate(stackId, stackTemplateId, objectMap, apply)};
+
+    if (apply == 1 && result) {
+        stackTemplateCacheAdd(*stackTemplateId, *stackId);
+    }
+
+    return result;
+}
 } // namespace hooks

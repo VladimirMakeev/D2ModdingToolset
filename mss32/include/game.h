@@ -79,6 +79,7 @@ struct LDeathAnimCategory;
 struct CMidStreamEnvFile;
 struct CMidgardScenarioMap;
 struct TBuildingType;
+struct CScenarioVisitor;
 
 enum class ModifierElementTypeFlag : int;
 
@@ -731,6 +732,12 @@ using GetBuildingStatus = BuildingStatus(__stdcall*)(const IMidgardObjectMap* ob
                                                      const CMidgardID* buildingId,
                                                      bool ignoreBuildTurnAndCost);
 
+/** Removes stack from plan, fort and object map. */
+using RemoveStack = bool(__stdcall*)(const CMidgardID* stackId,
+                                     CMidgardPlan* plan,
+                                     IMidgardObjectMap* objectMap,
+                                     CScenarioVisitor* visitor);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -857,6 +864,7 @@ struct Functions
     GetUnitRequiredBuildings getUnitRequiredBuildings;
     ComputeMovementCost computeMovementCost;
     GetBuildingStatus getBuildingStatus;
+    RemoveStack removeStack;
 };
 
 /** Global variables used in game. */

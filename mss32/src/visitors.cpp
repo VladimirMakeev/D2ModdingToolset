@@ -37,6 +37,7 @@ std::array<Api, 4> functions = {{
         (Api::UndoTransformUnit)0x5e96df,
         (Api::ExtractUnitFromGroup)0x5e8d72,
         (Api::PlayerSetAttitude)0,
+        (Api::SetStackSrcTemplate)0x5e9ef8,
     },
     // Russobit
     Api{
@@ -50,6 +51,7 @@ std::array<Api, 4> functions = {{
         (Api::UndoTransformUnit)0x5e96df,
         (Api::ExtractUnitFromGroup)0x5e8d72,
         (Api::PlayerSetAttitude)0,
+        (Api::SetStackSrcTemplate)0x5e9ef8,
     },
     // Gog
     Api{
@@ -63,6 +65,7 @@ std::array<Api, 4> functions = {{
         (Api::UndoTransformUnit)0x5e83de,
         (Api::ExtractUnitFromGroup)0x5e7a71,
         (Api::PlayerSetAttitude)0,
+        (Api::SetStackSrcTemplate)0x5e8bf7,
     },
     // Scenario Editor
     Api{
@@ -76,6 +79,7 @@ std::array<Api, 4> functions = {{
         (Api::UndoTransformUnit)0,
         (Api::ExtractUnitFromGroup)0,
         (Api::PlayerSetAttitude)0x4e9baa,
+        (Api::SetStackSrcTemplate)0,
     },
 }};
 // clang-format on

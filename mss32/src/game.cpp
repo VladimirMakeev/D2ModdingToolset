@@ -150,6 +150,7 @@ static std::array<Functions, 4> functions = {{
         (GetUnitRequiredBuildings)0x61f7fe,
         (ComputeMovementCost)0x603bc6,
         (GetBuildingStatus)0x5ddcb3,
+        (RemoveStack)0x60f5f8,
     },
     // Russobit
     Functions{
@@ -276,6 +277,7 @@ static std::array<Functions, 4> functions = {{
         (GetUnitRequiredBuildings)0x61f7fe,
         (ComputeMovementCost)0x603bc6,
         (GetBuildingStatus)0x5ddcb3,
+        (RemoveStack)0x60f5f8,
     },
     // Gog
     Functions{
@@ -402,6 +404,7 @@ static std::array<Functions, 4> functions = {{
         (GetUnitRequiredBuildings)0x61e33a,
         (ComputeMovementCost)0x6027f3,
         (GetBuildingStatus)0x5dc9e8,
+        (RemoveStack)0x60e12c,
     },
     // Scenario Editor
     Functions{
@@ -528,6 +531,7 @@ static std::array<Functions, 4> functions = {{
         (GetUnitRequiredBuildings)0x52314a,
         (ComputeMovementCost)nullptr,
         (GetBuildingStatus)0x4d8a11,
+        (RemoveStack)nullptr,
     },
 }};
 
