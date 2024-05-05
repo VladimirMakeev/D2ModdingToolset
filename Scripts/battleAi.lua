@@ -1601,8 +1601,8 @@ function findDamageAttackTargetWithAnyReach(targetGroup, possibleTargets, damage
             if sourceImmune ~= Immune.Always and classImmune ~= Immune.Always then
                 local priority = computeTargetUnitAiPriority(unit, battle, damage)
 
-                if (sourceImmune == Immune.Once and battle:isUnitResistantToSource(attackSource))
-                or (classImmune == Immune.Once and battle:isUnitResistantToClass(attackClass)) then
+                if (sourceImmune == Immune.Once and battle:isUnitResistantToSource(unit, attackSource))
+                or (classImmune == Immune.Once and battle:isUnitResistantToClass(unit, attackClass)) then
                     priority = priority * 0.69999999
                 end
                 
@@ -2700,7 +2700,7 @@ function findAttackTarget(unitOrItemId, attack, targetGroup, possibleTargets, ba
     return false, nil
 end
 
-function getNonAttackingItemTargets(item, itemTargetGroup, itemPossibleTargets)
+function getNonAttackingItemTargets(item, targetGroup, itemPossibleTargets)
     local base = item.base
     local itemType = base.type
     
@@ -2755,7 +2755,7 @@ function findHealOrRevivePotionAttackTarget(item, battle, itemTargetGroup, itemP
 end
 
 -- Returns true/false, targetId, attackerId
-function sub_5D1172(activeUnit, item, itemTargetGroup, itemPossibleTargets, battle)
+function findItemAttackTarget(activeUnit, item, itemTargetGroup, itemPossibleTargets, battle)
     if #itemPossibleTargets <= 0 then
         return false, nil, nil
     end
@@ -2765,13 +2765,13 @@ function sub_5D1172(activeUnit, item, itemTargetGroup, itemPossibleTargets, batt
     if attack then
         local targets = getAttackingItemTargets(attack, itemTargetGroup, itemPossibleTargets)
         if #targets then
-            local found, targetId = findAttackTarget(item.id, attack, itemTargetGroup, itemPossibleTargets, battle)
+            local found, targetId = findAttackTarget(item.id, attack, itemTargetGroup, targets, battle)
             return found, targetId, attackerId
         end
     else
         local targets = getNonAttackingItemTargets(item, itemTargetGroup, itemPossibleTargets)
         if #targets then
-            local found, targetId = findHealOrRevivePotionAttackTarget(item, battle, itemTargetGroup, itemPossibleTargets)
+            local found, targetId = findHealOrRevivePotionAttackTarget(item, battle, itemTargetGroup, targets)
             return found, targetId, attackerId
         end        
     end
@@ -2779,7 +2779,8 @@ function sub_5D1172(activeUnit, item, itemTargetGroup, itemPossibleTargets, batt
     return false, nil, nil
 end
 
-function sub_5D0FA2(activeUnit, activeUnitGroup, item1TargetGroup, item1PossibleTargets, item2TargetGroup, item2PossibleTargets, battle)
+-- Returns true/false, targetId, attackerId
+function findEquipmentAttackTarget(activeUnit, activeUnitGroup, item1TargetGroup, item1PossibleTargets, item2TargetGroup, item2PossibleTargets, battle)
     if activeUnitGroup.id.type ~= IdType.Stack then
         return false, nil, nil
     end
@@ -2798,7 +2799,7 @@ function sub_5D0FA2(activeUnit, activeUnitGroup, item1TargetGroup, item1Possible
     
     if item1Value < item2Value then
         if item2Value > 0 then
-            local ok, targetId, attackerId = sub_5D1172(activeUnit, item2, item2TargetGroup, item2PossibleTargets, battle)
+            local ok, targetId, attackerId = findItemAttackTarget(activeUnit, item2, item2TargetGroup, item2PossibleTargets, battle)
             if ok then
                 return ok, targetId, attackerId
             end
@@ -2808,18 +2809,18 @@ function sub_5D0FA2(activeUnit, activeUnitGroup, item1TargetGroup, item1Possible
             return false, nil, nil
         end
         
-        return sub_5D1172(activeUnit, item1, item1TargetGroup, item1PossibleTargets, battle)
+        return findItemAttackTarget(activeUnit, item1, item1TargetGroup, item1PossibleTargets, battle)
     end
     
     if item1Value > 0 then
-        local ok, targetId, attackerId = sub_5D1172(activeUnit, item1, item1TargetGroup, item1PossibleTargets, battle)
+        local ok, targetId, attackerId = findItemAttackTarget(activeUnit, item1, item1TargetGroup, item1PossibleTargets, battle)
         if ok then
             return ok, targetId, attackerId
         end
     end
     
     if item2Value > 0 then
-        local ok, targetId, attackerId = sub_5D1172(activeUnit, item2, item2TargetGroup, item2PossibleTargets, battle)
+        local ok, targetId, attackerId = findItemAttackTarget(activeUnit, item2, item2TargetGroup, item2PossibleTargets, battle)
         if ok then
             return ok, targetId, attackerId
         end
@@ -3027,7 +3028,7 @@ function chooseAction(
         -- Leader can use item in battle
         local ok,
             selectedTargetId,
-            selectedAttackerId = sub_5D0FA2(activeUnit, activeUnitGroup, item1TargetGroup, item1PossibleTargets, item2TargetGroup, item2PossibleTargets, battle)
+            selectedAttackerId = findEquipmentAttackTarget(activeUnit, activeUnitGroup, item1TargetGroup, item1PossibleTargets, item2TargetGroup, item2PossibleTargets, battle)
         if ok then
             -- Use item
             return BattleAction.UseItem, selectedTargetId, selectedAttackerId
