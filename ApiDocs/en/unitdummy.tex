@@ -1,0 +1,25 @@
+\subsection{Unit dummy}
+\label{UnitDummy}
+Represents preserved state of game \hyperref[Unit]{unit}. Used, for instance, to preserve unit state before transformation, so it can be restored later. Properties are identical to unit, except that there is no \texttt{original} and \texttt{originalModifiers}.
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+id & Returns unit \hyperref[Id]{id}. This is different to id of \hyperref[UnitImpl]{unit implementation}. The value is unique for every unit on \hyperref[Scenario]{scenario map}\\
+\hline
+hp & Returns unit's current hit points\\
+\hline
+hpMax & Returns unit's maximum hit points\\
+\hline
+xp & Returns unit's current experience points\\
+\hline
+impl & Returns unit's current \hyperref[UnitImpl]{implementation}. Current implementation describes unit stats according to its levels and possible transformations applied during battle\\
+\hline
+baseImpl & Returns unit's base \hyperref[UnitImpl]{implementation}. Base implementation is a record in \texttt{GUnits.dbf} that describes unit basic stats\\
+\hline
+leveledImpl & Returns unit's leveled (generated) \hyperref[UnitImpl]{implementation}. Leveled implementation is unit's current implementation without modifiers, or base implementation plus upgrades from \texttt{GDynUpgr.dbf} according to unit's level. This does not include leader upgrades from \texttt{GleaUpg.dbf}, because the upgrades are modifiers\\
+\hline
+\end{tabularx}
+\end{center}

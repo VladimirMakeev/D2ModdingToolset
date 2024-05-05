@@ -1,0 +1,49 @@
+\subsection{Attack}
+\label{Attack}
+Represents attack of \hyperref[UnitImpl]{unit implementation}.
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+id & Returns attack \hyperref[Id]{id}. This is different for every \hyperref[DynamicUpgrade]{dynamic upgrade} unit gets\\
+\hline
+type & Returns attack \hyperref[AttackCategory]{type}\\
+\hline
+source & Returns attack \hyperref[SourceCategory]{source}\\
+\hline
+reach & Returns attack \hyperref[ReachCategory]{reach}\\
+\hline
+initiative & Returns attack initiative value\\
+\hline
+power & Returns attack power (accuracy)\\
+\hline
+damage & Returns damage the attack can inflict. Damage depends on attack type\\
+\hline
+heal & Returns healing the attack can apply. Healing depends on attack type\\
+\hline
+infinite & Returns true if attack has long effect duration. Effect depends on attack type\\
+\hline
+crit & Returns true if attack can inflict critical damage\\
+\hline
+level & Returns level for boost damage, lower damage and lower initiative attacks\\
+\hline
+melee & Returns true if attack is melee (\texttt{L\_ADJACENT} or custom reach marked as \texttt{MELEE} in \texttt{LAttR.dbf})\\
+\hline
+maxTargets & Returns maximum number of targets (1, 6 or \texttt{MAX\_TARGTS} value for custom reach in \texttt{LAttR.dbf})\\
+\hline
+critDamage & Returns critical damage percent \texttt{[0 : 255]}\\
+\hline
+critPower & Returns critical damage chance \texttt{[0 : 100]}\\
+\hline
+damageRatio & Returns damage ratio \texttt{[0 : 255]} for additional targets\\
+\hline
+damageRatioPerTarget & Returns true if damage ratio reapplied for each consecutive target\\
+\hline
+damageSplit & Returns true if damage is split among targets\\
+\hline
+wards & Returns array of \hyperref[Modifier]{modifiers} applied by bestow wards attack\\
+\hline
+\end{tabularx}
+\end{center}

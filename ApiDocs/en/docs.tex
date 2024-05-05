@@ -1,0 +1,102 @@
+\documentclass[10pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+%\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{textcmds}
+\usepackage[table]{xcolor}
+\usepackage{tabularx}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{lghtgray}{rgb}{0.97,0.97,0.97}
+\definecolor{lghtgray2}{rgb}{0.94,0.94,0.94}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{kwblue}{rgb}{0.2,0.6,1.0}
+
+\lstdefinestyle{lua}{
+  defaultdialect=[5.0]Lua,
+  deletekeywords={type},
+  frame=single,
+  language=Lua,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  backgroundcolor=\color{lghtgray},
+  basicstyle={\small\ttfamily},
+  numbers=left,
+  numberstyle=\footnotesize\color{black},
+  keywordstyle=\color{kwblue}\bfseries,
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{brown},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  extendedchars=false,
+  inputencoding=utf8
+}
+
+\lstset{style=lua}
+
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+ }
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=teal,   
+    urlcolor=blue,
+    }
+
+
+% In case you want watermark on each page
+%\usepackage{draftwatermark}
+%\SetWatermarkText{Draft}
+%\SetWatermarkScale{2}
+%\SetWatermarkColor{red}
+
+
+\author{mak}
+\title{Lua API for D2 modding toolset\\Documentation for version 0.15}
+
+\begin{document}
+\pagestyle{fancy}
+ % clear all header fields
+\fancyhead{}
+ % clear all footer fields
+\fancyfoot{}
+% page number in the center for even and odd pages
+\fancyfoot[CE,CO]{\thepage}
+\fancyhead[RO,RE]{\textcolor{gray}{D2 modding toolset 0.15}}
+
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+
+% Overview
+\include{overview.tex}
+% API reference
+\include{apiReference.tex}
+% Examples
+%\include{examples.tex}
+% Targeting scripts
+%\include{targetingScripts.tex}
+% Event condition examples
+%\include{eventConditions.tex}
+% Custom modifiers
+%\include{customModifiers.tex}
+
+
+\end{document}

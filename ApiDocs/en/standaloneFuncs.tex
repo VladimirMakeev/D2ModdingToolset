@@ -1,0 +1,46 @@
+\subsection{Standalone functions}
+\subsubsection{Functions}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+log('') & Writes message to \texttt{luaDebug.log} file when \texttt{debugHooks} is set to \texttt{true} in \texttt{settings.lua}.\\
+\hline
+getScenario() & Returns current scenario. The function only accessible to scripts where scenario access is appropriate:
+\begin{itemize}
+\item summon.lua
+\item doppelganger.lua
+\item transformSelf.lua
+\item transformOther.lua
+\item drainLevel.lua
+\item custom attack reach scripts
+\item custom unit modifier script
+\end{itemize}
+\\
+\hline
+randomNumber(maxValue) & Generates random number in range \texttt{[0 : maxValue)} using ingame generator.\\
+\hline
+getGlobal() & Returns \hyperref[Global]{global data storage} used by game\\
+\hline
+getGame() & Returns \hyperref[Game]{game} restrictions and constants\\
+\hline
+\end{tabularx}
+\end{center}
+\subsubsection{Examples}
+\begin{center}
+\begin{lstlisting}[language=Lua]
+log('Unit current level:' .. unit.impl.level)
+
+getScenario():getUnit(unitId)
+
+local n = randomNumber(100)
+
+local data = getGlobal()
+-- Access contents of GVars.dbf
+local variables = data.variables
+
+-- Access unit maximum damage, currently set in game settings
+getGame().unitMaxDamage
+\end{lstlisting}
+\end{center}

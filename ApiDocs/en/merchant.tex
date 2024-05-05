@@ -1,0 +1,21 @@
+\subsection{Merchant}
+\label{Merchant}
+Represents Merchant on a map.
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+id & Returns merchant \hyperref[Id]{id}. The value is unique for every merchant on scenario map\\
+\hline
+position & Returns merchant position as a \hyperref[Point]{point}\\
+\hline
+visitors & Returns list of \hyperref[Player]{players} that have visited the merchant\\
+\hline
+items & Returns list of \hyperref[MerchantItem]{merchant items}\\
+\hline
+temple & Returns \texttt{true} if merchant can be used as a temple for AI to heal\\
+\hline
+\end{tabularx}
+\end{center}

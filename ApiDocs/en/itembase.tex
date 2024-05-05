@@ -1,0 +1,21 @@
+\subsection{Item base}
+\label{ItemBase}
+Represents base item of any type (described in \texttt{GItem.dbf})
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+id & Returns item \hyperref[Id]{id}. \texttt{ITEM\_ID} value from \texttt{GItem.dbf}\\
+\hline
+type & Returns item \hyperref[ItemCategory]{type}\\
+\hline
+value & Returns item \hyperref[Currency]{value}\\
+\hline
+unitImpl & Returns related \hyperref[UnitImpl]{unit implementation}. For instance: in case of `Angel Orb', Angel unit implementation is returned\\
+\hline
+attack & Returns \hyperref[Attack]{attack} that this item performs (in case of orb or talisman), or \texttt{nil} if no attack is associated with the item. For instance: in case of `Orb of Fire', corresponding attack from \texttt{Gattacks.dbf} is returned\\
+\hline
+\end{tabularx}
+\end{center}

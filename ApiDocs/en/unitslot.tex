@@ -1,0 +1,62 @@
+\subsection{Unit slot}
+\label{UnitSlot}
+Represents one of the twelve unit slots on battlefield. Unit positions on a battlefield are mirrored. Frontline positions are even, backline - odd.
+\begin{center}
+\begin{tabular}{c c c}
+Attacker & & Defender\\
+% Attacker group represented as a table
+\begin{tabular}{| c | c |}
+\hline
+1 & 0\\
+\hline
+3 & 2\\
+\hline
+5 & 4\\
+\hline
+\end{tabular} &
+VS &
+% Defender group
+\begin{tabular}{| c | c |}
+\hline
+0 & 1\\
+\hline
+2 & 3\\
+\hline
+4 & 5\\
+\hline
+\end{tabular} \\
+
+\end{tabular}
+\end{center}
+
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+unit & Returns unit that occupies the slot or \texttt{nil} if slot is empty\\
+\hline
+position & Returns position of the slot (0-5)\\
+\hline
+line & Returns line index of the slot: 0 - frontline, 1 - backline\\
+\hline
+column & Returns column index of the slot: 0 - top, 1 - middle, 2 - bottom\\
+\hline
+frontline & Returns \texttt{true} if slot is on the frontline\\
+\hline
+backline & Returns \texttt{true} if slot is on the backline\\
+\hline
+\end{tabularx}
+\end{center}
+
+\subsubsection{Methods}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+distance(otherSlot) & Returns distance between two slots (used for adjacent slot calculations)\\
+\hline
+\end{tabularx}
+\end{center}
