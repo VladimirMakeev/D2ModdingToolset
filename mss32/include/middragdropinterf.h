@@ -35,6 +35,36 @@ struct CMidDragDropInterf : public CDragAndDropInterf
 
 assert_offset(CMidDragDropInterf, phaseGame, 24);
 
+namespace CMidDragDropInterfApi {
+
+struct Api
+{
+    using Constructor = CMidDragDropInterf*(__thiscall*)(CMidDragDropInterf* thisptr,
+                                                         const char* dialogName,
+                                                         ITask* task,
+                                                         CPhaseGame* phaseGame);
+    Constructor constructor;
+
+    /**
+     * This is not a scalar deleting destructor, its a common one.
+     * It does not free memory allocated for an object
+     */
+    using Destructor = void(__thiscall*)(CMidDragDropInterf* thisptr);
+    Destructor destructor;
+
+    using RemoveDropTarget = void(__thiscall*)(CMidDragDropInterf* thisptr,
+                                               IMidDropTarget* dropTarget);
+    RemoveDropTarget removeDropTarget;
+
+    using RemoveDropSource = void(__thiscall*)(CMidDragDropInterf* thisptr,
+                                               IMidDropSource* dropSource);
+    RemoveDropSource removeDropSource;
+};
+
+Api& get();
+
+} // namespace CMidDragDropInterfApi
+
 } // namespace game
 
 #endif // MIDDRAGDROPINTERF_H

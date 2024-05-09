@@ -29,21 +29,33 @@ static std::array<Api, 4> functions = {{
     Api{
         (Api::GetObjectId)0x5f685f,
         (Api::IsPositionContainsObjects)0x5f69ae,
+        (Api::CanPlaceSite)nullptr,
+        (Api::AddMapElement)nullptr,
+        (Api::GetObjectsAtPoint)nullptr,
     },
     // Russobit
     Api{
         (Api::GetObjectId)0x5f685f,
         (Api::IsPositionContainsObjects)0x5f69ae,
+        (Api::CanPlaceSite)nullptr,
+        (Api::AddMapElement)nullptr,
+        (Api::GetObjectsAtPoint)nullptr,
     },
     // Gog
     Api{
         (Api::GetObjectId)0x5f54e2,
         (Api::IsPositionContainsObjects)0x5f5631,
+        (Api::CanPlaceSite)nullptr,
+        (Api::AddMapElement)nullptr,
+        (Api::GetObjectsAtPoint)nullptr,
     },
     // Scenario Editor
     Api{
         (Api::GetObjectId)0x4e4a42,
         (Api::IsPositionContainsObjects)0x4e4b91,
+        (Api::CanPlaceSite)0x511248,
+        (Api::AddMapElement)0x4e4e15,
+        (Api::GetObjectsAtPoint)0x4e4cf7,
     },
 }};
 // clang-format on

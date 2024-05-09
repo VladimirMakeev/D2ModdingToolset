@@ -55,6 +55,24 @@ struct CMidDataCache2 : public IMidgardObjectMap
 
 assert_size(CMidDataCache2, 36);
 
+namespace CMidDataCache2Api {
+
+struct Api
+{
+    using ChangeNotify = void(__thiscall*)(CMidDataCache2* thisptr,
+                                           CMidDataCache2::INotify* notify);
+
+    /** Adds subscriber that will receive scenario object chages notifications. */
+    ChangeNotify addNotify;
+
+    /** Removes scenario object chages notifications subscriber. */
+    ChangeNotify removeNotify;
+};
+
+Api& get();
+
+} // namespace CMidDataCache2Api
+
 } // namespace game
 
 #endif // MIDDATACACHE_H

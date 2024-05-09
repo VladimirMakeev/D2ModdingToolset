@@ -97,6 +97,7 @@
 #include "intvector.h"
 #include "isoenginegroundhooks.h"
 #include "isoview.h"
+#include "isoviewhooks.h"
 #include "itembase.h"
 #include "itemcategory.h"
 #include "itemexpotionboost.h"
@@ -133,6 +134,7 @@
 #include "midscenvariables.h"
 #include "midserverlogic.h"
 #include "midserverlogichooks.h"
+#include "midsite.h"
 #include "midstack.h"
 #include "midunitdescriptor.h"
 #include "midunitdescriptorhooks.h"
@@ -147,6 +149,8 @@
 #include "netplayerinfo.h"
 #include "netsingleplayer.h"
 #include "netsingleplayerhooks.h"
+#include "objectinterf.h"
+#include "objectinterfhooks.h"
 #include "originalfunctions.h"
 #include "phasegame.h"
 #include "playerbuildings.h"
@@ -157,14 +161,21 @@
 #include "scenariodata.h"
 #include "scenariodataarray.h"
 #include "scenarioinfo.h"
+#include "scenedit.h"
+#include "scenedithooks.h"
 #include "scenpropinterfhooks.h"
 #include "settings.h"
+#include "sitecategoryhooks.h"
 #include "sitemerchantinterf.h"
 #include "sitemerchantinterfhooks.h"
 #include "smartptr.h"
 #include "stackbattleactionmsg.h"
 #include "stacktemplatecache.h"
 #include "summonhooks.h"
+#include "taskobjaddsite.h"
+#include "taskobjaddsitehooks.h"
+#include "taskobjprop.h"
+#include "taskobjprophooks.h"
 #include "testconditionhooks.h"
 #include "testkillstackhooks.h"
 #include "testleaderownitemhooks.h"
@@ -172,6 +183,8 @@
 #include "testleadertozonehooks.h"
 #include "testownitemhooks.h"
 #include "teststackexistshooks.h"
+#include "textboxinterf.h"
+#include "textids.h"
 #include "transformotherhooks.h"
 #include "transformselfhooks.h"
 #include "umattack.h"
@@ -192,6 +205,8 @@
 #include "usunitimpl.h"
 #include "utils.h"
 #include "version.h"
+#include "visitorcreatesite.h"
+#include "visitorcreatesitehooks.h"
 #include "visitors.h"
 #include <algorithm>
 #include <cstring>
@@ -292,7 +307,6 @@ static Hooks getGameHooks()
         // Fix AI not being able to find target for lower damage/ini attack
         // Fix incorrect AI prioritization of shatter attack targets
         {battle.findAttackTarget, findAttackTargetHooked, (void**)&orig.findAttackTarget},
-        {battle.findHealAttackTarget, findHealAttackTargetHooked},
         // Support custom attack sources
         {fn.getUnitAttackSourceImmunities, getUnitAttackSourceImmunitiesHooked},
         {battle.isUnitAttackSourceWardRemoved, isUnitAttackSourceWardRemovedHooked},
@@ -418,6 +432,11 @@ static Hooks getGameHooks()
         {eventConditions.testItemToLocation, testItemToLocationHooked, (void**)&orig.testItemToLocation},
         {eventConditions.testStackExists, testStackExistsHooked},
         {eventConditions.testVarInRange, testVarInRangeHooked, (void**)&orig.testVarInRange},
+        // Support resource market site
+        {CMainView2Api::get().handleCmdStackVisitMsg, mainView2HandleCmdStackVisitMsgHooked, (void**)&orig.handleCmdStackVisitMsg},
+        {CMidServerLogicApi::get().constructor, midServerLogicCtorHooked, (void**)&orig.midServerLogicCtor},
+        {fn.getSiteSound, getSiteSoundHooked},
+        {fn.siteHasSound, siteHasSoundHooked},
     };
     // clang-format on
 
@@ -587,6 +606,13 @@ static Hooks getScenarioEditorHooks()
         {CMidgardScenarioMapApi::get().stream, scenarioMapStreamHooked, (void**)&orig.scenarioMapStream},
         // Allow changing Netrals attitude from scenario properties menu
         {editor::CScenPropInterfApi::get().constructor, scenPropInterfCtorHooked, (void**)&orig.scenPropInterfCtor},
+        // Support new sites
+        {editor::CVisitorCreateSiteApi::get().canApply, visitorCreateSiteCanApplyHooked},
+        {editor::CVisitorCreateSiteApi::get().apply, visitorCreateSiteApplyHooked},
+        {editor::CObjectInterfApi::get().createTaskObj, createTaskObjHooked, (void**)&orig.createTaskObj},
+        {editor::CTaskObjPropApi::get().doAction, taskObjPropDoActionHooked, (void**)&orig.taskObjPropDoAction},
+        {editor::CTaskObjAddSiteApi::get().doAction, taskObjAddSiteDoActionHooked, (void**)&orig.taskObjAddSiteDoAction},
+        {CScenEditApi::get().readScenData, readScenDataHooked, (void**)&orig.readScenData},
     };
     // clang-format on
 
@@ -777,6 +803,17 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{fn.getBuildingStatus, getBuildingStatusHooked});
     // Fix input of 'io' (U+0451) and 'IO' (U+0401)
     hooks.emplace_back(HookInfo{CEditBoxInterfApi::get().isCharValid, editBoxIsCharValidHooked});
+
+    // Support new sites
+    hooks.emplace_back(
+        HookInfo{LSiteCategoryTableApi::get().constructor, siteCategoryTableCtorHooked});
+    hooks.emplace_back(HookInfo{fn.getSiteNameSuffix, getSiteNameSuffixHooked});
+    // Support new site on a strategic map
+    hooks.emplace_back(HookInfo{ImageLayerListApi::get().getMapElementIsoLayerImages,
+                                getMapElementIsoLayerImagesHooked,
+                                (void**)&orig.getMapElementIsoLayerImages});
+    // Support encyclopedia info for a new sites
+    hooks.emplace_back(HookInfo{fn.updateEncLayoutSite, updateEncLayoutSiteHooked});
 
     return hooks;
 }
@@ -1137,7 +1174,7 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
 
     const auto& phase = CPhaseApi::get();
     auto playerId = phase.getCurrentPlayerId(&phaseGame->phase);
-    auto objectMap = phase.getObjectMap(&phaseGame->phase);
+    auto objectMap = phase.getDataCache(&phaseGame->phase);
     auto findScenarioObjectById = objectMap->vftable->findScenarioObjectById;
 
     auto playerObject = findScenarioObjectById(objectMap, playerId);
@@ -1677,6 +1714,11 @@ void __stdcall beforeBattleTurnHooked(game::BattleMsgData* battleMsgData,
 
 void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)
 {
+    // TODO: this is wrong, os_exception is a base class and it does not store message as a char*
+    // Instead, there are plenty of child classes that store messages in their own way.
+    // There should be proper way to get message, perhaps using vftable.
+    // This particular example leads to a crash when there are problems with .dlg files and
+    // CAutoDialogException is thrown
     if (thisptr && thisptr->message) {
         showErrorMessageBox(fmt::format("Caught exception '{:s}'.\n"
                                         "The {:s} will probably crash now.",
@@ -1817,7 +1859,7 @@ bool __stdcall enableUnitInHireListUiHooked(const game::CMidPlayer* player,
 {
     using namespace game;
 
-    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto objectMap = CPhaseApi::get().getDataCache(&phaseGame->phase);
 
     auto playerBuildings = getPlayerBuildings(objectMap, player);
     if (!playerBuildings) {
@@ -2479,6 +2521,129 @@ bool __stdcall setStackSrcTemplateHooked(const game::CMidgardID* stackId,
     }
 
     return result;
+}
+
+const char* __stdcall getSiteNameSuffixHooked(const game::LSiteCategory* siteCategory)
+{
+    using namespace game;
+
+    const auto& categories = SiteCategories::get();
+
+    const auto id = siteCategory->id;
+
+    if (id == categories.merchant->id) {
+        return "MERH";
+    }
+
+    if (id == categories.mageTower->id) {
+        return "MAGE";
+    }
+
+    if (id == categories.mercenaries->id) {
+        return "MERC";
+    }
+
+    if (customSiteCategories().exists && id == customSiteCategories().resourceMarket.id) {
+        return "RMKT";
+    }
+
+    return "TRAI";
+}
+
+void __stdcall updateEncLayoutSiteHooked(const game::CMidSite* site, game::CTextBoxInterf* textBox)
+{
+    if (!site) {
+        return;
+    }
+
+    using namespace game;
+
+    // \hC;\vC;\fLarge;%NAME%\fNormal;\n%TYPE%\n\n%DESC%
+    std::string str{getInterfaceText("X005TA0868")};
+
+    const auto& categories{SiteCategories::get()};
+    const auto id{site->siteCategory.id};
+
+    const char* textId{};
+    if (id == categories.merchant->id) {
+        // (Merchant)
+        textId = "X005TA0873";
+    } else if (id == categories.mageTower->id) {
+        // (Magic shop)
+        textId = "X005TA0874";
+    } else if (id == categories.mercenaries->id) {
+        // (Mercenary)
+        textId = "X005TA0875";
+    } else if (customSiteCategories().exists && id == customSiteCategories().resourceMarket.id) {
+        textId = textIds().interf.resourceMarketEncyDesc.c_str();
+    } else {
+        // (Trainer)
+        textId = "X005TA0876";
+    }
+
+    const std::string type{getInterfaceText(textId)};
+
+    const char* name{site->title.string ? site->title.string : ""};
+    const char* description{site->description.string ? site->description.string : ""};
+
+    replace(str, "%NAME%", name);
+    replace(str, "%TYPE%", type);
+    replace(str, "%DESC%", description);
+
+    CTextBoxInterfApi::get().setString(textBox, str.c_str() ? str.c_str() : "");
+}
+
+game::String* __stdcall getSiteSoundHooked(game::String* soundName, const game::CMidSite* site)
+{
+    using namespace game;
+
+    const auto& init{StringApi::get().initFromString};
+
+    const SiteId id{site->siteCategory.id};
+
+    if (customSiteCategories().exists && id == customSiteCategories().resourceMarket.id) {
+        init(soundName, "RESMARKT");
+        return soundName;
+    }
+
+    const auto& sites{SiteCategories::get()};
+
+    if (id == sites.mageTower->id) {
+        init(soundName, "MAGICTW");
+        return soundName;
+    }
+
+    if (id == sites.trainer->id) {
+        init(soundName, "TRAINCMP");
+        return soundName;
+    }
+
+    if (id != sites.merchant->id || site->imgIso) {
+        init(soundName, "");
+        return soundName;
+    }
+
+    init(soundName, "WINDMILL");
+    return soundName;
+}
+
+bool __stdcall siteHasSoundHooked(const game::CMidSite* site)
+{
+    using namespace game;
+
+    const auto& sites{SiteCategories::get()};
+    const SiteId id{site->siteCategory.id};
+
+    if (id == sites.mageTower->id || id == sites.trainer->id
+        || id == sites.merchant->id && !site->imgIso) {
+        return true;
+    }
+
+    if (customSiteCategories().exists && id == customSiteCategories().resourceMarket.id) {
+        return true;
+    }
+
+    return false;
 }
 
 } // namespace hooks

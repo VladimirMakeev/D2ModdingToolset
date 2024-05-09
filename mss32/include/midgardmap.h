@@ -50,6 +50,12 @@ struct Api
                                             IMidgardObjectMap* objectMap);
     ChangeTerrain changeTerrain;
 
+    using GetTerrain = bool(__thiscall*)(const CMidgardMap* thisptr,
+                                         LTerrainCategory* terrain,
+                                         const CMqPoint* position,
+                                         const IMidgardObjectMap* objectMap);
+    GetTerrain getTerrain;
+
     /** Returns ground type of map tile at specified position. */
     using GetGround = bool(__thiscall*)(const CMidgardMap* thisptr,
                                         LGroundCategory* ground,

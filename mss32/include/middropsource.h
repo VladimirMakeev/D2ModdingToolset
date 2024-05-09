@@ -25,6 +25,8 @@
 namespace game {
 
 struct IMidDropSourceVftable;
+struct TypeDescriptor;
+struct IMidDropManager;
 
 struct IMidDropSource
 {
@@ -43,7 +45,11 @@ struct IMidDropSourceVftable
     GetCursorHandle getCursorHandle;
 
     void* method2;
-    void* method3;
+
+    using HandleMouse = void(__thiscall*)(IMidDropSource* thisptr,
+                                          int mouseKey,
+                                          const CMqPoint* mousePosition);
+    HandleMouse handleMouse;
 
     using IsPointOverButton = bool(__thiscall*)(IMidDropSource* thisptr, const CMqPoint* point);
     IsPointOverButton isPointOverButton;
@@ -56,10 +62,12 @@ struct IMidDropSourceVftable
     using Method7 = int(__thiscall*)(IMidDropSource* thisptr);
     Method7 method7;
 
-    void* method8;
+    using CastTo = void*(__thiscall*)(IMidDropSource* thisptr, const TypeDescriptor* type);
+    CastTo castTo;
 
-    using Method9 = int(__thiscall*)(IMidDropSource* thisptr, bool buttonPressed);
-    Method9 method9;
+    using GetDropManager = IMidDropManager*(__thiscall*)(IMidDropSource* thisptr,
+                                                         bool buttonPressed);
+    GetDropManager getDropManager;
 };
 
 assert_vftable_size(IMidDropSourceVftable, 10);

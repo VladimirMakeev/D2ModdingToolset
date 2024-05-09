@@ -21,12 +21,15 @@
 #define MIDGARDPLAN_H
 
 #include "d2vector.h"
+#include "idlist.h"
 #include "midgardid.h"
 #include "midscenarioobject.h"
 #include "mqpoint.h"
 #include <cstdint>
 
 namespace game {
+
+struct IMapElement;
 
 struct MidgardPlanElement
 {
@@ -91,6 +94,23 @@ struct Api
                                                         const IdType* objectTypes,
                                                         std::uint32_t typesTotal);
     IsPositionContainsObjects isPositionContainsObjects;
+
+    /** Returns true if CMidSite object can be placed at specified position. */
+    using CanPlaceSite = bool(__stdcall*)(const CMqPoint* mapPosition,
+                                          const CMidgardPlan* plan,
+                                          const CMidgardID* siteId);
+    CanPlaceSite canPlaceSite;
+
+    /** Adds map element to plan. */
+    using AddMapElement = bool(__thiscall*)(CMidgardPlan* thisptr,
+                                            const IMapElement* mapElement,
+                                            bool unknown);
+    AddMapElement addMapElement;
+
+    using GetObjectsAtPoint = bool(__thiscall*)(const CMidgardPlan* thisptr,
+                                                IdList* objectIds,
+                                                const CMqPoint* mapPosition);
+    GetObjectsAtPoint getObjectsAtPoint;
 };
 
 Api& get();

@@ -116,7 +116,7 @@ static void transferItems(const std::vector<game::CMidgardID>& items,
 {
     using namespace game;
 
-    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto objectMap = CPhaseApi::get().getDataCache(&phaseGame->phase);
     const auto& exchangeItem = VisitorApi::get().exchangeItem;
     const auto& sendExchangeItemMsg = NetMessagesApi::get().sendStackExchangeItemMsg;
 
@@ -139,7 +139,7 @@ static void transferCityToStack(game::CPhaseGame* phaseGame,
 {
     using namespace game;
 
-    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto objectMap = CPhaseApi::get().getDataCache(&phaseGame->phase);
     auto obj = objectMap->vftable->findScenarioObjectById(objectMap, cityId);
     if (!obj) {
         logError("mssProxyError.log", fmt::format("Could not find city {:s}", idToString(cityId)));
@@ -205,7 +205,7 @@ static void transferStackToCity(game::CPhaseGame* phaseGame,
 {
     using namespace game;
 
-    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto objectMap = CPhaseApi::get().getDataCache(&phaseGame->phase);
     auto obj = objectMap->vftable->findScenarioObjectById(objectMap, cityId);
     if (!obj) {
         logError("mssProxyError.log", fmt::format("Could not find city {:s}", idToString(cityId)));
@@ -364,7 +364,7 @@ static void transferStackToStack(game::CPhaseGame* phaseGame,
 {
     using namespace game;
 
-    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto objectMap = CPhaseApi::get().getDataCache(&phaseGame->phase);
     auto srcObj = objectMap->vftable->findScenarioObjectById(objectMap, srcStackId);
     if (!srcObj) {
         logError("mssProxyError.log",
@@ -539,7 +539,7 @@ static void transferBagToStack(game::CPhaseGame* phaseGame,
 {
     using namespace game;
 
-    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto objectMap = CPhaseApi::get().getDataCache(&phaseGame->phase);
     auto bagObj = objectMap->vftable->findScenarioObjectById(objectMap, bagId);
     if (!bagObj) {
         logError("mssProxyError.log", fmt::format("Could not find bag {:s}", idToString(bagId)));
@@ -592,7 +592,7 @@ static void transferStackToBag(game::CPhaseGame* phaseGame,
 {
     using namespace game;
 
-    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto objectMap = CPhaseApi::get().getDataCache(&phaseGame->phase);
     auto stackObj = objectMap->vftable->findScenarioObjectById(objectMap, stackId);
     if (!stackObj) {
         logError("mssProxyError.log",
@@ -758,7 +758,7 @@ static void sellItemsToMerchant(game::CPhaseGame* phaseGame,
 {
     using namespace game;
 
-    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto objectMap = CPhaseApi::get().getDataCache(&phaseGame->phase);
     auto stackObj = objectMap->vftable->findScenarioObjectById(objectMap, stackId);
     if (!stackObj) {
         logError("mssProxyError.log",
@@ -941,7 +941,7 @@ void __fastcall merchantSellValuables(game::CSiteMerchantInterf* thisptr, int /*
     using namespace game;
 
     auto phaseGame = thisptr->dragDropInterf.phaseGame;
-    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto objectMap = CPhaseApi::get().getDataCache(&phaseGame->phase);
     auto stackId = &thisptr->data->stackId;
 
     const auto sellPrice = computeItemsSellPrice(objectMap, stackId, isValuable);
@@ -972,7 +972,7 @@ void __fastcall merchantSellAll(game::CSiteMerchantInterf* thisptr, int /*%edx*/
     using namespace game;
 
     auto phaseGame = thisptr->dragDropInterf.phaseGame;
-    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto objectMap = CPhaseApi::get().getDataCache(&phaseGame->phase);
     auto stackId = &thisptr->data->stackId;
 
     const auto sellPrice = computeItemsSellPrice(objectMap, stackId);

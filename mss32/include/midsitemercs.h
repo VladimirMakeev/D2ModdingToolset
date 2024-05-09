@@ -43,6 +43,19 @@ struct CMidSiteMercs : public CMidSite
 
 assert_size(CMidSiteMercs, 140);
 
+namespace CMidSiteMercsApi {
+
+struct Api
+{
+    using Constructor = CMidSiteMercs*(__thiscall*)(CMidSiteMercs* thisptr,
+                                                    const CMidgardID* siteId);
+    Constructor constructor;
+};
+
+Api& get();
+
+} // namespace CMidSiteMercsApi
+
 } // namespace game
 
 #endif // MIDSITEMERCS_H

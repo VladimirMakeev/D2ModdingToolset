@@ -26,6 +26,9 @@ struct CMidgardID;
 struct IMidgardObjectMap;
 struct CScenarioVisitorVftable;
 struct LAttitudesCategory;
+struct LItemCategory;
+struct LSiteCategory;
+struct CMqPoint;
 
 /**
  * Base for all visitor classes.
@@ -222,6 +225,90 @@ struct Api
                                                  IMidgardObjectMap* objectMap,
                                                  int apply);
     SetStackSrcTemplate setStackSrcTemplate;
+
+    /**
+     * Allows merchant to buy items of specified category.
+     * Can be called only in Scenario Editor.
+     * Uses CVisitorMerchantAddBuyCategory.
+     * @param[in] siteId id of merchant to change.
+     * @param[in] itemCategory category of items merchant is allowed to buy.
+     * @param[in] objectMap interface used for objects search.
+     * @param apply specifies whether merchant object should be changed.
+     * @returns true if merchant was changed successfully when apply set to 1. If ally set to 0,
+     * returns whether visitor can be applied.
+     */
+    using MerchantAddBuyCategory = bool(__stdcall*)(const CMidgardID* siteId,
+                                                    const LItemCategory* itemCategory,
+                                                    IMidgardObjectMap* objectMap,
+                                                    int apply);
+    MerchantAddBuyCategory merchantAddBuyCategory;
+
+    /**
+     * Creates site of specified category.
+     * Can be called only in Scenario Editor.
+     * Uses CVisitorCreateSite.
+     * @param[in] site site category to create.
+     * @param[in] mapPosition position on a map where to create a new site.
+     * @param imgIso site scenario map image index.
+     * @param[in] imgIntf site interface image.
+     * @param[in] name site name.
+     * @param[in] description site description.
+     * @param[in] objectMap interface used for objects search.
+     * @param apply specifies whether site object should be created.
+     * @returns true if site was creates successfully when apply set to 1. If apply set to 0,
+     * returns wheter visitor can be applied.
+     */
+    using CreateSite = bool(__stdcall*)(const LSiteCategory* site,
+                                        const CMqPoint* mapPosition,
+                                        int imgIso,
+                                        const char* imgIntf,
+                                        const char* name,
+                                        const char* description,
+                                        IMidgardObjectMap* objectMap,
+                                        int apply);
+    CreateSite createSite;
+
+    /**
+     * Changes site object information.
+     * Can be called only in Scenario Editor.
+     * Uses CVisitorChangeSiteInfo.
+     * @param[in] siteId id of existing site object to change.
+     * @param[in] name new name for a site.
+     * @param[in] description new description for a site.
+     * @param[in] objectMap interface used for objects search.
+     * @param apply specifies whether site object info should be changed.
+     * @returns true if site info was changed successfully when apply set to 1.
+     * If apply set to 0, returns wheter visitor can be applied.
+     */
+    using ChangeSiteInfo = bool(__stdcall*)(const CMidgardID* siteId,
+                                            const char* name,
+                                            const char* description,
+                                            IMidgardObjectMap* objectMap,
+                                            int apply);
+    ChangeSiteInfo changeSiteInfo;
+
+    /**
+     * Changes site object image on a strategic map.
+     * Can be called only in Scenario Editor.
+     * Uses CVisitorChangeSiteImage.
+     * @param[in] siteId id of existing site object to change.
+     * @param imgIso strategic map image index.
+     * @param[in] objectMap interface used for objects search.
+     * @param apply specifies whether site object image should be changed.
+     * @returns true if site image was changed successfully when apply set to 1.
+     * If apply set to 0, returns whether visitor can be applied.
+     */
+    using ChangeSiteImage = bool(__stdcall*)(const CMidgardID* siteId,
+                                             int imgIso,
+                                             IMidgardObjectMap* objectMap,
+                                             int apply);
+    ChangeSiteImage changeSiteImage;
+
+    using ChangeSiteAiPriority = bool(__stdcall*)(const CMidgardID* siteId,
+                                                  int aiPriority,
+                                                  IMidgardObjectMap* objectMap,
+                                                  int apply);
+    ChangeSiteAiPriority changeSiteAiPriority;
 };
 
 Api& get();

@@ -29,16 +29,22 @@ static std::array<Api, 3> functions = {{
     Api{
         (Api::GetObjectMap)0x404f06,
         (Api::GetCurrentPlayerId)0x404e71,
+        (Api::GetCommandQueue)0x404f13,
+        (Api::ShowEncyclopediaPopup)0x404f57,
     },
     // Russobit
     Api{
         (Api::GetObjectMap)0x404f06,
         (Api::GetCurrentPlayerId)0x404e71,
+        (Api::GetCommandQueue)0x404f13,
+        (Api::ShowEncyclopediaPopup)0x404f57,
     },
     // Gog
     Api{
         (Api::GetObjectMap)0x404b8e,
         (Api::GetCurrentPlayerId)0x404af9,
+        (Api::GetCommandQueue)0x404b9b,
+        (Api::ShowEncyclopediaPopup)0x404bdf,
     }
 }};
 // clang-format on

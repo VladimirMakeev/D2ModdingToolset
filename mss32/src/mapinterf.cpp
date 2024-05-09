@@ -30,6 +30,7 @@ Api& get()
         (Api::CreateTask)0x462918,
         (Api::CreateTask)0x462b42,
         (Api::CreateTask)0x462997,
+        (Api::CreateToggleButtonFunctor)0x462f74,
     };
     // clang-format on
 

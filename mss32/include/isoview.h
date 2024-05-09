@@ -64,6 +64,19 @@ struct CIsoView : public CFullScreenInterf
     CIsoViewData* isoViewData;
 };
 
+namespace CIsoViewApi {
+
+struct Api
+{
+    using UpdateSelectedTileInfo = void(__thiscall*)(CIsoView* thisptr,
+                                                     const CMqPoint* mapPosition);
+    UpdateSelectedTileInfo updateSelectedTileInfo;
+};
+
+Api& get();
+
+} // namespace CIsoViewApi
+
 } // namespace editor
 } // namespace game
 

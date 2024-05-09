@@ -37,6 +37,9 @@ static std::array<Api, 3> functions = {{
         (Api::ExecuteEventEffects)0x44267c,
         (Api::FilterAndProcessEvents)0x441d45,
         (Api::CheckEventConditions)0x44213a,
+        (Api::Constructor)0x41fea6,
+        (Api::GetPlayerInfo)0x429866,
+        (Api::IsCurrentPlayer)0x41e77f,
     },
     // Russobit
     Api{
@@ -50,6 +53,9 @@ static std::array<Api, 3> functions = {{
         (Api::ExecuteEventEffects)0x44267c,
         (Api::FilterAndProcessEvents)0x441d45,
         (Api::CheckEventConditions)0x44213a,
+        (Api::Constructor)0x41fea6,
+        (Api::GetPlayerInfo)0x429866,
+        (Api::IsCurrentPlayer)0x41e77f,
     },
     // Gog
     Api{
@@ -63,6 +69,9 @@ static std::array<Api, 3> functions = {{
         (Api::ExecuteEventEffects)0x4422e1,
         (Api::FilterAndProcessEvents)0x4419aa,
         (Api::CheckEventConditions)0x441d9f,
+        (Api::Constructor)0x41f98e,
+        (Api::GetPlayerInfo)0x429291,
+        (Api::IsCurrentPlayer)0x41e267,
     },
 }};
 

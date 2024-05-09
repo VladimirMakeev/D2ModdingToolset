@@ -38,6 +38,11 @@ std::array<Api, 4> functions = {{
         (Api::ExtractUnitFromGroup)0x5e8d72,
         (Api::PlayerSetAttitude)0,
         (Api::SetStackSrcTemplate)0x5e9ef8,
+        (Api::MerchantAddBuyCategory)nullptr,
+        (Api::CreateSite)nullptr,
+        (Api::ChangeSiteInfo)nullptr,
+        (Api::ChangeSiteImage)nullptr,
+        (Api::ChangeSiteAiPriority)nullptr,
     },
     // Russobit
     Api{
@@ -52,6 +57,11 @@ std::array<Api, 4> functions = {{
         (Api::ExtractUnitFromGroup)0x5e8d72,
         (Api::PlayerSetAttitude)0,
         (Api::SetStackSrcTemplate)0x5e9ef8,
+        (Api::MerchantAddBuyCategory)nullptr,
+        (Api::CreateSite)nullptr,
+        (Api::ChangeSiteInfo)nullptr,
+        (Api::ChangeSiteImage)nullptr,
+        (Api::ChangeSiteAiPriority)nullptr,
     },
     // Gog
     Api{
@@ -66,6 +76,11 @@ std::array<Api, 4> functions = {{
         (Api::ExtractUnitFromGroup)0x5e7a71,
         (Api::PlayerSetAttitude)0,
         (Api::SetStackSrcTemplate)0x5e8bf7,
+        (Api::MerchantAddBuyCategory)nullptr,
+        (Api::CreateSite)nullptr,
+        (Api::ChangeSiteInfo)nullptr,
+        (Api::ChangeSiteImage)nullptr,
+        (Api::ChangeSiteAiPriority)nullptr,
     },
     // Scenario Editor
     Api{
@@ -80,6 +95,11 @@ std::array<Api, 4> functions = {{
         (Api::ExtractUnitFromGroup)0,
         (Api::PlayerSetAttitude)0x4e9baa,
         (Api::SetStackSrcTemplate)0,
+        (Api::MerchantAddBuyCategory)0x4eb0df,
+        (Api::CreateSite)0x4eac6f,
+        (Api::ChangeSiteInfo)0x4eadb9,
+        (Api::ChangeSiteImage)0x4eae6a,
+        (Api::ChangeSiteAiPriority)0x4eaeb8,
     },
 }};
 // clang-format on

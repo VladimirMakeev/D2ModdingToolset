@@ -163,6 +163,11 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.infiniteAttack = interf.value().get_or("infiniteAttack", std::string());
     value.infiniteText = interf.value().get_or("infiniteText", std::string());
     value.removedAttackWard = interf.value().get_or("removedAttackWard", std::string());
+    value.resourceMarketEncyDesc = interf.value().get_or("resourceMarketEncyDesc", std::string());
+    value.resourceMarketInfiniteAmount = interf.value().get_or("resourceMarketInfiniteAmount",
+                                                               std::string());
+    value.resourceMarketExchangeDesc = interf.value().get_or("resourceMarketExchangeDesc",
+                                                             std::string());
 }
 
 void initialize(TextIds& value)

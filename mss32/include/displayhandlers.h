@@ -20,14 +20,19 @@
 #ifndef DISPLAYHANDLERS_H
 #define DISPLAYHANDLERS_H
 
+#include "d2map.h"
 #include "idset.h"
 #include "imagelayerlist.h"
 #include "midgardid.h"
+#include "smartptr.h"
 
 namespace game {
 
 struct IMidgardObjectMap;
 struct CMidVillage;
+struct IMapElement;
+struct CMidSite;
+struct alignas(8) TypeDescriptor;
 
 namespace DisplayHandlersApi {
 
@@ -43,11 +48,70 @@ struct Api
                                             bool animatedIso);
 
     DisplayHandler<CMidVillage> villageHandler;
+
+    DisplayHandler<CMidSite> siteHandler;
 };
 
 Api& get();
 
 } // namespace DisplayHandlersApi
+
+struct ImageDisplayHandlerVftable;
+
+struct ImageDisplayHandler
+{
+    ImageDisplayHandlerVftable* vftable;
+    DisplayHandlersApi::Api::DisplayHandler<void> handler;
+};
+
+assert_size(ImageDisplayHandler, 8);
+
+struct ImageDisplayHandlerVftable
+{
+    using Destructor = void(__thiscall*)(ImageDisplayHandler* thisptr, char flags);
+    Destructor destructor;
+
+    using RunHandler = void(__thiscall*)(ImageDisplayHandler* thisptr,
+                                         ImageLayerList* list,
+                                         const IMapElement* mapElement,
+                                         const IMidgardObjectMap* objectMap,
+                                         const CMidgardID* playerId,
+                                         const IdSet* objectives,
+                                         int a6,
+                                         bool animatedIso);
+    RunHandler runHandler;
+};
+
+assert_vftable_size(ImageDisplayHandlerVftable, 2);
+
+using ImageDisplayHandlerPtr = SmartPtr<ImageDisplayHandler>;
+using ImageDisplayHandlerMap = Map<const TypeDescriptor*, ImageDisplayHandlerPtr>;
+using ImageDisplayHandlerMapIt = MapIterator<const TypeDescriptor*, ImageDisplayHandlerPtr>;
+using ImageDisplayHandlerMapInsertIt = Pair<ImageDisplayHandlerMapIt, bool>;
+
+using ImageDisplayHandlerMapFind =
+    ImageDisplayHandlerMapIt*(__thiscall*)(ImageDisplayHandlerMap* thisptr,
+                                           ImageDisplayHandlerMapIt* iterator,
+                                           const TypeDescriptor** descriptor);
+
+namespace ImageDisplayHandlerApi {
+
+struct Api
+{
+    using AddHandler =
+        ImageDisplayHandlerMapInsertIt*(__thiscall*)(ImageDisplayHandlerMap* thisptr,
+                                                     ImageDisplayHandlerMapInsertIt* iterator,
+                                                     const TypeDescriptor** descriptor,
+                                                     const ImageDisplayHandlerPtr* handler);
+    AddHandler addHandler;
+};
+
+Api& get();
+
+ImageDisplayHandlerMap* instance();
+
+} // namespace ImageDisplayHandlerApi
+
 } // namespace game
 
 #endif // DISPLAYHANDLERS_H

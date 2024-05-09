@@ -50,6 +50,9 @@
     <Filter Include="features\random scenario generator">
       <UniqueIdentifier>{54ad4f5d-bf7a-487f-9a3c-94547ca33f44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\custom scenario objects">
+      <UniqueIdentifier>{4414afc9-2087-4905-bf4d-220042197dd5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\fmt\src\format.cc">
@@ -1333,6 +1336,120 @@
     </ClCompile>
     <ClCompile Include="src\testleaderownitemhooks.cpp">
       <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\encparamidplayer.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\visitorcreatesite.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trainingcampinterf.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\taskobjprop.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\taskobjmove.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\taskobjerase.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\taskobjaddsite.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\taskmanager.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\middragdropinterf.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midcommandqueue2.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\middatacache.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\isoview.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\visitorcreatesitehooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\isoviewhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\taskobjprophooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\taskobjaddsitehooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\exchangeresourcesmsg.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ddstackgroup.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ddstackinventorydisplay.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\objectinterf.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\objectinterfhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midfreetask.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sounds.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\paperdollchildinterf.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midsite.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midsitemage.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midsitemerchant.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midsitemercs.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midsitetrainer.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenedithooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midunitgroupadapter.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\streambits.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sitecategoryhooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midtaskopeninterfparamresmarket.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midsiteresourcemarket.cpp">
+      <Filter>features\custom scenario objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\netmsgmapentryexchangeresourcesmsg.cpp">
+      <Filter>features\custom scenario objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resourcemarketinterface.cpp">
+      <Filter>features\custom scenario objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\siteresourcemarketinterf.cpp">
+      <Filter>features\custom scenario objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3466,6 +3583,90 @@
     <ClInclude Include="include\testleaderownitemhooks.h">
       <Filter>hooks</Filter>
     </ClInclude>
+    <ClInclude Include="include\miditemext.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\isoviewhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exchangeresourcesmsg.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ddstackinventorydisplay.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cmdstackvisitmsg.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ddfoldedinv.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ddfoldedinvdisplay.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\objectinterfhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\taskobj.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\taskobjaddsite.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\taskobjerase.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\taskobjmove.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\taskobjprop.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\taskobjaddsitehooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\taskobjprophooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\paperdollchildinterf.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\visitorcreatesite.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\visitorcreatesitehooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\trainingcampinterf.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scenedithooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\streambits.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sitecategoryhooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midtaskopeninterfparam.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midtaskopeninterfparamresmarket.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\midsiteresourcemarket.h">
+      <Filter>features\custom scenario objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\netmsgmapentryexchangeresourcesmsg.h">
+      <Filter>features\custom scenario objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\resourcemarketinterface.h">
+      <Filter>features\custom scenario objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\siteresourcemarketinterf.h">
+      <Filter>features\custom scenario objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mss32.rc">
@@ -3474,5 +3675,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="midgardid.natvis" />
   </ItemGroup>
 </Project>

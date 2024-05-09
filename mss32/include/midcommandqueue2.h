@@ -82,6 +82,18 @@ struct CMidCommandQueue2::INotifyCQVftable
 
 assert_vftable_size(CMidCommandQueue2::INotifyCQVftable, 2);
 
+namespace CMidCommandQueue2Api {
+
+struct Api
+{
+    using ProcessCommands = void(__thiscall*)(CMidCommandQueue2* thisptr);
+    ProcessCommands processCommands;
+};
+
+Api& get();
+
+} // namespace CMidCommandQueue2Api
+
 } // namespace game
 
 #endif // MIDCOMMANDQUEUE2_H

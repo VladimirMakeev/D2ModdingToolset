@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+	<Type Name="game::CMidgardID">
+		<DisplayString>{{ value={(unsigned int)value,X} }}</DisplayString>
+		<Expand>
+			<Item Name="[category]" Condition="((unsigned int)value &gt;&gt; 30) == 0">"Global (G)"</Item>
+			<Item Name="[category]" Condition="((unsigned int)value &gt;&gt; 30) == 1">"Campaign (C)"</Item>
+			<Item Name="[category]" Condition="((unsigned int)value &gt;&gt; 30) == 2">"Scenario (S)"</Item>
+			<Item Name="[category]" Condition="((unsigned int)value &gt;&gt; 30) == 3">"External (X)"</Item>
+			<Item Name="[category index]">((unsigned int)value &gt;&gt; 22) &amp; 0xff</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 0">"Empty (00)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 1">"App text (TA)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 2">"Building (BB)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 3">"Race (RR)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 4">"Lord (LR)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 5">"Spell (SS)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 6">"Unit global (UU)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 7">"Unit generated (UG)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 8">"Unit modifier (UM)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 9">"Attack (AA)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 10">"Text global (TG)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 11">"Landmark global (MG)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 12">"Item global (IG)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 13">"Noble action (NA)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 14">"Dynamic upgrade (DU)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 15">"Dynamic attack (DA)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 16">"Dynamic alt. attack (AL)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 17">"Dynamic attack 2 (DC)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 18">"Dynamic alt. attack 2 (AC)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 19">"Campaign file (CC)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 20">"CW"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 21">"CO"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 22">"Plan (PN)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 23">"Object count (OB)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 24">"Scenario file (SC)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 25">"Map (MP)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 26">"Map block (MB)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 27">"Scenario info (IF)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 28">"Spell effects (ET)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 29">"Fortification (FT)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 30">"Player (PL)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 31">"Player known spells (KS)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 32">"Fog (FG)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 33">"Player buildings (PB)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 34">"Road (RA)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 35">"Stack (KC)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 36">"Unit (UU)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 37">"Landmark (MM)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 38">"Item (IM)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 39">"Bag (BG)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 40">"Site (SI)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 41">"Ruin (RU)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 42">"Tomb (TB)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 43">"Rod (RD)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 44">"Crystal (CR)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 45">"Diplomacy (DP)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 46">"Spell cast (ST)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 47">"Location (LO)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 48">"Stack template (TM)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 49">"Event (EV)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 50">"Stack destroyed (SD)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 51">"Talisman charges (TC)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 52">"MT"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 53">"Mountains (ML)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 54">"Subrace (SR)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 55">"Subrace type (BR)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 56">"Quest log (QL)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 57">"Turn summary (TS)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) == 58">"Scenario variables (SV)"</Item>
+			<Item Name="[type]" Condition="(((unsigned int)value &gt;&gt; 16) &amp; 0x3f) >= 59">"Invalid"</Item>
+			<Item Name="[type index]">(unsigned int)value &amp; 0xffff</Item>
+		</Expand>
+	</Type>
+
+</AutoVisualizer>

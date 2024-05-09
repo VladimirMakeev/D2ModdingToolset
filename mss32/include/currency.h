@@ -165,6 +165,10 @@ struct Api
                                                   std::int16_t value);
     SetCurrency set;
 
+    /** Returns specified bank currency. */
+    using GetCurrency = std::int16_t(__thiscall*)(const Bank* bank, CurrencyType currencyType);
+    GetCurrency get;
+
     /** Returns true if all currencies in bank are zero. */
     using IsZero = bool(__thiscall*)(const Bank* bank);
     IsZero isZero;

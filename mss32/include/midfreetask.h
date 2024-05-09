@@ -35,6 +35,19 @@ struct CMidFreeTask : public IMidTask
 
 assert_size(CMidFreeTask, 16);
 
+namespace CMidFreeTaskApi {
+
+struct Api
+{
+    using Constructor = CMidFreeTask*(__thiscall*)(CMidFreeTask* thisptr,
+                                                   CTaskManager* taskManager);
+    Constructor constructor;
+};
+
+Api& get();
+
+} // namespace CMidFreeTaskApi
+
 } // namespace game
 
 #endif // MIDFREETASK_H

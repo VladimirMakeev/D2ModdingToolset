@@ -30,21 +30,21 @@ static std::array<Api, 4> functions = {{
         (Api::SetEnabled)0,
         (Api::SetButtonEnabled)0,
         (Api::SetCheckedButton)0,
-        (Api::SetOnButtonPressed)0,
+        (Api::SetOnButtonPressed)0x5c951c,
     },
     // Russobit
     Api{
         (Api::SetEnabled)0,
         (Api::SetButtonEnabled)0,
         (Api::SetCheckedButton)0,
-        (Api::SetOnButtonPressed)0,
+        (Api::SetOnButtonPressed)0x5c951c,
     },
     // Gog
     Api{
         (Api::SetEnabled)0,
         (Api::SetButtonEnabled)0,
         (Api::SetCheckedButton)0,
-        (Api::SetOnButtonPressed)0,
+        (Api::SetOnButtonPressed)0x5c84ea,
     },
     // Scenario Editor
     Api{

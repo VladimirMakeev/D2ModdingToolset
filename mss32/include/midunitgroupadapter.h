@@ -65,6 +65,22 @@ struct CMidUnitGroupAdapter : public IUnitGroup
 
 assert_size(CMidUnitGroupAdapter, 8);
 
+namespace CMidUnitGroupAdapterApi {
+
+struct Api
+{
+    using Constructor = CMidUnitGroupAdapter*(__thiscall*)(CMidUnitGroupAdapter* thisptr,
+                                                           IMidgardObjectMap* objectMap,
+                                                           const CMidgardID* groupId,
+                                                           const CMidgardID* playerId,
+                                                           int leftSide);
+    Constructor constructor;
+};
+
+Api& get();
+
+}
+
 } // namespace game
 
 #endif // MIDUNITGROUPADAPTER_H

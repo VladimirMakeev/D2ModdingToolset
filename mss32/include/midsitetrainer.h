@@ -30,6 +30,19 @@ struct CMidSiteTrainer : public CMidSite
 
 assert_size(CMidSiteTrainer, 120);
 
+namespace CMidSiteTrainerApi {
+
+struct Api
+{
+    using Constructor = CMidSiteTrainer*(__thiscall*)(CMidSiteTrainer* thisptr,
+                                                      const CMidgardID* siteId);
+    Constructor constructor;
+};
+
+Api& get();
+
+} // namespace CMidSiteTrainerApi
+
 } // namespace game
 
 #endif // MIDSITETRAINER_H

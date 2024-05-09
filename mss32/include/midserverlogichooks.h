@@ -32,6 +32,7 @@ struct IMidgardObjectMap;
 struct CMidEvent;
 struct IEventEffect;
 struct ITestCondition;
+struct CMidServer;
 } // namespace game
 
 namespace hooks {
@@ -161,6 +162,14 @@ bool __fastcall testVarInRangeHooked(const game::ITestCondition* thisptr,
                                      const game::IMidgardObjectMap* objectMap,
                                      const game::CMidgardID* playerId,
                                      const game::CMidgardID* eventId);
+
+game::CMidServerLogic* __fastcall midServerLogicCtorHooked(game::CMidServerLogic* thisptr,
+                                                           int /*%edx*/,
+                                                           game::CMidServer* server,
+                                                           bool multiplayerGame,
+                                                           bool hotseatGame,
+                                                           int a5,
+                                                           int gameVersion);
 
 } // namespace hooks
 

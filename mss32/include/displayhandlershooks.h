@@ -32,6 +32,14 @@ void __stdcall displayHandlerVillageHooked(game::ImageLayerList* list,
                                            int a6,
                                            bool animatedIso);
 
+void __stdcall getMapElementIsoLayerImagesHooked(game::ImageLayerList* list,
+                                       const game::IMapElement* mapElement,
+                                       const game::IMidgardObjectMap* objectMap,
+                                       const game::CMidgardID* playerId,
+                                       const game::IdSet* objectives,
+                                       int unknown,
+                                       bool animatedIso);
+
 }
 
 #endif // DISPLAYHANDLERSHOOKS_H

@@ -33,6 +33,18 @@ struct CMidSiteMage : public CMidSite
 
 assert_size(CMidSiteMage, 136);
 
+namespace CMidSiteMageApi {
+
+struct Api
+{
+    using Constructor = CMidSiteMage*(__thiscall*)(CMidSiteMage* thisptr, const CMidgardID* siteId);
+    Constructor constructor;
+};
+
+Api& get();
+
+} // namespace CMidSiteMageApi
+
 } // namespace game
 
 #endif // MIDSITEMAGE_H

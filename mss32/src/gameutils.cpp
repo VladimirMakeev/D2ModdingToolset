@@ -29,6 +29,7 @@
 #include "lordtype.h"
 #include "midclient.h"
 #include "midclientcore.h"
+#include "middatacache.h"
 #include "middiplomacy.h"
 #include "midgard.h"
 #include "midgardmap.h"
@@ -195,6 +196,18 @@ const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
                                           rtti.CMidPlayerType, 0);
 }
 
+game::CMidPlayer* getPlayerToChange(game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* playerId)
+{
+    using namespace game;
+
+    auto playerObj = objectMap->vftable->findScenarioObjectByIdForChange(objectMap, playerId);
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    return (CMidPlayer*)dynamicCast(playerObj, 0, rtti.IMidScenarioObjectType, rtti.CMidPlayerType,
+                                    0);
+}
+
 const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
                                   const game::BattleMsgData* battleMsgData,
                                   const game::CMidgardID* unitId)
@@ -298,6 +311,17 @@ const game::CMidgardPlan* getMidgardPlan(const game::IMidgardObjectMap* objectMa
     }
 
     return static_cast<const game::CMidgardPlan*>(obj);
+}
+
+game::CMidgardPlan* getMidgardPlanToChange(game::IMidgardObjectMap* objectMap)
+{
+    const auto id{createIdWithType(objectMap, game::IdType::Plan)};
+    auto obj{objectMap->vftable->findScenarioObjectByIdForChange(objectMap, &id)};
+    if (!obj) {
+        return nullptr;
+    }
+
+    return static_cast<game::CMidgardPlan*>(obj);
 }
 
 const game::CMidgardMap* getMidgardMap(const game::IMidgardObjectMap* objectMap)

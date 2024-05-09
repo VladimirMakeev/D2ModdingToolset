@@ -43,19 +43,9 @@ struct IMapElementVftable
 {
     using Destructor = void(__thiscall*)(IMapElement* thisptr, char flags);
     Destructor destructor;
-
-    using Initialize = bool(__thiscall*)(IMapElement* thisptr,
-                                         const IMidgardObjectMap* objectMap,
-                                         const CMidgardID* leaderId,
-                                         const CMidgardID* ownerId,
-                                         const CMidgardID* subraceId,
-                                         const CMqPoint* position);
-    Initialize initialize;
-
-    void* method2;
 };
 
-assert_vftable_size(IMapElementVftable, 3);
+assert_vftable_size(IMapElementVftable, 1);
 
 } // namespace game
 

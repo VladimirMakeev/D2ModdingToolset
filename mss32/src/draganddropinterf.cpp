@@ -24,19 +24,27 @@
 namespace game::CDragAndDropInterfApi {
 
 // clang-format off
-static std::array<Api, 3> functions = {{
+static std::array<Api, 4> functions = {{
     // Akella
     Api{
-        (Api::GetDialog)0x56cea4
+        (Api::GetDialog)0x56cea4,
+        (Api::Constructor)0x56c881,
     },
     // Russobit
     Api{
-        (Api::GetDialog)0x56cea4
+        (Api::GetDialog)0x56cea4,
+        (Api::Constructor)0x56c881,
     },
     // Gog
     Api{
-        (Api::GetDialog)0x56c54e
-    }
+        (Api::GetDialog)0x56c54e,
+        (Api::Constructor)0x56bf2b,
+    },
+    // Scenario Editor
+    Api{
+        (Api::GetDialog)0x567488,
+        (Api::Constructor)0x566e6c,
+    },
 }};
 // clang-format on
 

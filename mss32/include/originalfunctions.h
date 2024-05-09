@@ -37,6 +37,8 @@
 #include "exchangeinterf.h"
 #include "game.h"
 #include "gameimages.h"
+#include "imagelayerlist.h"
+#include "mainview2.h"
 #include "menubase.h"
 #include "menuload.h"
 #include "menunewskirmishhotseat.h"
@@ -53,9 +55,13 @@
 #include "midunit.h"
 #include "mqnetplayer.h"
 #include "netmsg.h"
+#include "objectinterf.h"
 #include "pickupdropinterf.h"
+#include "scenedit.h"
 #include "scenpropinterf.h"
 #include "sitemerchantinterf.h"
+#include "taskobjaddsite.h"
+#include "taskobjprop.h"
 #include "testcondition.h"
 #include "visitors.h"
 
@@ -177,6 +183,17 @@ struct OriginalFunctions
 
     game::RemoveStack removeStack;
     game::VisitorApi::Api::SetStackSrcTemplate setStackSrcTemplate;
+
+    game::editor::CObjectInterfApi::Api::CreateTaskObj createTaskObj;
+
+    game::ImageLayerListApi::Api::GetMapElementIsoLayerImages getMapElementIsoLayerImages;
+    game::editor::CTaskObjVftable::DoAction taskObjPropDoAction;
+    game::editor::CTaskObjVftable::DoAction taskObjAddSiteDoAction;
+    game::CScenEditApi::Api::ReadScenData readScenData;
+
+    game::CMainView2Api::Api::HandleCmdStackVisitMsg handleCmdStackVisitMsg;
+
+    game::CMidServerLogicApi::Api::Constructor midServerLogicCtor;
 };
 
 OriginalFunctions& getOriginalFunctions();

@@ -29,6 +29,56 @@ struct CWavStore;
 struct Wdb;
 struct CLogFile;
 
+enum class SoundEffect : int
+{
+    Appear,
+    Boatsnd,
+    Entrsite,
+    Entrruin,
+    Entrcity,
+    Exitcity,
+    Occupy,
+    Spelldis,
+    Lootruin,
+    Enroll,
+    Occupy2,
+    Beep,
+    Botreprt,
+    Seebat,
+    Sbattle,
+    Snoble,
+    Stolen,
+    Building,
+    Openbook,
+    Closbook,
+    Bkpopup,
+    Openintr,
+    Closintr,
+    Pboost,
+    Pheal,
+    Previve,
+    Useitem,
+    Buyitem,
+    Citygrow,
+    Takebag,
+    Spinrock,
+    Chngface,
+    Soundfx,
+    Givegold,
+    Tradspel,
+    Reftrspe,
+    Traditem,
+    Reftritm,
+    Alliance,
+    Refallia,
+    Brkallia,
+    Aichat,
+    AUNN7778,
+    AUNN7788,
+    Endriot,
+    Creatstk,
+};
+
 struct SoundsData
 {
     String string;
@@ -47,6 +97,29 @@ struct Sounds
 };
 
 assert_size(Sounds, 4);
+
+using SoundsPtr = SmartPtr<Sounds>;
+
+namespace SoundsApi {
+
+struct Api
+{
+    using Instance = SoundsPtr*(__stdcall*)(SoundsPtr* sounds);
+    Instance instance;
+
+    using SoundsPtrSetData = void(__thiscall*)(SoundsPtr* thisptr, Sounds* data);
+    SoundsPtrSetData soundsPtrSetData;
+
+    using PlaySound = int(__thiscall*)(Sounds* thisptr,
+                                       SoundEffect effect,
+                                       int a2,
+                                       SmartPointer* functor);
+    PlaySound playSound;
+};
+
+Api& get();
+
+} // namespace SoundsApi
 
 } // namespace game
 

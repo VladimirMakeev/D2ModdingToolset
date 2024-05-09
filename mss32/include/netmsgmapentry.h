@@ -68,7 +68,9 @@ struct CNetMsgMapEntry_memberVftable;
 struct CNetMsgMapEntry_member : public CNetMsgMapEntryT<CNetMsgMapEntry_memberVftable>
 {
     void* data;
-    bool(__thiscall* callback)(void* thisptr, CNetMsg* netMessage, std::uint32_t idFrom);
+
+    using Callback = bool(__thiscall*)(void* thisptr, CNetMsg* netMessage, std::uint32_t idFrom);
+    Callback callback;
 };
 
 assert_size(CNetMsgMapEntry_member, 12);

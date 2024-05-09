@@ -32,6 +32,7 @@ struct CMidMsgBoxButtonHandler;
 struct IMidgardObjectMap;
 struct UiEvent;
 struct CInterface;
+enum class SoundEffect : int;
 } // namespace game
 
 namespace hooks {
@@ -55,6 +56,9 @@ const std::filesystem::path& templatesFolder();
 
 /** Returns full path to the exports folder. */
 const std::filesystem::path& exportsFolder();
+
+/** Returns full path to the ScenData folder. */
+const std::filesystem::path& scenDataFolder();
 
 /** Returns full path to the executable that is currently running. */
 const std::filesystem::path& exePath();
@@ -120,6 +124,8 @@ bool computeHash(const std::filesystem::path& folder, std::string& hash);
 void forEachScenarioObject(const game::IMidgardObjectMap* objectMap,
                            game::IdType idType,
                            const std::function<void(const game::IMidScenarioObject*)>& func);
+
+void playSoundEffect(game::SoundEffect effect);
 
 template <typename T>
 static inline void replaceRttiInfo(game::RttiInfo<T>& dst, const T* src, bool copyVftable = true)

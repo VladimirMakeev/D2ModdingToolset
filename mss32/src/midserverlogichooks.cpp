@@ -18,6 +18,8 @@
  */
 
 #include "midserverlogichooks.h"
+#include "dynamiccast.h"
+#include "exchangeresourcesmsg.h"
 #include "gameutils.h"
 #include "idset.h"
 #include "log.h"
@@ -26,7 +28,11 @@
 #include "midplayer.h"
 #include "midserver.h"
 #include "midserverlogic.h"
+#include "midsiteresourcemarket.h"
 #include "midstack.h"
+#include "netmsgcallbacks.h"
+#include "netmsgmapentryexchangeresourcesmsg.h"
+#include "netplayerinfo.h"
 #include "originalfunctions.h"
 #include "racetype.h"
 #include "refreshinfo.h"
@@ -49,6 +55,33 @@ extern const std::string_view eventsPerformanceLog{"eventsPerformance.log"};
 long long conditionsTotalTime = 0;
 long long conditionsSystemTime = 0;
 long long effectsTime = 0;
+
+static bool __fastcall exchangeResourcesMsgHandler(game::CMidServerLogic* thisptr,
+                                                   int /*%edx*/,
+                                                   const CExchangeResourcesMsg* netMessage,
+                                                   std::uint32_t idFrom)
+{
+    using namespace game;
+
+    const NetPlayerInfo* playerInfo{CMidServerLogicApi::get().getPlayerInfo(thisptr, idFrom)};
+    if (!playerInfo) {
+        return false;
+    }
+
+    if (!CMidServerLogicApi::get().isCurrentPlayer(thisptr, &playerInfo->playerId)) {
+        return true;
+    }
+
+    auto objectMap{thisptr->coreData->objectMap};
+    if (!exchangeResources(objectMap, netMessage->siteId, netMessage->visitorStackId,
+                           netMessage->playerCurrency, netMessage->siteCurrency,
+                           netMessage->amount)) {
+        return false;
+    }
+
+    thisptr->IMidMsgSender::vftable->sendObjectsChanges(thisptr);
+    return true;
+}
 
 void addValidatedUnitsToChangedObjects(game::CMidgardScenarioMap* scenarioMap)
 {
@@ -524,6 +557,28 @@ bool __fastcall testVarInRangeHooked(const game::ITestCondition* thisptr,
 {
     return doTestHooked(getOriginalFunctions().testVarInRange, "var in range", thisptr, objectMap,
                         playerId, eventId);
+}
+
+game::CMidServerLogic* __fastcall midServerLogicCtorHooked(game::CMidServerLogic* thisptr,
+                                                           int /*%edx*/,
+                                                           game::CMidServer* server,
+                                                           bool multiplayerGame,
+                                                           bool hotseatGame,
+                                                           int a5,
+                                                           int gameVersion)
+{
+    using namespace game;
+
+    getOriginalFunctions().midServerLogicCtor(thisptr, server, multiplayerGame, hotseatGame, a5,
+                                              gameVersion);
+
+    auto netMsgEntryData{thisptr->coreData->netMsgEntryData};
+
+    auto callback = (CNetMsgMapEntry_member::Callback)exchangeResourcesMsgHandler;
+    auto entry{createNetMsgMapEntryExchangeResourcesMsg(thisptr, callback)};
+
+    NetMsgApi::get().addEntry(netMsgEntryData, (CNetMsgMapEntry*)entry);
+    return thisptr;
 }
 
 } // namespace hooks

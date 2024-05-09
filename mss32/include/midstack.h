@@ -94,6 +94,26 @@ assert_offset(CMidStack, inventory, 100);
 assert_offset(CMidStack, leaderEquippedItems, 124);
 assert_offset(CMidStack, orderTargetId, 172);
 
+struct CMidStackIMapElementVftable : public IMapElementVftable
+{
+    using Initialize = bool(__thiscall*)(IMapElement* thisptr,
+                                         const IMidgardObjectMap* objectMap,
+                                         const CMidgardID* leaderId,
+                                         const CMidgardID* ownerId,
+                                         const CMidgardID* subraceId,
+                                         const CMqPoint* position);
+    Initialize initialize;
+
+    /**
+     * Removes all units from stack, destroys all its items and sets leader,
+     * owner and subrace ids as empty.
+     */
+    using Cleanup = bool(__thiscall*)(IMapElement* thisptr, const IMidgardObjectMap* objectMap);
+    Cleanup cleanup;
+};
+
+assert_vftable_size(CMidStackIMapElementVftable, 3);
+
 namespace CMidStackApi {
 
 struct Api
@@ -113,7 +133,7 @@ struct Api
 
 Api& get();
 
-const IMapElementVftable* vftable();
+const CMidStackIMapElementVftable* vftable();
 
 } // namespace CMidStackApi
 

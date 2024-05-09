@@ -18,15 +18,23 @@
  */
 
 #include "mainview2hooks.h"
+#include "cmdstackvisitmsg.h"
 #include "dialoginterf.h"
+#include "dynamiccast.h"
 #include "gameimages.h"
 #include "gameutils.h"
 #include "isolayers.h"
 #include "log.h"
 #include "mainview2.h"
 #include "mapgraphics.h"
+#include "midcommandqueue2.h"
+#include "midsite.h"
+#include "midtaskopeninterfparamresmarket.h"
+#include "originalfunctions.h"
 #include "phasegame.h"
 #include "scenarioinfo.h"
+#include "sitecategoryhooks.h"
+#include "taskmanager.h"
 #include "togglebutton.h"
 #include <fmt/format.h>
 
@@ -76,7 +84,7 @@ static void __fastcall mainView2OnToggleGrid(game::CMainView2* thisptr,
     gridVisible = toggleOn;
 
     if (gridVisible) {
-        auto objectMap{game::CPhaseApi::get().getObjectMap(&thisptr->phaseGame->phase)};
+        auto objectMap{game::CPhaseApi::get().getDataCache(&thisptr->phaseGame->phase)};
         auto scenarioInfo{getScenarioInfo(objectMap)};
 
         showGrid(scenarioInfo->mapSize);
@@ -125,6 +133,47 @@ void __fastcall mainView2ShowIsoDialogHooked(game::CMainView2* thisptr, int /*%e
     SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
 
     buttonApi.setChecked(toggleButton, gridVisible);
+}
+
+void __fastcall mainView2HandleCmdStackVisitMsgHooked(game::CMainView2* thisptr,
+                                                      int /*%edx*/,
+                                                      const game::CCommandMsg* stackVisitMsg)
+{
+    using namespace game;
+
+    const auto& dynamicCast{RttiApi::get().dynamicCast};
+    const auto& rtti{RttiApi::rtti()};
+
+    auto msg{(const CCmdStackVisitMsg*)dynamicCast(stackVisitMsg, 0, rtti.CCommandMsgType,
+                                                   rtti.CCmdStackVisitMsgType, 0)};
+
+    const auto& phaseApi{CPhaseApi::get()};
+    CPhase* phase{&thisptr->phaseGame->phase};
+
+    IMidgardObjectMap* objectMap{phaseApi.getDataCache(phase)};
+
+    auto obj{objectMap->vftable->findScenarioObjectById(objectMap, &msg->siteId)};
+    auto site{
+        (const CMidSite*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType, rtti.CMidSiteType, 0)};
+    if (!customSiteCategories().exists
+        || customSiteCategories().resourceMarket.id != site->siteCategory.id) {
+        return getOriginalFunctions().handleCmdStackVisitMsg(thisptr, stackVisitMsg);
+    }
+
+    // Handle stack visiting resource market
+    ITaskManagerHolder* holder{&thisptr->taskManagerHolder};
+    CTaskManager* taskManager{holder->vftable->getTaskManager(holder)};
+
+    const CMidgardID& siteId{msg->siteId};
+    const CMidgardID& visitorStackId{msg->visitorStackId};
+
+    ITask* task{createMidTaskOpenInterfParamResMarket(taskManager, thisptr->phaseGame,
+                                                      visitorStackId, siteId)};
+
+    auto commandQueue{phaseApi.getCommandQueue(phase)};
+    CMidCommandQueue2Api::get().processCommands(commandQueue);
+
+    CTaskManagerApi::get().setCurrentTask(taskManager, task);
 }
 
 } // namespace hooks

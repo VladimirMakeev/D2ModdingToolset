@@ -27,6 +27,8 @@
 #include "midmsgboxbuttonhandlerstd.h"
 #include "midscenvariables.h"
 #include "smartptr.h"
+#include "mquikernelsimple.h"
+#include "sounds.h"
 #include "uimanager.h"
 #include <Windows.h>
 #include <fmt/format.h>
@@ -86,6 +88,12 @@ const std::filesystem::path& templatesFolder()
 const std::filesystem::path& exportsFolder()
 {
     static const std::filesystem::path folder{gameFolder() / "Exports"};
+    return folder;
+}
+
+const std::filesystem::path& scenDataFolder()
+{
+    static const std::filesystem::path folder{gameFolder() / "ScenData"};
     return folder;
 }
 
@@ -216,7 +224,26 @@ bool readUserSelectedFile(std::string& contents, const char* filter, const char*
     ofn.lpstrFileTitle = NULL;
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-    ofn.hwndOwner = FindWindowEx(nullptr, nullptr, "MQ_UIManager", nullptr);
+    // Handle DisciplesGL wrapper window presence.
+    // Wrapper creates its own window for the fullscreen mode
+    // and it should be used as owner for open dialog box to be displayed correctly.
+    static const char disciplesGlClassName[] = "7903f211-51ca-4a51-9ec5-e1301db2d24d";
+    HWND disciplesGlWindow = FindWindowEx(nullptr, nullptr, disciplesGlClassName, nullptr);
+    if (disciplesGlWindow) {
+        ofn.hwndOwner = disciplesGlWindow;
+    } else {
+        // Use original game window handle if there is no wrapper
+        // or wrapper works in a windowed mode.
+        using namespace game;
+
+        UIManagerPtr manager;
+        CUIManagerApi::get().get(&manager);
+        const auto* kernel = manager.data->data->uiKernel;
+
+        ofn.hwndOwner = kernel->vftable->getWindowHandle(kernel);
+
+        SmartPointerApi::get().createOrFree((game::SmartPointer*)&manager, nullptr);
+    }
 
     if (!GetOpenFileName(&ofn)) {
         return false;
@@ -435,6 +462,22 @@ void forEachScenarioObject(const game::IMidgardObjectMap* objectMap,
 
     free((SmartPointer*)&current, nullptr);
     free((SmartPointer*)&end, nullptr);
+}
+
+void playSoundEffect(game::SoundEffect effect)
+{
+    using namespace game;
+
+    const auto& api{SoundsApi::get()};
+
+    SmartPtr<Sounds> sounds{};
+    api.instance(&sounds);
+
+    SmartPointer functor{};
+    api.playSound(sounds.data, effect, -1, &functor);
+
+    SmartPointerApi::get().createOrFreeNoDtor(&functor, nullptr);
+    api.soundsPtrSetData(&sounds, nullptr);
 }
 
 } // namespace hooks

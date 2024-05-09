@@ -40,6 +40,19 @@ struct CMidSiteMerchant : public CMidSite
 
 assert_size(CMidSiteMerchant, 168);
 
+namespace CMidSiteMerchantApi {
+
+struct Api
+{
+    using Constructor = CMidSiteMerchant*(__thiscall*)(CMidSiteMerchant* thisptr,
+                                                       const CMidgardID* siteId);
+    Constructor constructor;
+};
+
+Api& get();
+
+} // namespace CMidSiteMerchantApi
+
 } // namespace game
 
 #endif // MIDSITEMERCHANT_H

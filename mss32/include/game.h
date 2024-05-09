@@ -80,6 +80,9 @@ struct CMidStreamEnvFile;
 struct CMidgardScenarioMap;
 struct TBuildingType;
 struct CScenarioVisitor;
+struct LSiteCategory;
+struct CMidSite;
+struct CTextBoxInterf;
 
 enum class ModifierElementTypeFlag : int;
 
@@ -738,6 +741,14 @@ using RemoveStack = bool(__stdcall*)(const CMidgardID* stackId,
                                      IMidgardObjectMap* objectMap,
                                      CScenarioVisitor* visitor);
 
+using GetSiteNameSuffix = const char*(__stdcall*)(const LSiteCategory* siteCategory);
+
+using UpdateEncLayoutSite = void(__stdcall*)(const CMidSite* site, CTextBoxInterf* textBox);
+
+using GetSiteSound = String*(__stdcall*)(String* soundName, const CMidSite* site);
+
+using SiteHasSound = bool(__stdcall*)(const CMidSite* site);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -865,6 +876,10 @@ struct Functions
     ComputeMovementCost computeMovementCost;
     GetBuildingStatus getBuildingStatus;
     RemoveStack removeStack;
+    GetSiteNameSuffix getSiteNameSuffix;
+    UpdateEncLayoutSite updateEncLayoutSite;
+    GetSiteSound getSiteSound;
+    SiteHasSound siteHasSound;
 };
 
 /** Global variables used in game. */

@@ -151,6 +151,10 @@ static std::array<Functions, 4> functions = {{
         (ComputeMovementCost)0x603bc6,
         (GetBuildingStatus)0x5ddcb3,
         (RemoveStack)0x60f5f8,
+        (GetSiteNameSuffix)0x5c5c3f,
+        (UpdateEncLayoutSite)0x579470,
+        (GetSiteSound)0x5093fb,
+        (SiteHasSound)0x50948c,
     },
     // Russobit
     Functions{
@@ -278,6 +282,10 @@ static std::array<Functions, 4> functions = {{
         (ComputeMovementCost)0x603bc6,
         (GetBuildingStatus)0x5ddcb3,
         (RemoveStack)0x60f5f8,
+        (GetSiteNameSuffix)0x5c5c3f,
+        (UpdateEncLayoutSite)0x579470,
+        (GetSiteSound)0x5093fb,
+        (SiteHasSound)0x50948c,
     },
     // Gog
     Functions{
@@ -405,6 +413,10 @@ static std::array<Functions, 4> functions = {{
         (ComputeMovementCost)0x6027f3,
         (GetBuildingStatus)0x5dc9e8,
         (RemoveStack)0x60e12c,
+        (GetSiteNameSuffix)0x5c4c28,
+        (UpdateEncLayoutSite)0x578b2b,
+        (GetSiteSound)0x5086eb,
+        (SiteHasSound)0x50877c,
     },
     // Scenario Editor
     Functions{
@@ -448,7 +460,7 @@ static std::array<Functions, 4> functions = {{
         (IsGroupOwnerPlayerHuman)nullptr,
         (AttackShouldMiss)nullptr,
         (GenerateRandomNumber)nullptr,
-        (GenerateRandomNumberStd)nullptr,
+        (GenerateRandomNumberStd)0x48341a,
         (GetUnitPositionInGroup)nullptr,
         (GetSummonUnitImplIdByAttack)nullptr,
         (GetSummonUnitImplId)nullptr,
@@ -532,6 +544,10 @@ static std::array<Functions, 4> functions = {{
         (ComputeMovementCost)nullptr,
         (GetBuildingStatus)0x4d8a11,
         (RemoveStack)nullptr,
+        (GetSiteNameSuffix)0x565306,
+        (UpdateEncLayoutSite)0x4ca874,
+        (GetSiteSound)nullptr,
+        (SiteHasSound)nullptr,
     },
 }};
 

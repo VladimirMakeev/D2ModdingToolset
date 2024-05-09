@@ -92,6 +92,7 @@ struct CMidServerLogic
     int unknown9;
     bool turnNumberIsZero;
     char padding[3];
+    // Assumption: List<Pair<CommandMsgId, CStreamBits>> messagesAndStreams;
     List<void*> list;
     int unknown11;
     int unknown12;
@@ -203,6 +204,23 @@ struct Api
                                                   int samePlayer,
                                                   const CMidgardID* eventId);
     CheckEventConditions checkEventConditions;
+
+    using Constructor = CMidServerLogic*(__thiscall*)(CMidServerLogic* thisptr,
+                                                      CMidServer* server,
+                                                      bool multiplayerGame,
+                                                      bool hotseatGame,
+                                                      int a5,
+                                                      int gameVersion);
+    Constructor constructor;
+
+    using GetPlayerInfo = NetPlayerInfo*(__thiscall*)(CMidServerLogic* thisptr,
+                                                      std::uint32_t playerNetId);
+    GetPlayerInfo getPlayerInfo;
+
+    /** Returns true if player with specified id is current: it actively plays its turn. */
+    using IsCurrentPlayer = bool(__stdcall*)(CMidServerLogic* serverLogic,
+                                             const CMidgardID* playerId);
+    IsCurrentPlayer isCurrentPlayer;
 };
 
 Api& get();

@@ -24,6 +24,7 @@ namespace game::CScenEditApi {
 // clang-format off
 Api functions{
     (Api::Instance)0x4013af,
+    (Api::ReadScenData)0x402b0b,
 };
 // clang-format on
 

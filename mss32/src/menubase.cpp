@@ -39,6 +39,7 @@ static std::array<Api, 3> functions = {{
         (Api::CreateListBoxFunctor)0x4ea8da,
         (Api::CreateSpinButtonFunctor)0x4e5867,
         (Api::CreatePictureFunctor)0x492cb0,
+        (Api::CreateRadioButtonFunctor)0x4e833a,
     },
     // Russobit
     Api{
@@ -54,6 +55,7 @@ static std::array<Api, 3> functions = {{
         (Api::CreateListBoxFunctor)0x4ea8da,
         (Api::CreateSpinButtonFunctor)0x4e5867,
         (Api::CreatePictureFunctor)0x492cb0,
+        (Api::CreateRadioButtonFunctor)0x4e833a,
     },
     // Gog
     Api{
@@ -69,6 +71,7 @@ static std::array<Api, 3> functions = {{
         (Api::CreateListBoxFunctor)0x4e9d75,
         (Api::CreateSpinButtonFunctor)0x4e4f74,
         (Api::CreatePictureFunctor)0x492766,
+        (Api::CreateRadioButtonFunctor)0x4e7839,
     },
 }};
 

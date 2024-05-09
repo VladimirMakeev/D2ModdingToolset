@@ -55,7 +55,7 @@ struct BaseClassDescriptor
     std::uint32_t attributes; /**< Flags, usually 0. */
 };
 
-struct BaseClassArray
+struct alignas(16) BaseClassArray
 {
 // Nonstandard extension: zero-sized array in struct/union
 #pragma warning(suppress : 4200)
@@ -63,7 +63,7 @@ struct BaseClassArray
 };
 
 /** Describes inheritance hierarchy of a class. */
-struct ClassHierarchyDescriptor
+struct alignas(16) ClassHierarchyDescriptor
 {
     std::uint32_t signature;
     std::uint32_t attributes;
@@ -77,7 +77,7 @@ struct ClassHierarchyDescriptor
  * Pointer to this structure can be found in memory just before class vftable.
  * @see http://www.openrce.org/articles/full_view/23 for additional info.
  */
-struct CompleteObjectLocator
+struct alignas(16) CompleteObjectLocator
 {
     std::uint32_t signature;
     std::uint32_t offset;                      /**< Offset of this vftable in complete class. */
@@ -175,9 +175,23 @@ struct Rtti
     TypeDescriptor* IUsNobleType;
     TypeDescriptor* IUsSummonType;
     TypeDescriptor* IItemExPotionBoostType;
+    TypeDescriptor* IMapElementType;
+    TypeDescriptor* CMidRoadType;
+    TypeDescriptor* CCmdStackVisitMsgType;
+    TypeDescriptor* CMidSiteType;
+
+    BaseClassDescriptor* IMidObjectDescriptor;
+    BaseClassDescriptor* IMidScenarioObjectDescriptor;
+    BaseClassDescriptor* IMapElementDescriptor;
+    BaseClassDescriptor* IAiPriorityDescriptor;
+    BaseClassDescriptor* CMidSiteDescriptor;
+    BaseClassDescriptor* CNetMsgDescriptor;
+    BaseClassDescriptor* CNetMsgMapEntryDescriptor;
 };
 
 const Rtti& rtti();
+
+const void* typeInfoVftable();
 
 } // namespace RttiApi
 

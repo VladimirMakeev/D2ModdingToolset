@@ -60,6 +60,9 @@ struct TextIds
         std::string infiniteAttack;
         std::string infiniteText;
         std::string removedAttackWard;
+        std::string resourceMarketEncyDesc;
+        std::string resourceMarketInfiniteAmount;
+        std::string resourceMarketExchangeDesc;
     } interf;
 
     struct Events
