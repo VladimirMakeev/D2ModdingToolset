@@ -432,6 +432,8 @@ static Hooks getGameHooks()
         {eventConditions.testItemToLocation, testItemToLocationHooked, (void**)&orig.testItemToLocation},
         {eventConditions.testStackExists, testStackExistsHooked},
         {eventConditions.testVarInRange, testVarInRangeHooked, (void**)&orig.testVarInRange},
+        {fn.removeStack, removeStackHooked, (void**)&orig.removeStack},
+        {VisitorApi::get().setStackSrcTemplate, setStackSrcTemplateHooked, (void**)&orig.setStackSrcTemplate},
         // Support resource market site
         {CMainView2Api::get().handleCmdStackVisitMsg, mainView2HandleCmdStackVisitMsgHooked, (void**)&orig.handleCmdStackVisitMsg},
         {CMidServerLogicApi::get().constructor, midServerLogicCtorHooked, (void**)&orig.midServerLogicCtor},
