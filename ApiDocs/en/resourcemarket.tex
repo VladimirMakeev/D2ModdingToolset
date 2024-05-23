@@ -1,0 +1,32 @@
+\subsection{Resource market}
+\label{ResourceMarket}
+Represents resource market on a map.
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+id & Returns market \hyperref[Id]{id}. The value is unique for every resource market on scenario map\\
+\hline
+position & Returns market position as a \hyperref[Point]{point}\\
+\hline
+visitors & Returns list of \hyperref[Player]{players} that have visited the market\\
+\hline
+stock & Returns market \hyperref[Currency]{stock}\\
+\hline
+customRates & Returns \texttt{true} if resource market uses custom exchange rates\\
+\hline
+\end{tabularx}
+\end{center}
+
+\subsubsection{Methods}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+isInfinite(Resource.Gold) & Returns \texttt{true} if market has infinite amount of specified \hyperref[Resource]{resource}\\
+\hline
+\end{tabularx}
+\end{center}

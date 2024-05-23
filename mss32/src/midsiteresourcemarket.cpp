@@ -18,6 +18,7 @@
  */
 
 #include "midsiteresourcemarket.h"
+#include "bindings/resourcemarketview.h"
 #include "bindings/stackview.h"
 #include "campaignstream.h"
 #include "dynamiccast.h"
@@ -396,7 +397,8 @@ bool isMarketStockInfinite(const InfiniteStock& stock, game::CurrencyType curren
 bool getExchangeRates(const game::IMidgardObjectMap* objectMap,
                       const game::CMidgardID& marketId,
                       const game::CMidgardID& visitorStackId,
-                      MarketExchangeRates& exchangeRates)
+                      MarketExchangeRates& exchangeRates,
+                      bool serverSide)
 {
     using namespace game;
 
@@ -441,7 +443,8 @@ bool getExchangeRates(const game::IMidgardObjectMap* objectMap,
         }
 
         const bindings::StackView visitor{visitorStack, objectMap};
-        const sol::table table = (*getExchangeRates)(visitor);
+        const bindings::ResourceMarketView marketView{market, objectMap};
+        const sol::table table = (*getExchangeRates)(visitor, marketView, serverSide);
 
         readExchangeRates(table, exchangeRates);
     } catch (const std::exception& e) {
@@ -494,7 +497,7 @@ bool exchangeResources(game::IMidgardObjectMap* objectMap,
     using namespace game;
 
     MarketExchangeRates rates;
-    if (!getExchangeRates(objectMap, marketId, visitorStackId, rates)) {
+    if (!getExchangeRates(objectMap, marketId, visitorStackId, rates, true)) {
         // Failed to get exchange rates from script. Bug.
         return false;
     }

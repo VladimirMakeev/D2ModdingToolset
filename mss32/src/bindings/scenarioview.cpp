@@ -39,14 +39,17 @@
 #include "midscenvariables.h"
 #include "midsitemerchant.h"
 #include "midsitemercs.h"
+#include "midsiteresourcemarket.h"
 #include "midsitetrainer.h"
 #include "midunit.h"
 #include "playerview.h"
 #include "point.h"
+#include "resourcemarketview.h"
 #include "rodview.h"
 #include "ruinview.h"
 #include "scenarioinfo.h"
 #include "scenvariablesview.h"
+#include "sitecategoryhooks.h"
 #include "stackview.h"
 #include "tileview.h"
 #include "trainerview.h"
@@ -96,6 +99,9 @@ void ScenarioView::bind(sol::state& lua)
                                              &ScenarioView::getTrainerById,
                                              &ScenarioView::getTrainerByCoordinates,
                                              &ScenarioView::getTrainerByPoint);
+    scenario["getMarket"] = sol::overload<>(&ScenarioView::getMarket, &ScenarioView::getMarketById,
+                                            &ScenarioView::getMarketByCoordinates,
+                                            &ScenarioView::getMarketByPoint);
 
     scenario["findStackByUnit"] = sol::overload<>(&ScenarioView::findStackByUnit,
                                                   &ScenarioView::findStackByUnitId,
@@ -112,6 +118,7 @@ void ScenarioView::bind(sol::state& lua)
     scenario["seed"] = sol::property(&ScenarioView::getSeed);
     scenario["day"] = sol::property(&ScenarioView::getCurrentDay);
     scenario["size"] = sol::property(&ScenarioView::getSize);
+    scenario["difficulty"] = sol::property(&ScenarioView::getDifficulty);
     scenario["diplomacy"] = sol::property(&ScenarioView::getDiplomacy);
     scenario["forEachStack"] = &ScenarioView::forEachStack;
     scenario["forEachLocation"] = &ScenarioView::forEachLocation;
@@ -124,6 +131,7 @@ void ScenarioView::bind(sol::state& lua)
     scenario["forEachMerchant"] = &ScenarioView::forEachMerchant;
     scenario["forEachMercenary"] = &ScenarioView::forEachMercenary;
     scenario["forEachTrainer"] = &ScenarioView::forEachTrainer;
+    scenario["forEachMarket"] = &ScenarioView::forEachMarket;
 }
 
 std::optional<LocationView> ScenarioView::getLocation(const std::string& id) const
@@ -686,6 +694,51 @@ std::optional<TrainerView> ScenarioView::getTrainerByPoint(const Point& p) const
     return getTrainerByCoordinates(p.x, p.y);
 }
 
+std::optional<ResourceMarketView> ScenarioView::getMarket(const std::string& id) const
+{
+    return getMarketById(IdView{id});
+}
+
+std::optional<ResourceMarketView> ScenarioView::getMarketById(const IdView& id) const
+{
+    using namespace game;
+
+    if (!objectMap) {
+        return std::nullopt;
+    }
+
+    if (CMidgardIDApi::get().getType(&id.id) != IdType::Site) {
+        return std::nullopt;
+    }
+
+    auto obj = objectMap->vftable->findScenarioObjectById(objectMap, &id.id);
+    if (!obj) {
+        return std::nullopt;
+    }
+
+    auto site = static_cast<const CMidSite*>(obj);
+    if (site->siteCategory.id != hooks::customSiteCategories().resourceMarket.id) {
+        return std::nullopt;
+    }
+
+    return ResourceMarketView{static_cast<const hooks::CMidSiteResourceMarket*>(site), objectMap};
+}
+
+std::optional<ResourceMarketView> ScenarioView::getMarketByCoordinates(int x, int y) const
+{
+    auto marketId = getObjectId(x, y, game::IdType::Site);
+    if (!marketId) {
+        return std::nullopt;
+    }
+
+    return getMarketById(IdView{marketId});
+}
+
+std::optional<ResourceMarketView> ScenarioView::getMarketByPoint(const Point& p) const
+{
+    return getMarketByCoordinates(p.x, p.y);
+}
+
 std::string ScenarioView::getName() const
 {
     if (!objectMap) {
@@ -744,6 +797,16 @@ int ScenarioView::getSize() const
 
     auto info = hooks::getScenarioInfo(objectMap);
     return info ? info->mapSize : 0;
+}
+
+int ScenarioView::getDifficulty() const
+{
+    if (!objectMap) {
+        return game::emptyCategoryId;
+    }
+
+    auto info = hooks::getScenarioInfo(objectMap);
+    return info ? static_cast<int>(info->gameDifficulty.id) : game::emptyCategoryId;
 }
 
 std::optional<DiplomacyView> ScenarioView::getDiplomacy() const
@@ -970,6 +1033,35 @@ void ScenarioView::forEachTrainer(const std::function<void(const TrainerView&)>&
         }
 
         const TrainerView view{static_cast<const CMidSiteTrainer*>(site), objectMap};
+        callback(view);
+    };
+
+    hooks::forEachScenarioObject(objectMap, IdType::Site, runCallback);
+}
+
+void ScenarioView::forEachMarket(
+    const std::function<void(const ResourceMarketView&)>& callback) const
+{
+    if (!objectMap) {
+        return;
+    }
+
+    if (!hooks::customSiteCategories().exists) {
+        return;
+    }
+
+    using namespace game;
+
+    const auto marketId{hooks::customSiteCategories().resourceMarket.id};
+
+    auto runCallback = [this, &callback, &marketId](const IMidScenarioObject* obj) {
+        const auto* site{static_cast<const CMidSite*>(obj)};
+        if (site->siteCategory.id != marketId) {
+            return;
+        }
+
+        const ResourceMarketView view{static_cast<const hooks::CMidSiteResourceMarket*>(site),
+                                      objectMap};
         callback(view);
     };
 

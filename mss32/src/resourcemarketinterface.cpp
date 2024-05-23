@@ -374,7 +374,7 @@ static void setupUi(const CResourceMarketInterf* thisptr)
 
     CEditBoxInterf* editRates{dialogApi.findEditBox(dialog, "EDIT_EXC_RATES")};
     CEditBoxInterfApi::get().setFilterAndLength(dialog, "EDIT_EXC_RATES", dialogName,
-                                                EditFilter::NoFilter, 4096);
+                                                EditFilter::NoFilter, 2048);
 
     if (market->customExchangeRates) {
         CEditBoxInterfApi::get().setString(editRates, market->exchangeRatesScript.c_str());

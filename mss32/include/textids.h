@@ -60,9 +60,6 @@ struct TextIds
         std::string infiniteAttack;
         std::string infiniteText;
         std::string removedAttackWard;
-        std::string resourceMarketEncyDesc;
-        std::string resourceMarketInfiniteAmount;
-        std::string resourceMarketExchangeDesc;
     } interf;
 
     struct Events
@@ -121,6 +118,14 @@ struct TextIds
         std::string generationError;
         std::string limitExceeded;
     } rsg;
+
+    struct ResourceMarket
+    {
+        std::string encyDesc;
+        std::string infiniteAmount;
+        std::string exchangeDesc;
+        std::string exchangeNotAvailable;
+    } resourceMarket;
 };
 
 const TextIds& textIds();

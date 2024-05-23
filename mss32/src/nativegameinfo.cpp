@@ -36,6 +36,7 @@
 #include "nativespellinfo.h"
 #include "nativeunitinfo.h"
 #include "racetype.h"
+#include "sitecategoryhooks.h"
 #include "strategicspell.h"
 #include "ussoldierimpl.h"
 #include "usstackleader.h"
@@ -328,6 +329,11 @@ const rsg::SiteTexts& NativeGameInfo::getRuinTexts() const
 const rsg::SiteTexts& NativeGameInfo::getTrainerTexts() const
 {
     return trainerTexts;
+}
+
+const rsg::SiteTexts& NativeGameInfo::getMarketTexts() const
+{
+    return marketTexts;
 }
 
 bool NativeGameInfo::readGameInfo(const std::filesystem::path& gameFolderPath)
@@ -740,11 +746,17 @@ bool NativeGameInfo::readCityNames(const std::filesystem::path& scenDataFolderPa
 
 bool NativeGameInfo::readSiteTexts(const std::filesystem::path& scenDataFolderPath)
 {
+    const bool resourceMarketExists{customSiteCategories().exists};
+
     return readSiteText(mercenaryTexts, scenDataFolderPath / "Campname.dbf")
            && readSiteText(mageTexts, scenDataFolderPath / "Magename.dbf")
            && readSiteText(merchantTexts, scenDataFolderPath / "Mercname.dbf")
            && readSiteText(ruinTexts, scenDataFolderPath / "Ruinname.dbf", false)
-           && readSiteText(trainerTexts, scenDataFolderPath / "Trainame.dbf");
+           && readSiteText(trainerTexts, scenDataFolderPath / "Trainame.dbf")
+           // If resource market feature exists, 'Marketname.dbf' must be valid
+           && (!resourceMarketExists
+               || (resourceMarketExists
+                   && readSiteText(marketTexts, scenDataFolderPath / "Marketname.dbf")));
 }
 
 } // namespace hooks

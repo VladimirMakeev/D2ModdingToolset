@@ -283,7 +283,7 @@ static std::string getResourceAmountString(std::uint16_t amount, bool infinite)
     if (infinite) {
         return std::string{
             "\\hR;\\vC;"
-            + getInterfaceText(textIds().interf.resourceMarketInfiniteAmount.c_str(), "Inf.")};
+            + getInterfaceText(textIds().resourceMarket.infiniteAmount.c_str(), "Inf.")};
     }
 
     return fmt::format("\\hR;\\vC;{:d}", amount);
@@ -341,6 +341,8 @@ static void updateExchangeRatesUi(CSiteResourceMarketInterf* interf)
         }
     }
 
+    const auto notAvailableText{
+        getInterfaceText(textIds().resourceMarket.exchangeNotAvailable.c_str(), "N/A")};
     // Mark unavailable exchanges
     for (std::size_t i = 0u; i < std::size(exchangePossible); ++i) {
         if (exchangePossible[i]) {
@@ -348,7 +350,7 @@ static void updateExchangeRatesUi(CSiteResourceMarketInterf* interf)
         }
 
         CTextBoxInterf* textBox{rates[i]};
-        CTextBoxInterfApi::get().setString(textBox, "N/A");
+        CTextBoxInterfApi::get().setString(textBox, notAvailableText.c_str());
     }
 }
 
@@ -551,7 +553,7 @@ static void updateExchangeDescription(CSiteResourceMarketInterf* interf)
 {
     using namespace game;
 
-    std::string desc{getInterfaceText(textIds().interf.resourceMarketExchangeDesc.c_str(),
+    std::string desc{getInterfaceText(textIds().resourceMarket.exchangeDesc.c_str(),
                                       "You offer %RES1% to get %RES2% in return.")};
 
     const auto playerCurrency{getPlayerCurrencyType(interf)};

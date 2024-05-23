@@ -2575,7 +2575,7 @@ void __stdcall updateEncLayoutSiteHooked(const game::CMidSite* site, game::CText
         // (Mercenary)
         textId = "X005TA0875";
     } else if (customSiteCategories().exists && id == customSiteCategories().resourceMarket.id) {
-        textId = textIds().interf.resourceMarketEncyDesc.c_str();
+        textId = textIds().resourceMarket.encyDesc.c_str();
     } else {
         // (Trainer)
         textId = "X005TA0876";

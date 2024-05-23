@@ -179,7 +179,7 @@ void sendExchangeResourcesMsg(game::CPhaseGame* phaseGame,
 {
     using namespace game;
 
-    if (!phaseGame->data->unknown8) {
+    if (!phaseGame->data->clientTakesTurn) {
         return;
     }
 

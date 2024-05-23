@@ -45,6 +45,7 @@
 #include "modifierview.h"
 #include "playerview.h"
 #include "point.h"
+#include "resourcemarketview.h"
 #include "rodview.h"
 #include "ruinview.h"
 #include "scenariovariableview.h"
@@ -388,6 +389,13 @@ static void bindApi(sol::state& lua)
         "RunicMana", ResourceId::RunicMana,
         "GroveMana", ResourceId::GroveMana
     );
+
+    lua.new_enum("Difficulty",
+        "Easy", DifficultyLevelId::Easy,
+        "Average", DifficultyLevelId::Average,
+        "Hard", DifficultyLevelId::Hard,
+        "VeryHard", DifficultyLevelId::VeryHard
+    );
     // clang-format on
 
     bindings::UnitView::bind(lua);
@@ -425,6 +433,7 @@ static void bindApi(sol::state& lua)
     bindings::MercenaryUnitView::bind(lua);
     bindings::MercsView::bind(lua);
     bindings::TrainerView::bind(lua);
+    bindings::ResourceMarketView::bind(lua);
     bindings::GlobalVariablesView::bind(lua);
     bindings::GlobalView::bind(lua);
     bindings::GameView::bind(lua);

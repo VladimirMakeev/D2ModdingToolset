@@ -54,6 +54,7 @@ class CrystalView;
 class MerchantView;
 class MercsView;
 class TrainerView;
+class ResourceMarketView;
 
 /**
  * Returns stub values if objectMap is null.
@@ -166,6 +167,15 @@ public:
     /** Searches for trainer at specified point. */
     std::optional<TrainerView> getTrainerByPoint(const Point& p) const;
 
+    /** Searches for market by id string. */
+    std::optional<ResourceMarketView> getMarket(const std::string& id) const;
+    /** Searches for market by id. */
+    std::optional<ResourceMarketView> getMarketById(const IdView& id) const;
+    /** Searches for market by coordinate pair. */
+    std::optional<ResourceMarketView> getMarketByCoordinates(int x, int y) const;
+    /** Searches for market at specified point. */
+    std::optional<ResourceMarketView> getMarketByPoint(const Point& p) const;
+
     /** Searches for stack that has specified unit among all the stacks in the whole scenario. */
     std::optional<StackView> findStackByUnit(const UnitView& unit) const;
     std::optional<StackView> findStackByUnitId(const IdView& unitId) const;
@@ -190,6 +200,7 @@ public:
     std::uint32_t getSeed() const;
     int getCurrentDay() const;
     int getSize() const;
+    int getDifficulty() const;
 
     std::optional<DiplomacyView> getDiplomacy() const;
 
@@ -204,6 +215,7 @@ public:
     void forEachMerchant(const std::function<void(const MerchantView&)>& callback) const;
     void forEachMercenary(const std::function<void(const MercsView&)>& callback) const;
     void forEachTrainer(const std::function<void(const TrainerView&)>& callback) const;
+    void forEachMarket(const std::function<void(const ResourceMarketView&)>& callback) const;
 
 private:
     const game::CMidgardID* getObjectId(int x, int y, game::IdType type) const;

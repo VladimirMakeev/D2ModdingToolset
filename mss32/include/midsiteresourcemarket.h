@@ -87,7 +87,8 @@ bool isMarketStockInfinite(const InfiniteStock& stock, game::CurrencyType curren
 bool getExchangeRates(const game::IMidgardObjectMap* objectMap,
                       const game::CMidgardID& marketId,
                       const game::CMidgardID& visitorStackId,
-                      MarketExchangeRates& exchangeRates);
+                      MarketExchangeRates& exchangeRates,
+                      bool serverSide = false);
 
 const ExchangeRates* findExchangeRates(const MarketExchangeRates& marketRates,
                                        game::CurrencyType playerCurrency,

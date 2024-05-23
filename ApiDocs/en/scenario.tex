@@ -19,6 +19,8 @@ day & Returns number of current day in game\\
 \hline
 size & Returns scenario map size\\
 \hline
+difficulty & Returns scenario map \hyperref[Difficulty]{difficulty} selected by player\\
+\hline
 variables & Returns \hyperref[ScenarioVariables]{scenario variables}. If scenario has no variables defined, returns \texttt{nil}\\
 \hline
 diplomacy & Returns object that holds \hyperref[Diplomacy]{diplomacy} relations between races. Fully loaded scenario always have diplomacy relations. During scenario loading this property can return \texttt{nil}\\
@@ -87,6 +89,11 @@ getTrainer(Point.new(10, 15)) &\\
 getTrainer('S143SI0002') &\\
 getTrainer(Id.new('S143SI0002')) &\\
 \hline
+getMarket(10, 15) & Searches for \hyperref[ResourceMarket]{market} by pair of coordinates, \hyperref[Point]{point}, id string or \hyperref[Id]{id}, returns \texttt{nil} if not found\\
+getMarket(Point.new(10, 15)) &\\
+getMarket('S143SI0002') &\\
+getMarket(Id.new('S143SI0002')) &\\
+\hline
 \end{tabularx}
 \end{center}
 \begin{center}
@@ -127,6 +134,8 @@ forEachMerchant(f) & Searches for every \hyperref[Merchant]{merchant} on a map a
 forEachMercenary(f) & Searches for every \hyperref[Mercenary]{mercenary camp} on a map and calls specified function on it\\
 \hline
 forEachTrainer(f) & Searches for every \hyperref[Trainer]{trainer} on a map and calls specified function on it\\
+\hline
+forEachMarket(f) & Searches for every \hyperref[ResourceMarket]{market} on a map and calls specified function on it\\
 \hline
 \end{tabularx}
 \end{center}

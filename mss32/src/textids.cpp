@@ -124,6 +124,20 @@ void readGeneratorTextIds(const sol::table& table, TextIds::ScenarioGenerator& v
     value.limitExceeded = rsg.get_or("limitExceeded", std::string());
 }
 
+void readResourceMarketTextIds(const sol::table& table, TextIds::ResourceMarket& value)
+{
+    auto marketTable = table.get<sol::optional<sol::table>>("resourceMarket");
+    if (!marketTable.has_value()) {
+        return;
+    }
+
+    auto& market = marketTable.value();
+    value.encyDesc = market.get_or("encyDesc", std::string());
+    value.infiniteAmount = market.get_or("infiniteAmount", std::string());
+    value.exchangeDesc = market.get_or("exchangeDesc", std::string());
+    value.exchangeNotAvailable = market.get_or("exchangeNotAvailable", std::string());
+}
+
 void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
 {
     auto interf = table.get<sol::optional<sol::table>>("interf");
@@ -163,11 +177,6 @@ void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
     value.infiniteAttack = interf.value().get_or("infiniteAttack", std::string());
     value.infiniteText = interf.value().get_or("infiniteText", std::string());
     value.removedAttackWard = interf.value().get_or("removedAttackWard", std::string());
-    value.resourceMarketEncyDesc = interf.value().get_or("resourceMarketEncyDesc", std::string());
-    value.resourceMarketInfiniteAmount = interf.value().get_or("resourceMarketInfiniteAmount",
-                                                               std::string());
-    value.resourceMarketExchangeDesc = interf.value().get_or("resourceMarketExchangeDesc",
-                                                             std::string());
 }
 
 void initialize(TextIds& value)
@@ -183,6 +192,7 @@ void initialize(TextIds& value)
         readEventsTextIds(table, value.events);
         readLobbyTextIds(table, value.lobby);
         readGeneratorTextIds(table, value.rsg);
+        readResourceMarketTextIds(table, value.resourceMarket);
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to read script '{:s}'.\n"
                                         "Reason: '{:s}'",

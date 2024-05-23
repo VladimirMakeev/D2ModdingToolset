@@ -1451,6 +1451,9 @@
     <ClCompile Include="src\siteresourcemarketinterf.cpp">
       <Filter>features\custom scenario objects</Filter>
     </ClCompile>
+    <ClCompile Include="src\bindings\resourcemarketview.cpp">
+      <Filter>bindings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3666,6 +3669,9 @@
     </ClInclude>
     <ClInclude Include="include\siteresourcemarketinterf.h">
       <Filter>features\custom scenario objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bindings\resourcemarketview.h">
+      <Filter>bindings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
