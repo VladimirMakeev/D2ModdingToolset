@@ -36,7 +36,8 @@ struct INotifyPlayerListVftable
     using Destructor = void(__thiscall*)(INotifyPlayerList* thisptr, char flags);
     Destructor destructor;
 
-    void* method1;
+    using Method1 = void(__thiscall*)(INotifyPlayerList* thisptr, int a2);
+    Method1 method1;
 };
 
 assert_vftable_size(INotifyPlayerListVftable, 2);

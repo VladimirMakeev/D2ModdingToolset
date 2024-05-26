@@ -25,25 +25,26 @@
 #include "midclientcore.h"
 #include "midcommandqueue2.h"
 #include "midgardid.h"
+#include "playerlistentry.h"
 #include "textmessage.h"
 #include "uievent.h"
 
 namespace game {
 
 struct CPhase;
+struct ILoveChat;
+struct INotifyPlayerList;
 
 struct CMidClientData
 {
     CPhase* phase;
-    int unknown2;
-    Vector<TextMessage> messages;
-    List<CMidgardID> list;
-    List<CMidgardID> list2;
+    bool scenarioStarted;
+    char padding[3];
+    Vector<TextMessage> textMessages; /**< Chat, player join and disconnect messages. */
+    List<ILoveChat*> chatList;        /**< Chat messages subscribers. */
+    List<INotifyPlayerList*> notifyPlayerList;
     List<CMidgardID> list3;
-    int unknown7;
-    int unknown8;
-    int unknown9;
-    int unknown10;
+    Vector<PlayerListEntry> playerListEntries;
     UiEvent notificationFadeEvent; /**< Restores window notify state. */
     /** Flashes game window each second to notify player, for example when battle starts. */
     UiEvent notificationShowEvent;
