@@ -33,6 +33,7 @@ void LocationView::bind(sol::state& lua)
     location["id"] = sol::property(&LocationView::getId);
     location["position"] = sol::property(&LocationView::getPosition);
     location["radius"] = sol::property(&LocationView::getRadius);
+    location["name"] = sol::property(&LocationView::getName);
 }
 
 IdView LocationView::getId() const
@@ -49,6 +50,12 @@ int LocationView::getRadius() const
 {
     // Convert radius from ingame type to actual value
     return location->radius * 2 + 1;
+}
+
+std::string LocationView::getName() const
+{
+    const auto& name{location->name};
+    return name.string ? name.string : "";
 }
 
 } // namespace bindings
