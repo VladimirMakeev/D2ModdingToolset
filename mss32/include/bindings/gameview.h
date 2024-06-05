@@ -35,6 +35,7 @@ public:
     int getUnitMinDamage() const;
     int getLeaderAdditionalDamage() const;
     int getUnitMaxArmor() const;
+    bool isEditor() const;
 };
 
 } // namespace bindings

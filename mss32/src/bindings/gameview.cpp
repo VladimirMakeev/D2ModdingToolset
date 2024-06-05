@@ -19,6 +19,7 @@
 
 #include "gameview.h"
 #include "settings.h"
+#include "version.h"
 #include <sol/sol.hpp>
 
 namespace bindings {
@@ -30,6 +31,7 @@ void GameView::bind(sol::state& lua)
     view["unitMinDamage"] = sol::property(&GameView::getUnitMinDamage);
     view["unitMaxArmor"] = sol::property(&GameView::getUnitMaxArmor);
     view["leaderAdditionalDamage"] = sol::property(&GameView::getLeaderAdditionalDamage);
+    view["editor"] = sol::property(&GameView::isEditor);
 }
 
 int GameView::getUnitMaxDamage() const
@@ -50,6 +52,11 @@ int GameView::getLeaderAdditionalDamage() const
 int GameView::getUnitMaxArmor() const
 {
     return hooks::userSettings().unitMaxArmor;
+}
+
+bool GameView::isEditor() const
+{
+    return !hooks::executableIsGame();
 }
 
 } // namespace bindings
