@@ -20,6 +20,8 @@
 #ifndef GAMEUTILS_H
 #define GAMEUTILS_H
 
+#include "mqpoint.h"
+
 namespace game {
 struct CMidgardID;
 struct CMidUnitGroup;
@@ -194,6 +196,8 @@ const game::CMidStackDestroyed* getStackDestroyed(const game::IMidgardObjectMap*
 bool isInventoryContainsItem(const game::IMidgardObjectMap* objectMap,
                              const game::CMidInventory& inventory,
                              const game::CMidgardID& globalItemId);
+
+const game::CMqPoint getObjectEntrance(const game::CMqPoint& position, int sizeX, int sizeY);
 
 } // namespace hooks
 

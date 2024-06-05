@@ -63,7 +63,7 @@ Point FortView::getEntrance() const
     const auto& mapElement{fort->mapElement};
     const auto& position{mapElement.position};
 
-    return Point(position.x + mapElement.sizeX - 1, position.y + mapElement.sizeY - 1);
+    return Point{hooks::getObjectEntrance(position, mapElement.sizeX, mapElement.sizeY)};
 }
 
 std::optional<PlayerView> FortView::getOwner() const

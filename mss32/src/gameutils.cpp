@@ -852,4 +852,13 @@ bool isInventoryContainsItem(const game::IMidgardObjectMap* objectMap,
     return false;
 }
 
+const game::CMqPoint getObjectEntrance(const game::CMqPoint& position, int sizeX, int sizeY)
+{
+    game::CMqPoint entrance;
+    entrance.x = position.x + sizeX - 1;
+    entrance.y = position.y + sizeY - 1;
+
+    return entrance;
+}
+
 } // namespace hooks
