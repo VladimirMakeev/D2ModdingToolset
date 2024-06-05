@@ -18,6 +18,7 @@
  */
 
 #include "gameview.h"
+#include "restrictions.h"
 #include "settings.h"
 #include "version.h"
 #include <sol/sol.hpp>
@@ -41,12 +42,12 @@ int GameView::getUnitMaxDamage() const
 
 int GameView::getUnitMinDamage() const
 {
-    return 1;
+    return game::gameRestrictions().attackDamage->min;
 }
 
 int GameView::getLeaderAdditionalDamage() const
 {
-    return 100;
+    return static_cast<int>(*game::gameRestrictions().fighterExplorerLeaderBonusMaxDamage);
 }
 
 int GameView::getUnitMaxArmor() const

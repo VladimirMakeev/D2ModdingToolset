@@ -24,9 +24,12 @@ namespace game {
 struct CMidgardID;
 struct IAttack;
 struct CAttackImpl;
+struct LAttackSource;
+struct LAttackClass;
 
 enum class AttackClassId : int;
 enum class AttackReachId : int;
+enum class AttackSourceId : int;
 } // namespace game
 
 namespace hooks {
@@ -60,6 +63,9 @@ bool isNormalDamageAttack(game::AttackClassId id);
 
 /** Attack uses modifiable value of IAttack::getQtyDamage. */
 bool isModifiableDamageAttack(game::AttackClassId id);
+
+const game::LAttackSource* getAttackSourceById(game::AttackSourceId id);
+const game::LAttackClass* getAttackClassById(game::AttackClassId id);
 
 } // namespace hooks
 

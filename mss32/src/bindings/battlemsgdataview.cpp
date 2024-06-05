@@ -19,6 +19,7 @@
 
 #include "battlemsgdataview.h"
 #include "attackclasscat.h"
+#include "attackutils.h"
 #include "battlemsgdata.h"
 #include "customattacks.h"
 #include "game.h"
@@ -226,10 +227,8 @@ BattleMsgDataView::UnitActions BattleMsgDataView::getUnitActionsById(const IdVie
         setApi.destructor((IntSet*)&battleActions);
     }
 
-    return {actions,                          //
-            attackTargetGroup, attackTargets, //
-            item1TargetGroup,  item1Targets,  //
-            item2TargetGroup,  item2Targets};
+    return {actions,      attackTargetGroup, attackTargets, item1TargetGroup,
+            item1Targets, item2TargetGroup,  item2Targets};
 }
 
 int BattleMsgDataView::getUnitShatteredArmor(const UnitView& unit) const
@@ -261,56 +260,13 @@ bool BattleMsgDataView::isUnitResistantToSourceById(const IdView& unitId, int so
 {
     using namespace game;
 
-    const auto& attackSources{AttackSourceCategories::get()};
-    const LAttackSource* source = nullptr;
-
-    const AttackSourceId srcId{static_cast<AttackSourceId>(sourceId)};
-    switch (srcId) {
-    default: {
-        // Check custom attack sources first
-        const auto& customSources = hooks::getCustomAttacks().sources;
-        for (const auto& customSource : customSources) {
-            if (customSource.source.id == srcId) {
-                source = &customSource.source;
-                break;
-            }
-        }
-
-        if (source == nullptr) {
-            // Could not find source id even in custom sources
-            return false;
-        }
-
-        break;
-    }
-    case AttackSourceId::Weapon:
-        source = attackSources.weapon;
-        break;
-    case AttackSourceId::Mind:
-        source = attackSources.mind;
-        break;
-    case AttackSourceId::Life:
-        source = attackSources.life;
-        break;
-    case AttackSourceId::Death:
-        source = attackSources.death;
-        break;
-    case AttackSourceId::Fire:
-        source = attackSources.fire;
-        break;
-    case AttackSourceId::Water:
-        source = attackSources.water;
-        break;
-    case AttackSourceId::Earth:
-        source = attackSources.earth;
-        break;
-    case AttackSourceId::Air:
-        source = attackSources.air;
-        break;
+    auto attackSource{hooks::getAttackSourceById(static_cast<game::AttackSourceId>(sourceId))};
+    if (!attackSource) {
+        return false;
     }
 
     return !BattleMsgDataApi::get().isUnitAttackSourceWardRemoved(battleMsgData, &unitId.id,
-                                                                  source);
+                                                                  attackSource);
 }
 
 bool BattleMsgDataView::isUnitResistantToClass(const UnitView& unit, int classId) const
@@ -322,81 +278,8 @@ bool BattleMsgDataView::isUnitResistantToClassById(const IdView& unitId, int cla
 {
     using namespace game;
 
-    const auto& attackClasses{AttackClassCategories::get()};
-    const LAttackClass* attackClass = nullptr;
-
-    const AttackClassId id{static_cast<AttackClassId>(classId)};
-    switch (id) {
-    case AttackClassId::Damage:
-        attackClass = attackClasses.damage;
-        break;
-    case AttackClassId::Drain:
-        attackClass = attackClasses.drain;
-        break;
-    case AttackClassId::Paralyze:
-        attackClass = attackClasses.paralyze;
-        break;
-    case AttackClassId::Heal:
-        attackClass = attackClasses.heal;
-        break;
-    case AttackClassId::Fear:
-        attackClass = attackClasses.fear;
-        break;
-    case AttackClassId::BoostDamage:
-        attackClass = attackClasses.boostDamage;
-        break;
-    case AttackClassId::Petrify:
-        attackClass = attackClasses.petrify;
-        break;
-    case AttackClassId::LowerDamage:
-        attackClass = attackClasses.lowerDamage;
-        break;
-    case AttackClassId::LowerInitiative:
-        attackClass = attackClasses.lowerInitiative;
-        break;
-    case AttackClassId::Poison:
-        attackClass = attackClasses.poison;
-        break;
-    case AttackClassId::Frostbite:
-        attackClass = attackClasses.frostbite;
-        break;
-    case AttackClassId::Revive:
-        attackClass = attackClasses.revive;
-        break;
-    case AttackClassId::DrainOverflow:
-        attackClass = attackClasses.drainOverflow;
-        break;
-    case AttackClassId::Cure:
-        attackClass = attackClasses.cure;
-        break;
-    case AttackClassId::Summon:
-        attackClass = attackClasses.summon;
-        break;
-    case AttackClassId::DrainLevel:
-        attackClass = attackClasses.drainLevel;
-        break;
-    case AttackClassId::GiveAttack:
-        attackClass = attackClasses.giveAttack;
-        break;
-    case AttackClassId::Doppelganger:
-        attackClass = attackClasses.doppelganger;
-        break;
-    case AttackClassId::TransformSelf:
-        attackClass = attackClasses.transformSelf;
-        break;
-    case AttackClassId::TransformOther:
-        attackClass = attackClasses.transformOther;
-        break;
-    case AttackClassId::Blister:
-        attackClass = attackClasses.blister;
-        break;
-    case AttackClassId::BestowWards:
-        attackClass = attackClasses.bestowWards;
-        break;
-    case AttackClassId::Shatter:
-        attackClass = attackClasses.shatter;
-        break;
-    default:
+    auto attackClass{hooks::getAttackClassById(static_cast<AttackClassId>(classId))};
+    if (!attackClass) {
         return false;
     }
 

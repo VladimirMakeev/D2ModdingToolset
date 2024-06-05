@@ -231,4 +231,128 @@ int getAttackMaxTargets(const game::AttackReachId id)
     return 0;
 }
 
+const game::LAttackSource* getAttackSourceById(game::AttackSourceId id)
+{
+    using namespace game;
+
+    const auto& attackSources{AttackSourceCategories::get()};
+
+    switch (id) {
+    default: {
+        const auto& customSources = hooks::getCustomAttacks().sources;
+        for (const auto& customSource : customSources) {
+            if (customSource.source.id == id) {
+                return &customSource.source;
+            }
+        }
+
+        // Could not find source id even in custom sources
+        return nullptr;
+    }
+    case AttackSourceId::Weapon:
+        return attackSources.weapon;
+
+    case AttackSourceId::Mind:
+        return attackSources.mind;
+
+    case AttackSourceId::Life:
+        return attackSources.life;
+
+    case AttackSourceId::Death:
+        return attackSources.death;
+
+    case AttackSourceId::Fire:
+        return attackSources.fire;
+
+    case AttackSourceId::Water:
+        return attackSources.water;
+
+    case AttackSourceId::Earth:
+        return attackSources.earth;
+
+    case AttackSourceId::Air:
+        return attackSources.air;
+    }
+}
+
+const game::LAttackClass* getAttackClassById(game::AttackClassId id)
+{
+    using namespace game;
+
+    const auto& attackClasses{AttackClassCategories::get()};
+
+    switch (id) {
+    case AttackClassId::Damage:
+        return attackClasses.damage;
+
+    case AttackClassId::Drain:
+        return attackClasses.drain;
+
+    case AttackClassId::Paralyze:
+        return attackClasses.paralyze;
+
+    case AttackClassId::Heal:
+        return attackClasses.heal;
+
+    case AttackClassId::Fear:
+        return attackClasses.fear;
+
+    case AttackClassId::BoostDamage:
+        return attackClasses.boostDamage;
+
+    case AttackClassId::Petrify:
+        return attackClasses.petrify;
+
+    case AttackClassId::LowerDamage:
+        return attackClasses.lowerDamage;
+
+    case AttackClassId::LowerInitiative:
+        return attackClasses.lowerInitiative;
+
+    case AttackClassId::Poison:
+        return attackClasses.poison;
+
+    case AttackClassId::Frostbite:
+        return attackClasses.frostbite;
+
+    case AttackClassId::Revive:
+        return attackClasses.revive;
+
+    case AttackClassId::DrainOverflow:
+        return attackClasses.drainOverflow;
+
+    case AttackClassId::Cure:
+        return attackClasses.cure;
+
+    case AttackClassId::Summon:
+        return attackClasses.summon;
+
+    case AttackClassId::DrainLevel:
+        return attackClasses.drainLevel;
+
+    case AttackClassId::GiveAttack:
+        return attackClasses.giveAttack;
+
+    case AttackClassId::Doppelganger:
+        return attackClasses.doppelganger;
+
+    case AttackClassId::TransformSelf:
+        return attackClasses.transformSelf;
+
+    case AttackClassId::TransformOther:
+        return attackClasses.transformOther;
+
+    case AttackClassId::Blister:
+        return attackClasses.blister;
+
+    case AttackClassId::BestowWards:
+        return attackClasses.bestowWards;
+
+    case AttackClassId::Shatter:
+        return attackClasses.shatter;
+    }
+
+    return nullptr;
+}
+
 } // namespace hooks
