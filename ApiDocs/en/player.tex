@@ -21,5 +21,19 @@ alwaysAi & Returns \texttt{true} if player is always AI\\
 \hline
 fog & Returns player's \hyperref[Fog]{fog of war}. In fully loaded scenario, player objects always have fog of war. During scenario loading this property can return \texttt{nil}\\
 \hline
+buildings & Returns list of \hyperref[Building]{buildings} that are already built\\
+\hline
+\end{tabularx}
+\end{center}
+
+\subsubsection{Methods}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+hasBuilding('g000bb0001') & Returns \texttt{true} if player has built building with specified id\\
+hasBuilding(Id.new('g000bb0001')) & Method also accepts \hyperref[Id]{ids}\\
+\hline
 \end{tabularx}
 \end{center}

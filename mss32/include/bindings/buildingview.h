@@ -1,7 +1,7 @@
 /*
  * This file is part of the modding toolset for Disciples 2.
  * (https://github.com/VladimirMakeev/D2ModdingToolset)
- * Copyright (C) 2022 Stanislav Egorov.
+ * Copyright (C) 2024 Vladimir Makeev.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLAYERVIEW_H
-#define PLAYERVIEW_H
+#ifndef BUILDINGVIEW_H
+#define BUILDINGVIEW_H
 
-#include "buildingview.h"
 #include "currencyview.h"
 #include "idview.h"
 #include <optional>
@@ -30,39 +29,29 @@ class state;
 }
 
 namespace game {
-struct CMidPlayer;
-struct IMidgardObjectMap;
-} // namespace game
+struct TBuildingType;
+}
 
 namespace bindings {
 
-class FogView;
-
-class PlayerView
+class BuildingView
 {
 public:
-    PlayerView(const game::CMidPlayer* player, const game::IMidgardObjectMap* objectMap);
+    BuildingView(const game::TBuildingType* building);
 
     static void bind(sol::state& lua);
 
     IdView getId() const;
-    int getRaceCategoryId() const;
-    int getLordCategoryId() const;
-    CurrencyView getBank() const;
-    bool isHuman() const;
-    bool isAlwaysAi() const;
-
-    std::optional<FogView> getFog() const;
-
-    std::vector<BuildingView> getBuildings() const;
-    bool hasBuilding(const std::string& id) const;
-    bool hasBuildingById(const IdView& id) const;
+    CurrencyView getCost() const;
+    int getCategory() const;
+    std::optional<BuildingView> getRequiredBuilding() const;
+    int getUnitBranch() const;
+    int getLevel() const;
 
 private:
-    const game::CMidPlayer* player;
-    const game::IMidgardObjectMap* objectMap;
+    const game::TBuildingType* building;
 };
 
 } // namespace bindings
 
-#endif // PLAYERVIEW_H
+#endif // BUILDINGVIEW_H

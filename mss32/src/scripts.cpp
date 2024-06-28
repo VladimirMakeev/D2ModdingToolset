@@ -21,6 +21,7 @@
 #include "attackview.h"
 #include "battlemsgdata.h"
 #include "battlemsgdataviewmutable.h"
+#include "buildingview.h"
 #include "categoryids.h"
 #include "crystalview.h"
 #include "currencyview.h"
@@ -396,6 +397,24 @@ static void bindApi(sol::state& lua)
         "Hard", DifficultyLevelId::Hard,
         "VeryHard", DifficultyLevelId::VeryHard
     );
+
+    lua.new_enum("Building",
+        "Guild", BuildingId::Guild,
+        "Heal", BuildingId::Heal,
+        "Magic", BuildingId::Magic,
+        "Unit", BuildingId::Unit
+    );
+
+    lua.new_enum("UnitBranch",
+        "Fighter", UnitBranchId::Fighter,
+        "Archer", UnitBranchId::Archer,
+        "Mage", UnitBranchId::Mage,
+        "Special", UnitBranchId::Special,
+        "Sideshow", UnitBranchId::Sideshow,
+        "Hero", UnitBranchId::Hero,
+        "Noble", UnitBranchId::Noble,
+        "Summon", UnitBranchId::Summon
+    );
     // clang-format on
 
     bindings::UnitView::bind(lua);
@@ -437,6 +456,7 @@ static void bindApi(sol::state& lua)
     bindings::GlobalVariablesView::bind(lua);
     bindings::GlobalView::bind(lua);
     bindings::GameView::bind(lua);
+    bindings::BuildingView::bind(lua);
 
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
     lua.set_function("randomNumber", [](std::uint32_t maxValue) {

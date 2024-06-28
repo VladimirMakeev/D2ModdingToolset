@@ -198,6 +198,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\bindings\attackview.cpp" />
     <ClCompile Include="src\bindings\battlemsgdataview.cpp" />
     <ClCompile Include="src\bindings\battlemsgdataviewmutable.cpp" />
+    <ClCompile Include="src\bindings\buildingview.cpp" />
     <ClCompile Include="src\bindings\crystalview.cpp" />
     <ClCompile Include="src\bindings\currencyview.cpp" />
     <ClCompile Include="src\bindings\diplomacyview.cpp" />
@@ -700,6 +701,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\bindings\attackview.h" />
     <ClInclude Include="include\bindings\battlemsgdataview.h" />
     <ClInclude Include="include\bindings\battlemsgdataviewmutable.h" />
+    <ClInclude Include="include\bindings\buildingview.h" />
     <ClInclude Include="include\bindings\crystalview.h" />
     <ClInclude Include="include\bindings\currencyview.h" />
     <ClInclude Include="include\bindings\diplomacyview.h" />

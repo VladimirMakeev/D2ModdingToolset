@@ -1,0 +1,18 @@
+\subsection{Building}
+\label{Building}
+Represents building in \hyperref[Player]{player's} capital.
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+id & Returns building \hyperref[Id]{id}. \texttt{BUILD\_ID} value from \texttt{GBuild.dbf}\\
+cost & Returns building \hyperref[Currency]{cost}. \texttt{COST} value from \texttt{GBuild.dbf}\\
+type & Returns building \hyperref[BuildingCategory]{type}. \texttt{CATEGORY} value from \texttt{GBuild.dbf}\\
+requiredBuilding & Returns \hyperref[Building]{building} that is required to build this one or \texttt{nil} if building has no requirements. \texttt{REQUIRED} value from \texttt{GBuild.dbf}\\
+branch & Returns unit \hyperref[UnitBranch]{branch} or -1 if building type is not \texttt{Unit}\\
+level & Returns building level or 0 if building type is not \texttt{Unit}\\
+\hline
+\end{tabularx}
+\end{center}
