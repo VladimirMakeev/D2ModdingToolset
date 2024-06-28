@@ -2343,19 +2343,9 @@ bool __stdcall isUnitUpgradePendingHooked(const game::CMidgardID* unitId,
     return false;
 }
 
-bool __fastcall editBoxIsCharValidHooked(const game::EditBoxData* thisptr,
-                                         int /*%edx*/,
-                                         char character)
+bool __fastcall editBoxIsCharValidHooked(const game::EditBoxData* thisptr, int /*%edx*/, char ch)
 {
     using namespace game;
-
-    // Cast to int using unsigned char
-    // so extended symbols (>= 127) are handled correctly by isalpha()
-    const int ch = static_cast<unsigned char>(character);
-
-    if (!(ch && ch != VK_ESCAPE && (thisptr->allowEnter || ch != '\n' && ch != '\r'))) {
-        return false;
-    }
 
     // clang-format off
     // These characters are language specific and depend on actual code page being used.
@@ -2376,77 +2366,75 @@ bool __fastcall editBoxIsCharValidHooked(const game::EditBoxData* thisptr,
     };
     // clang-format on
 
-    if (thisptr->filter == EditFilter::TextOnly) {
-        if (isalpha(ch) || isspace(ch)) {
-            return true;
-        }
+    // Cast to int using unsigned char
+    // so extended symbols (>= 127) are handled correctly by isalpha()
+    const int a2 = static_cast<unsigned char>(ch);
 
-        // Check if ch is language specific character
-        if (strchr(reinterpret_cast<const char*>(languageSpecific), ch)) {
-            return true;
-        }
-
+    if (!a2 || a2 == VK_ESCAPE || !thisptr->allowEnter && (a2 == '\n' || a2 == '\r')) {
         return false;
     }
 
-    if (thisptr->filter >= EditFilter::AlphaNum) {
-        if (thisptr->filter == EditFilter::DigitsOnly) {
-            return isdigit(ch) != 0;
+    const int filter = (int)thisptr->filter;
+
+    const int v2 = filter - 1;
+    if (!v2) {
+        if (isalpha(a2) || isspace(a2)) {
+            return true;
         }
 
-        if (thisptr->filter >= EditFilter::AlphaNumNoSlash) {
-            if (thisptr->filter >= EditFilter::NamesDot) {
-                if (thisptr->filter == EditFilter::NamesDot) {
-                    return true;
-                }
+        const char* v10 = strchr((const char*)languageSpecific, a2);
+        return v10 != nullptr;
+    }
 
-                if ((ch < 'a' || ch > 'z') && (ch < 'A' || ch > 'Z') && (ch < '0' || ch > '9')
-                    && ch != ' ' && ch != '\\' && ch != '_' && ch != '-') {
-                    return false;
-                }
+    const int v3 = v2 - 1;
+    if (!v3) {
+        // Remove two symbols from forbidden list.
+        // This allows players to enter 'io' (U+0451) and 'IO' (U+0401) in cp-1251
+        static const unsigned char forbiddenSymbols[] = {'`', '^', '~', /* 0xA8, 0xB8,*/ 0};
 
+        if (!strchr((const char*)forbiddenSymbols, a2)) {
+            if (isalpha(a2) || isdigit(a2) || isspace(a2) || ispunct(a2)) {
                 return true;
             }
 
-            if (iscntrl(ch)) {
-                return false;
-            }
-
-            if (!strchr("/?*\"<>|+':\\", ch)) {
-                return true;
-            }
-
-            return false;
-        }
-
-        if (iscntrl(ch)) {
-            return false;
-        }
-
-        if (!strchr("/?*\"<>|+'", ch)) {
-            return true;
+            const char* v10 = strchr((const char*)languageSpecific, a2);
+            return v10 != nullptr;
         }
 
         return false;
     }
 
-    // Remove two symbols from forbidden list.
-    // This allows players to enter 'io' (U+0451) and 'IO' (U+0401) in cp-1251
-    static const char forbiddenSymbols[] = {'`', '^', '~', /* 0xA8, 0xB8, */ 0};
-
-    if (!strchr(forbiddenSymbols, ch)) {
-        if (isalpha(ch) || isdigit(ch) || isspace(ch) || ispunct(ch)) {
-            return true;
-        }
-
-        if (strchr(reinterpret_cast<const char*>(languageSpecific), ch)) {
-            return true;
-        }
-
-        return false;
+    const int v4 = v3 - 1;
+    if (!v4) {
+        return isdigit(a2) != 0;
     }
 
-    return false;
+    const int v5 = v4 - 1;
+    if (!v5) {
+        if (iscntrl(a2)) {
+            return false;
+        }
+
+        const char* v8 = strchr("/?*\"<>|+'", a2);
+        return !v8;
+    }
+
+    const int v6 = v5 - 1;
+    if (!v6) {
+        if (iscntrl(a2)) {
+            return false;
+        }
+
+        const char* v8 = strchr("/?*\"<>|+':\\", a2);
+        return !v8;
+    }
+
+    if (v6 == 1) {
+        return isalnum(a2) || strchr((const char*)languageSpecific, a2) != nullptr || a2 == ' '
+               || a2 == '\'' || a2 == '_' || a2 == '-';
+    } else {
+        return true;
+    }
 }
 
 // Conditions should be checked from most critical to less critical to provide correct flow of unit
