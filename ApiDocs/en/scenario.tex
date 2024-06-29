@@ -139,3 +139,51 @@ forEachMarket(f) & Searches for every \hyperref[ResourceMarket]{market} on a map
 \hline
 \end{tabularx}
 \end{center}
+\newpage
+\subsubsection{Examples}
+Search for \hyperref[Location]{location} by \hyperref[Id]{id}, check if found:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+local location = scenario:getLocation('S143LO0001')
+if not location then
+  return
+end
+\end{lstlisting}
+\end{center}
+Access \hyperref[ScenarioVariables]{scenario variables}. Check for \texttt{nil} in case when no variables defined:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+local variables = scenario.variables
+if not variables then
+  return
+end
+
+local v = variables:getVariable('VAR1')
+\end{lstlisting}
+\end{center}
+Count neutral \hyperref[Stack]{stacks} on map. \texttt{forEachStack} visits each stack on a map and calls provided function which takes visited \hyperref[Stack]{stack} as its argument:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+local count = 0
+
+scenario:forEachStack(function (stack)
+  if stack.owner.race == Race.Neutral then
+    count = count + 1
+  end
+end)
+\end{lstlisting}
+\end{center}
+The same logic can be implemented by storing function that count stacks in a variable:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+local count = 0
+
+local countNeutralStacks = function (stack)
+  if stack.owner.race == Race.Neutral then
+    count = count + 1
+  end
+end
+
+scenario:forEachStack(countNeutralStacks)
+\end{lstlisting}
+\end{center}

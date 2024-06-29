@@ -30,9 +30,8 @@ getGame() & Returns \hyperref[Game]{game} restrictions and constants\\
 \subsubsection{Examples}
 \begin{center}
 \begin{lstlisting}[language=Lua]
+local unit = getScenario():getUnit(unitId)
 log('Unit current level:' .. unit.impl.level)
-
-getScenario():getUnit(unitId)
 
 local n = randomNumber(100)
 

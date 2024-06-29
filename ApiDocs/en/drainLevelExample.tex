@@ -1,0 +1,10 @@
+\subsection{drainLevel.lua}
+\texttt{attacker} and \texttt{target} have type \hyperref[Unit]{Unit}. \texttt{item} is \hyperref[Item]{Item} used to perform the attack. \texttt{battle} specifies information about \hyperref[Battle]{battle} state.
+\begin{center}
+\begin{lstlisting}[language=Lua]
+function getLevel(attacker, target, item, battle)
+  -- transform into unit with its level minus 1 and minus attacker over-level
+  return math.max(1, target.impl.level - 1 - attacker.impl.level + attacker.baseImpl.level);
+end
+\end{lstlisting}
+\end{center}

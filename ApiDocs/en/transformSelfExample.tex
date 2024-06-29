@@ -1,0 +1,10 @@
+\subsection{transformSelf.lua}
+\texttt{unit} has type \hyperref[Unit]{Unit}. \texttt{transformImpl} is \hyperref[UnitImpl]{Unit implementation}. \texttt{item} is \hyperref[Item]{Item} used to perform the attack. \texttt{battle} specifies an information about current \hyperref[Battle]{battle}.
+\begin{center}
+\begin{lstlisting}[language=Lua]
+function getLevel(unit, transformImpl, item, battle)
+  -- Transform into current level or level of resulting unit's template, whichever is bigger.
+  return math.max(unit.impl.level, transformImpl.level)
+end
+\end{lstlisting}
+\end{center}
