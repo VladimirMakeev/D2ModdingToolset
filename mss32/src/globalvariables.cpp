@@ -17,26 +17,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "globalview.h"
-#include "globaldata.h"
-#include <sol/sol.hpp>
+#include "globalvariables.h"
+#include "version.h"
+#include <array>
 
-namespace bindings {
+namespace game::GlobalVariablesApi {
 
-void GlobalView::bind(sol::state& lua)
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::Constructor)0x587a19,
+    },
+    // Russobit
+    Api{
+        (Api::Constructor)0x587a19,
+    },
+    // Gog
+    Api{
+        (Api::Constructor)0x586bce,
+    },
+    // Scenario Editor
+    Api{
+        (Api::Constructor)0x530a98,
+    },
+}};
+// clang-format on
+
+Api& get()
 {
-    auto view = lua.new_usertype<GlobalView>("GlobalView");
-
-    view["variables"] = sol::property(&GlobalView::getGlobalVariables);
+    return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-GlobalVariablesView GlobalView::getGlobalVariables() const
-{
-    using namespace game;
-
-    const GlobalData* global = *GlobalDataApi::get().getGlobalData();
-
-    return GlobalVariablesView{global->globalVariables};
 }
-
-} // namespace bindings

@@ -116,37 +116,37 @@ int GlobalVariablesView::getMorale(int tier) const
         return 0;
     }
 
-    return variables->morale[tier - 1];
+    return variables->data->morale[tier - 1];
 }
 
 int GlobalVariablesView::getWeapnMstr() const
 {
-    return variables->weaponMaster;
+    return variables->data->weaponMaster;
 }
 
 int GlobalVariablesView::getBatInit() const
 {
-    return variables->additionalBattleIni;
+    return variables->data->additionalBattleIni;
 }
 
 int GlobalVariablesView::getBatDamage() const
 {
-    return variables->additionalBattleDmg;
+    return variables->data->additionalBattleDmg;
 }
 
 int GlobalVariablesView::getBatRound() const
 {
-    return variables->batRound;
+    return variables->data->batRound;
 }
 
 int GlobalVariablesView::getBatBreak() const
 {
-    return variables->batBreak;
+    return variables->data->batBreak;
 }
 
 int GlobalVariablesView::getBatBModif() const
 {
-    return variables->batBmodif;
+    return variables->data->batBmodif;
 }
 
 int GlobalVariablesView::getBatBoostd(int level) const
@@ -155,7 +155,7 @@ int GlobalVariablesView::getBatBoostd(int level) const
         return 0;
     }
 
-    return variables->battleBoostDamage[level - 1];
+    return variables->data->battleBoostDamage[level - 1];
 }
 
 int GlobalVariablesView::getBatLowerd(int level) const
@@ -164,77 +164,77 @@ int GlobalVariablesView::getBatLowerd(int level) const
         return 0;
     }
 
-    return variables->battleLowerDamage[level - 1];
+    return variables->data->battleLowerDamage[level - 1];
 }
 
 int GlobalVariablesView::getBatLoweri() const
 {
-    return variables->battleLowerIni;
+    return variables->data->battleLowerIni;
 }
 
 int GlobalVariablesView::getLdrMaxAbil() const
 {
-    return variables->maxLeaderAbilities;
+    return variables->data->maxLeaderAbilities;
 }
 
 int GlobalVariablesView::getSpyDiscov() const
 {
-    return variables->spyDiscoveryChance;
+    return variables->data->spyDiscoveryChance;
 }
 
 int GlobalVariablesView::getPoisonS() const
 {
-    return variables->poisonStackDamage;
+    return variables->data->poisonStackDamage;
 }
 
 int GlobalVariablesView::getPoisonC() const
 {
-    return variables->poisonCityDamage;
+    return variables->data->poisonCityDamage;
 }
 
 int GlobalVariablesView::getBribe() const
 {
-    return variables->bribeMultiplier;
+    return variables->data->bribeMultiplier;
 }
 
 int GlobalVariablesView::getStealRace() const
 {
-    return variables->stealRace;
+    return variables->data->stealRace;
 }
 
 int GlobalVariablesView::getStealNeut() const
 {
-    return variables->stealNeut;
+    return variables->data->stealNeut;
 }
 
 int GlobalVariablesView::getRiotMin() const
 {
-    return variables->riotDaysMin;
+    return variables->data->riotDaysMin;
 }
 
 int GlobalVariablesView::getRiotMax() const
 {
-    return variables->riotDaysMax;
+    return variables->data->riotDaysMax;
 }
 
 int GlobalVariablesView::getRiotDmg() const
 {
-    return variables->riotDamage;
+    return variables->data->riotDamage;
 }
 
 int GlobalVariablesView::getSellRatio() const
 {
-    return variables->sellRatio;
+    return variables->data->sellRatio;
 }
 
 int GlobalVariablesView::getTCapture() const
 {
-    return variables->landTransformCapture;
+    return variables->data->landTransformCapture;
 }
 
 int GlobalVariablesView::getTCapital() const
 {
-    return variables->landTransformCapital;
+    return variables->data->landTransformCapital;
 }
 
 int GlobalVariablesView::getTCity(int tier) const
@@ -243,107 +243,107 @@ int GlobalVariablesView::getTCity(int tier) const
         return 0;
     }
 
-    return variables->landTransformCity[tier - 1];
+    return variables->data->landTransformCity[tier - 1];
 }
 
 CurrencyView GlobalVariablesView::getRodCost() const
 {
-    return CurrencyView{variables->rodPlacementCost};
+    return CurrencyView{variables->data->rodPlacementCost};
 }
 
 int GlobalVariablesView::getRodRange() const
 {
-    return variables->rodRange;
+    return variables->data->rodRange;
 }
 
 int GlobalVariablesView::getCrystalP() const
 {
-    return variables->crystalProfit;
+    return variables->data->crystalProfit;
 }
 
 int GlobalVariablesView::getConstUrg() const
 {
-    return variables->constUrg;
+    return variables->data->constUrg;
 }
 
 int GlobalVariablesView::getRegenLWar() const
 {
-    return variables->fighterLeaderRegen;
+    return variables->data->fighterLeaderRegen;
 }
 
 int GlobalVariablesView::getRegenRuin() const
 {
-    return variables->regenRuin;
+    return variables->data->regenRuin;
 }
 
 int GlobalVariablesView::getDPeace() const
 {
-    return variables->diplomacyPeace;
+    return variables->data->diplomacyPeace;
 }
 
 int GlobalVariablesView::getDWar() const
 {
-    return variables->diplomacyWar;
+    return variables->data->diplomacyWar;
 }
 
 int GlobalVariablesView::getDNeutral() const
 {
-    return variables->diplomacyNeutral;
+    return variables->data->diplomacyNeutral;
 }
 
 int GlobalVariablesView::getDGold() const
 {
-    return variables->dGold;
+    return variables->data->dGold;
 }
 
 int GlobalVariablesView::getDMkAlly() const
 {
-    return variables->dMkAlly;
+    return variables->data->dMkAlly;
 }
 
 int GlobalVariablesView::getDAttackSc() const
 {
-    return variables->dAttackSc;
+    return variables->data->dAttackSc;
 }
 
 int GlobalVariablesView::getDAttackFo() const
 {
-    return variables->dAttackFo;
+    return variables->data->dAttackFo;
 }
 
 int GlobalVariablesView::getDAttackPc() const
 {
-    return variables->dAttackPc;
+    return variables->data->dAttackPc;
 }
 
 int GlobalVariablesView::getDRod() const
 {
-    return variables->dRod;
+    return variables->data->dRod;
 }
 
 int GlobalVariablesView::getDRefAlly() const
 {
-    return variables->dRefAlly;
+    return variables->data->dRefAlly;
 }
 
 int GlobalVariablesView::getDBkAlly() const
 {
-    return variables->dBkAlly;
+    return variables->data->dBkAlly;
 }
 
 int GlobalVariablesView::getDNoble() const
 {
-    return variables->dNoble;
+    return variables->data->dNoble;
 }
 
 int GlobalVariablesView::getDBkaChnc() const
 {
-    return variables->dBkaChance;
+    return variables->data->dBkaChance;
 }
 
 int GlobalVariablesView::getDBkaTurn() const
 {
-    return variables->dBkaTurn;
+    return variables->data->dBkaTurn;
 }
 
 int GlobalVariablesView::getProt(int tier) const
@@ -356,77 +356,77 @@ int GlobalVariablesView::getProt(int tier) const
         return getProtCap();
     }
 
-    return variables->cityProtection[tier - 1];
+    return variables->data->cityProtection[tier - 1];
 }
 
 int GlobalVariablesView::getProtCap() const
 {
-    return variables->capitalProtection;
+    return variables->data->capitalProtection;
 }
 
 int GlobalVariablesView::getBonusE() const
 {
-    return variables->bonusGoldEasy;
+    return variables->data->bonusGoldEasy;
 }
 
 int GlobalVariablesView::getBonusA() const
 {
-    return variables->bonusGoldAverage;
+    return variables->data->bonusGoldAverage;
 }
 
 int GlobalVariablesView::getBonusH() const
 {
-    return variables->bonusGoldHard;
+    return variables->data->bonusGoldHard;
 }
 
 int GlobalVariablesView::getBonusV() const
 {
-    return variables->bonusGoldVeryHard;
+    return variables->data->bonusGoldVeryHard;
 }
 
 int GlobalVariablesView::getIncomeE() const
 {
-    return variables->incomeEasy;
+    return variables->data->incomeEasy;
 }
 
 int GlobalVariablesView::getIncomeA() const
 {
-    return variables->incomeAverage;
+    return variables->data->incomeAverage;
 }
 
 int GlobalVariablesView::getIncomeH() const
 {
-    return variables->incomeHard;
+    return variables->data->incomeHard;
 }
 
 int GlobalVariablesView::getIncomeV() const
 {
-    return variables->incomeVeryHard;
+    return variables->data->incomeVeryHard;
 }
 
 int GlobalVariablesView::getGuRange() const
 {
-    return variables->guRange;
+    return variables->data->guRange;
 }
 
 int GlobalVariablesView::getPaRange() const
 {
-    return variables->paRange;
+    return variables->data->paRange;
 }
 
 int GlobalVariablesView::getLoRange() const
 {
-    return variables->loRange;
+    return variables->data->loRange;
 }
 
 int GlobalVariablesView::getDfendBonus() const
 {
-    return variables->defendBonus;
+    return variables->data->defendBonus;
 }
 
 int GlobalVariablesView::getTalisChrg() const
 {
-    return variables->talismanCharges;
+    return variables->data->talismanCharges;
 }
 
 int GlobalVariablesView::getSplpwr(int level) const
@@ -435,17 +435,17 @@ int GlobalVariablesView::getSplpwr(int level) const
         return 0;
     }
 
-    return variables->spellPower[level - 1];
+    return variables->data->spellPower[level - 1];
 }
 
 int GlobalVariablesView::getGainSpell() const
 {
-    return variables->gainSpellChance;
+    return variables->data->gainSpellChance;
 }
 
 int GlobalVariablesView::getDefendBonus() const
 {
-    return variables->defendBonus;
+    return variables->data->defendBonus;
 }
 
 } // namespace bindings

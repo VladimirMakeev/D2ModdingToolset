@@ -26,8 +26,10 @@
 
 namespace game {
 
+struct CProxyCodeBaseEnv;
+
 /** Holds global game settings read from GVars.dbf. */
-struct GlobalVariables
+struct GlobalVariablesData
 {
     /** 'MORALE_n' */
     int morale[6];
@@ -155,9 +157,40 @@ struct GlobalVariables
     String tutorialName;
 };
 
-assert_size(GlobalVariables, 352);
-assert_offset(GlobalVariables, rodPlacementCost, 148);
-assert_offset(GlobalVariables, talismanCharges, 296);
+assert_size(GlobalVariablesData, 352);
+assert_offset(GlobalVariablesData, rodPlacementCost, 148);
+assert_offset(GlobalVariablesData, talismanCharges, 296);
+
+struct GlobalVariablesDataHooked : public GlobalVariablesData
+{
+    /** Maximum amount of resource the noble can steal from resource market. 'STEAL_RMKT' */
+    int stealRmkt;
+    /** Minimal resource market riot duration in days. 'RMKT_RIOT_MIN' */
+    int rmktRiotMin;
+    /** Maximal resource market riot duration in days. 'RMKT_RIOT_MAX' */
+    int rmktRiotMax;
+};
+
+struct GlobalVariables
+{
+    GlobalVariablesDataHooked* data;
+};
+
+assert_size(GlobalVariables, 4);
+
+namespace GlobalVariablesApi {
+
+struct Api
+{
+    using Constructor = GlobalVariables*(__thiscall*)(GlobalVariables* thisptr,
+                                                      const char* directory,
+                                                      CProxyCodeBaseEnv* proxy);
+    Constructor constructor;
+};
+
+Api& get();
+
+} // namespace GlobalVariablesApi
 
 } // namespace game
 

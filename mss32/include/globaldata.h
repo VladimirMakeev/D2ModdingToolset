@@ -147,7 +147,7 @@ struct GlobalData
     CTileVariation* tileVariation;
     CAiAttitudesTable* aiAttitudes;
     int* aiMessages;
-    GlobalVariables** globalVariables;
+    GlobalVariables* globalVariables;
     CUnitGenerator* unitGenerator;
     int initialized;
 };

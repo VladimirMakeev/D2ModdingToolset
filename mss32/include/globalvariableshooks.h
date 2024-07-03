@@ -17,26 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "globalview.h"
-#include "globaldata.h"
-#include <sol/sol.hpp>
+#ifndef GLOBALVARIABLESHOOKS_H
+#define GLOBALVARIABLESHOOKS_H
 
-namespace bindings {
+namespace game {
+struct GlobalVariables;
+struct CProxyCodeBaseEnv;
+} // namespace game
 
-void GlobalView::bind(sol::state& lua)
-{
-    auto view = lua.new_usertype<GlobalView>("GlobalView");
+namespace hooks {
 
-    view["variables"] = sol::property(&GlobalView::getGlobalVariables);
+game::GlobalVariables* __fastcall globalVariablesCtorHooked(game::GlobalVariables* thisptr,
+                                                            int /*%edx*/,
+                                                            const char* directory,
+                                                            game::CProxyCodeBaseEnv* proxy);
+
 }
 
-GlobalVariablesView GlobalView::getGlobalVariables() const
-{
-    using namespace game;
-
-    const GlobalData* global = *GlobalDataApi::get().getGlobalData();
-
-    return GlobalVariablesView{global->globalVariables};
-}
-
-} // namespace bindings
+#endif // GLOBALVARIABLESHOOKS_H

@@ -263,6 +263,8 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\fontshooks.cpp" />
     <ClCompile Include="src\formattedtext.cpp" />
     <ClCompile Include="src\generationresultinterf.cpp" />
+    <ClCompile Include="src\globalvariables.cpp" />
+    <ClCompile Include="src\globalvariableshooks.cpp" />
     <ClCompile Include="src\groupupgradehooks.cpp" />
     <ClCompile Include="src\image2memory.cpp" />
     <ClCompile Include="src\intintmap.cpp" />
@@ -759,6 +761,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\diplomacyhooks.h" />
     <ClInclude Include="include\fonts.h" />
     <ClInclude Include="include\fontshooks.h" />
+    <ClInclude Include="include\globalvariableshooks.h" />
     <ClInclude Include="include\midcrystal.h" />
     <ClInclude Include="include\middiplomacy.h" />
     <ClInclude Include="include\midgardmapfog.h" />

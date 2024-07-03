@@ -567,8 +567,8 @@ int getWeaponMasterBonusXpPercent(const game::IMidgardObjectMap* objectMap,
         auto stack = getStack(objectMap, groupId);
         auto leader = fn.findUnitById(objectMap, &stack->leaderId);
         if (hasLeaderAbility(leader->unitImpl, LeaderAbilityCategories::get().weaponMaster)) {
-            const auto vars = *(*GlobalDataApi::get().getGlobalData())->globalVariables;
-            return vars->weaponMaster;
+            const auto vars = (*GlobalDataApi::get().getGlobalData())->globalVariables;
+            return vars->data->weaponMaster;
         }
     }
 
