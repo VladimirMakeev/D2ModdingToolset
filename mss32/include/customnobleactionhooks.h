@@ -21,11 +21,11 @@
 #define CUSTOMNOBLEACTIONHOOKS_H
 
 #include "d2set.h"
+#include "nobleactioncat.h"
 
 namespace game {
 struct INobleActionResult;
 struct IMidgardObjectMap;
-struct LNobleActionCat;
 struct CMidgardID;
 struct String;
 struct CCmdNobleResultMsg;
