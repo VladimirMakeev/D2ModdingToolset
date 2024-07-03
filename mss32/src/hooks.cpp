@@ -58,6 +58,8 @@
 #include "customattacks.h"
 #include "customattackutils.h"
 #include "custombuildingcategories.h"
+#include "customnobleactioncategories.h"
+#include "customnobleactionhooks.h"
 #include "d2string.h"
 #include "dbfaccess.h"
 #include "dbtable.h"
@@ -90,6 +92,7 @@
 #include "fortification.h"
 #include "gameutils.h"
 #include "globaldata.h"
+#include "globalvariableshooks.h"
 #include "groupupgradehooks.h"
 #include "idlist.h"
 #include "interfmanager.h"
@@ -408,7 +411,7 @@ static Hooks getGameHooks()
         {fn.computeMovementCost, computeMovementCostHooked},
         // Support custom scripts for AI battle actions
         {battle.aiChooseBattleAction, aiChooseBattleActionHooked, (void**)&orig.aiChooseBattleAction},
-        // Profile events
+        // Profile and speed up events system
         {serverLogic.applyEventEffectsAndCheckMidEventTriggerers, applyEventEffectsAndCheckMidEventTriggerersHooked, (void**)&orig.applyEventEffectsAndCheckMidEventTriggerers},
         {serverLogic.stackMove, stackMoveHooked, (void**)&orig.stackMove},
         {serverLogic.filterAndProcessEventsNoPlayer, filterAndProcessEventsNoPlayerHooked, (void**)&orig.filterAndProcessEventsNoPlayer},
@@ -439,6 +442,11 @@ static Hooks getGameHooks()
         {CMidServerLogicApi::get().constructor, midServerLogicCtorHooked, (void**)&orig.midServerLogicCtor},
         {fn.getSiteSound, getSiteSoundHooked},
         {fn.siteHasSound, siteHasSoundHooked},
+        // Support custom noble actions
+        {NobleActionsApi::get().create, createNobleActionResultHooked, (void**)&orig.createNobleActionResult},
+        {fn.getSiteNobleActions, getSiteNobleActionsHooked, (void**)&orig.getSiteNobleActions},
+        {fn.getPossibleNobleActions, getPossibleNobleActionsHooked, (void**)&orig.getPossibleNobleActions},
+        {fn.getNobleActionResultDescription, getNobleActionResultDescriptionHooked, (void**)&orig.getNobleActionResultDescription},
     };
     // clang-format on
 
@@ -816,6 +824,12 @@ Hooks getHooks()
                                 (void**)&orig.getMapElementIsoLayerImages});
     // Support encyclopedia info for a new sites
     hooks.emplace_back(HookInfo{fn.updateEncLayoutSite, updateEncLayoutSiteHooked});
+    // Support custom noble action categories
+    hooks.emplace_back(
+        HookInfo{LNobleActionCatTableApi::get().constructor, nobleActionCatTableCtorHooked});
+    // Support new global variables
+    hooks.emplace_back(HookInfo{GlobalVariablesApi::get().constructor, globalVariablesCtorHooked,
+                                (void**)&orig.globalVariablesCtor});
 
     return hooks;
 }

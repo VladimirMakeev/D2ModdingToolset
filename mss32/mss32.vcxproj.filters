@@ -1469,6 +1469,12 @@
     <ClCompile Include="src\customnobleactioncategories.cpp">
       <Filter>features\custom noble actions</Filter>
     </ClCompile>
+    <ClCompile Include="src\customnobleactionhooks.cpp">
+      <Filter>features\custom noble actions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nobleactioncategoryset.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
     <ClCompile Include="src\globalvariables.cpp">
       <Filter>game</Filter>
     </ClCompile>
@@ -3714,6 +3720,12 @@
     </ClInclude>
     <ClInclude Include="include\customnobleactioncategories.h">
       <Filter>features\custom noble actions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\customnobleactionhooks.h">
+      <Filter>features\custom noble actions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\nobleactioncategoryset.h">
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\eventeffectbase.h">
       <Filter>game</Filter>

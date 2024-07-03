@@ -155,6 +155,9 @@ static std::array<Functions, 4> functions = {{
         (UpdateEncLayoutSite)0x579470,
         (GetSiteSound)0x5093fb,
         (SiteHasSound)0x50948c,
+        (GetNobleActions)0x5d44c5,
+        (GetNobleActions)0x5d4b28,
+        (GetNobleActionResultDescription)0x49cf6f,
     },
     // Russobit
     Functions{
@@ -286,6 +289,9 @@ static std::array<Functions, 4> functions = {{
         (UpdateEncLayoutSite)0x579470,
         (GetSiteSound)0x5093fb,
         (SiteHasSound)0x50948c,
+        (GetNobleActions)0x5d44c5,
+        (GetNobleActions)0x5d4b28,
+        (GetNobleActionResultDescription)0x49cf6f,
     },
     // Gog
     Functions{
@@ -417,6 +423,9 @@ static std::array<Functions, 4> functions = {{
         (UpdateEncLayoutSite)0x578b2b,
         (GetSiteSound)0x5086eb,
         (SiteHasSound)0x50877c,
+        (GetNobleActions)0x5d33ee,
+        (GetNobleActions)0x5d3a51,
+        (GetNobleActionResultDescription)0x49c8dc,
     },
     // Scenario Editor
     Functions{
@@ -548,6 +557,9 @@ static std::array<Functions, 4> functions = {{
         (UpdateEncLayoutSite)0x4ca874,
         (GetSiteSound)nullptr,
         (SiteHasSound)nullptr,
+        (GetNobleActions)nullptr,
+        (GetNobleActions)nullptr,
+        (GetNobleActionResultDescription)nullptr,
     },
 }};
 

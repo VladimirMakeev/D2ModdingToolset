@@ -138,6 +138,17 @@ void readResourceMarketTextIds(const sol::table& table, TextIds::ResourceMarket&
     value.exchangeNotAvailable = market.get_or("exchangeNotAvailable", std::string());
 }
 
+void readNobleActionsTextIds(const sol::table& table, TextIds::NobleActions& value)
+{
+    auto actionsTable = table.get<sol::optional<sol::table>>("nobleActions");
+    if (!actionsTable.has_value()) {
+        return;
+    }
+
+    auto& actions = actionsTable.value();
+    value.stealMarketSuccess = actions.get_or("stealMarketSuccess", std::string());
+}
+
 void readInterfTextIds(const sol::table& table, TextIds::Interf& value)
 {
     auto interf = table.get<sol::optional<sol::table>>("interf");
@@ -193,6 +204,7 @@ void initialize(TextIds& value)
         readLobbyTextIds(table, value.lobby);
         readGeneratorTextIds(table, value.rsg);
         readResourceMarketTextIds(table, value.resourceMarket);
+        readNobleActionsTextIds(table, value.nobleActions);
     } catch (const std::exception& e) {
         showErrorMessageBox(fmt::format("Failed to read script '{:s}'.\n"
                                         "Reason: '{:s}'",

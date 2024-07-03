@@ -37,6 +37,7 @@
 #include "exchangeinterf.h"
 #include "game.h"
 #include "gameimages.h"
+#include "globalvariables.h"
 #include "imagelayerlist.h"
 #include "mainview2.h"
 #include "menubase.h"
@@ -55,6 +56,7 @@
 #include "midunit.h"
 #include "mqnetplayer.h"
 #include "netmsg.h"
+#include "nobleactionresult.h"
 #include "objectinterf.h"
 #include "pickupdropinterf.h"
 #include "scenedit.h"
@@ -194,6 +196,13 @@ struct OriginalFunctions
     game::CMainView2Api::Api::HandleCmdStackVisitMsg handleCmdStackVisitMsg;
 
     game::CMidServerLogicApi::Api::Constructor midServerLogicCtor;
+
+    game::NobleActionsApi::Api::Create createNobleActionResult;
+    game::GetNobleActions getSiteNobleActions;
+    game::GetNobleActions getPossibleNobleActions;
+    game::GetNobleActionResultDescription getNobleActionResultDescription;
+
+    game::GlobalVariablesApi::Api::Constructor globalVariablesCtor;
 };
 
 OriginalFunctions& getOriginalFunctions();

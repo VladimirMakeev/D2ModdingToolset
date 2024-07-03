@@ -243,6 +243,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\customaibattle.cpp" />
     <ClCompile Include="src\custombuildingcategories.cpp" />
     <ClCompile Include="src\customnobleactioncategories.cpp" />
+    <ClCompile Include="src\customnobleactionhooks.cpp" />
     <ClCompile Include="src\ddstackgroup.cpp" />
     <ClCompile Include="src\ddstackinventorydisplay.cpp" />
     <ClCompile Include="src\diplomacyhooks.cpp" />
@@ -351,6 +352,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\netsingleplayerhooks.cpp" />
     <ClCompile Include="src\nativegameinfo.cpp" />
     <ClCompile Include="src\nobleactioncat.cpp" />
+    <ClCompile Include="src\nobleactioncategoryset.cpp" />
     <ClCompile Include="src\nobleactionresult.cpp" />
     <ClCompile Include="src\nobleactionresultstealmarket.cpp" />
     <ClCompile Include="src\objectinterf.cpp" />
@@ -756,6 +758,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\customaibattle.h" />
     <ClInclude Include="include\custombuildingcategories.h" />
     <ClInclude Include="include\customnobleactioncategories.h" />
+    <ClInclude Include="include\customnobleactionhooks.h" />
     <ClInclude Include="include\d2unorderedmap.h" />
     <ClInclude Include="include\ddfoldedinv.h" />
     <ClInclude Include="include\ddfoldedinvdisplay.h" />
@@ -889,6 +892,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\netsingleplayer.h" />
     <ClInclude Include="include\netsingleplayerhooks.h" />
     <ClInclude Include="include\nobleactioncat.h" />
+    <ClInclude Include="include\nobleactioncategoryset.h" />
     <ClInclude Include="include\nobleactionresult.h" />
     <ClInclude Include="include\nobleactionresultstealmarket.h" />
     <ClInclude Include="include\notifyplayerlist.h" />

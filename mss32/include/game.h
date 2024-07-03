@@ -21,10 +21,12 @@
 #define GAME_H
 
 #include "attacktypepairvector.h"
+#include "d2set.h"
 #include "faceimg.h"
 #include "globaldata.h"
 #include "idlist.h"
 #include "mqpoint.h"
+#include "nobleactioncat.h"
 #include "smartptr.h"
 
 namespace game {
@@ -83,6 +85,7 @@ struct CScenarioVisitor;
 struct LSiteCategory;
 struct CMidSite;
 struct CTextBoxInterf;
+struct CCmdNobleResultMsg;
 
 enum class ModifierElementTypeFlag : int;
 
@@ -749,6 +752,18 @@ using GetSiteSound = String*(__stdcall*)(String* soundName, const CMidSite* site
 
 using SiteHasSound = bool(__stdcall*)(const CMidSite* site);
 
+using GetNobleActions = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                         const CMidgardID* playerId,
+                                         const CMidgardID* objectId,
+                                         Set<LNobleActionCat>* nobleActions);
+
+using GetNobleActionResultDescription =
+    String*(__stdcall*)(String* description,
+                        const LNobleActionCat nobleActionCat,
+                        const CCmdNobleResultMsg* nobleResultMsg,
+                        const CPhaseGame* phaseGame,
+                        const CMidPlayer* player);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -880,6 +895,11 @@ struct Functions
     UpdateEncLayoutSite updateEncLayoutSite;
     GetSiteSound getSiteSound;
     SiteHasSound siteHasSound;
+    /** Returns actions that noble can do with the site specified by id. */
+    GetNobleActions getSiteNobleActions;
+    /** Returns all actions that noble can possibly perform on object with specified id. */
+    GetNobleActions getPossibleNobleActions;
+    GetNobleActionResultDescription getNobleActionResultDescription;
 };
 
 /** Global variables used in game. */
