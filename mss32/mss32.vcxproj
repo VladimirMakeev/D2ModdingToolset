@@ -759,6 +759,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\ddstackinventorydisplay.h" />
     <ClInclude Include="include\ddunitgroup.h" />
     <ClInclude Include="include\diplomacyhooks.h" />
+    <ClInclude Include="include\eventeffectbase.h" />
     <ClInclude Include="include\fonts.h" />
     <ClInclude Include="include\fontshooks.h" />
     <ClInclude Include="include\globalvariableshooks.h" />
