@@ -1457,6 +1457,9 @@
     <ClCompile Include="src\bindings\buildingview.cpp">
       <Filter>bindings</Filter>
     </ClCompile>
+    <ClCompile Include="src\nobleactioncat.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3678,6 +3681,9 @@
     </ClInclude>
     <ClInclude Include="include\bindings\buildingview.h">
       <Filter>bindings</Filter>
+    </ClInclude>
+    <ClInclude Include="include\nobleactioncat.h">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
