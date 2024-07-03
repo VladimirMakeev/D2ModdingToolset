@@ -53,6 +53,9 @@
     <Filter Include="features\custom scenario objects">
       <UniqueIdentifier>{4414afc9-2087-4905-bf4d-220042197dd5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\custom noble actions">
+      <UniqueIdentifier>{6454c2cc-1767-4c10-9a0a-dee340ea6ca0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\fmt\src\format.cc">
@@ -1459,6 +1462,9 @@
     </ClCompile>
     <ClCompile Include="src\nobleactioncat.cpp">
       <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\customnobleactioncategories.cpp">
+      <Filter>features\custom noble actions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3684,6 +3690,9 @@
     </ClInclude>
     <ClInclude Include="include\nobleactioncat.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\customnobleactioncategories.h">
+      <Filter>features\custom noble actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -242,6 +242,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\citystackinterfhooks.cpp" />
     <ClCompile Include="src\customaibattle.cpp" />
     <ClCompile Include="src\custombuildingcategories.cpp" />
+    <ClCompile Include="src\customnobleactioncategories.cpp" />
     <ClCompile Include="src\ddstackgroup.cpp" />
     <ClCompile Include="src\ddstackinventorydisplay.cpp" />
     <ClCompile Include="src\diplomacyhooks.cpp" />
@@ -748,6 +749,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\cmdstackvisitmsg.h" />
     <ClInclude Include="include\customaibattle.h" />
     <ClInclude Include="include\custombuildingcategories.h" />
+    <ClInclude Include="include\customnobleactioncategories.h" />
     <ClInclude Include="include\d2unorderedmap.h" />
     <ClInclude Include="include\ddfoldedinv.h" />
     <ClInclude Include="include\ddfoldedinvdisplay.h" />
