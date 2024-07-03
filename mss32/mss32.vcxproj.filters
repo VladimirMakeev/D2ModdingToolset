@@ -1472,6 +1472,9 @@
     <ClCompile Include="src\globalvariableshooks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="src\effectstealmarket.cpp">
+      <Filter>features\custom noble actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aipriority.h">
@@ -3705,6 +3708,9 @@
     </ClInclude>
     <ClInclude Include="include\globalvariableshooks.h">
       <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="include\effectstealmarket.h">
+      <Filter>features\custom noble actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

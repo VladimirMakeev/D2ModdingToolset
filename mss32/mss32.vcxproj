@@ -248,6 +248,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\diplomacyhooks.cpp" />
     <ClCompile Include="src\displayd3d.cpp" />
     <ClCompile Include="src\displayddraw.cpp" />
+    <ClCompile Include="src\effectstealmarket.cpp" />
     <ClCompile Include="src\enclayoutcity.cpp" />
     <ClCompile Include="src\enclayoutcityhooks.cpp" />
     <ClCompile Include="src\enclayoutruin.cpp" />
@@ -759,6 +760,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\ddstackinventorydisplay.h" />
     <ClInclude Include="include\ddunitgroup.h" />
     <ClInclude Include="include\diplomacyhooks.h" />
+    <ClInclude Include="include\effectstealmarket.h" />
     <ClInclude Include="include\eventeffectbase.h" />
     <ClInclude Include="include\fonts.h" />
     <ClInclude Include="include\fontshooks.h" />
