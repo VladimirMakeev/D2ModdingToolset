@@ -1463,6 +1463,9 @@
     <ClCompile Include="src\nobleactioncat.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="src\nobleactionresult.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
     <ClCompile Include="src\customnobleactioncategories.cpp">
       <Filter>features\custom noble actions</Filter>
     </ClCompile>
@@ -3701,6 +3704,9 @@
       <Filter>bindings</Filter>
     </ClInclude>
     <ClInclude Include="include\nobleactioncat.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\nobleactionresult.h">
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="include\customnobleactioncategories.h">

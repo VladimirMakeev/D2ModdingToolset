@@ -351,6 +351,7 @@ call ..\buildDetours.bat ..\Detours
     <ClCompile Include="src\netsingleplayerhooks.cpp" />
     <ClCompile Include="src\nativegameinfo.cpp" />
     <ClCompile Include="src\nobleactioncat.cpp" />
+    <ClCompile Include="src\nobleactionresult.cpp" />
     <ClCompile Include="src\objectinterf.cpp" />
     <ClCompile Include="src\objectinterfhooks.cpp" />
     <ClCompile Include="src\paperdollchildinterf.cpp" />
@@ -887,6 +888,7 @@ call ..\buildDetours.bat ..\Detours
     <ClInclude Include="include\netsingleplayer.h" />
     <ClInclude Include="include\netsingleplayerhooks.h" />
     <ClInclude Include="include\nobleactioncat.h" />
+    <ClInclude Include="include\nobleactionresult.h" />
     <ClInclude Include="include\notifyplayerlist.h" />
     <ClInclude Include="include\objectinterf.h" />
     <ClInclude Include="include\objectinterfhooks.h" />
