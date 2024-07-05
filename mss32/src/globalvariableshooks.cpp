@@ -33,6 +33,12 @@ static const char stealRmktColumn[]{"STEAL_RMKT"};
 static const char rmktRiotMinColumn[]{"RMKT_R_MIN"};
 static const char rmktRiotMaxColumn[]{"RMKT_R_MAX"};
 
+static bool hasCustomVariables(const utils::DbfFile& dbfFile)
+{
+    return dbfFile.column(stealRmktColumn) || dbfFile.column(rmktRiotMinColumn)
+           || dbfFile.column(rmktRiotMaxColumn);
+}
+
 game::GlobalVariables* __fastcall globalVariablesCtorHooked(game::GlobalVariables* thisptr,
                                                             int /*%edx*/,
                                                             const char* directory,
@@ -51,8 +57,7 @@ game::GlobalVariables* __fastcall globalVariablesCtorHooked(game::GlobalVariable
         return originalCtor(thisptr, directory, proxy);
     }
 
-    if (!dbfFile.column(stealRmktColumn) || !dbfFile.column(rmktRiotMinColumn)
-        || !dbfFile.column(rmktRiotMaxColumn)) {
+    if (!hasCustomVariables(dbfFile)) {
         return originalCtor(thisptr, directory, proxy);
     }
 
