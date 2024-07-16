@@ -20,12 +20,19 @@
 #ifndef MIDSERVERLOGICHOOKS_H
 #define MIDSERVERLOGICHOOKS_H
 
+#include "d2pair.h"
 #include "d2set.h"
+#include "idlist.h"
+#include "mqpoint.h"
 
 namespace game {
 struct IMidMsgSender;
 struct CMidServerLogic;
-struct CMidgardID;
+struct IMidgardObjectMap;
+struct CMidEvent;
+struct IEventEffect;
+struct ITestCondition;
+struct CMidServer;
 } // namespace game
 
 namespace hooks {
@@ -36,6 +43,133 @@ bool __fastcall midServerLogicSendRefreshInfoHooked(const game::CMidServerLogic*
                                                     int /*%edx*/,
                                                     const game::Set<game::CMidgardID>* objectsList,
                                                     std::uint32_t playerNetId);
+
+bool __fastcall applyEventEffectsAndCheckMidEventTriggerersHooked(
+    game::CMidServerLogic** thisptr,
+    int /*%edx*/,
+    game::List<game::IEventEffect*>* effectsList,
+    const game::CMidgardID* triggererId,
+    const game::CMidgardID* playingStackId);
+
+bool __fastcall stackMoveHooked(game::CMidServerLogic** thisptr,
+                                int /*%edx*/,
+                                const game::CMidgardID* playerId,
+                                game::List<game::Pair<game::CMqPoint, int>>* movementPath,
+                                const game::CMidgardID* stackId,
+                                const game::CMqPoint* startingPoint,
+                                const game::CMqPoint* endPoint);
+
+bool __stdcall filterAndProcessEventsNoPlayerHooked(game::IMidgardObjectMap* objectMap,
+                                                    game::List<game::CMidEvent*>* eventObjectList,
+                                                    game::List<game::IEventEffect*>* effectsList,
+                                                    bool* stopProcessing,
+                                                    game::IdList* executedEvents,
+                                                    const game::CMidgardID* triggererStackId,
+                                                    const game::CMidgardID* playingStackId);
+
+bool __stdcall filterAndProcessEventsHooked(game::IMidgardObjectMap* objectMap,
+                                            game::List<game::CMidEvent*>* eventObjectList,
+                                            game::List<game::IEventEffect*>* effectsList,
+                                            bool* stopProcessing,
+                                            game::IdList* executedEvents,
+                                            const game::CMidgardID* playerId,
+                                            const game::CMidgardID* triggererStackId,
+                                            const game::CMidgardID* playingStackId);
+
+bool __stdcall checkEventConditionsHooked(const game::IMidgardObjectMap* objectMap,
+                                          game::List<game::IEventEffect*>* effectsList,
+                                          const game::CMidgardID* playerId,
+                                          const game::CMidgardID* stackTriggererId,
+                                          int samePlayer,
+                                          const game::CMidgardID* eventId);
+
+void __stdcall executeEventEffectsHooked(game::IMidgardObjectMap* objectMap,
+                                         game::List<game::IEventEffect*>* effectsList,
+                                         bool* stopProcessing,
+                                         const game::CMidgardID* eventId,
+                                         const game::CMidgardID* playerId,
+                                         const game::CMidgardID* stackTriggererId,
+                                         const game::CMidgardID* playingStackId);
+
+bool __fastcall testFreqHooked(const game::ITestCondition* thisptr,
+                               int /*%edx*/,
+                               const game::IMidgardObjectMap* objectMap,
+                               const game::CMidgardID* playerId,
+                               const game::CMidgardID* eventId);
+
+bool __fastcall testLocationHooked(const game::ITestCondition* thisptr,
+                                   int /*%edx*/,
+                                   const game::IMidgardObjectMap* objectMap,
+                                   const game::CMidgardID* playerId,
+                                   const game::CMidgardID* eventId);
+
+bool __fastcall testEnterCityHooked(const game::ITestCondition* thisptr,
+                                    int /*%edx*/,
+                                    const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* playerId,
+                                    const game::CMidgardID* eventId);
+
+bool __fastcall testLeaderToCityHooked(const game::ITestCondition* thisptr,
+                                       int /*%edx*/,
+                                       const game::IMidgardObjectMap* objectMap,
+                                       const game::CMidgardID* playerId,
+                                       const game::CMidgardID* eventId);
+
+bool __fastcall testOwnCityHooked(const game::ITestCondition* thisptr,
+                                  int /*%edx*/,
+                                  const game::IMidgardObjectMap* objectMap,
+                                  const game::CMidgardID* playerId,
+                                  const game::CMidgardID* eventId);
+
+bool __fastcall testDiplomacyHooked(const game::ITestCondition* thisptr,
+                                    int /*%edx*/,
+                                    const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* playerId,
+                                    const game::CMidgardID* eventId);
+
+bool __fastcall testAllianceHooked(const game::ITestCondition* thisptr,
+                                   int /*%edx*/,
+                                   const game::IMidgardObjectMap* objectMap,
+                                   const game::CMidgardID* playerId,
+                                   const game::CMidgardID* eventId);
+
+bool __fastcall testLootRuinHooked(const game::ITestCondition* thisptr,
+                                   int /*%edx*/,
+                                   const game::IMidgardObjectMap* objectMap,
+                                   const game::CMidgardID* playerId,
+                                   const game::CMidgardID* eventId);
+
+bool __fastcall testTransformLandHooked(const game::ITestCondition* thisptr,
+                                        int /*%edx*/,
+                                        const game::IMidgardObjectMap* objectMap,
+                                        const game::CMidgardID* playerId,
+                                        const game::CMidgardID* eventId);
+
+bool __fastcall testVisitSiteHooked(const game::ITestCondition* thisptr,
+                                    int /*%edx*/,
+                                    const game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* playerId,
+                                    const game::CMidgardID* eventId);
+
+bool __fastcall testItemToLocationHooked(const game::ITestCondition* thisptr,
+                                         int /*%edx*/,
+                                         const game::IMidgardObjectMap* objectMap,
+                                         const game::CMidgardID* playerId,
+                                         const game::CMidgardID* eventId);
+
+bool __fastcall testVarInRangeHooked(const game::ITestCondition* thisptr,
+                                     int /*%edx*/,
+                                     const game::IMidgardObjectMap* objectMap,
+                                     const game::CMidgardID* playerId,
+                                     const game::CMidgardID* eventId);
+
+game::CMidServerLogic* __fastcall midServerLogicCtorHooked(game::CMidServerLogic* thisptr,
+                                                           int /*%edx*/,
+                                                           game::CMidServer* server,
+                                                           bool multiplayerGame,
+                                                           bool hotseatGame,
+                                                           int a5,
+                                                           int gameVersion);
 
 } // namespace hooks
 

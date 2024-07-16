@@ -18,6 +18,7 @@
  */
 
 #include "settings.h"
+#include "battlemsgdata.h"
 #include "log.h"
 #include "scripts.h"
 #include "utils.h"
@@ -279,9 +280,13 @@ static void readBattleSettings(const sol::table& table, Settings::Battle& value)
                                            def.carryXpOverUpgrade);
     value.allowMultiUpgrade = readSetting(category.value(), "allowMultiUpgrade",
                                           def.allowMultiUpgrade);
+    value.debugAi = readSetting(category.value(), "debugAi", def.debugAi);
+    value.fallbackAction = readSetting(category.value(), "fallbackAction", def.fallbackAction,
+                                       game::BattleAction::Attack, game::BattleAction::UseItem);
 }
 
-static void readAdditionalLordIncomeSettings(const sol::table& table, Settings::AdditionalLordIncome& value)
+static void readAdditionalLordIncomeSettings(const sol::table& table,
+                                             Settings::AdditionalLordIncome& value)
 {
     const auto& def = defaultSettings().additionalLordIncome;
 
@@ -414,6 +419,7 @@ const Settings& baseSettings()
         settings.movementCost.plain.onRoad = 1;
         settings.movementCost.textColor = Color{200, 200, 200};
         settings.movementCost.show = false;
+        settings.battle.fallbackAction = game::BattleAction::Defend;
         settings.debugMode = false;
 
         initialized = true;

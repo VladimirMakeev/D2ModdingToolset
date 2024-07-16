@@ -1,0 +1,21 @@
+\subsection{summon.lua}
+\texttt{summoner} has type \hyperref[Unit]{Unit}. \texttt{summonImpl} is \hyperref[UnitImpl]{Unit implementation}. \texttt{item} is \hyperref[Item]{Item} used to perform the attack. \texttt{battle} specifies an information about current \hyperref[Battle]{battle}.
+\begin{center}
+\begin{lstlisting}[language=Lua]
+function getLevel(summoner, summonImpl, item, battle)
+  -- Use base level of summon if cheap item is used to summon it
+  if item and item.base.value.gold < 500 then
+    return summonImpl.level
+  end
+  
+  -- Summon unit with level twice as big as summoner level
+  -- or with level of summon implementation, whichever is bigger.
+  local impl = summoner.impl
+  local summonerLevel = impl.level
+  
+  local summonLevel = summonImpl.level
+  
+  return math.max(summonerLevel * 2, summonLevel)
+end
+\end{lstlisting}
+\end{center}

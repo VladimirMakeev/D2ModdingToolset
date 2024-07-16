@@ -58,6 +58,8 @@
 #include "customattacks.h"
 #include "customattackutils.h"
 #include "custombuildingcategories.h"
+#include "customnobleactioncategories.h"
+#include "customnobleactionhooks.h"
 #include "d2string.h"
 #include "dbfaccess.h"
 #include "dbtable.h"
@@ -90,12 +92,15 @@
 #include "fortification.h"
 #include "gameutils.h"
 #include "globaldata.h"
+#include "globalvariableshooks.h"
 #include "groupupgradehooks.h"
 #include "idlist.h"
 #include "interfmanager.h"
 #include "interftexthooks.h"
 #include "intvector.h"
 #include "isoenginegroundhooks.h"
+#include "isoview.h"
+#include "isoviewhooks.h"
 #include "itembase.h"
 #include "itemcategory.h"
 #include "itemexpotionboost.h"
@@ -132,6 +137,7 @@
 #include "midscenvariables.h"
 #include "midserverlogic.h"
 #include "midserverlogichooks.h"
+#include "midsite.h"
 #include "midstack.h"
 #include "midunitdescriptor.h"
 #include "midunitdescriptorhooks.h"
@@ -146,6 +152,8 @@
 #include "netplayerinfo.h"
 #include "netsingleplayer.h"
 #include "netsingleplayerhooks.h"
+#include "objectinterf.h"
+#include "objectinterfhooks.h"
 #include "originalfunctions.h"
 #include "phasegame.h"
 #include "playerbuildings.h"
@@ -156,13 +164,30 @@
 #include "scenariodata.h"
 #include "scenariodataarray.h"
 #include "scenarioinfo.h"
+#include "scenedit.h"
+#include "scenedithooks.h"
+#include "scenpropinterfhooks.h"
 #include "settings.h"
+#include "sitecategoryhooks.h"
 #include "sitemerchantinterf.h"
 #include "sitemerchantinterfhooks.h"
 #include "smartptr.h"
 #include "stackbattleactionmsg.h"
+#include "stacktemplatecache.h"
 #include "summonhooks.h"
+#include "taskobjaddsite.h"
+#include "taskobjaddsitehooks.h"
+#include "taskobjprop.h"
+#include "taskobjprophooks.h"
 #include "testconditionhooks.h"
+#include "testkillstackhooks.h"
+#include "testleaderownitemhooks.h"
+#include "testleadertozone.h"
+#include "testleadertozonehooks.h"
+#include "testownitemhooks.h"
+#include "teststackexistshooks.h"
+#include "textboxinterf.h"
+#include "textids.h"
 #include "transformotherhooks.h"
 #include "transformselfhooks.h"
 #include "umattack.h"
@@ -183,6 +208,8 @@
 #include "usunitimpl.h"
 #include "utils.h"
 #include "version.h"
+#include "visitorcreatesite.h"
+#include "visitorcreatesitehooks.h"
 #include "visitors.h"
 #include <algorithm>
 #include <cstring>
@@ -201,6 +228,8 @@ static Hooks getGameHooks()
     auto& fn = gameFunctions();
     auto& battle = BattleMsgDataApi::get();
     auto& orig = getOriginalFunctions();
+    auto& serverLogic{CMidServerLogicApi::get()};
+    auto& eventConditions{ITestConditionApi::get()};
 
     // clang-format off
     Hooks hooks{
@@ -329,7 +358,7 @@ static Hooks getGameHooks()
         // Fix missing modifiers of alternative attacks
         {fn.getUnitAttacks, getUnitAttacksHooked},
         // Support custom event conditions
-        {ITestConditionApi::get().create, createTestConditionHooked, (void**)&orig.createTestCondition},
+        {eventConditions.create, createTestConditionHooked, (void**)&orig.createTestCondition},
         // Support custom event effects
         //{IEffectResultApi::get().create, createEffectResultHooked, (void**)&orig.createEffectResult},
         // Support additional as well as high tier units in hire list
@@ -380,6 +409,44 @@ static Hooks getGameHooks()
         {fn.changeUnitXpCheckUpgrade, changeUnitXpCheckUpgradeHooked},
         // Allow player to customize movement cost
         {fn.computeMovementCost, computeMovementCostHooked},
+        // Support custom scripts for AI battle actions
+        {battle.aiChooseBattleAction, aiChooseBattleActionHooked, (void**)&orig.aiChooseBattleAction},
+        // Profile and speed up events system
+        {serverLogic.applyEventEffectsAndCheckMidEventTriggerers, applyEventEffectsAndCheckMidEventTriggerersHooked, (void**)&orig.applyEventEffectsAndCheckMidEventTriggerers},
+        {serverLogic.stackMove, stackMoveHooked, (void**)&orig.stackMove},
+        {serverLogic.filterAndProcessEventsNoPlayer, filterAndProcessEventsNoPlayerHooked, (void**)&orig.filterAndProcessEventsNoPlayer},
+        {serverLogic.filterAndProcessEvents, filterAndProcessEventsHooked, (void**)&orig.filterAndProcessEvents},
+        {serverLogic.checkEventConditions, checkEventConditionsHooked, (void**)&orig.checkEventConditions},
+        {serverLogic.executeEventEffects, executeEventEffectsHooked, (void**)&orig.executeEventEffects},
+        {eventConditions.testFrequency, testFreqHooked, (void**)&orig.testFrequency},
+        {eventConditions.testLocation, testLocationHooked, (void**)&orig.testLocation},
+        {eventConditions.testLeaderToZone, testLeaderToZoneHooked},
+        {eventConditions.testEnterCity, testEnterCityHooked, (void**)&orig.testEnterCity},
+        {eventConditions.testLeaderToCity, testLeaderToCityHooked, (void**)&orig.testLeaderToCity},
+        {eventConditions.testOwnCity, testOwnCityHooked, (void**)&orig.testOwnCity},
+        {eventConditions.testKillStack, testKillStackHooked},
+        {eventConditions.testOwnItem, testOwnItemHooked},
+        {eventConditions.testLeaderOwnItem, testLeaderOwnItemHooked},
+        {eventConditions.testDiplomacy, testDiplomacyHooked, (void**)&orig.testDiplomacy},
+        {eventConditions.testAlliance, testAllianceHooked, (void**)&orig.testAlliance},
+        {eventConditions.testLootRuin, testLootRuinHooked, (void**)&orig.testLootRuin},
+        {eventConditions.testTransformLand, testTransformLandHooked, (void**)&orig.testTransformLand},
+        {eventConditions.testVisitSite, testVisitSiteHooked, (void**)&orig.testVisitSite},
+        {eventConditions.testItemToLocation, testItemToLocationHooked, (void**)&orig.testItemToLocation},
+        {eventConditions.testStackExists, testStackExistsHooked},
+        {eventConditions.testVarInRange, testVarInRangeHooked, (void**)&orig.testVarInRange},
+        {fn.removeStack, removeStackHooked, (void**)&orig.removeStack},
+        {VisitorApi::get().setStackSrcTemplate, setStackSrcTemplateHooked, (void**)&orig.setStackSrcTemplate},
+        // Support resource market site
+        {CMainView2Api::get().handleCmdStackVisitMsg, mainView2HandleCmdStackVisitMsgHooked, (void**)&orig.handleCmdStackVisitMsg},
+        {CMidServerLogicApi::get().constructor, midServerLogicCtorHooked, (void**)&orig.midServerLogicCtor},
+        {fn.getSiteSound, getSiteSoundHooked},
+        {fn.siteHasSound, siteHasSoundHooked},
+        // Support custom noble actions
+        {NobleActionsApi::get().create, createNobleActionResultHooked, (void**)&orig.createNobleActionResult},
+        {fn.getSiteNobleActions, getSiteNobleActionsHooked, (void**)&orig.getSiteNobleActions},
+        {fn.getPossibleNobleActions, getPossibleNobleActionsHooked, (void**)&orig.getPossibleNobleActions},
+        {fn.getNobleActionResultDescription, getNobleActionResultDescriptionHooked, (void**)&orig.getNobleActionResultDescription},
     };
     // clang-format on
 
@@ -547,6 +614,15 @@ static Hooks getScenarioEditorHooks()
         {CMidgardScenarioMapApi::get().checkObjects, checkMapObjectsHooked},
         // Support custom modifiers
         {CMidgardScenarioMapApi::get().stream, scenarioMapStreamHooked, (void**)&orig.scenarioMapStream},
+        // Allow changing Netrals attitude from scenario properties menu
+        {editor::CScenPropInterfApi::get().constructor, scenPropInterfCtorHooked, (void**)&orig.scenPropInterfCtor},
+        // Support new sites
+        {editor::CVisitorCreateSiteApi::get().canApply, visitorCreateSiteCanApplyHooked},
+        {editor::CVisitorCreateSiteApi::get().apply, visitorCreateSiteApplyHooked},
+        {editor::CObjectInterfApi::get().createTaskObj, createTaskObjHooked, (void**)&orig.createTaskObj},
+        {editor::CTaskObjPropApi::get().doAction, taskObjPropDoActionHooked, (void**)&orig.taskObjPropDoAction},
+        {editor::CTaskObjAddSiteApi::get().doAction, taskObjAddSiteDoActionHooked, (void**)&orig.taskObjAddSiteDoAction},
+        {CScenEditApi::get().readScenData, readScenDataHooked, (void**)&orig.readScenData},
     };
     // clang-format on
 
@@ -737,6 +813,23 @@ Hooks getHooks()
     hooks.emplace_back(HookInfo{fn.getBuildingStatus, getBuildingStatusHooked});
     // Fix input of 'io' (U+0451) and 'IO' (U+0401)
     hooks.emplace_back(HookInfo{CEditBoxInterfApi::get().isCharValid, editBoxIsCharValidHooked});
+
+    // Support new sites
+    hooks.emplace_back(
+        HookInfo{LSiteCategoryTableApi::get().constructor, siteCategoryTableCtorHooked});
+    hooks.emplace_back(HookInfo{fn.getSiteNameSuffix, getSiteNameSuffixHooked});
+    // Support new site on a strategic map
+    hooks.emplace_back(HookInfo{ImageLayerListApi::get().getMapElementIsoLayerImages,
+                                getMapElementIsoLayerImagesHooked,
+                                (void**)&orig.getMapElementIsoLayerImages});
+    // Support encyclopedia info for a new sites
+    hooks.emplace_back(HookInfo{fn.updateEncLayoutSite, updateEncLayoutSiteHooked});
+    // Support custom noble action categories
+    hooks.emplace_back(
+        HookInfo{LNobleActionCatTableApi::get().constructor, nobleActionCatTableCtorHooked});
+    // Support new global variables
+    hooks.emplace_back(HookInfo{GlobalVariablesApi::get().constructor, globalVariablesCtorHooked,
+                                (void**)&orig.globalVariablesCtor});
 
     return hooks;
 }
@@ -1097,7 +1190,7 @@ game::CBuildingBranch* __fastcall buildingBranchCtorHooked(game::CBuildingBranch
 
     const auto& phase = CPhaseApi::get();
     auto playerId = phase.getCurrentPlayerId(&phaseGame->phase);
-    auto objectMap = phase.getObjectMap(&phaseGame->phase);
+    auto objectMap = phase.getDataCache(&phaseGame->phase);
     auto findScenarioObjectById = objectMap->vftable->findScenarioObjectById;
 
     auto playerObject = findScenarioObjectById(objectMap, playerId);
@@ -1630,13 +1723,18 @@ void __stdcall beforeBattleTurnHooked(game::BattleMsgData* battleMsgData,
         // Fix free transform-self to disable Wait/Defend/Retreat
         auto unitInfo = battle.getUnitInfoById(battleMsgData, unitId);
         if (unitInfo)
-            unitInfo->unitFlags.parts.attackedOnceOfTwice = 1;
+            unitInfo->unitFlags.parts.attackedOnceOfTwice = true;
     }
     freeTransformSelf.turnCount++;
 }
 
 void __stdcall throwExceptionHooked(const game::os_exception* thisptr, const void* throwInfo)
 {
+    // TODO: this is wrong, os_exception is a base class and it does not store message as a char*
+    // Instead, there are plenty of child classes that store messages in their own way.
+    // There should be proper way to get message, perhaps using vftable.
+    // This particular example leads to a crash when there are problems with .dlg files and
+    // CAutoDialogException is thrown
     if (thisptr && thisptr->message) {
         showErrorMessageBox(fmt::format("Caught exception '{:s}'.\n"
                                         "The {:s} will probably crash now.",
@@ -1777,7 +1875,7 @@ bool __stdcall enableUnitInHireListUiHooked(const game::CMidPlayer* player,
 {
     using namespace game;
 
-    auto objectMap = CPhaseApi::get().getObjectMap(&phaseGame->phase);
+    auto objectMap = CPhaseApi::get().getDataCache(&phaseGame->phase);
 
     auto playerBuildings = getPlayerBuildings(objectMap, player);
     if (!playerBuildings) {
@@ -1994,11 +2092,26 @@ int __stdcall loadScenarioMapHooked(int a1,
                                     game::CMidStreamEnvFile* streamEnv,
                                     game::CMidgardScenarioMap* scenarioMap)
 {
-    int result = getOriginalFunctions().loadScenarioMap(a1, streamEnv, scenarioMap);
+    stackTemplateCacheClear();
 
+    const int result = getOriginalFunctions().loadScenarioMap(a1, streamEnv, scenarioMap);
     // Write-mode validation is done in midUnitStreamHooked
     validateUnits(scenarioMap);
 
+    using namespace game;
+
+    const auto& dynamicCast{RttiApi::get().dynamicCast};
+    const auto& rtti{RttiApi::rtti()};
+
+    auto addStackFromTemplateToCache = [&dynamicCast, &rtti](const IMidScenarioObject* obj) {
+        auto stack{(const CMidStack*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType,
+                                                 rtti.CMidStackType, 0)};
+        if (stack->sourceTemplateId != emptyId) {
+            stackTemplateCacheAdd(stack->sourceTemplateId, stack->id);
+        }
+    };
+
+    forEachScenarioObject(scenarioMap, IdType::Stack, addStackFromTemplateToCache);
     return result;
 }
 
@@ -2244,19 +2357,9 @@ bool __stdcall isUnitUpgradePendingHooked(const game::CMidgardID* unitId,
     return false;
 }
 
-bool __fastcall editBoxIsCharValidHooked(const game::EditBoxData* thisptr,
-                                         int /*%edx*/,
-                                         char character)
+bool __fastcall editBoxIsCharValidHooked(const game::EditBoxData* thisptr, int /*%edx*/, char ch)
 {
     using namespace game;
-
-    // Cast to int using unsigned char
-    // so extended symbols (>= 127) are handled correctly by isalpha()
-    const int ch = static_cast<unsigned char>(character);
-
-    if (!(ch && ch != VK_ESCAPE && (thisptr->allowEnter || ch != '\n' && ch != '\r'))) {
-        return false;
-    }
 
     // clang-format off
     // These characters are language specific and depend on actual code page being used.
@@ -2277,77 +2380,75 @@ bool __fastcall editBoxIsCharValidHooked(const game::EditBoxData* thisptr,
     };
     // clang-format on
 
-    if (thisptr->filter == EditFilter::TextOnly) {
-        if (isalpha(ch) || isspace(ch)) {
-            return true;
-        }
+    // Cast to int using unsigned char
+    // so extended symbols (>= 127) are handled correctly by isalpha()
+    const int a2 = static_cast<unsigned char>(ch);
 
-        // Check if ch is language specific character
-        if (strchr(reinterpret_cast<const char*>(languageSpecific), ch)) {
-            return true;
-        }
-
+    if (!a2 || a2 == VK_ESCAPE || !thisptr->allowEnter && (a2 == '\n' || a2 == '\r')) {
         return false;
     }
 
-    if (thisptr->filter >= EditFilter::AlphaNum) {
-        if (thisptr->filter == EditFilter::DigitsOnly) {
-            return isdigit(ch) != 0;
+    const int filter = (int)thisptr->filter;
+
+    const int v2 = filter - 1;
+    if (!v2) {
+        if (isalpha(a2) || isspace(a2)) {
+            return true;
         }
 
-        if (thisptr->filter >= EditFilter::AlphaNumNoSlash) {
-            if (thisptr->filter >= EditFilter::NamesDot) {
-                if (thisptr->filter == EditFilter::NamesDot) {
-                    return true;
-                }
+        const char* v10 = strchr((const char*)languageSpecific, a2);
+        return v10 != nullptr;
+    }
 
-                if ((ch < 'a' || ch > 'z') && (ch < 'A' || ch > 'Z') && (ch < '0' || ch > '9')
-                    && ch != ' ' && ch != '\\' && ch != '_' && ch != '-') {
-                    return false;
-                }
+    const int v3 = v2 - 1;
+    if (!v3) {
+        // Remove two symbols from forbidden list.
+        // This allows players to enter 'io' (U+0451) and 'IO' (U+0401) in cp-1251
+        static const unsigned char forbiddenSymbols[] = {'`', '^', '~', /* 0xA8, 0xB8,*/ 0};
 
+        if (!strchr((const char*)forbiddenSymbols, a2)) {
+            if (isalpha(a2) || isdigit(a2) || isspace(a2) || ispunct(a2)) {
                 return true;
             }
 
-            if (iscntrl(ch)) {
-                return false;
-            }
-
-            if (!strchr("/?*\"<>|+':\\", ch)) {
-                return true;
-            }
-
-            return false;
-        }
-
-        if (iscntrl(ch)) {
-            return false;
-        }
-
-        if (!strchr("/?*\"<>|+'", ch)) {
-            return true;
+            const char* v10 = strchr((const char*)languageSpecific, a2);
+            return v10 != nullptr;
         }
 
         return false;
     }
 
-    // Remove two symbols from forbidden list.
-    // This allows players to enter 'io' (U+0451) and 'IO' (U+0401) in cp-1251
-    static const char forbiddenSymbols[] = {'`', '^', '~', /* 0xA8, 0xB8, */ 0};
-
-    if (!strchr(forbiddenSymbols, ch)) {
-        if (isalpha(ch) || isdigit(ch) || isspace(ch) || ispunct(ch)) {
-            return true;
-        }
-
-        if (strchr(reinterpret_cast<const char*>(languageSpecific), ch)) {
-            return true;
-        }
-
-        return false;
+    const int v4 = v3 - 1;
+    if (!v4) {
+        return isdigit(a2) != 0;
     }
 
-    return false;
+    const int v5 = v4 - 1;
+    if (!v5) {
+        if (iscntrl(a2)) {
+            return false;
+        }
+
+        const char* v8 = strchr("/?*\"<>|+'", a2);
+        return !v8;
+    }
+
+    const int v6 = v5 - 1;
+    if (!v6) {
+        if (iscntrl(a2)) {
+            return false;
+        }
+
+        const char* v8 = strchr("/?*\"<>|+':\\", a2);
+        return !v8;
+    }
+
+    if (v6 == 1) {
+        return isalnum(a2) || strchr((const char*)languageSpecific, a2) != nullptr || a2 == ' '
+               || a2 == '\'' || a2 == '_' || a2 == '-';
+    } else {
+        return true;
+    }
 }
 
 // Conditions should be checked from most critical to less critical to provide correct flow of unit
@@ -2394,6 +2495,159 @@ game::BuildingStatus __stdcall getBuildingStatusHooked(const game::IMidgardObjec
     }
 
     return BuildingStatus::CanBeBuilt;
+}
+
+bool __stdcall removeStackHooked(const game::CMidgardID* stackId,
+                                 game::CMidgardPlan* plan,
+                                 game::IMidgardObjectMap* objectMap,
+                                 game::CScenarioVisitor* visitor)
+{
+    using namespace game;
+
+    const CMidStack* stack{getStack(objectMap, stackId)};
+    if (stack && stack->sourceTemplateId != emptyId) {
+        stackTemplateCacheRemove(stack->sourceTemplateId, stack->id);
+    }
+
+    return getOriginalFunctions().removeStack(stackId, plan, objectMap, visitor);
+}
+
+bool __stdcall setStackSrcTemplateHooked(const game::CMidgardID* stackId,
+                                         const game::CMidgardID* stackTemplateId,
+                                         game::IMidgardObjectMap* objectMap,
+                                         int apply)
+{
+    const bool result{
+        getOriginalFunctions().setStackSrcTemplate(stackId, stackTemplateId, objectMap, apply)};
+
+    if (apply == 1 && result) {
+        stackTemplateCacheAdd(*stackTemplateId, *stackId);
+    }
+
+    return result;
+}
+
+const char* __stdcall getSiteNameSuffixHooked(const game::LSiteCategory* siteCategory)
+{
+    using namespace game;
+
+    const auto& categories = SiteCategories::get();
+
+    const auto id = siteCategory->id;
+
+    if (id == categories.merchant->id) {
+        return "MERH";
+    }
+
+    if (id == categories.mageTower->id) {
+        return "MAGE";
+    }
+
+    if (id == categories.mercenaries->id) {
+        return "MERC";
+    }
+
+    if (customSiteCategories().exists && id == customSiteCategories().resourceMarket.id) {
+        return "RMKT";
+    }
+
+    return "TRAI";
+}
+
+void __stdcall updateEncLayoutSiteHooked(const game::CMidSite* site, game::CTextBoxInterf* textBox)
+{
+    if (!site) {
+        return;
+    }
+
+    using namespace game;
+
+    // \hC;\vC;\fLarge;%NAME%\fNormal;\n%TYPE%\n\n%DESC%
+    std::string str{getInterfaceText("X005TA0868")};
+
+    const auto& categories{SiteCategories::get()};
+    const auto id{site->siteCategory.id};
+
+    const char* textId{};
+    if (id == categories.merchant->id) {
+        // (Merchant)
+        textId = "X005TA0873";
+    } else if (id == categories.mageTower->id) {
+        // (Magic shop)
+        textId = "X005TA0874";
+    } else if (id == categories.mercenaries->id) {
+        // (Mercenary)
+        textId = "X005TA0875";
+    } else if (customSiteCategories().exists && id == customSiteCategories().resourceMarket.id) {
+        textId = textIds().resourceMarket.encyDesc.c_str();
+    } else {
+        // (Trainer)
+        textId = "X005TA0876";
+    }
+
+    const std::string type{getInterfaceText(textId)};
+
+    const char* name{site->title.string ? site->title.string : ""};
+    const char* description{site->description.string ? site->description.string : ""};
+
+    replace(str, "%NAME%", name);
+    replace(str, "%TYPE%", type);
+    replace(str, "%DESC%", description);
+
+    CTextBoxInterfApi::get().setString(textBox, str.c_str() ? str.c_str() : "");
+}
+
+game::String* __stdcall getSiteSoundHooked(game::String* soundName, const game::CMidSite* site)
+{
+    using namespace game;
+
+    const auto& init{StringApi::get().initFromString};
+
+    const SiteId id{site->siteCategory.id};
+
+    if (customSiteCategories().exists && id == customSiteCategories().resourceMarket.id) {
+        init(soundName, "RESMARKT");
+        return soundName;
+    }
+
+    const auto& sites{SiteCategories::get()};
+
+    if (id == sites.mageTower->id) {
+        init(soundName, "MAGICTW");
+        return soundName;
+    }
+
+    if (id == sites.trainer->id) {
+        init(soundName, "TRAINCMP");
+        return soundName;
+    }
+
+    if (id != sites.merchant->id || site->imgIso) {
+        init(soundName, "");
+        return soundName;
+    }
+
+    init(soundName, "WINDMILL");
+    return soundName;
+}
+
+bool __stdcall siteHasSoundHooked(const game::CMidSite* site)
+{
+    using namespace game;
+
+    const auto& sites{SiteCategories::get()};
+    const SiteId id{site->siteCategory.id};
+
+    if (id == sites.mageTower->id || id == sites.trainer->id
+        || id == sites.merchant->id && !site->imgIso) {
+        return true;
+    }
+
+    if (customSiteCategories().exists && id == customSiteCategories().resourceMarket.id) {
+        return true;
+    }
+
+    return false;
 }
 
 } // namespace hooks

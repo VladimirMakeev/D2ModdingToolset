@@ -68,10 +68,8 @@ struct CInterfaceVftable
     using Destructor = void(__thiscall*)(CInterface* thisptr, char flags);
     Destructor destructor;
 
-    /** Draws childs of specified root element. */
-    using Draw = void(__thiscall*)(CInterface* thisptr,
-                                   CInterface* rootElement,
-                                   IMqRenderer2* renderer);
+    /** Draws interface element and its children. */
+    using Draw = void(__stdcall*)(CInterface* thisptr, IMqRenderer2* renderer);
     Draw draw;
 
     /** Handles mouse position changes. */

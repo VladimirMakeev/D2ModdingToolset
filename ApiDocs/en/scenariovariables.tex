@@ -1,0 +1,25 @@
+\subsection{Scenario variables}
+\label{ScenarioVariables}
+Stores \hyperref[ScenarioVariable]{scenario variables}, allows searching them by name.
+\subsubsection{Methods}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+getVariable('name') & Searches for \hyperref[ScenarioVariable]{scenario variable} by its name, returns \texttt{nil} if not found\\
+\hline
+\end{tabularx}
+\end{center}
+\subsubsection{Examples}
+\begin{center}
+\begin{lstlisting}[language=Lua]
+local variable = variables:getVariable('VAR1')
+if variable == nil then
+  return
+end
+
+-- s == 'VAR1'
+local s = variable.name
+\end{lstlisting}
+\end{center}

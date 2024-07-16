@@ -32,6 +32,10 @@ EditorFunctions editorFunctions{
     (IsRaceCategoryPlayable)0x419193,
     (ChangeCapitalTerrain)0x50afb4,
     (GetObjectNamePos)0x45797c,
+    (GetSiteImageIndices)0x556835,
+    (GetSiteImage)0x5569f4,
+    (GetSiteAtPosition)0x410cf7,
+    (ShowOrHideSiteOnStrategicMap)0x553907,
 };
 // clang-format on
 

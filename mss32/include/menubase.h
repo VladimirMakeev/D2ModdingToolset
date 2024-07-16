@@ -181,6 +181,18 @@ struct Api
                                                            CMenuBase* menu,
                                                            const PictureCallback* callback);
     CreatePictureFunctor createPictureFunctor;
+
+    using RadioButtonCallback = void(__thiscall*)(CMenuBase* thisptr, int index);
+
+    /**
+     * Creates functor for radio button that will handle button press events.
+     * Reused from CMenuLord.
+     */
+    using CreateRadioButtonFunctor = SmartPointer(__stdcall*)(SmartPointer* functor,
+                                                              int,
+                                                              CMenuBase* menu,
+                                                              const RadioButtonCallback* callback);
+    CreateRadioButtonFunctor createRadioButtonFunctor;
 };
 
 Api& get();

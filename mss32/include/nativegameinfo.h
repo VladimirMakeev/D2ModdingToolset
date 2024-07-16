@@ -66,6 +66,7 @@ public:
     const rsg::SiteTexts& getMerchantTexts() const override;
     const rsg::SiteTexts& getRuinTexts() const override;
     const rsg::SiteTexts& getTrainerTexts() const override;
+    const rsg::SiteTexts& getMarketTexts() const override;
 
 private:
     bool readGameInfo(const std::filesystem::path& gameFolderPath);
@@ -115,6 +116,7 @@ private:
     rsg::SiteTexts merchantTexts;
     rsg::SiteTexts ruinTexts;
     rsg::SiteTexts trainerTexts;
+    rsg::SiteTexts marketTexts;
 };
 
 } // namespace hooks

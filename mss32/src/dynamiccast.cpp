@@ -105,6 +105,17 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)0x793d90, // IUsNobleType
         (TypeDescriptor*)0x7974b8, // IUsSummonType
         (TypeDescriptor*)0x7afcf8, // IItemExPotionBoostType
+        (TypeDescriptor*)0x796880, // IMapElementType
+        (TypeDescriptor*)0x793bc8, // CMidRoadType
+        (TypeDescriptor*)0x793040, // CCmdStackVisitMsgType
+        (TypeDescriptor*)0x793b90, // CMidSiteType
+        (BaseClassDescriptor*)0x719cf0, // IMidObjectDescriptor
+        (BaseClassDescriptor*)0x71f190, // IMidScenarioObjectDescriptor
+        (BaseClassDescriptor*)0x71f328, // IMapElementDescriptor
+        (BaseClassDescriptor*)0x71f310, // IAiPriorityDescriptor
+        (BaseClassDescriptor*)0x71ffb0, // CMidSiteDescriptor
+        (BaseClassDescriptor*)0x6f6dd0, // CNetMsgDescriptor
+        (BaseClassDescriptor*)0x6f7338, // CNetMsgMapEntryDescriptor
     },
     // Russobit
     Rtti{
@@ -155,6 +166,17 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)0x793d90, // IUsNobleType
         (TypeDescriptor*)0x7974b8, // IUsSummonType
         (TypeDescriptor*)0x7afcf8, // IItemExPotionBoostType
+        (TypeDescriptor*)0x796880, // IMapElementType
+        (TypeDescriptor*)0x793bc8, // CMidRoadType
+        (TypeDescriptor*)0x793040, // CCmdStackVisitMsgType
+        (TypeDescriptor*)0x793b90, // CMidSiteType
+        (BaseClassDescriptor*)0x719cf0, // IMidObjectDescriptor
+        (BaseClassDescriptor*)0x71f190, // IMidScenarioObjectDescriptor
+        (BaseClassDescriptor*)0x71f328, // IMapElementDescriptor
+        (BaseClassDescriptor*)0x71f310, // IAiPriorityDescriptor
+        (BaseClassDescriptor*)0x71ffb0, // CMidSiteDescriptor
+        (BaseClassDescriptor*)0x6f6dd0, // CNetMsgDescriptor
+        (BaseClassDescriptor*)0x6f7338, // CNetMsgMapEntryDescriptor
     },
     // Gog
     Rtti{
@@ -205,6 +227,17 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)0x791d38, // IUsNobleType
         (TypeDescriptor*)0x795460, // IUsSummonType
         (TypeDescriptor*)0x7adcb0, // IItemExPotionBoostType
+        (TypeDescriptor*)0x794828, // IMapElementType
+        (TypeDescriptor*)0x791b70, // CMidRoadType
+        (TypeDescriptor*)0x790fe8, // CCmdStackVisitMsgType
+        (TypeDescriptor*)0x791b38, // CMidSiteType
+        (BaseClassDescriptor*)0x717c58, // IMidObjectDescriptor
+        (BaseClassDescriptor*)0x71d0f8, // IMidScenarioObjectDescriptor
+        (BaseClassDescriptor*)0x71d290, // IMapElementDescriptor
+        (BaseClassDescriptor*)0x71d278, // IAiPriorityDescriptor
+        (BaseClassDescriptor*)0x71df18, // CMidSiteDescriptor
+        (BaseClassDescriptor*)0x6f4d38, // CNetMsgDescriptor
+        (BaseClassDescriptor*)0x6f52a0, // CNetMsgMapEntryDescriptor
     },
     // Scenario Editor
     Rtti{
@@ -255,8 +288,30 @@ static const std::array<Rtti, 4> types = {{
         (TypeDescriptor*)0x64c3d0, // IUsNobleType
         (TypeDescriptor*)0x64f068, // IUsSummonType
         (TypeDescriptor*)0x656e28, // IItemExPotionBoostType
+        (TypeDescriptor*)0x648b70, // IMapElementType
+        (TypeDescriptor*)0x649488, // CMidRoadType
+        (TypeDescriptor*)nullptr, // CCmdStackVisitMsgType
+        (TypeDescriptor*)0x649470, // CMidSiteType
+        (BaseClassDescriptor*)0x5f5f90, // IMidObjectDescriptor
+        (BaseClassDescriptor*)0x5f5fa8, // IMidScenarioObjectDescriptor
+        (BaseClassDescriptor*)0x5f6748, // IMapElementDescriptor
+        (BaseClassDescriptor*)0x5f6730, // IAiPriorityDescriptor
+        (BaseClassDescriptor*)0x5f6cc8, // CMidSiteDescriptor
+        (BaseClassDescriptor*)nullptr,  // CNetMsgDescriptor
+        (BaseClassDescriptor*)nullptr,  // CNetMsgMapEntryDescriptor
     },
 }};
+
+static const std::array<const void*, 4> vftables = {
+    // Akella
+    (const void*)0x6f5ae4,
+    // Russobit
+    (const void*)0x6f5ae4,
+    // Gog
+    (const void*)0x6f3a94,
+    // Scenario Editor
+    (const void*)0x5e3cb4,
+};
 // clang-format on
 
 Api& get()
@@ -267,6 +322,11 @@ Api& get()
 const Rtti& rtti()
 {
     return types[static_cast<int>(hooks::gameVersion())];
+}
+
+const void* typeInfoVftable()
+{
+    return vftables[static_cast<int>(hooks::gameVersion())];
 }
 
 } // namespace game::RttiApi

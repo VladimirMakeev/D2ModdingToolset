@@ -37,6 +37,9 @@
 #include "exchangeinterf.h"
 #include "game.h"
 #include "gameimages.h"
+#include "globalvariables.h"
+#include "imagelayerlist.h"
+#include "mainview2.h"
 #include "menubase.h"
 #include "menuload.h"
 #include "menunewskirmishhotseat.h"
@@ -49,12 +52,20 @@
 #include "midevent.h"
 #include "midgardscenariomap.h"
 #include "midmsgsender.h"
+#include "midserverlogic.h"
 #include "midunit.h"
 #include "mqnetplayer.h"
 #include "netmsg.h"
+#include "nobleactionresult.h"
+#include "objectinterf.h"
 #include "pickupdropinterf.h"
+#include "scenedit.h"
+#include "scenpropinterf.h"
 #include "sitemerchantinterf.h"
+#include "taskobjaddsite.h"
+#include "taskobjprop.h"
 #include "testcondition.h"
+#include "visitors.h"
 
 namespace hooks {
 
@@ -98,6 +109,7 @@ struct OriginalFunctions
     game::ITestConditionApi::Api::Create createTestCondition;
     game::CMidEventApi::Api::CheckValid checkEventValid;
     game::BattleMsgDataApi::Api::BeforeBattleRound beforeBattleRound;
+    game::BattleMsgDataApi::Api::AiChooseBattleAction aiChooseBattleAction;
     game::CMidUnitVftable::InitWithSoldierImpl initWithSoldierImpl;
 
     game::CMidEvEffectApi::Api::CreateFromCategory createEventEffectFromCategory;
@@ -146,6 +158,51 @@ struct OriginalFunctions
     game::CMidDataCache2::INotifyVftable::OnObjectChanged cityStackInterfOnObjectChanged;
 
     game::CMidDataCache2::INotifyVftable::OnObjectChanged siteMerchantInterfOnObjectChanged;
+
+    game::editor::CScenPropInterfApi::Api::Constructor scenPropInterfCtor;
+
+    game::CMidServerLogicApi::Api::ApplyEventEffectsAndCheckMidEventTriggerers
+        applyEventEffectsAndCheckMidEventTriggerers;
+    game::CMidServerLogicApi::Api::StackMove stackMove;
+    game::CMidServerLogicApi::Api::FilterAndProcessEventsNoPlayer filterAndProcessEventsNoPlayer;
+    game::CMidServerLogicApi::Api::CheckAndExecuteEvent checkAndExecuteEvent;
+    game::CMidServerLogicApi::Api::FilterAndProcessEvents filterAndProcessEvents;
+    game::CMidServerLogicApi::Api::CheckEventConditions checkEventConditions;
+    game::CMidServerLogicApi::Api::ExecuteEventEffects executeEventEffects;
+
+    game::ITestConditionVftable::Test testFrequency;
+    game::ITestConditionVftable::Test testLocation;
+    game::ITestConditionVftable::Test testEnterCity;
+    game::ITestConditionVftable::Test testLeaderToCity;
+    game::ITestConditionVftable::Test testOwnCity;
+    game::ITestConditionVftable::Test testDiplomacy;
+    game::ITestConditionVftable::Test testAlliance;
+    game::ITestConditionVftable::Test testLootRuin;
+    game::ITestConditionVftable::Test testTransformLand;
+    game::ITestConditionVftable::Test testVisitSite;
+    game::ITestConditionVftable::Test testItemToLocation;
+    game::ITestConditionVftable::Test testVarInRange;
+
+    game::RemoveStack removeStack;
+    game::VisitorApi::Api::SetStackSrcTemplate setStackSrcTemplate;
+
+    game::editor::CObjectInterfApi::Api::CreateTaskObj createTaskObj;
+
+    game::ImageLayerListApi::Api::GetMapElementIsoLayerImages getMapElementIsoLayerImages;
+    game::editor::CTaskObjVftable::DoAction taskObjPropDoAction;
+    game::editor::CTaskObjVftable::DoAction taskObjAddSiteDoAction;
+    game::CScenEditApi::Api::ReadScenData readScenData;
+
+    game::CMainView2Api::Api::HandleCmdStackVisitMsg handleCmdStackVisitMsg;
+
+    game::CMidServerLogicApi::Api::Constructor midServerLogicCtor;
+
+    game::NobleActionsApi::Api::Create createNobleActionResult;
+    game::GetNobleActions getSiteNobleActions;
+    game::GetNobleActions getPossibleNobleActions;
+    game::GetNobleActionResultDescription getNobleActionResultDescription;
+
+    game::GlobalVariablesApi::Api::Constructor globalVariablesCtor;
 };
 
 OriginalFunctions& getOriginalFunctions();

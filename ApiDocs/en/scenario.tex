@@ -1,0 +1,189 @@
+\subsection{Scenario}
+\label{Scenario}
+Represents scenario map with all its objects and state
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+name & Returns scenario name or empty string if scenario is unnamed\\
+\hline
+description & Returns scenario description or empty string if scenario has no description\\
+\hline
+author & Returns scenario author or empty string if no author specified\\
+\hline
+seed & Returns scenario initial seed used by random generator\\
+\hline
+day & Returns number of current day in game\\
+\hline
+size & Returns scenario map size\\
+\hline
+difficulty & Returns scenario map \hyperref[Difficulty]{difficulty} selected by player\\
+\hline
+variables & Returns \hyperref[ScenarioVariables]{scenario variables}. If scenario has no variables defined, returns \texttt{nil}\\
+\hline
+diplomacy & Returns object that holds \hyperref[Diplomacy]{diplomacy} relations between races. Fully loaded scenario always have diplomacy relations. During scenario loading this property can return \texttt{nil}\\
+\hline
+\end{tabularx}
+\end{center}
+
+\subsubsection{Methods}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+getLocation('S143LO0001') & Searches for \hyperref[Location]{location} by id string or \hyperref[Id]{id}, returns \texttt{nil} if not found\\
+getLocation(Id.new('S143LO0001')) & \\
+\hline
+getPlayer('S143PL0001') & Searches for \hyperref[Player]{player} by id string or \hyperref[Id]{id}, returns \texttt{nil} if not found\\
+getPlayer(Id.new('S143PL0001')) & \\
+\hline
+getUnit('S143UN0007') & Searches for \hyperref[Unit]{unit} by id string or \hyperref[Id]{id}, returns \texttt{nil} if not found\\
+getUnit(Id.new('S143UN0007')) & \\
+\hline
+getItem('S143IM0001') & Searches for \hyperref[Item]{item} by id string or \hyperref[Id]{id}, returns \texttt{nil} if not found\\
+getItem(Id.new('S143IM0001')) & \\
+\hline
+getTile(3, 5) & Searches for \hyperref[Tile]{tile} by pair of coordinates or \hyperref[Point]{point}, returns \texttt{nil} if not found\\
+getTile(Point.new(3, 5)) &\\
+\hline
+getStack(10, 15) & Searches for \hyperref[Stack]{stack} by pair of coordinates, \hyperref[Point]{point}, id string or \hyperref[Id]{id}, returns \texttt{nil} if not found\\
+getStack(Point.new(10, 15)) &\\
+getStack('S143KC0005') &\\
+getStack(Id.new('S143KC0005')) &\\
+\hline
+getFort(10, 15) & Searches for \hyperref[Fort]{fort} by pair of coordinates, \hyperref[Point]{point}, id string or \hyperref[Id]{id}, returns \texttt{nil} if not found\\
+getFort(Point.new(10, 15)) &\\
+getFort('S143FT0005') &\\
+getFort(Id.new('S143FT0005')) &\\
+\hline
+getRuin(10, 15) & Searches for \hyperref[Ruin]{ruin} by pair of coordinates, \hyperref[Point]{point}, id string or \hyperref[Id]{id}, returns \texttt{nil} if not found\\
+getRuin(Point.new(10, 15)) &\\
+getRuin('S143RU0000') &\\
+getRuin(Id.new('S143RU0000')) &\\
+\hline
+getRod(10, 15) & Searches for \hyperref[Rod]{rod} by pair of coordinates, \hyperref[Point]{point}, id string or \hyperref[Id]{id}, returns \texttt{nil} if not found\\
+getRod(Point.new(10, 15)) &\\
+getRod('S143RD0003') &\\
+getRod(Id.new('S143RD0003')) &\\
+\hline
+getCrystal(10, 15) & Searches for \hyperref[Crystal]{crystal} by pair of coordinates, \hyperref[Point]{point}, id string or \hyperref[Id]{id}, returns \texttt{nil} if not found\\
+getCrystal(Point.new(10, 15)) &\\
+getCrystal('S143CR0004') &\\
+getCrystal(Id.new('S143CR0004')) &\\
+\hline
+getMerchant(10, 15) & Searches for \hyperref[Merchant]{merchant} by pair of coordinates, \hyperref[Point]{point}, id string or \hyperref[Id]{id}, returns \texttt{nil} if not found\\
+getMerchant(Point.new(10, 15)) &\\
+getMerchant('S143SI0002') &\\
+getMerchant(Id.new('S143SI0002')) &\\
+\hline
+getMercenary(10, 15) & Searches for \hyperref[Mercenary]{mercenary camp} by pair of coordinates, \hyperref[Point]{point}, id string or \hyperref[Id]{id}, returns \texttt{nil} if not found\\
+getMercenary(Point.new(10, 15)) &\\
+getMercenary('S143SI0002') &\\
+getMercenary(Id.new('S143SI0002')) &\\
+\hline
+getTrainer(10, 15) & Searches for \hyperref[Trainer]{trainer} by pair of coordinates, \hyperref[Point]{point}, id string or \hyperref[Id]{id}, returns \texttt{nil} if not found\\
+getTrainer(Point.new(10, 15)) &\\
+getTrainer('S143SI0002') &\\
+getTrainer(Id.new('S143SI0002')) &\\
+\hline
+getMarket(10, 15) & Searches for \hyperref[ResourceMarket]{market} by pair of coordinates, \hyperref[Point]{point}, id string or \hyperref[Id]{id}, returns \texttt{nil} if not found\\
+getMarket(Point.new(10, 15)) &\\
+getMarket('S143SI0002') &\\
+getMarket(Id.new('S143SI0002')) &\\
+\hline
+\end{tabularx}
+\end{center}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+findStackByUnit(unit) & Searches for \hyperref[Stack]{stack} that has specified \hyperref[Unit]{unit} among all the stacks in the whole scenario.\\
+findStackByUnit('S143UN0007') & You can also use unit id string or \hyperref[Id]{id}. Returns \texttt{nil} if not found.\\
+findStackByUnit(Id.new('S143UN0007')) & Note that \textbf{this search is heavy in terms of performance}, so you probably want to minimize excessive calls and use variables to store its results.\\
+\hline
+findFortByUnit(unit) & Searches for \hyperref[Fort]{fort} that has specified \hyperref[Unit]{unit} in its garrison among all the forts in the whole scenario. Only garrison units are counted, visiting stack is ignored.\\
+findFortByUnit('S143UN0007') & You can also use unit id string or \hyperref[Id]{id}. Returns \texttt{nil} if not found.\\
+findFortByUnit(Id.new('S143UN0007')) & Note that \textbf{this search is heavy in terms of performance}, so you probably want to minimize excessive calls and use variables to store its results.\\
+\hline
+findRuinByUnit(unit) & Searches for \hyperref[Ruin]{ruin} that has specified \hyperref[Unit]{unit} among all the forts in the whole scenario.\\
+findRuinByUnit('S143UN0007') & You can also use unit id string or \hyperref[Id]{id}. Returns \texttt{nil} if not found.\\
+findRuinByUnit(Id.new('S143UN0007')) & Note that \textbf{this search is heavy in terms of performance}, so you probably want to minimize excessive calls and use variables to store its results.\\
+\hline
+forEachStack(f) & Searches for every \hyperref[Stack]{stack} on a map and calls specified function on it\\
+\hline
+forEachLocation(f) & Searches for every \hyperref[Location]{location} on a map and calls specified function on it\\
+\hline
+forEachFort(f) & Searches for every \hyperref[Fort]{fort} on a map and calls specified function on it\\
+\hline
+forEachRuin(f) & Searches for every \hyperref[Ruin]{ruin} on a map and calls specified function on it\\
+\hline
+forEachRod(f) & Searches for every \hyperref[Rod]{rod} on a map and calls specified function on it\\
+\hline
+forEachPlayer(f) & Searches for every \hyperref[Player]{player} on a map and calls specified function on it\\
+\hline
+forEachUnit(f) & Searches for every \hyperref[Unit]{unit} on a map and calls specified function on it\\
+\hline
+forEachCrystal(f) & Searches for every \hyperref[Crystal]{crystal} on a map and calls specified function on it\\
+\hline
+forEachMerchant(f) & Searches for every \hyperref[Merchant]{merchant} on a map and calls specified function on it\\
+\hline
+forEachMercenary(f) & Searches for every \hyperref[Mercenary]{mercenary camp} on a map and calls specified function on it\\
+\hline
+forEachTrainer(f) & Searches for every \hyperref[Trainer]{trainer} on a map and calls specified function on it\\
+\hline
+forEachMarket(f) & Searches for every \hyperref[ResourceMarket]{market} on a map and calls specified function on it\\
+\hline
+\end{tabularx}
+\end{center}
+\newpage
+\subsubsection{Examples}
+Search for \hyperref[Location]{location} by \hyperref[Id]{id}, check if found:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+local location = scenario:getLocation('S143LO0001')
+if not location then
+  return
+end
+\end{lstlisting}
+\end{center}
+Access \hyperref[ScenarioVariables]{scenario variables}. Check for \texttt{nil} in case when no variables defined:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+local variables = scenario.variables
+if not variables then
+  return
+end
+
+local v = variables:getVariable('VAR1')
+\end{lstlisting}
+\end{center}
+Count neutral \hyperref[Stack]{stacks} on map. \texttt{forEachStack} visits each stack on a map and calls provided function which takes visited \hyperref[Stack]{stack} as its argument:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+local count = 0
+
+scenario:forEachStack(function (stack)
+  if stack.owner.race == Race.Neutral then
+    count = count + 1
+  end
+end)
+\end{lstlisting}
+\end{center}
+The same logic can be implemented by storing function that count stacks in a variable:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+local count = 0
+
+local countNeutralStacks = function (stack)
+  if stack.owner.race == Race.Neutral then
+    count = count + 1
+  end
+end
+
+scenario:forEachStack(countNeutralStacks)
+\end{lstlisting}
+\end{center}

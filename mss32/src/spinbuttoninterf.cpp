@@ -49,9 +49,9 @@ static std::array<Api, 4> functions = {{
     // Scenario Editor
     Api{
         (Api::SetValues)0,
-        (Api::SetOptions)0,
-        (Api::SetSelectedOption)0,
-        (Api::AssignFunctor)0,
+        (Api::SetOptions)0x490a65,
+        (Api::SetSelectedOption)0x490a40,
+        (Api::AssignFunctor)0x4d1798,
     },
 }};
 // clang-format on

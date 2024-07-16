@@ -31,6 +31,9 @@
 
 namespace game {
 
+struct IMidgardObjectMap;
+struct CampaignStream;
+
 /** Base class for site objects. */
 struct CMidSite : public IMidScenarioObject
 {
@@ -49,6 +52,42 @@ struct CMidSite : public IMidScenarioObject
 assert_size(CMidSite, 120);
 assert_offset(CMidSite, mapElement, 8);
 assert_offset(CMidSite, title, 52);
+
+struct CMidSiteVftable : public IMidScenarioObjectVftable
+{
+    using GetEntrancePoint = CMqPoint*(__thiscall*)(const CMidSite* thisptr, CMqPoint* entrance);
+    GetEntrancePoint getEntrancePoint;
+
+    using StreamSiteData = void(__thiscall*)(CMidSite* thisptr,
+                                             CampaignStream* stream,
+                                             const CMidgardID* siteId);
+    StreamSiteData streamSiteData;
+};
+
+assert_vftable_size(CMidSiteVftable, 6);
+
+namespace CMidSiteApi {
+
+struct Api
+{
+    using Constructor = CMidSite*(__thiscall*)(CMidSite* thisptr,
+                                               const CMidgardID* siteId,
+                                               const LSiteCategory* siteCategory);
+    Constructor constructor;
+
+    using SetData = bool(__thiscall*)(CMidSite* thisptr,
+                                      IMidgardObjectMap* objectMap,
+                                      int imgIso,
+                                      const char* imgIntf,
+                                      const CMqPoint* position,
+                                      const char* title,
+                                      const char* description);
+    SetData setData;
+};
+
+Api& get();
+
+} // namespace CMidSiteApi
 
 } // namespace game
 

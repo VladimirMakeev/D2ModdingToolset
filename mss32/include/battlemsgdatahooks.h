@@ -27,6 +27,7 @@ namespace game {
 struct CMidgardID;
 struct BattleMsgData;
 struct IMidgardObjectMap;
+struct PossibleTargets;
 
 using TargetSet = Set<int>;
 using GroupIdTargetsPair = Pair<CMidgardID, TargetSet>;
@@ -65,6 +66,15 @@ void __stdcall updateBattleActionsHooked(const game::IMidgardObjectMap* objectMa
                                          game::GroupIdTargetsPair* item2Targets);
 
 void __fastcall beforeBattleRoundHooked(game::BattleMsgData* thisptr, int /*%edx*/);
+
+void __stdcall aiChooseBattleActionHooked(const game::IMidgardObjectMap* objectMap,
+                                          game::BattleMsgData* battleMsgData,
+                                          const game::CMidgardID* unitId,
+                                          const game::Set<game::BattleAction>* possibleActions,
+                                          const game::PossibleTargets* possibleTargets,
+                                          game::BattleAction* battleAction,
+                                          game::CMidgardID* targetUnitId,
+                                          game::CMidgardID* attackerUnitId);
 
 } // namespace hooks
 

@@ -1,0 +1,773 @@
+\subsection{Enumerations}
+\subsubsection{Race}
+\label{RaceCategory}
+Race categories correspond to the contents of \texttt{LRace.dbf} and can be accessed using table \texttt{Race}.
+By default, table contains following races:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Race.Human & Empire\\
+\hline
+Race.Undead & Undead Hordes\\
+\hline
+Race.Heretic & Legions of the Damned\\
+\hline
+Race.Dwarf & Mountain Clans\\
+\hline
+Race.Neutral & Neutrals\\
+\hline
+Race.Elf & Elven Alliance\\
+\hline
+\end{tabularx}
+
+\subsubsection{Subrace}
+\label{SubraceCategory}
+Subrace categories correspond to the contents of \texttt{LSubRace.dbf} and can be accessed using table \texttt{Subrace}.
+By default, table contains following subraces:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Subrace.Custom &\\
+\hline
+Subrace.Human &\\
+\hline
+Subrace.Undead &\\
+\hline
+Subrace.Heretic &\\
+\hline
+Subrace.Dwarf &\\
+\hline
+Subrace.Neutral &\\
+\hline
+Subrace.NeutralHuman &\\
+\hline
+Subrace.NeutralElf &\\
+\hline
+Subrace.NeutralGreenSkin &\\
+\hline
+Subrace.NeutralDragon &\\
+\hline
+Subrace.NeutralMarsh &\\
+\hline
+Subrace.NeutralWater &\\
+\hline
+Subrace.NeutralBarbarian &\\
+\hline
+Subrace.NeutralWolf &\\
+\hline
+Subrace.Elf &\\
+\hline
+\end{tabularx}
+
+\subsubsection{Lord}
+\label{LordCategory}
+Lord categories correspond to the contents of \texttt{LLord.dbf} and can be accessed using table \texttt{Lord}.
+By default, table contains following lord types:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Lord.Mage &\\
+\hline
+Lord.Warrior &\\
+\hline
+Lord.Diplomat &\\
+\hline
+\end{tabularx}
+
+\subsubsection{Terrain}
+\label{TerrainCategory}
+Terrain types correspond to the contents of \texttt{LTerrain.dbf} and can be accessed using table \texttt{Terrain}.
+By default, table contains following terrain types:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Terrain.Human & Empire native terrain\\
+\hline
+Terrain.Undead & Undead Hordes native terrain\\
+\hline
+Terrain.Heretic & Legions of the Damned native terrain\\
+\hline
+Terrain.Dwarf & Mountain Clans native terrain\\
+\hline
+Terrain.Neutral & Neutrals native terrain\\
+\hline
+Terrain.Elf & Elven Alliance native terrain\\
+\hline
+\end{tabularx}
+
+\subsubsection{Ground}
+\label{GroundCategory}
+Ground types correspond to the contents of \texttt{LGround.dbf} and can be accessed using table \texttt{Ground}.
+By default, table contains following ground types:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Ground.Plain &\\
+\hline
+Ground.Forest &\\
+\hline
+Ground.Water &\\
+\hline
+Ground.Mountain & Special type, indicates there is a mountain present on the tile.\\
+\hline
+\end{tabularx}
+
+\subsubsection{Unit}
+\label{UnitCategory}
+Unit types correspond to the contents of \texttt{LUnitC.dbf} and can be accessed using table \texttt{Unit}.
+By default, table contains following unit types:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Unit.Soldier & Ordinary units that can be hired in cities or mercenary camps\\
+\hline
+Unit.Noble & Nobles (thieves) units\\
+\hline
+Unit.Leader & Stack leader units\\
+\hline
+Unit.Summon & Units summoned on the strategic map. Living Armor, for example\\
+\hline
+Unit.Illusion & Illusions summoned on the strategic map\\
+\hline
+Unit.Guardian & Race capital guardian units\\
+\hline
+\end{tabularx}
+
+\subsubsection{Leader}
+\label{LeaderCategory}
+Leader types correspond to the contents of \texttt{LLeadC.dbf} and can be accessed using table \texttt{Leader}.
+By default, table contains following leader types:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Leader.Fighter & Leaders with melee (\texttt{L\_ADJACENT}) attacks. Default starting leader for \texttt{Warrior} \hyperref[LordCategory]{lord type}\\
+\hline
+Leader.Explorer & Leaders with ranged (\texttt{L\_ANY}) attacks. Default starting leader for \texttt{Diplomat} \hyperref[LordCategory]{lord type}\\
+\hline
+Leader.Mage & Leaders with ranged (\texttt{L\_ALL}) attacks. Default starting leader for \texttt{Mage} \hyperref[LordCategory]{lord type}\\
+\hline
+Leader.Rod & Leaders with rod placement ability\\
+\hline
+Leader.Noble & Nobles (thieves)\\
+\hline
+\end{tabularx}
+
+\subsubsection{Ability}
+\label{AbilityCategory}
+Leader ability types correspond to the contents of \texttt{LLeadA.dbf} and can be accessed using table \texttt{Ability}.
+By default, table contains following leader abilities:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Ability.Incorruptible &\\
+\hline
+Ability.WeaponMaster &\\
+\hline
+Ability.WandScrollUse &\\
+\hline
+Ability.WeaponArmorUse &\\
+\hline
+Ability.BannerUse &\\
+\hline
+Ability.JewelryUse &\\
+\hline
+Ability.Rod &\\
+\hline
+Ability.OrbUse &\\
+\hline
+Ability.TalismanUse &\\
+\hline
+Ability.TravelItemUse &\\
+\hline
+Ability.CriticalHit &\\
+\hline
+\end{tabularx}
+
+\subsubsection{Attack}
+\label{AttackCategory}
+Attack types correspond to the contents of \texttt{LAttC.dbf} and can be accessed using table \texttt{Attack}.
+By default, table contains following attack types:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Attack.Damage &\\
+\hline
+Attack.Drain &\\
+\hline
+Attack.Paralyze &\\
+\hline
+Attack.Heal &\\
+\hline
+Attack.Fear &\\
+\hline
+Attack.BoostDamage &\\
+\hline
+Attack.Petrify &\\
+\hline
+Attack.LowerDamage &\\
+\hline
+Attack.LowerInitiative &\\
+\hline
+Attack.Poison &\\
+\hline
+Attack.Frostbite &\\
+\hline
+Attack.Revive &\\
+\hline
+Attack.DrainOverflow &\\
+\hline
+Attack.Cure &\\
+\hline
+Attack.Summon &\\
+\hline
+Attack.DrainLevel &\\
+\hline
+Attack.GiveAttack &\\
+\hline
+Attack.Doppelganger &\\
+\hline
+Attack.TransformSelf &\\
+\hline
+Attack.TransformOther &\\
+\hline
+Attack.Blister &\\
+\hline
+Attack.BestowWards &\\
+\hline
+Attack.Shatter &\\
+\hline
+\end{tabularx}
+
+\subsubsection{Source}
+\label{SourceCategory}
+Attack sources correspond to the contents of \texttt{LAttS.dbf} and can be accessed using table \texttt{Source}.
+By default, table contains following attack sources:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Source.Weapon &\\
+\hline
+Source.Mind &\\
+\hline
+Source.Life &\\
+\hline
+Source.Death &\\
+\hline
+Source.Fire &\\
+\hline
+Source.Water &\\
+\hline
+Source.Earth &\\
+\hline
+Source.Air &\\
+\hline
+\end{tabularx}
+
+\subsubsection{Reach}
+\label{ReachCategory}
+Attack reach types correspond to the contents of \texttt{LAttR.dbf} and can be accessed using table \texttt{Reach}.
+By default, table contains following attack reach types:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Reach.All &\\
+\hline
+Reach.Any &\\
+\hline
+Reach.Adjacent &\\
+\hline
+\end{tabularx}
+
+\subsubsection{Immune}
+\label{ImmuneCategory}
+Immune categories correspond to the contents of \texttt{LImmune.dbf} and can be accessed using table \texttt{Immune}.
+By default, table contains following immune categories:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Immune.NotImmune & Target (unit or stack) is not immune\\
+\hline
+Immune.Once & Target has one-time immunity (resistant)\\
+\hline
+Immune.Always & Target is always immune\\
+\hline
+\end{tabularx}
+
+\subsubsection{Item}
+\label{ItemCategory}
+Item types correspond to the contents of \texttt{LMagItm.dbf} and can be accessed using table \texttt{Item}.
+By default, table contains following item types:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Item.Armor &\\
+\hline
+Item.Jewel &\\
+\hline
+Item.Weapon &\\
+\hline
+Item.Banner &\\
+\hline
+Item.PotionBoost &\\
+\hline
+Item.PotionHeal &\\
+\hline
+Item.PotionRevive &\\
+\hline
+Item.PotionPermanent &\\
+\hline
+Item.Scroll &\\
+\hline
+Item.Wand &\\
+\hline
+Item.Valuable &\\
+\hline
+Item.Orb &\\
+\hline
+Item.Talisman &\\
+\hline
+Item.TravelItem &\\
+\hline
+Item.Special &\\
+\hline
+\end{tabularx}
+
+\subsubsection{Equipment}
+\label{EquipmentCategory}
+Leader equipment types can be accessed using table \texttt{Equipment}.
+By default, table contains following equipment types:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Equipment.Banner &\\
+\hline
+Equipment.Tome &\\
+\hline
+Equipment.Battle1 &\\
+\hline
+Equipment.Battle2 &\\
+\hline
+Equipment.Artifact1 &\\
+\hline
+Equipment.Artifact2 &\\
+\hline
+Equipment.Boots &\\
+\hline
+\end{tabularx}
+
+\subsubsection{DeathAnimation}
+\label{DeathAnimationCategory}
+Death animation types correspond to the contents of \texttt{LDthAnim.dbf} and can be accessed using table \texttt{DeathAnimation}.
+By default, table contains following animations types:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+DeathAnimation.Human &\\
+\hline
+DeathAnimation.Heretic &\\
+\hline
+DeathAnimation.Dwarf &\\
+\hline
+DeathAnimation.Undead &\\
+\hline
+DeathAnimation.Neutral &\\
+\hline
+DeathAnimation.Dragon &\\
+\hline
+DeathAnimation.Ghost &\\
+\hline
+DeathAnimation.Elf &\\
+\hline
+\end{tabularx}
+
+\subsubsection{BattleStatus}
+\label{BattleStatus}
+Battle statuses can be accessed using table \texttt{BattleStatus}.
+By default, table contains following statuses:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+BattleStatus.XpCounted & Unit was killed and its experience points were counted\\
+\hline
+BattleStatus.Dead & Unit dead\\
+\hline
+BattleStatus.Paralyze & Unit paralyzed\\
+\hline
+BattleStatus.Petrify & Unit petrified\\
+\hline
+BattleStatus.DisableLong & Long disable applied (paralyze, petrify or fear)\\
+\hline
+BattleStatus.BoostDamageLvl1 & 1st level damage boost applied (25\% by default)\\
+\hline
+BattleStatus.BoostDamageLvl2 & 2nd level damage boost applied (50\% by default)\\
+\hline
+BattleStatus.BoostDamageLvl3 & 3rd level damage boost applied (75\% by default)\\
+\hline
+BattleStatus.BoostDamageLvl4 & 4th level damage boost applied (100\% by default)\\
+\hline
+BattleStatus.BoostDamageLong & Long damage boost (until battle is over or lower damage applied)\\
+\hline
+BattleStatus.LowerDamageLvl1 & 1st level lower damage applied (50\% by default)\\
+\hline
+BattleStatus.LowerDamageLvl2 & 2nd level lower damage applied (33\% by default)\\
+\hline
+BattleStatus.LowerDamageLong & Long lower damage (until battle is over or removed)\\
+\hline
+BattleStatus.LowerInitiative & Lower initiative applied (50\% by default)\\
+\hline
+BattleStatus.LowerInitiativeLong & Long lower initiative\\
+\hline
+BattleStatus.Poison & Poison DoT attack applied\\
+\hline
+BattleStatus.PoisonLong & Long poison applied\\
+\hline
+BattleStatus.Frostbite & Frostbite DoT attack applied\\
+\hline
+BattleStatus.FrostbiteLong & Long frostbite applied\\
+\hline
+BattleStatus.Blister & Blister DoT attack applied\\
+\hline
+BattleStatus.BlisterLong & Long blister applied\\
+\hline
+BattleStatus.Cured & Cure applied\\
+\hline
+BattleStatus.Transform & Unit transformed by another unit\\
+\hline
+BattleStatus.TransformLong & Long transformation applied by another unit\\
+\hline
+BattleStatus.TransformSelf & Unit transfomed itself\\
+\hline
+BattleStatus.TransformDoppelganger & Doppelganger transformation\\
+\hline
+BattleStatus.TransformDrainLevel & Drain level applied\\
+\hline
+BattleStatus.Summon & Unit was summoned during battle\\
+\hline
+BattleStatus.Retreated & Unit retreated from battle\\
+\hline
+BattleStatus.Retreat & Unit is retreating\\
+\hline
+BattleStatus.Hidden & Unit is hidden. For example, while leader dueling a thief\\
+\hline
+BattleStatus.Defend & Defend was used in this round\\
+\hline
+BattleStatus.Unsummoned & Unsummon effect applied\\
+\hline
+\end{tabularx}
+
+\subsubsection{BattleAction}
+\label{BattleAction}
+Battle action types can be accessed using table \texttt{BattleAction}.
+By default, table contains following battle actions:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+BattleAction.Attack &\\
+\hline
+BattleAction.Skip &\\
+\hline
+BattleAction.Retreat &\\
+\hline
+BattleAction.Wait &\\
+\hline
+BattleAction.Defend &\\
+\hline
+BattleAction.Auto &\\
+\hline
+BattleAction.UseItem &\\
+\hline
+\end{tabularx}
+
+\subsubsection{Retreat}
+\label{Retreat}
+Retreat types can be accessed using table \texttt{Retreat}.
+By default, table contains following retreat decisions:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Retreat.NoRetreat & Group does not retreat from battle\\
+\hline
+Retreat.CoverAndRetreat & Frontline units defend and cover retreating leader and backline units\\
+\hline
+Retreat.FullRetreat & Entire group retreats\\
+\hline
+\end{tabularx}
+
+\subsubsection{Relation}
+\label{Relation}
+Diplomacy relation types can be accessed using table \texttt{Relation}.
+By default, table contains following types:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Relation.War &\\
+\hline
+Relation.Neutral &\\
+\hline
+Relation.Peace &\\
+\hline
+\end{tabularx}
+
+\subsubsection{Order}
+\label{Order}
+Stack orders correspond to the contents of \texttt{LOrder.dbf} and can be accessed using table \texttt{Order}.
+By default, table contains following order types:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Order.Normal &\\
+\hline
+Order.Stand &\\
+\hline
+Order.Guard &\\
+\hline
+Order.AttackStack &\\
+\hline
+Order.DefendStack &\\
+\hline
+Order.SecureCity &\\
+\hline
+Order.Roam &\\
+\hline
+Order.MoveToLocation &\\
+\hline
+Order.DefendLocation &\\
+\hline
+Order.Bezerk &\\
+\hline
+Order.Assist &\\
+\hline
+Order.Steal &\\
+\hline
+Order.DefendCity &\\
+\hline
+\end{tabularx}
+
+\subsubsection{Resource}
+\label{Resource}
+Resource types correspond to the contents of \texttt{LRes.dbf} and can be accessed using table \texttt{Resource}.
+By default, table contains following resource types:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Resource.Gold &\\
+\hline
+Resource.InfernalMana & \texttt{L\_RED}\\
+\hline
+Resource.LifeMana & \texttt{L\_YELLOW}\\
+\hline
+Resource.DeathMana & \texttt{L\_ORANGE}\\
+\hline
+Resource.RunicMana & \texttt{L\_WHITE}\\
+\hline
+Resource.GroveMana & \texttt{L\_BLUE}\\
+\hline
+\end{tabularx}
+
+\subsubsection{IdType}
+\label{IdType}
+Identifier types can be accessed using table \texttt{IdType}.
+By default, table contains following types:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+IdType.Empty & Empty id\\
+\hline
+IdType.ApplicationText & Entries of \texttt{TApp.dbf} and \texttt{TAppEdit.dbf}\\
+\hline
+IdType.Building & Entries of \texttt{GBuild.dbf}\\
+\hline
+IdType.Race & Entries of \texttt{GRace.dbf}\\
+\hline
+IdType.Lord & Entries of \texttt{GLord.dbf}\\
+\hline
+IdType.Spell & Entries of \texttt{GSpells.dbf}\\
+\hline
+IdType.UnitGlobal & Unit implementations, entries of \texttt{GUnits.dbf}\\
+\hline
+IdType.UnitGenerated & Runtime-generated unit implementations\\
+\hline
+IdType.UnitModifier & Unit modifiers, entries of \texttt{GModif.dbf}\\
+\hline
+IdType.Attack & Attacks, entries of \texttt{GAttacks.dbf}\\
+\hline
+IdType.TextGlobal & Entries of \texttt{TGlobal.dbf}\\
+\hline
+IdType.LandmarkGlobal & Entries of \texttt{GLmark.dbf}\\
+\hline
+IdType.ItemGlobal & Base items, entries of \texttt{GItem.dbf}\\
+\hline
+IdType.NobleAction & Noble (thief) actions, entries of \texttt{GAction.dbf}\\
+\hline
+IdType.DynamicUpgrade & Dynamic upgrade rules, entries of \texttt{GDynUpgr.dbf}\\
+\hline
+IdType.DynamicAttack & Runtime-generated unit primary attacks\\
+\hline
+IdType.DynamicAltAttack & Runtime-generated unit primary alternative attacks\\
+\hline
+IdType.DynamicAttack2 & Runtime-generated unit secondary attacks\\
+\hline
+IdType.DynamicAltAttack2 & Runtime-generated unit secondary alternative attacks\\
+\hline
+IdType.CampaignFile & Campaign files\\
+\hline
+IdType.Plan & Utility for fast object lookup by map coordinates\\
+\hline
+IdType.ObjectCount & Number of objects in scenario file\\
+\hline
+IdType.ScenarioFile & Scenario files\\
+\hline
+IdType.Map & Scenario map\\
+\hline
+IdType.MapBlock & Blocks of scenario map\\
+\hline
+IdType.ScenarioInfo & Scenario information\\
+\hline
+IdType.SpellEffects &\\
+\hline
+IdType.Fortification & Capitals and villages\\
+\hline
+IdType.Player & Players in scenario\\
+\hline
+IdType.PlayerKnownSpells & Spells known by player in scenario\\
+\hline
+IdType.Fog & Fog of war for player in scenario\\
+\hline
+IdType.PlayerBuildings & Capital buildings\\
+\hline
+IdType.Road & Roads on scenario map\\
+\hline
+IdType.Stack & Stacks in scenario\\
+\hline
+IdType.Unit & Units in scenario\\
+\hline
+IdType.Landmark & Landmarks in scenario\\
+\hline
+IdType.Item & Items in scenario\\
+\hline
+IdType.Bag & Bags in scenario\\
+\hline
+IdType.Site & Sites in scenario\\
+\hline
+IdType.Ruin & Ruins in scenario\\
+\hline
+IdType.Tomb & Grave markers in scenario\\
+\hline
+IdType.Rod & Rods in scenario\\
+\hline
+IdType.Crystal & Gold mines and mana sources in scenario\\
+\hline
+IdType.Diplomacy & Diplomacy rules in scenario\\
+\hline
+IdType.SpellCast &\\
+\hline
+\end{tabularx}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+IdType.Location & Location on scenario map\\
+\hline
+IdType.StackTemplate & Stack templates in scenario\\
+\hline
+IdType.Event & Events in scenario\\
+\hline
+IdType.StackDestroyed & Information about stacks defeated in scenario\\
+\hline
+IdType.TalismanCharges & Talisman charges counter in scenario\\
+\hline
+IdType.Mountains & Mountains in scenario\\
+\hline
+IdType.SubRace & Subraces in scenario\\
+\hline
+IdType.SubRaceType & Entries of \texttt{GSubRace.dbf}\\
+\hline
+IdType.QuestLog & Scenario quest log\\
+\hline
+IdType.TurnSummary & Brief information about last turn in scenario\\
+\hline
+IdType.ScenarioVariable & Scenario variables\\
+\hline
+\end{tabularx}
+
+\subsubsection{Difficulty}
+\label{Difficulty}
+Difficulty types correspond to the contents of \texttt{Ldiff.dbf} and can be accessed using table \texttt{Difficulty}.
+By default, table contains following difficulty types:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Easy &\\
+\hline
+Average &\\
+\hline
+Hard &\\
+\hline
+VeryHard &\\
+\hline
+\end{tabularx}
+
+\subsubsection{Building}
+\label{BuildingCategory}
+Building types correspond to the contents of \texttt{Lbuild.dbf} and can be accessed using table \texttt{Building}.
+By default, table contains following building types:\\
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Guild & Allows to hire thieves\\
+\hline
+Heal & Temple, necessary for healing and resurrection in towns\\
+\hline
+Magic & Mage tower, necessary for spells research\\
+\hline
+Unit & Building that is needed to upgrade units\\
+\hline
+\end{tabularx}
+
+\subsubsection{UnitBranch}
+\label{UnitBranch}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Fighter &\\
+\hline
+Archer &\\
+\hline
+Mage &\\
+\hline
+Special &\\
+\hline
+Sideshow &\\
+\hline
+Hero &\\
+\hline
+Noble &\\
+\hline
+Summon &\\
+\hline
+\end{tabularx}

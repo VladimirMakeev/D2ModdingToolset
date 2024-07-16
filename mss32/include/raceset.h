@@ -43,6 +43,9 @@ struct Api
                                               RaceSetIterator* iterator,
                                               LRaceCategory* raceCategory);
     Add add;
+
+    using Find = SetIterator<LRaceCategory>* (__thiscall*)(const RaceSet* thisptr, SetIterator<LRaceCategory>* iterator, const LRaceCategory* raceCategory);
+    Find find;
 };
 
 Api& get();

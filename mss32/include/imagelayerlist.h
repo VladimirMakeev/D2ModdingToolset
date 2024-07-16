@@ -22,6 +22,7 @@
 
 #include "d2list.h"
 #include "d2pair.h"
+#include "idset.h"
 
 namespace game {
 
@@ -30,6 +31,7 @@ struct CIsoLayer;
 struct CFortification;
 struct IMidgardObjectMap;
 struct CMidgardID;
+struct IMapElement;
 
 using ImageLayerPair = Pair<IMqImage2*, const CIsoLayer*>;
 using ImageLayerList = List<ImageLayerPair>;
@@ -56,6 +58,26 @@ struct Api
                                                  const IMidgardObjectMap* objectMap,
                                                  const CMidgardID* playerId);
     AddShieldImageLayer addShieldImageLayer;
+
+    /**
+     * Adds images and iso layers to the list depending on specified map element.
+     * Images describe how map element should look on each layer on a strategic map.
+     * @param list - list of images and corresponding iso layers.
+     * @param mapElement - map element to show on a strategic map.
+     * @param objectMap - objects storage.
+     * @param playerId - id of current player.
+     * @param objectives - list of scenario objective ids.
+     * @param unknown
+     * @param animatedIso - whether strategic map should show animated graphics.
+     */
+    using GetMapElementIsoLayerImages = void(__stdcall*)(ImageLayerList* list,
+                                                         const IMapElement* mapElement,
+                                                         const IMidgardObjectMap* objectMap,
+                                                         const CMidgardID* playerId,
+                                                         const IdSet* objectives,
+                                                         int unknown,
+                                                         bool animatedIso);
+    GetMapElementIsoLayerImages getMapElementIsoLayerImages;
 };
 
 Api& get();

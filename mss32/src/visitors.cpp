@@ -24,7 +24,7 @@
 namespace game::VisitorApi {
 
 // clang-format off
-std::array<Api, 3> functions = {{
+std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::ChangeUnitHp)0x5e88f4,
@@ -36,6 +36,13 @@ std::array<Api, 3> functions = {{
         (Api::TransformUnit)0x5e968e,
         (Api::UndoTransformUnit)0x5e96df,
         (Api::ExtractUnitFromGroup)0x5e8d72,
+        (Api::PlayerSetAttitude)nullptr,
+        (Api::SetStackSrcTemplate)0x5e9ef8,
+        (Api::MerchantAddBuyCategory)nullptr,
+        (Api::CreateSite)nullptr,
+        (Api::ChangeSiteInfo)nullptr,
+        (Api::ChangeSiteImage)nullptr,
+        (Api::ChangeSiteAiPriority)nullptr,
     },
     // Russobit
     Api{
@@ -48,6 +55,13 @@ std::array<Api, 3> functions = {{
         (Api::TransformUnit)0x5e968e,
         (Api::UndoTransformUnit)0x5e96df,
         (Api::ExtractUnitFromGroup)0x5e8d72,
+        (Api::PlayerSetAttitude)nullptr,
+        (Api::SetStackSrcTemplate)0x5e9ef8,
+        (Api::MerchantAddBuyCategory)nullptr,
+        (Api::CreateSite)nullptr,
+        (Api::ChangeSiteInfo)nullptr,
+        (Api::ChangeSiteImage)nullptr,
+        (Api::ChangeSiteAiPriority)nullptr,
     },
     // Gog
     Api{
@@ -60,7 +74,33 @@ std::array<Api, 3> functions = {{
         (Api::TransformUnit)0x5e838d,
         (Api::UndoTransformUnit)0x5e83de,
         (Api::ExtractUnitFromGroup)0x5e7a71,
-    }
+        (Api::PlayerSetAttitude)nullptr,
+        (Api::SetStackSrcTemplate)0x5e8bf7,
+        (Api::MerchantAddBuyCategory)nullptr,
+        (Api::CreateSite)nullptr,
+        (Api::ChangeSiteInfo)nullptr,
+        (Api::ChangeSiteImage)nullptr,
+        (Api::ChangeSiteAiPriority)nullptr,
+    },
+    // Scenario Editor
+    Api{
+        (Api::ChangeUnitHp)0,
+        (Api::ChangeUnitXp)0,
+        (Api::UpgradeUnit)0,
+        (Api::ForceUnitMax)0,
+        (Api::AddUnitToGroup)0,
+        (Api::ExchangeItem)0,
+        (Api::TransformUnit)0,
+        (Api::UndoTransformUnit)0,
+        (Api::ExtractUnitFromGroup)0,
+        (Api::PlayerSetAttitude)0x4e9baa,
+        (Api::SetStackSrcTemplate)0,
+        (Api::MerchantAddBuyCategory)0x4eb0df,
+        (Api::CreateSite)0x4eac6f,
+        (Api::ChangeSiteInfo)0x4eadb9,
+        (Api::ChangeSiteImage)0x4eae6a,
+        (Api::ChangeSiteAiPriority)0x4eaeb8,
+    },
 }};
 // clang-format on
 

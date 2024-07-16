@@ -51,6 +51,9 @@ void StackView::bind(sol::state& lua)
 
     stackView["inventory"] = sol::property(&StackView::getInventoryItems);
     stackView["getEquippedItem"] = &StackView::getLeaderEquippedItem;
+    stackView["order"] = sol::property(&StackView::getOrder);
+    stackView["orderTargetId"] = sol::property(&StackView::getOrderTargetId);
+    stackView["aiOrder"] = sol::property(&StackView::getAiOrder);
 }
 
 IdView StackView::getId() const
@@ -148,6 +151,21 @@ std::optional<ItemView> StackView::getLeaderEquippedItem(const game::EquippedIte
         return std::nullopt;
 
     return {ItemView{&itemId, objectMap}};
+}
+
+int StackView::getOrder() const
+{
+    return static_cast<int>(stack->order.id);
+}
+
+IdView StackView::getOrderTargetId() const
+{
+    return IdView{stack->orderTargetId};
+}
+
+int StackView::getAiOrder() const
+{
+    return static_cast<int>(stack->aiOrder.id);
 }
 
 } // namespace bindings

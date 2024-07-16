@@ -20,15 +20,15 @@
 #ifndef LOG_H
 #define LOG_H
 
-#include <string>
+#include <string_view>
 
 namespace hooks {
 
 /** Prints message to the file only if debug mode setting is enabled. */
-void logDebug(const std::string& logFile, const std::string& message);
+void logDebug(std::string_view logFile, std::string_view message);
 
 /** Prints message to the file. */
-void logError(const std::string& logFile, const std::string& message);
+void logError(std::string_view logFile, std::string_view message);
 
 } // namespace hooks
 

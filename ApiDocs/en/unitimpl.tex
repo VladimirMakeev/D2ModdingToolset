@@ -1,0 +1,115 @@
+\subsection{Unit implementation}
+\label{UnitImpl}
+Represents \hyperref[Unit]{unit} template. Records in \texttt{GUnits.dbf} are unit implementations.
+\subsubsection{How unit implementation works and why it is different to unit}
+Unit implementation is a unit template that can be used by different individual units on scenario map. It is different to unit, because different unit instances can have the same implementation. For example, you can have 3 Squires of level 1 in your party, each having the same implementation.\\
+There are 3 different stages of unit implementation that build on top of each other:
+\begin{itemize}
+\item \texttt{Global}, corresponds to a record from \texttt{GUnits.dbf};
+\begin{itemize}
+\item Returned by \hyperref[Unit]{unit}.\texttt{baseImpl} or \hyperref[UnitImpl]{impl}.\texttt{global};
+\item Its \hyperref[Id]{id} corresponds to \texttt{UNIT\_ID} from \texttt{GUnits.dbf}.
+\end{itemize}
+\item \texttt{Generated}, equals \texttt{Global} plus level upgrades from \texttt{GDynUpgr.dbf} (if any);
+\begin{itemize}
+\item Returned by \hyperref[Unit]{unit}.\texttt{leveledImpl} or \hyperref[UnitImpl]{impl}.\texttt{generated};
+\item Its \hyperref[Id]{id} is different to id of inherited \texttt{Global} implementation;
+\item If unit has no level upgrades, \hyperref[Unit]{unit}.\texttt{leveledImpl}/\hyperref[UnitImpl]{impl}.\texttt{generated} equals \hyperref[Unit]{unit}.\texttt{baseImpl}/\hyperref[UnitImpl]{impl}.\texttt{global}.
+\end{itemize}
+\item \texttt{Modified}, equals \texttt{Generated} plus applied modifiers from \texttt{Gmodif.dbf} (if any).
+\begin{itemize}
+\item Returned by \hyperref[Unit]{unit}.\texttt{impl};
+\item Its \hyperref[Id]{id} equals to id of inherited \texttt{Generated} implementation;
+\item If unit has no modifiers, \hyperref[Unit]{unit}.\texttt{impl} equals \hyperref[Unit]{unit}.\texttt{leveledImpl}/\hyperref[UnitImpl]{impl}.\texttt{generated}.
+\end{itemize}
+\end{itemize}
+\subsubsection{Unit implementation changes}
+Unit implementation changes when \hyperref[Unit]{unit}:
+\begin{itemize}
+\item Gets an upgrade, does not matter if it transforms to higher tier unit or simply gets over-level;
+\item Gets transformed: by Transform-Self, Transform-Other, Drain-Level, or Doppelganger attack;
+\item Gets \hyperref[Modifier]{modified}: when consuming a potion, affected by a spell, equipping an item, getting a leader upgrade, etc.;
+\end{itemize}
+\newpage
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+id & Returns unit implementation \hyperref[Id]{id}. \texttt{UNIT\_ID} value from \texttt{GUnits.dbf}\\
+\hline
+base & Returns base unit implementation. \texttt{BASE\_UNIT} value from \texttt{GUnits.dbf}\\
+\hline
+type & Returns unit \hyperref[UnitCategory]{type}\\
+\hline
+leaderType & Returns \hyperref[LeaderCategory]{leader type} (or -1 if unit is not a leader)\\
+\hline
+global & Returns global unit implementation - a record from \texttt{GUnits.dbf}. Same as \hyperref[Unit]{unit}.\texttt{baseImpl}\\
+\hline
+generated & Returns generated unit implementation. Equals global plus upgrades from \texttt{GDynUpgr.dbf} according to unit's level. Same as \hyperref[Unit]{unit}.\texttt{leveledImpl}\\
+\hline
+modifiers & Returns array of applied \hyperref[Modifier]{modifiers}\\
+\hline
+level & Returns unit's implementation level. \texttt{LEVEL} value from \texttt{GUnits.dbf}\\
+\hline
+xpNext & Returns experience points needed for next level. \texttt{XP\_NEXT} value from \texttt{GUnits.dbf}\\
+\hline
+xpKilled & Returns experience points granted for killing the unit. \texttt{XP\_KILLED} value from \texttt{GUnits.dbf}\\
+\hline
+hp & Returns unit's hit points. \texttt{HIT\_POINT} value from \texttt{GUnits.dbf}\\
+\hline
+armor & Returns unit's armor. \texttt{ARMOR} value from \texttt{GUnits.dbf}\\
+\hline
+regen & Returns unit's regen. \texttt{REGEN} value from \texttt{GUnits.dbf}\\
+\hline
+race & Returns unit's race. \texttt{ID} value from \texttt{LRace.dbf}. See \hyperref[RaceCategory]{Race enumeration} for all possible values\\
+\hline
+subrace & Returns unit's subrace. \texttt{ID} value from \texttt{LSubRace.dbf}. See \hyperref[SubraceCategory]{Subrace enumeration} for all possible values\\
+\hline
+small & Indicates if the unit is small (occupies single slot). \texttt{SIZE\_SMALL} value from \texttt{GUnits.dbf}\\
+\hline
+male & Indicates if the unit is male. \texttt{SEX\_M} value from \texttt{GUnits.dbf}\\
+\hline
+waterOnly & Indicates if the unit is water only. \texttt{WATER\_ONLY} value from \texttt{GUnits.dbf}\\
+\hline
+attacksTwice & Indicates if the unit attacks twice. \texttt{ATCK\_TWICE} value from \texttt{GUnits.dbf}\\
+\hline
+dynUpgLvl & Returns level after which \texttt{dynUpg2} rules are applied. \texttt{DYN\_UPG\_LV} from \texttt{GUnits.dbf}\\
+\hline
+dynUpg1 & Returns dynamic upgrade 1\\
+\hline
+dynUpg2 & Returns dynamic upgrade 2\\
+\hline
+attack1 & Returns primary \hyperref[Attack]{attack} or \texttt{nil} if no primary attack used\\
+\hline
+attack2 & Returns secondary \hyperref[Attack]{attack} or \texttt{nil} if no secondary attack used\\
+\hline
+altAttack & Returns alternative \hyperref[Attack]{attack} or \texttt{nil} if no alternative attack used\\
+\hline
+movement & Returns leader maximum movement points (or 0 if unit is not a leader)\\
+\hline
+scout & Returns leader scouting range (or 0 if unit is not a leader)\\
+\hline
+leadership & Returns current leadership value (or 0 if unit is not a leader)\\
+\hline
+\end{tabularx}
+\end{center}
+\subsubsection{Methods}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+hasAbility(Ability.OrbUse) & Returns \texttt{true} if leader has specified \hyperref[AbilityCategory]{ability} (or false if unit is not a leader)\\
+\hline
+hasMoveBonus(Ground.Water) & Returns \texttt{true} if leader has movement bonus on specified \hyperref[GroundCategory]{ground} (or false if unit is not a leader)\\
+\hline
+hasModifier('G000UM5021') & Returns \texttt{true} if the implementation has modifier specified by id or id string\\
+\hline
+getImmuneToAttackClass(Attack.Paralyze) & Returns \hyperref[ImmuneCategory]{immune type} for specified \hyperref[AttackCategory]{attack type}\\
+\hline
+getImmuneToAttackSource(Source.Water) & Returns \hyperref[ImmuneCategory]{immune type} for specified \hyperref[SourceCategory]{attack source type}\\
+\hline
+\end{tabularx}
+\end{center}

@@ -25,17 +25,18 @@
 namespace game {
 
 struct CMidgard;
-struct IMidgardObjectMap;
+struct CMidDataCache2;
 struct CMidCommandQueue2;
 struct CoreCommandUpdate;
 struct CCommandCanIgnore;
 struct CMidHotseatManager;
+struct CNetMsg;
 
 struct CMidClientCoreData
 {
     CMidgard* midgard;
     int unknown;
-    IMidgardObjectMap* objectMap;
+    CMidDataCache2* dataCache;
     int unknown3;
     CMidCommandQueue2* commandQueue;
     CoreCommandUpdate* coreCommandUpdate;
@@ -54,7 +55,7 @@ namespace CMidClientCoreApi {
 
 struct Api
 {
-    using GetObjectMap = IMidgardObjectMap*(__thiscall*)(CMidClientCore* thisptr);
+    using GetObjectMap = CMidDataCache2*(__thiscall*)(CMidClientCore* thisptr);
     GetObjectMap getObjectMap;
 };
 

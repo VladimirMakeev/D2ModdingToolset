@@ -28,21 +28,25 @@ static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::SetImage)0x5318a0,
+        (Api::SetImageWithAnchor)0x5318ea,
         (Api::AssignFunctor)0x531843,
     },
     // Russobit
     Api{
         (Api::SetImage)0x5318a0,
+        (Api::SetImageWithAnchor)0x5318ea,
         (Api::AssignFunctor)0x531843,
     },
     // Gog
     Api{
         (Api::SetImage)0x530db8,
+        (Api::SetImageWithAnchor)0x530e29,
         (Api::AssignFunctor)0x530d5b,
     },
     // Scenario Editor
     Api{
         (Api::SetImage)0x494988,
+        (Api::SetImageWithAnchor)0x4949d2,
         (Api::AssignFunctor)0,
     },
 }};

@@ -18,18 +18,60 @@
  */
 
 #include "displayhandlershooks.h"
+#include "dynamiccast.h"
 #include "game.h"
 #include "gameimages.h"
 #include "gameutils.h"
 #include "isolayers.h"
+#include "mempool.h"
 #include "midgardobjectmap.h"
 #include "midplayer.h"
+#include "midsiteresourcemarket.h"
 #include "midvillage.h"
+#include "originalfunctions.h"
 #include "racetype.h"
 #include "stringintlist.h"
 #include <fmt/format.h>
 
 namespace hooks {
+
+struct ResourceMarketDisplayHandler : public game::ImageDisplayHandler
+{ };
+
+static void __fastcall resMarketDisplayHandlerDtor(ResourceMarketDisplayHandler* thisptr,
+                                                   int /*%edx*/,
+                                                   char flags)
+{
+    if (flags & 1) {
+        game::Memory::get().freeNonZero(thisptr);
+    }
+}
+
+static void __fastcall resMarketDisplayHandlerRunHandler(ResourceMarketDisplayHandler* thisptr,
+                                                         int /*%edx*/,
+                                                         game::ImageLayerList* list,
+                                                         const game::IMapElement* mapElement,
+                                                         const game::IMidgardObjectMap* objectMap,
+                                                         const game::CMidgardID* playerId,
+                                                         const game::IdSet* objectives,
+                                                         int a6,
+                                                         bool animatedIso)
+{
+    using namespace game;
+
+    auto* site = (CMidSiteResourceMarket*)RttiApi::get()
+                     .dynamicCast(mapElement, 0, RttiApi::rtti().IMapElementType,
+                                  getResourceMarketTypeDescriptor(), 0);
+
+    thisptr->handler(list, site, objectMap, playerId, objectives, a6, animatedIso);
+}
+
+// clang-format off
+static game::ImageDisplayHandlerVftable resMarketDisplayHandlerVftable{
+    (game::ImageDisplayHandlerVftable::Destructor)resMarketDisplayHandlerDtor,
+    (game::ImageDisplayHandlerVftable::RunHandler)resMarketDisplayHandlerRunHandler,
+};
+// clang-format on
 
 static std::string getVillageImageName(game::RaceId raceId, int villageTier, bool shadow)
 {
@@ -192,6 +234,77 @@ void __stdcall displayHandlerVillageHooked(game::ImageLayerList* list,
     if (village->riotTurn) {
         ImageLayerPair riotPair{GameImagesApi::get().getRiotImage(), isoLayers().riots};
         listApi.pushBack(list, &riotPair);
+    }
+}
+
+static void registerResourceMarketDisplayHandler(game::ImageDisplayHandlerMap* handlerMap)
+{
+    using namespace game;
+
+    auto handler = (ResourceMarketDisplayHandler*)Memory::get().allocate(
+        sizeof(ResourceMarketDisplayHandler));
+    handler->vftable = &resMarketDisplayHandlerVftable;
+    handler->handler = (DisplayHandlersApi::Api::DisplayHandler<void>)DisplayHandlersApi::get()
+                           .siteHandler;
+
+    SmartPointer ptr{};
+    SmartPointerApi::get().createOrFree(&ptr, handler);
+
+    const auto* marketTypeDescriptor{getResourceMarketTypeDescriptor()};
+
+    ImageDisplayHandlerMapInsertIt iterator{};
+    ImageDisplayHandlerApi::get().addHandler(handlerMap, &iterator, &marketTypeDescriptor,
+                                             (ImageDisplayHandlerPtr*)&ptr);
+
+    SmartPointerApi::get().createOrFree(&ptr, nullptr);
+}
+
+void __stdcall getMapElementIsoLayerImagesHooked(game::ImageLayerList* list,
+                                                 const game::IMapElement* mapElement,
+                                                 const game::IMidgardObjectMap* objectMap,
+                                                 const game::CMidgardID* playerId,
+                                                 const game::IdSet* objectives,
+                                                 int unknown,
+                                                 bool animatedIso)
+{
+    using namespace game;
+
+    getOriginalFunctions().getMapElementIsoLayerImages(list, mapElement, objectMap, playerId,
+                                                       objectives, unknown, animatedIso);
+
+    auto handlerMap{ImageDisplayHandlerApi::instance()};
+
+    bool firstTime{true};
+    if (firstTime) {
+        firstTime = false;
+
+        // Register display handler for custom site
+        registerResourceMarketDisplayHandler(handlerMap);
+    }
+
+    const auto typeId{*RttiApi::get().typeIdOperator};
+    const auto typeIdsNotEqual{*RttiApi::get().typeInfoInequalityOperator};
+
+    const auto* mapElementDescriptor{typeId(mapElement)};
+    const auto* resourceMarketDescriptor{getResourceMarketTypeDescriptor()};
+
+    if (typeIdsNotEqual(mapElementDescriptor, resourceMarketDescriptor)) {
+        // Filter out map elements that were handled by original function
+        return;
+    }
+
+    // Reuse IdSet::find since game itself uses it
+    auto find = (ImageDisplayHandlerMapFind)IdSetApi::get().find;
+
+    ImageDisplayHandlerMapIt iterator;
+    find(handlerMap, &iterator, &mapElementDescriptor);
+    if (iterator != handlerMap->end()) {
+        auto& pair = *iterator;
+
+        ImageDisplayHandlerPtr& ptr = pair.second;
+        ImageDisplayHandler* handler = ptr.data;
+        handler->vftable->runHandler(handler, list, mapElement, objectMap, playerId, objectives,
+                                     unknown, animatedIso);
     }
 }
 

@@ -28,7 +28,7 @@
 
 namespace hooks {
 
-static void logAction(const std::string& logFile, const std::string& message)
+static void logAction(std::string_view logFile, std::string_view message)
 {
     using namespace std::chrono;
 
@@ -42,14 +42,14 @@ static void logAction(const std::string& logFile, const std::string& message)
     file << "[" << std::put_time(&tm, "%c") << "]\t" << tid << "\t" << message << "\n";
 }
 
-void logDebug(const std::string& logFile, const std::string& message)
+void logDebug(std::string_view logFile, std::string_view message)
 {
     if (userSettings().debugMode) {
         logAction(logFile, message);
     }
 }
 
-void logError(const std::string& logFile, const std::string& message)
+void logError(std::string_view logFile, std::string_view message)
 {
     logAction(logFile, message);
 }

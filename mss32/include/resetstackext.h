@@ -20,6 +20,8 @@
 #ifndef RESETSTACKEXT_H
 #define RESETSTACKEXT_H
 
+#include "idvector.h"
+
 namespace game {
 
 struct IResetStackExtVftable;
@@ -34,7 +36,23 @@ struct IResetStackExtVftable
     using Destructor = void(__thiscall*)(IResetStackExt* thisptr, bool freeMemory);
     Destructor destructor;
 
-    void* methods[4];
+    using HireLeader = bool(
+        __thiscall*)(IResetStackExt* thisptr, const CMidgardID* unitImplId, int a3, int a4, int a5);
+    HireLeader hireLeader;
+
+    void* methods[2];
+
+    /**
+     * Returns ids of units or leaders that can be hired.
+     * @param[in] thisptr object pointer.
+     * @param[inout] unitImplIds vector where ids will be stored.
+     * @param leaders - if set to 1, leader ids will be returned.
+     * Any other value results in return of unit ids. Game logic uses 2 for units here.
+     */
+    using GetUnitIdsForHire = void(__thiscall*)(IResetStackExt* thisptr,
+                                                IdVector* unitImplIds,
+                                                int leaders);
+    GetUnitIdsForHire getUnitIdsForHire;
 
     using GetStackId = CMidgardID*(__thiscall*)(IResetStackExt* thisptr, CMidgardID* value);
     GetStackId getStackId;

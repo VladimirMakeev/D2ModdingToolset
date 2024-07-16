@@ -20,6 +20,7 @@
 #ifndef TOGGLEBUTTON_H
 #define TOGGLEBUTTON_H
 
+#include "functordispatch2.h"
 #include "interface.h"
 #include "smartptr.h"
 
@@ -27,13 +28,26 @@ namespace game {
 
 struct CToggleButtonVftable;
 struct CDialogInterf;
+struct CToggleButton;
+struct IMqImage2;
+
+enum class ToggleButtonState : int
+{
+    Normal,
+    Hovered,
+    Clicked,
+    NormalChecked,
+    HoveredChecked,
+    ClickedChecked,
+    Disabled,
+};
 
 struct CToggleButtonData
 {
     int buttonChildIndex;
     bool checked;
     char padding[3];
-    SmartPointer ptr;
+    SmartPtr<CBFunctorDispatch2<bool, CToggleButton*>> onClickedFunctor;
     SmartPointer ptrArray[7];
 };
 
@@ -52,13 +66,23 @@ assert_size(CToggleButton, 12);
 
 struct CToggleButtonVftable : public CInterfaceVftable
 {
-    void* method34;
+    /** Sets image for specified toggle button state. */
+    using SetImage = void(__thiscall*)(CToggleButton* thisptr,
+                                       IMqImage2* image,
+                                       ToggleButtonState state);
+    SetImage setImage;
 
+    /** Enables or disables toggle button. */
     using SetEnabled = void(__thiscall*)(CToggleButton* thisptr, bool value);
     SetEnabled setEnabled;
 
-    void* method36;
-    void* method37;
+    /** Returns true if toggle button is enabled. */
+    using IsEnabled = bool(__thiscall*)(const CToggleButton* thisptr);
+    IsEnabled isEnabled;
+
+    /** Calls onClickedFunctor callback if previously set. */
+    using CallOnClicked = void(__thiscall*)(CToggleButton* thisptr);
+    CallOnClicked callOnClicked;
 };
 
 assert_vftable_size(CToggleButtonVftable, 38);

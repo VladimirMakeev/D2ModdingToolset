@@ -45,7 +45,8 @@ struct CPhaseGameData
     SmartPointer palMapIsoScroller;
     IIsoCBScroll* audioRegionCtrl;
     CMidClient* midClient;
-    int unknown8;
+    bool clientTakesTurn;
+    char padding[3];
     CMidObjectNotify* midObjectNotify;
     CMidAnim2System* animSystem;
     void* listPtr;

@@ -21,10 +21,12 @@
 #define GAME_H
 
 #include "attacktypepairvector.h"
+#include "d2set.h"
 #include "faceimg.h"
 #include "globaldata.h"
 #include "idlist.h"
 #include "mqpoint.h"
+#include "nobleactioncat.h"
 #include "smartptr.h"
 
 namespace game {
@@ -79,6 +81,11 @@ struct LDeathAnimCategory;
 struct CMidStreamEnvFile;
 struct CMidgardScenarioMap;
 struct TBuildingType;
+struct CScenarioVisitor;
+struct LSiteCategory;
+struct CMidSite;
+struct CTextBoxInterf;
+struct CCmdNobleResultMsg;
 
 enum class ModifierElementTypeFlag : int;
 
@@ -731,6 +738,32 @@ using GetBuildingStatus = BuildingStatus(__stdcall*)(const IMidgardObjectMap* ob
                                                      const CMidgardID* buildingId,
                                                      bool ignoreBuildTurnAndCost);
 
+/** Removes stack from plan, fort and object map. */
+using RemoveStack = bool(__stdcall*)(const CMidgardID* stackId,
+                                     CMidgardPlan* plan,
+                                     IMidgardObjectMap* objectMap,
+                                     CScenarioVisitor* visitor);
+
+using GetSiteNameSuffix = const char*(__stdcall*)(const LSiteCategory* siteCategory);
+
+using UpdateEncLayoutSite = void(__stdcall*)(const CMidSite* site, CTextBoxInterf* textBox);
+
+using GetSiteSound = String*(__stdcall*)(String* soundName, const CMidSite* site);
+
+using SiteHasSound = bool(__stdcall*)(const CMidSite* site);
+
+using GetNobleActions = bool(__stdcall*)(const IMidgardObjectMap* objectMap,
+                                         const CMidgardID* playerId,
+                                         const CMidgardID* objectId,
+                                         Set<LNobleActionCat>* nobleActions);
+
+using GetNobleActionResultDescription =
+    String*(__stdcall*)(String* description,
+                        const LNobleActionCat nobleActionCat,
+                        const CCmdNobleResultMsg* nobleResultMsg,
+                        const CPhaseGame* phaseGame,
+                        const CMidPlayer* player);
+
 /** Game and editor functions that can be hooked. */
 struct Functions
 {
@@ -857,6 +890,16 @@ struct Functions
     GetUnitRequiredBuildings getUnitRequiredBuildings;
     ComputeMovementCost computeMovementCost;
     GetBuildingStatus getBuildingStatus;
+    RemoveStack removeStack;
+    GetSiteNameSuffix getSiteNameSuffix;
+    UpdateEncLayoutSite updateEncLayoutSite;
+    GetSiteSound getSiteSound;
+    SiteHasSound siteHasSound;
+    /** Returns actions that noble can do with the site specified by id. */
+    GetNobleActions getSiteNobleActions;
+    /** Returns all actions that noble can possibly perform on object with specified id. */
+    GetNobleActions getPossibleNobleActions;
+    GetNobleActionResultDescription getNobleActionResultDescription;
 };
 
 /** Global variables used in game. */

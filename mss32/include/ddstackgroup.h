@@ -53,6 +53,28 @@ struct CDDStackGroup : public CDDUnitGroup
 
 assert_size(CDDStackGroup, 20);
 
+namespace CDDStackGroupApi {
+
+struct Api
+{
+    using Constructor = CDDStackGroup*(__thiscall*)(CDDStackGroup* thisptr,
+                                                    CMidUnitGroupAdapter* unitGroupAdapter,
+                                                    const CMidgardID* groupId,
+                                                    IMidgardObjectMap* objectMap,
+                                                    IMidDropManager* dropManager,
+                                                    int leftSide,
+                                                    const CMqRect* rSlotArea,
+                                                    ITask* taskOpenInterf,
+                                                    CPhaseGame* phaseGame,
+                                                    CMidDragDropInterf* dragDropInterf,
+                                                    const char* addUnitDialogName);
+    Constructor constructor;
+};
+
+Api& get();
+
+} // namespace CDDStackGroupApi
+
 } // namespace game
 
 #endif // DDSTACKGROUP_H

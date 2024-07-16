@@ -253,20 +253,36 @@ textids = {
 		-- Fallback text "Wrong room password"
 		wrongRoomPassword = "",
 	},
-    
-    generator = {
-        -- Description text for randomly generated scenarios
-        -- Fallback text "Random scenario based on template '%TMPL%'. Seed: %SEED%. Starting gold: %GOLD%. Roads: %ROADS%%. Forest: %FOREST%%."
-        description = "",
-        -- Generator could not process game data from dbf tables or .ff files
-        -- Error details are logged in mssProxyError.log
-        -- Fallback text "Could not read game data needed for scenario generator.\nSee mssProxyError.log for details"
-        wrongGameData = "",
-        -- Error occured during scenario generation
-        -- Fallback text "Error during random scenario map generation.\nSee mssProxyError.log for details".
-        generationError = "",
-        -- Generator failed to create scenario after specified number of attempts
-        -- Fallback text "Could not generate scenario map after %NUM% attempts.\nPlease, adjust template contents or settings"
-        limitExceeded = "",
-    },
+
+	generator = {
+		-- Description text for randomly generated scenarios
+		-- Fallback text "Random scenario based on template '%TMPL%'. Seed: %SEED%. Starting gold: %GOLD%. Roads: %ROADS%%. Forest: %FOREST%%."
+		description = "",
+		-- Generator could not process game data from dbf tables or .ff files
+		-- Error details are logged in mssProxyError.log
+		-- Fallback text "Could not read game data needed for scenario generator.\nSee mssProxyError.log for details"
+		wrongGameData = "",
+		-- Error occured during scenario generation
+		-- Fallback text "Error during random scenario map generation.\nSee mssProxyError.log for details".
+		generationError = "",
+		-- Generator failed to create scenario after specified number of attempts
+		-- Fallback text "Could not generate scenario map after %NUM% attempts.\nPlease, adjust template contents or settings"
+		limitExceeded = "",
+	},
+
+	resourceMarket = {
+		-- Resource market site description for encyclopedia
+		-- Fallback text is "(Resource market)"
+		encyDesc = "",
+		-- Infinite amount of resources string.
+		-- Fallback text is "Inf."
+		infiniteAmount = "",
+		-- Exchange description for market window in game.
+		-- The text must contain keywords "%RES1%" and "%RES2%".
+		-- Fallback text is "You offer %RES1% to get %RES2% in return."
+		exchangeDesc = "",
+		-- Exchange is not available hint for market window in game.
+		-- Fallback text is "N/A"
+		exchangeNotAvailable = "",
+	}
 }

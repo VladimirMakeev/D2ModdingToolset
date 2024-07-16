@@ -1,0 +1,35 @@
+\subsection{Targeting scripts (custom attack reaches, specified via LAttR.dbf)}
+Targeting scripts are used to specify either selection or attack targets of custom attack reach:
+\begin{itemize}
+\item \textbf{Selection} targets are targets that can be \textbf{selected (clicked)} (specified as \texttt{SEL\_SCRIPT} in \texttt{LAttR.dbf});
+\item \textbf{Attack} targets are targets that will be \textbf{affected by attack} (specified as \texttt{ATT\_SCRIPT} in \texttt{LAttR.dbf}). For instance, in case of 'pierce` attack, you can only click adjacent targets, but the attack will not only affect the selected target but also the one behind it (if any). Thus the 'pierce` attack uses \texttt{getAdjacentTargets.lua} \textbf{as selection} script and \texttt{getSelectedTargetAndOneBehindIt.lua} as attack script.
+\end{itemize}
+Targeting scripts use uniform \texttt{getTargets} function for both selection and attack scripts with the following arguments:
+\begin{itemize}
+\item \texttt{attacker} is the \hyperref[UnitSlot]{unit slot} of the attacker unit;
+\item \texttt{selected} is the \hyperref[UnitSlot]{unit slot} of the unit that was selected (clicked).\\
+\texttt{selected.position == -1} and \texttt{selected.unit == nil} if this is a selection script (no target is clicked yet);
+\item \texttt{allies} are \hyperref[UnitSlot]{unit slots} of all the allies on the battlefield (excluding the attacker);
+\item \texttt{targets} are \hyperref[UnitSlot]{unit slots} of all the targets on the battlefield on which the attack can be performed. For instance, if targets are allies and the attack is Revive, then it will only include dead allies that can be revived;
+\item \texttt{targetsAreAllies} specified whether targets are allies;
+\item \texttt{item} specifies an \hyperref[Item]{item} (orb or talisman) used to perform the attack, or \texttt{nil} if no item is used;
+\item \texttt{battle} specifies an information about current \hyperref[Battle]{battle};
+\item \texttt{isMarking} specified whether the script is being called to mark targets visually on the battlefield. Can be used to provide consistent visual representation for randomized scripts, as soft alternative to \texttt{MRK\_TARGTS} flag in \texttt{LAttR.dbf}. Always \texttt{false} if this is a selection script.
+\end{itemize}
+Example of attack script of pierce attack (\texttt{getSelectedTargetAndOneBehindIt.lua}):
+\begin{center}
+\begin{lstlisting}[language=Lua]
+function getTargets(attacker, selected, allies, targets, targetsAreAllies, item, battle, isMarking)
+  -- Get the selected target and the one behind it (pierce attack)
+  local result = {selected}
+  for i = 1, #targets do
+    local target = targets[i]
+    if target.backline and target.position == selected.position + 1 then
+      table.insert(result, target)
+      break
+    end
+  end
+  return result
+end
+\end{lstlisting}
+\end{center}

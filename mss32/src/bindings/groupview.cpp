@@ -18,8 +18,14 @@
  */
 
 #include "groupview.h"
+#include "fortification.h"
 #include "game.h"
+#include "gameutils.h"
 #include "idview.h"
+#include "midgardobjectmap.h"
+#include "midruin.h"
+#include "midstack.h"
+#include "midsubrace.h"
 #include "midunitgroup.h"
 #include "unitslotview.h"
 #include "unitview.h"
@@ -42,6 +48,9 @@ void GroupView::bind(sol::state& lua)
     group["slots"] = sol::property(&GroupView::getSlots);
     group["units"] = sol::property(&GroupView::getUnits);
     group["hasUnit"] = sol::overload<>(&GroupView::hasUnit, &GroupView::hasUnitById);
+    group["getUnitPosition"] = sol::overload<>(&GroupView::getUnitPosition,
+                                               &GroupView::getUnitPositionById);
+    group["subrace"] = sol::property(&GroupView::getSubrace);
 }
 
 IdView GroupView::getId() const
@@ -103,6 +112,42 @@ bool GroupView::hasUnitById(const bindings::IdView& unitId) const
     }
 
     return false;
+}
+
+int GroupView::getUnitPosition(const bindings::UnitView& unit) const
+{
+    return getUnitPositionById(unit.getId());
+}
+
+int GroupView::getUnitPositionById(const bindings::IdView& unitId) const
+{
+    return game::CMidUnitGroupApi::get().getUnitPosition(group, &unitId.id);
+}
+
+int GroupView::getSubrace() const
+{
+    using namespace game;
+
+    const auto type = CMidgardIDApi::get().getType(&groupId);
+    switch (type) {
+    case IdType::Stack: {
+        const CMidStack* stack{hooks::getStack(objectMap, &groupId)};
+
+        auto obj{objectMap->vftable->findScenarioObjectById(objectMap, &stack->subraceId)};
+        const CMidSubRace* subrace = static_cast<const game::CMidSubRace*>(obj);
+        return static_cast<int>(subrace->subraceCategory.id);
+    }
+
+    case IdType::Fortification: {
+        const CFortification* fort{hooks::getFort(objectMap, &groupId)};
+
+        auto obj{objectMap->vftable->findScenarioObjectById(objectMap, &fort->subraceId)};
+        const CMidSubRace* subrace = static_cast<const game::CMidSubRace*>(obj);
+        return static_cast<int>(subrace->subraceCategory.id);
+    }
+    }
+
+    return game::emptyCategoryId;
 }
 
 } // namespace bindings

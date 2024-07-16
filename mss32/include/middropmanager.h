@@ -26,6 +26,7 @@ namespace game {
 
 struct IMidDropManagerVftable;
 struct IMidDropSource;
+struct IMidDropTarget;
 
 struct IMidDropManager
 {
@@ -40,6 +41,7 @@ struct IMidDropManagerVftable
     using GetDropSource = IMidDropSource*(__thiscall*)(IMidDropManager* thisptr);
     GetDropSource getDropSource;
 
+    /** Actual 'drop' action logic. */
     using SetDropSource = void(__thiscall*)(IMidDropManager* thisptr,
                                             IMidDropSource* value,
                                             bool a3);
@@ -50,7 +52,23 @@ struct IMidDropManagerVftable
     using ResetDropSource = void(__thiscall*)(IMidDropManager* thisptr);
     ResetDropSource resetDropSource;
 
-    void* methods[9];
+    void* method6;
+    void* method7;
+    void* method8;
+
+    void* method9;
+
+    using AddDropSource = void(__thiscall*)(IMidDropManager* thisptr, IMidDropSource* dropSource);
+    AddDropSource addDropSource;
+
+    using AddDropTarget = void(__thiscall*)(IMidDropManager* thisptr, IMidDropTarget* dropTarget);
+    AddDropTarget addDropTarget;
+
+    void* method12;
+    void* method13;
+
+    using IsShiftPressed = bool (*)();
+    IsShiftPressed isShiftPressed;
 };
 
 assert_vftable_size(IMidDropManagerVftable, 14);

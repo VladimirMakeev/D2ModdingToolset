@@ -150,6 +150,14 @@ static std::array<Functions, 4> functions = {{
         (GetUnitRequiredBuildings)0x61f7fe,
         (ComputeMovementCost)0x603bc6,
         (GetBuildingStatus)0x5ddcb3,
+        (RemoveStack)0x60f5f8,
+        (GetSiteNameSuffix)0x5c5c3f,
+        (UpdateEncLayoutSite)0x579470,
+        (GetSiteSound)0x5093fb,
+        (SiteHasSound)0x50948c,
+        (GetNobleActions)0x5d44c5,
+        (GetNobleActions)0x5d4b28,
+        (GetNobleActionResultDescription)0x49cf6f,
     },
     // Russobit
     Functions{
@@ -276,6 +284,14 @@ static std::array<Functions, 4> functions = {{
         (GetUnitRequiredBuildings)0x61f7fe,
         (ComputeMovementCost)0x603bc6,
         (GetBuildingStatus)0x5ddcb3,
+        (RemoveStack)0x60f5f8,
+        (GetSiteNameSuffix)0x5c5c3f,
+        (UpdateEncLayoutSite)0x579470,
+        (GetSiteSound)0x5093fb,
+        (SiteHasSound)0x50948c,
+        (GetNobleActions)0x5d44c5,
+        (GetNobleActions)0x5d4b28,
+        (GetNobleActionResultDescription)0x49cf6f,
     },
     // Gog
     Functions{
@@ -402,6 +418,14 @@ static std::array<Functions, 4> functions = {{
         (GetUnitRequiredBuildings)0x61e33a,
         (ComputeMovementCost)0x6027f3,
         (GetBuildingStatus)0x5dc9e8,
+        (RemoveStack)0x60e12c,
+        (GetSiteNameSuffix)0x5c4c28,
+        (UpdateEncLayoutSite)0x578b2b,
+        (GetSiteSound)0x5086eb,
+        (SiteHasSound)0x50877c,
+        (GetNobleActions)0x5d33ee,
+        (GetNobleActions)0x5d3a51,
+        (GetNobleActionResultDescription)0x49c8dc,
     },
     // Scenario Editor
     Functions{
@@ -445,7 +469,7 @@ static std::array<Functions, 4> functions = {{
         (IsGroupOwnerPlayerHuman)nullptr,
         (AttackShouldMiss)nullptr,
         (GenerateRandomNumber)nullptr,
-        (GenerateRandomNumberStd)nullptr,
+        (GenerateRandomNumberStd)0x48341a,
         (GetUnitPositionInGroup)nullptr,
         (GetSummonUnitImplIdByAttack)nullptr,
         (GetSummonUnitImplId)nullptr,
@@ -528,6 +552,14 @@ static std::array<Functions, 4> functions = {{
         (GetUnitRequiredBuildings)0x52314a,
         (ComputeMovementCost)nullptr,
         (GetBuildingStatus)0x4d8a11,
+        (RemoveStack)nullptr,
+        (GetSiteNameSuffix)0x565306,
+        (UpdateEncLayoutSite)0x4ca874,
+        (GetSiteSound)nullptr,
+        (SiteHasSound)nullptr,
+        (GetNobleActions)nullptr,
+        (GetNobleActions)nullptr,
+        (GetNobleActionResultDescription)nullptr,
     },
 }};
 

@@ -94,6 +94,10 @@ struct Api
 {
     using Instance = CScenEdit*(__cdecl*)();
     Instance instance;
+
+    /** Reads contents of dbf files from ScenData folder. */
+    using ReadScenData = bool(__thiscall*)(CScenEdit* thisptr);
+    ReadScenData readScenData;
 };
 
 Api& get();

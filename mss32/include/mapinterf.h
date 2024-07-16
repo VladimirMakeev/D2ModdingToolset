@@ -22,7 +22,10 @@
 
 #include "isoview.h"
 
-namespace game::editor {
+namespace game {
+struct CToggleButton;
+
+namespace editor {
 
 struct CTaskMapChange;
 
@@ -76,12 +79,27 @@ struct Api
     CreateTask createAddMountainsTask;
     CreateTask createAddTreesTask;
     CreateTask createChangeHeightTask;
+
+    struct ToggleButtonCallback
+    {
+        using Callback = void(__thiscall*)(CMapInterf* thisptr, bool, CToggleButton*);
+
+        Callback callback;
+        int unknown;
+    };
+
+    using CreateToggleButtonFunctor = SmartPointer*(__stdcall*)(SmartPointer* functor,
+                                                                int a2,
+                                                                CMapInterf* mapInterf,
+                                                                ToggleButtonCallback* callback);
+    CreateToggleButtonFunctor createToggleButtonFunctor;
 };
 
 Api& get();
 
 } // namespace CMapInterfApi
 
-} // namespace game::editor
+} // namespace editor
+} // namespace game
 
 #endif // MAPINTERF_H

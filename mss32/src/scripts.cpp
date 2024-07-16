@@ -20,30 +20,42 @@
 #include "scripts.h"
 #include "attackview.h"
 #include "battlemsgdata.h"
-#include "battlemsgdataview.h"
+#include "battlemsgdataviewmutable.h"
+#include "buildingview.h"
 #include "categoryids.h"
+#include "crystalview.h"
 #include "currencyview.h"
 #include "diplomacyview.h"
 #include "dynupgradeview.h"
 #include "fogview.h"
 #include "fortview.h"
+#include "game.h"
 #include "gameutils.h"
+#include "gameview.h"
+#include "globalvariablesview.h"
+#include "globalview.h"
 #include "groupview.h"
 #include "idview.h"
 #include "itembaseview.h"
 #include "itemview.h"
 #include "locationview.h"
 #include "log.h"
+#include "merchantview.h"
+#include "mercsview.h"
 #include "midstack.h"
 #include "modifierview.h"
 #include "playerview.h"
 #include "point.h"
+#include "resourcemarketview.h"
+#include "rodview.h"
 #include "ruinview.h"
 #include "scenariovariableview.h"
 #include "scenarioview.h"
 #include "scenvariablesview.h"
+#include "siteview.h"
 #include "stackview.h"
 #include "tileview.h"
+#include "trainerview.h"
 #include "unitimplview.h"
 #include "unitslotview.h"
 #include "unitview.h"
@@ -273,6 +285,136 @@ static void bindApi(sol::state& lua)
         "Defend", BattleStatus::Defend,
         "Unsummoned", BattleStatus::Unsummoned
     );
+
+    lua.new_enum("BattleAction",
+        "Attack", BattleAction::Attack,
+        "Skip", BattleAction::Skip,
+        "Retreat", BattleAction::Retreat,
+        "Wait", BattleAction::Wait,
+        "Defend", BattleAction::Defend,
+        "Auto", BattleAction::Auto,
+        "UseItem", BattleAction::UseItem
+        // Restrict access to Resolve action from scripts
+    );
+
+    lua.new_enum("Retreat",
+        "NoRetreat", RetreatStatus::NoRetreat,
+        "CoverAndRetreat", RetreatStatus::CoverAndRetreat,
+        "FullRetreat", RetreatStatus::FullRetreat
+    );
+
+    lua.new_enum("IdType",
+        "Empty", IdType::Empty,
+        "ApplicationText", IdType::ApplicationText,
+        "Building", IdType::Building,
+        "Race", IdType::Race,
+        "Lord", IdType::Lord,
+        "Spell", IdType::Spell,
+        "UnitGlobal", IdType::UnitGlobal,
+        "UnitGenerated", IdType::UnitGenerated,
+        "UnitModifier", IdType::UnitModifier,
+        "Attack", IdType::Attack,
+        "TextGlobal", IdType::TextGlobal,
+        "LandmarkGlobal", IdType::LandmarkGlobal,
+        "ItemGlobal", IdType::ItemGlobal,
+        "NobleAction", IdType::NobleAction,
+        "DynamicUpgrade", IdType::DynamicUpgrade,
+        "DynamicAttack", IdType::DynamicAttack,
+        "DynamicAltAttack", IdType::DynamicAltAttack,
+        "DynamicAttack2", IdType::DynamicAttack2,
+        "DynamicAltAttack2", IdType::DynamicAltAttack2,
+        "CampaignFile", IdType::CampaignFile,
+        // Do not list id types that are not understood yet
+        //"CW", IdType::CW,
+        //"CO", IdType::CO,
+        "Plan", IdType::Plan,
+        "ObjectCount", IdType::ObjectCount,
+        "ScenarioFile", IdType::ScenarioFile,
+        "Map", IdType::Map,
+        "MapBlock", IdType::MapBlock,
+        "ScenarioInfo", IdType::ScenarioInfo,
+        "SpellEffects", IdType::SpellEffects,
+        "Fortification", IdType::Fortification,
+        "Player", IdType::Player,
+        "PlayerKnownSpells", IdType::PlayerKnownSpells,
+        "Fog", IdType::Fog,
+        "PlayerBuildings", IdType::PlayerBuildings,
+        "Road", IdType::Road,
+        "Stack", IdType::Stack,
+        "Unit", IdType::Unit,
+        "Landmark", IdType::Landmark,
+        "Item", IdType::Item,
+        "Bag", IdType::Bag,
+        "Site", IdType::Site,
+        "Ruin", IdType::Ruin,
+        "Tomb", IdType::Tomb,
+        "Rod", IdType::Rod,
+        "Crystal", IdType::Crystal,
+        "Diplomacy", IdType::Diplomacy,
+        "SpellCast", IdType::SpellCast,
+        "Location", IdType::Location,
+        "StackTemplate", IdType::StackTemplate,
+        "Event", IdType::Event,
+        "StackDestroyed", IdType::StackDestroyed,
+        "TalismanCharges", IdType::TalismanCharges,
+        //"MT", IdType::MT,
+        "Mountains", IdType::Mountains,
+        "SubRace", IdType::SubRace,
+        "SubRaceType", IdType::SubRaceType,
+        "QuestLog", IdType::QuestLog,
+        "TurnSummary", IdType::TurnSummary,
+        "ScenarioVariable", IdType::ScenarioVariable
+    );
+
+    lua.new_enum("Order",
+        "Normal", OrderId::Normal,
+        "Stand", OrderId::Stand,
+        "Guard", OrderId::Guard,
+        "AttackStack", OrderId::AttackStack,
+        "DefendStack", OrderId::DefendStack,
+        "SecureCity", OrderId::SecureCity,
+        "Roam", OrderId::Roam,
+        "MoveToLocation", OrderId::MoveToLocation,
+        "DefendLocation", OrderId::DefendLocation,
+        "Bezerk", OrderId::Bezerk,
+        "Assist", OrderId::Assist,
+        "Steal", OrderId::Steal,
+        "DefendCity", OrderId::DefendCity
+    );
+
+    lua.new_enum("Resource",
+        "Gold", ResourceId::Gold,
+        "InfernalMana", ResourceId::InfernalMana,
+        "LifeMana", ResourceId::LifeMana,
+        "DeathMana", ResourceId::DeathMana,
+        "RunicMana", ResourceId::RunicMana,
+        "GroveMana", ResourceId::GroveMana
+    );
+
+    lua.new_enum("Difficulty",
+        "Easy", DifficultyLevelId::Easy,
+        "Average", DifficultyLevelId::Average,
+        "Hard", DifficultyLevelId::Hard,
+        "VeryHard", DifficultyLevelId::VeryHard
+    );
+
+    lua.new_enum("Building",
+        "Guild", BuildingId::Guild,
+        "Heal", BuildingId::Heal,
+        "Magic", BuildingId::Magic,
+        "Unit", BuildingId::Unit
+    );
+
+    lua.new_enum("UnitBranch",
+        "Fighter", UnitBranchId::Fighter,
+        "Archer", UnitBranchId::Archer,
+        "Mage", UnitBranchId::Mage,
+        "Special", UnitBranchId::Special,
+        "Sideshow", UnitBranchId::Sideshow,
+        "Hero", UnitBranchId::Hero,
+        "Noble", UnitBranchId::Noble,
+        "Summon", UnitBranchId::Summon
+    );
     // clang-format on
 
     bindings::UnitView::bind(lua);
@@ -297,11 +439,29 @@ static void bindApi(sol::state& lua)
     bindings::ItemView::bind(lua);
     bindings::PlayerView::bind(lua);
     bindings::ModifierView::bind(lua);
+    bindings::BattleTurnView::bind(lua);
     bindings::BattleMsgDataView::bind(lua);
+    bindings::BattleMsgDataViewMutable::bind(lua);
     bindings::DiplomacyView::bind(lua);
     bindings::FogView::bind(lua);
+    bindings::RodView::bind(lua);
+    bindings::CrystalView::bind(lua);
+    bindings::SiteView::bind(lua);
+    bindings::MerchantItemView::bind(lua);
+    bindings::MerchantView::bind(lua);
+    bindings::MercenaryUnitView::bind(lua);
+    bindings::MercsView::bind(lua);
+    bindings::TrainerView::bind(lua);
+    bindings::ResourceMarketView::bind(lua);
+    bindings::GlobalVariablesView::bind(lua);
+    bindings::GlobalView::bind(lua);
+    bindings::GameView::bind(lua);
+    bindings::BuildingView::bind(lua);
 
     lua.set_function("log", [](const std::string& message) { logDebug("luaDebug.log", message); });
+    lua.set_function("randomNumber", [](std::uint32_t maxValue) {
+        return game::gameFunctions().generateRandomNumber(maxValue);
+    });
 }
 
 // https://sol2.readthedocs.io/en/latest/threading.html
@@ -316,7 +476,7 @@ sol::state& getLua()
     if (lua == nullptr) {
         lua = std::make_unique<sol::state>();
         lua->open_libraries(sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::table,
-                            sol::lib::os, sol::lib::string);
+                            sol::lib::os, sol::lib::string, sol::lib::debug);
         bindApi(*lua);
     }
 
@@ -344,6 +504,16 @@ bindings::ScenarioView getScenario()
     return {getObjectMap()};
 }
 
+bindings::GlobalView getGlobal()
+{
+    return bindings::GlobalView();
+}
+
+bindings::GameView getGame()
+{
+    return bindings::GameView();
+}
+
 sol::environment executeScript(const std::string& source,
                                sol::protected_function_result& result,
                                bool bindScenario)
@@ -355,6 +525,9 @@ sol::environment executeScript(const std::string& source,
     sol::environment env{lua, sol::create, lua.globals()};
     result = lua.safe_script(source, env,
                              [](lua_State*, sol::protected_function_result pfr) { return pfr; });
+
+    env["getGlobal"] = &getGlobal;
+    env["getGame"] = &getGame;
 
     if (bindScenario) {
         env["getScenario"] = &getScenario;

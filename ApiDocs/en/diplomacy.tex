@@ -1,0 +1,31 @@
+\subsection{Diplomacy}
+\label{Diplomacy}
+Represents diplomacy relations between \hyperref[RaceCategory]{races} in \hyperref[Scenario]{scenario}.
+\subsubsection{Methods}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+getCurrentRelation(race1, race2) & Returns current diplomacy relations value between two \hyperref[RaceCategory]{races} in range \texttt{[0 : 100]}\\
+\hline
+getPreviousRelation(race1, race2) & Returns previous diplomacy relations value between two \hyperref[RaceCategory]{races} in range \texttt{[0 : 100]}\\
+\hline
+getAlliance(race1, race2) & Returns \texttt{true} if two \hyperref[RaceCategory]{races} are in alliance\\
+\hline
+getAllianceTurn(race1, race2) & Returns turn number when two \hyperref[RaceCategory]{races} made an alliance. Returns zero if races are not in alliance\\
+\hline
+getAlwaysAtWar(race1, race2) & Returns \texttt{true} if two \hyperref[RaceCategory]{races} are always at war\\
+\hline
+getAiCouldNotBreakAlliance(race1, race2) & Returns \texttt{true} if diplomacy relations prohibit AI-controlled \hyperref[RaceCategory]{races} from breaking alliance\\
+\hline
+getRelationType(value) & Returns \hyperref[Relation]{relation type} according to diplomacy relations value\\
+\hline
+\end{tabularx}
+\end{center}
+\paragraph{Relations value to type mapping}
+\begin{itemize}
+\item \texttt{[0 : D\_WAR]} - \texttt{Relation.War}
+\item \texttt{[D\_WAR : D\_NEUTRAL]} - \texttt{Relation.Neutral}
+\item \texttt{[D\_NEUTRAL : 100]} - \texttt{Relation.Peace}
+\end{itemize}

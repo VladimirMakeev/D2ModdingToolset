@@ -25,6 +25,7 @@
 namespace game {
 
 struct ITaskManagerHolder;
+struct ITask;
 
 struct CTaskManagerData
 {
@@ -41,6 +42,18 @@ struct CTaskManager
 };
 
 assert_size(CTaskManager, 8);
+
+namespace CTaskManagerApi {
+
+struct Api
+{
+    using SetCurrentTask = void(__thiscall*)(CTaskManager* taskManager, ITask* task);
+    SetCurrentTask setCurrentTask;
+};
+
+Api& get();
+
+} // namespace CTaskManagerApi
 
 } // namespace game
 

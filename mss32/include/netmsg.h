@@ -88,6 +88,9 @@ struct Api
 {
     using Destructor = void(__thiscall*)(CNetMsg* thisptr);
     Destructor destructor;
+
+    using Serialize = void(__thiscall*)(CNetMsg* thisptr, CMqStream* stream);
+    Serialize serialize;
 };
 
 Api& get();

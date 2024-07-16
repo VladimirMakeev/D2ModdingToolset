@@ -50,6 +50,7 @@ struct CSiteMerchantInterf : public CMidDataCache2::INotify
 };
 
 assert_size(CSiteMerchantInterf, 40);
+assert_offset(CSiteMerchantInterf, data, 36);
 
 namespace CSiteMerchantInterfApi {
 

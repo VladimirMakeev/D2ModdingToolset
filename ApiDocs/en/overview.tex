@@ -1,0 +1,25 @@
+\section{Overview}
+All scripts are expected to be written using \href{https://www.lua.org/}{Lua} language \href{https://www.lua.org/ftp/lua-5.4.1.tar.gz}{version 5.4.1} and should be placed in Scripts folder. Scripts folder itself should be placed in the game folder.
+
+
+Currently used scripts and their meanings:
+\begin{itemize}
+\item settings.lua - mss32 proxy dll settings that changes game rules
+\item doppelganger.lua - logic that computes level of doppelganger transform (category \texttt{L\_DOPPELGANGER})
+\item transformSelf.lua - computes unit level and determines free attacks to give for transform-self attacks (category \texttt{L\_TRANSFORM\_SELF})
+\item transformOther.lua - computes unit level for transform-other attacks (category \texttt{L\_TRANSFORM\_OTHER})
+\item summon.lua - computes summoned unit level for summon attacks (category \texttt{L\_SUMMON})
+\item textids.lua - contains interface text mapping for custom functionality
+\item getAllTargets.lua - contains selection/attack targeting logic for \texttt{L\_ANY}/\texttt{L\_ALL} attack reaches
+\item getAdjacentTargets.lua - contains selection/attack targeting logic for adjacent/all-adjacent attack reach
+\item getSelectedTargetAndAllAdjacentToIt.lua - contains attack targeting logic for selective-cleave attack reach
+\item getSelectedTargetAndOneAdjacentToIt.lua - contains attack targeting logic for single selective-cleave attack reach
+\item getSelectedTargetAndOneBehindIt.lua - contains attack targeting logic for pierce attack reach
+\item getSelectedLineTargets.lua - contains attack targeting logic for wide-cleave attack reach
+\item getSelectedColumnTargets.lua - contains attack targeting logic for column attack reach
+\item getSelectedArea2x2Targets.lua - contains attack targeting logic for 2x2 area splash attack reach
+\item getSelectedTargetAndTwoChainedRandom.lua - contains attack targeting logic for random chain attack reach
+\item getSelectedTargetAndOneRandom.lua - contains attack targeting logic for additional random target
+\item getWoundedFemaleGreenskinTargets.lua - contains targeting logic that only allows to reach wounded female greenskins
+\item \href{https://github.com/VladimirMakeev/D2ModdingToolset/tree/master/Scripts/Modifiers}{Scripts/Modifiers} - contain custom modifier script examples
+\end{itemize}

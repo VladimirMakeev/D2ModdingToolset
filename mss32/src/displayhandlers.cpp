@@ -21,25 +21,30 @@
 #include "version.h"
 #include <array>
 
-namespace game::DisplayHandlersApi {
+namespace game {
+namespace DisplayHandlersApi {
 
 // clang-format off
 static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::DisplayHandler<CMidVillage>)0x5bcb73,
+        (Api::DisplayHandler<CMidSite>)0x5bd31a,
     },
     // Russobit
     Api{
         (Api::DisplayHandler<CMidVillage>)0x5bcb73,
+        (Api::DisplayHandler<CMidSite>)0x5bd31a,
     },
     // Gog
     Api{
         (Api::DisplayHandler<CMidVillage>)0x5bbc37,
+        (Api::DisplayHandler<CMidSite>)0x5bc3de,
     },
     // Scenario Editor
     Api{
         (Api::DisplayHandler<CMidVillage>)0x55d9eb,
+        (Api::DisplayHandler<CMidSite>)0x55e192,
     },
 }};
 // clang-format on
@@ -49,4 +54,54 @@ Api& get()
     return functions[static_cast<int>(hooks::gameVersion())];
 }
 
-} // namespace game::DisplayHandlersApi
+} // namespace DisplayHandlersApi
+
+namespace ImageDisplayHandlerApi {
+
+// clang-format off
+static std::array<Api, 4> functions = {{
+    // Akella
+    Api{
+        (Api::AddHandler)0x5be078,
+    },
+    // Russobit
+    Api{
+        (Api::AddHandler)0x5be078,
+    },
+    // Gog
+    Api{
+        (Api::AddHandler)0x5bd13c,
+    },
+    // Scenario Editor
+    Api{
+        (Api::AddHandler)0x55ef15,
+    },
+}};
+// clang-format on
+
+Api& get()
+{
+    return functions[static_cast<int>(hooks::gameVersion())];
+}
+
+// clang-format off
+static std::array<ImageDisplayHandlerMap*, 4> instances = {{
+    // Akella
+    (ImageDisplayHandlerMap*)0x83a8d0,
+    // Russobit
+    (ImageDisplayHandlerMap*)0x83a8d0,
+    // Gog
+    (ImageDisplayHandlerMap*)0x838878,
+    // Scenario Editor
+    (ImageDisplayHandlerMap*)0x666440,
+}};
+// clang-format on
+
+ImageDisplayHandlerMap* instance()
+{
+    return instances[static_cast<int>(hooks::gameVersion())];
+}
+
+} // namespace ImageDisplayHandlerApi
+
+} // namespace game

@@ -21,6 +21,7 @@
 #define MQSTREAM_H
 
 #include "d2assert.h"
+#include <cstdint>
 
 namespace game {
 
@@ -43,7 +44,14 @@ struct CMqStreamVftable
     using Serialize = void(__thiscall*)(CMqStream* thisptr, const void* data, int count);
     Serialize serialize;
 
-    void* methods[3];
+    using Method2 = int(__thiscall*)(CMqStream* thisptr);
+    Method2 method2;
+
+    using GetNumBytes = std::uint32_t(__thiscall*)(CMqStream* thisptr);
+    GetNumBytes getNumBytes;
+
+    using GetBuffer = void*(__thiscall*)(CMqStream* thisptr);
+    GetBuffer getBuffer;
 };
 
 assert_vftable_size(CMqStreamVftable, 5);

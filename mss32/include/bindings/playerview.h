@@ -20,6 +20,7 @@
 #ifndef PLAYERVIEW_H
 #define PLAYERVIEW_H
 
+#include "buildingview.h"
 #include "currencyview.h"
 #include "idview.h"
 #include <optional>
@@ -52,6 +53,10 @@ public:
     bool isAlwaysAi() const;
 
     std::optional<FogView> getFog() const;
+
+    std::vector<BuildingView> getBuildings() const;
+    bool hasBuilding(const std::string& id) const;
+    bool hasBuildingById(const IdView& id) const;
 
 private:
     const game::CMidPlayer* player;

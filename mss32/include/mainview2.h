@@ -32,6 +32,7 @@ struct CZoomInterface;
 struct CDialogInterf;
 struct IMqImage2;
 struct CToggleButton;
+struct CCommandMsg;
 
 struct CMainView2
     : public CFullScreenInterf
@@ -46,7 +47,7 @@ struct CMainView2
     CDialogInterf* resourcePopup;
     char unknown14;
     char padding[3];
-    int unknown15;
+    CInterface* emptyInterface;
     CDialogInterf* dialogInterf;
     CMqRect imgResourceArea;
     CMqPoint bgndFillSize;
@@ -58,7 +59,7 @@ struct CMainView2
     IMqImage2* isoPalFill;
     CMqPoint imgPaletteTopLeftXBottomRightY;
     IMqImage2* isoBlackbar;
-    int unknown34;
+    int isoAreaWidthBlackbarAdjusted;
     int unknown35;
     bool unknown36;
     bool unknown37;
@@ -97,6 +98,10 @@ struct Api
                                                                 CMainView2* mainView,
                                                                 ToggleButtonCallback* callback);
     CreateToggleButtonFunctor createToggleButtonFunctor;
+
+    using HandleCmdStackVisitMsg = void(__thiscall*)(CMainView2* thisptr,
+                                                     const CCommandMsg* stackVisitMsg);
+    HandleCmdStackVisitMsg handleCmdStackVisitMsg;
 };
 
 Api& get();

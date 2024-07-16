@@ -118,6 +118,19 @@ struct TextIds
         std::string generationError;
         std::string limitExceeded;
     } rsg;
+
+    struct ResourceMarket
+    {
+        std::string encyDesc;
+        std::string infiniteAmount;
+        std::string exchangeDesc;
+        std::string exchangeNotAvailable;
+    } resourceMarket;
+
+    struct NobleActions
+    {
+        std::string stealMarketSuccess;
+    } nobleActions;
 };
 
 const TextIds& textIds();

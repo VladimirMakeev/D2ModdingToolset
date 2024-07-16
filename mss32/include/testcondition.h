@@ -59,6 +59,24 @@ struct Api
                                                bool samePlayer,
                                                const CMidgardID* triggererStackId);
     Create create;
+
+    ITestConditionVftable::Test testFrequency;
+    ITestConditionVftable::Test testLocation;
+    ITestConditionVftable::Test testEnterCity;
+    ITestConditionVftable::Test testOwnCity;
+    ITestConditionVftable::Test testKillStack;
+    ITestConditionVftable::Test testOwnItem;
+    ITestConditionVftable::Test testLeaderOwnItem;
+    ITestConditionVftable::Test testDiplomacy;
+    ITestConditionVftable::Test testAlliance;
+    ITestConditionVftable::Test testLootRuin;
+    ITestConditionVftable::Test testTransformLand;
+    ITestConditionVftable::Test testVisitSite;
+    ITestConditionVftable::Test testLeaderToZone;
+    ITestConditionVftable::Test testLeaderToCity;
+    ITestConditionVftable::Test testItemToLocation;
+    ITestConditionVftable::Test testStackExists;
+    ITestConditionVftable::Test testVarInRange;
 };
 
 Api& get();

@@ -63,6 +63,12 @@ struct Api
 {
     using GetDialog = CDialogInterf*(__thiscall*)(CDragAndDropInterf* thisptr);
     GetDialog getDialog;
+
+    using Constructor = CDragAndDropInterf*(__thiscall*)(CDragAndDropInterf* thisptr,
+                                                         const char* dialogName,
+                                                         ITask* task,
+                                                         bool a8);
+    Constructor constructor;
 };
 
 Api& get();

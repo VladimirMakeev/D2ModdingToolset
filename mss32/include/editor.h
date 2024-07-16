@@ -20,6 +20,8 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
+#include "intvector.h"
+
 namespace game {
 
 struct CMidgardID;
@@ -31,6 +33,12 @@ struct TRaceType;
 struct CCapital;
 struct CVisitorAddPlayer;
 struct String;
+struct CMqPoint;
+struct CMidgardMap;
+struct LSiteCategory;
+struct IMqImage2;
+struct CMidSite;
+struct CTextBoxInterf;
 
 /**
  * Returns player id depending on RAD_CASTER radio button selection in DLG_EFFECT_CASTMAP dialog.
@@ -44,7 +52,9 @@ using FindPlayerByRaceCategory = CMidPlayer*(__stdcall*)(const LRaceCategory* ra
                                                          IMidgardObjectMap* objectMap);
 
 /** Returns true if tiles are suitable for site or ruin. */
-using CanPlace = bool(__stdcall*)(int, int, int);
+using CanPlace = bool(__stdcall*)(const CMqPoint* position,
+                                  const CMidgardMap* map,
+                                  const IMidgardObjectMap* objectMap);
 
 /** Returns number of CMidStack objects on map. */
 using CountStacksOnMap = int(__stdcall*)(IMidgardObjectMap* objectMap);
@@ -68,6 +78,26 @@ using GetObjectNamePos = String*(__stdcall*)(String* description,
                                              const IMidgardObjectMap* objectMap,
                                              const CMidgardID* objectId);
 
+/**
+ * Returns indices (G000SI0000<suffix><index>) of site images in .ff files
+ * for specified site category.
+ */
+using GetSiteImageIndices = void(__stdcall*)(IntVector* indices,
+                                             const LSiteCategory* site,
+                                             int animatedIso);
+
+using GetSiteImage = IMqImage2*(__stdcall*)(const LSiteCategory* site,
+                                            int imageIndex,
+                                            bool animatedIso);
+
+using GetSiteAtPosition = const CMidSite*(__stdcall*)(const CMqPoint* mapPosition,
+                                                      const IMidgardObjectMap* objectMap);
+
+using ShowOrHideSiteOnStrategicMap = void(__stdcall*)(const CMidSite* site,
+                                                      const IMidgardObjectMap* objectMap,
+                                                      const CMidgardID* playerId,
+                                                      int a4);
+
 /** Scenario Editor functions that can be hooked. */
 struct EditorFunctions
 {
@@ -80,6 +110,10 @@ struct EditorFunctions
     IsRaceCategoryPlayable isRaceCategoryPlayable;
     ChangeCapitalTerrain changeCapitalTerrain;
     GetObjectNamePos getObjectNamePos;
+    GetSiteImageIndices getSiteImageIndices;
+    GetSiteImage getSiteImage;
+    GetSiteAtPosition getSiteAtPosition;
+    ShowOrHideSiteOnStrategicMap showOrHideSiteOnStrategicMap;
 };
 
 extern EditorFunctions editorFunctions;

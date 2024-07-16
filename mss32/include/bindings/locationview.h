@@ -22,6 +22,7 @@
 
 #include "idview.h"
 #include "point.h"
+#include <string>
 
 namespace sol {
 class state;
@@ -43,6 +44,7 @@ public:
     IdView getId() const;
     Point getPosition() const;
     int getRadius() const;
+    std::string getName() const;
 
 private:
     const game::CMidLocation* location;

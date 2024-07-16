@@ -20,7 +20,7 @@
 #ifndef MIDPLAYER_H
 #define MIDPLAYER_H
 
-#include "categories.h"
+#include "aiattitudescat.h"
 #include "currency.h"
 #include "d2set.h"
 #include "midgardid.h"

@@ -33,6 +33,24 @@ struct CEncParamIDPlayer : CEncParamBase
 
 assert_size(CEncParamIDPlayer, 16);
 
+namespace CEncParamIDPlayerApi {
+
+struct Api
+{
+    using Constructor = CEncParamIDPlayer*(__thiscall*)(CEncParamIDPlayer* thisptr,
+                                                        const CMidgardID* objectId,
+                                                        const CMidgardID* playerId,
+                                                        SmartPointer* functor);
+    Constructor constructor;
+
+    using Destructor = void(__thiscall*)(CEncParamIDPlayer* thisptr);
+    Destructor destructor;
+};
+
+Api& get();
+
+} // namespace CEncParamIDPlayerApi
+
 } // namespace game
 
 #endif // ENCPARAMPLAYERID_H

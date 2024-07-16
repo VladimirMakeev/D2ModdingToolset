@@ -99,8 +99,10 @@ public:
     std::optional<AttackView> getAttack() const;
     /** Returns secondary attack. */
     std::optional<AttackView> getAttack2() const;
-    /** Returns alternative attack. */
+    /** Returns alternative attack for primary attack. */
     std::optional<AttackView> getAltAttack() const;
+    /** Returns alternative attack for secondary attack. */
+    std::optional<AttackView> getAltAttack2() const;
 
     /** Returns immune category id for specified attack class id. */
     int getImmuneToAttackClass(int attackClassId) const;

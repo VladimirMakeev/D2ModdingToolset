@@ -30,24 +30,28 @@ static std::array<Api, 4> functions = {{
         (Api::PushBack)0x522151,
         (Api::Clear)0x522289,
         (Api::AddShieldImageLayer)0x5bca73,
+        (Api::GetMapElementIsoLayerImages)0x5bc668,
     },
     // Russobit
     Api{
         (Api::PushBack)0x522151,
         (Api::Clear)0x522289,
         (Api::AddShieldImageLayer)0x5bca73,
+        (Api::GetMapElementIsoLayerImages)0x5bc668,
     },
     // Gog
     Api{
         (Api::PushBack)0x524c10,
         (Api::Clear)0x407a04,
         (Api::AddShieldImageLayer)0x5bbb37,
+        (Api::GetMapElementIsoLayerImages)0x5bb72c,
     },
     // Scenario Editor
     Api{
         (Api::PushBack)0x55e5b7,
         (Api::Clear)0x5541ca,
         (Api::AddShieldImageLayer)0x55d8eb,
+        (Api::GetMapElementIsoLayerImages)0x55d4e0,
     },
 }};
 // clang-format on

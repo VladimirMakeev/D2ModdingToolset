@@ -1,0 +1,87 @@
+\subsection{Battle}
+\label{Battle}
+Represents battle state.
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+currentRound & Returns current round in battle. Round counting starts from 1, but there is a special round 0 when units with `Doppelganger' \hyperref[Attack]{attacks} present\\
+\hline
+autoBattle & Returns \texttt{true} if autobattle mode is turned on\\
+\hline
+fastBattle & Returns \texttt{true} if fast battle is turned on. When fast battle is active, auto battle is active too\\
+\hline
+attackerPlayer & Returns \hyperref[Player]{player} that started battle or \texttt{nil} if not found\\
+\hline
+defenderPlayer & Returns \hyperref[Player]{player} that was attacked or \texttt{nil} if not found\\
+\hline
+attacker & Returns \hyperref[Stack]{stack} that started battle. Only stacks can initiate battles\\
+\hline
+defender & Returns \hyperref[Group]{group} that was attacked. Defender group can represent units of a \hyperref[Stack]{stack}, \hyperref[Fort]{fort} or \hyperref[Ruin]{ruin}. Use \texttt{group.id.type} to get an actual type of a group\\
+\hline
+decidedToRetreat & Returns \texttt{true} if decision about groups retreat was made and should not be reconsidered\\
+\hline
+afterBattle & Returns \texttt{true} if battle is over but healers can make one more turn to heal allies\\
+\hline
+duel & Returns \texttt{true} if battle is a duel between thief and a stack leader. All units except leaders are marked with \texttt{Hidden} \hyperref[BattleStatus]{battle status}\\
+\hline
+turnsOrder & Returns list of \hyperref[BattleTurn]{battle turns} remaining in the current round of battle. Position of elements in the list corresponds to order of remaining turns in current round. In other words, at the start of a round, battle turns in the list are sorted according to units initiative, including an additional random initiative\\
+\hline
+\end{tabularx}
+\end{center}
+
+\subsubsection{Methods}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+getUnitStatus(id, BattleStatus.Defend) & Returns \texttt{true} if a unit with a specified \hyperref[Id]{id} has a specified \hyperref[BattleStatus]{battle status}\\
+\hline
+isUnitAttacker(unit) & Returns \texttt{true} if \hyperref[Unit]{unit} belongs to attacker group.\\
+isUnitAttacker(id) & Method also accepts unit \hyperref[Id]{ids}\\
+\hline
+getUnitActions(unit) & Returns possible actions and attack options for specified \hyperref[Unit]{unit}.\\
+getUnitActions(id) & Method also accepts unit \hyperref[Id]{ids}\\
+\hline
+getRetreatStatus(true) & Returns retreat status of attacker (\texttt{true}) or defender (\texttt{false}) group\\
+getRetreatStatus(false) &\\
+\hline
+isUnitRevived(unit) & Returns \texttt{true} if specified \hyperref[Unit]{unit} was revived during battle.\\
+isUnitRevived(id) & Method also accepts unit \hyperref[Id]{ids}\\
+\hline
+isUnitWaiting(unit) & Returns \texttt{true} if specified \hyperref[Unit]{unit} skipped its turn and waiting.\\
+isUnitWaiting(id) & Method also accepts unit \hyperref[Id]{ids}\\
+\hline
+getUnitShatteredArmor(unit) & Returns amount of \hyperref[Unit]{unit} armor shattered in battle so far.\\
+getUnitShatteredArmor(id) & Method also accepts unit \hyperref[Id]{ids}\\
+\hline
+getUnitFortificationArmor(unit) & Returns armor that is granted to \hyperref[Unit]{unit} by fortification, if any.\\
+getUnitFortificationArmor(id) & Method also accepts unit \hyperref[Id]{ids}\\
+\hline
+isUnitResistantToClass(unit, attackClass) & Returns true if specified \hyperref[Unit]{unit} is resistant to \hyperref[AttackCategory]{attack class}.\\
+isUnitResistantToClass(id, attackClass) & Method also accepts unit \hyperref[Id]{ids}\\
+\hline
+isUnitResistantToSource(unit, attackSource) & Returns true if specified \hyperref[Unit]{unit} is resistant to \hyperref[SourceCategory]{attack source}.\\
+isUnitResistantToSource(id, attackSource) & Method also accepts unit \hyperref[Id]{ids}\\
+\hline
+getUnitDisableRound(unit) & Returns round when paralyze, petrify or fear was applied to \hyperref[Unit]{unit}. Returns 0 if unit is not disabled.\\
+getUnitDisableRound(id) & Method also accepts unit \hyperref[Id]{ids}\\
+\hline
+getUnitPoisonRound(unit) & Returns round when long poison was applied to \hyperref[Unit]{unit}. Returns 0 if unit is not poisoned.\\
+getUnitPoisonRound(id) & Method also accepts unit \hyperref[Id]{ids}\\
+\hline
+getUnitFrostbiteRound(unit) & Returns round when long frostbite was applied to \hyperref[Unit]{unit}. Returns 0 if unit is not frozen.\\
+getUnitFrostbiteRound(id) & Method also accepts unit \hyperref[Id]{ids}\\
+\hline
+getUnitBlisterRound(unit) & Returns round when long blister was applied to \hyperref[Unit]{unit}. Returns 0 if unit is not burning.\\
+getUnitBlisterRound(id) & Method also accepts unit \hyperref[Id]{ids}\\
+\hline
+getUnitTransformRound(unit) & Returns round when long transform was applied to \hyperref[Unit]{unit}. Returns 0 if unit is not transformed.\\
+getUnitTransformRound(id) & Method also accepts unit \hyperref[Id]{ids}\\
+\hline
+setRetreatStatus(true, Retreat.FullRetreat) & Sets \hyperref[Retreat]{retreat status} of attacker (\texttt{true}) or defender (\texttt{false}) group. This method can be only used in AI battle action script\\
+setRetreatStatus(false, Retreat.NoRetreat) &\\
+\hline
+setDecidedToRetreat() & Notifies battle state that the decision about groups retreat was made and it is final. This method can be only used in AI battle action script\\
+\hline
+\end{tabularx}
+\end{center}

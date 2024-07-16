@@ -1,0 +1,148 @@
+\subsection{GlobalVariables}
+\label{GlobalVariables}
+Allows to access contents of \texttt{GVars.dbf}.
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description}\\
+\hline
+weapnMstr & Instructor skill bonus experience, \texttt{WEAPN\_MSTR}\\
+\hline
+batInit & Max additional initiative points that randomly added to unit in battle. \texttt{BAT\_INIT}\\
+\hline
+batDamage & Max additional damage points that randomly added to unit damage in battle. \texttt{BAT\_DAMAGE}\\
+\hline
+batRound & \texttt{BAT\_ROUND}\\
+\hline
+batBreak & \texttt{BAT\_BREAK}\\
+\hline
+batBModif & \texttt{BAT\_BMODIF}\\
+\hline
+batLoweri & Initiative debuff. \texttt{BATLOWERI}\\
+\hline
+ldrMaxAbil & Maximum number of abilities leader can learn. \texttt{LDRMAXABIL}\\
+\hline
+spyDiscov & Spy discovery chance per turn. \texttt{SPY\_DISCOV}\\
+\hline
+poisonC & Damage from thief action 'poison city'. \texttt{POISON\_C}\\
+\hline
+poisonS & Damage from thief action 'poison stack'. \texttt{POISON\_S}\\
+\hline
+bribe & Bribe multiplier. \texttt{BRIBE}\\
+\hline
+stealRace & \texttt{STEAL\_RACE}\\
+\hline
+stealNeut & \texttt{STEAL\_NEUT}\\
+\hline
+riotMin & Minimal riot duration in days. \texttt{RIOT\_MIN}\\
+\hline
+riotMax & Maximal riot duration in days. \texttt{RIOT\_MAX}\\
+\hline
+riotDmg & Percentage of riot damage. \texttt{RIOT\_DMG}\\
+\hline
+sellRatio & Percentage of the original price of the items at sale. \texttt{SELL\_RATIO}\\
+\hline
+tCapture & Land transformation after city capture. \texttt{T\_CAPTURE}\\
+\hline
+tCapital & Land transformation per turn by capital. \texttt{T\_CAPITAL}\\
+\hline
+rodRange & Range of land transformation by rod per turn. \texttt{ROD\_RANGE}\\
+\hline
+crystalP & Profit per mana crystal or gold mine per turn. \texttt{CRYSTAL\_P}\\
+\hline
+constUrg & \texttt{CONST\_URG}\\
+\hline
+regenLwar & Bonus per day regeneration for fighter leader. \texttt{REGEN\_LWAR}\\
+\hline
+regenRuin & Bonus per day regeneration for units in ruins. \texttt{REGEN\_RUIN}\\
+\hline
+dPeace & Diplomacy level representing peace. \texttt{D\_PEACE}\\
+\hline
+dWar & Diplomacy level representing war. \texttt{D\_WAR}\\
+\hline
+dNeutral & Diplomacy level representing neutrality. \texttt{D\_NEUTRAL}\\
+\hline
+dGold & \texttt{D\_GOLD}\\
+\hline
+dMkAlly & \texttt{D\_MK\_ALLY}\\
+\hline
+dAttakSc & \texttt{D\_ATTACK\_SC}\\
+\hline
+dAttakFo & \texttt{D\_ATTACK\_FO}\\
+\hline
+dAttakPc & \texttt{D\_ATTACK\_PC}\\
+\hline
+dRod & \texttt{D\_ROD}\\
+\hline
+dRefAlly & \texttt{D\_REF\_ALLY}\\
+\hline
+dBkAlly & \texttt{D\_BK\_ALLY}\\
+\hline
+dNoble & \texttt{D\_NOBLE}\\
+\hline
+dBkaChnc & \texttt{D\_BKA\_CHANCE}\\
+\hline
+dBkaTurn & \texttt{D\_BKA\_TURN}\\
+\hline
+\end{tabularx}
+\end{center}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description}\\
+\hline
+protCap & Capital protection. \texttt{PROT\_CAP}\\
+\hline
+bonusE & Additional gold on easy difficulty. \texttt{BONUS\_E}\\
+\hline
+bonusA & Additional gold on average difficulty. \texttt{BONUS\_A}\\
+\hline
+bonusH & Additional gold on hard difficulty. \texttt{BONUS\_H}\\
+\hline
+bonusV & Additional gold on very hard difficulty. \texttt{BONUS\_V}\\
+\hline
+incomeE & Income increase on easy difficulty. \texttt{INCOME\_E}\\
+\hline
+incomeA & Income increase on average difficulty. \texttt{INCOME\_A}\\
+\hline
+incomeH & Income increase on hard difficulty. \texttt{INCOME\_H}\\
+\hline
+incomeV & Income increase on very hard difficulty. \texttt{INCOME\_V}\\
+\hline
+guRange & \texttt{GU\_RANGE}\\
+\hline
+paRange & \texttt{PA\_RANGE}\\
+\hline
+loRange & \texttt{LO\_RANGE}\\
+\hline
+defendBonus & Armor bonus when unit uses defend in battle. \texttt{DFENDBONUS}\\
+\hline
+talisChrg & \texttt{TALIS\_CHRG}\\
+\hline
+gainSpell & Chance to get spells with capture of a capital. \texttt{GAIN\_SPELL}\\
+\hline
+rodCost & Rod placement cost. \texttt{ROD\_COST}\\
+\hline
+\end{tabularx}
+\end{center}
+\subsubsection{Methods}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description}\\
+\hline
+morale(n) & Input tier values must be in range \texttt{[1 : 6]}. \texttt{MORALE\_n}\\
+\hline
+batBoostd(n) & Damage boost values for various levels. Levels must be in range \texttt{[1 : 4]}. \texttt{BATBOOSTDn}\\
+\hline
+batLowerd(n) & Damage debuff values for various levels. Levels must be in range \texttt{[1 : 2]}. \texttt{BATLOWERDn}\\
+\hline
+tCity(n) & Land transformation per turn by cities of different tiers. Tier must be in range \texttt{[1 : 5]}. \texttt{T\_CITYn}\\
+\hline
+prot(n) & City protection values for various tier levels. Tier must be in range \texttt{[1 : 6]}. In case of tier 6, returns \texttt{protCap}. \texttt{PROT\_n}\\
+\hline
+splPwr(n) & Input tier values must be in range \texttt{[1 : 5]}. \texttt{SPLPWR\_n}\\
+\hline
+\end{tabularx}
+\end{center}

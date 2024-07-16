@@ -1,0 +1,23 @@
+\subsection{Ruin}
+\label{Ruin}
+Represents Ruin on a map. Ruin contains a garrison \hyperref[Group]{group} of 6 unit \hyperref[UnitSlot]{slots}.
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+id & Returns ruin \hyperref[Id]{id}. The value is unique for every ruin on scenario map\\
+\hline
+position & Returns ruin position as a \hyperref[Point]{point}\\
+\hline
+looter & Returns \hyperref[Player]{player} that have looted the ruin or \texttt{nil} if none\\
+\hline
+group & Returns ruin units as a \hyperref[Group]{group}\\
+\hline
+item & Returns \hyperref[Item]{item} reward for looting the ruin or \texttt{nil} if none\\
+\hline
+cash & Returns \hyperref[Currency]{cash} reward for looting the ruin\\
+\hline
+\end{tabularx}
+\end{center}

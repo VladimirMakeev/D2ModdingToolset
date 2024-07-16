@@ -1,0 +1,35 @@
+\subsection{Group}
+\label{Group}
+Represents 6 unit \hyperref[UnitSlot]{slots}.
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+id & Returns group \hyperref[Id]{id}\\
+\hline
+slots & Returns group as an array of 6 \hyperref[UnitSlot]{slots}\\
+\hline
+units & Returns group as an array of \hyperref[Unit]{units}\\
+\hline
+subrace & Returns group \hyperref[SubraceCategory]{subrace}. In case of group inside \hyperref[Ruin]{ruin}, returns -1 since ruins do not belong to subraces\\
+\hline
+\end{tabularx}
+\end{center}
+
+\subsubsection{Methods}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+hasUnit(unit) & Returns true if group has specified \hyperref[Unit]{unit}\\
+\hline
+hasUnit(Id.new('S143UN0001')) & Returns true if group has specified unit \hyperref[Id]{id}\\
+\hline
+getUnitPosition(unit) & Returns \hyperref[Unit]{unit} position in group, or -1 if unit not found\\
+getUnitPosition(unit.id) &\\
+\hline
+\end{tabularx}
+\end{center}

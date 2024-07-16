@@ -1,0 +1,180 @@
+\subsection{Resource market}
+\label{ResourceMarket}
+Represents resource market on a map.
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+id & Returns market \hyperref[Id]{id}. The value is unique for every resource market on scenario map\\
+\hline
+position & Returns market position as a \hyperref[Point]{point}\\
+\hline
+visitors & Returns list of \hyperref[Player]{players} that have visited the market\\
+\hline
+stock & Returns market \hyperref[Currency]{stock}\\
+\hline
+customRates & Returns \texttt{true} if resource market uses custom exchange rates\\
+\hline
+\end{tabularx}
+\end{center}
+
+\subsubsection{Methods}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+isInfinite(Resource.Gold) & Returns \texttt{true} if market has infinite amount of specified \hyperref[Resource]{resource}\\
+\hline
+\end{tabularx}
+\end{center}
+
+\subsubsection{Custom exchange rates}
+Custom exchange rates are defined by Lua script which must declare function with a predefined name:
+\texttt{getExchangeRates}.
+Function must return table with exchanges that are possible. Empty table means that market could not exchange resources at all.\\
+Function signature:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+function getExchangeRates(visitorStack, market, serverSide)
+  return { }
+end
+\end{lstlisting}
+\end{center}
+Arguments are:
+\begin{itemize}
+\item \texttt{visitorStack} - \hyperref[Stack]{stack} that is currently visiting the market
+\item \texttt{market} - \hyperref[ResourceMarket]{resource market} itself
+\item \texttt{serverSide} - \texttt{true} if exchange rates script is executed by the server
+\end{itemize}
+Possible exchange is represented by a table that specifies resource that player can sell and a list of resources it can get, with rates.\\
+Format is shown by the following listing:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+{
+  player_resource,
+  { market_resource, player_resource_amount, market_resource_amount }
+}
+\end{lstlisting}
+\end{center}
+Exchange that allows player to sell 2 gold for 1 life mana:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+{
+  Resource.Gold,
+  { Resource.LifeMana, 2, 1 }
+}
+\end{lstlisting}
+\end{center}
+Exchange that allows player to sell gold: 2 gold for 1 life mana or 7 gold for 4 death mana:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+{
+  Resource.Gold,
+  { Resource.LifeMana, 2, 1 },
+  { Resource.DeathMana, 7, 4 }
+}
+\end{lstlisting}
+\end{center}
+Exchange that allows player to sell runic mana: 1 runic mana for 10 gold or 4 runic mana for 2 grove mana:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+{
+  Resource.RunicMana,
+  { Resource.Gold, 1, 10 },
+  { Resource.GroveMana, 4, 2 }
+}
+\end{lstlisting}
+\end{center}
+Market exchange rates table must contain list of possible exchanges. Here is the example of exchange rates when player is allowed to trade gold for life mana and life mana for other mana types:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+{
+  {
+    Resource.Gold,
+    { Resource.LifeMana, 2, 1 }
+  },
+  {
+    Resource.LifeMana,
+    { Resource.DeathMana, 4, 1 },
+    { Resource.RunicMana, 4, 1 },
+    { Resource.InfernalMana, 4, 1 },
+    { Resource.GroveMana, 4, 1 }
+  }
+}
+\end{lstlisting}
+\end{center}
+\texttt{getExchangeRates} function must return such table.\\
+\subsubsection{Examples}
+Custom exchange rates where market is only allowed to exchange 7 gold for 1 life mana:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+function getExchangeRates(visitorStack, market, serverSide)
+  return {
+    {
+      Resource.Gold,
+      { Resource.LifeMana, 7, 1 }
+    }
+  }
+end
+\end{lstlisting}
+\end{center}
+\newpage
+All functions and objects of Lua API can be used in custom exchange rates scripts. This allows mod and map makers to check for lord types, specific leaders or stack groups, units and more.\\
+Example of custom exchange rates where exchange rates depend on number of previously visited resource markets:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+-- Returns true if market was visited by specified race
+local function isMarketVisited(market, race)
+  local visitors = market.visitors
+  for i = 1, #visitors do
+    local visitor = visitors[i]
+    if visitor.race == race then
+      return true
+    end
+  end
+  
+  return false
+end
+
+function getExchangeRates(visitor, currentMarket, serverSide)
+  local visitorRace = visitor.owner.race
+  local marketsVisited = 0
+  
+  local countVisitedMarkets = function (market)
+    if isMarketVisited(market, visitorRace) then
+      marketsVisited = marketsVisited + 1
+    end
+  end
+  
+  -- Count how many markets we have visited so far
+  getScenario():forEachMarket(countVisitedMarkets)
+
+  -- Check if current resource market is already visited.
+  -- If not, it means we entered it for the first time
+  -- and game have not yet marked it as visited.
+  if not isMarketVisited(currentMarket, visitorRace) then
+    marketsVisited = marketsVisited + 1
+  end
+
+  local exchangeRate = { 100, 50, 25, 12 }
+  -- Make sure index stays within array bounds
+  marketsVisited = math.min(marketsVisited, #exchangeRate)
+
+  local rate = exchangeRate[marketsVisited]
+
+  return {
+    {
+      Resource.Gold,
+      {
+        -- Exchange (100 / 50 / 25 / 12) gold for 50 life mana
+        -- Rate depends on how many resource markets player have visited so far
+        { Resource.LifeMana, rate, 50 }
+      }
+    }
+  }
+end
+\end{lstlisting}
+\end{center}

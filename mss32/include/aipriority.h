@@ -20,13 +20,27 @@
 #ifndef AIPRIORITY_H
 #define AIPRIORITY_H
 
+#include "d2assert.h"
+
 namespace game {
+
+struct IAiPriorityVftable;
 
 struct IAiPriority
 {
-    const void* vftable;
+    const IAiPriorityVftable* vftable;
     int priority;
 };
+
+assert_size(IAiPriority, 8);
+
+struct IAiPriorityVftable
+{
+    using Destructor = void(__thiscall*)(IAiPriority* thisptr, char flags);
+    Destructor destructor;
+};
+
+assert_vftable_size(IAiPriorityVftable, 1);
 
 } // namespace game
 

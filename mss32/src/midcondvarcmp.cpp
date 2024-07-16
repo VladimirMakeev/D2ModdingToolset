@@ -38,6 +38,7 @@
 #include "radiobuttoninterf.h"
 #include "testcondition.h"
 #include "textids.h"
+#include "timer.h"
 #include "utils.h"
 #include <fmt/format.h>
 #include <functional>
@@ -520,6 +521,14 @@ bool __fastcall testVarCmpDoTest(const CTestVarCmp* thisptr,
                                  const game::CMidgardID* playerId,
                                  const game::CMidgardID* eventId)
 {
+#ifdef D2_MEASURE_EVENTS_TIME
+    extern const std::string_view eventsPerformanceLog;
+    ScopedTimer timer{"    Test contidion 'var cmp'", eventsPerformanceLog};
+
+    extern long long conditionsTotalTime;
+    ScopedValueTimer valueTimer{conditionsTotalTime};
+#endif
+
     auto variables = getScenarioVariables(objectMap);
     if (!variables) {
         // Sanity check, this should never happen

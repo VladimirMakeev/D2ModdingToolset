@@ -1,0 +1,49 @@
+\subsection{Stack}
+\label{Stack}
+Represents \hyperref[Group]{group} of 6 unit \hyperref[UnitSlot]{slots} on a map. One of the units is a leader.
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+id & Returns stack \hyperref[Id]{id}. The value is unique for every stack on scenario map\\
+\hline
+position & Returns stack position as a \hyperref[Point]{point}\\
+\hline
+owner & Returns \hyperref[Player]{player} that owns the stack. Neutral stacks are owned by neutral player\\
+\hline
+inside & Returns \hyperref[Fort]{fort} that this stack is visiting or \texttt{nil} if none\\
+\hline
+group & Returns stack units as a \hyperref[Group]{group}\\
+\hline
+leader & Returns stack leader \hyperref[Unit]{unit}\\
+\hline
+inventory & Returns array of inventory \hyperref[Item]{items}. This includes equipped items\\
+\hline
+subrace & Returns stack \hyperref[SubraceCategory]{subrace}\\
+\hline
+order & Returns stack \hyperref[OrderCategory]{order}\\
+\hline
+orderTargetId & Returns stack's order target \hyperref[Id]{id}\\
+\hline
+aiOrder & Returns stack AI \hyperref[OrderCategory]{order}\\
+\hline
+movement & Returns stack current movement points\\
+\hline
+invisible & Returns \texttt{true} if stack is invisible\\
+\hline
+battlesWon & Returns number of battles won by the stack\\
+\hline
+\end{tabularx}
+\end{center}
+\subsubsection{Methods}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+getEquippedItem(Equipment.Boots) & Returns equipped \hyperref[Item]{item} by \hyperref[EquipmentCategory]{equipment} value\\
+\hline
+\end{tabularx}
+\end{center}

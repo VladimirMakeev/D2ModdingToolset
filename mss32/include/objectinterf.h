@@ -26,6 +26,8 @@ namespace game {
 
 namespace editor {
 
+struct CTaskObj;
+
 struct CObjectInterfData
 {
     int selectedMode;
@@ -40,6 +42,19 @@ struct CObjectInterf : public CIsoView
 };
 
 assert_size(CObjectInterf, 24);
+
+namespace CObjectInterfApi {
+
+struct Api
+{
+    // thisptr points to ITaskManagerHolder inside CObjectInterf
+    using CreateTaskObj = CTaskObj*(__thiscall*)(ITaskManagerHolder* thisptr);
+    CreateTaskObj createTaskObj;
+};
+
+Api& get();
+
+} // namespace CObjectInterfApi
 
 } // namespace editor
 

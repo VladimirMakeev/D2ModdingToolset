@@ -23,6 +23,7 @@
 #include "globaldata.h"
 #include "lordtype.h"
 #include "midplayer.h"
+#include "playerbuildings.h"
 #include "racetype.h"
 #include <sol/sol.hpp>
 
@@ -43,6 +44,8 @@ void PlayerView::bind(sol::state& lua)
     view["human"] = sol::property(&PlayerView::isHuman);
     view["alwaysAi"] = sol::property(&PlayerView::isAlwaysAi);
     view["fog"] = sol::property(&PlayerView::getFog);
+    view["buildings"] = sol::property(&PlayerView::getBuildings);
+    view["hasBuilding"] = sol::overload<>(&PlayerView::hasBuilding, &PlayerView::hasBuildingById);
 }
 
 IdView PlayerView::getId() const
@@ -96,6 +99,58 @@ std::optional<FogView> PlayerView::getFog() const
     }
 
     return FogView{fog};
+}
+
+std::vector<BuildingView> PlayerView::getBuildings() const
+{
+    using namespace game;
+
+    std::vector<BuildingView> buildings;
+
+    auto playerBuildings{hooks::getPlayerBuildings(objectMap, player)};
+    if (!playerBuildings) {
+        return buildings;
+    }
+
+    const auto& buildingsList{playerBuildings->buildings};
+
+    const auto& globalApi{GlobalDataApi::get()};
+    const GlobalData* global{*globalApi.getGlobalData()};
+
+    buildings.reserve(buildingsList.length);
+    for (auto node = buildingsList.head->next; node != buildingsList.head; node = node->next) {
+        auto buildingType{(const TBuildingType*)globalApi.findById(global->buildings, &node->data)};
+        if (!buildingType) {
+            continue;
+        }
+
+        buildings.push_back(BuildingView{buildingType});
+    }
+
+    return buildings;
+}
+
+bool PlayerView::hasBuilding(const std::string& id) const
+{
+    return hasBuildingById(IdView{id});
+}
+
+bool PlayerView::hasBuildingById(const IdView& id) const
+{
+    auto playerBuildings{hooks::getPlayerBuildings(objectMap, player)};
+    if (!playerBuildings) {
+        return false;
+    }
+
+    const auto& buildings{playerBuildings->buildings};
+
+    for (auto node = buildings.head->next; node != buildings.head; node = node->next) {
+        if (node->data == id.id) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 } // namespace bindings

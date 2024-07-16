@@ -1,0 +1,31 @@
+\subsection{Fort}
+\label{Fort}
+Represents Capital or City on a map. Fort contains a garrison \hyperref[Group]{group} of 6 unit \hyperref[UnitSlot]{slots}. Note that the garrison group is different to a group of visiting \hyperref[Stack]{stack}.
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+id & Returns fort \hyperref[Id]{id}. The value is unique for every fort on scenario map\\
+\hline
+position & Returns fort position as a \hyperref[Point]{point}\\
+\hline
+entrance & Return fort entrance coordinates as a \hyperref[Point]{point}\\
+\hline
+owner & Returns \hyperref[Player]{player} that owns the fort. Neutral forts are owned by neutral player\\
+\hline
+group & Returns fort units as a \hyperref[Group]{group}\\
+\hline
+visitor & Returns visitor \hyperref[Stack]{stack}, or \texttt{nil} if none\\
+\hline
+subrace & Returns fort \hyperref[SubraceCategory]{subrace}\\
+\hline
+inventory & Returns array of inventory \hyperref[Item]{items}\\
+\hline
+capital & Returns \texttt{true} if fort is a capital city\\
+\hline
+tier & Returns fort tier (level). Tiers are in range \texttt{[1 : 6]}. Tier 6 corresponds to the capital city\\
+\hline
+\end{tabularx}
+\end{center}

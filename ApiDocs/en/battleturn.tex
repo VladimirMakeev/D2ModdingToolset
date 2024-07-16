@@ -1,0 +1,15 @@
+\subsection{Battle turn}
+\label{BattleTurn}
+Represents \hyperref[Unit]{unit} action inside battle round\\
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+unit & Returns \hyperref[Unit]{unit} that performs the turn\\
+\hline
+attackCount & Returns number of attacks unit can perform in its turn. Units with double attack (\texttt{turn.unit.impl.attacksTwice}) will have 2 in attackCount\\
+\hline
+\end{tabularx}
+\end{center}

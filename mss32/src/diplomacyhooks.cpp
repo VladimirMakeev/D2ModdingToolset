@@ -144,9 +144,9 @@ bool __stdcall areRelationsAtWarHooked(const std::uint32_t* relation)
     using namespace game;
 
     const GlobalData* data = *GlobalDataApi::get().getGlobalData();
-    const GlobalVariables* variables = *data->globalVariables;
+    const GlobalVariables* variables = data->globalVariables;
 
-    return *relation <= variables->diplomacyWar;
+    return *relation <= variables->data->diplomacyWar;
 }
 
 bool __stdcall areRelationsNeutralHooked(const std::uint32_t* relation)
@@ -154,9 +154,10 @@ bool __stdcall areRelationsNeutralHooked(const std::uint32_t* relation)
     using namespace game;
 
     const GlobalData* data = *GlobalDataApi::get().getGlobalData();
-    const GlobalVariables* variables = *data->globalVariables;
+    const GlobalVariables* variables = data->globalVariables;
 
-    return *relation > variables->diplomacyWar && *relation <= variables->diplomacyNeutral;
+    return *relation > variables->data->diplomacyWar
+           && *relation <= variables->data->diplomacyNeutral;
 }
 
 bool __stdcall areRelationsPeacefulHooked(const std::uint32_t* relation)
@@ -164,9 +165,9 @@ bool __stdcall areRelationsPeacefulHooked(const std::uint32_t* relation)
     using namespace game;
 
     const GlobalData* data = *GlobalDataApi::get().getGlobalData();
-    const GlobalVariables* variables = *data->globalVariables;
+    const GlobalVariables* variables = data->globalVariables;
 
-    return *relation > variables->diplomacyNeutral;
+    return *relation > variables->data->diplomacyNeutral;
 }
 
-}
+} // namespace hooks

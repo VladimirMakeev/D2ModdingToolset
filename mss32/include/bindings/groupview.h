@@ -58,6 +58,11 @@ public:
     bool hasUnit(const bindings::UnitView& unit) const;
     bool hasUnitById(const bindings::IdView& unitId) const;
 
+    int getUnitPosition(const bindings::UnitView& unit) const;
+    int getUnitPositionById(const bindings::IdView& unitId) const;
+
+    int getSubrace() const;
+
 protected:
     const game::CMidUnitGroup* group;
     const game::IMidgardObjectMap* objectMap;

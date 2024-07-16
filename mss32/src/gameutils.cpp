@@ -29,6 +29,7 @@
 #include "lordtype.h"
 #include "midclient.h"
 #include "midclientcore.h"
+#include "middatacache.h"
 #include "middiplomacy.h"
 #include "midgard.h"
 #include "midgardmap.h"
@@ -37,6 +38,8 @@
 #include "midgardobjectmap.h"
 #include "midgardplan.h"
 #include "midgardscenariomap.h"
+#include "miditem.h"
+#include "midlocation.h"
 #include "midplayer.h"
 #include "midrod.h"
 #include "midruin.h"
@@ -44,8 +47,10 @@
 #include "midserver.h"
 #include "midserverlogic.h"
 #include "midstack.h"
+#include "midstackdestroyed.h"
 #include "midunit.h"
 #include "playerbuildings.h"
+#include "racetype.h"
 #include "scenarioinfo.h"
 #include "scenedit.h"
 #include "unitutils.h"
@@ -191,6 +196,18 @@ const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
                                           rtti.CMidPlayerType, 0);
 }
 
+game::CMidPlayer* getPlayerToChange(game::IMidgardObjectMap* objectMap,
+                                    const game::CMidgardID* playerId)
+{
+    using namespace game;
+
+    auto playerObj = objectMap->vftable->findScenarioObjectByIdForChange(objectMap, playerId);
+    const auto& rtti = RttiApi::rtti();
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    return (CMidPlayer*)dynamicCast(playerObj, 0, rtti.IMidScenarioObjectType, rtti.CMidPlayerType,
+                                    0);
+}
+
 const game::CMidPlayer* getPlayer(const game::IMidgardObjectMap* objectMap,
                                   const game::BattleMsgData* battleMsgData,
                                   const game::CMidgardID* unitId)
@@ -232,6 +249,46 @@ const game::CMidgardID getPlayerIdByUnitId(const game::IMidgardObjectMap* object
     return emptyId;
 }
 
+const game::CMidPlayer* getNeutralPlayer(const game::IMidgardObjectMap* objectMap)
+{
+    using namespace game;
+
+    const auto neutralRaceId{RaceCategories::get().neutral->id};
+    const CMidPlayer* neutrals{};
+
+    auto getNeutrals = [neutralRaceId, &neutrals](const IMidScenarioObject* obj) {
+        auto player{static_cast<const CMidPlayer*>(obj)};
+
+        if (neutralRaceId == player->raceType->data->raceType.id) {
+            neutrals = player;
+        }
+    };
+
+    forEachScenarioObject(objectMap, IdType::Player, getNeutrals);
+    return neutrals;
+}
+
+const game::CMidPlayer* getGroupOwner(const game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* groupId)
+{
+    using namespace game;
+
+    switch (CMidgardIDApi::get().getType(groupId)) {
+    case IdType::Stack: {
+        const CMidStack* allyStack{getStack(objectMap, groupId)};
+        return getPlayer(objectMap, &allyStack->ownerId);
+    }
+    case IdType::Fortification: {
+        const CFortification* allyFort{getFort(objectMap, groupId)};
+        return getPlayer(objectMap, &allyFort->ownerId);
+    }
+    case IdType::Ruin:
+        return getNeutralPlayer(objectMap);
+    }
+
+    return nullptr;
+}
+
 const game::CMidScenVariables* getScenarioVariables(const game::IMidgardObjectMap* objectMap)
 {
     const auto id{createIdWithType(objectMap, game::IdType::ScenarioVariable)};
@@ -254,6 +311,17 @@ const game::CMidgardPlan* getMidgardPlan(const game::IMidgardObjectMap* objectMa
     }
 
     return static_cast<const game::CMidgardPlan*>(obj);
+}
+
+game::CMidgardPlan* getMidgardPlanToChange(game::IMidgardObjectMap* objectMap)
+{
+    const auto id{createIdWithType(objectMap, game::IdType::Plan)};
+    auto obj{objectMap->vftable->findScenarioObjectByIdForChange(objectMap, &id)};
+    if (!obj) {
+        return nullptr;
+    }
+
+    return static_cast<game::CMidgardPlan*>(obj);
 }
 
 const game::CMidgardMap* getMidgardMap(const game::IMidgardObjectMap* objectMap)
@@ -499,8 +567,8 @@ int getWeaponMasterBonusXpPercent(const game::IMidgardObjectMap* objectMap,
         auto stack = getStack(objectMap, groupId);
         auto leader = fn.findUnitById(objectMap, &stack->leaderId);
         if (hasLeaderAbility(leader->unitImpl, LeaderAbilityCategories::get().weaponMaster)) {
-            const auto vars = *(*GlobalDataApi::get().getGlobalData())->globalVariables;
-            return vars->weaponMaster;
+            const auto vars = (*GlobalDataApi::get().getGlobalData())->globalVariables;
+            return vars->data->weaponMaster;
         }
     }
 
@@ -731,6 +799,66 @@ const game::CMidgardMapFog* getFog(const game::IMidgardObjectMap* objectMap,
     }
 
     return static_cast<const CMidgardMapFog*>(obj);
+}
+
+const game::CMidLocation* getLocation(const game::IMidgardObjectMap* objectMap,
+                                      const game::CMidgardID* locationId)
+{
+    using namespace game;
+
+    auto obj{objectMap->vftable->findScenarioObjectById(objectMap, locationId)};
+    if (!obj) {
+        return nullptr;
+    }
+
+    const auto dynamicCast = RttiApi::get().dynamicCast;
+    const auto& rtti = RttiApi::rtti();
+
+    return (const CMidLocation*)dynamicCast(obj, 0, rtti.IMidScenarioObjectType,
+                                            rtti.CMidLocationType, 0);
+}
+
+const game::CMidStackDestroyed* getStackDestroyed(const game::IMidgardObjectMap* objectMap)
+{
+    using namespace game;
+
+    const auto id{createIdWithType(objectMap, game::IdType::StackDestroyed)};
+
+    auto obj{objectMap->vftable->findScenarioObjectById(objectMap, &id)};
+    if (!obj) {
+        return nullptr;
+    }
+
+    return static_cast<const game::CMidStackDestroyed*>(obj);
+}
+
+bool isInventoryContainsItem(const game::IMidgardObjectMap* objectMap,
+                             const game::CMidInventory& inventory,
+                             const game::CMidgardID& globalItemId)
+{
+    using namespace game;
+
+    const int itemsTotal{inventory.vftable->getItemsCount(&inventory)};
+    for (int i = 0; i < itemsTotal; ++i) {
+        const CMidgardID* id{inventory.vftable->getItem(&inventory, i)};
+
+        auto obj{objectMap->vftable->findScenarioObjectById(objectMap, id)};
+        auto item{static_cast<const CMidItem*>(obj)};
+        if (item->globalItemId == globalItemId) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+const game::CMqPoint getObjectEntrance(const game::CMqPoint& position, int sizeX, int sizeY)
+{
+    game::CMqPoint entrance;
+    entrance.x = position.x + sizeX - 1;
+    entrance.y = position.y + sizeY - 1;
+
+    return entrance;
 }
 
 } // namespace hooks

@@ -1,0 +1,38 @@
+\subsection{Id}
+\label{Id}
+Represents object identifier. Identifiers used to search scenario objects.
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+value & Returns integer representation of id. Can be used as Lua table key for best performance.\\
+\hline
+typeIndex & Returns identified object index among the same type of scenario objects (units, stacks, items, etc.). Can be used as Lua table key for best performance.\\
+\hline
+type & Returns \hyperref[IdType]{type} of identifier. Identifier type can help to distinguish one object from another\\
+\hline
+\end{tabularx}
+\end{center}
+\subsubsection{Methods}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+Id.new('S143KC0001') & Creates id from string\\
+\hline
+Id.emptyId() & Returns empty identifier\\
+\hline
+tostring(id) & Converts id to string\\
+\hline
+Id.summonId(position) & Creates special id for summoning units in battle using specified position in group. Position in group should be in \texttt{[0 : 5]} range.\\
+\hline
+\end{tabularx}
+\end{center}
+%\paragraph{Examples:}
+%\begin{center}
+%\begin{lstlisting}[language=Lua]
+%\end{lstlisting}
+%\end{center}

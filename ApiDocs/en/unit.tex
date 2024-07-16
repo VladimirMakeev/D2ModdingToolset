@@ -1,0 +1,29 @@
+\subsection{Unit}
+\label{Unit}
+Represents game unit that participates in a battle, takes damage and performs attacks. Unit can also be a leader. Leaders are main units in stacks.
+\subsubsection{Properties}
+\begin{center}
+\begin{tabularx}{\linewidth}{| l | X |}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline
+id & Returns unit \hyperref[Id]{id}. This is different to id of \hyperref[UnitImpl]{unit implementation}. The value is unique for every unit on \hyperref[Scenario]{scenario map}\\
+\hline
+hp & Returns unit's current hit points\\
+\hline
+hpMax & Returns unit's maximum hit points\\
+\hline
+xp & Returns unit's current experience points\\
+\hline
+impl & Returns unit's current \hyperref[UnitImpl]{implementation}. Current implementation describes unit stats according to its levels and possible transformations applied during battle\\
+\hline
+baseImpl & Returns unit's base \hyperref[UnitImpl]{implementation}. Base implementation is a record in \texttt{GUnits.dbf} that describes unit basic stats\\
+\hline
+leveledImpl & Returns unit's leveled (generated) \hyperref[UnitImpl]{implementation}. Leveled implementation is unit's current implementation without modifiers, or base implementation plus upgrades from \texttt{GDynUpgr.dbf} according to unit's level. This does not include leader upgrades from \texttt{GleaUpg.dbf}, because the upgrades are modifiers\\
+\hline
+original & Returns original unit \hyperref[UnitDummy]{dummy} that represents unit state before transformation, or \texttt{nil} if unit is not transformed. The state does not include any unit modifiers thus contains only leveled implementation. Unit can be transformed by transform-self, transform-other, drain-level or doppelganger attack\\
+\hline
+originalModifiers & Returns array of original \hyperref[Modifier]{modifiers} that were applied to unit before transformation, or empty array if unit is not transformed. Usually, modifiers are reapplied after transformation, but there are cases where some modifiers are incompatible with a new form, thus not getting applied to it\\
+\hline
+\end{tabularx}
+\end{center}

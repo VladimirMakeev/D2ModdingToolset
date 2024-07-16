@@ -81,6 +81,7 @@ assert_size(TLordTypeData, 56);
 assert_offset(TLordTypeData, name, 4);
 assert_offset(TLordTypeData, description, 12);
 assert_offset(TLordTypeData, buildList, 32);
+assert_offset(TLordTypeData, lordCategory, 44);
 
 /** Holds information read from GLord.dbf. */
 struct TLordType : public IMidObject

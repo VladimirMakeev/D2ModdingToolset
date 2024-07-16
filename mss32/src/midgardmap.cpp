@@ -28,21 +28,25 @@ static std::array<Api, 4> functions = {{
     // Akella
     Api{
         (Api::ChangeTerrain)nullptr,
+        (Api::GetTerrain)0,
         (Api::GetGround)0x5e6f63,
     },
     // Russobit
     Api{
         (Api::ChangeTerrain)nullptr,
+        (Api::GetTerrain)0,
         (Api::GetGround)0x5e6f63,
     },
     // Gog
     Api{
         (Api::ChangeTerrain)nullptr,
+        (Api::GetTerrain)0,
         (Api::GetGround)0x5e5c78,
     },
     // Scenario Editor
     Api{
         (Api::ChangeTerrain)0x4e3d8d,
+        (Api::GetTerrain)0x4e393e,
         (Api::GetGround)0x4e39f4,
     },
 }};

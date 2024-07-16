@@ -1,0 +1,88 @@
+\subsection{Custom modifiers}
+Modifiers in the game stack on top of each other, making ordered modifiers chain.
+First modifier takes base values from the unit it modifies, next - values modified by the first modifier and so on.
+Custom modifiers allow you to modify every stat of unit and its attacks in a single script file with a number of uniform functions.\\
+Most of the custom modifier functions have the following form:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+function getSomething(unit, prev)
+  if someCondition then
+    return modifiedValue
+  end
+
+  return prev
+end
+\end{lstlisting}
+\end{center}
+\begin{itemize}
+\item \texttt{unit} has type \hyperref[Unit]{Unit}. The unit is presented in a state before the current modifier is applied.
+\item \texttt{prev} is a previous value of the stat. It is either a base value or a value modified by the previous modifier.
+\end{itemize}
+Check \href{https://github.com/VladimirMakeev/D2ModdingToolset/tree/master/Scripts/Modifiers}{Scripts/Modifiers} for script examples.\\
+\href{https://github.com/VladimirMakeev/D2ModdingToolset/blob/master/Scripts/Modifiers/template.lua}{template.lua} contains a complete list of available functions.\\
+
+\textbf{Due to how modifiers chain work, you have no direct access to final unit stats}\\
+For example:
+\begin{itemize}
+\item Lets say we have a unit with base of 50 initiative;
+\item Then we give it a potion that increases damage by 50\% \textbf{if unit initiative} \texttt{> 60};
+\item Then we give it another potion that increases initiative to 70.
+\end{itemize}
+The damage bonus \textbf{will not work} in this case, even though a final unit initiative is 70 that is \texttt{> 60}. This is because \textbf{damage modifier applied earlier than initiative modifier}.
+If we get \texttt{unit.impl.attack1.initiative} from the damage modifier script it will be 50, because \textbf{initiative modifier is not applied yet}.\\
+
+\textbf{Dangerous way around to get final unit stats}\\
+The limitation described above \textbf{can be avoided} by getting unit instance via \texttt{getScenario:getUnit(unit.id)}.\\
+But you have to be \textbf{very careful} using this approach, as you can easily fall into a deadloop.\\
+
+Lets see a \textbf{bad example} where we created a modifier that grants bonus armor and regen depending on each other:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+function getArmor(unit, prev)
+  local finalUnit = getScenario():getUnit(unit.id)
+  return prev + finalUnit.impl.regen / 5
+end
+
+function getRegen(unit, prev)
+    local finalUnit = getScenario():getUnit(unit.id)
+    return prev + finalUnit.impl.armor / 10
+end
+\end{lstlisting}
+\end{center}
+Or it can be two different modifiers, does not matter:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+-- MyBonusArmorMod.lua
+function getArmor(unit, prev)
+  local finalUnit = getScenario():getUnit(unit.id)
+  return prev + finalUnit.impl.regen / 5
+end
+\end{lstlisting}
+\end{center}
+When this modifier(s) applied to a unit, we are getting circular dependence here: \textbf{final armor depends on final regen while final regen depends on final armor}.\\
+Imagine what happens when the game tries to get unit armor:\\
+It calls \texttt{getArmor} that calls \texttt{getRegen} that calls \texttt{getArmor} that calls \texttt{getRegen} that calls \texttt{getArmor} that calls \texttt{getRegen} that calls \texttt{getArmor}... and so on until your \textbf{game hang or crash to desktop}.\\
+
+As a \textbf{good example}, you could refer to a third stat, thus avoiding deadloop condition:
+\begin{center}
+\begin{lstlisting}[language=Lua]
+-- MyBonusArmorMod.lua
+function getArmor(unit, prev)
+  local finalUnit = getScenario():getUnit(unit.id)
+  return prev + finalUnit.impl.regen / 5
+end
+\end{lstlisting}
+\end{center}
+and
+\begin{center}
+\begin{lstlisting}[language=Lua]
+-- MyBonusRegenMod.lua
+function getRegen(unit, prev)
+  local finalUnit = getScenario():getUnit(unit.id)
+  return prev + finalUnit.impl.level / 10
+end
+\end{lstlisting}
+\end{center}
+This way, regen depends on level, and armor depends on regen and there is no circular dependence in this case.\\
+
+\textbf{Remember that this is subject for all modifiers that can potentially happen to be applied to the same unit}.
